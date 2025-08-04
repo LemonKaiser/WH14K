@@ -28,6 +28,25 @@
           steps:
             - tool: Screwing
               doAfter: 2
+# WWWWWWWWWWWWWHHHHHH
+        - to: metalWall
+          completed:
+            - !type:SnapToGrid
+              southRotation: true
+          conditions:
+            - !type:EntityAnchored {}
+          steps:
+            - material: Lead
+              amount: 2
+              doAfter: 1
+            - material: MetalRod
+              amount: 8
+              doAfter: 1
+            - material: Plasteel
+              amount: 2
+              doAfter: 1
+
+# WWWWWWWWWWWWWHHHHHH
 
         - to: wall
           completed:
