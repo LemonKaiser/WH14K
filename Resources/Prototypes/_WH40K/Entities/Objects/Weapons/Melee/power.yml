@@ -79,18 +79,15 @@
     damage:
       types:
         Blunt: 18
-    bluntStaminaDamageFactor: 2.0
-    heavyRateModifier: 1.25
-    heavyDamageBaseModifier: 1.2
     animation: WeaponArcThrust
   # - type: DamageOtherOnHit
   #   meleeDamageMultiplier: 1.5
-  - type: StaminaDamageOnHit
-    damage: 20
-    sound: /Audio/Weapons/egloves.ogg
-  - type: StaminaDamageOnCollide
-    damage: 20
-    sound: /Audio/Weapons/egloves.ogg
+  # - type: StaminaDamageOnHit
+  #   damage: 20
+  #   sound: /Audio/Weapons/egloves.ogg
+  # - type: StaminaDamageOnCollide
+  #   damage: 20
+  #   sound: /Audio/Weapons/egloves.ogg
   - type: Battery
     maxCharge: 800
     startingCharge: 800

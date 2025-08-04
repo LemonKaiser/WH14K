@@ -36,7 +36,7 @@
           conditions:
             - !type:EntityAnchored {}
           steps:
-            - material: Lead
+            - material: Plasteel
               amount: 2
               doAfter: 1
             - material: MetalRod

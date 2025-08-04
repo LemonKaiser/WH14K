@@ -73,7 +73,6 @@
     fireRate: 5
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
-    fireOnDropChance: 0.5
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/ltrifle_cock.ogg

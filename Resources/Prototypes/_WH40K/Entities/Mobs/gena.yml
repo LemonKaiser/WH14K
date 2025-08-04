@@ -60,7 +60,7 @@
       types:
         Blunt: 20
   - type: DamageStateVisuals
-    rotate: true
+    # rotate: true
     states:
       Alive:
         Base: base

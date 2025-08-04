@@ -23,7 +23,7 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Shotgun/m12.rsi
     scale: 0.8, 0.8
-    Scale: 0.8, 0.8
+    scale: 0.8, 0.8
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
