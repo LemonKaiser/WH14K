@@ -25,8 +25,8 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-  afterLoadoutSpecial:
-  - !type:ModifyEnvirosuitSpecial
-    charges: 8
-  - !type:ModifyEnvirohelmSpecial
-    powerCell: PowerCellHigh
+  # afterLoadoutSpecial:
+  # - !type:ModifyEnvirosuitSpecial
+  #   charges: 8
+  # - !type:ModifyEnvirohelmSpecial
+  #   powerCell: PowerCellHigh

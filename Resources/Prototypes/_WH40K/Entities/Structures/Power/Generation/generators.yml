@@ -15,11 +15,11 @@
   - type: PowerMonitoringDevice
     sprite: _WH40K/Structures/Power/Generation/plasma_generator.rsi
     state: base
-  - type: AmbientSound
-    range: 5
-    volume: 5
-    sound:
-      path: /Audio/_EE/Supermatter/calm.ogg
+  # - type: AmbientSound
+  #   range: 5
+  #   volume: 5
+  #   sound:
+  #     path: /Audio/_EE/Supermatter/calm.ogg
   - type: Fixtures
     fixtures:
       fix1:

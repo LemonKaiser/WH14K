@@ -21,7 +21,6 @@
   - type: Gun
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_1.wav
-    fireOnDropChance: 0.2
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -49,7 +48,7 @@
     steps: 1
     zeroVisible: true
   - type: Appearance
-  
+
 - type: entity
   name: автоган "Армагеддон"
   parent: BaseWeaponRifle
@@ -105,7 +104,7 @@
     steps: 1
     zeroVisible: true
   - type: Appearance
-  
+
 - type: entity
   name: стаб-пистолет
   parent: BaseWeaponPistol

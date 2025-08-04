@@ -23,7 +23,6 @@
   - Service
   - External
   - Detective
-  - Corpsman # DeltaV - added Corpsman access
   - Cryogenics
   special:
   - !type:AddImplantSpecial
@@ -31,8 +30,8 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-  afterLoadoutSpecial:
-  - !type:ModifyEnvirosuitSpecial
-    charges: 8
-  - !type:ModifyEnvirohelmSpecial
-    powerCell: PowerCellHigh
+  # afterLoadoutSpecial:
+  # - !type:ModifyEnvirosuitSpecial
+  #   charges: 8
+  # - !type:ModifyEnvirohelmSpecial
+  #   powerCell: PowerCellHigh

@@ -43,21 +43,14 @@
   - Cargo
 #  - Atmospherics
 #  - Medical
-  - Boxer # DeltaV - Add Boxer access
-  - Clown # DeltaV - Add Clown access
-  - Library # DeltaV - Add Library access
-  - Mime # DeltaV - Add Mime access
-  - Musician # DeltaV - Add Musician access
-  - Reporter # DeltaV - Add Reporter access
-  - Zookeeper # DeltaV - Add Zookeeper access
   special:
   - !type:AddImplantSpecial
     implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-  afterLoadoutSpecial:
-  - !type:ModifyEnvirosuitSpecial
-    charges: 8
-  - !type:ModifyEnvirohelmSpecial
-    powerCell: PowerCellHigh
+  # afterLoadoutSpecial:
+  # - !type:ModifyEnvirosuitSpecial
+  #   charges: 8
+  # - !type:ModifyEnvirohelmSpecial
+  #   powerCell: PowerCellHigh

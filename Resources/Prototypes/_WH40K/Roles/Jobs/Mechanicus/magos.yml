@@ -27,7 +27,6 @@
   - Atmospherics
   - Research
   - ResearchDirector
-  - Mantis
   - Cargo
   - Salvage
   - Cryogenics
@@ -37,11 +36,11 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
-  afterLoadoutSpecial:
-  - !type:ModifyEnvirosuitSpecial
-    charges: 8
-  - !type:ModifyEnvirohelmSpecial
-    powerCell: PowerCellPotato
+  # afterLoadoutSpecial:
+  # - !type:ModifyEnvirosuitSpecial
+  #   charges: 8
+  # - !type:ModifyEnvirohelmSpecial
+  #   powerCell: PowerCellPotato
 
 - type: startingGear
   id: MagosGear

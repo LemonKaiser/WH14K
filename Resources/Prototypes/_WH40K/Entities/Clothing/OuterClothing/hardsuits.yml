@@ -18,7 +18,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.50
   - type: TemperatureProtection
-    coefficient: 0.01
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
   - type: Armor
     modifiers:
       coefficients:
@@ -42,7 +43,6 @@
     tags:
     - Hardsuit
     - WhitelistChameleon
-    - HidesHarpyWings #DeltaV: Used by harpies to help render their hardsuit sprites
 
 #смотритель
 - type: entity
@@ -62,7 +62,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.40
   - type: TemperatureProtection
-    coefficient: 0.01
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
   - type: Armor
     modifiers:
       coefficients:
@@ -95,7 +96,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.40
   - type: TemperatureProtection
-    coefficient: 0.01
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
   - type: Armor
     modifiers:
       coefficients:
@@ -217,7 +219,8 @@
     highPressureMultiplier: 0.02
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
-    coefficient: 0.001
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
   - type: ExplosionResistance
     damageCoefficient: 0.7
   - type: Armor
@@ -254,7 +257,8 @@
     highPressureMultiplier: 0.02
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
-    coefficient: 0.001
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
   - type: ExplosionResistance
     damageCoefficient: 0.7
   - type: Armor

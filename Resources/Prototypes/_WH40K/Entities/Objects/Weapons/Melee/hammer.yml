@@ -21,14 +21,11 @@
       types:
         Blunt: 30
         Structural: 50
-    heavyDamageBaseModifier: 1.0
-    heavyStaminaCost: 10
     angle: 100
     soundHit:
       collection: MetalThud
   # - type: DamageOtherOnHit
   #   meleeDamageMultiplier: 1.5
-    staminaCost: 18
   - type: Wieldable
   - type: IncreaseDamageOnWield
     damage:
@@ -69,14 +66,11 @@
     damage:
       types:
         Blunt: 20
-    heavyDamageBaseModifier: 1.0
-    heavyStaminaCost: 10
     angle: 100
     soundHit:
       collection: MetalThud
   # - type: DamageOtherOnHit
   #   meleeDamageMultiplier: 1.5
-    staminaCost: 18
   - type: Item
     size: Ginormous
     sprite: _WH40K/Objects/Weapons/Melee/omnissia_axe/omnissiahaxe_inhand.rsi
