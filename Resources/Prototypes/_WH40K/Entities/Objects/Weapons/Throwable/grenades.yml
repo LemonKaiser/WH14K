@@ -1,7 +1,7 @@
 - type: entity
   id: FragGrenade
-  name: фраг граната
-  description: Стандартная противопехотная граната, используемая в основном вооружёнными силами Империума Человечества.
+  name: frag grenade 
+  description: Standard issue fragmentation grenade used by the Imperial Guard and Space Marines to clear out enemy infantry.
   parent: GrenadeBase
   suffix: WH40K
   components:
@@ -21,7 +21,7 @@
     explosionType: Default
     maxIntensity: 10
     intensitySlope: 3
-    totalIntensity: 120 # about a ~4 tile radius
+    totalIntensity: 110 # about a ~4 tile radius
     canCreateVacuum: false
   - type: ContainerContainer
     containers:
@@ -32,8 +32,8 @@
 
 - type: entity
   id: KrakGrenade
-  name: крак граната
-  description: Взрывное устройство, используемое вооружёнными силами Империума Человечества для уничтожения структур, техники и тяжеловооружённой пехоты противника.
+  name: krak grenade
+  description: Explosive anti-armor grenade used by the Imperial Guard and Space Marines to destroy light vehicles and fortifications.
   parent: GrenadeBase
   suffix: WH40K
   components:
@@ -57,8 +57,8 @@
 
 - type: entity
   id: OrkGrenade
-  name: орочья граната
-  description: БУБУМКА для наимощнейшего ВААААААГХ!
+  name: ork's grenade
+  description: Big boom for big Waagh!
   parent: GrenadeBase
   suffix: WH40K
   components:
@@ -82,8 +82,8 @@
 
 - type: entity
   id: MeltaGrenade
-  name: мельта заряд
-  description: Разрушительный и редкий подрывной заряд, использующий тот же принцип действия, что и другое мельта оружие, но в более замкнутом объёме.
+  name: melta grenade
+  description: Short-range anti-armor grenade that projects a powerful melting blast, capable of destroying heavily armored targets.
   parent: GrenadeBase
   suffix: WH40K
   components:
