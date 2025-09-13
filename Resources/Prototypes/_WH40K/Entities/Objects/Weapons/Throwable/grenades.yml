@@ -57,10 +57,10 @@
 
 - type: entity
   id: OrkGrenade
-  name: ork's grenade
+  name: coolboyz grenade
   description: Big boom for big Waagh!
   parent: GrenadeBase
-  suffix: WH40K
+  suffix: WH40K, Ork
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Grenades/orkgrenade.rsi
