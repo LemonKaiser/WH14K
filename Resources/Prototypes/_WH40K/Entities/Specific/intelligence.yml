@@ -30,3 +30,31 @@
     price:
       Intelligence: 2
   - type: Appearance
+  
+- type: entity
+  name: чип хаоса
+  parent: DataChip
+  id: DataChipChaos
+  suffix: WH40K
+  description: Осквернённый чип, полный данных, являющихся весьма полезными для ваших покровителей. Они могут оказать вам милость, если вы пожертвуете эти чипы.
+  components:
+  - type: Sprite
+    scale: 0.8,0.8
+    sprite: _WH40K/Objects/Specific/intelligence.yml
+    state: datachip
+    layers:
+    - state: chaoschip
+      map: ["base"]
+  - type: Stack
+    stackType: DataChip
+    count: 1
+    baseLayer: base
+    layerStates:
+    - chaoschip
+    - chaoschip_2
+    - chaoschip_3
+    - chaoschip_4
+#  - type: Currency
+#    price:
+#      Chaos: 2
+#Пока неактивно т.к такой валюты ещё не существует
