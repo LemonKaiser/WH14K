@@ -1,0 +1,45 @@
+- type: entity
+  name: тяжёлый автопистолет
+  parent: BaseWeaponPistol
+  id: WeaponStubSMG
+  description: Пистолет пулемёт, модель которого не определить, похоже, оно является самодельным.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg.rsi
+    scale: 0.85,0.85
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg.rsi
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineStubSMG
+        insertSound: /Audio/Weapons/Guns/MagIn/pistol_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+            - MagazineStubSMG
+      gun_chamber:
+        name: Chamber
+        startingItem: Cartridge10mmLong
+        priority: 1
+        whitelist:
+          tags:
+            - Cartridge10mmLong
+  - type: Gun
+    fireRate: 5
+    availableModes:
+    - FullAuto
+    selectedMode: FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_3.wav
+  - type: MovementSpeedModifier
+    walkModifier: 0.97
+    sprintModifier: 0.97
