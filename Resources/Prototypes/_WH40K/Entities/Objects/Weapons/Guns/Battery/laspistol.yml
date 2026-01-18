@@ -8,7 +8,7 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Battery/laspistol.rsi
   - type: Gun
-    fireRate: 1
+    fireRate: 3
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
@@ -16,6 +16,33 @@
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
   - type: Item
     sprite: _WH40K/Objects/Weapons/Guns/Battery/laspistol.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - Sidearm
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Pistols/viper.rsi
+    slots:
+    - Belt
+
+- type: entity
+  name: Лазпистолет "Воля Императора"
+  parent: WeaponLaserWH40KEnergy
+  id: WeaponLaserPistolCommissar
+  description: Особый лазпистолет полкового Комиссара, повидавшей не мало вражеских морд и союзных затылков.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/laspistol_elite.rsi
+  - type: Gun
+    fireRate: 3
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/laspistol_elite.rsi
     size: Small
   - type: Tag
     tags:

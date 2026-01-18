@@ -1,12 +1,13 @@
 - type: entity
-  name: лазган
+  name: М36 Кантраэль
   parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
   id: WeaponLaserLasgun
-  description: Стандартная противопехотная лазерная винтовка, массово используемая силами Империума.
+  description: стандартное оружие Кадианских штурмовых войск и всех полков, ведущих свои воинские традиции и доктрины от них.
   suffix: WH40K
   components:
+  - type: GunRequiresWield
   - type: Clothing
-    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_in-hands.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_standart/lasgun_in-hands.rsi
     quickEquip: false
     slots:
     - Back

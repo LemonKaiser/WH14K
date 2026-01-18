@@ -28,8 +28,10 @@
   - type: Tag
     tags:
       - LasgunPowerCell
+  - type: BatterySelfRecharger
+    autoRechargeRate: 10
   - type: BatteryAmmoProvider
-    proto: RedLaser
+    proto: RedLaserAccatranLong
     fireCost: 50
 
 - type: entity
@@ -115,3 +117,27 @@
   - type: BatteryAmmoProvider
     proto: RedMeltaLaser
     fireCost: 1500
+
+- type: entity
+  name: батарея аккатрана
+  id: AccatranPowerCell
+  parent: WH40KPowerCell
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    layers:
+    - state: lasgun
+    scale: 0.8, 0.8
+  - type: Tag
+    tags:
+      - AccatranPowerCell
+  - type: Battery
+    maxCharge: 4000
+    startingCharge: 4000
+    pricePerJoule: 0.15
+  - type: BatterySelfRecharger
+    autoRechargeRate: 10
+  - type: BatteryAmmoProvider
+    proto: RedLaserAccatranLong
+    fireCost: 50

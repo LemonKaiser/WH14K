@@ -1,0 +1,23 @@
+- type: entity
+  name: М8 Восс
+  parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
+  id: WeaponLaserLasgunVoss
+  description: Вариант лазгана с повышенной скорострельностью, используемый полками Восс.
+  suffix: WH40K
+  components:
+  - type: Gun
+    fireRate: 3
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_voss/lasgun_in-hands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_voss/lasgun.rsi
+    scale: 0.85,0.85
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+      - state: mag-0
+        map: ["enum.GunVisualLayers.Mag"]
