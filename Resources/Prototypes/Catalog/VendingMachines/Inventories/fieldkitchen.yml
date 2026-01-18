@@ -1,0 +1,4 @@
+- type: vendingMachineInventory
+  id: FieldKitchenVendInventory
+  startingInventory:
+    WHSoup: 30

@@ -1,0 +1,59 @@
+- type: entity
+  parent: BaseStructure
+  id: FieldKitchen
+  name: Полевая кухня
+  description: Лучше не просите добавки.
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Machines/fieldkitchen.rsi
+      state: "base"
+    - type: Anchorable
+      enabled: true
+    - type: Rotatable
+      rotateWhileAnchored: true
+    - type: Damageable
+      damageContainer: StructuralInorganic
+      damageModifierSet: StructuralMetallic
+    - type: Destructible
+      thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 150
+        behaviors:
+        - !type:DoActsBehavior
+          acts: ["Destruction"]
+        - !type:PlaySoundBehavior
+          sound:
+            collection: MetalBreak
+    - type: Clickable
+    - type: GravityAffected
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.45,-0.45,0.45,0.45"
+          density: 60
+          mask:
+          - MachineMask
+          layer:
+          - MidImpassable
+          - LowImpassable
+    - type: Pullable
+    - type: StaticPrice
+      price: 300
+    - type: RequireProjectileTarget
+    - type: ActivatableUI
+      key: enum.VendingMachineUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.VendingMachineUiKey.Key:
+          type: VendingMachineBoundUserInterface
+    - type: VendingMachine
+      pack: FieldKitchenVendInventory
+      canShoot: false
+
+

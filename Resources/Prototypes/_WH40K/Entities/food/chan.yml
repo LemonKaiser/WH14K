@@ -1,0 +1,65 @@
+- type: entity
+  parent: GuardFlag
+  id: WHSoup
+  name: Гвардейский суп
+  description: Чан наполненный... А лучше и не знать.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Food/Chan.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Food/Chan.rsi
+    size: Huge
+  - type: Edible
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+          - ReagentId: Nutriment
+            Quantity: 15
+          - ReagentId: Vitamin
+            Quantity: 15
+          - ReagentId: Allicin
+            Quantity: 3
+  - type: Tag
+    tags:
+    - Meat
+    - Soup
+  - type: FlavorProfile
+    flavors:
+      - WHflavor
+  - type: MultiHandedItem
+  - type: DamageOnLand
+    damage:
+      types:
+        Blunt: 5
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Blunt: 5
+  - type: Spillable
+    solution: food
+  - type: MeleeWeapon
+    soundNoDamage:
+      path: "/Audio/Effects/Fluids/splat.ogg"
+    damage:
+      types:
+        Blunt: 2
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+          params:
+            volume: -8
+      - !type:SpillBehavior { }
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
