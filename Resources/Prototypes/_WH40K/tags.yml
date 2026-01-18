@@ -32,25 +32,31 @@
   id: MagazineRad
 
 - type: Tag
-  id: CartridgeLightAutogun
-
-- type: Tag
-  id: CartridgeHeavyAutogun
-
-- type: Tag
-  id: CartridgeStubPistol
-
-- type: Tag
-  id: MagazineLightAutogun
-
-- type: Tag
-  id: MagazineHeavyAutogun
-
-- type: Tag
-  id: MagazineStubPistol
-
-- type: Tag
   id: FlameThrowerFuelTank
 
 - type: Tag
   id: BigGunUser
+
+- type: Tag
+  id: MagazineStubLMG
+      
+- type: Tag
+  id: MagazineStubMG
+  
+- type: Tag
+  id: MagazineStubPistol
+  
+- type: Tag
+  id: MagazineStubRifle
+  
+- type: Tag
+  id: MagazineStubSMG
+  
+- type: Tag
+  id: Cartridge825mmLong
+  
+- type: Tag
+  id: Cartridge10mm
+  
+- type: Tag
+  id: Cartridge10mmLong
