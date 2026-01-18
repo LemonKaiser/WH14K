@@ -1,0 +1,21 @@
+- type: entity
+  id: StatueWH3
+  parent: BaseStructure
+  name: статуя
+  description: Одна из великого множества статуй, что веками стоят безмолвно, услаждая взор каждого, кто созерцает их.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _WH40K\Structures\Decorations\statues_new.rsi
+    state: Statue_gv
+    drawdepth: Mobs
+    offset: "0.0,1.0"
+
+- type: entity
+  id: StatueWH4
+  parent: StatueWH3
+  suffix: WH40K
+  components:
+  - type: Sprite
+    state: Statue_ch

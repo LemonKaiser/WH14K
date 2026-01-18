@@ -8,4 +8,4 @@
     sprite: _WH40K/Objects/Misc/guard_flag.rsi
     state: icon
   - type: Item
-    sprite: Objects/Misc/Handy_Flags/guard_flag.rsi
+    sprite: _WH40K/Objects/Misc/guard_flag.rsi

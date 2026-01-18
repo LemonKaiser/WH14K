@@ -37,7 +37,7 @@
         - FullTileMask
         layer:
         - WallLayer
-        
+
 - type: entity
   id: BarricadeSandbags
   name: мешки с песком

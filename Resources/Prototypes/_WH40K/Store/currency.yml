@@ -4,3 +4,10 @@
   cash:
     1: Intelligence
   canWithdraw: false
+
+- type: currency
+  id: intelligence_ch
+  displayName: Разведданные хаоса
+  cash:
+    1: intelligence_ch
+  canWithdraw: false

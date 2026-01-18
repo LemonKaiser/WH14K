@@ -11,3 +11,17 @@
     - Intelligence
     balance:
       Intelligence: 0
+
+- type: entity
+  id: StorePresetAltar
+  abstract: true
+  components:
+  - type: Store
+    name: Алтарь тёмных богов
+    categories:
+    - AltarWeaponry
+    - AltarAmmo
+    currencyWhitelist:
+    - intelligence_ch
+    balance:
+      intelligence_ch: 0

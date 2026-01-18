@@ -1,13 +1,13 @@
 - type: entity
-  name: чип данных
+  name: чип данных хаоса
   parent: BaseItem
-  id: DataChip
+  id: DataChipChaos
   suffix: WH40K
   description: Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
   components:
   - type: Sprite
     scale: 0.8,0.8
-    sprite: _WH40K/Objects/Specific/intelligence.yml
+    sprite: _WH40K/Objects/Specific/intelligence_ch.rsi
     state: datachip
     layers:
     - state: datachip
@@ -28,5 +28,5 @@
     thresholds: [ 2, 3, 4 ]
   - type: Currency
     price:
-      Intelligence: 2
+      intelligence_ch: 1
   - type: Appearance
