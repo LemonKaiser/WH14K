@@ -4,9 +4,21 @@
   id: VoxWeaponry
   name: Вооружение
   priority: 0
-  
+
 - type: storeCategory
   id: VoxAmmo
   name: Аммуниция
   priority: 1
-  
+
+
+  #Altar
+
+- type: storeCategory
+  id: AltarWeaponry
+  name: Вооружение
+  priority: 0
+
+- type: storeCategory
+  id: AltarAmmo
+  name: Аммуниция
+  priority: 1

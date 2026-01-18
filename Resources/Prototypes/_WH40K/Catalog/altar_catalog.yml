@@ -1,0 +1,23 @@
+#Weaponry
+
+- type: listing
+  id: AltarAstartes
+  name: Лазерный карабин
+  description: Карабин, вооот.
+  productEntity: WeaponLaserLasgun
+  cost:
+    intelligence_ch: 4
+  categories:
+  - AltarWeaponry
+
+#Ammo
+
+- type: listing
+  id: AltarLasgunPowerCell
+  name: Коробка батарей лазгана (злая)
+  description: батареи лазгана, пораженные варпом
+  productEntity: BoxLasgunPowerCell
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarAmmo
