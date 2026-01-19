@@ -7,7 +7,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _WH40K\Structures\Decorations\statues_new.rsi
+    sprite: _WH40K/Structures/Decorations/statues_new.rsi
     state: Statue_gv
     drawdepth: Mobs
     offset: "0.0,1.0"
