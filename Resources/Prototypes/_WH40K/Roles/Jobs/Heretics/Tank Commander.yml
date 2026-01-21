@@ -1,0 +1,13 @@
+- type: job
+  id: HTankComm
+  name: job-name-tank-comm
+  description: job-description-tank-comm
+  playTimeTracker: JobHTankComm
+  startingGear: SergeantGear
+  icon: "JobIconTankComm"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External

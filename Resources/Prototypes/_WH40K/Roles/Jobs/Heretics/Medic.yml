@@ -1,0 +1,13 @@
+- type: job
+  id: HMedic
+  name: job-name-medic
+  description: job-description-medic
+  playTimeTracker: JobHMedic
+  startingGear: MedicGear
+  icon: "JobIconMedic"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External

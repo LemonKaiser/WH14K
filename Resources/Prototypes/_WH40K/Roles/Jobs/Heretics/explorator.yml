@@ -1,0 +1,21 @@
+- type: job
+  id: HExplorator
+  name: job-name-explorator
+  description: job-description-explorator
+  playTimeTracker: JobHExplorator
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Imperium
+      time: 4h
+    - !type:RoleTimeRequirement
+      role: JobNovice
+      time: 2.5h
+  icon: "JobIconExplorator"
+  startingGear: ExploratorGear
+  supervisors: job-supervisors-qm
+  access:
+  - Cargo
+  - Salvage
+  - Maintenance
+  - External
+  - Engineering

@@ -1,35 +1,4 @@
 - type: department
-  id: Personnel
-  name: department-Personnel
-  description: department-Personnel-description
-  color: "#ADFF2F"
-  weight: -10
-  roles:
-  - FirstAssistant
-  - ChaplainWH40K
-  - BartenderWH40K
-  - ChefWH40K
-  - ChemistWH40K
-  - MedicalDoctorWH40K
-  - MedicalInternWH40K
-  - ParamedicWH40K
-  - JanitorWH40K
-  # - Passenger
-
-- type: department
-  id: Governance
-  name: department-Governance
-  description: department-Governance-description
-  color: "#334E6D"
-  roles:
-  - CaptainWH40K
-  - FirstAssistant
-  - HeadOfficer
-  - Magos
-  weight: 100
-  primary: false
-
-- type: department
   id: Mechanicus
   name: department-Mechanicus
   description: department-Mechanicus-description
@@ -43,14 +12,53 @@
   - Novice
 
 - type: department
-  id: Voidsmen
-  name: department-Voidsmen
-  description: department-Voidsmen-description
-  color: "#2F4F4F"
+  id: Imperium
+  name: department-Imperium
+  description: department-Imperium-description
+  color: "#006400"
   roles:
-  - HeadOfficer
-  - GunnerySergeant
+  - Colonel
+  - Commissar
+  - Lieutenant
+  - TankComm
+  - Tanker
   - Sergeant
-  - Voidsman
-  - Recruit
-  weight: 20
+  - SergeantSWS
+  - SergeantHWS
+  - SpecialistSWS
+  - SpecialistHWS
+  - Guardsman
+  - Medic
+  # - Passenger
+
+- type: department
+  id: DarkMechanicum
+  name: department-Dark-Mechanicum
+  description: department-Dark-Mechanicus-description
+  color: "#800000"
+  roles:
+  - HMagos
+  - HExplorator
+  - HLexmechanic
+  - HGenetor
+  - HEnginseer
+  - HNovice
+
+- type: department
+  id: Heretics
+  name: department-Heretics
+  description: department-Heretics-description
+  color: "#800000"
+  roles:
+  - HColonel
+  - HCommissar
+  - HLieutenant
+  - HTankComm
+  - HTanker
+  - HSergeant
+  - HSergeantSWS
+  - HSergeantHWS
+  - HSpecialistSWS
+  - HSpecialistHWS
+  - HGuardsman
+  - HMedic

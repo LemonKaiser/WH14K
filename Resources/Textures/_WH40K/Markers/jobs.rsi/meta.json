@@ -38,13 +38,43 @@
       "name": "voidsman"
     },
     {
-      "name": "sergeant"
-    },
-    {
       "name": "novice"
     },
     {
       "name": "gunnery_sergeant"
+    },
+    {
+      "name": "colonel"
+    },
+    {
+      "name": "commissar"
+    },
+    {
+      "name": "guardsman"
+    },
+    {
+      "name": "tank"
+    },
+    {
+      "name": "lieutenant"
+    },
+    {
+      "name": "medic"
+    },
+    {
+      "name": "sergeant"
+    },
+    {
+      "name": "specialist"
+    },
+    {
+      "name": "heretic"
+    },
+    {
+      "name": "HWS"
+    },
+    {
+      "name": "SWS"
     }
   ]
 }
