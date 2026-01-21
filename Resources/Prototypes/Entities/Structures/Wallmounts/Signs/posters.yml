@@ -1140,6 +1140,33 @@
   - type: Sprite
     state: poster56_legit
 
+- type: entity
+  parent: PosterBase
+  id: PosterLegitMechanicum
+  name: Механикум
+  description: "Дух машин свят."
+  components:
+  - type: Sprite
+    state: poster57_legit
+
+- type: entity
+  parent: PosterBase
+  id: PosterLegitCargo
+  name: Плакат
+  description: Самый обычный плакат
+  components:
+  - type: Sprite
+    state: poster58_legit
+
+- type: entity
+  parent: PosterBase
+  id: PosterLegitExterminatus
+  name: Экстерминатус
+  description: Изображение уничтожение планеты. Выглядит пугающе.
+  components:
+  - type: Sprite
+    state: poster59_legit
+
 #maps
 
 - type: entity

@@ -20,6 +20,12 @@
       "name": "closed_unpowered"
     },
     {
+      "name": "scan"
+    },
+    {
+      "name": "scan1"
+    },
+    {
       "name": "occupied",
       "delays": [
         [
