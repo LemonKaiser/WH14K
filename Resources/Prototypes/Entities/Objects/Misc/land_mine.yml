@@ -28,9 +28,6 @@
     sprite: Objects/Misc/landmine.rsi
     layers:
     - state: landmine
-    - state: landmine-unshaded
-      shader: unshaded
-      map: [ "enum.ToggleableVisuals.Layer" ]
   - type: Appearance
   - type: GenericVisualizer
     visuals:
