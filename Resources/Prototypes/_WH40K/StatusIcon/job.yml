@@ -1,13 +1,5 @@
 - type: jobIcon
   parent: JobIcon
-  id: JobIconFirstAssistant
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: FirstAssistant
-  jobName: job-name-first-assistant
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconEnginseer
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -53,38 +45,6 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: Novice
   jobName: job-name-novice
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconGunnerySergeant
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: GunnerySergeant
-  jobName: job-name-gunnery-sergeant
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconHeadOfficer
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HeadOfficer
-  jobName: job-name-head-officer
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconRecruit
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Recruit
-  jobName: job-name-recruit
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconVoidsman
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Voidsman
-  jobName: job-name-voidsman
 
 - type: jobIcon
   parent: JobIcon
