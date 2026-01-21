@@ -56,7 +56,6 @@
     proto: ZoanthropeLighting
     fireCost: 100
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 50
   - type: Battery
     maxCharge: 1000

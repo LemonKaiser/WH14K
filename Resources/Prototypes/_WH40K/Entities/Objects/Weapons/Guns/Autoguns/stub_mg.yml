@@ -56,6 +56,6 @@
     steps: 11
     zeroVisible: true
   - type: Appearance
-  - type: MovementSpeedModifier
+  - type: HeldSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9

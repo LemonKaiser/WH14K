@@ -48,8 +48,10 @@
     speedModifierThresholds:
       150: 0.5
   - type: Bloodstream
-    bloodReagent: Blood
-    bloodMaxVolume: 650
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 650
   - type: MeleeWeapon
     altDisarm: false
     angle: 0
@@ -70,9 +72,10 @@
     baseWalkSpeed: 4
     baseSprintSpeed: 5
   - type: Puller
-  - type: Temperature
+  - type: TemperatureDamage
     heatDamageThreshold: 360
-    coldDamageThreshold: -150
+    coldDamageThreshold: 50
+  - type: Temperature
     currentTemperature: 310.15
   - type: Tag
     tags:
@@ -85,4 +88,4 @@
   - type: Stamina
     decay: 6
     cooldown: 1
-    critThreshold: 400
+    baseCritThreshold: 400

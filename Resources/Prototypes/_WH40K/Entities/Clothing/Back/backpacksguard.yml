@@ -8,10 +8,25 @@
     sprite: _WH40K/Clothing/Back/Backpacks/guardpack.rsi
 
 - type: entity
-  parent: ClothingBackpack
-  id: ClothingBackpackGuardVox
-  name: Вокс-рюкзак
-  description: НЕ ДОДЕЛАН
+  parent: [ Clothing, StorePresetVox ]
+  id: ClothingBackpackVox
+  name: вокс рюкзак
+  description: Рюкзак, оборудованный разного рода электронникой, позволяющей передавать в штаб разведданные и получать за это пополнение ваших запасов.
+  suffix: WH40K, Гвардия
   components:
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - back
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/guardpackvox.rsi
+    state: icon
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    balance:
+      Intelligence: 0

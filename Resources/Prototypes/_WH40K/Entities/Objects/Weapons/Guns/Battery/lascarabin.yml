@@ -20,3 +20,6 @@
   - type: Gun
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
+  - type: HeldSpeedModifier
+    walkModifier: 1.01
+    sprintModifier: 1.01

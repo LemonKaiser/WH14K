@@ -3,7 +3,7 @@
   abstract: true
   components:
   - type: Store
-    name: Станция пополнения припасов
+    name: resupply-station
     categories:
     - VoxWeaponry
     - VoxAmmo
@@ -17,7 +17,7 @@
   abstract: true
   components:
   - type: Store
-    name: Алтарь тёмных богов
+    name: altar-dark-gods
     categories:
     - AltarWeaponry
     - AltarAmmo

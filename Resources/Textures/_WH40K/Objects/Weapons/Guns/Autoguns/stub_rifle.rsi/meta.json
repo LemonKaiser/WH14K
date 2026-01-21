@@ -11,6 +11,9 @@
             "name": "base"
         },
         {
+            "name": "base-scope"
+        },
+        {
             "name": "bolt-open"
         },
         {

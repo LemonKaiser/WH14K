@@ -22,6 +22,6 @@
       gun_magazine: !type:ContainerSlot
       gun_chamber: !type:ContainerSlot
   - type: Appearance
-  - type: MovementSpeedModifier
+  - type: ClothingSpeedModifier
     walkModifier: 0.97
     sprintModifier: 0.97
