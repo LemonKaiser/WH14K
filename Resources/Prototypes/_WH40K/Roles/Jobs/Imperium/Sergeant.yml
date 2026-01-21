@@ -1,0 +1,23 @@
+- type: job
+  id: Sergeant
+  name: job-name-sergeant
+  description: job-description-sergeant
+  playTimeTracker: JobSergeant
+  startingGear: SergeantGear
+  icon: "JobIconSergeant"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External
+
+- type: startingGear
+  id: SergeantGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOfficer
+    shoes: ClothingShoesGenBoots
+    belt: offbelt
+    neck: Gorjet
+    head: ClothingHeadOfficer
+    outerClothing: ClothingOuterArmorOfficer

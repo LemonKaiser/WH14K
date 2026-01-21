@@ -1,0 +1,20 @@
+- type: job
+  id: HEnginseer
+  name: job-name-enginseer
+  description: job-description-enginseer
+  playTimeTracker: JobHEnginseer
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Imperium
+      time: 4h
+    - !type:RoleTimeRequirement
+      role: JobNovice
+      time: 2.5h
+  startingGear: EnginseerGear
+  icon: "JobIconEnginseer"
+  supervisors: job-supervisors-ce
+  access:
+  - Maintenance
+  - Engineering
+  - External
+  - Atmospherics

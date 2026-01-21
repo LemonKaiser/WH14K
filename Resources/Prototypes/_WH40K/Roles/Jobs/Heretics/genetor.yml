@@ -1,0 +1,22 @@
+- type: job
+  id: HGenetor
+  name: job-name-genetor
+  description: job-description-genetor
+  playTimeTracker: JobHGenetor
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Imperium
+      time: 6h
+    - !type:RoleTimeRequirement
+      role: JobNovice
+      time: 2.5h
+  startingGear: GenetorGear
+  icon: "JobIconGenetor"
+  supervisors: job-supervisors-ce
+  access:
+  - Maintenance
+  - Engineering
+  - External
+  - Atmospherics
+  - Medical
+  - Chemistry

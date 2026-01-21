@@ -1,0 +1,13 @@
+- type: job
+  id: SpecialistHWS
+  name: job-name-specialist-hws
+  description: job-description-specialist-hws
+  playTimeTracker: JobSpecialistHWS
+  startingGear: GuardsmanGear
+  icon: "JobIconSpecialistHWS"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External

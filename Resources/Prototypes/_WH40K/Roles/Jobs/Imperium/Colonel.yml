@@ -1,0 +1,23 @@
+- type: job
+  id: Colonel
+  name: job-name-colonel
+  description: job-description-colonel
+  playTimeTracker: JobColonel
+  startingGear: ColonelGear
+  icon: "JobIconColonel"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - Engineering
+  - External
+
+- type: startingGear
+  id: ColonelGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColonel
+    gloves: ClothingHandsGlovesCombatColonel
+    shoes: ClothingShoesGenBoots
+    ears: ClothingHeadsetVoxBackpack
+    belt: colbelt
+    neck: Colonelcloak

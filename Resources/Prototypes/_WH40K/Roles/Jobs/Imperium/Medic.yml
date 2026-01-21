@@ -1,0 +1,23 @@
+- type: job
+  id: Medic
+  name: job-name-medic
+  description: job-description-medic
+  playTimeTracker: JobMedic
+  startingGear: MedicGear
+  icon: "JobIconMedic"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External
+
+- type: startingGear
+  id: MedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    head: ClothingHeadHelmetFlak
+    outerClothing: ClothingOuterArmorFlakVestMed

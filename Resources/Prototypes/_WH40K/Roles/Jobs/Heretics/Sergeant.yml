@@ -1,0 +1,13 @@
+- type: job
+  id: HSergeant
+  name: job-name-sergeant
+  description: job-description-sergeant
+  playTimeTracker: JobHSergeant
+  startingGear: SergeantGear
+  icon: "JobIconSergeant"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External

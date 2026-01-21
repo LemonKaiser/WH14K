@@ -1,0 +1,23 @@
+- type: job
+  id: Commissar
+  name: job-name-commissar
+  description: job-description-commissar
+  playTimeTracker: JobCommissar
+  startingGear: CommissarGear
+  icon: "JobIconCommissar"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - Engineering
+  - External
+
+- type: startingGear
+  id: CommissarGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCommissar
+    gloves: ClothingHandsGlovesCombatCommissar
+    shoes: ClothingShoesCommissarBoots
+    belt: Comibelt
+    ears: ClothingHeadsetVoxBackpack
+    head: ClothingHeadCommissar

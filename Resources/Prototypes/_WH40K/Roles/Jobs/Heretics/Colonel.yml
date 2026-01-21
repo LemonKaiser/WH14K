@@ -1,0 +1,13 @@
+- type: job
+  id: HColonel
+  name: job-name-colonel
+  description: job-description-colonel
+  playTimeTracker: JobHColonel
+  startingGear: ColonelGear
+  icon: "JobIconColonel"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - Engineering
+  - External
