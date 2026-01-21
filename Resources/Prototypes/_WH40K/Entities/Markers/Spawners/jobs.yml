@@ -1,18 +1,4 @@
-# Civilian
-
-- type: entity
-  id: SpawnPointPassengerWH40K
-  parent: SpawnPointJobBase
-  name: passenger
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: PassengerWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: passenger
-
+# Engineering
 - type: entity
   id: SpawnPointNovice
   parent: SpawnPointJobBase
@@ -26,116 +12,6 @@
     layers:
       - state: green
       - state: novice
-
-- type: entity
-  id: SpawnPointMedicalInternWH40K
-  parent: SpawnPointJobBase
-  name: medical intern
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: MedicalInternWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: medicalintern
-
-- type: entity
-  id: SpawnPointRecruit
-  parent: SpawnPointJobBase
-  name: recruit
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: Recruit
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: recruit
-
-- type: entity
-  id: SpawnPointBartenderWH40K
-  parent: SpawnPointJobBase
-  name: bartender
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: BartenderWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: bartender
-
-- type: entity
-  id: SpawnPointChefWH40K
-  parent: SpawnPointJobBase
-  name: chef
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: ChefWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: chef
-
-- type: entity
-  id: SpawnPointChaplainWH40K
-  parent: SpawnPointJobBase
-  name: chaplain
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: ChaplainWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: chaplain
-
-- type: entity
-  id: SpawnPointJanitorWH40K
-  parent: SpawnPointJobBase
-  name: janitorWH40K
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: JanitorWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: janitor
-
-# Command
-
-- type: entity
-  id: SpawnPointCaptainWH40K
-  parent: SpawnPointJobBase
-  name: captain
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: CaptainWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: captain
-
-- type: entity
-  id: SpawnPointFirstAssistant
-  parent: SpawnPointJobBase
-  name: first assistant
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: FirstAssistant
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: first_assistant
-
-# Engineering
 
 - type: entity
   id: SpawnPointMagos
@@ -211,82 +87,83 @@
       # - sprite: DeltaV/Markers/jobs.rsi
       #   state: salvagespecialist
 
-# Medical
+# Imperium
 
 - type: entity
-  id: SpawnPointMedicalDoctorWH40K
+  id: SpawnPointColonel
   parent: SpawnPointJobBase
-  name: medicaldoctor
-  suffix: WH40K
+  name: Colonel
+  suffix: WH40K, Империум
   components:
   - type: SpawnPoint
-    job_id: MedicalDoctorWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: doctor
-
-- type: entity
-  id: SpawnPointParamedicWH40K
-  parent: SpawnPointJobBase
-  name: paramedic
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: ParamedicWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: paramedic
-
-- type: entity
-  id: SpawnPointChemistWH40K
-  parent: SpawnPointJobBase
-  name: chemist
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: ChemistWH40K
-  - type: Sprite
-    layers:
-      - state: green
-      - state: chemist
-
-# Security
-
-- type: entity
-  id: SpawnPointHeadOfficer
-  parent: SpawnPointJobBase
-  name: head officer
-  suffix: WH40K
-  components:
-  - type: SpawnPoint
-    job_id: HeadOfficer
+    job_id: Colonel
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - state: head_officer
+      - state: colonel
 
 - type: entity
-  id: SpawnPointGunnerySergeant
+  id: SpawnPointCommissar
   parent: SpawnPointJobBase
-  name: gunnery sergeant
-  suffix: WH40K
+  name: Commissar
+  suffix: WH40K, Империум
   components:
   - type: SpawnPoint
-    job_id: GunnerySergeant
+    job_id: Commissar
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - state: gunnery_sergeant
+      - state: commissar
+
+- type: entity
+  id: SpawnPointGuardsman
+  parent: SpawnPointJobBase
+  name: Guardsman
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: Guardsman
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointLieutenant
+  parent: SpawnPointJobBase
+  name: Lieutenant
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: Lieutenant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: lieutenant
+
+- type: entity
+  id: SpawnPointMedic
+  parent: SpawnPointJobBase
+  name: Medic
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: Medic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: medic
 
 - type: entity
   id: SpawnPointSergeant
   parent: SpawnPointJobBase
-  name: sergeant
-  suffix: WH40K
+  name: Sergeant
+  suffix: WH40K, Империум
   components:
   - type: SpawnPoint
     job_id: Sergeant
@@ -297,15 +174,366 @@
       - state: sergeant
 
 - type: entity
-  id: SpawnPointVoidsman
+  id: SpawnPointSergeantHWS
   parent: SpawnPointJobBase
-  name: voidsman
-  suffix: WH40K
+  name: SergeantHWS
+  suffix: WH40K, Империум
   components:
   - type: SpawnPoint
-    job_id: Voidsman
+    job_id: SergeantHWS
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - state: voidsman
+      - state: HWS
+      - state: sergeant
+
+- type: entity
+  id: SpawnPointSergeantSWS
+  parent: SpawnPointJobBase
+  name: SergeantSWS
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: SergeantSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: SWS
+      - state: sergeant
+
+- type: entity
+  id: SpawnPointSpecialistHWS
+  parent: SpawnPointJobBase
+  name: SpecialistHWS
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: SpecialistHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: HWS
+      - state: specialist
+
+- type: entity
+  id: SpawnPointSpecialistSWS
+  parent: SpawnPointJobBase
+  name: SpecialistSWS
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: SpecialistSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: SWS
+      - state: specialist
+
+- type: entity
+  id: SpawnPointTankComm
+  parent: SpawnPointJobBase
+  name: TankComm
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: TankComm
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: tank
+
+- type: entity
+  id: SpawnPointTanker
+  parent: SpawnPointJobBase
+  name: Tanker
+  suffix: WH40K, Империум
+  components:
+  - type: SpawnPoint
+    job_id: Tanker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: tank
+
+# Heretics
+
+- type: entity
+  id: SpawnPointHColonel
+  parent: SpawnPointJobBase
+  name: HColonel
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HColonel
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: colonel
+
+- type: entity
+  id: SpawnPointHCommissar
+  parent: SpawnPointJobBase
+  name: HCommissar
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HCommissar
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: commissar
+
+- type: entity
+  id: SpawnPointHGuardsman
+  parent: SpawnPointJobBase
+  name: HGuardsman
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HGuardsman
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointHLieutenant
+  parent: SpawnPointJobBase
+  name: Lieutenant
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HLieutenant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: lieutenant
+
+- type: entity
+  id: SpawnPointHMedic
+  parent: SpawnPointJobBase
+  name: Medic
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HMedic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: medic
+
+- type: entity
+  id: SpawnPointHSergeant
+  parent: SpawnPointJobBase
+  name: Sergeant
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HSergeant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: sergeant
+
+- type: entity
+  id: SpawnPointHSergeantHWS
+  parent: SpawnPointJobBase
+  name: SergeantHWS
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HSergeantHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: HWS
+      - state: sergeant
+
+- type: entity
+  id: SpawnPointHSergeantSWS
+  parent: SpawnPointJobBase
+  name: SergeantSWS
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HSergeantSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: SWS
+      - state: sergeant
+
+- type: entity
+  id: SpawnPointHSpecialistHWS
+  parent: SpawnPointJobBase
+  name: SpecialistHWS
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HSpecialistHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: HWS
+      - state: specialist
+
+- type: entity
+  id: SpawnPointHSpecialistSWS
+  parent: SpawnPointJobBase
+  name: SpecialistSWS
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HSpecialistSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: SWS
+      - state: specialist
+
+- type: entity
+  id: SpawnPointHTankComm
+  parent: SpawnPointJobBase
+  name: TankComm
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HTankComm
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: tank
+
+- type: entity
+  id: SpawnPointHTanker
+  parent: SpawnPointJobBase
+  name: Tanker
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HTanker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: tank
+
+# Engineering
+- type: entity
+  id: SpawnPointHNovice
+  parent: SpawnPointJobBase
+  name: novice
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HNovice
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: novice
+
+- type: entity
+  id: SpawnPointHMagos
+  parent: SpawnPointJobBase
+  name: magos
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HMagos
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: magos
+
+- type: entity
+  id: SpawnPointHLexmechanic
+  parent: SpawnPointJobBase
+  name: lexmechanic
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HLexmechanic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: lexmechanic
+
+- type: entity
+  id: SpawnPointHStationEnginseer
+  parent: SpawnPointJobBase
+  name: enginseer
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HEnginseer
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: enginseer
+
+- type: entity
+  id: SpawnPointHGenetor
+  parent: SpawnPointJobBase
+  name: genetor
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HGenetor
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: genetor
+
+- type: entity
+  id: SpawnPointHExplorator
+  parent: SpawnPointJobBase
+  name: explorator
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: Explorator
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: genetor

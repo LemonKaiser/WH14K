@@ -26,9 +26,6 @@
   id: JobGunnerySergeant
 
 - type: playTimeTracker
-  id: JobSergeant
-
-- type: playTimeTracker
   id: JobVoidsman
 
 - type: playTimeTracker
@@ -63,3 +60,93 @@
 
 - type: playTimeTracker
   id: JobPassengerWH40K
+
+- type: playTimeTracker
+  id: JobColonel
+
+- type: playTimeTracker
+  id: JobCommissar
+
+- type: playTimeTracker
+  id: JobLieutenant
+
+- type: playTimeTracker
+  id: JobSergeantHWS
+
+- type: playTimeTracker
+  id: JobSergeantSWS
+
+- type: playTimeTracker
+  id: JobSergeant
+
+- type: playTimeTracker
+  id: JobTankComm
+
+- type: playTimeTracker
+  id: JobSpecialistHWS
+
+- type: playTimeTracker
+  id: JobSpecialistSWS
+
+- type: playTimeTracker
+  id: JobTanker
+
+- type: playTimeTracker
+  id: JobGuardsman
+
+- type: playTimeTracker
+  id: JobMedic
+
+- type: playTimeTracker
+  id: JobHMagos
+
+- type: playTimeTracker
+  id: JobHLexmechanic
+
+- type: playTimeTracker
+  id: JobHExplorator
+
+- type: playTimeTracker
+  id: JobHGenetor
+
+- type: playTimeTracker
+  id: JobHEnginseer
+
+- type: playTimeTracker
+  id: JobHNovice
+
+- type: playTimeTracker
+  id: JobHColonel
+
+- type: playTimeTracker
+  id: JobHCommissar
+
+- type: playTimeTracker
+  id: JobHLieutenant
+
+- type: playTimeTracker
+  id: JobHSergeantHWS
+
+- type: playTimeTracker
+  id: JobHSergeantSWS
+
+- type: playTimeTracker
+  id: JobHSergeant
+
+- type: playTimeTracker
+  id: JobHTankComm
+
+- type: playTimeTracker
+  id: JobHSpecialistHWS
+
+- type: playTimeTracker
+  id: JobHSpecialistSWS
+
+- type: playTimeTracker
+  id: JobHTanker
+
+- type: playTimeTracker
+  id: JobHGuardsman
+
+- type: playTimeTracker
+  id: JobHMedic

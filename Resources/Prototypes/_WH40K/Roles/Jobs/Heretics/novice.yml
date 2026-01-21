@@ -1,0 +1,13 @@
+- type: job
+  id: HNovice
+  name: job-name-novice
+  description: job-description-novice
+  playTimeTracker: JobHNovice
+  startingGear: NoviceGear
+  icon: "JobIconNovice"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External

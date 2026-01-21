@@ -1,13 +1,5 @@
 - type: jobIcon
   parent: JobIcon
-  id: JobIconFirstAssistant
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: FirstAssistant
-  jobName: job-name-first-assistant
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconEnginseer
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -56,27 +48,43 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconGunnerySergeant
+  id: JobIconColonel
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: GunnerySergeant
-  jobName: job-name-gunnery-sergeant
+    state: Colonel
+  jobName: job-name-colonel
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconHeadOfficer
+  id: JobIconCommissar
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HeadOfficer
-  jobName: job-name-head-officer
+    state: Commissar
+  jobName: job-name-commissar
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconRecruit
+  id: JobIconLieutenant
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Recruit
-  jobName: job-name-recruit
+    state: Lieutenant
+  jobName: job-name-lieutenant
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSergeantSWS
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: SergeantSWS
+  jobName: job-name-sergeant-sws
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSergeantHWS
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: SergeantHWS
+  jobName: job-name-sergeant-hws
 
 - type: jobIcon
   parent: JobIcon
@@ -88,8 +96,48 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconVoidsman
+  id: JobIconTankComm
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Voidsman
-  jobName: job-name-voidsman
+    state: TankComm
+  jobName: job-name-tank-comm
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSpecialistHWS
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: SpecialistHWS
+  jobName: job-name-specialist-hws
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSpecialistSWS
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: SpecialistSWS
+  jobName: job-name-specialist-sws
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTanker
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Tanker
+  jobName: job-name-tanker
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMedic
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Medic
+  jobName: job-name-medic
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconGuardsman
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Guardsman
+  jobName: job-name-guardsman

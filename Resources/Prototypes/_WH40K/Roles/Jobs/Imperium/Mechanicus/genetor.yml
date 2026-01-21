@@ -1,0 +1,35 @@
+- type: job
+  id: Genetor
+  name: job-name-genetor
+  description: job-description-genetor
+  playTimeTracker: JobGenetor
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Imperium
+      time: 6h
+    - !type:RoleTimeRequirement
+      role: JobNovice
+      time: 2.5h
+  startingGear: GenetorGear
+  icon: "JobIconGenetor"
+  supervisors: job-supervisors-ce
+  access:
+  - Maintenance
+  - Engineering
+  - External
+  - Atmospherics
+  - Medical
+  - Chemistry
+
+- type: startingGear
+  id: GenetorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    neck: ClothingNeckRobeGenetorTechpriestMars
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    mask: ClothingMaskGasTechPriest
+    id: PassengerPDA

@@ -9,12 +9,6 @@
     },
     "states": [
         {
-            "name": "FirstAssistant"
-        },
-        {
-            "name": "HeadOfficer"
-        },
-        {
             "name": "Magos"
         },
         {
@@ -33,16 +27,40 @@
             "name": "Novice"
         },
         {
-            "name": "GunnerySergeant"
+            "name": "Colonel"
+        },
+        {
+            "name": "Commissar"
+        },
+        {
+            "name": "Lieutenant"
+        },
+        {
+            "name": "SergeantSWS"
+        },
+        {
+            "name": "SergeantHWS"
         },
         {
             "name": "Sergeant"
         },
         {
-            "name": "Voidsman"
+            "name": "TankComm"
         },
         {
-            "name": "Recruit"
+            "name": "SpecialistHWS"
+        },
+        {
+            "name": "SpecialistSWS"
+        },
+        {
+            "name": "Tanker"
+        },
+        {
+            "name": "Medic"
+        },
+        {
+            "name": "Guardsman"
         }
     ]
 }

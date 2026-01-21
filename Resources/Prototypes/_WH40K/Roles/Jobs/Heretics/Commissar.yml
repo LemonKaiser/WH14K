@@ -1,0 +1,13 @@
+- type: job
+  id: HCommissar
+  name: job-name-commissar
+  description: job-description-commissar
+  playTimeTracker: JobHCommissar
+  startingGear: CommissarGear
+  icon: "JobIconCommissar"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - Engineering
+  - External

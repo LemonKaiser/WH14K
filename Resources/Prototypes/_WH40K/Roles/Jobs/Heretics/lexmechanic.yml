@@ -1,0 +1,22 @@
+- type: job
+  id: HLexmechanic
+  name: job-name-lexmechanic
+  description: job-description-lexmechanic
+  playTimeTracker: JobHLexmechanic
+  requirements:
+    - !type:DepartmentTimeRequirement
+      department: Imperium
+      time: 6h
+    - !type:RoleTimeRequirement
+      role: JobNovice
+      time: 2.5h
+  startingGear: LexmechanicGear
+  icon: "JobIconLexmechanic"
+  supervisors: job-supervisors-ce
+  access:
+  - Maintenance
+  - Engineering
+  - External
+  - Atmospherics
+  - Research
+  - ResearchDirector

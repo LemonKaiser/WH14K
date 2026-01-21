@@ -1,0 +1,23 @@
+- type: job
+  id: Guardsman
+  name: job-name-guardsman
+  description: job-description-guardsman
+  playTimeTracker: JobGuardsman
+  startingGear: GuardsmanGear
+  icon: "JobIconGuardsman"
+  supervisors: job-supervisors-engineering
+  canBeAntag: true # DeltaV - Can be antagonist
+  access:
+  - Maintenance
+  - Engineering
+  - External
+
+- type: startingGear
+  id: GuardsmanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    head: ClothingHeadHelmetFlak
+    outerClothing: ClothingOuterArmorFlakVestLight
