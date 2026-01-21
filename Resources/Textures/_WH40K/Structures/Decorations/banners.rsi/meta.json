@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Made for WH14K project",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "chaos_banner"
+    },
+    {
+      "name": "gvardia_banner"
+    },
+    {
+      "name": "gvardia_banner2"
+    }
+  ]
+}

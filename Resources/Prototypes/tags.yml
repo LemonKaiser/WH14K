@@ -7,6 +7,9 @@
   id: AccessBreakerImmune # Default value in EmagProviderComponent. Marks tagged entity as immune to AccessBreakerUnlimited.
 
 - type: Tag
+  id: AccatranPowerCell # Storage whitelist: Lasgun weapons. Used for Accatran power cells in WH40K mod.
+
+- type: Tag
   id: AirAlarm # Used by AtmosAlarmableComponent for syncing devices.
 
 - type: Tag

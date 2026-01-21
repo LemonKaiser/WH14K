@@ -1,0 +1,68 @@
+- type: entity
+  name: знамя хаоса
+  id: WHChaosBanner
+  parent: BaseStructureDynamic
+  description: Зла и Добра в Хаосе нет — он выше этого.
+  suffix: WH40K, Хаос
+  components:
+  - type: Transform
+    noRot: true
+  - type: InteractionOutline
+    color: "#00FF00"
+    enabled: true
+  - type: Anchorable
+    enabled: true
+  - type: Pullable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - Opaque
+        - MidImpassable
+        - HighImpassable
+        - BulletImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: chaos_banner
+
+- type: entity
+  name: знамя гвардии
+  id: WHGvardiaBanner
+  parent: WHChaosBanner
+  description: Один верующий способен одолеть легион безбожников.
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: gvardia_banner
+
+- type: entity
+  name: знамя гвардии
+  id: WHGvardiaBanner2
+  parent: WHChaosBanner
+  description: Один верующий способен одолеть легион безбожников.
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: gvardia_banner2

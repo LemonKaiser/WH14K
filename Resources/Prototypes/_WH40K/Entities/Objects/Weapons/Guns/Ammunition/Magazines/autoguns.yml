@@ -1,44 +1,85 @@
+
 - type: entity
-  id: MagazineLightAutogun
+  id: MagazineStabLMG
   name: "магазин (8,25 мм удлинённый)"
-  parent: BaseMagazineLightRifle
-  components:
-  - type: Tag
-    tags:
-      - MagazineLightAutogun
-  - type: BallisticAmmoProvider
-    proto: CartridgeLightAutogun
-    mayTransfer: true
-    whitelist:
-      tags:
-        - CartridgeLightAutogun
-      
-- type: entity
-  id: MagazineHeavyAutogun
-  name: "магазин (12 мм удлинённый)"
   parent: BaseMagazineRifle
   components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_box.rsi
   - type: Tag
     tags:
-      - MagazineHeavyAutogun
+      - MagazineStubLMG
   - type: BallisticAmmoProvider
-    proto: CartridgeHeavyAutogun
+    capacity: 60
+    proto: Cartridge825mmLong
     mayTransfer: true
     whitelist:
       tags:
-        - CartridgeHeavyAutogun
-        
+        - Cartridge825mmLong
+
+- type: entity
+  id: MagazineStubMG
+  name: "магазин (8,25 мм удлинённый)"
+  parent: BaseMagazineRifle
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_box.rsi
+  - type: Tag
+    tags:
+      - MagazineStubMG
+  - type: BallisticAmmoProvider
+    capacity: 200
+    proto: Cartridge825mmLong
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Cartridge825mmLong
+
 - type: entity
   id: MagazineStubPistol
-  name: "магазин (6,2 мм укороченный)"
+  name: "магазин (10 мм)"
   parent: BaseMagazinePistol
   components:
   - type: Tag
     tags:
       - MagazineStubPistol
   - type: BallisticAmmoProvider
-    proto: CartridgeStubPistol
+    capacity: 10
+    proto: Cartridge10mm
     mayTransfer: true
     whitelist:
       tags:
-        - CartridgeStubPistol
+        - Cartridge10mm
+
+- type: entity
+  id: MagazineStubRifle
+  name: "магазин (8,25 мм удлинённый)"
+  parent: BaseMagazineRifle
+  components:
+  - type: Tag
+    tags:
+      - MagazineStubRifle
+  - type: BallisticAmmoProvider
+    capacity: 30
+    proto: Cartridge825mmLong
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Cartridge825mmLong
+
+- type: entity
+  id: MagazineStubSMG
+  name: "магазин (10 мм удлинённый)"
+  parent: BaseMagazinePistol
+  components:
+  - type: Tag
+    tags:
+      - MagazineStubSMG
+  - type: BallisticAmmoProvider
+    proto: Cartridge10mmLong
+    capacity: 30
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Cartridge10mmLong
+

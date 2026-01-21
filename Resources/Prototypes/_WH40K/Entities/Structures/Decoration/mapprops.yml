@@ -38,7 +38,7 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/mapprops.rsi
     state: map_prop0
-   
+
 - type: entity
   name: блок
   id: MapPropBlock
@@ -102,7 +102,7 @@
         - LowImpassable
   - type: Sprite
     state: map_prop2
-    
+
 - type: entity
   name: блок
   id: MapPropBlock1
@@ -123,7 +123,7 @@
         - LowImpassable
   - type: Sprite
     state: map_prop3
-    
+
 - type: entity
   name: балка
   id: MapPropBeam
@@ -144,7 +144,7 @@
         - LowImpassable
   - type: Sprite
     state: map_prop4
-    
+
 - type: entity
   name: катушка
   id: MapPropCoil
@@ -165,7 +165,7 @@
         - LowImpassable
   - type: Sprite
     state: map_prop5
-    
+
 - type: entity
   name: блок
   id: MapPropBlock2
@@ -186,4 +186,259 @@
         - LowImpassable
   - type: Sprite
     state: map_prop6
-    
+
+- type: entity
+  name: комиссар
+  id: ChaosProp
+  parent: BaseStructureDynamic
+  description: Через 10 тысяч лет пусть галактика горит в огне.
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/chaos.rsi
+    state: "1"
+
+- type: entity
+  name: полковник
+  id: ChaosProp2
+  parent: ChaosProp
+  description: Мы вернулись! Смерть Ложному Императору!
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 250
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    state: "2"
+
+- type: entity
+  name: гвардейцы
+  id: ChaosProp3
+  parent: ChaosProp
+  description: Вы боевые псы Кхорна и вы будете пускать кровь и добывать черепа во имя его!
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 250
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    state: "3"
+
+- type: entity
+  name: сержант
+  id: ChaosProp4
+  parent: ChaosProp
+  description: Всё — прах.
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 250
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    state: "4"
+
+- type: entity
+  name: ветераны
+  id: ChaosProp5
+  parent: ChaosProp
+  description: Ave Dominus Nox!
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 250
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Sprite
+    state: "5"
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout
+  parent: BaseStructure
+  description: интересно, в них есть что-то сьедобное?
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Pullable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
+    state: trashbags_1
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout2
+  parent: MapPropFallout
+  description: интересно, в них есть что-то сьедобное?
+  components:
+  - type: Sprite
+    state: trashbags_2
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout3
+  parent: MapPropFallout
+  description: интересно, в них есть что-то сьедобное?
+  components:
+  - type: Sprite
+    state: trashbags_3
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout4
+  parent: MapPropFallout
+  description: интересно, в них есть что-то сьедобное?
+  components:
+  - type: Sprite
+    state: trashbags_4
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout5
+  parent: MapPropFallout
+  description: интересно, в них есть что-то сьедобное?
+  components:
+  - type: Sprite
+    state: trashbags_5
+
+- type: entity
+  name: мешки с мусором
+  id: MapPropFallout6
+  parent: MapPropFallout
+  description: интересно, в них есть что-то сьедобное?
+  components:
+  - type: Sprite
+    state: trashbags_6
+
+- type: entity
+  name: табличка
+  id: MapPropFallout7
+  parent: BaseStructure
+  description: "ОСТОРОЖНО! МИНЫ!"
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Pullable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.125,-0.5,0.125,0.5"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
+    state: mine_sign
+
+- type: entity
+  name: скелет
+  id: MapPropFallout8
+  parent: BaseStructure
+  description: тяжело.
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
+    state: skeleton

@@ -18,6 +18,7 @@ job-name-technical-assistant = Technical Assistant
 job-name-engineer = Station Engineer
 job-name-atmostech = Atmospheric Technician
 job-name-hop = Head of Personnel
+job-name-first-assistant = First Assistant
 job-name-captain = Captain
 job-name-serviceworker = Service Worker
 job-name-centcomoff = CentComm Official

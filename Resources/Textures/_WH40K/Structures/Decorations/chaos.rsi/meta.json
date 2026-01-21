@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "heretek",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "1"
+    },
+    {
+      "name": "2"
+    },
+    {
+      "name": "3"
+    },
+    {
+      "name": "4"
+    },
+    {
+      "name": "5"
+    }
+  ]
+}

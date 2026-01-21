@@ -58,3 +58,233 @@
       behaviors:
       - !type:DoActsBehavior
         acts: ["Destruction"]
+
+- type: entity
+  id: FallotBarbedWire
+  parent: BaseStructure
+  name: колючая проволока
+  description: То, что не дает вам умереть в штыковой атаке.
+  suffix: WH40K, Пропы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: barbedwire_single
+  - type: Damageable
+    damageModifierSet: Metallic
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 2
+  - type: StepTrigger
+    intersectRatio: 0.2
+    requiredTriggeredSpeed: 0
+  - type: TriggerOnStepTrigger
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.08
+    sprintSpeedModifier: 0.08
+  - type: Fixtures
+    fixtures:
+      slips:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,-0.25"
+        hard: false
+        layer:
+        - LowImpassable
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,-0.25"
+        density: 100
+        mask:
+        - ItemMask
+  - type: CollisionWake
+    enabled: false
+  - type: Slippery
+    slipSound:
+      path: /Audio/Effects/fence_rattle1.ogg
+    launchForwardsMultiplier: 0
+    paralyzeTime: 0
+
+- type: entity
+  name: Противотанковый ёж
+  id: FalloutBarricades
+  parent: BaseStructureDynamic
+  description: Стоп, танки?
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: iron_barricade
+
+- type: entity
+  name: Противотанковый ёж
+  id: FalloutBarricades3
+  parent: BaseStructureDynamic
+  description: Стоп, танки?
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: iron_barricadeA
+
+- type: entity
+  name: Противотанковый ёж
+  id: FalloutBarricades4
+  parent: BaseStructureDynamic
+  description: Стоп, танки?
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 350
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: iron_barricade2
+
+- type: entity
+  name: Противотанковый ёж
+  id: FalloutBarricades5
+  parent: BaseStructureDynamic
+  description: Стоп, танки?
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: iron_barricade2A
+
+- type: entity
+  name: баррикады
+  id: FalloutBarricades6
+  parent: BaseStructureDynamic
+  description: Ржавый бункер моя свобода, заколочена дверь крестом.
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: boarded
+
+- type: entity
+  name: оконные рамы
+  id: FalloutBarricades7
+  parent: BaseStructureDynamic
+  description: От гнусных воров и жалких тиранидов.
+  suffix: WH40K, Пропы
+  components:
+  - type: Transform
+    noRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+  - type: Climbable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
+    state: bars
+
+
+
