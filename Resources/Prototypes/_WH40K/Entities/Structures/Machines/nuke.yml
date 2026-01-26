@@ -1,0 +1,25 @@
+- type: entity
+  parent: NuclearBomb
+  id: NuclearBombEX
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Devices/exnuke.rsi
+    noRot: true
+    layers:
+    - state: nuclearbomb_base
+      map: ["enum.NukeVisualLayers.Base"]
+    - state: nuclearbomb_deployed_unlit
+      map: ["enum.NukeVisualLayers.Unlit"]
+      shader: unshaded
+      visible: false
+
+- type: entity
+  parent: NuclearBombEX
+  id: NuclearBombEXUnanchored
+  suffix: "WH40K, unanchored"
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
