@@ -6,6 +6,7 @@ using Content.Shared.Mech.Equipment.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Random;
+using Content.Shared.Power.Components;
 
 namespace Content.Server.Mech.Equipment.EntitySystems;
 public sealed class MechGunSystem : EntitySystem
@@ -45,17 +46,16 @@ public sealed class MechGunSystem : EntitySystem
             return;
 
         var maxCharge = component.MaxCharge;
-        var currentCharge = component.CurrentCharge;
+        var currentCharge = _battery.GetCharge((uid, component));
 
         var chargeDelta = maxCharge - currentCharge;
-
-        // TODO: The battery charge of the mech would be spent directly when fired.
+    
         if (chargeDelta <= 0 || mech.Energy - chargeDelta < 0)
             return;
 
         if (!_mech.TryChangeEnergy(mechEquipment.EquipmentOwner.Value, -chargeDelta, mech))
             return;
 
-        _battery.SetCharge(uid, component.MaxCharge, component);
+        _battery.SetCharge((uid, component), maxCharge);
     }
 }
