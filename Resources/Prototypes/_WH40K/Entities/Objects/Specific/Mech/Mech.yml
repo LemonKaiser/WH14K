@@ -22,7 +22,7 @@
     mechToPilotDamageMultiplier: 0.75
     pilotWhitelist:
       components:
-        - HumanoidAppearance
+        - HumanoidProfile
   - type: SpriteMovement
     movementLayers:
       movement:
