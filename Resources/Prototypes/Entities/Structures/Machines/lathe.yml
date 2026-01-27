@@ -332,17 +332,6 @@
     - BorgModules
     - MechParts
     - MechEquipment
-  - type: EmagLatheRecipes
-    emagStaticPacks:
-    - WeaponMechCombatImmolationGun
-    - WeaponMechCombatSolarisLaser
-    - WeaponMechCombatFiredartLaser
-    - WeaponMechCombatUltraRifle
-    - WeaponMechCombatShotgun
-    - WeaponMechCombatShotgunIncendiary
-    - WeaponMechCombatDisabler
-    - WeaponMechCombatFlashbangLauncher
-    - WeaponMechCombatMissileRack8
   - type: MaterialStorage
     whitelist: *StandardMaterialWhitelist
   - type: OreSiloClient
