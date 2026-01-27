@@ -8,7 +8,7 @@
   
 - type: radioChannel
   id: Vox
-  name: 'вокс'
+  name: chat-radio-vox
   keycode: 'w'
   frequency: 2050
   color: "#60615b"

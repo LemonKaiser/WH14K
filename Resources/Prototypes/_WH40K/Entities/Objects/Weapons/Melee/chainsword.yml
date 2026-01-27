@@ -41,7 +41,7 @@
       types:
         Slash: 13
         Blunt: 3
-    ActivatedSoundOnHit:
+    activatedSoundOnHit:
       path: /Audio/Weapons/chainsaw.ogg
       params:
         volume: -3
