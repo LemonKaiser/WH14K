@@ -333,7 +333,7 @@
     - MechParts
     - MechEquipment
   - type: EmagLatheRecipes
-    emagDynamicRecipes:
+    emagStaticPacks:
     - WeaponMechCombatImmolationGun
     - WeaponMechCombatSolarisLaser
     - WeaponMechCombatFiredartLaser

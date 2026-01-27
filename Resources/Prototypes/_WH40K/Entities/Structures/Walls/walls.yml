@@ -82,3 +82,46 @@
   - type: Icon
     sprite: _WH40K/Structures/Walls/solid_diagonal.rsi
     state: state0
+
+- type: entity
+  parent: BaseWall
+  id: WallRockIndestructible
+  name: твердокаменная скала
+  suffix: неразрушимая
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/rock.rsi
+    state: rock
+  - type: MiningScannerViewable
+  - type: SmoothEdge
+  - type: Sprite
+    sprite: _WH40K/Structures/Walls/rock.rsi
+    layers:
+    - state: rock
+    - map: [ "enum.EdgeLayer.South" ]
+      state: rock_south
+    - map: [ "enum.EdgeLayer.East" ]
+      state: rock_east
+    - map: [ "enum.EdgeLayer.North" ]
+      state: rock_north
+    - map: [ "enum.EdgeLayer.West" ]
+      state: rock_west
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 4000
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: RadiationBlocker
+    resistance: 5
