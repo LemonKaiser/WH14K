@@ -1,0 +1,45 @@
+- type: entity
+  id: WeaponMechCombatSentinelRifle
+  name: Автопушка часового
+  description: Placeholder.
+  suffix: Mech Weapon, Gun, Combat, Rifle
+  parent: [ BaseMechWeaponRange, CombatMechEquipment ]
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Mech/mecha_equipment.rsi
+    state: mecha_uac2
+  - type: Gun
+    fireRate: 2
+    selectedMode: FullAuto
+    availableModes:
+      - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/bolter.ogg
+  - type: BatteryAmmoProvider
+    proto: BulletSentine
+    fireCost: 15
+  - type: Appearance
+  - type: AmmoCounter
+
+- type: entity
+  id: WeaponMechCombatSentinelPlasma
+  name: Плазма-винтовка часового
+  description: Placeholder.
+  suffix: Mech Weapon, Gun, Combat, Rifle
+  parent: [ BaseMechWeaponRange, CombatMechEquipment ]
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Mech/mecha_equipment.rsi
+    state: mecha_uac2
+  - type: Gun
+    fireRate: 0.6
+    selectedMode: FullAuto
+    availableModes:
+      - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmapist.wav
+  - type: BatteryAmmoProvider
+    proto: WHBulletPlasmaSentine
+    fireCost: 15
+  - type: Appearance
+  - type: AmmoCounter

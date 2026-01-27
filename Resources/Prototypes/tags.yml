@@ -322,6 +322,24 @@
   id: Cleaver # Storage whitelist: ClothingBeltChef. ItemMapper: ClothingBeltChef
 
 - type: Tag
+  id: ClarkeCentralControlModule
+
+- type: Tag
+  id: ClarkePeripheralsControlModule
+
+- type: Tag
+  id: ClarkeHead
+
+- type: Tag
+  id: ClarkeLArm
+
+- type: Tag
+  id: ClarkeRArm
+
+- type: Tag
+  id: ClarkeTreads
+
+- type: Tag
   id: ClothMade # SpecialDigestible: OrganMothStomach. Storage whitelist: FoodBoxCloth
 
 - type: Tag
@@ -516,6 +534,33 @@
   id: EmagImmune # Default value in EmagComponent. Marks tagged entity as immune to EmagUnlimited.
 
 - type: Tag
+  id: DurandArmor
+
+- type: Tag
+  id: DurandCentralControlModule
+
+- type: Tag
+  id: DurandPeripheralsControlModule
+
+- type: Tag
+  id: DurandTargetingControlModule
+
+- type: Tag
+  id: DurandHead
+
+- type: Tag
+  id: DurandLArm
+
+- type: Tag
+  id: DurandLLeg
+
+- type: Tag
+  id: DurandRArm
+
+- type: Tag
+  id: DurandRLeg
+
+- type: Tag
   id: EmitterBolt # Default value in ContainmentFieldGeneratorComponent for tagged collisions that power the generator.
 
 - type: Tag
@@ -666,6 +711,33 @@
 
 - type: Tag
   id: GrenadeFlashBang # Storage whitelist: ClusterBang
+
+- type: Tag
+  id: GygaxArmor
+
+- type: Tag
+  id: GygaxCentralControlModule
+
+- type: Tag
+  id: GygaxPeripheralsControlModule
+
+- type: Tag
+  id: GygaxTargetingControlModule
+
+- type: Tag
+  id: GygaxHead
+
+- type: Tag
+  id: GygaxLArm
+
+- type: Tag
+  id: GygaxLLeg
+
+- type: Tag
+  id: GygaxRArm
+
+- type: Tag
+  id: GygaxRLeg
 
 - type: Tag
   id: GuideEmbeded # Applied by GuideEntityEmbed and used by GuidebookSystem. This tag hides the guidebook link when examining an entity inside a guide book.
@@ -945,6 +1017,12 @@
   id: MicrowaveMachineBoard # CargoBounty: BountyMicrowaveMachineBoard
 
 - type: Tag
+  id: MechAirTank
+
+- type: Tag
+  id: MechThruster
+
+- type: Tag
   id: MimeBelt # ConstructionGraph: MimeHardsuit, MimeBot
 
 - type: Tag
@@ -1219,6 +1297,9 @@
   id: RipleyPeripheralsControlModule # ConstructionGraph: Ripley
 
 - type: Tag
+  id: RipleyMKIIUpgradeKit
+
+- type: Tag
   id: RipleyRArm # PartAssembly: RipleyHarness. ItemMapper: RipleyHarness
 
 - type: Tag
@@ -1318,6 +1399,16 @@
 
 - type: Tag
   id: SolarTrackerElectronics # ConstructionGraph: SolarPanel
+
+- type: Tag
+  id: IndustrialMech
+
+- type: Tag
+  id: CombatMech
+# TODO: Make medical mech
+
+- type: Tag
+  id: SpecialMech
 
 - type: Tag
   id: Soup # CargoBounty: BountySoup
