@@ -9,7 +9,8 @@
       sprite: _WH40K/Structures/Machines/fieldkitchen.rsi
       state: "base"
     - type: Anchorable
-      enabled: true
+      flags:
+      - Anchorable
     - type: Rotatable
       rotateWhileAnchored: true
     - type: Damageable

@@ -3,7 +3,6 @@
   id: RedLaserLong
   components:
   - type: HitscanBasicDamage
-    components:
     damage:
       types:
         Heat: 50

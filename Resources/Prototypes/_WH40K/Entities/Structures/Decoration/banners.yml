@@ -8,10 +8,10 @@
   - type: Transform
     noRot: true
   - type: InteractionOutline
-    color: "#00FF00"
-    enabled: true
   - type: Anchorable
-    enabled: true
+    flags:
+    - Anchorable
+  - type: Rotatable
   - type: Pullable
   - type: Fixtures
     fixtures:

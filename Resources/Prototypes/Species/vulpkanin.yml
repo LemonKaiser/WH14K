@@ -6,6 +6,7 @@
   defaultSkinTone: "#5a3f2d"
   dollPrototype: AppearanceVulpkanin
   skinColoration: VulpkaninColors
-  maleFirstNames: names_vulpkanin_male
-  femaleFirstNames: names_vulpkanin_female
-  lastNames: names_vulpkanin_last
+  maleFirstNames: NamesVulpFirstMale # Corvax-CorvaxVulp_Port names_vulpkanin_male
+  femaleFirstNames: NamesVulpFirstFemale # Corvax-CorvaxVulp_Port names_vulpkanin_female
+  maleLastNames: NamesVulpLast # Corvax-LastnameGender
+  femaleLastNames: NamesVulpLast # Corvax-LastnameGender
