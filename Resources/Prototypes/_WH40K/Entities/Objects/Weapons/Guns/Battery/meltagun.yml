@@ -15,11 +15,11 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/meltagun.ogg
-  - type: MagazineAmmoProvider
+  - type: BatteryAmmoProvider
     proto: RedMeltaLaser
   - type: ItemSlots
     slots:
-      gun_magazine:
+      cell_slot:
         name: Magazine
         startingItem: MeltPowerCell
         whitelist:

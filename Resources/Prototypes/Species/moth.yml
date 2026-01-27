@@ -8,4 +8,5 @@
   skinColoration: Hues
   maleFirstNames: NamesMothFirstMale
   femaleFirstNames: NamesMothFirstFemale
-  lastNames: NamesMothLast
+  maleLastNames: NamesMothLast # Corvax-LastnameGender
+  femaleLastNames: NamesMothLast # Corvax-LastnameGender

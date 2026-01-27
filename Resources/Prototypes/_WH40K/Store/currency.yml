@@ -2,12 +2,12 @@
   id: Intelligence
   displayName: Разведданные
   cash:
-    1: Intelligence
+    1: DataChip
   canWithdraw: false
 
 - type: currency
   id: intelligence_ch
   displayName: Разведданные хаоса
   cash:
-    1: intelligence_ch
+    1: DataChipChaos
   canWithdraw: false

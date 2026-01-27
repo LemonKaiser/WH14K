@@ -24,6 +24,4 @@
       balance:
         intelligence_ch: 0
     - type: InteractionOutline
-      color: "#00FF00"
-      enabled: true
 
