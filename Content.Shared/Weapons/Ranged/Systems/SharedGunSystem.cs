@@ -10,6 +10,8 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
+using Content.Shared.Hands.Components;
+using Content.Shared.Mech.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
@@ -145,44 +147,42 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         var user = args.SenderSession.AttachedEntity;
 
-        if (user == null ||
-            !_combatMode.IsInCombatMode(user) ||
-            !TryGetGun(user.Value, out var gun))
-        {
-            return;
-        }
-
-        if (gun.Owner != GetEntity(msg.Gun))
+        if (user == null || !_combatMode.IsInCombatMode(user))
             return;
 
-        gun.Comp.ShootCoordinates = GetCoordinates(msg.Coordinates);
-        gun.Comp.Target = GetEntity(msg.Target);
-        AttemptShoot(user.Value, gun);
+        if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
+            user = mechPilot.Mech;
+
+        if (!TryGetGun(user.Value, out var ent, out var gun))
+            return;
+
+        if (ent != GetEntity(msg.Gun))
+            return;
+
+        gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
+        gun.Target = GetEntity(msg.Target);
+        AttemptShoot(user.Value, (ent, gun));
     }
 
     private void OnStopShootRequest(RequestStopShootEvent ev, EntitySessionEventArgs args)
     {
         var gunUid = GetEntity(ev.Gun);
 
-        if (args.SenderSession.AttachedEntity == null ||
-            !TryComp<GunComponent>(gunUid, out var gun) ||
-            !TryGetGun(args.SenderSession.AttachedEntity.Value, out var userGun))
-        {
-            return;
-        }
+        var user = args.SenderSession.AttachedEntity;
 
-        if (userGun != (gunUid, gun))
+        if (user == null)
             return;
 
-        StopShooting(userGun);
-    }
+        if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
+            user = mechPilot.Mech;
 
-    public bool CanShoot(GunComponent component)
-    {
-        if (component.NextFire > Timing.CurTime)
-            return false;
+        if (!TryGetGun(user.Value, out var ent, out var gun))
+            return;
 
-        return true;
+        if (ent != gunUid)
+            return;
+
+        StopShooting((gunUid, gun));
     }
 
     /// <summary>
@@ -194,9 +194,21 @@ public abstract partial class SharedGunSystem : EntitySystem
     public bool TryGetGun(EntityUid entity, out Entity<GunComponent> gun)
     {
         gun = default;
+        EntityUid? gunEntity = null;
+        GunComponent? gunComp = null;
+
+        if (TryComp<MechComponent>(entity, out var mech) &&
+            mech.CurrentSelectedEquipment.HasValue &&
+            TryComp<GunComponent>(mech.CurrentSelectedEquipment.Value, out var mechGun))
+        {
+            gunEntity = mech.CurrentSelectedEquipment.Value;
+            gunComp = mechGun;
+            gun = (gunEntity.Value, gunComp);
+            return true;
+        }
 
         if (_hands.GetActiveItem(entity) is { } held &&
-            TryComp(held, out GunComponent? gunComp))
+            TryComp(held, out gunComp))
         {
             gun = (held, gunComp);
             return true;
@@ -209,6 +221,19 @@ public abstract partial class SharedGunSystem : EntitySystem
             return true;
         }
 
+        return false;
+    }
+
+    public bool TryGetGun(EntityUid entity, out EntityUid uid, out GunComponent comp)
+    {
+        if (TryGetGun(entity, out var gunEnt))
+        {
+            uid = gunEnt.Owner;
+            comp = gunEnt.Comp;
+            return true;
+        }
+        uid = default!;
+        comp = default!;
         return false;
     }
 
@@ -296,8 +321,11 @@ public abstract partial class SharedGunSystem : EntitySystem
         var shots = 0;
         var lastFire = gun.Comp.NextFire;
 
+        Log.Debug($"Nextfire={gun.Comp.NextFire} curTime={curTime}");
+
         while (gun.Comp.NextFire <= curTime)
         {
+            Log.Debug("Shots++");
             gun.Comp.NextFire += fireRate;
             shots++;
         }
@@ -327,6 +355,8 @@ public abstract partial class SharedGunSystem : EntitySystem
         {
             shots = Math.Min(shots, gun.Comp.ShotsPerBurstModified - gun.Comp.ShotCounter);
         }
+
+        Log.Debug($"Shots fired: {shots}");
 
         var attemptEv = new AttemptShootEvent(user, null);
         RaiseLocalEvent(gun, ref attemptEv);

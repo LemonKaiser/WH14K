@@ -184,8 +184,8 @@ public sealed partial class NPCCombatSystem
 
             // TODO: Check if we can face
 
-            if (!Enabled || !_gun.CanShoot(gun))
-                continue;
+//            if (!Enabled || !_gun.CanShoot(gun))
+//                continue;
 
             EntityCoordinates targetCordinates;
 
