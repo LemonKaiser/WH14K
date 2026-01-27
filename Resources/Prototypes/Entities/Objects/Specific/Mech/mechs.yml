@@ -735,8 +735,8 @@
         Blunt: 30
         Structural: 200
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.2
-    baseSprintSpeed: 3.7
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4
   - type: Damageable
     damageModifierSet: MediumArmorSyndi
   - type: CanMoveInAir

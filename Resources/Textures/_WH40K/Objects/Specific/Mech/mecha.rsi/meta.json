@@ -46,6 +46,14 @@
     },
     {
       "name": "sentinel-broken"
+    },
+    {
+      "name": "sentinel_autogun",
+      "directions": 4
+    },
+    {
+      "name": "sentinel_plasma",
+      "directions": 4
     }
   ]
 }
