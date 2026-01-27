@@ -229,7 +229,7 @@
     - Instruments
     - Equipment
   - type: EmagLatheRecipes
-    emagDynamicPacks:
+    emagStaticPacks:
     - SecurityAmmo
     - SecurityExplosives
     - SecurityEquipment

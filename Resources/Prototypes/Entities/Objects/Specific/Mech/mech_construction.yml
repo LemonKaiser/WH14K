@@ -624,6 +624,10 @@
   - type: ContainerContainer
     containers:
       mech-assembly-container: !type:Container
+      battery-container: !type:Container
+  - type: PartAssembly
+    parts:
+      RipleyMKII:
       - MechAssemblyRipleyMKIIUpgradeKit
       - RipleyLArm
       - RipleyRArm

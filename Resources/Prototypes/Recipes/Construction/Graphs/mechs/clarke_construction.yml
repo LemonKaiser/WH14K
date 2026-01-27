@@ -51,7 +51,7 @@
           data: 6
 
       - tag: ClarkePeripheralsControlModule
-        name: clarke peripherals control module
+        name: clarke-peripherals-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: id_mod
@@ -85,7 +85,7 @@
           data: 10
 
       - component: PowerCell
-        name: power cell
+        name: power-cell
         store: battery-container
         icon:
           sprite: Objects/Power/power_cells.rsi

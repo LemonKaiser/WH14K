@@ -34,7 +34,7 @@
           data: 4
 
       - tag: RipleyCentralControlModule
-        name: ripley central control module
+        name: ripley-central-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: "mainboard"
@@ -68,7 +68,7 @@
           data: 8
 
       - component: PowerCell
-        name: power cell
+        name: power-cell
         store: battery-container
         icon:
           sprite: Objects/Power/power_cells.rsi
