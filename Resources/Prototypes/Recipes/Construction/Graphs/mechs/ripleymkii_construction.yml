@@ -51,7 +51,7 @@
           data: 6
 
       - tag: RipleyPeripheralsControlModule
-        name: ripley peripherals control module
+        name: ripley-peripherals-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: id_mod
@@ -107,7 +107,7 @@
           data: 17
 
       - tag: MechAirTank
-        name: exosuit air tank
+        name: exosuit-air-tank
         icon:
           sprite: Objects/Specific/Mech/mecha_equipment.rsi
           state: mecha_air_tank

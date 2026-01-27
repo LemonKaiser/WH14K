@@ -47,7 +47,7 @@
           data: 5
 
       - tag: DurandPeripheralsControlModule
-        name: durand peripherals control module
+        name: durand-peripherals-control-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: id_mod
@@ -64,7 +64,7 @@
           data: 7
 
       - tag: DurandTargetingControlModule
-        name: durand weapon control and targeting module
+        name: durand-weapon-control-and-targeting-module
         icon:
           sprite: "Objects/Misc/module.rsi"
           state: mcontroller
@@ -137,7 +137,7 @@
           data: 16
 
       - tag: MechAirTank
-        name: exosuit air tank
+        name: exosuit-air-tank
         icon:
           sprite: Objects/Specific/Mech/mecha_equipment.rsi
           state: mecha_air_tank
@@ -155,7 +155,7 @@
         doAfter: 1
 
       - tag: DurandArmor
-        name: durand armor plates
+        name: durand-armor-plates
         icon:
           sprite: "Objects/Specific/Mech/durand_construction.rsi"
           state: durand_armor
