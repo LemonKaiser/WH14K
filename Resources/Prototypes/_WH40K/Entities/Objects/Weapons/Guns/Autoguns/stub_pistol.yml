@@ -3,7 +3,7 @@
   parent: BaseWeaponPistol
   id: WeaponStubPistol
   description: Пистолет неизвестной модели. Использует 10мм.
-  suffix: WH40K
+  suffix: WH40K, Общий
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_pistol.rsi

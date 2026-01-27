@@ -3,7 +3,7 @@
   parent: BaseWeaponRifle
   id: WeaponStubMG
   description: Тяжёлый, неказистый самодельный пулемёт, питается с помощью патронной ленты.
-  suffix: WH40K
+  suffix: WH40K, Общий
   components:
   - type: GunRequiresWield
   - type: Item

@@ -3,7 +3,7 @@
   parent: BaseWeaponRifle
   id: WeaponStubRifle
   description: Тяжёлый автомат модели «Агрипинаа» является переработанной версией Mk. II, фактически ничем не отличается от Mk. II, за исключением более стабильной отдачи взамен на вес. Использует 8,25 "Лонг".
-  suffix: WH40K
+  suffix: WH40K, Общий
   components:
   - type: GunRequiresWield
   - type: Item

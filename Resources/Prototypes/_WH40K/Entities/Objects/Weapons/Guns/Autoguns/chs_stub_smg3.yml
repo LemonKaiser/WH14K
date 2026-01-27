@@ -1,12 +1,12 @@
 - type: entity
   name: Стабб-пистолет пулемёт
   parent: BaseWeaponPistol
-  id: WeaponStubSMG3
+  id: WeaponChsStubSMG3
   description: Пистолет пулемёт, модель которого не определить, похоже, оно является самодельным.
-  suffix: WH40K, Общий
+  suffix: WH40K, Хаос
   components:
   - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg3.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/chs_stub_smg3.rsi
     scale: 0.85,0.85
     layers:
     - state: base
@@ -14,7 +14,7 @@
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
-    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg3.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/chs_stub_smg3.rsi
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -34,6 +34,8 @@
           tags:
             - Cartridge10mmLong
   - type: Gun
+    minAngle: 2
+    maxAngle: 20
     fireRate: 5.5
     availableModes:
     - FullAuto

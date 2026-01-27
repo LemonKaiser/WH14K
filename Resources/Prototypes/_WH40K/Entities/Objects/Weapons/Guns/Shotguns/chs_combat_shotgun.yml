@@ -1,19 +1,20 @@
 - type: entity
   name: боевой дробовик Аккатран Мk. XI
   parent: BaseWeaponShotgun
-  id: WeaponCombatShotgun
+  id: WeaponChsCombatShotgun
   description: Помповый дробовик с угловатым дизайном, изготавливаемый на Аккатране для нужд Имперской Гвардии. Использует 12 мм.
-  suffix: WH40K, Общий
+  suffix: WH40K, Хаос
   components:
   - type: Item
     size: Huge
-    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun_inhands.rsi
   - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun.rsi
     scale: 0.85,0.85
   - type: Clothing
-    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun_inhands.rsi
   - type: Gun
+    maxAngle: 7
     fireRate: 2
     availableModes:
     - SemiAuto
