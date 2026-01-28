@@ -165,6 +165,9 @@
     - board
   - type: PlacementReplacement
     key: walls
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
   - type: Paintable
     group: AirlockStandard
   - type: StaticPrice

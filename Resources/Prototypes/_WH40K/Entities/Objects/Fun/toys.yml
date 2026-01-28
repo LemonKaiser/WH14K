@@ -1,0 +1,85 @@
+- type: entity
+  parent: BasePlushie
+  id: PlushieFull
+  name: плюшевый Фулл
+  description: "Плюшевая версия некогда великого существа. Из его спины торчат два белоснежных крыла, а в руках массивный молот и... двадцатигранная игральная кость? Интересный набор предметов."
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Objects/Fun/toys.rsi
+      state: Full
+    - type: MeleeWeapon
+      wideAnimationRotation: 180
+      soundHit:
+        path: /Audio/Effects/adminhelp.ogg
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieGGados
+  name: Плюшевый Гадос
+  description: "Плюшевая игрушка, без сомнений, великого Гадоса. Без него не было бы ничего"
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Objects/Fun/toys.rsi
+      state: GGados
+
+- type: entity
+  parent: BasePlushie
+  id: Plushielondorondondon
+  name: LONDORONDONDON
+  description: "Когда-нибудь я точно нарисую что-то крутое!"
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Objects/Fun/toys.rsi
+      state: lon
+
+- type: entity
+  parent: BaseFigurine
+  id: PlushieIfi07
+  name: Игрушечный лекс-механик
+  description: "Плюшевая игрушка лексмеханика, что бесконечно ожидает новых сообщений что-бы перенести их на свиток. Не способен работать без подключения к внешним приборам."
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Objects/Fun/toys.rsi
+      state: ifi
+    - type: SpeakOnTrigger
+      pack: FigurinesIfi07
+
+- type: localizedDataset
+  id: FigurinesIfi07
+  values:
+    prefix: figurines-ifi-
+    count: 4
+
+- type: entity
+  parent: BasePlushie
+  id: StrangeToster
+  name: Странный тостер
+  description: "В нём обитает ленивый дух, так что вы не сможете заставить этот тостер работать"
+  suffix: WH40K
+  components:
+    - type: Sprite
+      sprite: _WH40K/Objects/Fun/toys.rsi
+      state: Toster
+    - type: EmitSoundOnUse
+      sound:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg
+    - type: EmitSoundOnLand
+      sound:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg
+    - type: EmitSoundOnCollide
+      sound:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg
+    - type: EmitSoundOnActivate
+      sound:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg
+    - type: EmitSoundOnTrigger
+      sound:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg
+    - type: MeleeWeapon
+      wideAnimationRotation: 180
+      soundHit:
+        path: /Audio/_WH40K/Fun/metalpipe.ogg

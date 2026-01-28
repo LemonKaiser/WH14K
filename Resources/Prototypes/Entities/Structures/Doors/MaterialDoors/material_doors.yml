@@ -224,7 +224,7 @@
   name: wooden door
   components:
   - type: Sprite
-    sprite: Structures/Doors/MineralDoors/wood_door.rsi
+    sprite: _WH40K/Structures/Doors/MineralDoors/wood_door.rsi
   - type: Door
     openSound:
       path: /Audio/Effects/door_open.ogg
@@ -233,6 +233,11 @@
   - type: Construction
     graph: DoorGraph
     node: woodDoor
+  - type: PlacementReplacement
+    key: walls
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
   - type: Damageable
     damageModifierSet: Wood
   - type: Destructible

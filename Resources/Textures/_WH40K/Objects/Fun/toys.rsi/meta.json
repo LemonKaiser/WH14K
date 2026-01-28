@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for DeltaV-Stray, WH14K    by boctonskuitea, Fullmaster, ifi07, londorondondon",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+        "name": "GGados"
+    },
+    {
+        "name": "Full"
+    },
+    {
+        "name": "Toster"
+    },
+    {
+        "name": "ifi"
+    },
+    {
+        "name": "lon"
+    }
+  ]
+}

@@ -19,3 +19,8 @@ durand-weapon-control-and-targeting-module = модуль управления �
 durand-armor-plates = броневые плиты Durand
 clarke-central-control-module = центральный блок управления Clarke
 clarke-peripherals-control-module = периферийный блок управления Clarke
+
+figurines-ifi-1 ="Должен практиковаться, должен практиковаться..."
+figurines-ifi-2 ="Однажды Омниссия явит себя мне и освободит от кривых рук"
+figurines-ifi-3 ="Как там было?... Я забыл"
+figurines-ifi-4 = "Так и запишем, реколор"
