@@ -1,0 +1,11 @@
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: -  cultbeltChaos
+  name: "разгрузочный жилет"
+  description: "Разгрузочный жилет, созданный для служителей Хаоса."
+  suffix: WH40K, Культ
+  components:
+  - type: Sprite
+    sprite: Resources/Textures/_WH40K/Clothing/Belt/beltcult.rsi
+  - type: Clothing
+    sprite: Resources/Textures/_WH40K/Clothing/Belt/beltcult.rsi
