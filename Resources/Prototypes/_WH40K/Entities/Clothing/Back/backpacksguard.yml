@@ -30,3 +30,5 @@
   - type: Store
     balance:
       Intelligence: 0
+  - type: Item
+    size: Huge

@@ -1,0 +1,611 @@
+# Engineering
+- type: entity
+  id: LateJoinSpawnPointNovice
+  parent: SpawnPointJobBase
+  name: novice
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Novice
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: novice
+
+- type: entity
+  id: LateJoinSpawnPointMagos
+  parent: SpawnPointJobBase
+  name: magos
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Magos
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: magos
+
+- type: entity
+  id: LateJoinSpawnPointLexmechanic
+  parent: SpawnPointJobBase
+  name: lexmechanic
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Lexmechanic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: lexmechanic
+
+- type: entity
+  id: LateJoinSpawnPointStationEnginseer
+  parent: SpawnPointJobBase
+  name: enginseer
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Enginseer
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: enginseer
+
+- type: entity
+  id: LateJoinSpawnPointGenetor
+  parent: SpawnPointJobBase
+  name: genetor
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Genetor
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: genetor
+
+- type: entity
+  id: LateJoinSpawnPointExplorator
+  parent: SpawnPointJobBase
+  name: explorator
+  suffix: WH40K, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Explorator
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: genetor
+    # layers:
+      # - state: green
+      # - sprite: DeltaV/Markers/jobs.rsi
+      #   state: salvagespecialist
+
+# Imperium
+
+- type: entity
+  id: LateJoinSpawnPointColonel
+  parent: SpawnPointJobBase
+  name: Colonel
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Colonel
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: colonel
+
+- type: entity
+  id: LateJoinSpawnPointCommissar
+  parent: SpawnPointJobBase
+  name: Commissar
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Commissar
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: commissar
+
+- type: entity
+  id: LateJoinSpawnPointGuardsman
+  parent: SpawnPointJobBase
+  name: Guardsman
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Guardsman
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: guardsman
+
+- type: entity
+  id: LateJoinSpawnPointLieutenant
+  parent: SpawnPointJobBase
+  name: Lieutenant
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Lieutenant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: lieutenant
+
+- type: entity
+  id: LateJoinSpawnPointMedic
+  parent: SpawnPointJobBase
+  name: Medic
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Medic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: medic
+
+- type: entity
+  id: LateJoinSpawnPointSergeant
+  parent: SpawnPointJobBase
+  name: Sergeant
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Sergeant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointSergeantHWS
+  parent: SpawnPointJobBase
+  name: SergeantHWS
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: SergeantHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: HWS
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointSergeantSWS
+  parent: SpawnPointJobBase
+  name: SergeantSWS
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: SergeantSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: SWS
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointSpecialistHWS
+  parent: SpawnPointJobBase
+  name: SpecialistHWS
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: SpecialistHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: HWS
+      - state: specialist
+
+- type: entity
+  id: LateJoinSpawnPointSpecialistSWS
+  parent: SpawnPointJobBase
+  name: SpecialistSWS
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: SpecialistSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: SWS
+      - state: specialist
+
+- type: entity
+  id: LateJoinSpawnPointTankComm
+  parent: SpawnPointJobBase
+  name: TankComm
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: TankComm
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: tank
+
+- type: entity
+  id: LateJoinSpawnPointTanker
+  parent: SpawnPointJobBase
+  name: Tanker
+  suffix: WH40K, Империум, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Tanker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: tank
+
+# Heretics
+
+- type: entity
+  id: LateJoinSpawnPointHColonel
+  parent: SpawnPointJobBase
+  name: HColonel
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HColonel
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: colonel
+
+- type: entity
+  id: LateJoinSpawnPointHCommissar
+  parent: SpawnPointJobBase
+  name: HCommissar
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HCommissar
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: commissar
+
+- type: entity
+  id: LateJoinSpawnPointHGuardsman
+  parent: SpawnPointJobBase
+  name: HGuardsman
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HGuardsman
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: guardsman
+
+- type: entity
+  id: LateJoinSpawnPointHLieutenant
+  parent: SpawnPointJobBase
+  name: Lieutenant
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HLieutenant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: lieutenant
+
+- type: entity
+  id: LateJoinSpawnPointHMedic
+  parent: SpawnPointJobBase
+  name: Medic
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HMedic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: medic
+
+- type: entity
+  id: LateJoinSpawnPointHSergeant
+  parent: SpawnPointJobBase
+  name: Sergeant
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HSergeant
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointHSergeantHWS
+  parent: SpawnPointJobBase
+  name: SergeantHWS
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HSergeantHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: HWS
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointHSergeantSWS
+  parent: SpawnPointJobBase
+  name: SergeantSWS
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HSergeantSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: SWS
+      - state: sergeant
+
+- type: entity
+  id: LateJoinSpawnPointHSpecialistHWS
+  parent: SpawnPointJobBase
+  name: SpecialistHWS
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HSpecialistHWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: HWS
+      - state: specialist
+
+- type: entity
+  id: LateJoinSpawnPointHSpecialistSWS
+  parent: SpawnPointJobBase
+  name: SpecialistSWS
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HSpecialistSWS
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: SWS
+      - state: specialist
+
+- type: entity
+  id: LateJoinSpawnPointHTankComm
+  parent: SpawnPointJobBase
+  name: TankComm
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HTankComm
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: tank
+
+- type: entity
+  id: LateJoinSpawnPointHTanker
+  parent: SpawnPointJobBase
+  name: Tanker
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HTanker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: tank
+
+# Engineering
+- type: entity
+  id: LateJoinSpawnPointHNovice
+  parent: SpawnPointJobBase
+  name: novice
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HNovice
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: novice
+
+- type: entity
+  id: LateJoinSpawnPointHMagos
+  parent: SpawnPointJobBase
+  name: magos
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HMagos
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: magos
+
+- type: entity
+  id: LateJoinSpawnPointHLexmechanic
+  parent: SpawnPointJobBase
+  name: lexmechanic
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin, LateJoin
+    job_id: HLexmechanic
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: lexmechanic
+
+- type: entity
+  id: LateJoinSpawnPointHStationEnginseer
+  parent: SpawnPointJobBase
+  name: enginseer
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HEnginseer
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: enginseer
+
+- type: entity
+  id: LateJoinSpawnPointHGenetor
+  parent: SpawnPointJobBase
+  name: genetor
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: HGenetor
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: genetor
+
+- type: entity
+  id: LateJoinSpawnPointHExplorator
+  parent: SpawnPointJobBase
+  name: explorator
+  suffix: WH40K, Еретик, LateJoin
+  components:
+  - type: SpawnPoint
+    spawn_type: LateJoin
+    job_id: Explorator
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: late
+      - state: heretic
+      - state: genetor

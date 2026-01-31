@@ -22,6 +22,5 @@
       key: enum.StoreUiKey.Key
     - type: Store
       balance:
-        intelligence_ch: 0
+        intelligence_imp: 0
     - type: InteractionOutline
-

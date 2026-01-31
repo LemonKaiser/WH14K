@@ -1,0 +1,75 @@
+- type: entity
+  parent: BaseStructure
+  id: MachineChipProduser
+  name: станция анализа
+  description: Древняя машина, что получает важные данные из неизвестного нам источника.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/data_chip_producer.rsi
+    offset: 0,1
+    noRot: true
+    layers:
+    - state: base
+    - state: unshaded
+      shader: unshaded
+  - type: AmbientSound
+    range: 10
+    volume: -5
+    sound:
+       path: /Audio/Ambience/Objects/periodic_beep.ogg
+  - type: PointLight
+    radius: 3
+    energy: 0.3
+    color: "#b3f02e"
+  - type: TimedSpawner
+    prototypes:
+      - DataChip
+    chance: 0.99
+    intervalSeconds: 60
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
+  - type: NavMapBeacon
+    color: "#ff0000"
+    text: точка захвата
+  - type: SpriteFade
+
+- type: entity
+  parent: MachineChipProduser
+  id: MachineChipProduserCenter
+  name: станция анализа
+  description: Древняя машина, что получает важные данные из неизвестного нам источника. Именно эта почему-то имеет лучший сигнал.
+  suffix: WH40K, Центральный
+  components:
+  - type: TimedSpawner
+    prototypes:
+      - DataChip4
+    chance: 0.99
+    intervalSeconds: 120
+    minimumEntitiesSpawned: 1
+    maximumEntitiesSpawned: 1
+
+#- type: entity
+#  id: ImpPointConverter
+#  parent: BaseLathe
+#  name: очиститель данных
+#  description: Убирает ошибки и лишние данные в чипах.
+#  suffix: WH40K
+#  components:
+#  - type: Sprite
+#    sprite: _WH40K/Structures/Machines/data_conventer.rsi
+#    offset: 0,0.5
+#    noRot: true
+#    layers:
+#    - state: icon
+#    - state: unshaded
+#      shader: unshaded
+#      map: ["enum.PowerDeviceVisualLayers.Powered"]
+#    - state: inserting
+#      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+#  - type: Lathe
+#    idleState: icon
+#    runningState: building
+#    staticPacks:
+#    - DataChipsForImp
+#  - type: SpriteFade

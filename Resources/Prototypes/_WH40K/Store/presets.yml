@@ -8,9 +8,23 @@
     - VoxWeaponry
     - VoxAmmo
     currencyWhitelist:
-    - Intelligence
+    - Intelligence_imp
     balance:
-      Intelligence: 0
+      Intelligence_imp: 0
+
+- type: entity
+  id: StorePresetStore
+  abstract: true
+  components:
+  - type: Store
+    name: resupply-station
+    categories:
+    - VoxWeaponry
+    - VoxAmmo
+    currencyWhitelist:
+    - Intelligence_imp
+    balance:
+      Intelligence_imp: 0
 
 - type: entity
   id: StorePresetAltar
@@ -22,6 +36,6 @@
     - AltarWeaponry
     - AltarAmmo
     currencyWhitelist:
-    - intelligence_ch
+    - Intelligence_imp
     balance:
-      intelligence_ch: 0
+      Intelligence_imp: 0
