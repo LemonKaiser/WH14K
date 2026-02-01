@@ -14,7 +14,7 @@
     capacity: 200
     whitelist:
       tags:
-        - PromethiumBullet
+        - CartridgeFlameThrower
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
     layers:
