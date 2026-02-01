@@ -23,4 +23,3 @@
     - type: Store
       balance:
         intelligence_imp: 0
-    - type: InteractionOutline

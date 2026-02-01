@@ -1,1 +1,21 @@
+- type: listing
+  id: VoxAstartes
+  name: Лазерный карабин
+  description: Карабин, вооот.
+  productEntity: WeaponLaserLasgun
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxWeaponry
 
+#Ammo
+
+- type: listing
+  id: VoxLasgunPowerCell
+  name: Коробка батарей лазгана
+  description: батареи лазгана, пораженные варпом
+  productEntity: BoxLasgunPowerCell
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxAmmo

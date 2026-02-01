@@ -8,9 +8,9 @@
     - VoxWeaponry
     - VoxAmmo
     currencyWhitelist:
-    - Intelligence_imp
+    - intelligence_imp
     balance:
-      Intelligence_imp: 0
+      intelligence_imp: 0
 
 - type: entity
   id: StorePresetStore
@@ -22,9 +22,9 @@
     - VoxWeaponry
     - VoxAmmo
     currencyWhitelist:
-    - Intelligence_imp
+    - intelligence_imp
     balance:
-      Intelligence_imp: 0
+      intelligence_imp: 0
 
 - type: entity
   id: StorePresetAltar
@@ -36,6 +36,6 @@
     - AltarWeaponry
     - AltarAmmo
     currencyWhitelist:
-    - Intelligence_imp
+    - intelligence_imp
     balance:
-      Intelligence_imp: 0
+      intelligence_imp: 0

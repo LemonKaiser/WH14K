@@ -6,7 +6,7 @@
   description: Карабин, вооот.
   productEntity: WeaponLaserLasgun
   cost:
-    intelligence_ch: 4
+    intelligence_imp: 4
   categories:
   - AltarWeaponry
 
@@ -18,6 +18,6 @@
   description: батареи лазгана, пораженные варпом
   productEntity: BoxLasgunPowerCell
   cost:
-    intelligence_ch: 2
+    intelligence_imp: 2
   categories:
   - AltarAmmo
