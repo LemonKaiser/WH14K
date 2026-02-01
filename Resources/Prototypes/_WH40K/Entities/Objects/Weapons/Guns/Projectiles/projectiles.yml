@@ -106,22 +106,23 @@
         - state: base
           shader: unshaded
     - type: FireUnderBullet
-      pickedUp: true
+      pickedUp: false
       releaseSpeed: 1
       releaseTemp: 1500
+      hitRelease: true
       releaseGas:
-        volume: 0.5
+        volume: 0
+        temperature: 1500
         moles:
-          - 0.1     # oxygen
+          - 0.04     # oxygen
           - 0     # nitrogen
           - 0     # carbon dioxide
-          - 0.05     # plasma
+          - 0.02     # plasma
           - 0     # tritium
           - 0     # vapor
           - 0     # ammonia
           - 0  # n2o
           - 0     # frezon
-        temperature: 293.15
     - type: FlyBySound
     - type: Clickable
     - type: Physics
@@ -138,6 +139,9 @@
           mask:
           - Impassable
           - BulletImpassable
+          - MidImpassable
+          - HighImpassable
+          - LowImpassable
         fly-by: &flybyfixture
           shape: !type:PhysShapeCircle
             radius: 1.5
