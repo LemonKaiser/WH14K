@@ -7,7 +7,14 @@
 
 - type: currency
   id: intelligence_ch
-  displayName: Разведданные хаоса
+  displayName: Разведданные Хаоса
   cash:
     1: DataChipChaos
+  canWithdraw: false
+
+- type: currency
+  id: intelligence_imp
+  displayName: Разведданные Империума
+  cash:
+    1: DataChipImp
   canWithdraw: false

@@ -1,6 +1,7 @@
 - type: entity
   name: чип данных
   parent: BaseItem
+  categories: [ HideSpawnMenu ]
   id: DataChip
   suffix: WH40K
   description: Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
@@ -8,6 +9,61 @@
   - type: Sprite
     scale: 0.8,0.8
     sprite: _WH40K/Objects/Specific/intelligence.rsi
+    layers:
+    - state: datachip
+      map: ["base"]
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: DataChip
+    baseLayer: base
+    layerStates:
+    - datachip
+    - datachip_2
+    - datachip_3
+    - datachip_4
+    layerFunction: Threshold
+  - type: StackLayerThreshold
+    thresholds: [ 2, 3, 4 ]
+  - type: Appearance
+  - type: PhysicalComposition
+    materialComposition:
+      DataPoint: 1
+  - type: Tag
+    tags:
+    - DataChip
+    - RawMaterial
+  - type: Currency
+    price:
+      intelligence_imp: 1
+
+- type: entity
+  parent: DataChip
+  id: DataChip4
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 4
+
+- type: entity
+  parent: DataChip
+  id: DataChip1
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  name: чип данных
+  parent: BaseItem
+  id: DataChipImp
+  suffix: WH40K
+  description: Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+  components:
+  - type: Sprite
+    scale: 0.8,0.8
+    sprite: _WH40K/Objects/Specific/intelligence_imp.rsi
     layers:
     - state: datachip
       map: ["base"]
@@ -27,5 +83,14 @@
     thresholds: [ 2, 3, 4 ]
   - type: Currency
     price:
-      Intelligence: 2
+      intelligence_imp: 1
   - type: Appearance
+
+- type: material
+  id: DataPoint
+  stackEntity: DataChip1
+  name: materials-datapoint
+  unit: materials-unit-piece
+  icon: _WH40K/Objects/Specific/intelligence.rsi:datachip
+  color: "#8A9A5B"
+  price: 0

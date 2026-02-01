@@ -48,24 +48,27 @@
 
 - type: Tag
   id: MagazineStubLMG
-      
+
 - type: Tag
   id: MagazineStubMG
-  
+
 - type: Tag
   id: MagazineStubPistol
-  
+
 - type: Tag
   id: MagazineStubRifle
-  
+
 - type: Tag
   id: MagazineStubSMG
-  
+
 - type: Tag
   id: Cartridge825mmLong
-  
+
 - type: Tag
   id: Cartridge10mm
-  
+
 - type: Tag
   id: Cartridge10mmLong
+
+- type: Tag
+  id: DataChip

@@ -29,4 +29,6 @@
     key: enum.StoreUiKey.Key
   - type: Store
     balance:
-      Intelligence: 0
+      intelligence_imp: 0
+  - type: Item
+    size: Ginormous

@@ -1,14 +1,26 @@
 {
-    "version": 1,
-    "size": {
-        "x": 32,
-        "y": 64
+  "version":1,
+  "size":{
+    "x":32,
+    "y":96
+  },
+  "license":"CC-BY-SA-4.0",
+  "copyright":"by endr_animet",
+  "states":[
+    {
+      "name":"base"
     },
-    "license": "CC-BY-SA-3.0",
-    "copyright": "heretek",
-    "states": [
-        {
-            "name": "base"
-        }
-    ]
+    {
+      "name": "unshaded",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    }
+  ]
 }

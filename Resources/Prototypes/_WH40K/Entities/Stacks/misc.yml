@@ -11,3 +11,10 @@
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence_ch.rsi, state: datachip }
   spawn: DataChip
   maxCount: 4
+
+- type: stack
+  id: DataChipImp
+  name: data-chip-name
+  icon: _WH40K/Objects/Specific/intelligence.rsi:datachip
+  spawn: DataChip
+  maxCount: 4

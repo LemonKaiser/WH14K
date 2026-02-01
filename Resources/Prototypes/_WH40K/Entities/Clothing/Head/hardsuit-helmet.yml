@@ -110,6 +110,7 @@
   id: ClothingHeadHelmetHardsuitTechpriest
   name: шлем скафандра техножреца
   description: Шлем скафандра для техножрецов, что ещё слишком слабо оснащены бионикой.
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -128,6 +129,7 @@
   id: ClothingHeadHelmetHardsuitTechpriestMarsMagos
   name: капюшон магоса
   description: Шлем скафандра магоса с капюшоном робы.
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -148,6 +150,7 @@
   id: ClothingHeadHelmetTechpriestMarsSkitarii
   name: капюшон робы скитарийца
   description: Священное одеяние.
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
