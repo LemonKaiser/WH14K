@@ -37,6 +37,12 @@
         whitelist:
           tags:
             - FlameThrowerFuelTank
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgeFlameThrower
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -46,8 +52,6 @@
     steps: 1
     zeroVisible: true
   - type: Appearance
-  - type: Ammo
-    muzzleFlash: FlamethrowerFlashEffect
   - type: Item
     size: Huge
     shape:
