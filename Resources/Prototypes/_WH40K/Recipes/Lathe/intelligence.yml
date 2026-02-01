@@ -1,11 +1,11 @@
-#- type: latheRecipe
-#  id: DataChipImp
-#  result: DataChipImp
-#  completetime: 2
-#  materials:
-#   Steel: 1
+- type: latheRecipe
+  id: DataChipImp
+  result: DataChipImp
+  completetime: 2
+  materials:
+   Steel: 1
 
-#- type: latheRecipePack
-#  id: DataChipsForImp
-#  recipes:
-#  - DataChipImp
+- type: latheRecipePack
+  id: DataChipsForImp
+  recipes:
+  - DataChipImp

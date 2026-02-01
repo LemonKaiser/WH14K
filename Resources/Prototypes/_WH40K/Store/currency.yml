@@ -13,7 +13,7 @@
   canWithdraw: false
 
 - type: currency
-  id: Intelligence_imp
+  id: intelligence_imp
   displayName: Разведданные Империума
   cash:
     1: DataChipImp
