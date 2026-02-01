@@ -16,7 +16,7 @@ public sealed partial class FireUnderBulletComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("ruptureSound")]
     public SoundSpecifier RuptureSound = new SoundPathSpecifier("/Audio/_WH40K/Weapons/flamethrower.ogg");
 
-    [ViewVariables(VVAccess.ReadWrite), DataField("pickedUp", required: true)]
+    [ViewVariables(VVAccess.ReadWrite), DataField("pickedUp")]
     public bool pickedUp = true;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("releaseSpeed")]
@@ -25,8 +25,11 @@ public sealed partial class FireUnderBulletComponent : Component
     [ViewVariables(VVAccess.ReadWrite), DataField("releaseTemp")]
     public float releaseTemp = 279;
 
-    [ViewVariables(VVAccess.ReadWrite), DataField("releaseGas", required: true)]
-    public GasMixture releaseGas {get; set;} = new();
+    [ViewVariables(VVAccess.ReadWrite), DataField("releaseGas")]
+    public GasMixture releaseGas = new();
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("hitRelease")]
+    public bool HitRelease = false;
 
     public TimeSpan minusTime = TimeSpan.Zero;
     public TimeSpan removeTime = TimeSpan.Zero;
