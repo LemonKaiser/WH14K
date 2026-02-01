@@ -34,4 +34,24 @@
   - type: Sprite
     sprite: _WH40K/Clothing/OuterClothing/Armor/officrercoat.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/officrercoat.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/officrercoat.rsi   
+    
+- type: entity
+  parent: ClothingOuterArmorCommissar
+  id: ClothingOuterArmorCultistCoat
+  name: шинель культиста
+  description: Тёмная шинель, пропитанная символами Хаоса. Она внушает страх своим видом.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K\Clothing\OuterClothing\Coats\overcoat.rsi
+  - type: Clothing
+    sprite: _WH40K\Clothing\OuterClothing\Coats\overcoat.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95        # чуть-чуть снижает тупой урон
+        Slash: 0.95        # немного снижает рубящий урон
+        Piercing: 0.97     # почти весь колющий проходит
+        Heat: 1.0          # нет защиты от огня
+        Radiation: 0.9     # слабая защита от радиации

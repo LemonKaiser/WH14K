@@ -80,3 +80,27 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98
+
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorChaosVest
+  name: Осквернённая бронижелет хаоса
+  description: Полный комплект осквернённой брони хаоса для рядового культиста. Обеспечивает надёжную защиту, но её чуждый металл давит на тело и ограничивает движения.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K\Clothing\OuterClothing\Armor\flak_armour.rsi
+  - type: Clothing
+    sprite: _WH40K\Clothing\OuterClothing\Armor\flak_armour.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.8
+        Heat: 0.9
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9

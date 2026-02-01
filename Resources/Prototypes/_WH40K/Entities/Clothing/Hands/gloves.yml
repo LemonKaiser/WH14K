@@ -67,3 +67,16 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/colonelshand.rsi
   - type: Insulated
+
+- type: entity
+  parent: ClothingHandsGlovesColorBlack
+  id: ClothingHandsGlovesCombatcult
+  name: боевые перчатки
+  description: Боевые перчатки культа.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K\Clothing\Hands\Gloves\gloves_fingerless_cult.rsi
+  - type: Clothing
+    sprite: _WH40K\Clothing\Hands\Gloves\gloves_fingerless_cult.rsi
+  - type: Insulated
