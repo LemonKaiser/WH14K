@@ -1,0 +1,15 @@
+- type: entity
+  id: CartridgeFlameThrower
+  categories: [ HideSpawnMenu ]
+  name: "метан"
+  parent: BaseCartridge
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - CartridgeFlameThrower
+      - Cartridge
+  - type: CartridgeAmmo
+    proto: PromethiumBullet
+    muzzleFlash: FlamethrowerFlashEffect
+  - type: Appearance

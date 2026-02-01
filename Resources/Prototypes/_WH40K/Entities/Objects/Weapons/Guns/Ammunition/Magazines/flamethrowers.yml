@@ -8,11 +8,13 @@
   - type: Tag
     tags:
     - FlameThrowerFuelTank
-  - type: Ammo
-    muzzleFlash: FlamethrowerFlashEffect
-  - type: BasicEntityAmmoProvider
-    proto: PromethiumBullet
-    capacity: 300
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeFlameThrower
+    capacity: 200
+    whitelist:
+      tags:
+        - PromethiumBullet
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
     layers:
