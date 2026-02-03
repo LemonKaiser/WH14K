@@ -29,14 +29,20 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.friendly_fire_ahelp_enabled", true, CVar.SERVERONLY);
 
     /// <summary>
-    ///     If true, players cannot damage teammates unless their role allows friendly fire.
+    ///     If true, friendly fire is allowed (no blocking) unless a role overrides it.
     /// </summary>
-    public static readonly CVarDef<bool> WH40KFriendlyFireEnabled =
-        CVarDef.Create("wh40k.friendly_fire_enabled", false, CVar.SERVERONLY);
+    public static readonly CVarDef<bool> WH40KFriendlyFireDisabled =
+        CVarDef.Create("wh40k.friendly_fire_disabled", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     Cooldown in seconds between friendly-fire ahelp warnings per player.
     /// </summary>
     public static readonly CVarDef<float> WH40KFriendlyFireAhelpCooldownSeconds =
         CVarDef.Create("wh40k.friendly_fire_ahelp_cooldown_seconds", 300f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum damage required to send a friendly-fire ahelp warning. 0 disables the threshold.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KFriendlyFireAhelpMinDamage =
+        CVarDef.Create("wh40k.friendly_fire_ahelp_min_damage", 5f, CVar.SERVERONLY);
 }

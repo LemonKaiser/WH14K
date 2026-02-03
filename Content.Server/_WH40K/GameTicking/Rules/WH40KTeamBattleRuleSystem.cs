@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Administration.Systems;
 using Content.Server._WH40K.Combat;
+using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
@@ -25,6 +26,11 @@ using Content.Shared.Players;
 using Content.Shared.Projectiles;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Content.Shared.Throwing;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Mech.Components;
+using Content.Shared.Mech.Equipment.Components;
+using Robust.Shared.Containers;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
@@ -49,6 +55,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly SharedRoleSystem _roles = default!;
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
@@ -242,9 +249,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (!rule.AnnounceTeamOnSpawn)
-            return;
-
         if (!_mind.TryGetMind(ev.Mob, out var mindId, out _))
             return;
 
@@ -257,6 +261,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         var team = rule.Teams[teamIndex];
+        var member = EnsureComp<WH40KTeamMemberComponent>(ev.Mob);
+        member.TeamId = team.Id;
+
+        if (!rule.AnnounceTeamOnSpawn)
+            return;
+
         if (ev.Player != null)
         {
             _chat.DispatchServerMessage(ev.Player, Loc.GetString("wh40k-team-service-message", ("team", Loc.GetString(team.Name))));
@@ -356,12 +366,18 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (_mind.TryGetMind(ev.Entity, out var victimMindId, out _))
+        if (TryComp<WH40KTeamMemberComponent>(ev.Entity, out var teamMember) &&
+            TryGetTeamIndexById(teamMember.TeamId, rule, out var victimTeam))
         {
-            if (TryGetTeamIndex(victimMindId, rule, out var victimTeam))
+            EnsureTeamArrays(rule);
+            rule.TeamDeaths[victimTeam]++;
+        }
+        else if (_mind.TryGetMind(ev.Entity, out var victimMindId, out _))
+        {
+            if (TryGetTeamIndex(victimMindId, rule, out var victimTeamIndex))
             {
                 EnsureTeamArrays(rule);
-                rule.TeamDeaths[victimTeam]++;
+                rule.TeamDeaths[victimTeamIndex]++;
             }
         }
 
@@ -391,6 +407,22 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
+        var minDamage = _config.GetCVar(CCVars.WH40KFriendlyFireAhelpMinDamage);
+        if (minDamage > 0f && args.DamageDelta != null)
+        {
+            var totalDamage = 0f;
+            foreach (var value in args.DamageDelta.DamageDict.Values)
+            {
+                if (value <= 0)
+                    continue;
+
+                totalDamage += value.Float();
+            }
+
+            if (totalDamage < minDamage)
+                return;
+        }
+
         if (!TryResolveAttacker(args.Origin.Value, out var attacker, out var attackerActor))
             return;
 
@@ -400,16 +432,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
             return;
 
-        if (!_mind.TryGetMind(uid, out var victimMindId, out _))
+        if (!TryGetTeamIndexFromEntity(uid, rule, out var victimTeam))
             return;
 
-        if (!_mind.TryGetMind(attacker, out var attackerMindId, out _))
-            return;
-
-        if (!TryGetTeamIndex(victimMindId, rule, out var victimTeam))
-            return;
-
-        if (!TryGetTeamIndex(attackerMindId, rule, out var attackerTeam))
+        if (!TryGetTeamIndexFromEntity(attacker, rule, out var attackerTeam))
             return;
 
         if (victimTeam != attackerTeam)
@@ -434,7 +460,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void OnBeforeDamageChanged(EntityUid uid, DamageableComponent component, ref BeforeDamageChangedEvent args)
     {
-        if (!_config.GetCVar(CCVars.WH40KFriendlyFireEnabled))
+        if (!_config.GetCVar(CCVars.WH40KFriendlyFireDisabled))
             return;
 
         if (args.Origin == null)
@@ -452,16 +478,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
             return;
 
-        if (!_mind.TryGetMind(uid, out var victimMindId, out _))
+        if (!TryGetTeamIndexFromEntity(uid, rule, out var victimTeam))
             return;
 
-        if (!_mind.TryGetMind(attacker, out var attackerMindId, out _))
-            return;
-
-        if (!TryGetTeamIndex(victimMindId, rule, out var victimTeam))
-            return;
-
-        if (!TryGetTeamIndex(attackerMindId, rule, out var attackerTeam))
+        if (!TryGetTeamIndexFromEntity(attacker, rule, out var attackerTeam))
             return;
 
         if (victimTeam != attackerTeam)
@@ -487,8 +507,16 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor)
     {
+        return TryResolveAttacker(origin, out attacker, out attackerActor, 0);
+    }
+
+    private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor, int depth)
+    {
         attacker = default;
         attackerActor = default!;
+
+        if (depth > 6)
+            return false;
 
         if (TryComp(origin, out ActorComponent? actor))
         {
@@ -497,16 +525,97 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return true;
         }
 
-        if (TryComp<ProjectileComponent>(origin, out var projectile) &&
-            projectile.Shooter is { } shooter &&
-            TryComp(shooter, out ActorComponent? shooterActor))
+        if (TryResolveMechPilot(origin, out attacker, out attackerActor))
+            return true;
+
+        if (TryComp(origin, out MechEquipmentComponent? mechEquipment) &&
+            mechEquipment.EquipmentOwner is { } mechOwner &&
+            TryResolveMechPilot(mechOwner, out attacker, out attackerActor))
         {
-            attacker = shooter;
-            attackerActor = shooterActor!;
             return true;
         }
 
+        if (TryComp<ProjectileComponent>(origin, out var projectile) &&
+            projectile.Shooter is { } shooter)
+        {
+            if (shooter == origin)
+                return false;
+
+            return TryResolveAttacker(shooter, out attacker, out attackerActor, depth + 1);
+        }
+
+        if (TryComp<ThrownItemComponent>(origin, out var thrown) &&
+            thrown.Thrower is { } thrower)
+        {
+            if (thrower == origin)
+                return false;
+
+            return TryResolveAttacker(thrower, out attacker, out attackerActor, depth + 1);
+        }
+
+        if (TryComp<TimerTriggerComponent>(origin, out var timer) &&
+            timer.User is { } timerUser)
+        {
+            if (timerUser == origin)
+                return false;
+
+            return TryResolveAttacker(timerUser, out attacker, out attackerActor, depth + 1);
+        }
+
+        if (TryResolveAttackerFromContainer(origin, out attacker, out attackerActor))
+            return true;
+
         return false;
+    }
+
+    private bool TryResolveAttackerFromContainer(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor)
+    {
+        attacker = default;
+        attackerActor = default!;
+
+        var current = origin;
+        for (var i = 0; i < 6; i++)
+        {
+            if (!_container.TryGetContainingContainer((current, null, null), out var container))
+                return false;
+
+            var owner = container.Owner;
+            if (!owner.IsValid() || owner == current)
+                return false;
+
+            if (TryComp(owner, out ActorComponent? ownerActor))
+            {
+                attacker = owner;
+                attackerActor = ownerActor!;
+                return true;
+            }
+
+            if (TryResolveMechPilot(owner, out attacker, out attackerActor))
+                return true;
+
+            current = owner;
+        }
+
+        return false;
+    }
+
+    private bool TryResolveMechPilot(EntityUid mech, out EntityUid pilot, out ActorComponent pilotActor)
+    {
+        pilot = default;
+        pilotActor = default!;
+
+        if (!TryComp(mech, out MechComponent? mechComp))
+            return false;
+
+        if (mechComp.PilotSlot.ContainedEntity is not { } pilotEntity)
+            return false;
+
+        if (!TryComp(pilotEntity, out ActorComponent? actor))
+            return false;
+
+        pilot = pilotEntity;
+        pilotActor = actor!;
+        return true;
     }
 
     private void ComputeTeamCounts(Components.WH40KTeamBattleRuleComponent component, out int[] total, out int[] alive)
@@ -514,16 +623,15 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         total = new int[component.Teams.Count];
         alive = new int[component.Teams.Count];
 
-        var mindQuery = EntityQueryEnumerator<MindComponent>();
-        while (mindQuery.MoveNext(out var mindId, out var mind))
+        var memberQuery = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        while (memberQuery.MoveNext(out var entity, out var member))
         {
-            if (!TryGetTeamIndex(mindId, component, out var teamIndex))
+            if (!TryGetTeamIndexById(member.TeamId, component, out var teamIndex))
                 continue;
 
             total[teamIndex]++;
 
-            var entity = mind.CurrentEntity;
-            if (entity != null && IsConsideredAlive(entity.Value, component))
+            if (IsConsideredAlive(entity, component))
                 alive[teamIndex]++;
         }
     }
@@ -561,6 +669,36 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
                 if (component.DepartmentToTeam.TryGetValue(deptId, out teamIndex))
                     return true;
             }
+        }
+
+        return false;
+    }
+
+    private bool TryGetTeamIndexFromEntity(EntityUid entity, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
+    {
+        teamIndex = -1;
+
+        if (TryComp<WH40KTeamMemberComponent>(entity, out var member) &&
+            TryGetTeamIndexById(member.TeamId, component, out teamIndex))
+            return true;
+
+        if (_mind.TryGetMind(entity, out var mindId, out _))
+            return TryGetTeamIndex(mindId, component, out teamIndex);
+
+        return false;
+    }
+
+    private bool TryGetTeamIndexById(string teamId, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
+    {
+        teamIndex = -1;
+
+        for (var i = 0; i < component.Teams.Count; i++)
+        {
+            if (component.Teams[i].Id != teamId)
+                continue;
+
+            teamIndex = i;
+            return true;
         }
 
         return false;

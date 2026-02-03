@@ -454,7 +454,13 @@ public sealed partial class ExplosionSystem
                     continue;
 
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
-                _damageableSystem.TryChangeDamage((entity, damageable), damage, ignoreResistances: true, ignoreGlobalModifiers: true);
+                // WH40K
+                EntityUid? origin = null;
+                if (cause is { } causeUid && EntityManager.EntityExists(causeUid) && !EntityManager.IsQueuedForDeletion(causeUid))
+                    origin = causeUid;
+
+                _damageableSystem.TryChangeDamage((entity, damageable), damage, ignoreResistances: true, origin: origin, ignoreGlobalModifiers: true);
+                // WH40K
 
                 if (_actorQuery.HasComp(entity))
                 {
