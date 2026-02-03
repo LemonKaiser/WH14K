@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetFlakAdv
-  name: панцирный шлем
-  description: Продвинутый шлем имперской гвардии, оснащённой системой замкнутого дыхания, позволяющей солдату изолировать свои дыхательные пути от внешней среды и дышать из любого баллона.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

@@ -1,8 +1,6 @@
 - type: entity
-  name: хаоситское мачете
   parent: [BaseSecurityCargoContraband, CombatKnife]
   id: ChaosMachete
-  description: Мачете, коим владеют культисты хаоса, оно сделано из заостренного куска металолома, но удар его все так же опасен.
   suffix: WH40K, Хаос
   components:
   - type: Sprite

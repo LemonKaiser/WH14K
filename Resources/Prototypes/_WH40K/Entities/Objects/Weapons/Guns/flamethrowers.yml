@@ -1,8 +1,6 @@
 - type: entity
   id: FlameThrowerGun
   parent: BaseWeaponRifle
-  name: "огнемёт"
-  description: "Неважно, кто стоит перед тобой - мерзкий ксенос или падший еретик - огнемёт поможет тебе минимизировать срок его жизни."
   suffix: WH40K
   components:
   - type: Sprite

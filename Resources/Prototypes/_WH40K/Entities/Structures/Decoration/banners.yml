@@ -1,8 +1,6 @@
 - type: entity
-  name: знамя хаоса
   id: WHChaosBanner
   parent: BaseStructureDynamic
-  description: Зла и Добра в Хаосе нет — он выше этого.
   suffix: WH40K, Хаос
   components:
   - type: Transform
@@ -46,10 +44,8 @@
     state: chaos_banner
 
 - type: entity
-  name: знамя гвардии
   id: WHGvardiaBanner
   parent: WHChaosBanner
-  description: Один верующий способен одолеть легион безбожников.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -57,10 +53,8 @@
     state: gvardia_banner
 
 - type: entity
-  name: знамя гвардии
   id: WHGvardiaBanner2
   parent: WHChaosBanner
-  description: Один верующий способен одолеть легион безбожников.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

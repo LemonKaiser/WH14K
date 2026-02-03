@@ -1,8 +1,6 @@
 - type: entity
-  name: плазма-пистолет
   parent: WeaponLaserWH40KEnergy
   id: WeaponLaserPlasmaPistol
-  description: Уменьшенная версия плазменной винтовки, не смотря на размер не потерял в мощности, чего не скажешь о размере его топливного бака. Прекрасное личное оружие офицеров по всему империуму.
   suffix: WH40K
   components:
   - type: Sprite

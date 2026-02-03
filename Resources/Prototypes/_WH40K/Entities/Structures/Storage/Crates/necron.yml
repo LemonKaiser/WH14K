@@ -1,8 +1,6 @@
 - type: entity
   id: CrateNecron
-  name: некронский ящик
   parent: CrateGenericSteel
-  description: Это хранилище, принадлежащее загадочной цивилизации машин из живой стали - некронам. Хватит ли у вас воли открыть его?
   suffix: WH40K, Некроны
   components:
   - type: Icon

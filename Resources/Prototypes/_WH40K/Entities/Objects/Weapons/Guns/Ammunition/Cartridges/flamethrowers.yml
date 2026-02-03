@@ -1,7 +1,6 @@
 - type: entity
   id: CartridgeFlameThrower
   categories: [ HideSpawnMenu ]
-  name: "метан"
   parent: BaseCartridge
   suffix: WH40K
   components:

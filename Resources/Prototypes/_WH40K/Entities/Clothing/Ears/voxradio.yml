@@ -1,7 +1,6 @@
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetVoxBackpack
-  name: гарнитура радиста
   suffix: WH40K
   description: 
   components:
@@ -18,7 +17,6 @@
 - type: entity
   parent: EncryptionKey
   id: EncryptionKeyVox
-  name: вокс ключ шифрования
   suffix: WH40K
   description: 
   components:

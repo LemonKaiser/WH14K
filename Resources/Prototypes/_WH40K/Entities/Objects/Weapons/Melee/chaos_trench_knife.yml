@@ -1,8 +1,6 @@
 - type: entity
-  name: хаоситский окопный нож
   parent: BaseKnife
   id: TrenchKnifeChaos
-  description: Старый и ржавый нож, который слуги хаоса используют в бою. Он туп и ржав, но вам стоит опосатся его и его владельца.
   suffix: WH40K, Хаос
   components:
   - type: Tag

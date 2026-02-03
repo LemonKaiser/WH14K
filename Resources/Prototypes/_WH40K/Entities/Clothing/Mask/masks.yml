@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasTechPriest
-  name: респиратор
-  description: Стандартный респиратор, защищающий только дыхательные пути.
   suffix: WH40K, АдМехи
   components:
   - type: Item
@@ -26,8 +24,6 @@
 - type: entity
   parent: ClothingMaskPullableBase
   id: ClothingGasTechPriest
-  name: противогаз
-  description: Противогаз оснащённый визором.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite

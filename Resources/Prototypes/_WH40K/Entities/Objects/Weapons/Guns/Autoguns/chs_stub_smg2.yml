@@ -1,8 +1,6 @@
 - type: entity
-  name: Стабб-пистолет пулемёт
   parent: BaseWeaponPistol
   id: WeaponChsStubSMG2
-  description: Пистолет пулемёт, модель которого не определить, похоже, оно является самодельным.
   suffix: WH40K, Хаос
   components:
   - type: Sprite

@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetFlak
-  name: флак-шлем
-  description: Стандартная каска, выдаваемая солдатам имперской гвардии.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -24,8 +22,6 @@
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetBloodPact
-  name: шлем бладпакта
-  description: Стандартный шлем
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
@@ -36,8 +32,6 @@
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetrHeresy
-  name: Шлем еретика
-  description: Стандартный шлем гвардейца-предателя
   suffix: WH40K, Еретики
   components:
   - type: Sprite
@@ -48,8 +42,6 @@
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetFlakResp
-  name: флак-шлем с респиратором
-  description: Стандартная каска, выдаваемая солдатам имперской гвардии, но с респиратором
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -60,8 +52,6 @@
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetPsyker
-  name: шлем псайкера
-  description: Шлем, защищающий голову псайкера не только от физических, но и ментальных угроз
   suffix: WH40K, Псайкер
   components:
   - type: Sprite

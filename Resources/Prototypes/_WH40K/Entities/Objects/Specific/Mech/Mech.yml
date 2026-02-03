@@ -2,7 +2,6 @@
   id: MechSentinel
   parent: [ BaseMech, CombatMech ]
   suffix: WH40K
-  name: Часовой
   description: placeholder.
   components:
   - type: Sprite

@@ -1,7 +1,5 @@
 - type: entity
   id: MobGenestealer
-  name: генокрад
-  description: Перед вами находится одно из наиболее смертоносных существ роя тиранидов - генокрады, чьи острые когти и безумные рефлексы стали причиной гибели множества людей.
   parent: SimpleSpaceMobBase
   suffix: WH40K, Тираниды
   components:

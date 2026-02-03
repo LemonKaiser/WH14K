@@ -1,8 +1,6 @@
 - type: entity
-  name: плазма-винтовка
   parent: [WeaponLaserPlasmaPistol, BaseGunWieldable]
   id: WeaponLaserPlasmagun
-  description: Пожалуй, самое известное и эффективное оружие Империума, встречающееся во всех его войсках.
   suffix: WH40K
   components:
   - type: Item

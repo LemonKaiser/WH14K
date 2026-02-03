@@ -1,8 +1,6 @@
 - type: entity
-  name: Боевой Молот
   parent: BaseItem
   id: WHHammerImperial
-  description: Тяжёлый, крепкий, на удивление НЕ силовой молот. Многие считают его символом праведного гнева и правосудия.
   suffix: WH40K
   components:
   - type: Tag
@@ -48,10 +46,8 @@
   # Shitmed Change
 
 - type: entity
-  name: Боевой топор Омниссии
   parent: BaseItem
   id: WHOmnissianAxe
-  description: Тяжёлый и крепкий.
   suffix: WH40K
   components:
   - type: Execution

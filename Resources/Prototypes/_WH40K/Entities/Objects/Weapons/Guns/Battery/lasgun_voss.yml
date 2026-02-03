@@ -1,8 +1,6 @@
 - type: entity
-  name: М8 Восс
   parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
   id: WeaponLaserLasgunVoss
-  description: Вариант лазгана с повышенной скорострельностью, используемый полками Восс.
   suffix: WH40K
   components:
   - type: Gun

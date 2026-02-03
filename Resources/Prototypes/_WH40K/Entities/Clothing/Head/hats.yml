@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadCommissar
-  name: фуражка комиссара
-  description: Идеальный головной убор для выкриков в духе 'ВПЕРЁД, СОБАКИ!'
   suffix: WH40K
   components:
   - type: Sprite
@@ -16,8 +14,6 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadOfficer
-  name: фуражка офицера
-  description: Самая обыкновенная фуражка, принадлежащая кому-то из офицеров.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -31,8 +27,6 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadSgt
-  name: кепка сержанта
-  description: Самая обыкновенная кепка, принадлежащая кому-то из сержантов.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -46,8 +40,6 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadVet
-  name: берет
-  description: Берет Гвардейца, что принадлежит ветерану или офицеру
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

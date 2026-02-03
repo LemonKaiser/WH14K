@@ -1,8 +1,6 @@
 - type: entity
-  name: кратер
   id: Crater
   parent: BaseStructure
-  description: Созданное взрывом отверстие в земле
   suffix: WH40K
   components:
   - type: Animateable

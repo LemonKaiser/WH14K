@@ -1,7 +1,5 @@
 - type: entity
   id: MobRavener
-  name: Равенер
-  description: Змееподобное чудище, использующее свои передние лезвиеподобные конечности для разрывания врагов, стен и грунта.
   parent: SimpleSpaceMobBase
   suffix: WH40K, Тираниды
   components:

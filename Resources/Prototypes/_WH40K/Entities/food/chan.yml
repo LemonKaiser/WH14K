@@ -1,8 +1,6 @@
 - type: entity
   parent: GuardFlag
   id: WHSoup
-  name: Гвардейский суп
-  description: Чан наполненный... А лучше и не знать.
   suffix: WH40K
   components:
   - type: Sprite

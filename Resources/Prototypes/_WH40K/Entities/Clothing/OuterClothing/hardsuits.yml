@@ -4,8 +4,6 @@
 - type: entity
   parent: [ClothingOuterBase, GeigerCounterClothing, AllowSuitStorageClothing]
   id: ClothingOuterHardsuitVoidsmanStandard
-  name: скафандр войдсмена
-  description: Базовый скафандр войдсмена. Достаточно удобен для комфортного использования в безатмосферных областях.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -48,8 +46,6 @@
 - type: entity
   parent: ClothingOuterHardsuitVoidsmanStandard
   id: ClothingOuterHardsuitVoidsmanOfficer
-  name: скафандр офицера войдсмена
-  description: Офицерский скафандр войдсмена - атрибут лучших командиров в полевых условиях.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -82,8 +78,6 @@
 - type: entity
   parent: ClothingOuterHardsuitVoidsmanStandard
   id: ClothingOuterHardsuitVoidsmanSergeant
-  name: скафандр сержанта войдсмена
-  description: Укреплённая сержантская версия скафандра войдсмена.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -115,8 +109,6 @@
 - type: entity
   parent: ClothingOuterHardsuitVoidsmanStandard
   id: ClothingOuterHardsuitVoidsmanGrenadier
-  name: скафандр гренадёра войдсмена
-  description: Грёнадёрский скафандр на поле боя - знак того, что скоро что-нибудь рванёт.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -141,8 +133,6 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitTechpriest
-  name: скафандр техножреца
-  description: Скафандр для техножрецов, что ещё слишком слабо оснащены бионикой.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -171,8 +161,6 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitTechpriestMarsMagos
-  name: роба магоса
-  description: Роба магоса Марса...
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -207,8 +195,6 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitTechpriestMarsSkitarii
-  name: роба скитарийца
-  description: Священное одеяние.
   suffix: WH40K, АдМехи, Егери
   components:
   - type: Sprite
@@ -245,8 +231,6 @@
 - type: entity
   parent: ClothingOuterHardsuitBase
   id: ClothingOuterHardsuitTechpriestMarsSkitariiAvangard
-  name: роба скитарийца
-  description: Священное одеяние.
   suffix: WH40K, АдМехи, Авангард
   components:
   - type: Sprite

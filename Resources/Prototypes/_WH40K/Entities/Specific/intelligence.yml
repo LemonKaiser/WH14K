@@ -1,10 +1,8 @@
 - type: entity
-  name: чип данных
   parent: BaseItem
   categories: [ HideSpawnMenu ]
   id: DataChip
   suffix: WH40K
-  description: Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
   components:
   - type: Sprite
     scale: 0.8,0.8
@@ -55,11 +53,9 @@
     count: 1
 
 - type: entity
-  name: чип данных
   parent: BaseItem
   id: DataChipImp
   suffix: WH40K
-  description: Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
   components:
   - type: Sprite
     scale: 0.8,0.8

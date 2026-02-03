@@ -1,8 +1,6 @@
 - type: entity
-  name: Стаб-пистолет
   parent: BaseWeaponPistol
   id: WeaponStubPistol
-  description: Пистолет неизвестной модели. Использует 10мм.
   suffix: WH40K, Общий
   components:
   - type: Sprite

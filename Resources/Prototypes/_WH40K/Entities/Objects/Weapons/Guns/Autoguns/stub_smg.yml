@@ -1,8 +1,6 @@
 - type: entity
-  name: тяжёлый автопистолет
   parent: BaseWeaponPistol
   id: WeaponStubSMG
-  description: Пистолет пулемёт, модель которого не определить, похоже, оно является самодельным.
   suffix: WH40K, Хаос
   components:
   - type: Sprite

@@ -1,8 +1,6 @@
 - type: entity
-  name: тяжёлый стаббер
   parent: BaseWeaponRifle
   id: WeaponStubLMG
-  description: Тяжёлый ручной пулемёт, модель которого не определить, похоже, оно является самодельным. Использует 8,25мм лонг.
   suffix: WH40K, Общий
   components:
   - type: GunRequiresWield

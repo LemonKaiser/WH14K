@@ -1,8 +1,6 @@
 - type: entity
-  name: Силовая Сабля
   parent: BaseSword
   id: WHPowerSaberImperial
-  description: Высококачественная, благородная офицерская силовая сабля, выполненная из дорогих материалов. Её энергетическое поле позволяет лезвию прорезать плоть, кости и большинство защитных доспехов.
   suffix: WH40K
   components:
   - type: Sprite
@@ -41,7 +39,6 @@
   - type: PirateAccent
 
 - type: entity
-  name: силовая булава
   parent: BaseItem
   id: WHPowerMaceImperial
   description: filler

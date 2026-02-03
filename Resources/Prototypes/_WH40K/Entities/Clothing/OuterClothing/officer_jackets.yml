@@ -1,8 +1,6 @@
 - type: entity
   parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing]
   id: ClothingOuterArmorSeniorOfficerArmoredJacket
-  name: китель старшего офицера
-  description: Китель старшего офицера флота - удобный и крепкий, идеальный символ вашей власти.
   suffix: WH40K, флот
   components:
   - type: Sprite
@@ -28,8 +26,6 @@
 - type: entity
   parent: ClothingOuterArmorSeniorOfficerArmoredJacket
   id: ClothingOuterArmorJuniorOfficerArmoredJacket
-  name: китель младшего офицера
-  description: Именно этот прекрасный костюм даётся младшим офицерам флота - достойная награда за вашу службу, не правда ли?
   suffix: WH40K, флот
   components:
   - type: Armor

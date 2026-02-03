@@ -1,6 +1,5 @@
 - type: entity
   id: WallNecron
-  name: стена некронов
   parent: BaseWall
   suffix: WH40K, Некроны
   components:

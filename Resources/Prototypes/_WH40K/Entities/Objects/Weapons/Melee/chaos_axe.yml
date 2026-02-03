@@ -1,8 +1,6 @@
 - type: entity
-  name: хаоситский топор
   parent: BaseKnife
   id: AxeChaos
-  description: Одноручный топорик хаоситов, чуток ржавый и побитый жизнью, но удар его все так же болезнен.
   suffix: WH40K, Хаос
   components:
   - type: Tag

@@ -1,7 +1,6 @@
 
 - type: entity
   id: Cartridge12mm
-  name: патрон (12 мм)
   parent: BaseCartridgeHeavyRifle
   suffix: WH40K
   components:
@@ -14,7 +13,6 @@
 
 - type: entity
   id: Cartridge10mm
-  name: патрон (10 мм)
   parent: BaseCartridgePistol
   suffix: WH40K
   components:
@@ -27,7 +25,6 @@
 
 - type: entity
   id: Cartridge825mmLong
-  name: патрон (8,25 мм удлинённый)
   parent: BaseCartridgeLightRifle
   suffix: WH40K
   components:
@@ -40,7 +37,6 @@
 
 - type: entity
   id: Cartridge10mmLong
-  name: патрон (10 мм удлинённый)
   parent: BaseCartridgePistol
   suffix: WH40K
   components:

@@ -1,8 +1,6 @@
 - type: entity
-  name: стабб-дробовик
   parent: BaseWeaponShotgun
   id: WeaponStubShotgun
-  description: Дробовик неизвестной модели. Использует 12мм
   suffix: WH40K, Общий
   components:
   - type: Item

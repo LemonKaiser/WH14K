@@ -1,7 +1,6 @@
 - type: entity
   parent: BaseWall
   id: WallMetal
-  name: металлическая стена
   suffix: WH40K, сверхукреплённая
   components:
   - type: Sprite
@@ -64,7 +63,6 @@
 - type: entity
   parent: WallShuttleDiagonal
   id: WallMetalDiagonal
-  name: металлическая стена
   suffix: WH40K, диагональная, сверхукреплённая
   placement:
     mode: SnapgridCenter
@@ -86,7 +84,6 @@
 - type: entity
   parent: BaseWall
   id: WallRockIndestructible
-  name: твердокаменная скала
   suffix: неразрушимая
   components:
   - type: Icon

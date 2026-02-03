@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingNeckBase
   id: Colonelcloak
-  name: плащ полковника
-  description: Великолепно вышитый плащ старшего офицера Имперской Гвардии, одним своим видом показывает авторитет, власть, богатство... и куда стрелять противнику.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

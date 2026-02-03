@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorAdvancedFlakVest
-  name: панцирная броня
-  description: Крепкая броня, почти полностью покрывающее тело и дающая хорошую защиту от большинства видов повреждений.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -25,8 +23,6 @@
 - type: entity
   parent: ClothingOuterArmorAdvancedFlakVest
   id: ClothingOuterArmorFlakVestGen
-  name: панцирный нагрудник
-  description: Высококачественный позолоченый панцирный нагрудник офицера, покажет вашим подчинённым статус и власть, а врагу - в кого стрелять.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -49,8 +45,6 @@
 - type: entity
   parent: ClothingOuterArmorAdvancedFlakVest
   id: ClothingOuterArmorAdvancedFlakVestHeretic
-  name: панцирная броня еретиков
-  description: Панцирная броня гвардейца-предателя, отличающаяся только раскраской и символами.
   suffix: WH40K, Еретики
   components:
   - type: Sprite

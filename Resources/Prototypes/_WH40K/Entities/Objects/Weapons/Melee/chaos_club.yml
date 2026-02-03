@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseItem
   id: Chaosclub
-  name: молоток хаоса
-  description: Киянка, созданная из куска металла. Используется хаоситами для борьбы с броней.
   suffix: WH40K, Хаос
   components:
   - type: Sprite

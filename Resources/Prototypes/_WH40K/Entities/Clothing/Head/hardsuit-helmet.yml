@@ -4,8 +4,6 @@
 - type: entity
   parent: ClothingHeadEVAHelmetBase
   id: ClothingHeadHelmetHardsuitVoidsmanStandard
-  name: шлем войдсмена
-  description: Шлем стандартного скафандра войдсмена.
   suffix: WH40K, войдсмены
   components:
   - type: BreathMask
@@ -30,8 +28,6 @@
 - type: entity
   parent: [ClothingHeadSuitWithLightBase, ClothingHeadEVAHelmetBase]
   id: ClothingHeadHelmetHardsuitVoidsmanOfficer
-  name: шлем офицера войдсмена
-  description: Шлем офицерской модификации скафандра войдсмена.
   suffix: WH40K, войдсмены
   components:
   - type: BreathMask
@@ -58,8 +54,6 @@
 - type: entity
   parent: [ClothingHeadSuitWithLightBase, ClothingHeadEVAHelmetBase]
   id: ClothingHeadHelmetHardsuitVoidsmanSergeant
-  name: шлем сержанта войдсмена
-  description: Шлем сержантской модификации скафандра войдсмена.
   suffix: WH40K, войдсмены
   components:
   - type: BreathMask
@@ -87,8 +81,6 @@
 - type: entity
   parent: ClothingHeadHelmetHardsuitVoidsmanSergeant
   id: ClothingHeadHelmetHardsuitVoidsmanGrenadier
-  name: шлем гренадёра войдсмена
-  description: Шлем гренадёрской модификации скафандра войдсмена.
   suffix: WH40K, войдсмены
   components:
   - type: BreathMask
@@ -108,8 +100,6 @@
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitTechpriest
-  name: шлем скафандра техножреца
-  description: Шлем скафандра для техножрецов, что ещё слишком слабо оснащены бионикой.
   categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
@@ -127,8 +117,6 @@
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetHardsuitTechpriestMarsMagos
-  name: капюшон магоса
-  description: Шлем скафандра магоса с капюшоном робы.
   categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
@@ -148,8 +136,6 @@
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]
   id: ClothingHeadHelmetTechpriestMarsSkitarii
-  name: капюшон робы скитарийца
-  description: Священное одеяние.
   categories: [ HideSpawnMenu ]
   suffix: WH40K, АдМехи
   components:
@@ -171,8 +157,6 @@
 - type: entity
   parent: [ClothingHeadSuitWithLightBase, ClothingHeadEVAHelmetBase]
   id: ClothingHeadHelmetTechpriestMarsSkitariiAvangard
-  name: шлем скитарийца
-  description: Священное одеяние.
   suffix: WH40K, АдМехи
   components:
   - type: BreathMask
