@@ -1,6 +1,6 @@
 - type: job
   id: HTankComm
-  name: job-name-tank-comm
+  name: job-name-htank-comm
   description: job-description-tank-comm
   playTimeTracker: JobHTankComm
   startingGear: SergeantGear

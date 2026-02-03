@@ -1,6 +1,6 @@
 - type: job
   id: HGenetor
-  name: job-name-genetor
+  name: job-name-hgenetor
   description: job-description-genetor
   playTimeTracker: JobHGenetor
   requirements:

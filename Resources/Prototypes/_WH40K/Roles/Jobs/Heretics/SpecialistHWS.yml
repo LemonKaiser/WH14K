@@ -1,6 +1,6 @@
 - type: job
   id: HSpecialistHWS
-  name: job-name-specialist-hws
+  name: job-name-hspecialist-hws
   description: job-description-specialist-hws
   playTimeTracker: JobHSpecialistHWS
   startingGear: GuardsmanGear

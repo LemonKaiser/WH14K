@@ -84,10 +84,14 @@
   - type: StepTrigger
     intersectRatio: 0.2
     requiredTriggeredSpeed: 0
+  - type: PreventableStepTrigger
   - type: TriggerOnStepTrigger
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.08
     sprintSpeedModifier: 0.08
+    ignoreWhitelist:
+      components:
+      - Mech
   - type: Fixtures
     fixtures:
       slips:

@@ -1,6 +1,6 @@
 - type: job
   id: HEnginseer
-  name: job-name-enginseer
+  name: job-name-henginseer
   description: job-description-enginseer
   playTimeTracker: JobHEnginseer
   requirements:

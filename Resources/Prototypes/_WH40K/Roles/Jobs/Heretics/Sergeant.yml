@@ -1,6 +1,6 @@
 - type: job
   id: HSergeant
-  name: job-name-sergeant
+  name: job-name-hsergeant
   description: job-description-sergeant
   playTimeTracker: JobHSergeant
   startingGear: SergeantGear

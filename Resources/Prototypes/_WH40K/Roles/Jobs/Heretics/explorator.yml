@@ -1,6 +1,6 @@
 - type: job
   id: HExplorator
-  name: job-name-explorator
+  name: job-name-hexplorator
   description: job-description-explorator
   playTimeTracker: JobHExplorator
   requirements:

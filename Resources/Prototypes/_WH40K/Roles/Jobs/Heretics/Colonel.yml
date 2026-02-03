@@ -1,6 +1,6 @@
 - type: job
   id: HColonel
-  name: job-name-colonel
+  name: job-name-hcolonel
   description: job-description-colonel
   playTimeTracker: JobHColonel
   startingGear: ColonelGear

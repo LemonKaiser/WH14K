@@ -1,6 +1,6 @@
 - type: job
   id: HTanker
-  name: job-name-tanker
+  name: job-name-htanker
   description: job-description-tanker
   playTimeTracker: JobHTanker
   startingGear: GuardsmanGear

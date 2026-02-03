@@ -106,6 +106,7 @@
     bodyType: KinematicController
   - type: GravityAffected
   - type: Clickable
+  - type: ProtectedFromStepTriggers
   - type: WiresPanel
   - type: Fixtures
     fixtures:

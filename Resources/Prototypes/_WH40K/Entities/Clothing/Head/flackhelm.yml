@@ -7,6 +7,8 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmet.rsi
+  - type: Item
+    size: Normal
   - type: Armor
     modifiers:
       coefficients:
