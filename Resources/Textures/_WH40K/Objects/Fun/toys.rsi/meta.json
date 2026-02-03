@@ -21,6 +21,9 @@
     },
     {
         "name": "lon"
+    },
+    {
+        "name": "kaiser"
     }
   ]
 }

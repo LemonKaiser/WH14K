@@ -1,4 +1,5 @@
 - type: stack
+  parent: BaseSheetStack
   id: DataChip
   name: data-chip-name
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence.rsi, state: datachip }
@@ -9,12 +10,12 @@
   id: DataChipChaos
   name: data-chip-ch-name
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence_ch.rsi, state: datachip }
-  spawn: DataChip
+  spawn: DataChipChaos
   maxCount: 4
 
 - type: stack
   id: DataChipImp
   name: data-chip-name
-  icon: _WH40K/Objects/Specific/intelligence.rsi:datachip
-  spawn: DataChip
+  icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence_imp.rsi, state: datachip }
+  spawn: DataChipImp
   maxCount: 4

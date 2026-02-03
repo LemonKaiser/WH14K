@@ -19,6 +19,9 @@ ent-MobZoanthrope = зоантроп
 ent-DataChip = чип данных
     .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
 
+ent-DataChip1 = чип данных
+    .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+
 ent-DataChipImp = чип данных
     .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
 
@@ -278,6 +281,10 @@ ent-MeltPowerCell = контейнер мельта-оружия
 ent-AccatranPowerCell = батарея аккатрана
 
 ent-MechSentinel = Часовой
+
+ent-MechSentinelBatteryAutogun = Часовой
+
+ent-MechSentinelBatteryPlasma = Часовой
 
 ent-WeaponMechCombatSentinelRifle = Автопушка часового
 

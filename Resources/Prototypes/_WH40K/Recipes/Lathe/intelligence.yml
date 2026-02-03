@@ -3,7 +3,7 @@
   result: DataChipImp
   completetime: 2
   materials:
-   Steel: 1
+   DataChip: 1
 
 - type: latheRecipePack
   id: DataChipsForImp
