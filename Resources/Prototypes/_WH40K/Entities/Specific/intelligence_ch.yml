@@ -13,7 +13,7 @@
   - type: Item
     size: Small
   - type: Stack
-    stackType: DataChip
+    stackType: DataChipChaos
     count: 1
     baseLayer: base
     layerStates:
