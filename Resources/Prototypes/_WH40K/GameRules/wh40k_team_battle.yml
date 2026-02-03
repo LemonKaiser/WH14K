@@ -1,0 +1,15 @@
+- type: entity
+  id: WH40KTeamBattle
+  parent: BaseGameRule
+  components:
+  - type: WH40KTeamBattleRule
+    countCriticalAsAlive: true
+    announceTeamOnSpawn: true
+    announceWinner: true
+    teams:
+    - id: Imperium
+      name: wh40k-team-imperium
+      departments: [ Imperium, Mechanicus ]
+    - id: Heretics
+      name: wh40k-team-heretics
+      departments: [ Heretics, DarkMechanicum ]
