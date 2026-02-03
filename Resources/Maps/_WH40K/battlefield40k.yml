@@ -97,6 +97,8 @@ entities:
       ambientLightColor: '#FFFFFFFF'
     - type: LightCycle
       duration: 1800
+      initialOffset: false
+      offset: 900
       minLightLevel: 0.1
       maxLightLevel: 3.0
       minLevel: '#1A264DFF'

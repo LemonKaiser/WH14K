@@ -3,7 +3,6 @@ wh40k-team-battle-description = Two factions fight for total victory. Teams are 
 wh40k-team-imperium = Imperium
 wh40k-team-heretics = Heretics
 
-wh40k-team-assigned = You are on the { $team } team.
 wh40k-team-service-message = You have been called to serve the { $team }. Hold the line.
 wh40k-team-service-message-Imperium = By the Emperor's will, scour this world of heresy. No mercy. No retreat.
 wh40k-team-service-message-Heretics = Let the Imperium fall. Slay the Emperor's faithful and drown the soil in their blood.

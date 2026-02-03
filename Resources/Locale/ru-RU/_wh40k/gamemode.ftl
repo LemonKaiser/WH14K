@@ -3,7 +3,6 @@ wh40k-team-battle-description = Две фракции сражаются до п
 wh40k-team-imperium = Империум
 wh40k-team-heretics = Еретики
 
-wh40k-team-assigned = Вы в команде: { $team }.
 wh40k-team-service-message = Вы призваны на службу в { $team }. Исполните свой долг.
 wh40k-team-service-message-Imperium = По воле Императора очистите этот мир от ереси. Ни шагу назад, ни пощады.
 wh40k-team-service-message-Heretics = Да падёт Империум. Уничтожьте верных Императору и окропите землю их кровью.

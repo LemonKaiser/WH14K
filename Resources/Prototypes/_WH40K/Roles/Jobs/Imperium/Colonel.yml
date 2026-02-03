@@ -7,6 +7,10 @@
   icon: "JobIconColonel"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
   access:
   - Maintenance
   - Engineering
