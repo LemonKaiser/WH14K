@@ -13,21 +13,18 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/meltagun.ogg
-  - type: BatteryAmmoProvider
-    proto: RedMeltaLaser
   - type: ItemSlots
     slots:
-      cell_slot:
+      gun_magazine:
         name: Magazine
         startingItem: MeltPowerCell
         whitelist:
           tags:
             - MeltPowerCell
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/meltagun_in-hands.rsi
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/meltagun_in-hands.rsi
-    quickEquip: false
     slots:
     - Back
     - suitStorage
-  - type: Item
-    sprite: _WH40K/Objects/Weapons/Guns/Battery/meltagun_in-hands.rsi

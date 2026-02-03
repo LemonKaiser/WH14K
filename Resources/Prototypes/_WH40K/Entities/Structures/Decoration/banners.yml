@@ -60,3 +60,12 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/banners.rsi
     state: gvardia_banner2
+
+- type: entity
+  id: MechanicusBanner
+  parent: WHChaosBanner
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: mechanicus

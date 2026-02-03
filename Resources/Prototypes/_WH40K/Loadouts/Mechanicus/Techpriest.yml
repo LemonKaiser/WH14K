@@ -1,0 +1,34 @@
+- type: loadout
+  id: RobeTechpriestMars
+  equipment:
+    neck: ClothingNeckRobeTechpriestMars
+
+- type: loadout
+  id: RobeTechpriestAgripinaa
+  equipment:
+    neck: ClothingNeckRobeTechpriestAgripinaa
+
+- type: loadout
+  id: RobeTechpriestGraia
+  equipment:
+    neck: ClothingNeckRobeTechpriestGraia
+
+- type: loadout
+  id: RobeTechpriestLucius
+  equipment:
+    neck: ClothingNeckRobeTechpriestLucius
+
+- type: loadout
+  id: RobeTechpriestMetalica
+  equipment:
+    neck: ClothingNeckRobeTechpriestMetalica
+
+- type: loadout
+  id: RobeTechpriestRiza
+  equipment:
+    neck: ClothingNeckRobeTechpriestRiza
+
+- type: loadout
+  id: RobeTechpriestStygiesVIII
+  equipment:
+    neck: ClothingNeckRobeTechpriestStygiesVIII

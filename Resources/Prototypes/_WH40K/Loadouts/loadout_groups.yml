@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: TechpriestNeck
+  name: loadout-group-techpriest-neck
+  loadouts:
+  - RobeTechpriestMars
+  - RobeTechpriestAgripinaa
+  - RobeTechpriestGraia
+  - RobeTechpriestLucius
+  - RobeTechpriestMetalica
+  - RobeTechpriestRiza
+  - RobeTechpriestStygiesVIII

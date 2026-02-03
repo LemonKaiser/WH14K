@@ -22,7 +22,7 @@
     color: "#b3f02e"
   - type: TimedSpawner
     prototypes:
-      - DataChip
+      - DataChip1
     chance: 0.99
     intervalSeconds: 60
     minimumEntitiesSpawned: 1

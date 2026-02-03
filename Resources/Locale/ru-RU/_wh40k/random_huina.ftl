@@ -26,3 +26,5 @@ figurines-ifi-3 ="Как там было?... Я забыл"
 figurines-ifi-4 = "Так и запишем, реколор"
 
 materials-datapoint = необработанные данные
+
+loadout-group-techpriest-neck = роба, техножрец

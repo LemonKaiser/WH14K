@@ -1,0 +1,39 @@
+- type: roleLoadout
+  id: JobEnginseer
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobNovice
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobExplorator
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobLexmechanic
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobHEnginseer
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobHNovice
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobHExplorator
+  groups:
+  - TechpriestNeck
+
+- type: roleLoadout
+  id: JobHLexmechanic
+  groups:
+  - TechpriestNeck
