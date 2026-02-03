@@ -1,8 +1,9 @@
 - type: entity
-  parent: BaseWeaponShotgun
+  parent: [BaseWeaponShotgun, BaseGunWieldable]
   id: WeaponChsCombatShotgun
   suffix: WH40K, Хаос
   components:
+  - type: GunRequiresWield
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun_inhands.rsi

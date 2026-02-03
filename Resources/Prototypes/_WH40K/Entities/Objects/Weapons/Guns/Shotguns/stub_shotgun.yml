@@ -1,8 +1,9 @@
 - type: entity
-  parent: BaseWeaponShotgun
+  parent: [BaseWeaponShotgun, BaseGunWieldable]
   id: WeaponStubShotgun
   suffix: WH40K, Общий
   components:
+  - type: GunRequiresWield
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/stub_shotgun_inhands.rsi
