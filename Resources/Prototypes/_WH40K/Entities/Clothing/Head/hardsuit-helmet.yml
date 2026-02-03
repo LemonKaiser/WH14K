@@ -89,9 +89,9 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hardsuits/v_grenadier.rsi
   - type: Item
-    size: Small
     storedRotation: -90
     heldPrefix: off
+    size: Normal
 
 
 #Техножречество

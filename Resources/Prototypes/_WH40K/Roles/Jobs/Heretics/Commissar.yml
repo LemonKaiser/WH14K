@@ -1,6 +1,6 @@
 - type: job
   id: HCommissar
-  name: job-name-commissar
+  name: job-name-hcommissar
   description: job-description-commissar
   playTimeTracker: JobHCommissar
   startingGear: CommissarGear

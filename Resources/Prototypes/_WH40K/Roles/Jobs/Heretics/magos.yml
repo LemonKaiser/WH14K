@@ -1,6 +1,6 @@
 - type: job
   id: HMagos
-  name: job-name-magos
+  name: job-name-hmagos
   description: job-description-magos
   playTimeTracker: JobHMagos
   requirements:

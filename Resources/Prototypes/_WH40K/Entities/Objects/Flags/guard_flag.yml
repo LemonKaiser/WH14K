@@ -7,3 +7,4 @@
     state: icon
   - type: Item
     sprite: _WH40K/Objects/Misc/guard_flag.rsi
+    size: Normal

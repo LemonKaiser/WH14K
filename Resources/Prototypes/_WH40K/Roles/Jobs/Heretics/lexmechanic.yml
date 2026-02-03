@@ -1,6 +1,6 @@
 - type: job
   id: HLexmechanic
-  name: job-name-lexmechanic
+  name: job-name-hlexmechanic
   description: job-description-lexmechanic
   playTimeTracker: JobHLexmechanic
   requirements:

@@ -94,14 +94,15 @@ entities:
     - type: Broadphase
     - type: OccluderTree
     - type: MapLight
-      ambientLightColor: '#FFFFFFFF'
+      ambientLightColor: '#E6CB8BFF'
     - type: LightCycle
       duration: 1800
       initialOffset: false
-      offset: 900
-      minLightLevel: 0.1
+      offset: 600
+      minLightLevel: 0.2
       maxLightLevel: 3.0
-      minLevel: '#1A264DFF'
+      clipLight: 3.0
+      minLevel: '#2B3143FF'
       maxLevel: '#F5F1E8FF'
     - type: SunShadow
       direction: 1, 1
@@ -38928,7 +38929,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -60393,7 +60393,6 @@ entities:
       parent: 2
     - type: Meteor
       hitList:
-      - invalid
   - uid: 6879
     components:
     - type: Transform

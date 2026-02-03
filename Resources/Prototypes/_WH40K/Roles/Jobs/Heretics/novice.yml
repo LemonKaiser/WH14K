@@ -1,6 +1,6 @@
 - type: job
   id: HNovice
-  name: job-name-novice
+  name: job-name-hnovice
   description: job-description-novice
   playTimeTracker: JobHNovice
   startingGear: NoviceGear

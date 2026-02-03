@@ -2,7 +2,7 @@
   id: FragGrenade
   name: frag grenade 
   description: Standard issue fragmentation grenade used by the Imperial Guard and Space Marines to clear out enemy infantry.
-  parent: GrenadeBase
+  parent: [VolatileGrenadeBase, TimerGrenadeBase]
   suffix: WH40K
   components:
   - type: Sprite
@@ -34,7 +34,7 @@
   id: KrakGrenade
   name: krak grenade
   description: Explosive anti-armor grenade used by the Imperial Guard and Space Marines to destroy light vehicles and fortifications.
-  parent: GrenadeBase
+  parent: [VolatileGrenadeBase, TimerGrenadeBase]
   suffix: WH40K
   components:
   - type: Sprite
@@ -59,7 +59,7 @@
   id: OrkGrenade
   name: coolboyz grenade
   description: Big boom for big Waagh!
-  parent: GrenadeBase
+  parent: [VolatileGrenadeBase, TimerGrenadeBase]
   suffix: WH40K, Ork
   components:
   - type: Sprite
@@ -84,7 +84,7 @@
   id: MeltaGrenade
   name: melta grenade
   description: Short-range anti-armor grenade that projects a powerful melting blast, capable of destroying heavily armored targets.
-  parent: GrenadeBase
+  parent: [VolatileGrenadeBase, TimerGrenadeBase]
   suffix: WH40K
   components:
   - type: Sprite

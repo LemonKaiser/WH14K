@@ -1,6 +1,6 @@
 - type: job
   id: HMedic
-  name: job-name-medic
+  name: job-name-hmedic
   description: job-description-medic
   playTimeTracker: JobHMedic
   startingGear: MedicGear
