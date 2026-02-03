@@ -1,0 +1,11 @@
+- type: gamePreset
+  id: WH40KTeamBattle
+  alias:
+  - wh40kteam
+  - wh40k
+  name: wh40k-team-battle-title
+  description: wh40k-team-battle-description
+  showInVote: true
+  supportedMaps: WH40KMapPool
+  rules:
+  - WH40KTeamBattle

@@ -1,0 +1,53 @@
+- type: gameMap
+  id: Battlefield40k
+  mapName: Battlefield 40K
+  mapPath: /Maps/_WH40K/battlefield40k.yml
+  minPlayers: 0
+  stations:
+    Battlefield40k:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Battlefield 40K"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ -1, -1 ]
+            Commissar: [ -1, -1 ]
+            Lieutenant: [ -1, -1 ]
+            TankComm: [ -1, -1 ]
+            Tanker: [ -1, -1 ]
+            Sergeant: [ -1, -1 ]
+            SergeantSWS: [ -1, -1 ]
+            SergeantHWS: [ -1, -1 ]
+            SpecialistSWS: [ -1, -1 ]
+            SpecialistHWS: [ -1, -1 ]
+            Guardsman: [ -1, -1 ]
+            Medic: [ -1, -1 ]
+            # Mechanicus
+            Magos: [ -1, -1 ]
+            Explorator: [ -1, -1 ]
+            Lexmechanic: [ -1, -1 ]
+            Genetor: [ -1, -1 ]
+            Enginseer: [ -1, -1 ]
+            Novice: [ -1, -1 ]
+            # Heretics
+            HColonel: [ -1, -1 ]
+            HCommissar: [ -1, -1 ]
+            HLieutenant: [ -1, -1 ]
+            HTankComm: [ -1, -1 ]
+            HTanker: [ -1, -1 ]
+            HSergeant: [ -1, -1 ]
+            HSergeantSWS: [ -1, -1 ]
+            HSergeantHWS: [ -1, -1 ]
+            HSpecialistSWS: [ -1, -1 ]
+            HSpecialistHWS: [ -1, -1 ]
+            HGuardsman: [ -1, -1 ]
+            HMedic: [ -1, -1 ]
+            # Dark Mechanicum
+            HMagos: [ -1, -1 ]
+            HExplorator: [ -1, -1 ]
+            HLexmechanic: [ -1, -1 ]
+            HGenetor: [ -1, -1 ]
+            HEnginseer: [ -1, -1 ]
+            HNovice: [ -1, -1 ]
