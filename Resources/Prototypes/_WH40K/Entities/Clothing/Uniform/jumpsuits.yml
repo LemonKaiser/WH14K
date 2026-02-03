@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitCommandUniform
-  name: форма флота
-  description: Самая обыкновенная флотская униформа - строго и без изысков.
   suffix: WH40K, флот
   components:
   - type: Sprite
@@ -13,8 +11,6 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitVoidsman
-  name: униформа войдсменов
-  description: Строгий тёмный комбинезон флота - самая необходимая вещь для службы в рядах войдсменов.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -25,8 +21,6 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitCommissar
-  name: униформа комиссара
-  description: Униформа боевого командира Астра Милитарум - комиссара. От неё пахнет ужасом врагов и подчинённых.
   suffix: WH40K
   components:
   - type: Sprite
@@ -37,8 +31,6 @@
 - type: entity
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformJumpsuitGuardsman
-  name: униформа гвардейца
-  description: Униформа, выдающаяся членам регулярной армии империума - имперской гвардии.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -49,8 +41,6 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitTechpriest
-  name: комбинезон техножреца
-  description: Комбинезон, выдающийся всем техножрецам, что ещё имеют гуманоидную форму тела.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -61,8 +51,6 @@
 - type: entity
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformJumpsuitBloodPact
-  name: униформа бладпакта
-  description: Обычная униформа
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
@@ -73,8 +61,6 @@
 - type: entity
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformJumpsuitOfficer
-  name: униформа офицера
-  description: Обычная униформа офицера Имперской Гвардии
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -85,8 +71,6 @@
 - type: entity
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformJumpsuitColonel
-  name: униформа полковника
-  description: Обычная униформа полковника Имперской Гвардии
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

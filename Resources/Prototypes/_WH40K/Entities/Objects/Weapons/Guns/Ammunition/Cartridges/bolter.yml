@@ -1,6 +1,5 @@
 - type: entity
   id: CartridgeBolter
-  name: патрон (.75 болт)
   parent: BaseCartridge
   suffix: WH40K
   components:

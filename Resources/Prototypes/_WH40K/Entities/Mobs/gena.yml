@@ -1,8 +1,6 @@
 - type: entity
-  name: Гена
   id: GenaWH40
   parent: SimpleSpaceMobBase
-  description: Гена шкаф 2,5
   components:
   - type: Insulated
   - type: CombatMode

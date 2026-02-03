@@ -1,8 +1,6 @@
 - type: entity
-  name: Аккатран VI D
   parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
   id: WeaponLaserLasgunAccatran
-  description: Штурмовая версия легендарного модельного ряда Аккатран, модель - Шесть Дэ.
   suffix: WH40K
   components:
   - type: GunRequiresWield

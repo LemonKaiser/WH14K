@@ -15,7 +15,6 @@
   - type: Riggable
 
 - type: entity
-  name: батарея лазгана
   id: LasgunPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -35,7 +34,6 @@
     fireCost: 50
 
 - type: entity
-  name: батарея лонглаза
   id: LonglasPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -57,7 +55,6 @@
     pricePerJoule: 0.15
 
 - type: entity
-  name: контейнер плазма-винтовки
   id: PlasmGunPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -78,7 +75,6 @@
     fireCost: 1000
 
 - type: entity
-  name: контейнер плазма-пистолета
   id: PlasmPistolPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -99,7 +95,6 @@
     fireCost: 1000
 
 - type: entity
-  name: контейнер мельта-оружия
   id: MeltPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -119,7 +114,6 @@
     fireCost: 1500
 
 - type: entity
-  name: батарея аккатрана
   id: AccatranPowerCell
   parent: WH40KPowerCell
   suffix: WH40K

@@ -36,7 +36,6 @@
 
 - type: entity
   id: MagazineCombatShotgun
-  name: барабан дробовика (.50 дробь)
   parent: BaseMagazineCombatShotgun
   suffix: WH40K
   components:
@@ -45,7 +44,6 @@
 
 - type: entity
   id: MagazineCombatShotgunEmpty
-  name: барабан дробовика (.50 дробь)
   suffix: empty, WH40K
   parent: BaseMagazineCombatShotgun
   components:

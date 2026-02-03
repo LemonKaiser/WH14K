@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseGenerator
   id: GeneratorPlasma
-  name: Привод «Юпитер»
-  description: Термоядерное пламя в их сердце слабее, чем у других представителей серии, они гораздо более надежны и способны пережить непоправимый урон без потери производительности.
   suffix: WH40K, 250kW
   components:
   - type: SpriteFade
@@ -59,8 +57,6 @@
 - type: entity
   parent: GeneratorPlasma
   id: GeneratorPlasmaLiteDamaged
-  name: Повреждённый привод «Юпитер»
-  description: Термоядерное пламя в их сердце слабее, чем у других представителей серии, они гораздо более надежны и способны пережить непоправимый урон без потери производительности.
   suffix: WH40K, 250kW, слабо повреждённый
   components:
   - type: Sprite
@@ -93,8 +89,6 @@
 - type: entity
   parent: GeneratorPlasma
   id: GeneratorPlasmaDamaged
-  name: Повреждённый привод «Юпитер»
-  description: Термоядерное пламя в их сердце слабее, чем у других представителей серии, они гораздо более надежны и способны пережить непоправимый урон без потери производительности.
   suffix: WH40K, 250kW, средне повреждённый
   components:
   - type: Sprite
@@ -127,8 +121,6 @@
 - type: entity
   parent: GeneratorPlasma
   id: GeneratorPlasmaHardDamaged
-  name: Повреждённый привод «Юпитер»
-  description: Термоядерное пламя в их сердце слабее, чем у других представителей серии, они гораздо более надежны и способны пережить непоправимый урон без потери производительности.
   suffix: WH40K, 250kW, сильно повреждённый
   components:
   - type: Sprite

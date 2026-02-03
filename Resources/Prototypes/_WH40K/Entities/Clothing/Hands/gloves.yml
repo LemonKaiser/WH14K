@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingHandsGlovesColorBlack
   id: ClothingHandsGlovesCombatVoidsman
-  name: боевые перчатки
-  description: Боевые перчатки флота.
   suffix: WH40K, войдсмены
   components:
   - type: Sprite
@@ -14,8 +12,6 @@
 - type: entity
   parent: ClothingHandsGlovesColorBlack
   id: ClothingHandsGlovesCombatCommissar
-  name: перчатки комиссара
-  description: Крайне удобны для одновременного удержания болт-пистолета и пиломеча в одних руках.
   suffix: WH40K
   components:
   - type: Sprite
@@ -27,8 +23,6 @@
 - type: entity
   parent: ClothingHandsBase
   id: ClothingHandsGlovesTechpriest
-  name: перчатки техножреца
-  description: Изолированные перчатки для работы.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -46,8 +40,6 @@
 - type: entity
   parent: ClothingHandsBase
   id: ClothingHandsGlovesBloodPact
-  name: перчатки бладпакта
-  description: боевые перчатки
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
@@ -58,8 +50,6 @@
 - type: entity
   parent: ClothingHandsGlovesColorBlack
   id: ClothingHandsGlovesCombatColonel
-  name: перчатки полковника
-  description: филлер
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

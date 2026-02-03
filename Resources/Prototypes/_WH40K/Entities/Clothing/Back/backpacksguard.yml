@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackGuard
-  name: рюкзак гвардейца
-  description: Стандартный рюкзак Имперского Гвардейца, в который влезет всё необходимое и даже чуточку больше.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/guardpack.rsi
@@ -10,8 +8,6 @@
 - type: entity
   parent: [ Clothing, StorePresetVox ]
   id: ClothingBackpackVox
-  name: вокс рюкзак
-  description: Рюкзак, оборудованный разного рода электронникой, позволяющей передавать в штаб разведданные и получать за это пополнение ваших запасов.
   suffix: WH40K, Гвардия
   components:
   - type: Clothing

@@ -1,6 +1,5 @@
 - type: entity
   id: MagazineBolter
-  name: магазин болтера (.75 болт)
   parent: BaseMagazineRifle
   suffix: WH40K
   components:
@@ -23,7 +22,6 @@
 - type: entity
   id: MagazineBolterPistol
   parent: MagazineBolter
-  name: пистолетный магазин болтера (.75 болт)
   suffix: WH40K
   components:
   - type: Tag

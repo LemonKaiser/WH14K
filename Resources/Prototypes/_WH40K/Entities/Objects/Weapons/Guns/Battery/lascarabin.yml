@@ -1,5 +1,4 @@
 - type: entity
-  name: лазкарабин
   parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
   id: WeaponLaserCarabin
   description:

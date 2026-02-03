@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackSkitarii
-  name: радиевый ранец
-  description: Ранец скитарийцев.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
@@ -54,8 +52,6 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackTechpriest
-  name: ранец техножреца
-  description: Ранец, что пока не имеет особо выделяющихся модулей.
   suffix: WH40K, АдМехи
   components:
   - type: Sprite

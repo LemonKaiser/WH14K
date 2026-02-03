@@ -1,8 +1,6 @@
 - type: entity
   parent: [ClothingBeltBase, ClothingSlotBase]
   id: WHClothingBeltSheath
-  name: ножны для сабли
-  description: Предназначены для силового меча Империума!
   suffix: WH40K
   components:
   - type: Sprite

@@ -1,7 +1,6 @@
 - type: entity
   parent: [ClothingEyesBase]
   id: ClothingEyesHudTechPriest
-  name: визор техножреца
   description: Filler
   suffix: WH40K, адмехи
   components:

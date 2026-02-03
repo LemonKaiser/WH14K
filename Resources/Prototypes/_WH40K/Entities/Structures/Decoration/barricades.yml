@@ -1,7 +1,5 @@
 - type: entity
   id: BarricadeWarhammer
-  name: баррикада
-  description: Именно это когда-нибудь может спасти тебе жизнь. Или наоборот
   parent: BaseBarricade
   suffix: WH40K
   placement:
@@ -40,8 +38,6 @@
 
 - type: entity
   id: BarricadeSandbags
-  name: мешки с песком
-  description: Именно это когда-нибудь может спасти тебе жизнь. Или наоборот
   parent: BarricadeWarhammer
   placement:
     mode: SnapgridCenter
@@ -62,8 +58,6 @@
 - type: entity
   id: FallotBarbedWire
   parent: BaseStructure
-  name: колючая проволока
-  description: То, что не дает вам умереть в штыковой атаке.
   suffix: WH40K, Пропы
   components:
   - type: Sprite
@@ -121,10 +115,8 @@
       launchForwardsMultiplier: 0
 
 - type: entity
-  name: Противотанковый ёж
   id: FalloutBarricades
   parent: BaseStructureDynamic
-  description: Стоп, танки?
   suffix: WH40K, Пропы
   components:
   - type: Transform
@@ -149,10 +141,8 @@
     state: iron_barricade
 
 - type: entity
-  name: Противотанковый ёж
   id: FalloutBarricades3
   parent: BaseStructureDynamic
-  description: Стоп, танки?
   suffix: WH40K, Пропы
   components:
   - type: Transform
@@ -177,10 +167,8 @@
     state: iron_barricadeA
 
 - type: entity
-  name: Противотанковый ёж
   id: FalloutBarricades4
   parent: BaseStructureDynamic
-  description: Стоп, танки?
   suffix: WH40K, Пропы
   components:
   - type: Transform
@@ -205,10 +193,8 @@
     state: iron_barricade2
 
 - type: entity
-  name: Противотанковый ёж
   id: FalloutBarricades5
   parent: BaseStructureDynamic
-  description: Стоп, танки?
   suffix: WH40K, Пропы
   components:
   - type: Transform
@@ -233,10 +219,8 @@
     state: iron_barricade2A
 
 - type: entity
-  name: баррикады
   id: FalloutBarricades6
   parent: BaseStructureDynamic
-  description: Ржавый бункер моя свобода, заколочена дверь крестом.
   suffix: WH40K, Пропы
   components:
   - type: Transform
@@ -261,10 +245,8 @@
     state: boarded
 
 - type: entity
-  name: оконные рамы
   id: FalloutBarricades7
   parent: BaseStructureDynamic
-  description: От гнусных воров и жалких тиранидов.
   suffix: WH40K, Пропы
   components:
   - type: Transform

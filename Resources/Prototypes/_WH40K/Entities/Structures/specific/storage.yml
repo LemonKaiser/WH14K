@@ -1,7 +1,6 @@
 - type: entity
   parent: [BaseStructure, StorePresetStore]
   id: StructureStorageImp
-  name: склад
   description: placeholder
   suffix: "WH40K, Империум"
   components:

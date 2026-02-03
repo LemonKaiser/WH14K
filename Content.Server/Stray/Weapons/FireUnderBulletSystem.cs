@@ -4,17 +4,17 @@ using Content.Shared.Atmos;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Projectiles;
-using Robust.Shared.Audio.Systems;
-using Robust.Shared.Random;
+using Robust.Server.GameObjects;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
-using Robust.Shared.Map;
+using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.Stray.Weapons.FireUnderBullet;
 
 public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
 {
     [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly SharedAudioSystem _audioSys = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] protected readonly IGameTiming Timing = default!;
 
     public override void Initialize()
@@ -41,6 +41,12 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
 
     private void OnHit(EntityUid uid, FireUnderBulletComponent component, ref ProjectileHitEvent args)
     {
+        if (component.HotspotExpose)
+        {
+            TryExposeHotspot(args.Target, component, uid);
+            return;
+        }
+
         if (component.HitRelease)
         {
             ReleaseGas((uid, component));
@@ -63,6 +69,14 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
         {
             if (comp.startTime < Timing.CurTime)
             {
+                if (comp.HotspotExpose || comp.HitRelease)
+                {
+                    if (!comp.pickedUp && comp.removeTime < Timing.CurTime)
+                        QueueDel(uid);
+
+                    continue;
+                }
+
                 if (!comp.pickedUp)
                 {
                     ReleaseGas((uid, comp));
@@ -95,5 +109,75 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
         }
 
         _atmosphereSystem.Merge(environment, removed);
+    }
+
+    private void TryExposeHotspot(EntityUid target, FireUnderBulletComponent component, EntityUid? source)
+    {
+        if (!TryComp<TransformComponent>(target, out var xform))
+            return;
+
+        var grid = xform.GridUid;
+        var map = xform.MapUid;
+        if (grid == null && map == null)
+            return;
+
+        if (grid == null)
+            return;
+
+        var indices = _transform.GetGridTilePositionOrDefault((target, xform));
+
+        var exposeRadius = Math.Max(0, component.HotspotExposeRadius);
+        for (var dx = -exposeRadius; dx <= exposeRadius; dx++)
+        {
+            for (var dy = -exposeRadius; dy <= exposeRadius; dy++)
+            {
+                var tile = indices + new Vector2i(dx, dy);
+                if (component.HotspotSeedMoles > 0f)
+                {
+                    var mix = _atmosphereSystem.GetTileMixture(grid, map, tile, true);
+                    if (mix != null)
+                        mix.AdjustMoles(component.HotspotSeedGas, component.HotspotSeedMoles);
+                }
+
+                _atmosphereSystem.HotspotExpose(grid.Value, tile, component.HotspotTemperature, component.HotspotVolume, source, true);
+            }
+        }
+
+        if (component.HotspotCleanupDelay > 0f)
+        {
+            var cleanupAfter = TimeSpan.FromSeconds(component.HotspotCleanupDelay);
+            var cleanupRadius = Math.Max(0, component.HotspotCleanupRadius);
+            var cleanupTemp = component.HotspotCleanupTemperature;
+            var cleanupRemoveGases = component.HotspotCleanupRemoveGases;
+            var gridUid = grid.Value;
+            var mapUid = map;
+            var center = indices;
+
+            Timer.Spawn(cleanupAfter, () =>
+            {
+                for (var cx = -cleanupRadius; cx <= cleanupRadius; cx++)
+                {
+                    for (var cy = -cleanupRadius; cy <= cleanupRadius; cy++)
+                    {
+                        var tile = center + new Vector2i(cx, cy);
+                        _atmosphereSystem.HotspotExtinguish(gridUid, tile);
+
+                        var mix = _atmosphereSystem.GetTileMixture(gridUid, mapUid, tile, true);
+                        if (mix == null || mix.Immutable)
+                            continue;
+
+                        if (cleanupTemp > 0f)
+                            mix.Temperature = MathF.Min(mix.Temperature, cleanupTemp);
+
+                        if (cleanupRemoveGases)
+                        {
+                            mix.SetMoles(Gas.Plasma, 0f);
+                            mix.SetMoles(Gas.Tritium, 0f);
+                            mix.SetMoles(Gas.WaterVapor, 0f);
+                        }
+                    }
+                }
+            });
+        }
     }
 }

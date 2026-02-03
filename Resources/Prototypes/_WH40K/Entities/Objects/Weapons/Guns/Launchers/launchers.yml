@@ -1,5 +1,4 @@
 - type: entity
-  name: ракетомёт
   parent: [ BaseWeaponLauncher, BaseMajorContraband ]
   id: WeaponRocketLauncher
   description:

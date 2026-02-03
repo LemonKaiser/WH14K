@@ -1,8 +1,6 @@
 - type: entity
   parent: [BaseStructure, StorePresetAltar]
   id: StructureAltar
-  name: алтарь хаоса
-  description: "Алтарь, на котором за разведданые тёмные боги могут наградить вас, или же ближайшая крепость фабрика. Кажется, оно шевелится..."
   suffix: "WH40K, Хаос"
   components:
     - type: Sprite

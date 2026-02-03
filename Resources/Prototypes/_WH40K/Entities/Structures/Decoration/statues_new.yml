@@ -1,8 +1,6 @@
 - type: entity
   id: StatueWH3
   parent: BaseStructure
-  name: статуя
-  description: Одна из великого множества статуй, что веками стоят безмолвно, услаждая взор каждого, кто созерцает их.
   suffix: WH40K
   components:
   - type: Sprite

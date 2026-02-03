@@ -1,6 +1,5 @@
 - type: entity
   id: MagazineRadCarabin
-  name: "оцинковонный магазин"
   parent: BaseItem
   suffix: WH40K, АдМехи
   components:

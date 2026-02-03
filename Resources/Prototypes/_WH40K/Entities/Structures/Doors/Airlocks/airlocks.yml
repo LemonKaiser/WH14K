@@ -1,7 +1,6 @@
 - type: entity
   parent: Airlock
   id: DoubleAirlock
-  name: шлюз
   suffix: WH40K
   components:
   - type: Sprite

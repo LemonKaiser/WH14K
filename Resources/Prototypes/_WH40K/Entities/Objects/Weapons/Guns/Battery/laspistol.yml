@@ -1,5 +1,4 @@
 - type: entity
-  name: лазпистолет
   parent: WeaponLaserWH40KEnergy
   id: WeaponLaserPistol
   description:
@@ -26,10 +25,8 @@
     - Belt
 
 - type: entity
-  name: Лазпистолет "Воля Императора"
   parent: WeaponLaserWH40KEnergy
   id: WeaponLaserPistolCommissar
-  description: Особый лазпистолет полкового Комиссара, повидавшей не мало вражеских морд и союзных затылков.
   suffix: WH40K
   components:
   - type: Sprite

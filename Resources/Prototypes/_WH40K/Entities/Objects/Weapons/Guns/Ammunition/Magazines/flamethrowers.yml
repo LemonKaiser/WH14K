@@ -1,7 +1,5 @@
 - type: entity
   id: FlameThrowerTank
-  name: "баллон с прометием"
-  description: "Баллон с сжиженным прометием. Был сделан специально для огнемётов"
   parent: BaseMagazinePistol
   suffix: WH40K
   components:

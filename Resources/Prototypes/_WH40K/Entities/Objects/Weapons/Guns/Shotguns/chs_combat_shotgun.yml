@@ -1,8 +1,6 @@
 - type: entity
-  name: боевой дробовик Аккатран Мk. XI
   parent: BaseWeaponShotgun
   id: WeaponChsCombatShotgun
-  description: Помповый дробовик с угловатым дизайном, изготавливаемый на Аккатране для нужд Имперской Гвардии. Использует 12 мм.
   suffix: WH40K, Хаос
   components:
   - type: Item

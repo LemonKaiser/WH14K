@@ -1,8 +1,6 @@
 - type: entity
-  name: пиломеч
   parent: BaseItem
   id: Chainsword
-  description: Врррррууум
   suffix: WH40K
   components:
   - type: Sprite

@@ -1,8 +1,6 @@
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorFlakVest
-  name: Флак-броня
-  description: Полный комплект флак-брони для среднестатестического гвардейца. Обеспечивает усреднённую защиту, но слегка стесняет движения из за своего веса.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
@@ -25,8 +23,6 @@
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorFlakVestMed
-  name: флак-жилет медика
-  description: Стандартный противоосколочный жилет Имперского Гвардейца с пометкой медика на плече, Кадийского образца. Защитит от осколков, слабых лазеров и мелкокалиберных пуль.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/OuterClothing/Armor/medflakvest.rsi
@@ -36,8 +32,6 @@
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorBloodpact
-  name: броня бладпакта
-  description: Достаточно крепкая и лёгкая броня.
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
@@ -48,8 +42,6 @@
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorFlakVestHeretic
-  name: броня еретика
-  description: Флак-жилет гвардейца-предателя, отличающийся только раскраской и символами.
   suffix: WH40K, Еретики
   components:
   - type: Sprite
@@ -60,8 +52,6 @@
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorFlakVestLight
-  name: Флак-броня (Облегчённая)
-  description: Облегчённая версия стандартной имперской флак-брони, используется в основном разведчиками.
   suffix: WH40K, Гвардия
   components:
   - type: Sprite

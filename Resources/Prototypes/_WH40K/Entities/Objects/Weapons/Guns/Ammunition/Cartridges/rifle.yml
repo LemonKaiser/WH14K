@@ -1,6 +1,5 @@
 - type: entity
   id: CartridgeRadCarabin
-  name: "радиоактивный патрон (.308)"
   parent: BaseCartridge
   suffix: WH40K, АдМехи
   components:

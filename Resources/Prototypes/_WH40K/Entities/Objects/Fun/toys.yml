@@ -1,8 +1,6 @@
 - type: entity
   parent: BasePlushie
   id: PlushieFull
-  name: плюшевый Фулл
-  description: "Плюшевая версия некогда великого существа. Из его спины торчат два белоснежных крыла, а в руках массивный молот и... двадцатигранная игральная кость? Интересный набор предметов."
   suffix: WH40K
   components:
     - type: Sprite
@@ -16,8 +14,6 @@
 - type: entity
   parent: BasePlushie
   id: PlushieGGados
-  name: Плюшевый Гадос
-  description: "Плюшевая игрушка, без сомнений, великого Гадоса. Без него не было бы ничего"
   suffix: WH40K
   components:
     - type: Sprite
@@ -28,7 +24,6 @@
   parent: BasePlushie
   id: Plushielondorondondon
   name: LONDORONDONDON
-  description: "Когда-нибудь я точно нарисую что-то крутое!"
   suffix: WH40K
   components:
     - type: Sprite
@@ -38,8 +33,6 @@
 - type: entity
   parent: BaseFigurine
   id: PlushieIfi07
-  name: Игрушечный лекс-механик
-  description: "Плюшевая игрушка лексмеханика, что бесконечно ожидает новых сообщений что-бы перенести их на свиток. Не способен работать без подключения к внешним приборам."
   suffix: WH40K
   components:
     - type: Sprite
@@ -57,8 +50,6 @@
 - type: entity
   parent: BasePlushie
   id: StrangeToster
-  name: Странный тостер
-  description: "В нём обитает ленивый дух, так что вы не сможете заставить этот тостер работать"
   suffix: WH40K
   components:
     - type: Sprite

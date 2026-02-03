@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseItem
   id: WeaponMeleeChaosNailBoard
-  name: хаоситская доска с гвоздями
-  description: Доска с гвоздями. Самое простое самодельное оружие, который, однако, обеспечивает относительно высокий урон по цели.
   suffix: WH40K, Хаос
   components:
   - type: Sprite

@@ -1,6 +1,5 @@
 - type: entity
   id: WeaponMechCombatSentinelRifle
-  name: Автопушка часового
   description: Placeholder.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
@@ -23,7 +22,6 @@
 
 - type: entity
   id: WeaponMechCombatSentinelPlasma
-  name: Плазма-винтовка часового
   description: Placeholder.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
