@@ -4,8 +4,8 @@ meta:
   engineVersion: 272.0.0
   forkId: main
   forkVersion: e610a005a59380b8d0cdbc02c8774374b0339660
-  time: 02/03/2026 12:12:09
-  entityCount: 14140
+  time: 02/04/2026 04:14:01
+  entityCount: 14138
 maps:
 - 1
 grids:
@@ -553,7 +553,250 @@ entities:
     - type: SpreaderGrid
     - type: Shuttle
       dampingModifier: 0.25
-    - type: ImplicitRoof
+    - type: Roof
+      data:
+        -22,3: 16204198715729166336
+        -22,4: 18229723555195314400
+        -22,5: 18229723555195321596
+        -22,6: 17361641532880125180
+        -22,7: 247256451182832
+        -21,2: 18158513697557839872
+        -21,3: 18446744073709551612
+        -21,4: 18446744073709551615
+        -21,5: 18446744073709551615
+        -21,6: 18446744073709551615
+        -21,7: 17361658038489972735
+        -21,8: 13889313185719185648
+        -21,9: 13889313184910721216
+        -21,10: 13889313184910721216
+        -20,2: 504403158265495552
+        -20,3: 18446744073693761295
+        -20,4: 18446744073709551615
+        -20,5: 18446744073709551615
+        -20,6: 18446744073709551615
+        -20,7: 18446744073709551615
+        -20,8: 18446744073709551615
+        -20,9: 18446744073709551615
+        -20,10: 18446744073709551615
+        -20,11: 255
+        -19,3: 18446744073692774400
+        -19,4: 18446744073709551615
+        -19,5: 18446744073709551615
+        -19,6: 18446744073709551615
+        -19,7: 18446744073709551615
+        -19,8: 18446744073709551615
+        -19,9: 18446744073709551615
+        -19,10: 18446744073709551615
+        -19,11: 255
+        -18,3: 217020518514032640
+        -18,4: 217020518514230019
+        -18,5: 1085089346689893123
+        -18,6: 506390040454041359
+        -18,7: 1085102592571148039
+        -18,8: 217020518514233103
+        -18,9: 217020518514230019
+        -18,10: 217020518514230019
+        -18,11: 3
+        -17,5: 0
+        -16,3: 0
+        -16,4: 0
+        -16,6: 0
+        -16,9: 0
+        -16,11: 264917609349120
+        -15,2: 12686640150302687232
+        -15,3: 579838452023951360
+        -15,4: 25803358208
+        -15,10: 0
+        -15,11: 281474959933440
+        -14,2: 216735732067205120
+        -14,4: 0
+        -14,5: 96
+        -14,6: 139053793280
+        -14,7: 128
+        -14,8: 0
+        -14,9: 0
+        -14,11: 281474959933440
+        -13,2: 10952754293765046272
+        -13,3: 2056
+        -13,4: 3670016
+        -13,5: 12893323264
+        -13,6: 290482210426061824
+        -13,7: 7
+        -13,8: 0
+        -13,9: 545460874368
+        -13,11: 1103823372288
+        -12,2: 72057594037927936
+        -12,3: 393731
+        -12,4: 0
+        -12,5: 0
+        -12,8: 433478061204176896
+        -12,9: 12935430144
+        -11,3: 966115522800
+        -11,9: 18084767253662720
+        -10,3: 70649119642746879
+        -10,5: 16204198715729174528
+        -10,6: 16204198715729174752
+        -10,7: 16204198715729174752
+        -10,8: 63297651233317088
+        -9,2: 1152921504606846976
+        -9,3: 18230571291595767807
+        -9,5: 18446744073709551360
+        -9,6: 18446744073709551615
+        -9,7: 18446744073709551615
+        -9,8: 72057594037927935
+        -9,11: 273644190220480
+        -8,2: 17940089115630370816
+        -8,3: 18446744073709551615
+        -8,5: 18446744073709551360
+        -8,6: 18446744073709551615
+        -8,7: 18446744073709551615
+        -8,8: 72057594037927935
+        -8,10: 18446602236709568512
+        -8,11: 3315714752511
+        -7,3: 18446744073709551615
+        -7,5: 18446744073709551360
+        -7,6: 18446744073709551615
+        -7,7: 18446744073709551615
+        -7,8: 72057594037927935
+        -7,10: 18446741878981263360
+        -6,2: 18446462598732840960
+        -6,3: 18446744073709551615
+        -6,5: 18446744073709551360
+        -6,6: 18446744073709551615
+        -6,7: 18446744073709551615
+        -6,8: 72057594037927935
+        -5,2: 18410433801713876992
+        -5,3: 9223372036854775807
+        -5,5: 2242545357980376832
+        -5,6: 2242545357980376863
+        -5,7: 2242545357980376863
+        -5,8: 8759942804610847
+        -4,0: 18446744069414584320
+        -4,1: 72057594037927935
+        -4,3: 3311470314241
+        -4,4: 0
+        -4,5: 2317111002514063890
+        -4,6: 263712
+        -3,0: 506381209748635648
+        -3,1: 1733612108324996871
+        -3,2: 36170086419005440
+        -2,1: 13889312357043142656
+        -2,2: 13898042212018602176
+        -2,3: 552989671616
+        -2,10: 9259542121117908992
+        -2,11: 32896
+        -1,1: 18446744073709551615
+        -1,2: 18392524749610647423
+        -1,3: 1099511627775
+        -1,8: 0
+        -1,9: 32985348833818
+        -1,10: 72340172821233664
+        -1,11: 257
+        0,1: 18446744073709551615
+        0,2: 18446736325452751856
+        0,3: 1099511627775
+        1,1: 18446742978509734145
+        1,2: 18446744073709551615
+        1,3: 1099511627775
+        1,4: 11556236643832692736
+        1,5: 57424
+        1,8: 0
+        1,9: 154481383702528
+        2,4: 144396663052566528
+        2,5: 259
+        2,8: 0
+        2,9: 0
+        2,10: 6764195534077952
+        3,5: 246290604621824
+        3,6: 16140901064495857664
+        3,7: 0
+        3,9: 0
+        3,10: 0
+        4,5: 3298534883328
+        4,6: 0
+        4,7: 0
+        4,9: 2048
+        4,10: 0
+        5,3: 141197049856
+        5,5: 7696581394432
+        5,6: 3684366707654164480
+        5,7: 0
+        5,9: 0
+        5,10: 141287244169216
+        6,3: 3298585214976
+        6,6: 3298534884096
+        6,9: 0
+        6,10: 36283883716608
+        7,3: 1152921504606846976
+        7,4: 54043196333756416
+        7,9: 0
+        7,10: 2105392
+        8,3: 361700842631331840
+        8,4: 844424997502981
+        8,6: 8388608
+        9,6: 65536
+        10,6: 9259542121117908992
+        10,7: 18229723555195321472
+        10,8: 18229723555195321596
+        10,9: 9259678997380136188
+        10,10: 8421504
+        11,5: 17870283321406128128
+        11,6: 18446744073591650552
+        11,7: 18446744073709551615
+        11,8: 18446744073709551615
+        11,9: 18446744073709551615
+        11,10: 63297651235356671
+        12,5: 13889101250810609664
+        12,6: 18446744073709551552
+        12,7: 18446744073709551615
+        12,8: 18446744073709551615
+        12,9: 18446744073709551615
+        12,10: 54255401272606719
+        13,5: 18446462598732840960
+        13,6: 18446744073709551615
+        13,7: 18446744073709551615
+        13,8: 18446744073709551615
+        13,9: 18446744073709551615
+        13,10: 72057594037927935
+        14,5: 18446462598732840960
+        14,6: 18446744073709551615
+        14,7: 18446744073709551615
+        14,8: 18446744073709551615
+        14,9: 18446744073709551615
+        14,10: 72057594037927935
+        15,5: 9187061764859101184
+        15,6: 18446744073709551615
+        15,7: 18446744073709551615
+        15,8: 18446744073709551615
+        15,9: 18446744073709551615
+        15,10: 35888059530608639
+        16,6: 18446744073709551615
+        16,7: 18446744073709551615
+        16,8: 18446744073709551615
+        16,9: 18446744073709551615
+        16,10: 1099511627775
+        17,6: 18410573985168294145
+        17,7: 18446744073709551615
+        17,8: 18446744073709551615
+        17,9: 9187343239835811839
+        17,10: 4311810431
+        18,6: 504403158265495552
+        18,7: 18446743245841958663
+        18,8: 18446744073709551615
+        18,9: 7726767750975
+        19,7: 4557430617154781184
+        19,8: 4557430888798830399
+        -11,6: 0
+        -9,10: 13889312357043142656
+        -7,11: 4294967295
+        -10,2: 504403158265495552
+        -11,2: 16140901064495857664
+        -8,4: 63736
+        -7,4: 65535
+        -7,2: 18446462598732840960
+        -6,4: 65535
+        -5,4: 32639
+        -14,10: 7722418307072
     - type: GridPathfinding
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
@@ -26598,7 +26841,7 @@ entities:
       pos: -152.5,41.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -12561.721
+      secondsUntilStateChange: -13408.283
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -38910,29 +39153,6 @@ entities:
         moles:
           Oxygen: 1.7459903
           Nitrogen: 6.568249
-  - uid: 1568
-    components:
-    - type: Transform
-      pos: -98.5,76.5
-      parent: 2
-    - type: EntityStorage
-      air:
-        volume: 200
-        immutable: False
-        temperature: 293.147
-        moles:
-          Oxygen: 6.1896887
-          Nitrogen: 23.285023
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
 - proto: CrateElectrical
   entities:
   - uid: 1569
@@ -60386,13 +60606,6 @@ entities:
       parent: 2
 - proto: MeteorSpaceDust
   entities:
-  - uid: 182
-    components:
-    - type: Transform
-      pos: -51.76448,68.13246
-      parent: 2
-    - type: Meteor
-      hitList:
   - uid: 6879
     components:
     - type: Transform
@@ -63002,70 +63215,94 @@ entities:
     - type: Transform
       pos: 141.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 38
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 146.5,63.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3672
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 98.5,54.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3676
     components:
     - type: Transform
       pos: 97.5,59.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3677
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 103.5,58.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3678
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 105.5,53.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3679
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 101.5,55.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3680
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 96.5,75.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3681
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 100.5,73.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3682
     components:
     - type: Transform
       pos: 108.5,82.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3683
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 109.5,80.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 12111
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -167.5,38.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
 - proto: Poweredlight
   entities:
   - uid: 157
@@ -63073,88 +63310,120 @@ entities:
     - type: Transform
       pos: -65.5,69.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 160
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -53.5,42.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 162
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -40.5,42.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 164
     components:
     - type: Transform
       pos: -48.5,64.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 166
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -64.5,48.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 169
     components:
     - type: Transform
       pos: -51.5,54.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 170
     components:
     - type: Transform
       pos: -52.5,60.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 174
     components:
     - type: Transform
       pos: -45.5,60.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 175
     components:
     - type: Transform
       pos: -48.5,54.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 176
     components:
     - type: Transform
       pos: -71.5,69.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 179
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -75.5,65.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 181
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -62.5,48.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 190
     components:
     - type: Transform
       pos: -63.5,60.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 202
     components:
     - type: Transform
       pos: -60.5,69.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 2218
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -75.5,60.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3123
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -34.5,65.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
 - proto: PoweredSmallLight
   entities:
   - uid: 12113
@@ -63163,6 +63432,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -169.5,41.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
 - proto: PoweredSmallLightEmpty
   entities:
   - uid: 3686
@@ -63171,6 +63442,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 111.5,75.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
 - proto: PoweredWarmSmallLight
   entities:
   - uid: 5
@@ -63179,203 +63452,275 @@ entities:
       rot: 3.141592653589793 rad
       pos: 125.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 6
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 117.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 7
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 113.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 8
     components:
     - type: Transform
       pos: 109.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 9
     components:
     - type: Transform
       pos: 105.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 10
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 105.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 11
     components:
     - type: Transform
       pos: 113.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 12
     components:
     - type: Transform
       pos: 125.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 15
     components:
     - type: Transform
       pos: 129.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 16
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 141.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 39
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 137.5,61.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 41
     components:
     - type: Transform
       pos: 137.5,71.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 42
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 146.5,69.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1250
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 120.5,49.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1259
     components:
     - type: Transform
       pos: 130.5,59.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1283
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 128.5,51.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1287
     components:
     - type: Transform
       pos: 128.5,81.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1672
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 130.5,73.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1753
     components:
     - type: Transform
       pos: 120.5,83.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 1965
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 117.5,73.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 2031
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 102.5,69.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 2041
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 102.5,63.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 2157
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 138.5,58.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 2163
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 135.5,76.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3687
     components:
     - type: Transform
       pos: 108.5,51.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3688
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 108.5,55.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3689
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 112.5,57.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3695
     components:
     - type: Transform
       pos: 109.5,53.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3696
     components:
     - type: Transform
       pos: 142.5,74.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3697
     components:
     - type: Transform
       pos: 137.5,56.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3698
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 93.5,74.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3699
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 104.5,76.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3700
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 107.5,76.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3701
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 110.5,73.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3702
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 111.5,80.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
   - uid: 3703
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 106.5,79.5
       parent: 2
+    - type: ApcPowerReceiver
+      needsPower: false
 - proto: PresentRandomCoal
   entities:
   - uid: 8612
@@ -106053,7 +106398,7 @@ entities:
       pos: 147.5,66.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -66968.56
+      secondsUntilStateChange: -67815.125
       state: Opening
   - uid: 13727
     components:
