@@ -1,7 +1,7 @@
 - type: entity
   parent: [BaseStructure, StorePresetAltar]
   id: StructureAltar
-  suffix: "WH40K, Хаос"
+  suffix: "WH40K, Хаос, обычное"
   components:
     - type: Sprite
       sprite: _WH40K/Structures/Specific/altar.rsi
@@ -20,4 +20,28 @@
       key: enum.StoreUiKey.Key
     - type: Store
       balance:
-        intelligence_imp: 0
+        intelligence_ch: 0
+
+- type: entity
+  parent: [BaseStructure, StorePresetAltarCmd]
+  id: StructureAltarCmd
+  suffix: "WH40K, Хаос, Кмд/дорогое"
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/altar_cmd.rsi
+      state: Altar_Idol1
+    - type: AmbientSound
+      enabled: true
+      volume: -3
+      range: 5
+      sound:
+        path: /Audio/_WH40K/Machines/altar.ogg
+    - type: UserInterface
+      interfaces:
+        enum.StoreUiKey.Key:
+          type: StoreBoundUserInterface
+    - type: ActivatableUI
+      key: enum.StoreUiKey.Key
+    - type: Store
+      balance:
+        intelligence_ch: 0

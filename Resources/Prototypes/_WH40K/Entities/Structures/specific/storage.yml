@@ -2,10 +2,42 @@
   parent: [BaseStructure, StorePresetStore]
   id: StructureStorageImp
   description: placeholder
-  suffix: "WH40K, Империум"
+  suffix: "WH40K, Империум, обычное"
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/storage.rsi
+    layers:
+    - state: icon
+    - state: unshaded
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    balance:
+      intelligence_imp: 0
+  - type: SpriteFade
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-1.5,1.5,0.1"
+        density: 2000
+        layer:
+        - WallLayer
+
+- type: entity
+  parent: [BaseStructure, StorePresetStoreCmd]
+  id: StructureStorageImpCmd
+  description: placeholder
+  suffix: "WH40K, Империум, кмд/дорогое"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/storage_cmd.rsi
     layers:
     - state: icon
     - state: unshaded

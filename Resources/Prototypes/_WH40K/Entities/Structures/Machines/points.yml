@@ -48,7 +48,7 @@
 - type: entity
   id: ImpPointConverter
   parent: BaseLathe
-  suffix: WH40K
+  suffix: WH40K, Гвардия
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Machines/data_conventer.rsi
@@ -66,4 +66,27 @@
     runningState: building
     staticPacks:
     - DataChipsForImp
+  - type: SpriteFade
+
+- type: entity
+  id: ChPointConverter
+  parent: BaseLathe
+  suffix: WH40K, Хаос
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/data_conventer_ch.rsi
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: icon
+    - state: unshaded
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+  - type: Lathe
+    idleState: icon
+    runningState: building
+    staticPacks:
+    - DataChipsForCh
   - type: SpriteFade

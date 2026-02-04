@@ -27839,12 +27839,10 @@ entities:
     - type: Transform
       pos: -152.5,73.5
       parent: 2
-- proto: BannerEngineering
+- proto: MechanicusBanner
   entities:
   - uid: 210
     components:
-    - type: MetaData
-      name: знамя адептус ХУяникус
     - type: Transform
       pos: -158.5,34.5
       parent: 2
@@ -27865,7 +27863,7 @@ entities:
     - type: Transform
       pos: -143.5,70.5
       parent: 2
-- proto: BannerScience
+- proto: MechanicusBanner
   entities:
   - uid: 214
     components:
@@ -61456,7 +61454,7 @@ entities:
       parent: 2
     - type: Paper
       content: >-
-        Вся база империума сделана крутым Litiy, ну и еще 80% карты ну короче я крутой, да, похвалите пожалуйста(( 
+        Вся база империума сделана крутым Litiy, ну и еще 80% карты ну короче я крутой, да, похвалите пожалуйста((
 
 
 
@@ -61469,8 +61467,8 @@ entities:
       parent: 2
     - type: Paper
       content: >-
-        Посвящается всем разработчикам, внесшим свой вклад в карту, спрайты, прототипы и многое другое. Пусть не все упомянуты здесь, но ничей вклад не будет забыт! 
-                                               Слава Еретеху! 
+        Посвящается всем разработчикам, внесшим свой вклад в карту, спрайты, прототипы и многое другое. Пусть не все упомянуты здесь, но ничей вклад не будет забыт!
+                                               Слава Еретеху!
         ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⠠⢤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
         ⡴⠒⠒⠒⠒⠒⠶⠦⠄⢹⣄⠀⠀⠑⠄⣀⡠⠤⠴⠒⠒⠒⠀⠀
@@ -62487,7 +62485,7 @@ entities:
     - type: Transform
       pos: -63.5,30.5
       parent: 2
-- proto: PortableGeneratorPacman
+- proto: GeneratorJupiter
   entities:
   - uid: 2018
     components:

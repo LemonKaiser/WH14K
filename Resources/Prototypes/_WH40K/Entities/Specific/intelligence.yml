@@ -31,9 +31,6 @@
     tags:
     - DataChip
   - type: Material
-  - type: Currency
-    price:
-      intelligence_imp: 1
 
 - type: entity
   parent: DataChip

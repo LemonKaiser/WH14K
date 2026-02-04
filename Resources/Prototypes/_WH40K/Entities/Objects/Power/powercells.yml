@@ -30,7 +30,7 @@
   - type: BatterySelfRecharger
     autoRechargeRate: 10
   - type: BatteryAmmoProvider
-    proto: RedLaserAccatranLong
+    proto: RedMediumLaser
     fireCost: 50
 
 - type: entity

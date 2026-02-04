@@ -9,3 +9,15 @@
   id: DataChipsForImp
   recipes:
   - DataChipImp
+
+- type: latheRecipe
+  id: DataChipCh
+  result: DataChipChaos
+  completetime: 2
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForCh
+  recipes:
+  - DataChipCh
