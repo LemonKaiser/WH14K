@@ -87,7 +87,7 @@
   components:
   - type: SpawnPoint
     spawn_type: LateJoin
-    job_id: HExplorator
+    job_id: Explorator
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -601,7 +601,7 @@
   components:
   - type: SpawnPoint
     spawn_type: LateJoin
-    job_id: Explorator
+    job_id: HExplorator
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:

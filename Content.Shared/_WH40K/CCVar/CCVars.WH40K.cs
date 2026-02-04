@@ -32,7 +32,7 @@ public sealed partial class CCVars
     ///     If true, friendly fire is allowed (no blocking) unless a role overrides it.
     /// </summary>
     public static readonly CVarDef<bool> WH40KFriendlyFireDisabled =
-        CVarDef.Create("wh40k.friendly_fire_disabled", false, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.friendly_fire_disabled", true, CVar.SERVERONLY);
 
     /// <summary>
     ///     Cooldown in seconds between friendly-fire ahelp warnings per player.

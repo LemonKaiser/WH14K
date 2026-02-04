@@ -6,7 +6,7 @@
   startingGear: NoviceGear
   icon: "JobIconNovice"
   supervisors: job-supervisors-engineering
-  canBeAntag: true # DeltaV - Can be antagonist
+  canBeAntag: false
   access:
   - Maintenance
   - Engineering

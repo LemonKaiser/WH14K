@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.Administration.Systems;
 using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Server._WH40K.LateJoin;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
@@ -56,6 +57,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly WH40KFactionSystem _wh40kFactions = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
@@ -112,6 +114,14 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         if (component.Teams.Count < 2)
             _sawmill.Warning($"WH40K team rule '{ToPrettyString(uid)}' has fewer than 2 teams configured.");
+
+        _wh40kFactions.BroadcastFactionsToAll();
+    }
+
+    protected override void Ended(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
+    {
+        base.Ended(uid, component, gameRule, args);
+        _wh40kFactions.BroadcastFactionsToAll();
     }
 
     protected override void ActiveTick(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, float frameTime)

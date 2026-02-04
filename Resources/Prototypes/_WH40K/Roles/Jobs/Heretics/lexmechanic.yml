@@ -13,6 +13,7 @@
   startingGear: LexmechanicGear
   icon: "JobIconLexmechanic"
   supervisors: job-supervisors-ce
+  canBeAntag: false
   access:
   - Maintenance
   - Engineering

@@ -6,7 +6,7 @@
   startingGear: SergeantGear
   icon: "JobIconTankComm"
   supervisors: job-supervisors-engineering
-  canBeAntag: true # DeltaV - Can be antagonist
+  canBeAntag: false
   access:
   - Maintenance
   - Engineering

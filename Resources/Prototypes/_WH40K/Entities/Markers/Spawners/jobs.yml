@@ -76,7 +76,7 @@
   suffix: WH40K
   components:
   - type: SpawnPoint
-    job_id: HExplorator
+    job_id: Explorator
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -530,7 +530,7 @@
   suffix: WH40K, Еретик
   components:
   - type: SpawnPoint
-    job_id: Explorator
+    job_id: HExplorator
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
