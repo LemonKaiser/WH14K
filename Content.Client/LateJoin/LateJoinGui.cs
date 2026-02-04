@@ -43,8 +43,9 @@ namespace Content.Client.LateJoin
         private readonly List<ScrollContainer> _jobLists = new();
 
         private readonly Control _base;
+        private readonly HashSet<ProtoId<DepartmentPrototype>>? _departmentFilter;
 
-        public LateJoinGui()
+        public LateJoinGui(IReadOnlyCollection<ProtoId<DepartmentPrototype>>? departmentFilter = null)
         {
             MinSize = SetSize = new Vector2(360, 560);
             IoCManager.InjectDependencies(this);
@@ -52,6 +53,8 @@ namespace Content.Client.LateJoin
             _crewManifest = _entitySystem.GetEntitySystem<CrewManifestSystem>();
             _gameTicker = _entitySystem.GetEntitySystem<ClientGameTicker>();
             _sawmill = _logManager.GetSawmill("latejoin.panel");
+            if (departmentFilter != null)
+                _departmentFilter = new HashSet<ProtoId<DepartmentPrototype>>(departmentFilter);
 
             Title = Loc.GetString("late-join-gui-title");
 
@@ -173,6 +176,10 @@ namespace Content.Client.LateJoin
 
                 foreach (var department in departments)
                 {
+                    var deptId = new ProtoId<DepartmentPrototype>(department.ID);
+                    if (_departmentFilter != null && !_departmentFilter.Contains(deptId))
+                        continue;
+
                     var departmentName = Loc.GetString(department.Name);
                     _jobCategories[id] = new Dictionary<string, BoxContainer>();
                     var stationAvailable = _gameTicker.JobsAvailable[id];

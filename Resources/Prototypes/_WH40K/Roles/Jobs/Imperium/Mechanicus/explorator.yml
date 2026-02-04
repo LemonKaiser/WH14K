@@ -13,6 +13,7 @@
   icon: "JobIconExplorator"
   startingGear: ExploratorGear
   supervisors: job-supervisors-qm
+  canBeAntag: false
   access:
   - Cargo
   - Salvage

@@ -4,6 +4,7 @@ using Content.Shared.Roles;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.GameTicking.Rules.Components;
 
@@ -85,6 +86,9 @@ public sealed partial class WH40KTeamDefinition
 
     [DataField("name", required: true)]
     public LocId Name = string.Empty;
+
+    [DataField("logo")]
+    public SpriteSpecifier? Logo;
 
     [DataField("departments")]
     public List<ProtoId<DepartmentPrototype>> Departments = new();

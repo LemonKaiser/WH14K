@@ -13,6 +13,7 @@
   startingGear: EnginseerGear
   icon: "JobIconEnginseer"
   supervisors: job-supervisors-ce
+  canBeAntag: false
   access:
   - Maintenance
   - Engineering
