@@ -11,6 +11,8 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    size: Huge
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/chs_stub_smg2.rsi
   - type: ItemSlots
