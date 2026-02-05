@@ -681,9 +681,11 @@ ent-StatueWH1Broken = broken statue
 ent-StatueWH4 = statue
 
 ent-NuclearBombEX = Exterminatus
+    .desc = A cataclysmic device meant to purge a world.
 
 ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
     .suffix = WH40K, Unanchored
+    .desc = { ent-NuclearBombEX.desc }
 
 ent-ChPointConverter = Chaos points converter
 

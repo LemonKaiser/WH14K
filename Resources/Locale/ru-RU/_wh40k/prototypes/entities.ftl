@@ -653,9 +653,11 @@ ent-StatueWH1Broken = разбитая статуя
 ent-StatueWH4 = статуя
 
 ent-NuclearBombEX = Экстерминатус
+    .desc = Катаклизмическое устройство, предназначенное для очищения мира.
 
 ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
     .suffix = WH40K, Не закреплено
+    .desc = { ent-NuclearBombEX.desc }
 
 ent-ChPointConverter = конвертер очков Хаоса
 
