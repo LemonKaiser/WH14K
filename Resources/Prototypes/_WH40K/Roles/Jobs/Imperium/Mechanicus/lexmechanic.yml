@@ -33,3 +33,14 @@
     eyes: ClothingEyesHudTechPriest
     mask: ClothingMaskGasTechPriest
     id: PassengerPDA
+
+- type: chameleonOutfit
+  id: LexmechanicChameleonOutfit
+  job: Lexmechanic
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    mask: ClothingMaskGasTechPriest

@@ -11,3 +11,11 @@
   - Maintenance
   - Engineering
   - External
+
+- type: chameleonOutfit
+  id: HNoviceChameleonOutfit
+  job: HNovice
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering

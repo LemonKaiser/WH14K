@@ -2,8 +2,6 @@
   id: WH40KObjectiveBase
   parent: BaseStructure
   abstract: true
-  name: wh40k-objective-base-name
-  description: wh40k-objective-base-desc
   components:
   - type: Sprite
     sprite: Objects/Specific/Security/target.rsi
@@ -82,8 +80,6 @@
 - type: entity
   id: WH40KObjectiveImperium
   parent: WH40KObjectiveBase
-  name: wh40k-objective-imperium-name
-  description: wh40k-objective-imperium-desc
   suffix: WH40K, Imperium
   components:
   - type: WH40KObjective
@@ -93,8 +89,6 @@
 - type: entity
   id: WH40KObjectiveHeretics
   parent: WH40KObjectiveBase
-  name: wh40k-objective-heretics-name
-  description: wh40k-objective-heretics-desc
   suffix: WH40K, Heretics
   components:
   - type: WH40KObjective

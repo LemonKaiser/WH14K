@@ -20,3 +20,11 @@
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
     id: PassengerPDA
+
+- type: chameleonOutfit
+  id: NoviceChameleonOutfit
+  job: Novice
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering

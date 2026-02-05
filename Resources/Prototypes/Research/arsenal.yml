@@ -65,6 +65,7 @@
   - BoxBeanbag
   - WeaponDisabler
   - WeaponMechCombatDisabler
+  - WeaponMechCombatFlashbangLauncher
 
 - type: technology
   id: UraniumMunitions

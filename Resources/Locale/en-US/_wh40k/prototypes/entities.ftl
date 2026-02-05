@@ -1,6 +1,15 @@
 ent-BoxLasgunPowerCell = lasgun battery box
     .desc = Box full of lasgun batteries
 
+ent-WH40KObjectiveBase = Command Relay
+    .desc = A hardened command relay that anchors a faction's foothold.
+
+ent-WH40KObjectiveImperium = Imperium Command Relay
+    .desc = The Imperium's main relay node. Protect it at all costs.
+
+ent-WH40KObjectiveHeretics = Heretic Command Relay
+    .desc = The heretics' main relay node. Protect it at all costs.
+
 ent-WHSoup = Guards soup
     .desc = The vat is full... And it’s better not to know.
 

@@ -31,9 +31,3 @@ wh40k-objective-destroyed = { $target } уничтожен!
 wh40k-objective-destroyed-remaining-allies = { $target } уничтожен. Осталось точек вашей команды: { $remaining }.
 wh40k-objective-destroyed-remaining-enemies = { $target } уничтожен. Осталось точек команды { $team }: { $remaining }.
 
-ent-WH40KObjectiveBase = Командный узел
-    .desc = Укреплённый узел связи, удерживающий позиции фракции.
-ent-WH40KObjectiveImperium = Командный узел Империума
-    .desc = Главный узел Империума. Защитите любой ценой.
-ent-WH40KObjectiveHeretics = Командный узел Еретиков
-    .desc = Главный узел Еретиков. Защитите любой ценой.

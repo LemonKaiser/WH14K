@@ -81,7 +81,7 @@
 
 - type: material
   id: DataChip
-  stackEntity: DataChip1
+  stackEntity: DataChip
   name: materials-datapoint
   unit: materials-unit-piece
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence.rsi, state: datachip }

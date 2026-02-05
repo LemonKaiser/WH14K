@@ -11,7 +11,6 @@
     pricePerJoule: 0.15
   - type: PowerCell
   - type: Appearance
-  - type: PowerCellVisuals
   - type: Riggable
 
 - type: entity
