@@ -1,8 +1,6 @@
 resupply-station = Станция пополнения припасов
 altar-dark-gods = Алтарь тёмных богов
 chat-radio-vox = вокс
-data-chip-name = чипы
-data-chip-ch-name = чипы хаоса
 gygax-central-control-module = центральный блок управления Gygax
 gygax-peripherals-control-module = периферийный блок управления Gygax
 gygax-weapon-control-and-targeting-module = модуль управления оружием и прицеливанием Gygax

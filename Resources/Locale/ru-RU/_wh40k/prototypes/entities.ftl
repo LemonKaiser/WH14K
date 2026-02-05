@@ -457,7 +457,8 @@ ent-MagazineRadCarabin = оцинковонный магазин
 
 ent-MagazineCombatShotgun = барабан дробовика (.50 дробь)
 
-ent-MagazineCombatShotgunEmpty = барабан дробовика (.50 дробь)
+ent-MagazineCombatShotgunEmpty = { ent-MagazineCombatShotgun }
+    .suffix = WH40K, Пустой
 
 ent-WHChaosBanner = знамя хаоса
     .desc = Зла и Добра в Хаосе нет — он выше этого.
@@ -613,3 +614,85 @@ ent-GeneratorPlasmaHardDamaged = Повреждённый привод «Юпи�
 
 ent-CrateNecron = некронский ящик
     .desc = Это хранилище, принадлежащее загадочной цивилизации машин из живой стали - некронам. Хватит ли у вас воли открыть его?
+ent-FragGrenade = осколочная граната
+    .desc = Стандартная осколочная граната Империума, используемая Имперской гвардией и Космодесантом для уничтожения врагов.
+
+ent-KrakGrenade = крак-граната
+    .desc = Бронебойная взрывчатка Империума, предназначенная для уничтожения лёгкой техники и укреплений.
+
+ent-MeltaGrenade = мелта-заряд
+    .desc = Короткодистанционная противотанковая граната, создающая мощный плавящий взрыв, способный разрушать тяжёлую броню.
+
+ent-OrkGrenade = крутая граната
+    .desc = Большие взрывы для большого ВААГХ!
+
+ent-ClothingNeckRobeTechpriestMars = роба техножреца
+
+ent-ClothingNeckRobeTechpriestAgripinaa = роба техножреца
+
+ent-ClothingNeckRobeTechpriestGraia = роба техножреца
+
+ent-ClothingNeckRobeTechpriestLucius = роба техножреца
+
+ent-ClothingNeckRobeTechpriestMetalica = роба техножреца
+
+ent-ClothingNeckRobeTechpriestRiza = роба техножреца
+
+ent-ClothingNeckRobeTechpriestStygiesVIII = роба техножреца
+
+ent-ClothingNeckRobeGenetorTechpriestMars = роба генетора
+
+ent-WH40KTeamBattle = Битва команд WH40K
+
+ent-StorePresetVox = Пресет пункта снабжения Вокс
+
+ent-StorePresetStore = Пресет магазина пополнения
+
+ent-StorePresetStoreCmd = Пресет командного магазина пополнения
+
+ent-StorePresetAltar = Пресет алтаря тёмных богов
+
+ent-StorePresetAltarCmd = Пресет командного алтаря тёмных богов
+
+ent-DataChip4 = чипы данных x4
+
+ent-WH40KStation = станция WH40K
+
+ent-WH40KPowerCell = энергоблок Механикуса
+
+ent-WeaponLaserWH40KEnergy = базовое лаз-оружие Механикуса
+
+ent-RedLaserLong = длинный красный лазер
+
+ent-RedMeltaLaser = мелта-луч
+
+ent-RedLaserAccatranLong = длинный аккатран-лазер
+
+ent-ZoanthropeLighting = молния зоантропа
+
+ent-FlamethrowerFlashEffect = вспышка огнемёта
+
+ent-StatueWH1 = статуя
+
+ent-StatueWH1Broken = разбитая статуя
+
+ent-StatueWH4 = статуя
+
+ent-NuclearBombEX = Экстерминатус
+
+ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
+    .suffix = WH40K, Не закреплено
+
+ent-ChPointConverter = конвертер очков Хаоса
+
+ent-StructureAltarCmd = командный алтарь тёмных богов
+
+ent-StructureStorageImpCmd = командный склад Империума
+
+ent-GeneratorJupiter = плазменный генератор
+
+ent-GeneratorJupiterLiteDamaged = { ent-GeneratorJupiter }
+
+ent-GeneratorJupiterDamaged = { ent-GeneratorJupiter }
+
+ent-GeneratorJupiterHardDamaged = { ent-GeneratorJupiter }

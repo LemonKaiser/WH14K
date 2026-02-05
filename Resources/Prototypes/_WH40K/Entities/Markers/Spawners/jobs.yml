@@ -81,7 +81,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - state: genetor
+      - state: explorator
     # layers:
       # - state: green
       # - sprite: DeltaV/Markers/jobs.rsi
@@ -536,4 +536,4 @@
     layers:
       - state: green
       - state: heretic
-      - state: genetor
+      - state: explorator
