@@ -13,7 +13,7 @@
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Flamethrower/flamethrower.rsi
   - type: Gun
-    fireRate: 15
+    fireRate: 10
     minAngle: 0
     maxAngle: 45
     selectedMode: FullAuto

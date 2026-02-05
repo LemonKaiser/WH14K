@@ -8,10 +8,8 @@
     tags:
       - CartridgeFlameThrower
       - Cartridge
-  - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
-    state: base
   - type: CartridgeAmmo
     proto: PromethiumBullet
     muzzleFlash: FlamethrowerFlashEffect
+    deleteOnSpawn: true
   - type: Appearance

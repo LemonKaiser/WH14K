@@ -143,10 +143,10 @@
       impactEffect: BulletImpactEffect
       damage:
         types:
-          Heat: 3
+          Heat: 1
     - type: IgniteOnCollide
       fireStacks: 1
-      count: 5
+      count: 3
 
 - type: entity
   id: BulletRadCarabin
