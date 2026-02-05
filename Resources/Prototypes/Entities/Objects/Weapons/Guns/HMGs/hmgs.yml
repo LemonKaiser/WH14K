@@ -13,6 +13,9 @@
     walkModifier: 0.8
     sprintModifier: 0.8
   - type: HeldSpeedModifier
+  - type: AimingCamera
+    maxOffset: 3
+    pvsIncrease: 0.3
   - type: Gun
     fireRate: 20
     selectedMode: FullAuto

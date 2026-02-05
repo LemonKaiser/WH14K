@@ -10,6 +10,9 @@
     sprite: _WH40K/Structures/Decorations/barricades.rsi
     state: barricade
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: Tag
+    tags:
+    - barricade
   - type: Physics
   - type: Damageable
   - type: Destructible
@@ -45,6 +48,9 @@
   components:
   - type: Sprite
     state: sandbags
+  - type: Tag
+    tags:
+    - barricade
   - type: Damageable
   - type: Destructible
     thresholds:
@@ -63,6 +69,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: barbedwire_single
+  - type: Tag
+    tags:
+    - barricade
   - type: Damageable
     damageModifierSet: Metallic
     damageContainer: Inorganic
@@ -125,6 +134,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -151,6 +163,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -177,6 +192,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -203,6 +221,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -229,6 +250,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -255,6 +279,9 @@
   components:
   - type: Transform
     noRot: true
+  - type: Tag
+    tags:
+    - barricade
   - type: Destructible
     thresholds:
     - trigger:
@@ -288,6 +315,9 @@
     sprite: _WH40K/Structures/Decorations/barricadeschaosblack.rsi
     state: haos_barricade_black_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: Tag
+    tags:
+    - barricade
   - type: Physics
   - type: Damageable
   - type: Destructible
@@ -328,6 +358,9 @@
     sprite: _WH40K/Structures/Decorations/barricadeschaosgreen.rsi
     state: haos_barricade_green_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: Tag
+    tags:
+    - barricade
   - type: Physics
   - type: Damageable
   - type: Destructible

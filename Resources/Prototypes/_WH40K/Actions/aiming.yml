@@ -1,0 +1,10 @@
+- type: entity
+  parent: BaseToggleAction
+  id: ActionToggleAiming
+  name: action-aiming-name
+  description: action-aiming-desc
+  components:
+  - type: Action
+    useDelay: 0.5
+    icon: Interface/Actions/eyeclose.png
+    iconOn: Interface/Actions/eyeopen.png

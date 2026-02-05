@@ -86,6 +86,9 @@
   - type: Sharp
     butcherDelayModifier: 2 #It's a bayonet
   - type: GunRequiresWield
+  - type: AimingCamera
+    maxOffset: 8
+    pvsIncrease: 0.8
   - type: StaticPrice
     price: 500
 
@@ -120,10 +123,9 @@
   - type: SpeedModifiedOnWield
     walkModifier: 0.25
     sprintModifier: 0.25
-  - type: CursorOffsetRequiresWield
-  - type: EyeCursorOffset
-    maxOffset: 3
-    pvsIncrease: 0.3
+  - type: AimingCamera
+    maxOffset: 8
+    pvsIncrease: 0.8
   - type: StaticPrice
     price: 3500
 
@@ -165,6 +167,9 @@
     soundHit:
       path: /Audio/Weapons/bladeslice.ogg
   - type: GunRequiresWield
+  - type: AimingCamera
+    maxOffset: 8
+    pvsIncrease: 0.8
 
 - type: entity
   name: flintlock pistol
