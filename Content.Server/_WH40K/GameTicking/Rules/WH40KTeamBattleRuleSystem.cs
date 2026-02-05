@@ -43,6 +43,9 @@ namespace Content.Server._WH40K.GameTicking.Rules;
 
 public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KTeamBattleRuleComponent>
 {
+    private const bool AnnounceTeamOnSpawn = true;
+    private const bool AnnounceWinner = true;
+    private const bool CountCriticalAsAlive = true;
     [Dependency] private readonly AdminSystem _admin = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
@@ -145,7 +148,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
 
         component.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(component.CheckInterval);
-        CheckForVictory(uid, component, gameRule);
+        if (AllowsTeamVictory(component))
+            CheckForVictory(uid, component, gameRule);
     }
 
     protected override void AppendRoundEndText(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, ref RoundEndTextAppendEvent args)
@@ -274,7 +278,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var member = EnsureComp<WH40KTeamMemberComponent>(ev.Mob);
         member.TeamId = team.Id;
 
-        if (!rule.AnnounceTeamOnSpawn)
+        if (!AnnounceTeamOnSpawn)
             return;
 
         if (ev.Player != null)
@@ -305,6 +309,101 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component = default!;
         gameRule = default!;
         return false;
+    }
+
+    public bool AreObjectivesEnabled()
+    {
+        var query = EntityQueryEnumerator<Components.WH40KTeamBattleRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var rule, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleAdded(uid, gameRule))
+                continue;
+
+            return rule.ObjectivesEnabled;
+        }
+
+        return false;
+    }
+
+    public bool TryGetTeamIdFromEntity(EntityUid entity, out string teamId)
+    {
+        teamId = string.Empty;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        if (!TryGetTeamIndexFromEntity(entity, rule, out var teamIndex))
+            return false;
+
+        if (teamIndex < 0 || teamIndex >= rule.Teams.Count)
+            return false;
+
+        var team = rule.Teams[teamIndex];
+        if (string.IsNullOrEmpty(team.Id))
+            return false;
+
+        teamId = team.Id;
+        return true;
+    }
+
+    public bool TryGetTeamDisplayName(string teamId, out string teamName)
+    {
+        teamName = string.Empty;
+
+        if (string.IsNullOrEmpty(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        var team = rule.Teams.FirstOrDefault(t => t.Id == teamId);
+        if (string.IsNullOrEmpty(team?.Id))
+            return false;
+
+        teamName = Loc.GetString(team!.Name);
+        return true;
+    }
+
+    public void HandleObjectiveDestroyed(string destroyedTeamId)
+    {
+        if (string.IsNullOrEmpty(destroyedTeamId))
+            return;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return;
+
+        if (!AllowsObjectiveVictory(rule))
+            return;
+
+        if (rule.RoundEnding)
+            return;
+
+        var otherTeams = rule.Teams.Where(t => t.Id != destroyedTeamId).ToList();
+
+        if (otherTeams.Count == 1)
+        {
+            var winner = otherTeams[0];
+            rule.WinnerTeamId = winner.Id;
+            rule.Draw = false;
+            rule.RoundEnding = true;
+            rule.TimeLimitReached = false;
+
+            if (AnnounceWinner)
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-winner-announce", ("team", Loc.GetString(winner.Name))));
+
+            _roundEnd.EndRound();
+            return;
+        }
+
+        rule.WinnerTeamId = null;
+        rule.Draw = true;
+        rule.RoundEnding = true;
+        rule.TimeLimitReached = false;
+
+        if (AnnounceWinner)
+            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-draw-announce"));
+
+        _roundEnd.EndRound();
     }
 
     private void BuildDepartmentMap(Components.WH40KTeamBattleRuleComponent component)
@@ -351,7 +450,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             component.Draw = false;
             component.RoundEnding = true;
 
-            if (component.AnnounceWinner)
+            if (AnnounceWinner)
                 _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-winner-announce", ("team", Loc.GetString(winner.Name))));
 
             _roundEnd.EndRound();
@@ -364,7 +463,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             component.Draw = true;
             component.RoundEnding = true;
 
-            if (component.AnnounceWinner)
+            if (AnnounceWinner)
                 _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-draw-announce"));
 
             _roundEnd.EndRound();
@@ -651,7 +750,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (_mobState.IsAlive(entity))
             return true;
 
-        return component.CountCriticalAsAlive && _mobState.IsCritical(entity);
+        return CountCriticalAsAlive && _mobState.IsCritical(entity);
     }
 
     private bool TryGetTeamIndex(EntityUid mindId, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
@@ -724,10 +823,22 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.RoundEnding = true;
         component.TimeLimitReached = true;
 
-        if (component.AnnounceWinner)
+        if (AnnounceWinner)
             _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-time-limit-announce"));
 
         _roundEnd.EndRound();
+    }
+
+    private bool AllowsTeamVictory(Components.WH40KTeamBattleRuleComponent component)
+    {
+        return component.VictoryCondition == Components.WH40KVictoryCondition.Teams ||
+               component.VictoryCondition == Components.WH40KVictoryCondition.Either;
+    }
+
+    private bool AllowsObjectiveVictory(Components.WH40KTeamBattleRuleComponent component)
+    {
+        return component.VictoryCondition == Components.WH40KVictoryCondition.Objectives ||
+               component.VictoryCondition == Components.WH40KVictoryCondition.Either;
     }
 
     private void EnsureTeamArrays(Components.WH40KTeamBattleRuleComponent component)

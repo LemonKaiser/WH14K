@@ -1,0 +1,102 @@
+- type: entity
+  id: WH40KObjectiveBase
+  parent: BaseStructure
+  abstract: true
+  name: wh40k-objective-base-name
+  description: wh40k-objective-base-desc
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Security/target.rsi
+    layers:
+    - state: target_f
+      map: [ "enum.WH40KObjectiveVisualLayers.Base" ]
+    - sprite: Effects/sparks.rsi
+      state: sparks
+      visible: false
+      shader: unshaded
+      map: [ "enum.WH40KObjectiveVisualLayers.Destroying" ]
+  - type: Appearance
+  - type: WH40KAlwaysShowHealthBar
+    maxHealth: 1000
+    useMobThresholds: false
+    barWidthPixels: 72
+    barHeightPixels: 9
+    yOffsetSpritePercent: 0.2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - Opaque
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: GenericVisualizer
+    visuals:
+      enum.WH40KObjectiveVisuals.State:
+        enum.WH40KObjectiveVisualLayers.Base:
+          Intact: { state: target_f }
+          Destroying: { state: target_f }
+          Destroyed: { state: target_s }
+        enum.WH40KObjectiveVisualLayers.Destroying:
+          Intact: { visible: false }
+          Destroying: { visible: true }
+          Destroyed: { visible: false }
+  - type: InteractionOutline
+  - type: Damageable
+    damageContainer: Inorganic
+    healthBarThreshold: 0
+  - type: MobState
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1000: Dead
+    triggersAlerts: false
+    showOverlays: false
+  - type: WH40KObjective
+    teamId: Imperium
+    name: wh40k-objective-base-name
+    maxHealth: 1000
+    warnAtPercent: 0.5
+    destructionDelaySeconds: 6
+    triggerKey: wh40k-objective-destroyed
+  - type: TimerTrigger
+    keyOut: wh40k-objective-destroyed
+    delay: 6
+    popup: null
+    examinable: false
+  - type: EmitSoundOnTrigger
+    keysIn: [ wh40k-objective-destroyed ]
+    sound:
+      collection: MetalBreak
+  - type: SpawnOnTrigger
+    keysIn: [ wh40k-objective-destroyed ]
+    proto: EffectSparks
+    useMapCoords: true
+
+- type: entity
+  id: WH40KObjectiveImperium
+  parent: WH40KObjectiveBase
+  name: wh40k-objective-imperium-name
+  description: wh40k-objective-imperium-desc
+  suffix: WH40K, Imperium
+  components:
+  - type: WH40KObjective
+    teamId: Imperium
+    name: wh40k-objective-imperium-name
+
+- type: entity
+  id: WH40KObjectiveHeretics
+  parent: WH40KObjectiveBase
+  name: wh40k-objective-heretics-name
+  description: wh40k-objective-heretics-desc
+  suffix: WH40K, Heretics
+  components:
+  - type: WH40KObjective
+    teamId: Heretics
+    name: wh40k-objective-heretics-name

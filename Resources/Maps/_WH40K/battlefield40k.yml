@@ -2,10 +2,10 @@ meta:
   format: 7
   category: Map
   engineVersion: 272.0.0
-  forkId: main
-  forkVersion: e610a005a59380b8d0cdbc02c8774374b0339660
-  time: 02/04/2026 04:14:01
-  entityCount: 14138
+  forkId: ""
+  forkVersion: ""
+  time: 02/05/2026 07:16:36
+  entityCount: 14134
 maps:
 - 1
 grids:
@@ -96,17 +96,16 @@ entities:
     - type: MapLight
       ambientLightColor: '#E6CB8BFF'
     - type: LightCycle
-      duration: 1800
-      initialOffset: false
-      offset: 600
-      minLightLevel: 0.2
-      maxLightLevel: 3.0
-      clipLight: 3.0
-      minLevel: '#2B3143FF'
       maxLevel: '#F5F1E8FF'
+      minLevel: '#2B3143FF'
+      clipLight: 3
+      minLightLevel: 0.2
+      initialOffset: False
+      offset: 600
+      duration: 1200
     - type: SunShadow
-      direction: 1, 1
       alpha: 0.5
+      direction: 1,1
   - uid: 2
     components:
     - type: MetaData
@@ -26841,7 +26840,7 @@ entities:
       pos: -152.5,41.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -13408.283
+      secondsUntilStateChange: -14066.579
       state: Opening
     - type: DeviceLinkSource
       lastSignals:
@@ -27839,13 +27838,6 @@ entities:
     - type: Transform
       pos: -152.5,73.5
       parent: 2
-- proto: MechanicusBanner
-  entities:
-  - uid: 210
-    components:
-    - type: Transform
-      pos: -158.5,34.5
-      parent: 2
 - proto: BannerMedical
   entities:
   - uid: 211
@@ -27862,13 +27854,6 @@ entities:
     components:
     - type: Transform
       pos: -143.5,70.5
-      parent: 2
-- proto: MechanicusBanner
-  entities:
-  - uid: 214
-    components:
-    - type: Transform
-      pos: -155.5,73.5
       parent: 2
 - proto: Barricade
   entities:
@@ -53320,6 +53305,18 @@ entities:
       fibers: []
       fingerprints: []
     - type: RadiationReceiver
+- proto: GeneratorJupiter
+  entities:
+  - uid: 2018
+    components:
+    - type: Transform
+      pos: -165.5,29.5
+      parent: 2
+  - uid: 2174
+    components:
+    - type: Transform
+      pos: -29.5,6.5
+      parent: 2
 - proto: GeneratorRTG
   entities:
   - uid: 1682
@@ -59087,11 +59084,6 @@ entities:
     - type: Transform
       pos: 133.5,78.5
       parent: 2
-  - uid: 14931
-    components:
-    - type: Transform
-      pos: 131.5,57.5
-      parent: 2
   - uid: 14978
     components:
     - type: Transform
@@ -60339,6 +60331,18 @@ entities:
     components:
     - type: Transform
       pos: 131.5,75.5
+      parent: 2
+- proto: MechanicusBanner
+  entities:
+  - uid: 210
+    components:
+    - type: Transform
+      pos: -158.5,34.5
+      parent: 2
+  - uid: 214
+    components:
+    - type: Transform
+      pos: -155.5,73.5
       parent: 2
 - proto: MedicalBed
   entities:
@@ -62485,18 +62489,6 @@ entities:
     - type: Transform
       pos: -63.5,30.5
       parent: 2
-- proto: GeneratorJupiter
-  entities:
-  - uid: 2018
-    components:
-    - type: Transform
-      pos: -165.5,29.5
-      parent: 2
-  - uid: 2174
-    components:
-    - type: Transform
-      pos: -29.5,6.5
-      parent: 2
 - proto: PosterBroken
   entities:
   - uid: 5667
@@ -63060,7 +63052,7 @@ entities:
       pos: 141.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 38
     components:
     - type: Transform
@@ -63068,7 +63060,7 @@ entities:
       pos: 146.5,63.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3672
     components:
     - type: Transform
@@ -63076,14 +63068,14 @@ entities:
       pos: 98.5,54.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3676
     components:
     - type: Transform
       pos: 97.5,59.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3677
     components:
     - type: Transform
@@ -63091,7 +63083,7 @@ entities:
       pos: 103.5,58.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3678
     components:
     - type: Transform
@@ -63099,7 +63091,7 @@ entities:
       pos: 105.5,53.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3679
     components:
     - type: Transform
@@ -63107,7 +63099,7 @@ entities:
       pos: 101.5,55.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3680
     components:
     - type: Transform
@@ -63115,7 +63107,7 @@ entities:
       pos: 96.5,75.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3681
     components:
     - type: Transform
@@ -63123,14 +63115,14 @@ entities:
       pos: 100.5,73.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3682
     components:
     - type: Transform
       pos: 108.5,82.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3683
     components:
     - type: Transform
@@ -63138,7 +63130,7 @@ entities:
       pos: 109.5,80.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 12111
     components:
     - type: Transform
@@ -63146,7 +63138,7 @@ entities:
       pos: -167.5,38.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
 - proto: Poweredlight
   entities:
   - uid: 157
@@ -63155,7 +63147,7 @@ entities:
       pos: -65.5,69.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 160
     components:
     - type: Transform
@@ -63163,7 +63155,7 @@ entities:
       pos: -53.5,42.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 162
     components:
     - type: Transform
@@ -63171,14 +63163,14 @@ entities:
       pos: -40.5,42.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 164
     components:
     - type: Transform
       pos: -48.5,64.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 166
     components:
     - type: Transform
@@ -63186,42 +63178,42 @@ entities:
       pos: -64.5,48.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 169
     components:
     - type: Transform
       pos: -51.5,54.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 170
     components:
     - type: Transform
       pos: -52.5,60.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 174
     components:
     - type: Transform
       pos: -45.5,60.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 175
     components:
     - type: Transform
       pos: -48.5,54.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 176
     components:
     - type: Transform
       pos: -71.5,69.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 179
     components:
     - type: Transform
@@ -63229,7 +63221,7 @@ entities:
       pos: -75.5,65.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 181
     components:
     - type: Transform
@@ -63237,21 +63229,21 @@ entities:
       pos: -62.5,48.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 190
     components:
     - type: Transform
       pos: -63.5,60.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 202
     components:
     - type: Transform
       pos: -60.5,69.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 2218
     components:
     - type: Transform
@@ -63259,7 +63251,7 @@ entities:
       pos: -75.5,60.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3123
     components:
     - type: Transform
@@ -63267,7 +63259,7 @@ entities:
       pos: -34.5,65.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
 - proto: PoweredSmallLight
   entities:
   - uid: 12113
@@ -63277,7 +63269,7 @@ entities:
       pos: -169.5,41.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
 - proto: PoweredSmallLightEmpty
   entities:
   - uid: 3686
@@ -63287,7 +63279,7 @@ entities:
       pos: 111.5,75.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
 - proto: PoweredWarmSmallLight
   entities:
   - uid: 5
@@ -63297,7 +63289,7 @@ entities:
       pos: 125.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 6
     components:
     - type: Transform
@@ -63305,7 +63297,7 @@ entities:
       pos: 117.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 7
     components:
     - type: Transform
@@ -63313,21 +63305,21 @@ entities:
       pos: 113.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 8
     components:
     - type: Transform
       pos: 109.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 9
     components:
     - type: Transform
       pos: 105.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 10
     components:
     - type: Transform
@@ -63335,28 +63327,28 @@ entities:
       pos: 105.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 11
     components:
     - type: Transform
       pos: 113.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 12
     components:
     - type: Transform
       pos: 125.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 15
     components:
     - type: Transform
       pos: 129.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 16
     components:
     - type: Transform
@@ -63364,7 +63356,7 @@ entities:
       pos: 141.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 39
     components:
     - type: Transform
@@ -63372,14 +63364,14 @@ entities:
       pos: 137.5,61.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 41
     components:
     - type: Transform
       pos: 137.5,71.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 42
     components:
     - type: Transform
@@ -63387,7 +63379,7 @@ entities:
       pos: 146.5,69.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1250
     components:
     - type: Transform
@@ -63395,14 +63387,14 @@ entities:
       pos: 120.5,49.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1259
     components:
     - type: Transform
       pos: 130.5,59.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1283
     components:
     - type: Transform
@@ -63410,14 +63402,14 @@ entities:
       pos: 128.5,51.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1287
     components:
     - type: Transform
       pos: 128.5,81.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1672
     components:
     - type: Transform
@@ -63425,14 +63417,14 @@ entities:
       pos: 130.5,73.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1753
     components:
     - type: Transform
       pos: 120.5,83.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 1965
     components:
     - type: Transform
@@ -63440,7 +63432,7 @@ entities:
       pos: 117.5,73.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 2031
     components:
     - type: Transform
@@ -63448,7 +63440,7 @@ entities:
       pos: 102.5,69.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 2041
     components:
     - type: Transform
@@ -63456,7 +63448,7 @@ entities:
       pos: 102.5,63.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 2157
     components:
     - type: Transform
@@ -63464,7 +63456,7 @@ entities:
       pos: 138.5,58.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 2163
     components:
     - type: Transform
@@ -63472,14 +63464,14 @@ entities:
       pos: 135.5,76.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3687
     components:
     - type: Transform
       pos: 108.5,51.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3688
     components:
     - type: Transform
@@ -63487,7 +63479,7 @@ entities:
       pos: 108.5,55.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3689
     components:
     - type: Transform
@@ -63495,28 +63487,28 @@ entities:
       pos: 112.5,57.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3695
     components:
     - type: Transform
       pos: 109.5,53.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3696
     components:
     - type: Transform
       pos: 142.5,74.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3697
     components:
     - type: Transform
       pos: 137.5,56.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3698
     components:
     - type: Transform
@@ -63524,7 +63516,7 @@ entities:
       pos: 93.5,74.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3699
     components:
     - type: Transform
@@ -63532,7 +63524,7 @@ entities:
       pos: 104.5,76.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3700
     components:
     - type: Transform
@@ -63540,7 +63532,7 @@ entities:
       pos: 107.5,76.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3701
     components:
     - type: Transform
@@ -63548,7 +63540,7 @@ entities:
       pos: 110.5,73.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3702
     components:
     - type: Transform
@@ -63556,7 +63548,7 @@ entities:
       pos: 111.5,80.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
   - uid: 3703
     components:
     - type: Transform
@@ -63564,7 +63556,7 @@ entities:
       pos: 106.5,79.5
       parent: 2
     - type: ApcPowerReceiver
-      needsPower: false
+      needsPower: False
 - proto: PresentRandomCoal
   entities:
   - uid: 8612
@@ -68676,6 +68668,20 @@ entities:
     - type: Transform
       pos: -149.5,29.5
       parent: 2
+- proto: SpawnPointExplorator
+  entities:
+  - uid: 7132
+    components:
+    - type: Transform
+      pos: -155.5,84.5
+      parent: 2
+- proto: SpawnPointGenetor
+  entities:
+  - uid: 5925
+    components:
+    - type: Transform
+      pos: -148.5,69.5
+      parent: 2
 - proto: SpawnPointGuardsman
   entities:
   - uid: 11713
@@ -68732,12 +68738,43 @@ entities:
     - type: Transform
       pos: 144.5,67.5
       parent: 2
+- proto: SpawnPointHExplorator
+  entities:
+  - uid: 11690
+    components:
+    - type: Transform
+      pos: 138.5,68.5
+      parent: 2
+  - uid: 11691
+    components:
+    - type: Transform
+      pos: 138.5,64.5
+      parent: 2
+- proto: SpawnPointHGenetor
+  entities:
+  - uid: 11696
+    components:
+    - type: Transform
+      pos: 119.5,54.5
+      parent: 2
 - proto: SpawnPointHGuardsman
   entities:
   - uid: 8541
     components:
     - type: Transform
       pos: 118.5,78.5
+      parent: 2
+- proto: SpawnPointHLexmechanic
+  entities:
+  - uid: 182
+    components:
+    - type: Transform
+      pos: 131.5,57.5
+      parent: 2
+  - uid: 11699
+    components:
+    - type: Transform
+      pos: 127.5,53.5
       parent: 2
 - proto: SpawnPointHLieutenant
   entities:
@@ -68746,12 +68783,36 @@ entities:
     - type: Transform
       pos: 144.5,65.5
       parent: 2
+- proto: SpawnPointHMagos
+  entities:
+  - uid: 8493
+    components:
+    - type: Transform
+      pos: 136.5,64.5
+      parent: 2
+  - uid: 11654
+    components:
+    - type: Transform
+      pos: 140.5,68.5
+      parent: 2
 - proto: SpawnPointHMedic
   entities:
   - uid: 11482
     components:
     - type: Transform
       pos: 117.5,54.5
+      parent: 2
+- proto: SpawnPointHNovice
+  entities:
+  - uid: 11655
+    components:
+    - type: Transform
+      pos: 140.5,64.5
+      parent: 2
+  - uid: 11689
+    components:
+    - type: Transform
+      pos: 136.5,68.5
       parent: 2
 - proto: SpawnPointHSergeant
   entities:
@@ -68788,6 +68849,18 @@ entities:
     - type: Transform
       pos: 120.5,77.5
       parent: 2
+- proto: SpawnPointHStationEnginseer
+  entities:
+  - uid: 11694
+    components:
+    - type: Transform
+      pos: 127.5,57.5
+      parent: 2
+  - uid: 11695
+    components:
+    - type: Transform
+      pos: 131.5,53.5
+      parent: 2
 - proto: SpawnPointHTankComm
   entities:
   - uid: 8538
@@ -68802,6 +68875,13 @@ entities:
     - type: Transform
       pos: 118.5,75.5
       parent: 2
+- proto: SpawnPointLexmechanic
+  entities:
+  - uid: 7546
+    components:
+    - type: Transform
+      pos: -156.5,84.5
+      parent: 2
 - proto: SpawnPointLieutenant
   entities:
   - uid: 9606
@@ -68809,12 +68889,26 @@ entities:
     - type: Transform
       pos: -145.5,31.5
       parent: 2
+- proto: SpawnPointMagos
+  entities:
+  - uid: 7994
+    components:
+    - type: Transform
+      pos: -156.5,76.5
+      parent: 2
 - proto: SpawnPointMedic
   entities:
   - uid: 9602
     components:
     - type: Transform
       pos: -147.5,69.5
+      parent: 2
+- proto: SpawnPointNovice
+  entities:
+  - uid: 5924
+    components:
+    - type: Transform
+      pos: -157.5,76.5
       parent: 2
 - proto: SpawnPointObserver
   entities:
@@ -68857,6 +68951,13 @@ entities:
     components:
     - type: Transform
       pos: -148.5,38.5
+      parent: 2
+- proto: SpawnPointStationEnginseer
+  entities:
+  - uid: 1568
+    components:
+    - type: Transform
+      pos: -159.5,30.5
       parent: 2
 - proto: SpawnPointTankComm
   entities:
@@ -105529,6 +105630,20 @@ entities:
     - type: Transform
       pos: -147.45932,48.489006
       parent: 2
+- proto: WH40KObjectiveHeretics
+  entities:
+  - uid: 9393
+    components:
+    - type: Transform
+      pos: 151.5,68.5
+      parent: 2
+- proto: WH40KObjectiveImperium
+  entities:
+  - uid: 8185
+    components:
+    - type: Transform
+      pos: -145.5,33.5
+      parent: 2
 - proto: WHChaosBanner
   entities:
   - uid: 304
@@ -106242,7 +106357,7 @@ entities:
       pos: 147.5,66.5
       parent: 2
     - type: Door
-      secondsUntilStateChange: -67815.125
+      secondsUntilStateChange: -68473.42
       state: Opening
   - uid: 13727
     components:
