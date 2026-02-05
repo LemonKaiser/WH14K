@@ -465,9 +465,11 @@ ent-FlameThrowerTank = promethium cylinder
 ent-MagazineRadCarabin = galvanizing shop
 
 ent-MagazineCombatShotgun = shotgun cylinder (.50 shot)
+    .desc = A shotgun cylinder for .50 shells.
 
 ent-MagazineCombatShotgunEmpty = { ent-MagazineCombatShotgun }
     .suffix = WH40K, Empty
+    .desc = { ent-MagazineCombatShotgun.desc }
 
 ent-WHChaosBanner = chaos banner
     .desc = There is no Evil and Good in Chaos - it is above this.

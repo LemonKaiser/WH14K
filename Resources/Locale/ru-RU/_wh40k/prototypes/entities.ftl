@@ -456,9 +456,11 @@ ent-FlameThrowerTank = баллон с прометием
 ent-MagazineRadCarabin = оцинковонный магазин
 
 ent-MagazineCombatShotgun = барабан дробовика (.50 дробь)
+    .desc = Барабан дробовика калибра .50 дробь.
 
 ent-MagazineCombatShotgunEmpty = { ent-MagazineCombatShotgun }
     .suffix = WH40K, Пустой
+    .desc = { ent-MagazineCombatShotgun.desc }
 
 ent-WHChaosBanner = знамя хаоса
     .desc = Зла и Добра в Хаосе нет — он выше этого.
@@ -614,34 +616,6 @@ ent-GeneratorPlasmaHardDamaged = Повреждённый привод «Юпи�
 
 ent-CrateNecron = некронский ящик
     .desc = Это хранилище, принадлежащее загадочной цивилизации машин из живой стали - некронам. Хватит ли у вас воли открыть его?
-ent-FragGrenade = осколочная граната
-    .desc = Стандартная осколочная граната Империума, используемая Имперской гвардией и Космодесантом для уничтожения врагов.
-
-ent-KrakGrenade = крак-граната
-    .desc = Бронебойная взрывчатка Империума, предназначенная для уничтожения лёгкой техники и укреплений.
-
-ent-MeltaGrenade = мелта-заряд
-    .desc = Короткодистанционная противотанковая граната, создающая мощный плавящий взрыв, способный разрушать тяжёлую броню.
-
-ent-OrkGrenade = крутая граната
-    .desc = Большие взрывы для большого ВААГХ!
-
-ent-ClothingNeckRobeTechpriestMars = роба техножреца
-
-ent-ClothingNeckRobeTechpriestAgripinaa = роба техножреца
-
-ent-ClothingNeckRobeTechpriestGraia = роба техножреца
-
-ent-ClothingNeckRobeTechpriestLucius = роба техножреца
-
-ent-ClothingNeckRobeTechpriestMetalica = роба техножреца
-
-ent-ClothingNeckRobeTechpriestRiza = роба техножреца
-
-ent-ClothingNeckRobeTechpriestStygiesVIII = роба техножреца
-
-ent-ClothingNeckRobeGenetorTechpriestMars = роба генетора
-
 ent-WH40KTeamBattle = Битва команд WH40K
 
 ent-StorePresetVox = Пресет пункта снабжения Вокс
