@@ -274,5 +274,82 @@
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: bars
 
+- type: entity
+  id: BarricadeWarhammerChaos
+  name: Баррикада Хаоса черные
+  description: Именно это когда-нибудь может спасти тебе жизнь. Или наоборот
+  parent: BaseBarricade
+  suffix: WH40K Chaos
+  placement:
+    mode: SnapgridCenter
+#A bunch of this is taken straight from dirwindows and there is a chance that I may have fucked something up. Probably not though
+  components:
+  - type: Sprite
+    sprite: _WH40K\Structures\Decorations\barricadeschaosblack.rsi
+    state: haos_barricade_black_loophole
+    noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: Physics
+  - type: Damageable
+  - type: Destructible
+    thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.39,0.49,-0.36"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
 
-
+- type: entity
+  id: BarricadeWarhammerChaosgreen
+  name: Баррикада Хаоса зеленые
+  description: Именно это когда-нибудь может спасти тебе жизнь. Или наоборот
+  parent: BaseBarricade
+  suffix: WH40K Chaos
+  placement:
+    mode: SnapgridCenter
+#A bunch of this is taken straight from dirwindows and there is a chance that I may have fucked something up. Probably not though
+  components:
+  - type: Sprite
+    sprite: _WH40K\Structures\Decorations\barricadeschaosgreen.rsi
+    state: haos_barricade_green_loophole
+    noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: Physics
+  - type: Damageable
+  - type: Destructible
+    thresholds:
+    - trigger: # Excess damage, don't spawn entities
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.39,0.49,-0.36"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
