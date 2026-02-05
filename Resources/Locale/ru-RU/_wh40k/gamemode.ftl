@@ -19,3 +19,21 @@ wh40k-team-round-end-time-limit = [color=yellow]Лимит времени ист
 wh40k-team-round-end-team-line = [bold]{ $team }[/bold] - [color=gray]Всего: { $total }[/color] / [color=green]Живых: { $alive }[/color] - [color=red]Потери: { $deaths }[/color] - [color=orange]Убийства: { $kills }[/color]
 wh40k-team-round-end-top-header = [bold][color=white]Лучшие бойцы[/color][/bold]:
 wh40k-team-round-end-top-entry = { $place }. [color=white]{ $name }[/color] - [color=orange]{ $kills } убийств[/color]
+
+wh40k-objective-base-name = Командный узел
+wh40k-objective-base-desc = Укреплённый узел связи, удерживающий позиции фракции.
+wh40k-objective-imperium-name = Командный узел Империума
+wh40k-objective-imperium-desc = Главный узел Империума. Защитите любой ценой.
+wh40k-objective-heretics-name = Командный узел Еретиков
+wh40k-objective-heretics-desc = Главный узел Еретиков. Защитите любой ценой.
+wh40k-objective-low-health = { $target } повреждён более чем на 50%!
+wh40k-objective-destroyed = { $target } уничтожен!
+wh40k-objective-destroyed-remaining-allies = { $target } уничтожен. Осталось точек вашей команды: { $remaining }.
+wh40k-objective-destroyed-remaining-enemies = { $target } уничтожен. Осталось точек команды { $team }: { $remaining }.
+
+ent-WH40KObjectiveBase = Командный узел
+    .desc = Укреплённый узел связи, удерживающий позиции фракции.
+ent-WH40KObjectiveImperium = Командный узел Империума
+    .desc = Главный узел Империума. Защитите любой ценой.
+ent-WH40KObjectiveHeretics = Командный узел Еретиков
+    .desc = Главный узел Еретиков. Защитите любой ценой.

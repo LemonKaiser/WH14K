@@ -3,9 +3,8 @@
   parent: BaseGameRule
   components:
   - type: WH40KTeamBattleRule
-    countCriticalAsAlive: true
-    announceTeamOnSpawn: true
-    announceWinner: true
+    objectivesEnabled: true
+    victoryCondition: Either # victoryCondition: Teams | Objectives | Either | None
     teams:
     - id: Imperium
       name: wh40k-team-imperium

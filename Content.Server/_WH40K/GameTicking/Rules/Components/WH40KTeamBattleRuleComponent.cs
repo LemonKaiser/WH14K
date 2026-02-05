@@ -27,22 +27,22 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     public bool RequireAllTeamsPresent = true;
 
     /// <summary>
-    /// If true, critical (but not dead) players still count as alive.
+    /// If true, WH40K objectives will be spawned for the teams.
     /// </summary>
-    [DataField("countCriticalAsAlive")]
-    public bool CountCriticalAsAlive = true;
-
-    [DataField("announceTeamOnSpawn")]
-    public bool AnnounceTeamOnSpawn = true;
-
-    [DataField("announceWinner")]
-    public bool AnnounceWinner = true;
+    [DataField("objectivesEnabled")]
+    public bool ObjectivesEnabled = true;
 
     /// <summary>
     /// Round time limit in seconds. 0 disables the limit.
     /// </summary>
     [DataField("roundTimeLimitSeconds")]
     public float RoundTimeLimitSeconds = 3600f;
+
+    /// <summary>
+    /// Controls which victory conditions can end the round.
+    /// </summary>
+    [DataField("victoryCondition")]
+    public WH40KVictoryCondition VictoryCondition = WH40KVictoryCondition.Either;
 
     [ViewVariables]
     public TimeSpan NextCheck;
@@ -92,4 +92,12 @@ public sealed partial class WH40KTeamDefinition
 
     [DataField("departments")]
     public List<ProtoId<DepartmentPrototype>> Departments = new();
+}
+
+public enum WH40KVictoryCondition
+{
+    Teams,
+    Objectives,
+    Either,
+    None
 }

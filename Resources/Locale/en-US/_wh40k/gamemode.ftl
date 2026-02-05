@@ -19,3 +19,21 @@ wh40k-team-round-end-time-limit = [color=yellow]Time limit reached - the war gri
 wh40k-team-round-end-team-line = [bold]{ $team }[/bold] - [color=gray]Total: { $total }[/color] / [color=green]Alive: { $alive }[/color] - [color=red]Losses: { $deaths }[/color] - [color=orange]Kills: { $kills }[/color]
 wh40k-team-round-end-top-header = [bold][color=white]Top killers[/color][/bold]:
 wh40k-team-round-end-top-entry = { $place }. [color=white]{ $name }[/color] - [color=orange]{ $kills } kills[/color]
+
+wh40k-objective-base-name = Command Relay
+wh40k-objective-base-desc = A hardened command relay that anchors a faction's foothold.
+wh40k-objective-imperium-name = Imperium Command Relay
+wh40k-objective-imperium-desc = The Imperium's main relay node. Protect it at all costs.
+wh40k-objective-heretics-name = Heretic Command Relay
+wh40k-objective-heretics-desc = The heretics' main relay node. Protect it at all costs.
+wh40k-objective-low-health = { $target } is below 50% integrity!
+wh40k-objective-destroyed = { $target } has been destroyed!
+wh40k-objective-destroyed-remaining-allies = { $target } has been destroyed. Remaining objectives for your team: { $remaining }.
+wh40k-objective-destroyed-remaining-enemies = { $target } has been destroyed. Remaining objectives for { $team }: { $remaining }.
+
+ent-WH40KObjectiveBase = Command Relay
+    .desc = A hardened command relay that anchors a faction's foothold.
+ent-WH40KObjectiveImperium = Imperium Command Relay
+    .desc = The Imperium's main relay node. Protect it at all costs.
+ent-WH40KObjectiveHeretics = Heretic Command Relay
+    .desc = The heretics' main relay node. Protect it at all costs.
