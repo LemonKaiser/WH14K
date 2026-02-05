@@ -25,6 +25,9 @@
       - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/batrifle.ogg
+  - type: AimingCamera
+    maxOffset: 4
+    pvsIncrease: 0.4
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/sf_rifle_cock.ogg
@@ -202,10 +205,6 @@
     sprite: Objects/Weapons/Guns/Rifles/XL8.rsi
   - type: Clothing
     sprite: Objects/Weapons/Guns/Rifles/XL8.rsi
-  - type: CursorOffsetRequiresWield
-  - type: EyeCursorOffset
-    maxOffset: 2
-    pvsIncrease: 0.2
   - type: StaticPrice
     price: 1500 #3x lecter
   - type: Gun
@@ -269,10 +268,6 @@
   - type: SpeedModifiedOnWield
     walkModifier: 0.75
     sprintModifier: 0.75
-  - type: CursorOffsetRequiresWield
-  - type: EyeCursorOffset
-    maxOffset: 2
-    pvsIncrease: 0.2
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot

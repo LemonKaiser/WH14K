@@ -21,6 +21,9 @@
   - type: GunWieldBonus
     minAngle: -20
     maxAngle: -20
+  - type: AimingCamera
+    maxOffset: 3
+    pvsIncrease: 0.3
   - type: Gun
     minAngle: 24
     maxAngle: 45
