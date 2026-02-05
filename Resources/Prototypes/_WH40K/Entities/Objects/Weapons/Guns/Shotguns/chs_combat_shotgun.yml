@@ -17,10 +17,6 @@
     fireRate: 2
     availableModes:
     - SemiAuto
-  - type: ContainerContainer
-    containers:
-      gun_magazine: !type:ContainerSlot
-      gun_chamber: !type:ContainerSlot
   - type: BallisticAmmoProvider
     whitelist:
       tags:

@@ -89,6 +89,7 @@ namespace Content.IntegrationTests.Tests
             "Fland",
             "Packed",
             "Bagel",
+            "Battlefield40k",
             "CentComm",
             "Box",
             "Marathon",

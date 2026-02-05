@@ -82,6 +82,7 @@
       - ClarkeLArm
       - ClarkeRArm
       - ClarkeTreads
+    containerId: mech-assembly-container
   - type: Sprite
     state: clarke_harness+o
     noRot: true
@@ -215,6 +216,7 @@
       - DurandRArm
       - DurandLLeg
       - DurandRLeg
+    containerId: mech-assembly-container
   - type: Sprite
     state: durand_harness+o
     noRot: true
@@ -360,6 +362,7 @@
       - GygaxRArm
       - GygaxLLeg
       - GygaxRLeg
+    containerId: mech-assembly-container
   - type: Sprite
     state: gygax_harness+o
     noRot: true
@@ -633,6 +636,7 @@
       - RipleyRArm
       - RipleyLLeg
       - RipleyRLeg
+    containerId: mech-assembly-container
   - type: Sprite
     state: ripleymkii_harness+o
     noRot: true
