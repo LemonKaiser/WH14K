@@ -31,9 +31,3 @@ wh40k-objective-destroyed = { $target } has been destroyed!
 wh40k-objective-destroyed-remaining-allies = { $target } has been destroyed. Remaining objectives for your team: { $remaining }.
 wh40k-objective-destroyed-remaining-enemies = { $target } has been destroyed. Remaining objectives for { $team }: { $remaining }.
 
-ent-WH40KObjectiveBase = Command Relay
-    .desc = A hardened command relay that anchors a faction's foothold.
-ent-WH40KObjectiveImperium = Imperium Command Relay
-    .desc = The Imperium's main relay node. Protect it at all costs.
-ent-WH40KObjectiveHeretics = Heretic Command Relay
-    .desc = The heretics' main relay node. Protect it at all costs.
