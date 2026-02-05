@@ -465,8 +465,11 @@ ent-FlameThrowerTank = promethium cylinder
 ent-MagazineRadCarabin = galvanizing shop
 
 ent-MagazineCombatShotgun = shotgun cylinder (.50 shot)
+    .desc = A shotgun cylinder for .50 shells.
 
-ent-MagazineCombatShotgunEmpty = shotgun cylinder (.50 shot)
+ent-MagazineCombatShotgunEmpty = { ent-MagazineCombatShotgun }
+    .suffix = WH40K, Empty
+    .desc = { ent-MagazineCombatShotgun.desc }
 
 ent-WHChaosBanner = chaos banner
     .desc = There is no Evil and Good in Chaos - it is above this.
@@ -631,3 +634,69 @@ ent-OrkGrenade = cool grenade
 
 ent-MeltaGrenade = melta charge
     .desc = A short-range anti-tank grenade that creates a powerful melting explosion capable of destroying heavily armored targets.
+ent-DataChip1 = data chip
+    .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
+
+ent-MechSentinelBatteryAutogun = Sentinel
+
+ent-MechSentinelBatteryPlasma = Sentinel
+
+ent-MechanicusBanner = Mechanicus banner
+    .desc = A banner showing allegiance to Mars.
+
+ent-WH40KTeamBattle = WH40K Team Battle
+
+ent-StorePresetVox = Vox resupply preset
+
+ent-StorePresetStore = Resupply store preset
+
+ent-StorePresetStoreCmd = Command resupply store preset
+
+ent-StorePresetAltar = Dark gods altar store preset
+
+ent-StorePresetAltarCmd = Command dark gods altar store preset
+
+ent-DataChip4 = data chips x4
+
+ent-WH40KStation = WH40K station
+
+ent-WH40KPowerCell = Mechanicus power cell
+
+ent-WeaponLaserWH40KEnergy = base Mechanicus las-weapon
+
+ent-RedLaserLong = long red laser
+
+ent-RedMeltaLaser = melta beam
+
+ent-RedLaserAccatranLong = long Accatran laser
+
+ent-ZoanthropeLighting = zoanthrope lightning
+
+ent-FlamethrowerFlashEffect = flamethrower flash
+
+ent-StatueWH1 = statue
+
+ent-StatueWH1Broken = broken statue
+
+ent-StatueWH4 = statue
+
+ent-NuclearBombEX = Exterminatus
+    .desc = A cataclysmic device meant to purge a world.
+
+ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
+    .suffix = WH40K, Unanchored
+    .desc = { ent-NuclearBombEX.desc }
+
+ent-ChPointConverter = Chaos points converter
+
+ent-StructureAltarCmd = command dark gods altar
+
+ent-StructureStorageImpCmd = command Imperium storage
+
+ent-GeneratorJupiter = plasma generator
+
+ent-GeneratorJupiterLiteDamaged = { ent-GeneratorJupiter }
+
+ent-GeneratorJupiterDamaged = { ent-GeneratorJupiter }
+
+ent-GeneratorJupiterHardDamaged = { ent-GeneratorJupiter }
