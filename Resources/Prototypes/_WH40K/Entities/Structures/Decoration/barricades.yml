@@ -285,7 +285,7 @@
 #A bunch of this is taken straight from dirwindows and there is a chance that I may have fucked something up. Probably not though
   components:
   - type: Sprite
-    sprite: _WH40K\Structures\Decorations\barricadeschaosblack.rsi
+    sprite: _WH40K/Structures/Decorations/barricadeschaosblack.rsi
     state: haos_barricade_black_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
   - type: Physics
@@ -325,7 +325,7 @@
 #A bunch of this is taken straight from dirwindows and there is a chance that I may have fucked something up. Probably not though
   components:
   - type: Sprite
-    sprite: _WH40K\Structures\Decorations\barricadeschaosgreen.rsi
+    sprite: _WH40K/Structures/Decorations/barricadeschaosgreen.rsi
     state: haos_barricade_green_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
   - type: Physics
