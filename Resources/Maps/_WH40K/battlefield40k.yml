@@ -68973,6 +68973,13 @@ entities:
     - type: Transform
       pos: -158.5,29.5
       parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 15075
+    components:
+    - type: Transform
+      pos: -158.5,29.5
+      parent: 2
 - proto: SpiderWeb
   entities:
   - uid: 9017
