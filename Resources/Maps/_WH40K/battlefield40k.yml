@@ -68724,6 +68724,13 @@ entities:
     - type: Transform
       pos: -148.5,40.5
       parent: 2
+- proto: LateJoinSpawnPointGuardsman
+  entities:
+  - uid: 200000
+    components:
+    - type: Transform
+      pos: -149.5,41.5
+      parent: 2
 - proto: SpawnPointHColonel
   entities:
   - uid: 525
@@ -68763,6 +68770,13 @@ entities:
     components:
     - type: Transform
       pos: 118.5,78.5
+      parent: 2
+- proto: LateJoinSpawnPointHGuardsman
+  entities:
+  - uid: 200001
+    components:
+    - type: Transform
+      pos: 118.5,79.5
       parent: 2
 - proto: SpawnPointHLexmechanic
   entities:

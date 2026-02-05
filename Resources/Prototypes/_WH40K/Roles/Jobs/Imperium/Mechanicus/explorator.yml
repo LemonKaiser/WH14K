@@ -33,3 +33,15 @@
     outerClothing: ClothingOuterHardsuitTechpriest
     mask: ClothingMaskGasTechPriest
     id: PassengerPDA
+
+- type: chameleonOutfit
+  id: ExploratorChameleonOutfit
+  job: Explorator
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriest
+    mask: ClothingMaskGasTechPriest

@@ -20,3 +20,15 @@
   - Maintenance
   - External
   - Engineering
+
+- type: chameleonOutfit
+  id: HExploratorChameleonOutfit
+  job: HExplorator
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriest
+    mask: ClothingMaskGasTechPriest

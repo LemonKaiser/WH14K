@@ -31,3 +31,14 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
     id: PassengerPDA
+
+- type: chameleonOutfit
+  id: EnginseerChameleonOutfit
+  job: Enginseer
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriest
