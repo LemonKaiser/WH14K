@@ -4,9 +4,11 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: Objects/Specific/Security/target.rsi
+    sprite: _WH40K/Structures/Specific/imperium_throne.rsi
+    drawdepth: OverMobs
     layers:
-    - state: target_f
+    - state: base
+      offset: 0, 0.5
       map: [ "enum.WH40KObjectiveVisualLayers.Base" ]
     - sprite: Effects/sparks.rsi
       state: sparks
@@ -15,7 +17,7 @@
       map: [ "enum.WH40KObjectiveVisualLayers.Destroying" ]
   - type: Appearance
   - type: WH40KAlwaysShowHealthBar
-    maxHealth: 1000
+    maxHealth: 2000
     useMobThresholds: false
     barWidthPixels: 72
     barHeightPixels: 9
@@ -38,9 +40,9 @@
     visuals:
       enum.WH40KObjectiveVisuals.State:
         enum.WH40KObjectiveVisualLayers.Base:
-          Intact: { state: target_f }
-          Destroying: { state: target_f }
-          Destroyed: { state: target_s }
+          Intact: { state: base }
+          Destroying: { state: breaking }
+          Destroyed: { state: broken }
         enum.WH40KObjectiveVisualLayers.Destroying:
           Intact: { visible: false }
           Destroying: { visible: true }
@@ -53,19 +55,19 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      1000: Dead
+      2000: Dead
     triggersAlerts: false
     showOverlays: false
   - type: WH40KObjective
     teamId: Imperium
     name: wh40k-objective-base-name
-    maxHealth: 1000
+    maxHealth: 2000
     warnAtPercent: 0.5
-    destructionDelaySeconds: 6
+    destructionDelaySeconds: 3
     triggerKey: wh40k-objective-destroyed
   - type: TimerTrigger
     keyOut: wh40k-objective-destroyed
-    delay: 6
+    delay: 3
     popup: null
     examinable: false
   - type: EmitSoundOnTrigger
@@ -94,3 +96,16 @@
   - type: WH40KObjective
     teamId: Heretics
     name: wh40k-objective-heretics-name
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/chaos_throne.rsi
+    drawdepth: OverMobs
+    layers:
+    - state: base
+      offset: 0, 0.5
+      map: [ "enum.WH40KObjectiveVisualLayers.Base" ]
+    - sprite: Effects/sparks.rsi
+      state: sparks
+      visible: false
+      shader: unshaded
+      map: [ "enum.WH40KObjectiveVisualLayers.Destroying" ]
+
