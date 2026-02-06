@@ -10,6 +10,9 @@
     sprite: _WH40K/Structures/Decorations/barricades.rsi
     state: barricade
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: WH40KDirectionalBarricade
+    flipPassSide: true
+    blockedSidePassChance: 0.05
   - type: Tag
     tags:
     - barricade
@@ -33,7 +36,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.49,-0.39,0.49,-0.36"
+          bounds: "-0.49,-0.45,0.49,-0.25"
         mask:
         - FullTileMask
         layer:
@@ -48,6 +51,9 @@
   components:
   - type: Sprite
     state: sandbags
+  - type: WH40KDirectionalBarricade
+    passSideMaxDistance: 0
+    blockedSidePassChance: 0
   - type: Tag
     tags:
     - barricade
@@ -315,6 +321,9 @@
     sprite: _WH40K/Structures/Decorations/barricadeschaosblack.rsi
     state: haos_barricade_black_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: WH40KDirectionalBarricade
+    flipPassSide: true
+    blockedSidePassChance: 0.05
   - type: Tag
     tags:
     - barricade
@@ -338,7 +347,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.49,-0.39,0.49,-0.36"
+          bounds: "-0.49,-0.45,0.49,-0.25"
         mask:
         - FullTileMask
         layer:
@@ -358,6 +367,9 @@
     sprite: _WH40K/Structures/Decorations/barricadeschaosgreen.rsi
     state: haos_barricade_green_loophole
     noRot: false #Results in smoother rotation when turning the camera, the sprite's dirs are just it rotated anyways so there's no reason to not set this.
+  - type: WH40KDirectionalBarricade
+    flipPassSide: true
+    blockedSidePassChance: 0.05
   - type: Tag
     tags:
     - barricade
@@ -381,7 +393,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.49,-0.39,0.49,-0.36"
+          bounds: "-0.49,-0.45,0.49,-0.25"
         mask:
         - FullTileMask
         layer:

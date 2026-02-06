@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._WH40K.Combat;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
@@ -10,6 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Weapons.Hitscan.Systems;
@@ -20,14 +22,16 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly ISharedAdminLogManager _log = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-
+    [Dependency] private readonly IRobustRandom _random = default!;
     private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery;
+    private EntityQuery<WH40KDirectionalBarricadeComponent> _barricadeQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
         _visualsQuery = GetEntityQuery<HitscanBasicVisualsComponent>();
+        _barricadeQuery = GetEntityQuery<WH40KDirectionalBarricadeComponent>();
 
         SubscribeLocalEvent<HitscanBasicRaycastComponent, HitscanTraceEvent>(OnHitscanFired);
     }
@@ -40,14 +44,28 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         var rayCastResults = _physics.IntersectRay(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter, false);
 
         var target = args.Target;
-        // If you are in a container, use the raycast result
+        // If you are in a container, use the raycast result.
         // Otherwise:
         //  1.) Hit the first entity that you targeted.
         //  2.) Hit the first entity that doesn't require you to aim at it specifically to be hit.
-        var result = _container.IsEntityOrParentInContainer(shooter)
-            ? rayCastResults.FirstOrNull()
-            : rayCastResults.FirstOrNull(hit => hit.HitEntity == target
-                                                || CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active != true);
+        var useRawRaycast = _container.IsEntityOrParentInContainer(shooter);
+        RayCastResults? result = null;
+
+        foreach (var hit in rayCastResults)
+        {
+            if (!useRawRaycast &&
+                hit.HitEntity != target &&
+                CompOrNull<RequireProjectileTargetComponent>(hit.HitEntity)?.Active == true)
+            {
+                continue;
+            }
+
+            if (TryAllowDirectionalBarricadePass(hit, args.FromCoordinates, args.ShotDirection))
+                continue;
+
+            result = hit;
+            break;
+        }
 
         var distanceTried = result?.Distance ?? ent.Comp.MaxDistance;
 
@@ -79,6 +97,28 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
 
         var hitEvent = new HitscanRaycastFiredEvent { Data = data };
         RaiseLocalEvent(ent, ref hitEvent);
+    }
+
+    private bool TryAllowDirectionalBarricadePass(RayCastResults hit, EntityCoordinates fromCoordinates, Vector2 shotDirection)
+    {
+        if (!_barricadeQuery.TryGetComponent(hit.HitEntity, out var barricadeComp))
+            return false;
+
+        var fromMap = _transform.ToMapCoordinates(fromCoordinates);
+        var passDirection = _transform.GetWorldRotation(hit.HitEntity).ToWorldVec();
+        if (barricadeComp.FlipPassSide)
+            passDirection = -passDirection;
+
+        var barricadePos = _transform.GetWorldPosition(hit.HitEntity);
+        var originDirection = fromMap.Position - barricadePos;
+
+        return WH40KDirectionalBarricadeHelpers.ShouldPassFromOrigin(
+            passDirection,
+            shotDirection,
+            originDirection,
+            barricadeComp.PassSideMaxDistance,
+            barricadeComp.BlockedSidePassChance,
+            _random);
     }
 
     /// <summary>
