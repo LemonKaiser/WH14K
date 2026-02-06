@@ -30,7 +30,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
 
     public WH40KFactionJoinGui(IReadOnlyList<WH40KFactionInfo>? initialFactions = null)
     {
-        MinSize = SetSize = new Vector2(470, 450);
+        MinSize = SetSize = new Vector2(460, 360);
         IoCManager.InjectDependencies(this);
 
         _factionSystem = _entitySystem.GetEntitySystem<WH40KFactionSystem>();
