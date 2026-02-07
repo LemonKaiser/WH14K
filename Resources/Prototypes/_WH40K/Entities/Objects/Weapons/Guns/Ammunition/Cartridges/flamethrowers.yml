@@ -8,6 +8,9 @@
     tags:
       - CartridgeFlameThrower
       - Cartridge
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/null.rsi
+    state: null
   - type: CartridgeAmmo
     proto: PromethiumBullet
     muzzleFlash: FlamethrowerFlashEffect
