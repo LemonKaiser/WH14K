@@ -30,4 +30,4 @@
     reflectProb: 0.01
     reflects:
       - Energy
-      - Projectile
+      - NonEnergy

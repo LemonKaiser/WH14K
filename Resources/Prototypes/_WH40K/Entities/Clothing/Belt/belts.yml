@@ -29,3 +29,76 @@
           - CaptainSabre
   - type: Appearance
 
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: chaosbelt
+  name: ритуальная разгрузка хаоса
+  description: Жуткий пояс, сшитая из неизвестной кожи и пропитанная шёпотом Варпа.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/beltcultchaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/beltcultchaos.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: chaosbelt2
+  name: пояс Культа Хаоса
+  description: Жуткий пояс, сшитая из неизвестной кожи и пропитанная кровью.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/beltcultchaos2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/beltcultchaos2.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: Comibelt
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/comissar.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/comissar.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: guardbelt
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/guardsman.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/guardsman.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: offbelt
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/officer.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/officer.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: psybelt
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/psyker.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/psyker.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: colbelt
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/colonel.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/colonel.rsi

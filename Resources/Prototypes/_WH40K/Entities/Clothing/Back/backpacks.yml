@@ -75,3 +75,69 @@
   - type: EncryptionKeyHolder
     keysExtractionMethod: Prying
     keySlots: 1
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackGuard
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/guardpack.rsi
+
+- type: entity
+  parent: [ Clothing, StorePresetVox ]
+  id: ClothingBackpackVox
+  suffix: WH40K, Гвардия
+  components:
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - back
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/guardpackvox.rsi
+    state: icon
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: StoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: Store
+    balance:
+      intelligence_imp: 0
+  - type: Item
+    size: Ginormous
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackCULT1
+  name: Рюкзак культиста хаоса
+  description: Рюкзак, сотканный из кожи неведомого происхождения, вмещает припасы, оружие и тайные книги служителей Хаоса.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/cultchaospack.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackCULT2
+  name: Рюкзак культиста хаоса с черепом
+  description: Рюкзак, сотканный из кожи неведомого происхождения и с черепом , вмещает припасы, оружие и тайные книги служителей Хаоса.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/cultchaospak2.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackSatchelChaosWheel
+  name: сумка с колесом Хаоса
+  description: Потёртая сумка культиста, украшенная конструкцией Колеса Хаоса. Символы варпа на её поверхности изредка вспыхивают, внушая страх и даруя странную защиту.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/satchel_cult.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/satchel_cult.rsi
+  - type: PointLight
+    color: red
+    radius: 1.5
+    energy: 0.5

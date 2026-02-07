@@ -22,3 +22,90 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetFlak
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet.rsi
+  - type: Item
+    size: Normal
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.95
+  - type: HideLayerClothing
+    slots:
+    - Hair
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetBloodPact
+  suffix: WH40K, Бладпакт
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetrHeresy
+  suffix: WH40K, Еретики
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetFlakResp
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetresp.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetresp.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetPsyker
+  suffix: WH40K, Псайкер
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/psyhelmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/psyhelmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetFlakCHAOS
+  name: композитный каска культа Хаоса
+  description: Стандартная каска, выкованная из тёмного металла и осквернённая рунами Хаоса. Защищает голову культиста, но внушает ужас своим видом.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.95
+  - type: HideLayerClothing
+    slots:
+    - Hair
