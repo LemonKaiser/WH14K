@@ -63,9 +63,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Head\headscarf\Headscrafcult.rsi
+    sprite: _WH40K/Clothing/Head/headscarf/Headscrafcult.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Head\headscarf\Headscrafcult.rsi
+    sprite: _WH40K/Clothing/Head/headscarf/Headscrafcult.rsi
   - type: HideLayerClothing
     slots:
     - Hair

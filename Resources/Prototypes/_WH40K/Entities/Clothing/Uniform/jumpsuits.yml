@@ -102,9 +102,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Uniforms\Jumpsuit\uniform_cult1.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Uniforms\Jumpsuit\uniform_cult1.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
     
 - type: entity
   parent: ClothingUniformBase
@@ -114,6 +114,6 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Uniforms\Jumpsuit\uniform_cult2.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult2.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Uniforms\Jumpsuit\uniform_cult2.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult2.rsi

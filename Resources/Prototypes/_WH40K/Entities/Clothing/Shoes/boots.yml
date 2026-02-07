@@ -94,9 +94,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Shoes\Boots\Cultboots.rsi
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Shoes\Boots\Cultboots.rsi
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5
     
@@ -108,8 +108,8 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Shoes\Boots\Cultboots2.rsi
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Shoes\Boots\Cultboots2.rsi
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5

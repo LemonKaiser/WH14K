@@ -14,14 +14,6 @@
   - type: HideLayerClothing
     slots:
     - Snout
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.95
-        Slash: 0.9
-        Piercing: 0.95
-        Heat: 0.9
-        Radiation: 0.95
 
 - type: entity
   parent: ClothingMaskPullableBase
@@ -53,14 +45,6 @@
     hideOnToggle: true
   - type: FlashImmunity
   - type: EyeProtection
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.95
-        Slash: 0.95
-        Piercing: 0.95
-        Heat: 0.95
-        Radiation: 0.95
         
 - type: entity
   parent: ClothingMaskGas
@@ -71,25 +55,15 @@
   components:
     - type: Item
       size: Tiny
-
     - type: Sprite
       sprite: _WH40K/Clothing/Mask/gas_mask_cult.rsi
       state: icon
-
     - type: Clothing
       sprite: _WH40K/Clothing/Mask/gas_mask_cult.rsi
-
     - type: HideLayerClothing
       slots:
         - Snout
 
-    - type: Armor
-      modifiers:
-        coefficients:
-          Blunt: 0.98        # почти весь тупой урон проходит, защита минимальная
-          Slash: 0.97        # рубящий урон почти не блокируется
-          Piercing: 0.97     # колющий урон почти не блокируется
-          Radiation: 0.7     # хорошая защита от радиации
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasChaosCultist2
@@ -99,25 +73,15 @@
   components:
     - type: Item
       size: Tiny
-
     - type: Sprite
       sprite: _WH40K/Clothing/Mask/gas_mask_cult2.rsi
       state: icon
-
     - type: Clothing
       sprite: _WH40K/Clothing/Mask/gas_mask_cult2.rsi
-
     - type: HideLayerClothing
       slots:
         - Snout
 
-    - type: Armor
-      modifiers:
-        coefficients:
-          Blunt: 0.98        # почти весь тупой урон проходит, защита минимальная
-          Slash: 0.97        # рубящий урон почти не блокируется
-          Piercing: 0.97     # колющий урон почти не блокируется
-          Radiation: 0.7     # хорошая защита от радиации
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasCultist3
@@ -128,17 +92,13 @@
   - type: Item
     size: Tiny
   - type: Sprite
-    sprite: _WH40K\Clothing\Mask\respirator_cult.rsi
+    sprite: _WH40K/Clothing/Mask/respirator_cult.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Mask\respirator_cult.rsi
+    sprite: _WH40K/Clothing/Mask/respirator_cult.rsi
   - type: HideLayerClothing
     slots:
     - Snout
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.97        # почти весь урон проходит
-        Slash: 0.97        # слабая защита от рубящего
-        Piercing: 0.98     # минимальная защита от колющего
-        Heat: 0.95         # чуть-чуть от огня
-        Radiation: 0.85    # заметно лучше против радиации
+        Radiation: 0.85

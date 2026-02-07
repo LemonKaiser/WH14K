@@ -44,9 +44,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\OuterClothing\Coats\overcoat.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/overcoat.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\OuterClothing\Coats\overcoat.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/overcoat.rsi
   - type: Armor
     modifiers:
       coefficients:

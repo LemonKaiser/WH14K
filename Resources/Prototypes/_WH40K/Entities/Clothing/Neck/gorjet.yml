@@ -24,12 +24,12 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Neck\Cloaks\necklace_chaos.rsi
+    sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
     state: icon
   - type: Clothing
-    sprite: _WH40K\Clothing\Neck\Cloaks\necklace_chaos.rsi
+    sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
   - type: Reflect
-    reflectProb: 0.01       # всего 1% шанс отражения
-    reflectTypes:
-      - Energy              # отражает энергетические атаки
-      - Projectile          # отражает пули/снаряды
+    reflectProb: 0.01
+    reflects:
+      - Energy
+      - Projectile

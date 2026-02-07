@@ -77,9 +77,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K\Clothing\Head\Helmets\flak_helmetchaos.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
   - type: Clothing
-    sprite: _WH40K\Clothing\Head\Helmets\flak_helmetchaos.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
   - type: Armor
     modifiers:
       coefficients:
