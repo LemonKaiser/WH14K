@@ -3,7 +3,7 @@
   name: job-name-hsergeant-sws
   description: job-description-sergeant-sws
   playTimeTracker: JobHSergeantSWS
-  startingGear: SergeantGear
+  startingGear: HeresySergeantGear
   icon: "JobIconSergeantSWS"
   supervisors: job-supervisors-engineering
   canBeAntag: false

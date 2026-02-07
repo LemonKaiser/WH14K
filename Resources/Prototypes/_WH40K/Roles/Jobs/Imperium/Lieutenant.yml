@@ -3,7 +3,7 @@
   name: job-name-lieutenant
   description: job-description-lieutenant
   playTimeTracker: JobLieutenant
-  startingGear: LieutenantGear
+  startingGear: SergeantGear
   icon: "JobIconLieutenant"
   supervisors: job-supervisors-engineering
   canBeAntag: false

@@ -3,7 +3,7 @@
   name: job-name-hcolonel
   description: job-description-colonel
   playTimeTracker: JobHColonel
-  startingGear: ColonelGear
+  startingGear: HeresyColonelGear
   icon: "JobIconColonel"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -15,3 +15,15 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: HeresyColonelGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    gloves: ClothingHandsGlovesCombatcult
+    shoes: ClothingShoesChaosBoots2
+    ears: ClothingHeadsetVoxBackpack
+    outerClothing: ClothingOuterArmorCultistCoat
+    belt: chaosbelt
+    neck: NecklaceChaosCultistReflectWeak
+    head: ClothingHeadScarfChaos

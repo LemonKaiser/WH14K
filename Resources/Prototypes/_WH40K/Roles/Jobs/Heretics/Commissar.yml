@@ -3,7 +3,7 @@
   name: job-name-hcommissar
   description: job-description-commissar
   playTimeTracker: JobHCommissar
-  startingGear: CommissarGear
+  startingGear: HeresyCommissarGear
   icon: "JobIconCommissar"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -11,3 +11,13 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: HeresyCommissarGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCommissar
+    gloves: ClothingHandsGlovesCombatcult
+    shoes: ClothingShoesChaosBoots2
+    belt: chaosbelt2
+    ears: ClothingHeadsetVoxBackpack
+    head: ClothingHeadCommissar

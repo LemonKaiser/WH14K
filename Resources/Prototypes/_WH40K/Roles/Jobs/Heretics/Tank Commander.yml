@@ -3,7 +3,7 @@
   name: job-name-htank-comm
   description: job-description-tank-comm
   playTimeTracker: JobHTankComm
-  startingGear: SergeantGear
+  startingGear: HeresySergeantGear
   icon: "JobIconTankComm"
   supervisors: job-supervisors-engineering
   canBeAntag: false

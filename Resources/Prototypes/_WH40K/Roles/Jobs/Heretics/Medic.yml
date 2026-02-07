@@ -3,7 +3,7 @@
   name: job-name-hmedic
   description: job-description-medic
   playTimeTracker: JobHMedic
-  startingGear: MedicGear
+  startingGear: HeresyMedicGear
   icon: "JobIconMedic"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -11,3 +11,13 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: HeresyMedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackCULT2
+    shoes: ClothingShoesChaosBoots2
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorFlakVestMed

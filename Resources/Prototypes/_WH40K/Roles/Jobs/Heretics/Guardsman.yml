@@ -3,7 +3,7 @@
   name: job-name-hguardsman
   description: job-description-guardsman
   playTimeTracker: JobHGuardsman
-  startingGear: GuardsmanGear
+  startingGear: HeresyGuardsmanGear
   icon: "JobIconGuardsman"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -11,3 +11,13 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: HeresyGuardsmanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackCULT1
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorChaosVest

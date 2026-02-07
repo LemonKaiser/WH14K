@@ -3,7 +3,7 @@
   name: job-name-hlieutenant
   description: job-description-lieutenant
   playTimeTracker: JobHLieutenant
-  startingGear: LieutenantGear
+  startingGear: HeresySergeantGear
   icon: "JobIconLieutenant"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -11,13 +11,3 @@
   - Maintenance
   - Engineering
   - External
-
-- type: startingGear
-  id: LieutenantGear
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitTechpriest
-    back: ClothingBackpackTechpriest
-    shoes: ClothingShoesBootsworkTechpriest
-    belt: ClothingBeltUtilityEngineering
-    neck: ClothingNeckRobeTechpriestMars
-    id: PassengerPDA
