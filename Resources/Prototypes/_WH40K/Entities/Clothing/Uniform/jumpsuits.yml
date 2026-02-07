@@ -77,3 +77,27 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/colonel.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/colonel.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCultist1
+  name: униформа культиста
+  description: Тёмный комбинезон, испещрённый символами Хаоса. Он внушает страх своим видом, но не даёт никакой защиты.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
+    
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCultist2
+  name: облачение культиста
+  description: Зловещий комбинезон, сотканный из тёмных тканей и испещрённый рунами варпа. Его вид внушает трепет и подчёркивает преданность культу Хаоса.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult2.rsi

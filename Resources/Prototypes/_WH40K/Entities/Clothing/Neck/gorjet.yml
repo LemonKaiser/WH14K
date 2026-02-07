@@ -13,3 +13,21 @@
     reflects:
       - Energy
       - NonEnergy
+
+- type: entity
+  parent: ClothingNeckBase
+  id: NecklaceChaosCultistReflectWeak
+  name: ожерелье культиста
+  description: Зловещее ожерелье, украшенное символами Хаоса. Лишь изредка, почти случайно, оно вспыхивает варповой энергией и отражает снаряды обратно.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
+  - type: Reflect
+    reflectProb: 0.01
+    reflects:
+      - Energy
+      - Projectile

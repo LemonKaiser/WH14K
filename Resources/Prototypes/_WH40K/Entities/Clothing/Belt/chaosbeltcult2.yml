@@ -1,0 +1,11 @@
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: chaosbelt2
+  name: пояс Культа Хаоса
+  description: Жуткий пояс, сшитая из неизвестной кожи и пропитанная кровью.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K\Clothing\Belt\beltcultchaos2.rsi
+  - type: Clothing
+    sprite: _WH40K\Clothing\Belt\beltcultchaos2.rsi

@@ -12,14 +12,6 @@
   - type: HideLayerClothing
     slots:
     - Snout
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.95
-        Slash: 0.9
-        Piercing: 0.95
-        Heat: 0.9
-        Radiation: 0.95
 
 - type: entity
   parent: ClothingMaskPullableBase
@@ -49,11 +41,60 @@
     hideOnToggle: true
   - type: FlashImmunity
   - type: EyeProtection
+        
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasChaosCultist1
+  name: Противогаз Хаоса
+  description: Оно вообще работает? Был обмыт в крови детей.
+  suffix: WH40K, Культ Хаоса
+  components:
+    - type: Item
+      size: Tiny
+    - type: Sprite
+      sprite: _WH40K/Clothing/Mask/gas_mask_cult.rsi
+      state: icon
+    - type: Clothing
+      sprite: _WH40K/Clothing/Mask/gas_mask_cult.rsi
+    - type: HideLayerClothing
+      slots:
+        - Snout
+
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasChaosCultist2
+  name: Противогаз Хаоса
+  description: Оно вообще работает? Сделан из человеческой кожи.
+  suffix: WH40K, Культ Хаоса
+  components:
+    - type: Item
+      size: Tiny
+    - type: Sprite
+      sprite: _WH40K/Clothing/Mask/gas_mask_cult2.rsi
+      state: icon
+    - type: Clothing
+      sprite: _WH40K/Clothing/Mask/gas_mask_cult2.rsi
+    - type: HideLayerClothing
+      slots:
+        - Snout
+
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasCultist3
+  name: респиратор культиста
+  description: Зловещий респиратор, украшенный символами Хаоса. Он защищает дыхательные пути и лишь изредка смягчает удары по лицу за счет твердого каркаса.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/respirator_cult.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/respirator_cult.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.95
-        Slash: 0.95
-        Piercing: 0.95
-        Heat: 0.95
-        Radiation: 0.95
+        Radiation: 0.85

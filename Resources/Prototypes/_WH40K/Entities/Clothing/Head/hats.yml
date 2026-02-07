@@ -46,3 +46,18 @@
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadScarfChaos
+  name: головной мешок
+  description: Простой головной мешок, но его ткань пропитана символами Хаоса. Защищает голову и голову, придавая жуткий вид культисту.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/headscarf/Headscrafcult.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/headscarf/Headscrafcult.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair

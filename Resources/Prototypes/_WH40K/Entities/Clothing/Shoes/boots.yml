@@ -73,3 +73,31 @@
     sprite: _WH40K/Clothing/Shoes/Boots/heresyboots.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/heresyboots.rsi
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesChaosBoots1
+  name: Ботинки культиста хаоса
+  description: Жуткие сапоги, сшитые из неизвестной кожи и пропитанные шёпотом Варпа. Они служат не только защитой, но и символом преданности Хаоса.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5
+    
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesChaosBoots2 
+  name: Сапоги культиста хаоса
+  description: Сапоги культиста, сделанные из странно мягкой и нежной кожи, чья гладкость вызывает ужас, словно она ещё хранит тепло своих владельцев.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

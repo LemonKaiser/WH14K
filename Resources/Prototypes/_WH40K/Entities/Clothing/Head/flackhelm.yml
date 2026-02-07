@@ -60,3 +60,27 @@
     sprite: _WH40K/Clothing/Head/Helmets/psyhelmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/psyhelmet.rsi
+    
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetFlakCHAOS
+  name: композитный каска культа Хаоса
+  description: Стандартная каска, выкованная из тёмного металла и осквернённая рунами Хаоса. Защищает голову культиста, но внушает ужас своим видом.
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flak_helmetchaos.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.9
+        Piercing: 0.95
+        Heat: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.95
+  - type: HideLayerClothing
+    slots:
+    - Hair
