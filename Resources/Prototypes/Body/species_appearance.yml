@@ -40,8 +40,6 @@
     - map: [ "belt" ]
     - map: [ "id" ]
     - map: [ "outerClothing" ]
-    - map: [ "back" ]
-    - map: [ "neck" ]
     - map: [ "suitstorage" ]
 
     # Stuff that goes in front of equipment
