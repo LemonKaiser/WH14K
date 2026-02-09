@@ -26,3 +26,8 @@ figurines-ifi-4 = "Так и запишем, реколор"
 materials-datapoint = необработанные данные
 
 loadout-group-techpriest-neck = роба, техножрец
+
+chat-radio-hive = Улей
+
+recipes-metal-wall-name = металлическая стена
+recipes-metal-wall-desc = Удерживает воздух внутри, а грейтайд снаружи.

@@ -22,6 +22,7 @@ lathe-category-mechs-gygax = Gygax
 lathe-category-mechs-durand = Durand
 lathe-category-mechs-equipment = Mech equipment
 lathe-category-mechs-weapons = Mech weapons
+
 # Circuit imprinter
 lathe-category-computers = Computers
 lathe-category-engineering = Engineering

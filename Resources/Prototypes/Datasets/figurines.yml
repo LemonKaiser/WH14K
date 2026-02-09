@@ -98,7 +98,7 @@
   id: FigurinesQM
   values:
     prefix: figurines-qm-
-    count: 9
+    count: 8
 
 - type: localizedDataset
   id: FigurinesCE
