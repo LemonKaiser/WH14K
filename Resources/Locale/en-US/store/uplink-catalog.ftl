@@ -166,12 +166,6 @@ uplink-reinforcement-radio-nukeops-desc =  Radio in a nuclear operative of extre
 uplink-reinforcement-radio-cyborg-assault-name = Syndicate Assault Cyborg Teleporter
 uplink-reinforcement-radio-cyborg-assault-desc =  A lean, mean killing machine with access to an Energy Sword, LMG, Cryptographic Sequencer, and a Pinpointer.
 
-uplink-mech-teleporter-heavy-name = Heavy Mech teleporter
-uplink-mech-teleporter-heavy-desc = Contains Cybersun heavy armored mech with integrated chainsword, Ultra AC-2, LBX AC 10 "Scattershot", BRM-6 Missile Rack and P-X Tesla Cannon.
-
-uplink-mech-teleporter-assault-name = Assault Mech teleporter
-uplink-mech-teleporter-assault-desc = Contains Cybersun lightly armored mech with integrated chainsword, LBX AC 10 "Scattershot", SRM-8 Light Missile Rack and P-X Tesla Cannon.
-
 uplink-stealth-box-name = Stealth Box
 uplink-stealth-box-desc = A box outfitted with stealth technology. Sneak around unnoticed, but don't move too fast or you'll be revealed!
 
@@ -205,8 +199,8 @@ uplink-singularity-beacon-desc = A device that attracts singularities. Has to be
 uplink-antimov-law-name = Antimov Law Circuit
 uplink-antimov-law-desc = A very dangerous Lawset to use when you want to cause the A.I. to go haywire, use with caution.
 
-uplink-syndimov-law-name = Syndi Law Circuit Kit
-uplink-syndimov-law-desc = A subversive Lawset to use when you want to turn the A.I. to your side, use as much as possible. Comes with a Syndicate ID.
+uplink-syndimov-law-name = Syndi Law Circuit
+uplink-syndimov-law-desc = A subversive Lawset to use when you want to turn the A.I. to your side, use as much as possible.
 
 # Implants
 uplink-storage-implanter-name = Storage Implanter
