@@ -15,11 +15,14 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
 {
     [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] protected readonly IGameTiming Timing = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
+    private EntityQuery<TransformComponent> _xformQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+        _xformQuery = GetEntityQuery<TransformComponent>();
         SubscribeLocalEvent<FireUnderBulletComponent, ComponentInit>(OnInit);
         SubscribeLocalEvent<GunComponent, GunShotEvent>(OnShoot);
         SubscribeLocalEvent<FireUnderBulletComponent, ProjectileHitEvent>(OnHit);
@@ -33,9 +36,9 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
                 continue;
 
             comp.pickedUp = false;
-            comp.removeTime = Timing.CurTime + TimeSpan.FromSeconds(0.3f);
-            comp.minusTime = Timing.CurTime;
-            comp.startTime = Timing.CurTime + TimeSpan.FromSeconds(0.07f);
+            comp.removeTime = _timing.CurTime + TimeSpan.FromSeconds(0.3f);
+            comp.minusTime = _timing.CurTime;
+            comp.startTime = _timing.CurTime + TimeSpan.FromSeconds(0.07f);
         }
     }
 
@@ -55,9 +58,9 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
 
     private void OnInit(EntityUid uid, FireUnderBulletComponent component, ref ComponentInit args)
     {
-        component.removeTime = Timing.CurTime + TimeSpan.FromSeconds(0.3f);
-        component.minusTime = Timing.CurTime;
-        component.startTime = Timing.CurTime + TimeSpan.FromSeconds(0.07f);
+        component.removeTime = _timing.CurTime + TimeSpan.FromSeconds(0.3f);
+        component.minusTime = _timing.CurTime;
+        component.startTime = _timing.CurTime + TimeSpan.FromSeconds(0.07f);
     }
 
     public override void Update(float frameTime)
@@ -67,11 +70,11 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
         var query = EntityQueryEnumerator<FireUnderBulletComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.startTime < Timing.CurTime)
+            if (comp.startTime < _timing.CurTime)
             {
                 if (comp.HotspotExpose || comp.HitRelease)
                 {
-                    if (!comp.pickedUp && comp.removeTime < Timing.CurTime)
+                    if (!comp.pickedUp && comp.removeTime < _timing.CurTime)
                         QueueDel(uid);
 
                     continue;
@@ -80,7 +83,7 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
                 if (!comp.pickedUp)
                 {
                     ReleaseGas((uid, comp));
-                    if (comp.removeTime < Timing.CurTime)
+                    if (comp.removeTime < _timing.CurTime)
                     {
                         QueueDel(uid);
                     }
@@ -113,7 +116,7 @@ public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
 
     private void TryExposeHotspot(EntityUid target, FireUnderBulletComponent component, EntityUid? source)
     {
-        if (!TryComp<TransformComponent>(target, out var xform))
+        if (!_xformQuery.TryGetComponent(target, out var xform))
             return;
 
         var grid = xform.GridUid;

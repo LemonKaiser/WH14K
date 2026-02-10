@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared.WH40K.Aiming;
+namespace Content.Shared._WH40K.Aiming;
 
 /// <summary>
 /// Raised when aiming is toggled on a weapon.

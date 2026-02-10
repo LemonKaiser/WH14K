@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client.LateJoin;
 using Content.Shared._WH40K.LateJoin;
+using Content.Shared.Roles;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -10,6 +11,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.LateJoin;
 
@@ -75,7 +77,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
 
         if (factions.Count == 0)
         {
-            new LateJoinGui().OpenCentered();
+            OpenLateJoinWindow();
             Close();
             return;
         }
@@ -162,7 +164,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
                 _sawmill.Info($"Faction '{faction.Id}' has no departments; late join list will be empty.");
             }
 
-            new LateJoinGui(faction.Departments).OpenCentered();
+            OpenLateJoinWindow(faction.Departments);
             Close();
         };
 
@@ -194,11 +196,12 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         _factionSystem.FactionsUpdated -= OnFactionsUpdated;
     }
 
-    protected override void Dispose(bool disposing)
+    private static void OpenLateJoinWindow(IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null)
     {
-        base.Dispose(disposing);
-
-        if (disposing && _subscribed)
-            _factionSystem.FactionsUpdated -= OnFactionsUpdated;
+        if (departments == null)
+            new LateJoinGui().OpenCentered();
+        else
+            new LateJoinGui(departments).OpenCentered();
     }
+
 }

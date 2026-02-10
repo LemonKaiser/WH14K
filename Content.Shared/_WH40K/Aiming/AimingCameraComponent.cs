@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.WH40K.Aiming;
+namespace Content.Shared._WH40K.Aiming;
 
 /// <summary>
 /// Enables an action-toggled aiming camera offset for a weapon.

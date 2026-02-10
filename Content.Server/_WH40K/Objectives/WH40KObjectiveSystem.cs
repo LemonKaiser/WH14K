@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Objectives.Components;
 using Content.Server.Chat.Managers;
@@ -8,16 +10,11 @@ using Content.Shared._WH40K.Overlays;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
-using Content.Shared.Mech.Components;
-using Content.Shared.Mech.Equipment.Components;
-using Content.Shared.Mobs;
-using Content.Shared.Projectiles;
-using Content.Shared.Throwing;
+using Content.Shared.GameTicking;
 using Content.Shared.Trigger;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
 using Robust.Server.Player;
-using Robust.Shared.Containers;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
@@ -29,19 +26,24 @@ public sealed class WH40KObjectiveSystem : EntitySystem
 {
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    private readonly Dictionary<EntityUid, string> _objectiveTeams = new();
+    private readonly Dictionary<string, int> _teamObjectiveTotals = new();
+    private readonly Dictionary<string, int> _teamObjectiveRemaining = new();
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<WH40KObjectiveComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<WH40KObjectiveComponent, ComponentShutdown>(OnObjectiveShutdown);
         SubscribeLocalEvent<WH40KObjectiveComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<WH40KObjectiveComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<WH40KObjectiveComponent, TriggerEvent>(OnTrigger);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
     private void OnMapInit(EntityUid uid, WH40KObjectiveComponent component, MapInitEvent args)
@@ -59,6 +61,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         component.WarnAtPercent = MathHelper.Clamp(component.WarnAtPercent, 0f, 1f);
         if (component.MaxHealth <= FixedPoint2.Zero)
             component.MaxHealth = FixedPoint2.New(1);
+        RegisterObjective(uid, component);
 
         if (TryComp<TimerTriggerComponent>(uid, out var timer))
         {
@@ -95,8 +98,8 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         if (args.Origin == null)
             return;
 
-        if (!TryResolveAttacker(args.Origin.Value, out var attacker))
-            return;
+        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var attacker))
+            attacker = args.Origin.Value;
 
         if (!_teamRule.TryGetTeamIdFromEntity(attacker, out var attackerTeamId))
             return;
@@ -172,6 +175,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
 
         component.Destroyed = true;
         component.Destroying = false;
+        DecrementRemainingObjective(component.TeamId);
         SetVisualState(uid, WH40KObjectiveVisualState.Destroyed);
 
         var targetName = Loc.GetString(component.Name);
@@ -207,20 +211,10 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         if (string.IsNullOrEmpty(teamId))
             return 0;
 
-        var count = 0;
-        var query = EntityQueryEnumerator<WH40KObjectiveComponent>();
-        while (query.MoveNext(out _, out var objective))
-        {
-            if (objective.TeamId != teamId)
-                continue;
+        if (includeDestroyed)
+            return _teamObjectiveTotals.GetValueOrDefault(teamId, 0);
 
-            if (!includeDestroyed && objective.Destroyed)
-                continue;
-
-            count++;
-        }
-
-        return count;
+        return _teamObjectiveRemaining.GetValueOrDefault(teamId, 0);
     }
 
     private void DispatchObjectiveRemainingMessages(string teamId, string targetName, int remaining, string teamName)
@@ -279,107 +273,69 @@ public sealed class WH40KObjectiveSystem : EntitySystem
     }
 
 
-    private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker)
+    private void RegisterObjective(EntityUid uid, WH40KObjectiveComponent component)
     {
-        return TryResolveAttacker(origin, out attacker, 0);
-    }
+        if (string.IsNullOrEmpty(component.TeamId))
+            return;
 
-    private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker, int depth)
-    {
-        attacker = default;
-
-        if (depth > 6)
-            return false;
-
-        if (HasComp<ActorComponent>(origin))
+        if (_objectiveTeams.TryGetValue(uid, out var existingTeam))
         {
-            attacker = origin;
-            return true;
-        }
-
-        if (TryResolveMechPilot(origin, out attacker))
-            return true;
-
-        if (TryComp(origin, out MechEquipmentComponent? mechEquipment) &&
-            mechEquipment.EquipmentOwner is { } mechOwner &&
-            TryResolveMechPilot(mechOwner, out attacker))
-        {
-            return true;
-        }
-
-        if (TryComp<ProjectileComponent>(origin, out var projectile) &&
-            projectile.Shooter is { } shooter)
-        {
-            if (shooter == origin)
-                return false;
-
-            return TryResolveAttacker(shooter, out attacker, depth + 1);
-        }
-
-        if (TryComp<ThrownItemComponent>(origin, out var thrown) &&
-            thrown.Thrower is { } thrower)
-        {
-            if (thrower == origin)
-                return false;
-
-            return TryResolveAttacker(thrower, out attacker, depth + 1);
-        }
-
-        if (TryComp<TimerTriggerComponent>(origin, out var timer) &&
-            timer.User is { } timerUser)
-        {
-            if (timerUser == origin)
-                return false;
-
-            return TryResolveAttacker(timerUser, out attacker, depth + 1);
-        }
-
-        if (TryResolveAttackerFromContainer(origin, out attacker))
-            return true;
-
-        return false;
-    }
-
-    private bool TryResolveAttackerFromContainer(EntityUid origin, out EntityUid attacker)
-    {
-        attacker = default;
-
-        var current = origin;
-        for (var i = 0; i < 6; i++)
-        {
-            if (!_container.TryGetContainingContainer((current, null, null), out var container))
-                return false;
-
-            var owner = container.Owner;
-            if (!owner.IsValid() || owner == current)
-                return false;
-
-            if (HasComp<ActorComponent>(owner))
+            if (!string.IsNullOrEmpty(existingTeam))
             {
-                attacker = owner;
-                return true;
+                AdjustTeamCount(_teamObjectiveTotals, existingTeam, -1);
+                if (!component.Destroyed)
+                    AdjustTeamCount(_teamObjectiveRemaining, existingTeam, -1);
             }
-
-            if (TryResolveMechPilot(owner, out attacker))
-                return true;
-
-            current = owner;
         }
 
-        return false;
+        _objectiveTeams[uid] = component.TeamId;
+        AdjustTeamCount(_teamObjectiveTotals, component.TeamId, 1);
+        if (!component.Destroyed)
+            AdjustTeamCount(_teamObjectiveRemaining, component.TeamId, 1);
     }
 
-    private bool TryResolveMechPilot(EntityUid mech, out EntityUid pilot)
+    private void OnObjectiveShutdown(EntityUid uid, WH40KObjectiveComponent component, ComponentShutdown args)
     {
-        pilot = default;
+        UnregisterObjective(uid, component);
+    }
 
-        if (!TryComp(mech, out MechComponent? mechComp))
-            return false;
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
+    {
+        _objectiveTeams.Clear();
+        _teamObjectiveTotals.Clear();
+        _teamObjectiveRemaining.Clear();
+    }
 
-        if (mechComp.PilotSlot.ContainedEntity is not { } pilotEntity)
-            return false;
+    private void UnregisterObjective(EntityUid uid, WH40KObjectiveComponent component)
+    {
+        if (!_objectiveTeams.Remove(uid, out var teamId))
+            teamId = component.TeamId;
 
-        pilot = pilotEntity;
-        return true;
+        if (string.IsNullOrEmpty(teamId))
+            return;
+
+        AdjustTeamCount(_teamObjectiveTotals, teamId, -1);
+        if (!component.Destroyed)
+            AdjustTeamCount(_teamObjectiveRemaining, teamId, -1);
+    }
+
+    private void DecrementRemainingObjective(string teamId)
+    {
+        if (string.IsNullOrEmpty(teamId))
+            return;
+
+        AdjustTeamCount(_teamObjectiveRemaining, teamId, -1);
+    }
+
+    private static void AdjustTeamCount(Dictionary<string, int> dictionary, string teamId, int delta)
+    {
+        if (string.IsNullOrEmpty(teamId) || delta == 0)
+            return;
+
+        var next = dictionary.GetValueOrDefault(teamId, 0) + delta;
+        if (next <= 0)
+            dictionary.Remove(teamId);
+        else
+            dictionary[teamId] = next;
     }
 }

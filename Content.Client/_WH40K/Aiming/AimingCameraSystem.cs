@@ -5,10 +5,11 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
+using Content.Shared.Ghost;
 using Content.Shared.Construction;
 using Content.Shared.Physics;
 using Content.Shared.Tag;
-using Content.Shared.WH40K.Aiming;
+using Content.Shared._WH40K.Aiming;
 using Content.Shared.Wieldable.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -19,7 +20,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Client.WH40K.Aiming;
+namespace Content.Client._WH40K.Aiming;
 
 public sealed class AimingCameraSystem : EntitySystem
 {
@@ -87,7 +88,8 @@ public sealed class AimingCameraSystem : EntitySystem
             return;
         }
 
-        var offset = OffsetAfterMouse(uid, userComp, aimingComp);
+        var ignoreWallClamp = HasComp<GhostComponent>(uid);
+        var offset = OffsetAfterMouse(uid, userComp, aimingComp, ignoreWallClamp);
         if (offset == null)
             return;
 
@@ -95,7 +97,7 @@ public sealed class AimingCameraSystem : EntitySystem
         userComp.WasValid = true;
     }
 
-    private Vector2? OffsetAfterMouse(EntityUid user, AimingUserComponent userComp, AimingCameraComponent aimingComp)
+    private Vector2? OffsetAfterMouse(EntityUid user, AimingUserComponent userComp, AimingCameraComponent aimingComp, bool ignoreWallClamp)
     {
         if (_eyeManager.MainViewport is not ScalingViewport vp)
             return null;
@@ -119,9 +121,16 @@ public sealed class AimingCameraSystem : EntitySystem
         // but still clamp it to walls while the player moves.
         if (!mouseInside || _inputManager.MouseScreenPosition.Window == WindowId.Invalid)
         {
-            var clampedTargetHold = ClampToWalls(user, userComp.TargetPosition, userComp.LastWallBuffer);
-            var wallClampedHold = clampedTargetHold.LengthSquared() + 0.0001f < userComp.TargetPosition.LengthSquared();
-            var releasedHold = ApplyWallRelease(userComp, clampedTargetHold, userComp.TargetPosition, wallClampedHold);
+            var clampedTargetHold = ignoreWallClamp
+                ? userComp.TargetPosition
+                : ClampToWalls(user, userComp.TargetPosition, userComp.LastWallBuffer);
+            var wallClampedHold = !ignoreWallClamp &&
+                                  clampedTargetHold.LengthSquared() + 0.0001f < userComp.TargetPosition.LengthSquared();
+            var releasedHold = ignoreWallClamp
+                ? clampedTargetHold
+                : ApplyWallRelease(userComp, clampedTargetHold, userComp.TargetPosition, wallClampedHold);
+            if (ignoreWallClamp)
+                userComp.LastWallClamped = false;
             return SmoothToTarget(userComp, releasedHold, wallClampedHold, returning: false);
         }
 
@@ -148,9 +157,16 @@ public sealed class AimingCameraSystem : EntitySystem
             mouseActualRelativePos = mouseActualRelativePos.Normalized() * aimingComp.MaxOffset;
 
         // Clamp target to avoid peeking through walls, then smooth.
-        var clampedTarget = ClampToWalls(user, mouseActualRelativePos, aimingComp.WallBuffer);
-        var wallClamped = clampedTarget.LengthSquared() + 0.0001f < mouseActualRelativePos.LengthSquared();
-        var releasedTarget = ApplyWallRelease(userComp, clampedTarget, mouseActualRelativePos, wallClamped);
+        var clampedTarget = ignoreWallClamp
+            ? mouseActualRelativePos
+            : ClampToWalls(user, mouseActualRelativePos, aimingComp.WallBuffer);
+        var wallClamped = !ignoreWallClamp &&
+                          clampedTarget.LengthSquared() + 0.0001f < mouseActualRelativePos.LengthSquared();
+        var releasedTarget = ignoreWallClamp
+            ? clampedTarget
+            : ApplyWallRelease(userComp, clampedTarget, mouseActualRelativePos, wallClamped);
+        if (ignoreWallClamp)
+            userComp.LastWallClamped = false;
         return SmoothToTarget(userComp, releasedTarget, wallClamped, returning: false);
     }
 

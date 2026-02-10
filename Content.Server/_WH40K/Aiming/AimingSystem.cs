@@ -7,11 +7,11 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Item;
-using Content.Shared.WH40K.Aiming;
+using Content.Shared._WH40K.Aiming;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
 
-namespace Content.Server.WH40K.Aiming;
+namespace Content.Server._WH40K.Aiming;
 
 public sealed class AimingSystem : EntitySystem
 {

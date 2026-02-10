@@ -4,8 +4,11 @@ using Content.Server.Spawners.Components;
 using Content.Server.Spawners.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Roles;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server._WH40K.Spawning;
@@ -16,6 +19,7 @@ public sealed class WH40KSpawnPointSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly StationSystem _stationSystem = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
+    private readonly Dictionary<(EntityUid Station, ProtoId<JobPrototype> Job), List<EntityCoordinates>> _spawnCache = new();
 
     public override void Initialize()
     {
@@ -24,6 +28,9 @@ public sealed class WH40KSpawnPointSystem : EntitySystem
             OnPlayerSpawning,
             after: new[] { typeof(ContainerSpawnPointSystem) },
             before: new[] { typeof(SpawnPointSystem) });
+        SubscribeLocalEvent<SpawnPointComponent, MapInitEvent>((_, _, _) => InvalidateSpawnCache());
+        SubscribeLocalEvent<SpawnPointComponent, ComponentShutdown>((_, _, _) => InvalidateSpawnCache());
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => InvalidateSpawnCache());
     }
 
     private void OnPlayerSpawning(PlayerSpawningEvent args)
@@ -37,21 +44,7 @@ public sealed class WH40KSpawnPointSystem : EntitySystem
         if (args.Job == null || args.Station == null)
             return;
 
-        var possiblePositions = new List<EntityCoordinates>();
-        var query = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var spawnPoint, out var xform))
-        {
-            if (spawnPoint.SpawnType != SpawnPointType.Job)
-                continue;
-
-            if (spawnPoint.Job != null && spawnPoint.Job != args.Job)
-                continue;
-
-            if (_stationSystem.GetOwningStation(uid, xform) != args.Station)
-                continue;
-
-            possiblePositions.Add(xform.Coordinates);
-        }
+        var possiblePositions = GetSpawnPositions(args.Station.Value, args.Job.Value);
 
         if (possiblePositions.Count == 0)
             return;
@@ -74,5 +67,36 @@ public sealed class WH40KSpawnPointSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private List<EntityCoordinates> GetSpawnPositions(EntityUid station, ProtoId<JobPrototype> job)
+    {
+        var key = (station, job);
+        if (_spawnCache.TryGetValue(key, out var cached))
+            return cached;
+
+        var result = new List<EntityCoordinates>();
+        var query = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var spawnPoint, out var xform))
+        {
+            if (spawnPoint.SpawnType != SpawnPointType.Job)
+                continue;
+
+            if (spawnPoint.Job != null && spawnPoint.Job != job)
+                continue;
+
+            if (_stationSystem.GetOwningStation(uid, xform) != station)
+                continue;
+
+            result.Add(xform.Coordinates);
+        }
+
+        _spawnCache[key] = result;
+        return result;
+    }
+
+    private void InvalidateSpawnCache()
+    {
+        _spawnCache.Clear();
     }
 }

@@ -20,18 +20,13 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Players;
-using Content.Shared.Projectiles;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
-using Content.Shared.Throwing;
-using Content.Shared.Trigger.Components;
-using Content.Shared.Mech.Components;
-using Content.Shared.Mech.Equipment.Components;
-using Robust.Shared.Containers;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
@@ -43,9 +38,9 @@ namespace Content.Server._WH40K.GameTicking.Rules;
 
 public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KTeamBattleRuleComponent>
 {
-    private const bool AnnounceTeamOnSpawn = true;
-    private const bool AnnounceWinner = true;
-    private const bool CountCriticalAsAlive = true;
+    private static readonly bool AnnounceTeamOnSpawn = true;
+    private static readonly bool AnnounceWinner = true;
+    private static readonly bool CountCriticalAsAlive = true;
     [Dependency] private readonly AdminSystem _admin = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
@@ -59,13 +54,14 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly SharedRoleSystem _roles = default!;
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly WH40KFactionSystem _wh40kFactions = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
     private bool _requireAllTeamsPresent;
     private float _roundTimeLimitSeconds;
+    private EntityUid? _activeRuleUid;
 
     public override void Initialize()
     {
@@ -100,6 +96,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     protected override void Started(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
+        _activeRuleUid = uid;
 
         BuildDepartmentMap(component);
         component.CheckInterval = _checkInterval;
@@ -124,6 +121,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     protected override void Ended(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
         base.Ended(uid, component, gameRule, args);
+        if (_activeRuleUid == uid)
+            _activeRuleUid = null;
         _wh40kFactions.BroadcastFactionsToAll();
     }
 
@@ -293,11 +292,24 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private bool TryGetActiveRule(out EntityUid uid, out Components.WH40KTeamBattleRuleComponent component, out GameRuleComponent gameRule)
     {
+        if (_activeRuleUid is { } cachedUid &&
+            cachedUid.IsValid() &&
+            TryComp(cachedUid, out Components.WH40KTeamBattleRuleComponent? cachedRule) &&
+            TryComp(cachedUid, out GameRuleComponent? cachedGameRule) &&
+            GameTicker.IsGameRuleActive(cachedUid, cachedGameRule))
+        {
+            uid = cachedUid;
+            component = cachedRule;
+            gameRule = cachedGameRule;
+            return true;
+        }
+
         var query = EntityQueryEnumerator<Components.WH40KTeamBattleRuleComponent, GameRuleComponent>();
         while (query.MoveNext(out var foundUid, out var foundComponent, out var foundGameRule))
         {
             if (GameTicker.IsGameRuleActive(foundUid, foundGameRule))
             {
+                _activeRuleUid = foundUid;
                 uid = foundUid;
                 component = foundComponent;
                 gameRule = foundGameRule;
@@ -305,6 +317,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             }
         }
 
+        _activeRuleUid = null;
         uid = default;
         component = default!;
         gameRule = default!;
@@ -313,13 +326,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     public bool AreObjectivesEnabled()
     {
+        if (TryGetActiveRule(out _, out var activeRule, out _))
+            return activeRule.ObjectivesEnabled;
+
+        // Fallback for early map-init stages where the rule may be added but not yet active.
         var query = EntityQueryEnumerator<Components.WH40KTeamBattleRuleComponent, GameRuleComponent>();
-        while (query.MoveNext(out var uid, out var rule, out var gameRule))
+        while (query.MoveNext(out var fallbackUid, out var fallbackRule, out var fallbackGameRule))
         {
-            if (!GameTicker.IsGameRuleAdded(uid, gameRule))
+            if (!GameTicker.IsGameRuleAdded(fallbackUid, fallbackGameRule))
                 continue;
 
-            return rule.ObjectivesEnabled;
+            return fallbackRule.ObjectivesEnabled;
         }
 
         return false;
@@ -532,8 +549,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
                 return;
         }
 
-        if (!TryResolveAttacker(args.Origin.Value, out var attacker, out var attackerActor))
-            return;
+        ActorComponent? attackerActor = null;
+        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var attacker, out var resolvedActor))
+            attacker = args.Origin.Value;
+        else
+            attackerActor = resolvedActor;
 
         if (attacker == uid)
             return;
@@ -548,6 +568,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
 
         if (victimTeam != attackerTeam)
+            return;
+
+        if (attackerActor == null)
             return;
 
         var attackerId = attackerActor.PlayerSession.UserId;
@@ -578,8 +601,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (!TryResolveAttacker(args.Origin.Value, out var attacker, out _))
-            return;
+        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var attacker, out _))
+            attacker = args.Origin.Value;
 
         if (attacker == uid)
             return;
@@ -612,119 +635,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
             rule.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(rule.CheckInterval);
         }
-    }
-
-    private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor)
-    {
-        return TryResolveAttacker(origin, out attacker, out attackerActor, 0);
-    }
-
-    private bool TryResolveAttacker(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor, int depth)
-    {
-        attacker = default;
-        attackerActor = default!;
-
-        if (depth > 6)
-            return false;
-
-        if (TryComp(origin, out ActorComponent? actor))
-        {
-            attacker = origin;
-            attackerActor = actor!;
-            return true;
-        }
-
-        if (TryResolveMechPilot(origin, out attacker, out attackerActor))
-            return true;
-
-        if (TryComp(origin, out MechEquipmentComponent? mechEquipment) &&
-            mechEquipment.EquipmentOwner is { } mechOwner &&
-            TryResolveMechPilot(mechOwner, out attacker, out attackerActor))
-        {
-            return true;
-        }
-
-        if (TryComp<ProjectileComponent>(origin, out var projectile) &&
-            projectile.Shooter is { } shooter)
-        {
-            if (shooter == origin)
-                return false;
-
-            return TryResolveAttacker(shooter, out attacker, out attackerActor, depth + 1);
-        }
-
-        if (TryComp<ThrownItemComponent>(origin, out var thrown) &&
-            thrown.Thrower is { } thrower)
-        {
-            if (thrower == origin)
-                return false;
-
-            return TryResolveAttacker(thrower, out attacker, out attackerActor, depth + 1);
-        }
-
-        if (TryComp<TimerTriggerComponent>(origin, out var timer) &&
-            timer.User is { } timerUser)
-        {
-            if (timerUser == origin)
-                return false;
-
-            return TryResolveAttacker(timerUser, out attacker, out attackerActor, depth + 1);
-        }
-
-        if (TryResolveAttackerFromContainer(origin, out attacker, out attackerActor))
-            return true;
-
-        return false;
-    }
-
-    private bool TryResolveAttackerFromContainer(EntityUid origin, out EntityUid attacker, out ActorComponent attackerActor)
-    {
-        attacker = default;
-        attackerActor = default!;
-
-        var current = origin;
-        for (var i = 0; i < 6; i++)
-        {
-            if (!_container.TryGetContainingContainer((current, null, null), out var container))
-                return false;
-
-            var owner = container.Owner;
-            if (!owner.IsValid() || owner == current)
-                return false;
-
-            if (TryComp(owner, out ActorComponent? ownerActor))
-            {
-                attacker = owner;
-                attackerActor = ownerActor!;
-                return true;
-            }
-
-            if (TryResolveMechPilot(owner, out attacker, out attackerActor))
-                return true;
-
-            current = owner;
-        }
-
-        return false;
-    }
-
-    private bool TryResolveMechPilot(EntityUid mech, out EntityUid pilot, out ActorComponent pilotActor)
-    {
-        pilot = default;
-        pilotActor = default!;
-
-        if (!TryComp(mech, out MechComponent? mechComp))
-            return false;
-
-        if (mechComp.PilotSlot.ContainedEntity is not { } pilotEntity)
-            return false;
-
-        if (!TryComp(pilotEntity, out ActorComponent? actor))
-            return false;
-
-        pilot = pilotEntity;
-        pilotActor = actor!;
-        return true;
     }
 
     private void ComputeTeamCounts(Components.WH40KTeamBattleRuleComponent component, out int[] total, out int[] alive)
@@ -786,6 +696,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private bool TryGetTeamIndexFromEntity(EntityUid entity, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
     {
         teamIndex = -1;
+
+        // Admin ghosts should not inherit team restrictions while ghosting.
+        if (TryComp<GhostComponent>(entity, out var ghost) && ghost.CanGhostInteract)
+            return false;
 
         if (TryComp<WH40KTeamMemberComponent>(entity, out var member) &&
             TryGetTeamIndexById(member.TeamId, component, out teamIndex))

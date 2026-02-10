@@ -8,6 +8,7 @@
     - FlameThrowerFuelTank
   - type: BallisticAmmoProvider
     mayTransfer: true
+    cycleable: false
     proto: CartridgeFlameThrower
     capacity: 200
     whitelist:

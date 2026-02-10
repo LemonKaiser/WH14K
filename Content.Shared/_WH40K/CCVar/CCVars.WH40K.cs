@@ -29,7 +29,7 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.friendly_fire_ahelp_enabled", true, CVar.SERVERONLY);
 
     /// <summary>
-    ///     If true, friendly fire is allowed (no blocking) unless a role overrides it.
+    ///     If true, friendly fire is blocked between teammates unless attacker has WH40KFriendlyFireAllowed.
     /// </summary>
     public static readonly CVarDef<bool> WH40KFriendlyFireDisabled =
         CVarDef.Create("wh40k.friendly_fire_disabled", true, CVar.SERVERONLY);
