@@ -3,7 +3,7 @@ using System;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared.WH40K.Aiming;
+namespace Content.Shared._WH40K.Aiming;
 
 /// <summary>
 /// Stores global aiming toggle state for a user.

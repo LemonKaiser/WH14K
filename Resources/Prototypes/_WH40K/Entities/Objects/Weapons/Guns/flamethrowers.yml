@@ -1,6 +1,6 @@
 - type: entity
   id: FlameThrowerGun
-  parent: BaseWeaponRifle
+  parent: [BaseItem, BaseGunWieldable]
   suffix: WH40K
   components:
   - type: Sprite
@@ -12,6 +12,11 @@
       map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Flamethrower/flamethrower.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: AmmoCounter
   - type: Gun
     fireRate: 10
     minAngle: 0
@@ -24,6 +29,7 @@
       path: /Audio/_WH40K/Weapons/flamethrower.ogg
       params:
         volume: 3
+  - type: MagazineAmmoProvider
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -34,23 +40,18 @@
         priority: 2
         whitelist:
           tags:
-            - FlameThrowerFuelTank
-      gun_chamber:
-        name: Chamber
-        priority: 1
-        whitelist:
-          tags:
-            - CartridgeFlameThrower
+          - FlameThrowerFuelTank
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
-      gun_chamber: !type:ContainerSlot
+  - type: Appearance
   - type: MagazineVisuals
     magState: mag
     steps: 1
     zeroVisible: true
-  - type: Appearance
   - type: Item
     size: Huge
     shape:
     - 0,0,5,6
+  - type: StaticPrice
+    price: 500

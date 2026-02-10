@@ -3,16 +3,12 @@ using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Mech.Components;
 using Content.Shared.Mech.Equipment.Components;
-using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Systems;
-using Robust.Shared.Random;
 using Content.Shared.Power.Components;
 
 namespace Content.Server.Mech.Equipment.EntitySystems;
 public sealed class MechGunSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly MechSystem _mech = default!;
     [Dependency] private readonly BatterySystem _battery = default!;
 

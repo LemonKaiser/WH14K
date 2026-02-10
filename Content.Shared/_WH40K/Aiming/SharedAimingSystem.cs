@@ -3,7 +3,7 @@ using Content.Shared.Hands;
 using Content.Shared.Toggleable;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared.WH40K.Aiming;
+namespace Content.Shared._WH40K.Aiming;
 
 public sealed class SharedAimingSystem : EntitySystem
 {
