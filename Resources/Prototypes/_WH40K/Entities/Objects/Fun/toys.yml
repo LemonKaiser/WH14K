@@ -1,7 +1,7 @@
 - type: entity
   parent: BasePlushie
   id: PlushieFull
-  suffix: WH40K
+  suffix: WH40K, Fullmaster
   components:
     - type: Sprite
       sprite: _WH40K/Objects/Fun/toys.rsi
@@ -24,7 +24,7 @@
   parent: BasePlushie
   id: Plushielondorondondon
   name: LONDORONDONDON
-  suffix: WH40K
+  suffix: WH40K, LONDORONDONDON
   components:
     - type: Sprite
       sprite: _WH40K/Objects/Fun/toys.rsi
@@ -33,7 +33,7 @@
 - type: entity
   parent: BaseFigurine
   id: PlushieIfi07
-  suffix: WH40K
+  suffix: WH40K, Ifi07
   components:
     - type: Sprite
       sprite: _WH40K/Objects/Fun/toys.rsi
@@ -50,7 +50,7 @@
 - type: entity
   parent: BasePlushie
   id: StrangeToster
-  suffix: WH40K
+  suffix: WH40K, точно не endr_animet
   components:
     - type: Sprite
       sprite: _WH40K/Objects/Fun/toys.rsi
@@ -74,3 +74,47 @@
       wideAnimationRotation: 180
       soundHit:
         path: /Audio/_WH40K/Fun/metalpipe.ogg
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieEndrAnimet
+  suffix: WH40K, endr_animet
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: endr_animet
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieKaiser
+  suffix: WH40K, kaiser
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: kaiser
+
+- type: entity
+  parent: BaseItem
+  id: PlushieBiomass
+  suffix: WH40K, точно не biomass
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    layers:
+    - state: biomass
+    - state: biomass-unshaded
+      shader: unshaded
+  - type: AmbientSound
+    volume: 0
+    range: 7
+    sound:
+      path: /Audio/_WH40K/Fun/breath.ogg
+
+- type: entity
+  parent: BaseItem
+  id: PlushieLitiy
+  suffix: WH40K, Litiy
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: litiy
