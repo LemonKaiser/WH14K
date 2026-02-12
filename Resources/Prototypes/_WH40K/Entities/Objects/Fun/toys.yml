@@ -143,8 +143,6 @@
     sprite: _WH40K/Objects/Fun/toys.rsi
     state: solder
   - type: AudioLoop
-    volume: -3
-    range: 7
     sound:
       path: /Audio/_WH40K/Fun/funkytown.ogg
 
