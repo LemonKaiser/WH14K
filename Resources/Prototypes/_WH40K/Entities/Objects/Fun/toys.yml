@@ -37,7 +37,10 @@
   components:
     - type: Sprite
       sprite: _WH40K/Objects/Fun/toys.rsi
-      state: ifi
+      layers:
+      - state: ifi
+      - state: ifi-unshaded
+        shader: unshaded
     - type: SpeakOnTrigger
       pack: FigurinesIfi07
 
@@ -82,7 +85,12 @@
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Fun/toys.rsi
-    state: endr_animet
+    layers:
+    - state: endr_animet
+    - state: endr_animet-unshaded
+      shader: unshaded
+    - state: endr_animet-particls
+      shader: unshaded
 
 - type: entity
   parent: BasePlushie
@@ -91,7 +99,10 @@
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Fun/toys.rsi
-    state: kaiser
+    layers:
+    - state: kaiser
+    - state: kaiser-unshaded
+      shader: unshaded
 
 - type: entity
   parent: BaseItem
@@ -104,8 +115,12 @@
     - state: biomass
     - state: biomass-unshaded
       shader: unshaded
+  - type: PointLight
+    radius: 1.2
+    energy: 1
+    color: "#e58952"
   - type: AmbientSound
-    volume: 0
+    volume: 2
     range: 7
     sound:
       path: /Audio/_WH40K/Fun/breath.ogg
@@ -118,3 +133,47 @@
   - type: Sprite
     sprite: _WH40K/Objects/Fun/toys.rsi
     state: litiy
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSolder
+  suffix: WH40K, solder
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: solder
+  - type: AudioLoop
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/_WH40K/Fun/funkytown.ogg
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieAcic
+  suffix: WH40K, acic
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    layers:
+    - state: acic
+    - state: acic-unshaded
+      shader: unshaded
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieNecron
+  suffix: WH40K, necron
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: necron
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieCarbon
+  suffix: WH40K, carbon
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: carbon

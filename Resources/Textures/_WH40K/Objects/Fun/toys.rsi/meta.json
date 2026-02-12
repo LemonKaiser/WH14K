@@ -20,13 +20,43 @@
         "name": "ifi"
     },
     {
+        "name": "ifi-unshaded"
+    },
+    {
         "name": "lon"
     },
     {
         "name": "kaiser"
     },
     {
+        "name": "kaiser-unshaded"
+    },
+    {
         "name": "endr_animet"
+    },
+    {
+        "name": "endr_animet-unshaded"
+    },
+    {
+        "name": "endr_animet-particls",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
     },
     {
         "name": "biomass"
@@ -36,6 +66,21 @@
     },
     {
         "name": "litiy"
+    },
+    {
+        "name": "solder"
+    },
+    {
+        "name": "acic"
+    },
+    {
+        "name": "acic-unshaded"
+    },
+    {
+        "name": "necron"
+    },
+    {
+        "name": "carbon"
     }
   ]
 }
