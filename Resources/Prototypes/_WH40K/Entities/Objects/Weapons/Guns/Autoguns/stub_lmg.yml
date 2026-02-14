@@ -3,7 +3,6 @@
   id: WeaponStubLMG
   suffix: WH40K, Общий
   components:
-  - type: GunRequiresWield
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_lmg.rsi
@@ -17,8 +16,15 @@
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_lmg.rsi
+  - type: GunWieldBonus
+    minAngle: -30
+    maxAngle: -30
   - type: Gun
-    fireRate: 15
+    minAngle: 24
+    maxAngle: 45
+    angleIncrease: 4
+    angleDecay: 16
+    fireRate: 6
     availableModes:
     - FullAuto
     selectedMode: FullAuto
@@ -37,7 +43,7 @@
         priority: 2
         whitelist:
           tags:
-            - MagazineStabLMG
+            - MagazineStubLMG
       gun_chamber:
         name: Chamber
         startingItem: Cartridge825mmLong

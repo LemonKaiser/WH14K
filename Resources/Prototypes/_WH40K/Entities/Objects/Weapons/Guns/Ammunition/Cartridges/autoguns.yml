@@ -28,12 +28,12 @@
   parent: BaseCartridgeLightRifle
   suffix: WH40K
   components:
-  - type: CartridgeAmmo
-    deleteOnSpawn: true
   - type: Tag
     tags:
     - Cartridge
     - Cartridge825mmLong
+  - type: CartridgeAmmo
+    proto: Bullet825mmLong
 
 - type: entity
   id: Cartridge10mmLong

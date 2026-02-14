@@ -30,7 +30,7 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
-    id: PassengerPDA
+    id: EnginseerDogTag
 
 - type: chameleonOutfit
   id: EnginseerChameleonOutfit

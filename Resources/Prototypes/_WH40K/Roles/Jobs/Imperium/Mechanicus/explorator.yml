@@ -32,7 +32,7 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
     mask: ClothingMaskGasTechPriest
-    id: PassengerPDA
+    id: ExploratorDogTag
 
 - type: chameleonOutfit
   id: ExploratorChameleonOutfit

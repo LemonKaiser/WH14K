@@ -19,7 +19,7 @@
     back: ClothingBackpackTechpriest
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
-    id: PassengerPDA
+    id: NoviceDogTag
 
 - type: chameleonOutfit
   id: NoviceChameleonOutfit

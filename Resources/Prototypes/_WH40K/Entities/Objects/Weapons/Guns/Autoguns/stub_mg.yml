@@ -17,8 +17,15 @@
         map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_mg_clothing.rsi
+  - type: GunWieldBonus
+    minAngle: -20
+    maxAngle: -20
   - type: Gun
-    fireRate: 20
+    minAngle: 24
+    maxAngle: 45
+    angleIncrease: 4
+    angleDecay: 16
+    fireRate: 8.5
     availableModes:
     - FullAuto
     selectedMode: FullAuto

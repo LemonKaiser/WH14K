@@ -1,0 +1,265 @@
+- type: entity
+  parent: IDCardStandard
+  id: StandardDogTag
+  name: армейский жетон
+  description: Железяка с чипом по которой вас могут узнать.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/dog_tags.rsi
+    state: icon
+  - type: Item
+    storedRotation: 0
+
+- type: entity
+  parent: StandardDogTag
+  id: GuardsmanDogTag
+  components:
+  - type: PresetIdCard
+    job: Guardsman
+
+- type: entity
+  parent: StandardDogTag
+  id: ColonelDogTag
+  components:
+  - type: PresetIdCard
+    job: Colonel
+
+- type: entity
+  parent: StandardDogTag
+  id: CommissarDogTag
+  components:
+  - type: PresetIdCard
+    job: Commissar
+
+- type: entity
+  parent: StandardDogTag
+  id: LieutenantDogTag
+  components:
+  - type: PresetIdCard
+    job: Lieutenant
+
+- type: entity
+  parent: StandardDogTag
+  id: MedicDogTag
+  components:
+  - type: PresetIdCard
+    job: Medic
+
+- type: entity
+  parent: StandardDogTag
+  id: SergeantDogTag
+  components:
+  - type: PresetIdCard
+    job: Sergeant
+
+- type: entity
+  parent: StandardDogTag
+  id: SergeantHWSDogTag
+  components:
+  - type: PresetIdCard
+    job: SergeantHWS
+
+- type: entity
+  parent: StandardDogTag
+  id: SergeantSWSDogTag
+  components:
+  - type: PresetIdCard
+    job: SergeantSWS
+
+- type: entity
+  parent: StandardDogTag
+  id: SpecialistHWSDogTag
+  components:
+  - type: PresetIdCard
+    job: SpecialistHWS
+
+- type: entity
+  parent: StandardDogTag
+  id: SpecialistSWSDogTag
+  components:
+  - type: PresetIdCard
+    job: SpecialistSWS
+
+- type: entity
+  parent: StandardDogTag
+  id: TankCommDogTag
+  components:
+  - type: PresetIdCard
+    job: TankComm
+
+- type: entity
+  parent: StandardDogTag
+  id: TankerDogTag
+  components:
+  - type: PresetIdCard
+    job: Tanker
+
+- type: entity
+  parent: StandardDogTag
+  id: EnginseerDogTag
+  components:
+  - type: PresetIdCard
+    job: Enginseer
+
+- type: entity
+  parent: StandardDogTag
+  id: ExploratorDogTag
+  components:
+  - type: PresetIdCard
+    job: Explorator
+
+- type: entity
+  parent: StandardDogTag
+  id: GenetorDogTag
+  components:
+  - type: PresetIdCard
+    job: Genetor
+
+- type: entity
+  parent: StandardDogTag
+  id: LexmechanicDogTag
+  components:
+  - type: PresetIdCard
+    job: Lexmechanic
+
+- type: entity
+  parent: StandardDogTag
+  id: MagosDogTag
+  components:
+  - type: PresetIdCard
+    job: Magos
+
+- type: entity
+  parent: StandardDogTag
+  id: NoviceDogTag
+  components:
+  - type: PresetIdCard
+    job: Novice
+
+# eretics
+
+- type: entity
+  parent: StandardDogTag
+  id: HGuardsmanDogTag
+  components:
+  - type: PresetIdCard
+    job: HGuardsman
+
+- type: entity
+  parent: StandardDogTag
+  id: HColonelDogTag
+  components:
+  - type: PresetIdCard
+    job: HColonel
+
+- type: entity
+  parent: StandardDogTag
+  id: HCommissarDogTag
+  components:
+  - type: PresetIdCard
+    job: HCommissar
+
+- type: entity
+  parent: StandardDogTag
+  id: HLieutenantDogTag
+  components:
+  - type: PresetIdCard
+    job: HLieutenant
+
+- type: entity
+  parent: StandardDogTag
+  id: HMedicDogTag
+  components:
+  - type: PresetIdCard
+    job: HMedic
+
+- type: entity
+  parent: StandardDogTag
+  id: HSergeantDogTag
+  components:
+  - type: PresetIdCard
+    job: HSergeant
+
+- type: entity
+  parent: StandardDogTag
+  id: HSergeantHWSDogTag
+  components:
+  - type: PresetIdCard
+    job: HSergeantHWS
+
+- type: entity
+  parent: StandardDogTag
+  id: HSergeantSWSDogTag
+  components:
+  - type: PresetIdCard
+    job: HSergeantSWS
+
+- type: entity
+  parent: StandardDogTag
+  id: HSpecialistHWSDogTag
+  components:
+  - type: PresetIdCard
+    job: HSpecialistHWS
+
+- type: entity
+  parent: StandardDogTag
+  id: HSpecialistSWSDogTag
+  components:
+  - type: PresetIdCard
+    job: HSpecialistSWS
+
+- type: entity
+  parent: StandardDogTag
+  id: HTankCommDogTag
+  components:
+  - type: PresetIdCard
+    job: HTankComm
+
+- type: entity
+  parent: StandardDogTag
+  id: HTankerDogTag
+  components:
+  - type: PresetIdCard
+    job: HTanker
+
+- type: entity
+  parent: StandardDogTag
+  id: HEnginseerDogTag
+  components:
+  - type: PresetIdCard
+    job: HEnginseer
+
+- type: entity
+  parent: StandardDogTag
+  id: HExploratorDogTag
+  components:
+  - type: PresetIdCard
+    job: HExplorator
+
+- type: entity
+  parent: StandardDogTag
+  id: HGenetorDogTag
+  components:
+  - type: PresetIdCard
+    job: HGenetor
+
+- type: entity
+  parent: StandardDogTag
+  id: HLexmechanicDogTag
+  components:
+  - type: PresetIdCard
+    job: HLexmechanic
+
+- type: entity
+  parent: StandardDogTag
+  id: HMagosDogTag
+  components:
+  - type: PresetIdCard
+    job: Magos
+
+- type: entity
+  parent: StandardDogTag
+  id: HNoviceDogTag
+  components:
+  - type: PresetIdCard
+    job: HNovice

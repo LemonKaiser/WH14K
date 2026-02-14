@@ -1,3 +1,4 @@
+# Флак-броня
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorFlakVest
@@ -13,13 +14,14 @@
         Blunt: 0.6
         Slash: 0.6
         Piercing: 0.7
-        Heat: 0.8
+        Heat: 0.6
   - type: ExplosionResistance
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier
     walkModifier: 0.95
     sprintModifier: 0.95
 
+# флак-жилет медика
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorFlakVestMed
@@ -29,6 +31,7 @@
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/medflakvest.rsi
 
+# броня бладпакта
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorBloodpact
@@ -39,6 +42,7 @@
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresy_armor.rsi
 
+# броня еретика
 - type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorFlakVestHeretic
@@ -49,6 +53,7 @@
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestheresy.rsi
 
+# Флак-броня (Облегчённая)
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorFlakVestLight
@@ -61,18 +66,16 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.7
-        Slash: 0.7
-        Piercing: 0.8
-        Heat: 0.9
+        Blunt: 0.65
+        Slash: 0.65
+        Piercing: 0.75
+        Heat: 0.7
   - type: ExplosionResistance
     damageCoefficient: 0.7
-  - type: ClothingSpeedModifier
-    walkModifier: 0.98
-    sprintModifier: 0.98
 
+# Осквернённая бронижелет хаоса
 - type: entity
-  parent: ClothingOuterArmorBasic
+  parent: ClothingOuterArmorFlakVestLight
   id: ClothingOuterArmorChaosVest
   name: Осквернённая бронижелет хаоса
   description: Полный комплект осквернённой брони хаоса для рядового культиста. Обеспечивает надёжную защиту, но её чуждый металл давит на тело и ограничивает движения.
@@ -82,19 +85,8 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flak_armour.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/flak_armour.rsi
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.7
-        Slash: 0.7
-        Piercing: 0.8
-        Heat: 0.9
-  - type: ExplosionResistance
-    damageCoefficient: 0.7
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
 
+# панцирная броня
 - type: entity
   parent: ClothingOuterArmorBasic
   id: ClothingOuterArmorAdvancedFlakVest
@@ -107,16 +99,17 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.3
-        Slash: 0.3
-        Piercing: 0.4
-        Heat: 0.5
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.45
+        Heat: 0.4
   - type: ExplosionResistance
     damageCoefficient: 0.4
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
 
+# панцирный нагрудник
 - type: entity
   parent: ClothingOuterArmorAdvancedFlakVest
   id: ClothingOuterArmorFlakVestGen
@@ -129,16 +122,17 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.3
-        Slash: 0.3
-        Piercing: 0.4
-        Heat: 0.5
+        Blunt: 0.35
+        Slash: 0.35
+        Piercing: 0.35
+        Heat: 0.55
   - type: ExplosionResistance
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier
     walkModifier: 0.95
     sprintModifier: 0.95
 
+# панцирная броня еретиков
 - type: entity
   parent: ClothingOuterArmorAdvancedFlakVest
   id: ClothingOuterArmorAdvancedFlakVestHeretic

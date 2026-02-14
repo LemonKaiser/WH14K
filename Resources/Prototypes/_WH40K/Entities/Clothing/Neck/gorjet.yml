@@ -27,7 +27,7 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
   - type: Reflect
-    reflectProb: 0.01
+    reflectProb: 0.2
     reflects:
       - Energy
       - NonEnergy

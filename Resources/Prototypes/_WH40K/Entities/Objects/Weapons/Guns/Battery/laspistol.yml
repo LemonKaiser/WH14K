@@ -7,7 +7,7 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Battery/laspistol.rsi
   - type: Gun
-    fireRate: 3
+    fireRate: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto

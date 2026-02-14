@@ -10,9 +10,9 @@
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.5
-        Slash: 0.5
-        Piercing: 0.55
+        Blunt: 0.45
+        Slash: 0.45
+        Piercing: 0.5
         Heat: 0.55
         Caustic: 0.9
   - type: ClothingSpeedModifier
@@ -33,7 +33,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/officrercoat.rsi
 
 - type: entity
-  parent: ClothingOuterArmorCommissar
+  parent: ClothingOuterArmorOfficer
   id: ClothingOuterArmorCultistCoat
   name: шинель культиста
   description: Тёмная шинель, пропитанная символами Хаоса. Она внушает страх своим видом.
@@ -43,11 +43,42 @@
     sprite: _WH40K/Clothing/OuterClothing/Coats/overcoat.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Coats/overcoat.rsi
+
+- type: entity
+  parent: [ClothingOuterBaseLarge, AllowSuitStorageClothing]
+  id: ClothingOuterArmorSeniorOfficerArmoredJacket
+  suffix: WH40K, флот
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/captain.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/captain.rsi
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.95
-        Slash: 0.95
-        Piercing: 0.97
-        Heat: 1.0
-        Radiation: 0.9
+        Blunt: 0.6
+        Slash: 0.6
+        Piercing: 0.6
+        Heat: 0.6
+        Caustic: 0.9
+  - type: ClothingSpeedModifier
+    walkModifier: 1.0
+    sprintModifier: 1.0
+  - type: HeldSpeedModifier
+  - type: ExplosionResistance
+    damageCoefficient: 0.65
+  - type: GroupExamine
+
+- type: entity
+  parent: ClothingOuterArmorSeniorOfficerArmoredJacket
+  id: ClothingOuterArmorJuniorOfficerArmoredJacket
+  suffix: WH40K, флот
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.7
+        Slash: 0.7
+        Piercing: 0.7
+        Heat: 0.7
+        Caustic: 0.9

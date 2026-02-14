@@ -14,8 +14,8 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 20
-        Heat: 20
+        Slash: 15
+        Heat: 15
     angle: 80
   # - type: DamageOtherOnHit
   #   staminaCost: 5
@@ -65,7 +65,7 @@
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Shock: 10
+        Shock: 15
   # - type: ItemToggleDamageOtherOnHit
   - type: Stunbaton
     energyPerUse: 20

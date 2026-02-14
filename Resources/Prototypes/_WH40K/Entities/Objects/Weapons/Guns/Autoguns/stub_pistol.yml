@@ -32,7 +32,7 @@
           tags:
             - Cartridge10mm
   - type: Gun
-    fireRate: 3
+    fireRate: 3.5
     availableModes:
     - SemiAuto
     soundGunshot:

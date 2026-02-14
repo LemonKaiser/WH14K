@@ -54,7 +54,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 60
+        Piercing: 55
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
@@ -162,8 +162,9 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 7
-        Radiation: 15
+        Piercing: 10
+        Radiation: 10
+        Structural: 10
   - type: PointLight
     enabled: true
     color: "#38c24f"
@@ -172,6 +173,16 @@
   - type: RadiationSource
     intensity: 6
     slope: 0.3
+
+- type: entity
+  id: Bullet825mmLong
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 18
 
 - type: entity
   id: WHBulletPlasmaSentine

@@ -32,7 +32,7 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     mask: ClothingMaskGasTechPriest
-    id: PassengerPDA
+    id: LexmechanicDogTag
 
 - type: chameleonOutfit
   id: LexmechanicChameleonOutfit
