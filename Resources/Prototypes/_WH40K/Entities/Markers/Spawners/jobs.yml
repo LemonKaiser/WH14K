@@ -176,11 +176,11 @@
 - type: entity
   id: SpawnPointSergeantHWS
   parent: SpawnPointJobBase
-  name: SergeantHWS
-  suffix: WH40K, Империум
+  name: удали это с карты
+  suffix: WH40K, Империум, НЕ МАППИТЬ
   components:
   - type: SpawnPoint
-    job_id: SergeantHWS
+    job_id: sergeant
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -191,11 +191,11 @@
 - type: entity
   id: SpawnPointSergeantSWS
   parent: SpawnPointJobBase
-  name: SergeantSWS
-  suffix: WH40K, Империум
+  name: удали это с карты
+  suffix: WH40K, Империум, НЕ МАППИТЬ
   components:
   - type: SpawnPoint
-    job_id: SergeantSWS
+    job_id: sergeant
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -356,11 +356,11 @@
 - type: entity
   id: SpawnPointHSergeantHWS
   parent: SpawnPointJobBase
-  name: SergeantHWS
-  suffix: WH40K, Еретик
+  name: удали это с карты
+  suffix: WH40K, Еретик, НЕ МАППИТЬ
   components:
   - type: SpawnPoint
-    job_id: HSergeantHWS
+    job_id: HSergeant
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -372,11 +372,11 @@
 - type: entity
   id: SpawnPointHSergeantSWS
   parent: SpawnPointJobBase
-  name: SergeantSWS
-  suffix: WH40K, Еретик
+  name: удали это с карты
+  suffix: WH40K, Еретик, НЕ МАППИТЬ
   components:
   - type: SpawnPoint
-    job_id: HSergeantSWS
+    job_id: HSergeant
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:

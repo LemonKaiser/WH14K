@@ -12,6 +12,10 @@
   - type: HideLayerClothing
     slots:
     - Snout
+  - type: Armor
+    modifiers:
+      coefficients:
+        Radiation: 0.85
 
 - type: entity
   parent: ClothingMaskPullableBase
@@ -41,7 +45,11 @@
     hideOnToggle: true
   - type: FlashImmunity
   - type: EyeProtection
-        
+  - type: Armor
+    modifiers:
+      coefficients:
+        Radiation: 0.8
+
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasChaosCultist1
@@ -63,7 +71,7 @@
 - type: entity
   parent: ClothingMaskGas
   id: ClothingMaskGasChaosCultist2
-  name: Противогаз Хаоса
+  name: противогаз Хаоса
   description: Оно вообще работает? Сделан из человеческой кожи.
   suffix: WH40K, Культ Хаоса
   components:

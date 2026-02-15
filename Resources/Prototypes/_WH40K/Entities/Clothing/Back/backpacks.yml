@@ -110,7 +110,7 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackCULT1
-  name: Рюкзак культиста хаоса
+  name: рюкзак культиста Хаоса
   description: Рюкзак, сотканный из кожи неведомого происхождения, вмещает припасы, оружие и тайные книги служителей Хаоса.
   components:
   - type: Sprite
@@ -119,8 +119,8 @@
 - type: entity
   parent: ClothingBackpack
   id: ClothingBackpackCULT2
-  name: Рюкзак культиста хаоса с черепом
-  description: Рюкзак, сотканный из кожи неведомого происхождения и с черепом , вмещает припасы, оружие и тайные книги служителей Хаоса.
+  name: рюкзак культиста Хаоса с черепом
+  description: Рюкзак, сотканный из кожи неведомого происхождения и с черепом, вмещает припасы, оружие и тайные книги служителей Хаоса.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/cultchaospak2.rsi

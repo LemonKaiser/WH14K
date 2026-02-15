@@ -19,20 +19,22 @@ job-name-tank-comm = танк командир
 job-name-specialist-hws = специалист ОТВ
 job-name-specialist-sws = специалист ОСВ
 job-name-tanker = танкист
-job-name-medic = медик
+job-name-medic = хирургеон
 job-name-guardsman = гвардеец
-job-name-hcolonel = Воевода Ереси
+
+
+job-name-hcolonel = Ересиарх
 job-name-hcommissar = Комиссар-Каратель
-job-name-hlieutenant = Лейтенант Клятвопреступников
+job-name-hlieutenant = Чемпион Хаоса
 job-name-hsergeant-hws = Сержант ОТВ Скверны
 job-name-hsergeant-sws = Сержант ОСВ Скверны
-job-name-hsergeant = Сержант Скверны
+job-name-hsergeant = Избранный Хаоса
 job-name-htank-comm = Мастер Бронеколонн
 job-name-hspecialist-hws = Специалист ОТВ Скверны
 job-name-hspecialist-sws = Специалист ОСВ Скверны
 job-name-htanker = Броневод Культа
 job-name-hmedic = Полевой хирург Ереси
-job-name-hguardsman = Проклятый гвардеец
+job-name-hguardsman = Культист
 job-name-hmagos = Архимагос Ереси
 job-name-hexplorator = Изыскатель Осквернённых Миров
 job-name-hlexmechanic = Лексмеханик Осквернения
