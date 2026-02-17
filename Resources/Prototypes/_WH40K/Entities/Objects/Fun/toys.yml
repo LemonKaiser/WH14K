@@ -175,3 +175,64 @@
   - type: Sprite
     sprite: _WH40K/Objects/Fun/toys.rsi
     state: carbon
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieSuslik
+  suffix: WH40K, Suslik
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: suslik
+
+- type: entity
+  parent: BasePlushie
+  id: PlushiePopug
+  suffix: WH40K, AtomicMarker
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: popug
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieOliva
+  suffix: WH40K, Oliva
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/toys.rsi
+    state: oliva
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieFizzo
+  name: FizzoGhoster
+  suffix: WH40K, Fizzo
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/Plushies/fizzo.rsi
+    state: icon
+  - type: EmitSoundOnUse
+    volume: -5
+    sound:
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+  - type: EmitSoundOnLand
+    volume: -5
+    sound:
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+  - type: EmitSoundOnCollide
+    sound:
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+  - type: EmitSoundOnActivate
+    volume: -5
+    sound:
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+  - type: EmitSoundOnTrigger
+    volume: -5
+    sound:
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+  - type: MeleeWeapon
+    wideAnimationRotation: 180
+    soundHit:
+      volume: -5
+      path: /Audio/_WH40K/Fun/yarishon-squee.ogg

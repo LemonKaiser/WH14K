@@ -46,6 +46,7 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetBloodPact
@@ -109,3 +110,15 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: [ClothingHeadHelmetFlak, ShowMedicalIcons]
+  id: ClothingHeadHelmetFlakMed
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed.rsi
+  - type: Item
+    size: Normal

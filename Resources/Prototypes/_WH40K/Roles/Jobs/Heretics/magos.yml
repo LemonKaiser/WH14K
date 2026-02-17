@@ -3,6 +3,7 @@
   name: job-name-hmagos
   description: job-description-magos
   playTimeTracker: JobHMagos
+  setPreference: false
   requirements:
     # - !type:CharacterTraitRequirement
     #   inverted: true

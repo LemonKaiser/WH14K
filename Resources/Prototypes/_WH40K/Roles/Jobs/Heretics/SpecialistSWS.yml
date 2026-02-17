@@ -3,6 +3,7 @@
   name: job-name-hspecialist-sws
   description: job-description-specialist-sws
   playTimeTracker: JobHSpecialistSWS
+  setPreference: false
   startingGear: HeresyGuardsmanGear
   icon: "JobIconSpecialistSWS"
   supervisors: job-supervisors-engineering

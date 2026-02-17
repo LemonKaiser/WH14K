@@ -3,7 +3,7 @@
   name: job-name-specialist-sws
   description: job-description-specialist-sws
   playTimeTracker: JobSpecialistSWS
-  startingGear: GuardsmanGear
+  startingGear: GuardsmanSpesSpecGear
   icon: "JobIconSpecialistSWS"
   supervisors: job-supervisors-engineering
   canBeAntag: false
@@ -11,3 +11,16 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: GuardsmanSpesSpecGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    mask: ClothingMaskGasGuardsman
+    head: ClothingHeadHelmetFlakResp
+    eyes: ClothingEyesHudGuard
+    outerClothing: ClothingOuterArmorFlakVestLight
+    id: GuardsmanDogTag

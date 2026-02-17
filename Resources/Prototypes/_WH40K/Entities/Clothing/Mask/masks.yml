@@ -106,3 +106,22 @@
     modifiers:
       coefficients:
         Radiation: 0.85
+
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasGuardsman
+  suffix: WH40K, Гвардия
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/respirator_guard.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/respirator_guard.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout
+  - type: Armor
+    modifiers:
+      coefficients:
+        Radiation: 0.85

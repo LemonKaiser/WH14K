@@ -3,6 +3,7 @@
   name: job-name-hcommissar
   description: job-description-commissar
   playTimeTracker: JobHCommissar
+  setPreference: false
   startingGear: HeresyCommissarGear
   icon: "JobIconCommissar"
   supervisors: job-supervisors-engineering

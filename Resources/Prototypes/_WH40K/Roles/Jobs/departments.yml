@@ -23,8 +23,6 @@
   - TankComm
   - Tanker
   - Sergeant
-  - SergeantSWS
-  - SergeantHWS
   - SpecialistSWS
   - SpecialistHWS
   - Guardsman
@@ -43,6 +41,7 @@
   - HGenetor
   - HEnginseer
   - HNovice
+  editorHidden: true
 
 - type: department
   id: Heretics
@@ -56,8 +55,6 @@
   - HTankComm
   - HTanker
   - HSergeant
-  - HSergeantSWS
-  - HSergeantHWS
   - HSpecialistSWS
   - HSpecialistHWS
   - HGuardsman

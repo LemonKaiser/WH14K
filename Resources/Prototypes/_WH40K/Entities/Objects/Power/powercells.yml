@@ -11,6 +11,8 @@
     pricePerJoule: 0.15
   - type: PowerCell
   - type: Appearance
+  - type: BatterySelfRecharger
+    autoRechargeRate: 10
   - type: Riggable
 
 - type: entity
@@ -26,8 +28,6 @@
   - type: Tag
     tags:
       - LasgunPowerCell
-  - type: BatterySelfRecharger
-    autoRechargeRate: 10
   - type: BatteryAmmoProvider
     proto: RedMediumLaser
     fireCost: 50
@@ -129,8 +129,33 @@
     maxCharge: 4000
     startingCharge: 4000
     pricePerJoule: 0.15
-  - type: BatterySelfRecharger
-    autoRechargeRate: 10
   - type: BatteryAmmoProvider
     proto: RedLaserAccatranLong
     fireCost: 50
+
+- type: entity
+  parent: [Clothing, ClothingSlotBase]
+  id: ClothingBackpackHellEnergy
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+    - HellBackpackEnergy
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
+    state: icon
+  - type: Item
+    size: Ginormous
+  - type: Clothing
+    slots: BACK
+    sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
+  - type: Appearance
+  - type: BatterySelfRecharger
+    autoRechargeRate: 10
+  - type: BatteryAmmoProvider
+    proto: RedLaserLong
+    fireCost: 50
+  - type: Battery
+    maxCharge: 100000
+    startingCharge: 100000
+    pricePerJoule: 0.15

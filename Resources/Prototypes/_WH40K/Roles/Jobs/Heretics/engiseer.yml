@@ -3,6 +3,7 @@
   name: job-name-henginseer
   description: job-description-enginseer
   playTimeTracker: JobHEnginseer
+  setPreference: false
   requirements:
     - !type:DepartmentTimeRequirement
       department: Imperium

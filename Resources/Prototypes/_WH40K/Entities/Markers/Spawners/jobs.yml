@@ -174,36 +174,6 @@
       - state: sergeant
 
 - type: entity
-  id: SpawnPointSergeantHWS
-  parent: SpawnPointJobBase
-  name: удали это с карты
-  suffix: WH40K, Империум, НЕ МАППИТЬ
-  components:
-  - type: SpawnPoint
-    job_id: Sergeant
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: HWS
-      - state: sergeant
-
-- type: entity
-  id: SpawnPointSergeantSWS
-  parent: SpawnPointJobBase
-  name: удали это с карты
-  suffix: WH40K, Империум, НЕ МАППИТЬ
-  components:
-  - type: SpawnPoint
-    job_id: Sergeant
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: SWS
-      - state: sergeant
-
-- type: entity
   id: SpawnPointSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
@@ -351,38 +321,6 @@
     layers:
       - state: green
       - state: heretic
-      - state: sergeant
-
-- type: entity
-  id: SpawnPointHSergeantHWS
-  parent: SpawnPointJobBase
-  name: удали это с карты
-  suffix: WH40K, Еретик, НЕ МАППИТЬ
-  components:
-  - type: SpawnPoint
-    job_id: HSergeant
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: HWS
-      - state: sergeant
-
-- type: entity
-  id: SpawnPointHSergeantSWS
-  parent: SpawnPointJobBase
-  name: удали это с карты
-  suffix: WH40K, Еретик, НЕ МАППИТЬ
-  components:
-  - type: SpawnPoint
-    job_id: HSergeant
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: SWS
       - state: sergeant
 
 - type: entity

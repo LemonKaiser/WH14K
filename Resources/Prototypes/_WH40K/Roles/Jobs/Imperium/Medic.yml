@@ -19,6 +19,6 @@
     back: ClothingBackpackGuard
     shoes: ClothingShoesAnkleBoots
     belt: guardbelt
-    head: ClothingHeadHelmetFlak
+    head: ClothingHeadHelmetFlakMed
     outerClothing: ClothingOuterArmorFlakVestMed
     id: MedicDogTag

@@ -1,0 +1,43 @@
+- type: entity
+  id: WeaponHellgun
+  parent: BaseItem
+  name: hellgun
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+    - Hellgun
+  - type: ClothingSlotAmmoProvider
+  - type: AmmoCounter
+  - type: Gun
+    fireRate: 1
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
+  - type: Appearance
+  - type: StaticPrice
+    price: 500
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
+    scale: 0.85,0.85
+    layers:
+      - state: base
+        map: ["enum.GunVisualLayers.Base"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2_in-hands.rsi
+    size: Huge
+    shape:
+    - 0,0,4,1
+  - type: SlotBasedConnectedContainer
+    targetSlot: BACK
+    containerWhitelist:
+      tags:
+      - HellBackpackEnergy
+  - type: HeldSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95

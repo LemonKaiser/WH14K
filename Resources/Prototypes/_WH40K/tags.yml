@@ -75,3 +75,9 @@
 
 - type: Tag
   id: barricade
+
+- type: Tag
+  id: HellBackpackEnergy
+
+- type: Tag
+  id: Hellgun

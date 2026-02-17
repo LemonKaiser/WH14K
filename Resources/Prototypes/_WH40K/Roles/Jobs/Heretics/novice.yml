@@ -4,6 +4,7 @@
   description: job-description-novice
   playTimeTracker: JobHNovice
   startingGear: NoviceGear
+  setPreference: false
   icon: "JobIconNovice"
   supervisors: job-supervisors-engineering
   canBeAntag: false
