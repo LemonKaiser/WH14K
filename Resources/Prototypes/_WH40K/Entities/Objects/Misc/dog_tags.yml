@@ -54,20 +54,6 @@
 
 - type: entity
   parent: StandardDogTag
-  id: SergeantHWSDogTag
-  components:
-  - type: PresetIdCard
-    job: SergeantHWS
-
-- type: entity
-  parent: StandardDogTag
-  id: SergeantSWSDogTag
-  components:
-  - type: PresetIdCard
-    job: SergeantSWS
-
-- type: entity
-  parent: StandardDogTag
   id: SpecialistHWSDogTag
   components:
   - type: PresetIdCard
@@ -179,20 +165,6 @@
   components:
   - type: PresetIdCard
     job: HSergeant
-
-- type: entity
-  parent: StandardDogTag
-  id: HSergeantHWSDogTag
-  components:
-  - type: PresetIdCard
-    job: HSergeantHWS
-
-- type: entity
-  parent: StandardDogTag
-  id: HSergeantSWSDogTag
-  components:
-  - type: PresetIdCard
-    job: HSergeantSWS
 
 - type: entity
   parent: StandardDogTag

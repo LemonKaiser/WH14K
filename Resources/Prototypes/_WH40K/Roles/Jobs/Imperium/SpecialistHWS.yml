@@ -3,7 +3,7 @@
   name: job-name-specialist-hws
   description: job-description-specialist-hws
   playTimeTracker: JobSpecialistHWS
-  startingGear: GuardsmanSpecGear
+  startingGear: GuardsmanHevSpecGear
   icon: "JobIconSpecialistHWS"
   supervisors: job-supervisors-engineering
   canBeAntag: false

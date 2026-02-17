@@ -213,26 +213,33 @@
     sprite: _WH40K/Objects/Fun/Plushies/fizzo.rsi
     state: icon
   - type: EmitSoundOnUse
-    volume: -5
     sound:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
   - type: EmitSoundOnLand
-    volume: -5
     sound:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
   - type: EmitSoundOnCollide
     sound:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
   - type: EmitSoundOnActivate
-    volume: -5
     sound:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
   - type: EmitSoundOnTrigger
-    volume: -5
     sound:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
   - type: MeleeWeapon
     wideAnimationRotation: 180
     soundHit:
-      volume: -5
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
