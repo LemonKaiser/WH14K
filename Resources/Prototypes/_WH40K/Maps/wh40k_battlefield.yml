@@ -31,7 +31,6 @@
             Novice: [ -1, -1 ]
             # Heretics
             HColonel: [ 1, 0 ]
-            HCommissar: [ 1, 0 ]
             HLieutenant: [ 2, 1 ]
             HSergeant: [ 4, 4 ]
             HGuardsman: [ -1, -1 ]
