@@ -4,7 +4,6 @@ using Robust.Shared.Audio.Systems;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio.Effects;
 using Robust.Shared.GameObjects;
-using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 
 namespace Content.Shared.Stray.AudioLoop;
