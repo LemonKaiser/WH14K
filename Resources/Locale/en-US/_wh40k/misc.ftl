@@ -26,3 +26,8 @@ figurines-ifi-4 = "Write it down, recolor"
 materials-datapoint = raw data
 
 loadout-group-techpriest-neck = robe, tech-priest
+
+wh40k-store-vox-astartes-name = Laser carbine
+wh40k-store-vox-astartes-desc = A compact lascarbine for mobile troopers and vox-operators.
+wh40k-store-vox-lasgun-power-cell-name = Box of lasgun power cells
+wh40k-store-vox-lasgun-power-cell-desc = A box of power cells for lasguns and lascarbines, meant to replenish field ammunition stocks.

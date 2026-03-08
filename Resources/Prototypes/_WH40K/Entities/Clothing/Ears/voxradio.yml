@@ -2,7 +2,6 @@
   parent: ClothingHeadset
   id: ClothingHeadsetVoxBackpack
   suffix: WH40K
-  description: 
   components:
   - type: ContainerFill
     containers:
@@ -18,7 +17,6 @@
   parent: EncryptionKey
   id: EncryptionKeyVox
   suffix: WH40K
-  description: 
   components:
   - type: EncryptionKey
     channels:

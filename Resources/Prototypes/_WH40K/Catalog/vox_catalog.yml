@@ -1,7 +1,7 @@
 - type: listing
   id: VoxAstartes
-  name: Лазерный карабин
-  description: Карабин, вооот.
+  name: wh40k-store-vox-astartes-name
+  description: wh40k-store-vox-astartes-desc
   productEntity: WeaponLaserLasgun
   cost:
     intelligence_imp: 4
@@ -12,8 +12,8 @@
 
 - type: listing
   id: VoxLasgunPowerCell
-  name: Коробка батарей лазгана
-  description: батареи лазгана, пораженные варпом
+  name: wh40k-store-vox-lasgun-power-cell-name
+  description: wh40k-store-vox-lasgun-power-cell-desc
   productEntity: BoxLasgunPowerCell
   cost:
     intelligence_imp: 2

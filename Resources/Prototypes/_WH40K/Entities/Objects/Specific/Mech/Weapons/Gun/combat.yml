@@ -1,6 +1,5 @@
 - type: entity
   id: WeaponMechCombatSentinelRifle
-  description: Placeholder.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
   components:
@@ -22,7 +21,6 @@
 
 - type: entity
   id: WeaponMechCombatSentinelPlasma
-  description: Placeholder.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
   components:

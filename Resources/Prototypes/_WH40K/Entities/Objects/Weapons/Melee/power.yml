@@ -41,7 +41,6 @@
 - type: entity
   parent: BaseItem
   id: WHPowerMaceImperial
-  description: filler
   suffix: WH40K
   components:
   - type: Sprite

@@ -1,7 +1,6 @@
 - type: entity
   parent: [ BaseWeaponLauncher, BaseMajorContraband ]
   id: WeaponRocketLauncher
-  description:
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Launcher/rocketlauncher.rsi

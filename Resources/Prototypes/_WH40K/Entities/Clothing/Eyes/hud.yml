@@ -1,7 +1,6 @@
 - type: entity
   parent: [ClothingEyesBase]
   id: ClothingEyesHudTechPriest
-  description: Filler
   suffix: WH40K, адмехи
   components:
   - type: Sprite

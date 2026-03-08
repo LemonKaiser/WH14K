@@ -65,13 +65,16 @@ ent-colbelt = colonel's belt
     .desc = Gorgeously embroidered, expensive and durable Colonel belt, spacious and shiny.
 
 ent-ClothingHeadsetVoxBackpack = radio operator headset
+    .desc = A field headset tied into the regiment's vox network for relaying orders and battlefield reports.
 
 ent-EncryptionKeyVox = vox encryption key
+    .desc = An encryption key used to access the regiment's secured vox channel.
 
 ent-ClothingEyesHudGuard = tactical glasses
     .desc = Protects against splinters and dirt
 
 ent-ClothingEyesHudTechPriest = Tech-Priest's Visor
+    .desc = An augmetic visor with tactical lenses and auspex readouts for monitoring flesh and machinery alike.
 
 ent-ClothingHandsGlovesCombatVoidsman = combat gloves
     .desc = Navy combat gloves.
@@ -86,7 +89,7 @@ ent-ClothingHandsGlovesBloodPact = bloodpact gloves
     .desc = combat gloves
 
 ent-ClothingHandsGlovesCombatColonel = Colonel's gloves
-    .desc = filler
+    .desc = Fine officer's gloves made to look ceremonial without giving up battlefield practicality.
 
 ent-ClothingHeadHelmetFlak = Flak helmet
     .desc = The standard helmet issued to Imperial Guard soldiers.
@@ -302,11 +305,14 @@ ent-MeltPowerCell = melta weapon container
 
 ent-AccatranPowerCell = accatran battery
 
-ent-MechSentinel = Hourly
+ent-MechSentinel = Sentinel
+    .desc = A light Imperial Guard walker used for reconnaissance, patrols, and mobile fire support.
 
-ent-WeaponMechCombatSentinelRifle = Sentry Autocannon
+ent-WeaponMechCombatSentinelRifle = Sentinel Autocannon
+    .desc = An autocannon mount for the Sentinel, effective against infantry and lightly armored targets.
 
 ent-WeaponMechCombatSentinelPlasma = Sentinel Plasma Rifle
+    .desc = A plasma weapon mount for the Sentinel, slower to fire but devastating against hardened targets.
 
 ent-FlameThrowerGun = flamethrower
     .desc = No matter who stands in front of you - a vile xenos or a fallen heretic - the flamethrower will help you minimize his lifespan.
@@ -339,6 +345,7 @@ ent-WHPowerSaberImperial = Power Saber
     .desc = High-quality, noble officer's power saber, made of expensive materials. Her energy field allows the blade to cut through flesh, bone, and most protective armor.
 
 ent-WHPowerMaceImperial = power mace
+    .desc = A power mace wrapped in a disruptive energy field and meant to smash through armor and bone alike.
 
 ent-WeaponChsStubSMG2 = Stubb pistol submachine gun
     .desc = A submachine gun, the model of which cannot be determined; it appears to be homemade.
@@ -368,6 +375,7 @@ ent-WeaponStubSMG3 = Stubb pistol submachine gun
     .desc = A submachine gun, the model of which cannot be determined; it appears to be homemade.
 
 ent-WeaponLaserCarabin = lascarbine
+    .desc = A compact las-weapon favored by mobile troops who need something lighter than a full lasgun.
 
 ent-WeaponLaserLasgun = M36 Cantrael
     .desc = The standard weapon of the Cadian Assault Troops and all regiments that derive their military traditions and doctrines from them.
@@ -379,6 +387,7 @@ ent-WeaponLaserLasgunVoss = M8 Voss
     .desc = A variant of the lasgun with an increased rate of fire used by Voss regiments.
 
 ent-WeaponLaserPistol = laspistol
+    .desc = A standard Imperial sidearm: compact, reliable, and lethal at close range.
 
 ent-WeaponLaserPistolCommissar = Laspistol "Will of the Emperor"
     .desc = A special laspistol of the Regimental Commissar, who has seen quite a few enemy faces and the backs of allied heads.
@@ -402,6 +411,7 @@ ent-WeaponPistolBolter = bolt gun
     .desc = Even the non-automatic pistol version of the bolter still impresses with its destructive power - the shells destroy enemies just as effectively, and now you can use it with one hand!
 
 ent-WeaponRocketLauncher = rocket launcher
+    .desc = A heavy launcher built to fire anti-armor and high-explosive rockets at vehicles, emplacements, and packed infantry.
 
 ent-WHBulletPlasmaPistol = Plasma projectile
 
@@ -591,6 +601,7 @@ ent-StructureAltar = altar of chaos
     .desc = An altar where the dark gods can reward you for intelligence data, or the nearest fortress factory. It seems to be moving...
 
 ent-StructureStorageImp = warehouse
+    .desc = An Imperial resupply depot where intelligence can be exchanged for weapons, ammunition, and field equipment.
 
 ent-WallNecron = Necron wall
 
@@ -638,8 +649,10 @@ ent-DataChip1 = data chip
     .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
 
 ent-MechSentinelBatteryAutogun = Sentinel
+    .desc = { ent-MechSentinel.desc }
 
 ent-MechSentinelBatteryPlasma = Sentinel
+    .desc = { ent-MechSentinel.desc }
 
 ent-MechanicusBanner = Mechanicus banner
     .desc = A banner showing allegiance to Mars.
@@ -692,6 +705,7 @@ ent-ChPointConverter = Chaos points converter
 ent-StructureAltarCmd = command dark gods altar
 
 ent-StructureStorageImpCmd = command Imperium storage
+    .desc = A command-grade Imperial depot with access to heavier weapons and rarer battlefield supplies.
 
 ent-GeneratorJupiter = plasma generator
 

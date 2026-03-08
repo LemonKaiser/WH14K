@@ -1,7 +1,6 @@
 - type: entity
   parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
   id: WeaponLaserCarabin
-  description:
   suffix: WH40K
   components:
   - type: Item

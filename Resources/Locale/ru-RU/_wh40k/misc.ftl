@@ -32,3 +32,8 @@ chat-radio-hive = Улей
 
 recipes-metal-wall-name = металлическая стена
 recipes-metal-wall-desc = Удерживает воздух внутри, а грейтайд снаружи.
+
+wh40k-store-vox-astartes-name = Лазерный карабин
+wh40k-store-vox-astartes-desc = Компактный лазкарабин для мобильных бойцов и радистов.
+wh40k-store-vox-lasgun-power-cell-name = Коробка батарей лазгана
+wh40k-store-vox-lasgun-power-cell-desc = Набор батарей для лазганов и лазкарабинов, пригодный для пополнения боезапаса в поле.
