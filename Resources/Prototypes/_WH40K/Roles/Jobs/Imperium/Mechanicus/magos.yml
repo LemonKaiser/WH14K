@@ -57,3 +57,5 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriestMarsMagos
     id: MagosDogTag
+  inhand:
+    - WHOmnissianAxe

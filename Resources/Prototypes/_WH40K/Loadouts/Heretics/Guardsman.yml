@@ -1,0 +1,9 @@
+- type: loadout
+  id: HFlakHelmet
+  equipment:
+    head: ClothingHeadHelmetFlakCHAOS
+
+- type: loadout
+  id: HFlakHelmetCandle
+  equipment:
+    head: ClothingHeadHelmetFlakCandleChaos

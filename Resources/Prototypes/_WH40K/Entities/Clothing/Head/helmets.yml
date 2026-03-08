@@ -68,7 +68,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetFlak
+  parent: ClothingHeadHelmetFlakCandle
   id: ClothingHeadHelmetFlakResp
   suffix: WH40K, Гвардия
   components:
@@ -76,6 +76,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetresp.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetresp.rsi
+  - type: PointLight
+    enabled: false
+    radius: 3
+    energy: 2
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    netsync: false
 
 - type: entity
   parent: ClothingHeadHelmetFlak
@@ -122,3 +129,76 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed.rsi
   - type: Item
     size: Normal
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetFlakCandle
+  name: flakhelmet with candle
+  description: Is this idiocy, a necessary measure?
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandle.rsi
+    layers:
+    - state: icon
+    - state: light-overlay
+      visible: false
+      shader: unshaded
+      map: [ "light" ]
+  - type: HandheldLight
+    addPrefix: false
+    blinkingBehaviourId: blinking
+    radiatingBehaviourId: radiating
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+        id: radiating
+        interpolate: Linear
+        maxDuration: 2.0
+        startValue: 3.0
+        endValue: 2.0
+        isLooped: true
+        reverseWhenFinished: true
+      - !type:PulseBehaviour
+        id: blinking
+        interpolate: Nearest
+        maxDuration: 1.0
+        startValue: 0.1
+        endValue: 2.0
+        isLooped: true
+  - type: ToggleableVisuals
+    spriteLayer: light
+    clothingVisuals:
+      head:
+      - state: equipped-head-light
+        shader: unshaded
+  - type: Clothing
+    equippedPrefix: off
+    clothingVisuals:
+      head:
+      - state: equipped-head
+  - type: PointLight
+    enabled: false
+    color: "#e39c40"
+    radius: 2.5
+    power: 10
+  - type: Item
+    heldPrefix: off
+    size: Normal
+  - type: ItemTogglePointLight
+  - type: Appearance
+  - type: Battery
+    maxCharge: 600
+    startingCharge: 600
+  - type: BatterySelfRecharger
+    autoRechargeRate: 2
+
+- type: entity
+  parent: ClothingHeadHelmetFlakCandle
+  id: ClothingHeadHelmetFlakCandleChaos
+  suffix: WH40K, Еретики
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi

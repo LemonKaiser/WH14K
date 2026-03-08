@@ -37,3 +37,13 @@
   id: JobHLexmechanic
   groups:
   - TechpriestNeck
+
+- type: roleLoadout
+  id: JobGuardsman
+  groups:
+  - GuardsmanHead
+
+- type: roleLoadout
+  id: JobHGuardsman
+  groups:
+  - HGuardsmanHead

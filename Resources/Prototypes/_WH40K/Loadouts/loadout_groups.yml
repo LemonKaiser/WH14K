@@ -9,3 +9,17 @@
   - RobeTechpriestMetalica
   - RobeTechpriestRiza
   - RobeTechpriestStygiesVIII
+
+- type: loadoutGroup
+  id: GuardsmanHead
+  name: loadout-group-guardsman-head
+  loadouts:
+  - FlakHelmet
+  - FlakHelmetCandle
+
+- type: loadoutGroup
+  id: HGuardsmanHead
+  name: loadout-group-guardsman-head
+  loadouts:
+  - HFlakHelmet
+  - HFlakHelmetCandle

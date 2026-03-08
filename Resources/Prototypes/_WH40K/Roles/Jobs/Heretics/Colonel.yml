@@ -28,3 +28,5 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadScarfChaos
     id: HColonelDogTag
+  inhand:
+    - ChaosMachete
