@@ -26,3 +26,5 @@
     belt: colbelt
     neck: Colonelcloak
     id: ColonelDogTag
+  inhand:
+    - WHPowerSaberImperial

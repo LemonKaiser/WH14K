@@ -1,0 +1,20 @@
+- type: entity
+  parent: BaseItem
+  id: Bugle
+  name: bugle
+  description: Someone forgot to turn off a kettle?
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/maggot_horn.rsi
+    state: icon
+    quickEquip: false
+    slots: neck
+  - type: UseDelay
+    delay: 10
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/_WH40K/Fun/horn.ogg
+  - type: Whistle
+    distance: 3

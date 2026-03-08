@@ -26,6 +26,7 @@ figurines-ifi-4 = "Так и запишем, реколор"
 materials-datapoint = необработанные данные
 
 loadout-group-techpriest-neck = роба, техножрец
+loadout-group-guardsman-head = голова, гвардеец
 
 chat-radio-hive = Улей
 

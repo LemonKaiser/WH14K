@@ -11,7 +11,10 @@
       "name": "icon"
     },
     {
-      "name": "equipped-HELMET",
+      "name": "light-overlay"
+    },
+    {
+      "name": "equipped-head",
       "directions": 4
     },
     {
@@ -20,6 +23,10 @@
     },
     {
       "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "equipped-head-light",
       "directions": 4
     }
   ]

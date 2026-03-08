@@ -22,3 +22,6 @@
     ears: ClothingHeadsetVoxBackpack
     head: ClothingHeadCommissar
     id: CommissarDogTag
+    pocket1: Bugle
+  inhand:
+    - WeaponLaserPistol

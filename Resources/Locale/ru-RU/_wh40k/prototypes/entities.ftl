@@ -729,3 +729,12 @@ ent-GeneratorJupiterLiteDamaged = { ent-GeneratorJupiter }
 ent-GeneratorJupiterDamaged = { ent-GeneratorJupiter }
 
 ent-GeneratorJupiterHardDamaged = { ent-GeneratorJupiter }
+
+ent-ClothingHeadHelmetFlakCandle = шлем со свечкой
+    .desc = это идиотизм или вынужденная мера?
+
+ent-ClothingHeadHelmetFlakCandleChaos = шлем со свечкой
+    .desc = это идиотизм или вынужденная мера?
+
+ent-Bugle = вокс-горн
+    .desc = наверное он сможет привлечь внимание...
