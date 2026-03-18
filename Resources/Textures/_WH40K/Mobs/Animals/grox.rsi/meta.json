@@ -1,18 +1,18 @@
-﻿{
-  "version": 1,
-  "license": "Custom",
-  "copyright": "Grox textures provided by project author",
-  "size": {
-    "x": 51,
-    "y": 51
-  },
-  "states": [
-    {
-      "name": "base",
-      "directions": 4
-    },
-    {
-      "name": "dead"
-    }
-  ]
+{
+    "version":  1,
+    "license":  "CC-BY-SA-3.0",
+    "copyright":  "Grox textures provided by project author",
+    "size":  {
+                 "x":  51,
+                 "y":  51
+             },
+    "states":  [
+                   {
+                       "name":  "base",
+                       "directions":  4
+                   },
+                   {
+                       "name":  "dead"
+                   }
+               ]
 }

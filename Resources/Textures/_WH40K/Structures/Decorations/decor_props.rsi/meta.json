@@ -1,83 +1,83 @@
 {
-  "version": 1,
-  "license": "Custom",
-  "copyright": "Imported from local decor source",
-  "size": {
-    "x": 32,
-    "y": 32
-  },
-  "states": [
-    {
-      "name": "barrel_blue"
-    },
-    {
-      "name": "barrel_blue_broken"
-    },
-    {
-      "name": "barrel_red"
-    },
-    {
-      "name": "barrel_red_broken"
-    },
-    {
-      "name": "barrel_steel"
-    },
-    {
-      "name": "barrel_steel_broken"
-    },
-    {
-      "name": "box_opened_wood"
-    },
-    {
-      "name": "box_opened_wood_broken"
-    },
-    {
-      "name": "box_wood"
-    },
-    {
-      "name": "box_wood_broken"
-    },
-    {
-      "name": "bricksv"
-    },
-    {
-      "name": "briksh"
-    },
-    {
-      "name": "create_wood"
-    },
-    {
-      "name": "create_wood_broken"
-    },
-    {
-      "name": "createx_wood"
-    },
-    {
-      "name": "createx_wood_broken"
-    },
-    {
-      "name": "furnance_a"
-    },
-    {
-      "name": "furnance_b"
-    },
-    {
-      "name": "furnance_c"
-    },
-    {
-      "name": "furnance_d"
-    },
-    {
-      "name": "paller"
-    },
-    {
-      "name": "tire"
-    },
-    {
-      "name": "tire2"
-    },
-    {
-      "name": "tumba"
-    }
-  ]
+    "version":  1,
+    "license":  "CC-BY-SA-3.0",
+    "copyright":  "Imported from local decor source",
+    "size":  {
+                 "x":  32,
+                 "y":  32
+             },
+    "states":  [
+                   {
+                       "name":  "barrel_blue"
+                   },
+                   {
+                       "name":  "barrel_blue_broken"
+                   },
+                   {
+                       "name":  "barrel_red"
+                   },
+                   {
+                       "name":  "barrel_red_broken"
+                   },
+                   {
+                       "name":  "barrel_steel"
+                   },
+                   {
+                       "name":  "barrel_steel_broken"
+                   },
+                   {
+                       "name":  "box_opened_wood"
+                   },
+                   {
+                       "name":  "box_opened_wood_broken"
+                   },
+                   {
+                       "name":  "box_wood"
+                   },
+                   {
+                       "name":  "box_wood_broken"
+                   },
+                   {
+                       "name":  "bricksv"
+                   },
+                   {
+                       "name":  "briksh"
+                   },
+                   {
+                       "name":  "create_wood"
+                   },
+                   {
+                       "name":  "create_wood_broken"
+                   },
+                   {
+                       "name":  "createx_wood"
+                   },
+                   {
+                       "name":  "createx_wood_broken"
+                   },
+                   {
+                       "name":  "furnance_a"
+                   },
+                   {
+                       "name":  "furnance_b"
+                   },
+                   {
+                       "name":  "furnance_c"
+                   },
+                   {
+                       "name":  "furnance_d"
+                   },
+                   {
+                       "name":  "paller"
+                   },
+                   {
+                       "name":  "tire"
+                   },
+                   {
+                       "name":  "tire2"
+                   },
+                   {
+                       "name":  "tumba"
+                   }
+               ]
 }
