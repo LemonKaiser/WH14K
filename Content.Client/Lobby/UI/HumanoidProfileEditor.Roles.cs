@@ -9,6 +9,7 @@ using Content.Shared.Roles;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby.UI;
@@ -23,6 +24,9 @@ public sealed partial class HumanoidProfileEditor
 
     // One at a time.
     private LoadoutWindow? _loadoutWindow;
+    private RoleLoadout? _activeLoadout;
+    private ICommonSession? _activeLoadoutSession;
+    private IDependencyCollection? _activeLoadoutCollection;
 
     private List<(string, RequirementsSelector)> _jobPriorities = new();
 
@@ -45,13 +49,21 @@ public sealed partial class HumanoidProfileEditor
     /// </summary>
     public void RefreshLoadouts()
     {
+        CloseLoadoutWindow();
+    }
+
+    private void CloseLoadoutWindow()
+    {
         _loadoutWindow?.Dispose();
+        _loadoutWindow = null;
+        _activeLoadout = null;
+        _activeLoadoutSession = null;
+        _activeLoadoutCollection = null;
     }
 
     private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
-        _loadoutWindow?.Dispose();
-        _loadoutWindow = null;
+        CloseLoadoutWindow();
         var collection = IoCManager.Instance;
 
         if (collection == null || _playerManager.LocalSession == null || Profile == null)
@@ -59,6 +71,9 @@ public sealed partial class HumanoidProfileEditor
 
         JobOverride = jobProto;
         var session = _playerManager.LocalSession;
+        _activeLoadout = roleLoadout;
+        _activeLoadoutSession = session;
+        _activeLoadoutCollection = collection;
 
         _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, _playerManager.LocalSession, collection)
         {
@@ -79,7 +94,7 @@ public sealed partial class HumanoidProfileEditor
         _loadoutWindow.OnLoadoutPressed += (loadoutGroup, loadoutProto) =>
         {
             roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
-            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            _loadoutWindow?.RefreshLoadouts(roleLoadout, session, collection);
             Profile = Profile?.WithLoadout(roleLoadout);
             ReloadPreview();
         };
@@ -87,7 +102,7 @@ public sealed partial class HumanoidProfileEditor
         _loadoutWindow.OnLoadoutUnpressed += (loadoutGroup, loadoutProto) =>
         {
             roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
-            _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
+            _loadoutWindow?.RefreshLoadouts(roleLoadout, session, collection);
             Profile = Profile?.WithLoadout(roleLoadout);
             ReloadPreview();
         };
@@ -97,6 +112,10 @@ public sealed partial class HumanoidProfileEditor
 
         _loadoutWindow.OnClose += () =>
         {
+            _loadoutWindow = null;
+            _activeLoadout = null;
+            _activeLoadoutSession = null;
+            _activeLoadoutCollection = null;
             JobOverride = null;
             ReloadPreview();
         };

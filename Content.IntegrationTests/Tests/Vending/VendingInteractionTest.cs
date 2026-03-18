@@ -9,6 +9,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.VendingMachines;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Vending;
 
 public sealed class VendingInteractionTest : InteractionTest

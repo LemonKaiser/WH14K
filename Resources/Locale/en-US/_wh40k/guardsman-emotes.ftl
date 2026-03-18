@@ -1,0 +1,25 @@
+wh40k-chat-emote-name-guardsman-ready-for-orders = Ready for Orders
+wh40k-chat-emote-name-guardsman-awaiting-orders = Awaiting Orders
+wh40k-chat-emote-name-guardsman-attack-the-enemy = Attack the Enemy
+wh40k-chat-emote-name-guardsman-open-fire = Open Fire
+wh40k-chat-emote-name-guardsman-charge = Charge
+wh40k-chat-emote-name-guardsman-into-the-fight = Into the Fight
+wh40k-chat-emote-name-guardsman-capture-the-strategic-point = Capture the Strategic Point
+wh40k-chat-emote-name-guardsman-secure-the-strategic-point = Secure the Strategic Point
+wh40k-chat-emote-name-guardsman-enemy-spotted = Enemy Spotted
+wh40k-chat-emote-name-guardsman-chaos-marine-spotted = Chaos Marine Spotted
+wh40k-chat-emote-name-guardsman-hold-the-line = Hold the Line
+wh40k-chat-emote-name-guardsman-morale-restored = Morale Restored
+
+wh40k-chat-emote-msg-guardsman-ready-for-orders = answers, "Ready for orders."
+wh40k-chat-emote-msg-guardsman-awaiting-orders = says, "Awaiting orders."
+wh40k-chat-emote-msg-guardsman-attack-the-enemy = shouts, "Attack the enemy!"
+wh40k-chat-emote-msg-guardsman-open-fire = yells, "Open fire!"
+wh40k-chat-emote-msg-guardsman-charge = cries, "Charge!"
+wh40k-chat-emote-msg-guardsman-into-the-fight = roars, "Into the fight!"
+wh40k-chat-emote-msg-guardsman-capture-the-strategic-point = orders, "Capture the strategic point!"
+wh40k-chat-emote-msg-guardsman-secure-the-strategic-point = calls out, "Secure the strategic point!"
+wh40k-chat-emote-msg-guardsman-enemy-spotted = warns, "Enemy spotted!"
+wh40k-chat-emote-msg-guardsman-chaos-marine-spotted = warns, "Chaos Marine spotted!"
+wh40k-chat-emote-msg-guardsman-hold-the-line = shouts, "Hold the line!"
+wh40k-chat-emote-msg-guardsman-morale-restored = says, "Morale restored!"

@@ -132,6 +132,34 @@
       - state: guardsman
 
 - type: entity
+  id: SpawnPointPsyker
+  parent: SpawnPointJobBase
+  name: Psyker
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: Psyker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointVoxScout
+  parent: SpawnPointJobBase
+  name: VoxScout
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: VoxScout
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
   id: SpawnPointLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant
@@ -231,6 +259,20 @@
       - state: green
       - state: tank
 
+- type: entity
+  id: SpawnPointTitheSupplier
+  parent: SpawnPointJobBase
+  name: TitheSupplier
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: TitheSupplier
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
 # Heretics
 
 - type: entity
@@ -271,6 +313,21 @@
   components:
   - type: SpawnPoint
     job_id: HGuardsman
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointHVoxScout
+  parent: SpawnPointJobBase
+  name: HVoxScout
+  suffix: WH40K, Еретик
+  components:
+  - type: SpawnPoint
+    job_id: HVoxScout
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -384,6 +441,21 @@
       - state: green
       - state: heretic
       - state: tank
+
+- type: entity
+  id: SpawnPointHBandSupplier
+  parent: SpawnPointJobBase
+  name: HBandSupplier
+  suffix: WH40K, Heretics
+  components:
+  - type: SpawnPoint
+    job_id: HBandSupplier
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: heretic
+      - state: guardsman
 
 # Engineering
 - type: entity

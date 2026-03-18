@@ -350,6 +350,19 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
     }
 
     /// <summary>
+    /// Sets the beacon label and refreshes the grid nav-map data.
+    /// </summary>
+    public void SetBeaconLabel(EntityUid uid, string? label, NavMapBeaconComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp) || comp.Text == label)
+            return;
+
+        comp.Text = label;
+        Dirty(uid, comp);
+        UpdateNavMapBeaconData(uid, comp);
+    }
+
+    /// <summary>
     /// Sets the beacon's Enabled field and refreshes the grid.
     /// </summary>
     public void SetBeaconEnabled(EntityUid uid, bool enabled, NavMapBeaconComponent? comp = null)

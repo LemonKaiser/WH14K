@@ -1,0 +1,16 @@
+﻿- type: entity
+  parent: FoodMeat
+  id: FoodMeatGrox
+  name: raw grox meat
+  description: Dense, stringy meat from a grox.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Food/grox_meat.rsi
+    state: meat
+  - type: Item
+    storedOffset: -1,0
+    inhandVisuals:
+      left:
+      - state: meat-inhand-left
+      right:
+      - state: meat-inhand-right

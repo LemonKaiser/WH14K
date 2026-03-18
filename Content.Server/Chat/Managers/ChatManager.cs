@@ -1,22 +1,34 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using Content.Server._WH40K.MetaProgress;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.Discord.DiscordLink;
+using Content.Server.GameTicking;
 using Content.Server.Players.RateLimiting;
 using Content.Server.Preferences.Managers;
+using Content.Server.Roles.Jobs;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.GameTicking;
 using Content.Shared.Mind;
+using Content.Shared.Players;
+using Content.Shared.Roles.Jobs;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared.StatusIcon;
+using Content.Shared.StatusIcon.Components;
+using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Replays;
+using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Chat.Managers;
@@ -34,6 +46,17 @@ internal sealed partial class ChatManager : IChatManager
         { "revolutionary", "#aa00ff" }
     };
 
+    private const string DefaultMetaOocNameColorHex = "#87CEFA";
+    private const string JobIconNoId = "JobIconNoId";
+    private const string JobIconUnknown = "JobIconUnknown";
+
+    private enum WH40KOocDecorationLineMode : byte
+    {
+        Off = 0,
+        Admins = 1,
+        On = 2,
+    }
+
     [Dependency] private readonly IReplayRecordingManager _replay = default!;
     [Dependency] private readonly IServerNetManager _netManager = default!;
     [Dependency] private readonly IAdminManager _adminManager = default!;
@@ -46,6 +69,7 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly DiscordChatLink _discordLink = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -58,6 +82,8 @@ internal sealed partial class ChatManager : IChatManager
     private bool _adminOocEnabled = true;
 
     private readonly Dictionary<NetUserId, ChatUser> _players = new();
+
+    private JobSystem Jobs => _entityManager.System<JobSystem>();
 
     public void Initialize()
     {
@@ -271,34 +297,601 @@ internal sealed partial class ChatManager : IChatManager
 
     private void SendOOC(ICommonSession player, string message)
     {
-        if (_adminManager.IsAdmin(player))
+        var adminDecorationPriority = _configurationManager.GetCVar(CCVars.WH40KMetaAdminPriorityOverDecorations);
+        var fullLineMode = NormalizeDecorationLineMode(_configurationManager.GetCVar(CCVars.WH40KMetaOocDecorationLineMode));
+        var isAdmin = _adminManager.IsAdmin(player);
+        var lobbyIsolationMode = IsLobbyOocIsolationMode(player);
+
+        if (isAdmin)
         {
             if (!_adminOocEnabled)
             {
                 return;
             }
         }
-        else if (!_oocEnabled)
+        else if (!_oocEnabled && !lobbyIsolationMode)
         {
             return;
         }
 
+        var escapedMessage = FormattedMessage.EscapeText(message);
         Color? colorOverride = null;
-        var wrappedMessage = Loc.GetString("chat-manager-send-ooc-wrap-message", ("playerName",player.Name), ("message", FormattedMessage.EscapeText(message)));
-        if (_adminManager.HasAdminFlag(player, AdminFlags.NameColor))
+        string? metaNameColorHex = null;
+        string? metaNameMarkup = null;
+        var playerName = player.Name;
+        string titlePrefix;
+        WH40KMetaDecorationSnapshotEntry? titleEntry;
+        WH40KMetaDecorationSnapshotEntry? colorEntry;
+
+        TryResolveMetaOocDecorations(
+            player,
+            adminDecorationPriority,
+            out playerName,
+            out metaNameColorHex,
+            out metaNameMarkup,
+            out titlePrefix,
+            out titleEntry,
+            out colorEntry);
+
+        var wrappedMessage = Loc.GetString(
+            "chat-manager-send-ooc-wrap-message",
+            ("playerName", playerName),
+            ("message", escapedMessage));
+
+        if (adminDecorationPriority && _adminManager.HasAdminFlag(player, AdminFlags.NameColor))
         {
             var prefs = _preferencesManager.GetPreferences(player.UserId);
             colorOverride = prefs.AdminOOCColor;
+            metaNameColorHex = null;
+            metaNameMarkup = null;
         }
-        if (  _netConfigManager.GetClientCVar(player.Channel, CCVars.ShowOocPatronColor) && player.Channel.UserData.PatronTier is { } patron && PatronOocColors.TryGetValue(patron, out var patronColor))
+
+        if (_netConfigManager.GetClientCVar(player.Channel, CCVars.ShowOocPatronColor) &&
+            player.Channel.UserData.PatronTier is { } patron &&
+            PatronOocColors.TryGetValue(patron, out var patronColor))
         {
-            wrappedMessage = Loc.GetString("chat-manager-send-ooc-patron-wrap-message", ("patronColor", patronColor),("playerName", player.Name), ("message", FormattedMessage.EscapeText(message)));
+            wrappedMessage = Loc.GetString(
+                "chat-manager-send-ooc-patron-wrap-message",
+                ("patronColor", patronColor),
+                ("playerName", playerName),
+                ("message", escapedMessage));
+        }
+        else if (colorOverride == null &&
+                 ShouldDecorateFullLine(fullLineMode, isAdmin, adminDecorationPriority) &&
+                 TryBuildDecoratedOocLineMarkup(colorEntry, titleEntry, player.Name, titlePrefix, message, out var fullLineMarkup))
+        {
+            wrappedMessage = fullLineMarkup;
+        }
+        else if (colorOverride == null && !string.IsNullOrWhiteSpace(metaNameMarkup))
+        {
+            wrappedMessage = Loc.GetString(
+                "chat-manager-send-ooc-decoration-markup-wrap-message",
+                ("playerNameMarkup", metaNameMarkup),
+                ("message", escapedMessage));
+        }
+        else if (colorOverride == null && !string.IsNullOrWhiteSpace(metaNameColorHex))
+        {
+            wrappedMessage = Loc.GetString(
+                "chat-manager-send-ooc-decoration-wrap-message",
+                ("nameColor", metaNameColorHex),
+                ("playerName", playerName),
+                ("message", escapedMessage));
         }
 
         //TODO: player.Name color, this will need to change the structure of the MsgChatMessage
-        ChatMessageToAll(ChatChannel.OOC, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride, author: player.UserId);
+        if (lobbyIsolationMode && !isAdmin)
+        {
+            var lobbyClients = _player.Sessions
+                .Where(session => !IsSessionInRoundGameplay(session))
+                .Select(session => session.Channel)
+                .ToList();
+
+            ChatMessageToMany(ChatChannel.OOC, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, clients: lobbyClients, colorOverride: colorOverride, author: player.UserId);
+        }
+        else
+        {
+            ChatMessageToAll(ChatChannel.OOC, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride, author: player.UserId);
+        }
+
         _discordLink.SendMessage(message, player.Name, ChatChannel.OOC);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"OOC from {player:Player}: {message}");
+    }
+
+    private bool IsLobbyOocIsolationMode(ICommonSession sender)
+    {
+        var ticker = _entityManager.System<GameTicker>();
+
+        if (!_configurationManager.GetCVar(CCVars.OocLobbyIsolatedDuringRound))
+            return false;
+
+        if (ticker.RunLevel != GameRunLevel.InRound)
+            return false;
+
+        // If OOC has been manually enabled during the round (e.g. by setooc),
+        // lobby messages should again be visible to in-round players.
+        if (_oocEnabled)
+            return false;
+
+        return !IsSessionInRoundGameplay(sender);
+    }
+
+    private bool IsSessionInRoundGameplay(ICommonSession session)
+    {
+        return _entityManager.System<GameTicker>().UserHasJoinedGame(session);
+    }
+
+    private void TryResolveMetaOocDecorations(
+        ICommonSession player,
+        bool adminDecorationPriority,
+        out string displayName,
+        out string? nameColorHex,
+        out string? nameMarkup,
+        out string titlePrefix,
+        out WH40KMetaDecorationSnapshotEntry? titleEntry,
+        out WH40KMetaDecorationSnapshotEntry? colorEntry)
+    {
+        displayName = player.Name;
+        nameColorHex = null;
+        nameMarkup = null;
+        titlePrefix = string.Empty;
+        titleEntry = null;
+        colorEntry = null;
+
+        WH40KMetaProgressSnapshot snapshot;
+        try
+        {
+            snapshot = _entityManager.System<WH40KMetaProgressSystem>().GetSnapshot(player.UserId);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Warning($"Failed to resolve WH40K OOC decorations for {player.Name}: {e.Message}");
+            return;
+        }
+
+        var selectedTitleId = snapshot.DecorationSelection.SelectedOocTitleId;
+        var selectedColorId = snapshot.DecorationSelection.SelectedOocNameColorId;
+
+        foreach (var entry in snapshot.Decorations)
+        {
+            if (!entry.Unlocked)
+                continue;
+
+            if (entry.Category == WH40KMetaDecorationCategory.OocTitles &&
+                string.Equals(entry.Id, selectedTitleId, StringComparison.Ordinal))
+            {
+                titleEntry = entry;
+                continue;
+            }
+
+            if (entry.Category == WH40KMetaDecorationCategory.OocNameColors &&
+                string.Equals(entry.Id, selectedColorId, StringComparison.Ordinal))
+            {
+                colorEntry = entry;
+            }
+        }
+
+        var adminTitleForced = adminDecorationPriority && !string.IsNullOrWhiteSpace(_adminManager.GetAdminData(player)?.Title);
+        if (!adminTitleForced && titleEntry != null && !titleEntry.SuppressTitlePrefix)
+        {
+            var titleLocKey = string.IsNullOrWhiteSpace(titleEntry.PreviewKey)
+                ? titleEntry.TitleKey
+                : titleEntry.PreviewKey;
+
+            if (!string.IsNullOrWhiteSpace(titleLocKey))
+            {
+                var titleText = Loc.GetString(titleLocKey);
+                if (!string.IsNullOrWhiteSpace(titleText))
+                    titlePrefix = $"({titleText})";
+            }
+        }
+
+        displayName = string.IsNullOrWhiteSpace(titlePrefix)
+            ? player.Name
+            : $"{titlePrefix} {player.Name}";
+        var titlePrefixRuneCount = CountRunes(titlePrefix);
+
+        if (TryBuildDecoratedNameMarkup(colorEntry, titleEntry, player.Name, titlePrefix, titlePrefixRuneCount, out var decoratedMarkup))
+        {
+            nameMarkup = decoratedMarkup;
+            return;
+        }
+
+        if (colorEntry == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(colorEntry.OocColorHex))
+            return;
+
+        if (Color.TryFromHex(colorEntry.OocColorHex) is not { } solidColor)
+            return;
+
+        nameColorHex = solidColor.ToHex();
+    }
+
+    private static bool TryBuildDecoratedNameMarkup(
+        WH40KMetaDecorationSnapshotEntry? colorEntry,
+        WH40KMetaDecorationSnapshotEntry? titleEntry,
+        string playerName,
+        string titlePrefix,
+        int titlePrefixRuneCount,
+        [NotNullWhen(true)] out string? markup)
+    {
+        markup = null;
+
+        var hasNameMarkup = TryBuildNameDecorationMarkup(colorEntry, playerName, out var nameMarkup);
+
+        var hasTitleMarkup = TryBuildTitleDecorationMarkup(
+            titleEntry,
+            colorEntry,
+            titlePrefix,
+            titlePrefixRuneCount,
+            out var titleMarkup);
+
+        if (!hasNameMarkup && !hasTitleMarkup)
+            return false;
+
+        var builder = new StringBuilder();
+        builder.Append(hasTitleMarkup
+            ? titleMarkup
+            : FormattedMessage.EscapeText(titlePrefix));
+        if (titlePrefixRuneCount > 0)
+            builder.Append(' ');
+        builder.Append(hasNameMarkup
+            ? nameMarkup
+            : FormattedMessage.EscapeText(playerName));
+
+        markup = builder.ToString();
+        return true;
+    }
+
+    private static bool TryBuildDecoratedOocLineMarkup(
+        WH40KMetaDecorationSnapshotEntry? colorEntry,
+        WH40KMetaDecorationSnapshotEntry? titleEntry,
+        string playerName,
+        string titlePrefix,
+        string message,
+        [NotNullWhen(true)] out string? markup)
+    {
+        markup = null;
+
+        var fullLine = BuildRawOocLine(playerName, titlePrefix, message);
+        if (string.IsNullOrWhiteSpace(fullLine))
+            return false;
+
+        if (TryBuildTitleDecorationMarkup(
+                titleEntry,
+                colorEntry,
+                fullLine,
+                CountRunes(fullLine),
+                out var titleLineMarkup))
+        {
+            markup = titleLineMarkup;
+            return true;
+        }
+
+        if (TryBuildNameDecorationMarkup(colorEntry, fullLine, out var lineNameMarkup))
+        {
+            markup = lineNameMarkup;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static string BuildRawOocLine(string playerName, string titlePrefix, string message)
+    {
+        var builder = new StringBuilder();
+        builder.Append("OOC: ");
+        if (!string.IsNullOrWhiteSpace(titlePrefix))
+        {
+            builder.Append(titlePrefix);
+            builder.Append(' ');
+        }
+        builder.Append(playerName);
+        builder.Append(": ");
+        builder.Append(message);
+        return builder.ToString();
+    }
+
+    private static bool TryBuildNameDecorationMarkup(
+        WH40KMetaDecorationSnapshotEntry? colorEntry,
+        string playerName,
+        out string markup)
+    {
+        markup = string.Empty;
+        if (colorEntry == null)
+            return false;
+
+        var resolvedColorEntry = colorEntry;
+        var palette = new List<string>();
+        foreach (var paletteEntry in resolvedColorEntry.OocGradientColors)
+        {
+            if (!TryResolveGradientColor(paletteEntry, out var color))
+                continue;
+
+            palette.Add(color.ToHex());
+        }
+
+        var hasGradient = palette.Count >= 2;
+        if (!hasGradient && TryResolveGradientColor(resolvedColorEntry.OocColorHex, out var solidColor))
+        {
+            palette.Add(solidColor.ToHex());
+        }
+
+        var hasAura = false;
+        var auraColorHex = string.Empty;
+        var auraRadius = 0;
+        var auraAlphaPercent = 0;
+        if (resolvedColorEntry.OocAuraRadius > 0 &&
+            resolvedColorEntry.OocAuraAlphaPercent > 0 &&
+            TryResolveGradientColor(resolvedColorEntry.OocAuraHex, out var auraColor))
+        {
+            hasAura = true;
+            auraColorHex = auraColor.ToHex();
+            auraRadius = Math.Clamp(resolvedColorEntry.OocAuraRadius, 1, 4);
+            auraAlphaPercent = Math.Clamp(resolvedColorEntry.OocAuraAlphaPercent, 1, 100);
+        }
+
+        if (palette.Count == 0 && hasAura && TryResolveGradientColor(DefaultMetaOocNameColorHex, out var defaultColor))
+        {
+            palette.Add(defaultColor.ToHex());
+        }
+
+        if (palette.Count == 0 && !hasAura)
+            return false;
+
+        var safeName = SanitizeGradientParameter(playerName);
+        var safePalette = SanitizeGradientParameter(string.Join("|", palette));
+        var animated = hasGradient && resolvedColorEntry.OocGradientAnimated ? 1 : 0;
+        var durationMs = Math.Clamp(resolvedColorEntry.OocGradientDurationMs, 400, 60000);
+
+        var builder = new StringBuilder();
+        builder.Append("[wh40kgradient=\"")
+            .Append(safeName)
+            .Append("\" palette=\"")
+            .Append(safePalette)
+            .Append("\" animated=")
+            .Append(animated)
+            .Append(" duration=")
+            .Append(durationMs);
+
+        if (hasAura)
+        {
+            builder.Append(" aura=1")
+                .Append(" auracolor=\"")
+                .Append(SanitizeGradientParameter(auraColorHex))
+                .Append("\" auraradius=")
+                .Append(auraRadius)
+                .Append(" auraalpha=")
+                .Append(auraAlphaPercent);
+        }
+
+        builder.Append("/]");
+        markup = builder.ToString();
+        return true;
+    }
+
+    private static bool TryBuildTitleDecorationMarkup(
+        WH40KMetaDecorationSnapshotEntry? titleEntry,
+        WH40KMetaDecorationSnapshotEntry? colorEntry,
+        string titleText,
+        int titleTextRuneCount,
+        out string markup)
+    {
+        markup = string.Empty;
+
+        if (titleEntry == null || titleTextRuneCount <= 0)
+            return false;
+
+        if (!TryBuildPalette(titleEntry, colorEntry, out var palette, out var animated, out var durationMs))
+            return false;
+
+        var safeTitle = SanitizeGradientParameter(titleText);
+        var safePalette = SanitizeGradientParameter(string.Join("|", palette));
+
+        var revealMs = Math.Clamp(titleEntry.OocTitleEffectRevealMs, 100, 120000);
+        var holdMs = Math.Clamp(titleEntry.OocTitleEffectHoldMs, 100, 120000);
+        var dissolveMs = Math.Clamp(titleEntry.OocTitleEffectDissolveMs, 100, 120000);
+        var hasEffect = TryNormalizeTitleEffect(titleEntry.OocTitleEffect, out var effect);
+        var hasOutline = TryResolveTitleOutlineFromEntry(titleEntry, out var outlineColorHex, out var outlineWidth, out var outlineAlphaPercent);
+
+        var builder = new StringBuilder();
+        builder.Append("[wh40ktitlefx=\"")
+            .Append(safeTitle)
+            .Append("\" palette=\"")
+            .Append(safePalette)
+            .Append("\" animated=")
+            .Append(animated)
+            .Append(" duration=")
+            .Append(durationMs)
+            .Append(" reveal=")
+            .Append(revealMs)
+            .Append(" hold=")
+            .Append(holdMs)
+            .Append(" dissolve=")
+            .Append(dissolveMs)
+            .Append(" cursor=1");
+
+        if (hasEffect)
+        {
+            builder.Append(" effect=\"")
+                .Append(SanitizeGradientParameter(effect))
+                .Append("\"");
+        }
+
+        if (hasOutline)
+        {
+            builder.Append(" outline=1")
+                .Append(" outlinecolor=\"")
+                .Append(SanitizeGradientParameter(outlineColorHex))
+                .Append("\" outlinewidth=")
+                .Append(outlineWidth)
+                .Append(" outlinealpha=")
+                .Append(outlineAlphaPercent);
+        }
+
+        builder.Append("/]");
+        markup = builder.ToString();
+        return true;
+    }
+
+    private static bool TryBuildPalette(
+        WH40KMetaDecorationSnapshotEntry? primaryEntry,
+        WH40KMetaDecorationSnapshotEntry? fallbackEntry,
+        [NotNullWhen(true)] out List<string>? palette,
+        out int animated,
+        out int durationMs)
+    {
+        palette = new List<string>();
+        animated = 0;
+        durationMs = 3500;
+
+        WH40KMetaDecorationSnapshotEntry? sourceEntry = null;
+        if (TryAppendPaletteFromEntry(primaryEntry, palette))
+            sourceEntry = primaryEntry;
+        else if (TryAppendPaletteFromEntry(fallbackEntry, palette))
+            sourceEntry = fallbackEntry;
+
+        if (palette.Count == 0 && TryResolveGradientColor(DefaultMetaOocNameColorHex, out var defaultColor))
+            palette.Add(defaultColor.ToHex());
+
+        if (palette.Count == 0)
+            return false;
+
+        var hasGradient = palette.Count >= 2;
+        animated = hasGradient && sourceEntry?.OocGradientAnimated == true ? 1 : 0;
+        durationMs = Math.Clamp(sourceEntry?.OocGradientDurationMs ?? 3500, 400, 60000);
+        return true;
+    }
+
+    private static bool TryAppendPaletteFromEntry(
+        WH40KMetaDecorationSnapshotEntry? entry,
+        List<string> palette)
+    {
+        if (entry == null)
+            return false;
+
+        var startCount = palette.Count;
+        foreach (var paletteEntry in entry.OocGradientColors)
+        {
+            if (!TryResolveGradientColor(paletteEntry, out var color))
+                continue;
+
+            palette.Add(color.ToHex());
+        }
+
+        if (palette.Count == startCount && TryResolveGradientColor(entry.OocColorHex, out var solidColor))
+            palette.Add(solidColor.ToHex());
+
+        return palette.Count > startCount;
+    }
+
+    private static bool TryResolveTitleOutlineFromEntry(
+        WH40KMetaDecorationSnapshotEntry? entry,
+        out string outlineColorHex,
+        out int outlineWidth,
+        out int outlineAlphaPercent)
+    {
+        outlineColorHex = string.Empty;
+        outlineWidth = 0;
+        outlineAlphaPercent = 0;
+
+        if (entry == null ||
+            entry.OocTitleOutlineWidth <= 0 ||
+            entry.OocTitleOutlineAlphaPercent <= 0 ||
+            !TryResolveGradientColor(entry.OocTitleOutlineHex, out var outlineColor))
+        {
+            return false;
+        }
+
+        outlineColorHex = outlineColor.ToHex();
+        outlineWidth = Math.Clamp(entry.OocTitleOutlineWidth, 1, 3);
+        outlineAlphaPercent = Math.Clamp(entry.OocTitleOutlineAlphaPercent, 1, 100);
+        return true;
+    }
+
+    private static bool TryNormalizeTitleEffect(string? source, out string effect)
+    {
+        effect = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(source))
+            return false;
+
+        var normalized = source.Trim().ToLowerInvariant();
+        if (normalized is not ("binary" or "scan" or "scramble-decode" or "typewriter-cursor" or "wave" or "glitch-slice" or "noise-dissolve" or "scanline"))
+            return false;
+
+        effect = normalized;
+        return true;
+    }
+
+    private static int CountRunes(string value)
+    {
+        var count = 0;
+        foreach (var _ in value.EnumerateRunes())
+        {
+            count++;
+        }
+
+        return count;
+    }
+
+    private static bool TryResolveGradientColor(string value, out Color color)
+    {
+        color = default;
+
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        var trimmed = value.Trim();
+
+        if (Color.TryFromHex(trimmed) is { } hex)
+        {
+            color = hex;
+            return true;
+        }
+
+        if (Color.TryFromName(trimmed, out var named))
+        {
+            color = named;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static string SanitizeGradientParameter(string value)
+    {
+        return value
+            .Replace("\"", "'")
+            .Replace("[", "(")
+            .Replace("]", ")")
+            .Replace("\r", " ")
+            .Replace("\n", " ");
+    }
+
+    private static WH40KOocDecorationLineMode NormalizeDecorationLineMode(int value)
+    {
+        return value switch
+        {
+            1 => WH40KOocDecorationLineMode.Admins,
+            2 => WH40KOocDecorationLineMode.On,
+            _ => WH40KOocDecorationLineMode.Off,
+        };
+    }
+
+    private static bool ShouldDecorateFullLine(
+        WH40KOocDecorationLineMode mode,
+        bool isAdmin,
+        bool adminDecorationPriority)
+    {
+        return mode switch
+        {
+            WH40KOocDecorationLineMode.Off => false,
+            WH40KOocDecorationLineMode.Admins => isAdmin && !adminDecorationPriority,
+            WH40KOocDecorationLineMode.On => true,
+            _ => false,
+        };
     }
 
     private void SendAdminChat(ICommonSession player, string message)
@@ -336,13 +929,74 @@ internal sealed partial class ChatManager : IChatManager
 
     #region Utility
 
-    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
+    private (string? SenderJobIconId, bool? SenderNameIsProperNoun) ResolveSenderChatVisuals(EntityUid source, NetUserId? authorUserId)
+    {
+        if (source == EntityUid.Invalid || !_entityManager.EntityExists(source))
+            return (TryResolveAuthorJobIcon(authorUserId), null);
+
+        bool? properNoun = null;
+        if (_entityManager.TryGetComponent(source, out GrammarComponent? grammar))
+            properNoun = grammar.ProperNoun;
+
+        string? iconId = null;
+        if (_entityManager.TryGetComponent(source, out JobStatusComponent? status) &&
+            status.JobStatusIcon is { } statusIcon &&
+            _prototypeManager.HasIndex<JobIconPrototype>(statusIcon.Id) &&
+            !IsNonSpecificJobIcon(statusIcon.Id))
+        {
+            iconId = statusIcon.Id;
+        }
+
+        iconId ??= TryResolveAuthorJobIcon(authorUserId);
+
+        return (iconId, properNoun);
+    }
+
+    private string? TryResolveAuthorJobIcon(NetUserId? authorUserId)
+    {
+        if (authorUserId is not { } userId)
+            return null;
+
+        if (!_player.TryGetSessionById(userId, out var session))
+            return null;
+
+        var mindId = session.ContentData()?.Mind;
+        if (mindId == null || !Jobs.MindTryGetJob(mindId.Value, out var job))
+            return null;
+
+        var iconId = job.Icon.Id;
+        if (IsNonSpecificJobIcon(iconId) || !_prototypeManager.HasIndex<JobIconPrototype>(iconId))
+            return null;
+
+        return iconId;
+    }
+
+    private static bool IsNonSpecificJobIcon(string iconId)
+    {
+        return string.Equals(iconId, JobIconNoId, StringComparison.Ordinal) ||
+               string.Equals(iconId, JobIconUnknown, StringComparison.Ordinal);
+    }
+
+    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
+        var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
 
-        var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume);
+        var msg = new ChatMessage(
+            channel,
+            message,
+            wrappedMessage,
+            netSource,
+            user?.Key,
+            hideChat,
+            colorOverride,
+            audioPath,
+            audioVolume,
+            senderJobIconId,
+            senderNameIsProperNoun,
+            speechTransport);
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
 
         if (!recordReplay)
@@ -355,16 +1009,29 @@ internal sealed partial class ChatManager : IChatManager
         }
     }
 
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
-        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author);
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author, speechTransport);
 
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
+        var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
 
-        var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume);
+        var msg = new ChatMessage(
+            channel,
+            message,
+            wrappedMessage,
+            netSource,
+            user?.Key,
+            hideChat,
+            colorOverride,
+            audioPath,
+            audioVolume,
+            senderJobIconId,
+            senderNameIsProperNoun,
+            speechTransport);
         _netManager.ServerSendToMany(new MsgChatMessage() { Message = msg }, clients);
 
         if (!recordReplay)
@@ -378,7 +1045,7 @@ internal sealed partial class ChatManager : IChatManager
     }
 
     public void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source,
-        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0)
+        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
     {
         if (!recordReplay && !filter.Recipients.Any())
             return;
@@ -389,16 +1056,29 @@ internal sealed partial class ChatManager : IChatManager
             clients.Add(recipient.Channel);
         }
 
-        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume);
+        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume, speechTransport: speechTransport);
     }
 
-    public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
+    public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
+        var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
 
-        var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume);
+        var msg = new ChatMessage(
+            channel,
+            message,
+            wrappedMessage,
+            netSource,
+            user?.Key,
+            hideChat,
+            colorOverride,
+            audioPath,
+            audioVolume,
+            senderJobIconId,
+            senderNameIsProperNoun,
+            speechTransport);
         _netManager.ServerSendToAll(new MsgChatMessage() { Message = msg });
 
         if (!recordReplay)

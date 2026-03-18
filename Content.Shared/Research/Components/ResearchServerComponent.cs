@@ -42,6 +42,19 @@ public sealed partial class ResearchServerComponent : Component
 
     [DataField("researchConsoleUpdateTime"), ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan ResearchConsoleUpdateTime = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// If enabled, technologies with a non-zero research time are queued as timed projects.
+    /// Only one timed project may run at once on this server.
+    /// </summary>
+    [DataField("timedResearchEnabled"), ViewVariables(VVAccess.ReadWrite)]
+    public bool TimedResearchEnabled = false;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public string? ActiveTechnologyId;
+
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float ActiveTechnologyRemainingSeconds;
 }
 
 /// <summary>
@@ -60,4 +73,7 @@ public readonly record struct ResearchServerPointsChangedEvent(EntityUid Server,
 /// <param name="Points"></param>
 [ByRefEvent]
 public record struct ResearchServerGetPointsPerSecondEvent(EntityUid Server, int Points);
+
+[ByRefEvent]
+public readonly record struct ResearchServerTimedResearchUpdatedEvent(EntityUid Server);
 

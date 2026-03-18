@@ -9,7 +9,9 @@ namespace Content.Shared.Verbs
     [Serializable, NetSerializable]
     public sealed class VerbCategory
     {
-        public readonly string Text;
+        public readonly string? TextLocId;
+
+        public string Text;
 
         public readonly SpriteSpecifier? Icon;
 
@@ -30,9 +32,26 @@ namespace Content.Shared.Verbs
 
         public VerbCategory(string text, string? icon, bool iconsOnly = false)
         {
+            TextLocId = text;
             Text = Loc.GetString(text);
             Icon = icon == null ? null : new SpriteSpecifier.Texture(new(icon));
             IconsOnly = iconsOnly;
+        }
+
+        public void RefreshLocalization()
+        {
+            if (string.IsNullOrWhiteSpace(TextLocId))
+                return;
+
+            Text = Loc.GetString(TextLocId);
+        }
+
+        public string GetDisplayText()
+        {
+            if (!string.IsNullOrWhiteSpace(TextLocId))
+                return Loc.GetString(TextLocId);
+
+            return Text;
         }
 
         public static readonly VerbCategory Admin =
@@ -88,5 +107,29 @@ namespace Content.Shared.Verbs
 
         public static readonly VerbCategory Adjust =
             new("verb-categories-adjust", "/Textures/Interface/VerbIcons/screwdriver.png");
+
+        public static void RefreshStaticLocalizations()
+        {
+            Admin.RefreshLocalization();
+            Antag.RefreshLocalization();
+            Examine.RefreshLocalization();
+            Debug.RefreshLocalization();
+            Eject.RefreshLocalization();
+            Insert.RefreshLocalization();
+            Buckle.RefreshLocalization();
+            Unbuckle.RefreshLocalization();
+            Rotate.RefreshLocalization();
+            Smite.RefreshLocalization();
+            Tricks.RefreshLocalization();
+            SetTransferAmount.RefreshLocalization();
+            Split.RefreshLocalization();
+            InstrumentStyle.RefreshLocalization();
+            ChannelSelect.RefreshLocalization();
+            SetSensor.RefreshLocalization();
+            Lever.RefreshLocalization();
+            SelectType.RefreshLocalization();
+            PowerLevel.RefreshLocalization();
+            Adjust.RefreshLocalization();
+        }
     }
 }

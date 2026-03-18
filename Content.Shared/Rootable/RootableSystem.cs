@@ -253,6 +253,6 @@ public sealed class RootableSystem : EntitySystem
     private void OnRefreshMovementSpeed(Entity<RootableComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
         if (ent.Comp.Rooted)
-            args.ModifySpeed(ent.Comp.SpeedModifier);
+            args.ModifySpeed(ent.Comp.SpeedModifier, MovementSpeedModifierLayer.Status);
     }
 }

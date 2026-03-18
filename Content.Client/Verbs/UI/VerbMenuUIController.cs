@@ -139,7 +139,7 @@ namespace Content.Client.Verbs.UI
 
             foreach (var cat in ExtraCategories)
             {
-                extras.Add(cat.Text);
+                extras.Add(cat.GetDisplayText());
             }
 
             foreach (var verb in CurrentVerbs)
@@ -150,13 +150,17 @@ namespace Content.Client.Verbs.UI
                     _context.AddElement(popup, element);
                 }
                 // Add the category if it's not an extra (this is to avoid shuffling if we're filling from server verbs response).
-                else if (!extras.Contains(verb.Category.Text) && listedCategories.Add(verb.Category.Text))
-                    AddVerbCategory(verb.Category, popup);
+                else
+                {
+                    var categoryText = verb.Category.GetDisplayText();
+                    if (!extras.Contains(categoryText) && listedCategories.Add(categoryText))
+                        AddVerbCategory(verb.Category, popup);
+                }
             }
 
             foreach (var category in ExtraCategories)
             {
-                if (listedCategories.Add(category.Text))
+                if (listedCategories.Add(category.GetDisplayText()))
                     AddVerbCategory(category, popup);
             }
 
@@ -171,9 +175,10 @@ namespace Content.Client.Verbs.UI
             // Get a list of the verbs in this category
             List<Verb> verbsInCategory = new();
             var drawIcons = false;
+            var categoryText = category.GetDisplayText();
             foreach (var verb in CurrentVerbs)
             {
-                if (verb.Category?.Text == category.Text)
+                if (verb.Category?.GetDisplayText() == categoryText)
                 {
                     verbsInCategory.Add(verb);
                     drawIcons = drawIcons || verb.Icon != null || verb.IconEntity != null;

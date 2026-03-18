@@ -49,6 +49,7 @@
       - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/flaregun.ogg
+  - type: WH40KGunPrediction
 
 
 - type: entity

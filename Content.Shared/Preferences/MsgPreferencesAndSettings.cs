@@ -14,6 +14,7 @@ namespace Content.Shared.Preferences
 
         public PlayerPreferences Preferences = default!;
         public GameSettings Settings = default!;
+        public bool NewlyInitialized;
 
         public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
         {
@@ -31,6 +32,8 @@ namespace Content.Shared.Preferences
                 buffer.ReadAlignedMemory(stream, length);
                 serializer.DeserializeDirect(stream, out Settings);
             }
+
+            NewlyInitialized = buffer.ReadBoolean();
         }
 
         public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
@@ -50,6 +53,8 @@ namespace Content.Shared.Preferences
                 stream.TryGetBuffer(out var segment);
                 buffer.Write(segment);
             }
+
+            buffer.Write(NewlyInitialized);
         }
     }
 }

@@ -21,6 +21,18 @@ public sealed partial class FrictionContactsComponent : Component
     public float MobFriction = 0.05f;
 
     /// <summary>
+    /// Contact aggregation policy for this friction source.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public ContactModifierAggregationMode AggregationMode = ContactModifierAggregationMode.Average;
+
+    /// <summary>
+    /// Weight used only when <see cref="AggregationMode"/> is <see cref="ContactModifierAggregationMode.WeightedAverage"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float AggregationWeight = 1.0f;
+
+    /// <summary>
     /// Modified mob friction without input while on FrictionContactsComponent
     /// </summary>
     [DataField, AutoNetworkedField]

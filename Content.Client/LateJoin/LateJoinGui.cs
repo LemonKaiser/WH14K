@@ -44,8 +44,11 @@ namespace Content.Client.LateJoin
 
         private readonly Control _base;
         private readonly HashSet<ProtoId<DepartmentPrototype>>? _departmentFilter;
+        private readonly HashSet<ProtoId<JobPrototype>>? _hiddenJobs;
 
-        public LateJoinGui(IReadOnlyCollection<ProtoId<DepartmentPrototype>>? departmentFilter = null)
+        public LateJoinGui(
+            IReadOnlyCollection<ProtoId<DepartmentPrototype>>? departmentFilter = null,
+            IReadOnlyCollection<ProtoId<JobPrototype>>? hiddenJobs = null)
         {
             MinSize = SetSize = new Vector2(360, 560);
             IoCManager.InjectDependencies(this);
@@ -55,6 +58,8 @@ namespace Content.Client.LateJoin
             _sawmill = _logManager.GetSawmill("latejoin.panel");
             if (departmentFilter != null)
                 _departmentFilter = new HashSet<ProtoId<DepartmentPrototype>>(departmentFilter);
+            if (hiddenJobs != null)
+                _hiddenJobs = new HashSet<ProtoId<JobPrototype>>(hiddenJobs);
 
             Title = Loc.GetString("late-join-gui-title");
 
@@ -173,6 +178,7 @@ namespace Content.Client.LateJoin
                 Array.Sort(departments, DepartmentUIComparer.Instance);
 
                 _jobButtons[id] = new Dictionary<string, List<JobButton>>();
+                _jobCategories[id] = new Dictionary<string, BoxContainer>();
 
                 foreach (var department in departments)
                 {
@@ -181,12 +187,14 @@ namespace Content.Client.LateJoin
                         continue;
 
                     var departmentName = Loc.GetString(department.Name);
-                    _jobCategories[id] = new Dictionary<string, BoxContainer>();
                     var stationAvailable = _gameTicker.JobsAvailable[id];
                     var jobsAvailable = new List<JobPrototype>();
 
                     foreach (var jobId in department.Roles)
                     {
+                        if (_hiddenJobs != null && _hiddenJobs.Contains(jobId))
+                            continue;
+
                         if (!stationAvailable.ContainsKey(jobId))
                             continue;
 
@@ -269,6 +277,7 @@ namespace Content.Client.LateJoin
 
                         if (!_jobRequirements.IsAllowed(prototype, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
                         {
+                            jobButton.LockedByRequirements = true;
                             jobButton.Disabled = true;
 
                             if (!reason.IsEmpty)
@@ -322,8 +331,11 @@ namespace Content.Client.LateJoin
                                 if (matchingJobButton.Amount != updatedJobValue)
                                 {
                                     matchingJobButton.RefreshLabel(updatedJobValue);
-                                    matchingJobButton.Disabled |= matchingJobButton.Amount == 0;
                                 }
+
+                                matchingJobButton.Disabled =
+                                    matchingJobButton.LockedByRequirements ||
+                                    matchingJobButton.Amount == 0;
                             }
                         }
                     }
@@ -351,6 +363,7 @@ namespace Content.Client.LateJoin
         public string JobId { get; }
         public string JobLocalisedName { get; }
         public int? Amount { get; private set; }
+        public bool LockedByRequirements { get; set; }
         private bool _initialised = false;
 
         public JobButton(Label jobLabel, ProtoId<JobPrototype> jobId, string jobLocalisedName, int? amount)

@@ -128,23 +128,23 @@ public sealed class MoverController : SharedMoverController
     private void OnRelayPlayerAttached(Entity<RelayInputMoverComponent> entity, ref PlayerAttachedEvent args)
     {
         if (MoverQuery.TryGetComponent(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
     }
 
     private void OnRelayPlayerDetached(Entity<RelayInputMoverComponent> entity, ref PlayerDetachedEvent args)
     {
         if (MoverQuery.TryGetComponent(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
     }
 
     private void OnPlayerAttached(Entity<InputMoverComponent> entity, ref PlayerAttachedEvent args)
     {
-        SetMoveInput(entity, MoveButtons.None);
+        SetMoveInput(entity, MoveButtons.Walk);
     }
 
     private void OnPlayerDetached(Entity<InputMoverComponent> entity, ref PlayerDetachedEvent args)
     {
-        SetMoveInput(entity, MoveButtons.None);
+        SetMoveInput(entity, MoveButtons.Walk);
     }
 
     protected override bool CanSound()

@@ -1,0 +1,89 @@
+# DRAFT ONLY
+# This file is not loaded by runtime prototype loader.
+# Copy to `team_random_events.yml` only after implementing corresponding prototype definitions in code.
+
+meta:
+  profile: wh40k_team_random_events_v1
+  roll_interval_seconds_min: 480
+  roll_interval_seconds_max: 720
+  anti_repeat: true
+  max_active_events_per_team: 1
+
+stacking_caps:
+  max_offense_bonus_percent: 8
+  min_incoming_damage_multiplier: 0.92
+
+events:
+  - id: rapid_ammo_chain
+    weight: 1.0
+    duration_seconds: 90
+    cooldown_seconds: 600
+    tags: [logistics, economy]
+    requires:
+      - subsystem: cargo
+    effects:
+      - type: cargo_ammo_price_multiplier
+        value: 0.85
+      - type: cargo_order_cooldown_multiplier
+        value: 0.9
+
+  - id: medicae_push
+    weight: 1.0
+    duration_seconds: 75
+    cooldown_seconds: 600
+    tags: [combat, sustain]
+    effects:
+      - type: medical_do_after_multiplier
+        value: 0.85
+      - type: passive_regen_bonus
+        value: 0.05
+
+  - id: fireline_fury
+    weight: 0.9
+    duration_seconds: 60
+    cooldown_seconds: 660
+    tags: [combat, offense]
+    effects:
+      - type: outgoing_damage_multiplier
+        value: 1.06
+
+  - id: iron_skin_window
+    weight: 0.9
+    duration_seconds: 60
+    cooldown_seconds: 660
+    tags: [combat, defense]
+    effects:
+      - type: incoming_damage_multiplier
+        value: 0.95
+
+  - id: scrap_windfall
+    weight: 0.8
+    duration_seconds: 100
+    cooldown_seconds: 720
+    tags: [industry, economy]
+    requires:
+      - subsystem: reclaimer
+    effects:
+      - type: reclaimer_yield_multiplier
+        value: 1.15
+      - type: chip_conversion_speed_multiplier
+        value: 1.12
+
+  - id: relay_overclock
+    weight: 0.8
+    duration_seconds: 80
+    cooldown_seconds: 720
+    tags: [command]
+    effects:
+      - type: tactical_call_cooldown_multiplier
+        value: 0.85
+
+fallback_rules:
+  reroll_if_requirements_missing: true
+  max_rerolls: 3
+  if_no_valid_event: skip_cycle
+
+ui:
+  show_event_name: true
+  show_remaining_time: true
+  announce_team_only: true

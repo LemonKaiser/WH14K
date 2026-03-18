@@ -3,6 +3,7 @@ using Content.Server.Acz;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
+using Content.Server._WH40K.Administration.ScreenCheck;
 using Content.Server.Afk;
 using Content.Server.Chat.Managers;
 using Content.Server.Connection;
@@ -51,6 +52,7 @@ namespace Content.Server.Entry
         [Dependency] private readonly DiscordLink _discordLink = default!;
         [Dependency] private readonly EuiManager _euiManager = default!;
         [Dependency] private readonly GhostKickManager _ghostKick = default!;
+        [Dependency] private readonly ScreenCheckManager _screenCheckManager = default!;
         [Dependency] private readonly IAdminManager _admin = default!;
         [Dependency] private readonly IAdminLogManager _adminLog = default!;
         [Dependency] private readonly IAfkManager _afk = default!;
@@ -129,6 +131,7 @@ namespace Content.Server.Entry
             _nodeFactory.Initialize();
             _netResMan.Initialize();
             _ghostKick.Initialize();
+            _screenCheckManager.Initialize();
             _serverInfo.Initialize();
             _serverApi.Initialize();
             _voteManager.Initialize();

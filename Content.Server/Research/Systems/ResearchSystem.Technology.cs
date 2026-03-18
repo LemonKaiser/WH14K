@@ -80,6 +80,21 @@ public sealed partial class ResearchSystem
         if (!CanServerUnlockTechnology(client, prototype, clientDatabase, component))
             return false;
 
+        if (TryComp<ResearchServerComponent>(serverEnt.Value, out var serverComp) &&
+            serverComp.TimedResearchEnabled &&
+            prototype.ResearchTimeSeconds > 0f)
+        {
+            serverComp.ActiveTechnologyId = prototype.ID;
+            serverComp.ActiveTechnologyRemainingSeconds = prototype.ResearchTimeSeconds;
+            Dirty(serverEnt.Value, serverComp);
+            ModifyServerPoints(serverEnt.Value, -prototype.Cost, serverComp);
+            NotifyTimedResearchUpdated(serverEnt.Value, serverComp);
+
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"{ToPrettyString(user):player} started timed research {prototype.ID} (discipline: {prototype.Discipline}, tier: {prototype.Tier}, time: {prototype.ResearchTimeSeconds}s) at {ToPrettyString(client)}, for server {ToPrettyString(serverEnt.Value)}.");
+            return true;
+        }
+
         AddTechnology(serverEnt.Value, prototype);
         TrySetMainDiscipline(prototype, serverEnt.Value);
         ModifyServerPoints(serverEnt.Value, -prototype.Cost);
@@ -152,6 +167,10 @@ public sealed partial class ResearchSystem
             return false;
 
         if (!IsTechnologyAvailable(database, technology))
+            return false;
+
+        if (serverComp.TimedResearchEnabled &&
+            serverComp.ActiveTechnologyId != null)
             return false;
 
         if (technology.Cost > serverComp.Points)

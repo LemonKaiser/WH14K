@@ -5,6 +5,7 @@ using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Objectives.Components;
 using Content.Server.Chat.Managers;
 using Content.Shared.Chat;
+using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Objectives;
 using Content.Shared._WH40K.Overlays;
 using Content.Shared.Damage.Components;
@@ -18,6 +19,7 @@ using Robust.Server.Player;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.Objectives;
@@ -27,12 +29,15 @@ public sealed class WH40KObjectiveSystem : EntitySystem
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     private readonly Dictionary<EntityUid, string> _objectiveTeams = new();
     private readonly Dictionary<string, int> _teamObjectiveTotals = new();
     private readonly Dictionary<string, int> _teamObjectiveRemaining = new();
+    private TimeSpan _nextShieldVisualTick;
 
     public override void Initialize()
     {
@@ -46,9 +51,27 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_timing.CurTime < _nextShieldVisualTick)
+            return;
+
+        _nextShieldVisualTick = _timing.CurTime + TimeSpan.FromSeconds(0.5);
+        var phase = _teamRule.GetCurrentPhase();
+        var query = EntityQueryEnumerator<WH40KObjectiveComponent>();
+        while (query.MoveNext(out var uid, out var objective))
+        {
+            UpdateShieldVisual(uid, objective, phase);
+        }
+    }
+
     private void OnMapInit(EntityUid uid, WH40KObjectiveComponent component, MapInitEvent args)
     {
-        if (!_teamRule.AreObjectivesEnabled())
+        var objectivesEnabled = _teamRule.AreObjectivesEnabled();
+        var hasActiveTeamBattle = _teamRule.GetTeamIds().Count > 0;
+        if (!objectivesEnabled && hasActiveTeamBattle)
         {
             QueueDel(uid);
             return;
@@ -85,11 +108,18 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         }
 
         SetVisualState(uid, WH40KObjectiveVisualState.Intact);
+        UpdateShieldVisual(uid, component, _teamRule.GetCurrentPhase());
     }
 
     private void OnBeforeDamageChanged(EntityUid uid, WH40KObjectiveComponent component, ref BeforeDamageChangedEvent args)
     {
         if (component.Destroying || component.Destroyed)
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        if (_teamRule.IsEarlyVictoryLocked())
         {
             args.Cancelled = true;
             return;
@@ -105,7 +135,23 @@ public sealed class WH40KObjectiveSystem : EntitySystem
             return;
 
         if (attackerTeamId == component.TeamId)
+        {
             args.Cancelled = true;
+            return;
+        }
+
+        if (_teamRule.GetCurrentPhase() < WH40KBattlePhase.Assault)
+        {
+            var multiplier = Math.Clamp(component.PreparationShieldDamageMultiplier, 0f, 1f);
+            if (multiplier <= 0f)
+            {
+                args.Cancelled = true;
+                return;
+            }
+
+            args.Damage = args.Damage * multiplier;
+        }
+
     }
 
     private void OnDamageChanged(EntityUid uid, WH40KObjectiveComponent component, DamageChangedEvent args)
@@ -120,7 +166,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         if (maxHealth <= FixedPoint2.Zero)
             return;
 
-        var totalDamage = damageable.TotalDamage;
+        var totalDamage = _damageable.GetTotalDamage((uid, damageable));
         var remainingRatio = (maxHealth - totalDamage).Float() / maxHealth.Float();
 
         if (!component.LowHealthAnnounced &&
@@ -199,6 +245,16 @@ public sealed class WH40KObjectiveSystem : EntitySystem
     {
         if (TryComp<AppearanceComponent>(uid, out var appearance))
             _appearance.SetData(uid, WH40KObjectiveVisuals.State, state, appearance);
+    }
+
+    private void UpdateShieldVisual(EntityUid uid, WH40KObjectiveComponent component, WH40KBattlePhase phase)
+    {
+        var shielded = !component.Destroying &&
+                       !component.Destroyed &&
+                       phase < WH40KBattlePhase.Assault;
+
+        if (TryComp<AppearanceComponent>(uid, out var appearance))
+            _appearance.SetData(uid, WH40KObjectiveVisuals.Shielded, shielded, appearance);
     }
 
     private int CountRemainingObjectives(string teamId)

@@ -113,6 +113,14 @@ public sealed class ChannelSelectorPopup : Popup
         Selected?.Invoke(channel);
     }
 
+    public void RefreshLocalization()
+    {
+        foreach (var selector in _selectorStates.Values)
+        {
+            selector.RefreshLocalization();
+        }
+    }
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

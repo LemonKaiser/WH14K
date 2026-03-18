@@ -120,7 +120,7 @@ public abstract class SharedMobCollisionSystem : EntitySystem
         if (!ent.Comp.Colliding)
             return;
 
-        args.ModifySpeed(ent.Comp.SpeedModifier);
+        args.ModifySpeed(ent.Comp.SpeedModifier, MovementSpeedModifierLayer.Environment);
     }
 
     private void SetColliding(Entity<MobCollisionComponent> entity, bool value, float speedMod)

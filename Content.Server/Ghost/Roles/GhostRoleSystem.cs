@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.EUI;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
@@ -49,6 +50,7 @@ public sealed class GhostRoleSystem : EntitySystem
     [Dependency] private readonly IAdminLogManager _adminLogger = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly FollowerSystem _followerSystem = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly SharedRoleSystem _roleSystem = default!;
@@ -129,8 +131,15 @@ public sealed class GhostRoleSystem : EntitySystem
 
     public void OpenEui(ICommonSession session)
     {
-        if (session.AttachedEntity is not { Valid: true } attached ||
-            !HasComp<GhostComponent>(attached))
+        var isGhost = session.AttachedEntity is { Valid: true } attached &&
+                      HasComp<GhostComponent>(attached);
+
+        var canOpenFromRoundLobby =
+            _gameTicker.RunLevel == GameRunLevel.InRound &&
+            _gameTicker.PlayerGameStatuses.TryGetValue(session.UserId, out var status) &&
+            status != PlayerGameStatus.JoinedGame;
+
+        if (!isGhost && !canOpenFromRoundLobby)
             return;
 
         if (_openUis.ContainsKey(session))
@@ -272,14 +281,23 @@ public sealed class GhostRoleSystem : EntitySystem
 
     private bool TryTakeover(ICommonSession player, uint identifier)
     {
-        // TODO: the following two checks are kind of redundant since they should already be removed
-        //           from the raffle
-        // can't win if you are disconnected (although you shouldn't be a candidate anyway)
+        // TODO: the following checks are kind of redundant since they should already be removed
+        // from the raffle.
+        // Can't win if you are disconnected (although you shouldn't be a candidate anyway).
         if (player.Status != SessionStatus.InGame)
             return false;
 
-        // can't win if you are no longer a ghost (e.g. if you returned to your body)
-        if (player.AttachedEntity == null || !HasComp<GhostComponent>(player.AttachedEntity))
+        var isGhost = player.AttachedEntity is { Valid: true } attached &&
+                      HasComp<GhostComponent>(attached);
+
+        // In-round lobby players (e.g. after "Return to Lobby") are valid ghost-role candidates too.
+        var canTakeFromRoundLobby =
+            _gameTicker.RunLevel == GameRunLevel.InRound &&
+            _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status) &&
+            status != PlayerGameStatus.JoinedGame;
+
+        // Keep disallowing active in-round bodies (JoinedGame) from winning raffles.
+        if (!isGhost && !canTakeFromRoundLobby)
             return false;
 
         if (Takeover(player, identifier))
@@ -614,6 +632,14 @@ public sealed class GhostRoleSystem : EntitySystem
         _mindSystem.SetUserId(newMind, player.UserId);
         _mindSystem.TransferTo(newMind, mob);
 
+        // If player takes a ghost role directly from in-round lobby, they must be moved
+        // to gameplay state so client exits lobby UI and joins the round view.
+        if (_gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status) &&
+            status != PlayerGameStatus.JoinedGame)
+        {
+            _gameTicker.PlayerJoinGame(player, silent: true);
+        }
+
         _roleSystem.MindAddRoles(newMind.Owner, role.MindRoles, newMind.Comp);
     }
 
@@ -666,6 +692,8 @@ public sealed class GhostRoleSystem : EntitySystem
                 : TimeSpan.MinValue;
 
             TryPrototypes((uid, role), out var antags, out var jobs);
+            if (player is not null && !IsRoleAllowed(player, jobs, antags))
+                continue;
 
             roles.Add(new GhostRoleInfo
             {

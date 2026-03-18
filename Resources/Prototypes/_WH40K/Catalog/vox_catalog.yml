@@ -1,21 +1,345 @@
 - type: listing
-  id: VoxAstartes
-  name: Лазерный карабин
-  description: Карабин, вооот.
+  id: VoxFlashlightLantern
+  name: Utility lantern
+  description: Reliable field lantern for night pushes.
+  productEntity: FlashlightLantern
+  cost:
+    intelligence_imp: 1
+  categories:
+  - VoxBasics
+
+  conditions:
+- type: listing
+  id: VoxBasicMedkit
+  name: Medic
+  description: Basic medicine for frontline treatment.
+  productEntity: Medkit
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxSupport
+
+  conditions:
+- type: listing
+  id: VoxNutribrick
+  name: Nutribrick
+  description: Compact ration for long assaults.
+  productEntity: FoodSnackNutribrick
+  cost:
+    intelligence_imp: 1
+  categories:
+  - VoxBasics
+
+  conditions:
+- type: listing
+  id: VoxWHSoup
+  name: Warm ration soup
+  description: Hot meal to sustain a squad.
+  productEntity: WHSoup
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxBasics
+
+  conditions:
+- type: listing
+  id: VoxLasgun
+  name: Lasgun
+  description: Standard issue imperial lasgun.
   productEntity: WeaponLaserLasgun
   cost:
     intelligence_imp: 4
   categories:
   - VoxWeaponry
 
-#Ammo
+  conditions:
+- type: listing
+  id: VoxStubRifle
+  name: Stub rifle
+  description: Kinetic rifle for trench engagements.
+  productEntity: WeaponStubRifle
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxWeaponry
+
+  conditions:
+- type: listing
+  id: VoxChainsword
+  name: Chainsword
+  description: Brutal close-quarters blade.
+  productEntity: Chainsword
+  cost:
+    intelligence_imp: 5
+  categories:
+  - VoxWeaponry
+
+  conditions:
+- type: listing
+  id: VoxLasgunAccatran
+  name: Accatran lasgun
+  description: Assault-grade precision lasgun.
+  productEntity: WeaponLaserLasgunAccatran
+  cost:
+    intelligence_imp: 6
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: VoxCombatShotgun
+  name: Combat shotgun
+  description: Devastating close-range breacher.
+  productEntity: WeaponCombatShotgun
+  cost:
+    intelligence_imp: 6
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: VoxStubLMG
+  name: Stub LMG
+  description: Suppressive automatic weapon.
+  productEntity: WeaponStubLMG
+  cost:
+    intelligence_imp: 8
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxBolter
+  name: Bolter
+  description: Heavy-caliber anti-infantry bolter.
+  productEntity: WeaponRifleBolter
+  cost:
+    intelligence_imp: 10
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxPlasmagun
+  name: Plasma gun
+  description: Catastrophic anti-armor plasma weapon.
+  productEntity: WeaponLaserPlasmagun
+  cost:
+    intelligence_imp: 14
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: VoxRocketLauncher
+  name: Rocket launcher
+  description: Heavy launcher for late-war pushes.
+  productEntity: WeaponRocketLauncher
+  cost:
+    intelligence_imp: 16
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 5
 
 - type: listing
   id: VoxLasgunPowerCell
-  name: Коробка батарей лазгана
-  description: батареи лазгана, пораженные варпом
+  name: Lasgun cell crate
+  description: Multi-pack of lasgun cells.
   productEntity: BoxLasgunPowerCell
   cost:
     intelligence_imp: 2
   categories:
   - VoxAmmo
+
+  conditions:
+- type: listing
+  id: VoxMagazineStubRifle
+  name: Stub rifle magazine
+  description: Extra kinetic magazine.
+  productEntity: MagazineStubRifle
+  cost:
+    intelligence_imp: 1
+  categories:
+  - VoxAmmo
+
+  conditions:
+- type: listing
+  id: VoxMagazineStubSmg
+  name: Stub SMG magazine
+  description: Reserve SMG ammo.
+  productEntity: MagazineStubSMG
+  cost:
+    intelligence_imp: 1
+  categories:
+  - VoxAmmo
+
+  conditions:
+- type: listing
+  id: VoxMagazineBolter
+  name: Bolter magazine
+  description: Bolter ammo magazine.
+  productEntity: MagazineBolter
+  cost:
+    intelligence_imp: 3
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxFlameTank
+  name: Promethium tank
+  description: Flamethrower fuel reserve.
+  productEntity: FlameThrowerTank
+  cost:
+    intelligence_imp: 3
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: VoxArmorFlakVest
+  name: Flak vest
+  description: Baseline imperial body armor.
+  productEntity: ClothingOuterArmorFlakVest
+  cost:
+    intelligence_imp: 3
+  categories:
+  - VoxArmor
+
+  conditions:
+- type: listing
+  id: VoxArmorHelmetFlak
+  name: Flak helmet
+  description: Standard issue flak helmet.
+  productEntity: ClothingHeadHelmetFlak
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxArmor
+
+  conditions:
+- type: listing
+  id: VoxArmorAdvancedVest
+  name: Advanced flak vest
+  description: Reinforced armor for veteran squads.
+  productEntity: ClothingOuterArmorAdvancedFlakVest
+  cost:
+    intelligence_imp: 7
+  categories:
+  - VoxArmor
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxArmorAdvancedHelmet
+  name: Advanced flak helmet
+  description: Improved head protection package.
+  productEntity: ClothingHeadHelmetFlakAdv
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxArmor
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxSeclite
+  name: Tactical flashlight
+  description: Durable high-output flashlight.
+  productEntity: FlashlightSeclite
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxBasics
+
+  conditions:
+- type: listing
+  id: VoxMedkitAdvanced
+  name: Advanced medkit
+  description: Better supplies for medics.
+  productEntity: MedkitAdvanced
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxMedkitCombat
+  name: Combat medkit
+  description: Trauma-focused battle medkit.
+  productEntity: MedkitCombat
+  cost:
+    intelligence_imp: 6
+  categories:
+  - VoxSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: VoxStimpackMini
+  name: Mini stimpack
+  description: Rapid short burst stimulant.
+  productEntity: StimpackMini
+  cost:
+    intelligence_imp: 3
+  categories:
+  - VoxSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: VoxCombatMedipen
+  name: Combat medipen
+  description: High-pressure emergency injector.
+  productEntity: CombatMedipen
+  cost:
+    intelligence_imp: 6
+  categories:
+  - VoxSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: VoxSentinelAutogun
+  name: Sentinel walker (autogun)
+  description: Light armored walker support.
+  productEntity: MechSentinelBatteryAutogun
+  cost:
+    intelligence_imp: 20
+  categories:
+  - VoxReinforcements
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 6
+
+- type: listing
+  id: VoxSentinelPlasma
+  name: Sentinel walker (plasma)
+  description: Elite walker variant with plasma.
+  productEntity: MechSentinelBatteryPlasma
+  cost:
+    intelligence_imp: 26
+  categories:
+  - VoxReinforcements
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 7

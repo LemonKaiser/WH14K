@@ -1,0 +1,54 @@
+- type: entity
+  id: WH40KIntelDetectorBase
+  parent: BaseItem
+  abstract: true
+  name: intel detector
+  description: A compact scanner tuned for active mission markers and objective zones.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    layers:
+    - state: datadetector
+      map: [ "base" ]
+  - type: Item
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    slots:
+    - suitstorage
+    - belt
+  - type: WH40KIntelDetector
+    short: true
+    shortRange: 7
+    longRange: 14
+    shortRefresh: 1
+    longRefresh: 2
+    requireTeam: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.WH40KIntelDetectorLayer.State:
+        base:
+          True: { state: datadetector_on_0 }
+          False: { state: datadetector }
+
+- type: entity
+  id: WH40KIntelDetectorImperium
+  parent: WH40KIntelDetectorBase
+  name: imperium intel detector
+  description: Mission scanner calibrated for Imperium frontline objective markers.
+  components:
+  - type: WH40KIntelDetector
+    allowedTeamIds:
+    - Imperium
+
+- type: entity
+  id: WH40KIntelDetectorHeretics
+  parent: WH40KIntelDetectorBase
+  name: heretics intel detector
+  description: Mission scanner calibrated for Heretics frontline objective markers.
+  components:
+  - type: WH40KIntelDetector
+    allowedTeamIds:
+    - Heretics

@@ -1,0 +1,18 @@
+- type: rmcWaypointer
+  abstract: true
+  id: RMCBaseWaypointer
+  rsiPath: _RMC14/Markers/Waypointers/waypointer.rsi
+  waypointerStates: 5
+  color: White
+  workOnGrid: true
+  workInCombat: true
+
+- type: rmcWaypointer
+  parent: RMCBaseWaypointer
+  id: RMCWH40KObjectiveWaypointer
+  name: rmc-waypointer-objective
+  trackedComponents:
+  - type: WaypointerTrackable
+  color: "#FFCB57"
+  maxRange: 200
+  radialMenuIconPath: _RMC14/Markers/Waypointers/station_waypointer.rsi

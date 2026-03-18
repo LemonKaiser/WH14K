@@ -1,6 +1,6 @@
 - type: construction
   name: recipes-metal-wall-name
-  id: metalWall
+  id: WH40KMetalWall
   graph: Girder
   startNode: start
   targetNode: metalWall
@@ -12,6 +12,18 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canRotate: false
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KBarricade
+  graph: Barricade
+  startNode: start
+  targetNode: barricadefull
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
     - !type:TileNotBlocked

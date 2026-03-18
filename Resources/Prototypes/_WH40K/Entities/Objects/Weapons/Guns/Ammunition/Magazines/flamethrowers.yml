@@ -10,7 +10,7 @@
     mayTransfer: true
     cycleable: false
     proto: CartridgeFlameThrower
-    capacity: 200
+    capacity: 160
     whitelist:
       tags:
         - CartridgeFlameThrower

@@ -1,9 +1,9 @@
-﻿- type: entity
+- type: entity
   parent: [BaseStructureDynamic, BaseXenoArtifact]
   id: BaseXenoArtifactStructure
   name: artifact
   abstract: true
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   # Visual
   - type: Sprite
@@ -49,4 +49,5 @@
     nodeCount:
       min: 9
       max: 13
+
 

@@ -22,3 +22,4 @@ player-panel-false = Нет
 player-panel-true = Да
 player-panel-follow = Следовать
 player-panel-camera = Камера
+player-panel-screen-check = Скринчек

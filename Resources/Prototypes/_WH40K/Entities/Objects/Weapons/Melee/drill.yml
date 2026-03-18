@@ -1,0 +1,12 @@
+- type: entity
+  parent: MiningDrill
+  id: WH40KMiningDrillVoidpiercer
+  name: Voidpiercer Drill
+  description: A custom assault-pattern reskin of a mining drill. It chews through rock fast and sounds like it will eat a bunker next.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Tools/voidpiercer_drill.rsi
+    state: handdrill
+  - type: Item
+    sprite: _WH40K/Objects/Tools/voidpiercer_drill.rsi

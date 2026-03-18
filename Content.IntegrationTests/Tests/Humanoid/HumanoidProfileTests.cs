@@ -1,6 +1,7 @@
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
 using Robust.Shared.Enums;
 using Robust.Shared.GameObjects;
@@ -31,14 +32,17 @@ public sealed class HumanoidProfileTests
                 .WithSex(Sex.Female)
                 .WithAge(67)
                 .WithGender(Gender.Neuter)
-                .WithSpecies(Vox));
+                .WithSpecies(Vox)
+                .WithVoiceTone(VoiceTone.High));
             var humanoidComponent = entityManager.GetComponent<HumanoidProfileComponent>(human);
             var voiceComponent = entityManager.GetComponent<VocalComponent>(human);
+            var speechComponent = entityManager.GetComponent<SpeechComponent>(human);
 
             Assert.That(humanoidComponent.Age, Is.EqualTo(67));
             Assert.That(humanoidComponent.Sex, Is.EqualTo(Sex.Female));
             Assert.That(humanoidComponent.Gender, Is.EqualTo(Gender.Neuter));
             Assert.That(humanoidComponent.Species, Is.EqualTo(Vox));
+            Assert.That(speechComponent.VoiceTone, Is.EqualTo(VoiceTone.High));
 
             Assert.That(voiceComponent.Sounds, Is.Not.Null, message: "the MobHuman spawned by this test needs to have sex-specific sound set");
             Assert.That(voiceComponent.Sounds![Sex.Female], Is.EqualTo(voiceComponent.EmoteSounds));

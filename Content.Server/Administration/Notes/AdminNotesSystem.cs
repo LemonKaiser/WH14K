@@ -41,6 +41,7 @@ public sealed class AdminNotesSystem : EntitySystem
 
         var verb = new Verb
         {
+            TextLocId = "admin-notes-verb-text",
             Text = Loc.GetString("admin-notes-verb-text"),
             Category = VerbCategory.Admin,
             Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/examine.svg.192dpi.png")),

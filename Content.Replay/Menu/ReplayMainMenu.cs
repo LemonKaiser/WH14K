@@ -13,6 +13,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Log;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Utility;
 using static Robust.Shared.Replays.ReplayConstants;
@@ -24,6 +25,8 @@ namespace Content.Replay.Menu;
 /// </summary>
 public sealed class ReplayMainScreen : State
 {
+    private static readonly ISawmill Sawmill = Logger.GetSawmill("replay.main_menu");
+
     [Dependency] private readonly IResourceManager _resMan = default!;
     [Dependency] private readonly IComponentFactory _factory = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
@@ -263,7 +266,7 @@ public sealed class ReplayMainScreen : State
         }
         catch (Exception ex)
         {
-            Logger.Error($"Failed to load replay info. Exception: {ex}");
+            Sawmill.Error($"Failed to load replay info. Exception: {ex}");
             SelectReplay(null);
             return;
         }
@@ -272,8 +275,10 @@ public sealed class ReplayMainScreen : State
 
     protected override void Shutdown()
     {
-        _mainMenuControl.Dispose();
-        _selectWindow?.Dispose();
+        _mainMenuControl.Orphan();
+        _selectWindow?.Close();
+        _selectWindow?.Orphan();
+        _selectWindow = null;
     }
 
     private void OptionsButtonPressed(BaseButton.ButtonEventArgs args)

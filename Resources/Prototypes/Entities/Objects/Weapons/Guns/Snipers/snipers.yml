@@ -25,6 +25,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/sniper.ogg
+  - type: WH40KGunPrediction
   - type: BallisticAmmoProvider
     capacity: 10
     proto: CartridgeLightRifle

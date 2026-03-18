@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
@@ -21,6 +22,8 @@ using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Pulling.Events;
+using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.RoundEvents;
 using Content.Shared.Standing;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
@@ -292,15 +295,34 @@ public sealed class PullingSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
+        var walkMod = component.WalkSpeedModifier;
+        var sprintMod = component.SprintSpeedModifier;
+
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var heldMoveSpeed) && component.Pulling.HasValue)
         {
-            var (walkMod, sprintMod) =
+            (walkMod, sprintMod) =
                 _clothingMoveSpeed.GetHeldMovementSpeedModifiers(component.Pulling.Value, heldMoveSpeed);
-            args.ModifySpeed(walkMod, sprintMod);
+        }
+        args.ModifySpeed(walkMod, sprintMod, MovementSpeedModifierLayer.Status);
+
+        var ignorePullSlowdown = TryComp<WH40KRoundEventBuffComponent>(uid, out var whBuff) &&
+                                 whBuff.IgnorePullSlowdown;
+        if (TryComp<WH40KTeamEventEffectComponent>(uid, out var teamEventBuff) &&
+            teamEventBuff.IgnorePullSlowdown)
+        {
+            ignorePullSlowdown = true;
+        }
+
+        if (!ignorePullSlowdown ||
+            component.Pulling == null)
+        {
             return;
         }
 
-        args.ModifySpeed(component.WalkSpeedModifier, component.SprintSpeedModifier);
+        // Neutralize the active pull slowdown while the event buff is enabled.
+        var undoWalk = 1f / Math.Max(0.01f, walkMod);
+        var undoSprint = 1f / Math.Max(0.01f, sprintMod);
+        args.ModifySpeed(undoWalk, undoSprint, MovementSpeedModifierLayer.Status);
     }
 
     private void OnPullableMoveInput(EntityUid uid, PullableComponent component, ref MoveInputEvent args)

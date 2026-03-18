@@ -3,11 +3,24 @@
   name: job-name-tanker
   description: job-description-tanker
   playTimeTracker: JobTanker
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: GuardsmanGear
   icon: "JobIconTanker"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Engineering

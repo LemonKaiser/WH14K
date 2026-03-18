@@ -1,0 +1,56 @@
+- type: entity
+  id: WH40KCargoRailDecor
+  name: cargo rail
+  description: Decorative rail segment under the logistics train.
+  suffix: WH40K, Visual
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _WH40K/Objects/Cargo/rail.rsi
+    state: icon
+    drawdepth: FloorObjects
+
+- type: entity
+  id: WH40KCargoTrainVisualImperium
+  name: imperial supply train
+  description: Decorative logistics train.
+  suffix: WH40K, Visual
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Cargo/chocho.rsi
+    state: icon
+    drawdepth: Effects
+  - type: WH40KCargoBatchTrainVisual
+    account: WH40KImperium
+    outboundDistance: 120
+    returnSpawnDistance: 24
+    returnSpawnDirectionX: 1
+    animationDurationSeconds: 20
+    returnLeadSeconds: 20
+    departureSound: /Audio/_WH40K/Effects/Cargo/train_departure.ogg
+    arrivalSound: /Audio/_WH40K/Effects/Cargo/train_arrival.ogg
+    departureSoundVolume: 0
+    arrivalSoundVolume: 0
+
+- type: entity
+  id: WH40KCargoTrainVisualHeretics
+  name: heretic supply train
+  description: Decorative logistics train.
+  suffix: WH40K, Visual
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Cargo/poezd.rsi
+    state: icon
+    drawdepth: Effects
+  - type: WH40KCargoBatchTrainVisual
+    account: WH40KHeretics
+    outboundDistance: 120
+    returnSpawnDistance: 24
+    returnSpawnDirectionX: 1
+    animationDurationSeconds: 20
+    returnLeadSeconds: 20
+    departureSound: /Audio/_WH40K/Effects/Cargo/train_departure.ogg
+    arrivalSound: /Audio/_WH40K/Effects/Cargo/train_arrival.ogg
+    departureSoundVolume: 0
+    arrivalSoundVolume: 0

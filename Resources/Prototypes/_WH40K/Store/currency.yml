@@ -1,20 +1,25 @@
 - type: currency
   id: Intelligence
-  displayName: Разведданные
+  displayName: wh40k-currency-intel
   cash:
     1: DataChip
   canWithdraw: false
 
 - type: currency
   id: intelligence_ch
-  displayName: Разведданные Хаоса
+  displayName: wh40k-currency-intel-chaos
   cash:
     1: DataChipChaos
   canWithdraw: false
 
 - type: currency
   id: intelligence_imp
-  displayName: Разведданные Империума
+  displayName: wh40k-currency-intel-imperium
   cash:
     1: DataChipImp
+  canWithdraw: false
+
+- type: currency
+  id: WH40KFactionFunds
+  displayName: store-currency-display-wh40k-faction-funds
   canWithdraw: false

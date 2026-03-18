@@ -85,7 +85,10 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     private void UpdateCount()
     {
         _markingsModel.GetMarkingCounts(_organ, _layer, out var isRequired, out var count, out var selected);
-        MarkingsStatus.Text = Loc.GetString("markings-limits", ("required", isRequired), ("count", count), ("selectable", count - selected));
+        if (!Loc.TryGetString("markings-limits", out var limitsText, ("required", isRequired), ("count", count), ("selectable", count - selected)))
+            limitsText = $"{selected}/{count}";
+
+        MarkingsStatus.Text = limitsText;
     }
 
     private void ReorderButtonPressed(BaseButton.ButtonEventArgs args)

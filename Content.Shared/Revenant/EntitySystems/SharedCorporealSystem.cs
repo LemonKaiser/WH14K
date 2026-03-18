@@ -29,7 +29,7 @@ public abstract class SharedCorporealSystem : EntitySystem
 
     private void OnRefresh(EntityUid uid, CorporealComponent component, RefreshMovementSpeedModifiersEvent args)
     {
-        args.ModifySpeed(component.MovementSpeedDebuff, component.MovementSpeedDebuff);
+        args.ModifySpeed(component.MovementSpeedDebuff, component.MovementSpeedDebuff, MovementSpeedModifierLayer.Status);
     }
 
     public virtual void OnStartup(EntityUid uid, CorporealComponent component, ComponentStartup args)

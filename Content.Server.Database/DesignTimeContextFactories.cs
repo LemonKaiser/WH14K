@@ -1,5 +1,6 @@
 ﻿#if TOOLS
 
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using SQLitePCL;
@@ -23,7 +24,10 @@ public sealed class DesignTimeContextFactorySqlite : IDesignTimeDbContextFactory
     public SqliteServerDbContext CreateDbContext(string[] args)
     {
 #if !USE_SYSTEM_SQLITE
-        raw.SetProvider(new SQLite3Provider_e_sqlite3());
+        var batteriesType = System.Type.GetType("SQLitePCL.Batteries_V2, SQLitePCLRaw.batteries_v2");
+        batteriesType?
+            .GetMethod("Init", BindingFlags.Public | BindingFlags.Static)?
+            .Invoke(null, null);
 #endif
 
         var optionsBuilder = new DbContextOptionsBuilder<SqliteServerDbContext>();

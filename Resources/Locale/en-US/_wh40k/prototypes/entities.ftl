@@ -25,14 +25,41 @@ ent-MobRavener = Ravener
 ent-MobZoanthrope = zoanthrope
     .desc = An extremely dangerous creature that uses its psionic powers to destroy enemies.
 
+ent-MobGrox = grox
+    .desc = A heavy reptilian livestock beast. Neutral, unless someone hurts it.
+
+ent-SpawnMobGrox = Grox Spawner
+    .desc = Spawns a grox.
+
+ent-FoodMeatGrox = raw grox meat
+    .desc = Dense, stringy meat from a grox.
+
 ent-DataChip = data chip
-    .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
+    .desc = A raw intel chip. Process it in a data cleaner (Imperium or Chaos variant) to extract useful data and obtain a faction chip.
 
 ent-DataChipImp = data chip
-    .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
+    .desc = A processed Imperium data chip. It can be used to gain research points or sold for a very good price.
+
+ent-DataChipImp2 = data chip x2
+    .desc = { ent-DataChipImp.desc }
+
+ent-DataChipImp3 = data chip x3
+    .desc = { ent-DataChipImp.desc }
+
+ent-DataChipImp4 = data chip x4
+    .desc = { ent-DataChipImp.desc }
 
 ent-DataChipChaos = chaos data chip
-    .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
+    .desc = A processed Chaos data chip. It can be used to gain research points or sold for a very good price.
+
+ent-DataChipChaos2 = chaos data chip x2
+    .desc = { ent-DataChipChaos.desc }
+
+ent-DataChipChaos3 = chaos data chip x3
+    .desc = { ent-DataChipChaos.desc }
+
+ent-DataChipChaos4 = chaos data chip x4
+    .desc = { ent-DataChipChaos.desc }
 
 ent-ClothingBackpackSkitarii = radium backpack
     .desc = Skitarii Satchel.
@@ -46,6 +73,15 @@ ent-ClothingBackpackGuard = guardsman backpack
 ent-ClothingBackpackVox = vox backpack
     .desc = A backpack equipped with various kinds of electronics that allows you to transmit intelligence data to headquarters and receive replenishment of your supplies for this.
 
+ent-ClothingBackpackVoxChaos = heretic vox backpack
+    .desc = A heretic field vox pack. It can request supply drops only for the Heretics team and spends from their shared faction budget.
+
+ent-ClothingBackpackHellEnergy = shoulder power pack
+    .desc = A large battery pack for armor-piercing lasrifles.
+
+ent-StandardDogTag = military dog tag
+    .desc = A metal tag with an embedded chip that can be used to identify you.
+
 ent-WHClothingBeltSheath = scabbard for saber
     .desc = Designed for the power sword of the Imperium!
 
@@ -54,6 +90,9 @@ ent-Comibelt = commissar's belt
 
 ent-guardbelt = unloading vest
     .desc = Rough combat loadout designed for guardsmen
+
+ent-ClothingBeltKriegWebbing = krieg webbing
+    .desc = A compact trench-webbing harness fitted with spare filter pouches and field kit loops.
 
 ent-offbelt = officer's belt
     .desc = High-quality belt for storing everything an officer needs
@@ -67,6 +106,10 @@ ent-colbelt = colonel's belt
 ent-ClothingHeadsetVoxBackpack = radio operator headset
 
 ent-EncryptionKeyVox = vox encryption key
+ent-ClothingHeadsetVoxBackpackImperium = imperium radio operator headset
+ent-ClothingHeadsetVoxBackpackHeretics = heretics radio operator headset
+ent-EncryptionKeyVoxImperium = imperium vox encryption key
+ent-EncryptionKeyVoxHeretics = heretics vox encryption key
 
 ent-ClothingEyesHudGuard = tactical glasses
     .desc = Protects against splinters and dirt
@@ -91,6 +134,9 @@ ent-ClothingHandsGlovesCombatColonel = Colonel's gloves
 ent-ClothingHeadHelmetFlak = Flak helmet
     .desc = The standard helmet issued to Imperial Guard soldiers.
 
+ent-ClothingHeadHelmetFlakCyan = cyan-pattern flak helmet
+    .desc = { ent-ClothingHeadHelmetFlak.desc }
+
 ent-ClothingHeadHelmetBloodPact = bloodpact helmet
     .desc = Standard helmet
 
@@ -100,8 +146,20 @@ ent-ClothingHeadHelmetrHeresy = Heretic's Helm
 ent-ClothingHeadHelmetFlakResp = Flak helmet with respirator
     .desc = Standard helmet issued to Imperial Guard soldiers, but with a respirator
 
+ent-ClothingHeadHelmetKrieg = krieg helmet
+    .desc = A reinforced trench helmet in the Krieg pattern, made to endure ash, mud, and shell splinters.
+
+ent-ClothingMaskGasGuardsman = respirator
+    .desc = A mask that protects the respiratory tract.
+
+ent-ClothingMaskGasKrieg = krieg gasmask
+    .desc = A sealed trench gasmask with broad lenses and round filters, built for poison fog and corpse-choked frontlines.
+
 ent-ClothingHeadHelmetPsyker = psyker helmet
     .desc = A helmet that protects the psyker's head not only from physical but also mental threats
+
+ent-ClothingHeadHelmetFlakMed = visor helmet
+    .desc = A helmet with a medical visor worn by chirurgeons.
 
 ent-ClothingHeadHelmetHardsuitVoidsmanStandard = voidsman helmet
     .desc = Helmet of a standard voidsman suit.
@@ -133,6 +191,9 @@ ent-ClothingHeadCommissar = commissar's cap
 ent-ClothingHeadOfficer = officer's cap
     .desc = The most ordinary cap, belonging to one of the officers.
 
+ent-ClothingHeadOfficerCyan = cyan officer's cap
+    .desc = { ent-ClothingHeadOfficer.desc }
+
 ent-ClothingHeadSgt = sergeant's cap
     .desc = The most ordinary cap, belonging to one of the sergeants.
 
@@ -141,6 +202,9 @@ ent-ClothingHeadVet = beret
 
 ent-ClothingHeadHelmetFlakAdv = armored helmet
     .desc = An advanced helmet of the Imperial Guard, equipped with a closed breathing system, allowing the soldier to isolate his respiratory tract from the external environment and breathe from any cylinder.
+
+ent-ClothingHeadHelmetFlakAdvCyan = cyan-pattern armored helmet
+    .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
 ent-ClothingMaskGasTechPriest = respirator
     .desc = A standard respirator that protects only the respiratory tract.
@@ -188,6 +252,9 @@ ent-ClothingOuterArmorOfficer = officer's overcoat
 ent-ClothingOuterArmorFlakVest = Flak armor
     .desc = A complete set of flak armor for the average guardsman. Provides average protection, but slightly restricts movement due to its weight.
 
+ent-ClothingOuterArmorFlakVestCyan = cyan-pattern flak armor
+    .desc = { ent-ClothingOuterArmorFlakVest.desc }
+
 ent-ClothingOuterArmorFlakVestMed = medic flak vest
     .desc = Standard Imperial Guard splinter vest with medic marking on shoulder, Cadian pattern. Protects against shrapnel, weak lasers and small-caliber bullets.
 
@@ -199,6 +266,12 @@ ent-ClothingOuterArmorFlakVestHeretic = heretic armor
 
 ent-ClothingOuterArmorFlakVestLight = Flak armor (Light)
     .desc = A lightweight version of the standard Imperial flak armor, used primarily by scouts.
+
+ent-ClothingOuterArmorFlakVestLightCyan = cyan-pattern flak armor (light)
+    .desc = { ent-ClothingOuterArmorFlakVestLight.desc }
+
+ent-ClothingOuterArmorKriegCoat = krieg greatcoat
+    .desc = A long Krieg-pattern greatcoat layered over field armor, meant to keep a trooper marching through mud and shrapnel.
 
 ent-ClothingOuterHardsuitVoidsmanStandard = voidsman suit
     .desc = Basic voidsman suit. Convenient enough for comfortable use in non-atmospheric areas.
@@ -232,6 +305,9 @@ ent-ClothingOuterArmorJuniorOfficerArmoredJacket = junior officer's jacket
 
 ent-ClothingShoesAnkleBoots = combat boots
     .desc = Imperial Guard Combat Boots
+
+ent-ClothingShoesAnkleBootsCyan = cyan combat boots
+    .desc = { ent-ClothingShoesAnkleBoots.desc }
 
 ent-ClothingShoesCommissarBoots = Commissioner's boots
     .desc = We are ice under the commissioner's feet...
@@ -286,6 +362,42 @@ ent-PlushieGGados = Plush Gados
 
 ent-PlushieIfi07 = Toy Lex Mechanic
     .desc = A plush toy of lexmechanics that endlessly waits for new messages in order to transfer them to the scroll. It is not able to work without connecting to external devices.
+
+ent-PlushieEndrAnimet = Plush endr_animet
+    .desc = How did I end up with this much share in the work?
+
+ent-PlushieKaiser = Plush Kaiser
+    .desc = WORK, YOU IDIOTS! I NEED THE SERVER READY BY THURSDAY!
+
+ent-PlushieBiomass = skull in red mold
+    .desc = Definitely just an ordinary skull and absolutely not a reference to ._biomass_.
+
+ent-PlushieLitiy = Litiy
+    .desc = Mapper description.
+
+ent-PlushieSolder = Solder
+    .desc = A dirty plush rat. Its head is full of heresy and maybe a few sprites.
+
+ent-PlushieAcic = Acic
+    .desc = Mapper description. A damn little sphere with a blue circle.
+
+ent-PlushieNecron = Nekron
+    .desc = The head of one of the spriters. Looks like you never saw the sprites he drew.
+
+ent-PlushieCarbon = Carbonium
+    .desc = Smells like soup and skipping work. P.S. thanks to Endr for the plushie and for carrying the project for a long time.
+
+ent-PlushieSuslik = strange rat
+    .desc = A strange rat asking for warpstone. The Inquisition should investigate this sector.
+
+ent-PlushiePopug = Popug208
+    .desc = Popug in their prime.
+
+ent-PlushieOliva = Oliva
+    .desc = Mapper description.
+
+ent-PlushieFizzo = Plush FizzoGhoster
+    .desc = Do you know what true love is?.. Never mind. Chrysalis is the best pony.
 
 ent-StrangeToster = Strange toaster
     .desc = There's a lazy spirit in it, so you can't get this toaster to work.
@@ -401,6 +513,9 @@ ent-WeaponRifleBolter = bolter
 ent-WeaponPistolBolter = bolt gun
     .desc = Even the non-automatic pistol version of the bolter still impresses with its destructive power - the shells destroy enemies just as effectively, and now you can use it with one hand!
 
+ent-WeaponHellgun = Mk. II Hellgun
+    .desc = A heavy but powerful variant of the lasrifle.
+
 ent-WeaponRocketLauncher = rocket launcher
 
 ent-WHBulletPlasmaPistol = Plasma projectile
@@ -507,6 +622,36 @@ ent-FalloutBarricades6 = barricades
 ent-FalloutBarricades7 = window frames
     .desc = From vile thieves and pathetic tyranids.
 
+ent-WH40KDeployableBarricadeWarhammer = imperial barricade kit
+    .desc = Basic Imperium barricade in a deployment crate.
+
+ent-WH40KDeployableBarricadeSandbags = sandbag barricade kit
+    .desc = Field-deployable sandbag cover section.
+
+ent-WH40KDeployableBarricadeChaosBlack = chaos black barricade kit
+    .desc = Crated chaos barricade section with firing loophole.
+
+ent-WH40KDeployableBarricadeChaosGreen = chaos green barricade kit
+    .desc = Crated chaos barricade section with firing loophole.
+
+ent-WH40KDeployableBarricadeHedgehog = anti-tank hedgehog kit
+    .desc = Heavy anti-vehicle hedgehog barricade in crate form.
+
+ent-WH40KDeployableBarricadeHedgehogA = anti-tank hedgehog kit A
+    .desc = Heavy anti-vehicle hedgehog barricade in crate form.
+
+ent-WH40KDeployableBarricadeHedgehog2 = anti-tank hedgehog kit B
+    .desc = Heavy anti-vehicle hedgehog barricade in crate form.
+
+ent-WH40KDeployableBarricadeHedgehog2A = anti-tank hedgehog kit C
+    .desc = Heavy anti-vehicle hedgehog barricade in crate form.
+
+ent-WH40KDeployableBarricadeBoarded = boarded barricade kit
+    .desc = Boarded fortification segment packed for rapid deployment.
+
+ent-WH40KDeployableBarricadeBars = bars barricade kit
+    .desc = Metal bars barricade segment packed for rapid deployment.
+
 ent-Crater = crater
     .desc = Explosion-created hole in the ground
 
@@ -584,13 +729,18 @@ ent-MachineChipProduser = analysis station
 ent-MachineChipProduserCenter = analysis station
     .desc = An ancient machine that receives important data from a source unknown to us. For some reason this one has the best signal.
 
-ent-ImpPointConverter = data cleaner
+ent-ImpPointLathe = data cleaner
     .desc = Removes errors and unnecessary data in chips.
 
 ent-StructureAltar = altar of chaos
-    .desc = An altar where the dark gods can reward you for intelligence data, or the nearest fortress factory. It seems to be moving...
+    .desc = An altar where heretics offer sacrifices to the dark gods in exchange for their favor. It seems to be moving...
 
-ent-StructureStorageImp = warehouse
+ent-StructureLogisticsConsoleImperiumBuy = Imperium logistics console
+ent-StructureLogisticsConsoleImperiumCmd = Imperium command terminal
+ent-StructureLogisticsConsoleImperiumSell = Imperium logistics sale console
+ent-StructureLogisticsConsoleHereticsBuy = Heretics logistics console
+ent-StructureLogisticsConsoleHereticsCmd = Heretics command terminal
+ent-StructureLogisticsConsoleHereticsSell = Heretics logistics sale console
 
 ent-WallNecron = Necron wall
 
@@ -634,8 +784,16 @@ ent-OrkGrenade = cool grenade
 
 ent-MeltaGrenade = melta charge
     .desc = A short-range anti-tank grenade that creates a powerful melting explosion capable of destroying heavily armored targets.
+ent-WH40KServoSkull = servo skull
+    .desc = A compact servo skull chassis. Deploy it to create a friendly support skull.
+ent-WH40KServoSkullMelta = melta servo skull
+    .desc = A servo skull rigged with a melta charge. Deploy it and it will hunt nearby enemies for your team.
+ent-WH40KServoSkullMob = servo skull
+    .desc = A friendly servo skull awaiting a command.
+ent-WH40KServoSkullMeltaMob = melta servo skull
+    .desc = A friendly servo skull carrying a live melta charge.
 ent-DataChip1 = data chip
-    .desc = The chip probably contains very important intelligence data. You can get additional equipment for them!
+    .desc = { ent-DataChip.desc }
 
 ent-MechSentinelBatteryAutogun = Sentinel
 
@@ -687,11 +845,7 @@ ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
     .suffix = WH40K, Unanchored
     .desc = { ent-NuclearBombEX.desc }
 
-ent-ChPointConverter = Chaos points converter
-
-ent-StructureAltarCmd = command dark gods altar
-
-ent-StructureStorageImpCmd = command Imperium storage
+ent-ChPointLathe = Chaos data cleaner
 
 ent-GeneratorJupiter = plasma generator
 
@@ -700,3 +854,132 @@ ent-GeneratorJupiterLiteDamaged = { ent-GeneratorJupiter }
 ent-GeneratorJupiterDamaged = { ent-GeneratorJupiter }
 
 ent-GeneratorJupiterHardDamaged = { ent-GeneratorJupiter }
+
+ent-WH40KAutolathe = autolathe
+    .desc = Produces basic items from materials.
+
+ent-WH40KAutolatheImperium = Imperium autolathe
+    .desc = { ent-WH40KAutolathe.desc }
+
+ent-WH40KAutolatheHeretics = Heretics autolathe
+    .desc = { ent-WH40KAutolathe.desc }
+
+ent-WH40KProtolathe = protolathe
+    .desc = Produces advanced items from materials.
+
+ent-WH40KProtolatheImperium = Imperium protolathe
+    .desc = { ent-WH40KProtolathe.desc }
+
+ent-WH40KProtolatheHeretics = Heretics protolathe
+    .desc = { ent-WH40KProtolathe.desc }
+
+ent-WH40KOreProcessor = ore processor
+    .desc = Refines ore into sheets and ingots.
+
+ent-WH40KOreProcessorImperium = Imperium ore processor
+    .desc = { ent-WH40KOreProcessor.desc }
+
+ent-WH40KOreProcessorHeretics = Heretics ore processor
+    .desc = { ent-WH40KOreProcessor.desc }
+
+ent-WH40KResearchAndDevelopmentServer = R&D server
+    .desc = Stores and serves research data.
+
+ent-WH40KResearchAndDevelopmentServerImperium = Imperium R&D server
+    .desc = Team research server for the Imperium.
+
+ent-WH40KResearchAndDevelopmentServerHeretics = Heretics R&D server
+    .desc = Team research server for the Heretics.
+
+ent-WH40KComputerResearchAndDevelopmentImperium = Imperium R&D console
+    .desc = Research console bound to the Imperium team.
+
+ent-WH40KComputerResearchAndDevelopmentHeretics = Heretics R&D console
+    .desc = Research console bound to the Heretics team.
+
+ent-WH40KConveyorManipulator = conveyor manipulator
+    .desc = Moves items from the left tile to the right tile and can smart-feed nearby processing machines.
+
+ent-WH40KOreExtractor = ore extractor
+    .desc = A powered drill that extracts one ore every 4 seconds and outputs it to the front tile.
+
+ent-WH40KAmmoBoxAutogun = autogun ammo box
+    .desc = A compact box filled with 8.25mm cartridges for automatic stub weapons.
+
+ent-WH40KAmmoBoxMinigun = minigun ammo box
+    .desc = A compact ammo box packed with .10 minigun cartridges for mini sentry turrets.
+
+ent-WH40KAutogunAmmoCrate = autogun ammo crate
+    .desc = A frontline supply crate containing ammo boxes loaded with 8.25mm autogun cartridges.
+
+ent-WH40KWeaponTurretImperiumLaser = laser field sentry turret [WH40K, Imperium]
+    .desc = A deployable laser sentry turret. Uses lasgun power cells and supports fast frontline redeployment.
+
+ent-WH40KWeaponTurretHereticsLaser = laser field sentry turret [WH40K, Heretics]
+    .desc = A deployable laser sentry turret. Uses lasgun power cells and supports fast frontline redeployment.
+
+ent-WH40KTacticalWhistle = tactical whistle
+    .desc = A compact command whistle for rally calls and squad coordination.
+
+ent-WH40KSignalFlare = signal flare
+    .desc = A field flare for quick visual signaling and target marking.
+
+ent-WH40KIntelDetector = intel detector
+    .desc = A compact detector tuned for frontline intel signatures.
+
+ent-WH40KSentryLaptop = sentry control laptop
+    .desc = A portable control unit used to configure and redeploy sentry assets.
+
+ent-WH40KTacticalFultonField = tactical Fulton
+    .desc = A recovery pack for fast field extraction of supplies and objectives.
+
+ent-WH40KMissionPinpointerRelay = relay mission pinpointer
+    .desc = Tracks active relay-control objectives for the current team.
+
+ent-WH40KMissionPinpointerCargo = cargo mission pinpointer
+    .desc = Tracks active cargo-delivery objectives for the current team.
+
+ent-WH40KMissionPinpointerBanner = banner mission pinpointer
+    .desc = Tracks active banner-hold objectives for the current team.
+
+ent-WH40KMissionPinpointerKit = mission pinpointer kit
+    .desc = Command kit with relay, cargo, and banner mission pinpointers for the current team.
+
+ent-ColMarTechBase = ColMarTech vendor
+    .desc = Automated rack for starter loadout distribution.
+
+ent-ColMarTechGuns = ColMarTech automated weapons rack
+    .desc = Standard laser-weapon rack.
+
+ent-ColMarTechEquipment = ColMarTech automated marine equipment rack
+    .desc = Starter equipment rack.
+
+ent-ColMarTechSurplus = ColMarTech surplus uniform vendor
+    .desc = Starter surplus clothing rack.
+
+ent-ColMarTechFood = ColMarTech food vendor
+    .desc = Starter food rack.
+
+ent-ColMarTechMunitions = ColMarTech automated munition squad vendor
+    .desc = Starter munitions rack.
+
+ent-ColMarTechSLGear = ColMarTech officer sidearm rack
+    .desc = An automated sidearm and command-weapon rack for officers.
+
+ent-ColMarTechMedicalGear = ColMarTech squad medical gear rack
+    .desc = An automated gear rack for hospital corpsmen.
+
+ent-ColMarTechSCTGear = ColMarTech squad comtech gear rack
+    .desc = An automated gear rack for combat technicians.
+
+ent-ColMarTechSWSGear = ColMarTech squad weapons specialist gear rack
+    .desc = An automated gear rack for Squad Weapons Specialists.
+
+ent-ColMarTechFLGear = ColMarTech fireteam leader gear rack
+    .desc = An automated gear rack for fireteam leaders.
+
+ent-ColMarTechSGGear = ColMarTech squad smart gun operator gear rack
+    .desc = An automated gear rack for Squad Smart Gun Operators.
+
+ent-ColMarTechUtilities = ColMarTech automated utilities squad vendor
+    .desc = An automated supply rack hooked up to a small storage of various utilities and tools. Can be accessed by any Marine Rifleman.

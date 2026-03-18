@@ -1,0 +1,22 @@
+light_mode unshaded;
+
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 position;
+uniform highp float radius;
+uniform highp float feather;
+
+void fragment()
+{
+    highp vec4 src = zTextureSpec(SCREEN_TEXTURE, UV);
+    highp float dist = length(FRAGCOORD.xy - position);
+
+    highp float edge = max(feather, 0.0001);
+    highp float inner = max(radius - edge, 0.0);
+    highp float mask = 1.0 - smoothstep(inner, radius, dist);
+
+    if (mask <= 0.0)
+        discard;
+
+    highp float gray = zGrayscale(src.rgb);
+    COLOR = vec4(vec3(gray), src.a * mask);
+}

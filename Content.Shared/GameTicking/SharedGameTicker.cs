@@ -25,9 +25,9 @@ namespace Content.Shared.GameTicking
         // See ideally these would be pulled from the job definition or something.
         // But this is easier, and at least it isn't hardcoded.
         //TODO: Move these, they really belong in StationJobsSystem or a cvar.
-        public static readonly ProtoId<JobPrototype> FallbackOverflowJob = "Passenger";
+        public static readonly ProtoId<JobPrototype> FallbackOverflowJob = "Guardsman";
 
-        public const string FallbackOverflowJobName = "job-name-passenger";
+        public const string FallbackOverflowJobName = "job-name-guardsman";
 
         // TODO network.
         // Probably most useful for replays, round end info, and probably things like lobby menus.
@@ -122,6 +122,17 @@ namespace Content.Shared.GameTicking
         public TickerLobbyInfoEvent(string textBlob)
         {
             TextBlob = textBlob;
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class RequestLobbyInfoRefreshEvent : EntityEventArgs
+    {
+        public string? CultureName { get; }
+
+        public RequestLobbyInfoRefreshEvent(string? cultureName = null)
+        {
+            CultureName = cultureName;
         }
     }
 

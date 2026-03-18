@@ -1,3 +1,4 @@
+using System;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Research.Components;
 using Content.Shared.UserInterface;
@@ -19,6 +20,7 @@ public sealed partial class ResearchSystem
         SubscribeLocalEvent<ResearchConsoleComponent, ConsoleUnlockTechnologyMessage>(OnConsoleUnlock);
         SubscribeLocalEvent<ResearchConsoleComponent, BeforeActivatableUIOpenEvent>(OnConsoleBeforeUiOpened);
         SubscribeLocalEvent<ResearchConsoleComponent, ResearchServerPointsChangedEvent>(OnPointsChanged);
+        SubscribeLocalEvent<ResearchConsoleComponent, ResearchServerTimedResearchUpdatedEvent>(OnTimedResearchUpdated);
         SubscribeLocalEvent<ResearchConsoleComponent, ResearchRegistrationChangedEvent>(OnConsoleRegistrationChanged);
         SubscribeLocalEvent<ResearchConsoleComponent, TechnologyDatabaseModifiedEvent>(OnConsoleDatabaseModified);
         SubscribeLocalEvent<ResearchConsoleComponent, TechnologyDatabaseSynchronizedEvent>(OnConsoleDatabaseSynchronized);
@@ -41,8 +43,32 @@ public sealed partial class ResearchSystem
             return;
         }
 
+        var researchClient = CompOrNull<ResearchClientComponent>(uid);
+        var hasTimedResearch = false;
+        var activeTechnologyId = string.Empty;
+        if (TryGetClientServer(uid, out _, out var currentServer, researchClient))
+        {
+            hasTimedResearch = currentServer.TimedResearchEnabled;
+            activeTechnologyId = currentServer.ActiveTechnologyId ?? string.Empty;
+        }
+
         if (!UnlockTechnology(uid, args.Id, act))
+        {
+            if (hasTimedResearch && !string.IsNullOrEmpty(activeTechnologyId))
+            {
+                var popup = Loc.GetString(
+                    activeTechnologyId == args.Id
+                        ? "research-console-research-active-popup"
+                        : "research-console-research-busy-popup");
+                _popup.PopupEntity(popup, uid, act);
+            }
+
             return;
+        }
+
+        var startedTimedResearch = false;
+        if (TryGetClientServer(uid, out _, out var updatedServer, researchClient))
+            startedTimedResearch = updatedServer.TimedResearchEnabled && updatedServer.ActiveTechnologyId == args.Id;
 
         if (!_emag.CheckFlag(uid, EmagType.Interaction))
         {
@@ -50,7 +76,9 @@ public sealed partial class ResearchSystem
             RaiseLocalEvent(getIdentityEvent);
 
             var message = Loc.GetString(
-                "research-console-unlock-technology-radio-broadcast",
+                startedTimedResearch
+                    ? "research-console-start-technology-radio-broadcast"
+                    : "research-console-unlock-technology-radio-broadcast",
                 ("technology", Loc.GetString(technologyPrototype.Name)),
                 ("amount", technologyPrototype.Cost),
                 ("approver", getIdentityEvent.Title ?? string.Empty)
@@ -77,11 +105,15 @@ public sealed partial class ResearchSystem
         if (TryGetClientServer(uid, out _, out var serverComponent, clientComponent))
         {
             var points = clientComponent.ConnectedToServer ? serverComponent.Points : 0;
-            state = new ResearchConsoleBoundInterfaceState(points);
+            state = new ResearchConsoleBoundInterfaceState(
+                points,
+                serverComponent.TimedResearchEnabled,
+                serverComponent.ActiveTechnologyId,
+                Math.Max(0, (int) MathF.Ceiling(serverComponent.ActiveTechnologyRemainingSeconds)));
         }
         else
         {
-            state = new ResearchConsoleBoundInterfaceState(default);
+            state = new ResearchConsoleBoundInterfaceState(0, false, null, 0);
         }
 
         _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key, state);
@@ -91,6 +123,14 @@ public sealed partial class ResearchSystem
     {
         if (!_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key))
             return;
+        UpdateConsoleInterface(uid, component);
+    }
+
+    private void OnTimedResearchUpdated(EntityUid uid, ResearchConsoleComponent component, ref ResearchServerTimedResearchUpdatedEvent args)
+    {
+        if (!_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key))
+            return;
+
         UpdateConsoleInterface(uid, component);
     }
 

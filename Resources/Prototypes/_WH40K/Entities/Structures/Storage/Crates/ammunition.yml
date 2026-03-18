@@ -1,0 +1,15 @@
+- type: entity
+  id: WH40KAutogunAmmoCrate
+  parent: CrateGenericSteel
+  suffix: WH40K
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Storage/Crates/guard_autogun_ammo_crate.rsi
+    state: icon
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/Crates/guard_autogun_ammo_crate.rsi
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: WH40KAmmoBoxAutogun
+        amount: 4

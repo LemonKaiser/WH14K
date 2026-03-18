@@ -1,0 +1,106 @@
+- type: entity
+  id: WH40KResearchAndDevelopmentServer
+  parent: ResearchAndDevelopmentServer
+  name: R&D server
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/server.rsi
+    snapCardinals: true
+    layers:
+    - state: server
+    - state: inserting
+      visible: false
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: candle
+      shader: unshaded
+    - state: variant-research
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: server_o
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+
+- type: entity
+  id: WH40KResearchAndDevelopmentServerImperium
+  parent: WH40KResearchAndDevelopmentServer
+  name: imperium R&D server
+  suffix: WH40K, Imperium
+  components:
+  - type: ResearchServer
+    serverName: RD-IMPERIUM
+    timedResearchEnabled: true
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - WH40KWeaponry
+    - WH40KEquipment
+  - type: WH40KResearchTeam
+    teamId: Imperium
+
+- type: entity
+  id: WH40KResearchAndDevelopmentServerHeretics
+  parent: WH40KResearchAndDevelopmentServer
+  name: heretic R&D server
+  suffix: WH40K, Heretics
+  components:
+  - type: ResearchServer
+    serverName: RD-HERETICS
+    timedResearchEnabled: true
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - WH40KWeaponry
+    - WH40KEquipment
+  - type: WH40KResearchTeam
+    teamId: Heretics
+
+- type: entity
+  id: WH40KComputerResearchAndDevelopmentImperium
+  parent: ComputerResearchAndDevelopment
+  name: imperium R&D computer
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/admech_modular_computer.rsi
+    offset: 0.5,0
+    layers:
+    - state: base
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: unshaded
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      visible: false
+    - state: inserting
+      visible: false
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+  - type: WH40KResearchTeam
+    teamId: Imperium
+  - type: AccessReader
+    access: []
+
+- type: entity
+  id: WH40KComputerResearchAndDevelopmentHeretics
+  parent: ComputerResearchAndDevelopment
+  name: heretic R&D computer
+  suffix: WH40K, Heretics
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/modular_computer.rsi
+    drawdepth: Mobs
+    offset: 0,0.4
+    layers:
+    - state: base
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: unshaded
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      visible: false
+    - state: inserting
+      visible: false
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+  - type: WH40KResearchTeam
+    teamId: Heretics
+  - type: AccessReader
+    access: []

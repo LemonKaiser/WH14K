@@ -2,9 +2,61 @@
   id: WH40KStation
   parent:
     - BaseStation
+    - BaseStationCargo
     - BaseStationJobsSpawning
     - BaseStationRecords
     - BaseStationAlertLevels
   categories: [ HideSpawnMenu ]
   components:
     - type: Transform
+    - type: StationBankAccount
+      primaryAccount: WH40KImperium
+      increasePerSecond: 0
+      accounts:
+        WH40KImperium: 12000
+        WH40KHeretics: 12000
+      revenueDistribution:
+        WH40KImperium: 0.5
+        WH40KHeretics: 0.5
+    - type: StationCargoOrderDatabase
+      capacity: 10
+      orders:
+        WH40KImperium: [ ]
+        WH40KHeretics: [ ]
+      markets:
+        - WH40KImperiumMarket
+        - WH40KHereticsMarket
+    - type: WH40KCargoProductUnlocks
+      unlockedProductsByAccount:
+        WH40KImperium:
+          - WH40KImperiumLantern
+          - WH40KImperiumMedkit
+          - WH40KImperiumLasgun
+          - WH40KImperiumStubRifle
+          - WH40KImperiumLasCellBox
+          - WH40KImperiumFlakVest
+          - WH40KImperiumFlakHelmet
+        WH40KHeretics:
+          - WH40KHereticsLantern
+          - WH40KHereticsMedkit
+          - WH40KHereticsLasgun
+          - WH40KHereticsStubRifle
+          - WH40KHereticsLasCellBox
+          - WH40KHereticsFlakVest
+          - WH40KHereticsFlakHelmet
+      researchRequirementsByAccount:
+        WH40KImperium:
+          WH40KImperiumLasgun: [WH40KWeaponryStandardLasguns]
+          WH40KImperiumStubRifle: [WH40KWeaponryStubberLines]
+        WH40KHeretics:
+          WH40KHereticsLasgun: [WH40KWeaponryStandardLasguns]
+          WH40KHereticsStubRifle: [WH40KWeaponryStubberLines]
+    - type: StationCargoOrderBatch
+    - type: CargoLogisticsTier
+      tierLogisticsProfile: WH40KTierLogisticsStandard
+      accountTiers:
+        WH40KImperium: 0
+        WH40KHeretics: 0
+      accountTeams:
+        WH40KImperium: Imperium
+        WH40KHeretics: Heretics

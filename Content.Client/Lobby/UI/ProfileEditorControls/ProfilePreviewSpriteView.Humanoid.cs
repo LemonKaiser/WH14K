@@ -63,13 +63,15 @@ public sealed partial class ProfilePreviewSpriteView
         {
             DebugTools.Assert(job != null);
 
-            GiveDummyJobClothes(humanoid, job);
-
+            RoleLoadout? loadout = null;
             if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID)))
             {
-                var loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
-                GiveDummyLoadout(loadout);
+                loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
             }
+
+            // Mirror real spawn order: role loadout claims its slots first, then job gear fills the remaining gaps.
+            GiveDummyLoadout(loadout);
+            GiveDummyJobClothes(job);
         }
     }
 
@@ -105,77 +107,28 @@ public sealed partial class ProfilePreviewSpriteView
     /// <summary>
     /// Applies the specified job's clothes to the dummy.
     /// </summary>
-    private void GiveDummyJobClothes(HumanoidCharacterProfile profile, JobPrototype job)
+    private void GiveDummyJobClothes(JobPrototype job)
     {
         var inventorySys = EntMan.System<InventorySystem>();
         if (!inventorySys.TryGetSlots(PreviewDummy, out var slots))
             return;
-
-        // Apply loadout
-        if (profile.Loadouts.TryGetValue(job.ID, out var jobLoadout))
-        {
-            foreach (var loadouts in jobLoadout.SelectedLoadouts.Values)
-            {
-                foreach (var loadout in loadouts)
-                {
-                    if (!_prototypeManager.Resolve(loadout.Prototype, out var loadoutProto))
-                        continue;
-
-                    // TODO: Need some way to apply starting gear to an entity and replace existing stuff coz holy fucking shit dude.
-                    foreach (var slot in slots)
-                    {
-                        // Try startinggear first
-                        if (_prototypeManager.Resolve(loadoutProto.StartingGear, out var loadoutGear))
-                        {
-                            var itemType = ((IEquipmentLoadout) loadoutGear).GetGear(slot.Name);
-
-                            if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntMan.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
-                            }
-                        }
-                        else
-                        {
-                            var itemType = ((IEquipmentLoadout) loadoutProto).GetGear(slot.Name);
-
-                            if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-                            {
-                                EntMan.DeleteEntity(unequippedItem.Value);
-                            }
-
-                            if (itemType != string.Empty)
-                            {
-                                var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                                inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         if (!_prototypeManager.Resolve(job.StartingGear, out var gear))
             return;
 
         foreach (var slot in slots)
         {
-            var itemType = ((IEquipmentLoadout) gear).GetGear(slot.Name);
+            if (inventorySys.TryGetSlotEntity(PreviewDummy, slot.Name, out _))
+                continue;
 
-            if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
-            {
-                EntMan.DeleteEntity(unequippedItem.Value);
-            }
+            var itemType = ((IEquipmentLoadout) gear).GetGear(slot.Name);
 
             if (itemType != string.Empty)
             {
                 var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
-                inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
+
+                if (!inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true))
+                    EntMan.DeleteEntity(item);
             }
         }
     }

@@ -316,7 +316,7 @@ namespace Content.Shared.Movement.Systems
                 DebugTools.AssertNotNull(relayMover.RelayEntity);
 
                 if (MoverQuery.TryGetComponent(entity, out var mover))
-                    SetMoveInput((entity, mover), MoveButtons.None);
+                    SetMoveInput((entity, mover), MoveButtons.Walk);
 
                 if (!_mobState.IsIncapacitated(entity))
                     HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
@@ -361,7 +361,7 @@ namespace Content.Shared.Movement.Systems
                 // if we swap to relay then stop our existing input if we ever change back.
                 if (moverComp != null)
                 {
-                    SetMoveInput((uid, moverComp), MoveButtons.None);
+                    SetMoveInput((uid, moverComp), MoveButtons.Walk);
                 }
 
                 HandleRunChange(relayMover.RelayEntity, subTick, walking);
@@ -370,7 +370,9 @@ namespace Content.Shared.Movement.Systems
 
             if (moverComp == null) return;
 
-            SetSprinting((uid, moverComp), subTick, walking);
+            // "Walk" input is repurposed as sprint modifier:
+            // unpressed = walk by default, pressed = run.
+            SetSprinting((uid, moverComp), subTick, !walking);
         }
 
         public (Vector2 Walking, Vector2 Sprinting) GetVelocityInput(InputMoverComponent mover)

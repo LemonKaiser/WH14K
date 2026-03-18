@@ -1,17 +1,20 @@
 - type: job
   id: HMedic
   name: job-name-hmedic
-  description: job-description-medic
+  description: job-description-hmedic
   playTimeTracker: JobHMedic
-  setPreference: false
   startingGear: HeresyMedicGear
-  icon: "JobIconMedic"
+  icon: "JobIconHMedic"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
   access:
   - Maintenance
-  - Engineering
   - External
+  - Medical
 
 - type: startingGear
   id: HeresyMedicGear

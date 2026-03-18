@@ -5,6 +5,7 @@ using Content.Client.Gameplay;
 using Content.Client.Popups;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
+using Content.Shared.Localizations;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
@@ -15,6 +16,7 @@ using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -34,6 +36,7 @@ namespace Content.Client.Verbs
         [Dependency] private readonly SharedContainerSystem _containers = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
+        [Dependency] private readonly ILocalizationManager _loc = default!;
 
         private float _lookupSize;
 
@@ -176,7 +179,11 @@ namespace Content.Client.Verbs
         public SortedSet<Verb> GetVerbs(NetEntity target, EntityUid user, List<Type> verbTypes, out List<VerbCategory> extraCategories, bool force = false)
         {
             if (!target.IsClientSide())
-                RaiseNetworkEvent(new RequestServerVerbsEvent(target, verbTypes, adminRequest: force));
+                RaiseNetworkEvent(new RequestServerVerbsEvent(
+                    target,
+                    verbTypes,
+                    adminRequest: force,
+                    cultureName: _loc.GetCurrentCultureName()));
 
             // Some admin menu interactions will try get verbs for entities that have not yet been sent to the player.
             if (!TryGetEntity(target, out var local))
@@ -225,11 +232,17 @@ namespace Content.Client.Verbs
                 // is this a client exclusive (gui) verb?
                 ExecuteVerb(verb, user, GetEntity(target));
             else
-                RaisePredictiveEvent(new ExecuteVerbEvent(target, verb));
+                RaisePredictiveEvent(new ExecuteVerbEvent(target, verb, _loc.GetCurrentCultureName()));
         }
 
         private void HandleVerbResponse(VerbsResponseEvent msg)
         {
+            if (!string.IsNullOrWhiteSpace(msg.CultureName) &&
+                !string.Equals(msg.CultureName, _loc.GetCurrentCultureName(), StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             OnVerbsResponse?.Invoke(msg);
         }
     }

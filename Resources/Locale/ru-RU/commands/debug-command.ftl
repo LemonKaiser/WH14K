@@ -4,3 +4,6 @@ cmd-showsubfloor-desc = Makes entities below the floor always visible.
 cmd-showsubfloor-help = Usage: { $command }
 cmd-notify-desc = Send a notify client side.
 cmd-notify-help = Usage: { $command } <message>
+
+cmd-showroof-desc = Переключает отладочную подсветку крыши (плитки с крышей и без).
+cmd-showroof-help = Использование: { $command }

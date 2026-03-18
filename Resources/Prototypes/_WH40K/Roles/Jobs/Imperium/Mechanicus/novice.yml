@@ -3,6 +3,10 @@
   name: job-name-novice
   description: job-description-novice
   playTimeTracker: JobNovice
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: NoviceGear
   icon: "JobIconNovice"
   supervisors: job-supervisors-engineering

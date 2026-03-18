@@ -1,0 +1,348 @@
+- type: startingGear
+  id: WH40KWaveObjectiveTestCombatGear
+  inhand:
+    - WeaponPistolMk58
+  storage:
+    back:
+      - MagazinePistol
+      - MagazinePistol
+      - MagazinePistol
+
+- type: startingGear
+  id: WH40KWaveObjectiveTestBreacherGear
+  inhand:
+    - FireAxe
+
+- type: entity
+  id: MobWH40KWaveAssault
+  name: wave assault raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveAssaultRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        false
+      NavSmash: !type:Bool
+        false
+      NavClimb: !type:Bool
+        false
+      WaveCoordinationEnabled: !type:Bool
+        true
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        false
+      WaveLoadoutAcquireEnabled: !type:Bool
+        true
+      WaveWeatherShelterEnabled: !type:Bool
+        false
+      WaveServiceEnabled: !type:Bool
+        false
+      WaveDeployEnabled: !type:Bool
+        false
+      WaveInfluenceEnabled: !type:Bool
+        true
+      WaveObjectiveEnabled: !type:Bool
+        true
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveBreacher
+  name: wave breacher raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveBreacherRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+      NavClimb: !type:Bool
+        false
+      WaveCoordinationEnabled: !type:Bool
+        true
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        false
+      WaveLoadoutAcquireEnabled: !type:Bool
+        true
+      WaveWeatherShelterEnabled: !type:Bool
+        false
+      WaveServiceEnabled: !type:Bool
+        false
+      WaveDeployEnabled: !type:Bool
+        false
+      WaveInfluenceEnabled: !type:Bool
+        true
+      WaveObjectiveEnabled: !type:Bool
+        true
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveSapper
+  name: wave sapper raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveSapperRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        false
+      NavSmash: !type:Bool
+        false
+      NavClimb: !type:Bool
+        true
+      WaveCoordinationEnabled: !type:Bool
+        true
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        true
+      WaveLoadoutAcquireEnabled: !type:Bool
+        true
+      WaveWeatherShelterEnabled: !type:Bool
+        false
+      WaveServiceEnabled: !type:Bool
+        false
+      WaveDeployEnabled: !type:Bool
+        false
+      WaveInfluenceEnabled: !type:Bool
+        true
+      WaveObjectiveEnabled: !type:Bool
+        true
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveSupport
+  name: wave support raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveSupportRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        false
+      NavSmash: !type:Bool
+        false
+      NavClimb: !type:Bool
+        false
+      WaveCoordinationEnabled: !type:Bool
+        true
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        false
+      WaveLoadoutAcquireEnabled: !type:Bool
+        true
+      WaveWeatherShelterEnabled: !type:Bool
+        true
+      WaveServiceEnabled: !type:Bool
+        false
+      WaveDeployEnabled: !type:Bool
+        true
+      WaveInfluenceEnabled: !type:Bool
+        true
+      WaveObjectiveEnabled: !type:Bool
+        true
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveLogistics
+  name: wave logistics raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveLogisticsRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        false
+      NavSmash: !type:Bool
+        false
+      NavClimb: !type:Bool
+        false
+      WaveCoordinationEnabled: !type:Bool
+        true
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        false
+      WaveLoadoutAcquireEnabled: !type:Bool
+        true
+      WaveWeatherShelterEnabled: !type:Bool
+        true
+      WaveServiceEnabled: !type:Bool
+        true
+      WaveDeployEnabled: !type:Bool
+        false
+      WaveInfluenceEnabled: !type:Bool
+        false
+      WaveObjectiveEnabled: !type:Bool
+        false
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveCoordinator
+  name: wave coordinator raider
+  parent: MobSpirate
+  suffix: WH40K, Wave Role
+  components:
+  - type: HTN
+    rootTask:
+      task: WH40KWaveCoordinatorRoot
+    blackboard:
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        false
+      NavSmash: !type:Bool
+        false
+      NavClimb: !type:Bool
+        false
+      WaveCoordinationEnabled: !type:Bool
+        false
+      WaveRoleEnabled: !type:Bool
+        true
+      WaveMineHandlingEnabled: !type:Bool
+        false
+      WaveLoadoutAcquireEnabled: !type:Bool
+        false
+      WaveWeatherShelterEnabled: !type:Bool
+        true
+      WaveServiceEnabled: !type:Bool
+        false
+      WaveDeployEnabled: !type:Bool
+        false
+      WaveInfluenceEnabled: !type:Bool
+        true
+      WaveObjectiveEnabled: !type:Bool
+        true
+      WaveDirectorEnabled: !type:Bool
+        true
+
+- type: entity
+  id: MobWH40KWaveAssaultNoGear
+  name: wave assault raider (no gear)
+  parent: MobWH40KWaveAssault
+  suffix: WH40K, Wave Role, No Gear
+  components:
+  - type: Loadout
+    prototypes: []
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveAssault
+  name: heretic objective test assault
+  parent: MobWH40KWaveAssault
+  suffix: WH40K, Wave Role, Test, Objective
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveBreacher
+  name: heretic objective test breacher
+  parent: MobWH40KWaveBreacher
+  suffix: WH40K, Wave Role, Test, Objective
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestBreacherGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveSupport
+  name: heretic objective test support
+  parent: MobWH40KWaveSupport
+  suffix: WH40K, Wave Role, Test, Objective
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveLeader
+  name: heretic objective test leader
+  parent: MobWH40KWaveAssault
+  suffix: WH40K, Wave Role, Test, Objective, Leader
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveCoordinator
+  name: heretic objective test coordinator
+  parent: MobWH40KWaveCoordinator
+  suffix: WH40K, Wave Role, Test, Objective, Coordinator
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveSapper
+  name: heretic objective test sapper
+  parent: MobWH40KWaveSapper
+  suffix: WH40K, Wave Role, Test, Objective, Sapper
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+
+- type: entity
+  id: MobWH40KWaveTestHereticObjectiveSoldier
+  name: heretic objective test soldier
+  parent: MobWH40KWaveAssault
+  suffix: WH40K, Wave Role, Test, Objective, Soldier
+  components:
+  - type: Loadout
+    prototypes:
+      - PirateGear
+      - WH40KWaveObjectiveTestCombatGear
+  - type: WH40KTeamMember
+    teamId: Heretics

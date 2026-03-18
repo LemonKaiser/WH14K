@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "license": "Custom",
+  "copyright": "Detector and inhand states refreshed from local Auspex source; motion/queen blip states remain from the original CM/RMC import",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "detector"
+    },
+    {
+      "name": "detector_long_switch"
+    },
+    {
+      "name": "detector_short_switch"
+    },
+    {
+      "name": "detector_on_0",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "detector_on_1"
+    },
+    {
+      "name": "detector_on_2"
+    },
+    {
+      "name": "detector_on_3"
+    },
+    {
+      "name": "detector_on_4"
+    },
+    {
+      "name": "detector_on_5"
+    },
+    {
+      "name": "detector_on_6"
+    },
+    {
+      "name": "detector_on_7"
+    },
+    {
+      "name": "detector_on_8"
+    },
+    {
+      "name": "detector_on_9"
+    },
+    {
+      "name": "detector_blip",
+      "delays": [
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ]
+      ]
+    },
+    {
+      "name": "detector_blip_dir",
+      "directions": 8,
+      "delays": [
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ]
+      ]
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "queen_eye_blip",
+      "delays": [
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ]
+      ]
+    },
+    {
+      "name": "queen_eye_blip_dir",
+      "directions": 8,
+      "delays": [
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        [
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ]
+      ]
+    }
+  ]
+}

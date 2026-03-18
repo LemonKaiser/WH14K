@@ -1,0 +1,81 @@
+- type: entity
+  abstract: true
+  id: WH40KOreExtractorBase
+  parent: BaseMachinePowered
+  name: ore extractor
+  description: Extracts and outputs ore on the tile in front.
+  suffix: WH40K
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Rotatable
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/ore_extractor.rsi
+    state: icon
+    snapCardinals: true
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/ore_extractor.rsi
+    state: icon
+  - type: WH40KOreExtractor
+    tierThresholdProfile: WH40KTierThresholdsStandard
+    spawnIntervalTier0: 8
+    spawnIntervalTier1: 6
+    spawnIntervalTier2: 4
+    spawnIntervalTier3: 2
+    spawnCountTier0: 1
+    spawnCountTier1: 2
+    spawnCountTier2: 3
+    spawnCountTier3: 4
+    requirePowered: true
+    enabled: true
+    maxItemsOnOutputTile: 30
+    randomOrePool: RandomOreDistributionStandard
+    tier0Ores:
+    - OreSteel
+    - OreCoal
+    tier1Ores:
+    - OreSpaceQuartz
+    tier2Ores:
+    - OreGold
+    - OreSilver
+    tier3Ores:
+    - OrePlasma
+    - OreUranium
+  - type: ApcPowerReceiver
+    powerLoad: 250
+  - type: PowerState
+    idlePowerDraw: 250
+    workingPowerDraw: 250
+  - type: StaticPrice
+    price: 500
+
+- type: entity
+  id: WH40KOreExtractorImperium
+  parent: WH40KOreExtractorBase
+  suffix: WH40K, Imperium
+  components:
+  - type: WH40KOreExtractor
+    teamId: Imperium
+    teamIds:
+    - Imperium
+
+- type: entity
+  id: WH40KOreExtractorHeretics
+  parent: WH40KOreExtractorBase
+  suffix: WH40K, Heretics
+  components:
+  - type: WH40KOreExtractor
+    teamId: Heretics
+    teamIds:
+    - Heretics
+
+- type: entity
+  id: WH40KOreExtractor
+  parent: WH40KOreExtractorBase
+  suffix: WH40K, SharedLegacy
+  components:
+  - type: WH40KOreExtractor
+    teamIds:
+    - Imperium
+    - Heretics

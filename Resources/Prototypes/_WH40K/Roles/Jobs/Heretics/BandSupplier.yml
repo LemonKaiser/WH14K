@@ -1,0 +1,28 @@
+- type: job
+  id: HBandSupplier
+  name: job-name-hband-supplier
+  description: job-description-hband-supplier
+  playTimeTracker: JobHBandSupplier
+  startingGear: HBandSupplierGear
+  icon: "JobIconHCargo"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+  access:
+  - Maintenance
+  - External
+  - Cargo
+
+- type: startingGear
+  id: HBandSupplierGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackCULT2
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorChaosVest
+    id: HBandSupplierDogTag

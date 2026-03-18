@@ -24,6 +24,16 @@
     - Hair
 
 - type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetFlakAdvCyan
+  suffix: WH40K, Guard Cyan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetadv_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetadv_cyan.rsi
+
+- type: entity
   parent: ClothingHeadHelmetBasic
   id: ClothingHeadHelmetFlak
   suffix: WH40K, Гвардия
@@ -46,6 +56,16 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetFlakCyan
+  suffix: WH40K, Guard Cyan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_cyan.rsi
 
 - type: entity
   parent: ClothingHeadHelmetFlak
@@ -129,6 +149,16 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed.rsi
   - type: Item
     size: Normal
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetKrieg
+  suffix: WH40K, Krieg
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/krieg_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/krieg_helmet.rsi
 
 - type: entity
   parent: ClothingHeadHelmetFlak

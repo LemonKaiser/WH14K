@@ -1,0 +1,416 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPsykerToggleProgressionUi
+  name: Psyker Discipline
+  description: Open your psyker progression panel.
+  components:
+  - type: Action
+    icon:
+      sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+      state: skrizhal_chaos
+  - type: InstantAction
+    event: !type:WH40KPsykerToggleProgressionUiActionEvent
+
+- type: entity
+  parent: ActionRepulse
+  id: ActionWH40KPsykerTelekineticRepulse
+  name: Telekinetic Burst
+  description: Push entities away with controlled warp force.
+  components:
+  - type: Action
+    useDelay: 24
+  - type: WH40KWarpActionCost
+    warpChargeCost: 18
+    instabilityGain: 6
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionBlink
+  id: ActionWH40KPsykerWarpBlink
+  name: Warp Step
+  description: Blink through the veil to a selected location.
+  components:
+  - type: Action
+    useDelay: 14
+  - type: WH40KWarpActionCost
+    warpChargeCost: 20
+    instabilityGain: 8
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionKnock
+  id: ActionWH40KPsykerWarpKnock
+  name: Psychic Knock
+  description: Force nearby doors and latches open with warp pressure.
+  components:
+  - type: Action
+    useDelay: 12
+  - type: WH40KWarpActionCost
+    warpChargeCost: 10
+    instabilityGain: 4
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionFireball
+  id: ActionWH40KChaosWarpBlast
+  name: Варп-взрыв
+  description: Швырните нестабильный огонь Варпа в цель.
+  components:
+  - type: Action
+    useDelay: 16
+  - type: WH40KWarpActionCost
+    warpChargeCost: 22
+    instabilityGain: 10
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+  - type: WorldTargetAction
+    event: !type:ProjectileSpellEvent
+      prototype: WH40KProjectileChaosWarpBlast
+
+- type: entity
+  parent: ActionKnock
+  id: ActionWH40KChaosWarpKnock
+  name: Осквернённый взлом
+  description: Взломайте ближайшие двери, осквернив машинных духов.
+  components:
+  - type: Action
+    useDelay: 10
+  - type: WH40KWarpActionCost
+    warpChargeCost: 9
+    instabilityGain: 5
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionBlink
+  id: ActionWH40KChaosUndividedBlink
+  name: Шаг Неразделенного
+  description: Скользните через Варп во имя Неразделенного Хаоса.
+  components:
+  - type: Action
+    useDelay: 12
+  - type: WH40KWarpActionCost
+    warpChargeCost: 18
+    instabilityGain: 9
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionRepulse
+  id: ActionWH40KChaosKhorneRepulse
+  name: Рёв Кхорна
+  description: Отбросьте врагов ударной волной, чтобы захватить темп ближнего боя.
+  components:
+  - type: Action
+    useDelay: 18
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: repulse
+  - type: InstantAction
+    event: !type:WH40KChaosKhorneRepulseActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 14
+    instabilityGain: 7
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionSmoke
+  id: ActionWH40KChaosNurgleMiasma
+  name: Миазмы Нургла
+  description: Распространите чумной туман, чтобы затруднить обзор и задавить поле.
+  components:
+  - type: Action
+    useDelay: 14
+  - type: WH40KWarpActionCost
+    warpChargeCost: 14
+    instabilityGain: 8
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionVoidApplause
+  id: ActionWH40KChaosSlaaneshSwap
+  name: Вальс Слаанеш
+  description: Поменяйтесь местами с целью в вихре экстатической скорости.
+  components:
+  - type: Action
+    useDelay: 18
+  - type: WH40KWarpActionCost
+    warpChargeCost: 24
+    instabilityGain: 12
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionForceWall
+  id: ActionWH40KChaosTzeentchBarrier
+  name: Барьер Тзинча
+  description: Сформируйте кратковременную стену из мутирующих нитей Варпа.
+  components:
+  - type: Action
+    useDelay: 16
+  - type: WH40KWarpActionCost
+    warpChargeCost: 16
+    instabilityGain: 9
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionForceWall
+  id: ActionWH40KPsykerAegisWall
+  name: Aegis Wall
+  description: Raise a disciplined warp barrier to control angles.
+  components:
+  - type: Action
+    useDelay: 16
+  - type: WH40KWarpActionCost
+    warpChargeCost: 16
+    instabilityGain: 6
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionSmoke
+  id: ActionWH40KPsykerVeilSmoke
+  name: Veil of Silence
+  description: Release a controlled veil to break enemy line of sight.
+  components:
+  - type: Action
+    useDelay: 14
+  - type: WH40KWarpActionCost
+    warpChargeCost: 12
+    instabilityGain: 7
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionMindSwap
+  id: ActionWH40KPsykerMindShunt
+  name: Mind Shunt
+  description: Temporarily force your will into an enemy vessel.
+  components:
+  - type: Action
+    useDelay: 150
+  - type: WH40KWarpActionCost
+    warpChargeCost: 30
+    instabilityGain: 16
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: ActionFireballII
+  id: ActionWH40KChaosWarpBlastSurge
+  name: Всплеск варп-взрыва
+  description: Выпустите перегруженный варп-взрыв с сокрушительной силой.
+  components:
+  - type: Action
+    useDelay: 12
+  - type: WH40KWarpActionCost
+    warpChargeCost: 30
+    instabilityGain: 16
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+  - type: WorldTargetAction
+    event: !type:ProjectileSpellEvent
+      prototype: WH40KProjectileChaosWarpBlast
+
+- type: entity
+  parent: ActionBlink
+  id: ActionWH40KChaosWarpRiftStep
+  name: Шаг через разлом
+  description: Разорвите кратковременный разлом и вырвитесь из него в рывке.
+  components:
+  - type: Action
+    useDelay: 10
+  - type: WH40KWarpActionCost
+    warpChargeCost: 24
+    instabilityGain: 14
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionForceWall
+  id: ActionWH40KChaosUndividedAegis
+  name: Эгида Неразделенного
+  description: Возведите грубую, но упорную стену для любого отряда.
+  components:
+  - type: Action
+    useDelay: 14
+  - type: WH40KWarpActionCost
+    warpChargeCost: 18
+    instabilityGain: 10
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosKhorneExecutionStep
+  name: Шаг Казни
+  description: Рваните вперед по кровавым отголоскам Варпа.
+  components:
+  - type: Action
+    useDelay: 9
+    icon:
+      sprite: Interface/Actions/jump.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:WH40KChaosKhorneGravityJumpActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 20
+    instabilityGain: 12
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionRepulse
+  id: ActionWH40KChaosNurgleRepulse
+  name: Гнилостный Ветер
+  description: Зловонная волна давления отталкивает врагов от вашей линии гниения.
+  components:
+  - type: Action
+    useDelay: 16
+  - type: WH40KWarpActionCost
+    warpChargeCost: 15
+    instabilityGain: 9
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionSmoke
+  id: ActionWH40KChaosSlaaneshMiasma
+  name: Завеса Сирены
+  description: Накройте поле боя опьяняющей чувственной дымкой.
+  components:
+  - type: Action
+    useDelay: 12
+  - type: WH40KWarpActionCost
+    warpChargeCost: 16
+    instabilityGain: 10
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionMindSwap
+  id: ActionWH40KChaosTzeentchMindTwist
+  name: Искажение Разума Тзинча
+  description: Перепишите бой, поменявшись разумом с жертвой.
+  components:
+  - type: Action
+    useDelay: 130
+  - type: WH40KWarpActionCost
+    warpChargeCost: 34
+    instabilityGain: 20
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosKhorneBloodstorm
+  name: Кровавый Натиск
+  description: Выпустите взрыв кровавой ярости, чтобы проломить укрепленное сопротивление.
+  components:
+  - type: Action
+    useDelay: 13
+    icon:
+      sprite: Objects/Weapons/Melee/energykatana.rsi
+      state: icon
+  - type: TargetAction
+    checkCanAccess: false
+    range: 16
+    repeat: false
+  - type: WorldTargetAction
+    event: !type:WH40KChaosKhorneDashActionEvent
+  - type: WH40KChaosKhorneDashAction
+  - type: WH40KWarpActionCost
+    warpChargeCost: 28
+    instabilityGain: 15
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseActionPolymorph
+  id: ActionWH40KChaosKhorneGroxMorph
+  name: Форма Грокса
+  description: Превратитесь в неистового грокса на короткое окно кровавого безумия.
+  components:
+  - type: Action
+    useDelay: 300
+    icon:
+      sprite: _WH40K/Mobs/Animals/grox.rsi
+      state: base
+  - type: InstantAction
+    event: !type:PolymorphActionEvent
+      protoId: WH40KChaosKhorneGroxMorph
+
+- type: entity
+  parent: ActionSmoke
+  id: ActionWH40KChaosNurgleCorpseBloom
+  name: Цветение Трупа
+  description: Посейте чумное цветение, которое утопит проход в гнили и панике.
+  components:
+  - type: Action
+    useDelay: 15
+  - type: WH40KWarpActionCost
+    warpChargeCost: 18
+    instabilityGain: 11
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionBlink
+  id: ActionWH40KChaosSlaaneshExquisiteTempo
+  name: Изысканный Темп
+  description: Выполните молниеносный шаг Варпа, чтобы обогнать и изолировать жертву.
+  components:
+  - type: Action
+    useDelay: 8
+  - type: WH40KWarpActionCost
+    warpChargeCost: 22
+    instabilityGain: 13
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionFireball
+  id: ActionWH40KChaosTzeentchWarpRewrite
+  name: Перезапись Варпа
+  description: Выпустите мутирующий огонь Варпа, вынуждая врага срочно перестраиваться.
+  components:
+  - type: Action
+    useDelay: 14
+  - type: WH40KWarpActionCost
+    warpChargeCost: 26
+    instabilityGain: 14
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+  - type: WorldTargetAction
+    event: !type:ProjectileSpellEvent
+      prototype: WH40KProjectileChaosWarpBlast

@@ -3,6 +3,8 @@
   id: WeaponLaserLasgun
   suffix: WH40K
   components:
+  - type: Gun
+    fireRate: 1.5
   - type: GunRequiresWield
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_standart/lasgun_in-hands.rsi

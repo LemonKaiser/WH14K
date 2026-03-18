@@ -1,0 +1,24 @@
+cm-automated-vendor-ui-title-fallback = Вендор ColMarTech
+cm-automated-vendor-ui-search = Поиск
+cm-automated-vendor-ui-search-placeholder = Поиск...
+cm-automated-vendor-ui-points = Очки: {$points}
+cm-automated-vendor-ui-take-all = ВЗЯТЬ ВСЕ
+cm-automated-vendor-ui-take-one = ВЗЯТЬ ОДНО
+cm-automated-vendor-ui-choose-left = ВЫБРАТЬ {$count}
+cm-automated-vendor-ui-unlimited = ∞
+
+cm-automated-vendor-section-starter = Стартовый набор
+cm-automated-vendor-section-primary-firearms = Основное оружие
+cm-automated-vendor-section-primary-ammunition = Основные боеприпасы
+cm-automated-vendor-section-sidearms = Вторичное оружие
+cm-automated-vendor-section-standard-equipment = Стандартное снаряжение
+cm-automated-vendor-section-armor = Броня
+cm-automated-vendor-section-backpack = Рюкзак
+cm-automated-vendor-section-belt = Пояс
+cm-automated-vendor-section-belts = Пояса
+cm-automated-vendor-section-miscellaneous = Разное
+cm-automated-vendor-section-prepared-meals = Готовые пайки
+cm-automated-vendor-section-flasks = Фляги
+cm-automated-vendor-section-armor-piercing-ammunition = Бронебойные боеприпасы
+cm-automated-vendor-section-extended-ammunition = Увеличенные боеприпасы
+cm-automated-vendor-section-special-ammunition = Специальные боеприпасы

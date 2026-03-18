@@ -656,7 +656,7 @@ namespace Content.Shared.Containers.ItemSlots
 
                     if (slot.InsertVerbText != null)
                     {
-                        verb.Text = Loc.GetString(slot.InsertVerbText);
+                        verb.TextLocId = slot.InsertVerbText;
                         verb.Icon = new SpriteSpecifier.Texture(
                             new("/Textures/Interface/VerbIcons/insert.svg.192dpi.png"));
                     }
@@ -715,7 +715,7 @@ namespace Content.Shared.Containers.ItemSlots
                 }
                 else
                 {
-                    verb.Text = Loc.GetString(slot.EjectVerbText);
+                    verb.TextLocId = slot.EjectVerbText;
                 }
 
                 verb.Priority = slot.Priority;
@@ -752,7 +752,7 @@ namespace Content.Shared.Containers.ItemSlots
                 if (slot.EjectVerbText == null)
                     takeVerb.Text = Loc.GetString("take-item-verb-text", ("subject", verbSubject));
                 else
-                    takeVerb.Text = Loc.GetString(slot.EjectVerbText);
+                    takeVerb.TextLocId = slot.EjectVerbText;
 
                 takeVerb.Priority = slot.Priority;
                 args.Verbs.Add(takeVerb);
@@ -779,7 +779,7 @@ namespace Content.Shared.Containers.ItemSlots
 
                 if (slot.InsertVerbText != null)
                 {
-                    insertVerb.Text = Loc.GetString(slot.InsertVerbText);
+                    insertVerb.TextLocId = slot.InsertVerbText;
                     insertVerb.Icon =
                         new SpriteSpecifier.Texture(
                             new ResPath("/Textures/Interface/VerbIcons/insert.svg.192dpi.png"));

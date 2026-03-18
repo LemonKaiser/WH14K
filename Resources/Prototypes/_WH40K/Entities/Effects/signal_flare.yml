@@ -1,0 +1,33 @@
+- type: entity
+  id: WH40KSignalFlareMarker
+  name: signal flare marker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 50
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_intense
+      color: "#7CFF95DD"
+  - type: PointLight
+    enabled: true
+    radius: 1.8
+    softness: 1
+    color: "#7CFF95"
+    energy: 1.45
+  - type: WH40KMissionObjectiveVisual
+    label: wh40k-signal-flare-marker-label
+    radius: 6
+    pulse: true
+    color: "#7CFF95"
+  - type: WH40KSignalFlareTarget
+  - type: Tag
+    tags:
+    - HideContextMenu

@@ -208,21 +208,21 @@
     heatingCoefficient: 0.1
     coolingCoefficient: 0.1
   - type: ExplosionResistance
-    damageCoefficient: 0.7
+    damageCoefficient: 0.8
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.7
-        Slash: 0.7
-        Piercing: 0.6
-        Heat: 0.1
-        Cold: 0.1
-        Shock: 0.1
-        Radiation: 0.1
-        Caustic: 0.1
+        Blunt: 0.8
+        Slash: 0.8
+        Piercing: 0.7
+        Heat: 0.25
+        Cold: 0.25
+        Shock: 0.25
+        Radiation: 0.25
+        Caustic: 0.25
   - type: ClothingSpeedModifier
-    walkModifier: 1.0
-    sprintModifier: 1.0
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetTechpriestMarsSkitarii
@@ -244,21 +244,21 @@
     heatingCoefficient: 0.01
     coolingCoefficient: 0.01
   - type: ExplosionResistance
-    damageCoefficient: 0.7
+    damageCoefficient: 0.8
   - type: Armor
     modifiers:
       coefficients:
-        Blunt: 0.7
-        Slash: 0.7
-        Piercing: 0.6
-        Heat: 0.1
-        Cold: 0.1
-        Shock: 0.1
-        Radiation: 0.1
-        Caustic: 0.1
+        Blunt: 0.8
+        Slash: 0.8
+        Piercing: 0.7
+        Heat: 0.25
+        Cold: 0.25
+        Shock: 0.25
+        Radiation: 0.25
+        Caustic: 0.25
   - type: ClothingSpeedModifier
-    walkModifier: 1.0
-    sprintModifier: 1.0
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: HeldSpeedModifier
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetTechpriestMarsSkitarii

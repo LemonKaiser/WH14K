@@ -57,6 +57,13 @@ public sealed partial class StepTriggerComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool StepOn = false;
+
+    /// <summary>
+    /// If true, trigger only when the tripper center is on the same tile as this trigger.
+    /// Useful for tile hazards where edge-only collider overlap should not count as stepping on the hazard.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool RequireTripperOnSameTile;
 }
 
 [RegisterComponent]

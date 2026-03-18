@@ -1,5 +1,7 @@
 using Content.Client.Info;
 using Content.Client.Info.PlaytimeStats;
+using Content.Client.Localization;
+using Content.Client._WH40K.MetaProgress;
 using Content.Client.Resources;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
@@ -19,7 +21,7 @@ namespace Content.Client.Lobby.UI
     /// Holds the entire character setup GUI, from character picks to individual character editing.
     /// </summary>
     [GenerateTypedNameReferences]
-    public sealed partial class CharacterSetupGui : Control
+    public sealed partial class CharacterSetupGui : Control, ILocalizedControl
     {
         [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
         [Dependency] private readonly IPrototypeManager _protomanager = default!;
@@ -63,8 +65,22 @@ namespace Content.Client.Lobby.UI
             RulesButton.OnPressed += _ => new RulesAndInfoWindow().Open();
 
             StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
+            AchievementsButton.OnPressed += _ => new PlayerAchievementsWindow().OpenCentered();
+            DecorationsButton.OnPressed += _ => new PlayerDecorationsWindow().OpenCentered();
 
-            _cfg.OnValueChanged(CCVars.SeeOwnNotes, p => AdminRemarksButton.Visible = p, true);
+            _cfg.OnValueChanged(CCVars.SeeOwnNotes, UpdateAdminRemarksVisibility, true);
+            _cfg.OnValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged, true);
+            Relocalize();
+        }
+
+        private void UpdateAdminRemarksVisibility(bool visible)
+        {
+            AdminRemarksButton.Visible = visible;
+        }
+
+        private void OnCustomizationPanelOpacityChanged(float opacity)
+        {
+            LobbyPanelOpacityHelper.ApplyPanelOpacity(BackgroundPanel, opacity);
         }
 
         /// <summary>
@@ -113,6 +129,38 @@ namespace Content.Client.Lobby.UI
 
             _createNewCharacterButton.Disabled = numberOfFullSlots >= _preferencesManager.Settings.MaxCharacterSlots;
             Characters.AddChild(_createNewCharacterButton);
+        }
+
+        public void Relocalize()
+        {
+            CharacterSetupLabel.Text = Loc.GetString("character-setup-gui-character-setup-label");
+            StatsButton.Text = Loc.GetString("character-setup-gui-character-setup-stats-button");
+            AdminRemarksButton.Text = Loc.GetString("character-setup-gui-character-setup-adminremarks-button");
+            RulesButton.Text = Loc.GetString("character-setup-gui-character-setup-rules-button");
+            AchievementsButton.Text = Loc.GetString("wh40k-meta-progress-achievements-button");
+            DecorationsButton.Text = Loc.GetString("wh40k-meta-progress-decorations-button");
+            CloseButton.Text = Loc.GetString("character-setup-gui-character-setup-close-button");
+            _createNewCharacterButton.Text = Loc.GetString("character-setup-gui-create-new-character-button");
+
+            if (_preferencesManager.ServerDataLoaded && _preferencesManager.Settings != null)
+            {
+                _createNewCharacterButton.ToolTip =
+                    Loc.GetString("character-setup-gui-create-new-character-button-tooltip",
+                        ("maxCharacters", _preferencesManager.Settings.MaxCharacterSlots));
+            }
+
+            ReloadCharacterPickers();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _cfg.UnsubValueChanged(CCVars.SeeOwnNotes, UpdateAdminRemarksVisibility);
+                _cfg.UnsubValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged);
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

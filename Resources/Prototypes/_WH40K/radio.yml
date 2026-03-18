@@ -7,9 +7,17 @@
   longRange: true
   
 - type: radioChannel
-  id: Vox
-  name: chat-radio-vox
+  id: VoxImperium
+  name: chat-radio-vox-imperium
   keycode: 'w'
   frequency: 2050
   color: "#60615b"
-  longRange: false
+  longRange: true
+
+- type: radioChannel
+  id: VoxHeretics
+  name: chat-radio-vox-heretics
+  keycode: 'e'
+  frequency: 2051
+  color: "#8B3A3A"
+  longRange: true

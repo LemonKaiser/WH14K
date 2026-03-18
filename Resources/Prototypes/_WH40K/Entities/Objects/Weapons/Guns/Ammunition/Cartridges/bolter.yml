@@ -16,3 +16,22 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: Appearance
   - type: SpentAmmoVisuals
+
+- type: entity
+  id: CartridgeHeavyBolter
+  parent: BaseCartridge
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - CartridgeHeavyBolter
+      - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletHeavyBolter
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals

@@ -25,6 +25,13 @@ public sealed partial class WH40KObjectiveComponent : Component
     [DataField("triggerKey")]
     public string TriggerKey = "wh40k-objective-destroyed";
 
+    /// <summary>
+    /// Incoming damage multiplier while preparation shield is active.
+    /// 0.1 = 90% damage reduction.
+    /// </summary>
+    [DataField("preparationShieldDamageMultiplier")]
+    public float PreparationShieldDamageMultiplier = 0.1f;
+
     [ViewVariables]
     public bool LowHealthAnnounced;
 

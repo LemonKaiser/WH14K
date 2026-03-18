@@ -20,6 +20,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/water_spray.ogg
+  - type: WH40KGunPrediction
   - type: SolutionContainerManager
     solutions:
       chamber:

@@ -38,10 +38,40 @@ namespace Content.Shared.Chat
         public string? AudioPath;
         public float AudioVolume;
 
+        /// <summary>
+        /// Optional sender role icon id resolved server-side.
+        /// Used by clients to render role icon even when sender entity data is not yet replicated.
+        /// </summary>
+        public string? SenderJobIconId;
+
+        /// <summary>
+        /// Optional sender grammar proper-noun flag resolved server-side.
+        /// Used by clients for deterministic name-coloring of early round messages.
+        /// </summary>
+        public bool? SenderNameIsProperNoun;
+
+        /// <summary>
+        /// How this spoken line reached the local listener.
+        /// Used by client-side speech bubble systems to apply context-aware playback.
+        /// </summary>
+        public ChatSpeechTransport SpeechTransport;
+
         [NonSerialized]
         public bool Read;
 
-        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0)
+        public ChatMessage(
+            ChatChannel channel,
+            string message,
+            string wrappedMessage,
+            NetEntity source,
+            int? senderKey,
+            bool hideChat = false,
+            Color? colorOverride = null,
+            string? audioPath = null,
+            float audioVolume = 0,
+            string? senderJobIconId = null,
+            bool? senderNameIsProperNoun = null,
+            ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
         {
             Channel = channel;
             Message = message;
@@ -52,6 +82,9 @@ namespace Content.Shared.Chat
             MessageColorOverride = colorOverride;
             AudioPath = audioPath;
             AudioVolume = audioVolume;
+            SenderJobIconId = senderJobIconId;
+            SenderNameIsProperNoun = senderNameIsProperNoun;
+            SpeechTransport = speechTransport;
         }
     }
 

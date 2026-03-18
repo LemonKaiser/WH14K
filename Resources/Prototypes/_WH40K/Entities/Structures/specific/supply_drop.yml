@@ -1,0 +1,55 @@
+- type: entity
+  id: WH40KSupplyDropPadBase
+  parent: BaseStructure
+  abstract: true
+  name: supply drop uplink
+  description: Calls an ammo drop to the operator position and charges the faction budget.
+  components:
+  - type: InteractionOutline
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: Structures/cargo_telepad.rsi
+    drawdepth: HighFloorObjects
+    layers:
+    - state: offline
+    - state: idle
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.WH40KSupplyDropUiKey.Key:
+        type: WH40KSupplyDropBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KSupplyDropUiKey.Key
+  - type: WH40KSupplyDropPad
+    cratePrototype: WH40KSupplyDropAmmoCrate
+    cost: 4000
+    cooldownSeconds: 90
+    dropDelaySeconds: 5
+    markerPrototype: WH40KSupplyDropParachuteCrateVisual
+
+- type: entity
+  id: WH40KSupplyDropAmmoCrate
+  parent: CrateGenericSteel
+  name: frontline ammo crate
+  description: A rapid airdrop container packed with lasgun power cells.
+  components:
+  - type: TimedDespawn
+    lifetime: 300
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: BoxLasgunPowerCell
+        amount: 3
+
+- type: entity
+  id: WH40KVoxSupplyDropCrate
+  parent: CrateGenericSteel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 300

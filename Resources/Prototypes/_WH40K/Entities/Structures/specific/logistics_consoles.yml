@@ -1,0 +1,158 @@
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumBuy
+  name: imperium logistics console
+  description: Cargo-order console for imperial requisitions.
+  suffix: "WH40K, Imperium, Cargo Console"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/storage.rsi
+    layers:
+    - state: icon
+  - type: UserInterface
+    interfaces:
+      enum.CargoConsoleUiKey.Orders:
+        type: CargoOrderConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.CargoConsoleUiKey.Orders
+  - type: CargoOrderConsole
+    account: WH40KImperium
+    baseTransferLimit: 0
+    allowedGroups:
+    - WH40KImperiumMarket
+  - type: CargoBatchOrderConsole
+    batchDelaySeconds: 300
+  - type: WH40KStoreTeam
+    teamId: Imperium
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumCmd
+  name: imperium command terminal
+  description: Strategic command terminal for imperial control.
+  suffix: "WH40K, Imperium, Command Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/imp_command.rsi
+    scale: 0.3, 0.3
+    layers:
+    - state: icon
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.Key:
+        type: WH40KCommandNodeBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.Key
+  - type: WH40KCommandNode
+    teamId: Imperium
+    trackedCategories:
+    - VoxBasics
+    - VoxWeaponry
+    - VoxAmmo
+    - VoxArmor
+    - VoxSupport
+    - VoxReinforcements
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumSell
+  name: imperium logistics sale console
+  description: Cargo-sale console for imperial logistics.
+  suffix: "WH40K, Imperium, Cargo Sell Console"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/imp_sell.rsi
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.CargoPalletConsoleUiKey.Sale:
+        type: CargoPalletConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.CargoPalletConsoleUiKey.Sale
+  - type: CargoPalletConsole
+  - type: WH40KStoreTeam
+    teamId: Imperium
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsBuy
+  name: heretic logistics console
+  description: Cargo-order console for heretic requisitions.
+  suffix: "WH40K, Heretics, Cargo Console"
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/storage_cmd.rsi
+      layers:
+      - state: icon
+    - type: UserInterface
+      interfaces:
+        enum.CargoConsoleUiKey.Orders:
+          type: CargoOrderConsoleBoundUserInterface
+    - type: ActivatableUI
+      key: enum.CargoConsoleUiKey.Orders
+    - type: CargoOrderConsole
+      account: WH40KHeretics
+      baseTransferLimit: 0
+      allowedGroups:
+      - WH40KHereticsMarket
+    - type: CargoBatchOrderConsole
+      batchDelaySeconds: 300
+    - type: WH40KStoreTeam
+      teamId: Heretics
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsCmd
+  name: heretic command terminal
+  description: Strategic command terminal for heretic control.
+  suffix: "WH40K, Heretics, Command Terminal"
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/ch_command.rsi
+      scale: 0.3, 0.3
+      layers:
+      - state: icon
+    - type: UserInterface
+      interfaces:
+        enum.WH40KCommandNodeUiKey.Key:
+          type: WH40KCommandNodeBoundUserInterface
+    - type: ActivatableUI
+      key: enum.WH40KCommandNodeUiKey.Key
+    - type: WH40KCommandNode
+      teamId: Heretics
+      trackedCategories:
+      - AltarBasics
+      - AltarWeaponry
+      - AltarAmmo
+      - AltarArmor
+      - AltarSupport
+      - AltarReinforcements
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsSell
+  name: heretic logistics sale console
+  description: Cargo-sale console for heretic logistics.
+  suffix: "WH40K, Heretics, Cargo Sell Console"
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/ch_sell.rsi
+      layers:
+      - state: computer
+      - state: decorative_monitor
+        shader: unshaded
+    - type: UserInterface
+      interfaces:
+        enum.CargoPalletConsoleUiKey.Sale:
+          type: CargoPalletConsoleBoundUserInterface
+    - type: ActivatableUI
+      key: enum.CargoPalletConsoleUiKey.Sale
+    - type: CargoPalletConsole
+    - type: WH40KStoreTeam
+      teamId: Heretics

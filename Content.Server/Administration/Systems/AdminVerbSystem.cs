@@ -95,7 +95,9 @@ namespace Content.Server.Administration.Systems
             if (_adminManager.IsAdmin(player))
             {
                 Verb mark = new();
+                mark.TextLocId = "toolshed-verb-mark";
                 mark.Text = Loc.GetString("toolshed-verb-mark");
+                mark.MessageLocId = "toolshed-verb-mark-description";
                 mark.Message = Loc.GetString("toolshed-verb-mark-description");
                 mark.Category = VerbCategory.Admin;
                 mark.Act = () => _toolshed.InvokeCommand(player, "=> $marked", new List<EntityUid> {args.Target}, out _);
@@ -106,6 +108,7 @@ namespace Content.Server.Administration.Systems
                 {
                     // AdminHelp
                     Verb verb = new();
+                    verb.TextLocId = "ahelp-verb-get-data-text";
                     verb.Text = Loc.GetString("ahelp-verb-get-data-text");
                     verb.Category = VerbCategory.Admin;
                     verb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/gavel.svg.192dpi.png"));
@@ -132,6 +135,7 @@ namespace Content.Server.Administration.Systems
                     // Spawn - Like respawn but on the spot.
                     args.Verbs.Add(new Verb()
                     {
+                        TextLocId = "admin-player-actions-spawn",
                         Text = Loc.GetString("admin-player-actions-spawn"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -158,6 +162,7 @@ namespace Content.Server.Administration.Systems
                     // Clone - Spawn but without the mind transfer, also spawns at the user's coordinates not the target's
                     args.Verbs.Add(new Verb()
                     {
+                        TextLocId = "admin-player-actions-clone",
                         Text = Loc.GetString("admin-player-actions-clone"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -180,6 +185,7 @@ namespace Content.Server.Administration.Systems
                     // PlayerPanel
                     args.Verbs.Add(new Verb
                     {
+                        TextLocId = "admin-player-actions-player-panel",
                         Text = Loc.GetString("admin-player-actions-player-panel"),
                         Category = VerbCategory.Admin,
                         Act = () => _console.ExecuteCommand(player, $"playerpanel \"{targetActor.PlayerSession.UserId}\""),
@@ -192,7 +198,9 @@ namespace Content.Server.Administration.Systems
                     // Erase
                     args.Verbs.Add(new Verb
                     {
+                        TextLocId = "admin-verbs-erase",
                         Text = Loc.GetString("admin-verbs-erase"),
+                        MessageLocId = "admin-verbs-erase-description",
                         Message = Loc.GetString("admin-verbs-erase-description"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(
@@ -208,6 +216,7 @@ namespace Content.Server.Administration.Systems
                     // Respawn
                     args.Verbs.Add(new Verb
                     {
+                        TextLocId = "admin-player-actions-respawn",
                         Text = Loc.GetString("admin-player-actions-respawn"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -221,6 +230,7 @@ namespace Content.Server.Administration.Systems
                     // Inspect mind
                     args.Verbs.Add(new Verb
                     {
+                        TextLocId = "inspect-mind-verb-get-data-text",
                         Text = Loc.GetString("inspect-mind-verb-get-data-text"),
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
                         Category = VerbCategory.Debug,
@@ -237,6 +247,7 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
+                        TextLocId = "admin-verbs-freeze",
                         Text = Loc.GetString("admin-verbs-freeze"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -254,6 +265,7 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
+                        TextLocId = "admin-verbs-freeze-and-mute",
                         Text = Loc.GetString("admin-verbs-freeze-and-mute"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -270,6 +282,7 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
+                        TextLocId = "admin-verbs-unfreeze",
                         Text = Loc.GetString("admin-verbs-unfreeze"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -288,6 +301,7 @@ namespace Content.Server.Administration.Systems
                     Verb logsVerbEntity = new()
                     {
                         Priority = -2,
+                        TextLocId = "admin-verbs-admin-logs-entity",
                         Text = Loc.GetString("admin-verbs-admin-logs-entity"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -304,6 +318,7 @@ namespace Content.Server.Administration.Systems
                 // TeleportTo
                 args.Verbs.Add(new Verb
                 {
+                    TextLocId = "admin-verbs-teleport-to",
                     Text = Loc.GetString("admin-verbs-teleport-to"),
                     Category = VerbCategory.Admin,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/open.svg.192dpi.png")),
@@ -317,6 +332,7 @@ namespace Content.Server.Administration.Systems
                 // TeleportHere
                 args.Verbs.Add(new Verb
                 {
+                    TextLocId = "admin-verbs-teleport-here",
                     Text = Loc.GetString("admin-verbs-teleport-here"),
                     Category = VerbCategory.Admin,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
@@ -374,6 +390,7 @@ namespace Content.Server.Administration.Systems
                 {
                     args.Verbs.Add(new Verb()
                     {
+                        TextLocId = "silicon-law-ui-verb",
                         Text = Loc.GetString("silicon-law-ui-verb"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -394,7 +411,9 @@ namespace Content.Server.Administration.Systems
                 args.Verbs.Add(new Verb()
                 {
                     Priority = 10,
+                    TextLocId = "admin-verbs-camera",
                     Text = Loc.GetString("admin-verbs-camera"),
+                    MessageLocId = "admin-verbs-camera-description",
                     Message = Loc.GetString("admin-verbs-camera-description"),
                     Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/vv.svg.192dpi.png")),
                     Category = VerbCategory.Admin,
@@ -420,6 +439,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "delete-verb-get-data-text",
                     Text = Loc.GetString("delete-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/delete_transparent.svg.192dpi.png")),
@@ -435,6 +455,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "rejuvenate-verb-get-data-text",
                     Text = Loc.GetString("rejuvenate-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")),
@@ -450,6 +471,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "control-mob-verb-get-data-text",
                     Text = Loc.GetString("control-mob-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     // TODO VERB ICON control mob icon
@@ -470,6 +492,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "make-sentient-verb-get-data-text",
                     Text = Loc.GetString("make-sentient-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
@@ -486,6 +509,7 @@ namespace Content.Server.Administration.Systems
                 {
                     args.Verbs.Add(new Verb
                     {
+                        TextLocId = "strip-all-verb-get-data-text",
                         Text = Loc.GetString("strip-all-verb-get-data-text"),
                         Category = VerbCategory.Debug,
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
@@ -499,6 +523,7 @@ namespace Content.Server.Administration.Systems
                 {
                     Verb verb = new()
                     {
+                        TextLocId = "set-outfit-verb-get-data-text",
                         Text = Loc.GetString("set-outfit-verb-get-data-text"),
                         Category = VerbCategory.Debug,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
@@ -514,6 +539,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "in-range-unoccluded-verb-get-data-text",
                     Text = Loc.GetString("in-range-unoccluded-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
@@ -536,6 +562,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "tube-direction-verb-get-data-text",
                     Text = Loc.GetString("tube-direction-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
@@ -549,6 +576,7 @@ namespace Content.Server.Administration.Systems
                 !(EntityManager.GetComponentOrNull<MindContainerComponent>(args.Target)?.HasMind ?? false))
             {
                 Verb verb = new();
+                verb.TextLocId = "make-ghost-role-verb-get-data-text";
                 verb.Text = Loc.GetString("make-ghost-role-verb-get-data-text");
                 verb.Category = VerbCategory.Debug;
                 // TODO VERB ICON add ghost icon
@@ -563,6 +591,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "configure-verb-get-data-text",
                     Text = Loc.GetString("configure-verb-get-data-text"),
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
                     Category = VerbCategory.Debug,
@@ -577,6 +606,7 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
+                    TextLocId = "edit-solutions-verb-get-data-text",
                     Text = Loc.GetString("edit-solutions-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/spill.svg.192dpi.png")),

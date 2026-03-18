@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Construction.Components;
@@ -12,6 +13,8 @@ using Content.Shared.Interaction.Components;
 using Content.Shared.Prying.Systems;
 using Content.Shared.Radio.EntitySystems;
 using Content.Shared.Stacks;
+using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.RoundEvents;
 using Content.Shared.Temperature;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
@@ -289,8 +292,9 @@ namespace Content.Server.Construction
                     if (doAfterState == DoAfterState.None && insertStep.DoAfter > 0)
                     {
                         var doAfterEv = new ConstructionInteractDoAfterEvent(EntityManager, interactUsing);
+                        var doAfterSeconds = ApplyConstructionDelayMultiplier(interactUsing.User, step.DoAfter);
 
-                        var doAfterEventArgs = new DoAfterArgs(EntityManager, interactUsing.User, step.DoAfter, doAfterEv, uid, uid, interactUsing.Used)
+                        var doAfterEventArgs = new DoAfterArgs(EntityManager, interactUsing.User, doAfterSeconds, doAfterEv, uid, uid, interactUsing.Used)
                         {
                             BreakOnDamage = false,
                             BreakOnMove = true,
@@ -371,7 +375,7 @@ namespace Content.Server.Construction
                         interactUsing.Used,
                         interactUsing.User,
                         uid,
-                        TimeSpan.FromSeconds(toolInsertStep.DoAfter),
+                        TimeSpan.FromSeconds(ApplyConstructionDelayMultiplier(interactUsing.User, toolInsertStep.DoAfter)),
                         new [] { toolInsertStep.Tool },
                         new ConstructionInteractDoAfterEvent(EntityManager, interactUsing),
                         out var doAfter,
@@ -436,6 +440,28 @@ namespace Content.Server.Construction
 
             // If the handlers were not able to handle this event, return...
             return HandleResult.False;
+        }
+
+        private float ApplyConstructionDelayMultiplier(EntityUid user, float baseSeconds)
+        {
+            if (baseSeconds <= 0f)
+                return 0f;
+
+            var multiplier = 1f;
+
+            if (TryComp<WH40KRoundEventBuffComponent>(user, out var roundBuff) &&
+                roundBuff.ConstructionDelayMultiplier > 0f)
+            {
+                multiplier *= roundBuff.ConstructionDelayMultiplier;
+            }
+
+            if (TryComp<WH40KTeamEventEffectComponent>(user, out var teamEventBuff) &&
+                teamEventBuff.ConstructionDelayMultiplier > 0f)
+            {
+                multiplier *= teamEventBuff.ConstructionDelayMultiplier;
+            }
+
+            return MathF.Max(0.05f, baseSeconds * multiplier);
         }
 
         /// <summary>

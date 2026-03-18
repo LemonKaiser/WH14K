@@ -120,4 +120,9 @@ public enum PathfindingBreadcrumbFlag : ushort
     /// Is there climbing involved
     /// </summary>
     Climb = 1 << 4,
+
+    /// <summary>
+    /// Tile contains an anchored environmental hazard that should be strongly avoided.
+    /// </summary>
+    Hazard = 1 << 5,
 }

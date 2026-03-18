@@ -135,6 +135,28 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     }
 
     /// <summary>
+    /// Sets the total storage volume cap for a material storage entity.
+    /// </summary>
+    public bool SetStorageLimit(EntityUid uid, int? volumeLimit, MaterialStorageComponent? component = null, bool dirty = true)
+    {
+        if (!Resolve(uid, ref component))
+            return false;
+
+        if (volumeLimit is <= 0)
+            volumeLimit = null;
+
+        if (component.StorageLimit == volumeLimit)
+            return false;
+
+        component.StorageLimit = volumeLimit;
+
+        if (dirty)
+            Dirty(uid, component);
+
+        return true;
+    }
+
+    /// <summary>
     /// Checks if a certain material prototype is supported by this entity.
     /// </summary>
     public bool IsMaterialWhitelisted(Entity<MaterialStorageComponent?> ent, ProtoId<MaterialPrototype> material)
@@ -327,9 +349,10 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     }
 
     /// <summary>
-    /// Tries to insert an entity into the material storage.
+    /// Dry-run check for whether an entity can be inserted into material storage.
+    /// This performs no mutation, no deletion, and no feedback effects.
     /// </summary>
-    public virtual bool TryInsertMaterialEntity(EntityUid user,
+    public virtual bool CanInsertMaterialEntity(
         EntityUid toInsert,
         EntityUid receiver,
         MaterialStorageComponent? storage = null,
@@ -348,23 +371,42 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (HasComp<UnremoveableComponent>(toInsert))
             return false;
 
-        // Material Whitelist checked implicitly by CanChangeMaterialAmount();
-
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
         var totalVolume = 0;
         foreach (var (mat, vol) in composition.MaterialComposition)
         {
             if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
                 return false;
+
             totalVolume += vol * multiplier;
         }
 
-        if (!CanTakeVolume(receiver, totalVolume, storage, localOnly: true))
+        return CanTakeVolume(receiver, totalVolume, storage, localOnly: true);
+    }
+
+    /// <summary>
+    /// Tries to insert an entity into the material storage.
+    /// </summary>
+    public virtual bool TryInsertMaterialEntity(EntityUid user,
+        EntityUid toInsert,
+        EntityUid receiver,
+        MaterialStorageComponent? storage = null,
+        MaterialComponent? material = null,
+        PhysicalCompositionComponent? composition = null)
+    {
+        if (!CanInsertMaterialEntity(toInsert, receiver, storage, material, composition))
             return false;
 
+        if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
+            return false;
+
+        // Material Whitelist checked implicitly by CanChangeMaterialAmount();
+
+        var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
         foreach (var (mat, vol) in composition.MaterialComposition)
         {
-            TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage);
+            if (!TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
+                return false;
         }
 
         var insertingComp = EnsureComp<InsertingMaterialStorageComponent>(receiver);

@@ -1,29 +1,63 @@
 - type: entity
   parent: ClothingHeadset
   id: ClothingHeadsetVoxBackpack
+  abstract: true
   suffix: WH40K
+  description: 
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Ears/voxradio.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Ears/voxradio.rsi
+
+- type: entity
+  parent: ClothingHeadsetVoxBackpack
+  id: ClothingHeadsetVoxBackpackImperium
+  suffix: WH40K, Imperium
   description: 
   components:
   - type: ContainerFill
     containers:
       key_slots:
-      - EncryptionKeyCargo
+      - EncryptionKeyVoxImperium
       - EncryptionKeyCommon
-  - type: Sprite
-    sprite: _WH40K/Clothing/Ears/voxradio.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Ears/voxradio.rsi
+
+- type: entity
+  parent: ClothingHeadsetVoxBackpack
+  id: ClothingHeadsetVoxBackpackHeretics
+  suffix: WH40K, Heretics
+  description: 
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyVoxHeretics
+      - EncryptionKeyCommon
     
 - type: entity
   parent: EncryptionKey
-  id: EncryptionKeyVox
+  id: EncryptionKeyVoxImperium
   suffix: WH40K
   description: 
   components:
   - type: EncryptionKey
     channels:
-    - Vox
-    defaultChannel: Vox
+    - VoxImperium
+    defaultChannel: VoxImperium
+  - type: Sprite
+    layers:
+    - state: crypt_gray
+
+- type: entity
+  parent: EncryptionKey
+  id: EncryptionKeyVoxHeretics
+  suffix: WH40K
+  description: 
+  components:
+  - type: EncryptionKey
+    channels:
+    - VoxHeretics
+    defaultChannel: VoxHeretics
   - type: Sprite
     layers:
     - state: crypt_gray

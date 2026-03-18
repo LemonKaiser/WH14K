@@ -1,10 +1,10 @@
-﻿- type: entity
+- type: entity
   parent: [BaseItem, BaseXenoArtifact]
   id: BaseXenoArtifactItem
   name: artifact
   description: A strange artifact from time unknown. Looks like a good time. Fits in hand perfectly.
   abstract: true
-  noSpawn: true
+  categories: [ HideSpawnMenu ]
   components:
   # Visual
   - type: Sprite
@@ -142,3 +142,4 @@
   components:
   - type: Stack
     count: 1
+

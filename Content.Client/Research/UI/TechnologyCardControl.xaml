@@ -24,13 +24,16 @@
                                  HorizontalAlignment="Center"/>
                     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center" Margin="10 0 0 0">
                         <BoxContainer Orientation="Horizontal">
-                            <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True"/>
+                            <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True" ClipText="True"/>
                             <TextureRect Name="DisciplineTexture" TextureScale="2 2" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                         </BoxContainer>
                         <customControls:HSeparator StyleClasses="LowDivider" Margin="0 5 0 5"/>
-                        <BoxContainer Orientation="Horizontal">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                             <RichTextLabel Name="TierLabel" HorizontalAlignment="Left" StyleClasses="LabelSubText" HorizontalExpand="True"/>
-                            <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}"/>
+                            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 2 0 0">
+                                <Control HorizontalExpand="True"/>
+                                <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}"/>
+                            </BoxContainer>
                         </BoxContainer>
                     </BoxContainer>
                 </BoxContainer>

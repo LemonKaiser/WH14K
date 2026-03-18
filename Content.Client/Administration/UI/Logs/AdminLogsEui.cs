@@ -66,6 +66,9 @@ public sealed class AdminLogsEui : BaseEui
 
     private void RequestLogs()
     {
+        if (LogsControl.SelectedRoundId <= 0)
+            return;
+
         var request = new LogsRequest(
             LogsControl.SelectedRoundId,
             LogsControl.Search,

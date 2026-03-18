@@ -1,0 +1,32 @@
+- type: job
+  id: Psyker
+  name: job-name-psyker
+  description: job-description-psyker
+  playTimeTracker: JobPsyker
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: PsykerGear
+  icon: "JobIconPsyker"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KPsykerRole
+      - type: WH40KMoraleExecutionTarget
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: PsykerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: psybelt
+    head: ClothingHeadHelmetPsyker
+    outerClothing: ClothingOuterArmorFlakVestLight
+    id: GuardsmanDogTag

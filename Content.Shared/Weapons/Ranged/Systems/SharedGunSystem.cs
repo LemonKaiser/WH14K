@@ -1,9 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._WH40K.HeavyBolter;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Audio;
+using Content.Shared.Buckle.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
@@ -145,22 +147,40 @@ public abstract partial class SharedGunSystem : EntitySystem
 
     private void OnShootRequest(RequestShootEvent msg, EntitySessionEventArgs args)
     {
+        var requestedGun = GetEntity(msg.Gun);
+        var requestedCoordinates = GetCoordinates(msg.Coordinates);
+        var requestedTarget = GetEntity(msg.Target);
+
         var user = args.SenderSession.AttachedEntity;
 
         if (user == null || !_combatMode.IsInCombatMode(user))
+        {
             return;
+        }
 
         if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
             user = mechPilot.Mech;
 
         if (!TryGetGun(user.Value, out var ent, out var gun))
+        {
             return;
+        }
 
-        if (ent != GetEntity(msg.Gun))
+        if (ent != requestedGun)
+        {
             return;
+        }
 
-        gun.ShootCoordinates = GetCoordinates(msg.Coordinates);
-        gun.Target = GetEntity(msg.Target);
+        gun.ShootCoordinates = requestedCoordinates;
+        gun.Target = requestedTarget;
+
+        // Heavy bolter uses strict server-side authority for shot execution to avoid
+        // client-side ghost shots when server arc validation rejects the attempt.
+        if (!_netManager.IsServer && HasComp<WH40KHeavyBolterComponent>(ent))
+        {
+            return;
+        }
+
         AttemptShoot(user.Value, (ent, gun));
         if (msg.Continuous)
             gun.ShotCounter = 0;
@@ -173,17 +193,22 @@ public abstract partial class SharedGunSystem : EntitySystem
         var user = args.SenderSession.AttachedEntity;
 
         if (user == null)
+        {
             return;
+        }
 
         if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
             user = mechPilot.Mech;
 
         if (!TryGetGun(user.Value, out var ent, out var gun))
+        {
             return;
+        }
 
         if (ent != gunUid)
+        {
             return;
-
+        }
         StopShooting((gunUid, gun));
     }
 
@@ -214,6 +239,21 @@ public abstract partial class SharedGunSystem : EntitySystem
         {
             gun = (held, gunComp);
             return true;
+        }
+
+        // Allow firing from mounted guns while buckled to a compatible strap entity.
+        if (TryComp(entity, out BuckleComponent? buckle) &&
+            buckle.BuckledTo is { } strappedTo &&
+            TryComp(strappedTo, out BuckleMountedGunComponent? mounted) &&
+            TryComp(strappedTo, out gunComp))
+        {
+            if (!mounted.RequireEnabledStrap ||
+                !TryComp(strappedTo, out StrapComponent? strap) ||
+                strap.Enabled)
+            {
+                gun = (strappedTo, gunComp);
+                return true;
+            }
         }
 
         // Last resort is check if the entity itself is a gun.
@@ -286,7 +326,9 @@ public abstract partial class SharedGunSystem : EntitySystem
         var toCoordinates = gun.Comp.ShootCoordinates;
 
         if (toCoordinates == null)
+        {
             return false;
+        }
 
         var curTime = Timing.CurTime;
 
@@ -298,16 +340,22 @@ public abstract partial class SharedGunSystem : EntitySystem
         };
         RaiseLocalEvent(gun, ref prevention);
         if (prevention.Cancelled)
+        {
             return false;
+        }
 
         RaiseLocalEvent(user, ref prevention);
         if (prevention.Cancelled)
+        {
             return false;
+        }
 
         // Need to do this to play the clicking sound for empty automatic weapons
         // but not play anything for burst fire.
         if (gun.Comp.NextFire > curTime)
+        {
             return false;
+        }
 
         var fireRate = TimeSpan.FromSeconds(1f / gun.Comp.FireRateModified);
 
@@ -375,7 +423,7 @@ public abstract partial class SharedGunSystem : EntitySystem
             return false;
         }
 
-        var fromCoordinates = Transform(user).Coordinates;
+        var fromCoordinates = GetShootOriginCoordinates(user, gun);
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, [], fromCoordinates, user);
 
@@ -450,6 +498,22 @@ public abstract partial class SharedGunSystem : EntitySystem
         return true;
     }
 
+    private EntityCoordinates GetShootOriginCoordinates(EntityUid user, Entity<GunComponent> gun)
+    {
+        if (!TryComp<BuckleMountedGunComponent>(gun, out var mounted))
+            return Transform(user).Coordinates;
+
+        if (!TryComp<BuckleComponent>(user, out var buckle) || buckle.BuckledTo != gun.Owner)
+            return Transform(user).Coordinates;
+
+        if (mounted.ShootOriginOffset.LengthSquared() > 0.0001f)
+        {
+            var offsetCoordinates = new EntityCoordinates(gun.Owner, mounted.ShootOriginOffset);
+            return offsetCoordinates;
+        }
+        return Transform(gun).Coordinates;
+    }
+
     public void Shoot(
         Entity<GunComponent> gun,
         EntityUid ammo,
@@ -484,6 +548,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         var projectile = EnsureComp<ProjectileComponent>(uid);
         projectile.Weapon = gunUid;
+        projectile.ShotOrigin = TransformSystem.GetMapCoordinates(uid).Position;
         var shooter = user ?? gunUid;
         if (shooter != null)
             Projectiles.SetShooter(uid, projectile, shooter.Value);
@@ -575,8 +640,17 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
+        var tracked = user;
+        if (user != null &&
+            HasComp<BuckleMountedGunComponent>(gun) &&
+            TryComp<BuckleComponent>(user.Value, out var buckle) &&
+            buckle.BuckledTo == gun)
+        {
+            tracked = gun;
+        }
+
         var ev = new MuzzleFlashEvent(GetNetEntity(gun), sprite, worldAngle);
-        CreateEffect(gun, ev, user);
+        CreateEffect(gun, ev, tracked);
     }
 
     public void CauseImpulse(EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, Entity<PhysicsComponent> user)
@@ -750,3 +824,4 @@ public enum AmmoVisuals : byte
     MagLoaded,
     BoltClosed,
 }
+

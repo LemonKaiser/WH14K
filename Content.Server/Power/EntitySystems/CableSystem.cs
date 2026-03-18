@@ -77,4 +77,17 @@ public sealed partial class CableSystem : EntitySystem
         Spawn(cable.CableDroppedOnCutPrototype, Transform(uid).Coordinates);
         QueueDel(uid);
     }
+
+    public void SetCanBeCut(EntityUid uid, bool canBeCut, CableComponent? cable = null)
+    {
+        if (!Resolve(uid, ref cable, false))
+            return;
+
+        var newQuality = canBeCut ? SharedToolSystem.CutQuality : null;
+        if (cable.CuttingQuality == newQuality)
+            return;
+
+        cable.CuttingQuality = newQuality;
+        Dirty(uid, cable);
+    }
 }

@@ -1,0 +1,11 @@
+- type: entity
+  id: WHBlackIceCrust
+  parent: IceCrust
+  name: black ice crust
+  description: A fragile and extremely slick frozen crust.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 300
+  - type: Sprite
+    color: "#A6D2FF66"

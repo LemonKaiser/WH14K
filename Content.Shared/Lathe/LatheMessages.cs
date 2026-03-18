@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Research.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -13,11 +14,30 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
 
     public ProtoId<LatheRecipePrototype>? CurrentlyProducing;
 
-    public LatheUpdateState(List<ProtoId<LatheRecipePrototype>> recipes, LatheRecipeBatch[] queue, ProtoId<LatheRecipePrototype>? currentlyProducing = null)
+    public bool IsProducing;
+
+    public TimeSpan ProductionStartTime;
+
+    public TimeSpan ProductionLength;
+
+    public int? MaterialStorageLimit;
+
+    public LatheUpdateState(
+        List<ProtoId<LatheRecipePrototype>> recipes,
+        LatheRecipeBatch[] queue,
+        ProtoId<LatheRecipePrototype>? currentlyProducing = null,
+        bool isProducing = false,
+        TimeSpan? productionStartTime = null,
+        TimeSpan? productionLength = null,
+        int? materialStorageLimit = null)
     {
         Recipes = recipes;
         Queue = queue;
         CurrentlyProducing = currentlyProducing;
+        IsProducing = isProducing;
+        ProductionStartTime = productionStartTime ?? TimeSpan.Zero;
+        ProductionLength = productionLength ?? TimeSpan.Zero;
+        MaterialStorageLimit = materialStorageLimit;
     }
 }
 
@@ -38,10 +58,13 @@ public sealed class LatheQueueRecipeMessage : BoundUserInterfaceMessage
 {
     public readonly string ID;
     public readonly int Quantity;
-    public LatheQueueRecipeMessage(string id, int quantity)
+    public readonly bool Infinite;
+
+    public LatheQueueRecipeMessage(string id, int quantity, bool infinite = false)
     {
         ID = id;
         Quantity = quantity;
+        Infinite = infinite;
     }
 }
 

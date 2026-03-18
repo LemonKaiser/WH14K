@@ -31,6 +31,7 @@
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/smg.ogg
     defaultDirection: 1, 0
+  - type: WH40KGunPrediction
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/smg_cock.ogg
@@ -143,6 +144,7 @@
     - Burst
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/c-20r.ogg
+  - type: WH40KGunPrediction
   - type: Sprite
     sprite: Objects/Weapons/Guns/SMGs/c20r.rsi
     layers:

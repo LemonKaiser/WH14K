@@ -19,6 +19,9 @@ namespace Content.Shared.Speech
         [DataField, AutoNetworkedField]
         public ProtoId<SpeechSoundsPrototype>? SpeechSounds;
 
+        [DataField, AutoNetworkedField]
+        public VoiceTone VoiceTone = VoiceTone.Normal;
+
         /// <summary>
         ///     What speech verb prototype should be used by default for displaying this entity's messages?
         /// </summary>

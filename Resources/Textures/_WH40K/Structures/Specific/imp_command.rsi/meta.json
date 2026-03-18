@@ -1,0 +1,17 @@
+﻿{
+    "version":  1,
+    "license":  "CC-BY-SA-4.0",
+    "copyright":  "from needtouse",
+    "size":  {
+                 "x":  319,
+                 "y":  149
+             },
+    "states":  [
+                   {
+                       "name":  "icon"
+                   },
+                   {
+                       "name":  "unshaded"
+                   }
+               ]
+}

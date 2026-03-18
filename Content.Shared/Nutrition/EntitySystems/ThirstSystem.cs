@@ -66,7 +66,7 @@ public sealed class ThirstSystem : EntitySystem
             return;
 
         var mod = component.CurrentThirstThreshold <= ThirstThreshold.Parched ? 0.75f : 1.0f;
-        args.ModifySpeed(mod, mod);
+        args.ModifySpeed(mod, mod, MovementSpeedModifierLayer.Status);
     }
 
     private void OnRejuvenate(EntityUid uid, ThirstComponent component, RejuvenateEvent args)

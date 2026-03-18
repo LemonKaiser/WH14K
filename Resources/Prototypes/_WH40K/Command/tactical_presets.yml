@@ -1,0 +1,55 @@
+- type: wh40kCommandTacticalPresetProfile
+  id: WH40KCommandTacticalPresetProfileDefault
+  forecastCount: 3
+  activeDurationMinSeconds: 75
+  activeDurationMaxSeconds: 140
+  queueDurationMinSeconds: 65
+  queueDurationMaxSeconds: 140
+  queueEtaBaseSeconds: 35
+  queueEtaStepSeconds: 55
+  queueEtaJitterSeconds: 20
+  queueChancePenaltyPerIndex: 2
+  presets:
+  - id: logistics_surge
+    titleKey: wh40k-command-node-tactical-bonuses-random-logistics_surge-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-logistics_surge-description
+    chancePreparation: 28
+    chanceAssault: 22
+    chanceApocalypse: 16
+  - id: engineering_overdrive
+    titleKey: wh40k-command-node-tactical-bonuses-random-engineering_overdrive-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-engineering_overdrive-description
+    chancePreparation: 26
+    chanceAssault: 20
+    chanceApocalypse: 16
+  - id: medicae_push
+    titleKey: wh40k-command-node-tactical-bonuses-random-medicae_push-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-medicae_push-description
+    chancePreparation: 18
+    chanceAssault: 16
+    chanceApocalypse: 14
+  - id: fireline_fury
+    titleKey: wh40k-command-node-tactical-bonuses-random-fireline_fury-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-fireline_fury-description
+    chancePreparation: 10
+    chanceAssault: 16
+    chanceApocalypse: 24
+  - id: iron_skin_window
+    titleKey: wh40k-command-node-tactical-bonuses-random-iron_skin_window-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-iron_skin_window-description
+    chancePreparation: 10
+    chanceAssault: 14
+    chanceApocalypse: 20
+  - id: relay_overclock
+    titleKey: wh40k-command-node-tactical-bonuses-random-relay_overclock-title
+    descriptionKey: wh40k-command-node-tactical-bonuses-random-relay_overclock-description
+    chancePreparation: 8
+    chanceAssault: 12
+    chanceApocalypse: 10
+
+- type: wh40kCommandTacticalPresetTeamMap
+  id: WH40KCommandTacticalPresetTeamMap
+  defaultProfile: WH40KCommandTacticalPresetProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandTacticalPresetProfileDefault
+    Heretics: WH40KCommandTacticalPresetProfileDefault

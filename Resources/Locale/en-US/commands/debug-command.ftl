@@ -6,3 +6,6 @@ cmd-showsubfloor-help = Usage: {$command}
 
 cmd-notify-desc = Send a notify client side.
 cmd-notify-help = Usage: {$command} <message>
+
+cmd-showroof-desc = Toggles roof debug overlay (roofed vs unroofed tiles).
+cmd-showroof-help = Usage: {$command}

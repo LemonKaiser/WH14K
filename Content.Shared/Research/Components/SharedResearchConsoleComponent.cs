@@ -29,9 +29,20 @@ namespace Content.Shared.Research.Components
     public sealed class ResearchConsoleBoundInterfaceState : BoundUserInterfaceState
     {
         public int Points;
-        public ResearchConsoleBoundInterfaceState(int points)
+        public bool TimedResearchEnabled;
+        public string? ActiveTechnologyId;
+        public int ActiveTechnologyRemainingSeconds;
+
+        public ResearchConsoleBoundInterfaceState(
+            int points,
+            bool timedResearchEnabled,
+            string? activeTechnologyId,
+            int activeTechnologyRemainingSeconds)
         {
             Points = points;
+            TimedResearchEnabled = timedResearchEnabled;
+            ActiveTechnologyId = activeTechnologyId;
+            ActiveTechnologyRemainingSeconds = activeTechnologyRemainingSeconds;
         }
     }
 }

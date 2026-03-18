@@ -5,19 +5,20 @@
         <ScrollContainer VerticalExpand="True">
             <BoxContainer Orientation="Vertical" Margin="8 8 8 8">
                 <!-- Display -->
-                <Label Text="{Loc 'ui-options-display-label'}" StyleClasses="LabelKeyText"/>
+                <Label Name="DisplayHeaderLabel" Text="{Loc 'ui-options-display-label'}" StyleClasses="LabelKeyText"/>
                 <CheckBox Name="VSyncCheckBox" Text="{Loc 'ui-options-vsync'}" />
                 <CheckBox Name="FullscreenCheckBox" Text="{Loc 'ui-options-fullscreen'}" />
 
                 <!-- Quality -->
-                <Label Text="{Loc 'ui-options-quality-label'}" StyleClasses="LabelKeyText"/>
+                <Label Name="QualityHeaderLabel" Text="{Loc 'ui-options-quality-label'}" StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownLightingQuality" Title="{Loc 'ui-options-lighting-label'}" />
                 <CheckBox Name="ViewportLowResCheckBox" Text="{Loc 'ui-options-vp-low-res'}" />
                 <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'ui-options-parallax-low-quality'}" />
                 <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'ui-options-ambient-occlusion'}" />
+                <CheckBox Name="WH40KGrimdarkShaderCheckBox" Text="{Loc 'ui-options-wh40k-grimdark-shader'}" />
 
                 <!-- Interface -->
-                <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>
+                <Label Name="InterfaceHeaderLabel" Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownUIScale" Title="{Loc 'ui-options-scale-label'}" />
                 <CheckBox Name="ViewportStretchCheckBox" Text="{Loc 'ui-options-vp-stretch'}" />
                 <ui:OptionSlider Name="ViewportScaleSlider" Title="{Loc ui-options-vp-scale}" />
@@ -31,7 +32,7 @@
                           ToolTip="{Loc 'ui-options-vp-vertical-fit-tooltip'}" />
 
                 <!-- Misc -->
-                <Label Text="{Loc 'ui-options-misc-label'}" StyleClasses="LabelKeyText"/>
+                <Label Name="MiscHeaderLabel" Text="{Loc 'ui-options-misc-label'}" StyleClasses="LabelKeyText"/>
                 <CheckBox Name="FpsCounterCheckBox" Text="{Loc 'ui-options-fps-counter'}" />
             </BoxContainer>
         </ScrollContainer>

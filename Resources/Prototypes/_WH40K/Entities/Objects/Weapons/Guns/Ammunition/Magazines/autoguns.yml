@@ -26,7 +26,7 @@
     tags:
       - MagazineStubMG
   - type: BallisticAmmoProvider
-    capacity: 200
+    capacity: 120
     proto: Cartridge825mmLong
     mayTransfer: true
     whitelist:

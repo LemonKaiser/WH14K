@@ -18,6 +18,9 @@
             "name": "Lexmechanic"
         },
         {
+            "name": "HLexmechanic"
+        },
+        {
             "name": "Genetor"
         },
         {
@@ -31,6 +34,9 @@
         },
         {
             "name": "Commissar"
+        },
+        {
+            "name": "HCommissar"
         },
         {
             "name": "Lieutenant"
@@ -54,13 +60,52 @@
             "name": "SpecialistSWS"
         },
         {
+            "name": "Team_ch"
+        },
+        {
+            "name": "Team_imp"
+        },
+        {
             "name": "Tanker"
+        },
+        {
+            "name": "Cargo"
+        },
+        {
+            "name": "HTanker"
+        },
+        {
+            "name": "HCargo"
         },
         {
             "name": "Medic"
         },
         {
+            "name": "HMedic"
+        },
+        {
             "name": "Guardsman"
+        },
+        {
+            "name": "VoxScout"
+        },
+        {
+            "name": "Psyker"
+        },
+        {
+            "name": "HColonel"
+        },
+        {
+            "name": "HLieutenant"
+        },
+        {
+            "name": "HSergeant"
+        },
+        {
+            "name": "HGuardsman"
+        },
+        {
+            "name": "HVoxScout"
         }
     ]
 }

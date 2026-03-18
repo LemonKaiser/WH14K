@@ -1,0 +1,25 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KHeavyBolterRotateLeft
+  name: Rotate left
+  description: Rotate the mounted heavy bolter to the left.
+  components:
+  - type: Action
+    icon: Interface/VerbIcons/rotate_ccw.svg.192dpi.png
+    itemIconStyle: BigItem
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:WH40KHeavyBolterRotateLeftActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KHeavyBolterRotateRight
+  name: Rotate right
+  description: Rotate the mounted heavy bolter to the right.
+  components:
+  - type: Action
+    icon: Interface/VerbIcons/rotate_cw.svg.192dpi.png
+    itemIconStyle: BigItem
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:WH40KHeavyBolterRotateRightActionEvent

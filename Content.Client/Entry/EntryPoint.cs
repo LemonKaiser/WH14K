@@ -1,4 +1,6 @@
 using Content.Client.Administration.Managers;
+using Content.Client._WH40K.Administration.ScreenCheck;
+using Content.Client._WH40K.Roadmap;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.DebugMon;
@@ -22,6 +24,7 @@ using Content.Client.Screenshot;
 using Content.Client.Singularity;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface;
+using Content.Client.UserInterface.Systems.Localization;
 using Content.Client.Viewport;
 using Content.Client.Voting;
 using Content.Shared.Ame.Components;
@@ -55,8 +58,10 @@ namespace Content.Client.Entry
         [Dependency] private readonly IConfigurationManager _configManager = default!;
         [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
         [Dependency] private readonly IScreenshotHook _screenshotHook = default!;
+        [Dependency] private readonly ScreenCheckClientManager _screenCheckManager = default!;
         [Dependency] private readonly FullscreenHook _fullscreenHook = default!;
         [Dependency] private readonly ChangelogManager _changelogManager = default!;
+        [Dependency] private readonly RoadmapManager _roadmapManager = default!;
         [Dependency] private readonly ViewportManager _viewportManager = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private readonly IInputManager _inputManager = default!;
@@ -96,6 +101,7 @@ namespace Content.Client.Entry
             Dependencies.BuildGraph();
             Dependencies.InjectDependencies(this);
 
+            _configManager.OverrideDefault(CVars.LocCultureName, "ru-RU");
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();
@@ -131,12 +137,23 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleConfig");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattlePointsProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleWeatherProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleRoundEventsProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleLogisticsProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleBlackFrontProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleOrbitalProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleEconomyProfile");
+            _prototypeManager.RegisterIgnore("wh40kTeamBattleLevelBuffProfile");
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();
             _screenshotHook.Initialize();
+            _screenCheckManager.Initialize();
             _fullscreenHook.Initialize();
             _changelogManager.Initialize();
+            _roadmapManager.Initialize();
             _viewportManager.Initialize();
             _ghostKick.Initialize();
             _extendedDisconnectInformation.Initialize();
@@ -174,11 +191,23 @@ namespace Content.Client.Entry
             _documentParsingManager.Initialize();
             _titleWindowManager.Initialize();
             _feedbackManager.Initialize();
+            _userInterfaceManager.GetUIController<LocalizationUIController>();
 
             _baseClient.RunLevelChanged += (_, args) =>
             {
                 if (args.NewLevel == ClientRunLevel.Initialize)
                 {
+                    if (_stateManager.CurrentState is LauncherConnecting launcherConnecting)
+                    {
+                        if (args.OldLevel == ClientRunLevel.Connected ||
+                            args.OldLevel == ClientRunLevel.InGame)
+                        {
+                            launcherConnecting.SetDisconnected();
+                        }
+
+                        return;
+                    }
+
                     SwitchToDefaultState(args.OldLevel == ClientRunLevel.Connected ||
                                          args.OldLevel == ClientRunLevel.InGame);
                 }

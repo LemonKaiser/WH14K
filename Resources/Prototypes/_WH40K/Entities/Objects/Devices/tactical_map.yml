@@ -1,0 +1,111 @@
+- type: entity
+  id: WH40KTacticalMapScannerEye
+  name: tactical map scanner eye
+  categories: [ HideSpawnMenu ]
+  suffix: Hidden
+  components:
+    - type: Eye
+
+- type: entity
+  id: WH40KBaseTacticalMapDevice
+  abstract: true
+  components:
+    - type: WH40KTacticalMap
+      initializeWithStation: true
+      snapshotTexture: /Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png
+      fogEnabled: true
+      fogChunkSize: 8
+      fogRevealRadiusChunks: 0
+      liveRefreshEnabled: false
+      liveRefreshChunkSize: 16
+      liveRefreshInterval: 2.5
+      liveRefreshPvsScale: 1.0
+
+- type: entity
+  id: WH40KBaseTacticalMapTablet
+  parent:
+    - WH40KBaseTacticalMapDevice
+    - BaseHandheldComputer
+  name: tactical map tablet
+  description: Displays a readout of the active battlefield grid.
+  abstract: true
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/tablets.rsi
+      layers:
+        - state: tablet
+        - state: generic
+          shader: unshaded
+    - type: ActivatableUI
+      inHandsOnly: true
+      singleUser: true
+      key: enum.WH40KTacticalMapUiKey.Key
+    - type: Damageable
+      damageContainer: Inorganic
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+    - type: UserInterface
+      interfaces:
+        enum.WH40KTacticalMapUiKey.Key:
+          type: WH40KTacticalMapBoundUserInterface
+
+- type: entity
+  id: WH40KBaseTacticalMapConsole
+  parent:
+    - WH40KBaseTacticalMapDevice
+    - BaseComputer
+  name: tactical map console
+  description: Fixed battlefield tactical console with access to the active tactical feed.
+  abstract: true
+  components:
+    - type: ActivatableUI
+      singleUser: true
+      key: enum.WH40KTacticalMapUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.WH40KTacticalMapUiKey.Key:
+          type: WH40KTacticalMapBoundUserInterface
+        enum.WiresUiKey.Key:
+          type: WiresBoundUserInterface
+
+- type: entity
+  id: WH40KCommandTacticalMapTablet
+  parent:
+    - WH40KBaseTacticalMapTablet
+  name: command tactical map tablet
+  description: Command-issued tactical tablet with annotation and team-feed editing controls.
+  suffix: Handheld, Command
+
+- type: entity
+  id: WH40KStandardTacticalMapTablet
+  parent:
+    - WH40KBaseTacticalMapTablet
+  name: field tactical map tablet
+  description: Standard battlefield tactical tablet with read-only command feed access.
+  suffix: Handheld, Standard
+  components:
+    - type: WH40KTacticalMap
+      canAnnotate: false
+
+- type: entity
+  id: WH40KCommandTacticalMapConsole
+  parent: WH40KBaseTacticalMapConsole
+  name: command tactical map console
+  description: Fixed command tactical console with annotation and team-feed editing controls.
+  suffix: Console, Command
+
+- type: entity
+  id: WH40KStandardTacticalMapConsole
+  parent: WH40KBaseTacticalMapConsole
+  name: field tactical map console
+  description: Fixed battlefield tactical console with read-only command feed access.
+  suffix: Console, Standard
+  components:
+    - type: WH40KTacticalMap
+      canAnnotate: false

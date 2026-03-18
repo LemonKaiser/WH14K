@@ -1,5 +1,6 @@
 ﻿<ui1:EscapeMenu xmlns="https://spacestation14.io"
             xmlns:changelog="clr-namespace:Content.Client.Changelog"
+            xmlns:roadmap="clr-namespace:Content.Client._WH40K.Roadmap"
             xmlns:ui="clr-namespace:Content.Client.Voting.UI"
             xmlns:ui1="clr-namespace:Content.Client.Options.UI"
             Title="{Loc 'ui-escape-title'}"
@@ -12,6 +13,8 @@
         <Button Access="Public" Name="GuidebookButton" Text="{Loc 'ui-escape-guidebook'}" />
         <Button Access="Public" Name="WikiButton" Text="{Loc 'ui-escape-wiki'}" />
         <changelog:ChangelogButton Access="Public" Name="ChangelogButton" />
+        <roadmap:RoadmapButton Access="Public" Name="RoadmapButton" />
+        <Button Access="Public" Name="DiscordButton" Text="{Loc 'ui-escape-discord'}" />
         <Button Access="Public" Name="FeedbackButton" Text="{Loc 'ui-escape-feedback'}"/>
         <PanelContainer StyleClasses="LowDivider" Margin="0 2.5 0 2.5" />
         <Button Access="Public" Name="OptionsButton" Text="{Loc 'ui-escape-options'}" />

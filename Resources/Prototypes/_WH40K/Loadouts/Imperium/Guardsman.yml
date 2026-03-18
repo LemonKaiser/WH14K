@@ -7,3 +7,43 @@
   id: FlakHelmetCandle
   equipment:
     head: ClothingHeadHelmetFlakCandle
+
+- type: loadout
+  id: WH40KCyanFlakHelmet
+  equipment:
+    head: ClothingHeadHelmetFlakCyan
+
+- type: loadout
+  id: WH40KCyanArmoredHelmet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    head: ClothingHeadHelmetFlakAdvCyan
+
+- type: loadout
+  id: WH40KCyanLightFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestLightCyan
+
+- type: loadout
+  id: WH40KCyanFlakArmor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestCyan
+
+- type: loadout
+  id: WH40KCyanCombatBoots
+  equipment:
+    shoes: ClothingShoesAnkleBootsCyan
+
+- type: loadout
+  id: WH40KCyanOfficerCap
+  equipment:
+    head: ClothingHeadOfficerCyan

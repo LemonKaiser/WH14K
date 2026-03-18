@@ -1,0 +1,28 @@
+- type: npcFaction
+  id: Imperium
+  hostile:
+  - Heretics
+  - SimpleHostile
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg
+
+- type: npcFaction
+  id: Heretics
+  hostile:
+  - Imperium
+  - SimpleHostile
+  - NanoTrasen
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg

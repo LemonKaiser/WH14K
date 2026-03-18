@@ -12,6 +12,7 @@ public static class WH40KDirectionalBarricadeHelpers
         Vector2 originDirection,
         float passSideMaxDistance,
         float blockedSidePassChance,
+        float blockedSidePointBlankPassDistance,
         IRobustRandom random)
     {
         const float sideDotThreshold = 0.05f;
@@ -45,6 +46,14 @@ public static class WH40KDirectionalBarricadeHelpers
 
         if (dotShot <= shotDotThreshold)
             return false;
+
+        var pointBlankDistance = MathF.Max(0f, blockedSidePointBlankPassDistance);
+        if (pointBlankDistance > 0f)
+        {
+            var maxDistance = pointBlankDistance + 0.001f;
+            if (originLenSq <= maxDistance * maxDistance)
+                return true;
+        }
 
         var chance = Math.Clamp(blockedSidePassChance, 0f, 1f);
         return random.Prob(chance);

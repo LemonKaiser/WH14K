@@ -51,7 +51,9 @@ namespace Content.Server.Speech
                 contextSound = prototype.ExclaimSound;
             }
 
-            var scale = (float) _random.NextGaussian(1, prototype.Variation);
+            var pitchCenter = ent.Comp.VoiceTone.GetPitchScale();
+            var pitchVariation = prototype.Variation * ent.Comp.VoiceTone.GetVariationScale();
+            var scale = Math.Clamp((float) _random.NextGaussian(pitchCenter, pitchVariation), 0.65f, 1.5f);
             contextSound.Params = ent.Comp.AudioParams.WithPitchScale(scale);
             return contextSound;
         }

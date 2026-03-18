@@ -1,0 +1,223 @@
+- type: entity
+  id: WH40KAutolathe
+  parent: Autolathe
+  name: autolathe
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/autolathe.rsi
+    snapCardinals: true
+    offset: 0.5,0
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Lathe
+    idleState: icon
+    runningState: building
+    unlitIdleState: unlit
+    unlitRunningState: unlit-building
+    staticPacks:
+    - WH40KAutolatheStockEmpty
+
+- type: entity
+  id: WH40KAutolatheImperium
+  parent: WH40KAutolathe
+  name: autolathe
+  suffix: WH40K, Imperium
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KAutolatheStatic
+  - type: WH40KTieredLatheProcessing
+    teamId: Imperium
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KAutolatheStatic
+    tier1Pack: WH40KAutolatheTier1
+    tier2Pack: WH40KAutolatheTier2
+    tier3Pack: WH40KAutolatheTier3
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Imperium
+
+- type: entity
+  id: WH40KAutolatheHeretics
+  parent: WH40KAutolathe
+  name: autolathe
+  suffix: WH40K, Heretics
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KAutolatheStatic
+  - type: WH40KTieredLatheProcessing
+    teamId: Heretics
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KAutolatheStatic
+    tier1Pack: WH40KAutolatheTier1
+    tier2Pack: WH40KAutolatheTier2
+    tier3Pack: WH40KAutolatheTier3
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Heretics
+
+- type: entity
+  id: WH40KProtolathe
+  parent: Protolathe
+  name: protolathe
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/protolathe.rsi
+    offset: 0,0.5
+    snapCardinals: true
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Lathe
+    idleState: icon
+    runningState: building
+    producingSound: /Audio/_WH40K/Machines/protolathe.ogg
+    unlitIdleState: unlit
+    unlitRunningState: unlit-building
+    staticPacks:
+    - WH40KProtolatheStockEmpty
+    dynamicPacks: []
+
+- type: entity
+  id: WH40KProtolatheImperium
+  parent: WH40KProtolathe
+  name: protolathe
+  suffix: WH40K, Imperium
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KProtolatheStatic
+    dynamicPacks:
+    - WH40KProtolatheDynamic
+    - WH40KCommandWeaponryResearch
+    - WH40KCommandEquipmentResearch
+  - type: WH40KTieredLatheProcessing
+    teamId: Imperium
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KProtolatheStatic
+    tier1Pack: WH40KProtolatheTier1
+    tier2Pack: WH40KProtolatheTier2
+    tier3Pack: WH40KProtolatheTier3
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Imperium
+
+- type: entity
+  id: WH40KProtolatheHeretics
+  parent: WH40KProtolathe
+  name: protolathe
+  suffix: WH40K, Heretics
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KProtolatheStatic
+    dynamicPacks:
+    - WH40KProtolatheDynamic
+    - WH40KCommandWeaponryResearch
+    - WH40KCommandEquipmentResearch
+  - type: WH40KTieredLatheProcessing
+    teamId: Heretics
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KProtolatheStatic
+    tier1Pack: WH40KProtolatheTier1
+    tier2Pack: WH40KProtolatheTier2
+    tier3Pack: WH40KProtolatheTier3
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Heretics
+
+- type: entity
+  id: WH40KOreProcessor
+  parent: OreProcessor
+  name: ore processor
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/ore_processor.rsi
+    offset: 0.5,0.5
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,1.49,1.49"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Lathe
+    idleState: icon
+    runningState: building
+    defaultProductionAmount: 10
+    producingSound: /Audio/_WH40K/Machines/MCRW.ogg
+    staticPacks:
+    - WH40KOreProcessorStockEmpty
+
+- type: entity
+  id: WH40KOreProcessorImperium
+  parent: WH40KOreProcessor
+  name: ore processor
+  suffix: WH40K, Imperium
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KOreProcessorVanillaFull
+  - type: WH40KTieredLatheProcessing
+    teamId: Imperium
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KOreProcessorVanillaFull
+    tier1Pack: WH40KOreProcessorVanillaFull
+    tier2Pack: WH40KOreProcessorVanillaFull
+    tier3Pack: WH40KOreProcessorVanillaFull
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Imperium
+
+- type: entity
+  id: WH40KOreProcessorHeretics
+  parent: WH40KOreProcessor
+  name: ore processor
+  suffix: WH40K, Heretics
+  components:
+  - type: Lathe
+    staticPacks:
+    - WH40KOreProcessorVanillaFull
+  - type: WH40KTieredLatheProcessing
+    teamId: Heretics
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KOreProcessorVanillaFull
+    tier1Pack: WH40KOreProcessorVanillaFull
+    tier2Pack: WH40KOreProcessorVanillaFull
+    tier3Pack: WH40KOreProcessorVanillaFull
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Heretics

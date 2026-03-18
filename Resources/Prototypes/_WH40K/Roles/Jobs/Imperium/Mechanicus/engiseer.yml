@@ -4,6 +4,9 @@
   description: job-description-enginseer
   playTimeTracker: JobEnginseer
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     - !type:DepartmentTimeRequirement
       department: Imperium
       time: 4h

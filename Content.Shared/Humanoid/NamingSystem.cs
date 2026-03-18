@@ -4,6 +4,7 @@ using Content.Shared.Random.Helpers;
 using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Enums;
+using Robust.Shared.Localization;
 
 namespace Content.Shared.Humanoid
 {
@@ -13,8 +14,10 @@ namespace Content.Shared.Humanoid
     public sealed class NamingSystem : EntitySystem
     {
         private static readonly ProtoId<SpeciesPrototype> FallbackSpecies = "Human";
+        private static readonly ProtoId<LocalizedDatasetPrototype> FallbackHumanLastNames = "NamesLast";
 
         [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly ILocalizationManager _loc = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
         public string GetName(string species, Gender? gender = null)
@@ -50,31 +53,59 @@ namespace Content.Shared.Humanoid
             switch (gender)
             {
                 case Gender.Male:
-                    return _random.Pick(_prototypeManager.Index(speciesProto.MaleFirstNames));
+                    return PickDatasetValue(speciesProto.MaleFirstNames);
                 case Gender.Female:
-                    return _random.Pick(_prototypeManager.Index(speciesProto.FemaleFirstNames));
+                    return PickDatasetValue(speciesProto.FemaleFirstNames);
                 default:
                     if (_random.Prob(0.5f))
-                        return _random.Pick(_prototypeManager.Index(speciesProto.MaleFirstNames));
+                        return PickDatasetValue(speciesProto.MaleFirstNames);
                     else
-                        return _random.Pick(_prototypeManager.Index(speciesProto.FemaleFirstNames));
+                        return PickDatasetValue(speciesProto.FemaleFirstNames);
             }
         }
 
         public string GetLastName(SpeciesPrototype speciesProto, Gender? gender = null)
         {
-switch (gender)
+            if (speciesProto.ID == FallbackSpecies &&
+                HumanoidNameScriptHelper.GetPreferredScript(_loc.DefaultCulture) == HumanoidNameScript.Latin &&
+                _prototypeManager.TryIndex(FallbackHumanLastNames, out LocalizedDatasetPrototype? fallbackHumanLastNames))
+            {
+                return PickLocalizedDatasetValue(fallbackHumanLastNames);
+            }
+
+            switch (gender)
             {
                 case Gender.Male:
-                    return _random.Pick(_prototypeManager.Index<DatasetPrototype>(speciesProto.MaleLastNames).Values);
+                    return PickLastName(speciesProto.MaleLastNames);
                 case Gender.Female:
-                    return _random.Pick(_prototypeManager.Index<DatasetPrototype>(speciesProto.FemaleLastNames).Values);
+                    return PickLastName(speciesProto.FemaleLastNames);
                 default:
                     if (_random.Prob(0.5f))
-                        return _random.Pick(_prototypeManager.Index<DatasetPrototype>(speciesProto.MaleLastNames).Values);
+                        return PickLastName(speciesProto.MaleLastNames);
                     else
-                        return _random.Pick(_prototypeManager.Index<DatasetPrototype>(speciesProto.FemaleLastNames).Values);
+                        return PickLastName(speciesProto.FemaleLastNames);
             }
+        }
+
+        private string PickLastName(string datasetId)
+        {
+            return PickDatasetValue(datasetId);
+        }
+
+        private string PickDatasetValue(string datasetId)
+        {
+            if (_prototypeManager.TryIndex<LocalizedDatasetPrototype>(datasetId, out var localizedDataset))
+                return PickLocalizedDatasetValue(localizedDataset);
+
+            if (_prototypeManager.TryIndex<DatasetPrototype>(datasetId, out var rawDataset))
+                return _random.Pick(rawDataset.Values);
+
+            throw new InvalidOperationException($"Unable to find name dataset {datasetId}.");
+        }
+
+        private string PickLocalizedDatasetValue(LocalizedDatasetPrototype dataset)
+        {
+            return Loc.GetString(_random.Pick(dataset.Values));
         }
     }
 }

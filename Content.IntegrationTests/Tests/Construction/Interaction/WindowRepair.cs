@@ -6,6 +6,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Construction.Interaction;
 
 public sealed class WindowRepair : InteractionTest

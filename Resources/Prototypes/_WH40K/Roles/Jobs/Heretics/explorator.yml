@@ -1,10 +1,13 @@
 - type: job
   id: HExplorator
   name: job-name-hexplorator
-  description: job-description-explorator
+  description: job-description-hexplorator
   playTimeTracker: JobHExplorator
   setPreference: false
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     - !type:DepartmentTimeRequirement
       department: Imperium
       time: 4h
@@ -15,6 +18,10 @@
   startingGear: ExploratorGear
   supervisors: job-supervisors-qm
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
   access:
   - Cargo
   - Salvage

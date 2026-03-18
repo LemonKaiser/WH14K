@@ -1,14 +1,27 @@
 - type: job
   id: HTanker
   name: job-name-htanker
-  description: job-description-tanker
+  description: job-description-htanker
   playTimeTracker: JobHTanker
-  setPreference: false
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: HeresyGuardsmanGear
-  icon: "JobIconTanker"
+  icon: "JobIconHTanker"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Engineering

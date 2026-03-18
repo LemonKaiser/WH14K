@@ -27,12 +27,12 @@ namespace Content.Client.Verbs.UI
         // Top quality variable naming
         public readonly Verb? Verb;
 
-        public VerbMenuElement(Verb verb) : base(verb.Text)
+        public VerbMenuElement(Verb verb) : base(verb.GetDisplayText())
         {
             TooltipSupplier = sender =>
             {
                 var label = new RichTextLabel();
-                label.SetMessage(FormattedMessage.FromMarkupOrThrow(verb.Message ?? verb.Text));
+                label.SetMessage(FormattedMessage.FromMarkupOrThrow(verb.GetDisplayMessage() ?? verb.GetDisplayText()));
 
                 var tooltip = new Tooltip();
                 tooltip.GetChild(0).Children.Clear();
@@ -76,7 +76,7 @@ namespace Content.Client.Verbs.UI
             });
         }
 
-        public VerbMenuElement(VerbCategory category, string styleClass) : base(category.Text)
+        public VerbMenuElement(VerbCategory category, string styleClass) : base(category.GetDisplayText())
         {
             Label.SetOnlyStyleClass(styleClass);
 

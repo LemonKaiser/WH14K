@@ -14,6 +14,8 @@ namespace Content.IntegrationTests.Tests.Storage;
 
 public sealed class StorageTest
 {
+    private const string StorageFillComponentId = "StorageFill";
+
     /// <summary>
     /// Can an item store more than itself weighs.
     /// In an ideal world this test wouldn't need to exist because sizes would be recursive.
@@ -61,10 +63,10 @@ public sealed class StorageTest
             {
                 foreach (var proto in protoManager.EnumeratePrototypes<EntityPrototype>())
                 {
-                    if (!proto.TryGetComponent<StorageFillComponent>("StorageFill", out var storage))
+                    if (!proto.Components.TryGetComponent(StorageFillComponentId, out var storageFill))
                         continue;
 
-                    foreach (var entry in storage.Contents)
+                    foreach (var entry in GetStorageFillContents(storageFill))
                     {
                         Assert.That(entry.Amount, Is.GreaterThan(0), $"Specified invalid amount of {entry.Amount} for prototype {proto.ID}");
                         Assert.That(entry.SpawnProbability, Is.GreaterThan(0), $"Specified invalid probability of {entry.SpawnProbability} for prototype {proto.ID}");
@@ -84,7 +86,6 @@ public sealed class StorageTest
         var entMan = server.ResolveDependency<IEntityManager>();
         var protoMan = server.ResolveDependency<IPrototypeManager>();
         var compFact = server.ResolveDependency<IComponentFactory>();
-        var id = compFact.GetComponentName<StorageFillComponent>();
 
         var itemSys = entMan.System<SharedItemSystem>();
 
@@ -93,8 +94,13 @@ public sealed class StorageTest
 
         await Assert.MultipleAsync(async () =>
         {
-            foreach (var (proto, fill) in pair.GetPrototypesWithComponent<StorageFillComponent>())
+            foreach (var proto in protoMan.EnumeratePrototypes<EntityPrototype>())
             {
+                if (!proto.Components.TryGetComponent(StorageFillComponentId, out var storageFill))
+                    continue;
+
+                var fillContents = GetStorageFillContents(storageFill);
+
                 if (proto.HasComponent<EntityStorageComponent>(compFact))
                     continue;
 
@@ -110,7 +116,7 @@ public sealed class StorageTest
                     }
 
                     proto.TryGetComponent("Item", out item);
-                    size = GetFillSize(fill, false, protoMan, itemSys);
+                    size = GetFillSize(fillContents, false, protoMan, itemSys);
                 });
 
                 if (storage == null)
@@ -136,7 +142,7 @@ public sealed class StorageTest
 
                 Assert.That(size, Is.LessThanOrEqualTo(storage.Grid.GetArea()), $"{proto.ID} storage fill is too large.");
 
-                foreach (var entry in fill.Contents)
+                foreach (var entry in fillContents)
                 {
                     if (entry.PrototypeId == null)
                         continue;
@@ -172,12 +178,16 @@ public sealed class StorageTest
         var entMan = server.ResolveDependency<IEntityManager>();
         var protoMan = server.ResolveDependency<IPrototypeManager>();
         var compFact = server.ResolveDependency<IComponentFactory>();
-        var id = compFact.GetComponentName<StorageFillComponent>();
 
         var itemSys = entMan.System<SharedItemSystem>();
 
-        foreach (var (proto, fill) in pair.GetPrototypesWithComponent<StorageFillComponent>())
+        foreach (var proto in protoMan.EnumeratePrototypes<EntityPrototype>())
         {
+            if (!proto.Components.TryGetComponent(StorageFillComponentId, out var storageFill))
+                continue;
+
+            var fillContents = GetStorageFillContents(storageFill);
+
             if (proto.HasComponent<StorageComponent>(compFact))
                 continue;
 
@@ -189,7 +199,7 @@ public sealed class StorageTest
                 if (entStorage == null)
                     return;
 
-                var size = GetFillSize(fill, true, protoMan, itemSys);
+                var size = GetFillSize(fillContents, true, protoMan, itemSys);
                 Assert.That(size, Is.LessThanOrEqualTo(entStorage.Capacity),
                     $"{proto.ID} storage fill is too large.");
             });
@@ -219,11 +229,11 @@ public sealed class StorageTest
         return 0;
     }
 
-    private int GetFillSize(StorageFillComponent fill, bool getCount, IPrototypeManager protoMan, SharedItemSystem itemSystem)
+    private int GetFillSize(IEnumerable<EntitySpawnEntry> fillContents, bool getCount, IPrototypeManager protoMan, SharedItemSystem itemSystem)
     {
         var totalSize = 0;
         var groups = new Dictionary<string, int>();
-        foreach (var entry in fill.Contents)
+        foreach (var entry in fillContents)
         {
             var size = GetEntrySize(entry, getCount, protoMan, itemSystem);
 
@@ -249,15 +259,26 @@ public sealed class StorageTest
         {
             foreach (var (proto, fill) in pair.GetPrototypesWithComponent<EntityTableContainerFillComponent>())
             {
-                Assert.That(!proto.HasComponent<StorageFillComponent>(compFact), $"Prototype {proto.ID} has both {nameof(EntityTableContainerFillComponent)} and {nameof(StorageFillComponent)}.");
+                Assert.That(!proto.Components.ContainsKey(StorageFillComponentId), $"Prototype {proto.ID} has both {nameof(EntityTableContainerFillComponent)} and {StorageFillComponentId}.");
                 Assert.That(!proto.HasComponent<ContainerFillComponent>(compFact), $"Prototype {proto.ID} has both {nameof(EntityTableContainerFillComponent)} and {nameof(ContainerFillComponent)}.");
             }
 
             foreach (var (proto, fill) in pair.GetPrototypesWithComponent<ContainerFillComponent>())
             {
-                Assert.That(!proto.HasComponent<StorageFillComponent>(compFact), $"Prototype {proto.ID} has both {nameof(ContainerFillComponent)} and {nameof(StorageFillComponent)}.");
+                Assert.That(!proto.Components.ContainsKey(StorageFillComponentId), $"Prototype {proto.ID} has both {nameof(ContainerFillComponent)} and {StorageFillComponentId}.");
             }
         });
         await pair.CleanReturnAsync();
+    }
+
+    private static IReadOnlyList<EntitySpawnEntry> GetStorageFillContents(object storageFill)
+    {
+        var contentsField = storageFill.GetType().GetField("Contents");
+        Assert.That(contentsField, Is.Not.Null, $"{StorageFillComponentId} is missing expected Contents field.");
+
+        var contents = contentsField!.GetValue(storageFill) as List<EntitySpawnEntry>;
+        Assert.That(contents, Is.Not.Null, $"{StorageFillComponentId} contents were not deserialized as a list of spawn entries.");
+
+        return contents!;
     }
 }

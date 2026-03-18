@@ -1,0 +1,31 @@
+- type: wh40kCommandOreExtractorIntelProfile
+  id: WH40KCommandOreExtractorIntelProfileDefault
+  tier1MinBaseLevel: 2
+  tier2MinBaseLevel: 3
+  tier3MinBaseLevel: 4
+  spawnIntervalTier0: 8
+  spawnIntervalTier1: 6
+  spawnIntervalTier2: 4
+  spawnIntervalTier3: 2
+  spawnCountTier0: 1
+  spawnCountTier1: 2
+  spawnCountTier2: 3
+  spawnCountTier3: 4
+  tier0Ores:
+  - OreSteel
+  - OreCoal
+  tier1Ores:
+  - OreSpaceQuartz
+  tier2Ores:
+  - OreGold
+  - OreSilver
+  tier3Ores:
+  - OrePlasma
+  - OreUranium
+
+- type: wh40kCommandOreExtractorIntelTeamMap
+  id: WH40KCommandOreExtractorIntelTeamMap
+  defaultProfile: WH40KCommandOreExtractorIntelProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandOreExtractorIntelProfileDefault
+    Heretics: WH40KCommandOreExtractorIntelProfileDefault

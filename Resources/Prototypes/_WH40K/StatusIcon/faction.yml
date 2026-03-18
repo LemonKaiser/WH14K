@@ -1,0 +1,15 @@
+- type: factionIcon
+  id: WH40KFactionIconImperium
+  priority: -10
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Team_imp
+
+- type: factionIcon
+  id: WH40KFactionIconHeretics
+  priority: -10
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Team_ch

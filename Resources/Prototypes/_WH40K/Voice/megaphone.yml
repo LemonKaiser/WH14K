@@ -1,0 +1,34 @@
+- type: speechVerb
+  id: WH40KMegaphone
+  name: chat-speech-verb-name-wh40k-megaphone
+  speechVerbStrings:
+  - chat-speech-verb-wh40k-megaphone-1
+  - chat-speech-verb-wh40k-megaphone-2
+  priority: 1000
+  bold: true
+
+- type: speechSounds
+  id: WH40KMegaphone
+  saySound:
+    path: /Audio/_WH40K/Items/megaphone.ogg
+    params:
+      referenceDistance: 4
+      maxDistance: 1.5
+  askSound:
+    path: /Audio/_WH40K/Items/megaphone.ogg
+    params:
+      referenceDistance: 4
+      maxDistance: 1.5
+  exclaimSound:
+    path: /Audio/_WH40K/Items/megaphone.ogg
+    params:
+      referenceDistance: 4
+      maxDistance: 1.5
+  dialogueBlipSound:
+    collection: DialogueBlipMegaphone
+  dialogueBlipPitch: 0.98
+  dialogueBlipVariation: 0.02
+  dialogueBlipVolume: -9
+  dialogueCharsPerSecond: 21
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.06

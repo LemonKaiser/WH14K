@@ -67,6 +67,15 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
         Gui.Update(_system?.AvailableGhostRoleCount, _system?.Player?.CanReturnToBody);
     }
 
+    public void RefreshLocalization()
+    {
+        if (Gui == null)
+            return;
+
+        Gui.Relocalize();
+        UpdateGui();
+    }
+
     private void OnPlayerRemoved(GhostComponent component)
     {
         Gui?.Hide();
@@ -124,6 +133,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
         Gui.RequestWarpsPressed += RequestWarps;
         Gui.ReturnToBodyPressed += ReturnToBody;
+        Gui.ReturnToLobbyPressed += ReturnToLobby;
         Gui.GhostRolesPressed += GhostRolesPressed;
         Gui.TargetWindow.WarpClicked += OnWarpClicked;
         Gui.TargetWindow.OnGhostnadoClicked += OnGhostnadoClicked;
@@ -138,6 +148,7 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
 
         Gui.RequestWarpsPressed -= RequestWarps;
         Gui.ReturnToBodyPressed -= ReturnToBody;
+        Gui.ReturnToLobbyPressed -= ReturnToLobby;
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
 
@@ -147,6 +158,11 @@ public sealed class GhostUIController : UIController, IOnSystemChanged<GhostSyst
     private void ReturnToBody()
     {
         _system?.ReturnToBody();
+    }
+
+    private void ReturnToLobby()
+    {
+        _system?.ReturnToLobby();
     }
 
     private void RequestWarps()

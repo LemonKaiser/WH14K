@@ -1,0 +1,42 @@
+- type: entity
+  parent: BaseItem
+  id: MaterialWH40KBarbedWire
+  name: wh40k-barbed-wire-item-name
+  description: wh40k-barbed-wire-item-desc
+  suffix: Full
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/barbed_wire.rsi
+    state: barbed_wire
+    layers:
+    - state: barbed_wire
+      map: ["base"]
+  - type: Item
+    sprite: _RMC14/Objects/barbed_wire.rsi
+    size: Small
+  - type: Stack
+    stackType: WH40KBarbedWire
+    count: 10
+    baseLayer: base
+    layerStates:
+    - barbed_wire
+    - barbed_wire_2
+    - barbed_wire_3
+  - type: HandheldEntityPlacement
+    entityType: FallotBarbedWire
+    placementMode: SnapgridCenter
+    range: 2
+    canRotate: true
+  - type: WH40KDeployableBarbedWire
+    stackCost: 1
+  - type: Appearance
+  - type: StaticPrice
+    price: 0
+
+- type: entity
+  parent: MaterialWH40KBarbedWire
+  id: MaterialWH40KBarbedWire1
+  suffix: 1
+  components:
+  - type: Stack
+    count: 1

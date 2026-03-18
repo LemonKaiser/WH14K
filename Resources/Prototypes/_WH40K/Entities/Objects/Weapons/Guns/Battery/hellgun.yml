@@ -1,6 +1,6 @@
 - type: entity
   id: WeaponHellgun
-  parent: BaseItem
+  parent: [BaseItem, BaseGunWieldable]
   name: hellgun
   suffix: WH40K
   components:
@@ -16,6 +16,7 @@
     - FullAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
+  - type: GunRequiresWield
   - type: Appearance
   - type: StaticPrice
     price: 500
@@ -33,6 +34,12 @@
     size: Huge
     shape:
     - 0,0,4,1
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2_in-hands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
   - type: SlotBasedConnectedContainer
     targetSlot: BACK
     containerWhitelist:

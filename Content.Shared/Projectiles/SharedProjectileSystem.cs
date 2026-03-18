@@ -165,6 +165,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         {
             projectile.Shooter = null;
             projectile.Weapon = null;
+            projectile.ShotOrigin = null;
             projectile.ProjectileSpent = false;
 
             Dirty(uid, projectile);

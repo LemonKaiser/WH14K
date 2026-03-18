@@ -13,6 +13,7 @@ using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
+using Content.Shared.Speech;
 using Content.Shared.Traits;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -105,6 +106,10 @@ namespace Content.Server.Preferences.Managers
             if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
                 gender = genderVal;
 
+            var voiceTone = VoiceTone.Normal;
+            if (Enum.TryParse<VoiceTone>(profile.VoiceTone, true, out var voiceToneVal))
+                voiceTone = voiceToneVal;
+
 
             var markings =
                 new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>();
@@ -174,6 +179,7 @@ namespace Content.Server.Preferences.Managers
                 profile.Age,
                 sex,
                 gender,
+                voiceTone,
                 new HumanoidCharacterAppearance
                 (
                     Color.FromHex(profile.EyeColor),
@@ -369,6 +375,7 @@ namespace Content.Server.Preferences.Managers
                 // Don't store data for guests.
                 var prefsData = new PlayerPrefData
                 {
+                    NewlyInitialized = true,
                     PrefsLoaded = true,
                     Prefs = new PlayerPreferences(
                         new[] { new KeyValuePair<int, HumanoidCharacterProfile>(0, HumanoidCharacterProfile.Random()) },
@@ -387,8 +394,9 @@ namespace Content.Server.Preferences.Managers
 
                 async Task LoadPrefs()
                 {
-                    var prefs = await GetOrCreatePreferencesAsync(session.UserId, cancel);
+                    var (prefs, newlyInitialized) = await GetOrCreatePreferencesAsync(session.UserId, cancel);
                     prefsData.Prefs = ConvertPreferences(prefs);
+                    prefsData.NewlyInitialized = newlyInitialized;
                 }
             }
         }
@@ -410,6 +418,7 @@ namespace Content.Server.Preferences.Managers
             {
                 MaxCharacterSlots = MaxCharacterSlots
             };
+            msg.NewlyInitialized = prefsData.NewlyInitialized;
             _netManager.ServerSendMessage(msg, session.Channel);
         }
 
@@ -470,17 +479,17 @@ namespace Content.Server.Preferences.Managers
             return null;
         }
 
-        private async Task<Preference> GetOrCreatePreferencesAsync(NetUserId userId, CancellationToken cancel)
+        private async Task<(Preference Preference, bool NewlyInitialized)> GetOrCreatePreferencesAsync(NetUserId userId, CancellationToken cancel)
         {
             var prefs = await _db.GetPlayerPreferencesAsync(userId, cancel);
             if (prefs is null)
             {
                 var speciesToBlacklist =
                     new HashSet<string>(_cfg.GetCVar(CCVars.ICNewAccountSpeciesBlacklist).Split(","));
-                return await _db.InitPrefsAsync(userId, HumanoidCharacterProfile.Random(speciesToBlacklist), cancel);
+                return (await _db.InitPrefsAsync(userId, HumanoidCharacterProfile.Random(speciesToBlacklist), cancel), true);
             }
 
-            return prefs;
+            return (prefs, false);
         }
 
         private PlayerPreferences SanitizePreferences(ICommonSession session, PlayerPreferences prefs, IDependencyCollection collection)
@@ -510,6 +519,7 @@ namespace Content.Server.Preferences.Managers
 
         private sealed class PlayerPrefData
         {
+            public bool NewlyInitialized;
             public bool PrefsLoaded;
             public PlayerPreferences? Prefs;
         }

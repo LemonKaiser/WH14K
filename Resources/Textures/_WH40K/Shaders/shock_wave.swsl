@@ -1,0 +1,45 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform highp vec2 renderScale;
+uniform lowp int count;
+uniform highp vec2[10] position;
+uniform highp float[10] sharpness;
+uniform highp float[10] width;
+uniform highp float[10] falloffPower;
+
+void fragment()
+{
+    highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
+    highp float ratio = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x * 0.6;
+
+    for (int i = 0; i < count; ++i)
+    {
+        highp vec2 waveCenter = position[i];
+
+        highp float dist = distance(
+            vec2(coord.x, coord.y * ratio),
+            vec2(waveCenter.x, waveCenter.y * ratio)
+        );
+
+        // Skip the first tiny part of the wave to avoid a bright center artifact.
+        dist = max(dist, 0.13);
+
+        highp float offset = (TIME - floor(TIME)) / TIME;
+        highp float currentTime = TIME * offset;
+
+        if (dist <= (currentTime + 0.1) && dist >= (currentTime - 0.1))
+        {
+            highp float diff = dist - currentTime;
+            highp float scaleDiff = 1.0 - pow(abs(diff * sharpness[i]), width[i]);
+            highp float diffTime = diff * scaleDiff;
+            highp vec2 diffTexCoord = normalize(coord - waveCenter);
+            coord += (diffTexCoord * diffTime) / (currentTime * dist * falloffPower[i]);
+            highp vec4 color = zTextureSpec(SCREEN_TEXTURE, coord);
+            color += (color * scaleDiff) / (currentTime * dist * 40.0);
+            COLOR = color;
+        }
+        else
+        {
+            COLOR = zTextureSpec(SCREEN_TEXTURE, UV);
+        }
+    }
+}

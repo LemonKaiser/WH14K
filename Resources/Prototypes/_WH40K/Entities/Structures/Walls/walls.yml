@@ -122,3 +122,155 @@
     damageModifierSet: StructuralMetallicStrong
   - type: RadiationBlocker
     resistance: 5
+
+- type: entity
+  id: WH40KWallInvisiblePersistent
+  name: invisible wall
+  suffix: WH40K, persistent, marker-visible
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Marker
+  - type: Tag
+    tags:
+    - Wall
+    - ForceFixRotations
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: Markers/cross.rsi
+    state: red
+  - type: Icon
+    sprite: Markers/cross.rsi
+    state: red
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Airtight
+
+- type: entity
+  id: WH40KWallInvisibleTimedTDM
+  name: invisible wall
+  suffix: WH40K, prep-phase, marker-visible
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Marker
+  - type: Tag
+    tags:
+    - Wall
+    - ForceFixRotations
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: Markers/cross.rsi
+    state: red
+  - type: Icon
+    sprite: Markers/cross.rsi
+    state: red
+  - type: WH40KPreparationPhaseBarrier
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Airtight
+
+- type: entity
+  id: WH40KWallWarningTDM
+  name: invisible warning barrier
+  suffix: WH40K, prep-phase, marker-visible
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Marker
+  - type: Tag
+    tags:
+    - Wall
+    - ForceFixRotations
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: Markers/cross.rsi
+    state: red
+  - type: Icon
+    sprite: Markers/cross.rsi
+    state: red
+  - type: WH40KPreparationPhaseBarrier
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+        hard: false
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: WH40KTdmWarningBarrier
+    pushbackDistance: 0.85
+    popupCooldownSeconds: 1.5
+
+- type: entity
+  parent: WallForce
+  id: WH40KWallForceTzeentchTier1
+  name: tzeentch force wall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 18
+
+- type: entity
+  parent: WallForce
+  id: WH40KWallForceTzeentchTier2
+  name: tzeentch force wall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 28
+
+- type: entity
+  parent: WallForce
+  id: WH40KWallForceTzeentchTier3
+  name: tzeentch force wall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 42
+
+- type: entity
+  parent: WallForce
+  id: WH40KWallForceTzeentchEx
+  name: tzeentch force wall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 70

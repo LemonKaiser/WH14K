@@ -22,6 +22,13 @@ public sealed partial class WH40KDirectionalBarricadeComponent : Component
     public float BlockedSidePassChance = 0.05f;
 
     /// <summary>
+    /// If shooter is on blocked side but very close to the barricade, allow deterministic pass-through.
+    /// Set to 0 to disable.
+    /// </summary>
+    [DataField("blockedSidePointBlankPassDistance")]
+    public float BlockedSidePointBlankPassDistance = 1f;
+
+    /// <summary>
     /// Flip the pass side by 180 degrees for this barricade.
     /// </summary>
     [DataField("flipPassSide")]

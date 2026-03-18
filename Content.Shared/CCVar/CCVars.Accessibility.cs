@@ -33,6 +33,41 @@ public sealed partial class CCVars
         CVarDef.Create("accessibility.screen_shake_intensity", 1f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    ///     Lobby background mode selection.
+    ///     Supported values: <c>server</c>, <c>static</c>, <c>animated</c>.
+    /// </summary>
+    public static readonly CVarDef<string> LobbyBackgroundType =
+        CVarDef.Create("accessibility.lobby_background_type", "server", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Preferred static lobby background prototype id.
+    ///     Empty value means automatic fallback behavior.
+    /// </summary>
+    public static readonly CVarDef<string> LobbyStaticBackground =
+        CVarDef.Create("accessibility.lobby_static_background", string.Empty, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Preferred animated lobby background prototype id.
+    ///     Empty value means automatic fallback behavior.
+    /// </summary>
+    public static readonly CVarDef<string> LobbyAnimatedBackground =
+        CVarDef.Create("accessibility.lobby_animated_background", string.Empty, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Lobby panel background opacity.
+    ///     Goes from 0 (fully transparent) to 1 (fully opaque)
+    /// </summary>
+    public static readonly CVarDef<float> LobbyPanelOpacity =
+        CVarDef.Create("accessibility.lobby_panel_opacity", 0.85f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Character customization panel background opacity.
+    ///     Goes from 0 (fully transparent) to 1 (fully opaque)
+    /// </summary>
+    public static readonly CVarDef<float> LobbyCustomizationPanelOpacity =
+        CVarDef.Create("accessibility.lobby_customization_panel_opacity", 0.85f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
     ///     A generic toggle for various visual effects that are color sensitive.
     ///     As of 2/16/24, only applies to progress bar colors.
     /// </summary>
@@ -59,6 +94,26 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> SpeechBubbleBackgroundOpacity =
         CVarDef.Create("accessibility.speech_bubble_background_opacity", 0.75f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Enables animated speech bubble reveal and dialogue blip playback for supported speech profiles.
+    /// </summary>
+    public static readonly CVarDef<bool> SpeechBubbleDialogueBlipsEnabled =
+        CVarDef.Create("accessibility.speech_bubble_dialogue_blips", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     User-side gain scale for dialogue blips.
+    ///     Goes from 0 (mute) to 1 (configured profile volume).
+    /// </summary>
+    public static readonly CVarDef<float> SpeechBubbleDialogueBlipVolume =
+        CVarDef.Create("accessibility.speech_bubble_dialogue_blip_volume", 0.6f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     User-side speed multiplier for animated speech bubble reveal.
+    ///     1 is authored profile speed.
+    /// </summary>
+    public static readonly CVarDef<float> SpeechBubbleDialogueBlipSpeed =
+        CVarDef.Create("accessibility.speech_bubble_dialogue_blip_speed", 1f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// If enabled, censors character nudity by forcing clothes markings on characters, selected by the client.

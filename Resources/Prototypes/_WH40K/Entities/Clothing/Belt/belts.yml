@@ -102,3 +102,13 @@
     sprite: _WH40K/Clothing/Belt/colonel.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Belt/colonel.rsi
+
+- type: entity
+  parent: guardbelt
+  id: ClothingBeltKriegWebbing
+  suffix: WH40K, Krieg
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/krieg_webbing.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/krieg_webbing.rsi

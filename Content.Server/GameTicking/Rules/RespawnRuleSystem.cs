@@ -44,17 +44,29 @@ public sealed class RespawnRuleSystem : GameRuleSystem<RespawnDeadRuleComponent>
 
         foreach (var tracker in EntityQuery<RespawnTrackerComponent>())
         {
+            if (tracker.RespawnQueue.Count == 0)
+                continue;
+
+            var dueRespawns = new List<NetUserId>();
             foreach (var (player, time) in tracker.RespawnQueue)
             {
                 if (_timing.CurTime < time)
                     continue;
 
+                dueRespawns.Add(player);
+            }
+
+            foreach (var player in dueRespawns)
+            {
                 if (!_playerManager.TryGetSessionById(player, out var session))
+                {
+                    tracker.RespawnQueue.Remove(player);
                     continue;
+                }
 
                 if (session.GetMind() is { } mind && TryComp<MindComponent>(mind, out var mindComp) && mindComp.OwnedEntity.HasValue)
                     QueueDel(mindComp.OwnedEntity.Value);
-                GameTicker.MakeJoinGame(session, station, silent: true);
+                GameTicker.MakeJoinGame(session, station, silent: true, bypassRoundParticipationLock: true);
                 tracker.RespawnQueue.Remove(player);
             }
         }
@@ -109,7 +121,7 @@ public sealed class RespawnRuleSystem : GameRuleSystem<RespawnDeadRuleComponent>
 
             if (respawnTracker.Comp.DeleteBody)
                 QueueDel(player);
-            GameTicker.MakeJoinGame(player.Comp.PlayerSession, station, silent: true);
+            GameTicker.MakeJoinGame(player.Comp.PlayerSession, station, silent: true, bypassRoundParticipationLock: true);
             return false;
         }
 

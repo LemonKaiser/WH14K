@@ -66,6 +66,7 @@
   id: SecurityEquipment
   recipes:
   - ClothingBackpackElectropack
+  - EnergyDomeDirectionalTurtle
   - HoloprojectorSecurity
   - PortableRecharger
   - PowerCageHigh

@@ -1062,6 +1062,11 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("species");
 
+                    b.Property<string>("VoiceTone")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("voice_tone");
+
                     b.HasKey("Id")
                         .HasName("PK_profile");
 
@@ -1340,6 +1345,247 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasName("PK_uploaded_resource_log");
 
                     b.ToTable("uploaded_resource_log", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KDiscordLink", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("AccessToken")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("access_token");
+
+                    b.Property<string>("AvatarHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("avatar_hash");
+
+                    b.Property<string>("DiscordUserId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("discord_user_id");
+
+                    b.Property<string>("GlobalName")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("global_name");
+
+                    b.Property<string>("GuildIdCached")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("guild_id_cached");
+
+                    b.Property<bool>("GuildMemberCached")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("guild_member_cached");
+
+                    b.Property<string>("GuildNickname")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("guild_nickname");
+
+                    b.Property<DateTime?>("LastGuildRefreshAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_guild_refresh_at");
+
+                    b.Property<DateTime>("LastRefreshAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_refresh_at");
+
+                    b.Property<DateTime>("LinkedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("linked_at");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<string>("RoleCacheJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("role_cache_json");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("scope");
+
+                    b.Property<DateTime>("TokenExpiresAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("token_expires_at");
+
+                    b.Property<string>("TokenType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("token_type");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("username");
+
+                    b.HasKey("PlayerUserId")
+                        .HasName("PK_wh40k_discord_link");
+
+                    b.HasIndex("DiscordUserId")
+                        .IsUnique();
+
+                    b.ToTable("wh40k_discord_link", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaAchievementProgress", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("AchievementId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("achievement_id");
+
+                    b.Property<bool>("Claimed")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("claimed");
+
+                    b.Property<int>("ProgressValue")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("progress_value");
+
+                    b.Property<bool>("Unlocked")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("unlocked");
+
+                    b.Property<DateTime?>("UnlockedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unlocked_at");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("version");
+
+                    b.HasKey("PlayerUserId", "AchievementId")
+                        .HasName("PK_wh40k_meta_achievement_progress");
+
+                    b.HasIndex("PlayerUserId");
+
+                    b.ToTable("wh40k_meta_achievement_progress", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaDecorationUnlock", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("UnlockId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unlock_id");
+
+                    b.Property<int>("SourceLevel")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("source_level");
+
+                    b.Property<bool>("Unlocked")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("unlocked");
+
+                    b.Property<DateTime?>("UnlockedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unlocked_at");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("PlayerUserId", "UnlockId")
+                        .HasName("PK_wh40k_meta_decoration_unlock");
+
+                    b.HasIndex("PlayerUserId");
+
+                    b.ToTable("wh40k_meta_decoration_unlock", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaDevelopmentUnlock", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("NodeId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("node_id");
+
+                    b.Property<int>("SpentCost")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("spent_cost");
+
+                    b.Property<DateTime>("UnlockedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unlocked_at");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("PlayerUserId", "NodeId")
+                        .HasName("PK_wh40k_meta_development_unlock");
+
+                    b.HasIndex("PlayerUserId");
+
+                    b.ToTable("wh40k_meta_development_unlock", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaProgress", b =>
+                {
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<DateTime>("LastProgressAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_progress_at");
+
+                    b.Property<int>("LifetimeXp")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("lifetime_xp");
+
+                    b.Property<int>("SeasonXp")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("season_xp");
+
+                    b.Property<string>("SelectedGhostSkinId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("selected_ghost_skin_id");
+
+                    b.Property<string>("SelectedOocNameColorId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("selected_ooc_name_color_id");
+
+                    b.Property<string>("SelectedOocTitleId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("selected_ooc_title_id");
+
+                    b.HasKey("PlayerUserId")
+                        .HasName("PK_wh40k_meta_progress");
+
+                    b.ToTable("wh40k_meta_progress", (string)null);
                 });
 
             modelBuilder.Entity("Content.Server.Database.Whitelist", b =>
@@ -1909,6 +2155,71 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasConstraintName("FK_unban_ban_ban_id");
 
                     b.Navigation("Ban");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KDiscordLink", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_discord_link_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaAchievementProgress", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_meta_achievement_progress_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaDecorationUnlock", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_meta_decoration_unlock_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaDevelopmentUnlock", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_meta_development_unlock_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMetaProgress", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_meta_progress_player_player_id");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("PlayerRound", b =>

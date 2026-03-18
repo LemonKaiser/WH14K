@@ -1,3 +1,4 @@
+using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Client.UserInterface.Controls;
@@ -35,7 +36,7 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
         LoadHumanoidEntity(profile, jobOverride, showClothes);
 
         SetEntity(PreviewDummy);
-        SetName(profile.Name);
+        SetName(HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(profile.Name));
     }
 
     /// <summary>
@@ -43,7 +44,7 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
     /// </summary>
     public void SetName(string newName)
     {
-        EntMan.System<MetaDataSystem>().SetEntityName(PreviewDummy, newName);
+        EntMan.System<MetaDataSystem>().SetEntityName(PreviewDummy, HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(newName));
     }
 
     /// <summary>

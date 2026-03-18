@@ -62,7 +62,7 @@ public sealed class ClothingSpeedModifierSystem : EntitySystem
         if (component.Standing != null && !_standing.IsMatchingState(args.Owner, component.Standing.Value))
             return;
 
-        args.Args.ModifySpeed(component.WalkModifier, component.SprintModifier);
+        args.Args.ModifySpeed(component.WalkModifier, component.SprintModifier, MovementSpeedModifierLayer.Equipment);
     }
 
     private void OnClothingVerbExamine(EntityUid uid, ClothingSpeedModifierComponent component, GetVerbsEvent<ExamineVerb> args)

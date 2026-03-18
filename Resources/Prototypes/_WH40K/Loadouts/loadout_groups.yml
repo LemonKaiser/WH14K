@@ -11,6 +11,285 @@
   - RobeTechpriestStygiesVIII
 
 - type: loadoutGroup
+  id: WH40KImperialLineHead
+  name: loadout-group-wh40k-imperial-line-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaBlack
+  - WH40KBandanaGreen
+  - WH40KBandanaMerc
+  - WH40KKriegHelmet
+  - WH40KCyanFlakHelmet
+  - WH40KCyanArmoredHelmet
+  - WH40KImperialVeteranBeret
+  - WH40KBandanaGold
+
+- type: loadoutGroup
+  id: WH40KImperialLineHonours
+  name: loadout-group-wh40k-imperial-line-honours
+  minLimit: 0
+  loadouts:
+  - WH40KBronzeheart
+  - WH40KSecurityMedal
+  - WH40KGorget
+  - WH40KGoldMedal
+
+- type: loadoutGroup
+  id: WH40KImperialFieldOuter
+  name: loadout-group-wh40k-imperial-field-outer
+  minLimit: 0
+  loadouts:
+  - WH40KKriegCoat
+  - WH40KCyanLightFlakArmor
+  - WH40KCyanFlakArmor
+
+- type: loadoutGroup
+  id: WH40KImperialFieldBelt
+  name: loadout-group-wh40k-imperial-field-belt
+  minLimit: 0
+  loadouts:
+  - WH40KKriegWebbing
+
+- type: loadoutGroup
+  id: WH40KImperialLineFeet
+  name: loadout-group-wh40k-imperial-line-feet
+  minLimit: 0
+  loadouts:
+  - WH40KCyanCombatBoots
+
+- type: loadoutGroup
+  id: WH40KFieldKit
+  name: loadout-group-wh40k-field-kit
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KLighterKit
+  - WH40KCigaretteKit
+  - WH40KCigarKit
+  - WH40KCigarCaseKit
+  - WH40KPipeKit
+  - WH40KGoldCigarKit
+
+- type: loadoutGroup
+  id: WH40KImperialMelee
+  name: loadout-group-wh40k-imperial-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCrowbarKit
+  - WH40KCombatKnifeKit
+  - WH40KSurvivalKnifeKit
+  - WH40KSapperShovelKit
+  - WH40KTruncheonKit
+  - WH40KKukriKnifeKit
+
+- type: loadoutGroup
+  id: WH40KImperialSpecialistMask
+  name: loadout-group-wh40k-imperial-specialist-mask
+  minLimit: 0
+  loadouts:
+  - WH40KKriegGasmask
+
+- type: loadoutGroup
+  id: WH40KImperialMedicHead
+  name: loadout-group-wh40k-imperial-medic-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaRed
+  - WH40KKriegHelmet
+  - WH40KMedicBeret
+  - WH40KSeniorMedicBeret
+
+- type: loadoutGroup
+  id: WH40KImperialMedicHonours
+  name: loadout-group-wh40k-imperial-medic-honours
+  minLimit: 0
+  loadouts:
+  - WH40KBronzeheart
+  - WH40KMedicalMedal
+  - WH40KGoldMedal
+
+- type: loadoutGroup
+  id: WH40KImperialLogisticsHead
+  name: loadout-group-wh40k-imperial-logistics-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaBrown
+  - WH40KKriegHelmet
+  - WH40KQuartermasterBeret
+  - WH40KCommandBeret
+
+- type: loadoutGroup
+  id: WH40KImperialLogisticsHonours
+  name: loadout-group-wh40k-imperial-logistics-honours
+  minLimit: 0
+  loadouts:
+  - WH40KBronzeheart
+  - WH40KCargoMedal
+  - WH40KGoldMedal
+
+- type: loadoutGroup
+  id: WH40KImperialCommandHead
+  name: loadout-group-wh40k-imperial-command-head
+  minLimit: 0
+  loadouts:
+  - WH40KOfficerCap
+  - WH40KCyanOfficerCap
+  - WH40KSergeantCap
+  - WH40KCommandBeret
+  - WH40KImperialVeteranBeret
+
+- type: loadoutGroup
+  id: WH40KImperialCommandNeck
+  name: loadout-group-wh40k-imperial-command-neck
+  minLimit: 0
+  loadouts:
+  - WH40KBronzeheart
+  - WH40KSecurityMedal
+  - WH40KGorget
+  - WH40KColonelCloak
+  - WH40KGoldMedal
+
+- type: loadoutGroup
+  id: WH40KImperialCommandOuter
+  name: loadout-group-wh40k-imperial-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KOfficerCoat
+  - WH40KJuniorOfficerJacket
+  - WH40KSeniorOfficerJacket
+  - WH40KCommissarCoat
+
+- type: loadoutGroup
+  id: WH40KImperialCommandHands
+  name: loadout-group-wh40k-imperial-command-hands
+  minLimit: 0
+  loadouts:
+  - WH40KBlackGloves
+  - WH40KCommissarGloves
+  - WH40KColonelGloves
+
+- type: loadoutGroup
+  id: WH40KCommandFieldKit
+  name: loadout-group-wh40k-command-field-kit
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KLighterKit
+  - WH40KFlippoKit
+  - WH40KCigarKit
+  - WH40KCigarCaseKit
+  - WH40KPipeKit
+  - WH40KGoldCigarKit
+  - WH40KGoldCigarCaseKit
+
+- type: loadoutGroup
+  id: WH40KHereticLineHead
+  name: loadout-group-wh40k-heretic-line-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaBlack
+  - WH40KBandanaBrown
+  - WH40KBandanaSkull
+  - WH40KChaosScarf
+  - WH40KHeresyHelmet
+  - WH40KBloodPactHelmet
+
+- type: loadoutGroup
+  id: WH40KHereticLineMask
+  name: loadout-group-wh40k-heretic-line-mask
+  minLimit: 0
+  loadouts:
+  - WH40KChaosMask1
+  - WH40KChaosMask2
+  - WH40KChaosMask3
+
+- type: loadoutGroup
+  id: WH40KHereticLineHands
+  name: loadout-group-wh40k-heretic-line-hands
+  minLimit: 0
+  loadouts:
+  - WH40KBlackGloves
+  - WH40KChaosCombatGloves
+  - WH40KBloodPactGloves
+
+- type: loadoutGroup
+  id: WH40KHereticFieldKit
+  name: loadout-group-wh40k-heretic-field-kit
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KLighterKit
+  - WH40KCigaretteKit
+  - WH40KCigarKit
+  - WH40KCigarCaseKit
+  - WH40KPipeKit
+  - WH40KGoldCigarKit
+
+- type: loadoutGroup
+  id: WH40KHereticMelee
+  name: loadout-group-wh40k-heretic-melee
+  minLimit: 0
+  loadouts:
+  - WH40KChaosCrowbarKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+
+- type: loadoutGroup
+  id: WH40KHereticCommandHead
+  name: loadout-group-wh40k-heretic-command-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaSkull
+  - WH40KChaosScarf
+  - WH40KHeresyHelmet
+  - WH40KBloodPactHelmet
+
+- type: loadoutGroup
+  id: WH40KHereticCommandNeck
+  name: loadout-group-wh40k-heretic-command-neck
+  minLimit: 0
+  loadouts:
+  - WH40KChaosNecklace
+  - WH40KBronzeheart
+  - WH40KGorget
+  - WH40KGoldMedal
+
+- type: loadoutGroup
+  id: WH40KHereticCommandOuter
+  name: loadout-group-wh40k-heretic-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KChaosCoat
+  - WH40KBloodPactArmor
+  - WH40KCommissarCoat
+
+- type: loadoutGroup
+  id: WH40KHereticCommandHands
+  name: loadout-group-wh40k-heretic-command-hands
+  minLimit: 0
+  loadouts:
+  - WH40KBlackGloves
+  - WH40KChaosCombatGloves
+  - WH40KBloodPactGloves
+
+- type: loadoutGroup
+  id: WH40KHereticCommandFieldKit
+  name: loadout-group-wh40k-heretic-command-field-kit
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KLighterKit
+  - WH40KFlippoKit
+  - WH40KCigarKit
+  - WH40KCigarCaseKit
+  - WH40KPipeKit
+  - WH40KGoldCigarKit
+  - WH40KGoldCigarCaseKit
+
+- type: loadoutGroup
   id: GuardsmanHead
   name: loadout-group-guardsman-head
   loadouts:

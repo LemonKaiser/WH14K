@@ -25,17 +25,44 @@ ent-MobRavener = Равенер
 ent-MobZoanthrope = зоантроп
     .desc = Крайне опасная тварь, использующая свои пси-силы для уничтожения врагов.
 
+ent-MobGrox = грокс
+    .desc = Тяжёлая рептильная скотина. Нейтрален, пока его не трогают.
+
+ent-SpawnMobGrox = спавнер грокса
+    .desc = Спавнит грокса.
+
+ent-FoodMeatGrox = сырое мясо грокса
+    .desc = Плотное волокнистое мясо грокса.
+
 ent-DataChip = чип данных
-    .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+    .desc = Сырой чип с разведданными. Переработайте его в очистителе данных (Империума или Хаоса), чтобы извлечь полезные данные и получить фракционный чип.
 
 ent-DataChip1 = чип данных
-    .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+    .desc = { ent-DataChip.desc }
 
 ent-DataChipImp = чип данных
-    .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+    .desc = Обработанный чип данных Империума. Его можно использовать для получения очков исследования или продать по очень выгодной цене.
+
+ent-DataChipImp2 = чип данных x2
+    .desc = { ent-DataChipImp.desc }
+
+ent-DataChipImp3 = чип данных x3
+    .desc = { ent-DataChipImp.desc }
+
+ent-DataChipImp4 = чип данных x4
+    .desc = { ent-DataChipImp.desc }
 
 ent-DataChipChaos = чип данных хаоса
-    .desc = Чип, вероятно, содержащий в себе очень важные разведданные. За них можно получить дополнительное снаряжение!
+    .desc = Обработанный чип данных Хаоса. Его можно использовать для получения очков исследования или продать по очень выгодной цене.
+
+ent-DataChipChaos2 = чип данных хаоса x2
+    .desc = { ent-DataChipChaos.desc }
+
+ent-DataChipChaos3 = чип данных хаоса x3
+    .desc = { ent-DataChipChaos.desc }
+
+ent-DataChipChaos4 = чип данных хаоса x4
+    .desc = { ent-DataChipChaos.desc }
 
 ent-ClothingBackpackSkitarii = радиевый ранец
     .desc = Ранец скитарийцев.
@@ -48,6 +75,9 @@ ent-ClothingBackpackGuard = рюкзак гвардейца
 
 ent-ClothingBackpackVox = вокс рюкзак
     .desc = Рюкзак, оборудованный разного рода электронникой, позволяющей передавать в штаб разведданные и получать за это пополнение ваших запасов.
+
+ent-ClothingBackpackVoxChaos = хаос-вокс рюкзак
+    .desc = Еретический полевой вокс-ранец. Поддерживает вызов снабжения только для фракции Еретиков и списывает средства из их общего бюджета.
 
 ent-ClothingBackpackHellEnergy = заплечная батарея
     .desc = Большая батарея для пробивных лазвинтовок.
@@ -64,6 +94,9 @@ ent-Comibelt = пояс комиссара
 ent-guardbelt = разгрузочный жилет
     .desc = Грубая боевая разгрузка, созданная для гвардейцев.
 
+ent-ClothingBeltKriegWebbing = разгрузка Крига
+    .desc = Компактная окопная разгрузка с подсумками под запасные фильтры и полевой комплект.
+
 ent-offbelt = пояс офицера
     .desc = Качественный пояс для хранения всего необходимого офицеру.
 
@@ -76,6 +109,10 @@ ent-colbelt = пояс полковника
 ent-ClothingHeadsetVoxBackpack = гарнитура радиста
 
 ent-EncryptionKeyVox = вокс ключ шифрования
+ent-ClothingHeadsetVoxBackpackImperium = имперская гарнитура радиста
+ent-ClothingHeadsetVoxBackpackHeretics = еретическая гарнитура радиста
+ent-EncryptionKeyVoxImperium = имперский вокс ключ шифрования
+ent-EncryptionKeyVoxHeretics = еретический вокс ключ шифрования
 
 ent-ClothingEyesHudGuard = тактические очки
     .desc = Защитят от осколков и грязи
@@ -100,6 +137,9 @@ ent-ClothingHandsGlovesCombatColonel = перчатки полковника
 ent-ClothingHeadHelmetFlak = флак-шлем
     .desc = Стандартная каска, выдаваемая солдатам имперской гвардии.
 
+ent-ClothingHeadHelmetFlakCyan = циановый флак-шлем
+    .desc = { ent-ClothingHeadHelmetFlak.desc }
+
 ent-ClothingHeadHelmetBloodPact = шлем бладпакта
     .desc = Стандартный шлем
 
@@ -109,8 +149,14 @@ ent-ClothingHeadHelmetrHeresy = шлем еретика
 ent-ClothingHeadHelmetFlakResp = флак-шлем с респиратором
     .desc = Стандартная каска, выдаваемая солдатам имперской гвардии, но с респиратором.
 
+ent-ClothingHeadHelmetKrieg = шлем Крига
+    .desc = Укреплённый окопный шлем кригского образца, созданный для пепла, грязи и осколков.
+
 ent-ClothingMaskGasGuardsman = респиратор
     .desc = Маска защищающая дыхательные пути.
+
+ent-ClothingMaskGasKrieg = противогаз Крига
+    .desc = Герметичный окопный противогаз с широкими линзами и круглыми фильтрами для ядовитого тумана и смрадных фронтов.
 
 ent-ClothingHeadHelmetPsyker = шлем псайкера
     .desc = Шлем, защищающий голову псайкера не только от физических, но и ментальных угроз.
@@ -148,6 +194,9 @@ ent-ClothingHeadCommissar = фуражка комиссара
 ent-ClothingHeadOfficer = фуражка офицера
     .desc = Самая обыкновенная фуражка, принадлежащая кому-то из офицеров.
 
+ent-ClothingHeadOfficerCyan = циановая фуражка офицера
+    .desc = { ent-ClothingHeadOfficer.desc }
+
 ent-ClothingHeadSgt = кепка сержанта
     .desc = Самая обыкновенная кепка, принадлежащая кому-то из сержантов.
 
@@ -156,6 +205,9 @@ ent-ClothingHeadVet = берет
 
 ent-ClothingHeadHelmetFlakAdv = панцирный шлем
     .desc = Продвинутый шлем имперской гвардии, оснащённой системой замкнутого дыхания, позволяющей солдату изолировать свои дыхательные пути от внешней среды и дышать из любого баллона.
+
+ent-ClothingHeadHelmetFlakAdvCyan = циановый панцирный шлем
+    .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
 ent-ClothingMaskGasTechPriest = респиратор
     .desc = Стандартный респиратор, защищающий только дыхательные пути.
@@ -187,6 +239,9 @@ ent-ClothingOuterArmorOfficer = шинель офицера
 ent-ClothingOuterArmorFlakVest = флак-броня
     .desc = Полный комплект флак-брони для среднестатестического гвардейца. Обеспечивает усреднённую защиту, но слегка стесняет движения из за своего веса.
 
+ent-ClothingOuterArmorFlakVestCyan = циановая флак-броня
+    .desc = { ent-ClothingOuterArmorFlakVest.desc }
+
 ent-ClothingOuterArmorFlakVestMed = флак-жилет медика
     .desc = Стандартный противоосколочный жилет Имперского Гвардейца с пометкой медика на плече, Кадийского образца. Защитит от осколков, слабых лазеров и мелкокалиберных пуль.
 
@@ -198,6 +253,12 @@ ent-ClothingOuterArmorFlakVestHeretic = броня еретика
 
 ent-ClothingOuterArmorFlakVestLight = флак-жилет
     .desc = Облегчённая версия стандартной имперской флак-брони, используется в основном разведчиками.
+
+ent-ClothingOuterArmorFlakVestLightCyan = циановый флак-жилет
+    .desc = { ent-ClothingOuterArmorFlakVestLight.desc }
+
+ent-ClothingOuterArmorKriegCoat = шинель Крига
+    .desc = Длинная шинель кригского образца поверх полевой брони, чтобы идти вперёд сквозь грязь, холод и осколки.
 
 ent-ClothingOuterHardsuitVoidsmanStandard = скафандр войдсмена
     .desc = Базовый скафандр войдсмена. Достаточно удобен для комфортного использования в безатмосферных областях.
@@ -231,6 +292,9 @@ ent-ClothingOuterArmorJuniorOfficerArmoredJacket = китель младшего
 
 ent-ClothingShoesAnkleBoots = боевые сапоги
     .desc = Боевые сапоги имперской гвардии.
+
+ent-ClothingShoesAnkleBootsCyan = циановые боевые сапоги
+    .desc = { ent-ClothingShoesAnkleBoots.desc }
 
 ent-ClothingShoesCommissarBoots = сапоги комиссара
     .desc = Мы лёд под ногами комиссара...
@@ -557,6 +621,36 @@ ent-FalloutBarricades6 = баррикады
 ent-FalloutBarricades7 = оконные рамы
     .desc = От гнусных воров и жалких тиранидов.
 
+ent-WH40KDeployableBarricadeWarhammer = ящик с имперской баррикадой
+    .desc = Базовая баррикада Империума в транспортном ящике.
+
+ent-WH40KDeployableBarricadeSandbags = ящик с мешками для баррикады
+    .desc = Полевой комплект мешков с песком для быстрой установки.
+
+ent-WH40KDeployableBarricadeChaosBlack = ящик с черной баррикадой Хаоса
+    .desc = Секция хаоситской баррикады с бойницей в транспортном ящике.
+
+ent-WH40KDeployableBarricadeChaosGreen = ящик с зеленой баррикадой Хаоса
+    .desc = Секция хаоситской баррикады с бойницей в транспортном ящике.
+
+ent-WH40KDeployableBarricadeHedgehog = ящик с противотанковым ежом
+    .desc = Тяжелая противотанковая преграда в транспортном исполнении.
+
+ent-WH40KDeployableBarricadeHedgehogA = ящик с противотанковым ежом A
+    .desc = Тяжелая противотанковая преграда в транспортном исполнении.
+
+ent-WH40KDeployableBarricadeHedgehog2 = ящик с противотанковым ежом B
+    .desc = Тяжелая противотанковая преграда в транспортном исполнении.
+
+ent-WH40KDeployableBarricadeHedgehog2A = ящик с противотанковым ежом C
+    .desc = Тяжелая противотанковая преграда в транспортном исполнении.
+
+ent-WH40KDeployableBarricadeBoarded = ящик с заколоченной баррикадой
+    .desc = Секция укрепления из досок для быстрого развертывания.
+
+ent-WH40KDeployableBarricadeBars = ящик с баррикадой-решеткой
+    .desc = Секция металлической решетки для быстрого развертывания.
+
 ent-Crater = кратер
     .desc = Созданное взрывом отверстие в земле.
 
@@ -634,13 +728,18 @@ ent-MachineChipProduser = станция анализа
 ent-MachineChipProduserCenter = станция анализа
     .desc = Древняя машина, что получает важные данные из неизвестного нам источника. Именно эта почему-то имеет лучший сигнал.
 
-ent-ImpPointConverter = очиститель данных
+ent-ImpPointLathe = очиститель данных
     .desc = Убирает ошибки и лишние данные в чипах.
 
 ent-StructureAltar = алтарь хаоса
-    .desc = Алтарь, на котором за разведданые тёмные боги могут наградить вас, или же ближайшая крепость фабрика. Кажется, оно шевелится...
+    .desc = Алтарь, на котором еретики приносят жертвы богам Хаоса в обмен на их благосклонность. Кажется, он шевелится...
 
-ent-StructureStorageImp = склад
+ent-StructureLogisticsConsoleImperiumBuy = консоль логистики Империума
+ent-StructureLogisticsConsoleImperiumCmd = командный терминал Империума
+ent-StructureLogisticsConsoleImperiumSell = консоль продажи логистики Империума
+ent-StructureLogisticsConsoleHereticsBuy = консоль логистики Еретиков
+ent-StructureLogisticsConsoleHereticsCmd = командный терминал Еретиков
+ent-StructureLogisticsConsoleHereticsSell = консоль продажи логистики Еретиков
 
 ent-WallNecron = стена некронов
 
@@ -716,11 +815,7 @@ ent-NuclearBombEXUnanchored = { ent-NuclearBombEX }
     .suffix = WH40K, Не закреплено
     .desc = { ent-NuclearBombEX.desc }
 
-ent-ChPointConverter = конвертер очков Хаоса
-
-ent-StructureAltarCmd = командный алтарь тёмных богов
-
-ent-StructureStorageImpCmd = командный склад Империума
+ent-ChPointLathe = очиститель данных Хаоса
 
 ent-GeneratorJupiter = плазменный генератор
 
@@ -730,6 +825,148 @@ ent-GeneratorJupiterDamaged = { ent-GeneratorJupiter }
 
 ent-GeneratorJupiterHardDamaged = { ent-GeneratorJupiter }
 
+ent-WH40KAutolathe = автолат
+    .desc = Производит базовые предметы из материалов.
+
+ent-WH40KAutolatheImperium = автолат Империума
+    .desc = { ent-WH40KAutolathe.desc }
+
+ent-WH40KAutolatheHeretics = автолат Еретиков
+    .desc = { ent-WH40KAutolathe.desc }
+
+ent-WH40KProtolathe = протолат
+    .desc = Производит продвинутые предметы из материалов.
+
+ent-WH40KProtolatheImperium = протолат Империума
+    .desc = { ent-WH40KProtolathe.desc }
+
+ent-WH40KProtolatheHeretics = протолат Еретиков
+    .desc = { ent-WH40KProtolathe.desc }
+
+ent-WH40KOreProcessor = переработчик руды
+    .desc = Перерабатывает руду в слитки и листы.
+
+ent-WH40KOreProcessorImperium = переработчик руды Империума
+    .desc = { ent-WH40KOreProcessor.desc }
+
+ent-WH40KOreProcessorHeretics = переработчик руды Еретиков
+    .desc = { ent-WH40KOreProcessor.desc }
+
+ent-WH40KResearchAndDevelopmentServer = сервер R&D
+    .desc = Хранит и обслуживает данные исследований.
+
+ent-WH40KResearchAndDevelopmentServerImperium = сервер R&D Империума
+    .desc = Фракционный сервер исследований Империума.
+
+ent-WH40KResearchAndDevelopmentServerHeretics = сервер R&D Еретиков
+    .desc = Фракционный сервер исследований Еретиков.
+
+ent-WH40KComputerResearchAndDevelopmentImperium = консоль R&D Империума
+    .desc = Консоль исследований, привязанная к Империуму.
+
+ent-WH40KComputerResearchAndDevelopmentHeretics = консоль R&D Еретиков
+    .desc = Консоль исследований, привязанная к Еретикам.
+
+ent-WH40KConveyorManipulator = конвейерный манипулятор
+    .desc = Переносит предметы с левого тайла на правый и умеет умно подавать материалы в перерабатывающие машины.
+
+ent-WH40KOreExtractor = добытчик руды
+    .desc = Питаемый от сети бур, добывающий 1 руду каждые 4 секунды и выдающий её на передний тайл.
+
+wh40k-manipulator-examine-status = Статус: {$status}
+wh40k-manipulator-examine-flow = Перенос: {$from} -> {$to}
+wh40k-manipulator-status-idle = ожидание
+wh40k-manipulator-status-busy = занят
+wh40k-manipulator-status-waiting-item = ожидание предмета
+wh40k-manipulator-status-waiting-compatible = ожидание совместимого предмета
+wh40k-manipulator-status-waiting-capacity = ожидание свободного места приёмника
+wh40k-manipulator-status-no-power = нет питания
+wh40k-manipulator-direction-north = север
+wh40k-manipulator-direction-south = юг
+wh40k-manipulator-direction-east = восток
+wh40k-manipulator-direction-west = запад
+wh40k-manipulator-direction-unknown = неизвестно
+
+ent-WH40KAmmoBoxAutogun = коробка автопатронов
+    .desc = Компактная коробка с патронами 8,25 мм для автоматического стаб-оружия.
+
+ent-WH40KAmmoBoxMinigun = коробка патронов минигана
+    .desc = Компактная коробка с патронами .10 для мини-турели.
+
+ent-WH40KAutogunAmmoCrate = ящик автопатронов
+    .desc = Армейский ящик снабжения. Внутри лежат коробки с патронами 8,25 мм для автоматов.
+
+ent-WH40KWeaponTurretImperiumLaser = лазерная полевая турель [WH40K, Империум]
+    .desc = Развёртываемая лазерная турель. Использует батареи лазгана и подходит для быстрого усиления линии фронта.
+
+ent-WH40KWeaponTurretHereticsLaser = лазерная полевая турель [WH40K, Еретики]
+    .desc = Развёртываемая лазерная турель. Использует батареи лазгана и подходит для быстрого усиления линии фронта.
+
+ent-WH40KTacticalWhistle = тактический свисток
+    .desc = Компактный командный свисток для перегруппировки и координации отрядов.
+
+ent-WH40KSignalFlare = сигнальная ракета
+    .desc = Полевой сигнальный заряд для быстрой маркировки и визуальных сигналов.
+
+ent-WH40KIntelDetector = детектор разведданных
+    .desc = Компактный детектор, настроенный на фронтовые сигнатуры разведданных.
+
+ent-WH40KSentryLaptop = ноутбук управления турелью
+    .desc = Переносной блок управления для настройки и переброски турельных систем.
+
+ent-WH40KTacticalFultonField = тактический Fulton
+    .desc = Полевой эвакуационный комплект для быстрого подъёма грузов и задачевых объектов.
+
+ent-WH40KMissionPinpointerRelay = релейный mission pinpointer
+    .desc = Отслеживает активные задачи контроля реле для текущей команды.
+
+ent-WH40KMissionPinpointerCargo = грузовой mission pinpointer
+    .desc = Отслеживает активные задачи доставки груза для текущей команды.
+
+ent-WH40KMissionPinpointerBanner = знамённый mission pinpointer
+    .desc = Отслеживает активные задачи удержания знамени для текущей команды.
+
+ent-WH40KMissionPinpointerKit = набор mission pinpointer
+    .desc = Командный набор с релейным, грузовым и знаменным pinpointer для текущей команды.
+
+ent-ColMarTechBase = вендор ColMarTech
+    .desc = Автоматизированная стойка для выдачи стартового снаряжения.
+
+ent-ColMarTechGuns = автоматизированная оружейная стойка ColMarTech
+    .desc = Стойка со стандартным лазерным вооружением.
+
+ent-ColMarTechEquipment = автоматизированная стойка экипировки ColMarTech
+    .desc = Стойка со стартовым снаряжением.
+
+ent-ColMarTechSurplus = вендор излишков обмундирования ColMarTech
+    .desc = Стойка со стартовой запасной одеждой.
+
+ent-ColMarTechFood = пищевой вендор ColMarTech
+    .desc = Стойка со стартовыми пайками.
+
+ent-ColMarTechMunitions = автоматизированная стойка боеприпасов ColMarTech
+    .desc = Стойка со стартовыми боеприпасами.
+
+ent-ColMarTechSLGear = офицерская стойка бокового и командного вооружения ColMarTech
+    .desc = Автоматизированная стойка бокового и командного вооружения для офицеров.
+
+ent-ColMarTechMedicalGear = стойка медицинского снаряжения отделения ColMarTech
+    .desc = Автоматизированная стойка снаряжения для полевых медиков.
+
+ent-ColMarTechSCTGear = стойка снаряжения боевого техника ColMarTech
+    .desc = Автоматизированная стойка снаряжения для боевых техников.
+
+ent-ColMarTechSWSGear = стойка снаряжения специалиста вооружения отделения ColMarTech
+    .desc = Автоматизированная стойка снаряжения для специалистов вооружения отделения.
+
+ent-ColMarTechFLGear = стойка снаряжения лидера огневой группы ColMarTech
+    .desc = Автоматизированная стойка снаряжения для лидеров огневых групп.
+
+ent-ColMarTechSGGear = стойка снаряжения оператора умного пулемета ColMarTech
+    .desc = Автоматизированная стойка снаряжения для операторов умного пулемета.
+
+ent-ColMarTechUtilities = автоматизированная утилитарная стойка отделения ColMarTech
+    .desc = Стойка снабжения с набором утилит и инструментов для отделения.
 ent-ClothingHeadHelmetFlakCandle = шлем со свечкой
     .desc = это идиотизм или вынужденная мера?
 
@@ -738,3 +975,13 @@ ent-ClothingHeadHelmetFlakCandleChaos = шлем со свечкой
 
 ent-Bugle = вокс-горн
     .desc = наверное он сможет привлечь внимание...
+
+ent-WH40KServoSkull = сервочереп
+    .desc = Компактный сервочереп. Разверни его, чтобы получить союзный дрон поддержки.
+
+ent-WH40KServoSkullMelta = сервочереп с мельта-зарядом
+    .desc = Сервочереп, снаряжённый мельта-зарядом. Разверни его, и он сам пойдёт на врага твоей команды.
+ent-WH40KServoSkullMob = сервочереп
+    .desc = Союзный сервочереп, ожидающий приказа.
+ent-WH40KServoSkullMeltaMob = сервочереп с мельта-зарядом
+    .desc = Союзный сервочереп, несущий боевой мельта-заряд.

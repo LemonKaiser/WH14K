@@ -1,0 +1,25 @@
+wh40k-chat-emote-name-officer-unit-complete-1 = Unit Complete I
+wh40k-chat-emote-name-officer-unit-complete-2 = Unit Complete II
+wh40k-chat-emote-name-officer-selection-response = Selection Response
+wh40k-chat-emote-name-officer-move-order = Move Order
+wh40k-chat-emote-name-officer-attack-order-1 = Attack Order I
+wh40k-chat-emote-name-officer-attack-order-2 = Attack Order II
+wh40k-chat-emote-name-officer-attack-order-3 = Attack Order III
+wh40k-chat-emote-name-officer-attack-order-4 = Attack Order IV
+wh40k-chat-emote-name-officer-charge-order-1 = Charge Order I
+wh40k-chat-emote-name-officer-charge-order-2 = Charge Order II
+wh40k-chat-emote-name-officer-charge-order-3 = Charge Order III
+wh40k-chat-emote-name-officer-morale-order = Morale Order
+
+wh40k-chat-emote-msg-officer-unit-complete-1 = confirms the unit assignment is complete.
+wh40k-chat-emote-msg-officer-unit-complete-2 = confirms the order has been completed.
+wh40k-chat-emote-msg-officer-selection-response = acknowledges the call.
+wh40k-chat-emote-msg-officer-move-order = issues a move order.
+wh40k-chat-emote-msg-officer-attack-order-1 = issues an attack order.
+wh40k-chat-emote-msg-officer-attack-order-2 = orders an aggressive advance.
+wh40k-chat-emote-msg-officer-attack-order-3 = orders the enemy engaged.
+wh40k-chat-emote-msg-officer-attack-order-4 = commands the assault to continue.
+wh40k-chat-emote-msg-officer-charge-order-1 = orders a charge.
+wh40k-chat-emote-msg-officer-charge-order-2 = commands the line forward.
+wh40k-chat-emote-msg-officer-charge-order-3 = calls for a full advance.
+wh40k-chat-emote-msg-officer-morale-order = rallies the troops.

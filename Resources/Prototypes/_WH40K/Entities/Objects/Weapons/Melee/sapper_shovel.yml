@@ -1,0 +1,35 @@
+- type: entity
+  parent: BaseItem
+  id: WHSapperShovel
+  name: sapper shovel
+  description: A sharpened entrenching shovel meant for trench work, breaching earthworks, and brutal close-quarters fighting.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/sapper_shovel.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _WH40K/Objects/Weapons/Melee/sapper_shovel.rsi
+  - type: MeleeWeapon
+    attackRate: 1.2
+    range: 1.2
+    angle: 40
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Slash: 11
+        Blunt: 7
+        Structural: 12
+    soundHit:
+      collection: MetalThud
+  - type: DisarmMalus
+    malus: 0.275
+  - type: Shovel
+    speedModifier: 1.1
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 120
+      Wood: 30
+  - type: StaticPrice
+    price: 40

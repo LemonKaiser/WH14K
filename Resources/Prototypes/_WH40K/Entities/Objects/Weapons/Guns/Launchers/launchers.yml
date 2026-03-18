@@ -16,6 +16,7 @@
     fireRate: 0.5
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: WH40KGunPrediction
   - type: BallisticAmmoProvider
     whitelist:
       tags:

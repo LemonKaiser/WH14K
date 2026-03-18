@@ -1,0 +1,47 @@
+- type: entity
+  id: WH40KAmmoBoxAutogun
+  parent: BaseStorageItem
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    size: Normal
+    shape:
+    - 0,0,1,1
+  - type: Storage
+    maxItemSize: Tiny
+    grid:
+    - 0,0,6,4
+    whitelist:
+      tags:
+      - Cartridge825mmLong
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: Cartridge825mmLong
+        amount: 24
+  - type: StaticPrice
+    price: 120
+
+- type: entity
+  id: WH40KAmmoBoxMinigun
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeMinigun
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeHeavyRifle
+  - type: StaticPrice
+    price: 180

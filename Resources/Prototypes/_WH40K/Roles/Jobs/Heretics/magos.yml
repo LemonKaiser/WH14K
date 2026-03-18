@@ -1,10 +1,13 @@
 - type: job
   id: HMagos
   name: job-name-hmagos
-  description: job-description-magos
+  description: job-description-hmagos
   playTimeTracker: JobHMagos
   setPreference: false
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     # - !type:CharacterTraitRequirement
     #   inverted: true
     #   traits:
@@ -30,6 +33,7 @@
   - ChiefEngineer
   - Atmospherics
   - Research
+  - Medical
   - ResearchDirector
   - Cargo
   - Salvage
@@ -39,6 +43,7 @@
     implants: [ MindShieldImplant ]
   - !type:AddComponentSpecial
     components:
+      - type: WH40KChaosGiftRole
       - type: CommandStaff
   # afterLoadoutSpecial:
   # - !type:ModifyEnvirosuitSpecial

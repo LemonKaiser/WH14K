@@ -94,6 +94,7 @@
     - FullAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/gun_sentry.ogg
+  - type: WH40KGunPrediction
   - type: BallisticAmmoProvider
     proto: CartridgeCaselessRifle
     capacity: 500
@@ -120,6 +121,7 @@
     fireRate: 1.5
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/taser2.ogg
+  - type: WH40KGunPrediction
   - type: BatteryAmmoProvider
     proto: BulletEnergyTurretLaser
     fireCost: 100

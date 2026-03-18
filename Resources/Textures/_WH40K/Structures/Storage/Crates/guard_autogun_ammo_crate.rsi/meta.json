@@ -1,0 +1,16 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites provided by repository contributor AR.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    { "name": "icon" },
+    { "name": "base" },
+    { "name": "closed" },
+    { "name": "open" },
+    { "name": "welded" }
+  ]
+}

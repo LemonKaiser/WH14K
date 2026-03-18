@@ -17,6 +17,8 @@
         Slash: 0.90
         Piercing: 0.90
         Heat: 0.90
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
 
 - type: entity
   parent: ClothingHeadBase
@@ -30,6 +32,16 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: ClothingHeadOfficer
+  id: ClothingHeadOfficerCyan
+  suffix: WH40K, Guard Cyan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/officer_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/officer_cyan.rsi
 
 - type: entity
   parent: ClothingHeadBase

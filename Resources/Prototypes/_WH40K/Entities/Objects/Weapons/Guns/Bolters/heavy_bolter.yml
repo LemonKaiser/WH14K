@@ -1,0 +1,148 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KHeavyBolter
+  name: heavy bolter emplacement
+  description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: [ "enum.WH40KHeavyBolterVisualLayers.Folded" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_kit.rsi
+      state: unanchored
+    - map: [ "enum.WH40KHeavyBolterVisualLayers.Deployed" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_emplacement.rsi
+      state: heavy_bolter
+      visible: false
+    - map: [ "enum.GunVisualLayers.Mag" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_emplacement.rsi
+      state: mag-0
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_kit.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_kit.rsi
+    size: Huge
+  - type: HandheldEntityPlacement
+    entityType: WH40KHeavyBolter
+    previewEntityType: WH40KHeavyBolterPlacementPreview
+    placementMode: SnapgridCenter
+    range: 2
+    canRotate: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      bolter:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 20
+        layer:
+        - Impassable
+        - Opaque
+        mask:
+        - Impassable
+        hard: false
+  - type: CollisionWake
+    enabled: false
+  - type: Anchorable
+    flags:
+    - Unanchorable
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,0.55"
+    enabled: false
+  - type: WH40KHeavyBolter
+    deployDelay: 4
+    foldDelay: 3
+    toggleCooldown: 2
+    fireArcDegrees: 180
+    rotateCooldown: 5
+    rotateStepDegrees: 90
+    rotateLeftAction: ActionWH40KHeavyBolterRotateLeft
+    rotateRightAction: ActionWH40KHeavyBolterRotateRight
+  - type: BuckleMountedGun
+    shootOriginOffset: "0,-0.35"
+  - type: WH40KDirectionalBarricade
+    flipPassSide: true
+    blockedSidePassChance: 0.05
+  - type: Gun
+    minAngle: 12
+    maxAngle: 24
+    angleIncrease: 2
+    angleDecay: 8
+    fireRate: 8
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: WH40KGunPrediction
+  - type: MagazineAmmoProvider
+  - type: AmmoCounter
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: WH40KMagazineHeavyBolter
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazineLightRifleBox
+          - WH40KMagazineHeavyBolter
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.WH40KHeavyBolterVisuals.State:
+        enum.WH40KHeavyBolterVisualLayers.Folded:
+          Folded: { visible: true }
+          Deployed: { visible: false }
+        enum.WH40KHeavyBolterVisualLayers.Deployed:
+          Folded: { visible: false }
+          Deployed: { visible: true, state: heavy_bolter }
+        enum.GunVisualLayers.Mag:
+          Folded: { visible: false }
+          Deployed: { visible: true }
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+
+- type: entity
+  id: WH40KHeavyBolterPlacementPreview
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_emplacement.rsi
+    state: heavy_bolter

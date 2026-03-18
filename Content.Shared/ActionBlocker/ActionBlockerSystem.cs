@@ -1,4 +1,5 @@
 using Content.Shared.Body.Events;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Emoting;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
@@ -10,6 +11,7 @@ using Content.Shared.Movement.Events;
 using Content.Shared.Speech;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
+using Content.Shared._WH40K.HeavyBolter;
 using JetBrains.Annotations;
 using Robust.Shared.Containers;
 
@@ -194,11 +196,18 @@ namespace Content.Shared.ActionBlocker
 
         public bool CanAttack(EntityUid uid, EntityUid? target = null, Entity<MeleeWeaponComponent>? weapon = null, bool disarm = false)
         {
+            var operatingBolter = TryGetOperatingHeavyBolter(uid, out _);
+
+            if (operatingBolter)
+            {
+                // While operating mounted bolter allow only generic ranged-fire probe path.
+                if (target != null || disarm || weapon != null)
+                    return false;
+            }
+
             // If target is in a container can we attack
             if (target != null && _container.IsEntityInContainer(target.Value))
-            {
                 return false;
-            }
 
             _container.TryGetOuterContainer(uid, Transform(uid), out var outerContainer);
 
@@ -222,6 +231,7 @@ namespace Content.Shared.ActionBlocker
 
             var tev = new GettingAttackedAttemptEvent(uid, weapon, disarm);
             RaiseLocalEvent(target.Value, ref tev);
+
             return !tev.Cancelled;
         }
 
@@ -231,6 +241,36 @@ namespace Content.Shared.ActionBlocker
             RaiseLocalEvent(uid, ev);
 
             return !ev.Cancelled;
+        }
+
+        private bool TryGetOperatingHeavyBolter(EntityUid user, out EntityUid bolterUid)
+        {
+            bolterUid = default;
+
+            if (!TryComp<BuckleComponent>(user, out var buckle) ||
+                !buckle.Buckled ||
+                buckle.BuckledTo is not { } strappedTo)
+            {
+                return false;
+            }
+
+            if (!TryComp<WH40KHeavyBolterComponent>(strappedTo, out var bolterComp))
+                return false;
+
+            if (!bolterComp.Deployed)
+                return false;
+
+            if (!TryComp<StrapComponent>(strappedTo, out var strapComp) ||
+                !strapComp.Enabled)
+            {
+                return false;
+            }
+
+            if (!Transform(strappedTo).Anchored)
+                return false;
+
+            bolterUid = strappedTo;
+            return true;
         }
 
         public bool CanShiver(EntityUid uid)

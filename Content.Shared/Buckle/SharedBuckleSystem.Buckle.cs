@@ -15,6 +15,7 @@ using Content.Shared.Standing;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -182,6 +183,15 @@ public abstract partial class SharedBuckleSystem
     public bool IsBuckled(EntityUid uid, BuckleComponent? component = null)
     {
         return Resolve(uid, ref component, false) && component.Buckled;
+    }
+
+    public void SetDontCollide(EntityUid uid, bool value, BuckleComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false) || component.DontCollide == value)
+            return;
+
+        component.DontCollide = value;
+        Dirty(uid, component);
     }
 
     protected void SetBuckledTo(Entity<BuckleComponent> buckle, Entity<StrapComponent?>? strap)
@@ -358,6 +368,15 @@ public abstract partial class SharedBuckleSystem
         else if (user != null)
             _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} buckled {ToPrettyString(buckle)} to {ToPrettyString(strap)}");
 
+        if (TryComp<BuckleMountedGunComponent>(strap, out var mountedGun) &&
+            mountedGun.OperatorDontCollide &&
+            !buckle.Comp.DontCollide)
+        {
+            // Prevent client/server collision resolution from kicking the operator out of the intended rear slot
+            // before mounted-gun specific systems run.
+            SetDontCollide(buckle, true, buckle.Comp);
+        }
+
         _audio.PlayPredicted(strap.Comp.BuckleSound, strap, user);
 
         SetBuckledTo(buckle, strap!);
@@ -455,19 +474,35 @@ public abstract partial class SharedBuckleSystem
 
         var buckleXform = Transform(buckle);
         var oldBuckledXform = Transform(strap);
+        var skipDefaultRelocation =
+            TryComp<BuckleMountedGunComponent>(strap, out var mountedGun) &&
+            mountedGun.SkipDefaultUnbuckleRelocation;
 
         if (buckleXform.ParentUid == strap.Owner && !Terminating(oldBuckledXform.ParentUid))
         {
-            _transform.PlaceNextTo((buckle, buckleXform), (strap.Owner, oldBuckledXform));
-            buckleXform.ActivelyLerping = false;
-
             var oldBuckledToWorldRot = _transform.GetWorldRotation(strap);
-            _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
 
-            // TODO: This is doing 4 moveevents this is why I left the warning in, if you're going to remove it make it only do 1 moveevent.
-            if (strap.Comp.BuckleOffset != Vector2.Zero)
+            if (skipDefaultRelocation)
             {
-                _transform.SetCoordinates(buckle, buckleXform, oldBuckledXform.Coordinates.Offset(strap.Comp.BuckleOffset));
+                // Detach to map space without generic "place next to strap" step.
+                var currentMap = _transform.GetMapCoordinates(buckle, buckleXform);
+                if (currentMap.MapId != MapId.Nullspace)
+                    _transform.SetMapCoordinates((buckle, buckleXform), currentMap);
+
+                buckleXform.ActivelyLerping = false;
+                _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
+            }
+            else
+            {
+                _transform.PlaceNextTo((buckle, buckleXform), (strap.Owner, oldBuckledXform));
+                buckleXform.ActivelyLerping = false;
+                _transform.SetWorldRotationNoLerp((buckle, buckleXform), oldBuckledToWorldRot);
+
+                // TODO: This is doing 4 moveevents this is why I left the warning in, if you're going to remove it make it only do 1 moveevent.
+                if (strap.Comp.BuckleOffset != Vector2.Zero)
+                {
+                    _transform.SetCoordinates(buckle, buckleXform, oldBuckledXform.Coordinates.Offset(strap.Comp.BuckleOffset));
+                }
             }
         }
 

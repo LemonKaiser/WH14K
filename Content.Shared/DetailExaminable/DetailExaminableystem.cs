@@ -33,10 +33,10 @@ public sealed class DetailExaminableSystem : EntitySystem
                 markup.AddMarkupPermissive(ent.Comp.Content);
                 _examine.SendExamineTooltip(user, ent, markup, false, false);
             },
-            Text = Loc.GetString("detail-examinable-verb-text"),
+            TextLocId = "detail-examinable-verb-text",
             Category = VerbCategory.Examine,
             Disabled = !detailsRange,
-            Message = detailsRange ? null : Loc.GetString("detail-examinable-verb-disabled"),
+            MessageLocId = detailsRange ? null : "detail-examinable-verb-disabled",
             Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/examine.svg.192dpi.png"))
         };
 

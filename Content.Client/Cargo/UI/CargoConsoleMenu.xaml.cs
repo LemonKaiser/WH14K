@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Content.Client.Cargo.Systems;
 using Content.Client.UserInterface.Controls;
@@ -31,8 +32,9 @@ namespace Content.Client.Cargo.UI
         private readonly EntityQuery<StationBankAccountComponent> _bankQuery;
 
         public event Action<CargoProductRow?>? OnItemSelected;
-        public event Action<CargoOrderData?>? OnOrderApproved;
-        public event Action<CargoOrderData?>? OnOrderCanceled;
+        public event Action? OnApproveAllRequests;
+        public event Action? OnCancelAllRequests;
+        public event Action<int>? OnRemoveRequest;
 
         public event Action<ProtoId<CargoAccountPrototype>?, int>? OnAccountAction;
 
@@ -40,6 +42,14 @@ namespace Content.Client.Cargo.UI
 
         private readonly List<string> _categoryStrings = new();
         private string? _category;
+        private bool _hasDeliveryEta;
+        private TimeSpan _deliveryEtaEndTime;
+        private TimeSpan _deliveryDuration;
+        private int _lastDeliveryDurationSeconds = int.MinValue;
+        private int _lastTransitEtaSeconds = int.MinValue;
+        private CargoOrderRow? _activeTransitOrderRow;
+        private string? _activeTransitOrderPrefix;
+        private string? _activeTransitOrderFallbackStatus;
 
         public List<ProtoId<CargoProductPrototype>> ProductCatalogue = new();
 
@@ -72,6 +82,9 @@ namespace Content.Client.Cargo.UI
 
             TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
             TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
+            TabContainer.SetTabVisible(1, false);
+            TabContainer.TabsVisible = false;
+            TabContainer.CurrentTab = 0;
 
             ActionOptions.OnItemSelected += idx =>
             {
@@ -97,6 +110,9 @@ namespace Content.Client.Cargo.UI
             {
                 OnToggleUnboundedLimit?.Invoke(a);
             };
+
+            ApproveAllRequests.OnPressed += _ => OnApproveAllRequests?.Invoke();
+            CancelAllRequests.OnPressed += _ => OnCancelAllRequests?.Invoke();
         }
 
         private void OnCategoryItemSelected(OptionButton.ItemSelectedEventArgs args)
@@ -155,13 +171,17 @@ namespace Content.Client.Cargo.UI
                     search.Length != 0 && prototype.Description.ToLowerInvariant().Contains(search) ||
                     search.Length == 0 && _category != null && Loc.GetString(prototype.Category).Equals(_category))
                 {
+                    var iconTexture = _spriteSystem.Frame0(prototype.Icon);
+                    if (_protoManager.Resolve(prototype.Product, out EntityPrototype? productEntity))
+                        iconTexture = _spriteSystem.Frame0(productEntity);
+
                     var button = new CargoProductRow
                     {
                         Product = prototype,
                         ProductName = { Text = prototype.Name },
                         MainButton = { ToolTip = prototype.Description },
-                        PointCost = { Text = Loc.GetString("cargo-console-menu-points-amount", ("amount", prototype.Cost.ToString())) },
-                        Icon = { Texture = _spriteSystem.Frame0(prototype.Icon) },
+                        PointCost = { Text = FormatCurrency(prototype.Cost) },
+                        Icon = { Texture = iconTexture },
                     };
                     button.MainButton.OnPressed += args =>
                     {
@@ -177,6 +197,8 @@ namespace Content.Client.Cargo.UI
         /// </summary>
         public void PopulateCategories()
         {
+            var selectedCategory = _category;
+
             _categoryStrings.Clear();
             Categories.Clear();
 
@@ -197,6 +219,19 @@ namespace Content.Client.Cargo.UI
             {
                 Categories.AddItem(str);
             }
+
+            if (selectedCategory != null)
+            {
+                var idx = _categoryStrings.IndexOf(selectedCategory);
+                if (idx > 0)
+                {
+                    _category = selectedCategory;
+                    Categories.SelectId(idx);
+                    return;
+                }
+            }
+
+            SetCategoryText(0);
         }
 
         /// <summary>
@@ -208,71 +243,129 @@ namespace Content.Client.Cargo.UI
                 return;
 
             Requests.RemoveAllChildren();
+            Orders.RemoveAllChildren();
+            _activeTransitOrderRow = null;
+            _activeTransitOrderPrefix = null;
+            _activeTransitOrderFallbackStatus = null;
+            _lastTransitEtaSeconds = int.MinValue;
+            var hasPending = false;
+            var pendingTotalCost = 0;
 
             foreach (var order in orders)
             {
-                if (order.Approved || !_protoManager.Resolve(order.Product, out var productProto))
+                if (!_protoManager.TryIndex(order.Account, out var account))
                     continue;
 
-                var product = _protoManager.Index<EntityPrototype>(productProto.Product);
-                var productName = productProto.Name;
-                var requester = !string.IsNullOrEmpty(order.Requester) ?
-                    order.Requester : Loc.GetString("cargo-console-menu-order-row-alerts-requester-unknown");
-                var account = _protoManager.Index(order.Account);
-
-                var row = new CargoOrderRow
+                var row = CreateOrderRow(order, account);
+                if (!order.Approved)
                 {
-                    Order = order,
+                    hasPending = true;
+                    pendingTotalCost += Math.Max(0, order.Price * order.OrderQuantity);
+                    row.SetRemoveRequestVisible(true);
+                    row.RemoveRequestButton.OnPressed += _ => OnRemoveRequest?.Invoke(order.OrderId);
+                    row.SetActionButtonsVisible(false, false);
+                    Requests.AddChild(row);
+                    continue;
+                }
 
-                    Title =
-                    {
-                        Text = Loc.GetString(
-                            "cargo-console-menu-order-row-title",
-                            ("productName", productName),
-                            ("orderAmount", order.OrderQuantity),
-                            ("orderPrice", productProto.Cost)),
-                    },
-
-                    Stride =
-                    {
-                        PanelOverride = new StyleBoxFlat
-                        {
-                            BackgroundColor = account.Color,
-                            ContentMarginBottomOverride = 2,
-                        },
-                    },
-
-                    Icon = { Texture = _spriteSystem.Frame0(product) },
-
-                    ProductName =
-                    {
-                        Text = Loc.GetString(
-                            "cargo-console-menu-populate-orders-cargo-order-row-product-name-text",
-                            ("orderRequester", requester),
-                            ("accountColor", account.Color),
-                            ("account", Loc.GetString(account.Code)))
-                    },
-
-                    Description =
-                    {
-                        Text = !string.IsNullOrEmpty(order.Reason) ?
-                            Loc.GetString(
-                                "cargo-console-menu-order-row-product-description",
-                                ("orderReason", order.Reason))
-                        :
-                            Loc.GetString(
-                                "cargo-console-menu-order-row-product-description",
-                                ("orderReason", Loc.GetString("cargo-console-menu-order-row-alerts-reason-absent")))
-                    }
-                };
-
-                row.Cancel.OnPressed += (args) => { OnOrderCanceled?.Invoke(order); };
-
-                // TODO: Disable based on access.
-                row.SetApproveVisible(orderConsole.Mode != CargoOrderConsoleMode.SendToPrimary);
-                row.Approve.OnPressed += (args) => { OnOrderApproved?.Invoke(order); };
-                Requests.AddChild(row);
+                row.SetRemoveRequestVisible(false);
+                row.SetActionButtonsVisible(false, false);
+                Orders.AddChild(row);
             }
+
+            var canApprove = hasPending && orderConsole.Mode != CargoOrderConsoleMode.SendToPrimary;
+            ApproveAllRequests.Disabled = !canApprove;
+            CancelAllRequests.Disabled = !hasPending;
+            RequestsTitleLabel.Text = $"{Loc.GetString("cargo-console-menu-requests-label")} ({FormatCurrency(pendingTotalCost)})";
+            UpdateTransitOrderStatusLabel(force: true);
+        }
+
+        private CargoOrderRow CreateOrderRow(CargoOrderData order, CargoAccountPrototype account)
+        {
+            var productName = order.ProductName;
+            CargoProductPrototype? cargoProduct = null;
+            EntityPrototype? product = null;
+            if (!string.IsNullOrWhiteSpace(order.Product) &&
+                _protoManager.Resolve(order.Product, out var productProto))
+            {
+                cargoProduct = productProto;
+                productName = productProto.Name;
+                _protoManager.TryIndex(productProto.Product, out product);
+            }
+            else if (!string.IsNullOrWhiteSpace(order.ProductId) &&
+                     _protoManager.TryIndex(order.ProductId, out var productPrototype))
+            {
+                product = productPrototype;
+                if (string.IsNullOrWhiteSpace(productName))
+                    productName = product.Name;
+            }
+
+            if (string.IsNullOrWhiteSpace(productName))
+                productName = Loc.GetString("cargo-console-invalid-product");
+
+            var requester = !string.IsNullOrEmpty(order.Requester)
+                ? order.Requester
+                : Loc.GetString("cargo-console-menu-order-row-alerts-requester-unknown");
+
+            var descriptionText = !string.IsNullOrEmpty(order.Reason)
+                ? order.Reason
+                : Loc.GetString("wh40k-cargo-order-no-details");
+
+            var isWh40kBatchSummary = order.Approved &&
+                                      order.IsBatchSummary &&
+                                      !string.IsNullOrWhiteSpace(order.Reason);
+
+            var status = !string.IsNullOrWhiteSpace(order.Approver)
+                ? order.Approver
+                : requester;
+            var accountCode = Loc.GetString(account.Code);
+
+            var descriptionValue = isWh40kBatchSummary
+                ? Loc.GetString("wh40k-cargo-batch-manifest", ("manifest", descriptionText))
+                : descriptionText;
+            var unitPrice = order.Price > 0 ? order.Price : cargoProduct?.Cost ?? 0;
+
+            var row = new CargoOrderRow
+            {
+                Order = order,
+
+                Title =
+                {
+                    Text = NormalizeCurrencyText(Loc.GetString(
+                        "cargo-console-menu-order-row-title",
+                        ("productName", productName),
+                        ("orderAmount", order.OrderQuantity),
+                        ("orderPrice", unitPrice))),
+                },
+
+                Stride =
+                {
+                    PanelOverride = new StyleBoxFlat
+                    {
+                        BackgroundColor = account.Color,
+                        ContentMarginBottomOverride = 2,
+                    },
+                },
+
+                ProductName =
+                {
+                    Text = $"{accountCode} | {status}"
+                }
+            };
+
+            if (product != null)
+                row.Icon.Texture = _spriteSystem.Frame0(product);
+
+            row.Description.SetMessage(descriptionValue);
+
+            if (isWh40kBatchSummary)
+            {
+                _activeTransitOrderRow = row;
+                _activeTransitOrderPrefix = accountCode;
+                _activeTransitOrderFallbackStatus = status;
+            }
+
+            return row;
         }
 
         public void PopulateAccountActions()
@@ -303,6 +396,22 @@ namespace Content.Client.Cargo.UI
             _station = station;
         }
 
+        public void UpdateOrderCapacity(int count, int capacity)
+        {
+            ShuttleCapacityLabel.Text = $"{count}/{capacity}";
+        }
+
+        public void UpdateDeliveryState(bool hasDeliveryEta, TimeSpan deliveryEtaEndTime, TimeSpan deliveryDuration)
+        {
+            _hasDeliveryEta = hasDeliveryEta;
+            _deliveryEtaEndTime = deliveryEtaEndTime;
+            _deliveryDuration = deliveryDuration;
+            _lastDeliveryDurationSeconds = int.MinValue;
+            _lastTransitEtaSeconds = int.MinValue;
+            UpdateDeliveryDurationLabel();
+            UpdateTransitOrderStatusLabel(force: true);
+        }
+
         protected override void FrameUpdate(FrameEventArgs args)
         {
             base.FrameUpdate(args);
@@ -314,9 +423,9 @@ namespace Content.Client.Cargo.UI
             }
 
             var balance = _cargoSystem.GetBalanceFromAccount((_station.Value, bankAccount), orderConsole.Account);
-            PointsLabel.Text = Loc.GetString("cargo-console-menu-points-amount", ("amount", balance));
-            TransferLimitLabel.Text = Loc.GetString("cargo-console-menu-account-action-transfer-limit",
-                ("limit", (int) (balance * orderConsole.TransferLimit)));
+            PointsLabel.Text = FormatCurrency(balance);
+            TransferLimitLabel.Text = NormalizeCurrencyText(Loc.GetString("cargo-console-menu-account-action-transfer-limit",
+                ("limit", (int) (balance * orderConsole.TransferLimit))));
 
             UnlimitedNotifier.Visible = orderConsole.TransferUnbounded;
             AccountActionButton.Disabled = TransferSpinBox.Value <= 0 ||
@@ -324,6 +433,78 @@ namespace Content.Client.Cargo.UI
                                            _timing.CurTime < orderConsole.NextAccountActionTime;
 
             RightPart.Visible = orderConsole.Mode != CargoOrderConsoleMode.PrintSlip;
+            UpdateDeliveryDurationLabel();
+            UpdateTransitOrderStatusLabel();
+        }
+
+        private void UpdateDeliveryDurationLabel()
+        {
+            var durationSeconds = (int) Math.Ceiling(Math.Max(0.0, _deliveryDuration.TotalSeconds));
+            if (durationSeconds <= 0)
+            {
+                if (_lastDeliveryDurationSeconds == -1)
+                    return;
+
+                _lastDeliveryDurationSeconds = -1;
+                DeliveryEtaLabel.Text = Loc.GetString("cargo-console-menu-delivery-time-none-text");
+                return;
+            }
+
+            if (durationSeconds == _lastDeliveryDurationSeconds)
+                return;
+
+            _lastDeliveryDurationSeconds = durationSeconds;
+            var formatted = FormatClockDuration(TimeSpan.FromSeconds(durationSeconds));
+            DeliveryEtaLabel.Text = Loc.GetString("cargo-console-menu-delivery-time-value", ("time", formatted));
+        }
+
+        private void UpdateTransitOrderStatusLabel(bool force = false)
+        {
+            if (_activeTransitOrderRow == null || string.IsNullOrWhiteSpace(_activeTransitOrderPrefix))
+                return;
+
+            if (!_hasDeliveryEta)
+            {
+                if (!force && _lastTransitEtaSeconds == -1)
+                    return;
+
+                _lastTransitEtaSeconds = -1;
+                var fallback = !string.IsNullOrWhiteSpace(_activeTransitOrderFallbackStatus)
+                    ? _activeTransitOrderFallbackStatus
+                    : Loc.GetString("wh40k-cargo-batch-delivered-approver");
+                _activeTransitOrderRow.ProductName.Text = $"{_activeTransitOrderPrefix} | {fallback}";
+                return;
+            }
+
+            var remaining = _deliveryEtaEndTime - _timing.CurTime;
+            var secondsLeft = (int) Math.Ceiling(Math.Max(0.0, remaining.TotalSeconds));
+            if (!force && secondsLeft == _lastTransitEtaSeconds)
+                return;
+
+            _lastTransitEtaSeconds = secondsLeft;
+
+            var status = secondsLeft <= 0
+                ? Loc.GetString("wh40k-cargo-batch-delivered-approver")
+                : Loc.GetString("wh40k-cargo-batch-summary-approver-time",
+                    ("time", FormatClockDuration(TimeSpan.FromSeconds(secondsLeft))));
+            _activeTransitOrderRow.ProductName.Text = $"{_activeTransitOrderPrefix} | {status}";
+        }
+
+        private static string FormatClockDuration(TimeSpan duration)
+        {
+            return duration.TotalHours >= 1
+                ? duration.ToString(@"hh\:mm\:ss")
+                : duration.ToString(@"mm\:ss");
+        }
+
+        private static string FormatCurrency(int amount)
+        {
+            return $"₮{amount}";
+        }
+
+        private static string NormalizeCurrencyText(string text)
+        {
+            return text.Replace('$', '₮');
         }
     }
 }

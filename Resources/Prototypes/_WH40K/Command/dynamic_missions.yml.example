@@ -1,0 +1,70 @@
+# DRAFT ONLY
+# This file is not loaded by runtime prototype loader.
+# Copy to `dynamic_missions.yml` only after implementing corresponding prototype definitions in code.
+
+meta:
+  profile: wh40k_dynamic_missions_v1
+  enabled: true
+  first_spawn_after_round_start_seconds: 720
+  respawn_interval_seconds_min: 600
+  respawn_interval_seconds_max: 900
+  max_active_missions_global: 1
+
+mission_types:
+  - id: high_value_cargo
+    weight: 1.0
+    duration_seconds: 420
+    announce_globally: true
+    objective_entity: WH40KHighValueCargoCrate
+    pickup_mode: carry_or_drag
+    delivery_target: team_command_node
+    spawn_rules:
+      marker_set: WH40KMissionSpawnMidline
+      avoid_safe_zone_radius: 20
+      prefer_contested_or_neutral: true
+      retry_count: 8
+    rewards:
+      success:
+        development_points: 18
+        upgrade_points: 1
+        optional_tokens:
+          - id: tactical_call_discount
+            count: 1
+            duration_seconds: 600
+      timeout:
+        development_points_winner: 0
+        development_points_loser: 0
+      destroyed:
+        development_points_winner: 6
+        development_points_loser: 2
+    anti_snowball:
+      trailing_team_level_gap: 2
+      trailing_team_bonus:
+        escort_speed_multiplier: 1.05
+        reveal_radius_bonus: 3
+
+  - id: signal_uplink
+    weight: 0.35
+    enabled: false
+    duration_seconds: 240
+    rewards:
+      success:
+        development_points: 12
+
+  - id: sabotage_relay
+    weight: 0.25
+    enabled: false
+    duration_seconds: 300
+    rewards:
+      success:
+        development_points: 14
+
+mission_fail_policy:
+  if_no_valid_spawn: defer_next_cycle
+  defer_seconds: 120
+
+ui:
+  show_map_marker: true
+  show_team_progress: true
+  show_reward_preview: true
+  show_time_remaining: true

@@ -1,0 +1,22 @@
+- type: entity
+  id: WH40KRadialGreyscaleField
+  name: radial greyscale field
+  description: Converts world colors to grayscale inside a radial area.
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _RMC14/Effects/alert.rsi
+    layers:
+    - state: alert_greyscale
+      color: "#9ac6ff99"
+  - type: PointLight
+    enabled: true
+    radius: 3
+    energy: 0.6
+    color: "#8dbfff"
+  - type: WH40KRadialGreyscale
+    radius: 3
+    feather: 0.35
+    movementSpeedMultiplier: 0.05
+    physicsVelocityMultiplier: 0.05

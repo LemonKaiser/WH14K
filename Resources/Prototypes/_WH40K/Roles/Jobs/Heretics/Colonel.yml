@@ -1,20 +1,42 @@
 - type: job
   id: HColonel
   name: job-name-hcolonel
-  description: job-description-colonel
+  description: job-description-hcolonel
   playTimeTracker: JobHColonel
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: HeresyColonelGear
-  icon: "JobIconColonel"
+  icon: "JobIconHColonel"
   supervisors: job-supervisors-engineering
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KChaosGiftRole
       - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KOfficerMaleHuman
+          Female: WH40KOfficerFemaleHuman
+          Unsexed: WH40KOfficerMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: HeresyColonelGear
@@ -22,7 +44,7 @@
     jumpsuit: ClothingUniformJumpsuitCultist1
     gloves: ClothingHandsGlovesCombatcult
     shoes: ClothingShoesChaosBoots2
-    ears: ClothingHeadsetVoxBackpack
+    ears: ClothingHeadsetVoxBackpackHeretics
     outerClothing: ClothingOuterArmorCultistCoat
     belt: chaosbelt
     neck: NecklaceChaosCultistReflectWeak

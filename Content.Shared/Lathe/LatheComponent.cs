@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Research.Prototypes;
@@ -107,12 +108,14 @@ namespace Content.Shared.Lathe
         public ProtoId<LatheRecipePrototype> Recipe;
         public int ItemsPrinted;
         public int ItemsRequested;
+        public bool Infinite;
 
-        public LatheRecipeBatch(ProtoId<LatheRecipePrototype> recipe, int itemsPrinted, int itemsRequested)
+        public LatheRecipeBatch(ProtoId<LatheRecipePrototype> recipe, int itemsPrinted, int itemsRequested, bool infinite = false)
         {
             Recipe = recipe;
             ItemsPrinted = itemsPrinted;
             ItemsRequested = itemsRequested;
+            Infinite = infinite;
         }
     }
 
@@ -121,4 +124,17 @@ namespace Content.Shared.Lathe
     /// </summary>
     [ByRefEvent]
     public readonly record struct LatheStartPrintingEvent(LatheRecipePrototype Recipe);
+
+    /// <summary>
+    /// Event raised before production starts to allow systems to adjust
+    /// per-item production duration.
+    /// </summary>
+    [ByRefEvent]
+    public record struct LatheGetProductionTimeEvent(LatheRecipePrototype Recipe, TimeSpan Time);
+
+    /// <summary>
+    /// Event raised after one item has been produced.
+    /// </summary>
+    [ByRefEvent]
+    public readonly record struct LatheFinishPrintingEvent(LatheRecipePrototype Recipe);
 }

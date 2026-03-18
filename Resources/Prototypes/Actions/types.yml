@@ -87,6 +87,16 @@
     iconOn: { sprite: Objects/Tools/flashlight.rsi, state: flashlight-on }
 
 - type: entity
+  parent: BaseToggleAction
+  id: ActionToggleDome
+  name: Toggle Energy Dome
+  description: Toggle the projected energy barrier.
+  components:
+  - type: Action
+    useDelay: 1
+    icon: { sprite: Objects/Tools/EnergyDome/syndie.rsi, state: icon }
+
+- type: entity
   parent: BaseAction
   id: ActionOpenStorageImplant
   name: Toggle Storage Implant

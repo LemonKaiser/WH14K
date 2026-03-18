@@ -4,6 +4,7 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Station.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.ViewVariables;
 
 namespace Content.Server.Cargo.Components;
 
@@ -14,9 +15,10 @@ namespace Content.Server.Cargo.Components;
 public sealed partial class StationCargoOrderDatabaseComponent : Component
 {
     /// <summary>
-    /// Maximum amount of orders a station is allowed, approved or not.
+    /// Maximum pending item count per account.
+    /// This is consumed as sum(order.OrderQuantity) for non-approved orders.
     /// </summary>
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public int Capacity = 20;
 
     [ViewVariables]

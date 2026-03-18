@@ -2,9 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Administration.Systems;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Server._WH40K.GameTicking.Rules.Prototypes;
 using Content.Server._WH40K.LateJoin;
+using Content.Server._WH40K.Store.Components;
+using Content.Shared._WH40K.GameTicking.Rules;
+using Content.Shared._WH40K.Interface;
+using Content.Server.Explosion.EntitySystems;
+using Content.Shared._WH40K.GameMode;
+using Content.Shared._WH40K.Influence;
+using Content.Shared._WH40K.RoundEvents;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
@@ -12,27 +21,47 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.KillTracking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
+using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Server.RoundEnd;
+using Content.Server.Shuttles.Systems;
+using Content.Server.Station.Components;
+using Content.Server.Store.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared.Administration;
+using Content.Shared.Atmos.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Gravity;
+using Content.Shared.Light.Components;
+using Content.Shared.Light.EntitySystems;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Polymorph;
 using Content.Shared.Players;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
+using Content.Shared.Store;
+using Content.Shared.Store.Components;
+using Content.Shared.Weather;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server._WH40K.GameTicking.Rules;
 
@@ -41,26 +70,53 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private static readonly bool AnnounceTeamOnSpawn = true;
     private static readonly bool AnnounceWinner = true;
     private static readonly bool CountCriticalAsAlive = true;
+    private const float WH40KSprintDrain = 5f;
+    private const float WH40KWalkRecovery = 2f;
+    private const float WH40KIdleRecovery = 4f;
+    private const float WH40KSprintMinRemaining = 25f;
+    private const float WH40KFatigueShakeReserve = 20f;
     [Dependency] private readonly AdminSystem _admin = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly PlayTimeTrackingSystem _playTimeTracking = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
+    [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly SharedRoleSystem _roles = default!;
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly WH40KFactionSystem _wh40kFactions = default!;
+    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private readonly SharedWeatherSystem _weather = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
+    [Dependency] private readonly CableSystem _cables = default!;
+    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
+    [Dependency] private readonly StoreSystem _store = default!;
+    [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
     private bool _requireAllTeamsPresent;
     private float _roundTimeLimitSeconds;
+    private bool _economyTelemetryTrace;
+    private float _economyTelemetrySnapshotIntervalSeconds;
+    private int _economyTelemetryBurstCommandDelta;
+    private TimeSpan _lastEconomyTelemetrySnapshotAt = TimeSpan.Zero;
+    private TimeSpan _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
+    private readonly Dictionary<string, int> _economySnapshotFrontPoints = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _economySnapshotCommandPoints = new(StringComparer.OrdinalIgnoreCase);
     private EntityUid? _activeRuleUid;
 
     public override void Initialize()
@@ -86,11 +142,27 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             ApplyConfigToActiveRules();
         }, true);
 
+        Subs.CVar(_config, CCVars.WH40KEconomyTelemetryTrace, v =>
+        {
+            _economyTelemetryTrace = v;
+            _sawmill.Info($"WH40K economy telemetry trace logging {(v ? "enabled" : "disabled")}.");
+        }, true);
+
+        Subs.CVar(_config, CCVars.WH40KEconomyTelemetrySnapshotIntervalSeconds, v =>
+        {
+            _economyTelemetrySnapshotIntervalSeconds = Math.Max(30f, v);
+        }, true);
+
+        Subs.CVar(_config, CCVars.WH40KEconomyTelemetryBurstCommandDelta, v =>
+        {
+            _economyTelemetryBurstCommandDelta = Math.Max(1, v);
+        }, true);
+
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnPlayerBeforeSpawn);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
         SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamageChanged);
-        SubscribeLocalEvent<DamageableComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        SubscribeLocalEvent<WH40KTeamBattleFactionIconComponent, PolymorphedEvent>(OnFactionIconPolymorphed);
     }
 
     protected override void Started(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -110,19 +182,61 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.TimeLimitReached = false;
         component.PlayerKills.Clear();
         component.NextFriendlyFireAhelpTime.Clear();
+        component.CurrentPhase = WH40KBattlePhase.Preparation;
+        component.NextPhaseChange = Timing.CurTime + TimeSpan.FromSeconds(component.PreparationDurationSeconds);
+        component.TeamFrontPoints.Clear();
+        component.TeamCommandPoints.Clear();
+        component.TeamBaseLevels.Clear();
+        component.TeamLevelBuffs.Clear();
+        component.PlayerLastKnownTeam.Clear();
+        component.WeatherSuppressedForRound = false;
+        component.NextWeatherStart = null;
+        component.ActiveWeatherEnd = null;
+        component.ActiveWeather = null;
+        component.PendingWeather = null;
+        component.LastWeatherWarningForStart = null;
+        component.RoundEventsSuppressedForRound = false;
+        component.ActiveRoundEvent = WH40KRoundEventType.None;
+        component.PendingRoundEvent = null;
+        component.NextRoundEventStart = null;
+        component.ActiveRoundEventEnd = null;
+        component.LastRoundEventWarningForStart = null;
+        component.NextOrbitalWaveAt = TimeSpan.Zero;
+        component.PendingOrbitalStrikes.Clear();
+        ApplyExternalConfigProfile(component);
+        NormalizeEconomyRuntimeConfig(component);
+        NormalizeWeatherDangerProfile(component);
+        component.LevelBuffPool = SanitizeLevelBuffPool(component.LevelBuffPool);
         EnsureTeamArrays(component);
+        EnsureTeamProgress(component);
+        ResetEconomyTelemetryState(component);
+        InitializeWeatherState(component);
+        InitializeRoundEventState(component);
+        ApplyMapStabilitySafeguards();
 
         if (component.Teams.Count < 2)
             _sawmill.Warning($"WH40K team rule '{ToPrettyString(uid)}' has fewer than 2 teams configured.");
 
+        RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(component)));
+        _teamNpcFactions.RefreshAllTeamFactions();
+        ApplyWh40KStaminaProfileToAllTeamMembers();
         _wh40kFactions.BroadcastFactionsToAll();
     }
 
     protected override void Ended(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
         base.Ended(uid, component, gameRule, args);
+        EndRoundEvent(component, Timing.CurTime, forceCleanup: true);
+        component.PendingOrbitalStrikes.Clear();
+        ClearAllTeamLevelBuffComponents();
+
+        if (_gameTicker.DefaultMap != MapId.Nullspace)
+            _weather.TrySetWeather(_gameTicker.DefaultMap, null, out _);
+
         if (_activeRuleUid == uid)
             _activeRuleUid = null;
+
+        ResetEconomyTelemetryState(null);
         _wh40kFactions.BroadcastFactionsToAll();
     }
 
@@ -132,6 +246,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         if (component.RoundEnding)
             return;
+
+        UpdatePhase(uid, component);
+        UpdateRoundEvents(component);
+        UpdateWeather(component);
+        UpdateEconomyTelemetrySnapshots(component);
 
         if (component.RoundTimeLimitSeconds > 0f)
         {
@@ -147,7 +266,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
 
         component.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(component.CheckInterval);
-        if (AllowsTeamVictory(component))
+        if (AllowsTeamVictory(component) && !IsEarlyVictoryLocked(component))
             CheckForVictory(uid, component, gameRule);
     }
 
@@ -270,12 +389,39 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetTeamIndex(mindId, rule, out var teamIndex))
         {
             _sawmill.Debug($"No team match for {ev.Player?.Name} ({ToPrettyString(ev.Mob)}). Job not in configured departments.");
+            RemCompDeferred<WH40KTeamBattleFactionIconComponent>(ev.Mob);
+            if (ev.Player is { } unknownPlayer)
+            {
+                RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), unknownPlayer);
+                RaiseNetworkEvent(new WH40KTeamThemeAssignedEvent(null), unknownPlayer);
+            }
             return;
         }
 
         var team = rule.Teams[teamIndex];
         var member = EnsureComp<WH40KTeamMemberComponent>(ev.Mob);
         member.TeamId = team.Id;
+        var factionIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(ev.Mob);
+        if (!string.Equals(factionIcon.TeamId, team.Id, StringComparison.OrdinalIgnoreCase))
+        {
+            factionIcon.TeamId = team.Id;
+            Dirty(ev.Mob, factionIcon);
+        }
+        _teamNpcFactions.ApplyTeamFaction(ev.Mob, team.Id);
+        if (ev.Player is { } teamPlayer)
+        {
+            rule.PlayerLastKnownTeam[teamPlayer.UserId] = team.Id;
+            RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), teamPlayer);
+            RaiseNetworkEvent(new WH40KTeamThemeAssignedEvent(team.Id), teamPlayer);
+        }
+
+        if (rule.TeamLevelBuffs.TryGetValue(team.Id, out var buffType) &&
+            buffType != WH40KLevelBuffType.None)
+        {
+            ApplyTeamLevelBuffToEntity(ev.Mob, rule, buffType);
+        }
+
+        ApplyWh40KStaminaProfile(ev.Mob);
 
         if (!AnnounceTeamOnSpawn)
             return;
@@ -288,6 +434,43 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             if (Loc.HasString(perTeamKey))
                 _chat.DispatchServerMessage(ev.Player, Loc.GetString(perTeamKey));
         }
+    }
+
+    private void OnFactionIconPolymorphed(Entity<WH40KTeamBattleFactionIconComponent> ent, ref PolymorphedEvent args)
+    {
+        var sourceTeamId = ent.Comp.TeamId;
+        if (string.IsNullOrWhiteSpace(sourceTeamId))
+            return;
+
+        var resolvedTeamId = sourceTeamId;
+        if (TryGetActiveRule(out _, out var rule, out _) &&
+            TryResolveTeamId(rule, sourceTeamId, out var canonicalTeamId))
+        {
+            resolvedTeamId = canonicalTeamId;
+        }
+
+        var targetIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(args.NewEntity);
+        if (!string.Equals(targetIcon.TeamId, resolvedTeamId, StringComparison.OrdinalIgnoreCase))
+        {
+            targetIcon.TeamId = resolvedTeamId;
+            Dirty(args.NewEntity, targetIcon);
+        }
+
+        _teamNpcFactions.ApplyTeamFaction(args.NewEntity, resolvedTeamId);
+    }
+
+    private static List<WH40KTeamColorDefinition> BuildTeamColorDefinitions(Components.WH40KTeamBattleRuleComponent rule)
+    {
+        var colors = new List<WH40KTeamColorDefinition>(rule.Teams.Count);
+        foreach (var team in rule.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            colors.Add(new WH40KTeamColorDefinition(team.Id, team.Color.ToHexNoAlpha()));
+        }
+
+        return colors;
     }
 
     private bool TryGetActiveRule(out EntityUid uid, out Components.WH40KTeamBattleRuleComponent component, out GameRuleComponent gameRule)
@@ -381,6 +564,131 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         return true;
     }
 
+    public bool TryGetTeamColor(string teamId, out Color teamColor)
+    {
+        teamColor = Color.White;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        var team = rule.Teams.FirstOrDefault(t => t.Id == teamId);
+        if (string.IsNullOrEmpty(team?.Id))
+            return false;
+
+        teamColor = team!.Color;
+        return true;
+    }
+
+    public bool TryGetTeamDepartments(string teamId, out IReadOnlyList<ProtoId<DepartmentPrototype>> departments)
+    {
+        departments = Array.Empty<ProtoId<DepartmentPrototype>>();
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        var team = rule.Teams.FirstOrDefault(t => t.Id == teamId);
+        if (string.IsNullOrEmpty(team?.Id))
+            return false;
+
+        departments = team!.Departments;
+        return true;
+    }
+
+    public bool TryGetRememberedTeam(NetUserId userId, out string teamId)
+    {
+        teamId = string.Empty;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        if (!rule.PlayerLastKnownTeam.TryGetValue(userId, out var rememberedTeam) ||
+            string.IsNullOrWhiteSpace(rememberedTeam))
+        {
+            return false;
+        }
+
+        teamId = rememberedTeam;
+        return true;
+    }
+
+    private void ApplyWh40KStaminaProfile(EntityUid mob)
+    {
+        if (!TryComp<StaminaComponent>(mob, out var stamina))
+            return;
+
+        stamina.SprintMinRemaining = WH40KSprintMinRemaining;
+        stamina.SprintDrain = WH40KSprintDrain;
+        stamina.WalkRecovery = WH40KWalkRecovery;
+        stamina.IdleRecovery = WH40KIdleRecovery;
+
+        // Start fatigue "shaking" only near the low-stamina end of the bar.
+        stamina.AnimationThreshold = Math.Clamp(
+            stamina.CritThreshold - WH40KFatigueShakeReserve,
+            0f,
+            MathF.Max(0f, stamina.CritThreshold - 1f));
+
+        Dirty(mob, stamina);
+    }
+
+    private void ApplyWh40KStaminaProfileToAllTeamMembers()
+    {
+        var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            ApplyWh40KStaminaProfile(uid);
+        }
+    }
+
+    public bool TryGetTeamIdForUser(NetUserId userId, out string teamId)
+    {
+        teamId = string.Empty;
+
+        if (TryGetRememberedTeam(userId, out teamId))
+            return true;
+
+        if (!_players.TryGetSessionById(userId, out var session) ||
+            session.AttachedEntity is not { Valid: true } attached)
+        {
+            return false;
+        }
+
+        return TryGetTeamIdFromEntity(attached, out teamId);
+    }
+
+    public bool TryGetRoundOutcome(out string? winnerTeamId, out bool draw, out bool timeLimitReached)
+    {
+        if (TryGetActiveRule(out _, out var rule, out _))
+        {
+            winnerTeamId = rule.WinnerTeamId;
+            draw = rule.Draw;
+            timeLimitReached = rule.TimeLimitReached;
+            return true;
+        }
+
+        var query = EntityQueryEnumerator<Components.WH40KTeamBattleRuleComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var fallbackRule, out var gameRule))
+        {
+            if (!GameTicker.IsGameRuleAdded(uid, gameRule))
+                continue;
+
+            winnerTeamId = fallbackRule.WinnerTeamId;
+            draw = fallbackRule.Draw;
+            timeLimitReached = fallbackRule.TimeLimitReached;
+            return true;
+        }
+
+        winnerTeamId = null;
+        draw = false;
+        timeLimitReached = false;
+        return false;
+    }
+
     public void HandleObjectiveDestroyed(string destroyedTeamId)
     {
         if (string.IsNullOrEmpty(destroyedTeamId))
@@ -390,6 +698,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
 
         if (!AllowsObjectiveVictory(rule))
+            return;
+
+        if (IsEarlyVictoryLocked(rule))
             return;
 
         if (rule.RoundEnding)
@@ -492,18 +803,21 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
+        var victimTeamIndex = -1;
         if (TryComp<WH40KTeamMemberComponent>(ev.Entity, out var teamMember) &&
             TryGetTeamIndexById(teamMember.TeamId, rule, out var victimTeam))
         {
             EnsureTeamArrays(rule);
             rule.TeamDeaths[victimTeam]++;
+            victimTeamIndex = victimTeam;
         }
         else if (_mind.TryGetMind(ev.Entity, out var victimMindId, out _))
         {
-            if (TryGetTeamIndex(victimMindId, rule, out var victimTeamIndex))
+            if (TryGetTeamIndex(victimMindId, rule, out var resolvedVictimTeamIndex))
             {
                 EnsureTeamArrays(rule);
-                rule.TeamDeaths[victimTeamIndex]++;
+                rule.TeamDeaths[resolvedVictimTeamIndex]++;
+                victimTeamIndex = resolvedVictimTeamIndex;
             }
         }
 
@@ -517,6 +831,15 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             {
                 EnsureTeamArrays(rule);
                 rule.TeamKills[teamIndex]++;
+
+                if (teamIndex != victimTeamIndex &&
+                    teamIndex >= 0 &&
+                    teamIndex < rule.Teams.Count)
+                {
+                    var teamId = rule.Teams[teamIndex].Id;
+                    var reward = Math.Max(1, rule.FrontPointsPerKill);
+                    AddTeamFrontPointsUnscaled(teamId, reward, "kill");
+                }
             }
         }
 
@@ -524,13 +847,15 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void OnDamageChanged(EntityUid uid, DamageableComponent component, DamageChangedEvent args)
     {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return;
+
+        TryRaiseHealingDoneEvent(uid, args, rule);
+
         if (!_config.GetCVar(CCVars.WH40KFriendlyFireAhelpEnabled))
             return;
 
         if (!args.DamageIncreased || args.Origin == null)
-            return;
-
-        if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
         var minDamage = _config.GetCVar(CCVars.WH40KFriendlyFireAhelpMinDamage);
@@ -590,36 +915,54 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             attackerActor.PlayerSession.Channel);
     }
 
-    private void OnBeforeDamageChanged(EntityUid uid, DamageableComponent component, ref BeforeDamageChangedEvent args)
+    private void TryRaiseHealingDoneEvent(EntityUid targetUid, DamageChangedEvent args, Components.WH40KTeamBattleRuleComponent rule)
     {
-        if (!_config.GetCVar(CCVars.WH40KFriendlyFireDisabled))
+        if (args.DamageIncreased || args.DamageDelta == null || args.Origin == null)
             return;
 
-        if (args.Origin == null)
+        ActorComponent? sourceActor = null;
+        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var sourceEntity, out var resolvedActor))
+            sourceEntity = args.Origin.Value;
+        else
+            sourceActor = resolvedActor;
+
+        if (sourceActor == null || sourceEntity == targetUid)
             return;
 
-        if (!TryGetActiveRule(out _, out var rule, out _))
+        if (!TryGetTeamIndexFromEntity(sourceEntity, rule, out var sourceTeam) ||
+            !TryGetTeamIndexFromEntity(targetUid, rule, out var targetTeam) ||
+            sourceTeam != targetTeam)
+        {
+            return;
+        }
+
+        if (sourceTeam < 0 || sourceTeam >= rule.Teams.Count)
             return;
 
-        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var attacker, out _))
-            attacker = args.Origin.Value;
-
-        if (attacker == uid)
+        if (!_players.TryGetSessionByEntity(targetUid, out var targetSession))
             return;
 
-        if (HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
+        var sourceUserId = sourceActor.PlayerSession.UserId;
+        if (targetSession.UserId == sourceUserId)
             return;
 
-        if (!TryGetTeamIndexFromEntity(uid, rule, out var victimTeam))
+        var healed = 0.0;
+        foreach (var value in args.DamageDelta.DamageDict.Values)
+        {
+            if (value < 0)
+                healed += -value.Double();
+        }
+
+        var healedInt = (int) Math.Floor(healed);
+        if (healedInt <= 0)
             return;
 
-        if (!TryGetTeamIndexFromEntity(attacker, rule, out var attackerTeam))
-            return;
-
-        if (victimTeam != attackerTeam)
-            return;
-
-        args.Cancelled = true;
+        var teamId = rule.Teams[sourceTeam].Id;
+        RaiseLocalEvent(new WH40KTeamBattleHealingDoneEvent(
+            sourceUserId,
+            targetSession.UserId,
+            teamId,
+            healedInt));
     }
 
     private void ApplyConfigToActiveRules()
@@ -635,6 +978,322 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
             rule.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(rule.CheckInterval);
         }
+    }
+
+    private void ResetEconomyTelemetryState(Components.WH40KTeamBattleRuleComponent? component)
+    {
+        _lastEconomyTelemetrySnapshotAt = TimeSpan.Zero;
+        _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
+        _economySnapshotFrontPoints.Clear();
+        _economySnapshotCommandPoints.Clear();
+
+        if (component == null)
+            return;
+
+        foreach (var team in component.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            var front = component.TeamFrontPoints.GetValueOrDefault(team.Id, 0);
+            var command = component.TeamCommandPoints.GetValueOrDefault(team.Id, 0);
+            _economySnapshotFrontPoints[team.Id] = front;
+            _economySnapshotCommandPoints[team.Id] = command;
+        }
+
+        _lastEconomyTelemetrySnapshotAt = Timing.CurTime;
+        var interval = Math.Max(30f, _economyTelemetrySnapshotIntervalSeconds);
+        _nextEconomyTelemetrySnapshotAt = Timing.CurTime + TimeSpan.FromSeconds(interval);
+    }
+
+    private void UpdateEconomyTelemetrySnapshots(Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (!_economyTelemetryTrace)
+            return;
+
+        var now = Timing.CurTime;
+        if (now < _nextEconomyTelemetrySnapshotAt)
+            return;
+
+        var elapsedSeconds = Math.Max(0, (int) (now - component.RoundStartTime).TotalSeconds);
+        var windowSeconds = _lastEconomyTelemetrySnapshotAt == TimeSpan.Zero
+            ? Math.Max(1f, _economyTelemetrySnapshotIntervalSeconds)
+            : Math.Max(1f, (float) (now - _lastEconomyTelemetrySnapshotAt).TotalSeconds);
+
+        foreach (var team in component.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            var teamId = team.Id;
+            var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
+            var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
+            var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
+            var previousFront = _economySnapshotFrontPoints.GetValueOrDefault(teamId, front);
+            var previousCommand = _economySnapshotCommandPoints.GetValueOrDefault(teamId, command);
+            var deltaFront = front - previousFront;
+            var deltaCommand = command - previousCommand;
+            var frontPerMinute = deltaFront * 60f / windowSeconds;
+            var commandPerMinute = deltaCommand * 60f / windowSeconds;
+
+            _sawmill.Info(
+                $"[eco][snapshot] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
+                $"lvl={level} fp={front} cp={command} dFp={deltaFront} dCp={deltaCommand} " +
+                $"fpPerMin={frontPerMinute:F1} cpPerMin={commandPerMinute:F1}");
+
+            _economySnapshotFrontPoints[teamId] = front;
+            _economySnapshotCommandPoints[teamId] = command;
+        }
+
+        _lastEconomyTelemetrySnapshotAt = now;
+        var interval = Math.Max(30f, _economyTelemetrySnapshotIntervalSeconds);
+        _nextEconomyTelemetrySnapshotAt = now + TimeSpan.FromSeconds(interval);
+    }
+
+    private void TraceEconomyDelta(
+        Components.WH40KTeamBattleRuleComponent component,
+        string teamId,
+        string source,
+        int frontDelta,
+        int commandDelta)
+    {
+        if (!_economyTelemetryTrace)
+            return;
+
+        var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
+        var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
+        var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
+        var elapsedSeconds = Math.Max(0, (int) (Timing.CurTime - component.RoundStartTime).TotalSeconds);
+        var burst = Math.Abs(commandDelta) >= Math.Max(1, _economyTelemetryBurstCommandDelta);
+        var burstMarker = burst ? " burst=true" : string.Empty;
+
+        _sawmill.Info(
+            $"[eco] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
+            $"source={source} dFp={frontDelta} dCp={commandDelta} fp={front} cp={command} lvl={level}{burstMarker}");
+    }
+
+    private static string FormatClockShort(int totalSeconds)
+    {
+        var safeSeconds = Math.Max(0, totalSeconds);
+        var minutes = safeSeconds / 60;
+        var seconds = safeSeconds % 60;
+        return $"{minutes:00}:{seconds:00}";
+    }
+
+    private void ApplyExternalConfigProfile(Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (component.ConfigProfile is not { } profileId)
+            return;
+
+        if (!_proto.TryIndex(profileId, out WH40KTeamBattleConfigPrototype? profile))
+        {
+            _sawmill.Warning($"WH40K mode config profile '{profileId}' was not found. Using inline/default values.");
+            return;
+        }
+
+        var points = profile.Points;
+        var weather = profile.Weather;
+        var eventsCfg = profile.Events;
+        var logistics = profile.Logistics;
+        var blackFront = profile.BlackFront;
+        var orbital = profile.Orbital;
+        var economy = profile.Economy;
+        var levelBuff = profile.LevelBuff;
+        var weatherDangerProfile = component.WeatherDangerProfile;
+
+        if (profile.PointsProfile is { } pointsProfileId)
+        {
+            if (_proto.TryIndex(pointsProfileId, out WH40KTeamBattlePointsProfilePrototype? pointsProfile))
+                points = pointsProfile.Config;
+            else
+                _sawmill.Warning($"WH40K points profile '{pointsProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.WeatherProfile is { } weatherProfileId)
+        {
+            if (_proto.TryIndex(weatherProfileId, out WH40KTeamBattleWeatherProfilePrototype? weatherProfile))
+                weather = weatherProfile.Config;
+            else
+                _sawmill.Warning($"WH40K weather profile '{weatherProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.EventsProfile is { } eventsProfileId)
+        {
+            if (_proto.TryIndex(eventsProfileId, out WH40KTeamBattleRoundEventsProfilePrototype? eventsProfile))
+                eventsCfg = eventsProfile.Config;
+            else
+                _sawmill.Warning($"WH40K events profile '{eventsProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.LogisticsProfile is { } logisticsProfileId)
+        {
+            if (_proto.TryIndex(logisticsProfileId, out WH40KTeamBattleLogisticsProfilePrototype? logisticsProfile))
+                logistics = logisticsProfile.Config;
+            else
+                _sawmill.Warning($"WH40K logistics profile '{logisticsProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.BlackFrontProfile is { } blackFrontProfileId)
+        {
+            if (_proto.TryIndex(blackFrontProfileId, out WH40KTeamBattleBlackFrontProfilePrototype? blackFrontProfile))
+                blackFront = blackFrontProfile.Config;
+            else
+                _sawmill.Warning($"WH40K black-front profile '{blackFrontProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.OrbitalProfile is { } orbitalProfileId)
+        {
+            if (_proto.TryIndex(orbitalProfileId, out WH40KTeamBattleOrbitalProfilePrototype? orbitalProfile))
+                orbital = orbitalProfile.Config;
+            else
+                _sawmill.Warning($"WH40K orbital profile '{orbitalProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.EconomyProfile is { } economyProfileId)
+        {
+            if (_proto.TryIndex(economyProfileId, out WH40KTeamBattleEconomyProfilePrototype? economyProfile))
+                economy = economyProfile.Config;
+            else
+                _sawmill.Warning($"WH40K economy profile '{economyProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.LevelBuffProfile is { } levelBuffProfileId)
+        {
+            if (_proto.TryIndex(levelBuffProfileId, out WH40KTeamBattleLevelBuffProfilePrototype? levelBuffProfile))
+                levelBuff = levelBuffProfile.Config;
+            else
+                _sawmill.Warning($"WH40K level-buff profile '{levelBuffProfileId}' (config '{profileId}') was not found. Using inline section.");
+        }
+
+        if (profile.WeatherDangerProfile is { } weatherDangerProfileId)
+        {
+            if (_proto.HasIndex<WH40KWeatherDangerProfilePrototype>(weatherDangerProfileId))
+                weatherDangerProfile = weatherDangerProfileId;
+            else
+                _sawmill.Warning($"WH40K weather-danger profile '{weatherDangerProfileId}' (config '{profileId}') was not found. Using component/default profile.");
+        }
+
+        component.TeamStartingPoints = points.TeamStartingPoints;
+        component.FrontPointsPerKill = points.FrontPointsPerKill;
+        component.BaseLevelThresholds = new List<int>(points.BaseLevelThresholds);
+        component.LevelBuffConstructionDoAfterMultiplier = points.LevelBuffConstructionDoAfterMultiplier;
+        component.LevelBuffMedicalDoAfterMultiplier = points.LevelBuffMedicalDoAfterMultiplier;
+        component.EconomyPreparationMultiplier = Math.Max(1, economy.PreparationMultiplier);
+        component.EconomyAssaultMultiplier = Math.Max(1, economy.AssaultMultiplier);
+        component.EconomyApocalypseMultiplier = Math.Max(1, economy.ApocalypseMultiplier);
+        component.ReinforcementCurveDurationMinSeconds = Math.Max(1f, economy.ReinforcementCurveDurationMinSeconds);
+        component.ReinforcementCurveDurationMaxSeconds = Math.Max(
+            component.ReinforcementCurveDurationMinSeconds,
+            economy.ReinforcementCurveDurationMaxSeconds);
+        component.ReinforcementCurveFallbackApocalypseSeconds = Math.Max(0f, economy.ReinforcementCurveFallbackApocalypseSeconds);
+        component.ReinforcementCurveBaseMultiplier = Math.Max(0f, economy.ReinforcementCurveBaseMultiplier);
+        component.ReinforcementCurveScale = Math.Max(0f, economy.ReinforcementCurveScale);
+        component.ReinforcementCurveExponent = Math.Clamp(economy.ReinforcementCurveExponent, 0f, 10f);
+        component.LevelBuffPool = SanitizeLevelBuffPool(levelBuff.Pool);
+
+        component.WeatherMinStartDelaySeconds = weather.MinStartDelaySeconds;
+        component.WeatherFirstStartJitterSeconds = weather.FirstStartJitterSeconds;
+        component.WeatherNoRoundChance = weather.NoRoundChance;
+        component.WeatherMinDurationSeconds = weather.MinDurationSeconds;
+        component.WeatherMaxDurationSeconds = weather.MaxDurationSeconds;
+        component.WeatherGapMinSeconds = weather.GapMinSeconds;
+        component.WeatherGapMaxSeconds = weather.GapMaxSeconds;
+        component.WeatherRepeatChance = weather.RepeatChance;
+        component.WeatherWarningLeadSeconds = weather.WarningLeadSeconds;
+        component.WeatherPool = new List<EntProtoId>(weather.Pool);
+        component.WeatherDangerProfile = weatherDangerProfile;
+
+        component.RoundEventsEnabled = eventsCfg.Enabled;
+        component.RoundEventMinStartDelaySeconds = eventsCfg.MinStartDelaySeconds;
+        component.RoundEventFirstStartJitterSeconds = eventsCfg.FirstStartJitterSeconds;
+        component.RoundEventNoRoundChance = eventsCfg.NoRoundChance;
+        component.RoundEventMinDurationSeconds = eventsCfg.MinDurationSeconds;
+        component.RoundEventMaxDurationSeconds = eventsCfg.MaxDurationSeconds;
+        component.RoundEventGapMinSeconds = eventsCfg.GapMinSeconds;
+        component.RoundEventGapMaxSeconds = eventsCfg.GapMaxSeconds;
+        component.RoundEventRepeatChance = eventsCfg.RepeatChance;
+        component.RoundEventWarningLeadSeconds = eventsCfg.WarningLeadSeconds;
+        component.RoundEventPool = new List<WH40KRoundEventType>(eventsCfg.Pool);
+
+        component.LogisticsAmmoPriceMultiplier = logistics.AmmoPriceMultiplier;
+        component.LogisticsAmmoCategories = logistics.AmmoCategories.Count > 0
+            ? new List<ProtoId<StoreCategoryPrototype>>(logistics.AmmoCategories)
+            : BuildDefaultLogisticsAmmoCategories();
+        component.LogisticsCooldownMultiplier = logistics.CooldownMultiplier;
+        component.LogisticsConstructionDoAfterMultiplier = logistics.ConstructionDoAfterMultiplier;
+        component.LogisticsMedicalDoAfterMultiplier = logistics.MedicalDoAfterMultiplier;
+
+        component.BlackFrontInfluenceMultiplier = blackFront.InfluenceMultiplier;
+        component.BlackFrontWeatherId = blackFront.WeatherId;
+
+        component.OrbitalBombardmentDurationSeconds = orbital.BombardmentDurationSeconds;
+        component.OrbitalWaveIntervalSeconds = orbital.WaveIntervalSeconds;
+        component.OrbitalStrikesPerWaveMin = orbital.StrikesPerWaveMin;
+        component.OrbitalStrikesPerWaveMax = orbital.StrikesPerWaveMax;
+        component.OrbitalStrikeDelaySeconds = orbital.StrikeDelaySeconds;
+        component.OrbitalTargetScatterRadius = orbital.TargetScatterRadius;
+        component.OrbitalExplosionIntensity = orbital.ExplosionIntensity;
+        component.OrbitalExplosionSlope = orbital.ExplosionSlope;
+        component.OrbitalExplosionMaxTileIntensity = orbital.ExplosionMaxTileIntensity;
+        component.OrbitalMarkerPrototype = orbital.MarkerPrototype;
+    }
+
+    private static List<WH40KTeamBattleLevelBuffPoolEntry> SanitizeLevelBuffPool(
+        IReadOnlyCollection<WH40KTeamBattleLevelBuffPoolEntry> source)
+    {
+        var sanitized = new List<WH40KTeamBattleLevelBuffPoolEntry>(source.Count);
+        foreach (var entry in source)
+        {
+            if (entry.BuffType == WH40KLevelBuffType.None || entry.Weight <= 0)
+                continue;
+
+            sanitized.Add(new WH40KTeamBattleLevelBuffPoolEntry
+            {
+                BuffType = entry.BuffType,
+                Weight = entry.Weight
+            });
+        }
+
+        if (sanitized.Count > 0)
+            return sanitized;
+
+        return BuildDefaultLevelBuffPool();
+    }
+
+    private static void NormalizeEconomyRuntimeConfig(Components.WH40KTeamBattleRuleComponent component)
+    {
+        component.EconomyPreparationMultiplier = Math.Max(1, component.EconomyPreparationMultiplier);
+        component.EconomyAssaultMultiplier = Math.Max(1, component.EconomyAssaultMultiplier);
+        component.EconomyApocalypseMultiplier = Math.Max(1, component.EconomyApocalypseMultiplier);
+        component.ReinforcementCurveDurationMinSeconds = Math.Max(1f, component.ReinforcementCurveDurationMinSeconds);
+        component.ReinforcementCurveDurationMaxSeconds = Math.Max(
+            component.ReinforcementCurveDurationMinSeconds,
+            component.ReinforcementCurveDurationMaxSeconds);
+        component.ReinforcementCurveFallbackApocalypseSeconds = Math.Max(0f, component.ReinforcementCurveFallbackApocalypseSeconds);
+        component.ReinforcementCurveBaseMultiplier = Math.Max(0f, component.ReinforcementCurveBaseMultiplier);
+        component.ReinforcementCurveScale = Math.Max(0f, component.ReinforcementCurveScale);
+        component.ReinforcementCurveExponent = Math.Clamp(component.ReinforcementCurveExponent, 0f, 10f);
+    }
+
+    private void NormalizeWeatherDangerProfile(Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (_proto.HasIndex<WH40KWeatherDangerProfilePrototype>(component.WeatherDangerProfile))
+            return;
+
+        _sawmill.Warning(
+            $"WH40K weather-danger profile '{component.WeatherDangerProfile}' was not found. " +
+            "Using WH40KWeatherDangerProfileDefault.");
+        component.WeatherDangerProfile = "WH40KWeatherDangerProfileDefault";
+    }
+
+    private static List<WH40KTeamBattleLevelBuffPoolEntry> BuildDefaultLevelBuffPool()
+    {
+        return new List<WH40KTeamBattleLevelBuffPoolEntry>
+        {
+            new() { BuffType = WH40KLevelBuffType.Pulling, Weight = 1 },
+            new() { BuffType = WH40KLevelBuffType.Medical, Weight = 1 },
+            new() { BuffType = WH40KLevelBuffType.Construction, Weight = 1 }
+        };
     }
 
     private void ComputeTeamCounts(Components.WH40KTeamBattleRuleComponent component, out int[] total, out int[] alive)
@@ -824,6 +1483,1406 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         args.AddLine("");
+    }
+
+    public WH40KBattlePhase GetCurrentPhase()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return WH40KBattlePhase.Preparation;
+
+        return rule.CurrentPhase;
+    }
+
+    public bool TrySetCurrentPhase(WH40KBattlePhase phase)
+    {
+        if (!TryGetActiveRule(out var uid, out var rule, out _))
+            return false;
+
+        ApplyPhase(uid, rule, phase, Timing.CurTime, announce: true);
+        return true;
+    }
+
+    public IReadOnlyList<string> GetTeamIds()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return Array.Empty<string>();
+
+        var ids = new List<string>(rule.Teams.Count);
+        foreach (var team in rule.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            ids.Add(team.Id);
+        }
+
+        return ids;
+    }
+
+    public bool IsEarlyVictoryLocked()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        return IsEarlyVictoryLocked(rule);
+    }
+
+    public int GetCurrentEconomyMultiplier()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return 1;
+
+        return GetEconomyMultiplier(rule, GetCurrentPhase());
+    }
+
+    public int GetRoundElapsedSeconds()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return 0;
+
+        var elapsed = (Timing.CurTime - rule.RoundStartTime).TotalSeconds;
+        if (elapsed <= 0)
+            return 0;
+
+        return (int) Math.Floor(elapsed);
+    }
+
+    public int GetDynamicReinforcementCost(int baseCost)
+    {
+        var baseValue = Math.Max(1, baseCost);
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return baseValue;
+
+        var fallbackDuration = Math.Max(
+            1f,
+            rule.PreparationDurationSeconds + rule.AssaultDurationSeconds + rule.ReinforcementCurveFallbackApocalypseSeconds);
+        var duration = rule.RoundTimeLimitSeconds > 0f
+            ? rule.RoundTimeLimitSeconds
+            : fallbackDuration;
+
+        duration = Math.Clamp(duration, rule.ReinforcementCurveDurationMinSeconds, rule.ReinforcementCurveDurationMaxSeconds);
+        var elapsed = (float) Math.Max(0.0, (Timing.CurTime - rule.RoundStartTime).TotalSeconds);
+        var normalized = Math.Clamp(elapsed / duration, 0f, 1f);
+
+        var curve = rule.ReinforcementCurveExponent <= 0f
+            ? 1f
+            : MathF.Pow(normalized, rule.ReinforcementCurveExponent);
+        var multiplier = rule.ReinforcementCurveBaseMultiplier + rule.ReinforcementCurveScale * curve;
+        return Math.Max(1, (int) MathF.Round(baseValue * Math.Max(0.01f, multiplier)));
+    }
+
+    public float GetStoreCooldownMultiplier()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return 1f;
+
+        if (rule.ActiveRoundEvent != WH40KRoundEventType.LogisticsSurge)
+            return 1f;
+
+        return Math.Clamp(rule.LogisticsCooldownMultiplier, 0.1f, 10f);
+    }
+
+    public int GetInfluenceRewardMultiplier()
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return 1;
+
+        if (rule.ActiveRoundEvent != WH40KRoundEventType.BlackFront)
+            return 1;
+
+        return Math.Max(1, rule.BlackFrontInfluenceMultiplier);
+    }
+
+    public bool TryGetTeamProgress(string teamId, out int level, out int frontPoints, out int? pointsToNextLevel)
+    {
+        level = 1;
+        frontPoints = 0;
+        pointsToNextLevel = null;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
+            !rule.TeamFrontPoints.TryGetValue(resolvedTeamId, out frontPoints))
+        {
+            return false;
+        }
+
+        if (!rule.TeamBaseLevels.TryGetValue(resolvedTeamId, out level))
+            level = CalculateTeamLevel(frontPoints, rule.BaseLevelThresholds);
+
+        pointsToNextLevel = GetPointsToNextLevel(frontPoints, rule.BaseLevelThresholds);
+        return true;
+    }
+
+    public bool TryGetTeamProgressForEntity(EntityUid entity, out string teamId, out int level, out int frontPoints, out int? pointsToNextLevel)
+    {
+        teamId = string.Empty;
+        level = 1;
+        frontPoints = 0;
+        pointsToNextLevel = null;
+
+        if (!TryGetTeamIdFromEntity(entity, out teamId))
+            return false;
+
+        return TryGetTeamProgress(teamId, out level, out frontPoints, out pointsToNextLevel);
+    }
+
+    public bool AddTeamFrontPoints(string teamId, int baseAmount, string? source = null)
+    {
+        return AddTeamFrontPointsInternal(teamId, baseAmount, applyEconomyMultiplier: true, source: source);
+    }
+
+    public bool AddTeamFrontPointsUnscaled(string teamId, int amount, string? source = null)
+    {
+        return AddTeamFrontPointsInternal(teamId, amount, applyEconomyMultiplier: false, source: source);
+    }
+
+    private bool AddTeamFrontPointsInternal(
+        string teamId,
+        int baseAmount,
+        bool applyEconomyMultiplier,
+        string? source = null)
+    {
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (baseAmount <= 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
+            !rule.TeamFrontPoints.ContainsKey(resolvedTeamId))
+            return false;
+
+        var oldLevel = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
+        var gained = applyEconomyMultiplier
+            ? Math.Max(1, baseAmount * GetEconomyMultiplier(rule, rule.CurrentPhase))
+            : Math.Max(1, baseAmount);
+
+        var points = rule.TeamFrontPoints[resolvedTeamId] + gained;
+
+        rule.TeamFrontPoints[resolvedTeamId] = points;
+        rule.TeamCommandPoints[resolvedTeamId] = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0) + gained;
+        TraceEconomyDelta(
+            rule,
+            resolvedTeamId,
+            source ?? (applyEconomyMultiplier ? "front-gain" : "front-gain-unscaled"),
+            gained,
+            gained);
+
+        var newLevel = CalculateTeamLevel(points, rule.BaseLevelThresholds);
+        rule.TeamBaseLevels[resolvedTeamId] = newLevel;
+
+        if (newLevel > oldLevel)
+        {
+            RollTeamLevelBuff(rule, resolvedTeamId);
+
+            if (TryGetTeamDisplayName(resolvedTeamId, out var teamName))
+            {
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-up-announce",
+                    ("team", teamName),
+                    ("level", newLevel)));
+
+                var activeBuff = rule.TeamLevelBuffs.GetValueOrDefault(resolvedTeamId, WH40KLevelBuffType.None);
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-buff-announce",
+                    ("team", teamName),
+                    ("buff", Loc.GetString(GetLevelBuffNameKey(activeBuff))),
+                    ("effect", Loc.GetString(GetLevelBuffEffectKey(activeBuff)))));
+            }
+        }
+
+        return true;
+    }
+
+    public bool TryGetTeamCommandPoints(string teamId, out int points)
+    {
+        points = 0;
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        return rule.TeamCommandPoints.TryGetValue(resolvedTeamId, out points);
+    }
+
+    public bool TrySpendTeamCommandPoints(string teamId, int amount, out int remaining, string? source = null)
+    {
+        remaining = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || amount <= 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
+            !rule.TeamCommandPoints.TryGetValue(resolvedTeamId, out var current))
+        {
+            return false;
+        }
+
+        if (current < amount)
+            return false;
+
+        current -= amount;
+        rule.TeamCommandPoints[resolvedTeamId] = current;
+        remaining = current;
+        TraceEconomyDelta(
+            rule,
+            resolvedTeamId,
+            source ?? "command-spend",
+            0,
+            -amount);
+        return true;
+    }
+
+    public bool TryAdjustTeamCommandPoints(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int commandPoints,
+        string? source = null)
+    {
+        resolvedTeamId = string.Empty;
+        commandPoints = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var current = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0);
+        commandPoints = Math.Max(0, current + delta);
+        rule.TeamCommandPoints[resolvedTeamId] = commandPoints;
+        TraceEconomyDelta(
+            rule,
+            resolvedTeamId,
+            source ?? "command-adjust",
+            0,
+            commandPoints - current);
+        return true;
+    }
+
+    public bool TryAdjustTeamFrontPoints(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int frontPoints,
+        out int level,
+        string? source = null)
+    {
+        resolvedTeamId = string.Empty;
+        frontPoints = 0;
+        level = 1;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var currentPoints = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
+        frontPoints = Math.Max(0, currentPoints + delta);
+        rule.TeamFrontPoints[resolvedTeamId] = frontPoints;
+        TraceEconomyDelta(
+            rule,
+            resolvedTeamId,
+            source ?? "front-adjust",
+            frontPoints - currentPoints,
+            0);
+
+        level = CalculateTeamLevel(frontPoints, rule.BaseLevelThresholds);
+        rule.TeamBaseLevels[resolvedTeamId] = level;
+
+        if (level <= 1)
+        {
+            rule.TeamLevelBuffs[resolvedTeamId] = WH40KLevelBuffType.None;
+            ApplyTeamLevelBuffToTeam(rule, resolvedTeamId, WH40KLevelBuffType.None);
+        }
+        else if (!rule.TeamLevelBuffs.TryGetValue(resolvedTeamId, out var buff) ||
+                 buff == WH40KLevelBuffType.None)
+        {
+            RollTeamLevelBuff(rule, resolvedTeamId);
+        }
+
+        return true;
+    }
+
+    public bool TrySetTeamBaseLevel(
+        string teamId,
+        int requestedLevel,
+        out string resolvedTeamId,
+        out int level,
+        out int frontPoints)
+    {
+        resolvedTeamId = string.Empty;
+        level = 1;
+        frontPoints = 0;
+
+        if (requestedLevel <= 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var maxLevel = Math.Max(1, rule.BaseLevelThresholds.Count + 1);
+        level = Math.Clamp(requestedLevel, 1, maxLevel);
+        var targetPoints = GetMinimumPointsForLevel(level, rule.BaseLevelThresholds);
+        var currentPoints = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
+
+        if (!TryAdjustTeamFrontPoints(resolvedTeamId, targetPoints - currentPoints, out _, out frontPoints, out level))
+            return false;
+
+        return true;
+    }
+
+    public bool TryGetBaseLevelThresholds(out IReadOnlyList<int> thresholds)
+    {
+        thresholds = Array.Empty<int>();
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        thresholds = rule.BaseLevelThresholds;
+        return true;
+    }
+
+    private static bool TryResolveTeamId(
+        Components.WH40KTeamBattleRuleComponent component,
+        string teamId,
+        out string resolvedTeamId)
+    {
+        resolvedTeamId = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        foreach (var team in component.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            if (!string.Equals(team.Id, teamId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            resolvedTeamId = team.Id;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void EnsureTeamProgress(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var startingPoints = Math.Max(0, component.TeamStartingPoints);
+
+        foreach (var team in component.Teams)
+        {
+            if (string.IsNullOrWhiteSpace(team.Id))
+                continue;
+
+            component.TeamFrontPoints.TryAdd(team.Id, startingPoints);
+            component.TeamCommandPoints.TryAdd(team.Id, startingPoints);
+            component.TeamBaseLevels.TryAdd(team.Id, 1);
+            component.TeamLevelBuffs.TryAdd(team.Id, WH40KLevelBuffType.None);
+        }
+    }
+
+    private int GetMinimumPointsForLevel(int level, IReadOnlyList<int> thresholds)
+    {
+        if (level <= 1 || thresholds.Count == 0)
+            return 0;
+
+        var ordered = thresholds.OrderBy(t => t).ToArray();
+        var clampedIndex = Math.Clamp(level - 2, 0, ordered.Length - 1);
+        return Math.Max(0, ordered[clampedIndex]);
+    }
+
+    private int CalculateTeamLevel(int points, IReadOnlyList<int> thresholds)
+    {
+        var level = 1;
+        foreach (var threshold in thresholds.OrderBy(t => t))
+        {
+            if (points < threshold)
+                break;
+
+            level++;
+        }
+
+        return level;
+    }
+
+    private int? GetPointsToNextLevel(int points, IReadOnlyList<int> thresholds)
+    {
+        foreach (var threshold in thresholds.OrderBy(t => t))
+        {
+            if (points < threshold)
+                return threshold - points;
+        }
+
+        return null;
+    }
+
+    private static int GetEconomyMultiplier(Components.WH40KTeamBattleRuleComponent component, WH40KBattlePhase phase)
+    {
+        return phase switch
+        {
+            WH40KBattlePhase.Preparation => Math.Max(1, component.EconomyPreparationMultiplier),
+            WH40KBattlePhase.Assault => Math.Max(1, component.EconomyAssaultMultiplier),
+            WH40KBattlePhase.Apocalypse => Math.Max(1, component.EconomyApocalypseMultiplier),
+            _ => 1
+        };
+    }
+
+    private bool IsEarlyVictoryLocked(Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (component.EarlyVictoryLockSeconds <= 0f)
+            return false;
+
+        var elapsed = (Timing.CurTime - component.RoundStartTime).TotalSeconds;
+        return elapsed < component.EarlyVictoryLockSeconds;
+    }
+
+    private void UpdatePhase(EntityUid uid, Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (component.CurrentPhase == WH40KBattlePhase.Apocalypse)
+            return;
+
+        var now = Timing.CurTime;
+        if (now < component.NextPhaseChange)
+            return;
+
+        switch (component.CurrentPhase)
+        {
+            case WH40KBattlePhase.Preparation:
+                ApplyPhase(uid, component, WH40KBattlePhase.Assault, now, announce: true);
+                break;
+
+            case WH40KBattlePhase.Assault:
+                ApplyPhase(uid, component, WH40KBattlePhase.Apocalypse, now, announce: true);
+                break;
+        }
+    }
+
+    private void ApplyPhase(
+        EntityUid uid,
+        Components.WH40KTeamBattleRuleComponent component,
+        WH40KBattlePhase phase,
+        TimeSpan now,
+        bool announce)
+    {
+        var previous = component.CurrentPhase;
+        component.CurrentPhase = phase;
+
+        switch (phase)
+        {
+            case WH40KBattlePhase.Preparation:
+                component.NextPhaseChange = now + TimeSpan.FromSeconds(Math.Max(1f, component.PreparationDurationSeconds));
+                break;
+            case WH40KBattlePhase.Assault:
+                component.NextPhaseChange = now + TimeSpan.FromSeconds(Math.Max(1f, component.AssaultDurationSeconds));
+                break;
+            default:
+                component.NextPhaseChange = TimeSpan.MaxValue;
+                break;
+        }
+
+        if (previous == phase)
+            return;
+
+        RaiseLocalEvent(new WH40KBattlePhaseChangedEvent(uid, previous, phase));
+
+        if (announce)
+            AnnouncePhaseChange(phase);
+    }
+
+    private void AnnouncePhaseChange(WH40KBattlePhase phase)
+    {
+        var key = phase switch
+        {
+            WH40KBattlePhase.Preparation => "wh40k-phase-preparation-announce",
+            WH40KBattlePhase.Assault => "wh40k-phase-assault-announce",
+            WH40KBattlePhase.Apocalypse => "wh40k-phase-apocalypse-announce",
+            _ => string.Empty
+        };
+
+        if (!string.IsNullOrEmpty(key) && Loc.HasString(key))
+        {
+            _chat.DispatchServerAnnouncement(Loc.GetString(key));
+            return;
+        }
+
+        _chat.DispatchServerAnnouncement($"WH40K phase changed: {phase}.");
+    }
+
+    private void InitializeWeatherState(Components.WH40KTeamBattleRuleComponent component)
+    {
+        component.ActiveWeather = null;
+        component.ActiveWeatherEnd = null;
+        component.NextWeatherStart = null;
+        component.PendingWeather = null;
+        component.LastWeatherWarningForStart = null;
+
+        if (component.WeatherPool.Count == 0 || _gameTicker.DefaultMap == MapId.Nullspace)
+        {
+            component.WeatherSuppressedForRound = true;
+            return;
+        }
+
+        component.WeatherSuppressedForRound = _random.Prob(Math.Clamp(component.WeatherNoRoundChance, 0f, 1f));
+        if (component.WeatherSuppressedForRound)
+            return;
+
+        var jitter = Math.Max(0f, component.WeatherFirstStartJitterSeconds);
+        var extraDelay = jitter > 0f ? _random.NextFloat(0f, jitter) : 0f;
+        var delay = Math.Max(0f, component.WeatherMinStartDelaySeconds) + extraDelay;
+
+        component.NextWeatherStart = component.RoundStartTime + TimeSpan.FromSeconds(delay);
+        component.PendingWeather = PickWeather(component);
+    }
+
+    private void UpdateWeather(Components.WH40KTeamBattleRuleComponent component)
+    {
+        if (component.ActiveRoundEvent == WH40KRoundEventType.BlackFront)
+            return;
+
+        if (component.WeatherSuppressedForRound || _gameTicker.DefaultMap == MapId.Nullspace)
+            return;
+
+        var now = Timing.CurTime;
+
+        if (component.ActiveWeatherEnd is { } activeEnd)
+        {
+            if (now < activeEnd + SharedWeatherSystem.ShutdownTime)
+                return;
+
+            component.ActiveWeather = null;
+            component.ActiveWeatherEnd = null;
+            ScheduleNextWeather(component, now);
+            return;
+        }
+
+        if (component.NextWeatherStart is { } warningStart)
+            TryAnnounceWeatherWarning(component, warningStart, now);
+
+        if (component.NextWeatherStart is not { } nextStart || now < nextStart)
+            return;
+
+        StartWeatherEvent(component, now);
+    }
+
+    private void ScheduleNextWeather(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        if (!_random.Prob(Math.Clamp(component.WeatherRepeatChance, 0f, 1f)))
+        {
+            component.WeatherSuppressedForRound = true;
+            component.NextWeatherStart = null;
+            component.PendingWeather = null;
+            component.LastWeatherWarningForStart = null;
+            return;
+        }
+
+        var minGap = Math.Max(0f, component.WeatherGapMinSeconds);
+        var maxGap = Math.Max(minGap, component.WeatherGapMaxSeconds);
+        var gap = _random.NextFloat(minGap, maxGap);
+
+        component.NextWeatherStart = now + TimeSpan.FromSeconds(gap);
+        component.PendingWeather = PickWeather(component);
+        component.LastWeatherWarningForStart = null;
+    }
+
+    private void StartWeatherEvent(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        var weatherId = component.PendingWeather is { } pending &&
+                        _weather.IsWeatherPrototype(pending)
+            ? pending
+            : PickWeather(component);
+
+        if (weatherId == null)
+        {
+            component.WeatherSuppressedForRound = true;
+            component.NextWeatherStart = null;
+            component.PendingWeather = null;
+            component.LastWeatherWarningForStart = null;
+            return;
+        }
+
+        var minDuration = Math.Max(1f, component.WeatherMinDurationSeconds);
+        var maxDuration = Math.Max(minDuration, component.WeatherMaxDurationSeconds);
+        var duration = _random.NextFloat(minDuration, maxDuration);
+
+        var endTime = now + TimeSpan.FromSeconds(duration);
+        _weather.TrySetWeather(_gameTicker.DefaultMap, weatherId.Value, out _, endTime - now);
+
+        component.ActiveWeather = weatherId.Value;
+        component.ActiveWeatherEnd = endTime;
+        component.NextWeatherStart = null;
+        component.PendingWeather = null;
+        component.LastWeatherWarningForStart = null;
+
+        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-start-announce"));
+    }
+
+    private EntProtoId? PickWeather(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var available = component.WeatherPool
+            .Where(_weather.IsWeatherPrototype)
+            .ToArray();
+
+        if (available.Length == 0)
+            return null;
+
+        return available[_random.Next(available.Length)];
+    }
+
+    private void TryAnnounceWeatherWarning(
+        Components.WH40KTeamBattleRuleComponent component,
+        TimeSpan nextStart,
+        TimeSpan now)
+    {
+        if (component.LastWeatherWarningForStart == nextStart)
+            return;
+
+        var leadSeconds = Math.Max(1f, component.WeatherWarningLeadSeconds);
+        var warningTime = nextStart - TimeSpan.FromSeconds(leadSeconds);
+        if (now < warningTime)
+            return;
+
+        component.LastWeatherWarningForStart = nextStart;
+        var weatherId = component.PendingWeather?.ToString() ?? "Unknown";
+        var danger = GetWeatherDanger(component, weatherId);
+        var dangerKey = danger switch
+        {
+            1 => "wh40k-weather-danger-low",
+            2 => "wh40k-weather-danger-medium",
+            3 => "wh40k-weather-danger-high",
+            _ => "wh40k-weather-danger-extreme"
+        };
+
+        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-warning-announce",
+            ("seconds", (int) leadSeconds),
+            ("danger", Loc.GetString(dangerKey))));
+    }
+
+    private void InitializeRoundEventState(Components.WH40KTeamBattleRuleComponent component)
+    {
+        component.ActiveRoundEvent = WH40KRoundEventType.None;
+        component.ActiveRoundEventEnd = null;
+        component.PendingRoundEvent = null;
+        component.NextRoundEventStart = null;
+        component.LastRoundEventWarningForStart = null;
+        component.NextOrbitalWaveAt = TimeSpan.Zero;
+        component.PendingOrbitalStrikes.Clear();
+
+        if (!component.RoundEventsEnabled || component.RoundEventPool.Count == 0)
+        {
+            component.RoundEventsSuppressedForRound = true;
+            return;
+        }
+
+        component.RoundEventsSuppressedForRound = _random.Prob(Math.Clamp(component.RoundEventNoRoundChance, 0f, 1f));
+        if (component.RoundEventsSuppressedForRound)
+            return;
+
+        var jitter = Math.Max(0f, component.RoundEventFirstStartJitterSeconds);
+        var extraDelay = jitter > 0f ? _random.NextFloat(0f, jitter) : 0f;
+        var delay = Math.Max(0f, component.RoundEventMinStartDelaySeconds) + extraDelay;
+
+        component.NextRoundEventStart = component.RoundStartTime + TimeSpan.FromSeconds(delay);
+        component.PendingRoundEvent = PickRoundEvent(component);
+        if (component.PendingRoundEvent == null)
+            component.RoundEventsSuppressedForRound = true;
+    }
+
+    private void UpdateRoundEvents(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var now = Timing.CurTime;
+        UpdatePendingOrbitalStrikes(component, now);
+
+        if (!component.RoundEventsEnabled || component.RoundEventsSuppressedForRound)
+            return;
+
+        if (component.ActiveRoundEvent != WH40KRoundEventType.None)
+        {
+            if (component.ActiveRoundEvent == WH40KRoundEventType.OrbitalBombardment &&
+                now >= component.NextOrbitalWaveAt)
+            {
+                SpawnOrbitalWave(component, now);
+                component.NextOrbitalWaveAt = now + TimeSpan.FromSeconds(Math.Max(1f, component.OrbitalWaveIntervalSeconds));
+            }
+
+            if (component.ActiveRoundEventEnd is { } end && now >= end)
+                EndRoundEvent(component, now);
+
+            return;
+        }
+
+        if (component.NextRoundEventStart is { } warningStart)
+            TryAnnounceRoundEventWarning(component, warningStart, now);
+
+        if (component.NextRoundEventStart is not { } nextStart || now < nextStart)
+            return;
+
+        StartRoundEvent(component, now);
+    }
+
+    private void ScheduleNextRoundEvent(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        if (!_random.Prob(Math.Clamp(component.RoundEventRepeatChance, 0f, 1f)))
+        {
+            component.RoundEventsSuppressedForRound = true;
+            component.NextRoundEventStart = null;
+            component.PendingRoundEvent = null;
+            component.LastRoundEventWarningForStart = null;
+            return;
+        }
+
+        var minGap = Math.Max(1f, component.RoundEventGapMinSeconds);
+        var maxGap = Math.Max(minGap, component.RoundEventGapMaxSeconds);
+        var gap = _random.NextFloat(minGap, maxGap);
+
+        component.NextRoundEventStart = now + TimeSpan.FromSeconds(gap);
+        component.PendingRoundEvent = PickRoundEvent(component);
+        component.LastRoundEventWarningForStart = null;
+        if (component.PendingRoundEvent == null)
+            component.RoundEventsSuppressedForRound = true;
+    }
+
+    private WH40KRoundEventType? PickRoundEvent(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var available = component.RoundEventPool
+            .Where(e => e != WH40KRoundEventType.None)
+            .ToArray();
+
+        if (available.Length == 0)
+            return null;
+
+        return available[_random.Next(available.Length)];
+    }
+
+    private void StartRoundEvent(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        var eventType = component.PendingRoundEvent ?? PickRoundEvent(component);
+        if (eventType == null || eventType == WH40KRoundEventType.None)
+        {
+            component.RoundEventsSuppressedForRound = true;
+            component.PendingRoundEvent = null;
+            component.NextRoundEventStart = null;
+            return;
+        }
+
+        component.ActiveRoundEvent = eventType.Value;
+        component.PendingRoundEvent = null;
+        component.NextRoundEventStart = null;
+        component.LastRoundEventWarningForStart = null;
+
+        var minDuration = Math.Max(1f, component.RoundEventMinDurationSeconds);
+        var maxDuration = Math.Max(minDuration, component.RoundEventMaxDurationSeconds);
+        var durationSeconds = _random.NextFloat(minDuration, maxDuration);
+
+        switch (component.ActiveRoundEvent)
+        {
+            case WH40KRoundEventType.LogisticsSurge:
+                ApplyAmmoDiscountToWh40KStores(component, true);
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-logistics-start"));
+                break;
+
+            case WH40KRoundEventType.OrbitalBombardment:
+                durationSeconds = Math.Max(10f, component.OrbitalBombardmentDurationSeconds);
+                component.NextOrbitalWaveAt = now;
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-orbital-start"));
+                break;
+
+            case WH40KRoundEventType.BlackFront:
+                StartBlackFrontWeather(component, now, TimeSpan.FromSeconds(durationSeconds));
+                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-blackfront-start"));
+                break;
+        }
+
+        component.ActiveRoundEventEnd = now + TimeSpan.FromSeconds(durationSeconds);
+    }
+
+    private void EndRoundEvent(
+        Components.WH40KTeamBattleRuleComponent component,
+        TimeSpan now,
+        bool forceCleanup = false)
+    {
+        var finishedEvent = component.ActiveRoundEvent;
+        if (finishedEvent == WH40KRoundEventType.None && !forceCleanup)
+            return;
+
+        switch (finishedEvent)
+        {
+            case WH40KRoundEventType.LogisticsSurge:
+                ApplyAmmoDiscountToWh40KStores(component, false);
+                if (!forceCleanup)
+                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-logistics-end"));
+                break;
+
+            case WH40KRoundEventType.OrbitalBombardment:
+                if (!forceCleanup)
+                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-orbital-end"));
+                break;
+
+            case WH40KRoundEventType.BlackFront:
+                StopBlackFrontWeather(component, now);
+                if (!forceCleanup)
+                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-blackfront-end"));
+                break;
+        }
+
+        component.ActiveRoundEvent = WH40KRoundEventType.None;
+        component.ActiveRoundEventEnd = null;
+        component.NextOrbitalWaveAt = TimeSpan.Zero;
+
+        if (forceCleanup)
+        {
+            component.RoundEventsSuppressedForRound = true;
+            component.PendingRoundEvent = null;
+            component.NextRoundEventStart = null;
+            component.LastRoundEventWarningForStart = null;
+            return;
+        }
+
+        ScheduleNextRoundEvent(component, now);
+    }
+
+    private void TryAnnounceRoundEventWarning(
+        Components.WH40KTeamBattleRuleComponent component,
+        TimeSpan nextStart,
+        TimeSpan now)
+    {
+        if (component.LastRoundEventWarningForStart == nextStart)
+            return;
+
+        var leadSeconds = Math.Max(1f, component.RoundEventWarningLeadSeconds);
+        var warningTime = nextStart - TimeSpan.FromSeconds(leadSeconds);
+        if (now < warningTime)
+            return;
+
+        component.LastRoundEventWarningForStart = nextStart;
+        if (component.PendingRoundEvent is not { } pending)
+            return;
+
+        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-warning",
+            ("seconds", (int) leadSeconds),
+            ("event", Loc.GetString(GetRoundEventNameKey(pending)))));
+    }
+
+    private void SpawnOrbitalWave(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        var minStrikes = Math.Max(1, component.OrbitalStrikesPerWaveMin);
+        var maxStrikes = Math.Max(minStrikes, component.OrbitalStrikesPerWaveMax);
+        var strikes = _random.Next(minStrikes, maxStrikes + 1);
+        var delay = Math.Max(0.2f, component.OrbitalStrikeDelaySeconds);
+        var detonateAt = now + TimeSpan.FromSeconds(delay);
+
+        for (var i = 0; i < strikes; i++)
+        {
+            if (!TryPickOrbitalTarget(component, out var target))
+                break;
+
+            if (_proto.HasIndex(component.OrbitalMarkerPrototype))
+                Spawn(component.OrbitalMarkerPrototype, target);
+
+            component.PendingOrbitalStrikes.Add(new WH40KPendingOrbitalStrike(target, detonateAt));
+        }
+    }
+
+    private bool TryPickOrbitalTarget(Components.WH40KTeamBattleRuleComponent component, out MapCoordinates target)
+    {
+        target = default;
+        var mapId = _gameTicker.DefaultMap;
+        if (mapId == MapId.Nullspace)
+            return false;
+
+        var candidates = new List<MapCoordinates>();
+        var xformQuery = GetEntityQuery<TransformComponent>();
+
+        var points = EntityQueryEnumerator<WH40KInfluencePointComponent, TransformComponent>();
+        while (points.MoveNext(out _, out _, out var pointXform))
+        {
+            if (pointXform.MapID != mapId)
+                continue;
+
+            var worldPos = _transform.GetWorldPosition(pointXform, xformQuery);
+            candidates.Add(new MapCoordinates(worldPos, pointXform.MapID));
+        }
+
+        if (candidates.Count == 0)
+        {
+            var members = EntityQueryEnumerator<WH40KTeamMemberComponent, TransformComponent>();
+            while (members.MoveNext(out var memberUid, out _, out var memberXform))
+            {
+                if (memberXform.MapID != mapId || !_mobState.IsAlive(memberUid))
+                    continue;
+
+                var worldPos = _transform.GetWorldPosition(memberXform, xformQuery);
+                candidates.Add(new MapCoordinates(worldPos, memberXform.MapID));
+            }
+        }
+
+        if (candidates.Count == 0)
+            return false;
+
+        var scatter = Math.Max(0f, component.OrbitalTargetScatterRadius);
+        const int maxAttempts = 32;
+
+        for (var attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            var center = candidates[_random.Next(candidates.Count)];
+            var offset = scatter > 0f ? _random.NextVector2(0f, scatter) : System.Numerics.Vector2.Zero;
+            var candidate = new MapCoordinates(center.Position + offset, center.MapId);
+            if (!IsOrbitalTargetAllowed(candidate))
+                continue;
+
+            target = candidate;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsOrbitalTargetAllowed(MapCoordinates candidate)
+    {
+        if (candidate.MapId == MapId.Nullspace)
+            return false;
+
+        if (!_mapManager.TryFindGridAt(candidate, out var gridUid, out var grid))
+            return false;
+
+        var tileIndices = _map.WorldToTile(gridUid, grid, candidate.Position);
+        if (!_map.TryGetTileRef(gridUid, grid, tileIndices, out var tileRef))
+            return false;
+
+        if (tileRef.Tile.IsEmpty || _turf.IsSpace(tileRef))
+            return false;
+
+        return !IsRoovedTile(gridUid, grid, tileIndices);
+    }
+
+    private bool IsRoovedTile(EntityUid gridUid, MapGridComponent grid, Vector2i tileIndices)
+    {
+        if (HasComp<ImplicitRoofComponent>(gridUid))
+            return true;
+
+        if (!TryComp<RoofComponent>(gridUid, out var roofComp))
+            return false;
+
+        return _roof.IsRooved((gridUid, grid, roofComp), tileIndices);
+    }
+
+    private void UpdatePendingOrbitalStrikes(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        if (component.PendingOrbitalStrikes.Count == 0)
+            return;
+
+        for (var i = component.PendingOrbitalStrikes.Count - 1; i >= 0; i--)
+        {
+            var strike = component.PendingOrbitalStrikes[i];
+            if (now < strike.DetonateAt)
+                continue;
+
+            _explosion.QueueExplosion(
+                strike.Target,
+                ExplosionSystem.DefaultExplosionPrototypeId,
+                Math.Max(1f, component.OrbitalExplosionIntensity),
+                Math.Max(0.1f, component.OrbitalExplosionSlope),
+                Math.Max(0.5f, component.OrbitalExplosionMaxTileIntensity),
+                null,
+                canCreateVacuum: false,
+                addLog: false);
+
+            component.PendingOrbitalStrikes.RemoveAt(i);
+        }
+    }
+
+    private void RollTeamLevelBuff(Components.WH40KTeamBattleRuleComponent component, string teamId)
+    {
+        var selected = PickRandomLevelBuffType(component);
+        component.TeamLevelBuffs[teamId] = selected;
+        ApplyTeamLevelBuffToTeam(component, teamId, selected);
+    }
+
+    private void ApplyTeamLevelBuffToTeam(
+        Components.WH40KTeamBattleRuleComponent component,
+        string teamId,
+        WH40KLevelBuffType buffType)
+    {
+        var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        while (query.MoveNext(out var uid, out var member))
+        {
+            if (!string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            ApplyTeamLevelBuffToEntity(uid, component, buffType);
+        }
+    }
+
+    private void ApplyTeamLevelBuffToEntity(
+        EntityUid uid,
+        Components.WH40KTeamBattleRuleComponent component,
+        WH40KLevelBuffType buffType)
+    {
+        if (buffType == WH40KLevelBuffType.None)
+        {
+            if (HasComp<WH40KRoundEventBuffComponent>(uid))
+            {
+                RemComp<WH40KRoundEventBuffComponent>(uid);
+                _movement.RefreshMovementSpeedModifiers(uid);
+            }
+
+            return;
+        }
+
+        var buff = EnsureComp<WH40KRoundEventBuffComponent>(uid);
+        buff.IgnorePullSlowdown = buffType == WH40KLevelBuffType.Pulling;
+        buff.MedicalDelayMultiplier = buffType == WH40KLevelBuffType.Medical
+            ? Math.Clamp(component.LevelBuffMedicalDoAfterMultiplier, 0.1f, 5f)
+            : 1f;
+        buff.ConstructionDelayMultiplier = buffType == WH40KLevelBuffType.Construction
+            ? Math.Clamp(component.LevelBuffConstructionDoAfterMultiplier, 0.1f, 5f)
+            : 1f;
+
+        Dirty(uid, buff);
+        _movement.RefreshMovementSpeedModifiers(uid);
+    }
+
+    private WH40KLevelBuffType PickRandomLevelBuffType(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var pool = component.LevelBuffPool.Count > 0
+            ? component.LevelBuffPool
+            : BuildDefaultLevelBuffPool();
+
+        var totalWeight = 0;
+        foreach (var entry in pool)
+        {
+            if (entry.BuffType == WH40KLevelBuffType.None || entry.Weight <= 0)
+                continue;
+
+            totalWeight += entry.Weight;
+        }
+
+        if (totalWeight <= 0)
+            return WH40KLevelBuffType.Pulling;
+
+        var roll = _random.Next(totalWeight);
+        var running = 0;
+        foreach (var entry in pool)
+        {
+            if (entry.BuffType == WH40KLevelBuffType.None || entry.Weight <= 0)
+                continue;
+
+            running += entry.Weight;
+            if (roll < running)
+                return entry.BuffType;
+        }
+
+        return WH40KLevelBuffType.Pulling;
+    }
+
+    private void ClearAllTeamLevelBuffComponents()
+    {
+        var query = EntityQueryEnumerator<WH40KRoundEventBuffComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            RemComp<WH40KRoundEventBuffComponent>(uid);
+            _movement.RefreshMovementSpeedModifiers(uid);
+        }
+    }
+
+    private void ApplyAmmoDiscountToWh40KStores(
+        Components.WH40KTeamBattleRuleComponent component,
+        bool enabled)
+    {
+        const string sourceId = "wh40k-logistics-ammo-discount";
+        var priceMultiplier = Math.Clamp(component.LogisticsAmmoPriceMultiplier, 0.1f, 1f);
+        var ammoCategories = component.LogisticsAmmoCategories.Count > 0
+            ? component.LogisticsAmmoCategories
+            : BuildDefaultLogisticsAmmoCategories();
+        var ammoCategorySet = new HashSet<ProtoId<StoreCategoryPrototype>>(ammoCategories);
+
+        var query = EntityQueryEnumerator<StoreComponent, WH40KStoreTeamComponent>();
+        while (query.MoveNext(out var storeUid, out var store, out _))
+        {
+            var changed = false;
+            foreach (var listing in store.FullListingsCatalog)
+            {
+                var hadModifier = listing.CostModifiersBySourceId.ContainsKey(sourceId);
+                listing.RemoveCostModifier(sourceId);
+                if (hadModifier)
+                    changed = true;
+
+                if (!enabled || priceMultiplier >= 0.999f || !IsAmmoListing(listing, ammoCategorySet))
+                    continue;
+
+                var modifier = BuildPriceModifier(listing.OriginalCost, priceMultiplier);
+                if (modifier.Count == 0)
+                    continue;
+
+                listing.AddCostModifier(sourceId, modifier);
+                changed = true;
+            }
+
+            if (!changed)
+                continue;
+
+            _store.UpdateUserInterface(store.AccountOwner, storeUid, store);
+        }
+    }
+
+    private static bool IsAmmoListing(
+        ListingData listing,
+        HashSet<ProtoId<StoreCategoryPrototype>> ammoCategorySet)
+    {
+        if (ammoCategorySet.Count == 0)
+            return false;
+
+        foreach (var category in listing.Categories)
+        {
+            if (ammoCategorySet.Contains(category))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static List<ProtoId<StoreCategoryPrototype>> BuildDefaultLogisticsAmmoCategories()
+    {
+        return new List<ProtoId<StoreCategoryPrototype>>
+        {
+            "VoxAmmo",
+            "AltarAmmo"
+        };
+    }
+
+    private static Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2> BuildPriceModifier(
+        IReadOnlyDictionary<ProtoId<CurrencyPrototype>, FixedPoint2> originalCost,
+        float multiplier)
+    {
+        var result = new Dictionary<ProtoId<CurrencyPrototype>, FixedPoint2>();
+        foreach (var (currency, amount) in originalCost)
+        {
+            var adjusted = amount * multiplier;
+            var delta = adjusted - amount;
+            if (delta == FixedPoint2.Zero)
+                continue;
+
+            result[currency] = delta;
+        }
+
+        return result;
+    }
+
+    private void StartBlackFrontWeather(
+        Components.WH40KTeamBattleRuleComponent component,
+        TimeSpan now,
+        TimeSpan duration)
+    {
+        if (_gameTicker.DefaultMap == MapId.Nullspace ||
+            !_weather.IsWeatherPrototype(component.BlackFrontWeatherId))
+        {
+            return;
+        }
+
+        var end = now + duration;
+        _weather.TrySetWeather(_gameTicker.DefaultMap, component.BlackFrontWeatherId, out _, end - now);
+    }
+
+    private void StopBlackFrontWeather(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        if (_gameTicker.DefaultMap != MapId.Nullspace)
+            _weather.TrySetWeather(_gameTicker.DefaultMap, null, out _);
+
+        if (!component.WeatherSuppressedForRound &&
+            component.NextWeatherStart is { } nextStart &&
+            nextStart <= now)
+        {
+            var minGap = Math.Max(30f, component.WeatherGapMinSeconds * 0.5f);
+            var maxGap = Math.Max(minGap, component.WeatherGapMaxSeconds);
+            var gap = _random.NextFloat(minGap, maxGap);
+            component.NextWeatherStart = now + TimeSpan.FromSeconds(gap);
+            component.PendingWeather ??= PickWeather(component);
+            component.LastWeatherWarningForStart = null;
+        }
+    }
+
+    private static string GetRoundEventNameKey(WH40KRoundEventType type)
+    {
+        return type switch
+        {
+            WH40KRoundEventType.LogisticsSurge => "wh40k-round-event-name-logistics",
+            WH40KRoundEventType.OrbitalBombardment => "wh40k-round-event-name-orbital",
+            WH40KRoundEventType.BlackFront => "wh40k-round-event-name-blackfront",
+            _ => "wh40k-round-event-name-unknown"
+        };
+    }
+
+    private static string GetLevelBuffNameKey(WH40KLevelBuffType buffType)
+    {
+        return buffType switch
+        {
+            WH40KLevelBuffType.Pulling => "wh40k-team-level-buff-name-pulling",
+            WH40KLevelBuffType.Medical => "wh40k-team-level-buff-name-medical",
+            WH40KLevelBuffType.Construction => "wh40k-team-level-buff-name-construction",
+            _ => "wh40k-team-level-buff-name-none"
+        };
+    }
+
+    private static string GetLevelBuffEffectKey(WH40KLevelBuffType buffType)
+    {
+        return buffType switch
+        {
+            WH40KLevelBuffType.Pulling => "wh40k-team-level-buff-effect-pulling",
+            WH40KLevelBuffType.Medical => "wh40k-team-level-buff-effect-medical",
+            WH40KLevelBuffType.Construction => "wh40k-team-level-buff-effect-construction",
+            _ => "wh40k-team-level-buff-effect-none"
+        };
+    }
+
+    private int GetWeatherDanger(Components.WH40KTeamBattleRuleComponent component, string weatherId)
+    {
+        if (!_proto.TryIndex(component.WeatherDangerProfile, out WH40KWeatherDangerProfilePrototype? profile))
+            return 3;
+
+        foreach (var entry in profile.WeatherDanger)
+        {
+            if (!string.Equals(entry.WeatherId.ToString(), weatherId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            return Math.Clamp(entry.Danger, 1, 4);
+        }
+
+        return Math.Clamp(profile.DefaultDanger, 1, 4);
+    }
+
+    private void ApplyMapStabilitySafeguards()
+    {
+        var mapId = _gameTicker.DefaultMap;
+        if (mapId == MapId.Nullspace)
+        {
+            _sawmill.Warning("WH40K map stability safeguards skipped: default map is nullspace.");
+            return;
+        }
+
+        var stationGrids = new HashSet<EntityUid>();
+        foreach (var grid in _mapManager.GetAllGrids(mapId))
+        {
+            if (HasComp<BecomesStationComponent>(grid.Owner))
+                stationGrids.Add(grid.Owner);
+        }
+
+        // Fallback for maps without explicit station markers.
+        if (stationGrids.Count == 0)
+        {
+            foreach (var grid in _mapManager.GetAllGrids(mapId))
+            {
+                stationGrids.Add(grid.Owner);
+            }
+        }
+
+        foreach (var gridUid in stationGrids)
+        {
+            _shuttle.Disable(gridUid);
+            EnsureInherentGravity(gridUid, raiseGravityChangedEvent: true);
+        }
+
+        if (_map.TryGetMap(mapId, out var mapUid))
+            EnsureInherentGravity(mapUid.Value, raiseGravityChangedEvent: false);
+
+        var atmosRebuilt = RebuildGridAtmosphereForMap(mapId);
+        var protectedCables = ProtectApcExtensionCablesFromCutting(mapId);
+
+        _sawmill.Info(
+            $"Applied WH40K map stability safeguards: anchored grids={stationGrids.Count}, fixgridatmos grids={atmosRebuilt}, protected APC extension cables={protectedCables}, map={mapId}.");
+    }
+
+    private int RebuildGridAtmosphereForMap(MapId mapId)
+    {
+        var rebuilt = 0;
+        var skippedNoAtmos = 0;
+        foreach (var grid in _mapManager.GetAllGrids(mapId))
+        {
+            var uid = grid.Owner;
+            if (!TryComp<GridAtmosphereComponent>(uid, out var atmos))
+            {
+                skippedNoAtmos++;
+                continue;
+            }
+
+            _atmosphere.RebuildGridAtmosphere((uid, atmos, grid));
+            rebuilt++;
+        }
+
+        if (skippedNoAtmos > 0)
+        {
+            _sawmill.Debug(
+                $"WH40K map stability safeguards: skipped fixgridatmos for {skippedNoAtmos} grids without GridAtmosphereComponent.");
+        }
+
+        return rebuilt;
+    }
+
+    private int ProtectApcExtensionCablesFromCutting(MapId mapId)
+    {
+        var changed = 0;
+        var query = EntityQueryEnumerator<CableComponent, ExtensionCableProviderComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var cable, out _, out var xform))
+        {
+            if (xform.MapID != mapId || cable.CuttingQuality == null)
+                continue;
+
+            _cables.SetCanBeCut(uid, false, cable);
+            changed++;
+        }
+
+        return changed;
+    }
+
+    private void EnsureInherentGravity(EntityUid uid, bool raiseGravityChangedEvent)
+    {
+        var gravity = EnsureComp<GravityComponent>(uid);
+        var wasEnabled = gravity.Enabled;
+
+        if (gravity.Enabled && gravity.Inherent)
+            return;
+
+        gravity.Enabled = true;
+        gravity.Inherent = true;
+        Dirty(uid, gravity);
+
+        if (raiseGravityChangedEvent && !wasEnabled)
+        {
+            var ev = new GravityChangedEvent(uid, true);
+            RaiseLocalEvent(uid, ref ev, true);
+        }
     }
 
 }

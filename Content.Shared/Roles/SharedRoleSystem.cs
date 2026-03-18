@@ -226,6 +226,9 @@ public abstract class SharedRoleSystem : EntitySystem
     /// </summary>
     public Entity<MindRoleComponent>? GetRoleCompByTime(MindComponent mind)
     {
+        if (mind.MindRoleContainer == null)
+            return null;
+
         var roles = new List<Entity<MindRoleComponent>>();
 
         foreach (var role in mind.MindRoleContainer.ContainedEntities)
@@ -294,6 +297,9 @@ public abstract class SharedRoleSystem : EntitySystem
         if (!Resolve(mind.Owner, ref mind.Comp))
             return false;
 
+        if (mind.Comp.MindRoleContainer == null)
+            return false;
+
         var delete = new List<EntityUid>();
         // If there were no matches and thus no mind role entity names, we'll need the component's name, to report what role failed to be removed
         var original = "'" + typeof(T).Name + "'";
@@ -358,6 +364,9 @@ public abstract class SharedRoleSystem : EntitySystem
     public bool MindRemoveRole(Entity<MindComponent?> mind, EntProtoId<MindRoleComponent> protoId)
     {
         if (!Resolve(mind.Owner, ref mind.Comp))
+            return false;
+
+        if (mind.Comp.MindRoleContainer == null)
             return false;
 
         // If there were no matches and thus no mind role entity names, we'll need the protoId, to report what role failed to be removed
@@ -429,6 +438,9 @@ public abstract class SharedRoleSystem : EntitySystem
         if (!Resolve(mind.Owner, ref mind.Comp))
             return false;
 
+        if (mind.Comp.MindRoleContainer == null)
+            return false;
+
         foreach (var roleEnt in mind.Comp.MindRoleContainer.ContainedEntities)
         {
             if (!TryComp(roleEnt, out T? tcomp))
@@ -472,6 +484,9 @@ public abstract class SharedRoleSystem : EntitySystem
         if (!TryComp<MindComponent>(mindId, out var mind))
             return false;
 
+        if (mind.MindRoleContainer == null)
+            return false;
+
         var found = false;
 
         foreach (var roleEnt in mind.MindRoleContainer.ContainedEntities)
@@ -498,6 +513,9 @@ public abstract class SharedRoleSystem : EntitySystem
     /// </summary>
     public bool MindHasRole(Entity<MindComponent> mind, EntityWhitelist whitelist)
     {
+        if (mind.Comp.MindRoleContainer == null)
+            return false;
+
         foreach (var roleEnt in mind.Comp.MindRoleContainer.ContainedEntities)
         {
             if (_whitelist.IsWhitelistPass(whitelist, roleEnt))
@@ -531,6 +549,9 @@ public abstract class SharedRoleSystem : EntitySystem
 
         var mind = Comp<MindComponent>(mindId);
 
+        if (mind.MindRoleContainer == null)
+            return result;
+
         foreach (var uid in mind.MindRoleContainer.ContainedEntities)
         {
             if (HasComp<T>(uid) && TryComp<MindRoleComponent>(uid, out var comp))
@@ -549,6 +570,9 @@ public abstract class SharedRoleSystem : EntitySystem
         var roleInfo = new List<RoleInfo>();
 
         if (!Resolve(mind.Owner, ref mind.Comp))
+            return roleInfo;
+
+        if (mind.Comp.MindRoleContainer == null)
             return roleInfo;
 
         foreach (var role in mind.Comp.MindRoleContainer.ContainedEntities)
@@ -634,6 +658,9 @@ public abstract class SharedRoleSystem : EntitySystem
     private (bool Antag, bool ExclusiveAntag) CheckAntagonistStatus(Entity<MindComponent?> mind)
     {
         if (!Resolve(mind.Owner, ref mind.Comp))
+            return (false, false);
+
+        if (mind.Comp.MindRoleContainer == null)
             return (false, false);
 
         var antagonist = false;

@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Robust.Client;
 using Robust.Client.Player;
+using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -18,6 +20,7 @@ namespace Content.Client.Lobby
     {
         [Dependency] private readonly IClientNetManager _netManager = default!;
         [Dependency] private readonly IBaseClient _baseClient = default!;
+        [Dependency] private readonly ILocalizationManager _loc = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
 
         public event Action? OnServerDataLoaded;
@@ -123,7 +126,66 @@ namespace Content.Client.Lobby
             Preferences = message.Preferences;
             Settings = message.Settings;
 
+            ApplyLanguageAwareInitialNameFixes(message.NewlyInitialized);
+
             OnServerDataLoaded?.Invoke();
+        }
+
+        private void ApplyLanguageAwareInitialNameFixes(bool repairScriptMismatch)
+        {
+            var culture = _loc.DefaultCulture;
+            var updatedCharacters = new Dictionary<int, HumanoidCharacterProfile>(Preferences.Characters);
+            var changed = new List<KeyValuePair<int, HumanoidCharacterProfile>>();
+
+            foreach (var (slot, profile) in Preferences.Characters)
+            {
+                var repairedName = profile.Name;
+                var hadBrokenDatasetId = HumanoidNameScriptHelper.ContainsUnresolvedDatasetId(repairedName);
+                if (hadBrokenDatasetId)
+                {
+                    repairedName = HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(repairedName);
+
+                    if (HumanoidNameScriptHelper.ContainsUnresolvedDatasetId(repairedName))
+                        repairedName = HumanoidCharacterProfile.GetName(profile.Species, profile.Gender);
+                }
+
+                var hasScriptMismatch = repairScriptMismatch &&
+                    (!HumanoidNameScriptHelper.MatchesPreferredScript(repairedName, culture) ||
+                     HumanoidNameScriptHelper.IsMixedScript(repairedName));
+
+                if (!hadBrokenDatasetId && !hasScriptMismatch)
+                    continue;
+
+                if (hasScriptMismatch)
+                    repairedName = HumanoidCharacterProfile.GetName(profile.Species, profile.Gender);
+
+                if (string.Equals(repairedName, profile.Name, StringComparison.Ordinal))
+                    continue;
+
+                var updatedProfile = profile.WithName(repairedName);
+                updatedCharacters[slot] = updatedProfile;
+                changed.Add(new KeyValuePair<int, HumanoidCharacterProfile>(slot, updatedProfile));
+            }
+
+            if (changed.Count == 0)
+                return;
+
+            Preferences = new PlayerPreferences(
+                updatedCharacters,
+                Preferences.SelectedCharacterIndex,
+                Preferences.AdminOOCColor,
+                Preferences.ConstructionFavorites);
+
+            foreach (var (slot, profile) in changed)
+            {
+                var msg = new MsgUpdateCharacter
+                {
+                    Profile = profile,
+                    Slot = slot
+                };
+
+                _netManager.ClientSendMessage(msg);
+            }
         }
     }
 }

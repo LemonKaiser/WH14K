@@ -3,11 +3,48 @@
   name: job-name-lieutenant
   description: job-description-lieutenant
   playTimeTracker: JobLieutenant
-  startingGear: SergeantGear
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: LieutenantGear
   icon: "JobIconLieutenant"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KOfficerMaleHuman
+          Female: WH40KOfficerFemaleHuman
+          Unsexed: WH40KOfficerMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: startingGear
+  id: LieutenantGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOfficer
+    shoes: ClothingShoesGenBoots
+    ears: ClothingHeadsetVoxBackpackImperium
+    belt: offbelt
+    neck: Gorjet
+    head: ClothingHeadOfficer
+    outerClothing: ClothingOuterArmorOfficer
+    id: LieutenantDogTag

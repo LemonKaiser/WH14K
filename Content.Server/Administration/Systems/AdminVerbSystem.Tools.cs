@@ -68,6 +68,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb bolt = new()
             {
+                TextLocId = bolts.BoltsDown ? "admin-verbs-unbolt" : "admin-verbs-bolt",
                 Text = Loc.GetString(bolts.BoltsDown ? "admin-verbs-unbolt" : "admin-verbs-bolt"),
                 Category = VerbCategory.Tricks,
                 Icon = bolts.BoltsDown
@@ -78,6 +79,9 @@ public sealed partial class AdminVerbSystem
                     _door.SetBoltsDown((args.Target, bolts), !bolts.BoltsDown);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = bolts.BoltsDown
+                    ? "admin-trick-unbolt-description"
+                    : "admin-trick-bolt-description",
                 Message = Loc.GetString(bolts.BoltsDown
                     ? "admin-trick-unbolt-description"
                     : "admin-trick-bolt-description"),
@@ -90,6 +94,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb emergencyAccess = new()
             {
+                TextLocId = airlockComp.EmergencyAccess ? "admin-verbs-emergency-access-off" : "admin-verbs-emergency-access-on",
                 Text = Loc.GetString(airlockComp.EmergencyAccess ? "admin-verbs-emergency-access-off" : "admin-verbs-emergency-access-on"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/emergency_access.png")),
@@ -98,6 +103,9 @@ public sealed partial class AdminVerbSystem
                     _airlockSystem.SetEmergencyAccess((args.Target, airlockComp), !airlockComp.EmergencyAccess);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = airlockComp.EmergencyAccess
+                    ? "admin-trick-emergency-access-off-description"
+                    : "admin-trick-emergency-access-on-description",
                 Message = Loc.GetString(airlockComp.EmergencyAccess
                     ? "admin-trick-emergency-access-off-description"
                     : "admin-trick-emergency-access-on-description"),
@@ -110,6 +118,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb rejuvenate = new()
             {
+                TextLocId = "admin-verbs-rejuvenate",
                 Text = Loc.GetString("admin-verbs-rejuvenate"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/rejuvenate.png")),
@@ -118,6 +127,7 @@ public sealed partial class AdminVerbSystem
                     _rejuvenate.PerformRejuvenate(args.Target);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-rejuvenate-description",
                 Message = Loc.GetString("admin-trick-rejuvenate-description"),
                 Priority = (int)TricksVerbPriorities.Rejuvenate,
             };
@@ -128,6 +138,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb makeIndestructible = new()
             {
+                TextLocId = "admin-verbs-make-indestructible",
                 Text = Loc.GetString("admin-verbs-make-indestructible"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/plus.svg.192dpi.png")),
@@ -136,6 +147,7 @@ public sealed partial class AdminVerbSystem
                     _sharedGodmodeSystem.EnableGodmode(args.Target);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-make-indestructible-description",
                 Message = Loc.GetString("admin-trick-make-indestructible-description"),
                 Priority = (int)TricksVerbPriorities.MakeIndestructible,
             };
@@ -145,6 +157,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb makeVulnerable = new()
             {
+                TextLocId = "admin-verbs-make-vulnerable",
                 Text = Loc.GetString("admin-verbs-make-vulnerable"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/plus.svg.192dpi.png")),
@@ -153,6 +166,7 @@ public sealed partial class AdminVerbSystem
                     _sharedGodmodeSystem.DisableGodmode(args.Target);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-make-vulnerable-description",
                 Message = Loc.GetString("admin-trick-make-vulnerable-description"),
                 Priority = (int)TricksVerbPriorities.MakeVulnerable,
             };
@@ -163,6 +177,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb refillBattery = new()
             {
+                TextLocId = "admin-verbs-refill-battery",
                 Text = Loc.GetString("admin-verbs-refill-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/fill_battery.png")),
@@ -171,6 +186,7 @@ public sealed partial class AdminVerbSystem
                     _batterySystem.SetCharge((args.Target, battery), battery.MaxCharge);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-refill-battery-description",
                 Message = Loc.GetString("admin-trick-refill-battery-description"),
                 Priority = (int)TricksVerbPriorities.RefillBattery,
             };
@@ -178,6 +194,7 @@ public sealed partial class AdminVerbSystem
 
             Verb drainBattery = new()
             {
+                TextLocId = "admin-verbs-drain-battery",
                 Text = Loc.GetString("admin-verbs-drain-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/drain_battery.png")),
@@ -186,6 +203,7 @@ public sealed partial class AdminVerbSystem
                     _batterySystem.SetCharge((args.Target, battery), 0);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-drain-battery-description",
                 Message = Loc.GetString("admin-trick-drain-battery-description"),
                 Priority = (int)TricksVerbPriorities.DrainBattery,
             };
@@ -193,6 +211,7 @@ public sealed partial class AdminVerbSystem
 
             Verb infiniteBattery = new()
             {
+                TextLocId = "admin-verbs-infinite-battery",
                 Text = Loc.GetString("admin-verbs-infinite-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/infinite_battery.png")),
@@ -205,6 +224,7 @@ public sealed partial class AdminVerbSystem
                     _batterySystem.RefreshChargeRate((args.Target, battery));
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-infinite-battery-object-description",
                 Message = Loc.GetString("admin-trick-infinite-battery-object-description"),
                 Priority = (int)TricksVerbPriorities.InfiniteBattery,
             };
@@ -215,6 +235,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb blockUnanchor = new()
             {
+                TextLocId = "admin-verbs-block-unanchoring",
                 Text = Loc.GetString("admin-verbs-block-unanchoring"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/anchor.svg.192dpi.png")),
@@ -223,6 +244,7 @@ public sealed partial class AdminVerbSystem
                     RemComp(args.Target, anchor);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-block-unanchoring-description",
                 Message = Loc.GetString("admin-trick-block-unanchoring-description"),
                 Priority = (int)TricksVerbPriorities.BlockUnanchoring,
             };
@@ -233,6 +255,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb refillInternalsO2 = new()
             {
+                TextLocId = "admin-verbs-refill-internals-oxygen",
                 Text = Loc.GetString("admin-verbs-refill-internals-oxygen"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/oxygen.rsi"), "icon"),
@@ -241,6 +264,7 @@ public sealed partial class AdminVerbSystem
                     RefillGasTank(args.Target, Gas.Oxygen, tank);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-oxygen-description",
                 Message = Loc.GetString("admin-trick-internals-refill-oxygen-description"),
                 Priority = (int)TricksVerbPriorities.RefillOxygen,
             };
@@ -248,6 +272,7 @@ public sealed partial class AdminVerbSystem
 
             Verb refillInternalsN2 = new()
             {
+                TextLocId = "admin-verbs-refill-internals-nitrogen",
                 Text = Loc.GetString("admin-verbs-refill-internals-nitrogen"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/red.rsi"), "icon"),
@@ -256,6 +281,7 @@ public sealed partial class AdminVerbSystem
                     RefillGasTank(args.Target, Gas.Nitrogen, tank);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-nitrogen-description",
                 Message = Loc.GetString("admin-trick-internals-refill-nitrogen-description"),
                 Priority = (int)TricksVerbPriorities.RefillNitrogen,
             };
@@ -263,6 +289,7 @@ public sealed partial class AdminVerbSystem
 
             Verb refillInternalsPlasma = new()
             {
+                TextLocId = "admin-verbs-refill-internals-plasma",
                 Text = Loc.GetString("admin-verbs-refill-internals-plasma"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/plasma.rsi"), "icon"),
@@ -271,6 +298,7 @@ public sealed partial class AdminVerbSystem
                     RefillGasTank(args.Target, Gas.Plasma, tank);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-plasma-description",
                 Message = Loc.GetString("admin-trick-internals-refill-plasma-description"),
                 Priority = (int)TricksVerbPriorities.RefillPlasma,
             };
@@ -281,11 +309,13 @@ public sealed partial class AdminVerbSystem
         {
             Verb refillInternalsO2 = new()
             {
+                TextLocId = "admin-verbs-refill-internals-oxygen",
                 Text = Loc.GetString("admin-verbs-refill-internals-oxygen"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/oxygen.rsi"), "icon"),
                 Act = () => RefillEquippedTanks(args.User, Gas.Oxygen),
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-oxygen-description",
                 Message = Loc.GetString("admin-trick-internals-refill-oxygen-description"),
                 Priority = (int)TricksVerbPriorities.RefillOxygen,
             };
@@ -293,11 +323,13 @@ public sealed partial class AdminVerbSystem
 
             Verb refillInternalsN2 = new()
             {
+                TextLocId = "admin-verbs-refill-internals-nitrogen",
                 Text = Loc.GetString("admin-verbs-refill-internals-nitrogen"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/red.rsi"), "icon"),
                 Act = () => RefillEquippedTanks(args.User, Gas.Nitrogen),
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-nitrogen-description",
                 Message = Loc.GetString("admin-trick-internals-refill-nitrogen-description"),
                 Priority = (int)TricksVerbPriorities.RefillNitrogen,
             };
@@ -305,11 +337,13 @@ public sealed partial class AdminVerbSystem
 
             Verb refillInternalsPlasma = new()
             {
+                TextLocId = "admin-verbs-refill-internals-plasma",
                 Text = Loc.GetString("admin-verbs-refill-internals-plasma"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Tanks/plasma.rsi"), "icon"),
                 Act = () => RefillEquippedTanks(args.User, Gas.Plasma),
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-internals-refill-plasma-description",
                 Message = Loc.GetString("admin-trick-internals-refill-plasma-description"),
                 Priority = (int)TricksVerbPriorities.RefillPlasma,
             };
@@ -318,6 +352,7 @@ public sealed partial class AdminVerbSystem
 
         Verb sendToTestArena = new()
         {
+            TextLocId = "admin-verbs-send-to-test-arena",
             Text = Loc.GetString("admin-verbs-send-to-test-arena"),
             Category = VerbCategory.Tricks,
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/eject.svg.192dpi.png")),
@@ -328,6 +363,7 @@ public sealed partial class AdminVerbSystem
                 _transformSystem.SetCoordinates(args.Target, new EntityCoordinates(gridUid ?? mapUid, Vector2.One));
             },
             Impact = LogImpact.Medium,
+            MessageLocId = "admin-trick-send-to-test-arena-description",
             Message = Loc.GetString("admin-trick-send-to-test-arena-description"),
             Priority = (int)TricksVerbPriorities.SendToTestArena,
         };
@@ -339,6 +375,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb grantAllAccess = new()
             {
+                TextLocId = "admin-verbs-grant-all-access",
                 Text = Loc.GetString("admin-verbs-grant-all-access"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Misc/id_cards.rsi"), "centcom"),
@@ -347,6 +384,7 @@ public sealed partial class AdminVerbSystem
                     GiveAllAccess(activeId.Value);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-grant-all-access-description",
                 Message = Loc.GetString("admin-trick-grant-all-access-description"),
                 Priority = (int)TricksVerbPriorities.GrantAllAccess,
             };
@@ -354,6 +392,7 @@ public sealed partial class AdminVerbSystem
 
             Verb revokeAllAccess = new()
             {
+                TextLocId = "admin-verbs-revoke-all-access",
                 Text = Loc.GetString("admin-verbs-revoke-all-access"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Misc/id_cards.rsi"), "default"),
@@ -362,6 +401,7 @@ public sealed partial class AdminVerbSystem
                     RevokeAllAccess(activeId.Value);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-revoke-all-access-description",
                 Message = Loc.GetString("admin-trick-revoke-all-access-description"),
                 Priority = (int)TricksVerbPriorities.RevokeAllAccess,
             };
@@ -372,6 +412,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb grantAllAccess = new()
             {
+                TextLocId = "admin-verbs-grant-all-access",
                 Text = Loc.GetString("admin-verbs-grant-all-access"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Misc/id_cards.rsi"), "centcom"),
@@ -380,6 +421,7 @@ public sealed partial class AdminVerbSystem
                     GiveAllAccess(args.Target);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-grant-all-access-description",
                 Message = Loc.GetString("admin-trick-grant-all-access-description"),
                 Priority = (int)TricksVerbPriorities.GrantAllAccess,
             };
@@ -387,6 +429,7 @@ public sealed partial class AdminVerbSystem
 
             Verb revokeAllAccess = new()
             {
+                TextLocId = "admin-verbs-revoke-all-access",
                 Text = Loc.GetString("admin-verbs-revoke-all-access"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Misc/id_cards.rsi"), "default"),
@@ -395,6 +438,7 @@ public sealed partial class AdminVerbSystem
                     RevokeAllAccess(args.Target);
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-revoke-all-access-description",
                 Message = Loc.GetString("admin-trick-revoke-all-access-description"),
                 Priority = (int)TricksVerbPriorities.RevokeAllAccess,
             };
@@ -405,6 +449,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb adjustStack = new()
             {
+                TextLocId = "admin-verbs-adjust-stack",
                 Text = Loc.GetString("admin-verbs-adjust-stack"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/adjust-stack.png")),
@@ -417,6 +462,7 @@ public sealed partial class AdminVerbSystem
                     });
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-adjust-stack-description",
                 Message = Loc.GetString("admin-trick-adjust-stack-description"),
                 Priority = (int) TricksVerbPriorities.AdjustStack,
             };
@@ -424,6 +470,7 @@ public sealed partial class AdminVerbSystem
 
             Verb fillStack = new()
             {
+                TextLocId = "admin-verbs-fill-stack",
                 Text = Loc.GetString("admin-verbs-fill-stack"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/fill-stack.png")),
@@ -432,6 +479,7 @@ public sealed partial class AdminVerbSystem
                     _stackSystem.SetCount((args.Target, stack), _stackSystem.GetMaxCount(stack));
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-fill-stack-description",
                 Message = Loc.GetString("admin-trick-fill-stack-description"),
                 Priority = (int) TricksVerbPriorities.FillStack,
             };
@@ -440,6 +488,7 @@ public sealed partial class AdminVerbSystem
 
         Verb rename = new()
         {
+            TextLocId = "admin-verbs-rename",
             Text = Loc.GetString("admin-verbs-rename"),
             Category = VerbCategory.Tricks,
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/rename.png")),
@@ -451,6 +500,7 @@ public sealed partial class AdminVerbSystem
                 });
             },
             Impact = LogImpact.Medium,
+            MessageLocId = "admin-trick-rename-description",
             Message = Loc.GetString("admin-trick-rename-description"),
             Priority = (int) TricksVerbPriorities.Rename,
         };
@@ -458,6 +508,7 @@ public sealed partial class AdminVerbSystem
 
         Verb redescribe = new()
         {
+            TextLocId = "admin-verbs-redescribe",
             Text = Loc.GetString("admin-verbs-redescribe"),
             Category = VerbCategory.Tricks,
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/redescribe.png")),
@@ -469,6 +520,7 @@ public sealed partial class AdminVerbSystem
                 });
             },
             Impact = LogImpact.Medium,
+            MessageLocId = "admin-trick-redescribe-description",
             Message = Loc.GetString("admin-trick-redescribe-description"),
             Priority = (int) TricksVerbPriorities.Redescribe,
         };
@@ -476,6 +528,7 @@ public sealed partial class AdminVerbSystem
 
         Verb renameAndRedescribe = new()
         {
+            TextLocId = "admin-verbs-rename-and-redescribe",
             Text = Loc.GetString("admin-verbs-rename-and-redescribe"),
             Category = VerbCategory.Tricks,
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/rename_and_redescribe.png")),
@@ -490,6 +543,7 @@ public sealed partial class AdminVerbSystem
                     });
             },
             Impact = LogImpact.Medium,
+            MessageLocId = "admin-trick-rename-and-redescribe-description",
             Message = Loc.GetString("admin-trick-rename-and-redescribe-description"),
             Priority = (int) TricksVerbPriorities.RenameAndRedescribe,
         };
@@ -501,6 +555,7 @@ public sealed partial class AdminVerbSystem
             {
                 Verb barJobSlots = new()
                 {
+                    TextLocId = "admin-verbs-bar-job-slots",
                     Text = Loc.GetString("admin-verbs-bar-job-slots"),
                     Category = VerbCategory.Tricks,
                     Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/bar_jobslots.png")),
@@ -512,6 +567,7 @@ public sealed partial class AdminVerbSystem
                         }
                     },
                     Impact = LogImpact.Extreme,
+                    MessageLocId = "admin-trick-bar-job-slots-description",
                     Message = Loc.GetString("admin-trick-bar-job-slots-description"),
                     Priority = (int) TricksVerbPriorities.BarJobSlots,
                 };
@@ -520,6 +576,7 @@ public sealed partial class AdminVerbSystem
 
             Verb locateCargoShuttle = new()
             {
+                TextLocId = "admin-verbs-locate-cargo-shuttle",
                 Text = Loc.GetString("admin-verbs-locate-cargo-shuttle"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Clothing/Head/Soft/cargosoft.rsi"), "icon"),
@@ -533,6 +590,7 @@ public sealed partial class AdminVerbSystem
                     _transformSystem.SetCoordinates(args.User, new EntityCoordinates(shuttle.Value, Vector2.Zero));
                 },
                 Impact = LogImpact.Low,
+                MessageLocId = "admin-trick-locate-cargo-shuttle-description",
                 Message = Loc.GetString("admin-trick-locate-cargo-shuttle-description"),
                 Priority = (int) TricksVerbPriorities.LocateCargoShuttle,
             };
@@ -543,6 +601,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb refillBattery = new()
             {
+                TextLocId = "admin-verbs-refill-battery",
                 Text = Loc.GetString("admin-verbs-refill-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/fill_battery.png")),
@@ -557,6 +616,7 @@ public sealed partial class AdminVerbSystem
                     }
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-refill-battery-description",
                 Message = Loc.GetString("admin-trick-refill-battery-description"),
                 Priority = (int) TricksVerbPriorities.RefillBattery,
             };
@@ -564,6 +624,7 @@ public sealed partial class AdminVerbSystem
 
             Verb drainBattery = new()
             {
+                TextLocId = "admin-verbs-drain-battery",
                 Text = Loc.GetString("admin-verbs-drain-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/drain_battery.png")),
@@ -578,6 +639,7 @@ public sealed partial class AdminVerbSystem
                     }
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-drain-battery-description",
                 Message = Loc.GetString("admin-trick-drain-battery-description"),
                 Priority = (int) TricksVerbPriorities.DrainBattery,
             };
@@ -585,6 +647,7 @@ public sealed partial class AdminVerbSystem
 
             Verb infiniteBattery = new()
             {
+                TextLocId = "admin-verbs-infinite-battery",
                 Text = Loc.GetString("admin-verbs-infinite-battery"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/infinite_battery.png")),
@@ -604,6 +667,7 @@ public sealed partial class AdminVerbSystem
                     }
                 },
                 Impact = LogImpact.Extreme,
+                MessageLocId = "admin-trick-infinite-battery-description",
                 Message = Loc.GetString("admin-trick-infinite-battery-description"),
                 Priority = (int) TricksVerbPriorities.InfiniteBattery,
             };
@@ -614,6 +678,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb haltMovement = new()
             {
+                TextLocId = "admin-verbs-halt-movement",
                 Text = Loc.GetString("admin-verbs-halt-movement"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/halt.png")),
@@ -623,6 +688,7 @@ public sealed partial class AdminVerbSystem
                     _physics.SetAngularVelocity(args.Target, 0f, body: physics);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-halt-movement-description",
                 Message = Loc.GetString("admin-trick-halt-movement-description"),
                 Priority = (int) TricksVerbPriorities.HaltMovement,
             };
@@ -637,6 +703,7 @@ public sealed partial class AdminVerbSystem
                 {
                     Verb unpauseMap = new()
                     {
+                        TextLocId = "admin-verbs-unpause-map",
                         Text = Loc.GetString("admin-verbs-unpause-map"),
                         Category = VerbCategory.Tricks,
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/play.png")),
@@ -645,6 +712,7 @@ public sealed partial class AdminVerbSystem
                             _map.SetPaused(map.MapId, false);
                         },
                         Impact = LogImpact.Extreme,
+                        MessageLocId = "admin-trick-unpause-map-description",
                         Message = Loc.GetString("admin-trick-unpause-map-description"),
                         Priority = (int) TricksVerbPriorities.Unpause,
                     };
@@ -654,6 +722,7 @@ public sealed partial class AdminVerbSystem
                 {
                     Verb pauseMap = new()
                     {
+                        TextLocId = "admin-verbs-pause-map",
                         Text = Loc.GetString("admin-verbs-pause-map"),
                         Category = VerbCategory.Tricks,
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/pause.png")),
@@ -662,6 +731,7 @@ public sealed partial class AdminVerbSystem
                             _map.SetPaused(map.MapId, true);
                         },
                         Impact = LogImpact.Extreme,
+                        MessageLocId = "admin-trick-pause-map-description",
                         Message = Loc.GetString("admin-trick-pause-map-description"),
                         Priority = (int) TricksVerbPriorities.Pause,
                     };
@@ -674,6 +744,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb snapJoints = new()
             {
+                TextLocId = "admin-verbs-snap-joints",
                 Text = Loc.GetString("admin-verbs-snap-joints"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/AdminActions/snap_joints.png")),
@@ -682,6 +753,7 @@ public sealed partial class AdminVerbSystem
                     _jointSystem.ClearJoints(args.Target, joints);
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-snap-joints-description",
                 Message = Loc.GetString("admin-trick-snap-joints-description"),
                 Priority = (int) TricksVerbPriorities.SnapJoints,
             };
@@ -692,6 +764,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb minigunFire = new()
             {
+                TextLocId = "admin-verbs-make-minigun",
                 Text = Loc.GetString("admin-verbs-make-minigun"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Weapons/Guns/HMGs/minigun.rsi"), "icon"),
@@ -701,6 +774,7 @@ public sealed partial class AdminVerbSystem
                     _gun.RefreshModifiers((args.Target, gun));
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-minigun-fire-description",
                 Message = Loc.GetString("admin-trick-minigun-fire-description"),
                 Priority = (int) TricksVerbPriorities.MakeMinigun,
             };
@@ -711,6 +785,7 @@ public sealed partial class AdminVerbSystem
         {
             Verb setCapacity = new()
             {
+                TextLocId = "admin-verbs-set-bullet-amount",
                 Text = Loc.GetString("admin-verbs-set-bullet-amount"),
                 Category = VerbCategory.Tricks,
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Fun/caps.rsi"), "mag-6"),
@@ -726,6 +801,7 @@ public sealed partial class AdminVerbSystem
                     });
                 },
                 Impact = LogImpact.Medium,
+                MessageLocId = "admin-trick-set-bullet-amount-description",
                 Message = Loc.GetString("admin-trick-set-bullet-amount-description"),
                 Priority = (int) TricksVerbPriorities.SetBulletAmount,
             };

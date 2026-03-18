@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._WH40K.Combat;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Components;
@@ -68,6 +69,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private   readonly DamageExamineSystem _damageExamine = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
+    private EntityQuery<WH40KDirectionalBarricadeComponent> _directionalBarricadeQuery;
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -82,6 +84,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        _directionalBarricadeQuery = GetEntityQuery<WH40KDirectionalBarricadeComponent>();
 
         SubscribeLocalEvent<MeleeWeaponComponent, HandSelectedEvent>(OnMeleeSelected);
         SubscribeLocalEvent<MeleeWeaponComponent, ShotAttemptedEvent>(OnMeleeShotAttempted);
@@ -100,14 +103,60 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
 #if DEBUG
         SubscribeLocalEvent<MeleeWeaponComponent, MapInitEvent>(OnMapInit);
+#endif
     }
 
+    protected SharedInteractionSystem.Ignored? GetDirectionalMeleePredicate(
+        EntityUid attacker,
+        EntityUid target,
+        EntityCoordinates targetCoordinates)
+    {
+        if (!TryComp(attacker, out TransformComponent? attackerXform))
+            return null;
+
+        var attackerMap = TransformSystem.GetMapCoordinates((attacker, attackerXform));
+        var targetMap = TransformSystem.ToMapCoordinates(targetCoordinates);
+        if (attackerMap.MapId != targetMap.MapId)
+            return null;
+
+        var attackDirection = targetMap.Position - attackerMap.Position;
+        if (attackDirection.LengthSquared() <= 0.0001f)
+            return null;
+
+        var attackerPos = attackerMap.Position;
+        return obstacle => obstacle != target && ShouldAllowMeleeDirectionalPass(obstacle, attackerPos, attackDirection);
+    }
+
+    private bool ShouldAllowMeleeDirectionalPass(EntityUid obstacle, Vector2 attackerPos, Vector2 attackDirection)
+    {
+        if (!_directionalBarricadeQuery.TryGetComponent(obstacle, out var barricadeComp))
+            return false;
+
+        var passDirection = TransformSystem.GetWorldRotation(obstacle).ToWorldVec();
+        if (barricadeComp.FlipPassSide)
+            passDirection = -passDirection;
+
+        var barricadePos = TransformSystem.GetWorldPosition(obstacle);
+        var originDirection = attackerPos - barricadePos;
+
+        // Melee pass is deterministic; we don't apply blocked-side random pass chance here.
+        return WH40KDirectionalBarricadeHelpers.ShouldPassFromOrigin(
+            passDirection,
+            attackDirection,
+            originDirection,
+            barricadeComp.PassSideMaxDistance,
+            0f,
+            0f,
+            _random);
+    }
+
+#if DEBUG
     private void OnMapInit(EntityUid uid, MeleeWeaponComponent component, MapInitEvent args)
     {
         if (component.NextAttack > Timing.CurTime)
             Log.Warning($"Initializing a map that contains an entity that is on cooldown. Entity: {ToPrettyString(uid)}");
-#endif
     }
+#endif
 
     private void OnMeleeShotAttempted(EntityUid uid, MeleeWeaponComponent comp, ref ShotAttemptedEvent args)
     {
@@ -757,9 +806,10 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         for (var i = 0; i < increments; i++)
         {
             var castAngle = new Angle(baseAngle + increment * i);
+            var castDirection = castAngle.ToWorldVec();
             var res = _physics.IntersectRay(mapId,
                 new CollisionRay(position,
-                    castAngle.ToWorldVec(),
+                    castDirection,
                     AttackMask),
                 range,
                 ignore,
@@ -768,11 +818,28 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
             if (res.Count != 0)
             {
-                // If there's exact distance overlap, we simply have to deal with all overlapping objects to avoid selecting randomly.
-                var resChecked = res.Where(x => x.Distance.Equals(res[0].Distance));
+                RayCastResults? firstHit = null;
+                foreach (var hit in res)
+                {
+                    if (ShouldAllowMeleeDirectionalPass(hit.HitEntity, position, castDirection))
+                        continue;
+
+                    firstHit = hit;
+                    break;
+                }
+
+                if (firstHit == null)
+                    continue;
+
+                // If there's exact distance overlap, deal with all matching objects to avoid random selection.
+                var resChecked = res.Where(x =>
+                    x.Distance.Equals(firstHit.Value.Distance) &&
+                    !ShouldAllowMeleeDirectionalPass(x.HitEntity, position, castDirection));
+
                 foreach (var r in resChecked)
                 {
-                    if (Interaction.InRangeUnobstructed(ignore, r.HitEntity, range + 0.1f, overlapCheck: false))
+                    var predicate = GetDirectionalMeleePredicate(ignore, r.HitEntity, Transform(r.HitEntity).Coordinates);
+                    if (Interaction.InRangeUnobstructed(ignore, r.HitEntity, range + 0.1f, predicate: predicate, overlapCheck: false))
                         resSet.Add(r.HitEntity);
                 }
             }

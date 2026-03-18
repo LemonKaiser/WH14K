@@ -90,6 +90,8 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
         SubscribeLocalEvent<ShuttleComponent, FTLCompletedEvent>(OnFTLCompleted);
 
         SubscribeLocalEvent<GridInitializeEvent>(OnGridInit);
+        SubscribeLocalEvent<RoofComponent, ComponentStartup>(OnRoofStartup);
+        SubscribeLocalEvent<RoofComponent, ComponentShutdown>(OnRoofShutdown);
     }
 
     public override void Update(float frameTime)
@@ -110,6 +112,22 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
             RemComp<ImplicitRoofComponent>(ev.EntityUid);
         else
             EnsureComp<ImplicitRoofComponent>(ev.EntityUid);
+    }
+
+    private void OnRoofStartup(Entity<RoofComponent> ent, ref ComponentStartup args)
+    {
+        if (!HasComp<ShuttleComponent>(ent) || HasComp<MapComponent>(ent))
+            return;
+
+        RemComp<ImplicitRoofComponent>(ent.Owner);
+    }
+
+    private void OnRoofShutdown(Entity<RoofComponent> ent, ref ComponentShutdown args)
+    {
+        if (TerminatingOrDeleted(ent) || !HasComp<ShuttleComponent>(ent) || HasComp<MapComponent>(ent))
+            return;
+
+        EnsureComp<ImplicitRoofComponent>(ent.Owner);
     }
 
     private void OnShuttleStartup(EntityUid uid, ShuttleComponent component, ComponentStartup args)

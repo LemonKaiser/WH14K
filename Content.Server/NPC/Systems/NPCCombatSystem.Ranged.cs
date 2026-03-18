@@ -1,6 +1,11 @@
+using System.Numerics;
+using Content.Server._WH40K.Objectives.Components;
 using Content.Server.NPC.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Interaction;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.NPC.Components;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -19,9 +24,14 @@ public sealed partial class NPCCombatSystem
     private EntityQuery<RechargeBasicEntityAmmoComponent> _rechargeQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;
     private EntityQuery<TransformComponent> _xformQuery;
+    private EntityQuery<NpcFactionMemberComponent> _factionQuery;
+    private EntityQuery<MobStateComponent> _mobStateQuery;
 
     // TODO: Don't predict for hitscan
     private const float ShootSpeed = 20f;
+    private const float FriendlyFireCorridorRadius = 0.75f;
+    private const float FriendlyFireCheckPadding = 0.35f;
+    private const float FriendlyFireSidestepDistance = 1.4f;
 
     /// <summary>
     /// Cooldown on raycasting to check LOS.
@@ -35,6 +45,8 @@ public sealed partial class NPCCombatSystem
         _rechargeQuery = GetEntityQuery<RechargeBasicEntityAmmoComponent>();
         _steeringQuery = GetEntityQuery<NPCSteeringComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();
+        _factionQuery = GetEntityQuery<NpcFactionMemberComponent>();
+        _mobStateQuery = GetEntityQuery<MobStateComponent>();
 
         SubscribeLocalEvent<NPCRangedCombatComponent, ComponentStartup>(OnRangedStartup);
         SubscribeLocalEvent<NPCRangedCombatComponent, ComponentShutdown>(OnRangedShutdown);
@@ -62,18 +74,36 @@ public sealed partial class NPCCombatSystem
 
     private void UpdateRanged(float frameTime)
     {
+        using var benchScope = _bench.Measure("npc.combat.ranged.update");
         var query = EntityQueryEnumerator<NPCRangedCombatComponent, TransformComponent>();
+        var processed = 0;
 
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
+            processed++;
+            using var entityScope = _bench.Measure("npc.combat.ranged.entity");
+
             if (comp.Status == CombatStatus.Unspecified)
+            {
+                _bench.RecordCount("npc.combat.ranged.unspecified_skip", 1);
                 continue;
+            }
 
             if (_steeringQuery.TryGetComponent(uid, out var steering) && steering.Status == SteeringStatus.NoPath)
             {
-                comp.Status = CombatStatus.TargetUnreachable;
-                comp.ShootAccumulator = 0f;
-                continue;
+                var objectiveOverride =
+                    TryComp(comp.Target, out WH40KObjectiveComponent? objective) &&
+                    objective is { Destroyed: false, Destroying: false };
+
+                if (!objectiveOverride)
+                {
+                    comp.Status = CombatStatus.TargetUnreachable;
+                    comp.ShootAccumulator = 0f;
+                    _bench.RecordCount("npc.combat.ranged.target_unreachable", 1);
+                    continue;
+                }
+
+                _bench.RecordCount("npc.combat.ranged.nopath_objective_override", 1);
             }
 
             if (!_xformQuery.TryGetComponent(comp.Target, out var targetXform) ||
@@ -81,6 +111,7 @@ public sealed partial class NPCCombatSystem
             {
                 comp.Status = CombatStatus.TargetUnreachable;
                 comp.ShootAccumulator = 0f;
+                _bench.RecordCount("npc.combat.ranged.target_invalid", 1);
                 continue;
             }
 
@@ -88,6 +119,7 @@ public sealed partial class NPCCombatSystem
             {
                 comp.Status = CombatStatus.TargetUnreachable;
                 comp.ShootAccumulator = 0f;
+                _bench.RecordCount("npc.combat.ranged.target_wrong_map", 1);
                 continue;
             }
 
@@ -100,6 +132,7 @@ public sealed partial class NPCCombatSystem
             {
                 comp.Status = CombatStatus.NoWeapon;
                 comp.ShootAccumulator = 0f;
+                _bench.RecordCount("npc.combat.ranged.no_weapon", 1);
                 continue;
             }
 
@@ -111,11 +144,13 @@ public sealed partial class NPCCombatSystem
                 // Recharging then?
                 if (_rechargeQuery.HasComponent(gun))
                 {
+                    _bench.RecordCount("npc.combat.ranged.recharging", 1);
                     continue;
                 }
 
                 comp.Status = CombatStatus.Unspecified;
                 comp.ShootAccumulator = 0f;
+                _bench.RecordCount("npc.combat.ranged.no_ammo", 1);
                 continue;
             }
 
@@ -132,6 +167,7 @@ public sealed partial class NPCCombatSystem
             // Ideally we'd have 2 steps, 1. to go over the normal details for shooting and then 2. to handle beep / rotate / shoot
             if (comp.LOSAccumulator < 0f)
             {
+                using var losScope = _bench.Measure("npc.combat.ranged.los_check");
                 comp.LOSAccumulator += UnoccludedCooldown;
 
                 // For consistency with NPC steering.
@@ -143,6 +179,7 @@ public sealed partial class NPCCombatSystem
             {
                 comp.ShootAccumulator = 0f;
                 comp.Status = CombatStatus.NotInSight;
+                _bench.RecordCount("npc.combat.ranged.not_in_sight", 1);
 
                 if (TryComp(uid, out steering))
                 {
@@ -157,6 +194,11 @@ public sealed partial class NPCCombatSystem
                 _audio.PlayPvs(comp.SoundTargetInLOS, uid);
             }
 
+            if (!oldInLos)
+            {
+                _waveComms.TryEnemySpotted(uid, comp.Target);
+            }
+
             comp.ShootAccumulator += frameTime;
 
             if (comp.ShootAccumulator < comp.ShootDelay)
@@ -167,12 +209,27 @@ public sealed partial class NPCCombatSystem
             var mapVelocity = targetBody.LinearVelocity;
             var targetSpot = targetPos + mapVelocity * distance / ShootSpeed;
 
+            if (IsFriendlyInLineOfFire(uid, comp.Target, xform.MapID, worldPos, targetSpot))
+            {
+                comp.Status = CombatStatus.NotInSight;
+                _bench.RecordCount("npc.combat.ranged.friendly_fire_blocked", 1);
+
+                if (TryComp(uid, out steering))
+                {
+                    steering.ForceMove = true;
+                    TryRegisterFriendlyFireSidestep(uid, xform, worldPos, targetSpot);
+                }
+
+                continue;
+            }
+
             // If we have a max rotation speed then do that.
             var goalRotation = (targetSpot - worldPos).ToWorldAngle();
             var rotationSpeed = comp.RotationSpeed;
 
             if (!_rotate.TryRotateTo(uid, goalRotation, frameTime, comp.AccuracyThreshold, rotationSpeed?.Theta ?? double.MaxValue, xform))
             {
+                _bench.RecordCount("npc.combat.ranged.rotate_wait", 1);
                 continue;
             }
 
@@ -202,10 +259,114 @@ public sealed partial class NPCCombatSystem
 
             if (gun.Comp.NextFire > _timing.CurTime)
             {
-                return;
+                _bench.RecordCount("npc.combat.ranged.cooldown_blocked", 1);
+                continue;
             }
 
-            _gun.AttemptShoot(uid, gun, targetCordinates, comp.Target);
+            _bench.RecordCount("npc.combat.ranged.shoot_attempt", 1);
+            var shotSucceeded = _gun.AttemptShoot(uid, gun, targetCordinates, comp.Target);
+            if (shotSucceeded)
+            {
+                _bench.RecordCount("npc.combat.ranged.shoot_performed", 1);
+                _waveComms.TryEngagingEnemy(uid, comp.Target);
+            }
+            else
+            {
+                _bench.RecordCount("npc.combat.ranged.shoot_failed", 1);
+            }
         }
+
+        _bench.RecordCount("npc.combat.ranged.entities", processed);
+    }
+
+    private bool IsFriendlyInLineOfFire(EntityUid shooter, EntityUid target, MapId mapId, Vector2 shotStart, Vector2 shotEnd)
+    {
+        if (!_factionQuery.TryGetComponent(shooter, out var shooterFaction))
+            return false;
+
+        var shotVector = shotEnd - shotStart;
+        var shotLength = shotVector.Length();
+        if (shotLength <= 0.05f)
+            return false;
+
+        var direction = shotVector / shotLength;
+        var scanRange = shotLength + FriendlyFireCheckPadding;
+        var mapCoords = new MapCoordinates(shotStart, mapId);
+
+        foreach (var candidate in _lookup.GetEntitiesInRange<NpcFactionMemberComponent>(mapCoords, scanRange))
+        {
+            var allyUid = candidate.Owner;
+            if (allyUid == shooter || allyUid == target || TerminatingOrDeleted(allyUid))
+                continue;
+
+            var allyFaction = (NpcFactionMemberComponent?) candidate.Comp;
+            var shooterFriendlyToAlly = _npcFaction.IsEntityFriendly((shooter, shooterFaction), (allyUid, allyFaction));
+            var allyFriendlyToShooter = _npcFaction.IsEntityFriendly((allyUid, allyFaction), (shooter, shooterFaction));
+            if (!shooterFriendlyToAlly && !allyFriendlyToShooter)
+                continue;
+
+            if (!_xformQuery.TryGetComponent(allyUid, out var allyXform) || allyXform.MapID != mapId)
+                continue;
+
+            if (_mobStateQuery.TryGetComponent(allyUid, out var allyState) &&
+                allyState.CurrentState == MobState.Dead)
+            {
+                continue;
+            }
+
+            var allyPosition = _transform.GetWorldPosition(allyXform);
+            if (IsPointInsideFireCorridor(shotStart, direction, shotLength, allyPosition, FriendlyFireCorridorRadius))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void TryRegisterFriendlyFireSidestep(EntityUid uid, TransformComponent xform, Vector2 shotStart, Vector2 shotEnd)
+    {
+        var shotVector = shotEnd - shotStart;
+        var shotLength = shotVector.Length();
+        if (shotLength <= 0.05f)
+            return;
+
+        var direction = shotVector / shotLength;
+        var perpendicular = new Vector2(-direction.Y, direction.X);
+        var side = (uid.GetHashCode() & 1) == 0 ? 1f : -1f;
+        var sideStepWorld = shotStart + perpendicular * (FriendlyFireSidestepDistance * side);
+
+        EntityCoordinates sideStepTarget;
+        if (_mapManager.TryFindGridAt(xform.MapID, sideStepWorld, out var gridUid, out var mapGrid))
+        {
+            sideStepTarget = new EntityCoordinates(gridUid, _map.WorldToLocal(gridUid, mapGrid, sideStepWorld));
+        }
+        else if (xform.MapUid is { } mapUid)
+        {
+            sideStepTarget = new EntityCoordinates(mapUid, sideStepWorld);
+        }
+        else
+        {
+            return;
+        }
+
+        _steering.TryRegister(uid, sideStepTarget);
+        _bench.RecordCount("npc.combat.ranged.friendly_fire_reposition", 1);
+    }
+
+    private static bool IsPointInsideFireCorridor(
+        Vector2 shotStart,
+        Vector2 direction,
+        float shotLength,
+        Vector2 point,
+        float corridorRadius)
+    {
+        var relative = point - shotStart;
+        var forward = Vector2.Dot(relative, direction);
+
+        if (forward <= 0.05f || forward >= shotLength - 0.05f)
+            return false;
+
+        var closestPoint = shotStart + direction * forward;
+        var lateralSq = (point - closestPoint).LengthSquared();
+        return lateralSq <= corridorRadius * corridorRadius;
     }
 }

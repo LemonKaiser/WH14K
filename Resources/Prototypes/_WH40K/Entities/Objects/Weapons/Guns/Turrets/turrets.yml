@@ -1,0 +1,460 @@
+- type: entity
+  id: WH40KWeaponTurretBallisticBase
+  abstract: true
+  parent: BaseWeaponBallisticTurret
+  name: bolter field sentry turret
+  description: A deployable frontline sentry built around a bolter-pattern weapon package.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    drawdepth: Mobs
+    layers:
+    - state: defense_base_off
+      renderingStrategy: NoRotation
+    - state: normal_uac_sentry_handheld
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: normal_uac_sentry_on
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: defense_base
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: normal_uac_sentry_handheld
+  - type: Appearance
+  - type: AnimationPlayer
+  - type: HTN
+    enabled: false
+    rootTask:
+      task: WH40KEnergyTurretCompound
+    blackboard:
+      RotateSpeed: !type:Single
+        3.141
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+  - type: DeployableTurret
+    deployedFixture: null
+    deploymentLength: 0.4
+    retractionLength: 0.4
+    deployedState: normal_uac_sentry
+    retractedState: normal_uac_sentry_handheld
+    deployingState: normal_uac_sentry
+    retractingState: normal_uac_sentry_handheld
+  - type: Gun
+    fireRate: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_1.wav
+  - type: BallisticAmmoProvider
+    proto: CartridgeRifle
+    capacity: 120
+    whitelist:
+      tags:
+      - CartridgeRifle
+  - type: WH40KTurretProfile
+    detectionRange: 14
+    fireRange: 14
+    supportedAmmo: CartridgeRifle, MagazineBoxRifle
+  - type: TurretTargetSettings
+    exemptAccessLevels:
+    - Borg
+    - BasicSilicon
+  - type: WH40KTurretFactionLock
+
+- type: entity
+  id: WH40KWeaponTurretImperium
+  parent: WH40KWeaponTurretBallisticBase
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    drawdepth: Mobs
+    layers:
+    - state: base
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    state: base
+  - type: DeployableTurret
+    deployedState: base
+    retractedState: base
+    deployingState: base
+    retractingState: base
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+
+- type: entity
+  id: WH40KWeaponTurretHeretics
+  parent: WH40KWeaponTurretBallisticBase
+  suffix: WH40K, Heretics
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    drawdepth: Mobs
+    layers:
+    - state: base
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    state: base
+  - type: DeployableTurret
+    deployedState: base
+    retractedState: base
+    deployingState: base
+    retractingState: base
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+
+- type: entity
+  id: WH40KWeaponTurretLaserBase
+  abstract: true
+  parent: BaseWeaponTurret
+  name: multilaser field sentry turret
+  description: A deployable frontline sentry fitted with a multilaser package. Uses lasgun power cells.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    drawdepth: Mobs
+    layers:
+    - state: defense_base_off
+      renderingStrategy: NoRotation
+    - state: normal_uac_sentry_handheld
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: normal_uac_sentry_on
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: defense_base
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: normal_uac_sentry_handheld
+  - type: Appearance
+  - type: AnimationPlayer
+  - type: HTN
+    enabled: false
+    rootTask:
+      task: WH40KEnergyTurretCompound
+    blackboard:
+      RotateSpeed: !type:Single
+        3.141
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+  - type: DeployableTurret
+    deployedFixture: null
+    deploymentLength: 0.4
+    retractionLength: 0.4
+    deployedState: normal_uac_sentry
+    retractedState: normal_uac_sentry_handheld
+    deployingState: normal_uac_sentry
+    retractingState: normal_uac_sentry_handheld
+  - type: Gun
+    fireRate: 2
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
+  - type: WH40KGunPrediction
+  - type: MagazineAmmoProvider
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: LasgunPowerCell
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        whitelist:
+          tags:
+          - LasgunPowerCell
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+  - type: WH40KTurretProfile
+    detectionRange: 14
+    fireRange: 14
+    supportedAmmo: LasgunPowerCell, BoxLasgunPowerCell
+  - type: TurretTargetSettings
+    exemptAccessLevels:
+    - Borg
+    - BasicSilicon
+  - type: WH40KTurretFactionLock
+
+- type: entity
+  id: WH40KWeaponTurretImperiumLaser
+  parent: WH40KWeaponTurretLaserBase
+  suffix: WH40K, Imperium, Laser
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    drawdepth: Mobs
+    layers:
+    - state: multilas
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    state: multilas
+  - type: DeployableTurret
+    deployedState: multilas
+    retractedState: multilas
+    deployingState: multilas
+    retractingState: multilas
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+
+- type: entity
+  id: WH40KWeaponTurretHereticsLaser
+  parent: WH40KWeaponTurretLaserBase
+  suffix: WH40K, Heretics, Laser
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    drawdepth: Mobs
+    layers:
+    - state: multilas
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    state: multilas
+  - type: DeployableTurret
+    deployedState: multilas
+    retractedState: multilas
+    deployingState: multilas
+    retractingState: multilas
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+
+- type: entity
+  id: WH40KWeaponTurretMiniBase
+  abstract: true
+  parent: WH40KWeaponTurretBallisticBase
+  name: mini field sentry turret
+  description: A compact sentry with lighter payload. Supports minigun rounds.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    drawdepth: Mobs
+    layers:
+    - state: defense_base_off
+      renderingStrategy: NoRotation
+    - state: mini_uac_sentry_handheld
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: mini_uac_sentry_on
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: defense_base
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: mini_uac_sentry_handheld
+  - type: DeployableTurret
+    deployedFixture: null
+    deploymentLength: 0.4
+    retractionLength: 0.4
+    deployedState: mini_uac_sentry
+    retractedState: mini_uac_sentry_handheld
+    deployingState: mini_uac_sentry
+    retractingState: mini_uac_sentry_handheld
+  - type: Gun
+    fireRate: 1
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_1.wav
+  - type: BallisticAmmoProvider
+    proto: CartridgeMinigun
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeHeavyRifle
+  - type: WH40KTurretProfile
+    detectionRange: 8
+    fireRange: 8
+    supportedAmmo: CartridgeMinigun, WH40KAmmoBoxMinigun
+
+- type: entity
+  id: WH40KWeaponTurretDmrBase
+  abstract: true
+  parent: WH40KWeaponTurretBallisticBase
+  name: marksman field sentry turret
+  description: A precision sentry variant for long range shots. Supports anti-materiel rounds.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    drawdepth: Mobs
+    layers:
+    - state: defense_base_off
+      renderingStrategy: NoRotation
+    - state: dmr_uac_sentry_handheld
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: dmr_uac_sentry_on
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: defense_base
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: dmr_uac_sentry_handheld
+  - type: DeployableTurret
+    deployedFixture: null
+    deploymentLength: 0.4
+    retractionLength: 0.4
+    deployedState: dmr_uac_sentry
+    retractedState: dmr_uac_sentry_handheld
+    deployingState: dmr_uac_sentry
+    retractingState: dmr_uac_sentry_handheld
+  - type: Gun
+    fireRate: 0.2
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_1.wav
+  - type: BallisticAmmoProvider
+    proto: CartridgeAntiMateriel
+    capacity: 60
+    whitelist:
+      tags:
+      - CartridgeAntiMateriel
+  - type: WH40KTurretProfile
+    detectionRange: 18
+    fireRange: 18
+    supportedAmmo: CartridgeAntiMateriel, MagazineBoxAntiMateriel
+
+- type: entity
+  id: WH40KWeaponTurretShotgunBase
+  abstract: true
+  parent: WH40KWeaponTurretBallisticBase
+  name: shotgun field sentry turret
+  description: A close-range sentry variant with heavy stopping power. Supports shotgun shells.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    drawdepth: Mobs
+    layers:
+    - state: defense_base_off
+      renderingStrategy: NoRotation
+    - state: shotgun_uac_sentry_handheld
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: shotgun_uac_sentry
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      visible: false
+    - state: defense_base
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: shotgun_uac_sentry_handheld
+  - type: DeployableTurret
+    deployedFixture: null
+    deploymentLength: 0.4
+    retractionLength: 0.4
+    deployedState: shotgun_uac_sentry
+    retractedState: shotgun_uac_sentry_handheld
+    deployingState: shotgun_uac_sentry
+    retractingState: shotgun_uac_sentry_handheld
+  - type: Gun
+    fireRate: 0.8
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
+  - type: BallisticAmmoProvider
+    proto: ShellShotgun
+    capacity: 30
+    whitelist:
+      tags:
+      - ShellShotgun
+  - type: WH40KTurretProfile
+    detectionRange: 8
+    fireRange: 8
+    supportedAmmo: ShellShotgun, BoxLethalshot
+
+- type: entity
+  id: WH40KWeaponTurretImperiumMini
+  parent: WH40KWeaponTurretMiniBase
+  suffix: WH40K, Imperium, Mini
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+
+- type: entity
+  id: WH40KWeaponTurretHereticsMini
+  parent: WH40KWeaponTurretMiniBase
+  suffix: WH40K, Heretics, Mini
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+
+- type: entity
+  id: WH40KWeaponTurretImperiumDmr
+  parent: WH40KWeaponTurretDmrBase
+  suffix: WH40K, Imperium, DMR
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+
+- type: entity
+  id: WH40KWeaponTurretHereticsDmr
+  parent: WH40KWeaponTurretDmrBase
+  suffix: WH40K, Heretics, DMR
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+
+- type: entity
+  id: WH40KWeaponTurretImperiumShotgun
+  parent: WH40KWeaponTurretShotgunBase
+  suffix: WH40K, Imperium, Shotgun
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+
+- type: entity
+  id: WH40KWeaponTurretHereticsShotgun
+  parent: WH40KWeaponTurretShotgunBase
+  suffix: WH40K, Heretics, Shotgun
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Heretics

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Components;
@@ -168,6 +169,14 @@ public abstract class SharedResearchSystem : EntitySystem
             description.PushNewline();
         }
 
+        if (technology.ResearchTimeSeconds > 0f)
+        {
+            description.AddMarkupOrThrow(Loc.GetString(
+                "research-console-time",
+                ("seconds", Math.Max(1, (int) MathF.Ceiling(technology.ResearchTimeSeconds)))));
+            description.PushNewline();
+        }
+
         if (includePrereqs && technology.TechnologyPrerequisites.Any())
         {
             description.AddMarkupOrThrow(Loc.GetString("research-console-prereqs-list-start"));
@@ -215,6 +224,14 @@ public abstract class SharedResearchSystem : EntitySystem
     public bool IsTechnologyUnlocked(EntityUid uid, string technologyId, TechnologyDatabaseComponent? component = null)
     {
         return Resolve(uid, ref component, false) && component.UnlockedTechnologies.Contains(technologyId);
+    }
+
+    /// <summary>
+    ///     Returns whether a lathe recipe is unlocked on this database or not.
+    /// </summary>
+    public bool IsLatheRecipeUnlocked(EntityUid uid, string recipeId, TechnologyDatabaseComponent? component = null)
+    {
+        return Resolve(uid, ref component, false) && component.UnlockedRecipes.Contains(recipeId);
     }
 
     public void TrySetMainDiscipline(TechnologyPrototype prototype, EntityUid uid, TechnologyDatabaseComponent? component = null)

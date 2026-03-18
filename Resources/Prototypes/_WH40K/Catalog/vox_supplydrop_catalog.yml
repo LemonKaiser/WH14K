@@ -1,0 +1,35 @@
+- type: listing
+  id: VoxSupplyDropNutribrick
+  productEntity: FoodSnackNutribrick
+  cost:
+    WH40KFactionFunds: 150
+
+- type: listing
+  id: VoxSupplyDropBasicMedkit
+  productEntity: MedkitFilled
+  cost:
+    WH40KFactionFunds: 800
+
+- type: listing
+  id: VoxSupplyDropLasgunPowerCell
+  productEntity: BoxLasgunPowerCell
+  cost:
+    WH40KFactionFunds: 650
+
+- type: listing
+  id: VoxSupplyDropMagazineStubRifle
+  productEntity: MagazineStubRifle
+  cost:
+    WH40KFactionFunds: 300
+
+- type: listing
+  id: VoxSupplyDropWHSoup
+  productEntity: WHSoup
+  cost:
+    WH40KFactionFunds: 200
+
+- type: listing
+  id: VoxSupplyDropAutogunAmmoBox
+  productEntity: WH40KAmmoBoxAutogun
+  cost:
+    WH40KFactionFunds: 700

@@ -11,6 +11,7 @@
     layers:
     - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
       state: sentinel
+  - type: StatusIcon
   - type: FootstepModifier
     footstepSoundCollection:
       path: /Audio/Mecha/sound_mecha_powerloader_step.ogg

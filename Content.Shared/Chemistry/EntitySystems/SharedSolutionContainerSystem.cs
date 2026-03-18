@@ -991,8 +991,8 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 var markup = GetSolutionExamine(solutionHolder);
                 ExamineSystem.SendExamineTooltip(user, target, markup, false, false);
             },
-            Text = Loc.GetString("scannable-solution-verb-text"),
-            Message = Loc.GetString("scannable-solution-verb-message"),
+            TextLocId = "scannable-solution-verb-text",
+            MessageLocId = "scannable-solution-verb-message",
             Category = VerbCategory.Examine,
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/drink.svg.192dpi.png")),
         };

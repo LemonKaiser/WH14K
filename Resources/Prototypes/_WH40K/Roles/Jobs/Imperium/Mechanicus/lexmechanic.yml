@@ -4,12 +4,9 @@
   description: job-description-lexmechanic
   playTimeTracker: JobLexmechanic
   requirements:
-    - !type:DepartmentTimeRequirement
-      department: Imperium
-      time: 6h
-    - !type:RoleTimeRequirement
-      role: JobNovice
-      time: 2.5h
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: LexmechanicGear
   icon: "JobIconLexmechanic"
   supervisors: job-supervisors-ce

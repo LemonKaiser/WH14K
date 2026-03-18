@@ -30,6 +30,10 @@ namespace Content.Client.Lathe.UI
             {
                 SendMessage(new LatheQueueRecipeMessage(recipe, amount));
             };
+            _menu.RecipeQueueInfiniteAction += recipe =>
+            {
+                SendMessage(new LatheQueueRecipeMessage(recipe, 1, true));
+            };
             _menu.QueueDeleteAction += index => SendMessage(new LatheDeleteRequestMessage(index));
             _menu.QueueMoveUpAction += index => SendMessage(new LatheMoveRequestMessage(index, -1));
             _menu.QueueMoveDownAction += index => SendMessage(new LatheMoveRequestMessage(index, 1));
@@ -48,7 +52,13 @@ namespace Content.Client.Lathe.UI
                     _menu?.PopulateRecipes();
                     _menu?.UpdateCategories();
                     _menu?.PopulateQueueList(msg.Queue);
-                    _menu?.SetQueueInfo(msg.CurrentlyProducing);
+                    _menu?.SetQueueInfo(
+                        msg.CurrentlyProducing,
+                        msg.Queue,
+                        msg.IsProducing,
+                        msg.ProductionStartTime,
+                        msg.ProductionLength);
+                    _menu?.SetMaterialStorageLimit(msg.MaterialStorageLimit);
                     break;
             }
         }

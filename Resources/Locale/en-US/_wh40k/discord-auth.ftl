@@ -1,0 +1,44 @@
+wh40k-discord-auth-button = Discord
+wh40k-discord-auth-button-link = Link Discord
+
+wh40k-discord-auth-window-title = Discord Auth
+wh40k-discord-auth-window-name = Discord: {$name}
+wh40k-discord-auth-window-id = ID: {$id}
+wh40k-discord-auth-window-guild = Discord server member: {$status}
+wh40k-discord-auth-window-role-gate = Role access: {$status}
+wh40k-discord-auth-window-refresh = Refresh Profile
+wh40k-discord-auth-window-refresh-pending = Refreshing...
+wh40k-discord-auth-window-refresh-cooldown = Refresh Profile ({$seconds}s)
+wh40k-discord-auth-window-unlink = Unlink Account
+
+wh40k-discord-auth-window-status-yes = yes
+wh40k-discord-auth-window-status-no = no
+wh40k-discord-auth-window-status-unknown = unknown
+wh40k-discord-auth-window-status-not-configured = not configured
+wh40k-discord-auth-window-status-passed = passed
+wh40k-discord-auth-window-status-failed = failed
+wh40k-discord-auth-window-status-stale = {$status} (stale cache)
+
+wh40k-discord-auth-popup-disabled = Discord linking is disabled on this server.
+wh40k-discord-auth-popup-misconfigured = Discord linking is not configured correctly.
+wh40k-discord-auth-popup-browser-opened = Browser opened for Discord authorization.
+wh40k-discord-auth-popup-link-required = Link a Discord account first.
+wh40k-discord-auth-popup-refresh-cooldown = Profile refresh is on cooldown.
+wh40k-discord-auth-popup-refresh-failed = Failed to refresh Discord profile.
+wh40k-discord-auth-popup-refresh-success = Discord profile updated.
+wh40k-discord-auth-popup-reauth-required = Discord needs to be authorized again.
+wh40k-discord-auth-popup-reauth-opening = Discord token expired or was revoked. Browser opened for reauthorization.
+wh40k-discord-auth-popup-unlink-success = Discord account unlinked.
+wh40k-discord-auth-popup-access-denied = Discord authorization was denied.
+wh40k-discord-auth-popup-callback-invalid = Invalid Discord callback data received.
+wh40k-discord-auth-popup-token-failed = Failed to exchange Discord token.
+wh40k-discord-auth-popup-fetch-failed = Failed to read Discord profile data.
+wh40k-discord-auth-popup-duplicate-link = This Discord account is already linked elsewhere.
+wh40k-discord-auth-popup-link-success = Discord account linked successfully.
+wh40k-discord-auth-support-default = If there are problems with linking, contact the server administration.
+wh40k-discord-auth-connect-deny-link-required = Server entry is restricted: link your Discord account first.
+wh40k-discord-auth-connect-deny-guild-required = Server entry is restricted: your Discord account is not on the configured guild.
+wh40k-discord-auth-connect-deny-role-required = Server entry is restricted: your Discord account is missing the required guild role.
+wh40k-discord-auth-connect-deny-misconfigured = Server entry is restricted, but Discord authorization is misconfigured on the server.
+wh40k-discord-auth-connect-deny-cache-stale = Server entry is restricted: the Discord cache is stale and could not be refreshed automatically.
+wh40k-discord-auth-connect-deny-generic = Server entry is restricted by Discord authorization policy.

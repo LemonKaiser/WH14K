@@ -27,6 +27,7 @@
     soundEmpty:
       path: /Audio/Items/hiss.ogg
     clumsyProof: true
+  - type: WH40KGunPrediction
   - type: ContainerAmmoProvider
     container: storagebase
   - type: PneumaticCannon
@@ -91,6 +92,7 @@
     soundEmpty:
       path: /Audio/Items/hiss.ogg
     clumsyProof: true
+  - type: WH40KGunPrediction
   - type: ContainerAmmoProvider
     container: storagebase
   - type: Item
@@ -166,6 +168,7 @@
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/empty.ogg
     clumsyProof: true
+  - type: WH40KGunPrediction
   - type: ContainerAmmoProvider
     container: storagebase
   - type: Item

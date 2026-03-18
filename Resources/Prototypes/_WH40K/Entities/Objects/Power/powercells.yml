@@ -29,7 +29,7 @@
     tags:
       - LasgunPowerCell
   - type: BatteryAmmoProvider
-    proto: RedMediumLaser
+    proto: WH40KRedMediumLaserLasgun
     fireCost: 50
 
 - type: entity
@@ -126,8 +126,8 @@
     tags:
       - AccatranPowerCell
   - type: Battery
-    maxCharge: 4000
-    startingCharge: 4000
+    maxCharge: 3000
+    startingCharge: 3000
     pricePerJoule: 0.15
   - type: BatteryAmmoProvider
     proto: RedLaserAccatranLong
@@ -154,8 +154,8 @@
     autoRechargeRate: 10
   - type: BatteryAmmoProvider
     proto: RedLaserLong
-    fireCost: 50
+    fireCost: 100
   - type: Battery
-    maxCharge: 100000
-    startingCharge: 100000
+    maxCharge: 20000
+    startingCharge: 20000
     pricePerJoule: 0.15

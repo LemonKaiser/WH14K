@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
@@ -70,12 +71,22 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         foreach (var techId in database.CurrentTechnologyCards)
         {
             var tech = _prototype.Index<TechnologyPrototype>(techId);
-            var cardControl = new TechnologyCardControl(tech, _prototype, _sprite, _research.GetTechnologyDescription(tech, includeTier: false), state.Points, hasAccess);
+            var cardControl = new TechnologyCardControl(
+                tech,
+                _prototype,
+                _sprite,
+                _research.GetTechnologyDescription(tech, includeTier: false),
+                state.Points,
+                hasAccess,
+                state.TimedResearchEnabled && state.ActiveTechnologyId != null,
+                state.ActiveTechnologyId == techId);
             cardControl.OnPressed += () => OnTechnologyCardPressed?.Invoke(techId);
             TechnologyCardsContainer.AddChild(cardControl);
         }
 
-        var unlockedTech = database.UnlockedTechnologies.Select(x => _prototype.Index<TechnologyPrototype>(x));
+        var unlockedTech = database.UnlockedTechnologies
+            .Select(x => _prototype.Index<TechnologyPrototype>(x))
+            .Where(tech => !tech.Hidden);
         SyncTechnologyList(UnlockedCardsContainer, unlockedTech);
     }
 
@@ -102,6 +113,32 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         msg.AddMarkupOrThrow(Loc.GetString("research-console-menu-main-discipline",
             ("name", disciplineText), ("color", disciplineColor)));
         MainDisciplineLabel.SetMessage(msg);
+
+        ActiveResearchLabel.Visible = state.TimedResearchEnabled;
+        if (state.TimedResearchEnabled)
+        {
+            var activeTechnologyName = Loc.GetString("research-console-menu-active-research-idle");
+            var remainingTime = string.Empty;
+
+            if (state.ActiveTechnologyId is { } activeTechnologyId)
+            {
+                if (_prototype.TryIndex<TechnologyPrototype>(activeTechnologyId, out var activeTechnology))
+                    activeTechnologyName = Loc.GetString(activeTechnology.Name);
+                else
+                    activeTechnologyName = activeTechnologyId;
+
+                remainingTime = FormatRemainingTime(state.ActiveTechnologyRemainingSeconds);
+            }
+
+            var activeResearchMessage = new FormattedMessage();
+            activeResearchMessage.AddMarkupOrThrow(state.ActiveTechnologyId == null
+                ? Loc.GetString("research-console-menu-active-research-idle")
+                : Loc.GetString(
+                    "research-console-menu-active-research-running",
+                    ("technology", activeTechnologyName),
+                    ("time", remainingTime)));
+            ActiveResearchLabel.SetMessage(activeResearchMessage);
+        }
 
         TierDisplayContainer.Children.Clear();
         foreach (var disciplineId in database.SupportedDisciplines)
@@ -178,6 +215,13 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         {
             container.Children.Remove(techControl);
         }
+    }
+
+    private static string FormatRemainingTime(int totalSeconds)
+    {
+        var clamped = Math.Max(0, totalSeconds);
+        var timeSpan = TimeSpan.FromSeconds(clamped);
+        return $"{(int) timeSpan.TotalMinutes:00}:{timeSpan.Seconds:00}";
     }
 }
 

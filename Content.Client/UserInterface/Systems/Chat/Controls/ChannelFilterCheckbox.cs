@@ -6,6 +6,7 @@ namespace Content.Client.UserInterface.Systems.Chat.Controls;
 public sealed class ChannelFilterCheckbox : CheckBox
 {
     public readonly ChatChannel Channel;
+    private int? _unreadCount;
 
     public bool IsHidden => Parent == null;
 
@@ -28,6 +29,12 @@ public sealed class ChannelFilterCheckbox : CheckBox
 
     public void UpdateUnreadCount(int? unread)
     {
+        _unreadCount = unread;
         UpdateText(unread);
+    }
+
+    public void RefreshLocalization()
+    {
+        UpdateText(_unreadCount);
     }
 }

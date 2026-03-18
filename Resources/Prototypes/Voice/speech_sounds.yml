@@ -6,6 +6,14 @@
     path: /Audio/Voice/Talk/speak_4_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/speak_4_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipBass
+  dialogueBlipPitch: 0.78
+  dialogueBlipVariation: 0.03
+  dialogueBlipVolume: -12
+  dialogueCharsPerSecond: 24
+  dialogueCharsPerBlip: 3
+  dialoguePunctuationPause: 0.07
 
 - type: speechSounds
   id: Baritone
@@ -15,6 +23,14 @@
     path: /Audio/Voice/Talk/speak_1_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/speak_1_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipBaritone
+  dialogueBlipPitch: 0.9
+  dialogueBlipVariation: 0.04
+  dialogueBlipVolume: -11
+  dialogueCharsPerSecond: 28
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.06
 
 - type: speechSounds
   id: Tenor
@@ -24,6 +40,14 @@
     path: /Audio/Voice/Talk/speak_3_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/speak_3_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipTenor
+  dialogueBlipPitch: 1.04
+  dialogueBlipVariation: 0.05
+  dialogueBlipVolume: -11
+  dialogueCharsPerSecond: 32
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.055
 
 - type: speechSounds
   id: Alto
@@ -33,6 +57,14 @@
     path: /Audio/Voice/Talk/speak_2_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/speak_2_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipAlto
+  dialogueBlipPitch: 1.14
+  dialogueBlipVariation: 0.06
+  dialogueBlipVolume: -10.5
+  dialogueCharsPerSecond: 34
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.05
 
 - type: speechSounds
   id: Squeak
@@ -51,6 +83,14 @@
     path: /Audio/Machines/vending_jingle.ogg
   exclaimSound:
     path: /Audio/Machines/vending_jingle.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipMechanical
+  dialogueBlipPitch: 0.9
+  dialogueBlipVariation: 0.02
+  dialogueBlipVolume: -12
+  dialogueCharsPerSecond: 18
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.08
 
 - type: speechSounds
   id: Borg
@@ -60,6 +100,14 @@
     path: /Audio/Voice/Talk/Silicon/borg_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/Silicon/borg_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipBorg
+  dialogueBlipPitch: 0.92
+  dialogueBlipVariation: 0.03
+  dialogueBlipVolume: -11
+  dialogueCharsPerSecond: 20
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.08
 
 - type: speechSounds
   id: SyndieBorg
@@ -69,6 +117,14 @@
     path: /Audio/Voice/Talk/Silicon/syndieborg_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/Silicon/syndieborg_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipSyndieBorg
+  dialogueBlipPitch: 0.82
+  dialogueBlipVariation: 0.04
+  dialogueBlipVolume: -10
+  dialogueCharsPerSecond: 18
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.085
 
 - type: speechSounds
   id: Xenoborg
@@ -78,6 +134,14 @@
     path: /Audio/Voice/Xenoborg/xenoborg_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Xenoborg/xenoborg_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipXenoborg
+  dialogueBlipPitch: 0.9
+  dialogueBlipVariation: 0.05
+  dialogueBlipVolume: -10.5
+  dialogueCharsPerSecond: 22
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.07
 
 - type: speechSounds
   id: Pai
@@ -87,6 +151,14 @@
     path: /Audio/Voice/Talk/pai_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/pai_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipPai
+  dialogueBlipPitch: 1.28
+  dialogueBlipVariation: 0.08
+  dialogueBlipVolume: -12
+  dialogueCharsPerSecond: 34
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.035
 
 - type: speechSounds
   id: Monkey
@@ -114,6 +186,14 @@
     path: /Audio/Voice/Talk/lizard_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/lizard_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipLizard
+  dialogueBlipPitch: 0.86
+  dialogueBlipVariation: 0.05
+  dialogueBlipVolume: -10.5
+  dialogueCharsPerSecond: 23
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.06
 
 - type: speechSounds
   id: Slime
@@ -123,6 +203,14 @@
     path: /Audio/Voice/Talk/slime_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/slime_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipSlime
+  dialogueBlipPitch: 0.68
+  dialogueBlipVariation: 0.03
+  dialogueBlipVolume: -12
+  dialogueCharsPerSecond: 16
+  dialogueCharsPerBlip: 3
+  dialoguePunctuationPause: 0.09
 
 - type: speechSounds
   id: Vox
@@ -132,6 +220,14 @@
     path: /Audio/Voice/Talk/vox_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/vox_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipVox
+  dialogueBlipPitch: 1.3
+  dialogueBlipVariation: 0.09
+  dialogueBlipVolume: -10.5
+  dialogueCharsPerSecond: 36
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.035
 
 - type: speechSounds
   id: Arachnid
@@ -141,6 +237,14 @@
     path: /Audio/Voice/Talk/arachnid_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/arachnid_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipArachnid
+  dialogueBlipPitch: 1.12
+  dialogueBlipVariation: 0.08
+  dialogueBlipVolume: -11
+  dialogueCharsPerSecond: 24
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.06
 
 - type: speechSounds
   id: Cat
@@ -186,6 +290,14 @@
     path: /Audio/Voice/Talk/vulp_ask.ogg
   exclaimSound:
     path: /Audio/Voice/Talk/vulp_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipVulpkanin
+  dialogueBlipPitch: 1.02
+  dialogueBlipVariation: 0.06
+  dialogueBlipVolume: -10.5
+  dialogueCharsPerSecond: 31
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.05
 
 - type: speechSounds
   id: Wawa
@@ -195,3 +307,11 @@
     path: /Audio/Animals/wawa_question.ogg
   exclaimSound:
     path: /Audio/Animals/wawa_exclaim.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipWawa
+  dialogueBlipPitch: 1.22
+  dialogueBlipVariation: 0.08
+  dialogueBlipVolume: -12
+  dialogueCharsPerSecond: 34
+  dialogueCharsPerBlip: 1
+  dialoguePunctuationPause: 0.04

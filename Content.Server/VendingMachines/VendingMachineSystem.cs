@@ -136,6 +136,11 @@ namespace Content.Server.VendingMachines
         /// <param name="throwItem">Whether to throw the item in a random direction after dispensing it.</param>
         /// <param name="forceEject">Whether to skip the regular ejection checks and immediately dispense the item without animation.</param>
         /// <param name="vendComponent"></param>
+        public bool IsPackageCompatibleWithPack(VendingMachineRestockComponent component, string packPrototypeId)
+        {
+            return component.CanRestock.Contains(packPrototypeId);
+        }
+
         public void EjectRandom(EntityUid uid, bool throwItem, bool forceEject = false, VendingMachineComponent? vendComponent = null)
         {
             if (!Resolve(uid, ref vendComponent))

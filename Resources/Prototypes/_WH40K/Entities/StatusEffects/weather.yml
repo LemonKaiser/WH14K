@@ -1,0 +1,4 @@
+- type: entity
+  parent: StatusEffectSlowdown
+  id: WeatherSlowdownStatusEffect
+  name: weather slowdown

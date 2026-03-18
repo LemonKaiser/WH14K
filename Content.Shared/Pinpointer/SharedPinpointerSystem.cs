@@ -60,6 +60,21 @@ public abstract class SharedPinpointerSystem : EntitySystem
     }
 
     /// <summary>
+    ///     Explicitly override target name shown in examine text.
+    /// </summary>
+    public void SetTargetName(EntityUid uid, string? targetName, PinpointerComponent? pinpointer = null)
+    {
+        if (!Resolve(uid, ref pinpointer))
+            return;
+
+        if (pinpointer.TargetName == targetName)
+            return;
+
+        pinpointer.TargetName = targetName;
+        Dirty(uid, pinpointer);
+    }
+
+    /// <summary>
     ///     Update direction from pinpointer to selected target (if it was set)
     /// </summary>
     protected virtual void UpdateDirectionToTarget(Entity<PinpointerComponent?> ent)

@@ -1,0 +1,25 @@
+wh40k-chat-emote-name-guardsman-ready-for-orders = Готов к приказам
+wh40k-chat-emote-name-guardsman-awaiting-orders = Ожидаю приказов
+wh40k-chat-emote-name-guardsman-attack-the-enemy = Атаковать врага
+wh40k-chat-emote-name-guardsman-open-fire = Открыть огонь
+wh40k-chat-emote-name-guardsman-charge = В атаку
+wh40k-chat-emote-name-guardsman-into-the-fight = В бой
+wh40k-chat-emote-name-guardsman-capture-the-strategic-point = Захватить стратегическую точку
+wh40k-chat-emote-name-guardsman-secure-the-strategic-point = Удержать стратегическую точку
+wh40k-chat-emote-name-guardsman-enemy-spotted = Враг замечен
+wh40k-chat-emote-name-guardsman-chaos-marine-spotted = Замечен хаоситский космодесантник
+wh40k-chat-emote-name-guardsman-hold-the-line = Держать строй
+wh40k-chat-emote-name-guardsman-morale-restored = Боевой дух восстановлен
+
+wh40k-chat-emote-msg-guardsman-ready-for-orders = отвечает: "Готов к приказам."
+wh40k-chat-emote-msg-guardsman-awaiting-orders = произносит: "Ожидаю приказов."
+wh40k-chat-emote-msg-guardsman-attack-the-enemy = кричит: "Атаковать врага!"
+wh40k-chat-emote-msg-guardsman-open-fire = орет: "Открыть огонь!"
+wh40k-chat-emote-msg-guardsman-charge = ревет: "В атаку!"
+wh40k-chat-emote-msg-guardsman-into-the-fight = кричит: "В бой!"
+wh40k-chat-emote-msg-guardsman-capture-the-strategic-point = приказывает: "Захватить стратегическую точку!"
+wh40k-chat-emote-msg-guardsman-secure-the-strategic-point = выкрикивает: "Удержать стратегическую точку!"
+wh40k-chat-emote-msg-guardsman-enemy-spotted = предупреждает: "Враг замечен!"
+wh40k-chat-emote-msg-guardsman-chaos-marine-spotted = предупреждает: "Замечен хаоситский космодесантник!"
+wh40k-chat-emote-msg-guardsman-hold-the-line = кричит: "Держать строй!"
+wh40k-chat-emote-msg-guardsman-morale-restored = произносит: "Боевой дух восстановлен!"

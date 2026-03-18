@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.GameTicking;
+using Content.Shared.Localizations;
 using Content.Server.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -11,6 +12,12 @@ namespace Content.Server.GameTicking
     {
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
+        [ViewVariables]
+        private readonly HashSet<NetUserId> _roundJoinedUsers = new();
+        [ViewVariables]
+        private readonly HashSet<NetUserId> _roundParticipationBypassUsers = new();
+        [ViewVariables]
+        private readonly Dictionary<NetUserId, string> _lobbyInfoCultures = new();
 
         [ViewVariables]
         private TimeSpan _roundStartTime;
@@ -37,7 +44,23 @@ namespace Content.Server.GameTicking
 
         public void UpdateInfoText()
         {
-            RaiseNetworkEvent(GetInfoMsg(), Filter.Empty().AddPlayers(_playerManager.NetworkedSessions));
+            foreach (var session in _playerManager.NetworkedSessions)
+            {
+                RaiseNetworkEvent(GetInfoMsg(session), session.Channel);
+            }
+        }
+
+        private void OnLobbyInfoRefreshRequested(RequestLobbyInfoRefreshEvent msg, EntitySessionEventArgs args)
+        {
+            if (args.SenderSession is not { } session)
+                return;
+
+            if (string.IsNullOrWhiteSpace(msg.CultureName))
+                _lobbyInfoCultures.Remove(session.UserId);
+            else
+                _lobbyInfoCultures[session.UserId] = msg.CultureName;
+
+            RaiseNetworkEvent(GetInfoMsg(session), session.Channel);
         }
 
         private string GetInfoText()
@@ -105,14 +128,22 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private TickerLobbyInfoEvent GetInfoMsg()
+        private TickerLobbyInfoEvent GetInfoMsg(ICommonSession? session = null)
         {
+            var cultureName = session != null && _lobbyInfoCultures.TryGetValue(session.UserId, out var storedCulture)
+                ? storedCulture
+                : null;
+
+            using var cultureScope = new LocalizationCultureScope(_localizationManager, cultureName);
             return new(GetInfoText());
         }
 
         private void UpdateLateJoinStatus()
         {
-            RaiseNetworkEvent(new TickerLateJoinStatusEvent(DisallowLateJoin));
+            foreach (var player in _playerManager.Sessions)
+            {
+                RaiseNetworkEvent(new TickerLateJoinStatusEvent(IsLateJoinDisallowedFor(player)), player.Channel);
+            }
         }
 
         public bool PauseStart(bool pause = true)
@@ -184,5 +215,30 @@ namespace Content.Server.GameTicking
 
         public bool UserHasJoinedGame(NetUserId userId)
             => PlayerGameStatuses.TryGetValue(userId, out var status) && status == PlayerGameStatus.JoinedGame;
+
+        public bool HasJoinedRoundThisSession(ICommonSession session)
+            => HasJoinedRoundThisSession(session.UserId);
+
+        public bool HasJoinedRoundThisSession(NetUserId userId)
+            => _roundJoinedUsers.Contains(userId);
+
+        public bool IsRoundParticipationLocked(ICommonSession session)
+            => RunLevel == GameRunLevel.InRound
+               && HasJoinedRoundThisSession(session.UserId)
+               && !_roundParticipationBypassUsers.Contains(session.UserId);
+
+        public void GrantRoundParticipationBypass(ICommonSession session)
+            => _roundParticipationBypassUsers.Add(session.UserId);
+
+        private void ConsumeRoundParticipationBypass(ICommonSession session)
+            => _roundParticipationBypassUsers.Remove(session.UserId);
+
+        private bool IsLateJoinDisallowedFor(ICommonSession session)
+        {
+            if (RunLevel != GameRunLevel.InRound)
+                return false;
+
+            return DisallowLateJoin || IsRoundParticipationLocked(session);
+        }
     }
 }

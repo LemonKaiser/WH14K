@@ -1,0 +1,35 @@
+- type: job
+  id: VoxScout
+  name: job-name-vox-scout
+  description: job-description-vox-scout
+  playTimeTracker: JobVoxScout
+  startingGear: VoxScoutGear
+  icon: "JobIconVoxScout"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KMoraleExecutionTarget
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: VoxScoutGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackVox
+    ears: ClothingHeadsetVoxBackpackImperium
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    head: ClothingHeadHelmetFlak
+    outerClothing: ClothingOuterArmorFlakVestLight
+    pocket1: RMCMotionDetector
+    id: GuardsmanDogTag

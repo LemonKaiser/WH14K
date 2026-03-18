@@ -1,0 +1,1690 @@
+- type: wh40kMetaDecoration
+  id: decor-ghost-standard
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-standard-title
+  preview: wh40k-meta-progress-decoration-ghost-standard-preview-name
+  requiredLevel: 1
+  ghostRsiPath: /Textures/Mobs/Ghosts/ghost_human.rsi
+  ghostState: animated
+  ghostTintHex: "#DFEAFF"
+  defaultSelected: true
+  sortOrder: 10
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-iron
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-iron-title
+  preview: wh40k-meta-progress-decoration-ghost-iron-preview-name
+  requiredLevel: 3
+  ghostRsiPath: /Textures/Mobs/Ghosts/ghost_human.rsi
+  ghostState: animated
+  ghostTintHex: "#B6C2D4"
+  sortOrder: 20
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-star
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-star-title
+  preview: wh40k-meta-progress-decoration-ghost-star-preview-name
+  requiredLevel: 5
+  ghostRsiPath: /Textures/Mobs/Ghosts/ghost_human.rsi
+  ghostState: animated
+  ghostTintHex: "#E3C979"
+  sortOrder: 30
+  requiredDiscordRoleIds:
+  - "1480648202620370974"
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-warp
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-warp-title
+  preview: wh40k-meta-progress-decoration-ghost-warp-preview-name
+  requiredLevel: 8
+  requiredAchievements:
+  - wh40k-ach-whispers-in-void
+  ghostRsiPath: /Textures/Mobs/Ghosts/ghost_human.rsi
+  ghostState: animated
+  ghostTintHex: "#C090FF"
+  sortOrder: 40
+  requiredDiscordGuildMember: true
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-aghost1
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-aghost1-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-aghost1-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: aghost1
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 50
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-aghost3
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-aghost3-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-aghost3-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: aghost3
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 60
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-aghost4
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-aghost4-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-aghost4-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: aghost4
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 70
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-aghost5
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-aghost5-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-aghost5-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: aghost5
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 80
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-dune
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-dune-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-dune-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: dune
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 90
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-felind
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-felind-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-felind-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: felind
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 100
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-kotovasu
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-kotovasu-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-kotovasu-preview-name
+  requiredLevel: 16
+  requiredAchievements:
+  - wh40k-ach-frontline-anchor
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: Kotovasu
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 110
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-kvasik
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-kvasik-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-kvasik-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: kvasik
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 120
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-nubas0914
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-nubas0914-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-nubas0914-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: nubas0914
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 130
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-shadowkin
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-shadowkin-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-shadowkin-preview-name
+  requiredLevel: 18
+  requiredAchievements:
+  - wh40k-ach-veteran-of-wars
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: shadowkin
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 140
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-stray
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-stray-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-stray-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: stray
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 150
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-vulpkin
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-vulpkin-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-vulpkin-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: vulpkin
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 160
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-endr-animet
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-endr-animet-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-endr-animet-preview-name
+  requiredLevel: 20
+  requiredAchievements:
+  - wh40k-ach-veteran-of-wars
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: endr_animet
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 170
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-1
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-1-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-1-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "1"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 180
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-10
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-10-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-10-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "10"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 190
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-11
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-11-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-11-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "11"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 200
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-12
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-12-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-12-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "12"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 210
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-13
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-13-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-13-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "13"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 220
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-14
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-14-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-14-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "14"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 230
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-15
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-15-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-15-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "15"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 240
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-16
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-16-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-16-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "16"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 250
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-17
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-17-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-17-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "17"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 260
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-2
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-2-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-2-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "2"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 270
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-3
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-3-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-3-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "3"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 280
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-4
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-4-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-4-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "4"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 290
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-5
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-5-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-5-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "5"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 300
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-6
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-6-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-6-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "6"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 310
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-7
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-7-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-7-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "7"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 320
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-8
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-8-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-8-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "8"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 330
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-9
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-9-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-9-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "9"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 340
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated1
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated1-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated1-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated1"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 350
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated10
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated10-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated10-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated10"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 360
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated11
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated11-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated11-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated11"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 370
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated12
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated12-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated12-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated12"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 380
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated13
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated13-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated13-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated13"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 390
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated14
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated14-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated14-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated14"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 400
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated15
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated15-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated15-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated15"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 410
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated16
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated16-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated16-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated16"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 420
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated17
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated17-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated17-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated17"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 430
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated18
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated18-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated18-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated18"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 440
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated19
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated19-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated19-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated19"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 450
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated2
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated2-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated2-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated2"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 460
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated20
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated20-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated20-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated20"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 470
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated21
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated21-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated21-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated21"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 480
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated22
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated22-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated22-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated22"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 490
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated23
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated23-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated23-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated23"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 500
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated24
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated24-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated24-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated24"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 510
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated25
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated25-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated25-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated25"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 520
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated26
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated26-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated26-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated26"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 530
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated27
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated27-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated27-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated27"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 540
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated28
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated28-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated28-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated28"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 550
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated3
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated3-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated3-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated3"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 560
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated30
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated30-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated30-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated30"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 570
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated31
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated31-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated31-preview-name
+  requiredLevel: 11
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated31"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 580
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated32
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated32-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated32-preview-name
+  requiredLevel: 12
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated32"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 590
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated33
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated33-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated33-preview-name
+  requiredLevel: 13
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated33"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 600
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated34
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated34-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated34-preview-name
+  requiredLevel: 14
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated34"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 610
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated4
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated4-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated4-preview-name
+  requiredLevel: 15
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated4"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 620
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated5
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated5-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated5-preview-name
+  requiredLevel: 16
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated5"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 630
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated6
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated6-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated6-preview-name
+  requiredLevel: 17
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated6"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 640
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated7
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated7-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated7-preview-name
+  requiredLevel: 18
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated7"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 650
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated8
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated8-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated8-preview-name
+  requiredLevel: 19
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated8"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 660
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-animated9
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-animated9-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-animated9-preview-name
+  requiredLevel: 20
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "animated9"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 670
+
+- type: wh40kMetaDecoration
+  id: decor-ghost-pack-icon
+  category: GhostSkins
+  title: wh40k-meta-progress-decoration-ghost-pack-icon-title
+  preview: wh40k-meta-progress-decoration-ghost-pack-icon-preview-name
+  requiredLevel: 11
+  adminOnly: true
+  ghostRsiPath: /Textures/_WH40K/Mobs/Ghosts/ghost_pack.rsi
+  ghostState: "icon"
+  ghostTintHex: "#FFFFFF"
+  sortOrder: 680
+
+- type: wh40kMetaDecoration
+  id: decor-title-none
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-none-title
+  preview: wh40k-meta-progress-decoration-title-none-preview-name
+  requiredLevel: 1
+  defaultSelected: true
+  suppressTitlePrefix: true
+  sortOrder: 10
+
+- type: wh40kMetaDecoration
+  id: decor-title-legend
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-legend-title
+  preview: wh40k-meta-progress-decoration-title-legend-preview-name
+  requiredLevel: 2
+  oocTitleEffect: typewriter-cursor
+  oocTitleEffectRevealMs: 2200
+  oocTitleEffectHoldMs: 8500
+  oocTitleEffectDissolveMs: 1800
+  sortOrder: 20
+
+- type: wh40kMetaDecoration
+  id: decor-title-vanguard
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-vanguard-title
+  preview: wh40k-meta-progress-decoration-title-vanguard-preview-name
+  requiredLevel: 4
+  sortOrder: 30
+
+- type: wh40kMetaDecoration
+  id: decor-title-marshal
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-marshal-title
+  preview: wh40k-meta-progress-decoration-title-marshal-preview-name
+  requiredLevel: 6
+  sortOrder: 40
+
+- type: wh40kMetaDecoration
+  id: decor-title-saint
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-saint-title
+  preview: wh40k-meta-progress-decoration-title-saint-preview-name
+  requiredLevel: 9
+  requiredAchievements:
+  - wh40k-ach-veteran-of-wars
+  sortOrder: 50
+
+- type: wh40kMetaDecoration
+  id: decor-title-chromatic
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-chromatic-title
+  preview: wh40k-meta-progress-decoration-title-chromatic-preview-name
+  requiredLevel: 11
+  sortOrder: 60
+
+- type: wh40kMetaDecoration
+  id: decor-title-warpweaver
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-warpweaver-title
+  preview: wh40k-meta-progress-decoration-title-warpweaver-preview-name
+  requiredLevel: 13
+  requiredAchievements:
+  - wh40k-ach-frontline-anchor
+  oocTitleEffect: wave
+  oocTitleEffectRevealMs: 1200
+  oocTitleEffectHoldMs: 10000
+  oocTitleEffectDissolveMs: 1200
+  sortOrder: 70
+
+- type: wh40kMetaDecoration
+  id: decor-title-iron-oath
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-iron-oath-title
+  preview: wh40k-meta-progress-decoration-title-iron-oath-preview-name
+  requiredLevel: 5
+  sortOrder: 80
+
+- type: wh40kMetaDecoration
+  id: decor-title-void-scout
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-void-scout-title
+  preview: wh40k-meta-progress-decoration-title-void-scout-preview-name
+  requiredLevel: 6
+  sortOrder: 90
+
+- type: wh40kMetaDecoration
+  id: decor-title-storm-herald
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-storm-herald-title
+  preview: wh40k-meta-progress-decoration-title-storm-herald-preview-name
+  requiredLevel: 7
+  oocTitleEffect: scanline
+  oocTitleEffectRevealMs: 900
+  oocTitleEffectHoldMs: 5500
+  oocTitleEffectDissolveMs: 900
+  sortOrder: 100
+
+- type: wh40kMetaDecoration
+  id: decor-title-trench-lord
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-trench-lord-title
+  preview: wh40k-meta-progress-decoration-title-trench-lord-preview-name
+  requiredLevel: 8
+  sortOrder: 110
+
+- type: wh40kMetaDecoration
+  id: decor-title-radiant-sign
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-radiant-sign-title
+  preview: wh40k-meta-progress-decoration-title-radiant-sign-preview-name
+  requiredLevel: 9
+  sortOrder: 120
+
+- type: wh40kMetaDecoration
+  id: decor-title-night-warden
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-night-warden-title
+  preview: wh40k-meta-progress-decoration-title-night-warden-preview-name
+  requiredLevel: 10
+  sortOrder: 130
+
+- type: wh40kMetaDecoration
+  id: decor-title-ember-sigil
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-ember-sigil-title
+  preview: wh40k-meta-progress-decoration-title-ember-sigil-preview-name
+  requiredLevel: 11
+  sortOrder: 140
+
+- type: wh40kMetaDecoration
+  id: decor-title-relic-keeper
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-relic-keeper-title
+  preview: wh40k-meta-progress-decoration-title-relic-keeper-preview-name
+  requiredLevel: 12
+  sortOrder: 150
+
+- type: wh40kMetaDecoration
+  id: decor-title-frost-vow
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-frost-vow-title
+  preview: wh40k-meta-progress-decoration-title-frost-vow-preview-name
+  requiredLevel: 13
+  sortOrder: 160
+
+- type: wh40kMetaDecoration
+  id: decor-title-war-choir
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-war-choir-title
+  preview: wh40k-meta-progress-decoration-title-war-choir-preview-name
+  requiredLevel: 14
+  sortOrder: 170
+
+- type: wh40kMetaDecoration
+  id: decor-title-sunbreaker
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-sunbreaker-title
+  preview: wh40k-meta-progress-decoration-title-sunbreaker-preview-name
+  requiredLevel: 15
+  sortOrder: 180
+
+- type: wh40kMetaDecoration
+  id: decor-title-rune-bearer
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-rune-bearer-title
+  preview: wh40k-meta-progress-decoration-title-rune-bearer-preview-name
+  requiredLevel: 16
+  sortOrder: 190
+
+- type: wh40kMetaDecoration
+  id: decor-title-gatekeeper
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-gatekeeper-title
+  preview: wh40k-meta-progress-decoration-title-gatekeeper-preview-name
+  requiredLevel: 17
+  sortOrder: 200
+
+- type: wh40kMetaDecoration
+  id: decor-title-iron-priest
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-iron-priest-title
+  preview: wh40k-meta-progress-decoration-title-iron-priest-preview-name
+  requiredLevel: 18
+  sortOrder: 210
+
+- type: wh40kMetaDecoration
+  id: decor-title-dusk-commander
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-dusk-commander-title
+  preview: wh40k-meta-progress-decoration-title-dusk-commander-preview-name
+  requiredLevel: 19
+  sortOrder: 220
+
+- type: wh40kMetaDecoration
+  id: decor-title-hellforged
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-hellforged-title
+  preview: wh40k-meta-progress-decoration-title-hellforged-preview-name
+  requiredLevel: 20
+  sortOrder: 230
+
+- type: wh40kMetaDecoration
+  id: decor-title-astral-sentinel
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-astral-sentinel-title
+  preview: wh40k-meta-progress-decoration-title-astral-sentinel-preview-name
+  requiredLevel: 11
+  sortOrder: 240
+
+- type: wh40kMetaDecoration
+  id: decor-title-blood-banner
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-blood-banner-title
+  preview: wh40k-meta-progress-decoration-title-blood-banner-preview-name
+  requiredLevel: 12
+  sortOrder: 250
+
+- type: wh40kMetaDecoration
+  id: decor-title-sigil-master
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-sigil-master-title
+  preview: wh40k-meta-progress-decoration-title-sigil-master-preview-name
+  requiredLevel: 13
+  oocTitleEffect: scramble-decode
+  oocTitleEffectRevealMs: 2600
+  oocTitleEffectHoldMs: 7000
+  oocTitleEffectDissolveMs: 2200
+  sortOrder: 260
+
+- type: wh40kMetaDecoration
+  id: decor-title-warp-seer
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-warp-seer-title
+  preview: wh40k-meta-progress-decoration-title-warp-seer-preview-name
+  requiredLevel: 14
+  sortOrder: 270
+
+- type: wh40kMetaDecoration
+  id: decor-title-bone-guard
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-bone-guard-title
+  preview: wh40k-meta-progress-decoration-title-bone-guard-preview-name
+  requiredLevel: 15
+  sortOrder: 280
+
+- type: wh40kMetaDecoration
+  id: decor-title-star-archon
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-star-archon-title
+  preview: wh40k-meta-progress-decoration-title-star-archon-preview-name
+  requiredLevel: 16
+  oocTitleEffect: noise-dissolve
+  oocTitleEffectRevealMs: 2200
+  oocTitleEffectHoldMs: 8000
+  oocTitleEffectDissolveMs: 2200
+  sortOrder: 290
+
+- type: wh40kMetaDecoration
+  id: decor-title-pyre-marshal
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-pyre-marshal-title
+  preview: wh40k-meta-progress-decoration-title-pyre-marshal-preview-name
+  requiredLevel: 17
+  sortOrder: 300
+
+- type: wh40kMetaDecoration
+  id: decor-title-black-cantor
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-black-cantor-title
+  preview: wh40k-meta-progress-decoration-title-black-cantor-preview-name
+  requiredLevel: 18
+  oocTitleEffect: glitch-slice
+  oocTitleEffectRevealMs: 700
+  oocTitleEffectHoldMs: 4500
+  oocTitleEffectDissolveMs: 700
+  sortOrder: 310
+
+- type: wh40kMetaDecoration
+  id: decor-title-red-omen
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-red-omen-title
+  preview: wh40k-meta-progress-decoration-title-red-omen-preview-name
+  requiredLevel: 19
+  adminOnly: true
+  sortOrder: 320
+
+- type: wh40kMetaDecoration
+  id: decor-title-binary-oracle
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-binary-oracle-title
+  preview: wh40k-meta-progress-decoration-title-binary-oracle-preview-name
+  requiredLevel: 17
+  oocTitleEffect: binary
+  oocTitleEffectRevealMs: 2500
+  oocTitleEffectHoldMs: 10000
+  oocTitleEffectDissolveMs: 2500
+  sortOrder: 330
+
+- type: wh40kMetaDecoration
+  id: decor-title-signal-specter
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-title-signal-specter-title
+  preview: wh40k-meta-progress-decoration-title-signal-specter-preview-name
+  requiredLevel: 18
+  oocTitleEffect: scan
+  oocTitleEffectRevealMs: 900
+  oocTitleEffectHoldMs: 4500
+  oocTitleEffectDissolveMs: 900
+  sortOrder: 340
+
+- type: wh40kMetaDecoration
+  id: decor-title-void-halo
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-color-void-halo-aura-title
+  preview: wh40k-meta-progress-decoration-color-void-halo-aura-title
+  requiredLevel: 17
+  oocColorHex: "#8FD0FF"
+  oocTitleOutlineHex: "#5FB8FF"
+  oocTitleOutlineWidth: 1
+  oocTitleOutlineAlphaPercent: 62
+  sortOrder: 350
+
+- type: wh40kMetaDecoration
+  id: decor-title-blood-crown
+  category: OocTitles
+  title: wh40k-meta-progress-decoration-color-blood-crown-aura-title
+  preview: wh40k-meta-progress-decoration-color-blood-crown-aura-title
+  requiredLevel: 20
+  oocColorHex: "#FF4B4B"
+  oocGradientColors:
+  - "#FF4B4B"
+  - "#B70032"
+  - "#1A0000"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 1900
+  oocTitleOutlineHex: "#FF1A1A"
+  oocTitleOutlineWidth: 1
+  oocTitleOutlineAlphaPercent: 72
+  sortOrder: 360
+
+- type: wh40kMetaDecoration
+  id: decor-color-default
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-default-title
+  requiredLevel: 1
+  oocColorHex: "#87CEFA"
+  defaultSelected: true
+  sortOrder: 10
+
+- type: wh40kMetaDecoration
+  id: decor-color-steel
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-steel-title
+  requiredLevel: 3
+  oocColorHex: "#8FB4FF"
+  sortOrder: 20
+
+- type: wh40kMetaDecoration
+  id: decor-color-gold
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-gold-title
+  requiredLevel: 5
+  oocColorHex: "#D8BC6A"
+  sortOrder: 30
+
+- type: wh40kMetaDecoration
+  id: decor-color-violet
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-violet-title
+  requiredLevel: 7
+  requiredAchievements:
+  - wh40k-ach-frontline-anchor
+  oocColorHex: "#C992FF"
+  sortOrder: 40
+
+- type: wh40kMetaDecoration
+  id: decor-color-red
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-red-title
+  requiredLevel: 10
+  requiredAchievements:
+  - wh40k-ach-fireline-initiation
+  oocColorHex: "#E26C6C"
+  sortOrder: 50
+
+- type: wh40kMetaDecoration
+  id: decor-color-sunset-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-sunset-static-title
+  requiredLevel: 8
+  oocColorHex: "#FF9A5B"
+  oocGradientColors:
+  - "#FF9A5B"
+  - "#FF5E7A"
+  - "#C86BFF"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 60
+
+- type: wh40kMetaDecoration
+  id: decor-color-aurora-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-aurora-static-title
+  requiredLevel: 12
+  requiredAchievements:
+  - wh40k-ach-frontline-anchor
+  oocColorHex: "#7AD1FF"
+  oocGradientColors:
+  - "#7AD1FF"
+  - "#7CFFBA"
+  - "#E9FF7A"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 70
+
+- type: wh40kMetaDecoration
+  id: decor-color-prism-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-prism-flow-title
+  requiredLevel: 14
+  oocColorHex: "#8FC8FF"
+  oocGradientColors:
+  - "#8FC8FF"
+  - "#9D8CFF"
+  - "#FF8CCC"
+  - "#FFE48A"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2800
+  sortOrder: 80
+
+- type: wh40kMetaDecoration
+  id: decor-color-warp-flux
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-warp-flux-title
+  requiredLevel: 16
+  requiredAchievements:
+  - wh40k-ach-veteran-of-wars
+  oocColorHex: "#B082FF"
+  oocGradientColors:
+  - "#B082FF"
+  - "#6EE7FF"
+  - "#9BFF8A"
+  - "#FFE082"
+  - "#FF84D8"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2200
+  sortOrder: 90
+- type: wh40kMetaDecoration
+  id: decor-color-crimson-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-crimson-solid-title
+  requiredLevel: 6
+  oocColorHex: "#D7263D"
+  sortOrder: 100
+
+- type: wh40kMetaDecoration
+  id: decor-color-cobalt-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-cobalt-solid-title
+  requiredLevel: 7
+  oocColorHex: "#265DFF"
+  sortOrder: 110
+
+- type: wh40kMetaDecoration
+  id: decor-color-jade-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-jade-solid-title
+  requiredLevel: 8
+  oocColorHex: "#1FBF75"
+  sortOrder: 120
+
+- type: wh40kMetaDecoration
+  id: decor-color-amber-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-amber-solid-title
+  requiredLevel: 9
+  oocColorHex: "#FFB020"
+  sortOrder: 130
+
+- type: wh40kMetaDecoration
+  id: decor-color-orchid-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-orchid-solid-title
+  requiredLevel: 10
+  oocColorHex: "#B85CFF"
+  sortOrder: 140
+
+- type: wh40kMetaDecoration
+  id: decor-color-coral-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-coral-solid-title
+  requiredLevel: 11
+  oocColorHex: "#FF6F61"
+  sortOrder: 150
+
+- type: wh40kMetaDecoration
+  id: decor-color-steelblue-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-steelblue-solid-title
+  requiredLevel: 12
+  oocColorHex: "#5B84B1"
+  sortOrder: 160
+
+- type: wh40kMetaDecoration
+  id: decor-color-lime-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-lime-solid-title
+  requiredLevel: 13
+  oocColorHex: "#9BCC2E"
+  sortOrder: 170
+
+- type: wh40kMetaDecoration
+  id: decor-color-cyan-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-cyan-solid-title
+  requiredLevel: 14
+  oocColorHex: "#24C4D8"
+  sortOrder: 180
+
+- type: wh40kMetaDecoration
+  id: decor-color-magenta-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-magenta-solid-title
+  requiredLevel: 15
+  oocColorHex: "#D84AC3"
+  sortOrder: 190
+
+- type: wh40kMetaDecoration
+  id: decor-color-ivory-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-ivory-solid-title
+  requiredLevel: 16
+  oocColorHex: "#F2EEE3"
+  sortOrder: 200
+
+- type: wh40kMetaDecoration
+  id: decor-color-obsidian-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-obsidian-solid-title
+  requiredLevel: 17
+  oocColorHex: "#2B2F3A"
+  sortOrder: 210
+
+- type: wh40kMetaDecoration
+  id: decor-color-sand-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-sand-solid-title
+  requiredLevel: 18
+  oocColorHex: "#C9A36B"
+  sortOrder: 220
+
+- type: wh40kMetaDecoration
+  id: decor-color-sky-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-sky-solid-title
+  requiredLevel: 19
+  oocColorHex: "#63B3FF"
+  sortOrder: 230
+
+- type: wh40kMetaDecoration
+  id: decor-color-mint-solid
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-mint-solid-title
+  requiredLevel: 20
+  oocColorHex: "#6EE7B7"
+  sortOrder: 240
+
+- type: wh40kMetaDecoration
+  id: decor-color-dawn-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-dawn-static-title
+  requiredLevel: 8
+  oocColorHex: "#FFD27A"
+  oocGradientColors:
+  - "#FFD27A"
+  - "#FF8A5B"
+  - "#FF5E7A"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 250
+
+- type: wh40kMetaDecoration
+  id: decor-color-glacier-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-glacier-static-title
+  requiredLevel: 9
+  oocColorHex: "#C7F2FF"
+  oocGradientColors:
+  - "#C7F2FF"
+  - "#7AD1FF"
+  - "#4A8DFF"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 260
+
+- type: wh40kMetaDecoration
+  id: decor-color-mintwave-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-mintwave-static-title
+  requiredLevel: 10
+  oocColorHex: "#BFFFE5"
+  oocGradientColors:
+  - "#BFFFE5"
+  - "#7CFFBA"
+  - "#4BD6A4"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 270
+
+- type: wh40kMetaDecoration
+  id: decor-color-royal-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-royal-static-title
+  requiredLevel: 11
+  oocColorHex: "#B89CFF"
+  oocGradientColors:
+  - "#B89CFF"
+  - "#8F7BFF"
+  - "#5D5AD8"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 280
+
+- type: wh40kMetaDecoration
+  id: decor-color-ember-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-ember-static-title
+  requiredLevel: 12
+  oocColorHex: "#FFC27A"
+  oocGradientColors:
+  - "#FFC27A"
+  - "#FF8B42"
+  - "#D24A2F"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 290
+
+- type: wh40kMetaDecoration
+  id: decor-color-rose-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-rose-static-title
+  requiredLevel: 13
+  oocColorHex: "#FFC1D9"
+  oocGradientColors:
+  - "#FFC1D9"
+  - "#FF8CB8"
+  - "#D95F8E"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 300
+
+- type: wh40kMetaDecoration
+  id: decor-color-slate-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-slate-static-title
+  requiredLevel: 14
+  oocColorHex: "#D6DEE8"
+  oocGradientColors:
+  - "#D6DEE8"
+  - "#9FB3CC"
+  - "#6F8199"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 310
+
+- type: wh40kMetaDecoration
+  id: decor-color-neonlime-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-neonlime-static-title
+  requiredLevel: 15
+  oocColorHex: "#E9FF7A"
+  oocGradientColors:
+  - "#E9FF7A"
+  - "#B6F84A"
+  - "#7CCF32"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 320
+
+- type: wh40kMetaDecoration
+  id: decor-color-ocean-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-ocean-static-title
+  requiredLevel: 16
+  oocColorHex: "#8FE8FF"
+  oocGradientColors:
+  - "#8FE8FF"
+  - "#55B7FF"
+  - "#2D7DCC"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 330
+
+- type: wh40kMetaDecoration
+  id: decor-color-sunreef-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-sunreef-static-title
+  requiredLevel: 17
+  oocColorHex: "#FFB86B"
+  oocGradientColors:
+  - "#FFB86B"
+  - "#FF7D6C"
+  - "#F64F8C"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 340
+
+- type: wh40kMetaDecoration
+  id: decor-color-copper-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-copper-static-title
+  requiredLevel: 18
+  oocColorHex: "#F2BE8A"
+  oocGradientColors:
+  - "#F2BE8A"
+  - "#D98A4E"
+  - "#A55A2A"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 350
+
+- type: wh40kMetaDecoration
+  id: decor-color-amethyst-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-amethyst-static-title
+  requiredLevel: 19
+  oocColorHex: "#D4B2FF"
+  oocGradientColors:
+  - "#D4B2FF"
+  - "#B082FF"
+  - "#7C5AD8"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 360
+
+- type: wh40kMetaDecoration
+  id: decor-color-storm-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-storm-static-title
+  requiredLevel: 20
+  oocColorHex: "#C9D6FF"
+  oocGradientColors:
+  - "#C9D6FF"
+  - "#A0B8FF"
+  - "#6C87D9"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 370
+
+- type: wh40kMetaDecoration
+  id: decor-color-viridian-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-viridian-static-title
+  requiredLevel: 12
+  oocColorHex: "#9FFFD4"
+  oocGradientColors:
+  - "#9FFFD4"
+  - "#5EE3B3"
+  - "#2DA87A"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 380
+
+- type: wh40kMetaDecoration
+  id: decor-color-lunar-static
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-lunar-static-title
+  requiredLevel: 13
+  oocColorHex: "#F7F7FF"
+  oocGradientColors:
+  - "#F7F7FF"
+  - "#D7D6F5"
+  - "#AAA8D8"
+  oocGradientAnimated: false
+  oocGradientDurationMs: 3500
+  sortOrder: 390
+
+- type: wh40kMetaDecoration
+  id: decor-color-red-black-pulse
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-red-black-pulse-title
+  requiredLevel: 14
+  oocColorHex: "#FF0000"
+  oocGradientColors:
+  - "#FF0000"
+  - "#000000"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 1600
+  sortOrder: 400
+
+- type: wh40kMetaDecoration
+  id: decor-color-plasma-rain-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-plasma-rain-flow-title
+  requiredLevel: 15
+  oocColorHex: "#00E5FF"
+  oocGradientColors:
+  - "#00E5FF"
+  - "#0077FF"
+  - "#B000FF"
+  - "#FF00C8"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2400
+  sortOrder: 410
+
+- type: wh40kMetaDecoration
+  id: decor-color-inferno-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-inferno-flow-title
+  requiredLevel: 16
+  oocColorHex: "#FF4500"
+  oocGradientColors:
+  - "#FF4500"
+  - "#FF0000"
+  - "#8B0000"
+  - "#1A0000"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2300
+  sortOrder: 420
+
+- type: wh40kMetaDecoration
+  id: decor-color-neon-circuit-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-neon-circuit-flow-title
+  requiredLevel: 17
+  oocColorHex: "#39FF14"
+  oocGradientColors:
+  - "#39FF14"
+  - "#00FFA8"
+  - "#00D1FF"
+  - "#0080FF"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2600
+  sortOrder: 430
+
+- type: wh40kMetaDecoration
+  id: decor-color-eclipse-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-eclipse-flow-title
+  requiredLevel: 18
+  oocColorHex: "#F8F9FF"
+  oocGradientColors:
+  - "#F8F9FF"
+  - "#9AA3FF"
+  - "#3A2A6A"
+  - "#0A0A0A"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2800
+  sortOrder: 440
+
+- type: wh40kMetaDecoration
+  id: decor-color-toxic-aurora-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-toxic-aurora-flow-title
+  requiredLevel: 19
+  oocColorHex: "#9BFF00"
+  oocGradientColors:
+  - "#9BFF00"
+  - "#46FF8A"
+  - "#00FFD1"
+  - "#0E7B5A"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2500
+  sortOrder: 450
+
+- type: wh40kMetaDecoration
+  id: decor-color-royal-surge-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-royal-surge-flow-title
+  requiredLevel: 20
+  oocColorHex: "#7A5CFF"
+  oocGradientColors:
+  - "#7A5CFF"
+  - "#B084FF"
+  - "#FF7AD9"
+  - "#7AD3FF"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 3000
+  sortOrder: 460
+
+- type: wh40kMetaDecoration
+  id: decor-color-ember-ice-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-ember-ice-flow-title
+  requiredLevel: 16
+  oocColorHex: "#FF6A3D"
+  oocGradientColors:
+  - "#FF6A3D"
+  - "#FFD166"
+  - "#7AD7FF"
+  - "#3D8BFF"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2700
+  sortOrder: 470
+
+- type: wh40kMetaDecoration
+  id: decor-color-spectral-rift-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-spectral-rift-flow-title
+  requiredLevel: 17
+  oocColorHex: "#62FFB0"
+  oocGradientColors:
+  - "#62FFB0"
+  - "#6AB7FF"
+  - "#B084FF"
+  - "#FF8ACF"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2600
+  sortOrder: 480
+
+- type: wh40kMetaDecoration
+  id: decor-color-nightflare-flow
+  category: OocNameColors
+  title: wh40k-meta-progress-decoration-color-nightflare-flow-title
+  requiredLevel: 18
+  adminOnly: true
+  oocColorHex: "#FF3B3B"
+  oocGradientColors:
+  - "#FF3B3B"
+  - "#A00032"
+  - "#260000"
+  - "#000000"
+  oocGradientAnimated: true
+  oocGradientDurationMs: 2100
+  sortOrder: 490
+
+
+

@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KMegaphone
+  name: command megaphone
+  description: A field loudhailer for short-range order broadcasts.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Tools/megaphone.rsi
+    state: megaphone
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - pocket
+  - type: UseDelay
+    delay: 2
+  - type: WH40KMegaphone

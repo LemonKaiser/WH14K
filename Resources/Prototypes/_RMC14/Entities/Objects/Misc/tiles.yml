@@ -1,0 +1,11 @@
+- type: entity
+  parent: FloorTileItemSteel
+  id: CMTileItemSteel
+  name: metal floor tile
+  suffix: RMC14
+
+- type: entity
+  parent: FloorTileItemWood
+  id: CMTileItemWood
+  name: wooden floor tile
+  suffix: RMC14

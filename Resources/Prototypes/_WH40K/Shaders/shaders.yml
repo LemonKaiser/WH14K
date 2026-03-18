@@ -1,0 +1,9 @@
+- type: shader
+  id: WH40KGrimdark
+  kind: source
+  path: "/Textures/_WH40K/Shaders/grimdark.swsl"
+
+- type: shader
+  id: WH40KShockWave
+  kind: source
+  path: "/Textures/_WH40K/Shaders/shock_wave.swsl"

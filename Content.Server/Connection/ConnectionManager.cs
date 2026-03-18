@@ -8,6 +8,7 @@ using Content.Server.Connection.IPIntel;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
+using Content.Server._WH40K.DiscordAuth;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Players.PlayTimeTracking;
@@ -144,17 +145,16 @@ namespace Content.Server.Connection
 
             if (deny != null)
             {
-                var (reason, msg, banHits) = deny.Value;
+                var (reason, denyReason, banHits) = deny.Value;
 
                 var id = await _db.AddConnectionLogAsync(userId, e.UserName, addr, hwid, trust, reason, serverId);
                 if (banHits is { Count: > 0 })
                     await _db.AddServerBanHitsAsync(id, banHits);
 
-                var properties = new Dictionary<string, object>();
                 if (reason == ConnectionDenyReason.Full)
-                    properties["delay"] = _cfg.GetCVar(CCVars.GameServerFullReconnectDelay);
+                    denyReason.AdditionalProperties["delay"] = _cfg.GetCVar(CCVars.GameServerFullReconnectDelay);
 
-                e.Deny(new NetDenyReason(msg, properties));
+                e.Deny(denyReason);
             }
             else
             {
@@ -207,7 +207,7 @@ namespace Content.Server.Connection
          * TODO: Jesus H Christ what is this utter mess of a function
          * TODO: Break this apart into is constituent steps.
          */
-        private async Task<(ConnectionDenyReason, string, List<BanDef>? bansHit)?> ShouldDeny(
+        private async Task<(ConnectionDenyReason, NetDenyReason, List<BanDef>? bansHit)?> ShouldDeny(
             NetConnectingArgs e)
         {
             // Check if banned.
@@ -225,7 +225,7 @@ namespace Content.Server.Connection
 
             if (modernHwid.Length == 0 && e.AuthType == LoginType.LoggedIn && _cfg.GetCVar(CCVars.RequireModernHardwareId))
             {
-                return (ConnectionDenyReason.NoHwid, Loc.GetString("hwid-required"), null);
+                return (ConnectionDenyReason.NoHwid, new NetDenyReason(Loc.GetString("hwid-required")), null);
             }
 
             var bans = await _db.GetBansAsync(addr, userId, hwId, modernHwid, includeUnbanned: false);
@@ -233,7 +233,7 @@ namespace Content.Server.Connection
             {
                 var firstBan = bans[0];
                 var message = firstBan.FormatBanMessage(_cfg, _loc);
-                return (ConnectionDenyReason.Ban, message, bans);
+                return (ConnectionDenyReason.Ban, new NetDenyReason(message), bans);
             }
 
             if (HasTemporaryBypass(userId))
@@ -243,6 +243,7 @@ namespace Content.Server.Connection
             }
 
             var adminData = await _db.GetAdminDataForAsync(e.UserId);
+            var discordAuthStaffBypass = ConnectionManagerStaffBypass.HasDiscordAuthBypass(adminData);
 
             if (_cfg.GetCVar(CCVars.PanicBunkerEnabled) && adminData == null)
             {
@@ -258,14 +259,14 @@ namespace Content.Server.Connection
                 // Use the custom reason if it exists & they don't have the minimum account age
                 if (customReason != string.Empty && !validAccountAge && !bypassAllowed)
                 {
-                    return (ConnectionDenyReason.Panic, customReason, null);
+                    return (ConnectionDenyReason.Panic, new NetDenyReason(customReason), null);
                 }
 
                 if (showReason && !validAccountAge && !bypassAllowed)
                 {
                     return (ConnectionDenyReason.Panic,
-                        Loc.GetString("panic-bunker-account-denied-reason",
-                            ("reason", Loc.GetString("panic-bunker-account-reason-account", ("minutes", minMinutesAge)))), null);
+                        new NetDenyReason(Loc.GetString("panic-bunker-account-denied-reason",
+                            ("reason", Loc.GetString("panic-bunker-account-reason-account", ("minutes", minMinutesAge))))), null);
                 }
 
                 var minOverallMinutes = _cfg.GetCVar(CCVars.PanicBunkerMinOverallMinutes);
@@ -275,19 +276,19 @@ namespace Content.Server.Connection
                 // Use the custom reason if it exists & they don't have the minimum time
                 if (customReason != string.Empty && !haveMinOverallTime && !bypassAllowed)
                 {
-                    return (ConnectionDenyReason.Panic, customReason, null);
+                    return (ConnectionDenyReason.Panic, new NetDenyReason(customReason), null);
                 }
 
                 if (showReason && !haveMinOverallTime && !bypassAllowed)
                 {
                     return (ConnectionDenyReason.Panic,
-                        Loc.GetString("panic-bunker-account-denied-reason",
-                            ("reason", Loc.GetString("panic-bunker-account-reason-overall", ("minutes", minOverallMinutes)))), null);
+                        new NetDenyReason(Loc.GetString("panic-bunker-account-denied-reason",
+                            ("reason", Loc.GetString("panic-bunker-account-reason-overall", ("minutes", minOverallMinutes))))), null);
                 }
 
                 if (!validAccountAge || !haveMinOverallTime && !bypassAllowed)
                 {
-                    return (ConnectionDenyReason.Panic, Loc.GetString("panic-bunker-account-denied"), null);
+                    return (ConnectionDenyReason.Panic, new NetDenyReason(Loc.GetString("panic-bunker-account-denied")), null);
                 }
             }
 
@@ -305,7 +306,7 @@ namespace Content.Server.Connection
 
             if ((softPlayerCount >= _cfg.GetCVar(CCVars.SoftMaxPlayers) && !adminBypass) && !wasInGame)
             {
-                return (ConnectionDenyReason.Full, Loc.GetString("soft-player-cap-full"), null);
+                return (ConnectionDenyReason.Full, new NetDenyReason(Loc.GetString("soft-player-cap-full")), null);
             }
 
             // Checks for whitelist IF it's enabled AND the user isn't an admin. Admins are always allowed.
@@ -315,7 +316,7 @@ namespace Content.Server.Connection
                 {
                     _sawmill.Error("Whitelist enabled but no whitelists loaded.");
                     // Misconfigured, deny everyone.
-                    return (ConnectionDenyReason.Whitelist, Loc.GetString("generic-misconfigured"), null);
+                    return (ConnectionDenyReason.Whitelist, new NetDenyReason(Loc.GetString("generic-misconfigured")), null);
                 }
 
                 foreach (var whitelist in _whitelists)
@@ -330,12 +331,19 @@ namespace Content.Server.Connection
                     if (!whitelistStatus.isWhitelisted)
                     {
                         // Not whitelisted.
-                        return (ConnectionDenyReason.Whitelist, Loc.GetString("whitelist-fail-prefix", ("msg", whitelistStatus.denyMessage!)), null);
+                        return (ConnectionDenyReason.Whitelist, new NetDenyReason(Loc.GetString("whitelist-fail-prefix", ("msg", whitelistStatus.denyMessage!))), null);
                     }
 
                     // Whitelisted, don't check any more.
                     break;
                 }
+            }
+
+            if (_entityManager.SystemOrNull<WH40KDiscordAuthSystem>() is { } discordAuth && !discordAuthStaffBypass)
+            {
+                var discordReason = await discordAuth.GetConnectionBlockReasonAsync(userId);
+                if (discordReason != Content.Shared._WH40K.DiscordAuth.WH40KDiscordAuthGateBlockReason.None)
+                    return (ConnectionDenyReason.DiscordAuth, discordAuth.BuildConnectionDenyReason(userId, discordReason), null);
             }
 
             // ALWAYS keep this at the end, to preserve the API limit.
@@ -344,7 +352,7 @@ namespace Content.Server.Connection
                 var result = await _ipintel.IsVpnOrProxy(e);
 
                 if (result.IsBad)
-                    return (ConnectionDenyReason.IPChecks, result.Reason, null);
+                    return (ConnectionDenyReason.IPChecks, new NetDenyReason(result.Reason), null);
             }
 
             return null;

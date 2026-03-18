@@ -9,6 +9,7 @@ using Content.Shared.Database;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
@@ -23,6 +24,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
@@ -32,6 +34,8 @@ namespace Content.Shared.Damage.Systems;
 public abstract partial class SharedStaminaSystem : EntitySystem
 {
     public static readonly EntProtoId StaminaLow = "StatusEffectStaminaLow";
+    private const float SprintReserveEpsilon = 0.05f;
+    private const float SprintMovementVelocityEpsilonSquared = 0.01f * 0.01f;
 
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] protected readonly IGameTiming Timing = default!;
@@ -63,6 +67,7 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         SubscribeLocalEvent<StaminaComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<StaminaComponent, AfterAutoHandleStateEvent>(OnStamHandleState);
         SubscribeLocalEvent<StaminaComponent, DisarmedEvent>(OnDisarmed);
+        SubscribeLocalEvent<StaminaComponent, MoveInputEvent>(OnMoveInput);
         SubscribeLocalEvent<StaminaComponent, RejuvenateEvent>(OnRejuvenate);
 
         SubscribeLocalEvent<StaminaDamageOnEmbedComponent, EmbedEvent>(OnProjectileEmbed);
@@ -146,6 +151,60 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         args.IsStunned = component.Critical;
 
         args.Handled = true;
+    }
+
+    private void OnMoveInput(Entity<StaminaComponent> ent, ref MoveInputEvent args)
+    {
+        if (!args.HasDirectionalMovement || !args.Entity.Comp.Sprinting)
+            return;
+
+        // Keep movement stamina processing active even when stamina damage is currently at zero.
+        EnsureComp<ActiveStaminaComponent>(ent);
+
+        // Break long cooldowns once when sprint starts, while preserving 1-second stamina ticks.
+        var now = Timing.CurTime;
+        if (ent.Comp.NextUpdate <= TimeSpan.Zero || ent.Comp.NextUpdate > now + TimeSpan.FromSeconds(1f))
+            ent.Comp.NextUpdate = now;
+    }
+
+    private bool TryForceWalkOnSprintReserve(
+        EntityUid uid,
+        InputMoverComponent? mover,
+        StaminaComponent stamina,
+        out float maxSprintDamage)
+    {
+        maxSprintDamage = MathF.Max(0f, stamina.CritThreshold - stamina.SprintMinRemaining);
+
+        if (mover == null || !mover.Sprinting)
+            return false;
+
+        // Use a small tolerance to avoid floating-point edge cases where reserve is never exactly reached.
+        if (stamina.StaminaDamage + SprintReserveEpsilon < maxSprintDamage)
+            return false;
+
+        // Snap to the exact reserve boundary once reached so we do not jitter around it.
+        if (stamina.StaminaDamage < maxSprintDamage)
+        {
+            stamina.StaminaDamage = maxSprintDamage;
+            Dirty(uid, stamina);
+        }
+
+        // Force walk when sprint reserve is exhausted, even if sprint key is still held.
+        var oldMovement = mover.HeldMoveButtons;
+        if ((oldMovement & MoveButtons.Walk) == 0x0)
+        {
+            mover.HeldMoveButtons = oldMovement | MoveButtons.Walk;
+
+            var moveEvent = new MoveInputEvent((uid, mover), oldMovement);
+            RaiseLocalEvent(uid, ref moveEvent);
+
+            Dirty(uid, mover);
+
+            var ev = new SpriteMoveEvent(mover.HasDirectionalMovement);
+            RaiseLocalEvent(uid, ref ev);
+        }
+
+        return true;
     }
 
     private void OnMeleeHit(EntityUid uid, StaminaDamageOnHitComponent component, MeleeHitEvent args)
@@ -262,7 +321,8 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     }
 
     public void TakeStaminaDamage(EntityUid uid, float value, StaminaComponent? component = null,
-        EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null, bool ignoreResist = false)
+        EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null,
+        bool ignoreResist = false, bool log = true, bool applyCooldown = true)
     {
         if (!Resolve(uid, ref component, false))
             return;
@@ -288,7 +348,7 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         component.StaminaDamage = MathF.Max(0f, component.StaminaDamage + value);
 
         // Reset the decay cooldown upon taking damage.
-        if (oldDamage < component.StaminaDamage)
+        if (applyCooldown && oldDamage < component.StaminaDamage)
         {
             var nextUpdate = Timing.CurTime + TimeSpan.FromSeconds(component.Cooldown);
 
@@ -327,6 +387,9 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
         if (value <= 0)
             return;
+        if (!log)
+            return;
+
         if (source != null)
         {
             _adminLogger.Add(LogType.Stamina, $"{ToPrettyString(source.Value):user} caused {value} stamina damage to {ToPrettyString(uid):target}{(with != null ? $" using {ToPrettyString(with.Value):using}" : "")}");
@@ -352,21 +415,51 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         base.Update(frameTime);
 
         var stamQuery = GetEntityQuery<StaminaComponent>();
+        var moverQuery = GetEntityQuery<InputMoverComponent>();
+        var physicsQuery = GetEntityQuery<PhysicsComponent>();
         var query = EntityQueryEnumerator<ActiveStaminaComponent>();
         var curTime = Timing.CurTime;
 
         while (query.MoveNext(out var uid, out _))
         {
+            var sprinting = false;
+            var directional = false;
+
+            if (moverQuery.TryGetComponent(uid, out var mover))
+            {
+                directional = mover.HasDirectionalMovement;
+                var physicallyMoving = !physicsQuery.TryGetComponent(uid, out var body) ||
+                                       body.LinearVelocity.LengthSquared() > SprintMovementVelocityEpsilonSquared;
+                sprinting = directional && mover.Sprinting && physicallyMoving;
+            }
+
             // Just in case we have active but not stamina we'll check and account for it.
             if (!stamQuery.TryGetComponent(uid, out var comp) ||
-                comp.StaminaDamage <= 0f && !comp.Critical)
+                comp.StaminaDamage <= 0f && !comp.Critical && !sprinting)
             {
                 RemComp<ActiveStaminaComponent>(uid);
                 continue;
             }
 
+            // Hard-stop sprint at reserve threshold so holding sprint cannot keep run mode.
+            if (TryForceWalkOnSprintReserve(uid, mover, comp, out var maxSprintDamageNow))
+            {
+                sprinting = false;
+            }
+            else
+            {
+                maxSprintDamageNow = MathF.Max(0f, comp.CritThreshold - comp.SprintMinRemaining);
+            }
+
             // Shouldn't need to consider paused time as we're only iterating non-paused stamina components.
             var nextUpdate = comp.NextUpdate;
+
+            // Rebase stale timers to avoid frame-rate catch-up bursts.
+            if (nextUpdate <= TimeSpan.Zero || nextUpdate < curTime - TimeSpan.FromSeconds(1f))
+            {
+                comp.NextUpdate = curTime;
+                nextUpdate = curTime;
+            }
 
             if (nextUpdate > curTime)
                 continue;
@@ -377,10 +470,41 @@ public abstract partial class SharedStaminaSystem : EntitySystem
 
             comp.NextUpdate += TimeSpan.FromSeconds(1f);
 
+            var staminaDelta = comp.Decay;
+
+            if (sprinting)
+            {
+                staminaDelta = comp.SprintDrain;
+            }
+            else if (directional)
+            {
+                staminaDelta = -comp.WalkRecovery;
+            }
+            else
+            {
+                staminaDelta = -comp.IdleRecovery;
+            }
+
+            // Sprint exhaustion is capped so movement drain alone cannot trigger stamina crit.
+            if (sprinting && staminaDelta > 0f)
+            {
+                if (comp.StaminaDamage >= maxSprintDamageNow)
+                {
+                    staminaDelta = 0f;
+                }
+                else
+                {
+                    staminaDelta = MathF.Min(staminaDelta, maxSprintDamageNow - comp.StaminaDamage);
+                }
+            }
+
             TakeStaminaDamage(
                 uid,
-                comp.AfterCritical ? -comp.Decay * comp.AfterCritDecayMultiplier : -comp.Decay, // Recover faster after crit
-                comp);
+                staminaDelta < 0f && comp.AfterCritical ? staminaDelta * comp.AfterCritDecayMultiplier : staminaDelta,
+                comp,
+                visual: false,
+                log: false,
+                applyCooldown: false);
 
             Dirty(uid, comp);
         }

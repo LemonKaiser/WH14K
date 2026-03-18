@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Shared.NPC;
@@ -20,6 +21,7 @@ public abstract class PathRequest
     public List<PathPoly> Polys = new();
 
     public bool Started = false;
+    public TimeSpan EnqueuedAt = TimeSpan.Zero;
 
     #region Pathfinding state
 
@@ -33,15 +35,23 @@ public abstract class PathRequest
     #region Data
 
     public readonly PathFlags Flags;
+    public readonly PathCostProfile Profile;
     public readonly int CollisionLayer;
     public readonly int CollisionMask;
 
     #endregion
 
-    public PathRequest(EntityCoordinates start, PathFlags flags, int layer, int mask, CancellationToken cancelToken)
+    public PathRequest(
+        EntityCoordinates start,
+        PathFlags flags,
+        int layer,
+        int mask,
+        CancellationToken cancelToken,
+        PathCostProfile profile = PathCostProfile.Default)
     {
         Start = start;
         Flags = flags;
+        Profile = profile;
         CollisionLayer = layer;
         CollisionMask = mask;
         Tcs = new TaskCompletionSource<PathResult>(cancelToken);
@@ -64,7 +74,8 @@ public sealed class AStarPathRequest : PathRequest
         float distance,
         int layer,
         int mask,
-        CancellationToken cancelToken) : base(start, flags, layer, mask, cancelToken)
+        CancellationToken cancelToken,
+        PathCostProfile profile = PathCostProfile.Default) : base(start, flags, layer, mask, cancelToken, profile)
     {
         Distance = distance;
         End = end;
@@ -90,7 +101,8 @@ public sealed class BFSPathRequest : PathRequest
         PathFlags flags,
         int layer,
         int mask,
-        CancellationToken cancelToken) : base(start, flags, layer, mask, cancelToken)
+        CancellationToken cancelToken,
+        PathCostProfile profile = PathCostProfile.Default) : base(start, flags, layer, mask, cancelToken, profile)
         {
             ExpansionRange = expansionRange;
             ExpansionLimit = expansionLimit;

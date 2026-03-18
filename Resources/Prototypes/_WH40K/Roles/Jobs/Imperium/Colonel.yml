@@ -3,6 +3,10 @@
   name: job-name-colonel
   description: job-description-colonel
   playTimeTracker: JobColonel
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: ColonelGear
   icon: "JobIconColonel"
   supervisors: job-supervisors-engineering
@@ -11,10 +15,27 @@
   - !type:AddComponentSpecial
     components:
       - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KOfficerMaleHuman
+          Female: WH40KOfficerFemaleHuman
+          Unsexed: WH40KOfficerMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: ColonelGear
@@ -22,7 +43,8 @@
     jumpsuit: ClothingUniformJumpsuitColonel
     gloves: ClothingHandsGlovesCombatColonel
     shoes: ClothingShoesGenBoots
-    ears: ClothingHeadsetVoxBackpack
+    ears: ClothingHeadsetVoxBackpackImperium
+    head: ClothingHeadOfficer
     belt: colbelt
     neck: Colonelcloak
     id: ColonelDogTag

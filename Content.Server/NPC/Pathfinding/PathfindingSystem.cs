@@ -6,15 +6,21 @@ using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.Destructible;
 using Content.Server.NPC.Systems;
+using Content.Shared.Damage.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.Administration;
+using Content.Shared.CCVar;
 using Content.Shared.Climbing.Components;
 using Content.Shared.Doors.Components;
+using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
+using Content.Shared.Slippery;
 using Robust.Server.Player;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -41,10 +47,12 @@ namespace Content.Server.NPC.Pathfinding
          */
 
         [Dependency] private readonly IAdminManager _adminManager = default!;
+        [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IParallelManager _parallel = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IRobustRandom _random = default!;
+        [Dependency] private readonly NPCBenchmarkSystem _bench = default!;
         [Dependency] private readonly DestructibleSystem _destructible = default!;
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly FixtureSystem _fixtures = default!;
@@ -57,6 +65,8 @@ namespace Content.Server.NPC.Pathfinding
 
         [ViewVariables]
         private readonly List<PathRequest> _pathRequests = new(PathTickLimit);
+        private readonly Dictionary<PathRequestCoalesceKey, PathRequest> _coalescedRequests = new();
+        private readonly Dictionary<PathRouteCacheKey, PathRouteCacheEntry> _routeCache = new();
 
         private static readonly TimeSpan PathTime = TimeSpan.FromMilliseconds(3);
 
@@ -67,25 +77,46 @@ namespace Content.Server.NPC.Pathfinding
 
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
+        private bool _routeCacheEnabled = true;
+        private float _routeCacheTtlSeconds = 0.80f;
+        private float _routeCacheNoPathTtlSeconds = 0.20f;
+        private int _routeCacheMaxEntries = 1024;
+        private TimeSpan _nextRouteCacheCleanupTime = TimeSpan.Zero;
 
         private EntityQuery<AccessReaderComponent> _accessQuery;
+        private EntityQuery<DamageContactsComponent> _damageContactsQuery;
         private EntityQuery<DestructibleComponent> _destructibleQuery;
         private EntityQuery<DoorComponent> _doorQuery;
         private EntityQuery<ClimbableComponent> _climbableQuery;
         private EntityQuery<FixturesComponent> _fixturesQuery;
         private EntityQuery<MapGridComponent> _gridQuery;
+        private EntityQuery<SlipperyComponent> _slipperyQuery;
+        private EntityQuery<SpeedModifierContactsComponent> _speedModifierContactsQuery;
         private EntityQuery<TransformComponent> _xformQuery;
 
         public override void Initialize()
         {
             base.Initialize();
 
+            Subs.CVar(_cfg, CCVars.NPCPathRouteCacheEnabled, value =>
+            {
+                _routeCacheEnabled = value;
+                if (!value)
+                    _routeCache.Clear();
+            }, true);
+            Subs.CVar(_cfg, CCVars.NPCPathRouteCacheTtlSeconds, value => _routeCacheTtlSeconds = MathF.Max(0f, value), true);
+            Subs.CVar(_cfg, CCVars.NPCPathRouteCacheNoPathTtlSeconds, value => _routeCacheNoPathTtlSeconds = MathF.Max(0f, value), true);
+            Subs.CVar(_cfg, CCVars.NPCPathRouteCacheMaxEntries, value => _routeCacheMaxEntries = Math.Max(32, value), true);
+
             _accessQuery = GetEntityQuery<AccessReaderComponent>();
+            _damageContactsQuery = GetEntityQuery<DamageContactsComponent>();
             _destructibleQuery = GetEntityQuery<DestructibleComponent>();
             _doorQuery = GetEntityQuery<DoorComponent>();
             _climbableQuery = GetEntityQuery<ClimbableComponent>();
             _fixturesQuery = GetEntityQuery<FixturesComponent>();
             _gridQuery = GetEntityQuery<MapGridComponent>();
+            _slipperyQuery = GetEntityQuery<SlipperyComponent>();
+            _speedModifierContactsQuery = GetEntityQuery<SpeedModifierContactsComponent>();
             _xformQuery = GetEntityQuery<TransformComponent>();
 
             _playerManager.PlayerStatusChanged += OnPlayerChange;
@@ -97,6 +128,7 @@ namespace Content.Server.NPC.Pathfinding
         {
             base.Shutdown();
             _subscribedSessions.Clear();
+            _routeCache.Clear();
             _playerManager.PlayerStatusChanged -= OnPlayerChange;
             _transform.OnGlobalMoveEvent -= OnMoveEvent;
         }
@@ -104,51 +136,72 @@ namespace Content.Server.NPC.Pathfinding
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
+            using var benchScope = _bench.Measure("npc.pathfinding.update");
+            var now = _timing.CurTime;
+
+            if (_routeCacheEnabled && now >= _nextRouteCacheCleanupTime)
+            {
+                CleanupRouteCache(now);
+            }
+
             var options = new ParallelOptions()
             {
                 MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
             };
 
-            UpdateGrid(options);
+            _bench.RecordCount("npc.pathfinding.queue_depth", _pathRequests.Count);
+
+            using (_bench.Measure("npc.pathfinding.grid_update"))
+            {
+                UpdateGrid(options);
+            }
+
             _stopwatch.Restart();
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
+            _bench.RecordCount("npc.pathfinding.batch_size", amount);
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
 
-
-            Parallel.For(0, amount, options, i =>
+            using (_bench.Measure("npc.pathfinding.compute_batch", amount))
             {
-                // If we're over the limit (either time-sliced or hard cap).
-                if (_stopwatch.Elapsed >= PathTime)
+                Parallel.For(0, amount, options, i =>
                 {
-                    results[i] = PathResult.Continuing;
-                    return;
-                }
-
-                var request = _pathRequests[i];
-
-                try
-                {
-                    switch (request)
+                    // If we're over the limit (either time-sliced or hard cap).
+                    if (_stopwatch.Elapsed >= PathTime)
                     {
-                        case AStarPathRequest astar:
-                            results[i] = UpdateAStarPath(astar);
-                            break;
-                        case BFSPathRequest bfs:
-                            results[i] = UpdateBFSPath(_random, bfs);
-                            break;
-                        default:
-                            throw new NotImplementedException();
+                        results[i] = PathResult.Continuing;
+                        return;
                     }
-                }
-                catch (Exception)
-                {
-                    results[i] = PathResult.NoPath;
-                    throw;
-                }
-            });
+
+                    var request = _pathRequests[i];
+
+                    try
+                    {
+                        switch (request)
+                        {
+                            case AStarPathRequest astar:
+                                results[i] = UpdateAStarPath(astar);
+                                break;
+                            case BFSPathRequest bfs:
+                                results[i] = UpdateBFSPath(_random, bfs);
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        results[i] = PathResult.NoPath;
+                        throw;
+                    }
+                });
+            }
 
             var offset = 0;
-
+            var continuing = 0;
+            var pathCount = 0;
+            var noPathCount = 0;
+            var partialCount = 0;
+            var finishedCount = 0;
             // then, single-threaded cleanup.
             for (var i = 0; i < amount; i++)
             {
@@ -164,10 +217,37 @@ namespace Content.Server.NPC.Pathfinding
                 switch (result)
                 {
                     case PathResult.Continuing:
+                        continuing++;
                         break;
                     case PathResult.PartialPath:
+                        partialCount++;
+                        finishedCount++;
+                        _bench.RecordDuration("npc.pathfinding.request_latency", (now - path.EnqueuedAt).TotalMilliseconds);
+                        _bench.RecordCount("npc.pathfinding.result.partial", 1);
+                        SendDebug(path);
+                        // Don't use RemoveSwap because we still want to try and process them in order.
+                        _pathRequests.RemoveAt(resultIndex);
+                        offset--;
+                        path.Tcs.SetResult(result);
+                        SendRoute(path);
+                        break;
                     case PathResult.Path:
+                        pathCount++;
+                        finishedCount++;
+                        _bench.RecordDuration("npc.pathfinding.request_latency", (now - path.EnqueuedAt).TotalMilliseconds);
+                        _bench.RecordCount("npc.pathfinding.result.path", 1);
+                        SendDebug(path);
+                        // Don't use RemoveSwap because we still want to try and process them in order.
+                        _pathRequests.RemoveAt(resultIndex);
+                        offset--;
+                        path.Tcs.SetResult(result);
+                        SendRoute(path);
+                        break;
                     case PathResult.NoPath:
+                        noPathCount++;
+                        finishedCount++;
+                        _bench.RecordDuration("npc.pathfinding.request_latency", (now - path.EnqueuedAt).TotalMilliseconds);
+                        _bench.RecordCount("npc.pathfinding.result.no_path", 1);
                         SendDebug(path);
                         // Don't use RemoveSwap because we still want to try and process them in order.
                         _pathRequests.RemoveAt(resultIndex);
@@ -180,7 +260,18 @@ namespace Content.Server.NPC.Pathfinding
                 }
             }
 
+            _bench.RecordCount("npc.pathfinding.continuing", continuing);
+            _bench.RecordCount("npc.pathfinding.finished", finishedCount);
+            _bench.RecordCount("npc.pathfinding.path", pathCount);
+            _bench.RecordCount("npc.pathfinding.no_path", noPathCount);
+            _bench.RecordCount("npc.pathfinding.partial", partialCount);
+
             ArrayPool<PathResult>.Shared.Return(results);
+        }
+
+        public int GetQueueDepth()
+        {
+            return _pathRequests.Count;
         }
 
         /// <summary>
@@ -275,7 +366,7 @@ namespace Content.Server.NPC.Pathfinding
                 (layer, mask) = _physics.GetHardCollision(entity, fixtures);
             }
 
-            var request = new BFSPathRequest(maxRange, limit, start.Coordinates, flags, layer, mask, cancelToken);
+            var request = new BFSPathRequest(maxRange, limit, start.Coordinates, flags, layer, mask, cancelToken, GetCostProfile(entity));
             var path = await GetPath(request);
 
             if (path.Result != PathResult.Path)
@@ -406,13 +497,27 @@ namespace Content.Server.NPC.Pathfinding
             }
 
             var localPos = Vector2.Transform(_transform.ToMapCoordinates(coordinates).Position, _transform.GetInvWorldMatrix(xform));
+
+            if (!float.IsFinite(localPos.X) || !float.IsFinite(localPos.Y))
+                return null;
+
             var origin = GetOrigin(localPos);
 
             if (!TryGetChunk(origin, comp, out var chunk))
                 return null;
 
             var chunkPos = new Vector2(MathHelper.Mod(localPos.X, ChunkSize), MathHelper.Mod(localPos.Y, ChunkSize));
-            var polys = chunk.Polygons[(int)chunkPos.X * ChunkSize + (int)chunkPos.Y];
+            var tileX = (int) chunkPos.X;
+            var tileY = (int) chunkPos.Y;
+
+            if ((uint) tileX >= ChunkSize || (uint) tileY >= ChunkSize)
+                return null;
+
+            var polyIndex = tileX * ChunkSize + tileY;
+            if ((uint) polyIndex >= chunk.Polygons.Length)
+                return null;
+
+            var polys = chunk.Polygons[polyIndex];
 
             foreach (var poly in polys)
             {
@@ -435,7 +540,7 @@ namespace Content.Server.NPC.Pathfinding
                 (layer, mask) = _physics.GetHardCollision(entity, fixtures);
             }
 
-            return new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken);
+            return new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken, GetCostProfile(entity));
         }
 
         public PathFlags GetFlags(EntityUid uid)
@@ -475,43 +580,370 @@ namespace Content.Server.NPC.Pathfinding
             return flags;
         }
 
+        public PathCostProfile GetCostProfile(EntityUid uid)
+        {
+            if (!_npc.TryGetNpc(uid, out var npc))
+                return PathCostProfile.Default;
+
+            return GetCostProfile(npc.Blackboard);
+        }
+
+        public PathCostProfile GetCostProfile(NPCBlackboard blackboard)
+        {
+            if (blackboard.TryGetValue<string>(NPCBlackboard.NavCostProfile, out var explicitProfileToken, EntityManager) &&
+                TryParsePathCostProfile(explicitProfileToken, out var explicitProfile))
+            {
+                return explicitProfile;
+            }
+
+            if (!blackboard.TryGetValue<string>(NPCBlackboard.WaveDirectorOrder, out var orderToken, EntityManager))
+                return PathCostProfile.Default;
+
+            return orderToken switch
+            {
+                "breach_lane" => PathCostProfile.Breach,
+                "push_objective" => PathCostProfile.Assault,
+                "defend_base" => PathCostProfile.Safe,
+                "resupply" => PathCostProfile.Safe,
+                "regroup" => PathCostProfile.Safe,
+                _ => PathCostProfile.Default,
+            };
+        }
+
+        private static bool TryParsePathCostProfile(string token, out PathCostProfile profile)
+        {
+            profile = PathCostProfile.Default;
+
+            if (string.IsNullOrWhiteSpace(token))
+                return false;
+
+            switch (token.Trim().ToLowerInvariant())
+            {
+                case "default":
+                    profile = PathCostProfile.Default;
+                    return true;
+                case "assault":
+                    profile = PathCostProfile.Assault;
+                    return true;
+                case "breach":
+                    profile = PathCostProfile.Breach;
+                    return true;
+                case "safe":
+                    profile = PathCostProfile.Safe;
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         private async Task<PathResultEvent> GetPath(
             PathRequest request, bool safe = false)
         {
+            if (TryGetRouteCache(request, out var cachedResult))
+                return cachedResult;
+
             // We could maybe try an initial quick run to avoid forcing time-slicing over ticks.
             // For now it seems okay and it shouldn't block on 1 NPC anyway.
+            request.EnqueuedAt = _timing.CurTime;
+            var queueDepth = 0;
+            PathRequest? coalesced = null;
+            PathRequestCoalesceKey? coalesceKey = null;
+            var canCoalesce = TryGetCoalesceKey(request, out var key);
+            if (canCoalesce)
+                coalesceKey = key;
 
             if (safe)
             {
                 lock (_pathRequests)
                 {
-                    _pathRequests.Add(request);
+                    if (canCoalesce && _coalescedRequests.TryGetValue(key, out coalesced) && !coalesced.Task.IsCompleted)
+                    {
+                        _bench.RecordCount("npc.pathfinding.request_coalesced", 1);
+                        queueDepth = _pathRequests.Count;
+                    }
+                    else
+                    {
+                        _pathRequests.Add(request);
+                        queueDepth = _pathRequests.Count;
+                        if (canCoalesce)
+                            _coalescedRequests[key] = request;
+                        _bench.RecordCount("npc.pathfinding.request_enqueued", 1);
+                    }
                 }
             }
             else
             {
-                _pathRequests.Add(request);
+                if (canCoalesce && _coalescedRequests.TryGetValue(key, out coalesced) && !coalesced.Task.IsCompleted)
+                {
+                    _bench.RecordCount("npc.pathfinding.request_coalesced", 1);
+                    queueDepth = _pathRequests.Count;
+                }
+                else
+                {
+                    _pathRequests.Add(request);
+                    queueDepth = _pathRequests.Count;
+                    if (canCoalesce)
+                        _coalescedRequests[key] = request;
+                    _bench.RecordCount("npc.pathfinding.request_enqueued", 1);
+                }
             }
 
-            await request.Task;
+            _bench.RecordCount("npc.pathfinding.queue_depth_after_enqueue", queueDepth);
 
-            if (request.Task.Exception != null)
+            var awaitRequest = coalesced ?? request;
+
+            try
             {
-                throw request.Task.Exception;
-            }
+                await awaitRequest.Task;
 
-            if (!request.Task.IsCompletedSuccessfully)
-            {
-                return new PathResultEvent(PathResult.NoPath, new List<PathPoly>());
-            }
+                if (awaitRequest.Task.Exception != null)
+                {
+                    throw awaitRequest.Task.Exception;
+                }
 
-            // Same context as do_after and not synchronously blocking soooo
+                if (!awaitRequest.Task.IsCompletedSuccessfully)
+                {
+                    return new PathResultEvent(PathResult.NoPath, new List<PathPoly>());
+                }
+
+                // Same context as do_after and not synchronously blocking soooo
 #pragma warning disable RA0004
-            var ev = new PathResultEvent(request.Task.Result, request.Polys);
+                var completedResult = awaitRequest.Task.Result;
 #pragma warning restore RA0004
+                var ev = new PathResultEvent(completedResult, awaitRequest.Polys);
 
-            return ev;
+                if (awaitRequest is AStarPathRequest astarRequest)
+                    TryStoreRouteCache(astarRequest, completedResult, awaitRequest.Polys);
+
+                return ev;
+            }
+            finally
+            {
+                if (coalesceKey != null && coalesced == null)
+                {
+                    if (safe)
+                    {
+                        lock (_pathRequests)
+                        {
+                            if (_coalescedRequests.TryGetValue(coalesceKey.Value, out var current) && ReferenceEquals(current, request))
+                                _coalescedRequests.Remove(coalesceKey.Value);
+                        }
+                    }
+                    else if (_coalescedRequests.TryGetValue(coalesceKey.Value, out var current) && ReferenceEquals(current, request))
+                    {
+                        _coalescedRequests.Remove(coalesceKey.Value);
+                    }
+                }
+            }
         }
+
+        private bool TryGetRouteCache(PathRequest request, out PathResultEvent result)
+        {
+            result = default!;
+
+            if (!_routeCacheEnabled ||
+                request is not AStarPathRequest astar)
+            {
+                return false;
+            }
+
+            var key = GetRouteCacheKey(astar);
+
+            if (!_routeCache.TryGetValue(key, out var entry))
+            {
+                _bench.RecordCount("npc.pathfinding.cache_miss", 1);
+                return false;
+            }
+
+            if (entry.ExpiresAt <= _timing.CurTime || !IsRouteCacheEntryValid(entry))
+            {
+                _routeCache.Remove(key);
+                _bench.RecordCount("npc.pathfinding.cache_stale", 1);
+                return false;
+            }
+
+            _bench.RecordCount("npc.pathfinding.cache_hit", 1);
+            var path = entry.Path.Count == 0 ? new List<PathPoly>() : new List<PathPoly>(entry.Path);
+            result = new PathResultEvent(entry.Result, path);
+            return true;
+        }
+
+        private void TryStoreRouteCache(AStarPathRequest request, PathResult requestResult, List<PathPoly> resultPath)
+        {
+            if (!_routeCacheEnabled ||
+                _routeCacheTtlSeconds <= 0f ||
+                !request.Task.IsCompletedSuccessfully)
+            {
+                return;
+            }
+
+            if (requestResult != PathResult.Path &&
+                requestResult != PathResult.PartialPath &&
+                requestResult != PathResult.NoPath)
+            {
+                return;
+            }
+
+            var ttl = requestResult == PathResult.NoPath ? _routeCacheNoPathTtlSeconds : _routeCacheTtlSeconds;
+            if (ttl <= 0f)
+                return;
+
+            var key = GetRouteCacheKey(request);
+            var path = resultPath.Count == 0 ? new List<PathPoly>() : new List<PathPoly>(resultPath);
+            var entry = new PathRouteCacheEntry(requestResult, path, _timing.CurTime + TimeSpan.FromSeconds(ttl));
+            _routeCache[key] = entry;
+            _bench.RecordCount(requestResult == PathResult.NoPath ? "npc.pathfinding.cache_store_no_path" : "npc.pathfinding.cache_store_path", 1);
+
+            if (_routeCache.Count > _routeCacheMaxEntries)
+            {
+                CompactRouteCache(_timing.CurTime);
+            }
+        }
+
+        private void CleanupRouteCache(TimeSpan now)
+        {
+            _nextRouteCacheCleanupTime = now + TimeSpan.FromSeconds(2);
+
+            if (_routeCache.Count == 0)
+                return;
+
+            List<PathRouteCacheKey>? stale = null;
+
+            foreach (var (key, entry) in _routeCache)
+            {
+                if (entry.ExpiresAt > now && IsRouteCacheEntryValid(entry))
+                    continue;
+
+                stale ??= new List<PathRouteCacheKey>();
+                stale.Add(key);
+            }
+
+            if (stale != null)
+            {
+                foreach (var key in stale)
+                {
+                    _routeCache.Remove(key);
+                }
+
+                _bench.RecordCount("npc.pathfinding.cache_cleanup_removed", stale.Count);
+            }
+
+            if (_routeCache.Count > _routeCacheMaxEntries)
+            {
+                CompactRouteCache(now);
+            }
+        }
+
+        private void CompactRouteCache(TimeSpan now)
+        {
+            if (_routeCache.Count <= _routeCacheMaxEntries)
+                return;
+
+            var toRemove = _routeCache.Count - _routeCacheMaxEntries;
+            if (toRemove <= 0)
+                return;
+
+            var keys = _routeCache
+                .OrderBy(pair => pair.Value.ExpiresAt)
+                .Take(toRemove)
+                .Select(pair => pair.Key)
+                .ToArray();
+
+            foreach (var key in keys)
+            {
+                _routeCache.Remove(key);
+            }
+
+            _bench.RecordCount("npc.pathfinding.cache_compact_removed", keys.Length);
+        }
+
+        private static bool IsRouteCacheEntryValid(PathRouteCacheEntry entry)
+        {
+            if (entry.Result == PathResult.NoPath || entry.Path.Count == 0)
+                return true;
+
+            foreach (var poly in entry.Path)
+            {
+                if (!poly.IsValid())
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static PathRouteCacheKey GetRouteCacheKey(AStarPathRequest request)
+        {
+            return new PathRouteCacheKey(
+                request.Start.EntityId,
+                request.End.EntityId,
+                ToChunk(request.Start.Position),
+                ToTile(request.End.Position),
+                request.Flags,
+                request.Profile,
+                request.CollisionLayer,
+                request.CollisionMask,
+                (int) MathF.Round(request.Distance * 10f));
+        }
+
+        private static bool TryGetCoalesceKey(PathRequest request, out PathRequestCoalesceKey key)
+        {
+            if (request is not AStarPathRequest astar)
+            {
+                key = default;
+                return false;
+            }
+
+            key = new PathRequestCoalesceKey(
+                astar.Start.EntityId,
+                astar.End.EntityId,
+                ToTile(astar.Start.Position),
+                ToTile(astar.End.Position),
+                astar.Flags,
+                astar.Profile,
+                astar.CollisionLayer,
+                astar.CollisionMask,
+                (int) MathF.Round(astar.Distance * 10f));
+            return true;
+        }
+
+        private static Vector2i ToTile(Vector2 value)
+        {
+            return new Vector2i((int) MathF.Floor(value.X), (int) MathF.Floor(value.Y));
+        }
+
+        private static Vector2i ToChunk(Vector2 value)
+        {
+            return new Vector2i(
+                (int) MathF.Floor(value.X / ChunkSize),
+                (int) MathF.Floor(value.Y / ChunkSize));
+        }
+
+        private readonly record struct PathRequestCoalesceKey(
+            EntityUid StartEntity,
+            EntityUid EndEntity,
+            Vector2i StartTile,
+            Vector2i EndTile,
+            PathFlags Flags,
+            PathCostProfile Profile,
+            int Layer,
+            int Mask,
+            int DistanceTenths);
+
+        private readonly record struct PathRouteCacheKey(
+            EntityUid StartEntity,
+            EntityUid EndEntity,
+            Vector2i StartChunk,
+            Vector2i EndTile,
+            PathFlags Flags,
+            PathCostProfile Profile,
+            int Layer,
+            int Mask,
+            int DistanceTenths);
+
+        private readonly record struct PathRouteCacheEntry(
+            PathResult Result,
+            List<PathPoly> Path,
+            TimeSpan ExpiresAt);
 
         #region Debug handlers
 

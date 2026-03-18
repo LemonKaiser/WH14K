@@ -42,7 +42,7 @@
                           <PanelContainer StyleClasses="LowDivider" Margin="0 -2"/>
 
                           <RichTextLabel Name="PointsLabel"
-                              Text="$0"
+                              Text="₮0"
                               Margin="4 0" />
 
                           <!-- Orders Count/Capacity -->
@@ -53,6 +53,16 @@
 
                           <Label Name="ShuttleCapacityLabel"
                               Text="0/20"
+                              Margin="4 0"/>
+
+                          <!-- Delivery ETA -->
+                          <Label Text="{Loc 'cargo-console-menu-delivery-time-label'}"
+                              StyleClasses="LabelKeyText" />
+
+                          <PanelContainer StyleClasses="LowDivider" Margin="0 -2 0 -1"/>
+
+                          <Label Name="DeliveryEtaLabel"
+                              Text="{Loc 'cargo-console-menu-delivery-time-none-text'}"
                               Margin="4 0"/>
                       </GridContainer>
 
@@ -103,7 +113,8 @@
 
                       <!-- Title -->
                       <controls:StripeBack>
-                          <Label Text="{Loc 'cargo-console-menu-requests-label'}"
+                          <Label Name="RequestsTitleLabel"
+                              Text="{Loc 'cargo-console-menu-requests-label'}"
                               HorizontalAlignment="Center"
                               Margin="4"/>
                       </controls:StripeBack>
@@ -128,6 +139,17 @@
                                       <!-- Requests are added here by code -->
                                   </BoxContainer>
                               </ScrollContainer>
+                              <PanelContainer StyleClasses="LowDivider" />
+                              <BoxContainer Margin="8 6 8 8">
+                                  <Button Name="ApproveAllRequests"
+                                      Text="{Loc 'cargo-console-menu-order-row-button-approve'}"
+                                      StyleClasses="OpenRight"
+                                      HorizontalExpand="True"/>
+                                  <Button Name="CancelAllRequests"
+                                      Text="{Loc 'cargo-console-menu-order-row-button-cancel'}"
+                                      StyleClasses="OpenLeft"
+                                      HorizontalExpand="True" />
+                              </BoxContainer>
                           </BoxContainer>
                       </PanelContainer>
                   </BoxContainer>
@@ -154,7 +176,8 @@
                           <BoxContainer Orientation="Vertical"
                               Margin="6">
                               <ScrollContainer VerticalExpand="True">
-                                  <BoxContainer Orientation="Vertical"
+                                  <BoxContainer Name="Orders"
+                                      Orientation="Vertical"
                                       StyleClasses="transparentItemList"
                                       VerticalExpand="True"
                                       SeparationOverride="6">

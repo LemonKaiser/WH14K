@@ -60,5 +60,6 @@ public sealed class GameTopMenuBarUIController : UIController
         _action.LoadButton();
         _sandbox.LoadButton();
         _emotes.LoadButton();
+        GameTopMenuBar?.Relocalize();
     }
 }

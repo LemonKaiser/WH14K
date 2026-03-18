@@ -92,7 +92,16 @@
   id: JobTanker
 
 - type: playTimeTracker
+  id: JobTitheSupplier
+
+- type: playTimeTracker
   id: JobGuardsman
+
+- type: playTimeTracker
+  id: JobPsyker
+
+- type: playTimeTracker
+  id: JobVoxScout
 
 - type: playTimeTracker
   id: JobMedic
@@ -146,7 +155,13 @@
   id: JobHTanker
 
 - type: playTimeTracker
+  id: JobHBandSupplier
+
+- type: playTimeTracker
   id: JobHGuardsman
+
+- type: playTimeTracker
+  id: JobHVoxScout
 
 - type: playTimeTracker
   id: JobHMedic

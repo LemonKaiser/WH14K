@@ -177,7 +177,7 @@ public sealed partial class DragonSystem : EntitySystem
     {
         if (component.Weakened)
         {
-            args.ModifySpeed(0.5f, 0.5f);
+            args.ModifySpeed(0.5f, 0.5f, MovementSpeedModifierLayer.Status);
         }
     }
 

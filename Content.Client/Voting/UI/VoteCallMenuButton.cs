@@ -1,4 +1,5 @@
-﻿using Robust.Client.UserInterface.Controls;
+using Content.Client.Localization;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 
@@ -8,7 +9,7 @@ namespace Content.Client.Voting.UI
     ///     LITERALLY just a button that opens the vote call menu.
     ///     Automatically disables itself if the client cannot call votes.
     /// </summary>
-    public sealed class VoteCallMenuButton : Button
+    public sealed class VoteCallMenuButton : Button, ILocalizedControl
     {
         [Dependency] private readonly IVoteManager _voteManager = default!;
 
@@ -18,9 +19,9 @@ namespace Content.Client.Voting.UI
         {
             IoCManager.InjectDependencies(this);
 
-            Text = Loc.GetString("ui-vote-menu-button");
             ToggleMode = true;
             OnPressed += OnOnPressed;
+            Relocalize();
         }
 
         private void OnOnPressed(ButtonEventArgs obj)
@@ -51,12 +52,17 @@ namespace Content.Client.Voting.UI
             if (_voteCallMenu is { IsOpen: true })
                 _voteCallMenu.Close();
 
-            _voteManager.CanCallVoteChanged += UpdateCanCall;
+            _voteManager.CanCallVoteChanged -= UpdateCanCall;
         }
 
         private void UpdateCanCall(bool canCall)
         {
             Disabled = !canCall;
+        }
+
+        public void Relocalize()
+        {
+            Text = Loc.GetString("ui-vote-menu-button");
         }
     }
 }

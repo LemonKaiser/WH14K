@@ -23,5 +23,26 @@ namespace Content.Shared.Speech
 
         [DataField("exclaimSound")]
         public SoundSpecifier ExclaimSound { get; set; } = new SoundPathSpecifier("/Audio/Voice/Talk/speak_2_exclaim.ogg");
+
+        [DataField("dialogueBlipSound")]
+        public SoundSpecifier? DialogueBlipSound { get; set; }
+
+        [DataField("dialogueBlipPitch")]
+        public float DialogueBlipPitch { get; set; } = 1f;
+
+        [DataField("dialogueBlipVariation")]
+        public float DialogueBlipVariation { get; set; } = 0.05f;
+
+        [DataField("dialogueBlipVolume")]
+        public float DialogueBlipVolume { get; set; } = -11f;
+
+        [DataField("dialogueCharsPerSecond")]
+        public float DialogueCharsPerSecond { get; set; } = 30f;
+
+        [DataField("dialogueCharsPerBlip")]
+        public int DialogueCharsPerBlip { get; set; } = 2;
+
+        [DataField("dialoguePunctuationPause")]
+        public float DialoguePunctuationPause { get; set; } = 0.04f;
     }
 }

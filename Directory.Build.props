@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <!--
+    Guardrail: never compile temporary build outputs created via custom BaseIntermediateOutputPath/BaseOutputPath.
+    These generated .cs files can otherwise be picked up as sources and cause duplicate assembly attributes.
+    -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/artifacts/tmpobj/**;**/artifacts/tmpbuild/**;**/artifacts/verify-server/**;**/artifacts/verify-client/**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' or '$(Configuration)' == 'DebugOpt' or '$(Configuration)' == 'Tools'">
+    <!--
+    Set these early so engine project ItemGroup conditions can see them during project evaluation.
+    RobustToolbox later normalizes some of these values again inside imported targets.
+    -->
+    <RobustToolsBuild Condition="'$(RobustToolsBuild)' == ''">True</RobustToolsBuild>
+    <DefineConstants>$(DefineConstants);TOOLS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' or '$(Configuration)' == 'DebugOpt' or '$(Configuration)' == 'Tools') and '$(MSBuildProjectName)' == 'Robust.Client'">
+    <EnableClientScripting Condition="'$(EnableClientScripting)' == ''">True</EnableClientScripting>
+    <DefineConstants>$(DefineConstants);CLIENT_SCRIPTING</DefineConstants>
+  </PropertyGroup>
+</Project>
+

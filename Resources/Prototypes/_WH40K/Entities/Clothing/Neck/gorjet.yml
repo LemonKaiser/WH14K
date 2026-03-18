@@ -8,11 +8,6 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/gorjet.rsi
-  - type: Reflect
-    reflectProb: 0.2
-    reflects:
-      - Energy
-      - NonEnergy
 
 - type: entity
   parent: ClothingNeckBase
@@ -26,8 +21,3 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
-  - type: Reflect
-    reflectProb: 0.2
-    reflects:
-      - Energy
-      - NonEnergy

@@ -129,6 +129,15 @@ namespace Content.Shared.Maps
         /// </summary>
         [DataField("indestructible")] public bool Indestructible = false;
 
+        // Legacy RMC14 tile metadata retained for YAML compatibility.
+        [DataField("minimapColor")] public string MinimapColor = string.Empty;
+        [DataField("weedsSpreadable")] public bool WeedsSpreadable = true;
+        [DataField("semiWeedable")] public bool SemiWeedable = false;
+        [DataField("canPlaceTunnel")] public bool CanPlaceTunnel = true;
+        [DataField("canDig")] public bool CanDig = false;
+        [DataField("blockAnchoring")] public bool BlockAnchoring = false;
+        [DataField("blockConstruction")] public bool BlockConstruction = false;
+
         /// <summary>
         ///     Hide this tile in the tile placement editor.
         /// </summary>

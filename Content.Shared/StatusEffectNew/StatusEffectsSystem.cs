@@ -33,6 +33,7 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
         SubscribeLocalEvent<StatusEffectContainerComponent, ComponentInit>(OnStatusContainerInit);
         SubscribeLocalEvent<StatusEffectContainerComponent, ComponentShutdown>(OnStatusContainerShutdown);
+        SubscribeLocalEvent<StatusEffectContainerComponent, EntityTerminatingEvent>(OnStatusContainerTerminating);
         SubscribeLocalEvent<StatusEffectContainerComponent, EntInsertedIntoContainerMessage>(OnEntityInserted);
         SubscribeLocalEvent<StatusEffectContainerComponent, EntRemovedFromContainerMessage>(OnEntityRemoved);
 
@@ -98,8 +99,13 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
     private void OnStatusContainerShutdown(Entity<StatusEffectContainerComponent> ent, ref ComponentShutdown args)
     {
+        ShutdownStatusContainer(ent);
+    }
+
+    private void OnStatusContainerTerminating(Entity<StatusEffectContainerComponent> ent, ref EntityTerminatingEvent args)
+    {
         if (ent.Comp.ActiveStatusEffects is { } container)
-            _container.ShutdownContainer(container);
+            _container.EmptyContainer(container, force: true, reparent: false);
     }
 
     private void OnEntityInserted(Entity<StatusEffectContainerComponent> ent, ref EntInsertedIntoContainerMessage args)
@@ -138,6 +144,15 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         // to another. That might be good to have for polymorphs or something.
         statusComp.AppliedTo = null;
         Dirty(args.Entity, statusComp);
+    }
+
+    private void ShutdownStatusContainer(Entity<StatusEffectContainerComponent> ent)
+    {
+        if (ent.Comp.ActiveStatusEffects is not { } container)
+            return;
+
+        _container.ShutdownContainer(container);
+        ent.Comp.ActiveStatusEffects = null;
     }
 
     private void OnRejuvenate(Entity<RejuvenateRemovedStatusEffectComponent> ent,

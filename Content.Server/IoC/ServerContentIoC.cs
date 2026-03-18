@@ -2,6 +2,9 @@ using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Notes;
+using Content.Server._WH40K.MetaProgress;
+using Content.Server._WH40K.Administration.ScreenCheck;
+using Content.Server._WH40K.DiscordAuth;
 using Content.Server.Afk;
 using Content.Server.Chat.Managers;
 using Content.Server.Connection;
@@ -32,6 +35,8 @@ using Content.Shared.IoC;
 using Content.Shared.Kitchen;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared._WH40K.DiscordAuth;
+using Content.Shared._WH40K.MetaProgress;
 
 namespace Content.Server.IoC;
 
@@ -61,6 +66,8 @@ internal static class ServerContentIoC
         deps.Register<ContentNetworkResourceManager>();
         deps.Register<IAdminNotesManager, AdminNotesManager>();
         deps.Register<GhostKickManager>();
+        deps.Register<ScreenCheckManager>();
+        deps.Register<IWH40KDiscordAuthApi, WH40KDiscordAuthApi>();
         deps.Register<ISharedAdminLogManager, AdminLogManager>();
         deps.Register<IAdminLogManager, AdminLogManager>();
         deps.Register<PlayTimeTrackingManager>();
@@ -71,6 +78,8 @@ internal static class ServerContentIoC
         deps.Register<VoteWebhooks>();
         deps.Register<ServerDbEntryManager>();
         deps.Register<ISharedPlaytimeManager, PlayTimeTrackingManager>();
+        deps.Register<ISharedWH40KDiscordAuthManager, WH40KDiscordAuthManager>();
+        deps.Register<ISharedWH40KMetaProgressManager, WH40KMetaProgressManager>();
         deps.Register<ServerApi>();
         deps.Register<JobWhitelistManager>();
         deps.Register<PlayerRateLimitManager>();

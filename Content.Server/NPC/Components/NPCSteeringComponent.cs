@@ -99,6 +99,16 @@ public sealed partial class NPCSteeringComponent : Component
     [ViewVariables(VVAccess.ReadWrite)] public float Range = 0.2f;
 
     /// <summary>
+    /// Whether to ignore pathing and just move directly to target.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)] public bool DirectMove = false;
+
+    /// <summary>
+    /// Up to how fast can we be going before being considered in range, if not null.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)] public float? InRangeMaxSpeed = null;
+
+    /// <summary>
     /// How far does the last node in the path need to be before considering re-pathfinding.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public float RepathRange = 1.5f;
@@ -109,6 +119,32 @@ public sealed partial class NPCSteeringComponent : Component
     /// How many times we've failed to pathfind. Once this hits the limit we'll stop steering.
     /// </summary>
     [ViewVariables] public int FailedPathCount;
+
+    /// <summary>
+    /// Earliest next time this NPC may request another path.
+    /// </summary>
+    [ViewVariables] public TimeSpan NextPathRequestTime = TimeSpan.Zero;
+
+    /// <summary>
+    /// Current retry backoff in seconds after repeated no-path outcomes.
+    /// </summary>
+    [ViewVariables] public float PathRequestBackoffSeconds = 0f;
+
+    /// <summary>
+    /// Amount of consecutive obstacle-policy failures inside the active failure window.
+    /// </summary>
+    [ViewVariables] public int ObstacleFailureCount = 0;
+
+    /// <summary>
+    /// Last time obstacle failure was recorded.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan LastObstacleFailureTime = TimeSpan.Zero;
+
+    /// <summary>
+    /// Alternating sign used for lane-rotation retry nudges.
+    /// </summary>
+    [ViewVariables] public int LaneRotateSign = 1;
 
     [ViewVariables] public SteeringStatus Status = SteeringStatus.Moving;
 

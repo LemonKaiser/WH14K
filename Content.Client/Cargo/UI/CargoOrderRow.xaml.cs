@@ -24,5 +24,17 @@ namespace Content.Client.Cargo.UI
             else
                 Cancel.RemoveStyleClass("OpenLeft");
         }
+
+        public void SetActionButtonsVisible(bool approveVisible, bool cancelVisible)
+        {
+            SetApproveVisible(approveVisible);
+            Cancel.Visible = cancelVisible;
+            Actions.Visible = approveVisible || cancelVisible;
+        }
+
+        public void SetRemoveRequestVisible(bool visible)
+        {
+            RemoveRequestButton.Visible = visible;
+        }
     }
 }

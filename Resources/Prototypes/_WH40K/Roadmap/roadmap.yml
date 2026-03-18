@@ -1,0 +1,15 @@
+- type: wh40kRoadmap
+  id: wh40k-roadmap-main
+  revision: 3
+  now:
+    - title: roadmap-task-patch-2-0
+      state: Complete
+      sortOrder: 10
+  next:
+    - title: roadmap-task-patch-2-5
+      state: InProgress
+      sortOrder: 10
+  later:
+    - title: roadmap-task-patch-3-0
+      state: Planned
+      sortOrder: 10

@@ -5,7 +5,7 @@
   components:
   - type: GunRequiresWield
   - type: Gun
-    fireRate: 7
+    fireRate: 5.5
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun_in-hands.rsi
     quickEquip: false

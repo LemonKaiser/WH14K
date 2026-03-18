@@ -1,0 +1,142 @@
+- type: entity
+  id: WH40KMissionZoneBeacon
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: WH40KMissionAirdropParachute
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 20
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _RMC14/Effects/alert.rsi
+      state: techpod_lz_marker
+      color: "#8ED9FFEE"
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    softness: 1
+    color: "#8ED9FF"
+    energy: 1.2
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: WH40KSupplyDropParachuteCrateVisual
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - sprite: _WH40K/Effects/supplydrop_parachute.rsi
+      state: icon
+      offset: 0.0, 1.2
+    - sprite: Structures/Storage/Crates/generic.rsi
+      state: base
+    - sprite: Structures/Storage/Crates/generic.rsi
+      state: closed
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    softness: 1
+    color: "#B5E8FF"
+    energy: 1.1
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CrateGenericSteel
+  id: WH40KMissionCargoCrate
+  name: high-value cargo crate
+  description: A sealed strategic shipment dropped into the combat zone.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 480
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: WH40KMissionAirdropCrateRewards
+  - type: NavMapBeacon
+    color: "#FFD250"
+    text: Cargo objective
+  - type: PointLight
+    enabled: true
+    radius: 2.8
+    softness: 1.3
+    color: "#FFB347"
+    energy: 2.1
+  - type: WH40KTacticalFultonTarget
+    frontReward: 0
+    commandReward: 0
+    completeMissionCargoOnExtract: true
+    label: wh40k-fulton-target-label-cargo
+
+- type: entity
+  parent: CrateGenericSteel
+  id: WH40KMissionCargoCrateDelivery
+  name: strategic cargo container
+  description: Mission-critical cargo. Deliver it to the command relay.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 480
+  - type: PointLight
+    enabled: true
+    radius: 2.8
+    softness: 1.3
+    color: "#FFB347"
+    energy: 2.1
+  - type: WH40KTacticalFultonTarget
+    frontReward: 0
+    commandReward: 0
+    completeMissionCargoOnExtract: true
+    label: wh40k-fulton-target-label-cargo
+
+- type: entityTable
+  id: WH40KMissionAirdropCrateRewards
+  table: !type:AllSelector
+    children:
+    - !type:NestedSelector
+      tableId: WH40KMissionAirdropChipBundle
+    - !type:NestedSelector
+      tableId: WH40KMissionAirdropSupportBundle
+
+- type: entityTable
+  id: WH40KMissionAirdropChipBundle
+  table: !type:GroupSelector
+    children:
+    - id: DataChip4
+      weight: 0.6
+    - id: DataChipImp4
+      weight: 0.2
+    - id: DataChipChaos4
+      weight: 0.2
+
+- type: entityTable
+  id: WH40KMissionAirdropSupportBundle
+  table: !type:GroupSelector
+    children:
+    - id: MedkitCombatFilled
+      weight: 0.35
+    - id: MedkitAdvancedFilled
+      weight: 0.35
+    - id: MedkitBruteFilled
+      weight: 0.3

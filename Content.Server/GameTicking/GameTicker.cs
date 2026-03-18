@@ -12,6 +12,7 @@ using Content.Server.Station.Systems;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
+using Content.Shared.Localizations;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Robust.Server;
@@ -41,6 +42,7 @@ namespace Content.Server.GameTicking
         [Dependency] private readonly IGameMapManager _gameMapManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private readonly ILocalizationManager _localizationManager = default!;
         [Dependency] private readonly IMapManager _mapManager = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly IRobustRandom _robustRandom = default!;
@@ -97,6 +99,7 @@ namespace Content.Server.GameTicking
                 "Overflow role does not have the correct name!");
             InitializeGameRules();
             InitializeReplays();
+            SubscribeNetworkEvent<RequestLobbyInfoRefreshEvent>(OnLobbyInfoRefreshRequested);
             _initialized = true;
         }
 

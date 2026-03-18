@@ -33,6 +33,7 @@
       zapHeal:
         types:
           Asphyxiation: -40
+          Bloodloss: -10
     - type: DoAfter
     - type: UseDelay
     - type: StaticPrice
@@ -91,6 +92,7 @@
     zapHeal:
       types:
         Asphyxiation: -40
+        Bloodloss: -10
     doAfterDuration: 6
   - type: DoAfter
   - type: UseDelay

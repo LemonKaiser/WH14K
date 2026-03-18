@@ -1,47 +1,29 @@
 - type: entity
-  parent: [BaseStructure, StorePresetAltar]
+  parent: BaseStructure
   id: StructureAltar
-  suffix: "WH40K, Хаос, обычное"
+  name: алтарь тёмных богов
+  description: Алтарь, на котором возносят жертвы тёмным богам.
+  suffix: "WH40K, Heretics, Decoration"
   components:
     - type: Sprite
       sprite: _WH40K/Structures/Specific/altar.rsi
       state: Altar_Idol1
+    - type: WH40KChaosAltar
+      sacrificeXpReward: 45
+      attunedSacrificeXpMultiplier: 1.2
+      ritualBoostMultiplier: 1.35
+      ritualBoostDuration: 120
+      warpChargeRestore: 20
+      instabilityGain: 10
+      sacrificeCooldown: 120
+      consumeStackAmount: 1
+      soulHarvestRange: 5
+      soulXpSamePatron: 50
+      soulXpOtherPatron: 10
+      requireAttunement: true
     - type: AmbientSound
       enabled: true
       volume: -3
       range: 5
       sound:
         path: /Audio/_WH40K/Machines/altar.ogg
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-    - type: Store
-      balance:
-        intelligence_ch: 0
-
-- type: entity
-  parent: [BaseStructure, StorePresetAltarCmd]
-  id: StructureAltarCmd
-  suffix: "WH40K, Хаос, Кмд/дорогое"
-  components:
-    - type: Sprite
-      sprite: _WH40K/Structures/Specific/altar_cmd.rsi
-      state: Altar_Idol1
-    - type: AmbientSound
-      enabled: true
-      volume: -3
-      range: 5
-      sound:
-        path: /Audio/_WH40K/Machines/altar.ogg
-    - type: UserInterface
-      interfaces:
-        enum.StoreUiKey.Key:
-          type: StoreBoundUserInterface
-    - type: ActivatableUI
-      key: enum.StoreUiKey.Key
-    - type: Store
-      balance:
-        intelligence_ch: 0

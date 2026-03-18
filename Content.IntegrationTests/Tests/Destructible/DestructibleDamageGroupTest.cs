@@ -8,6 +8,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using static Content.IntegrationTests.Tests.Destructible.DestructibleTestPrototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Destructible
 {
     [TestFixture]
@@ -54,11 +55,11 @@ namespace Content.IntegrationTests.Tests.Destructible
 
             await server.WaitAssertion(() =>
             {
-                var bruteDamageGroup = sPrototypeManager.Index<DamageGroupPrototype>(TestBruteDamageGroupId);
-                var burnDamageGroup = sPrototypeManager.Index<DamageGroupPrototype>(TestBurnDamageGroupId);
+                var bluntDamageType = sPrototypeManager.Index<DamageTypePrototype>(TestBluntDamageTypeId);
+                var heatDamageType = sPrototypeManager.Index<DamageTypePrototype>(TestHeatDamageTypeId);
 
-                DamageSpecifier bruteDamage = new(bruteDamageGroup, FixedPoint2.New(5));
-                DamageSpecifier burnDamage = new(burnDamageGroup, FixedPoint2.New(5));
+                DamageSpecifier bruteDamage = new(bluntDamageType, FixedPoint2.New(5));
+                DamageSpecifier burnDamage = new(heatDamageType, FixedPoint2.New(5));
 
                 // Raise brute damage to 5
                 sDamageableSystem.TryChangeDamage(sDestructibleEntity, bruteDamage, true);

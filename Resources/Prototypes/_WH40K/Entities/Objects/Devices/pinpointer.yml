@@ -1,0 +1,129 @@
+- type: entity
+  id: WH40KMissionPinpointerBase
+  parent: PinpointerBase
+  abstract: true
+  name: mission pinpointer
+  description: A mission-calibrated tracker for active frontline objectives.
+  components:
+  - type: Pinpointer
+    closeDistance: 18
+    mediumDistance: 42
+    reachedDistance: 2
+    updateTargetName: false
+    canRetarget: false
+  - type: WH40KMissionPinpointer
+    requireTeam: true
+    trackGlobalMissionFallback: true
+    refreshInterval: 1
+
+- type: entity
+  id: WH40KMissionPinpointerRelayImperium
+  parent: WH40KMissionPinpointerBase
+  name: imperium relay pinpointer
+  description: Tracks active relay-control sectors assigned to Imperium command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Relay
+    allowedTeamIds:
+    - Imperium
+    noMissionTargetName: No active relay mission
+    noTeamTargetName: Imperium team identity is not resolved
+    unauthorizedTargetName: Restricted to Imperium mission command
+
+- type: entity
+  id: WH40KMissionPinpointerCargoImperium
+  parent: WH40KMissionPinpointerBase
+  name: imperium cargo pinpointer
+  description: Tracks active cargo-delivery objectives assigned to Imperium command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Cargo
+    allowedTeamIds:
+    - Imperium
+    noMissionTargetName: No active cargo mission
+    noTeamTargetName: Imperium team identity is not resolved
+    unauthorizedTargetName: Restricted to Imperium mission command
+
+- type: entity
+  id: WH40KMissionPinpointerBannerImperium
+  parent: WH40KMissionPinpointerBase
+  name: imperium banner pinpointer
+  description: Tracks active banner-hold objectives assigned to Imperium command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Banner
+    allowedTeamIds:
+    - Imperium
+    noMissionTargetName: No active banner mission
+    noTeamTargetName: Imperium team identity is not resolved
+    unauthorizedTargetName: Restricted to Imperium mission command
+
+- type: entity
+  id: WH40KMissionPinpointerRelayHeretics
+  parent: WH40KMissionPinpointerBase
+  name: heretics relay pinpointer
+  description: Tracks active relay-control sectors assigned to Heretics command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Relay
+    allowedTeamIds:
+    - Heretics
+    noMissionTargetName: No active relay mission
+    noTeamTargetName: Heretics team identity is not resolved
+    unauthorizedTargetName: Restricted to Heretics mission command
+
+- type: entity
+  id: WH40KMissionPinpointerCargoHeretics
+  parent: WH40KMissionPinpointerBase
+  name: heretics cargo pinpointer
+  description: Tracks active cargo-delivery objectives assigned to Heretics command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Cargo
+    allowedTeamIds:
+    - Heretics
+    noMissionTargetName: No active cargo mission
+    noTeamTargetName: Heretics team identity is not resolved
+    unauthorizedTargetName: Restricted to Heretics mission command
+
+- type: entity
+  id: WH40KMissionPinpointerBannerHeretics
+  parent: WH40KMissionPinpointerBase
+  name: heretics banner pinpointer
+  description: Tracks active banner-hold objectives assigned to Heretics command.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Banner
+    allowedTeamIds:
+    - Heretics
+    noMissionTargetName: No active banner mission
+    noTeamTargetName: Heretics team identity is not resolved
+    unauthorizedTargetName: Restricted to Heretics mission command
+
+- type: entity
+  id: WH40KMissionPinpointerKitImperium
+  parent: BoxCardboard
+  name: imperium mission pinpointer kit
+  description: Command kit with relay, cargo, and banner mission pinpointers.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: WH40KMissionPinpointerRelayImperium
+        - id: WH40KMissionPinpointerCargoImperium
+        - id: WH40KMissionPinpointerBannerImperium
+
+- type: entity
+  id: WH40KMissionPinpointerKitHeretics
+  parent: BoxCardboard
+  name: heretics mission pinpointer kit
+  description: Command kit with relay, cargo, and banner mission pinpointers.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: WH40KMissionPinpointerRelayHeretics
+        - id: WH40KMissionPinpointerCargoHeretics
+        - id: WH40KMissionPinpointerBannerHeretics

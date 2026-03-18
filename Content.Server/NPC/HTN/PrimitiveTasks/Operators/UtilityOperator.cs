@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.NPC;
 using Content.Server.NPC.Queries;
 using Content.Server.NPC.Systems;
 using Robust.Shared.Map;
@@ -50,6 +51,12 @@ public sealed partial class UtilityOperator : HTNOperator
                     {Key, target},
                     {KeyCoordinates, new EntityCoordinates(target, Vector2.Zero)},
                 };
+
+                if (blackboard.TryGetValue<bool>(NPCBlackboard.WaveCoordinationEnabled, out var coordinationEnabled, _entManager) &&
+                    coordinationEnabled)
+                {
+                    effects[NPCBlackboard.CurrentOrderedTarget] = target;
+                }
 
                 return (true, effects);
 

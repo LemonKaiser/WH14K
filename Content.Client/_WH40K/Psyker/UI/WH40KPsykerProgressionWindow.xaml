@@ -1,0 +1,32 @@
+<psykerUi:WH40KPsykerProgressionWindow
+    xmlns="https://spacestation14.io"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
+    Title="{Loc 'wh40k-psyker-window-title'}"
+    MinSize="520 420"
+    Access="Public">
+    <PanelContainer Margin="6">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat
+                BackgroundColor="#151a24"
+                BorderColor="#5f6f8f"
+                BorderThickness="2"
+                ContentMarginLeftOverride="10"
+                ContentMarginTopOverride="8"
+                ContentMarginRightOverride="10"
+                ContentMarginBottomOverride="8" />
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical" SeparationOverride="5">
+            <Label Name="RoleLabel" Access="Public" Text="" />
+            <Label Name="WarpChargeLabel" Access="Public" Text="" />
+            <Label Name="WarpInstabilityLabel" Access="Public" Text="" />
+            <Label Name="LevelLabel" Access="Public" Text="" />
+            <ProgressBar Name="LevelProgressBar" Access="Public" MinSize="0 18" />
+            <Label Name="XpLabel" Access="Public" Text="" />
+            <Label Name="MeditationLabel" Access="Public" Text="" />
+            <Label Name="CastXpLabel" Access="Public" Text="" />
+            <Label Name="RepeatLabel" Access="Public" Text="" />
+            <Label Name="HintLabel" Access="Public" Text="" />
+        </BoxContainer>
+    </PanelContainer>
+</psykerUi:WH40KPsykerProgressionWindow>

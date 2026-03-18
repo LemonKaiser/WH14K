@@ -2,6 +2,8 @@ using System.Numerics;
 using Content.Client.Animations;
 using Content.Client.Gameplay;
 using Content.Client.Items;
+using Content.Shared._WH40K.HeavyBolter;
+using Content.Shared.Buckle.Components;
 using Content.Client.Weapons.Ranged.Components;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
@@ -34,6 +36,8 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
+    private const float HeavyBolterArcDotEpsilon = 0.001f;
+
     [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -186,7 +190,9 @@ public sealed partial class GunSystem : SharedGunSystem
         if (_inputSystem.CmdStates.GetState(useKey) != BoundKeyState.Down && !gun.BurstActivated)
         {
             if (gun.ShotCounter != 0)
+            {
                 RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gunUid) });
+            }
             return;
         }
 
@@ -198,13 +204,35 @@ public sealed partial class GunSystem : SharedGunSystem
         if (mousePos.MapId == MapId.Nullspace)
         {
             if (gun.ShotCounter != 0)
+            {
                 RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gunUid) });
+            }
 
             return;
         }
 
-        // Define target coordinates relative to gun entity, so that network latency on moving grids doesn't fuck up the target location.
-        var coordinates = TransformSystem.ToCoordinates(entity, mousePos);
+        // For mounted guns, keep target coordinates relative to the mounted gun entity.
+        // This avoids drift when the operator is buckled and holds fire while moving the cursor.
+        var referenceEntity = entity;
+        if (TryComp(entity, out BuckleComponent? buckle) &&
+            buckle.BuckledTo == gunUid &&
+            HasComp<BuckleMountedGunComponent>(gunUid))
+        {
+            referenceEntity = gunUid;
+        }
+
+        var coordinates = TransformSystem.ToCoordinates(referenceEntity, mousePos);
+        var requestTargetMap = _xform.ToMapCoordinates(coordinates);
+
+        if (TryComp(gunUid, out WH40KHeavyBolterComponent? heavyBolter) &&
+            heavyBolter.Deployed &&
+            !IsInsideHeavyBolterArc((gunUid, heavyBolter), requestTargetMap))
+        {
+            if (gun.ShotCounter != 0)
+                RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gunUid) });
+
+            return;
+        }
 
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)
@@ -220,6 +248,65 @@ public sealed partial class GunSystem : SharedGunSystem
             Gun = GetNetEntity(gunUid),
             Continuous = _cfg.GetCVar(CCVars.ControlHoldToAttackRanged),
         });
+    }
+
+    private bool IsInsideHeavyBolterArc(
+        Entity<WH40KHeavyBolterComponent> bolter,
+        MapCoordinates targetMapCoordinates)
+    {
+        var fromMapCoordinates = _xform.GetMapCoordinates(bolter);
+        if (fromMapCoordinates.MapId == MapId.Nullspace ||
+            targetMapCoordinates.MapId == MapId.Nullspace ||
+            fromMapCoordinates.MapId != targetMapCoordinates.MapId)
+        {
+            return false;
+        }
+
+        var shotVector = targetMapCoordinates.Position - fromMapCoordinates.Position;
+        if (shotVector.LengthSquared() <= 0.0001f)
+        {
+            return false;
+        }
+
+        var shotDirection = shotVector.Normalized();
+        var halfArc = Math.Clamp(bolter.Comp.FireArcDegrees, 0.1f, 360f) * 0.5f;
+        if (halfArc >= 179.9f)
+        {
+            return true;
+        }
+
+        Vector2 forwardDirection;
+        if (TryComp<StrapComponent>(bolter, out var strap))
+        {
+            var rearLocal = strap.BuckleOffset;
+            if (rearLocal.LengthSquared() <= 0.0001f)
+            {
+                return false;
+            }
+
+            var fromRearToFront = _xform.GetWorldRotation(bolter).RotateVec(-rearLocal);
+            if (fromRearToFront.LengthSquared() <= 0.0001f)
+            {
+                return false;
+            }
+
+            forwardDirection = fromRearToFront.Normalized();
+        }
+        else
+        {
+            return false;
+        }
+
+        if (forwardDirection.LengthSquared() <= 0.0001f)
+        {
+            return false;
+        }
+
+        var minDot = MathF.Cos((MathF.PI / 180f) * halfArc);
+        var dot = Vector2.Dot(forwardDirection, shotDirection);
+        var allowed = dot >= minDot + HeavyBolterArcDotEpsilon;
+
+        return allowed;
     }
 
     public override void Shoot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo,
@@ -420,3 +507,4 @@ public sealed partial class GunSystem : SharedGunSystem
     // TODO: Move RangedDamageSoundComponent to shared so this can be predicted.
     public override void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound) { }
 }
+

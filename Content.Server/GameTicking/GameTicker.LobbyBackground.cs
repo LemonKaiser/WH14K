@@ -14,7 +14,7 @@ public sealed partial class GameTicker
     [ViewVariables]
     private List<ProtoId<LobbyBackgroundPrototype>>? _lobbyBackgrounds;
 
-    private static readonly string[] WhitelistedBackgroundExtensions = new string[] {"png", "jpg", "jpeg", "webp"};
+    private static readonly string[] WhitelistedBackgroundExtensions = new[] { "png", "jpg", "jpeg", "webp" };
 
     private void InitializeLobbyBackground()
     {
@@ -24,8 +24,13 @@ public sealed partial class GameTicker
         //create protoids from them
         foreach (var proto in allprotos)
         {
-            var ext = proto.Background.Extension;
-            if (!WhitelistedBackgroundExtensions.Contains(ext))
+            var hasValidStaticBackground = proto.Background is { } staticPath &&
+                                           WhitelistedBackgroundExtensions.Contains(staticPath.Extension, StringComparer.OrdinalIgnoreCase);
+
+            var hasValidGifBackground = proto.BackgroundGif is { } gifPath &&
+                                        string.Equals(gifPath.Extension, "gif", StringComparison.OrdinalIgnoreCase);
+
+            if (!hasValidStaticBackground && !hasValidGifBackground)
                 continue;
 
             //create a protoid and add it to the list

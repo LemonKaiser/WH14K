@@ -16,6 +16,7 @@
     fireRate: 3
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/ltrifle.ogg
+  - type: WH40KGunPrediction
   - type: ItemSlots
     slots:
       gun_magazine:

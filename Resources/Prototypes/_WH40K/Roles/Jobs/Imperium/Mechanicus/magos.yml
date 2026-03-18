@@ -4,6 +4,9 @@
   description: job-description-magos
   playTimeTracker: JobMagos
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     # - !type:CharacterTraitRequirement
     #   inverted: true
     #   traits:
@@ -29,6 +32,7 @@
   - ChiefEngineer
   - Atmospherics
   - Research
+  - Medical
   - ResearchDirector
   - Cargo
   - Salvage

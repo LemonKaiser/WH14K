@@ -1,4 +1,14 @@
 - type: entity
+  parent: RedMediumLaser
+  id: WH40KRedMediumLaserLasgun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 8.5
+
+- type: entity
   parent: BasicHitscan
   id: RedLaserLong
   components:

@@ -3,6 +3,7 @@ using Content.Shared._WH40K.Combat;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
+using Content.Shared.EnergyDome;
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -25,6 +26,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery;
     private EntityQuery<WH40KDirectionalBarricadeComponent> _barricadeQuery;
+    private EntityQuery<EnergyDomeVisualsComponent> _domeVisualsQuery;
 
     public override void Initialize()
     {
@@ -32,6 +34,7 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
 
         _visualsQuery = GetEntityQuery<HitscanBasicVisualsComponent>();
         _barricadeQuery = GetEntityQuery<WH40KDirectionalBarricadeComponent>();
+        _domeVisualsQuery = GetEntityQuery<EnergyDomeVisualsComponent>();
 
         SubscribeLocalEvent<HitscanBasicRaycastComponent, HitscanTraceEvent>(OnHitscanFired);
     }
@@ -61,6 +64,9 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
             }
 
             if (TryAllowDirectionalBarricadePass(hit, args.FromCoordinates, args.ShotDirection))
+                continue;
+
+            if (TryAllowEnergyDomeInteriorPass(hit, args.FromCoordinates))
                 continue;
 
             result = hit;
@@ -118,7 +124,23 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
             originDirection,
             barricadeComp.PassSideMaxDistance,
             barricadeComp.BlockedSidePassChance,
+            barricadeComp.BlockedSidePointBlankPassDistance,
             _random);
+    }
+
+    private bool TryAllowEnergyDomeInteriorPass(RayCastResults hit, EntityCoordinates fromCoordinates)
+    {
+        if (!_domeVisualsQuery.TryGetComponent(hit.HitEntity, out var visuals) ||
+            _barricadeQuery.HasComp(hit.HitEntity))
+        {
+            return false;
+        }
+
+        var fromMap = _transform.ToMapCoordinates(fromCoordinates);
+        var domePos = _transform.GetWorldPosition(hit.HitEntity);
+        const float minInteriorRadius = 0.15f;
+        var radius = MathF.Max(visuals.InsideTransparencyRadius, minInteriorRadius);
+        return (fromMap.Position - domePos).LengthSquared() <= radius * radius;
     }
 
     /// <summary>

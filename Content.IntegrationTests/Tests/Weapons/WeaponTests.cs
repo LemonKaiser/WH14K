@@ -7,6 +7,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Weapons;
 
 public sealed class WeaponTests : InteractionTest
@@ -20,11 +21,9 @@ public sealed class WeaponTests : InteractionTest
     {
         var gunSystem = SEntMan.System<SharedGunSystem>();
         var damageSystem = SEntMan.System<DamageableSystem>();
-
         await AddAtmosphere(); // prevent the Urist from suffocating
 
         var urist = await SpawnTarget(MobHuman);
-        var damageComp = Comp<DamageableComponent>(urist);
 
         var mosinNet = await PlaceInHands(SniperMosin);
         var mosinEnt = ToServer(mosinNet);

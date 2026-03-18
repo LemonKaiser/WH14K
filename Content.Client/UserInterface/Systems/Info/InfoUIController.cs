@@ -107,4 +107,17 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
 
         _infoWindow?.OpenCentered();
     }
+
+    public void RefreshLocalization()
+    {
+        if (_infoWindow is not { Disposed: false })
+            return;
+
+        var wasOpen = _infoWindow.IsOpen;
+        _infoWindow.Dispose();
+        _infoWindow = null;
+
+        if (wasOpen)
+            OpenWindow();
+    }
 }

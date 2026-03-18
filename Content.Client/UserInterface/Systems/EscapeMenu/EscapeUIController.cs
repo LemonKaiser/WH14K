@@ -1,5 +1,7 @@
-﻿using Content.Client.FeedbackPopup;
+using Content.Client.FeedbackPopup;
 using Content.Client.Gameplay;
+using Content.Client._WH40K.DiscordAuth;
+using Content.Client._WH40K.Roadmap;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Client.UserInterface.Systems.Info;
@@ -26,6 +28,8 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     [Dependency] private readonly InfoUIController _info = default!;
     [Dependency] private readonly OptionsUIController _options = default!;
     [Dependency] private readonly GuidebookUIController _guidebook = default!;
+    [Dependency] private readonly WH40KDiscordAuthUIController _discordAuth = default!;
+    [Dependency] private readonly RoadmapUIController _roadmap = default!;
     [Dependency] private readonly FeedbackPopupUIController _feedback = null!;
 
     private Options.UI.EscapeMenu? _escapeWindow;
@@ -60,59 +64,7 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     {
         DebugTools.Assert(_escapeWindow == null);
 
-        _escapeWindow = UIManager.CreateWindow<Options.UI.EscapeMenu>();
-
-        _escapeWindow.OnClose += DeactivateButton;
-        _escapeWindow.OnOpen += ActivateButton;
-
-        _escapeWindow.FeedbackButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _feedback.ToggleWindow();
-        };
-
-        _escapeWindow.ChangelogButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _changelog.ToggleWindow();
-        };
-
-        _escapeWindow.RulesButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _info.OpenWindow();
-        };
-
-        _escapeWindow.DisconnectButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _console.ExecuteCommand("disconnect");
-        };
-
-        _escapeWindow.OptionsButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _options.OpenWindow();
-        };
-
-        _escapeWindow.QuitButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _console.ExecuteCommand("quit");
-        };
-
-        _escapeWindow.WikiButton.OnPressed += _ =>
-        {
-            _uri.OpenUri(_cfg.GetCVar(CCVars.InfoLinksWiki));
-        };
-
-        _escapeWindow.GuidebookButton.OnPressed += _ =>
-        {
-            _guidebook.ToggleGuidebook();
-        };
-
-        // Hide wiki button if we don't have a link for it.
-        _escapeWindow.WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";
+        _escapeWindow = CreateEscapeWindow();
 
         CommandBinds.Builder
             .Bind(EngineKeyFunctions.EscapeMenu,
@@ -141,6 +93,76 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
         _escapeWindow?.Close();
     }
 
+    private Options.UI.EscapeMenu CreateEscapeWindow()
+    {
+        var window = UIManager.CreateWindow<Options.UI.EscapeMenu>();
+
+        window.OnClose += DeactivateButton;
+        window.OnOpen += ActivateButton;
+
+        window.FeedbackButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _feedback.ToggleWindow();
+        };
+
+        window.ChangelogButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _changelog.ToggleWindow();
+        };
+
+        window.RoadmapButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _roadmap.ToggleRoadmap();
+        };
+
+        window.DiscordButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _discordAuth.OpenWindowOrStartLink();
+        };
+
+        window.RulesButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _info.OpenWindow();
+        };
+
+        window.DisconnectButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _console.ExecuteCommand("disconnect");
+        };
+
+        window.OptionsButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _options.OpenWindow();
+        };
+
+        window.QuitButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _console.ExecuteCommand("quit");
+        };
+
+        window.WikiButton.OnPressed += _ =>
+        {
+            _uri.OpenUri(_cfg.GetCVar(CCVars.InfoLinksWiki));
+        };
+
+        window.GuidebookButton.OnPressed += _ =>
+        {
+            _guidebook.ToggleGuidebook();
+        };
+
+        window.WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";
+        window.DiscordButton.Visible = _discordAuth.ShouldShowEntry();
+        return window;
+    }
+
     /// <summary>
     /// Toggles the game menu.
     /// </summary>
@@ -159,5 +181,22 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
             _escapeWindow.OpenCentered();
             EscapeButton!.Pressed = true;
         }
+    }
+
+    public void RefreshLocalization()
+    {
+        if (_escapeWindow == null)
+            return;
+
+        var wasOpen = _escapeWindow.IsOpen;
+        _escapeWindow.Dispose();
+        _escapeWindow = CreateEscapeWindow();
+
+        if (!wasOpen)
+            return;
+
+        _escapeWindow.OpenCentered();
+        if (EscapeButton != null)
+            EscapeButton.Pressed = true;
     }
 }

@@ -6,6 +6,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Destructible;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
@@ -65,6 +66,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
     private EntityQuery<ActorComponent> _actorQuery;
     private EntityQuery<DestructibleComponent> _destructibleQuery;
     private EntityQuery<DamageableComponent> _damageableQuery;
+    private EntityQuery<DeleteOnExplosionComponent> _deleteOnExplosionQuery;
     private EntityQuery<AirtightComponent> _airtightQuery;
     private EntityQuery<TileHistoryComponent> _tileHistoryQuery;
 
@@ -108,6 +110,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         _actorQuery = GetEntityQuery<ActorComponent>();
         _destructibleQuery = GetEntityQuery<DestructibleComponent>();
         _damageableQuery = GetEntityQuery<DamageableComponent>();
+        _deleteOnExplosionQuery = GetEntityQuery<DeleteOnExplosionComponent>();
         _airtightQuery = GetEntityQuery<AirtightComponent>();
         _tileHistoryQuery = GetEntityQuery<TileHistoryComponent>();
 

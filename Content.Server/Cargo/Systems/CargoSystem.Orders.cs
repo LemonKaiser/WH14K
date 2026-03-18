@@ -1,6 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using Content.Server.Cargo.Components;
+using Content.Server._WH40K.Cargo.Components;
+using Content.Server._WH40K.Research.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.BUI;
 using Content.Shared.Cargo.Components;
@@ -12,6 +15,9 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Labels.Components;
 using Content.Shared.Paper;
+using Content.Shared.Research.Components;
+using Content.Shared.Research.Prototypes;
+using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Station.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -77,7 +83,22 @@ namespace Content.Server.Cargo.Systems
                 return;
 
             var orderId = GenerateOrderId(orderDatabase);
-            var data = new CargoOrderData(orderId, product, slip.OrderQuantity, slip.Requester, slip.Reason, slip.Account);
+            var unitPrice = GetEffectiveOrderUnitPrice(stationUid.Value, ent.Comp.Account, product.Cost);
+            var data = new CargoOrderData(
+                orderId,
+                product,
+                slip.OrderQuantity,
+                slip.Requester,
+                slip.Reason,
+                slip.Account,
+                unitPrice);
+
+            if (!CanQueueOrderQuantity((stationUid.Value, orderDatabase), ent.Comp.Account, slip.OrderQuantity, out _))
+            {
+                ConsolePopup(args.User, Loc.GetString("cargo-console-too-many"));
+                PlayDenySound(ent, ent.Comp);
+                return;
+            }
 
             if (!TryAddOrder(stationUid.Value, ent.Comp.Account, data, orderDatabase))
             {
@@ -135,6 +156,302 @@ namespace Content.Server.Cargo.Systems
                 var balanceToAdd = (int) Math.Round(bank.IncreasePerSecond * bank.IncomeDelay.TotalSeconds);
                 UpdateBankAccount((uid, bank), balanceToAdd, bank.RevenueDistribution);
             }
+
+            UpdateDelayedBatches();
+        }
+
+        private void UpdateDelayedBatches()
+        {
+            var query = EntityQueryEnumerator<StationCargoOrderBatchComponent, StationCargoOrderDatabaseComponent>();
+            while (query.MoveNext(out var stationUid, out var batchState, out var orderDatabase))
+            {
+                if (batchState.ActiveBatches.Count == 0)
+                    continue;
+
+                var deliveredAccounts = new List<ProtoId<CargoAccountPrototype>>();
+                var shouldRefreshOrders = false;
+                foreach (var (account, batch) in batchState.ActiveBatches)
+                {
+                    if (Timing.CurTime < batch.DeliverAt)
+                    {
+                        continue;
+                    }
+
+                    if (!TryDeliverBatch(stationUid, account, batch, orderDatabase))
+                        continue;
+
+                    deliveredAccounts.Add(account);
+                    shouldRefreshOrders = true;
+                }
+
+                if (deliveredAccounts.Count != 0)
+                {
+                    foreach (var account in deliveredAccounts)
+                    {
+                        batchState.ActiveBatches.Remove(account);
+                    }
+
+                    Dirty(stationUid, batchState);
+                }
+
+                if (shouldRefreshOrders)
+                {
+                    UpdateOrders(stationUid);
+                }
+            }
+        }
+
+        private bool TryDeliverBatch(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account,
+            CargoOrderBatchTransitData batch,
+            StationCargoOrderDatabaseComponent orderDatabase)
+        {
+            var destinations = GetBatchPalletDestinations(stationUid, account);
+            if (destinations.Count == 0)
+                return false;
+
+            var productsToDeliver = new List<CargoOrderBatchItemData>();
+            foreach (var item in batch.Items)
+            {
+                if (item.Quantity <= 0)
+                {
+                    continue;
+                }
+
+                for (var i = 0; i < item.Quantity; i++)
+                {
+                    productsToDeliver.Add(item);
+                }
+            }
+
+            if (productsToDeliver.Count > 0)
+            {
+                _random.Shuffle(destinations);
+                _random.Shuffle(productsToDeliver);
+
+                // Limit crate count by both pallet capacity and batch size.
+                // For WH40K batches we cap crates to floor(itemCount / 2) to avoid single-item crates.
+                var maxCratesByItems = Math.Max(1, productsToDeliver.Count / 2);
+                var maxCrates = Math.Max(1, Math.Min(destinations.Count, maxCratesByItems));
+                var cratesToSpawn = _random.Next(1, maxCrates + 1);
+
+                var cratePrototype = batch.CratePrototype;
+                if (!_protoMan.HasIndex<EntityPrototype>(cratePrototype))
+                    cratePrototype = "CrateGenericSteel";
+
+                var crates = new List<EntityUid>(cratesToSpawn);
+                for (var i = 0; i < cratesToSpawn; i++)
+                {
+                    crates.Add(Spawn(cratePrototype, destinations[i]));
+                }
+
+                // Seed items across crates first, then spread remaining items randomly.
+                // With crates <= floor(itemCount / 2), this keeps crate contents denser.
+                var minItemsPerCrate = productsToDeliver.Count >= crates.Count * 2 ? 2 : 1;
+                var productIndex = 0;
+
+                for (var crateIndex = 0; crateIndex < crates.Count; crateIndex++)
+                {
+                    for (var j = 0; j < minItemsPerCrate && productIndex < productsToDeliver.Count; j++)
+                    {
+                        SpawnBatchItemInCrate(crates[crateIndex], productsToDeliver[productIndex]);
+                        productIndex++;
+                    }
+                }
+
+                for (; productIndex < productsToDeliver.Count; productIndex++)
+                {
+                    var crateIndex = _random.Next(crates.Count);
+                    SpawnBatchItemInCrate(crates[crateIndex], productsToDeliver[productIndex]);
+                }
+            }
+
+            if (orderDatabase.Orders.TryGetValue(account, out var orders))
+                orders.RemoveAll(order => order.OrderId == batch.SummaryOrderId);
+
+            return true;
+        }
+
+        private void SpawnBatchItemInCrate(EntityUid crate, CargoOrderBatchItemData product)
+        {
+            if (!_container.TryGetContainer(crate, SharedEntityStorageSystem.ContainerName, out var crateContainer))
+                return;
+
+            var spawn = Transform(crate).Coordinates;
+            if (!TrySpawnCargoProductEntity(product.Product, product.ProductId, spawn, out _, out var item))
+                return;
+
+            if (!_container.Insert(item.Value, crateContainer))
+                QueueDel(item.Value);
+        }
+
+        private List<EntityCoordinates> GetBatchPalletDestinations(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account)
+        {
+            var destinations = new List<EntityCoordinates>();
+            var query = EntityQueryEnumerator<CargoPalletComponent, CargoOrderBatchPalletComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var pallet, out var accountPallet, out var xform))
+            {
+                if ((pallet.PalletType & BuySellType.Buy) == 0)
+                    continue;
+
+                if (accountPallet.Account != account)
+                    continue;
+
+                if (!xform.Anchored)
+                    continue;
+
+                if (_station.GetOwningStation(uid, xform) != stationUid)
+                    continue;
+
+                destinations.Add(new EntityCoordinates(xform.ParentUid, xform.LocalPosition));
+            }
+
+            return destinations;
+        }
+
+        private bool IsBatchInTransit(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account,
+            [NotNullWhen(true)] out CargoOrderBatchTransitData? batch)
+        {
+            batch = null;
+
+            if (!TryComp<StationCargoOrderBatchComponent>(stationUid, out var batchState))
+                return false;
+
+            if (!batchState.ActiveBatches.TryGetValue(account, out batch))
+                return false;
+
+            return true;
+        }
+
+        private string BuildBatchManifest(IReadOnlyList<CargoOrderData> orders)
+        {
+            var builder = new StringBuilder();
+            for (var i = 0; i < orders.Count; i++)
+            {
+                var order = orders[i];
+                if (i > 0)
+                    builder.Append('\n');
+
+                var name = order.ProductName;
+                if (string.IsNullOrWhiteSpace(name) &&
+                    !string.IsNullOrWhiteSpace(order.Product) &&
+                    _protoMan.Resolve(order.Product, out var cargoProduct))
+                {
+                    name = cargoProduct.Name;
+                }
+
+                if (string.IsNullOrWhiteSpace(name) &&
+                    _protoMan.TryIndex<EntityPrototype>(order.ProductId, out var productProto))
+                {
+                    name = productProto.Name;
+                }
+
+                if (string.IsNullOrWhiteSpace(name))
+                    name = !string.IsNullOrWhiteSpace(order.ProductId) ? order.ProductId : Loc.GetString("cargo-console-invalid-product");
+
+                builder.Append("- ");
+                builder.Append(order.OrderQuantity);
+                builder.Append("x ");
+                builder.Append(name);
+            }
+
+            return builder.ToString();
+        }
+
+        private void TryApproveDelayedBatch(
+            EntityUid uid,
+            EntityUid player,
+            CargoOrderConsoleComponent component,
+            CargoBatchOrderConsoleComponent batchConsole,
+            EntityUid stationUid,
+            StationBankAccountComponent bank,
+            StationCargoOrderDatabaseComponent orderDatabase)
+        {
+            if (IsBatchInTransit(stationUid, component.Account, out _))
+            {
+                ConsolePopup(player, Loc.GetString("wh40k-cargo-batch-train-in-transit"));
+                PlayDenySound(uid, component);
+                return;
+            }
+
+            var accountOrders = EnsureOrderList(orderDatabase, component.Account);
+
+            var pendingOrders = accountOrders
+                .Where(order => !order.Approved)
+                .ToList();
+
+            if (pendingOrders.Count == 0)
+                return;
+
+            var totalCost = pendingOrders.Sum(order => order.Price * order.OrderQuantity);
+            var totalQuantity = pendingOrders.Sum(order => order.OrderQuantity);
+            var accountBalance = GetBalanceFromAccount((stationUid, bank), component.Account);
+
+            if (totalCost > accountBalance)
+            {
+                ConsolePopup(player, Loc.GetString("cargo-console-insufficient-funds", ("cost", totalCost)));
+                PlayDenySound(uid, component);
+                return;
+            }
+
+            var batchState = EnsureComp<StationCargoOrderBatchComponent>(stationUid);
+            var batchId = batchState.NextBatchId++;
+            var summaryOrderId = GenerateOrderId(orderDatabase);
+            var summaryOrder = new CargoOrderData(
+                summaryOrderId,
+                batchConsole.SummaryProduct,
+                Loc.GetString("wh40k-cargo-batch-summary-name", ("batchId", batchId)),
+                totalCost,
+                totalQuantity,
+                Loc.GetString("wh40k-cargo-batch-requester"),
+                BuildBatchManifest(pendingOrders),
+                component.Account)
+            {
+                Approved = true,
+                IsBatchSummary = true
+            };
+
+            var effectiveDelaySeconds = GetEffectiveBatchDelaySeconds(stationUid, component.Account, batchConsole);
+            var etaMinutes = Math.Max(1, (int) Math.Ceiling(effectiveDelaySeconds / 60f));
+            summaryOrder.SetApproverData(Loc.GetString("wh40k-cargo-batch-summary-approver-minutes", ("minutes", etaMinutes)));
+
+            accountOrders.RemoveAll(order => !order.Approved);
+            accountOrders.Add(summaryOrder);
+
+            var batchData = new CargoOrderBatchTransitData
+            {
+                BatchId = batchId,
+                SummaryOrderId = summaryOrderId,
+                DeliverAt = Timing.CurTime + TimeSpan.FromSeconds(effectiveDelaySeconds),
+                Account = component.Account,
+                CratePrototype = batchConsole.SummaryProduct
+            };
+
+            foreach (var order in pendingOrders)
+            {
+                batchData.Items.Add(new CargoOrderBatchItemData
+                {
+                    Product = order.Product,
+                    ProductId = order.ProductId,
+                    ProductName = order.ProductName,
+                    Price = order.Price,
+                    Quantity = order.OrderQuantity
+                });
+            }
+
+            batchState.ActiveBatches[component.Account] = batchData;
+
+            UpdateBankAccount((stationUid, bank), -totalCost, component.Account);
+            Dirty(stationUid, batchState);
+
+            _audio.PlayPvs(ApproveSound, uid);
+            ConsolePopup(player, Loc.GetString("wh40k-cargo-batch-approved", ("minutes", etaMinutes)));
+            UpdateOrders(stationUid);
         }
 
         #region Interface
@@ -166,15 +483,23 @@ namespace Content.Server.Cargo.Systems
                 return;
             }
 
+            if (TryComp<CargoBatchOrderConsoleComponent>(uid, out var batchConsole))
+            {
+                TryApproveDelayedBatch(uid, player, component, batchConsole, station.Value, bank, orderDatabase);
+                return;
+            }
+
             // Find our order again. It might have been dispatched or approved already
-            var order = orderDatabase.Orders[component.Account].Find(order => args.OrderId == order.OrderId && !order.Approved);
+            var accountOrders = EnsureOrderList(orderDatabase, component.Account);
+            var order = accountOrders.Find(order => args.OrderId == order.OrderId && !order.Approved);
             if (order == null || !_protoMan.Resolve(order.Account, out var account))
             {
                 return;
             }
 
             // Invalid order
-            if (!_protoMan.Resolve(order.Product, out var product))
+            if (string.IsNullOrWhiteSpace(order.Product) ||
+                !_protoMan.Resolve(order.Product, out var product))
             {
                 ConsolePopup(args.Actor, Loc.GetString("cargo-console-invalid-product"));
                 PlayDenySound(uid, component);
@@ -182,7 +507,7 @@ namespace Content.Server.Cargo.Systems
             }
 
             var amount = GetOutstandingOrderCount((station.Value, orderDatabase), order.Account);
-            var capacity = orderDatabase.Capacity;
+            var capacity = GetEffectiveOrderCapacity((station.Value, orderDatabase), order.Account);
 
             // Too many orders, avoid them getting spammed in the UI.
             if (amount >= capacity)
@@ -202,7 +527,8 @@ namespace Content.Server.Cargo.Systems
                 PlayDenySound(uid, component);
             }
 
-            var cost = product.Cost * order.OrderQuantity;
+            var unitPrice = order.Price > 0 ? order.Price : product.Cost;
+            var cost = unitPrice * order.OrderQuantity;
             var accountBalance = GetBalanceFromAccount((station.Value, bank), order.Account);
 
             // Not enough balance
@@ -239,7 +565,7 @@ namespace Content.Server.Cargo.Systems
                 order.SetApproverData(tryGetIdentityShortInfoEvent.Title);
 
                 var message = Loc.GetString("cargo-console-unlock-approved-order-broadcast",
-                    ("productName", Loc.GetString(product.Name)),
+                    ("productName", product.Name),
                     ("orderAmount", order.OrderQuantity),
                     ("approver", order.Approver ?? string.Empty),
                     ("cost", cost));
@@ -255,7 +581,7 @@ namespace Content.Server.Cargo.Systems
                 LogImpact.Low,
                 $"{ToPrettyString(player):user} approved order [orderId:{order.OrderId}, quantity:{order.OrderQuantity}, product:{order.Product}, requester:{order.Requester}, reason:{order.Reason}] on account {order.Account} with balance at {accountBalance}");
 
-            orderDatabase.Orders[component.Account].Remove(order);
+            accountOrders.Remove(order);
             UpdateBankAccount((station.Value, bank), -cost, order.Account);
             UpdateOrders(station.Value);
         }
@@ -335,13 +661,18 @@ namespace Content.Server.Cargo.Systems
 
             var paper = EnsureComp<PaperComponent>(label);
             var msg = new FormattedMessage();
+            var stationUid = _station.GetOwningStation(uid);
+            var unitPrice = stationUid is { } stationValue
+                ? GetEffectiveOrderUnitPrice(stationValue, component.Account, product.Cost)
+                : product.Cost;
+            var totalPrice = Math.Max(0, unitPrice * args.Amount);
 
             msg.AddMarkupPermissive(Loc.GetString("cargo-acquisition-slip-body",
                 ("product", product.Name),
                 ("description", product.Description),
-                ("unit", product.Cost),
+                ("unit", unitPrice),
                 ("amount", args.Amount),
-                ("cost", product.Cost * args.Amount),
+                ("cost", totalPrice),
                 ("orderer", args.Requester),
                 ("reason", args.Reason)));
             _paperSystem.SetContent((label, paper), msg.ToMarkup());
@@ -387,7 +718,15 @@ namespace Content.Server.Cargo.Systems
 
             var targetAccount = component.Mode == CargoOrderConsoleMode.SendToPrimary ? bank.PrimaryAccount : component.Account;
 
-            var data = GetOrderData(args, product, GenerateOrderId(orderDatabase), component.Account);
+            if (!CanQueueOrderQuantity((stationUid.Value, orderDatabase), component.Account, args.Amount, out _))
+            {
+                ConsolePopup(player, Loc.GetString("cargo-console-too-many"));
+                PlayDenySound(uid, component);
+                return;
+            }
+
+            var unitPrice = GetEffectiveOrderUnitPrice(stationUid.Value, component.Account, product.Cost);
+            var data = GetOrderData(args, product, GenerateOrderId(orderDatabase), component.Account, unitPrice);
 
             if (!TryAddOrder(stationUid.Value, targetAccount, data, orderDatabase))
             {
@@ -418,15 +757,36 @@ namespace Content.Server.Cargo.Systems
             if (!TryComp<StationCargoOrderDatabaseComponent>(station, out var orderDatabase))
                 return;
 
+            var hasDeliveryEta = false;
+            var deliveryEtaEndTime = TimeSpan.Zero;
+            var deliveryDuration = TimeSpan.Zero;
+
+            if (TryComp<CargoBatchOrderConsoleComponent>(consoleUid, out var batchConsole))
+            {
+                var effectiveDelaySeconds = GetEffectiveBatchDelaySeconds(station.Value, console.Account, batchConsole);
+                deliveryDuration = TimeSpan.FromSeconds(effectiveDelaySeconds);
+            }
+
+            if (TryComp<StationCargoOrderBatchComponent>(station, out var batchState) &&
+                batchState.ActiveBatches.TryGetValue(console.Account, out var activeBatch) &&
+                activeBatch.DeliverAt > _timing.CurTime)
+            {
+                hasDeliveryEta = true;
+                deliveryEtaEndTime = activeBatch.DeliverAt;
+            }
+
             if (_uiSystem.HasUi(consoleUid, CargoConsoleUiKey.Orders))
             {
                 _uiSystem.SetUiState(consoleUid,
                     CargoConsoleUiKey.Orders,
                     new CargoConsoleInterfaceState(
                     MetaData(station.Value).EntityName,
-                    GetOutstandingOrderCount((station!.Value, orderDatabase), console.Account),
-                    orderDatabase.Capacity,
+                    GetPendingOrderItemCount((station!.Value, orderDatabase), console.Account),
+                    GetEffectiveOrderCapacity((station.Value, orderDatabase), console.Account),
                     GetNetEntity(station.Value),
+                    hasDeliveryEta,
+                    deliveryEtaEndTime,
+                    deliveryDuration,
                     RelevantOrders((station!.Value, orderDatabase), (consoleUid, console)),
                     GetAvailableProducts((consoleUid, console))
                 ));
@@ -441,12 +801,18 @@ namespace Content.Server.Cargo.Systems
             if (!TryComp<StationBankAccountComponent>(station, out var bank))
                 return [];
 
-            var ourOrders = station.Comp.Orders[console.Comp.Account];
+            station.Comp.Orders.TryGetValue(console.Comp.Account, out var ourOrders);
 
             if (console.Comp.Account == bank.PrimaryAccount)
-                return ourOrders;
+                return ourOrders?.ToList() ?? [];
 
-            var otherOrders = station.Comp.Orders[bank.PrimaryAccount].Where(order => order.Account == console.Comp.Account);
+            if (!station.Comp.Orders.TryGetValue(bank.PrimaryAccount, out var primaryOrders))
+                return ourOrders?.ToList() ?? [];
+
+            if (ourOrders == null || ourOrders.Count == 0)
+                return primaryOrders.Where(order => order.Account == console.Comp.Account).ToList();
+
+            var otherOrders = primaryOrders.Where(order => order.Account == console.Comp.Account);
 
             return ourOrders.Concat(otherOrders).ToList();
         }
@@ -465,9 +831,14 @@ namespace Content.Server.Cargo.Systems
             }
         }
 
-        private static CargoOrderData GetOrderData(CargoConsoleAddOrderMessage args, CargoProductPrototype cargoProduct, int id, ProtoId<CargoAccountPrototype> account)
+        private static CargoOrderData GetOrderData(
+            CargoConsoleAddOrderMessage args,
+            CargoProductPrototype cargoProduct,
+            int id,
+            ProtoId<CargoAccountPrototype> account,
+            int unitPrice)
         {
-            return new CargoOrderData(id, cargoProduct, args.Amount, args.Requester, args.Reason, account);
+            return new CargoOrderData(id, cargoProduct, args.Amount, args.Requester, args.Reason, account, unitPrice);
         }
 
         public int GetOutstandingOrderCount(Entity<StationCargoOrderDatabaseComponent> station, ProtoId<CargoAccountPrototype> account)
@@ -477,26 +848,172 @@ namespace Content.Server.Cargo.Systems
             if (!TryComp<StationBankAccountComponent>(station, out var bank))
                 return amount;
 
-            foreach (var order in station.Comp.Orders[account])
+            if (station.Comp.Orders.TryGetValue(account, out var accountOrders))
             {
-                if (!order.Approved)
-                    continue;
-                amount += order.OrderQuantity - order.NumDispatched;
+                foreach (var order in accountOrders)
+                {
+                    if (!order.Approved)
+                        continue;
+
+                    amount += Math.Max(0, order.OrderQuantity - order.NumDispatched);
+                }
             }
 
             if (account == bank.PrimaryAccount)
                 return amount;
 
-            foreach (var order in station.Comp.Orders[bank.PrimaryAccount])
+            if (!station.Comp.Orders.TryGetValue(bank.PrimaryAccount, out var primaryOrders))
+                return amount;
+
+            foreach (var order in primaryOrders)
             {
                 if (order.Account != account)
                     continue;
+
                 if (!order.Approved)
                     continue;
-                amount += order.OrderQuantity - order.NumDispatched;
+
+                amount += Math.Max(0, order.OrderQuantity - order.NumDispatched);
             }
 
             return amount;
+        }
+
+        public int GetPendingOrderItemCount(Entity<StationCargoOrderDatabaseComponent> station, ProtoId<CargoAccountPrototype> account)
+        {
+            var amount = 0;
+
+            if (!TryComp<StationBankAccountComponent>(station, out var bank))
+                return amount;
+
+            if (station.Comp.Orders.TryGetValue(account, out var accountOrders))
+            {
+                foreach (var order in accountOrders)
+                {
+                    if (order.Approved)
+                        continue;
+
+                    amount += Math.Max(0, order.OrderQuantity);
+                }
+            }
+
+            if (account == bank.PrimaryAccount)
+                return amount;
+
+            if (!station.Comp.Orders.TryGetValue(bank.PrimaryAccount, out var primaryOrders))
+                return amount;
+
+            foreach (var order in primaryOrders)
+            {
+                if (order.Account != account)
+                    continue;
+
+                if (order.Approved)
+                    continue;
+
+                amount += Math.Max(0, order.OrderQuantity);
+            }
+
+            return amount;
+        }
+
+        private bool CanQueueOrderQuantity(
+            Entity<StationCargoOrderDatabaseComponent> station,
+            ProtoId<CargoAccountPrototype> account,
+            int requestedAmount,
+            out int remainingCapacity)
+        {
+            var pending = GetPendingOrderItemCount(station, account);
+            var capacity = GetEffectiveOrderCapacity(station, account);
+            remainingCapacity = Math.Max(0, capacity - pending);
+            return requestedAmount > 0 && requestedAmount <= remainingCapacity;
+        }
+
+        /// <summary>
+        /// Sets logistics tier for a station account. Tier is clamped to [0..3].
+        /// </summary>
+        public void SetCargoLogisticsTier(EntityUid stationUid, ProtoId<CargoAccountPrototype> account, int tier)
+        {
+            var logistics = EnsureComp<CargoLogisticsTierComponent>(stationUid);
+            logistics.AccountTiers[account] = Math.Clamp(tier, 0, 3);
+            UpdateOrders(stationUid);
+        }
+
+        /// <summary>
+        /// Sets external percentage logistics bonuses for a station account.
+        /// Positive delivery speed bonus means lower ETA.
+        /// Positive max-items bonus increases pending-capacity.
+        /// Positive price discount lowers order unit price.
+        /// </summary>
+        public void SetCargoLogisticsExternalBonuses(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account,
+            float deliverySpeedBonusPercent,
+            float maxItemsBonusPercent,
+            float priceDiscountPercent)
+        {
+            var logistics = EnsureComp<CargoLogisticsTierComponent>(stationUid);
+            logistics.ExternalDeliverySpeedBonusPercent[account] = deliverySpeedBonusPercent;
+            logistics.ExternalMaxItemsBonusPercent[account] = maxItemsBonusPercent;
+            logistics.ExternalPriceDiscountPercent[account] = priceDiscountPercent;
+            UpdateOrders(stationUid);
+        }
+
+        private int GetEffectiveOrderCapacity(
+            Entity<StationCargoOrderDatabaseComponent> station,
+            ProtoId<CargoAccountPrototype> account)
+        {
+            var baseCapacity = Math.Max(1, station.Comp.Capacity);
+            if (!TryComp<CargoLogisticsTierComponent>(station, out var logistics))
+                return baseCapacity;
+
+            var tier = logistics.GetTier(account);
+            var tierBonus = logistics.GetTierMaxItemsBonus(tier);
+            var withTier = Math.Max(1, baseCapacity + tierBonus);
+            var externalBonusPercent = logistics.GetExternalMaxItemsBonusPercent(account);
+            var externalDelta = RoundToInt(withTier * externalBonusPercent / 100f);
+
+            return Math.Max(1, withTier + externalDelta);
+        }
+
+        private int GetEffectiveBatchDelaySeconds(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account,
+            CargoBatchOrderConsoleComponent batchConsole)
+        {
+            var baseDelay = Math.Max(1, batchConsole.BatchDelaySeconds);
+            if (!TryComp<CargoLogisticsTierComponent>(stationUid, out var logistics))
+                return baseDelay;
+
+            var tier = logistics.GetTier(account);
+            var tierReduction = logistics.GetTierDeliveryReductionSeconds(tier);
+            var tierAdjusted = Math.Max(1, baseDelay - tierReduction);
+            var speedBonusPercent = logistics.GetExternalDeliverySpeedBonusPercent(account);
+            var speedMultiplier = Math.Clamp(1f - speedBonusPercent / 100f, 0.05f, 10f);
+            var adjusted = RoundToInt(tierAdjusted * speedMultiplier);
+
+            return Math.Max(1, adjusted);
+        }
+
+        private int GetEffectiveOrderUnitPrice(
+            EntityUid stationUid,
+            ProtoId<CargoAccountPrototype> account,
+            int basePrice)
+        {
+            var safeBasePrice = Math.Max(1, basePrice);
+            if (!TryComp<CargoLogisticsTierComponent>(stationUid, out var logistics))
+                return safeBasePrice;
+
+            var discountPercent = logistics.GetExternalPriceDiscountPercent(account);
+            var discountMultiplier = Math.Clamp(1f - discountPercent / 100f, 0.01f, 10f);
+            var adjusted = RoundToInt(safeBasePrice * discountMultiplier);
+
+            return Math.Max(1, adjusted);
+        }
+
+        private static int RoundToInt(float value)
+        {
+            return (int) Math.Round(value, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>
@@ -516,6 +1033,11 @@ namespace Content.Server.Cargo.Systems
 
                 UpdateOrderState(uid, station);
             }
+        }
+
+        public void RefreshOrderStateForStation(EntityUid stationUid)
+        {
+            UpdateOrders(stationUid);
         }
 
         public bool AddAndApproveOrder(
@@ -547,9 +1069,19 @@ namespace Content.Server.Cargo.Systems
             return TryAddOrder(dbUid, account, order, component) && TryFulfillOrder(stationData, account, order, component).HasValue;
         }
 
+        private static List<CargoOrderData> EnsureOrderList(StationCargoOrderDatabaseComponent orderDatabase, ProtoId<CargoAccountPrototype> account)
+        {
+            if (orderDatabase.Orders.TryGetValue(account, out var orders))
+                return orders;
+
+            orders = new List<CargoOrderData>();
+            orderDatabase.Orders[account] = orders;
+            return orders;
+        }
+
         private bool TryAddOrder(EntityUid dbUid, ProtoId<CargoAccountPrototype> account, CargoOrderData data, StationCargoOrderDatabaseComponent component)
         {
-            component.Orders[account].Add(data);
+            EnsureOrderList(component, account).Add(data);
             UpdateOrders(dbUid);
             return true;
         }
@@ -563,10 +1095,16 @@ namespace Content.Server.Cargo.Systems
 
         public void RemoveOrder(EntityUid dbUid, ProtoId<CargoAccountPrototype> account, int index, StationCargoOrderDatabaseComponent orderDB)
         {
-            var sequenceIdx = orderDB.Orders[account].FindIndex(order => order.OrderId == index);
+            if (!orderDB.Orders.TryGetValue(account, out var orders))
+            {
+                UpdateOrders(dbUid);
+                return;
+            }
+
+            var sequenceIdx = orders.FindIndex(order => order.OrderId == index);
             if (sequenceIdx != -1)
             {
-                orderDB.Orders[account].RemoveAt(sequenceIdx);
+                orders.RemoveAt(sequenceIdx);
             }
             UpdateOrders(dbUid);
         }
@@ -581,20 +1119,26 @@ namespace Content.Server.Cargo.Systems
 
         private static bool PopFrontOrder(StationCargoOrderDatabaseComponent orderDB, ProtoId<CargoAccountPrototype> account, [NotNullWhen(true)] out CargoOrderData? orderOut)
         {
-            var orderIdx = orderDB.Orders[account].FindIndex(order => order.Approved);
+            if (!orderDB.Orders.TryGetValue(account, out var orders))
+            {
+                orderOut = null;
+                return false;
+            }
+
+            var orderIdx = orders.FindIndex(order => order.Approved);
             if (orderIdx == -1)
             {
                 orderOut = null;
                 return false;
             }
 
-            orderOut = orderDB.Orders[account][orderIdx];
+            orderOut = orders[orderIdx];
             orderOut.NumDispatched++;
 
             if (orderOut.NumDispatched >= orderOut.OrderQuantity)
             {
                 // Order is complete. Remove from the queue.
-                orderDB.Orders[account].RemoveAt(orderIdx);
+                orders.RemoveAt(orderIdx);
             }
             return true;
         }
@@ -616,34 +1160,8 @@ namespace Content.Server.Cargo.Systems
         /// </summary>
         private bool FulfillOrder(CargoOrderData order, ProtoId<CargoAccountPrototype> account, EntityCoordinates spawn, string? paperProto)
         {
-            if (!_protoMan.Resolve(order.Product, out var product))
+            if (!TrySpawnCargoProductEntity(order.Product, order.ProductId, spawn, out var product, out var item))
                 return false;
-
-            // Create the item itself
-            var item = Spawn(product.Product, spawn);
-            var itemXForm = Transform(item);
-
-            // Ensure the item doesn't start anchored
-            _transformSystem.Unanchor(item, itemXForm);
-
-            // Spawn container and insert the item into it if a container is defined.
-            if (product.Container is { } productContainer)
-            {
-                var containerEntity = Spawn(productContainer.Entity, itemXForm.Coordinates);
-                _transformSystem.SetLocalRotation(containerEntity, itemXForm.LocalRotation);
-
-                if (!_container.TryGetContainer(containerEntity, productContainer.ContainerId, out var container1) ||
-                    !_container.Insert(item, container1, force: true))
-                {
-                    DebugTools.Assert(
-                        $"Failed to insert cargo product into its specified container. This indicates an error in the cargo product definition's YAML as the product should be insertable into its container. {nameof(CargoProductPrototype)}: {(ProtoId<CargoProductPrototype>)order.Product.Id}");
-                    QueueDel(containerEntity);
-                }
-                else
-                {
-                    item = containerEntity;
-                }
-            }
 
             // Create a sheet of paper to write the order details on
             var printed = Spawn(paperProto, spawn);
@@ -658,7 +1176,7 @@ namespace Content.Server.Cargo.Systems
                     Loc.GetString(
                         "cargo-console-paper-print-text",
                         ("orderNumber", order.OrderId),
-                        ("itemName", product.Name),
+                        ("itemName", product?.Name ?? order.ProductName),
                         ("orderQuantity", order.OrderQuantity),
                         ("requester", order.Requester),
                         ("reason", string.IsNullOrWhiteSpace(order.Reason) ? Loc.GetString("cargo-console-paper-reason-default") : order.Reason),
@@ -667,14 +1185,61 @@ namespace Content.Server.Cargo.Systems
                         ("approver", string.IsNullOrWhiteSpace(order.Approver) ? Loc.GetString("cargo-console-paper-approver-default") : order.Approver)));
 
                 // attempt to attach the label to the item
-                if (TryComp<PaperLabelComponent>(item, out var label))
+                if (TryComp<PaperLabelComponent>(item.Value, out var label))
                 {
-                    _slots.TryInsert(item, label.LabelSlot, printed, null);
+                    _slots.TryInsert(item.Value, label.LabelSlot, printed, null);
                 }
             }
 
             return true;
 
+        }
+
+        private bool TrySpawnCargoProductEntity(
+            ProtoId<CargoProductPrototype> productId,
+            string? fallbackProductId,
+            EntityCoordinates spawn,
+            out CargoProductPrototype? product,
+            [NotNullWhen(true)] out EntityUid? entity)
+        {
+            product = null;
+            entity = null;
+
+            if (_protoMan.Resolve(productId, out product))
+            {
+                var item = Spawn(product.Product, spawn);
+                var itemXform = Transform(item);
+                _transformSystem.Unanchor(item, itemXform);
+
+                if (product.Container is not { } productContainer)
+                {
+                    entity = item;
+                    return true;
+                }
+
+                var containerEntity = Spawn(productContainer.Entity, itemXform.Coordinates);
+                _transformSystem.SetLocalRotation(containerEntity, itemXform.LocalRotation);
+
+                if (!_container.TryGetContainer(containerEntity, productContainer.ContainerId, out var productContainerStorage) ||
+                    !_container.Insert(item, productContainerStorage, force: true))
+                {
+                    DebugTools.Assert(
+                        $"Failed to insert cargo product into its specified container. This indicates an error in the cargo product definition's YAML as the product should be insertable into its container. {nameof(CargoProductPrototype)}: {(ProtoId<CargoProductPrototype>)productId.Id}");
+                    QueueDel(item);
+                    QueueDel(containerEntity);
+                    return false;
+                }
+
+                entity = containerEntity;
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(fallbackProductId) || !_protoMan.HasIndex<EntityPrototype>(fallbackProductId))
+                return false;
+
+            entity = Spawn(fallbackProductId, spawn);
+            _transformSystem.Unanchor(entity.Value, Transform(entity.Value));
+            return true;
         }
 
         public List<ProtoId<CargoProductPrototype>> GetAvailableProducts(Entity<CargoOrderConsoleComponent> ent)
@@ -697,7 +1262,95 @@ namespace Content.Server.Cargo.Systems
                 products.Add(product.ID);
             }
 
+            if (TryComp<WH40KCargoProductUnlocksComponent>(station, out var unlocks))
+                products = FilterWh40KUnlockedProducts(products, station, ent.Comp.Account, unlocks);
+
             return products;
+        }
+
+        private List<ProtoId<CargoProductPrototype>> FilterWh40KUnlockedProducts(
+            List<ProtoId<CargoProductPrototype>> products,
+            EntityUid station,
+            ProtoId<CargoAccountPrototype> account,
+            WH40KCargoProductUnlocksComponent unlocks)
+        {
+            if (!unlocks.UnlockedProductsByAccount.TryGetValue(account, out var unlocked) || unlocked.Count == 0)
+                return new List<ProtoId<CargoProductPrototype>>();
+
+            var unlockedSet = unlocked.ToHashSet();
+            var unlockedTechnologies = GetTeamUnlockedTechnologiesForAccount(station, account);
+
+            return products
+                .Where(product =>
+                    unlockedSet.Contains(product) &&
+                    MeetsWh40KResearchRequirement(account, product, unlocks, unlockedTechnologies))
+                .ToList();
+        }
+
+        private static bool MeetsWh40KResearchRequirement(
+            ProtoId<CargoAccountPrototype> account,
+            ProtoId<CargoProductPrototype> product,
+            WH40KCargoProductUnlocksComponent unlocks,
+            HashSet<ProtoId<TechnologyPrototype>> unlockedTechnologies)
+        {
+            if (!unlocks.ResearchRequirementsByAccount.TryGetValue(account, out var requirementsByProduct) ||
+                !requirementsByProduct.TryGetValue(product, out var requiredTechs) ||
+                requiredTechs.Count == 0)
+            {
+                return true;
+            }
+
+            foreach (var tech in requiredTechs)
+            {
+                if (!unlockedTechnologies.Contains(tech))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private HashSet<ProtoId<TechnologyPrototype>> GetTeamUnlockedTechnologiesForAccount(
+            EntityUid station,
+            ProtoId<CargoAccountPrototype> account)
+        {
+            var result = new HashSet<ProtoId<TechnologyPrototype>>();
+            if (!TryResolveWh40KTeamIdForAccount(account, out var teamId))
+                return result;
+
+            var query = EntityQueryEnumerator<TechnologyDatabaseComponent, WH40KResearchTeamComponent>();
+            while (query.MoveNext(out _, out var database, out var researchTeam))
+            {
+                if (!string.Equals(researchTeam.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                foreach (var technology in database.UnlockedTechnologies)
+                {
+                    result.Add(technology);
+                }
+            }
+
+            return result;
+        }
+
+        private static bool TryResolveWh40KTeamIdForAccount(
+            ProtoId<CargoAccountPrototype> account,
+            [NotNullWhen(true)] out string? teamId)
+        {
+            teamId = null;
+
+            if (string.Equals(account, "WH40KImperium", StringComparison.OrdinalIgnoreCase))
+            {
+                teamId = "Imperium";
+                return true;
+            }
+
+            if (string.Equals(account, "WH40KHeretics", StringComparison.OrdinalIgnoreCase))
+            {
+                teamId = "Heretics";
+                return true;
+            }
+
+            return false;
         }
 
         #region Station

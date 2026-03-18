@@ -3,11 +3,32 @@
   name: job-name-tank-comm
   description: job-description-tank-comm
   playTimeTracker: JobTankComm
-  startingGear: SergeantGear
+  setPreference: false
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: TankCommGear
   icon: "JobIconTankComm"
   supervisors: job-supervisors-engineering
   canBeAntag: false
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: startingGear
+  id: TankCommGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOfficer
+    shoes: ClothingShoesGenBoots
+    ears: ClothingHeadsetVoxBackpackImperium
+    belt: offbelt
+    neck: Gorjet
+    head: ClothingHeadOfficer
+    outerClothing: ClothingOuterArmorOfficer
+    id: TankCommDogTag

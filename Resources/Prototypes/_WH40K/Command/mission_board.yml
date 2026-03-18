@@ -1,0 +1,66 @@
+- type: wh40kCommandMissionBoardProfile
+  id: WH40KCommandMissionBoardProfileDefault
+  activeMissionTitleKey: wh40k-command-node-mission-board-active-title
+  activeMissionDescriptionKey: wh40k-command-node-mission-board-active-description
+  activeRewardBasePoints: 8
+  activeRewardPerBaseLevel: 4
+  activeRewardMinPoints: 12
+  activeTimerPreparationKey: wh40k-command-node-mission-board-timer-prep
+  activeTimerAssaultKey: wh40k-command-node-mission-board-timer-active
+  systemTasks:
+  - id: system_cargo
+    titleKey: wh40k-command-node-mission-board-system-cargo-title
+    rewardKey: wh40k-command-node-mission-board-system-cargo-reward
+    descriptionKey: wh40k-command-node-mission-board-system-cargo-description
+    statusPreparation: Pending
+    statusAssault: Active
+    statusApocalypse: Active
+  - id: system_airdrop
+    titleKey: wh40k-command-node-mission-board-system-airdrop-title
+    rewardKey: wh40k-command-node-mission-board-system-airdrop-reward
+    descriptionKey: wh40k-command-node-mission-board-system-airdrop-description
+    statusPreparation: Pending
+    statusAssault: Queued
+    statusApocalypse: Queued
+  - id: system_uplink
+    titleKey: wh40k-command-node-mission-board-system-uplink-title
+    rewardKey: wh40k-command-node-mission-board-system-uplink-reward
+    descriptionKey: wh40k-command-node-mission-board-system-uplink-description
+    statusPreparation: Pending
+    statusAssault: Queued
+    statusApocalypse: Queued
+  - id: system_blackfront
+    titleKey: wh40k-command-node-mission-board-system-blackfront-title
+    rewardKey: wh40k-command-node-mission-board-system-blackfront-reward
+    descriptionKey: wh40k-command-node-mission-board-system-blackfront-description
+    statusPreparation: Queued
+    statusAssault: Queued
+    statusApocalypse: Active
+  selectableTasks:
+  - id: task_logistics_audit
+    titleKey: wh40k-command-node-mission-board-selectable-logistics-title
+    rewardKey: wh40k-command-node-mission-board-selectable-logistics-reward
+    durationKey: wh40k-command-node-mission-board-selectable-logistics-duration
+    descriptionKey: wh40k-command-node-mission-board-selectable-logistics-description
+  - id: task_reclaimer_expedition
+    titleKey: wh40k-command-node-mission-board-selectable-reclaimer-title
+    rewardKey: wh40k-command-node-mission-board-selectable-reclaimer-reward
+    durationKey: wh40k-command-node-mission-board-selectable-reclaimer-duration
+    descriptionKey: wh40k-command-node-mission-board-selectable-reclaimer-description
+  - id: task_fortification_order
+    titleKey: wh40k-command-node-mission-board-selectable-fortification-title
+    rewardKey: wh40k-command-node-mission-board-selectable-fortification-reward
+    durationKey: wh40k-command-node-mission-board-selectable-fortification-duration
+    descriptionKey: wh40k-command-node-mission-board-selectable-fortification-description
+  - id: task_recon_sweep
+    titleKey: wh40k-command-node-mission-board-selectable-recon-title
+    rewardKey: wh40k-command-node-mission-board-selectable-recon-reward
+    durationKey: wh40k-command-node-mission-board-selectable-recon-duration
+    descriptionKey: wh40k-command-node-mission-board-selectable-recon-description
+
+- type: wh40kCommandMissionBoardTeamMap
+  id: WH40KCommandMissionBoardTeamMap
+  defaultProfile: WH40KCommandMissionBoardProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandMissionBoardProfileDefault
+    Heretics: WH40KCommandMissionBoardProfileDefault

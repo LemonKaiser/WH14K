@@ -57,6 +57,13 @@ namespace Content.Server.GameTicking.Commands
                 return;
             }
 
+            if (ticker.IsRoundParticipationLocked(player))
+            {
+                _sawmill.Info($"{player.Name} ({player.UserId}) attempted to rejoin after leaving the round.");
+                shell.WriteError("You have already joined this round and cannot join again.");
+                return;
+            }
+
             if (ticker.RunLevel == GameRunLevel.PreRoundLobby)
             {
                 shell.WriteLine("Round has not started.");
@@ -69,6 +76,7 @@ namespace Content.Server.GameTicking.Commands
                 if (!int.TryParse(args[1], out var sid))
                 {
                     shell.WriteError(Loc.GetString("shell-argument-must-be-number"));
+                    return;
                 }
 
                 var station = _entManager.GetEntity(new NetEntity(sid));

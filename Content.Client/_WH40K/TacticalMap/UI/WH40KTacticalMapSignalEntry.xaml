@@ -1,0 +1,25 @@
+<Control xmlns="https://spacestation14.io"
+         HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal"
+                  HorizontalExpand="True">
+        <PanelContainer Name="AccentPanel"
+                        SetWidth="6"
+                        VerticalExpand="True"
+                        Margin="0 1 0 0" />
+        <Button Name="MainButton"
+                HorizontalExpand="True"
+                VerticalExpand="True"
+                StyleClasses="ButtonSquare"
+                Margin="-1 0 0 0"
+                ClipText="False">
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          SeparationOverride="1"
+                          Margin="2 1 2 1">
+                <Label Name="TitleLabel" />
+                <Label Name="StatusLabel"
+                       StyleClasses="LabelSubText" />
+            </BoxContainer>
+        </Button>
+    </BoxContainer>
+</Control>

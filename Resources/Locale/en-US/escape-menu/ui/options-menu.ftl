@@ -40,6 +40,7 @@ ui-options-event-music = Event Music
 ui-options-admin-sounds = Play Admin Sounds
 ui-options-bwoink-sound = Play AHelp Notification Sound
 ui-options-volume-label = Volume
+ui-options-speech-bubbles-label = Speech bubbles
 
 ## Graphics menu
 
@@ -84,6 +85,7 @@ ui-options-hud-theme-minimalist = Minimalist
 ui-options-hud-theme-ashen = Ashen
 ui-options-hud-layout-default = Default
 ui-options-hud-layout-separated = Separated
+ui-options-language = Game language:
 ui-options-vp-stretch = Stretch viewport to fit game window
 ui-options-vp-scale = Fixed viewport scale:
 ui-options-vp-scale-value = x{ $scale }
@@ -135,13 +137,13 @@ ui-options-header-text-chat = Chat
 ui-options-header-text-other = Text input other
 
 ui-options-hotkey-keymap = Use US QWERTY Keys
-ui-options-hotkey-toggle-walk = Toggle Walk
+ui-options-hotkey-toggle-walk = Toggle Sprint/Walk
 
 ui-options-function-move-up = Move Up
 ui-options-function-move-left = Move Left
 ui-options-function-move-down = Move Down
 ui-options-function-move-right = Move Right
-ui-options-function-walk = Walk
+ui-options-function-walk = Sprint
 ui-options-function-toggle-knockdown = Toggle Crawling
 
 ui-options-function-camera-rotate-left = Rotate left
@@ -367,11 +369,25 @@ ui-options-enable-color-name = Add colors to character names
 ui-options-colorblind-friendly = Colorblind friendly mode
 ui-options-reduced-motion = Reduce motion of visual effects
 ui-options-screen-shake-intensity = Screen shake intensity
+ui-options-accessability-header-lobby = Lobby
+
+ui-options-lobby-background-type = Lobby background mode
+ui-options-lobby-background-type-server = Server default
+ui-options-lobby-background-type-static = Static background
+ui-options-lobby-background-type-animated = Animated background
+ui-options-lobby-static-background = Static lobby background
+ui-options-lobby-animated-background = Animated lobby background
+ui-options-lobby-background-auto = Auto
+ui-options-lobby-panel-opacity = Lobby panel background opacity
+ui-options-customization-panel-opacity = Character customization background opacity
 
 ui-options-chat-window-opacity = Chat window opacity
 ui-options-speech-bubble-text-opacity = Speech bubble text opacity
 ui-options-speech-bubble-speaker-opacity = Speech bubble speaker opacity
 ui-options-speech-bubble-background-opacity = Speech bubble background opacity
+ui-options-speech-bubble-dialogue-blips = Enable speech bubble dialogue blips
+ui-options-speech-bubble-dialogue-blip-volume = Dialogue blip volume
+ui-options-speech-bubble-dialogue-blip-speed = Dialogue reveal speed
 
 ui-options-censor-nudity = Censor character nudity
 

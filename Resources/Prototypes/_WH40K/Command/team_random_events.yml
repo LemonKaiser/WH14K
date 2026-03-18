@@ -1,0 +1,103 @@
+- type: wh40kCommandTeamRandomEventProfile
+  id: WH40KCommandTeamRandomEventProfileDefault
+  rollIntervalSecondsMin: 480
+  rollIntervalSecondsMax: 720
+  antiRepeat: true
+  maxActiveEventsPerTeam: 1
+  maxRerolls: 3
+  events:
+  - id: fireline_surge
+    title: wh40k-command-node-runtime-event-fireline_surge-title
+    description: wh40k-command-node-runtime-event-fireline_surge-description
+    baseWeight: 1.0
+    durationSeconds: 75
+    cooldownSeconds: 600
+    allowedPhases:
+    - Assault
+    - Apocalypse
+    tags: [combat, offense]
+  - id: iron_discipline
+    title: wh40k-command-node-runtime-event-iron_discipline-title
+    description: wh40k-command-node-runtime-event-iron_discipline-description
+    baseWeight: 1.0
+    durationSeconds: 75
+    cooldownSeconds: 600
+    allowedPhases:
+    - Assault
+    - Apocalypse
+    tags: [combat, defense]
+  - id: logistics_corridor
+    title: wh40k-command-node-runtime-event-logistics_corridor-title
+    description: wh40k-command-node-runtime-event-logistics_corridor-description
+    baseWeight: 0.95
+    durationSeconds: 90
+    cooldownSeconds: 620
+    requiredSubsystems: [Cargo]
+    tags: [logistics, economy]
+  - id: medicae_push
+    title: wh40k-command-node-runtime-event-medicae_push-title
+    description: wh40k-command-node-runtime-event-medicae_push-description
+    baseWeight: 0.9
+    durationSeconds: 80
+    cooldownSeconds: 620
+    tags: [support, sustain]
+  - id: relay_overclock
+    title: wh40k-command-node-runtime-event-relay_overclock-title
+    description: wh40k-command-node-runtime-event-relay_overclock-description
+    baseWeight: 0.85
+    durationSeconds: 70
+    cooldownSeconds: 660
+    tags: [command]
+  - id: scrap_windfall
+    title: wh40k-command-node-runtime-event-scrap_windfall-title
+    description: wh40k-command-node-runtime-event-scrap_windfall-description
+    baseWeight: 0.85
+    durationSeconds: 90
+    cooldownSeconds: 660
+    requiredSubsystems: [Reclaimer]
+    tags: [industry, economy]
+  - id: vox_jamming_pulse
+    title: wh40k-command-node-runtime-event-vox_jamming_pulse-title
+    description: wh40k-command-node-runtime-event-vox_jamming_pulse-description
+    baseWeight: 0.75
+    durationSeconds: 60
+    cooldownSeconds: 700
+    allowedPhases:
+    - Assault
+    - Apocalypse
+    tags: [intel]
+  - id: servitor_rush
+    title: wh40k-command-node-runtime-event-servitor_rush-title
+    description: wh40k-command-node-runtime-event-servitor_rush-description
+    baseWeight: 0.8
+    durationSeconds: 85
+    cooldownSeconds: 680
+    requiredSubsystems: [Cargo]
+    tags: [engineering, logistics]
+  - id: suppression_grid
+    title: wh40k-command-node-runtime-event-suppression_grid-title
+    description: wh40k-command-node-runtime-event-suppression_grid-description
+    baseWeight: 0.8
+    durationSeconds: 70
+    cooldownSeconds: 680
+    allowedPhases:
+    - Assault
+    - Apocalypse
+    tags: [combat, control]
+  - id: counter_battery_window
+    title: wh40k-command-node-runtime-event-counter_battery_window-title
+    description: wh40k-command-node-runtime-event-counter_battery_window-description
+    baseWeight: 0.7
+    durationSeconds: 65
+    cooldownSeconds: 720
+    allowedPhases:
+    - Assault
+    - Apocalypse
+    tags: [combat, pressure]
+
+- type: wh40kCommandTeamRandomEventTeamMap
+  id: WH40KCommandTeamRandomEventTeamMap
+  defaultProfile: WH40KCommandTeamRandomEventProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandTeamRandomEventProfileDefault
+    Heretics: WH40KCommandTeamRandomEventProfileDefault

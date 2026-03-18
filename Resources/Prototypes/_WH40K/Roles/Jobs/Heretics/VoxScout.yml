@@ -1,0 +1,36 @@
+- type: job
+  id: HVoxScout
+  name: job-name-hvox-scout
+  description: job-description-hvox-scout
+  playTimeTracker: JobHVoxScout
+  startingGear: HVoxScoutGear
+  icon: "JobIconHVoxScout"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+      - type: WH40KMoraleExecutionTarget
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: HVoxScoutGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackVoxChaos
+    ears: ClothingHeadsetVoxBackpackHeretics
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorChaosVest
+    pocket1: RMCMotionDetector
+    id: HGuardsmanDogTag

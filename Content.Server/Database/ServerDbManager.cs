@@ -152,6 +152,32 @@ namespace Content.Server.Database
 
         #endregion
 
+        #region WH40K Meta Progress
+
+        Task<WH40KMetaProgressDbData?> GetWH40KMetaProgress(NetUserId player, CancellationToken cancel = default);
+
+        Task SetWH40KMetaProgress(NetUserId player, WH40KMetaProgressDbData data);
+
+        Task<List<WH40KMetaAchievementDbData>> GetWH40KMetaAchievements(NetUserId player, CancellationToken cancel = default);
+
+        Task SetWH40KMetaAchievements(NetUserId player, IReadOnlyCollection<WH40KMetaAchievementDbData> data);
+
+        Task<List<WH40KMetaDecorationDbData>> GetWH40KMetaDecorations(NetUserId player, CancellationToken cancel = default);
+
+        Task SetWH40KMetaDecorations(NetUserId player, IReadOnlyCollection<WH40KMetaDecorationDbData> data);
+
+        Task<List<WH40KMetaDevelopmentUnlockDbData>> GetWH40KMetaDevelopmentUnlocks(NetUserId player, CancellationToken cancel = default);
+
+        Task SetWH40KMetaDevelopmentUnlocks(NetUserId player, IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> data);
+
+        Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel = default);
+
+        Task SetWH40KDiscordLink(NetUserId player, WH40KDiscordAuthDbData data);
+
+        Task ClearWH40KDiscordLink(NetUserId player);
+
+        #endregion
+
         #region Player Records
         Task UpdatePlayerRecordAsync(
             NetUserId userId,
@@ -560,6 +586,76 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.UpdatePlayTimes(updates));
+        }
+
+        #endregion
+
+        #region WH40K Meta Progress
+
+        public Task<WH40KMetaProgressDbData?> GetWH40KMetaProgress(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KMetaProgress(player, cancel));
+        }
+
+        public Task SetWH40KMetaProgress(NetUserId player, WH40KMetaProgressDbData data)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetWH40KMetaProgress(player, data));
+        }
+
+        public Task<List<WH40KMetaAchievementDbData>> GetWH40KMetaAchievements(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KMetaAchievements(player, cancel));
+        }
+
+        public Task SetWH40KMetaAchievements(NetUserId player, IReadOnlyCollection<WH40KMetaAchievementDbData> data)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetWH40KMetaAchievements(player, data));
+        }
+
+        public Task<List<WH40KMetaDecorationDbData>> GetWH40KMetaDecorations(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KMetaDecorations(player, cancel));
+        }
+
+        public Task SetWH40KMetaDecorations(NetUserId player, IReadOnlyCollection<WH40KMetaDecorationDbData> data)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetWH40KMetaDecorations(player, data));
+        }
+
+        public Task<List<WH40KMetaDevelopmentUnlockDbData>> GetWH40KMetaDevelopmentUnlocks(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KMetaDevelopmentUnlocks(player, cancel));
+        }
+
+        public Task SetWH40KMetaDevelopmentUnlocks(NetUserId player, IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> data)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetWH40KMetaDevelopmentUnlocks(player, data));
+        }
+
+        public Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KDiscordLink(player, cancel));
+        }
+
+        public Task SetWH40KDiscordLink(NetUserId player, WH40KDiscordAuthDbData data)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetWH40KDiscordLink(player, data));
+        }
+
+        public Task ClearWH40KDiscordLink(NetUserId player)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.ClearWH40KDiscordLink(player));
         }
 
         #endregion

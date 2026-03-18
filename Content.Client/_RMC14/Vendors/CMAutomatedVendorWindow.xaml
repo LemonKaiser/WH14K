@@ -1,0 +1,22 @@
+<controls:CMAutomatedVendorWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._RMC14.Vendors"
+    xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+    MinSize="500 700">
+    <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Horizontal">
+            <Label Text="{Loc 'cm-automated-vendor-ui-search'}" Align="Left" />
+            <LineEdit Name="Search"
+                      Access="Public"
+                      HorizontalExpand="True"
+                      Margin="10 0 0 0"
+                      PlaceHolder="{Loc 'cm-automated-vendor-ui-search-placeholder'}" />
+            <Control HorizontalExpand="True" SizeFlagsStretchRatio="0.25" />
+            <Label Name="PointsLabel" Access="Public" HorizontalExpand="True" Align="Right" />
+        </BoxContainer>
+        <cc:HSeparator />
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" Name="Sections" Access="Public" />
+        </ScrollContainer>
+    </BoxContainer>
+</controls:CMAutomatedVendorWindow>

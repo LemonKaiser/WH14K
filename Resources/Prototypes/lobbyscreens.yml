@@ -1,7 +1,23 @@
 - type: lobbyBackground
-  id: Kastellan
-  background: /Textures/LobbyScreens/Legio_Cybernetica_Kastellan.webp
+  id: AnimatedWp1
+  backgroundGif: /Textures/LobbyScreens/Animated/wp1.gif
 
 - type: lobbyBackground
-  id: Biologis
-  background: /Textures/LobbyScreens/magos_biologis.png
+  id: AnimatedWp2
+  backgroundGif: /Textures/LobbyScreens/Animated/wp2.gif
+
+- type: lobbyBackground
+  id: AnimatedWp3
+  backgroundGif: /Textures/LobbyScreens/Animated/wp3.gif
+
+- type: lobbyBackground
+  id: AnimatedWp4
+  backgroundGif: /Textures/LobbyScreens/Animated/wp4.gif
+
+- type: lobbyBackground
+  id: AnimatedWp5
+  backgroundGif: /Textures/LobbyScreens/Animated/wp5.gif
+
+- type: lobbyBackground
+  id: AnimatedWp6
+  backgroundGif: /Textures/LobbyScreens/Animated/wp6.gif

@@ -1,3 +1,4 @@
+using Content.Shared._WH40K.HeavyBolter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
@@ -39,11 +40,14 @@ public abstract partial class SharedGunSystem
         // not checking for args.Handled or marking as such because we only relay the event to the magazine entity
 
         var magEnt = GetMagazineEntity(uid);
+        if (HasComp<WH40KHeavyBolterComponent>(uid))
+            return;
 
         if (magEnt == null)
             return;
 
         RaiseLocalEvent(magEnt.Value, args);
+
         UpdateAmmoCount(uid);
         UpdateMagazineAppearance(uid, component, magEnt.Value);
     }

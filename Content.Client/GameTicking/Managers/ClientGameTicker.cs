@@ -4,11 +4,13 @@ using Content.Client.Lobby;
 using Content.Client.RoundEnd;
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
+using Content.Shared.Localizations;
 using Content.Shared.Roles;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Audio;
 using Content.Shared.GameTicking.Prototypes;
@@ -22,6 +24,7 @@ namespace Content.Client.GameTicking.Managers
         [Dependency] private readonly IClientAdminManager _admin = default!;
         [Dependency] private readonly IClyde _clyde = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+        [Dependency] private readonly ILocalizationManager _loc = default!;
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();
@@ -112,6 +115,11 @@ namespace Content.Client.GameTicking.Managers
         private void JoinLobby(TickerJoinLobbyEvent message)
         {
             _stateManager.RequestStateChange<LobbyState>();
+        }
+
+        public void RequestLobbyInfoRefresh()
+        {
+            RaiseNetworkEvent(new RequestLobbyInfoRefreshEvent(_loc.GetCurrentCultureName()));
         }
 
         private void ConnectionStatus(TickerConnectionStatusEvent message)

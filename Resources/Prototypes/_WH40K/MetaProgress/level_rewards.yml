@@ -1,0 +1,40 @@
+- type: wh40kMetaLevelRewardTable
+  id: WH40KMetaLevelRewardTableDefault
+  defaultDecorations: 0
+  defaultSkillPoints: 0
+  entries:
+  - level: 1
+    decorations: 0
+    skillPoints: 0
+  - level: 2
+    decorations: 1
+    skillPoints: 1
+  - level: 3
+    decorations: 1
+    skillPoints: 1
+  - level: 4
+    decorations: 2
+    skillPoints: 2
+  - level: 5
+    decorations: 4
+    skillPoints: 3
+    unlockIds:
+    - decor-ghost-star
+    - decor-title-legend
+  - level: 10
+    decorations: 5
+    skillPoints: 3
+    unlockIds:
+    - decor-ghost-warp
+    - decor-title-saint
+  - level: 15
+    decorations: 6
+    skillPoints: 4
+    unlockIds:
+    - decor-color-violet
+  - level: 20
+    decorations: 8
+    skillPoints: 5
+    requiredAchievements:
+    - wh40k-ach-perfect-campaign
+
