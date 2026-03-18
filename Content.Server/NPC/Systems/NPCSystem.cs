@@ -25,6 +25,7 @@ namespace Content.Server.NPC.Systems
             "Amount of NPCs that are actively processing");
 
         [Dependency] private readonly IConfigurationManager _configurationManager = default!;
+        [Dependency] private readonly NPCBenchmarkSystem _bench = default!;
         [Dependency] private readonly HTNSystem _htn = default!;
         [Dependency] private readonly MobStateSystem _mobState = default!;
 
@@ -150,10 +151,15 @@ namespace Content.Server.NPC.Systems
             if (!Enabled)
                 return;
 
-            // Add your system here.
-            _htn.UpdateNPC(ref _count, _maxUpdates, frameTime);
+            var active = Count<ActiveNPCComponent>();
+            using (_bench.Measure("npc.system.update", active))
+            {
+                // Add your system here.
+                _htn.UpdateNPC(ref _count, _maxUpdates, frameTime);
+            }
 
-            ActiveGauge.Set(Count<ActiveNPCComponent>());
+            ActiveGauge.Set(active);
+            _bench.RecordCount("npc.active.count", active);
         }
 
         public void OnMobStateChange(EntityUid uid, HTNComponent component, MobStateChangedEvent args)

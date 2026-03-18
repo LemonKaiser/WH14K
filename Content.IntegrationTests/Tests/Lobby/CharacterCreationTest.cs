@@ -2,6 +2,7 @@ using Content.Client.Lobby;
 using Content.Server.Preferences.Managers;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
+using Content.Shared.Speech;
 using Robust.Client.State;
 
 namespace Content.IntegrationTests.Tests.Lobby;
@@ -86,6 +87,7 @@ public sealed class CharacterCreationTest
             Assert.That(a.Age, Is.EqualTo(b.Age));
             Assert.That(a.Sex, Is.EqualTo(b.Sex));
             Assert.That(a.Gender, Is.EqualTo(b.Gender));
+            Assert.That(a.VoiceTone, Is.EqualTo(b.VoiceTone));
             Assert.That(a.Species, Is.EqualTo(b.Species));
             Assert.That(a.PreferenceUnavailable, Is.EqualTo(b.PreferenceUnavailable));
             Assert.That(a.SpawnPriority, Is.EqualTo(b.SpawnPriority));

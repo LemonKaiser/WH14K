@@ -131,9 +131,13 @@ public abstract class SharedItemSystem : EntitySystem
         // this occurs when the item is in their inventory or in an open backpack
         Container.TryGetContainingContainer((args.User, null, null), out var userContainer);
         if (Container.TryGetContainingContainer((args.Target, null, null), out var container) && container != userContainer)
-            verb.Text = Loc.GetString("pick-up-verb-get-data-text-inventory");
+        {
+            verb.TextLocId = "pick-up-verb-get-data-text-inventory";
+        }
         else
-            verb.Text = Loc.GetString("pick-up-verb-get-data-text");
+        {
+            verb.TextLocId = "pick-up-verb-get-data-text";
+        }
 
         args.Verbs.Add(verb);
     }

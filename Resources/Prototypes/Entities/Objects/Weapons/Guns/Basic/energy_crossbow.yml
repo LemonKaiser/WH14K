@@ -17,6 +17,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/energycrossbow_shoot.ogg
+  - type: WH40KGunPrediction
   - type: AmmoCounter
   - type: Appearance
   - type: GenericVisualizer

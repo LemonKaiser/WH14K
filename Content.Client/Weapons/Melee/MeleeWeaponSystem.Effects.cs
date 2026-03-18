@@ -59,7 +59,8 @@ public sealed partial class MeleeWeaponSystem
             if (meleeWeaponComponent.SwingLeft)
                 angle *= -1;
 
-            length = (1 / meleeWeaponComponent.AttackRate) * 0.6f;
+            var attackRate = MathF.Max(0.01f, GetAttackRate(weapon, user, meleeWeaponComponent));
+            length = (1f / attackRate) * 0.6f;
             offset = meleeWeaponComponent.AnimationOffset;
         }
         _sprite.SetRotation((animationUid, sprite), localPos.ToWorldAngle());

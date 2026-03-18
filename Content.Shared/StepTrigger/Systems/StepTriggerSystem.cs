@@ -135,6 +135,9 @@ public sealed class StepTriggerSystem : EntitySystem
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
             return false;
 
+        if (component.RequireTripperOnSameTile && !AreOnSameTile(uid, otherUid))
+            return false;
+
         // Can't trigger if we don't ignore weightless entities
         // and the entity is flying or currently weightless
         // Makes sense simulation wise to have this be part of steptrigger directly IMO
@@ -147,6 +150,22 @@ public sealed class StepTriggerSystem : EntitySystem
         RaiseLocalEvent(uid, ref msg);
 
         return msg.Continue && !msg.Cancelled;
+    }
+
+    private bool AreOnSameTile(EntityUid first, EntityUid second)
+    {
+        var firstXform = Transform(first);
+        var secondXform = Transform(second);
+
+        if (firstXform.GridUid == null || firstXform.GridUid != secondXform.GridUid)
+            return false;
+
+        if (!TryComp<MapGridComponent>(firstXform.GridUid, out var grid))
+            return false;
+
+        var firstTile = _map.LocalToTile(firstXform.GridUid.Value, grid, firstXform.Coordinates);
+        var secondTile = _map.LocalToTile(secondXform.GridUid.Value, grid, secondXform.Coordinates);
+        return firstTile == secondTile;
     }
 
     private void OnStartCollide(EntityUid uid, StepTriggerComponent component, ref StartCollideEvent args)

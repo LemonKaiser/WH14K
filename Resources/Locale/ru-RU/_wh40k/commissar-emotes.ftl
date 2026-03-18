@@ -1,0 +1,27 @@
+wh40k-chat-emote-name-commissar-consider-it-done = Будет сделано
+wh40k-chat-emote-name-commissar-you-will-be-executed = Будешь расстрелян
+wh40k-chat-emote-name-commissar-attack = В атаку
+wh40k-chat-emote-name-commissar-forward-to-victory = Вперед, к победе
+wh40k-chat-emote-name-commissar-where-am-i-needed = Где я нужен?
+wh40k-chat-emote-name-commissar-their-days-are-numbered = Их дни сочтены
+wh40k-chat-emote-name-commissar-retreat-is-a-bad-decision = Отступать плохое решение
+wh40k-chat-emote-name-commissar-i-sentence-you-to-death = Приговариваю к смерти
+wh40k-chat-emote-name-commissar-order-received-and-understood = Приказ получен и понят
+wh40k-chat-emote-name-commissar-spread-out = Рассредоточиться
+wh40k-chat-emote-name-commissar-you-dared-to-shoot-at-me = Ты посмел стрелять в меня
+wh40k-chat-emote-name-commissar-what-do-you-want = Что вам угодно?
+wh40k-chat-emote-name-commissar-i-am-leaving = Я ухожу
+
+wh40k-chat-emote-msg-commissar-consider-it-done = произносит: "Будет сделано."
+wh40k-chat-emote-msg-commissar-you-will-be-executed = рычит: "Будешь расстрелян."
+wh40k-chat-emote-msg-commissar-attack = командует: "В атаку!"
+wh40k-chat-emote-msg-commissar-forward-to-victory = ревет: "Вперед, к победе!"
+wh40k-chat-emote-msg-commissar-where-am-i-needed = спрашивает: "Где я нужен?"
+wh40k-chat-emote-msg-commissar-their-days-are-numbered = заявляет: "Их дни сочтены."
+wh40k-chat-emote-msg-commissar-retreat-is-a-bad-decision = отрезает: "Отступать плохое решение."
+wh40k-chat-emote-msg-commissar-i-sentence-you-to-death = произносит: "Приговариваю к смерти."
+wh40k-chat-emote-msg-commissar-order-received-and-understood = отвечает: "Приказ получен и понят."
+wh40k-chat-emote-msg-commissar-spread-out = приказывает: "Рассредоточиться!"
+wh40k-chat-emote-msg-commissar-you-dared-to-shoot-at-me = шипит: "Ты посмел стрелять в меня?"
+wh40k-chat-emote-msg-commissar-what-do-you-want = спрашивает: "Что вам угодно?"
+wh40k-chat-emote-msg-commissar-i-am-leaving = произносит: "Я ухожу."

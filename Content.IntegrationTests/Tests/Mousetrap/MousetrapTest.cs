@@ -10,6 +10,7 @@ using Content.Shared.Mousetrap;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Mousetrap;
 
 /// <summary>

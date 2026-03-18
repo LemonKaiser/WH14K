@@ -18,7 +18,7 @@
     - suitStorage
   - type: AmmoCounter
   - type: Gun
-    fireRate: 10
+    fireRate: 7
     minAngle: 0
     maxAngle: 45
     selectedMode: FullAuto

@@ -10,11 +10,17 @@
     - state: base
       offset: 0, 0.5
       map: [ "enum.WH40KObjectiveVisualLayers.Base" ]
-    - sprite: Effects/sparks.rsi
+    - sprite: _RMC14/Effects/effects.rsi
       state: sparks
       visible: false
       shader: unshaded
       map: [ "enum.WH40KObjectiveVisualLayers.Destroying" ]
+    - sprite: Structures/Magic/forcewall.rsi
+      state: forcewall
+      visible: false
+      shader: unshaded
+      color: "#4f9cffc8"
+      map: [ "enum.WH40KObjectiveVisualLayers.Shield" ]
   - type: Appearance
   - type: WH40KAlwaysShowHealthBar
     maxHealth: 2000
@@ -47,10 +53,15 @@
           Intact: { visible: false }
           Destroying: { visible: true }
           Destroyed: { visible: false }
+      enum.WH40KObjectiveVisuals.Shielded:
+        enum.WH40KObjectiveVisualLayers.Shield:
+          True: { visible: true }
+          False: { visible: false }
   - type: InteractionOutline
   - type: Damageable
     damageContainer: Inorganic
     healthBarThreshold: 0
+  - type: WaypointerTrackable
   - type: MobState
   - type: MobThresholds
     thresholds:
@@ -84,6 +95,9 @@
   parent: WH40KObjectiveBase
   suffix: WH40K, Imperium
   components:
+  - type: NpcFactionMember
+    factions:
+    - Imperium
   - type: WH40KObjective
     teamId: Imperium
     name: wh40k-objective-imperium-name
@@ -93,6 +107,9 @@
   parent: WH40KObjectiveBase
   suffix: WH40K, Heretics
   components:
+  - type: NpcFactionMember
+    factions:
+    - Heretics
   - type: WH40KObjective
     teamId: Heretics
     name: wh40k-objective-heretics-name
@@ -103,9 +120,15 @@
     - state: base
       offset: 0, 0.5
       map: [ "enum.WH40KObjectiveVisualLayers.Base" ]
-    - sprite: Effects/sparks.rsi
+    - sprite: _RMC14/Effects/effects.rsi
       state: sparks
       visible: false
       shader: unshaded
       map: [ "enum.WH40KObjectiveVisualLayers.Destroying" ]
+    - sprite: Structures/Magic/forcewall.rsi
+      state: forcewall
+      visible: false
+      shader: unshaded
+      color: "#ff5757c8"
+      map: [ "enum.WH40KObjectiveVisualLayers.Shield" ]
 

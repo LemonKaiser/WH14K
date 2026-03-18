@@ -7,7 +7,7 @@ using Robust.Shared.Utility;
 namespace Content.IntegrationTests.Tests.NPC;
 
 [TestFixture]
-public sealed class NPCTest
+public sealed partial class NPCTest
 {
     [Test]
     public async Task CompoundRecursion()

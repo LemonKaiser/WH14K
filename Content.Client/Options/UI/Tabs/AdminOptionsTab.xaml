@@ -4,12 +4,12 @@
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
             <BoxContainer Orientation="Vertical" Margin="8">
-                <Label Text="{Loc 'ui-options-admin-player-panel'}"
+                <Label Name="PlayerPanelHeaderLabel" Text="{Loc 'ui-options-admin-player-panel'}"
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownPlayerTabSymbolSetting" Title="{Loc 'ui-options-admin-player-tab-symbol-setting'}" />
                 <ui:OptionDropDown Name="DropDownPlayerTabRoleSetting" Title="{Loc 'ui-options-admin-player-tab-role-setting'}" />
                 <ui:OptionDropDown Name="DropDownPlayerTabColorSetting" Title="{Loc 'ui-options-admin-player-tab-color-setting'}" />
-                <Label Text="{Loc 'ui-options-admin-overlay-title'}"
+                <Label Name="OverlayHeaderLabel" Text="{Loc 'ui-options-admin-overlay-title'}"
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownOverlayAntagFormat" Title="{Loc 'ui-options-admin-overlay-antag-format'}" />
                 <ui:OptionDropDown Name="DropDownOverlayAntagSymbol" Title="{Loc 'ui-options-admin-overlay-antag-symbol'}" />

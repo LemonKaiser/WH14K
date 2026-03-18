@@ -1,0 +1,388 @@
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: ColMarTechBase
+  name: ColMarTech vendor
+  description: Automated rack for starter loadout distribution.
+  suffix: WH40K
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: InteractionOutline
+  - type: WallMount
+    arc: 360
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: ActivatableUIRequiresAccess
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-starter
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechGuns
+  name: ColMarTech automated weapons rack
+  description: Standard laser-weapon rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-primary-firearms
+      entries:
+      - id: WeaponLaserLasgun
+        amount: 10
+      - id: WeaponLaserLonglas
+        amount: 2
+      - id: WeaponLaserLasgunVoss
+        amount: 4
+      - id: WeaponLaserLasgunAccatran
+        amount: 1
+    - name: cm-automated-vendor-section-primary-ammunition
+      entries:
+      - id: LasgunPowerCell
+        amount: 42
+      - id: LonglasPowerCell
+        amount: 8
+      - id: AccatranPowerCell
+        amount: 4
+    - name: cm-automated-vendor-section-sidearms
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechEquipment
+  name: ColMarTech automated marine equipment rack
+  description: Starter equipment rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/equipment.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-standard-equipment
+      entries: []
+    - name: cm-automated-vendor-section-armor
+      entries: []
+    - name: cm-automated-vendor-section-backpack
+      entries: []
+    - name: cm-automated-vendor-section-belt
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSurplus
+  name: ColMarTech surplus uniform vendor
+  description: Starter surplus clothing rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-standard-equipment
+      entries: []
+    - name: cm-automated-vendor-section-armor
+      entries: []
+    - name: cm-automated-vendor-section-belts
+      entries: []
+    - name: cm-automated-vendor-section-miscellaneous
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechFood
+  name: ColMarTech food vendor
+  description: Starter food rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/food.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-prepared-meals
+      entries: []
+    - name: cm-automated-vendor-section-flasks
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechMunitions
+  name: ColMarTech automated munition squad vendor
+  description: Starter munitions rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-armor-piercing-ammunition
+      entries:
+      - id: LasgunPowerCell
+        amount: 9
+    - name: cm-automated-vendor-section-extended-ammunition
+      entries:
+      - id: LasgunPowerCell
+        amount: 9
+    - name: cm-automated-vendor-section-special-ammunition
+      entries:
+      - id: LasgunPowerCell
+        amount: 9
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSLGear
+  name: ColMarTech officer sidearm rack
+  description: An automated sidearm and command-weapon rack for officers.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Officer Sidearms
+      entries:
+      - id: WeaponLaserPistolCommissar
+        amount: 4
+      - id: WeaponLaserPistol
+        amount: 10
+      - id: WeaponPistolBolter
+        amount: 2
+      - id: WeaponLaserPlasmaPistol
+        amount: 1
+    - name: Officer Melee
+      entries:
+      - id: Chainsword
+        amount: 4
+      - id: WHPowerSaberImperial
+        amount: 1
+    - name: Officer Ammunition
+      entries:
+      - id: LasgunPowerCell
+        amount: 30
+      - id: MagazineBolterPistol
+        amount: 8
+      - id: PlasmPistolPowerCell
+        amount: 4
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechMedicalGear
+  name: ColMarTech squad medical gear rack
+  description: An automated gear rack for hospital corpsmen.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Medical Set (Mandatory)
+      entries: []
+    - name: Field Supplies
+      entries: []
+    - name: Firstaid Kits
+      entries: []
+    - name: Pill Bottles
+      entries: []
+    - name: Autoinjectors
+      entries: []
+    - name: Medical Utilities
+      entries: []
+    - name: Explosives
+      entries: []
+    - name: Primary Ammunition
+      entries: []
+    - name: Sidearm Ammunition
+      entries: []
+    - name: Armors
+      entries: []
+    - name: Restricted Firearms
+      entries: []
+    - name: Clothing Items
+      entries: []
+    - name: Utilities
+      entries: []
+    - name: Binoculars
+      entries: []
+    - name: Helmet Optics
+      entries: []
+    - name: Pamphlets
+      entries: []
+    - name: Radio Keys
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSCTGear
+  name: ColMarTech squad comtech gear rack
+  description: An automated gear rack for combat technicians.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Engineer Set (Mandatory)
+      entries: []
+    - name: Handheld Defense
+      entries: []
+    - name: Handheld Defense Upgrade
+      entries: []
+    - name: Engineering Supplies
+      entries: []
+    - name: Explosives
+      entries: []
+    - name: Ammunition
+      entries: []
+    - name: Sidearm Ammunition
+      entries: []
+    - name: Armors
+      entries: []
+    - name: Restricted Firearms
+      entries: []
+    - name: Clothing Items
+      entries: []
+    - name: Utilities
+      entries: []
+    - name: Binoculars
+      entries: []
+    - name: Helmet Optics
+      entries: []
+    - name: Pamphlets
+      entries: []
+    - name: Radio Keys
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSWSGear
+  name: ColMarTech squad weapons specialist gear rack
+  description: An automated gear rack for Squad Weapons Specialists.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Weapons Specialist Sets
+      entries: []
+    - name: Extra Scout Ammunition
+      entries: []
+    - name: Extra Sniper Ammunition
+      entries: []
+    - name: Extra Demolitionist Ammunition
+      entries: []
+    - name: Extra Grenades
+      entries: []
+    - name: Extra Flamethrower Tanks
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechFLGear
+  name: ColMarTech fireteam leader gear rack
+  description: An automated gear rack for fireteam leaders.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/fireteam_leader_gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Explosives
+      entries: []
+    - name: Primary Ammunition
+      entries: []
+    - name: Sidearm Ammunition
+      entries: []
+    - name: Restricted Firearms
+      entries: []
+    - name: Armors
+      entries: []
+    - name: Clothing Items
+      entries: []
+    - name: Engineering Supplies
+      entries: []
+    - name: Utilities
+      entries: []
+    - name: Binoculars
+      entries: []
+    - name: Helmet Optics
+      entries: []
+    - name: Radio Keys
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSGGear
+  name: ColMarTech squad smart gun operator gear rack
+  description: An automated gear rack for Squad Smart Gun Operators.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Smart Gun Set (Mandatory)
+      entries: []
+    - name: Gun Attachments
+      entries: []
+    - name: Explosives
+      entries: []
+    - name: Sidearm Ammunitions
+      entries: []
+    - name: Restricted Firearms
+      entries: []
+    - name: Clothing Items
+      entries: []
+    - name: Utilities
+      entries: []
+    - name: Binoculars
+      entries: []
+    - name: Helmet Optics
+      entries: []
+    - name: Pamphlets
+      entries: []
+    - name: Radio Keys
+      entries: []
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechUtilities
+  name: ColMarTech automated utilities squad vendor
+  description: An automated supply rack hooked up to a small storage of various utilities and tools. Can be accessed by any Marine Rifleman.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/attachments.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: Food
+      entries: []
+    - name: Tools
+      entries: []
+    - name: Flare and light
+      entries: []
+    - name: Miscellaneous
+      entries: []

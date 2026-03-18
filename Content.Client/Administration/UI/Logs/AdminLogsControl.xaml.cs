@@ -27,6 +27,9 @@ public sealed partial class AdminLogsControl : Control
     {
         RobustXamlLoader.Load(this);
 
+        IncludeNonPlayerLogs = true;
+        IncludeNonPlayersButton.Pressed = true;
+
         TypeSearch.OnTextChanged += TypeSearchChanged;
         PlayerSearch.OnTextChanged += PlayerSearchChanged;
         LogSearch.OnTextChanged += LogSearchChanged;

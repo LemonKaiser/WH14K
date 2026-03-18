@@ -3,22 +3,14 @@
   parent: [ BaseMachinePowered, ConstructibleMachine ]
   name: R&D server
   description: Contains the collective knowledge of the station's scientists. Destroying it would send them back to the stone age. You don't want that do you?
-  suffix: WH40K, АдМехи
   components:
   - type: Sprite
-    sprite: _WH40K/Structures/Machines/server.rsi
+    sprite: Structures/Machines/server.rsi
     snapCardinals: true
     layers:
       - state: server
-      # - state: server-on
-      #   visible: false
-      #   map: ["enum.PowerDeviceVisualLayers.Powered"]
-      - state: inserting
+      - state: server-on
         visible: false
-        map: ["enum.MaterialStorageVisualLayers.Inserting"]
-      - state: candle
-        shader: unshaded
-      - state: variant-research
         shader: unshaded
         map: ["enum.PowerDeviceVisualLayers.Powered"]
       - state: server_o

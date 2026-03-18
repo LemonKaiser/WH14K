@@ -2,15 +2,20 @@ using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client._WH40K.LateJoin;
+using Content.Client._WH40K.DiscordAuth;
+using Content.Client.Ghost;
 using Content.Client.Lobby.UI;
 using Content.Client.Message;
 using Content.Client.Playtime;
 using Content.Client.UserInterface.Systems.Chat;
+using Content.Client.UserInterface.Systems.Localization;
 using Content.Client.Voting;
 using Content.Shared.CCVar;
+using Content.Shared.GameTicking.Prototypes;
 using Content.Shared.Roles;
 using Robust.Client;
 using Robust.Client.Console;
+using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -25,6 +30,7 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+        [Dependency] private readonly IClyde _clyde = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IResourceCache _resourceCache = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
@@ -35,10 +41,13 @@ namespace Content.Client.Lobby
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
+        private WH40KDiscordAuthSystem _discordAuth = default!;
+        private GhostSystem _ghostSystem = default!;
         private WH40KFactionSystem _wh40kFactions = default!;
         private bool _pendingJoinOpen;
         private LateJoinGui? _lateJoinWindow;
         private WH40KFactionJoinGui? _factionJoinWindow;
+        private LobbyBackgroundController? _backgroundController;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
@@ -55,8 +64,12 @@ namespace Content.Client.Lobby
             var chatController = _userInterfaceManager.GetUIController<ChatUIController>();
             _gameTicker = _entityManager.System<ClientGameTicker>();
             _contentAudioSystem = _entityManager.System<ContentAudioSystem>();
+            _discordAuth = _entityManager.System<WH40KDiscordAuthSystem>();
+            _ghostSystem = _entityManager.System<GhostSystem>();
             _wh40kFactions = _entityManager.System<WH40KFactionSystem>();
+            _discordAuth.EnsureSnapshot();
             _contentAudioSystem.LobbySoundtrackChanged += UpdateLobbySoundtrackInfo;
+            _ghostSystem.GhostRoleCountUpdated += OnGhostRoleCountUpdated;
             _wh40kFactions.FactionsUpdated += OnWh40kFactionsUpdated;
             _pendingJoinOpen = false;
 
@@ -76,14 +89,25 @@ namespace Content.Client.Lobby
             Lobby.RightSide.SetWidth = width;
 
             UpdateLobbyUi();
+            _backgroundController = new LobbyBackgroundController(
+                _cfg,
+                _protoMan,
+                _resourceCache,
+                _clyde,
+                _gameTiming,
+                () => _gameTicker.LobbyBackground ?? string.Empty);
+            _backgroundController.Startup(Lobby);
 
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
+            Lobby.GhostRolesButton.OnPressed += OnGhostRolesPressed;
 
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
+
+            _userInterfaceManager.GetUIController<LocalizationUIController>().RefreshCurrentCulture();
         }
 
         protected override void Shutdown()
@@ -94,15 +118,19 @@ namespace Content.Client.Lobby
             _gameTicker.LobbyStatusUpdated -= LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated -= LobbyLateJoinStatusUpdated;
             _contentAudioSystem.LobbySoundtrackChanged -= UpdateLobbySoundtrackInfo;
+            _ghostSystem.GhostRoleCountUpdated -= OnGhostRoleCountUpdated;
             _wh40kFactions.FactionsUpdated -= OnWh40kFactionsUpdated;
             _pendingJoinOpen = false;
             CloseJoinWindows();
+            _backgroundController?.Shutdown();
+            _backgroundController = null;
 
             _voteManager.ClearPopupContainer();
 
             Lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
+            Lobby!.GhostRolesButton.OnPressed -= OnGhostRolesPressed;
 
             Lobby = null;
         }
@@ -151,12 +179,31 @@ namespace Content.Client.Lobby
             _wh40kFactions.RequestFactions(force: true);
         }
 
+        private void OnGhostRolesPressed(BaseButton.ButtonEventArgs args)
+        {
+            if (!_gameTicker.IsGameStarted)
+                return;
+
+            _ghostSystem.OpenGhostRoles();
+        }
+
+        private void OnGhostRoleCountUpdated(Content.Shared.Ghost.GhostUpdateGhostRoleCountEvent ev)
+        {
+            UpdateLobbyUi();
+        }
+
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
         {
             SetReady(args.Pressed);
         }
 
         public override void FrameUpdate(FrameEventArgs e)
+        {
+            _backgroundController?.FrameUpdate(e.DeltaSeconds);
+            RefreshTimingText();
+        }
+
+        private void RefreshTimingText()
         {
             if (_gameTicker.IsGameStarted)
             {
@@ -201,7 +248,7 @@ namespace Content.Client.Lobby
 
         private void LobbyStatusUpdated()
         {
-            UpdateLobbyBackground();
+            _backgroundController?.RefreshBackground();
             UpdateLobbyUi();
 
             if (_gameTicker.IsGameStarted)
@@ -219,13 +266,47 @@ namespace Content.Client.Lobby
             Lobby!.ReadyButton.Disabled = _gameTicker.DisallowedLateJoin;
         }
 
+        public void RefreshLocalization()
+        {
+            if (Lobby == null)
+                return;
+
+            var lobbyNameCvar = _cfg.GetCVar(CCVars.ServerLobbyName);
+            var serverName = _baseClient.GameInfo?.ServerName ?? string.Empty;
+
+            Lobby.ServerName.Text = string.IsNullOrEmpty(lobbyNameCvar)
+                ? Loc.GetString("ui-lobby-title", ("serverName", serverName))
+                : lobbyNameCvar;
+
+            Lobby.ObserveButton.Text = Loc.GetString("ui-lobby-observe-button");
+            Lobby.OptionsButton.Text = Loc.GetString("ui-lobby-options-button");
+            Lobby.LeaveButton.Text = Loc.GetString("ui-lobby-leave-button");
+            Lobby.LobbySong.SetMarkup(Loc.GetString("lobby-state-song-no-song-text"));
+
+            _userInterfaceManager.GetUIController<LobbyUIController>().RefreshLocalization();
+            _backgroundController?.RefreshBackground();
+            UpdateLobbyUi();
+            RefreshTimingText();
+            _gameTicker.RequestLobbyInfoRefresh();
+            LobbyLateJoinStatusUpdated();
+            void RefreshTrack(LobbySoundtrackChangedEvent ev) => UpdateLobbySoundtrackInfo(ev);
+            _contentAudioSystem.LobbySoundtrackChanged += RefreshTrack;
+            _contentAudioSystem.LobbySoundtrackChanged -= RefreshTrack;
+        }
+
         private void UpdateLobbyUi()
         {
+            var availableGhostRoles = _ghostSystem.AvailableGhostRoleCount;
+            Lobby!.GhostRolesButton.Text = Loc.GetString("ghost-gui-ghost-roles-button", ("count", availableGhostRoles));
+            Lobby.GhostRolesButton.Visible = _gameTicker.IsGameStarted;
+            Lobby.GhostRolesButton.Disabled = !_gameTicker.IsGameStarted || availableGhostRoles <= 0;
+
             if (_gameTicker.IsGameStarted)
             {
                 Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
+                Lobby!.ReadyButton.Disabled = _gameTicker.DisallowedLateJoin;
                 Lobby!.ObserveButton.Disabled = false;
             }
             else
@@ -290,26 +371,6 @@ namespace Content.Client.Lobby
                     ("songArtist", artist));
 
                 Lobby!.LobbySong.SetMarkup(markup);
-            }
-        }
-
-        private void UpdateLobbyBackground()
-        {
-            if (_protoMan.TryIndex(_gameTicker.LobbyBackground, out var proto))
-            {
-                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(proto.Background);
-
-                var markup = Loc.GetString("lobby-state-background-text",
-                    ("backgroundTitle", Loc.GetString(proto.Title)),
-                    ("backgroundArtist", Loc.GetString(proto.Artist)));
-
-                Lobby!.LobbyBackground.SetMarkup(markup);
-            }
-            else
-            {
-                Lobby!.Background.Texture = null;
-
-                Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-no-background-text"));
             }
         }
 

@@ -37,3 +37,4 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_3.wav
+  - type: WH40KGunPrediction

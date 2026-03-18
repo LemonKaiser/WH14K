@@ -17,10 +17,15 @@
   - type: Wieldable
   - type: UseDelay
     delay: 1.0
-  - type: CursorOffsetRequiresWield
-  - type: EyeCursorOffset
-    maxOffset: 5
-    pvsIncrease: 0.5
+  - type: AimingCamera
+    maxOffset: 10
+    pvsIncrease: 1.0
+    requireWield: true
+  - type: WH40KRangefinder
+    range: 70
+    markerLifetime: 45
+    targetDelay: 0.5
+    switchModeDelay: 0.5
   - type: PhysicalComposition
     materialComposition:
       Steel: 100

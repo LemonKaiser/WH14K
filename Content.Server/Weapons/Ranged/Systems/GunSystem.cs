@@ -4,6 +4,7 @@ using Content.Server.Interaction;
 using Content.Server.Mech.Equipment.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stunnable;
+using Content.Shared._WH40K.HeavyBolter;
 using Content.Server.Weapons.Ranged.Components;
 using Content.Shared.Cargo;
 using Content.Shared.Damage;
@@ -62,6 +63,7 @@ public sealed partial class GunSystem : SharedGunSystem
         EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, out bool userImpulse, EntityUid? user = null, bool throwItems = false)
     {
         userImpulse = true;
+        var heavyBolter = HasComp<WH40KHeavyBolterComponent>(gun);
 
         if (user != null)
         {
@@ -119,9 +121,6 @@ public sealed partial class GunSystem : SharedGunSystem
                         });
 
                         SetCartridgeSpent(ent.Value, cartridge, true);
-
-                        if (cartridge.DeleteOnSpawn)
-                            Del(ent.Value);
                     }
                     else
                     {
@@ -129,9 +128,17 @@ public sealed partial class GunSystem : SharedGunSystem
                         Audio.PlayPredicted(gun.Comp.SoundEmpty, gun, user);
                     }
 
+                    // Heavy bolter is configured as caseless in gameplay terms:
+                    // always delete spent cartridge entity instead of ejecting it.
+                    if (heavyBolter || cartridge.DeleteOnSpawn)
+                    {
+                        Del(ent!.Value);
+                    }
                     // Something like ballistic might want to leave it in the container still
-                    if (!cartridge.DeleteOnSpawn && !Containers.IsEntityInContainer(ent!.Value))
+                    else if (!Containers.IsEntityInContainer(ent!.Value))
+                    {
                         EjectCartridge(ent.Value, angle);
+                    }
 
                     Dirty(ent!.Value, cartridge);
                     break;
@@ -158,7 +165,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
                     Del(ent);
 
-                    Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+                    if (heavyBolter)
+                        Audio.PlayPvs(gun.Comp.SoundGunshotModified, gun);
+                    else
+                        Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -197,7 +207,10 @@ public sealed partial class GunSystem : SharedGunSystem
             }
 
             MuzzleFlash(gun, ammoComp, mapDirection.ToAngle(), user);
-            Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+            if (heavyBolter)
+                Audio.PlayPvs(gun.Comp.SoundGunshotModified, gun);
+            else
+                Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
         }
     }
 
@@ -262,7 +275,10 @@ public sealed partial class GunSystem : SharedGunSystem
     {
         var filter = Filter.Pvs(gunUid, entityManager: EntityManager);
 
-        if (TryComp<ActorComponent>(user, out var actor))
+        // Heavy bolter is server-authoritative (no local predictive effect), so
+        // shooter must receive networked muzzle flash too.
+        if (!HasComp<WH40KHeavyBolterComponent>(gunUid) &&
+            TryComp<ActorComponent>(user, out var actor))
             filter.RemovePlayer(actor.PlayerSession);
 
         RaiseNetworkEvent(message, filter);

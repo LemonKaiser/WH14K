@@ -1,4 +1,84 @@
 - type: entity
+  id: WH40KProjectileChaosWarpBlast
+  parent: ProjectileFireball
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 2.5
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 10
+    intensitySlope: 6
+    totalIntensity: 50
+    maxTileBreak: 0
+
+- type: entity
+  id: WH40KProjectileChaosWarpBlastTzeentchTier1
+  parent: WH40KProjectileChaosWarpBlast
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 3.2
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 11
+    intensitySlope: 6
+    totalIntensity: 58
+    maxTileBreak: 0
+
+- type: entity
+  id: WH40KProjectileChaosWarpBlastTzeentchTier2
+  parent: WH40KProjectileChaosWarpBlast
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 4.2
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 12
+    intensitySlope: 6
+    totalIntensity: 67
+    maxTileBreak: 0
+
+- type: entity
+  id: WH40KProjectileChaosWarpBlastTzeentchTier3
+  parent: WH40KProjectileChaosWarpBlast
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 5.4
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 13
+    intensitySlope: 7
+    totalIntensity: 78
+    maxTileBreak: 0
+
+- type: entity
+  id: WH40KProjectileChaosWarpBlastTzeentchEx
+  parent: WH40KProjectileChaosWarpBlast
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Heat: 6.8
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 14
+    intensitySlope: 7
+    totalIntensity: 92
+    maxTileBreak: 0
+
+- type: entity
   id: WHBulletPlasmaPistol
   parent: BaseBulletTrigger
   categories: [ HideSpawnMenu ]
@@ -51,10 +131,16 @@
   parent: BaseBulletTrigger
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite
+    noRot: false
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Projectiles/bolter.rsi
+    layers:
+    - state: base
+      shader: unshaded
   - type: Projectile
     damage:
       types:
-        Piercing: 55
+        Piercing: 48
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Default
@@ -62,6 +148,22 @@
     intensitySlope: 0.5
     totalIntensity: 0.5
     maxTileBreak: 0
+
+- type: entity
+  id: BulletHeavyBolter
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Projectiles/bolter.rsi
+    layers:
+    - state: base
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 19
 
 - type: entity
   id: FlamethrowerFlashEffect

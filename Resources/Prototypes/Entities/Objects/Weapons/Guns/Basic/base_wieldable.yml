@@ -11,6 +11,7 @@
   - type: Gun
     minAngle: 21
     maxAngle: 32   
+  - type: WH40KGunPrediction
   - type: AimingCamera
     maxOffset: 4
     pvsIncrease: 0.4

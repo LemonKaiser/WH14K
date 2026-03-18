@@ -10,13 +10,14 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Commands
 {
     [TestFixture]
     [TestOf(typeof(RejuvenateSystem))]
     public sealed class RejuvenateTest
     {
-        private static readonly ProtoId<DamageGroupPrototype> TestDamageGroup = "Toxin";
+        private static readonly ProtoId<DamageTypePrototype> TestDamageType = "Blunt";
 
         [TestPrototypes]
         private const string Prototypes = @"
@@ -65,7 +66,7 @@ namespace Content.IntegrationTests.Tests.Commands
                 });
 
                 // Kill the entity
-                DamageSpecifier damage = new(prototypeManager.Index(TestDamageGroup), FixedPoint2.New(10000000));
+                DamageSpecifier damage = new(prototypeManager.Index(TestDamageType), FixedPoint2.New(10000000));
 
                 damSystem.TryChangeDamage(human, damage, true);
 

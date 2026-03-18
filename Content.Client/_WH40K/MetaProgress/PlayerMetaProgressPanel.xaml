@@ -1,0 +1,38 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                MinSize="360 0"
+                HorizontalExpand="True"
+                VerticalExpand="False"
+                VerticalAlignment="Top">
+    <PanelContainer.PanelOverride>
+        <graphics:StyleBoxFlat BackgroundColor="#2F2F35"
+                               ContentMarginTopOverride="8"
+                               ContentMarginBottomOverride="8"
+                               ContentMarginLeftOverride="10"
+                               ContentMarginRightOverride="10"/>
+    </PanelContainer.PanelOverride>
+    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+        <BoxContainer Orientation="Horizontal">
+            <Label Name="HeaderLabel"
+                   Text="{Loc wh40k-meta-progress-panel-header}"
+                   StyleClasses="LabelHeading"
+                   HorizontalExpand="True" />
+            <PanelContainer Name="LevelBadgeContainer">
+                <Label Name="LevelBadgeLabel"
+                       Margin="8 2 8 2"
+                       Text="Lv. 1" />
+            </PanelContainer>
+        </BoxContainer>
+
+        <ProgressBar Name="LevelProgressBar"
+                     MinValue="0"
+                     MaxValue="100"
+                     Value="0" />
+
+        <Label Name="ProgressLabel"
+               Text="" />
+
+        <Label Name="NextRewardLabel"
+               Text="" />
+    </BoxContainer>
+</PanelContainer>

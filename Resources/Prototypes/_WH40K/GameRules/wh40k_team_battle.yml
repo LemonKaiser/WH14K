@@ -5,15 +5,22 @@
   - type: WH40KTeamBattleRule
     objectivesEnabled: true
     victoryCondition: Either # victoryCondition: Teams | Objectives | Either | None
+    roundTimeLimitSeconds: 7200
+    preparationDurationSeconds: 600
+    assaultDurationSeconds: 4800
+    earlyVictoryLockSeconds: 0
+    configProfile: WH40KTeamBattleConfig120m
     teams:
     - id: Imperium
       name: wh40k-team-imperium
+      color: "#FFD200"
       logo:
         sprite: _WH40K/Structures/Decorations/banners.rsi
         state: gvardia_banner
       departments: [ Imperium, Mechanicus ]
     - id: Heretics
       name: wh40k-team-heretics
+      color: "#D62828"
       logo:
         sprite: _WH40K/Structures/Decorations/banners.rsi
         state: chaos_banner

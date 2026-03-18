@@ -4,6 +4,9 @@
   description: job-description-explorator
   playTimeTracker: JobExplorator
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     - !type:DepartmentTimeRequirement
       department: Imperium
       time: 4h

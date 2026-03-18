@@ -7,8 +7,11 @@ using Content.Shared.Cargo.Prototypes;
 using Content.Shared.IdentityManagement;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
+using System;
+using System.Linq;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
 namespace Content.Client.Cargo.BUI
@@ -43,6 +46,9 @@ namespace Content.Client.Cargo.BUI
         /// </summary>
         [ViewVariables]
         private CargoProductPrototype? _product;
+        private List<CargoOrderData> _currentOrders = new();
+        private EntityUid? _lastStation;
+        private bool _accountActionsInitialized;
 
         public CargoOrderConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
@@ -85,13 +91,13 @@ namespace Content.Client.Cargo.BUI
                 _orderMenu.ProductName.Text = row.ProductName.Text;
                 _orderMenu.PointCost.Text = row.PointCost.Text;
                 _orderMenu.Requester.Text = orderRequester;
-                _orderMenu.Reason.Text = "";
                 _orderMenu.Amount.Value = 1;
 
                 _orderMenu.OpenCentered();
             };
-            _menu.OnOrderApproved += ApproveOrder;
-            _menu.OnOrderCanceled += RemoveOrder;
+            _menu.OnApproveAllRequests += ApproveAllOrders;
+            _menu.OnCancelAllRequests += RemoveAllOrders;
+            _menu.OnRemoveRequest += RemoveOrderById;
             _orderMenu.SubmitButton.OnPressed += (_) =>
             {
                 if (AddOrder())
@@ -118,10 +124,7 @@ namespace Content.Client.Cargo.BUI
             if (_menu == null)
                 return;
 
-            _menu.PopulateProducts();
-            _menu.PopulateCategories();
             _menu.PopulateOrders(orders);
-            _menu.PopulateAccountActions();
         }
 
         protected override void UpdateState(BoundUserInterfaceState state)
@@ -141,9 +144,26 @@ namespace Content.Client.Cargo.BUI
             if (_menu == null)
                 return;
 
-            _menu.ProductCatalogue = cState.Products;
+            _menu.UpdateOrderCapacity(OrderCount, OrderCapacity);
+            _menu.UpdateDeliveryState(cState.HasDeliveryEta, cState.DeliveryEtaEndTime, cState.DeliveryDuration);
 
-            _menu?.UpdateStation(station);
+            var productsChanged = !_menu.ProductCatalogue.SequenceEqual(cState.Products);
+            if (productsChanged)
+            {
+                _menu.ProductCatalogue = cState.Products;
+                _menu.PopulateCategories();
+                _menu.PopulateProducts();
+            }
+
+            _menu.UpdateStation(station);
+            if (!_accountActionsInitialized || _lastStation != station)
+            {
+                _menu.PopulateAccountActions();
+                _accountActionsInitialized = true;
+                _lastStation = station;
+            }
+
+            _currentOrders = cState.Orders.ToList();
             Populate(cState.Orders);
         }
 
@@ -161,37 +181,39 @@ namespace Content.Client.Cargo.BUI
         private bool AddOrder()
         {
             var orderAmt = _orderMenu?.Amount.Value ?? 0;
-            if (orderAmt < 1 || orderAmt > OrderCapacity)
+            var remaining = Math.Max(0, OrderCapacity - OrderCount);
+            if (orderAmt < 1 || orderAmt > remaining)
             {
                 return false;
             }
 
             SendMessage(new CargoConsoleAddOrderMessage(
                 _orderMenu?.Requester.Text ?? "",
-                _orderMenu?.Reason.Text ?? "",
+                string.Empty,
                 _product?.ID ?? "",
                 orderAmt));
 
             return true;
         }
 
-        private void RemoveOrder(CargoOrderData? order)
+        private void ApproveAllOrders()
         {
-            if (order == null)
-                return;
-
-            SendMessage(new CargoConsoleRemoveOrderMessage(order.OrderId));
+            var pendingOrder = _currentOrders.FirstOrDefault(order => !order.Approved);
+            if (pendingOrder != null)
+                SendMessage(new CargoConsoleApproveOrderMessage(pendingOrder.OrderId));
         }
 
-        private void ApproveOrder(CargoOrderData? order)
+        private void RemoveAllOrders()
         {
-            if (order == null)
-                return;
+            foreach (var order in _currentOrders.Where(order => !order.Approved))
+            {
+                SendMessage(new CargoConsoleRemoveOrderMessage(order.OrderId));
+            }
+        }
 
-            if (OrderCount >= OrderCapacity)
-                return;
-
-            SendMessage(new CargoConsoleApproveOrderMessage(order.OrderId));
+        private void RemoveOrderById(int orderId)
+        {
+            SendMessage(new CargoConsoleRemoveOrderMessage(orderId));
         }
     }
 }

@@ -1,17 +1,42 @@
 - type: job
   id: HCommissar
   name: job-name-hcommissar
-  description: job-description-commissar
+  description: job-description-hcommissar
   playTimeTracker: JobHCommissar
-  setPreference: false
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: HeresyCommissarGear
-  icon: "JobIconCommissar"
+  icon: "JobIconHCommissar"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KCommissarVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KCommissarMaleHuman
+          Female: WH40KCommissarFemaleHuman
+          Unsexed: WH40KCommissarMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: HeresyCommissarGear
@@ -20,8 +45,9 @@
     gloves: ClothingHandsGlovesCombatcult
     shoes: ClothingShoesChaosBoots2
     belt: chaosbelt2
-    ears: ClothingHeadsetVoxBackpack
+    ears: ClothingHeadsetVoxBackpackHeretics
     head: ClothingHeadCommissar
+    outerClothing: ClothingOuterArmorCommissar
     id: HCommissarDogTag
     pocket1: Bugle
   inhand:

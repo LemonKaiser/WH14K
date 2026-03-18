@@ -1,0 +1,53 @@
+<psykerUi:WH40KChaosGiftsWindow
+    xmlns="https://spacestation14.io"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
+    Title="{Loc 'wh40k-chaos-window-title'}"
+    MinSize="520 460"
+    Access="Public">
+    <PanelContainer Margin="6">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat
+                BackgroundColor="#1f1314"
+                BorderColor="#8f5f5f"
+                BorderThickness="2"
+                ContentMarginLeftOverride="10"
+                ContentMarginTopOverride="8"
+                ContentMarginRightOverride="10"
+                ContentMarginBottomOverride="8" />
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical" SeparationOverride="5">
+            <Label Name="RoleLabel" Access="Public" Text="" />
+            <Label Name="PatronLabel" Access="Public" Text="" />
+            <Label Name="SoulsLabel" Access="Public" Text="" />
+            <Label Name="WarpChargeLabel" Access="Public" Text="" />
+            <Label Name="WarpInstabilityLabel" Access="Public" Text="" />
+            <Label Name="LevelLabel" Access="Public" Text="" />
+            <ProgressBar Name="LevelProgressBar" Access="Public" MinSize="0 18" />
+            <Label Name="XpLabel" Access="Public" Text="" />
+            <Label Name="PassiveIncomeLabel" Access="Public" Text="" />
+            <PanelContainer Margin="0 4 0 0">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#2b1819"
+                        BorderColor="#734545"
+                        BorderThickness="1"
+                        ContentMarginLeftOverride="8"
+                        ContentMarginTopOverride="6"
+                        ContentMarginRightOverride="8"
+                        ContentMarginBottomOverride="6" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="3">
+                    <Label Name="AltarTitleLabel" Access="Public" Text="" />
+                    <Label Name="AttunementLabel" Access="Public" Text="" />
+                    <Label Name="RitualBonusLabel" Access="Public" Text="" />
+                    <Label Name="SacrificeCooldownLabel" Access="Public" Text="" />
+                    <Label Name="AltarGuideLabel" Access="Public" Text="" />
+                    <Label Name="AltarRiskLabel" Access="Public" Text="" />
+                </BoxContainer>
+            </PanelContainer>
+            <Label Name="DevelopmentPointsLabel" Access="Public" Text="" />
+            <Label Name="HintLabel" Access="Public" Text="" />
+        </BoxContainer>
+    </PanelContainer>
+</psykerUi:WH40KChaosGiftsWindow>

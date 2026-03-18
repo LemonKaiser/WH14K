@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Provided by AR",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "skrizhal_chaos"
+        },
+        {
+            "name": "skrizhal_chaos_tuchlo"
+        },
+        {
+            "name": "skrizhal_khorn"
+        },
+        {
+            "name": "skrizhal_khorn_tuchlo"
+        },
+        {
+            "name": "skrizhal_nurgk"
+        },
+        {
+            "name": "skrizhal_nurgl_tuchlo"
+        },
+        {
+            "name": "skrizhal_slaanesh"
+        },
+        {
+            "name": "skrizhal_slaanesh_tuchlo"
+        },
+        {
+            "name": "skrizhal_tzinch"
+        },
+        {
+            "name": "skrizhal_tzinch_tuchlo"
+        }
+    ]
+}

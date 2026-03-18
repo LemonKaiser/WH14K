@@ -1,0 +1,17 @@
+<psykerUi:WH40KWarpHudControl
+    xmlns="https://spacestation14.io"
+    xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
+    MinSize="240 44"
+    MaxSize="240 44"
+    Access="Public">
+    <BoxContainer Orientation="Vertical" SeparationOverride="4">
+        <LayoutContainer Name="WarpChargeRow" Access="Public" MinSize="240 20" MaxSize="240 20">
+            <ProgressBar Name="WarpChargeBar" Access="Public" MinSize="240 20" MaxSize="240 20" />
+            <Label Name="WarpChargeValueLabel" Access="Public" Text="" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </LayoutContainer>
+        <LayoutContainer Name="WarpInstabilityRow" Access="Public" MinSize="240 20" MaxSize="240 20">
+            <ProgressBar Name="WarpInstabilityBar" Access="Public" MinSize="240 20" MaxSize="240 20" />
+            <Label Name="WarpInstabilityValueLabel" Access="Public" Text="" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </LayoutContainer>
+    </BoxContainer>
+</psykerUi:WH40KWarpHudControl>

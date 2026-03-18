@@ -1,0 +1,222 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
+    Title="{Loc 'wh40k-chaos-branch-title'}"
+    MinSize="1260 860"
+    SetSize="1320 920">
+    <PanelContainer Margin="6">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat
+                BackgroundColor="#101118"
+                BorderColor="#4E5264"
+                BorderThickness="2"
+                ContentMarginLeftOverride="10"
+                ContentMarginTopOverride="10"
+                ContentMarginRightOverride="10"
+                ContentMarginBottomOverride="10" />
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer>
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat
+                        BackgroundColor="#1A1D2A"
+                        BorderColor="#666D85"
+                        BorderThickness="1"
+                        ContentMarginLeftOverride="10"
+                        ContentMarginTopOverride="8"
+                        ContentMarginRightOverride="10"
+                        ContentMarginBottomOverride="8" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Name="BranchTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F2E7D2" />
+                    <Label Name="PatronLabel" HorizontalAlignment="Center" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer MinSize="460 0" VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat
+                            BackgroundColor="#171A25"
+                            BorderColor="#545C74"
+                            BorderThickness="1"
+                            ContentMarginLeftOverride="10"
+                            ContentMarginTopOverride="10"
+                            ContentMarginRightOverride="10"
+                            ContentMarginBottomOverride="10" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" SeparationOverride="7" VerticalExpand="True">
+                        <Label Name="LevelLabel" />
+                        <Label Name="XpLabel" />
+                        <ProgressBar Name="LevelProgressBar" MinValue="0" MaxValue="1" Value="0" SetHeight="22" />
+                        <Label Name="DevelopmentPointsLabel" />
+                        <Label Name="SoulsOfferedLabel" />
+                        <Label Name="PassiveIncomeLabel" />
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1E2232"
+                                    BorderColor="#505974"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="6"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="6" />
+                            </PanelContainer.PanelOverride>
+                            <Label Name="AbilitiesHeaderLabel" FontColorOverride="#F1E3C8" />
+                        </PanelContainer>
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1F2436"
+                                    BorderColor="#5D6887"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                    <TextureRect Name="GiftOneIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                        <Label Name="GiftOneTitleLabel" />
+                                        <RichTextLabel Name="GiftOneDescriptionLabel" MaxHeight="38" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                                <Label Name="GiftOneStatusLabel" />
+                                <Button Name="GiftOneCardButton" HorizontalAlignment="Right" MinSize="210 32" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1F2436"
+                                    BorderColor="#5D6887"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                    <TextureRect Name="GiftTwoIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                        <Label Name="GiftTwoTitleLabel" />
+                                        <RichTextLabel Name="GiftTwoDescriptionLabel" MaxHeight="38" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                                <Label Name="GiftTwoStatusLabel" />
+                                <Button Name="GiftTwoCardButton" HorizontalAlignment="Right" MinSize="210 32" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1F2436"
+                                    BorderColor="#5D6887"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                    <TextureRect Name="GiftThreeIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                        <Label Name="GiftThreeTitleLabel" />
+                                        <RichTextLabel Name="GiftThreeDescriptionLabel" MaxHeight="38" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                                <Label Name="GiftThreeStatusLabel" />
+                                <Button Name="GiftThreeCardButton" HorizontalAlignment="Right" MinSize="210 32" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1F2436"
+                                    BorderColor="#5D6887"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                    <TextureRect Name="PassiveIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                        <Label Name="PassiveTitleLabel" />
+                                        <RichTextLabel Name="PassiveDescriptionLabel" MaxHeight="38" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                                <Label Name="PassiveStatusLabel" />
+                                <Button Name="PassiveCardButton" HorizontalAlignment="Right" MinSize="210 32" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat
+                            BackgroundColor="#141724"
+                            BorderColor="#56607A"
+                            BorderThickness="1"
+                            ContentMarginLeftOverride="10"
+                            ContentMarginTopOverride="10"
+                            ContentMarginRightOverride="10"
+                            ContentMarginBottomOverride="10" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True">
+                        <Label Name="TreeHeaderLabel" HorizontalAlignment="Center" FontColorOverride="#D9E5FF" />
+                        <PanelContainer VerticalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#101426"
+                                    BorderColor="#4C5674"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="8"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="8"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                                <psykerUi:WH40KChaosGiftTreeControl Name="GiftTreeControl" Access="Public" HorizontalExpand="True" VerticalExpand="True" MinSize="0 470" />
+                                <RichTextLabel Name="TreeEmptyLabel" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#1D2233"
+                                    BorderColor="#5A6480"
+                                    BorderThickness="1"
+                                    ContentMarginLeftOverride="10"
+                                    ContentMarginTopOverride="8"
+                                    ContentMarginRightOverride="10"
+                                    ContentMarginBottomOverride="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                                <Label Name="SelectedGiftTitleLabel" FontColorOverride="#F0E6D2" />
+                                <RichTextLabel Name="SelectedGiftDescriptionLabel" VerticalExpand="True" HorizontalExpand="True" />
+                                <Label Name="SelectedGiftStatusLabel" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</controls:FancyWindow>

@@ -9,8 +9,11 @@
   - type: Sprite
     sprite: _WH40K/Objects/Misc/maggot_horn.rsi
     state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Misc/maggot_horn.rsi
     quickEquip: false
-    slots: neck
+    slots:
+    - neck
   - type: UseDelay
     delay: 10
   - type: EmitSoundOnUse

@@ -27,6 +27,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+  - type: WH40KGunPrediction
 
 - type: entity
   name: china lake
@@ -312,6 +313,7 @@
       soundGunshot: /Audio/Weapons/Guns/Gunshots/harpoon.ogg
       fireRate: 0.5
       clumsyProof: true
+    - type: WH40KGunPrediction
     - type: BasicEntityAmmoProvider
       proto: GrapplingHook
       capacity: 1

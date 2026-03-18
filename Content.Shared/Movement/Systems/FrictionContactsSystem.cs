@@ -80,14 +80,11 @@ public sealed class FrictionContactsSystem : EntitySystem
         if (!TryComp<PhysicsComponent>(entity, out var physicsComponent))
             return;
 
-        var friction = 0.0f;
-        var frictionNoInput = 0.0f;
-        var acceleration = 0.0f;
+        var aggregate = new ContactFrictionAggregate();
 
         var isAirborne = physicsComponent.BodyStatus == BodyStatus.InAir || _gravity.IsWeightless(entity.Owner);
 
         var remove = true;
-        var entries = 0;
         foreach (var ent in _physics.GetContactingEntities(entity, physicsComponent))
         {
             if (!TryComp<FrictionContactsComponent>(ent, out var contacts))
@@ -97,27 +94,24 @@ public sealed class FrictionContactsSystem : EntitySystem
             if (isAirborne && !contacts.AffectAirborne)
                 continue;
 
-            friction += contacts.MobFriction;
-            frictionNoInput += contacts.MobFrictionNoInput ?? contacts.MobFriction;
-            acceleration += contacts.MobAcceleration;
+            aggregate.Add(
+                contacts.MobFriction,
+                contacts.MobFrictionNoInput ?? contacts.MobFriction,
+                contacts.MobAcceleration,
+                contacts.AggregationMode,
+                contacts.AggregationWeight);
             remove = false;
-            entries++;
         }
 
-        if (entries > 0)
+        if (aggregate.TryGet(out var friction, out var frictionNoInput, out var acceleration))
         {
-            if (!MathHelper.CloseTo(friction, entries) || !MathHelper.CloseTo(frictionNoInput, entries))
+            if (!MathHelper.CloseTo(friction, 1f) || !MathHelper.CloseTo(frictionNoInput, 1f))
             {
-                friction /= entries;
-                frictionNoInput /= entries;
                 args.ModifyFriction(friction, frictionNoInput);
             }
 
-            if (!MathHelper.CloseTo(acceleration, entries))
-            {
-                acceleration /= entries;
+            if (!MathHelper.CloseTo(acceleration, 1f))
                 args.ModifyAcceleration(acceleration);
-            }
         }
 
         // no longer colliding with anything
@@ -143,5 +137,120 @@ public sealed class FrictionContactsSystem : EntitySystem
 
         EnsureComp<FrictionModifiedByContactComponent>(uid);
         _toUpdate.Add(uid);
+    }
+
+    private struct ContactFrictionAggregate
+    {
+        private float _averageFriction;
+        private float _averageFrictionNoInput;
+        private float _averageAcceleration;
+        private int _averageCount;
+
+        private float _weightedFriction;
+        private float _weightedFrictionNoInput;
+        private float _weightedAcceleration;
+        private float _weightedTotal;
+
+        private float _multiplyFriction;
+        private float _multiplyFrictionNoInput;
+        private float _multiplyAcceleration;
+        private bool _hasMultiply;
+
+        private float _strongestFriction;
+        private float _strongestFrictionNoInput;
+        private float _strongestAcceleration;
+        private bool _hasStrongest;
+
+        public void Add(
+            float friction,
+            float frictionNoInput,
+            float acceleration,
+            ContactModifierAggregationMode mode,
+            float weight)
+        {
+            switch (mode)
+            {
+                case ContactModifierAggregationMode.Strongest:
+                    if (_hasStrongest)
+                    {
+                        _strongestFriction = MathF.Min(_strongestFriction, friction);
+                        _strongestFrictionNoInput = MathF.Min(_strongestFrictionNoInput, frictionNoInput);
+                        _strongestAcceleration = MathF.Min(_strongestAcceleration, acceleration);
+                    }
+                    else
+                    {
+                        _strongestFriction = friction;
+                        _strongestFrictionNoInput = frictionNoInput;
+                        _strongestAcceleration = acceleration;
+                        _hasStrongest = true;
+                    }
+                    break;
+                case ContactModifierAggregationMode.Multiply:
+                    if (!_hasMultiply)
+                    {
+                        _multiplyFriction = 1f;
+                        _multiplyFrictionNoInput = 1f;
+                        _multiplyAcceleration = 1f;
+                        _hasMultiply = true;
+                    }
+
+                    _multiplyFriction *= friction;
+                    _multiplyFrictionNoInput *= frictionNoInput;
+                    _multiplyAcceleration *= acceleration;
+                    break;
+                case ContactModifierAggregationMode.WeightedAverage:
+                    var clamped = MathF.Max(0f, weight);
+                    _weightedFriction += friction * clamped;
+                    _weightedFrictionNoInput += frictionNoInput * clamped;
+                    _weightedAcceleration += acceleration * clamped;
+                    _weightedTotal += clamped;
+                    break;
+                default:
+                    _averageFriction += friction;
+                    _averageFrictionNoInput += frictionNoInput;
+                    _averageAcceleration += acceleration;
+                    _averageCount++;
+                    break;
+            }
+        }
+
+        public bool TryGet(out float friction, out float frictionNoInput, out float acceleration)
+        {
+            friction = 1f;
+            frictionNoInput = 1f;
+            acceleration = 1f;
+
+            if (_averageCount > 0)
+            {
+                friction *= _averageFriction / _averageCount;
+                frictionNoInput *= _averageFrictionNoInput / _averageCount;
+                acceleration *= _averageAcceleration / _averageCount;
+            }
+
+            if (_weightedTotal > 0f)
+            {
+                friction *= _weightedFriction / _weightedTotal;
+                frictionNoInput *= _weightedFrictionNoInput / _weightedTotal;
+                acceleration *= _weightedAcceleration / _weightedTotal;
+            }
+
+            if (_hasMultiply)
+            {
+                friction *= _multiplyFriction;
+                frictionNoInput *= _multiplyFrictionNoInput;
+                acceleration *= _multiplyAcceleration;
+            }
+
+            if (_hasStrongest)
+            {
+                friction *= _strongestFriction;
+                frictionNoInput *= _strongestFrictionNoInput;
+                acceleration *= _strongestAcceleration;
+            }
+
+            return !MathHelper.CloseTo(friction, 1f)
+                   || !MathHelper.CloseTo(frictionNoInput, 1f)
+                   || !MathHelper.CloseTo(acceleration, 1f);
+        }
     }
 }

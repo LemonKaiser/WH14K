@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.Localization;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Content.Shared.Input;
@@ -17,7 +18,7 @@ using static Robust.Client.UserInterface.Controls.BoxContainer;
 namespace Content.Client.Options.UI.Tabs
 {
     [GenerateTypedNameReferences]
-    public sealed partial class KeyRebindTab : Control
+    public sealed partial class KeyRebindTab : Control, ILocalizedControl
     {
         // List of key functions that must be registered as toggle instead.
         private static readonly HashSet<BoundKeyFunction> ToggleFunctions = new()
@@ -111,6 +112,21 @@ namespace Content.Client.Options.UI.Tabs
                 });
             };
 
+            BuildKeybindList();
+        }
+
+        public void Relocalize()
+        {
+            BindsExplanationLabel.Text = Loc.GetString("ui-options-binds-explanation");
+            ResetAllButton.Text = Loc.GetString("ui-options-binds-reset-all");
+            _currentlyRebinding = null;
+            _keyControls.Clear();
+            KeybindsContainer.DisposeAllChildren();
+            BuildKeybindList();
+        }
+
+        private void BuildKeybindList()
+        {
             var first = true;
 
             void AddHeader(string headerContents)

@@ -1,5 +1,7 @@
 using System.Numerics;
+using System.Linq;
 using Content.Client.LateJoin;
+using Content.Client._WH40K.Interface;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.Roles;
 using Robust.Client.GameObjects;
@@ -17,11 +19,27 @@ namespace Content.Client._WH40K.LateJoin;
 
 public sealed class WH40KFactionJoinGui : DefaultWindow
 {
+    private static readonly ProtoId<DepartmentPrototype> MechanicusDepartment = "Mechanicus";
+    private static readonly ProtoId<DepartmentPrototype> DarkMechanicumDepartment = "DarkMechanicum";
+
+    private static readonly ProtoId<JobPrototype>[] ImperiumHiddenLateJoinJobs =
+    [
+        "SpecialistHWS",
+        "SpecialistSWS"
+    ];
+
+    private static readonly ProtoId<JobPrototype>[] HereticsHiddenLateJoinJobs =
+    [
+        "HSpecialistHWS",
+        "HSpecialistSWS"
+    ];
+
     [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
     private readonly WH40KFactionSystem _factionSystem;
+    private readonly WH40KInterfaceThemeSystem _themeSystem;
     private readonly SpriteSystem _sprites;
     private readonly ISawmill _sawmill;
 
@@ -36,6 +54,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         IoCManager.InjectDependencies(this);
 
         _factionSystem = _entitySystem.GetEntitySystem<WH40KFactionSystem>();
+        _themeSystem = _entitySystem.GetEntitySystem<WH40KInterfaceThemeSystem>();
         _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
         _sawmill = _logManager.GetSawmill("wh40k.factionjoin");
 
@@ -159,12 +178,16 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
                 return;
 
             _selectionHandled = true;
-            if (faction.Departments.Count == 0)
+            var departments = BuildDepartmentFilterForFaction(faction);
+            var hiddenJobs = BuildHiddenJobsForFaction(faction.Id);
+
+            if (departments.Count == 0)
             {
                 _sawmill.Info($"Faction '{faction.Id}' has no departments; late join list will be empty.");
             }
 
-            OpenLateJoinWindow(faction.Departments);
+            _themeSystem.NotifyFactionSelected(faction.Id);
+            OpenLateJoinWindow(departments, hiddenJobs);
             Close();
         };
 
@@ -196,12 +219,34 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         _factionSystem.FactionsUpdated -= OnFactionsUpdated;
     }
 
-    private static void OpenLateJoinWindow(IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null)
+    private static IReadOnlyList<ProtoId<DepartmentPrototype>> BuildDepartmentFilterForFaction(WH40KFactionInfo faction)
+    {
+        return faction.Id switch
+        {
+            "Imperium" => faction.Departments.Where(d => d != MechanicusDepartment).ToList(),
+            "Heretics" => faction.Departments.Where(d => d != DarkMechanicumDepartment).ToList(),
+            _ => faction.Departments
+        };
+    }
+
+    private static IReadOnlyCollection<ProtoId<JobPrototype>>? BuildHiddenJobsForFaction(string factionId)
+    {
+        return factionId switch
+        {
+            "Imperium" => ImperiumHiddenLateJoinJobs,
+            "Heretics" => HereticsHiddenLateJoinJobs,
+            _ => null
+        };
+    }
+
+    private static void OpenLateJoinWindow(
+        IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null,
+        IReadOnlyCollection<ProtoId<JobPrototype>>? hiddenJobs = null)
     {
         if (departments == null)
-            new LateJoinGui().OpenCentered();
+            new LateJoinGui(hiddenJobs: hiddenJobs).OpenCentered();
         else
-            new LateJoinGui(departments).OpenCentered();
+            new LateJoinGui(departments, hiddenJobs).OpenCentered();
     }
 
 }

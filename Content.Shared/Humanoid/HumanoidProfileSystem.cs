@@ -2,6 +2,7 @@ using Content.Shared.Examine;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Preferences;
+using Content.Shared.Speech;
 using Robust.Shared.GameObjects.Components.Localization;
 using Robust.Shared.Prototypes;
 
@@ -36,6 +37,12 @@ public sealed class HumanoidProfileSystem : EntitySystem
         if (TryComp<GrammarComponent>(ent, out var grammar))
         {
             _grammar.SetGender((ent, grammar), profile.Gender);
+        }
+
+        if (TryComp<SpeechComponent>(ent, out var speech))
+        {
+            speech.VoiceTone = profile.VoiceTone;
+            Dirty(ent, speech);
         }
     }
 

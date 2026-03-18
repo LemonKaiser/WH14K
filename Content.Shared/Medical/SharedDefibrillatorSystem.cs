@@ -193,6 +193,7 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
         }
 
         var failedRevive = true;
+        var revivedFromDead = false;
         if (_rotting.IsRotten(target))
         {
             _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-rotten"),
@@ -205,7 +206,9 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
         }
         else
         {
-            if (_mobState.IsDead(target, targetMobState))
+            var wasDead = _mobState.IsDead(target, targetMobState);
+
+            if (wasDead)
                 _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
 
             if (TryComp<MobThresholdsComponent>(target, out var targetThresholds) &&
@@ -214,6 +217,7 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
             {
                 _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
                 failedRevive = false;
+                revivedFromDead = wasDead;
             }
 
             if (_mind.TryGetMind(target, out var mindUid, out var mindComp) &&
@@ -239,7 +243,7 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
         if (!_powerCell.HasActivatableCharge(ent.Owner))
             _toggle.TryDeactivate(ent.Owner);
 
-        var ev = new TargetDefibrillatedEvent(user, (ent.Owner, ent.Comp));
+        var ev = new TargetDefibrillatedEvent(user, (ent.Owner, ent.Comp), target, revivedFromDead);
         RaiseLocalEvent(target, ref ev);
     }
 

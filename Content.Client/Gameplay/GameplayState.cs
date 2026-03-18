@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client.Changelog;
 using Content.Client.Hands;
+using Content.Client.UserInterface.Systems.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
@@ -130,6 +131,7 @@ namespace Content.Client.Gameplay
             }
 
             _loadController.LoadScreen();
+            _uiManager.GetUIController<LocalizationUIController>().RefreshCurrentCulture();
         }
 
         protected override void OnKeyBindStateChanged(ViewportBoundKeyEventArgs args)

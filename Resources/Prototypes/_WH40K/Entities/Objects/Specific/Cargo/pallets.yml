@@ -1,0 +1,35 @@
+- type: entity
+  id: WH40KCargoPalletBuyImperium
+  parent: CargoPalletBuy
+  name: imperium delivery pallet
+  description: Faction delivery pallet for imperial requisitions.
+  components:
+  - type: CargoOrderBatchPallet
+    account: WH40KImperium
+
+- type: entity
+  id: WH40KCargoPalletSellImperium
+  parent: CargoPalletSell
+  name: imperium export pallet
+  description: Faction sale pallet for imperial logistics.
+  components:
+  - type: CargoOrderBatchPallet
+    account: WH40KImperium
+
+- type: entity
+  id: WH40KCargoPalletBuyHeretics
+  parent: CargoPalletBuy
+  name: heretics delivery pallet
+  description: Faction delivery pallet for heretic requisitions.
+  components:
+  - type: CargoOrderBatchPallet
+    account: WH40KHeretics
+
+- type: entity
+  id: WH40KCargoPalletSellHeretics
+  parent: CargoPalletSell
+  name: heretics export pallet
+  description: Faction sale pallet for heretic logistics.
+  components:
+  - type: CargoOrderBatchPallet
+    account: WH40KHeretics

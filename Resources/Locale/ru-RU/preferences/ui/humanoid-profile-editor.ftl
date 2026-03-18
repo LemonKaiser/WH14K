@@ -12,6 +12,10 @@ humanoid-profile-editor-age-label = Возраст:
 humanoid-profile-editor-skin-color-label = Цвет кожи:
 humanoid-profile-editor-species-label = Вид:
 humanoid-profile-editor-pronouns-label = Личное местоимение:
+humanoid-profile-editor-voice-tone-label = Тон голоса:
+humanoid-profile-editor-voice-tone-low = Низкий
+humanoid-profile-editor-voice-tone-normal = Обычный
+humanoid-profile-editor-voice-tone-high = Высокий
 humanoid-profile-editor-pronouns-male-text = Он / Его
 humanoid-profile-editor-pronouns-female-text = Она / Её
 humanoid-profile-editor-pronouns-epicene-text = Они / Их
@@ -55,3 +59,5 @@ humanoid-profile-editor-trait-count-hint = Доступно очков: [{ $curr
 trait-category-disabilities = Ограничения
 trait-category-speech = Черты речи
 trait-category-quirks = Причуды
+
+humanoid-profile-editor-development-tab = Развитие персонажа

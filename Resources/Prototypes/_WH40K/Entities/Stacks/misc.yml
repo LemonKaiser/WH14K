@@ -19,3 +19,10 @@
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence_imp.rsi, state: datachip }
   spawn: DataChipImp
   maxCount: 4
+
+- type: stack
+  parent: BaseSmallStack
+  id: WH40KBarbedWire
+  name: wh40k-stack-barbed-wire
+  icon: { sprite: /Textures/_RMC14/Objects/barbed_wire.rsi, state: barbed_wire }
+  spawn: MaterialWH40KBarbedWire1

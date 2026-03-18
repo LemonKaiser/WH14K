@@ -1,0 +1,13 @@
+﻿- type: entity
+  parent: MarkerBase
+  id: SpawnMobGrox
+  name: Grox Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: _WH40K/Mobs/Animals/grox.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobGrox

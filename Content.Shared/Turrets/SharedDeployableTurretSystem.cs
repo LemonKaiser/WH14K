@@ -3,11 +3,14 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Wires;
+using Content.Shared._WH40K.Combat;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -23,6 +26,7 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
     [Dependency] private readonly AccessReaderSystem _accessReader = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedWiresSystem _wires = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -42,6 +46,9 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
             return;
 
         if (!_accessReader.IsAllowed(args.User, ent))
+            return;
+
+        if (ent.Comp.Enabled && IsEnemyDeactivationBlocked(ent, args.User, false))
             return;
 
         var user = args.User;
@@ -92,6 +99,13 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
 
     public bool TrySetState(Entity<DeployableTurretComponent> ent, bool enabled, EntityUid? user = null)
     {
+        if (user != null && IsEnemyDeactivationBlocked(ent, user.Value, enabled))
+        {
+            _popup.PopupClient(Loc.GetString("deployable-turret-component-access-denied"), ent, user.Value);
+            _audio.PlayPredicted(ent.Comp.AccessDeniedSound, ent, user.Value);
+            return false;
+        }
+
         if (enabled && ent.Comp.CurrentState == DeployableTurretState.Broken)
         {
             if (user != null)
@@ -163,5 +177,23 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
         RaiseLocalEvent(ent, ref ammoCountEv);
 
         return ammoCountEv.Count > 0;
+    }
+
+    private bool IsEnemyDeactivationBlocked(Entity<DeployableTurretComponent> ent, EntityUid user, bool targetEnabledState)
+    {
+        // WH40K rule: enemy users may not deactivate faction-locked turrets.
+        if (targetEnabledState)
+            return false;
+
+        if (!TryComp<WH40KTurretFactionLockComponent>(ent, out var lockComp) || !lockComp.PreventEnemyDeactivation)
+            return false;
+
+        if (!TryComp<NpcFactionMemberComponent>(ent, out var turretFaction) || turretFaction.Factions.Count == 0)
+            return false;
+
+        if (!TryComp<NpcFactionMemberComponent>(user, out var userFaction))
+            return lockComp.TreatNoFactionAsEnemy;
+
+        return !_npcFaction.IsEntityFriendly((ent.Owner, turretFaction), (user, userFaction));
     }
 }

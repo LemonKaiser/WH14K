@@ -66,4 +66,12 @@ public sealed class OptionsUIController : UIController
             OpenWindow();
         }
     }
+
+    public void RefreshLocalization()
+    {
+        if (_optionsWindow is not { Disposed: false })
+            return;
+
+        _optionsWindow.Relocalize();
+    }
 }

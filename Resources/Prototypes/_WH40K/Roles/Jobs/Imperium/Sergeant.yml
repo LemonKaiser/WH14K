@@ -3,21 +3,108 @@
   name: job-name-sergeant
   description: job-description-sergeant
   playTimeTracker: JobSergeant
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: SergeantGear
   icon: "JobIconSergeant"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: job
+  id: SergeantSWS
+  name: job-name-sergeant-sws
+  description: job-description-sergeant-sws
+  playTimeTracker: JobSergeantSWS
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: SergeantGear
+  icon: "JobIconSergeantSWS"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: job
+  id: SergeantHWS
+  name: job-name-sergeant-hws
+  description: job-description-sergeant-hws
+  playTimeTracker: JobSergeantHWS
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: SergeantGear
+  icon: "JobIconSergeantHWS"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: SergeantGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitOfficer
     shoes: ClothingShoesGenBoots
+    ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
     neck: Gorjet
     head: ClothingHeadOfficer
     outerClothing: ClothingOuterArmorOfficer
+    id: SergeantDogTag

@@ -2,8 +2,8 @@
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls">
     <BoxContainer Orientation="Vertical">
-        <Label Text="{Loc 'observe-warning-1'}"/>
-        <Label Text="{Loc 'observe-warning-2'}"/>
+        <Label Name="WarningLabel1" Text="{Loc 'observe-warning-1'}"/>
+        <Label Name="WarningLabel2" Text="{Loc 'observe-warning-2'}"/>
         <BoxContainer Orientation="Horizontal">
             <Button Name="NevermindButton" Text="{Loc 'observe-nevermind'}" SizeFlagsStretchRatio="1"/>
             <Control HorizontalExpand="True" SizeFlagsStretchRatio="2" />

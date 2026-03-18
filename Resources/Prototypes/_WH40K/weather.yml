@@ -1,0 +1,352 @@
+- type: entity
+  parent: WeatherBase
+  id: WHAsh
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: ashfall
+    color: "#C5AA7A55"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm_weak.ogg
+      params:
+        loop: true
+        volume: -7
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      mobDamage:
+        types:
+          Heat: 0.35
+      mobDamageChance: 0.4
+      protectedByHardsuit: true
+
+- type: entity
+  parent: WeatherBase
+  id: WHToxicAshFront
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: ashfall_heavy
+    color: "#B8A17A66"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm.ogg
+      params:
+        loop: true
+        volume: -6
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      slowdown:
+        statusEffect: WeatherSlowdownStatusEffect
+        duration: 1.5
+        walkModifier: 0.76
+        sprintModifier: 0.74
+      mobDamage:
+        types:
+          Caustic: 2
+          Poison: 1
+      protectedByHardsuit: true
+
+- type: entity
+  parent: WeatherBase
+  id: WHAcidRain
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: rain
+    color: "#B8FF9D4C"
+    sound:
+      collection: Rain
+      params:
+        loop: true
+        volume: -6
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      mobDamage:
+        types:
+          Caustic: 0.8
+      mobDamageChance: 0.9
+      structureDamage:
+        types:
+          Caustic: 0.45
+      structureDamageChance: 0.25
+      protectedByHardsuit: true
+    globalEffects:
+      tickInterval: 5
+      ambient:
+        sound:
+          path: /Audio/Ambience/Objects/gas_hiss.ogg
+          params:
+            volume: -13
+        chance: 0.03
+
+- type: entity
+  parent: WeatherBase
+  id: WHRadFront
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: fallout
+    color: "#9EFF7B44"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm_weak.ogg
+      params:
+        loop: true
+        volume: -8
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      mobDamage:
+        types:
+          Radiation: 0.28
+      mobDamageChance: 0.7
+      hazardSpawn:
+        prototype: RadiationPulse
+        chance: 0.06
+        allowDuplicates: false
+      protectedByGasMask: true
+      protectedByHardsuit: true
+
+- type: entity
+  parent: WeatherBase
+  id: WHIonStorm
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: storm
+    color: "#9EC1FF4A"
+    sound:
+      path: /Audio/Effects/Weather/rain_heavy.ogg
+      params:
+        loop: true
+        volume: -7
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      emp:
+        chance: 0.3
+        range: 5.5
+        energyConsumption: 50000
+        duration: 5
+
+- type: entity
+  parent: WeatherBase
+  id: WHBlackIce
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: snowfall_med
+    color: "#B5D5FF4A"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm_weak.ogg
+      params:
+        loop: true
+        volume: -8
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      slowdown:
+        statusEffect: WeatherSlowdownStatusEffect
+        duration: 1.4
+        walkModifier: 0.72
+        sprintModifier: 0.68
+      hazardSpawn:
+        prototype: WHBlackIceCrust
+        chance: 0.72
+        allowDuplicates: false
+      mobDamage:
+        types:
+          Cold: 0.3
+      mobDamageChance: 0.3
+
+- type: entity
+  parent: WeatherBase
+  id: WHSandHurricane
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: sandstorm_heavy
+    color: "#D8BF8F55"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm.ogg
+      params:
+        loop: true
+        volume: -7
+    respectTileWeather: false
+    effects:
+      tickInterval: 0.25
+      slowdown:
+        statusEffect: WeatherSlowdownStatusEffect
+        duration: 0.35
+        walkModifier: 0.86
+        sprintModifier: 0.82
+      wind:
+        chance: 1
+        impulse: 2.2
+        randomDirection: false
+        directionDegrees: 18
+        directionChangeInterval: 60
+      protectedByHardsuit: true
+
+- type: entity
+  parent: WeatherBase
+  id: WHMetalHail
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: hail
+    color: "#C9D5E055"
+    sound:
+      path: /Audio/Effects/Weather/rain.ogg
+      params:
+        loop: true
+        volume: -6
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      mobDamage:
+        types:
+          Piercing: 0.8
+      mobDamageChance: 0.9
+      structureDamage:
+        types:
+          Structural: 0.45
+      structureDamageChance: 0.2
+      protectedByHardsuit: true
+
+- type: entity
+  parent: WeatherBase
+  id: WHSporeDrift
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: ashfall_light
+    color: "#B7E7A84A"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm_weak.ogg
+      params:
+        loop: true
+        volume: -9
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      mobDamage:
+        types:
+          Poison: 0.55
+      mobDamageChance: 0.8
+      protectedByGasMask: true
+      protectedByHardsuit: true
+    globalEffects:
+      tickInterval: 6
+      ambient:
+        sound:
+          path: /Audio/Ambience/anomaly_drone.ogg
+          params:
+            volume: -16
+        chance: 0.025
+
+- type: entity
+  parent: WeatherBase
+  id: WHGellarTremor
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: snowfall_light
+    color: "#A381C944"
+    sound:
+      path: /Audio/Ambience/anomaly_scary.ogg
+      params:
+        loop: true
+        volume: -18
+    exposureMode: UnroofedOnly
+    respectTileWeather: false
+    ignoreBlockers: true
+    effects:
+      tickInterval: 1.5
+      slowdown:
+        statusEffect: WeatherSlowdownStatusEffect
+        duration: 1.2
+        walkModifier: 0.96
+        sprintModifier: 0.96
+    globalEffects:
+      tickInterval: 1
+      lightFlicker:
+        chance: 0.3
+        durationMin: 0.35
+        durationMax: 2.2
+      ambient:
+        sound:
+          path: /Audio/Voice/Misc/lowHiss3.ogg
+          params:
+            volume: -10
+        chance: 0.12
+
+- type: entity
+  parent: WeatherBase
+  id: WHMachineCorrosionStorm
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: snowfall_light
+    color: "#BFD3E54C"
+    sound:
+      path: /Audio/Effects/Weather/snowstorm_weak.ogg
+      params:
+        loop: true
+        volume: -9
+    exposureMode: UnroofedOnly
+    respectTileWeather: false
+    effects:
+      tickInterval: 1
+      structureDamage:
+        types:
+          Structural: 4
+          Shock: 0.35
+      structureDamageChance: 0.32
+    globalEffects:
+      tickInterval: 2.5
+      lightFlicker:
+        chance: 0.2
+        durationMin: 0.2
+        durationMax: 1
+      ambient:
+        sound:
+          path: /Audio/Ambience/Objects/buzzing.ogg
+          params:
+            volume: -17
+        chance: 0.08
+
+- type: entity
+  parent: WeatherBase
+  id: WHBlackFront
+  components:
+  - type: WeatherStatusEffect
+    sprite:
+      sprite: /Textures/Effects/weather.rsi
+      state: storm
+    color: "#1E222DB0"
+    sound:
+      path: /Audio/Effects/Weather/rain_heavy.ogg
+      params:
+        loop: true
+        volume: -7
+    respectTileWeather: false
+    effects:
+      tickInterval: 0.8
+      slowdown:
+        statusEffect: WeatherSlowdownStatusEffect
+        duration: 1.2
+        walkModifier: 0.8
+        sprintModifier: 0.74

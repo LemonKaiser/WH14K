@@ -1,0 +1,44 @@
+- type: entity
+  id: WH40KConveyorManipulator
+  parent: BaseMachinePowered
+  name: conveyor manipulator
+  description: Moves nearby items from its left tile to its right tile.
+  suffix: WH40K
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Rotatable
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/manipulator.rsi
+    state: icon
+    snapCardinals: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/manipulator.rsi
+    state: icon
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: ContainerContainer
+    containers:
+      wh40k-manipulator-transfer: !type:Container
+  - type: WH40KConveyorManipulator
+    transferCooldown: 0.2
+    transferDuration: 0.45
+    arcHeight: 0.3
+    requirePowered: true
+  - type: ApcPowerReceiver
+    powerLoad: 120
+  - type: PowerState
+    idlePowerDraw: 120
+    workingPowerDraw: 120
+  - type: StaticPrice
+    price: 500

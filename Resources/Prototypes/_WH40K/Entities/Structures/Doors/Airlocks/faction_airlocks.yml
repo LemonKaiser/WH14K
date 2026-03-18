@@ -1,0 +1,239 @@
+- type: entity
+  parent: Airlock
+  id: WH40KAirlockImperium
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Doors/Airlocks/imperium.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: WH40KAirlockImperium
+  id: WH40KAirlockImperiumCommandLocked
+  suffix: WH40K, Imperium, Command, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: WH40KAirlockImperium
+  id: WH40KAirlockImperiumEngineeringLocked
+  suffix: WH40K, Imperium, Engineering, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: WH40KAirlockImperium
+  id: WH40KAirlockImperiumCargoLocked
+  suffix: WH40K, Imperium, Cargo, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: WH40KAirlockImperium
+  id: WH40KAirlockImperiumResearchLocked
+  suffix: WH40K, Imperium, Research, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: WH40KAirlockImperium
+  id: WH40KAirlockImperiumMedicalLocked
+  suffix: WH40K, Imperium, Medical, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+  - type: Wires
+    layoutId: AirlockMedical
+
+- type: entity
+  parent: Airlock
+  id: WH40KAirlockChaos
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Doors/Airlocks/chaos.rsi
+  - type: Wires
+    layoutId: AirlockService
+
+- type: entity
+  parent: WH40KAirlockChaos
+  id: WH40KAirlockChaosCommandLocked
+  suffix: WH40K, Chaos, Command, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: WH40KAirlockChaos
+  id: WH40KAirlockChaosEngineeringLocked
+  suffix: WH40K, Chaos, Engineering, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: WH40KAirlockChaos
+  id: WH40KAirlockChaosCargoLocked
+  suffix: WH40K, Chaos, Cargo, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: WH40KAirlockChaos
+  id: WH40KAirlockChaosResearchLocked
+  suffix: WH40K, Chaos, Research, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: WH40KAirlockChaos
+  id: WH40KAirlockChaosMedicalLocked
+  suffix: WH40K, Chaos, Medical, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+  - type: Wires
+    layoutId: AirlockMedical
+
+- type: entity
+  parent: DoubleAirlock
+  id: WH40KDoubleAirlockCommandLocked
+  suffix: WH40K, Double, Command, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: DoubleAirlock
+  id: WH40KDoubleAirlockEngineeringLocked
+  suffix: WH40K, Double, Engineering, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: DoubleAirlock
+  id: WH40KDoubleAirlockCargoLocked
+  suffix: WH40K, Double, Cargo, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: DoubleAirlock
+  id: WH40KDoubleAirlockResearchLocked
+  suffix: WH40K, Double, Research, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: DoubleAirlock
+  id: WH40KDoubleAirlockMedicalLocked
+  suffix: WH40K, Double, Medical, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+  - type: Wires
+    layoutId: AirlockMedical
+
+- type: entity
+  parent: AirlockNecron
+  id: WH40KAirlockNecronCommandLocked
+  suffix: WH40K, Necron, Command, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCommand ]
+  - type: Wires
+    layoutId: AirlockCommand
+
+- type: entity
+  parent: AirlockNecron
+  id: WH40KAirlockNecronEngineeringLocked
+  suffix: WH40K, Necron, Engineering, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsEngineering ]
+  - type: Wires
+    layoutId: AirlockEngineering
+
+- type: entity
+  parent: AirlockNecron
+  id: WH40KAirlockNecronCargoLocked
+  suffix: WH40K, Necron, Cargo, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsCargo ]
+  - type: Wires
+    layoutId: AirlockCargo
+
+- type: entity
+  parent: AirlockNecron
+  id: WH40KAirlockNecronResearchLocked
+  suffix: WH40K, Necron, Research, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsResearch ]
+  - type: Wires
+    layoutId: AirlockScience
+
+- type: entity
+  parent: AirlockNecron
+  id: WH40KAirlockNecronMedicalLocked
+  suffix: WH40K, Necron, Medical, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsMedical ]
+  - type: Wires
+    layoutId: AirlockMedical

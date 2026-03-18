@@ -11,6 +11,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Lathe.UI;
@@ -18,8 +19,11 @@ namespace Content.Client.Lathe.UI;
 [GenerateTypedNameReferences]
 public sealed partial class LatheMenu : DefaultWindow
 {
+    private const string InfinitySymbol = "\u221E";
+
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private readonly SpriteSystem _spriteSystem;
     private readonly LatheSystem _lathe;
@@ -27,6 +31,7 @@ public sealed partial class LatheMenu : DefaultWindow
 
     public event Action<BaseButton.ButtonEventArgs>? OnServerListButtonPressed;
     public event Action<string, int>? RecipeQueueAction;
+    public event Action<string>? RecipeQueueInfiniteAction;
     public event Action<int>? QueueDeleteAction;
     public event Action<int>? QueueMoveUpAction;
     public event Action<int>? QueueMoveDownAction;
@@ -39,6 +44,12 @@ public sealed partial class LatheMenu : DefaultWindow
     public ProtoId<LatheCategoryPrototype>? CurrentCategory;
 
     public EntityUid Entity;
+    private ProtoId<LatheRecipePrototype>? _progressRecipe;
+    private int _progressPrinted;
+    private TimeSpan _progressStepStart = TimeSpan.Zero;
+    private TimeSpan _progressStepDuration = TimeSpan.Zero;
+    private int? _materialStorageLimit;
+    private static readonly TimeSpan ProgressSyncClamp = TimeSpan.FromMilliseconds(150);
 
     public LatheMenu()
     {
@@ -87,6 +98,7 @@ public sealed partial class LatheMenu : DefaultWindow
         }
 
         MaterialsList.SetOwner(Entity);
+        UpdateMaterialsTitle();
     }
 
     /// <summary>
@@ -148,6 +160,10 @@ public sealed partial class LatheMenu : DefaultWindow
                     if (!int.TryParse(AmountLineEdit.Text, out var amount) || amount <= 0)
                         amount = 1;
                     RecipeQueueAction?.Invoke(s, amount);
+                };
+                control.OnInfiniteButtonPressed += s =>
+                {
+                    RecipeQueueInfiniteAction?.Invoke(s);
                 };
                 RecipeList.AddChild(control);
             }
@@ -278,7 +294,13 @@ public sealed partial class LatheMenu : DefaultWindow
 
             var itemName = _lathe.GetRecipeName(batch.Recipe);
             string displayText;
-            if (batch.ItemsRequested > 1)
+            if (batch.Infinite)
+                displayText = Loc.GetString("lathe-menu-item-infinite",
+                    ("index", idx + 1),
+                    ("name", itemName),
+                    ("printed", batch.ItemsPrinted),
+                    ("infinity", InfinitySymbol));
+            else if (batch.ItemsRequested > 1)
                 displayText = Loc.GetString("lathe-menu-item-batch", ("index", idx + 1), ("name", itemName), ("printed", batch.ItemsPrinted), ("total", batch.ItemsRequested));
             else
                 displayText = Loc.GetString("lathe-menu-item-single", ("index", idx + 1), ("name", itemName));
@@ -315,18 +337,94 @@ public sealed partial class LatheMenu : DefaultWindow
         }
     }
 
-    public void SetQueueInfo(ProtoId<LatheRecipePrototype>? recipeProto)
+    public void SetQueueInfo(
+        ProtoId<LatheRecipePrototype>? recipeProto,
+        IReadOnlyList<LatheRecipeBatch> queue,
+        bool isProducing,
+        TimeSpan productionStartTime,
+        TimeSpan productionLength)
     {
         FabricatingContainer.Visible = recipeProto != null;
         if (recipeProto == null)
+        {
+            FabricatingProgressBar.Value = 0;
+            _progressRecipe = null;
             return;
+        }
 
         var recipe = _prototypeManager.Index(recipeProto.Value);
+        var hasCurrentBatch = queue.Count > 0 && queue[0].Recipe == recipe.ID;
+        var isInfiniteBatch = hasCurrentBatch && queue[0].Infinite;
+        var printed = hasCurrentBatch ? Math.Max(0, queue[0].ItemsPrinted) : 0;
+        var requested = hasCurrentBatch ? Math.Max(0, queue[0].ItemsRequested) : 0;
+
+        if (_progressRecipe != recipe.ID ||
+            _progressPrinted != printed ||
+            _progressStepStart != productionStartTime ||
+            _progressStepDuration != productionLength)
+        {
+            var cycleChanged = _progressRecipe != recipe.ID || _progressPrinted != printed;
+            var stepStart = isProducing ? productionStartTime : TimeSpan.Zero;
+            if (isProducing && cycleChanged && _progressRecipe != null)
+            {
+                var oldestVisibleStart = _timing.CurTime - ProgressSyncClamp;
+                if (stepStart < oldestVisibleStart)
+                    stepStart = oldestVisibleStart;
+            }
+
+            _progressRecipe = recipe.ID;
+            _progressPrinted = printed;
+            _progressStepStart = stepStart;
+            _progressStepDuration = isProducing ? productionLength : TimeSpan.Zero;
+        }
 
         FabricatingDisplayContainer.Children.Clear();
         FabricatingDisplayContainer.AddChild(GetRecipeDisplayControl(recipe));
 
-        NameLabel.Text = _lathe.GetRecipeName(recipe);
+        var nameText = _lathe.GetRecipeName(recipe);
+        if (isInfiniteBatch)
+        {
+            nameText = Loc.GetString("lathe-menu-item-progress-infinite",
+                ("name", nameText),
+                ("printed", printed),
+                ("infinity", InfinitySymbol));
+        }
+        else if (hasCurrentBatch && requested > 1)
+        {
+            nameText = $"{nameText} ({printed}/{requested})";
+        }
+
+        NameLabel.Text = nameText;
+        UpdateFabricatingProgress();
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (!FabricatingContainer.Visible)
+            return;
+
+        UpdateFabricatingProgress();
+    }
+
+    private void UpdateFabricatingProgress()
+    {
+        if (_progressRecipe == null)
+        {
+            FabricatingProgressBar.Value = 0f;
+            return;
+        }
+
+        if (_progressStepDuration <= TimeSpan.Zero)
+        {
+            FabricatingProgressBar.Value = 0f;
+            return;
+        }
+
+        var elapsed = _timing.CurTime - _progressStepStart;
+        var stepProgress = Math.Clamp((float) (elapsed.TotalSeconds / _progressStepDuration.TotalSeconds), 0f, 1f);
+        FabricatingProgressBar.Value = stepProgress;
     }
 
     public Control GetRecipeDisplayControl(LatheRecipePrototype recipe)
@@ -360,5 +458,22 @@ public sealed partial class LatheMenu : DefaultWindow
             CurrentCategory = Categories?[obj.Id];
         }
         PopulateRecipes();
+    }
+
+    public void SetMaterialStorageLimit(int? limit)
+    {
+        _materialStorageLimit = limit;
+        UpdateMaterialsTitle();
+    }
+
+    private void UpdateMaterialsTitle()
+    {
+        if (_materialStorageLimit is { } limit && limit > 0)
+        {
+            MaterialsTitleLabel.Text = Loc.GetString("lathe-menu-materials-title-with-limit", ("max", limit));
+            return;
+        }
+
+        MaterialsTitleLabel.Text = Loc.GetString("lathe-menu-materials-title");
     }
 }

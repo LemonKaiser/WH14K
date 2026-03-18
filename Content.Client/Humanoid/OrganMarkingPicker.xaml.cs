@@ -64,15 +64,16 @@ public sealed partial class OrganMarkingPicker : Control
 
     private void UpdateMarkings()
     {
-        if (!_markingsModel.OrganProfileData.TryGetValue(_organ, out var organProfileData))
-            return;
+        var hasProfileData = _markingsModel.OrganProfileData.TryGetValue(_organ, out var organProfileData);
 
         LayerTabs.RemoveAllChildren();
         var i = 0;
         foreach (var layer in _layers)
         {
             var allMarkings =
-                _markingsModel.EnforceGroupAndSexRestrictions ? _marking.MarkingsByLayerAndGroupAndSex(layer, _group, organProfileData.Sex) : _marking.MarkingsByLayer(layer);
+                _markingsModel.EnforceGroupAndSexRestrictions && hasProfileData
+                    ? _marking.MarkingsByLayerAndGroupAndSex(layer, _group, organProfileData.Sex)
+                    : _marking.MarkingsByLayer(layer);
 
             if (allMarkings.Count == 0)
                 continue;

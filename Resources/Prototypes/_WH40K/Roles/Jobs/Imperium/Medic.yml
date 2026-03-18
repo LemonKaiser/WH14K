@@ -9,8 +9,8 @@
   canBeAntag: false
   access:
   - Maintenance
-  - Engineering
   - External
+  - Medical
 
 - type: startingGear
   id: MedicGear

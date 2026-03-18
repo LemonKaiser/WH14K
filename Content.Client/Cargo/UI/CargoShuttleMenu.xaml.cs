@@ -34,17 +34,34 @@ namespace Content.Client.Cargo.UI
 
             foreach (var order in orders)
             {
-                 if (!protoManager.Resolve(order.Product, out var productProto))
-                     continue;
+                 EntityPrototype? product = null;
+                 string? productName = null;
 
-                 var product = protoManager.Index<EntityPrototype>(productProto.Product);
-                 var productName = product.Name;
+                 if (!string.IsNullOrWhiteSpace(order.Product) &&
+                     protoManager.Resolve(order.Product, out var productProto))
+                 {
+                     product = protoManager.Index<EntityPrototype>(productProto.Product);
+                     productName = product.Name;
+                 }
+                 else if (!string.IsNullOrWhiteSpace(order.ProductId) &&
+                          protoManager.TryIndex(order.ProductId, out var productProtoFallback))
+                 {
+                     product = productProtoFallback;
+                     productName = order.ProductName;
+                     if (string.IsNullOrWhiteSpace(productName))
+                         productName = product.Name;
+                 }
+
+                 if (string.IsNullOrWhiteSpace(productName))
+                     productName = !string.IsNullOrWhiteSpace(order.ProductName)
+                         ? order.ProductName
+                         : Loc.GetString("cargo-console-invalid-product");
+
                  var account = protoManager.Index(order.Account);
 
                  var row = new CargoOrderRow
                  {
                      Order = order,
-                     Icon = { Texture = sprites.Frame0(product) },
                      ProductName =
                      {
                          Text = Loc.GetString(
@@ -58,6 +75,9 @@ namespace Content.Client.Cargo.UI
                      Description = {Text = Loc.GetString("cargo-console-menu-order-reason-description",
                          ("reason", order.Reason))}
                  };
+
+                 if (product != null)
+                     row.Icon.Texture = sprites.Frame0(product);
 
                  row.Approve.Visible = false;
                  row.Cancel.Visible = false;

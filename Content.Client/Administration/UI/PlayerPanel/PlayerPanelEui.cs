@@ -40,6 +40,7 @@ public sealed class PlayerPanelEui : BaseEui
         PlayerPanel.OnRejuvenate += () => SendMessage(new PlayerPanelRejuvenationMessage());
         PlayerPanel.OnDelete += () => SendMessage(new PlayerPanelDeleteMessage());
         PlayerPanel.OnFollow += () => SendMessage(new PlayerPanelFollowMessage());
+        PlayerPanel.OnScreenCheck += () => SendMessage(new PlayerPanelScreenCheckMessage());
 
         PlayerPanel.OnClose += () => SendMessage(new CloseEuiMessage());
     }
@@ -69,6 +70,14 @@ public sealed class PlayerPanelEui : BaseEui
         PlayerPanel.SetSharedConnections(s.SharedConnections);
         PlayerPanel.SetFrozen(s.CanFreeze, s.Frozen);
         PlayerPanel.SetAhelp(s.CanAhelp);
-        PlayerPanel.SetButtons();
+        PlayerPanel.SetScreenCheckState(
+            s.HasActiveScreenCheck,
+            s.ActiveScreenCheckAdmin,
+            s.ActiveScreenCheckSinceUtc,
+            s.HasLastScreenCheck,
+            s.LastScreenCheckAdmin,
+            s.LastScreenCheckAtUtc,
+            s.LastScreenCheckStatus);
+        PlayerPanel.SetButtons(s.CanScreenCheck);
     }
 }

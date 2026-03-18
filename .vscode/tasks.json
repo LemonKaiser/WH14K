@@ -76,6 +76,118 @@
                 "reveal": "silent"
             },
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "wh40k: build content.shared",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "Content.Shared/Content.Shared.csproj",
+                "-c",
+                "Debug",
+                "--no-restore",
+                "/p:TreatWarningsAsErrors=false",
+                "/p:UseAppHost=false"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "wh40k: build content.server (no deps)",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "Content.Server/Content.Server.csproj",
+                "-c",
+                "Debug",
+                "--no-restore",
+                "--no-dependencies",
+                "/p:TreatWarningsAsErrors=false",
+                "/p:UseAppHost=false"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "wh40k: render tactical map snapshot",
+            "command": "powershell",
+            "type": "shell",
+            "args": [
+                "-NoLogo",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/Tools/render_wh40k_tactical_map.ps1"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "wh40k: find proto on battlefield40k",
+            "command": "powershell",
+            "type": "shell",
+            "args": [
+                "-NoLogo",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/Tools/find_wh40k_map_proto.ps1",
+                "-MapPath",
+                "Resources/Maps/_WH40K/battlefield40k.yml",
+                "-ProtoId",
+                "${input:wh40kProtoId}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "wh40k: validate prep barriers",
+            "command": "powershell",
+            "type": "shell",
+            "args": [
+                "-NoLogo",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/Tools/validate_wh40k_prep_barriers.ps1",
+                "-MapPath",
+                "Resources/Maps/_WH40K/battlefield40k.yml"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "wh40kProtoId",
+            "type": "promptString",
+            "description": "Prototype id to search inside battlefield40k.yml",
+            "default": "WH40KWallWarningTDM"
         }
     ]
 }

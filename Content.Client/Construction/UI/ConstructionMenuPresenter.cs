@@ -46,6 +46,7 @@ namespace Content.Client.Construction.UI
 
         private const string FavoriteCatName = "construction-category-favorites";
         private const string ForAllCategoryName = "construction-category-all";
+        private const string Wh40KRecipePrefix = "WH40K";
 
         private bool CraftingAvailable
         {
@@ -191,10 +192,17 @@ namespace Content.Client.Construction.UI
 
             var recipesList = _constructionView.Recipes;
             var recipesGrid = _constructionView.RecipesGrid;
+            _recipeButtons.Clear();
             recipesGrid.RemoveAllChildren();
 
             _constructionView.RecipesGridScrollContainer.Visible = _constructionView.GridViewButtonPressed;
             _constructionView.Recipes.Visible = !_constructionView.GridViewButtonPressed;
+
+            if (actualRecipes.Count == 0)
+            {
+                _selected = null;
+                _constructionView.ClearRecipeInfo();
+            }
 
             if (_constructionView.GridViewButtonPressed)
             {
@@ -274,6 +282,18 @@ namespace Content.Client.Construction.UI
                     || _whitelistSystem.IsWhitelistFail(recipe.EntityWhitelist, _playerManager.LocalEntity.Value))
                     continue;
 
+                if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
+                {
+                    _sawmill.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
+                        recipe.ID,
+                        nameof(ConstructionPrototype));
+                    continue;
+                }
+
+                // WH40K branch policy: keep construction menu focused only on WH40K-defined recipes.
+                if (!IsWh40KRecipe(recipe, targetProtoId))
+                    continue;
+
                 if (!string.IsNullOrEmpty(search) && (recipe.Name is { } name &&
                                                       !name.Contains(search.Trim(),
                                                           StringComparison.InvariantCultureIgnoreCase)))
@@ -284,14 +304,6 @@ namespace Content.Client.Construction.UI
                     if ((category != FavoriteCatName || !_favoritedRecipes.Contains(recipe)) &&
                         recipe.Category != category)
                         continue;
-                }
-
-                if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
-                {
-                    _sawmill.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
-                        recipe.ID,
-                        nameof(ConstructionPrototype));
-                    continue;
                 }
 
                 if (!_prototypeManager.TryIndex(targetProtoId, out EntityPrototype? proto))
@@ -322,6 +334,9 @@ namespace Content.Client.Construction.UI
 
             foreach (var prototype in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
             {
+                if (!IsWh40KRecipe(prototype))
+                    continue;
+
                 var category = prototype.Category;
 
                 if (!string.IsNullOrEmpty(category))
@@ -331,15 +346,11 @@ namespace Content.Client.Construction.UI
             var isFavorites = _favoritedRecipes.Count > 0;
             var categoriesArray = new string[isFavorites ? uniqueCategories.Count + 2 : uniqueCategories.Count + 1];
 
-            // hard-coded to show all recipes
             var idx = 0;
             categoriesArray[idx++] = ForAllCategoryName;
 
-            // hard-coded to show favorites if it need
             if (isFavorites)
-            {
                 categoriesArray[idx++] = FavoriteCatName;
-            }
 
             var sortedProtoCategories = uniqueCategories.OrderBy(Loc.GetString);
 
@@ -358,7 +369,23 @@ namespace Content.Client.Construction.UI
                     _constructionView.OptionCategories.SelectId(i);
             }
 
+            if (_constructionView.OptionCategories.SelectedId < 0)
+                _constructionView.OptionCategories.SelectId(0);
+
             _constructionView.Categories = categoriesArray;
+        }
+
+        private static bool IsWh40KRecipe(ConstructionPrototype recipe)
+        {
+            return recipe.ID.StartsWith(Wh40KRecipePrefix, StringComparison.OrdinalIgnoreCase)
+                   || recipe.Graph.ToString().StartsWith(Wh40KRecipePrefix, StringComparison.OrdinalIgnoreCase)
+                   || recipe.Category.Contains("wh40k", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsWh40KRecipe(ConstructionPrototype recipe, EntProtoId targetProtoId)
+        {
+            return IsWh40KRecipe(recipe)
+                   || targetProtoId.ToString().StartsWith(Wh40KRecipePrefix, StringComparison.OrdinalIgnoreCase);
         }
 
         private void PopulateInfo(ConstructionPrototype? prototype)

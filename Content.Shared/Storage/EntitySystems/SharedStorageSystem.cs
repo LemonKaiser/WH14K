@@ -342,13 +342,13 @@ public abstract class SharedStorageSystem : EntitySystem
 
         if (uiOpen)
         {
-            verb.Text = Loc.GetString("comp-storage-verb-close-storage");
+            verb.TextLocId = "comp-storage-verb-close-storage";
             verb.Icon = new SpriteSpecifier.Texture(
                 new("/Textures/Interface/VerbIcons/close.svg.192dpi.png"));
         }
         else
         {
-            verb.Text = Loc.GetString("comp-storage-verb-open-storage");
+            verb.TextLocId = "comp-storage-verb-open-storage";
             verb.Icon = new SpriteSpecifier.Texture(
                 new("/Textures/Interface/VerbIcons/open.svg.192dpi.png"));
         }

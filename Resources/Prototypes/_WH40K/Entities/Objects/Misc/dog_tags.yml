@@ -82,6 +82,13 @@
 
 - type: entity
   parent: StandardDogTag
+  id: TitheSupplierDogTag
+  components:
+  - type: PresetIdCard
+    job: TitheSupplier
+
+- type: entity
+  parent: StandardDogTag
   id: EnginseerDogTag
   components:
   - type: PresetIdCard
@@ -193,6 +200,13 @@
   components:
   - type: PresetIdCard
     job: HTanker
+
+- type: entity
+  parent: StandardDogTag
+  id: HBandSupplierDogTag
+  components:
+  - type: PresetIdCard
+    job: HBandSupplier
 
 - type: entity
   parent: StandardDogTag

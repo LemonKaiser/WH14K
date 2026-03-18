@@ -13,7 +13,15 @@ public sealed partial class TechnologyCardControl : Control
 {
     public Action? OnPressed;
 
-    public TechnologyCardControl(TechnologyPrototype technology, IPrototypeManager prototypeManager, SpriteSystem spriteSys, FormattedMessage description, int points, bool hasAccess)
+    public TechnologyCardControl(
+        TechnologyPrototype technology,
+        IPrototypeManager prototypeManager,
+        SpriteSystem spriteSys,
+        FormattedMessage description,
+        int points,
+        bool hasAccess,
+        bool researchBusy,
+        bool isActiveResearch)
     {
         RobustXamlLoader.Load(this);
 
@@ -32,8 +40,22 @@ public sealed partial class TechnologyCardControl : Control
 
         if (!hasAccess)
             ResearchButton.ToolTip = Loc.GetString("research-console-no-access-popup");
+        else if (isActiveResearch)
+            ResearchButton.ToolTip = Loc.GetString("research-console-research-active-tooltip");
+        else if (researchBusy)
+            ResearchButton.ToolTip = Loc.GetString("research-console-research-busy-tooltip");
+        else if (points < technology.Cost)
+            ResearchButton.ToolTip = Loc.GetString(
+                "research-console-research-not-enough-points-tooltip",
+                ("cost", technology.Cost),
+                ("points", points));
 
-        ResearchButton.Disabled = points < technology.Cost || !hasAccess;
+        if (isActiveResearch)
+            ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button-active");
+        else if (researchBusy)
+            ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button-busy");
+
+        ResearchButton.Disabled = points < technology.Cost || !hasAccess || researchBusy;
         ResearchButton.OnPressed += _ => OnPressed?.Invoke();
     }
 }

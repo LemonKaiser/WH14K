@@ -30,6 +30,7 @@
     soundGunshot:
       collection: BulletMiss
     soundEmpty: null
+  - type: WH40KGunPrediction
   - type: ItemSlots
     slots:
       projectiles:

@@ -10,6 +10,7 @@ namespace Content.Client.Lathe.UI;
 public sealed partial class RecipeControl : Control
 {
     public Action<string>? OnButtonPressed;
+    public Action<string>? OnInfiniteButtonPressed;
     public Func<string> TooltipTextSupplier;
 
     private ProtoId<LatheRecipePrototype> _recipeId;
@@ -30,7 +31,12 @@ public sealed partial class RecipeControl : Control
         {
             OnButtonPressed?.Invoke(_recipeId);
         };
+        InfiniteButton.OnPressed += (_) =>
+        {
+            OnInfiniteButtonPressed?.Invoke(_recipeId);
+        };
         Button.TooltipSupplier = SupplyTooltip;
+        InfiniteButton.TooltipSupplier = SupplyTooltip;
     }
 
     public void SetRecipe(LatheRecipePrototype recipe)

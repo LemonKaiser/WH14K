@@ -53,6 +53,13 @@ public sealed partial class TechnologyPrototype : IPrototype
     public int Cost = 10000;
 
     /// <summary>
+    /// Optional time required to complete this research after it is started.
+    /// Timed research is only enforced on servers that explicitly enable it.
+    /// </summary>
+    [DataField("researchTimeSeconds")]
+    public float ResearchTimeSeconds = 0f;
+
+    /// <summary>
     /// A list of <see cref="TechnologyPrototype"/>s that need to be unlocked in order to unlock this technology.
     /// </summary>
     [DataField]

@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.UserInterface.Systems;
 using Content.Shared._WH40K.Overlays;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -25,6 +26,7 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
     private readonly MobThresholdSystem _mobThresholdSystem;
     private readonly SpriteSystem _spriteSystem;
     private readonly ProgressColorSystem _progressColor;
+    private readonly DamageableSystem _damageable;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -36,6 +38,7 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
         _mobThresholdSystem = _entManager.System<MobThresholdSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _progressColor = _entManager.System<ProgressColorSystem>();
+        _damageable = _entManager.System<DamageableSystem>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -107,20 +110,22 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
 
     private (float ratio, bool inCrit)? CalcProgress(EntityUid uid, WH40KAlwaysShowHealthBarComponent marker, DamageableComponent dmg)
     {
+        var totalDamage = _damageable.GetTotalDamage((uid, dmg));
+
         if (marker.UseMobThresholds &&
             _entManager.TryGetComponent(uid, out MobStateComponent? mobState) &&
             _entManager.TryGetComponent(uid, out MobThresholdsComponent? thresholds))
         {
             if (_mobStateSystem.IsAlive(uid, mobState))
             {
-                if (dmg.HealthBarThreshold != null && dmg.TotalDamage < dmg.HealthBarThreshold)
+                if (dmg.HealthBarThreshold != null && totalDamage < dmg.HealthBarThreshold)
                     return null;
 
                 if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var threshold, thresholds) &&
                     !_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out threshold, thresholds))
                     return (1, false);
 
-                var ratio = 1 - ((FixedPoint2)(dmg.TotalDamage / threshold)).Float();
+                var ratio = 1 - ((FixedPoint2)(totalDamage / threshold)).Float();
                 return (ClampRatio(ratio), false);
             }
 
@@ -132,7 +137,7 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
                     return (1, true);
                 }
 
-                var ratio = 1 - ((dmg.TotalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
+                var ratio = 1 - ((totalDamage - critThreshold) / (deadThreshold - critThreshold)).Value.Float();
                 return (ClampRatio(ratio), true);
             }
 
@@ -142,11 +147,11 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
         if (marker.MaxHealth == null || marker.MaxHealth <= FixedPoint2.Zero)
             return null;
 
-        if (dmg.HealthBarThreshold != null && dmg.TotalDamage < dmg.HealthBarThreshold)
+        if (dmg.HealthBarThreshold != null && totalDamage < dmg.HealthBarThreshold)
             return null;
 
         var max = marker.MaxHealth.Value;
-        var ratioFallback = 1 - ((FixedPoint2)(dmg.TotalDamage / max)).Float();
+        var ratioFallback = 1 - ((FixedPoint2)(totalDamage / max)).Float();
         return (ClampRatio(ratioFallback), false);
     }
 

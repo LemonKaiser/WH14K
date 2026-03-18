@@ -1,18 +1,27 @@
 <Control xmlns="https://spacestation14.io">
-    <Button
-        Name="Button"
-        HorizontalExpand="True"
-        Margin="0"
-        StyleClasses="ButtonSquare">
-        <BoxContainer Orientation="Horizontal">
-            <BoxContainer
-                Name="RecipeDisplayContainer"
-                Margin="0 0 4 0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                MinSize="32 32"
-                />
-            <Label Name="RecipeName" HorizontalExpand="True" />
-        </BoxContainer>
-    </Button>
+    <BoxContainer Orientation="Horizontal">
+        <Button
+            Name="Button"
+            HorizontalExpand="True"
+            Margin="0"
+            StyleClasses="ButtonSquare OpenRight">
+            <BoxContainer Orientation="Horizontal">
+                <BoxContainer
+                    Name="RecipeDisplayContainer"
+                    Margin="0 0 4 0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinSize="32 32"
+                    />
+                <Label Name="RecipeName" HorizontalExpand="True" />
+            </BoxContainer>
+        </Button>
+        <Button
+            Name="InfiniteButton"
+            Margin="0"
+            MinSize="34 0"
+            Text="⟳"
+            StyleClasses="ButtonSquare OpenLeft"
+            ToolTip="{Loc 'lathe-menu-infinite-queue-tooltip'}" />
+    </BoxContainer>
 </Control>

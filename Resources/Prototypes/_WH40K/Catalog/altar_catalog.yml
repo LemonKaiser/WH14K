@@ -1,23 +1,345 @@
-#Weaponry
-
 - type: listing
-  id: AltarAstartes
-  name: Лазерный карабин
-  description: Карабин, вооот.
+  id: AltarFlashlightLantern
+  name: Utility lantern
+  description: Rugged light source for dark frontlines.
+  productEntity: FlashlightLantern
+  cost:
+    intelligence_ch: 1
+  categories:
+  - AltarBasics
+
+  conditions:
+- type: listing
+  id: AltarBasicMedkit
+  name: Medic
+  description: Basic trauma supplies.
+  productEntity: Medkit
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarSupport
+
+  conditions:
+- type: listing
+  id: AltarNutribrick
+  name: Nutribrick
+  description: Dense ration for prolonged fighting.
+  productEntity: FoodSnackNutribrick
+  cost:
+    intelligence_ch: 1
+  categories:
+  - AltarBasics
+
+  conditions:
+- type: listing
+  id: AltarWHSoup
+  name: Warband ration stew
+  description: Hot meal for assault groups.
+  productEntity: WHSoup
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarBasics
+
+  conditions:
+- type: listing
+  id: AltarLasgun
+  name: Lasgun
+  description: Captured-pattern lasgun.
   productEntity: WeaponLaserLasgun
   cost:
     intelligence_ch: 4
   categories:
   - AltarWeaponry
 
-#Ammo
+  conditions:
+- type: listing
+  id: AltarStubRifle
+  name: Stub rifle
+  description: Reliable kinetic rifle.
+  productEntity: WeaponStubRifle
+  cost:
+    intelligence_ch: 4
+  categories:
+  - AltarWeaponry
+
+  conditions:
+- type: listing
+  id: AltarChaosMachete
+  name: Chaos machete
+  description: Brutal blade weapon.
+  productEntity: ChaosMachete
+  cost:
+    intelligence_ch: 5
+  categories:
+  - AltarWeaponry
+
+  conditions:
+- type: listing
+  id: AltarChsSmg2
+  name: Heretic SMG
+  description: Compact high-rate SMG.
+  productEntity: WeaponChsStubSMG2
+  cost:
+    intelligence_ch: 6
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: AltarChsCombatShotgun
+  name: Heretic combat shotgun
+  description: Close-range devastation.
+  productEntity: WeaponChsCombatShotgun
+  cost:
+    intelligence_ch: 6
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: AltarStubMG
+  name: Stub machine gun
+  description: Sustained suppressive fire platform.
+  productEntity: WeaponStubMG
+  cost:
+    intelligence_ch: 8
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarBolterPistol
+  name: Bolter pistol
+  description: Heavy-caliber sidearm.
+  productEntity: WeaponPistolBolter
+  cost:
+    intelligence_ch: 9
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarPlasmaPistol
+  name: Plasma pistol
+  description: Elite sidearm for final phase fights.
+  productEntity: WeaponLaserPlasmaPistol
+  cost:
+    intelligence_ch: 12
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: AltarRocketLauncher
+  name: Rocket launcher
+  description: Heavy anti-armor launcher.
+  productEntity: WeaponRocketLauncher
+  cost:
+    intelligence_ch: 16
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 5
 
 - type: listing
   id: AltarLasgunPowerCell
-  name: Коробка батарей лазгана (злая)
-  description: батареи лазгана, пораженные варпом
+  name: Lasgun cell crate
+  description: Bulk lasgun energy cells.
   productEntity: BoxLasgunPowerCell
   cost:
     intelligence_ch: 2
   categories:
   - AltarAmmo
+
+  conditions:
+- type: listing
+  id: AltarMagazineStubRifle
+  name: Stub rifle magazine
+  description: Reserve rifle magazine.
+  productEntity: MagazineStubRifle
+  cost:
+    intelligence_ch: 1
+  categories:
+  - AltarAmmo
+
+  conditions:
+- type: listing
+  id: AltarMagazineStubSmg
+  name: Stub SMG magazine
+  description: Spare SMG ammo.
+  productEntity: MagazineStubSMG
+  cost:
+    intelligence_ch: 1
+  categories:
+  - AltarAmmo
+
+  conditions:
+- type: listing
+  id: AltarMagazineBolterPistol
+  name: Bolter pistol magazine
+  description: Pistol bolter ammunition.
+  productEntity: MagazineBolterPistol
+  cost:
+    intelligence_ch: 3
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarFlameTank
+  name: Promethium tank
+  description: Fuel reserve for inferno operations.
+  productEntity: FlameThrowerTank
+  cost:
+    intelligence_ch: 3
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: AltarArmorFlakVest
+  name: Heretic flak vest
+  description: Basic heretic body armor.
+  productEntity: ClothingOuterArmorFlakVestHeretic
+  cost:
+    intelligence_ch: 3
+  categories:
+  - AltarArmor
+
+  conditions:
+- type: listing
+  id: AltarArmorHelmetFlak
+  name: Heretic flak helmet
+  description: Standard helmet for warbands.
+  productEntity: ClothingHeadHelmetFlakCHAOS
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarArmor
+
+  conditions:
+- type: listing
+  id: AltarArmorAdvancedVest
+  name: Advanced heretic vest
+  description: Reinforced armor plating.
+  productEntity: ClothingOuterArmorAdvancedFlakVestHeretic
+  cost:
+    intelligence_ch: 7
+  categories:
+  - AltarArmor
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarArmorBloodPact
+  name: Blood pact armor
+  description: Hardened elite wargear.
+  productEntity: ClothingOuterArmorBloodpact
+  cost:
+    intelligence_ch: 5
+  categories:
+  - AltarArmor
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarSeclite
+  name: Tactical flashlight
+  description: Durable combat flashlight.
+  productEntity: FlashlightSeclite
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarBasics
+
+  conditions:
+- type: listing
+  id: AltarMedkitAdvanced
+  name: Advanced medkit
+  description: Expanded medical set.
+  productEntity: MedkitAdvanced
+  cost:
+    intelligence_ch: 4
+  categories:
+  - AltarSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarMedkitCombat
+  name: Combat medkit
+  description: High-intensity trauma support.
+  productEntity: MedkitCombat
+  cost:
+    intelligence_ch: 6
+  categories:
+  - AltarSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: AltarStimpackMini
+  name: Mini stimpack
+  description: Short burst battlefield stimulant.
+  productEntity: StimpackMini
+  cost:
+    intelligence_ch: 3
+  categories:
+  - AltarSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+- type: listing
+  id: AltarCombatMedipen
+  name: Combat medipen
+  description: Emergency injector for elite troops.
+  productEntity: CombatMedipen
+  cost:
+    intelligence_ch: 6
+  categories:
+  - AltarSupport
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: AltarSentinelAutogun
+  name: Captured sentinel (autogun)
+  description: Repurposed walker support.
+  productEntity: MechSentinelBatteryAutogun
+  cost:
+    intelligence_ch: 20
+  categories:
+  - AltarReinforcements
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 6
+
+- type: listing
+  id: AltarSentinelPlasma
+  name: Captured sentinel (plasma)
+  description: Elite repurposed plasma walker.
+  productEntity: MechSentinelBatteryPlasma
+  cost:
+    intelligence_ch: 26
+  categories:
+  - AltarReinforcements
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 7

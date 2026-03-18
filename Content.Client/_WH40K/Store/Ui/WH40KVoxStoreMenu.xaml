@@ -1,0 +1,95 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Title="{Loc 'wh40k-vox-supplydrop-window-title'}"
+    MinSize="760 500"
+    SetSize="760 500">
+    <BoxContainer Margin="6" Orientation="Vertical" SeparationOverride="6">
+        <PanelContainer>
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat
+                    BackgroundColor="#1C221CFF"
+                    BorderColor="#5A715BFF"
+                    BorderThickness="1,1,1,1"
+                    ContentMarginBottomOverride="6"
+                    ContentMarginLeftOverride="8"
+                    ContentMarginRightOverride="8"
+                    ContentMarginTopOverride="6" />
+            </PanelContainer.PanelOverride>
+            <RichTextLabel Name="BalanceInfo" />
+        </PanelContainer>
+
+        <PanelContainer VerticalExpand="True">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat
+                    BackgroundColor="#10120FFF"
+                    BorderColor="#444B45FF"
+                    BorderThickness="1,1,1,1"
+                    ContentMarginBottomOverride="8"
+                    ContentMarginLeftOverride="8"
+                    ContentMarginRightOverride="8"
+                    ContentMarginTopOverride="8" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalExpand="True">
+                <PanelContainer VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat
+                            BackgroundColor="#141915FF"
+                            BorderColor="#354237FF"
+                            BorderThickness="1,1,1,1"
+                            ContentMarginBottomOverride="8"
+                            ContentMarginLeftOverride="8"
+                            ContentMarginRightOverride="8"
+                            ContentMarginTopOverride="8" />
+                    </PanelContainer.PanelOverride>
+                    <ScrollContainer HScrollEnabled="False" MinSize="240 0" VerticalExpand="True">
+                        <GridContainer
+                            Name="ListingGrid"
+                            Columns="3"
+                            HSeparationOverride="6"
+                            VSeparationOverride="6" />
+                    </ScrollContainer>
+                </PanelContainer>
+
+                <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat
+                            BackgroundColor="#171B18FF"
+                            BorderColor="#556758FF"
+                            BorderThickness="1,1,1,1"
+                            ContentMarginBottomOverride="10"
+                            ContentMarginLeftOverride="10"
+                            ContentMarginRightOverride="10"
+                            ContentMarginTopOverride="10" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" SeparationOverride="8" VerticalExpand="True">
+                        <TextureRect
+                            Name="SelectedIcon"
+                            HorizontalAlignment="Center"
+                            MinSize="120 120"
+                            Stretch="KeepAspectCentered" />
+                        <Label
+                            Name="SelectedName"
+                            HorizontalExpand="True" />
+                        <PanelContainer VerticalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat
+                                    BackgroundColor="#0F110FFF"
+                                    BorderColor="#3A423BFF"
+                                    BorderThickness="1,1,1,1"
+                                    ContentMarginBottomOverride="6"
+                                    ContentMarginLeftOverride="6"
+                                    ContentMarginRightOverride="6"
+                                    ContentMarginTopOverride="6" />
+                            </PanelContainer.PanelOverride>
+                            <RichTextLabel Name="SelectedDescription" VerticalExpand="True" />
+                        </PanelContainer>
+                        <RichTextLabel Name="SelectedPrice" />
+                        <Button Name="BuyButton" Text="{Loc 'wh40k-vox-supplydrop-buy-button'}" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:FancyWindow>

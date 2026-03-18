@@ -198,6 +198,22 @@ public sealed partial class OptionsTabControlRow : Control
     }
 
     /// <summary>
+    /// Refreshes any localized frontend text without reloading values from config.
+    /// This preserves unsaved changes while updating labels after a language switch.
+    /// </summary>
+    public void RefreshLocalization()
+    {
+        DefaultButton.Text = _loc.GetString("ui-options-default");
+        ResetButton.Text = _loc.GetString("ui-options-reset-all");
+        ApplyButton.Text = _loc.GetString("ui-options-apply");
+
+        foreach (var option in _options)
+        {
+            option.RefreshLocalization();
+        }
+    }
+
+    /// <summary>
     /// Called by <see cref="BaseOption"/> to signal that an option's value changed through user interaction.
     /// </summary>
     /// <remarks>
@@ -291,6 +307,13 @@ public abstract class BaseOption(OptionsTabControlRow controller)
     /// Loads the value represented by this option from its backing store, into the UI state.
     /// </summary>
     public abstract void LoadValue();
+
+    /// <summary>
+    /// Refreshes localized labels for the option while preserving the current UI value.
+    /// </summary>
+    public virtual void RefreshLocalization()
+    {
+    }
 
     /// <summary>
     /// Saves the value in the UI state to the backing store.
@@ -529,6 +552,11 @@ public sealed class OptionSliderFloatCVar : BaseOptionCVar<float>
     {
         _slider.ValueLabel.Text = _format(this, _slider.Slider.Value);
     }
+
+    public override void RefreshLocalization()
+    {
+        UpdateLabelValue();
+    }
 }
 
 /// <summary>
@@ -645,6 +673,11 @@ public sealed class OptionSliderIntCVar : BaseOptionCVar<int>
     {
         _slider.ValueLabel.Text = _format(this, (int) _slider.Slider.Value);
     }
+
+    public override void RefreshLocalization()
+    {
+        UpdateLabelValue();
+    }
 }
 
 /// <summary>
@@ -654,7 +687,7 @@ public sealed class OptionSliderIntCVar : BaseOptionCVar<int>
 public sealed class OptionDropDownCVar<T> : BaseOptionCVar<T> where T : notnull
 {
     private readonly OptionDropDown _dropDown;
-    private readonly ItemEntry[] _entries;
+    private ItemEntry[] _entries = Array.Empty<ItemEntry>();
 
     protected override T Value
     {
@@ -687,27 +720,27 @@ public sealed class OptionDropDownCVar<T> : BaseOptionCVar<T> where T : notnull
             throw new ArgumentException("Need at least one option!");
 
         _dropDown = dropDown;
-        _entries = new ItemEntry[options.Count];
-
-        var button = dropDown.Button;
-        var i = 0;
-        foreach (var option in options)
-        {
-            _entries[i] = new ItemEntry
-            {
-                Key = option.Key,
-            };
-
-            button.AddItem(option.Label, i);
-            button.SetItemMetadata(button.GetIdx(i), option.Key);
-            i += 1;
-        }
+        PopulateOptions(options);
 
         dropDown.Button.OnItemSelected += args =>
         {
             dropDown.Button.SelectId(args.Id);
             ValueChanged();
         };
+    }
+
+    public void ReloadOptions(IReadOnlyCollection<ValueOption> options)
+    {
+        if (options.Count == 0)
+            throw new ArgumentException("Need at least one option!", nameof(options));
+
+        var selectedValue = _dropDown.Button.SelectedMetadata is T value
+            ? value
+            : _entries[0].Key;
+
+        _dropDown.Button.Clear();
+        PopulateOptions(options);
+        Value = selectedValue;
     }
 
     private int FindValueId(T value)
@@ -720,6 +753,25 @@ public sealed class OptionDropDownCVar<T> : BaseOptionCVar<T> where T : notnull
 
         // This will just default select the first entry or whatever.
         return 0;
+    }
+
+    private void PopulateOptions(IReadOnlyCollection<ValueOption> options)
+    {
+        _entries = new ItemEntry[options.Count];
+
+        var button = _dropDown.Button;
+        var i = 0;
+        foreach (var option in options)
+        {
+            _entries[i] = new ItemEntry
+            {
+                Key = option.Key,
+            };
+
+            button.AddItem(option.Label, i);
+            button.SetItemMetadata(button.GetIdx(i), option.Key);
+            i += 1;
+        }
     }
 
     /// <summary>

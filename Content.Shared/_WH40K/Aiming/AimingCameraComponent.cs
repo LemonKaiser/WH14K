@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._WH40K.Aiming;
 
 /// <summary>
-/// Enables an action-toggled aiming camera offset for a weapon.
+/// Enables an action-toggled aiming camera offset for an item.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class AimingCameraComponent : Component
@@ -48,7 +48,7 @@ public sealed partial class AimingCameraComponent : Component
     public float WallPullMultiplier = 0.1f;
 
     /// <summary>
-    /// If true, aiming only works while the weapon is wielded.
+    /// If true, aiming only works while the item is wielded.
     /// </summary>
     [DataField]
     public bool RequireWield = true;

@@ -7,6 +7,8 @@ using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Content.Client.MainMenu;
+using Robust.Client.State;
 
 namespace Content.Client.Launcher
 {
@@ -21,6 +23,8 @@ namespace Content.Client.Launcher
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IClipboardManager _clipboard = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private readonly ConnectingTargetManager _connectingTarget = default!;
+        [Dependency] private readonly IStateManager _stateManager = default!;
 
         private LauncherConnectingGui? _control;
         private ISawmill _sawmill = default!;
@@ -28,7 +32,11 @@ namespace Content.Client.Launcher
         private Page _currentPage;
         private string? _connectFailReason;
 
-        public string? Address => _gameController.LaunchState.Ss14Address ?? _gameController.LaunchState.ConnectAddress;
+        public string? Address => _gameController.LaunchState.Ss14Address
+                                  ?? _gameController.LaunchState.ConnectAddress
+                                  ?? _connectingTarget.Address;
+
+        public bool UsesManualConnectTarget => !_gameController.LaunchState.FromLauncher && _connectingTarget.HasManualTarget;
 
         public string? ConnectFailReason
         {
@@ -79,6 +87,7 @@ namespace Content.Client.Launcher
 
             _clientNetManager.ConnectFailed -= OnConnectFailed;
             _clientNetManager.ClientConnectStateChanged -= OnConnectStateChanged;
+            _connectingTarget.Clear();
         }
 
         private void OnConnectFailed(object? _, NetConnectFailArgs args)
@@ -101,11 +110,21 @@ namespace Content.Client.Launcher
 
         public void RetryConnect()
         {
-            if (_gameController.LaunchState.ConnectEndpoint != null)
+            if (TryGetConnectTarget(out var host, out var port))
             {
-                _baseClient.ConnectToServer(_gameController.LaunchState.ConnectEndpoint);
+                if (_clientNetManager.ClientConnectState != ClientConnectionState.NotConnecting ||
+                    _baseClient.RunLevel == ClientRunLevel.Connecting)
+                {
+                    _baseClient.DisconnectFromServer("Retrying failed connection");
+                }
+
+                ConnectFailReason = null;
+                _baseClient.ConnectToServer(host, port);
                 CurrentPage = Page.Connecting;
+                return;
             }
+
+            _sawmill.Warning("RetryConnect requested, but no reconnect target could be resolved.");
         }
 
         public bool Redial()
@@ -115,6 +134,11 @@ namespace Content.Client.Launcher
                 if (_gameController.LaunchState.Ss14Address != null)
                 {
                     _gameController.Redial(_gameController.LaunchState.Ss14Address);
+                    return true;
+                }
+                else if (TryGetConnectTarget(out var host, out var port))
+                {
+                    _baseClient.ConnectToServer(host, port);
                     return true;
                 }
                 else
@@ -129,8 +153,17 @@ namespace Content.Client.Launcher
             return false;
         }
 
-        public void Exit()
+        public void Leave()
         {
+            if (UsesManualConnectTarget)
+            {
+                if (_baseClient.RunLevel == ClientRunLevel.Connecting)
+                    _baseClient.DisconnectFromServer("Manual direct-connect cancelled");
+
+                _stateManager.RequestStateChange<MainScreen>();
+                return;
+            }
+
             _gameController.Shutdown("Exit button pressed");
         }
 
@@ -144,6 +177,59 @@ namespace Content.Client.Launcher
             Connecting,
             ConnectFailed,
             Disconnected,
+        }
+
+        private bool TryGetConnectTarget(out string host, out ushort port)
+        {
+            if (_connectingTarget.HasManualTarget && _connectingTarget.Host != null && _connectingTarget.Port != null)
+            {
+                host = _connectingTarget.Host;
+                port = _connectingTarget.Port.Value;
+                return true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_gameController.LaunchState.Ss14Address))
+            {
+                try
+                {
+                    ConnectingAddressParser.ParseAddress(_gameController.LaunchState.Ss14Address, _baseClient.DefaultPort, out host, out port);
+                    return true;
+                }
+                catch (ArgumentException ex)
+                {
+                    _sawmill.Warning($"Unable to parse SS14 address '{_gameController.LaunchState.Ss14Address}' for reconnect: {ex.Message}");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(_gameController.LaunchState.ConnectAddress))
+            {
+                try
+                {
+                    ConnectingAddressParser.ParseAddress(_gameController.LaunchState.ConnectAddress, _baseClient.DefaultPort, out host, out port);
+                    return true;
+                }
+                catch (ArgumentException ex)
+                {
+                    _sawmill.Warning($"Unable to parse connect address '{_gameController.LaunchState.ConnectAddress}' for reconnect: {ex.Message}");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(Address))
+            {
+                try
+                {
+                    ConnectingAddressParser.ParseAddress(Address, _baseClient.DefaultPort, out host, out port);
+                    return true;
+                }
+                catch (ArgumentException ex)
+                {
+                    _sawmill.Warning($"Unable to parse fallback address '{Address}' for reconnect: {ex.Message}");
+                }
+            }
+
+            host = string.Empty;
+            port = 0;
+            return false;
         }
     }
 }

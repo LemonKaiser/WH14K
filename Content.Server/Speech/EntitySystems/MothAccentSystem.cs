@@ -11,6 +11,10 @@ public sealed class MothAccentSystem : EntitySystem
 
     private static readonly Regex RegexLowerBuzz = new Regex("z{1,3}");
     private static readonly Regex RegexUpperBuzz = new Regex("Z{1,3}");
+    private static readonly Regex RegexLowerZh = new(@"\u0436+");
+    private static readonly Regex RegexUpperZh = new(@"\u0416+");
+    private static readonly Regex RegexLowerZe = new(@"\u0437+");
+    private static readonly Regex RegexUpperZe = new(@"\u0417+");
 
     public override void Initialize()
     {
@@ -28,29 +32,25 @@ public sealed class MothAccentSystem : EntitySystem
         message = RegexUpperBuzz.Replace(message, "ZZZ");
 
         // Corvax-Localization-Start
-        // ж => жжж
-        message = Regex.Replace(
+        // \u0436 => \u0436\u0436\u0436
+        message = RegexLowerZh.Replace(
             message,
-            "ж+",
-            _random.Pick(new List<string>() { "жж", "жжж" })
+            _random.Pick(new List<string>() { "\u0436\u0436", "\u0436\u0436\u0436" })
         );
-        // Ж => ЖЖЖ
-        message = Regex.Replace(
+        // \u0416 => \u0416\u0416\u0416
+        message = RegexUpperZh.Replace(
             message,
-            "Ж+",
-            _random.Pick(new List<string>() { "ЖЖ", "ЖЖЖ" })
+            _random.Pick(new List<string>() { "\u0416\u0416", "\u0416\u0416\u0416" })
         );
-        // з => ссс
-        message = Regex.Replace(
+        // \u0437 => \u0437\u0437\u0437
+        message = RegexLowerZe.Replace(
             message,
-            "з+",
-            _random.Pick(new List<string>() { "зз", "ззз" })
+            _random.Pick(new List<string>() { "\u0437\u0437", "\u0437\u0437\u0437" })
         );
-        // З => CCC
-        message = Regex.Replace(
+        // \u0417 => \u0417\u0417\u0417
+        message = RegexUpperZe.Replace(
             message,
-            "З+",
-            _random.Pick(new List<string>() { "ЗЗ", "ЗЗЗ" })
+            _random.Pick(new List<string>() { "\u0417\u0417", "\u0417\u0417\u0417" })
         );
         // Corvax-Localization-End
 

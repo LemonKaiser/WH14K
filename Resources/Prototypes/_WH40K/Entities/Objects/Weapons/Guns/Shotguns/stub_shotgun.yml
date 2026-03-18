@@ -16,6 +16,7 @@
     fireRate: 1
     availableModes:
     - SemiAuto
+  - type: WH40KGunPrediction
   - type: BallisticAmmoProvider
     whitelist:
       tags:

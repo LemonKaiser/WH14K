@@ -1,0 +1,24 @@
+- type: job
+  id: TitheSupplier
+  name: job-name-tithe-supplier
+  description: job-description-tithe-supplier
+  playTimeTracker: JobTitheSupplier
+  startingGear: TitheSupplierGear
+  icon: "JobIconCargo"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+  - Cargo
+
+- type: startingGear
+  id: TitheSupplierGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    head: ClothingHeadHelmetFlak
+    outerClothing: ClothingOuterArmorFlakVestLight
+    id: TitheSupplierDogTag

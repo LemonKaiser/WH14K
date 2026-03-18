@@ -12,6 +12,8 @@ using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Content.Shared.Whitelist;
+using Content.Shared.Interaction.Components;
 
 namespace Content.Server.Materials;
 
@@ -26,6 +28,7 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StackSystem _stackSystem = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -97,25 +100,223 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
     {
         if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
             return false;
+
+        if (CanInsertMaterialEntity(toInsert, receiver, storage, material, composition))
+        {
+            if (!base.TryInsertMaterialEntity(user, toInsert, receiver, storage, material, composition))
+                return false;
+
+            HandleSuccessfulInsertion(user, toInsert, receiver, storage);
+            return true;
+        }
+
+        if (TryInsertPartialStack(user, toInsert, receiver, storage, composition))
+            return true;
+
+        if (IsStorageOverflow(receiver, toInsert, storage, composition))
+            _popup.PopupEntity(Loc.GetString("lathe-popup-material-storage-full"), receiver, user);
+
+        return false;
+    }
+
+    public override bool CanInsertMaterialEntity(
+        EntityUid toInsert,
+        EntityUid receiver,
+        MaterialStorageComponent? storage = null,
+        MaterialComponent? material = null,
+        PhysicalCompositionComponent? composition = null)
+    {
+        if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
+            return false;
+
         if (TryComp<ApcPowerReceiverComponent>(receiver, out var power) && !power.Powered)
             return false;
-        if (!base.TryInsertMaterialEntity(user, toInsert, receiver, storage, material, composition))
+
+        if (IsStorageOverflow(receiver, toInsert, storage, composition))
             return false;
+
+        return base.CanInsertMaterialEntity(toInsert, receiver, storage, material, composition);
+    }
+
+    /// <summary>
+    /// Server-side insertion variant for automation systems.
+    /// No popup/sound/admin log side effects.
+    /// </summary>
+    public bool TryInsertMaterialEntityNoFeedback(
+        EntityUid toInsert,
+        EntityUid receiver,
+        MaterialStorageComponent? storage = null,
+        MaterialComponent? material = null,
+        PhysicalCompositionComponent? composition = null)
+    {
+        if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
+            return false;
+
+        if (!CanInsertMaterialEntity(toInsert, receiver, storage, material, composition))
+            return false;
+
+        if (!base.TryInsertMaterialEntity(receiver, toInsert, receiver, storage, material, composition))
+            return false;
+
+        QueueDel(toInsert);
+        return true;
+    }
+
+    private bool IsStorageOverflow(
+        EntityUid receiver,
+        EntityUid toInsert,
+        MaterialStorageComponent storage,
+        PhysicalCompositionComponent composition)
+    {
+        if (storage.StorageLimit is not { } limit)
+            return false;
+
+        var currentVolume = GetTotalMaterialAmount(receiver, storage, localOnly: true);
+        var incomingVolume = GetIncomingVolume(toInsert, composition);
+        return currentVolume + incomingVolume > limit;
+    }
+
+    private bool TryInsertPartialStack(
+        EntityUid user,
+        EntityUid toInsert,
+        EntityUid receiver,
+        MaterialStorageComponent storage,
+        PhysicalCompositionComponent composition)
+    {
+        if (!IsStorageOverflow(receiver, toInsert, storage, composition))
+            return false;
+
+        if (!TryComp<StackComponent>(toInsert, out var stackComp) || stackComp.Count <= 1)
+            return false;
+
+        var maxSplit = GetMaximumInsertableStackCount(receiver, toInsert, stackComp, storage, composition);
+        if (maxSplit <= 0)
+            return false;
+
+        for (var count = maxSplit; count >= 1; count--)
+        {
+            if (!CanInsertMaterialCount(toInsert, receiver, storage, composition, count))
+                continue;
+
+            var split = _stackSystem.Split((toInsert, stackComp), count, Transform(toInsert).Coordinates);
+            if (split is not { } splitUid)
+                continue;
+
+            if (!TryComp<MaterialComponent>(splitUid, out var splitMaterial) ||
+                !TryComp<PhysicalCompositionComponent>(splitUid, out var splitComposition))
+            {
+                if (TryComp<StackComponent>(splitUid, out var splitStack))
+                    _stackSystem.TryMergeStacks((splitUid, splitStack), (toInsert, stackComp), out _);
+                continue;
+            }
+
+            if (!base.TryInsertMaterialEntity(user, splitUid, receiver, storage, splitMaterial, splitComposition))
+            {
+                if (TryComp<StackComponent>(splitUid, out var splitStack))
+                    _stackSystem.TryMergeStacks((splitUid, splitStack), (toInsert, stackComp), out _);
+                continue;
+            }
+
+            HandleSuccessfulInsertion(user, splitUid, receiver, storage);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CanInsertMaterialCount(
+        EntityUid toInsert,
+        EntityUid receiver,
+        MaterialStorageComponent storage,
+        PhysicalCompositionComponent composition,
+        int count)
+    {
+        if (count <= 0)
+            return false;
+
+        if (_whitelist.IsWhitelistFail(storage.Whitelist, toInsert))
+            return false;
+
+        if (HasComp<UnremoveableComponent>(toInsert))
+            return false;
+
+        if (TryComp<ApcPowerReceiverComponent>(receiver, out var power) && !power.Powered)
+            return false;
+
+        var totalVolume = 0;
+        foreach (var (mat, vol) in composition.MaterialComposition)
+        {
+            if (!CanChangeMaterialAmount(receiver, mat, vol * count, storage))
+                return false;
+
+            totalVolume += vol * count;
+        }
+
+        return CanTakeVolume(receiver, totalVolume, storage, localOnly: true);
+    }
+
+    private int GetMaximumInsertableStackCount(
+        EntityUid receiver,
+        EntityUid toInsert,
+        StackComponent stackComp,
+        MaterialStorageComponent storage,
+        PhysicalCompositionComponent composition)
+    {
+        if (stackComp.Count <= 1)
+            return 0;
+
+        var maxCount = stackComp.Count - 1;
+
+        var perUnitVolume = GetIncomingVolume(toInsert, composition);
+        if (perUnitVolume <= 0)
+            return 0;
+
+        perUnitVolume /= Math.Max(1, stackComp.Count);
+        if (perUnitVolume <= 0)
+            return 0;
+
+        if (storage.StorageLimit is { } limit)
+        {
+            var current = GetTotalMaterialAmount(receiver, storage, localOnly: true);
+            var remaining = Math.Max(0, limit - current);
+            maxCount = Math.Min(maxCount, remaining / perUnitVolume);
+        }
+
+        return Math.Max(0, maxCount);
+    }
+
+    private void HandleSuccessfulInsertion(
+        EntityUid user,
+        EntityUid insertedItem,
+        EntityUid receiver,
+        MaterialStorageComponent storage)
+    {
         _audio.PlayPvs(storage.InsertingSound, receiver);
         _popup.PopupEntity(Loc.GetString("machine-insert-item",
                 ("user", user),
                 ("machine", receiver),
-                ("item", toInsert)),
+                ("item", insertedItem)),
             receiver);
-        QueueDel(toInsert);
 
-        // Logging
-        TryComp<StackComponent>(toInsert, out var stack);
+        QueueDel(insertedItem);
+
+        TryComp<StackComponent>(insertedItem, out var stack);
         var count = stack?.Count ?? 1;
         _adminLogger.Add(LogType.Action,
             LogImpact.Low,
-            $"{ToPrettyString(user):player} inserted {count} {ToPrettyString(toInsert):inserted} into {ToPrettyString(receiver):receiver}");
-        return true;
+            $"{ToPrettyString(user):player} inserted {count} {ToPrettyString(insertedItem):inserted} into {ToPrettyString(receiver):receiver}");
+    }
+
+    private int GetIncomingVolume(EntityUid toInsert, PhysicalCompositionComponent composition)
+    {
+        var multiplier = TryComp<StackComponent>(toInsert, out var stackComp) ? Math.Max(1, stackComp.Count) : 1;
+        var incomingVolume = 0;
+        foreach (var (_, volume) in composition.MaterialComposition)
+        {
+            incomingVolume += volume * multiplier;
+        }
+
+        return incomingVolume;
     }
 
     /// <summary>

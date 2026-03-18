@@ -38,7 +38,7 @@ public sealed class ImpairedMobilitySystem : EntitySystem
         if (HasMobilityAid(ent.Owner))
             return;
 
-        args.ModifySpeed(ent.Comp.SpeedModifier);
+        args.ModifySpeed(ent.Comp.SpeedModifier, MovementSpeedModifierLayer.Status);
     }
 
     // Increases the time it takes for entities to stand up from being knocked down.

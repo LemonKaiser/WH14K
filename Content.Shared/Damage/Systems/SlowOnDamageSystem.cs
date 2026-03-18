@@ -54,7 +54,7 @@ public sealed class SlowOnDamageSystem : EntitySystem
 
             var ev = new ModifySlowOnDamageSpeedEvent(speed);
             RaiseLocalEvent(uid, ref ev);
-            args.ModifySpeed(ev.Speed, ev.Speed);
+            args.ModifySpeed(ev.Speed, ev.Speed, MovementSpeedModifierLayer.Status);
         }
     }
 

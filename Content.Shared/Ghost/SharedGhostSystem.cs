@@ -3,6 +3,7 @@ using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
 using Content.Shared.Popups;
+using Robust.Shared.Maths;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Ghost
@@ -100,6 +101,21 @@ namespace Content.Shared.Ghost
             entity.Comp.CanGhostInteract = value;
             Dirty(entity);
         }
+
+        /// <summary>
+        /// Sets ghost visual tint color.
+        /// </summary>
+        public void SetGhostColor(Entity<GhostComponent?> entity, Color value)
+        {
+            if (!Resolve(entity, ref entity.Comp))
+                return;
+
+            if (entity.Comp.Color == value)
+                return;
+
+            entity.Comp.Color = value;
+            Dirty(entity);
+        }
     }
 
     /// <summary>
@@ -185,6 +201,14 @@ namespace Content.Shared.Ghost
     /// </summary>
     [Serializable, NetSerializable]
     public sealed class GhostReturnToBodyRequest : EntityEventArgs
+    {
+    }
+
+    /// <summary>
+    /// A client to server request for moving their ghost session back to lobby.
+    /// </summary>
+    [Serializable, NetSerializable]
+    public sealed class GhostReturnToLobbyRequest : EntityEventArgs
     {
     }
 

@@ -1,0 +1,45 @@
+<ui:FancyWindow xmlns="https://spacestation14.io"
+                xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
+                xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
+                Title="{Loc wh40k-meta-progress-decorations-window-title}"
+                SetSize="1000 640">
+    <Control>
+        <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
+            <lobby:HighlightedContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                    <Label Text="{Loc wh40k-meta-progress-decorations-menu-header}" StyleClasses="LabelHeadingBigger" />
+                    <BoxContainer Orientation="Horizontal">
+                        <PanelContainer Name="SummaryProgressHighlight" HorizontalExpand="True">
+                            <Label Name="SummaryProgressLabel"
+                                   Margin="8 4 8 4"
+                                   HorizontalExpand="True"
+                                   StyleClasses="LabelHeading" />
+                        </PanelContainer>
+                        <Control MinWidth="6" />
+                        <PanelContainer Name="AccountLevelHighlight">
+                            <Label Name="AccountLevelLabel"
+                                   Margin="8 4 8 4"
+                                   StyleClasses="LabelHeading" />
+                        </PanelContainer>
+                    </BoxContainer>
+                </BoxContainer>
+            </lobby:HighlightedContainer>
+
+            <Control MinHeight="8" />
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <Button Name="GhostSkinsTabButton" ToggleMode="True" HorizontalExpand="True" />
+                <Button Name="OocTitlesTabButton" ToggleMode="True" HorizontalExpand="True" />
+                <Button Name="OocNameColorsTabButton" ToggleMode="True" HorizontalExpand="True" />
+            </BoxContainer>
+
+            <Control MinHeight="8" />
+
+            <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer VerticalExpand="True">
+                    <BoxContainer Name="CardsList" Orientation="Vertical" SeparationOverride="8" />
+                </ScrollContainer>
+            </lobby:HighlightedContainer>
+        </BoxContainer>
+    </Control>
+</ui:FancyWindow>

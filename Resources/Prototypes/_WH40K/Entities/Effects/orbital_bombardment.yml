@@ -1,0 +1,22 @@
+- type: entity
+  id: WH40KOrbitalStrikeMarker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 3
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _RMC14/Effects/targeted.rsi
+      state: sniper_lockon_intense
+      color: "#FF4C4CCC"
+  - type: PointLight
+    enabled: true
+    radius: 1.8
+    softness: 1
+    color: "#FF2D2D"
+    energy: 1.5

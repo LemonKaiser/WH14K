@@ -107,7 +107,8 @@ public sealed class RadioSystem : EntitySystem
             message,
             wrappedMessage,
             NetEntity.Invalid,
-            null);
+            null,
+            speechTransport: ChatSpeechTransport.Radio);
         var chatMsg = new MsgChatMessage { Message = chat };
         var ev = new RadioReceiveEvent(message, messageSource, channel, radioSource, chatMsg);
 

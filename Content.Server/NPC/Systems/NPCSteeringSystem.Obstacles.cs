@@ -1,16 +1,13 @@
-using Content.Server.Destructible;
+using System.Linq;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
-using Content.Shared.Climbing;
 using Content.Shared.CombatMode;
-using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
+using Content.Shared.DoAfter;
 using Content.Shared.NPC;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
-using ClimbableComponent = Content.Shared.Climbing.Components.ClimbableComponent;
 using ClimbingComponent = Content.Shared.Climbing.Components.ClimbingComponent;
 using Robust.Shared.Random;
 
@@ -58,168 +55,159 @@ public sealed partial class NPCSteeringSystem
 
         // TODO: Should cache the fact we're doing this somewhere.
         // See https://github.com/space-wizards/space-station-14/issues/11475
-        if ((poly.Data.CollisionLayer & mask) != 0x0 ||
-            (poly.Data.CollisionMask & layer) != 0x0)
+        if ((poly.Data.CollisionLayer & mask) == 0x0 &&
+            (poly.Data.CollisionMask & layer) == 0x0)
+            return SteeringObstacleStatus.Completed;
+
+        var id = component.DoAfterId;
+
+        // Still doing what we were doing before.
+        var doAfterStatus = _doAfter.GetStatus(id);
+
+        switch (doAfterStatus)
         {
-            var id = component.DoAfterId;
+            case DoAfterStatus.Running:
+                return SteeringObstacleStatus.Continuing;
+            case DoAfterStatus.Cancelled:
+                return SteeringObstacleStatus.Failed;
+        }
 
-            // Still doing what we were doing before.
-            var doAfterStatus = _doAfter.GetStatus(id);
+        if (!TryComp<MapGridComponent>(poly.GraphUid, out var grid))
+            return SteeringObstacleStatus.Completed;
 
-            switch (doAfterStatus)
+        var obstacleEnts = _mapSystem.GetLocalAnchoredEntities(poly.GraphUid, grid, poly.Box).ToHashSet();
+        FilterObstacleEntities((uid, component), mask, layer, obstacleEnts);
+
+        // Nothing actually near us.
+        if (obstacleEnts.Count == 0)
+            return SteeringObstacleStatus.Completed;
+
+        var isDoor = (poly.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
+        var isClimbable = (poly.Data.Flags & PathfindingBreadcrumbFlag.Climb) != 0x0;
+        var canSmash = (component.Flags & PathFlags.Smashing) != 0x0;
+
+        if (isDoor)
+        {
+            foreach (var ent in obstacleEnts)
             {
-                case DoAfterStatus.Running:
+                if (!_doorQuery.TryComp(ent, out var door))
+                    continue;
+
+                if (door.State == DoorState.Open)
+                {
+                    _bench.RecordCount("npc.steering.obstacle.progress", 1);
+                    return SteeringObstacleStatus.Completed;
+                }
+
+                if (door.State == DoorState.Opening)
+                {
+                    _bench.RecordCount("npc.steering.obstacle.progress", 1);
                     return SteeringObstacleStatus.Continuing;
-                case DoAfterStatus.Cancelled:
-                    return SteeringObstacleStatus.Failed;
+                }
+
+                // Includes checking if we have access:
+                if (!CanHandleDoor((uid, component), poly.Data.Flags, ent, false))
+                    continue;
+
+                // Interacts are bit nicer than bumps, so try interacting regardless
+                _bench.RecordCount("npc.steering.obstacle.policy.interact_attempt", 1);
+                _interaction.InteractionActivate(uid, ent);
+
+                if (_doorQuery.TryComp(ent, out door) &&
+                    (door.State == DoorState.Open || door.State == DoorState.Opening))
+                {
+                    _bench.RecordCount("npc.steering.obstacle.progress", 1);
+                    return door.State == DoorState.Open
+                        ? SteeringObstacleStatus.Completed
+                        : SteeringObstacleStatus.Continuing;
+                }
+
+                _bench.RecordCount("npc.steering.obstacle.policy.interact_no_effect", 1);
             }
 
-            var obstacleEnts = new List<EntityUid>();
-
-            GetObstacleEntities(poly, mask, layer, obstacleEnts);
-            var isDoor = (poly.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
-            var isAccessRequired = (poly.Data.Flags & PathfindingBreadcrumbFlag.Access) != 0x0;
-            var isClimbable = (poly.Data.Flags & PathfindingBreadcrumbFlag.Climb) != 0x0;
-
-            // Just walk into it stupid
-            if (isDoor && !isAccessRequired)
+            if ((component.Flags & PathFlags.Prying) != 0x0)
             {
-                var doorQuery = GetEntityQuery<DoorComponent>();
-
-                // ... At least if it's not a bump open.
                 foreach (var ent in obstacleEnts)
                 {
-                    if (!doorQuery.TryGetComponent(ent, out var door))
+                    if (!CanHandleDoor((uid, component), poly.Data.Flags, ent))
                         continue;
 
-                    if (!door.BumpOpen && (component.Flags & PathFlags.Interact) != 0x0)
+                    // Prefer hand-pry overload; tool-pry requires a PryingComponent tool.
+                    _bench.RecordCount("npc.steering.obstacle.policy.pry_attempt", 1);
+                    _pryingSystem.TryPry(ent, uid, out id);
+                    if (id != null)
                     {
-                        if (door.State != DoorState.Opening)
-                        {
-                            _interaction.InteractionActivate(uid, ent);
-                            return SteeringObstacleStatus.Continuing;
-                        }
-                    }
-                }
-
-                // If we get to here then didn't succeed for reasons.
-            }
-
-            if ((component.Flags & PathFlags.Prying) != 0x0 && isDoor)
-            {
-                var doorQuery = GetEntityQuery<DoorComponent>();
-
-                // Get the relevant obstacle
-                foreach (var ent in obstacleEnts)
-                {
-                    if (doorQuery.TryGetComponent(ent, out var door) && door.State != DoorState.Open)
-                    {
-                        // TODO: Use the verb.
-
-                        if (door.State != DoorState.Opening)
-                            _pryingSystem.TryPry(ent, uid, out id, uid);
-
                         component.DoAfterId = id;
+                        _bench.RecordCount("npc.steering.obstacle.progress", 1);
                         return SteeringObstacleStatus.Continuing;
                     }
                 }
-
-                if (obstacleEnts.Count == 0)
-                    return SteeringObstacleStatus.Completed;
             }
-            // Try climbing obstacles
-            else if ((component.Flags & PathFlags.Climbing) != 0x0 && isClimbable)
+        }
+
+        if ((component.Flags & PathFlags.Climbing) != 0x0 && isClimbable)
+        {
+            if (!TryComp<ClimbingComponent>(uid, out var climbing))
+                goto SmashFallback;
+
+            if (climbing.IsClimbing)
+                return SteeringObstacleStatus.Completed;
+
+            if (climbing.NextTransition != null)
+                return SteeringObstacleStatus.Continuing;
+
+            // Get the relevant obstacle
+            foreach (var ent in obstacleEnts)
             {
-                if (TryComp<ClimbingComponent>(uid, out var climbing))
+                if (CanHandleClimb((uid, climbing), ent, out var climbable) &&
+                    _climb.TryClimb(uid, uid, ent, out id, climbable, climbing))
                 {
-                    if (climbing.IsClimbing)
-                    {
-                        return SteeringObstacleStatus.Completed;
-                    }
-                    else if (climbing.NextTransition != null)
-                    {
-                        return SteeringObstacleStatus.Continuing;
-                    }
-
-                    var climbableQuery = GetEntityQuery<ClimbableComponent>();
-
-                    // Get the relevant obstacle
-                    foreach (var ent in obstacleEnts)
-                    {
-                        if (climbableQuery.TryGetComponent(ent, out var table) &&
-                            _climb.CanVault(table, uid, uid, out _) &&
-                            _climb.TryClimb(uid, uid, ent, out id, table, climbing))
-                        {
-                            component.DoAfterId = id;
-                            return SteeringObstacleStatus.Continuing;
-                        }
-                    }
-                }
-
-                if (obstacleEnts.Count == 0)
-                    return SteeringObstacleStatus.Completed;
-            }
-            // Try smashing obstacles.
-            else if ((component.Flags & PathFlags.Smashing) != 0x0)
-            {
-                if (_melee.TryGetWeapon(uid, out _, out var meleeWeapon) && meleeWeapon.NextAttack <= _timing.CurTime && TryComp<CombatModeComponent>(uid, out var combatMode))
-                {
-                    _combat.SetInCombatMode(uid, true, combatMode);
-                    var destructibleQuery = GetEntityQuery<DestructibleComponent>();
-
-                    // TODO: This is a hack around grilles and windows.
-                    _random.Shuffle(obstacleEnts);
-                    var attackResult = false;
-
-                    foreach (var ent in obstacleEnts)
-                    {
-                        // TODO: Validate we can damage it
-                        if (destructibleQuery.HasComponent(ent))
-                        {
-                            attackResult = _melee.AttemptLightAttack(uid, uid, meleeWeapon, ent);
-                            break;
-                        }
-                    }
-
-                    _combat.SetInCombatMode(uid, false, combatMode);
-
-                    // Blocked or the likes?
-                    if (!attackResult)
-                        return SteeringObstacleStatus.Failed;
-
-                    if (obstacleEnts.Count == 0)
-                        return SteeringObstacleStatus.Completed;
-
+                    _bench.RecordCount("npc.steering.obstacle.policy.climb_attempt", 1);
+                    component.DoAfterId = id;
+                    _bench.RecordCount("npc.steering.obstacle.progress", 1);
                     return SteeringObstacleStatus.Continuing;
                 }
             }
-
-            return SteeringObstacleStatus.Failed;
         }
 
-        return SteeringObstacleStatus.Completed;
-    }
-
-    private void GetObstacleEntities(PathPoly poly, int mask, int layer, List<EntityUid> ents)
-    {
-        // TODO: Can probably re-use this from pathfinding or something
-        if (!TryComp<MapGridComponent>(poly.GraphUid, out var grid))
+SmashFallback:
+        if (canSmash)
         {
-            return;
-        }
+            // Check we have a weapon, can (probably) swing it, and have combat mode.
+            if (!_melee.TryGetWeapon(uid, out var weaponUid, out var weaponComp) ||
+                weaponComp.NextAttack > _timing.CurTime ||
+                !TryComp<CombatModeComponent>(uid, out var combatMode))
+                return SteeringObstacleStatus.Failed;
 
-        foreach (var ent in _mapSystem.GetLocalAnchoredEntities(poly.GraphUid, grid, poly.Box))
-        {
-            if (!_physicsQuery.TryGetComponent(ent, out var body) ||
-                !body.Hard ||
-                !body.CanCollide ||
-                (body.CollisionMask & layer) == 0x0 && (body.CollisionLayer & mask) == 0x0)
+            _combat.SetInCombatMode(uid, true, combatMode);
+
+            // TODO: This is a hack around grilles and windows.
+            var shuffledEnts = obstacleEnts.ToList();
+            _random.Shuffle(shuffledEnts);
+
+            var attackResult = false;
+            foreach (var ent in shuffledEnts)
             {
-                continue;
+                // TODO: Validate we can damage it
+                if (!_destructibleQuery.HasComponent(ent))
+                    continue;
+
+                _bench.RecordCount("npc.steering.obstacle.policy.smash_attempt", 1);
+                attackResult = _melee.AttemptLightAttack(uid, weaponUid, weaponComp, ent);
+                break;
             }
 
-            ents.Add(ent);
+            _combat.SetInCombatMode(uid, false, combatMode);
+
+            // Blocked or the likes?
+            if (!attackResult)
+                return SteeringObstacleStatus.Failed;
+
+            _bench.RecordCount("npc.steering.obstacle.progress", 1);
+            return SteeringObstacleStatus.Continuing;
         }
+
+        return SteeringObstacleStatus.Failed;
     }
 
     private enum SteeringObstacleStatus : byte

@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
@@ -32,6 +33,13 @@ public sealed partial class ProjectileComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? Weapon;
+
+    /// <summary>
+    ///     Map position where the projectile started its flight.
+    ///     Used by directional cover logic for stable pass checks.
+    /// </summary>
+    [DataField]
+    public Vector2? ShotOrigin;
 
     /// <summary>
     ///     The projectile spawns inside the shooter most of the time, this prevents entities from shooting themselves.

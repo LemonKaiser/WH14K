@@ -1,0 +1,3073 @@
+{
+  "generatedAtUtc": "2026-03-04T10:18:54.6450713+00:00",
+  "benchmarkWarmupTicks": 120,
+  "benchmarkMeasureTicks": 600,
+  "scenarios": [
+    {
+      "name": "idle_swarm_60",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 36000,
+          "totalMilliseconds": 69.55119999999998,
+          "averageMilliseconds": 0.11591866666666663,
+          "maxMilliseconds": 6.0174,
+          "averageItemMicroseconds": 1.9319777777777773
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 69.45509999999996,
+          "averageMilliseconds": 0.11575849999999993,
+          "maxMilliseconds": 6.0171,
+          "averageItemMicroseconds": 115.75849999999994
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 51.44269999999993,
+          "averageMilliseconds": 0.08573783333333322,
+          "maxMilliseconds": 3.3947,
+          "averageItemMicroseconds": 85.73783333333321
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 3574,
+          "workItems": 3574,
+          "totalMilliseconds": 46.39219999999997,
+          "averageMilliseconds": 0.012980470061555671,
+          "maxMilliseconds": 3.0901,
+          "averageItemMicroseconds": 12.980470061555671
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 628,
+          "workItems": 628,
+          "totalMilliseconds": 39.544399999999975,
+          "averageMilliseconds": 0.06296878980891715,
+          "maxMilliseconds": 5.9438,
+          "averageItemMicroseconds": 62.96878980891715
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 628,
+          "workItems": 628,
+          "totalMilliseconds": 37.98610000000001,
+          "averageMilliseconds": 0.06048742038216562,
+          "maxMilliseconds": 5.9333,
+          "averageItemMicroseconds": 60.48742038216562
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 27.568100000000133,
+          "averageMilliseconds": 0.045946833333333555,
+          "maxMilliseconds": 1.6973,
+          "averageItemMicroseconds": 45.94683333333356
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 755,
+          "totalMilliseconds": 24.316099999999647,
+          "averageMilliseconds": 0.04052683333333274,
+          "maxMilliseconds": 1.5182,
+          "averageItemMicroseconds": 32.20675496688695
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 3574,
+          "workItems": 3574,
+          "totalMilliseconds": 17.881399999999914,
+          "averageMilliseconds": 0.005003189703413518,
+          "maxMilliseconds": 0.0292,
+          "averageItemMicroseconds": 5.003189703413518
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 3574,
+          "workItems": 3574,
+          "totalMilliseconds": 13.529999999999887,
+          "averageMilliseconds": 0.003785674314493533,
+          "maxMilliseconds": 0.0225,
+          "averageItemMicroseconds": 3.785674314493533
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 3574,
+          "workItems": 3574,
+          "totalMilliseconds": 9.840999999999978,
+          "averageMilliseconds": 0.0027534974818130883,
+          "maxMilliseconds": 3.0629,
+          "averageItemMicroseconds": 2.7534974818130884
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 3574,
+          "workItems": 5871,
+          "totalMilliseconds": 5.915599999999941,
+          "averageMilliseconds": 0.0016551762730833634,
+          "maxMilliseconds": 0.0098,
+          "averageItemMicroseconds": 1.0075966615567946
+        },
+        {
+          "name": "npc.steering.request_path",
+          "samples": 1388,
+          "workItems": 1388,
+          "totalMilliseconds": 4.942099999999929,
+          "averageMilliseconds": 0.0035605907780979313,
+          "maxMilliseconds": 4.8682,
+          "averageItemMicroseconds": 3.5605907780979313
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 8950,
+          "workItems": 8950,
+          "totalMilliseconds": 4.615000000000306,
+          "averageMilliseconds": 0.0005156424581005928,
+          "maxMilliseconds": 0.0922,
+          "averageItemMicroseconds": 0.5156424581005928
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 8990,
+          "workItems": 8990,
+          "totalMilliseconds": 2.6859000000000317,
+          "averageMilliseconds": 0.0002987652947719724,
+          "maxMilliseconds": 0.0919,
+          "averageItemMicroseconds": 0.2987652947719724
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.780199999999993,
+          "averageMilliseconds": 0.0013003333333333218,
+          "maxMilliseconds": 0.0027,
+          "averageItemMicroseconds": 1.3003333333333216
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.5276000000000014,
+          "averageMilliseconds": 0.0008793333333333357,
+          "maxMilliseconds": 0.0037,
+          "averageItemMicroseconds": 0.8793333333333356
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.2841000000000018,
+          "averageMilliseconds": 0.000473500000000003,
+          "maxMilliseconds": 0.0011,
+          "averageItemMicroseconds": 0.473500000000003
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.21580000000000002,
+          "averageMilliseconds": 0.0003596666666666667,
+          "maxMilliseconds": 0.0014,
+          "averageItemMicroseconds": 0.3596666666666667
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.15020000000000036,
+          "averageMilliseconds": 0.00025033333333333396,
+          "maxMilliseconds": 0.0009,
+          "averageItemMicroseconds": 0.2503333333333339
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 547,
+          "workItems": 547,
+          "totalMilliseconds": 0.044800000000000215,
+          "averageMilliseconds": 8.190127970749583E-05,
+          "maxMilliseconds": 0.0002,
+          "averageItemMicroseconds": 0.08190127970749583
+        },
+        {
+          "name": "npc.steering.path_result.success",
+          "samples": 1,
+          "workItems": 1,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.submitted",
+          "samples": 1,
+          "workItems": 1,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 87,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 87,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 242,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 242,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 87,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 87,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 36000,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 242,
+          "workItems": 929,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 600,
+          "workItems": 8950,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 628,
+          "workItems": 628,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 261,
+          "workItems": 3574,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 628,
+          "workItems": 628,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 3303,
+          "workItems": 3303,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 26828,
+          "workItems": 26828,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 5647,
+          "workItems": 5647,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 242,
+          "workItems": 242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.throttled",
+          "samples": 2,
+          "workItems": 2,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "melee_swarm_80",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.steering.request_path",
+          "samples": 1564,
+          "workItems": 1564,
+          "totalMilliseconds": 207.70600000000306,
+          "averageMilliseconds": 0.1328043478260889,
+          "maxMilliseconds": 3.5644,
+          "averageItemMicroseconds": 132.8043478260889
+        },
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 24000,
+          "totalMilliseconds": 182.19730000000018,
+          "averageMilliseconds": 0.30366216666666696,
+          "maxMilliseconds": 3.8912,
+          "averageItemMicroseconds": 7.591554166666675
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 182.07909999999998,
+          "averageMilliseconds": 0.3034651666666666,
+          "maxMilliseconds": 3.8911,
+          "averageItemMicroseconds": 303.4651666666666
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 164.6367,
+          "averageMilliseconds": 0.2743945,
+          "maxMilliseconds": 0.8662,
+          "averageItemMicroseconds": 274.3945
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 10882,
+          "workItems": 10882,
+          "totalMilliseconds": 159.23029999999983,
+          "averageMilliseconds": 0.014632448079397155,
+          "maxMilliseconds": 0.361,
+          "averageItemMicroseconds": 14.632448079397156
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 1417,
+          "workItems": 1417,
+          "totalMilliseconds": 102.10370000000002,
+          "averageMilliseconds": 0.07205624558927312,
+          "maxMilliseconds": 2.4141,
+          "averageItemMicroseconds": 72.05624558927312
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 1473,
+          "workItems": 1473,
+          "totalMilliseconds": 98.21199999999992,
+          "averageMilliseconds": 0.06667481330617782,
+          "maxMilliseconds": 2.3464,
+          "averageItemMicroseconds": 66.67481330617781
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 66.81490000000014,
+          "averageMilliseconds": 0.1113581666666669,
+          "maxMilliseconds": 3.6901,
+          "averageItemMicroseconds": 111.3581666666669
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 66.35059999999964,
+          "averageMilliseconds": 0.11058433333333274,
+          "maxMilliseconds": 3.6893,
+          "averageItemMicroseconds": 110.58433333333274
+        },
+        {
+          "name": "npc.combat.melee.entity",
+          "samples": 8341,
+          "workItems": 8341,
+          "totalMilliseconds": 63.805600000001064,
+          "averageMilliseconds": 0.00764963433641063,
+          "maxMilliseconds": 2.6412,
+          "averageItemMicroseconds": 7.64963433641063
+        },
+        {
+          "name": "npc.combat.melee.attack",
+          "samples": 8341,
+          "workItems": 8341,
+          "totalMilliseconds": 62.18050000000061,
+          "averageMilliseconds": 0.007454801582544133,
+          "maxMilliseconds": 2.6407,
+          "averageItemMicroseconds": 7.454801582544133
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 10882,
+          "workItems": 10882,
+          "totalMilliseconds": 58.72410000000092,
+          "averageMilliseconds": 0.005396443668443385,
+          "maxMilliseconds": 0.025,
+          "averageItemMicroseconds": 5.396443668443385
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 10882,
+          "workItems": 10882,
+          "totalMilliseconds": 54.783100000000395,
+          "averageMilliseconds": 0.005034285976842528,
+          "maxMilliseconds": 0.0434,
+          "averageItemMicroseconds": 5.034285976842529
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 38.54670000000011,
+          "averageMilliseconds": 0.06424450000000018,
+          "maxMilliseconds": 0.8915,
+          "averageItemMicroseconds": 64.24450000000017
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeWeapons",
+          "samples": 583,
+          "workItems": 583,
+          "totalMilliseconds": 31.128699999999988,
+          "averageMilliseconds": 0.05339399656946825,
+          "maxMilliseconds": 0.0899,
+          "averageItemMicroseconds": 53.39399656946824
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 1131,
+          "totalMilliseconds": 29.071499999999933,
+          "averageMilliseconds": 0.04845249999999989,
+          "maxMilliseconds": 0.4061,
+          "averageItemMicroseconds": 25.704244031830182
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 7971,
+          "workItems": 7971,
+          "totalMilliseconds": 20.252399999999906,
+          "averageMilliseconds": 0.002540760255927726,
+          "maxMilliseconds": 0.3309,
+          "averageItemMicroseconds": 2.5407602559277263
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 10882,
+          "workItems": 36360,
+          "totalMilliseconds": 17.94340000000003,
+          "averageMilliseconds": 0.0016489064510200357,
+          "maxMilliseconds": 0.0175,
+          "averageItemMicroseconds": 0.4934928492849293
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 12544,
+          "workItems": 12544,
+          "totalMilliseconds": 11.591599999999824,
+          "averageMilliseconds": 0.0009240752551020267,
+          "maxMilliseconds": 0.1148,
+          "averageItemMicroseconds": 0.9240752551020268
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 12285,
+          "workItems": 12285,
+          "totalMilliseconds": 8.956500000000359,
+          "averageMilliseconds": 0.0007290598290598583,
+          "maxMilliseconds": 0.1026,
+          "averageItemMicroseconds": 0.7290598290598582
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 5.051599999999996,
+          "averageMilliseconds": 0.008419333333333327,
+          "maxMilliseconds": 0.8641,
+          "averageItemMicroseconds": 8.419333333333327
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 761,
+          "workItems": 761,
+          "totalMilliseconds": 2.0793000000000315,
+          "averageMilliseconds": 0.002732325886990843,
+          "maxMilliseconds": 0.0149,
+          "averageItemMicroseconds": 2.732325886990843
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.25670000000000165,
+          "averageMilliseconds": 0.0004278333333333361,
+          "maxMilliseconds": 0.0037,
+          "averageItemMicroseconds": 0.42783333333333606
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.20219999999999919,
+          "averageMilliseconds": 0.00033699999999999865,
+          "maxMilliseconds": 0.0013,
+          "averageItemMicroseconds": 0.33699999999999863
+        },
+        {
+          "name": "npc.utility.filter",
+          "samples": 583,
+          "workItems": 583,
+          "totalMilliseconds": 0.14640000000000014,
+          "averageMilliseconds": 0.00025111492281303625,
+          "maxMilliseconds": 0.0008,
+          "averageItemMicroseconds": 0.25111492281303627
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 890,
+          "workItems": 890,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.hostile_query.matches",
+          "samples": 833,
+          "workItems": 30378,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.scored",
+          "samples": 583,
+          "workItems": 18094,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.candidates",
+          "samples": 833,
+          "workItems": 30378,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_attempt",
+          "samples": 186,
+          "workItems": 186,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 640,
+          "workItems": 640,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.hit",
+          "samples": 527,
+          "workItems": 527,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_performed",
+          "samples": 186,
+          "workItems": 186,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 361,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 24000,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_result.success",
+          "samples": 232,
+          "workItems": 232,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.entities",
+          "samples": 323,
+          "workItems": 8341,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 556,
+          "workItems": 10882,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.submitted",
+          "samples": 260,
+          "workItems": 260,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 892,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 919,
+          "workItems": 2242,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 10252,
+          "workItems": 10252,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 361,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 10854,
+          "workItems": 10854,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 600,
+          "workItems": 12544,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_coalesced",
+          "samples": 27,
+          "workItems": 27,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 361,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 361,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 892,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 892,
+          "workItems": 892,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 2292,
+          "workItems": 2292,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.throttled",
+          "samples": 72,
+          "workItems": 72,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "item_interaction_pickup",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 8709,
+          "totalMilliseconds": 51.63670000000004,
+          "averageMilliseconds": 0.08606116666666673,
+          "maxMilliseconds": 1.021,
+          "averageItemMicroseconds": 5.929119301871632
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 51.52599999999998,
+          "averageMilliseconds": 0.08587666666666664,
+          "maxMilliseconds": 1.0208,
+          "averageItemMicroseconds": 85.87666666666664
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 48.71290000000001,
+          "averageMilliseconds": 0.08118816666666669,
+          "maxMilliseconds": 12.3721,
+          "averageItemMicroseconds": 81.18816666666667
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 31.743699999999915,
+          "averageMilliseconds": 0.052906166666666525,
+          "maxMilliseconds": 12.3705,
+          "averageItemMicroseconds": 52.90616666666652
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 31.562699999999992,
+          "averageMilliseconds": 0.052604499999999985,
+          "maxMilliseconds": 0.3049,
+          "averageItemMicroseconds": 52.60449999999999
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 2143,
+          "workItems": 2143,
+          "totalMilliseconds": 29.783400000000082,
+          "averageMilliseconds": 0.013897993467102231,
+          "maxMilliseconds": 0.2446,
+          "averageItemMicroseconds": 13.897993467102232
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 734,
+          "workItems": 734,
+          "totalMilliseconds": 18.652700000000006,
+          "averageMilliseconds": 0.025412397820163496,
+          "maxMilliseconds": 0.2338,
+          "averageItemMicroseconds": 25.4123978201635
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 18.48250000000024,
+          "averageMilliseconds": 0.030804166666667066,
+          "maxMilliseconds": 1.7228,
+          "averageItemMicroseconds": 30.80416666666707
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 17.319599999999937,
+          "averageMilliseconds": 0.028865999999999895,
+          "maxMilliseconds": 1.7215,
+          "averageItemMicroseconds": 28.865999999999893
+        },
+        {
+          "name": "npc.combat.ranged.entity",
+          "samples": 170,
+          "workItems": 170,
+          "totalMilliseconds": 17.030899999999995,
+          "averageMilliseconds": 0.10018176470588233,
+          "maxMilliseconds": 0.8033,
+          "averageItemMicroseconds": 100.18176470588232
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 636,
+          "totalMilliseconds": 15.311799999999941,
+          "averageMilliseconds": 0.02551966666666657,
+          "maxMilliseconds": 0.2663,
+          "averageItemMicroseconds": 24.07515723270431
+        },
+        {
+          "name": "npc.utility.query.NearbyGunTargets",
+          "samples": 341,
+          "workItems": 341,
+          "totalMilliseconds": 11.132100000000008,
+          "averageMilliseconds": 0.03264545454545457,
+          "maxMilliseconds": 0.156,
+          "averageItemMicroseconds": 32.64545454545457
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 2143,
+          "workItems": 2143,
+          "totalMilliseconds": 10.898199999999973,
+          "averageMilliseconds": 0.00508548763415771,
+          "maxMilliseconds": 0.0196,
+          "averageItemMicroseconds": 5.08548763415771
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 346,
+          "workItems": 346,
+          "totalMilliseconds": 8.584299999999999,
+          "averageMilliseconds": 0.02481011560693641,
+          "maxMilliseconds": 0.2378,
+          "averageItemMicroseconds": 24.810115606936414
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 2083,
+          "workItems": 2083,
+          "totalMilliseconds": 8.475999999999981,
+          "averageMilliseconds": 0.004069131060969746,
+          "maxMilliseconds": 0.2343,
+          "averageItemMicroseconds": 4.069131060969746
+        },
+        {
+          "name": "npc.steering.request_path",
+          "samples": 583,
+          "workItems": 583,
+          "totalMilliseconds": 6.997699999999942,
+          "averageMilliseconds": 0.012002915951972457,
+          "maxMilliseconds": 1.048,
+          "averageItemMicroseconds": 12.002915951972458
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 5479,
+          "workItems": 5479,
+          "totalMilliseconds": 5.901600000000495,
+          "averageMilliseconds": 0.0010771308632963122,
+          "maxMilliseconds": 0.5381,
+          "averageItemMicroseconds": 1.0771308632963124
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 2143,
+          "workItems": 2143,
+          "totalMilliseconds": 5.780599999999971,
+          "averageMilliseconds": 0.0026974335044330244,
+          "maxMilliseconds": 0.0149,
+          "averageItemMicroseconds": 2.6974335044330244
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 5296,
+          "workItems": 5296,
+          "totalMilliseconds": 4.660200000000307,
+          "averageMilliseconds": 0.0008799471299094236,
+          "maxMilliseconds": 0.5377,
+          "averageItemMicroseconds": 0.8799471299094236
+        },
+        {
+          "name": "npc.utility.query.NearbyGuns",
+          "samples": 52,
+          "workItems": 52,
+          "totalMilliseconds": 3.852,
+          "averageMilliseconds": 0.07407692307692307,
+          "maxMilliseconds": 0.1283,
+          "averageItemMicroseconds": 74.07692307692308
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 2143,
+          "workItems": 2786,
+          "totalMilliseconds": 1.8810999999999671,
+          "averageMilliseconds": 0.0008777881474568208,
+          "maxMilliseconds": 0.0078,
+          "averageItemMicroseconds": 0.6751974156496652
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.8814999999999942,
+          "averageMilliseconds": 0.001469166666666657,
+          "maxMilliseconds": 0.0155,
+          "averageItemMicroseconds": 1.469166666666657
+        },
+        {
+          "name": "npc.combat.ranged.los_check",
+          "samples": 29,
+          "workItems": 29,
+          "totalMilliseconds": 0.5864999999999999,
+          "averageMilliseconds": 0.02022413793103448,
+          "maxMilliseconds": 0.0357,
+          "averageItemMicroseconds": 20.22413793103448
+        },
+        {
+          "name": "npc.combat.melee.entity",
+          "samples": 61,
+          "workItems": 61,
+          "totalMilliseconds": 0.5011999999999998,
+          "averageMilliseconds": 0.008216393442622948,
+          "maxMilliseconds": 0.0131,
+          "averageItemMicroseconds": 8.216393442622946
+        },
+        {
+          "name": "npc.combat.melee.attack",
+          "samples": 61,
+          "workItems": 61,
+          "totalMilliseconds": 0.4689999999999998,
+          "averageMilliseconds": 0.007688524590163931,
+          "maxMilliseconds": 0.0121,
+          "averageItemMicroseconds": 7.688524590163931
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeWeapons",
+          "samples": 5,
+          "workItems": 5,
+          "totalMilliseconds": 0.215,
+          "averageMilliseconds": 0.043,
+          "maxMilliseconds": 0.056,
+          "averageItemMicroseconds": 43
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.20269999999999902,
+          "averageMilliseconds": 0.0003378333333333317,
+          "maxMilliseconds": 0.0038,
+          "averageItemMicroseconds": 0.3378333333333317
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 322,
+          "workItems": 322,
+          "totalMilliseconds": 0.1727999999999983,
+          "averageMilliseconds": 0.000536645962732914,
+          "maxMilliseconds": 0.059,
+          "averageItemMicroseconds": 0.5366459627329139
+        },
+        {
+          "name": "npc.utility.filter",
+          "samples": 5,
+          "workItems": 5,
+          "totalMilliseconds": 0.002,
+          "averageMilliseconds": 0.0004,
+          "maxMilliseconds": 0.0006,
+          "averageItemMicroseconds": 0.4
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 401,
+          "workItems": 401,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 143,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 143,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.hostile_query.matches",
+          "samples": 281,
+          "workItems": 1572,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.candidates",
+          "samples": 333,
+          "workItems": 2202,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.scored",
+          "samples": 49,
+          "workItems": 202,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.ranged.shoot_performed",
+          "samples": 23,
+          "workItems": 23,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.hit",
+          "samples": 10,
+          "workItems": 10,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.component_query.matches",
+          "samples": 52,
+          "workItems": 630,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.ranged.cooldown_blocked",
+          "samples": 118,
+          "workItems": 118,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.ranged.shoot_attempt",
+          "samples": 23,
+          "workItems": 23,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_result.success",
+          "samples": 19,
+          "workItems": 19,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 143,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 179,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 143,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 179,
+          "workItems": 224,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 179,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.submitted",
+          "samples": 24,
+          "workItems": 24,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.ranged.entities",
+          "samples": 102,
+          "workItems": 170,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 600,
+          "workItems": 2143,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.throttled",
+          "samples": 48,
+          "workItems": 48,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 8709,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 677,
+          "workItems": 677,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 600,
+          "workItems": 5479,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 646,
+          "workItems": 646,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 3083,
+          "workItems": 3083,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 4833,
+          "workItems": 4833,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 179,
+          "workItems": 179,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.entities",
+          "samples": 61,
+          "workItems": 61,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "complex_path_maze",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 18000,
+          "totalMilliseconds": 17.69010000000001,
+          "averageMilliseconds": 0.02948350000000002,
+          "maxMilliseconds": 3.7216,
+          "averageItemMicroseconds": 0.982783333333334
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 17.566599999999983,
+          "averageMilliseconds": 0.02927766666666664,
+          "maxMilliseconds": 3.7212,
+          "averageItemMicroseconds": 29.27766666666664
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 5.532300000000003,
+          "averageMilliseconds": 0.009220500000000005,
+          "maxMilliseconds": 0.0473,
+          "averageItemMicroseconds": 9.220500000000005
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 283,
+          "workItems": 283,
+          "totalMilliseconds": 4.760199999999994,
+          "averageMilliseconds": 0.01682049469964662,
+          "maxMilliseconds": 0.0404,
+          "averageItemMicroseconds": 16.820494699646623
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 474,
+          "workItems": 474,
+          "totalMilliseconds": 4.639199999999997,
+          "averageMilliseconds": 0.009787341772151893,
+          "maxMilliseconds": 0.0253,
+          "averageItemMicroseconds": 9.787341772151892
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 237,
+          "workItems": 237,
+          "totalMilliseconds": 4.265800000000001,
+          "averageMilliseconds": 0.017999156118143466,
+          "maxMilliseconds": 0.028,
+          "averageItemMicroseconds": 17.999156118143464
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 3.050999999999998,
+          "averageMilliseconds": 0.005084999999999997,
+          "maxMilliseconds": 0.3218,
+          "averageItemMicroseconds": 5.084999999999996
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 2.221100000000001,
+          "averageMilliseconds": 0.003701833333333335,
+          "maxMilliseconds": 0.1163,
+          "averageItemMicroseconds": 3.7018333333333353
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 283,
+          "workItems": 283,
+          "totalMilliseconds": 2.0862,
+          "averageMilliseconds": 0.00737173144876325,
+          "maxMilliseconds": 0.0236,
+          "averageItemMicroseconds": 7.37173144876325
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 3332,
+          "workItems": 3332,
+          "totalMilliseconds": 1.2956999999999559,
+          "averageMilliseconds": 0.00038886554621847416,
+          "maxMilliseconds": 0.0181,
+          "averageItemMicroseconds": 0.3888655462184742
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 283,
+          "workItems": 283,
+          "totalMilliseconds": 1.0880999999999998,
+          "averageMilliseconds": 0.0038448763250883387,
+          "maxMilliseconds": 0.0177,
+          "averageItemMicroseconds": 3.844876325088339
+        },
+        {
+          "name": "npc.utility.query.NearbyGuns",
+          "samples": 237,
+          "workItems": 237,
+          "totalMilliseconds": 1.0002000000000015,
+          "averageMilliseconds": 0.004220253164556968,
+          "maxMilliseconds": 0.0113,
+          "averageItemMicroseconds": 4.2202531645569685
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 283,
+          "workItems": 283,
+          "totalMilliseconds": 0.8891000000000009,
+          "averageMilliseconds": 0.0031416961130742082,
+          "maxMilliseconds": 0.0112,
+          "averageItemMicroseconds": 3.1416961130742083
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 3311,
+          "workItems": 3311,
+          "totalMilliseconds": 0.7143999999999786,
+          "averageMilliseconds": 0.00021576562971911163,
+          "maxMilliseconds": 0.0174,
+          "averageItemMicroseconds": 0.21576562971911162
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.4627000000000005,
+          "averageMilliseconds": 0.0007711666666666675,
+          "maxMilliseconds": 0.0101,
+          "averageItemMicroseconds": 0.7711666666666676
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.4580999999999992,
+          "averageMilliseconds": 0.0007634999999999987,
+          "maxMilliseconds": 0.3212,
+          "averageItemMicroseconds": 0.7634999999999986
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 283,
+          "workItems": 533,
+          "totalMilliseconds": 0.39259999999999995,
+          "averageMilliseconds": 0.0013872791519434627,
+          "maxMilliseconds": 0.0065,
+          "averageItemMicroseconds": 0.7365853658536585
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.1643999999999997,
+          "averageMilliseconds": 0.0002739999999999995,
+          "maxMilliseconds": 0.001,
+          "averageItemMicroseconds": 0.2739999999999995
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.07640000000000075,
+          "averageMilliseconds": 0.00012733333333333458,
+          "maxMilliseconds": 0.0093,
+          "averageItemMicroseconds": 0.12733333333333458
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.05740000000000054,
+          "averageMilliseconds": 9.566666666666756E-05,
+          "maxMilliseconds": 0.0003,
+          "averageItemMicroseconds": 0.09566666666666757
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 214,
+          "workItems": 214,
+          "totalMilliseconds": 0.008300000000000005,
+          "averageMilliseconds": 3.8785046728971985E-05,
+          "maxMilliseconds": 0.0001,
+          "averageItemMicroseconds": 0.03878504672897199
+        },
+        {
+          "name": "npc.steering.request_path",
+          "samples": 49,
+          "workItems": 49,
+          "totalMilliseconds": 0.004199999999999997,
+          "averageMilliseconds": 8.571428571428566E-05,
+          "maxMilliseconds": 0.0002,
+          "averageItemMicroseconds": 0.08571428571428566
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 474,
+          "workItems": 474,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 269,
+          "workItems": 269,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 214,
+          "workItems": 283,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 599,
+          "workItems": 3332,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 3063,
+          "workItems": 3063,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 14652,
+          "workItems": 14652,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 237,
+          "workItems": 237,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 18000,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "blocked_path_no_solution",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 15000,
+          "totalMilliseconds": 12.072399999999996,
+          "averageMilliseconds": 0.02012066666666666,
+          "maxMilliseconds": 0.1027,
+          "averageItemMicroseconds": 0.8048266666666664
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 11.953899999999987,
+          "averageMilliseconds": 0.019923166666666645,
+          "maxMilliseconds": 0.1024,
+          "averageItemMicroseconds": 19.923166666666646
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 6.199000000000005,
+          "averageMilliseconds": 0.010331666666666675,
+          "maxMilliseconds": 0.0538,
+          "averageItemMicroseconds": 10.331666666666676
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 512,
+          "workItems": 512,
+          "totalMilliseconds": 5.546099999999996,
+          "averageMilliseconds": 0.010832226562499991,
+          "maxMilliseconds": 0.0301,
+          "averageItemMicroseconds": 10.832226562499992
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 426,
+          "workItems": 426,
+          "totalMilliseconds": 3.5482000000000053,
+          "averageMilliseconds": 0.00832910798122067,
+          "maxMilliseconds": 0.0244,
+          "averageItemMicroseconds": 8.32910798122067
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 213,
+          "workItems": 213,
+          "totalMilliseconds": 3.1862000000000017,
+          "averageMilliseconds": 0.014958685446009397,
+          "maxMilliseconds": 0.0263,
+          "averageItemMicroseconds": 14.958685446009397
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 2.4582999999999884,
+          "averageMilliseconds": 0.004097166666666647,
+          "maxMilliseconds": 0.2177,
+          "averageItemMicroseconds": 4.097166666666647
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 512,
+          "workItems": 512,
+          "totalMilliseconds": 2.2051000000000016,
+          "averageMilliseconds": 0.004306835937500003,
+          "maxMilliseconds": 0.0173,
+          "averageItemMicroseconds": 4.306835937500003
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 601,
+          "totalMilliseconds": 1.9069999999999936,
+          "averageMilliseconds": 0.0031783333333333225,
+          "maxMilliseconds": 0.2109,
+          "averageItemMicroseconds": 3.173044925124781
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 512,
+          "workItems": 512,
+          "totalMilliseconds": 1.5094999999999994,
+          "averageMilliseconds": 0.002948242187499999,
+          "maxMilliseconds": 0.0178,
+          "averageItemMicroseconds": 2.9482421874999987
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 2994,
+          "workItems": 2994,
+          "totalMilliseconds": 1.3309999999999595,
+          "averageMilliseconds": 0.00044455577822309937,
+          "maxMilliseconds": 0.02,
+          "averageItemMicroseconds": 0.4445557782230994
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 2962,
+          "workItems": 2962,
+          "totalMilliseconds": 0.8239999999999765,
+          "averageMilliseconds": 0.0002781904118838543,
+          "maxMilliseconds": 0.0193,
+          "averageItemMicroseconds": 0.27819041188385435
+        },
+        {
+          "name": "npc.utility.query.NearbyGuns",
+          "samples": 213,
+          "workItems": 213,
+          "totalMilliseconds": 0.8114000000000001,
+          "averageMilliseconds": 0.003809389671361503,
+          "maxMilliseconds": 0.0099,
+          "averageItemMicroseconds": 3.8093896713615027
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 512,
+          "workItems": 512,
+          "totalMilliseconds": 0.8021000000000001,
+          "averageMilliseconds": 0.0015666015625000003,
+          "maxMilliseconds": 0.0045,
+          "averageItemMicroseconds": 1.5666015625000003
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 512,
+          "workItems": 536,
+          "totalMilliseconds": 0.4734000000000017,
+          "averageMilliseconds": 0.0009246093750000033,
+          "maxMilliseconds": 0.0034,
+          "averageItemMicroseconds": 0.8832089552238838
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.4243999999999996,
+          "averageMilliseconds": 0.0007073333333333327,
+          "maxMilliseconds": 0.009,
+          "averageItemMicroseconds": 0.7073333333333327
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.1458,
+          "averageMilliseconds": 0.00024300000000000002,
+          "maxMilliseconds": 0.0005,
+          "averageItemMicroseconds": 0.24300000000000002
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.12820000000000087,
+          "averageMilliseconds": 0.0002136666666666681,
+          "maxMilliseconds": 0.0011,
+          "averageItemMicroseconds": 0.21366666666666811
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.07840000000000076,
+          "averageMilliseconds": 0.00013066666666666793,
+          "maxMilliseconds": 0.0082,
+          "averageItemMicroseconds": 0.13066666666666793
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.05200000000000042,
+          "averageMilliseconds": 8.666666666666737E-05,
+          "maxMilliseconds": 0.0002,
+          "averageItemMicroseconds": 0.08666666666666736
+        },
+        {
+          "name": "npc.steering.request_path",
+          "samples": 208,
+          "workItems": 208,
+          "totalMilliseconds": 0.013099999999999976,
+          "averageMilliseconds": 6.298076923076911E-05,
+          "maxMilliseconds": 0.0002,
+          "averageItemMicroseconds": 0.06298076923076912
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 185,
+          "workItems": 185,
+          "totalMilliseconds": 0.007500000000000007,
+          "averageMilliseconds": 4.054054054054058E-05,
+          "maxMilliseconds": 0.0001,
+          "averageItemMicroseconds": 0.04054054054054058
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 38,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 39,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 39,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 38,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 38,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 39,
+          "workItems": 40,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 39,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 213,
+          "workItems": 213,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 259,
+          "workItems": 512,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 426,
+          "workItems": 426,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 480,
+          "workItems": 480,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 11975,
+          "workItems": 11975,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 15000,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 38,
+          "workItems": 39,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 599,
+          "workItems": 2994,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 2514,
+          "workItems": 2514,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "action_use_goliath",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 21.049500000000013,
+          "averageMilliseconds": 0.03508250000000002,
+          "maxMilliseconds": 0.1814,
+          "averageItemMicroseconds": 35.08250000000002
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 2602,
+          "workItems": 2602,
+          "totalMilliseconds": 20.288900000000027,
+          "averageMilliseconds": 0.007797425057647973,
+          "maxMilliseconds": 0.1087,
+          "averageItemMicroseconds": 7.797425057647973
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 11.312100000000006,
+          "averageMilliseconds": 0.01885350000000001,
+          "maxMilliseconds": 0.5247,
+          "averageItemMicroseconds": 18.85350000000001
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 11.071200000000008,
+          "averageMilliseconds": 0.018452000000000014,
+          "maxMilliseconds": 0.5242,
+          "averageItemMicroseconds": 18.452000000000012
+        },
+        {
+          "name": "npc.combat.melee.entity",
+          "samples": 2359,
+          "workItems": 2359,
+          "totalMilliseconds": 10.586600000000178,
+          "averageMilliseconds": 0.0044877490462060955,
+          "maxMilliseconds": 0.4821,
+          "averageItemMicroseconds": 4.487749046206095
+        },
+        {
+          "name": "npc.combat.melee.attack",
+          "samples": 2359,
+          "workItems": 2359,
+          "totalMilliseconds": 10.265200000000164,
+          "averageMilliseconds": 0.004351504874947081,
+          "maxMilliseconds": 0.4819,
+          "averageItemMicroseconds": 4.351504874947081
+        },
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 7200,
+          "totalMilliseconds": 8.630800000000002,
+          "averageMilliseconds": 0.01438466666666667,
+          "maxMilliseconds": 0.1915,
+          "averageItemMicroseconds": 1.1987222222222227
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 8.524899999999995,
+          "averageMilliseconds": 0.014208166666666659,
+          "maxMilliseconds": 0.1912,
+          "averageItemMicroseconds": 14.20816666666666
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 2552,
+          "workItems": 2552,
+          "totalMilliseconds": 6.656699999999978,
+          "averageMilliseconds": 0.0026084247648902733,
+          "maxMilliseconds": 0.0121,
+          "averageItemMicroseconds": 2.6084247648902736
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 6.163699999999995,
+          "averageMilliseconds": 0.010272833333333325,
+          "maxMilliseconds": 0.6652,
+          "averageItemMicroseconds": 10.272833333333326
+        },
+        {
+          "name": "npc.action_on_target.entity",
+          "samples": 7200,
+          "workItems": 7200,
+          "totalMilliseconds": 5.532500000000032,
+          "averageMilliseconds": 0.0007684027777777822,
+          "maxMilliseconds": 0.3711,
+          "averageItemMicroseconds": 0.7684027777777822
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 3.889799999999989,
+          "averageMilliseconds": 0.006482999999999982,
+          "maxMilliseconds": 0.4019,
+          "averageItemMicroseconds": 6.482999999999982
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 1764,
+          "workItems": 1764,
+          "totalMilliseconds": 3.6175999999999844,
+          "averageMilliseconds": 0.002050793650793642,
+          "maxMilliseconds": 0.0381,
+          "averageItemMicroseconds": 2.050793650793642
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 3399,
+          "workItems": 3399,
+          "totalMilliseconds": 3.5122000000000377,
+          "averageMilliseconds": 0.0010333039129155745,
+          "maxMilliseconds": 0.1396,
+          "averageItemMicroseconds": 1.0333039129155746
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 3381,
+          "workItems": 3381,
+          "totalMilliseconds": 3.1613000000000357,
+          "averageMilliseconds": 0.0009350192250813475,
+          "maxMilliseconds": 0.1394,
+          "averageItemMicroseconds": 0.9350192250813474
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 2.989100000000005,
+          "averageMilliseconds": 0.004981833333333342,
+          "maxMilliseconds": 0.4013,
+          "averageItemMicroseconds": 4.981833333333341
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 2552,
+          "workItems": 3233,
+          "totalMilliseconds": 2.6899999999999658,
+          "averageMilliseconds": 0.0010540752351097045,
+          "maxMilliseconds": 0.0047,
+          "averageItemMicroseconds": 0.8320445406742858
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 2552,
+          "workItems": 2552,
+          "totalMilliseconds": 2.323599999999951,
+          "averageMilliseconds": 0.0009105015673980999,
+          "maxMilliseconds": 0.0035,
+          "averageItemMicroseconds": 0.9105015673981001
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 50,
+          "workItems": 50,
+          "totalMilliseconds": 2.207300000000001,
+          "averageMilliseconds": 0.04414600000000002,
+          "maxMilliseconds": 0.0787,
+          "averageItemMicroseconds": 44.14600000000002
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 50,
+          "workItems": 50,
+          "totalMilliseconds": 0.6285000000000002,
+          "averageMilliseconds": 0.012570000000000003,
+          "maxMilliseconds": 0.0277,
+          "averageItemMicroseconds": 12.570000000000002
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 608,
+          "totalMilliseconds": 0.44119999999999654,
+          "averageMilliseconds": 0.0007353333333333275,
+          "maxMilliseconds": 0.0414,
+          "averageItemMicroseconds": 0.7256578947368364
+        },
+        {
+          "name": "npc.steering.request_path",
+          "samples": 695,
+          "workItems": 695,
+          "totalMilliseconds": 0.35659999999999903,
+          "averageMilliseconds": 0.0005130935251798547,
+          "maxMilliseconds": 0.0271,
+          "averageItemMicroseconds": 0.5130935251798547
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.07620000000000067,
+          "averageMilliseconds": 0.0001270000000000011,
+          "maxMilliseconds": 0.0007,
+          "averageItemMicroseconds": 0.1270000000000011
+        },
+        {
+          "name": "npc.utility.candidates",
+          "samples": 48,
+          "workItems": 780,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.scored",
+          "samples": 48,
+          "workItems": 479,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 35,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 36,
+          "workItems": 47,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 27,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 27,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 35,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 27,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 27,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.success",
+          "samples": 8,
+          "workItems": 12,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 35,
+          "workItems": 35,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.hostile_query.matches",
+          "samples": 48,
+          "workItems": 780,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.skipped_cadence",
+          "samples": 600,
+          "workItems": 6032,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_performed",
+          "samples": 46,
+          "workItems": 46,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_attempt",
+          "samples": 46,
+          "workItems": 46,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.throttled",
+          "samples": 46,
+          "workItems": 46,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.submitted",
+          "samples": 17,
+          "workItems": 17,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.attempts",
+          "samples": 378,
+          "workItems": 564,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 2,
+          "workItems": 2,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.entities",
+          "samples": 600,
+          "workItems": 7200,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 7200,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 591,
+          "workItems": 3399,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 3801,
+          "workItems": 3801,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 798,
+          "workItems": 798,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 2601,
+          "workItems": 2601,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 479,
+          "workItems": 2602,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.entities",
+          "samples": 454,
+          "workItems": 2359,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 50,
+          "workItems": 50,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_coalesced",
+          "samples": 1,
+          "workItems": 1,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    },
+    {
+      "name": "stress_mixed_100_npc",
+      "windowSeconds": 19.99998,
+      "stages": [
+        {
+          "name": "npc.steering.request_path",
+          "samples": 3405,
+          "workItems": 3405,
+          "totalMilliseconds": 215.99870000000354,
+          "averageMilliseconds": 0.06343574155653554,
+          "maxMilliseconds": 6.7718,
+          "averageItemMicroseconds": 63.43574155653555
+        },
+        {
+          "name": "npc.system.update",
+          "samples": 600,
+          "workItems": 49319,
+          "totalMilliseconds": 173.36279999999996,
+          "averageMilliseconds": 0.2889379999999999,
+          "maxMilliseconds": 8.5968,
+          "averageItemMicroseconds": 3.5151320991909802
+        },
+        {
+          "name": "npc.htn.update_npc",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 173.2279000000002,
+          "averageMilliseconds": 0.288713166666667,
+          "maxMilliseconds": 8.5966,
+          "averageItemMicroseconds": 288.713166666667
+        },
+        {
+          "name": "npc.steering.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 125.37090000000006,
+          "averageMilliseconds": 0.2089515000000001,
+          "maxMilliseconds": 1.0158,
+          "averageItemMicroseconds": 208.95150000000012
+        },
+        {
+          "name": "npc.steering.entity",
+          "samples": 21366,
+          "workItems": 21366,
+          "totalMilliseconds": 121.88289999999927,
+          "averageMilliseconds": 0.005704525882242782,
+          "maxMilliseconds": 0.2521,
+          "averageItemMicroseconds": 5.704525882242781
+        },
+        {
+          "name": "npc.utility.add",
+          "samples": 3071,
+          "workItems": 3071,
+          "totalMilliseconds": 87.72200000000025,
+          "averageMilliseconds": 0.02856463692608279,
+          "maxMilliseconds": 8.5052,
+          "averageItemMicroseconds": 28.56463692608279
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeTargets",
+          "samples": 2534,
+          "workItems": 2534,
+          "totalMilliseconds": 81.0477,
+          "averageMilliseconds": 0.03198409629044988,
+          "maxMilliseconds": 8.5445,
+          "averageItemMicroseconds": 31.984096290449887
+        },
+        {
+          "name": "npc.combat.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 70.3725,
+          "averageMilliseconds": 0.1172875,
+          "maxMilliseconds": 1.135,
+          "averageItemMicroseconds": 117.2875
+        },
+        {
+          "name": "npc.combat.melee.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 70.08490000000008,
+          "averageMilliseconds": 0.1168081666666668,
+          "maxMilliseconds": 1.1344,
+          "averageItemMicroseconds": 116.8081666666668
+        },
+        {
+          "name": "npc.combat.melee.entity",
+          "samples": 18869,
+          "workItems": 18869,
+          "totalMilliseconds": 67.60390000000167,
+          "averageMilliseconds": 0.003582802480258714,
+          "maxMilliseconds": 0.5581,
+          "averageItemMicroseconds": 3.5828024802587137
+        },
+        {
+          "name": "npc.combat.melee.attack",
+          "samples": 18869,
+          "workItems": 18869,
+          "totalMilliseconds": 65.37310000000308,
+          "averageMilliseconds": 0.0034645768191214734,
+          "maxMilliseconds": 0.5578,
+          "averageItemMicroseconds": 3.464576819121473
+        },
+        {
+          "name": "npc.pathfinding.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 44.33520000000001,
+          "averageMilliseconds": 0.07389200000000001,
+          "maxMilliseconds": 14.4523,
+          "averageItemMicroseconds": 73.89200000000001
+        },
+        {
+          "name": "npc.steering.collision_avoidance",
+          "samples": 21231,
+          "workItems": 21231,
+          "totalMilliseconds": 38.95779999999975,
+          "averageMilliseconds": 0.0018349488954830084,
+          "maxMilliseconds": 0.0235,
+          "averageItemMicroseconds": 1.8349488954830082
+        },
+        {
+          "name": "npc.utility.query.NearbyMeleeWeapons",
+          "samples": 1143,
+          "workItems": 1143,
+          "totalMilliseconds": 35.53779999999999,
+          "averageMilliseconds": 0.031091688538932623,
+          "maxMilliseconds": 0.0603,
+          "averageItemMicroseconds": 31.091688538932623
+        },
+        {
+          "name": "npc.pathfinding.grid_update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 25.4884999999999,
+          "averageMilliseconds": 0.04248083333333316,
+          "maxMilliseconds": 14.4513,
+          "averageItemMicroseconds": 42.480833333333166
+        },
+        {
+          "name": "npc.steering.try_seek",
+          "samples": 16756,
+          "workItems": 16756,
+          "totalMilliseconds": 24.41299999999624,
+          "averageMilliseconds": 0.0014569706373833995,
+          "maxMilliseconds": 0.232,
+          "averageItemMicroseconds": 1.4569706373833995
+        },
+        {
+          "name": "npc.steering.separation",
+          "samples": 21231,
+          "workItems": 21231,
+          "totalMilliseconds": 22.40139999999743,
+          "averageMilliseconds": 0.0010551269370259258,
+          "maxMilliseconds": 0.0183,
+          "averageItemMicroseconds": 1.0551269370259257
+        },
+        {
+          "name": "npc.htn.component_update",
+          "samples": 25227,
+          "workItems": 25227,
+          "totalMilliseconds": 18.6622999999969,
+          "averageMilliseconds": 0.0007397748444126095,
+          "maxMilliseconds": 0.1304,
+          "averageItemMicroseconds": 0.7397748444126095
+        },
+        {
+          "name": "npc.htn.operator_iteration",
+          "samples": 24517,
+          "workItems": 24517,
+          "totalMilliseconds": 15.934499999996977,
+          "averageMilliseconds": 0.000649936778561691,
+          "maxMilliseconds": 0.1303,
+          "averageItemMicroseconds": 0.649936778561691
+        },
+        {
+          "name": "npc.pathfinding.compute_batch",
+          "samples": 600,
+          "workItems": 1510,
+          "totalMilliseconds": 14.997299999999983,
+          "averageMilliseconds": 0.024995499999999973,
+          "maxMilliseconds": 0.1126,
+          "averageItemMicroseconds": 9.931986754966877
+        },
+        {
+          "name": "npc.steering.filter_obstacles",
+          "samples": 21231,
+          "workItems": 34839,
+          "totalMilliseconds": 10.320900000002133,
+          "averageMilliseconds": 0.00048612406386897147,
+          "maxMilliseconds": 0.0108,
+          "averageItemMicroseconds": 0.2962455868423931
+        },
+        {
+          "name": "npc.action_on_target.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 9.103300000000003,
+          "averageMilliseconds": 0.01517216666666667,
+          "maxMilliseconds": 1.0228,
+          "averageItemMicroseconds": 15.172166666666671
+        },
+        {
+          "name": "npc.action_on_target.entity",
+          "samples": 12000,
+          "workItems": 12000,
+          "totalMilliseconds": 8.095600000000063,
+          "averageMilliseconds": 0.0006746333333333386,
+          "maxMilliseconds": 0.3778,
+          "averageItemMicroseconds": 0.6746333333333386
+        },
+        {
+          "name": "npc.htn.services",
+          "samples": 1261,
+          "workItems": 1261,
+          "totalMilliseconds": 2.0440999999999967,
+          "averageMilliseconds": 0.0016210150674068173,
+          "maxMilliseconds": 0.012,
+          "averageItemMicroseconds": 1.6210150674068173
+        },
+        {
+          "name": "npc.utility.query.NearbyGuns",
+          "samples": 407,
+          "workItems": 407,
+          "totalMilliseconds": 1.0339999999999996,
+          "averageMilliseconds": 0.0025405405405405394,
+          "maxMilliseconds": 0.0073,
+          "averageItemMicroseconds": 2.5405405405405395
+        },
+        {
+          "name": "npc.utility.filter",
+          "samples": 1143,
+          "workItems": 1143,
+          "totalMilliseconds": 0.24660000000000032,
+          "averageMilliseconds": 0.00021574803149606328,
+          "maxMilliseconds": 0.0084,
+          "averageItemMicroseconds": 0.21574803149606325
+        },
+        {
+          "name": "npc.combat.ranged.update",
+          "samples": 600,
+          "workItems": 600,
+          "totalMilliseconds": 0.1115000000000012,
+          "averageMilliseconds": 0.00018583333333333532,
+          "maxMilliseconds": 0.0007,
+          "averageItemMicroseconds": 0.18583333333333532
+        },
+        {
+          "name": "npc.steering.path_result.success",
+          "samples": 241,
+          "workItems": 241,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.result.path",
+          "samples": 1389,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_latency",
+          "samples": 1389,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.skipped_cadence",
+          "samples": 600,
+          "workItems": 10127,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.path",
+          "samples": 479,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_attempt",
+          "samples": 331,
+          "workItems": 331,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.batch_size",
+          "samples": 479,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.hit",
+          "samples": 1013,
+          "workItems": 1013,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth",
+          "samples": 479,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_coalesced",
+          "samples": 22,
+          "workItems": 22,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.attempts",
+          "samples": 355,
+          "workItems": 791,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.finished",
+          "samples": 479,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.entities",
+          "samples": 600,
+          "workItems": 18869,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.active.count",
+          "samples": 600,
+          "workItems": 49319,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.submitted",
+          "samples": 557,
+          "workItems": 557,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.request_enqueued",
+          "samples": 1389,
+          "workItems": 1389,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.pathfinding.queue_depth_after_enqueue",
+          "samples": 1411,
+          "workItems": 4276,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.entities",
+          "samples": 600,
+          "workItems": 21366,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.empty_result",
+          "samples": 1557,
+          "workItems": 1557,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.cache.miss",
+          "samples": 1521,
+          "workItems": 1521,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.hostile_query.matches",
+          "samples": 1514,
+          "workItems": 29520,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.candidates",
+          "samples": 1514,
+          "workItems": 29520,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.utility.scored",
+          "samples": 1192,
+          "workItems": 21180,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.steering.path_request.throttled",
+          "samples": 368,
+          "workItems": 368,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.full",
+          "samples": 20360,
+          "workItems": 20360,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.adaptive.tier.far",
+          "samples": 4867,
+          "workItems": 4867,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.skipped_adaptive",
+          "samples": 23119,
+          "workItems": 23119,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.htn.updated_entities",
+          "samples": 600,
+          "workItems": 25227,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.combat.melee.attack_performed",
+          "samples": 331,
+          "workItems": 331,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.entities",
+          "samples": 600,
+          "workItems": 12000,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        },
+        {
+          "name": "npc.action_on_target.success",
+          "samples": 12,
+          "workItems": 20,
+          "totalMilliseconds": 0,
+          "averageMilliseconds": 0,
+          "maxMilliseconds": 0,
+          "averageItemMicroseconds": 0
+        }
+      ]
+    }
+  ]
+}

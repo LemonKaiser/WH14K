@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Client.Gameplay;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Effects;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mobs.Components;
@@ -10,6 +11,7 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared._WH40K.HeavyBolter;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -69,6 +71,17 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
         if (!TryGetWeapon(entity, out var weaponUid, out var weapon))
             return;
+
+        // Client-side hard stop: while operating mounted heavy bolter,
+        // do not send melee/disarm input or play local attack loop.
+        if (IsOperatingHeavyBolter(entity))
+        {
+            if (weapon.Attacking)
+                RaisePredictiveEvent(new StopAttackEvent(GetNetEntity(weaponUid)));
+
+            weapon.Attacking = false;
+            return;
+        }
 
         if (!CombatMode.IsInCombatMode(entity) || !Blocker.CanAttack(entity, weapon: (weaponUid, weapon)))
         {
@@ -160,8 +173,9 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         var xform = Transform(target);
         var targetCoordinates = xform.Coordinates;
         var targetLocalAngle = xform.LocalRotation;
+        var predicate = GetDirectionalMeleePredicate(user, target, targetCoordinates);
 
-        return Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, overlapCheck: false);
+        return Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, predicate: predicate, overlapCheck: false);
     }
 
     protected override void DoDamageEffect(List<EntityUid> targets, EntityUid? user, TransformComponent targetXform)
@@ -225,6 +239,14 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
             return;
 
         RaisePredictiveEvent(new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(coordinates)));
+    }
+
+    private bool IsOperatingHeavyBolter(EntityUid user)
+    {
+        return TryComp<BuckleComponent>(user, out var buckle) &&
+               buckle.Buckled &&
+               buckle.BuckledTo is { } strappedTo &&
+               HasComp<WH40KHeavyBolterComponent>(strappedTo);
     }
 
     private void OnMeleeLunge(MeleeLungeEvent ev)

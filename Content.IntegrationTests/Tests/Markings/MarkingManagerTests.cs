@@ -235,4 +235,84 @@ public sealed class MarkingManagerTests
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task FelinidDefaults()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitIdleAsync();
+
+        await server.WaitAssertion(() =>
+        {
+            var markingManager = server.ResolveDependency<MarkingManager>();
+            var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+            var appearance = HumanoidCharacterAppearance.DefaultWithSpecies("Felinid", Sex.Male);
+
+            var head = new ProtoId<OrganCategoryPrototype>("Head");
+            var torso = new ProtoId<OrganCategoryPrototype>("Torso");
+            ProtoId<MarkingPrototype> felinidEars = "FelinidEars";
+
+            Assert.That(appearance.Markings, Does.ContainKey(head));
+            Assert.That(appearance.Markings[head], Does.ContainKey(HumanoidVisualLayers.HeadTop));
+            Assert.That(appearance.Markings[head][HumanoidVisualLayers.HeadTop], Has.Count.EqualTo(1));
+            Assert.That(appearance.Markings[head][HumanoidVisualLayers.HeadTop][0].MarkingId, Is.EqualTo("FelinidEars"));
+
+            Assert.That(appearance.Markings, Does.ContainKey(torso));
+            Assert.That(appearance.Markings[torso], Does.ContainKey(HumanoidVisualLayers.Tail));
+            Assert.That(appearance.Markings[torso][HumanoidVisualLayers.Tail], Has.Count.EqualTo(1));
+            Assert.That(appearance.Markings[torso][HumanoidVisualLayers.Tail][0].MarkingId, Is.EqualTo("FelinidTail"));
+
+            Assert.That(markingManager.MarkingsByLayerAndGroupAndSex(HumanoidVisualLayers.HeadTop, "Felinid", Sex.Male),
+                Does.ContainKey("FelinidEars"));
+            Assert.That(markingManager.MarkingsByLayerAndGroupAndSex(HumanoidVisualLayers.HeadTop, "Human", Sex.Male),
+                Does.Not.ContainKey("FelinidEars"));
+            Assert.That(markingManager.CanBeApplied("Felinid", Sex.Male, prototypeManager.Index(felinidEars)),
+                Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FelinidLegacySpecialMarkingsAreSanitized()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitIdleAsync();
+
+        await server.WaitAssertion(() =>
+        {
+            var head = new ProtoId<OrganCategoryPrototype>("Head");
+            var torso = new ProtoId<OrganCategoryPrototype>("Torso");
+            var legacyAppearance = new HumanoidCharacterAppearance(
+                Color.Black,
+                Color.White,
+                new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>()
+                {
+                    [torso] = new()
+                    {
+                        [HumanoidVisualLayers.Special] = new() { new("CatEars", 0) },
+                        [HumanoidVisualLayers.Tail] = new() { new("CatTail", 0) },
+                    },
+                });
+
+            var validated = HumanoidCharacterAppearance.EnsureValid(legacyAppearance, "Felinid", Sex.Male);
+
+            Assert.That(validated.Markings[head], Does.ContainKey(HumanoidVisualLayers.HeadTop));
+            Assert.That(validated.Markings[head][HumanoidVisualLayers.HeadTop], Has.Count.EqualTo(1));
+            Assert.That(validated.Markings[head][HumanoidVisualLayers.HeadTop][0].MarkingId, Is.EqualTo("FelinidEars"));
+
+            Assert.That(validated.Markings[torso], Does.ContainKey(HumanoidVisualLayers.Tail));
+            Assert.That(validated.Markings[torso][HumanoidVisualLayers.Tail], Has.Count.EqualTo(1));
+            Assert.That(validated.Markings[torso][HumanoidVisualLayers.Tail][0].MarkingId, Is.EqualTo("FelinidTail"));
+
+            Assert.That(validated.Markings[torso], Does.ContainKey(HumanoidVisualLayers.Special));
+            Assert.That(validated.Markings[torso][HumanoidVisualLayers.Special], Is.Empty);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }

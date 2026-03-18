@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "license": "LicenseRef-UserAsset",
+    "copyright": "User-provided local bolter projectile asset.",
+    "states": [
+        {
+            "name": "base"
+        }
+    ]
+}

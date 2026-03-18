@@ -1,0 +1,172 @@
+- type: wh40kTeamBattlePointsProfile
+  id: WH40KTeamBattlePoints120m
+  config:
+    teamStartingPoints: 20
+    frontPointsPerKill: 1
+    baseLevelThresholds: [170, 340, 580, 900, 1300, 1800, 2400, 3200]
+    levelBuffConstructionDoAfterMultiplier: 0.75
+    levelBuffMedicalDoAfterMultiplier: 0.8
+
+- type: wh40kTeamBattleEconomyProfile
+  id: WH40KTeamBattleEconomy120m
+  config:
+    preparationMultiplier: 1
+    assaultMultiplier: 2
+    apocalypseMultiplier: 3
+    reinforcementCurveDurationMinSeconds: 3600
+    reinforcementCurveDurationMaxSeconds: 7200
+    reinforcementCurveFallbackApocalypseSeconds: 1800
+    reinforcementCurveBaseMultiplier: 1
+    reinforcementCurveScale: 1.25
+    reinforcementCurveExponent: 2
+
+- type: wh40kTeamBattleLevelBuffProfile
+  id: WH40KTeamBattleLevelBuff120m
+  config:
+    pool:
+    - buffType: Pulling
+      weight: 1
+    - buffType: Medical
+      weight: 1
+    - buffType: Construction
+      weight: 1
+
+- type: wh40kTeamBattleWeatherProfile
+  id: WH40KTeamBattleWeather120m
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 0.28
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 360
+    gapMaxSeconds: 840
+    repeatChance: 0.65
+    warningLeadSeconds: 30
+    pool:
+    - WHAsh
+    - WHToxicAshFront
+    - WHAcidRain
+    - WHRadFront
+    - WHIonStorm
+    - WHBlackIce
+    - WHSandHurricane
+    - WHMetalHail
+    - WHSporeDrift
+    - WHGellarTremor
+    - WHMachineCorrosionStorm
+
+- type: wh40kWeatherDangerProfile
+  id: WH40KWeatherDanger120m
+  defaultDanger: 3
+  weatherDanger:
+  - weatherId: WHAsh
+    danger: 1
+  - weatherId: WHBlackIce
+    danger: 2
+  - weatherId: WHSporeDrift
+    danger: 2
+  - weatherId: WHRadFront
+    danger: 2
+  - weatherId: WHMetalHail
+    danger: 3
+  - weatherId: WHIonStorm
+    danger: 3
+  - weatherId: WHAcidRain
+    danger: 3
+  - weatherId: WHSandHurricane
+    danger: 3
+  - weatherId: WHToxicAshFront
+    danger: 4
+  - weatherId: WHGellarTremor
+    danger: 4
+  - weatherId: WHMachineCorrosionStorm
+    danger: 4
+
+- type: wh40kWeatherDangerProfile
+  id: WH40KWeatherDangerProfileDefault
+  defaultDanger: 3
+  weatherDanger:
+  - weatherId: WHAsh
+    danger: 1
+  - weatherId: WHBlackIce
+    danger: 2
+  - weatherId: WHSporeDrift
+    danger: 2
+  - weatherId: WHRadFront
+    danger: 2
+  - weatherId: WHMetalHail
+    danger: 3
+  - weatherId: WHIonStorm
+    danger: 3
+  - weatherId: WHAcidRain
+    danger: 3
+  - weatherId: WHSandHurricane
+    danger: 3
+  - weatherId: WHToxicAshFront
+    danger: 4
+  - weatherId: WHGellarTremor
+    danger: 4
+  - weatherId: WHMachineCorrosionStorm
+    danger: 4
+
+- type: wh40kTeamBattleRoundEventsProfile
+  id: WH40KTeamBattleEvents120m
+  config:
+    enabled: true
+    minStartDelaySeconds: 480
+    firstStartJitterSeconds: 720
+    noRoundChance: 0.12
+    minDurationSeconds: 180
+    maxDurationSeconds: 420
+    gapMinSeconds: 600
+    gapMaxSeconds: 1200
+    repeatChance: 0.85
+    warningLeadSeconds: 30
+    pool:
+    - LogisticsSurge
+    - OrbitalBombardment
+    - BlackFront
+
+- type: wh40kTeamBattleLogisticsProfile
+  id: WH40KTeamBattleLogistics120m
+  config:
+    ammoPriceMultiplier: 0.7
+    ammoCategories:
+    - VoxAmmo
+    - AltarAmmo
+    cooldownMultiplier: 0.65
+    constructionDoAfterMultiplier: 0.65
+    medicalDoAfterMultiplier: 0.7
+
+- type: wh40kTeamBattleBlackFrontProfile
+  id: WH40KTeamBattleBlackFront120m
+  config:
+    influenceMultiplier: 2
+    weatherId: WHBlackFront
+
+- type: wh40kTeamBattleOrbitalProfile
+  id: WH40KTeamBattleOrbital120m
+  config:
+    bombardmentDurationSeconds: 75
+    waveIntervalSeconds: 5
+    strikesPerWaveMin: 10
+    strikesPerWaveMax: 20
+    strikeDelaySeconds: 1.5
+    targetScatterRadius: 10
+    explosionIntensity: 75
+    explosionSlope: 2.75
+    explosionMaxTileIntensity: 4.5
+    markerPrototype: WH40KOrbitalStrikeMarker
+
+- type: wh40kTeamBattleConfig
+  id: WH40KTeamBattleConfig120m
+  pointsProfile: WH40KTeamBattlePoints120m
+  economyProfile: WH40KTeamBattleEconomy120m
+  levelBuffProfile: WH40KTeamBattleLevelBuff120m
+  weatherProfile: WH40KTeamBattleWeather120m
+  weatherDangerProfile: WH40KWeatherDanger120m
+  eventsProfile: WH40KTeamBattleEvents120m
+  logisticsProfile: WH40KTeamBattleLogistics120m
+  blackFrontProfile: WH40KTeamBattleBlackFront120m
+  orbitalProfile: WH40KTeamBattleOrbital120m

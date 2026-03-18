@@ -45,6 +45,6 @@ public sealed class HeldSpeedModifierSystem : EntitySystem
     private void OnRefreshMovementSpeedModifiers(EntityUid uid, HeldSpeedModifierComponent component, HeldRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
     {
         var (walkMod, sprintMod) = GetHeldMovementSpeedModifiers(uid, component);
-        args.Args.ModifySpeed(walkMod, sprintMod);
+        args.Args.ModifySpeed(walkMod, sprintMod, MovementSpeedModifierLayer.Equipment);
     }
 }

@@ -1,0 +1,51 @@
+- type: entity
+  id: WH40KTacticalWhistleBase
+  parent: BaseItem
+  abstract: true
+  name: tactical whistle
+  description: A command whistle for fast squad coordination and pulse markers.
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/whistles.rsi
+    state: trench
+  - type: Item
+    sprite: Objects/Fun/whistles.rsi
+    size: Tiny
+  - type: Clothing
+    sprite: Objects/Fun/whistles.rsi
+    equippedPrefix: trench
+    slots:
+    - neck
+    - pocket
+  - type: UseDelay
+    delay: 3
+  - type: WH40KTacticalWhistle
+    requireTeam: true
+    enableSignalVerbs: true
+    enableTacticalVariants: true
+    signalDelay: 3
+    userCooldown: 5
+    rateLimitWindow: 20
+    maxSignalsPerWindow: 4
+    signalSound:
+      collection: TrenchWhistle
+
+- type: entity
+  id: WH40KTacticalWhistleImperium
+  parent: WH40KTacticalWhistleBase
+  name: imperium tactical whistle
+  description: Command whistle calibrated for Imperium squad signal patterns.
+  components:
+  - type: WH40KTacticalWhistle
+    allowedTeamIds:
+    - Imperium
+
+- type: entity
+  id: WH40KTacticalWhistleHeretics
+  parent: WH40KTacticalWhistleBase
+  name: heretics tactical whistle
+  description: Command whistle calibrated for Heretics squad signal patterns.
+  components:
+  - type: WH40KTacticalWhistle
+    allowedTeamIds:
+    - Heretics

@@ -31,10 +31,10 @@ public sealed class IdExaminableSystem : EntitySystem
 
                 _examineSystem.SendExamineTooltip(args.User, uid, markup, false, false);
             },
-            Text = Loc.GetString("id-examinable-component-verb-text"),
+            TextLocId = "id-examinable-component-verb-text",
             Category = VerbCategory.Examine,
             Disabled = !detailsRange,
-            Message = detailsRange ? null : Loc.GetString("id-examinable-component-verb-disabled"),
+            MessageLocId = detailsRange ? null : "id-examinable-component-verb-disabled",
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/character.svg.192dpi.png"))
         };
 

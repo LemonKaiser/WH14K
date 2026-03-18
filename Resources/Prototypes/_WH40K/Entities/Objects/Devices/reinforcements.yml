@@ -1,0 +1,112 @@
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumGuardsman
+  name: reinforcement preview imperium guardsman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - GuardsmanGear
+
+- type: entity
+  parent: WH40KReinforcementPreviewImperiumGuardsman
+  id: MobHumanWH40KImperiumReinforcement
+  name: imperium reinforcement guardsman
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumVoxScout
+  name: reinforcement preview imperium vox scout
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - VoxScoutGear
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumSergeant
+  name: reinforcement preview imperium sergeant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - SergeantGear
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsGuardsman
+  name: reinforcement preview heretics guardsman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HeresyGuardsmanGear
+
+- type: entity
+  parent: WH40KReinforcementPreviewHereticsGuardsman
+  id: MobHumanWH40KHereticReinforcement
+  name: heretic reinforcement guardsman
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsVoxScout
+  name: reinforcement preview heretics vox scout
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HVoxScoutGear
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsSergeant
+  name: reinforcement preview heretics sergeant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HeresySergeantGear
+
+- type: entity
+  id: SpawnPointWH40KReinforcementImperium
+  parent: MarkerBase
+  name: imperium reinforcement spawn
+  suffix: WH40K
+  components:
+  - type: WH40KReinforcementSpawnPoint
+    teamId: Imperium
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: green
+    - state: guardsman
+
+- type: entity
+  id: SpawnPointWH40KReinforcementHeretics
+  parent: MarkerBase
+  name: heretics reinforcement spawn
+  suffix: WH40K
+  components:
+  - type: WH40KReinforcementSpawnPoint
+    teamId: Heretics
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: green
+    - state: heretic
+    - state: guardsman

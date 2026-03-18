@@ -8,6 +8,7 @@ public sealed class ChannelSelectorButton : ChatPopupButton<ChannelSelectorPopup
     public event Action<ChatSelectChannel>? OnChannelSelect;
 
     public ChatSelectChannel SelectedChannel { get; private set; }
+    private Shared.Radio.RadioChannelPrototype? _radioChannel;
 
     private const int SelectorDropdownOffset = 38;
 
@@ -70,7 +71,18 @@ public sealed class ChannelSelectorButton : ChatPopupButton<ChannelSelectorPopup
 
     public void UpdateChannelSelectButton(ChatSelectChannel channel, Shared.Radio.RadioChannelPrototype? radio)
     {
+        _radioChannel = radio;
         Text = radio != null ? Loc.GetString(radio.Name) : ChannelSelectorName(channel);
         Modulate = radio?.Color ?? ChannelSelectColor(channel);
+    }
+
+    public void RefreshLocalization()
+    {
+        Popup.RefreshLocalization();
+
+        if (SelectedChannel == ChatSelectChannel.None)
+            return;
+
+        UpdateChannelSelectButton(SelectedChannel, _radioChannel);
     }
 }

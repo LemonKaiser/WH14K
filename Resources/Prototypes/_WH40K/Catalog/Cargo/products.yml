@@ -1,0 +1,489 @@
+- type: cargoProduct
+  id: WH40KImperiumLantern
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlashlightLantern
+  cost: 500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMedkit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MedkitFilled
+  cost: 1200
+  category: cargoproduct-category-name-medical
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumLasgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserLasgun
+  cost: 2500
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubRifle
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubRifle
+  cost: 2500
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumChainsword
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: Chainsword
+  cost: 6000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponRifleBolter
+  cost: 13000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumPlasmaGun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserPlasmagun
+  cost: 19000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumLasCellBox
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: BoxLasgunPowerCell
+  cost: 1250
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumFlakVest
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingOuterArmorFlakVest
+  cost: 1800
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumFlakHelmet
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingHeadHelmetFlak
+  cost: 1200
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumCombatMedkit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MedkitCombatFilled
+  cost: 6000
+  category: cargoproduct-category-name-medical
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentinel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MechSentinelBatteryAutogun
+  cost: 50000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryTurret
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    state: base
+  product: WH40KWeaponTurretImperium
+  cost: 22000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryTurretMini
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: mini_uac_sentry_handheld
+  product: WH40KWeaponTurretImperiumMini
+  cost: 18000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryTurretDmr
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: dmr_uac_sentry_handheld
+  product: WH40KWeaponTurretImperiumDmr
+  cost: 28000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryTurretShotgun
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: shotgun_uac_sentry_handheld
+  product: WH40KWeaponTurretImperiumShotgun
+  cost: 30000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryTurretLaser
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
+    state: multilas
+  product: WH40KWeaponTurretImperiumLaser
+  cost: 34000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumInflatableCoverKit
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KInflatableCoverKitImperium
+  cost: 5500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMissionPinpointerKit
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  product: WH40KMissionPinpointerKitImperium
+  cost: 6500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumIntelDetector
+  icon:
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    state: datadetector
+  product: WH40KIntelDetectorImperium
+  cost: 7000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumTacticalWhistle
+  icon:
+    sprite: Objects/Fun/whistles.rsi
+    state: trench
+  product: WH40KTacticalWhistleImperium
+  cost: 3500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSignalFlare
+  icon:
+    sprite: Objects/Misc/flare.rsi
+    state: icon
+  product: WH40KSignalFlareImperium
+  cost: 4200
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSentryLaptop
+  icon:
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+  product: WH40KSentryLaptopImperium
+  cost: 9000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumTacticalFulton
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  product: WH40KTacticalFultonImperium
+  cost: 12000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KHereticsLantern
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlashlightLantern
+  cost: 500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMedkit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MedkitFilled
+  cost: 1250
+  category: cargoproduct-category-name-medical
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsLasgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserLasgun
+  cost: 2500
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubRifle
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubRifle
+  cost: 2500
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMachete
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ChaosMachete
+  cost: 6000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponChsStubSMG2
+  cost: 13000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBolterPistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponPistolBolter
+  cost: 16000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsPlasmaPistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserPlasmaPistol
+  cost: 19000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsLasCellBox
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: BoxLasgunPowerCell
+  cost: 1250
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsFlakVest
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingOuterArmorFlakVestHeretic
+  cost: 1800
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsFlakHelmet
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingHeadHelmetFlakCHAOS
+  cost: 1200
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsCombatMedkit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MedkitCombatFilled
+  cost: 6000
+  category: cargoproduct-category-name-medical
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentinel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MechSentinelBatteryAutogun
+  cost: 50000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryTurret
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    state: base
+  product: WH40KWeaponTurretHeretics
+  cost: 22000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryTurretMini
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: mini_uac_sentry_handheld
+  product: WH40KWeaponTurretHereticsMini
+  cost: 18000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryTurretDmr
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: dmr_uac_sentry_handheld
+  product: WH40KWeaponTurretHereticsDmr
+  cost: 28000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryTurretShotgun
+  icon:
+    sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
+    state: shotgun_uac_sentry_handheld
+  product: WH40KWeaponTurretHereticsShotgun
+  cost: 30000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryTurretLaser
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
+    state: multilas
+  product: WH40KWeaponTurretHereticsLaser
+  cost: 34000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsInflatableCoverKit
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KInflatableCoverKitHeretics
+  cost: 5500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMissionPinpointerKit
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  product: WH40KMissionPinpointerKitHeretics
+  cost: 6500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsIntelDetector
+  icon:
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    state: datadetector
+  product: WH40KIntelDetectorHeretics
+  cost: 7000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsTacticalWhistle
+  icon:
+    sprite: Objects/Fun/whistles.rsi
+    state: trench
+  product: WH40KTacticalWhistleHeretics
+  cost: 3500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSignalFlare
+  icon:
+    sprite: Objects/Misc/flare.rsi
+    state: icon
+  product: WH40KSignalFlareHeretics
+  cost: 4200
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSentryLaptop
+  icon:
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+  product: WH40KSentryLaptopHeretics
+  cost: 9000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsTacticalFulton
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  product: WH40KTacticalFultonHeretics
+  cost: 12000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket

@@ -224,7 +224,9 @@ public sealed partial class ClimbSystem : VirtualController
         if (ev.Cancelled)
             return false;
 
-        var args = new DoAfterArgs(EntityManager, user, comp.ClimbDelay, new ClimbDoAfterEvent(),
+        var climbDelay = ev.Delay ?? comp.ClimbDelay;
+
+        var args = new DoAfterArgs(EntityManager, user, climbDelay, new ClimbDoAfterEvent(),
             entityToMove,
             target: climbable,
             used: entityToMove)

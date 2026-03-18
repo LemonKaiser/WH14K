@@ -12,10 +12,9 @@ namespace Content.Tests.Shared
     [TestFixture]
     [TestOf(typeof(DamageSpecifier))]
     [TestOf(typeof(DamageModifierSetPrototype))]
-    [TestOf(typeof(DamageGroupPrototype))]
     public sealed class DamageTest : ContentUnitTest
     {
-        private static readonly ProtoId<DamageGroupPrototype> BruteDamageGroup = "Brute";
+        private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
         private static readonly ProtoId<DamageTypePrototype> RadiationDamageType = "Radiation";
         private static readonly ProtoId<DamageTypePrototype> SlashDamageType = "Slash";
         private static readonly ProtoId<DamageTypePrototype> PiercingDamageType = "Piercing";
@@ -34,19 +33,22 @@ namespace Content.Tests.Shared
             _prototypeManager.ResolveResults();
 
             // Create a damage data set
-            _damageSpec = new(_prototypeManager.Index(BruteDamageGroup), 6);
+            _damageSpec = new(_prototypeManager.Index(BluntDamageType), 2);
+            _damageSpec += new DamageSpecifier(_prototypeManager.Index(PiercingDamageType), 2);
+            _damageSpec += new DamageSpecifier(_prototypeManager.Index(SlashDamageType), 2);
             _damageSpec += new DamageSpecifier(_prototypeManager.Index(RadiationDamageType), 3);
-            _damageSpec += new DamageSpecifier(_prototypeManager.Index(SlashDamageType), -1); // already exists in brute
+            _damageSpec += new DamageSpecifier(_prototypeManager.Index(SlashDamageType), -1);
         }
 
-        //Check that DamageSpecifier will split groups and can do arithmetic operations
+        // Check that DamageSpecifier arithmetic and group aggregation stay correct.
         [Test]
         public void DamageSpecifierTest()
         {
             // Create a copy of the damage data
             DamageSpecifier damageSpec = new(_damageSpec);
+            var groupedDamage = damageSpec.GetDamagePerGroup(_prototypeManager);
 
-            // Check that it properly split up the groups into types
+            // Check that the base damage dictionary and derived group totals are correct.
             FixedPoint2 damage;
             Assert.That(damageSpec.GetTotal(), Is.EqualTo(FixedPoint2.New(8)));
             Assert.That(damageSpec.DamageDict.TryGetValue("Blunt", out damage));
@@ -57,6 +59,8 @@ namespace Content.Tests.Shared
             Assert.That(damage, Is.EqualTo(FixedPoint2.New(1)));
             Assert.That(damageSpec.DamageDict.TryGetValue("Radiation", out damage));
             Assert.That(damage, Is.EqualTo(FixedPoint2.New(3)));
+            Assert.That(groupedDamage["Brute"], Is.EqualTo(FixedPoint2.New(5)));
+            Assert.That(groupedDamage["Toxin"], Is.EqualTo(FixedPoint2.New(3)));
 
             // check that integer multiplication works
             damageSpec = damageSpec * 2;
@@ -104,18 +108,10 @@ namespace Content.Tests.Shared
             Assert.That(damageSpec.DamageDict.TryGetValue("Radiation", out damage));
             Assert.That(damage, Is.EqualTo(FixedPoint2.New(3)));
 
-            // Lets also test the constructor with damage types and damage groups works properly.
-            damageSpec = new(_prototypeManager.Index(BruteDamageGroup), 4);
-            Assert.That(damageSpec.DamageDict.TryGetValue("Blunt", out damage));
-            Assert.That(damage, Is.EqualTo(FixedPoint2.New(1.33)));
-            Assert.That(damageSpec.DamageDict.TryGetValue("Slash", out damage));
-            Assert.That(damage, Is.EqualTo(FixedPoint2.New(1.33)));
-            Assert.That(damageSpec.DamageDict.TryGetValue("Piercing", out damage));
-            Assert.That(damage, Is.EqualTo(FixedPoint2.New(1.34))); // doesn't divide evenly, so the 0.01 goes to the last one
-
             damageSpec = new(_prototypeManager.Index(PiercingDamageType), 4);
             Assert.That(damageSpec.DamageDict.TryGetValue("Piercing", out damage));
             Assert.That(damage, Is.EqualTo(FixedPoint2.New(4)));
+            Assert.That(damageSpec.GetDamagePerGroup(_prototypeManager)["Brute"], Is.EqualTo(FixedPoint2.New(4)));
         }
 
         //Check that DamageSpecifier will be properly adjusted by a resistance set

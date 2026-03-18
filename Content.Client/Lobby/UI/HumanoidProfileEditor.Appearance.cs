@@ -4,6 +4,7 @@ using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Speech;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
@@ -15,6 +16,7 @@ public sealed partial class HumanoidProfileEditor
     public event Action<List<ProtoId<GuideEntryPrototype>>>? OnOpenGuidebook;
 
     private ColorSelectorSliders _rgbSkinColorSelector;
+    private bool _updatingSkinControls;
     private List<SpeciesPrototype> _species = new();
     private static readonly ProtoId<GuideEntryPrototype> DefaultSpeciesGuidebook = "Species";
 
@@ -50,6 +52,14 @@ public sealed partial class HumanoidProfileEditor
     private void UpdateAgeEdit()
     {
         AgeEdit.Text = Profile?.Age.ToString() ?? "";
+    }
+
+    private void UpdateVoiceToneControls()
+    {
+        if (Profile == null)
+            return;
+
+        VoiceToneButton.SelectId((int) Profile.VoiceTone);
     }
 
     private void UpdateSexControls()
@@ -104,33 +114,41 @@ public sealed partial class HumanoidProfileEditor
 
         var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
         var strategy = _prototypeManager.Index(skin).Strategy;
+        _updatingSkinControls = true;
 
-        switch (strategy.InputType)
+        try
         {
-            case SkinColorationStrategyInput.Unary:
-                {
-                    if (!Skin.Visible)
+            switch (strategy.InputType)
+            {
+                case SkinColorationStrategyInput.Unary:
                     {
-                        Skin.Visible = true;
-                        RgbSkinColorContainer.Visible = false;
+                        if (!Skin.Visible)
+                        {
+                            Skin.Visible = true;
+                            RgbSkinColorContainer.Visible = false;
+                        }
+
+                        Skin.Value = strategy.ToUnary(Profile.Appearance.SkinColor);
+
+                        break;
                     }
-
-                    Skin.Value = strategy.ToUnary(Profile.Appearance.SkinColor);
-
-                    break;
-                }
-            case SkinColorationStrategyInput.Color:
-                {
-                    if (!RgbSkinColorContainer.Visible)
+                case SkinColorationStrategyInput.Color:
                     {
-                        Skin.Visible = false;
-                        RgbSkinColorContainer.Visible = true;
+                        if (!RgbSkinColorContainer.Visible)
+                        {
+                            Skin.Visible = false;
+                            RgbSkinColorContainer.Visible = true;
+                        }
+
+                        _rgbSkinColorSelector.Color = strategy.ClosestSkinColor(Profile.Appearance.SkinColor);
+
+                        break;
                     }
-
-                    _rgbSkinColorSelector.Color = strategy.ClosestSkinColor(Profile.Appearance.SkinColor);
-
-                    break;
-                }
+            }
+        }
+        finally
+        {
+            _updatingSkinControls = false;
         }
     }
 
@@ -180,9 +198,15 @@ public sealed partial class HumanoidProfileEditor
     private void SetSpecies(string newSpecies)
     {
         Profile = Profile?.WithSpecies(newSpecies);
-        OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
+        if (Profile == null)
+            return;
+
+        _markingsModel.OrganProfileData = _markingManager.GetProfileData(Profile.Species, Profile.Sex, Profile.Appearance.SkinColor, Profile.Appearance.EyeColor);
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);
+        _markingsModel.Markings = Profile.Appearance.Markings;
         _markingsModel.ValidateMarkings();
+        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(_markingsModel.Markings));
+        OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
         // In case there's job restrictions for the species
         RefreshJobs();
         // In case there's species restrictions for loadouts
@@ -226,6 +250,12 @@ public sealed partial class HumanoidProfileEditor
         ReloadPreview();
     }
 
+    private void SetVoiceTone(VoiceTone newVoiceTone)
+    {
+        Profile = Profile?.WithVoiceTone(newVoiceTone);
+        ReloadProfilePreview();
+    }
+
     private void SetSpawnPriority(SpawnPriorityPreference newSpawnPriority)
     {
         Profile = Profile?.WithSpawnPriorityPreference(newSpawnPriority);
@@ -255,7 +285,8 @@ public sealed partial class HumanoidProfileEditor
 
     private void OnSkinColorOnValueChanged()
     {
-        if (Profile is null) return;
+        if (Profile is null || _updatingSkinControls)
+            return;
 
         var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
         var strategy = _prototypeManager.Index(skin).Strategy;

@@ -364,6 +364,21 @@ public sealed class RespiratorSystem : EntitySystem
             Math.Clamp(respirator.Saturation, respirator.MinSaturation, respirator.MaxSaturation);
     }
 
+    /// <summary>
+    /// Restores a mob's oxygen buffer after a successful defibrillation revive and gives it a fresh respiration tick.
+    /// </summary>
+    public void RestoreSaturationBuffer(Entity<RespiratorComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        if (ent.Comp.Saturation < ent.Comp.MaxSaturation)
+            UpdateSaturation(ent.Owner, ent.Comp.MaxSaturation - ent.Comp.Saturation, ent.Comp);
+
+        ent.Comp.SuffocationCycles = 0;
+        ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval;
+    }
+
     private void OnApplyMetabolicMultiplier(Entity<RespiratorComponent> ent, ref ApplyMetabolicMultiplierEvent args)
     {
         ent.Comp.UpdateIntervalMultiplier = args.Multiplier;

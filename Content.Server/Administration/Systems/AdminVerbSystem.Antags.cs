@@ -53,6 +53,7 @@ public sealed partial class AdminVerbSystem
         var traitorName = Loc.GetString("admin-verb-text-make-traitor");
         Verb traitor = new()
         {
+            TextLocId = "admin-verb-text-make-traitor",
             Text = traitorName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Interface/Misc/job_icons.rsi"), "Syndicate"),
@@ -61,6 +62,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<TraitorRuleComponent>(targetPlayer, DefaultTraitorRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-traitor",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", traitorName, Loc.GetString("admin-verb-make-traitor")),
         };
         args.Verbs.Add(traitor);
@@ -68,6 +71,7 @@ public sealed partial class AdminVerbSystem
         var initialInfectedName = Loc.GetString("admin-verb-text-make-initial-infected");
         Verb initialInfected = new()
         {
+            TextLocId = "admin-verb-text-make-initial-infected",
             Text = initialInfectedName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "InitialInfected"),
@@ -76,6 +80,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<ZombieRuleComponent>(targetPlayer, DefaultInitialInfectedRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-initial-infected",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", initialInfectedName, Loc.GetString("admin-verb-make-initial-infected")),
         };
         args.Verbs.Add(initialInfected);
@@ -83,6 +89,7 @@ public sealed partial class AdminVerbSystem
         var zombieName = Loc.GetString("admin-verb-text-make-zombie");
         Verb zombie = new()
         {
+            TextLocId = "admin-verb-text-make-zombie",
             Text = zombieName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "Zombie"),
@@ -91,6 +98,8 @@ public sealed partial class AdminVerbSystem
                 _zombie.ZombifyEntity(args.Target);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-zombie",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", zombieName, Loc.GetString("admin-verb-make-zombie")),
         };
         args.Verbs.Add(zombie);
@@ -98,6 +107,7 @@ public sealed partial class AdminVerbSystem
         var nukeOpName = Loc.GetString("admin-verb-text-make-nuclear-operative");
         Verb nukeOp = new()
         {
+            TextLocId = "admin-verb-text-make-nuclear-operative",
             Text = nukeOpName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Clothing/Head/Hardsuits/syndicate.rsi"), "icon"),
@@ -106,6 +116,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<NukeopsRuleComponent>(targetPlayer, DefaultNukeOpRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-nuclear-operative",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", nukeOpName, Loc.GetString("admin-verb-make-nuclear-operative")),
         };
         args.Verbs.Add(nukeOp);
@@ -113,6 +125,7 @@ public sealed partial class AdminVerbSystem
         var pirateName = Loc.GetString("admin-verb-text-make-pirate");
         Verb pirate = new()
         {
+            TextLocId = "admin-verb-text-make-pirate",
             Text = pirateName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Clothing/Head/Hats/pirate.rsi"), "icon"),
@@ -122,6 +135,8 @@ public sealed partial class AdminVerbSystem
                 _outfit.SetOutfit(args.Target, PirateGearId);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-pirate",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", pirateName, Loc.GetString("admin-verb-make-pirate")),
         };
         args.Verbs.Add(pirate);
@@ -129,6 +144,7 @@ public sealed partial class AdminVerbSystem
         var headRevName = Loc.GetString("admin-verb-text-make-head-rev");
         Verb headRev = new()
         {
+            TextLocId = "admin-verb-text-make-head-rev",
             Text = headRevName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "HeadRevolutionary"),
@@ -137,6 +153,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<RevolutionaryRuleComponent>(targetPlayer, DefaultRevsRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-head-rev",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", headRevName, Loc.GetString("admin-verb-make-head-rev")),
         };
         args.Verbs.Add(headRev);
@@ -144,6 +162,7 @@ public sealed partial class AdminVerbSystem
         var thiefName = Loc.GetString("admin-verb-text-make-thief");
         Verb thief = new()
         {
+            TextLocId = "admin-verb-text-make-thief",
             Text = thiefName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Clothing/Hands/Gloves/Color/black.rsi"), "icon"),
@@ -152,6 +171,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<ThiefRuleComponent>(targetPlayer, DefaultThiefRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-thief",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", thiefName, Loc.GetString("admin-verb-make-thief")),
         };
         args.Verbs.Add(thief);
@@ -159,6 +180,7 @@ public sealed partial class AdminVerbSystem
         var changelingName = Loc.GetString("admin-verb-text-make-changeling");
         Verb changeling = new()
         {
+            TextLocId = "admin-verb-text-make-changeling",
             Text = changelingName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Objects/Weapons/Melee/armblade.rsi"), "icon"),
@@ -167,6 +189,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<ChangelingRuleComponent>(targetPlayer, DefaultChangelingRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-changeling",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", changelingName, Loc.GetString("admin-verb-make-changeling")),
         };
         args.Verbs.Add(changeling);
@@ -174,6 +198,7 @@ public sealed partial class AdminVerbSystem
         var paradoxCloneName = Loc.GetString("admin-verb-text-make-paradox-clone");
         Verb paradox = new()
         {
+            TextLocId = "admin-verb-text-make-paradox-clone",
             Text = paradoxCloneName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "ParadoxClone"),
@@ -189,12 +214,15 @@ public sealed partial class AdminVerbSystem
                 _gameTicker.StartGameRule(ruleEnt);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-paradox-clone",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", paradoxCloneName, Loc.GetString("admin-verb-make-paradox-clone")),
         };
 
         var wizardName = Loc.GetString("admin-verb-text-make-wizard");
         Verb wizard = new()
         {
+            TextLocId = "admin-verb-text-make-wizard",
             Text = wizardName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/Misc/job_icons.rsi"), "Wizard"),
@@ -204,6 +232,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<WizardRoleComponent>(targetPlayer, DefaultWizardRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-wizard",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", wizardName, Loc.GetString("admin-verb-make-wizard")),
         };
         args.Verbs.Add(wizard);
@@ -211,6 +241,7 @@ public sealed partial class AdminVerbSystem
         var ninjaName = Loc.GetString("admin-verb-text-make-space-ninja");
         Verb ninja = new()
         {
+            TextLocId = "admin-verb-text-make-space-ninja",
             Text = ninjaName,
             Category = VerbCategory.Antag,
             Icon = new SpriteSpecifier.Rsi(new("/Textures/Objects/Weapons/Melee/energykatana.rsi"), "icon"),
@@ -219,6 +250,8 @@ public sealed partial class AdminVerbSystem
                 _antag.ForceMakeAntag<NinjaRoleComponent>(targetPlayer, DefaultNinjaRule);
             },
             Impact = LogImpact.High,
+            MessageLocId = "admin-verb-make-space-ninja",
+            MessageUsesTextPrefix = true,
             Message = string.Join(": ", ninjaName, Loc.GetString("admin-verb-make-space-ninja")),
         };
         args.Verbs.Add(ninja);

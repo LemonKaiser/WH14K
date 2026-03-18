@@ -12,6 +12,14 @@ public sealed class LizardAccentSystem : EntitySystem
     private static readonly Regex RegexInternalX = new(@"(\w)x");
     private static readonly Regex RegexLowerEndX = new(@"\bx([\-|r|R]|\b)");
     private static readonly Regex RegexUpperEndX = new(@"\bX([\-|r|R]|\b)");
+    private static readonly Regex RegexLowerEs = new(@"\u0441+");
+    private static readonly Regex RegexUpperEs = new(@"\u0421+");
+    private static readonly Regex RegexLowerZe = new(@"\u0437+");
+    private static readonly Regex RegexUpperZe = new(@"\u0417+");
+    private static readonly Regex RegexLowerSha = new(@"\u0448+");
+    private static readonly Regex RegexUpperSha = new(@"\u0428+");
+    private static readonly Regex RegexLowerChe = new(@"\u0447+");
+    private static readonly Regex RegexUpperChe = new(@"\u0427+");
 
     [Dependency] private readonly IRobustRandom _random = default!; // Corvax-Localization
 
@@ -37,53 +45,45 @@ public sealed class LizardAccentSystem : EntitySystem
         message = RegexUpperEndX.Replace(message, "ECKS$1");
 
         // Corvax-Localization-Start
-        // c => ссс
-        message = Regex.Replace(
+        // \u0441 => \u0441\u0441\u0441
+        message = RegexLowerEs.Replace(
             message,
-            "с+",
-            _random.Pick(new List<string>() { "сс", "ссс" })
+            _random.Pick(new List<string>() { "\u0441\u0441", "\u0441\u0441\u0441" })
         );
-        // С => CCC
-        message = Regex.Replace(
+        // \u0421 => \u0421\u0421\u0421
+        message = RegexUpperEs.Replace(
             message,
-            "С+",
-            _random.Pick(new List<string>() { "СС", "ССС" })
+            _random.Pick(new List<string>() { "\u0421\u0421", "\u0421\u0421\u0421" })
         );
-        // з => ссс
-        message = Regex.Replace(
+        // \u0437 => \u0441\u0441\u0441
+        message = RegexLowerZe.Replace(
             message,
-            "з+",
-            _random.Pick(new List<string>() { "сс", "ссс" })
+            _random.Pick(new List<string>() { "\u0441\u0441", "\u0441\u0441\u0441" })
         );
-        // З => CCC
-        message = Regex.Replace(
+        // \u0417 => \u0421\u0421\u0421
+        message = RegexUpperZe.Replace(
             message,
-            "З+",
-            _random.Pick(new List<string>() { "СС", "ССС" })
+            _random.Pick(new List<string>() { "\u0421\u0421", "\u0421\u0421\u0421" })
         );
-        // ш => шшш
-        message = Regex.Replace(
+        // \u0448 => \u0448\u0448\u0448
+        message = RegexLowerSha.Replace(
             message,
-            "ш+",
-            _random.Pick(new List<string>() { "шш", "шшш" })
+            _random.Pick(new List<string>() { "\u0448\u0448", "\u0448\u0448\u0448" })
         );
-        // Ш => ШШШ
-        message = Regex.Replace(
+        // \u0428 => \u0428\u0428\u0428
+        message = RegexUpperSha.Replace(
             message,
-            "Ш+",
-            _random.Pick(new List<string>() { "ШШ", "ШШШ" })
+            _random.Pick(new List<string>() { "\u0428\u0428", "\u0428\u0428\u0428" })
         );
-        // ч => щщщ
-        message = Regex.Replace(
+        // \u0447 => \u0449\u0449\u0449
+        message = RegexLowerChe.Replace(
             message,
-            "ч+",
-            _random.Pick(new List<string>() { "щщ", "щщщ" })
+            _random.Pick(new List<string>() { "\u0449\u0449", "\u0449\u0449\u0449" })
         );
-        // Ч => ЩЩЩ
-        message = Regex.Replace(
+        // \u0427 => \u0429\u0429\u0429
+        message = RegexUpperChe.Replace(
             message,
-            "Ч+",
-            _random.Pick(new List<string>() { "ЩЩ", "ЩЩЩ" })
+            _random.Pick(new List<string>() { "\u0429\u0429", "\u0429\u0429\u0429" })
         );
         // Corvax-Localization-End
         args.Message = message;

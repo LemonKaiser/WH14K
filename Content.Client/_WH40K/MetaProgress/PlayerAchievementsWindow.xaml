@@ -1,0 +1,49 @@
+<ui:FancyWindow xmlns="https://spacestation14.io"
+                xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
+                xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
+                Title="{Loc wh40k-meta-progress-achievements-window-title}"
+                SetSize="960 620">
+    <Control>
+        <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
+            <lobby:HighlightedContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                    <Label Text="{Loc wh40k-meta-progress-achievements-summary-header}" StyleClasses="LabelHeading" />
+                    <PanelContainer Name="SummaryProgressHighlight">
+                        <Label Name="SummaryProgressLabel"
+                               Margin="8 4 8 4"
+                               HorizontalExpand="True"
+                               StyleClasses="LabelHeading" />
+                    </PanelContainer>
+                    <ProgressBar Name="SummaryCompletionBar"
+                                 MinValue="0"
+                                 MaxValue="100"
+                                 Value="0" />
+                </BoxContainer>
+            </lobby:HighlightedContainer>
+
+            <Control MinHeight="8" />
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalExpand="True">
+                <lobby:HighlightedContainer MinSize="210 0">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                        <Label Text="{Loc wh40k-meta-progress-achievements-filter-header}" StyleClasses="LabelHeading" />
+                        <Button Name="FilterAllButton" ToggleMode="True" />
+                        <Button Name="FilterCombatButton" ToggleMode="True" />
+                        <Button Name="FilterSupportButton" ToggleMode="True" />
+                        <Button Name="FilterLogisticsButton" ToggleMode="True" />
+                        <Button Name="FilterObjectiveButton" ToggleMode="True" />
+                        <Button Name="FilterParticipationButton" ToggleMode="True" />
+                        <Button Name="FilterHiddenButton" ToggleMode="True" />
+                        <Button Name="FilterSpecialButton" ToggleMode="True" />
+                    </BoxContainer>
+                </lobby:HighlightedContainer>
+
+                <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True">
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Name="AchievementsList" Orientation="Vertical" SeparationOverride="6" />
+                    </ScrollContainer>
+                </lobby:HighlightedContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </Control>
+</ui:FancyWindow>

@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Server._WH40K.Command;
+using Content.Server._WH40K.Research.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Access.Systems;
 using Content.Shared.Popups;
@@ -22,6 +24,7 @@ namespace Content.Server.Research.Systems
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
         [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly RadioSystem _radio = default!;
+        [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
 
         public override void Initialize()
         {
@@ -83,9 +86,31 @@ namespace Content.Server.Research.Systems
             if (clientXform.GridUid is not { } grid)
                 return [];
 
-            var set = new HashSet<Entity<ResearchServerComponent>>();
-            _lookup.GetGridEntities(grid, set);
-            return set;
+            var allServers = new HashSet<Entity<ResearchServerComponent>>();
+            _lookup.GetGridEntities(grid, allServers);
+
+            if (!TryComp<WH40KResearchTeamComponent>(client, out var clientTeam) ||
+                string.IsNullOrWhiteSpace(clientTeam.TeamId))
+            {
+                return allServers;
+            }
+
+            var teamServers = new HashSet<Entity<ResearchServerComponent>>();
+            foreach (var server in allServers)
+            {
+                if (!TryComp<WH40KResearchTeamComponent>(server, out var serverTeam) ||
+                    string.IsNullOrWhiteSpace(serverTeam.TeamId))
+                {
+                    continue;
+                }
+
+                if (!string.Equals(serverTeam.TeamId, clientTeam.TeamId, global::System.StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                teamServers.Add(server);
+            }
+
+            return teamServers;
         }
 
         public override void Update(float frameTime)

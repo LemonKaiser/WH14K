@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.GameTicking.Events;
@@ -11,6 +12,7 @@ using Content.Server.Station.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Mind;
@@ -141,8 +143,19 @@ namespace Content.Server.GameTicking
             var character = GetPlayerProfile(player);
 
             var jobBans = _banManager.GetJobBans(player.UserId);
-            if (jobBans == null || jobId != null && jobBans.Contains(jobId)) //TODO: use IsRoleBanned directly?
+            if (jobBans == null)
+            {
+                _sawmill.Warning($"Latejoin spawn denied for {player.Name} ({player.UserId}): job-ban cache is not ready.");
+                _chatManager.DispatchServerMessage(player, Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
                 return;
+            }
+
+            if (jobId != null && jobBans.Contains(jobId)) //TODO: use IsRoleBanned directly?
+            {
+                _sawmill.Info($"Latejoin spawn denied for {player.Name} ({player.UserId}): role ban on job '{jobId}'.");
+                _chatManager.DispatchServerMessage(player, Loc.GetString("role-ban"));
+                return;
+            }
 
             if (jobId != null)
             {
@@ -150,7 +163,11 @@ namespace Content.Server.GameTicking
                 var ev = new IsRoleAllowedEvent(player, jobs, null);
                 RaiseLocalEvent(ref ev);
                 if (ev.Cancelled)
+                {
+                    _sawmill.Info($"Latejoin spawn denied for {player.Name} ({player.UserId}): IsRoleAllowedEvent cancelled for job '{jobId}'.");
+                    _chatManager.DispatchServerMessage(player, Loc.GetString("game-ticker-player-no-jobs-available-when-joining"));
                     return;
+                }
             }
 
             SpawnPlayer(player, character, station, jobId, lateJoin, silent);
@@ -257,7 +274,7 @@ namespace Content.Server.GameTicking
 
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
 
-            if (lateJoin && !silent)
+            if (lateJoin && !silent && !IsWh40KTeamBattleLateJoinAnnouncementSuppressed())
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {
@@ -330,6 +347,18 @@ namespace Content.Server.GameTicking
             RaiseLocalEvent(mob, aev, true);
         }
 
+        private bool IsWh40KTeamBattleLateJoinAnnouncementSuppressed()
+        {
+            var query = EntityQueryEnumerator<WH40KTeamBattleRuleComponent, GameRuleComponent>();
+            while (query.MoveNext(out var ruleUid, out _, out var gameRule))
+            {
+                if (IsGameRuleActive(ruleUid, gameRule))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Creates a mob on the specified station, creates the new mind, equips job-specific starting gear and loadout
         /// </summary>
@@ -373,7 +402,10 @@ namespace Content.Server.GameTicking
             _adminLogger.Add(LogType.Respawn, LogImpact.Medium, $"Player {player} was respawned.");
 
             if (LobbyEnabled)
+            {
+                GrantRoundParticipationBypass(player);
                 PlayerJoinLobby(player);
+            }
             else
                 SpawnPlayer(player, EntityUid.Invalid);
         }
@@ -385,12 +417,20 @@ namespace Content.Server.GameTicking
         /// <param name="station">The station they're spawning on</param>
         /// <param name="jobId">An optional job for them to spawn as</param>
         /// <param name="silent">Whether or not the player should be greeted upon joining</param>
-        public void MakeJoinGame(ICommonSession player, EntityUid station, string? jobId = null, bool silent = false)
+        public void MakeJoinGame(
+            ICommonSession player,
+            EntityUid station,
+            string? jobId = null,
+            bool silent = false,
+            bool bypassRoundParticipationLock = false)
         {
             if (!_playerGameStatuses.ContainsKey(player.UserId))
                 return;
 
             if (!_userDb.IsLoadComplete(player))
+                return;
+
+            if (!bypassRoundParticipationLock && IsRoundParticipationLocked(player))
                 return;
 
             SpawnPlayer(player, station, jobId, silent: silent);

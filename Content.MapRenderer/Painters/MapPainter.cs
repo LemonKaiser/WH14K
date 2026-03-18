@@ -160,6 +160,7 @@ namespace Content.MapRenderer.Painters
 
             var tilePainter = new TilePainter(client, server);
             var entityPainter = new GridPainter(client, server);
+            var blackoutPainter = new WH40KTacticalMapBlackoutPainter(server);
             var xformQuery = sEntityManager.GetEntityQuery<TransformComponent>();
             var xformSystem = sEntityManager.System<SharedTransformSystem>();
 
@@ -217,6 +218,7 @@ namespace Content.MapRenderer.Painters
                 {
                     tilePainter.Run(gridCanvas, uid, grid, customOffset);
                     entityPainter.Run(gridCanvas, uid, grid, customOffset);
+                    blackoutPainter.Run(gridCanvas, uid, grid, customOffset);
 
                     gridCanvas.Mutate(e => e.Flip(FlipMode.Vertical));
                 });

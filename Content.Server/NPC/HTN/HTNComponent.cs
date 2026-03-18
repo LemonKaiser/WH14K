@@ -57,4 +57,10 @@ public sealed partial class HTNComponent : NPCComponent
     /// </summary>
     [DataField]
     public bool Enabled = true;
+
+    /// <summary>
+    /// Earliest next time this NPC should run HTN update under adaptive scheduling.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextAdaptiveUpdateTime = TimeSpan.Zero;
 }

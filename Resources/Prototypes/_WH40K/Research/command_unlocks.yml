@@ -1,0 +1,457 @@
+- type: techDiscipline
+  id: WH40KWeaponry
+  name: research-discipline-wh40k-weaponry
+  color: "#d65a45"
+  icon:
+    sprite: Interface/Misc/research_disciplines.rsi
+    state: arsenal
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+
+- type: techDiscipline
+  id: WH40KEquipment
+  name: research-discipline-wh40k-equipment
+  color: "#5e93d4"
+  icon:
+    sprite: Interface/Misc/research_disciplines.rsi
+    state: civilianservices
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+
+- type: technology
+  id: WH40KWeaponryAuthRoot
+  name: research-technology-wh40k-hidden-weaponry-root
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_standart/lasgun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthLeft2
+  name: research-technology-wh40k-hidden-weaponry-left2
+  icon:
+    sprite: _WH40K/Objects/Weapons/Melee/chainsword.rsi
+    state: off-icon
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthRight2
+  name: research-technology-wh40k-hidden-weaponry-right2
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_rifle.rsi
+    state: icon
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthLeft3
+  name: research-technology-wh40k-hidden-weaponry-left3
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthRight3
+  name: research-technology-wh40k-hidden-weaponry-right3
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/bolter.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthLeft4
+  name: research-technology-wh40k-hidden-weaponry-left4
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar/classic.rsi
+    state: mortar_m402_carry
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthRight4
+  name: research-technology-wh40k-hidden-weaponry-right4
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmagun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryAuthCap
+  name: research-technology-wh40k-hidden-weaponry-cap
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_kit.rsi
+    state: icon
+  discipline: WH40KWeaponry
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthRoot
+  name: research-technology-wh40k-hidden-equipment-root
+  icon:
+    sprite: Objects/Fun/whistles.rsi
+    state: trench
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthLeft2
+  name: research-technology-wh40k-hidden-equipment-left2
+  icon:
+    sprite: Objects/Misc/flare.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthRight2
+  name: research-technology-wh40k-hidden-equipment-right2
+  icon:
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    state: datadetector
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthLeft3
+  name: research-technology-wh40k-hidden-equipment-left3
+  icon:
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthRight3
+  name: research-technology-wh40k-hidden-equipment-right3
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthLeft4
+  name: research-technology-wh40k-hidden-equipment-left4
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthRight4
+  name: research-technology-wh40k-hidden-equipment-right4
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KEquipmentAuthCap
+  name: research-technology-wh40k-hidden-equipment-cap
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  hidden: true
+  cost: 0
+
+- type: technology
+  id: WH40KWeaponryStandardLasguns
+  name: research-technology-wh40k-weaponry-standard-lasguns
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_standart/lasgun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 5000
+  researchTimeSeconds: 135
+  technologyPrerequisites:
+  - WH40KWeaponryAuthRoot
+  recipeUnlocks:
+  - WH40KRecipeWeaponLaserLasgun
+
+- type: technology
+  id: WH40KWeaponryChainblades
+  name: research-technology-wh40k-weaponry-chainblades
+  icon:
+    sprite: _WH40K/Objects/Weapons/Melee/chainsword.rsi
+    state: off-icon
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 7000
+  researchTimeSeconds: 165
+  technologyPrerequisites:
+  - WH40KWeaponryAuthLeft2
+  - WH40KWeaponryStandardLasguns
+  recipeUnlocks:
+  - WH40KRecipeChainsword
+
+- type: technology
+  id: WH40KWeaponryStubberLines
+  name: research-technology-wh40k-weaponry-stubber-lines
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_rifle.rsi
+    state: icon
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 7000
+  researchTimeSeconds: 165
+  technologyPrerequisites:
+  - WH40KWeaponryAuthRight2
+  - WH40KWeaponryStandardLasguns
+  recipeUnlocks:
+  - WH40KRecipeWeaponStubRifle
+
+- type: technology
+  id: WH40KWeaponryAccatranPatterns
+  name: research-technology-wh40k-weaponry-accatran-patterns
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 9000
+  researchTimeSeconds: 195
+  technologyPrerequisites:
+  - WH40KWeaponryAuthLeft3
+  - WH40KWeaponryChainblades
+  recipeUnlocks:
+  - WH40KRecipeWeaponLaserLasgunAccatran
+
+- type: technology
+  id: WH40KWeaponryBolterArming
+  name: research-technology-wh40k-weaponry-bolter-arming
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/bolter.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 9000
+  researchTimeSeconds: 195
+  technologyPrerequisites:
+  - WH40KWeaponryAuthRight3
+  - WH40KWeaponryStubberLines
+  recipeUnlocks:
+  - WH40KRecipeWeaponRifleBolter
+
+- type: technology
+  id: WH40KWeaponryMortarSupport
+  name: research-technology-wh40k-weaponry-mortar-support
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar/classic.rsi
+    state: mortar_m402_carry
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 12000
+  researchTimeSeconds: 225
+  technologyPrerequisites:
+  - WH40KWeaponryAuthLeft4
+  - WH40KWeaponryAccatranPatterns
+  recipeUnlocks:
+  - WH40KRecipeMortarKit
+
+- type: technology
+  id: WH40KWeaponryPlasmaArming
+  name: research-technology-wh40k-weaponry-plasma-arming
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmagun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 12000
+  researchTimeSeconds: 225
+  technologyPrerequisites:
+  - WH40KWeaponryAuthRight4
+  - WH40KWeaponryBolterArming
+  recipeUnlocks:
+  - WH40KRecipeWeaponLaserPlasmagun
+
+- type: technology
+  id: WH40KWeaponryHeavyEmplacements
+  name: research-technology-wh40k-weaponry-heavy-emplacements
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_kit.rsi
+    state: icon
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 16000
+  researchTimeSeconds: 300
+  technologyPrerequisites:
+  - WH40KWeaponryAuthCap
+  - WH40KWeaponryMortarSupport
+  - WH40KWeaponryPlasmaArming
+  recipeUnlocks:
+  - WH40KRecipeHeavyBolter
+  - WH40KRecipeWeaponLaserLasgunVoss
+
+- type: technology
+  id: WH40KEquipmentSignalDoctrine
+  name: research-technology-wh40k-equipment-signal-doctrine
+  icon:
+    sprite: Objects/Fun/whistles.rsi
+    state: trench
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 5000
+  researchTimeSeconds: 135
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRoot
+  recipeUnlocks:
+  - WH40KRecipeTacticalWhistle
+
+- type: technology
+  id: WH40KEquipmentFieldFlares
+  name: research-technology-wh40k-equipment-field-flares
+  icon:
+    sprite: Objects/Misc/flare.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 7000
+  researchTimeSeconds: 165
+  technologyPrerequisites:
+  - WH40KEquipmentAuthLeft2
+  - WH40KEquipmentSignalDoctrine
+  recipeUnlocks:
+  - WH40KRecipeSignalFlare
+
+- type: technology
+  id: WH40KEquipmentIntelDetectors
+  name: research-technology-wh40k-equipment-intel-detectors
+  icon:
+    sprite: _RMC14/Objects/Tools/intel_detector.rsi
+    state: datadetector
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 7000
+  researchTimeSeconds: 165
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRight2
+  - WH40KEquipmentSignalDoctrine
+  recipeUnlocks:
+  - WH40KRecipeIntelDetector
+
+- type: technology
+  id: WH40KEquipmentSentryLinks
+  name: research-technology-wh40k-equipment-sentry-links
+  icon:
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 9000
+  researchTimeSeconds: 195
+  technologyPrerequisites:
+  - WH40KEquipmentAuthLeft3
+  - WH40KEquipmentFieldFlares
+  recipeUnlocks:
+  - WH40KRecipeSentryLaptop
+
+- type: technology
+  id: WH40KEquipmentFultonRecovery
+  name: research-technology-wh40k-equipment-fulton-recovery
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 9000
+  researchTimeSeconds: 195
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRight3
+  - WH40KEquipmentIntelDetectors
+  recipeUnlocks:
+  - WH40KRecipeTacticalFulton
+
+- type: technology
+  id: WH40KEquipmentRelayTrackers
+  name: research-technology-wh40k-equipment-relay-trackers
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 12000
+  researchTimeSeconds: 225
+  technologyPrerequisites:
+  - WH40KEquipmentAuthLeft4
+  - WH40KEquipmentSentryLinks
+  recipeUnlocks:
+  - WH40KRecipeMissionPinpointerRelay
+
+- type: technology
+  id: WH40KEquipmentCargoTrackers
+  name: research-technology-wh40k-equipment-cargo-trackers
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 12000
+  researchTimeSeconds: 225
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRight4
+  - WH40KEquipmentFultonRecovery
+  recipeUnlocks:
+  - WH40KRecipeMissionPinpointerCargo
+
+- type: technology
+  id: WH40KEquipmentMissionCommand
+  name: research-technology-wh40k-equipment-mission-command
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 16000
+  researchTimeSeconds: 300
+  technologyPrerequisites:
+  - WH40KEquipmentAuthCap
+  - WH40KEquipmentRelayTrackers
+  - WH40KEquipmentCargoTrackers
+  recipeUnlocks:
+  - WH40KRecipeMissionPinpointerBanner
+  - WH40KRecipeMissionPinpointerKit

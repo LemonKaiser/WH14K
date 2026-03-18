@@ -1,24 +1,59 @@
-#Vox
+- type: storeCategory
+  id: VoxBasics
+  name: Basics
+  priority: 0
 
 - type: storeCategory
   id: VoxWeaponry
-  name: Вооружение
-  priority: 0
+  name: Weapons
+  priority: 1
 
 - type: storeCategory
   id: VoxAmmo
-  name: Аммуниция
-  priority: 1
-
-
-  #Altar
+  name: Ammo
+  priority: 2
 
 - type: storeCategory
-  id: AltarWeaponry
-  name: Вооружение
+  id: VoxArmor
+  name: Armor
+  priority: 3
+
+- type: storeCategory
+  id: VoxSupport
+  name: Support
+  priority: 4
+
+- type: storeCategory
+  id: VoxReinforcements
+  name: Reinforcements
+  priority: 5
+
+- type: storeCategory
+  id: AltarBasics
+  name: Basics
   priority: 0
 
 - type: storeCategory
-  id: AltarAmmo
-  name: Аммуниция
+  id: AltarWeaponry
+  name: Weapons
   priority: 1
+
+- type: storeCategory
+  id: AltarAmmo
+  name: Ammo
+  priority: 2
+
+- type: storeCategory
+  id: AltarArmor
+  name: Armor
+  priority: 3
+
+- type: storeCategory
+  id: AltarSupport
+  name: Support
+  priority: 4
+
+- type: storeCategory
+  id: AltarReinforcements
+  name: Reinforcements
+  priority: 5

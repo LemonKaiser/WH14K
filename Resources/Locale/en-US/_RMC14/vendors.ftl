@@ -1,0 +1,24 @@
+cm-automated-vendor-ui-title-fallback = ColMarTech Vendor
+cm-automated-vendor-ui-search = Search
+cm-automated-vendor-ui-search-placeholder = Search...
+cm-automated-vendor-ui-points = Points: {$points}
+cm-automated-vendor-ui-take-all = TAKE ALL
+cm-automated-vendor-ui-take-one = TAKE ONE
+cm-automated-vendor-ui-choose-left = CHOOSE {$count}
+cm-automated-vendor-ui-unlimited = ∞
+
+cm-automated-vendor-section-starter = Starter
+cm-automated-vendor-section-primary-firearms = Primary firearms
+cm-automated-vendor-section-primary-ammunition = Primary ammunition
+cm-automated-vendor-section-sidearms = Sidearms
+cm-automated-vendor-section-standard-equipment = Standard equipment
+cm-automated-vendor-section-armor = Armor
+cm-automated-vendor-section-backpack = Backpack
+cm-automated-vendor-section-belt = Belt
+cm-automated-vendor-section-belts = Belts
+cm-automated-vendor-section-miscellaneous = Miscellaneous
+cm-automated-vendor-section-prepared-meals = Prepared meals
+cm-automated-vendor-section-flasks = Flasks
+cm-automated-vendor-section-armor-piercing-ammunition = Armor-piercing ammunition
+cm-automated-vendor-section-extended-ammunition = Extended ammunition
+cm-automated-vendor-section-special-ammunition = Special ammunition

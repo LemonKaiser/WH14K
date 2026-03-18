@@ -6,10 +6,10 @@
   roles:
   - Magos
   - Explorator
-  - Lexmechanic
   - Genetor
   - Enginseer
   - Novice
+  editorHidden: true
 
 - type: department
   id: Imperium
@@ -26,8 +26,11 @@
   - SpecialistSWS
   - SpecialistHWS
   - Guardsman
+  - Psyker
+  - VoxScout
+  - TitheSupplier
+  - Lexmechanic
   - Medic
-  # - Passenger
 
 - type: department
   id: DarkMechanicum
@@ -37,7 +40,6 @@
   roles:
   - HMagos
   - HExplorator
-  - HLexmechanic
   - HGenetor
   - HEnginseer
   - HNovice
@@ -58,4 +60,7 @@
   - HSpecialistSWS
   - HSpecialistHWS
   - HGuardsman
+  - HVoxScout
+  - HBandSupplier
+  - HLexmechanic
   - HMedic

@@ -4,12 +4,19 @@
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
             <BoxContainer Orientation="Vertical" Margin="8">
-                <Label Text="{Loc 'ui-options-accessability-header-visuals'}"
+                <Label Name="VisualsHeaderLabel" Text="{Loc 'ui-options-accessability-header-visuals'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}" />
                 <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
                 <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
                 <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
+                <Label Name="LobbyHeaderLabel" Text="{Loc 'ui-options-accessability-header-lobby'}"
+                       StyleClasses="LabelKeyText"/>
+                <ui:OptionDropDown Name="DropDownLobbyBackgroundType" Title="{Loc 'ui-options-lobby-background-type'}" />
+                <ui:OptionDropDown Name="DropDownLobbyStaticBackground" Title="{Loc 'ui-options-lobby-static-background'}" />
+                <ui:OptionDropDown Name="DropDownLobbyAnimatedBackground" Title="{Loc 'ui-options-lobby-animated-background'}" />
+                <ui:OptionSlider Name="LobbyPanelOpacitySlider" Title="{Loc 'ui-options-lobby-panel-opacity'}" />
+                <ui:OptionSlider Name="CustomizationPanelOpacitySlider" Title="{Loc 'ui-options-customization-panel-opacity'}" />
                 <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
                 <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
                 <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />
@@ -18,7 +25,7 @@
                 <ui:OptionColorSlider Name="HighlightsColorSlider"
                     Title="{Loc 'ui-options-highlights-color'}"
                     Example="{Loc 'ui-options-highlights-color-example'}"/>
-                <Label Text="{Loc 'ui-options-accessability-header-content'}"
+                <Label Name="ContentHeaderLabel" Text="{Loc 'ui-options-accessability-header-content'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="CensorNudityCheckBox" Text="{Loc 'ui-options-censor-nudity'}" />
             </BoxContainer>

@@ -1,10 +1,14 @@
-### Connecting dialog when you start up the game
+### Диалог подключения при запуске игры
 
 connecting-title = Space Station 14
 connecting-exit = Выйти
+connecting-back = Назад
 connecting-retry = Повторить
 connecting-reconnect = Переподключиться
 connecting-copy = Скопировать сообщение
+connecting-discord-auth-link = Привязать Discord
+connecting-discord-auth-refresh = Обновить Discord
+connecting-discord-auth-refresh-cooldown = Обновить Discord ({ $seconds }с)
 connecting-redial = Перезапустить
 connecting-redial-wait = Пожалуйста подождите: { TOSTRING($time, "G3") }
 connecting-in-progress = Подключение к серверу...

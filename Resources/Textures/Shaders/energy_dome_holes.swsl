@@ -1,0 +1,131 @@
+uniform highp float holeCoverage;
+uniform highp float holeScale;
+uniform highp float edgeSoftness;
+uniform highp float speed;
+uniform highp float debugView;
+uniform highp float darkenCoreStrength;
+uniform highp float darkenHazeStrength;
+uniform highp float alphaCoreStrength;
+uniform highp float alphaHazeStrength;
+uniform highp float minColorFactor;
+uniform highp float minAlphaFactor;
+
+highp float hash(highp vec2 p)
+{
+    return fract(cos(p.x * 42.98 + p.y * 43.23) * 1127.53);
+}
+
+highp float valueNoise(highp vec2 p)
+{
+    highp vec2 i = floor(p);
+    highp vec2 f = smoothstep(vec2(0.0), vec2(1.0), fract(p));
+
+    highp float h1 = mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x);
+    highp float h2 = mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x);
+    return mix(h1, h2, f.y);
+}
+
+highp float layeredNoise(highp vec2 p)
+{
+    // Adapted to SWSL from classic procedural noise fade patterns.
+    highp float n =
+        valueNoise(p / 32.0) * 0.58 +
+        valueNoise(p / 16.0) * 0.20 +
+        valueNoise(p / 8.0) * 0.10 +
+        valueNoise(p / 4.0) * 0.05 +
+        valueNoise(p / 2.0) * 0.02 +
+        valueNoise(p) * 0.0125;
+
+    // Normalize accumulated amplitude sum (~0.9625) to 0..1-ish.
+    return clamp(n / 0.9625, 0.0, 1.0);
+}
+
+void fragment()
+{
+    highp vec4 baseColor = zTexture(UV);
+    if (baseColor.a <= 0.0)
+        discard;
+
+    highp float coverage = clamp(holeCoverage, 0.0, 1.0);
+    if (coverage <= 0.0001)
+    {
+        COLOR = baseColor;
+        return;
+    }
+
+    // Use UV2 (quad-space) instead of UV (atlas-space) so mask is stable across animated atlas frames.
+    highp vec2 uvNorm = UV2;
+
+    // As charge drops, lower noise frequency -> larger dissolve islands (size growth).
+    highp float scaleMul = clamp(holeScale / 10.0, 0.65, 1.60);
+    highp float noiseScale = mix(20.0, 8.0, pow(coverage, 0.85)) * scaleMul;
+
+    // Static warp for organic shape, but no time translation (no flying pattern).
+    highp vec2 warp = vec2(
+        layeredNoise(uvNorm * 5.0 + vec2(7.3, 17.1)),
+        layeredNoise(uvNorm * 5.0 + vec2(29.7, 3.9))
+    ) - vec2(0.5);
+    highp vec2 noiseUv = uvNorm * noiseScale + warp * (0.35 + coverage * 1.00);
+
+    highp float fineField = layeredNoise(noiseUv);
+    highp float macroField = layeredNoise(uvNorm * mix(3.6, 1.7, pow(coverage, 0.80)) + vec2(3.1, 11.7));
+    highp float field = clamp(mix(fineField, max(fineField, macroField), 0.40 + coverage * 0.25), 0.0, 1.0);
+
+    // Final target affected area is coverage (up to ~0.80 at critical charge).
+    highp float threshold = 1.0 - coverage;
+    highp float feather = max(edgeSoftness * (0.90 + coverage * 1.20), 0.010);
+    highp float dissolveMaskRaw = smoothstep(threshold - feather, threshold + feather, field);
+
+    // Subtle intensity pulse only; spatial pattern is static.
+    highp float pulse = 0.96 + 0.04 * sin(TIME * speed * 1.6 + field * 6.0);
+    highp float dissolveMask = clamp(dissolveMaskRaw * pulse, 0.0, 1.0);
+
+    // Diagnostics:
+    // 1 = noise field, 2 = dissolve mask, 3 = resulting alpha factor.
+    if (debugView > 0.5 && debugView < 1.5)
+    {
+        COLOR = vec4(vec3(field), 1.0);
+        return;
+    }
+
+    if (debugView > 1.5 && debugView < 2.5)
+    {
+        COLOR = vec4(vec3(dissolveMaskRaw), 1.0);
+        return;
+    }
+
+    if (debugView > 2.5)
+    {
+        highp float coreDbg = pow(dissolveMask, 1.25);
+        highp float hazeDbg = pow(dissolveMask, 0.55);
+        highp float alphaFactorDbg = clamp(
+            1.0 - (coreDbg * clamp(alphaCoreStrength, 0.0, 2.0) + hazeDbg * clamp(alphaHazeStrength, 0.0, 2.0)),
+            clamp(minAlphaFactor, 0.0, 1.0),
+            1.0);
+        COLOR = vec4(vec3(alphaFactorDbg), 1.0);
+        return;
+    }
+
+    // Soft dissolve (not holes): darken + reduce alpha, but do not fully cut out.
+    highp float core = pow(dissolveMask, 1.25);
+    highp float haze = pow(dissolveMask, 0.55);
+
+    highp float colorFactor = clamp(
+        1.0 - (core * clamp(darkenCoreStrength, 0.0, 2.0) + haze * clamp(darkenHazeStrength, 0.0, 2.0)),
+        clamp(minColorFactor, 0.0, 1.0),
+        1.0);
+    highp float alphaFactor = clamp(
+        1.0 - (core * clamp(alphaCoreStrength, 0.0, 2.0) + haze * clamp(alphaHazeStrength, 0.0, 2.0)),
+        clamp(minAlphaFactor, 0.0, 1.0),
+        1.0);
+
+    // Slight cyan edge tint to avoid "flat black holes" look.
+    highp float edgeBandA = smoothstep(threshold - feather * 1.00, threshold - feather * 0.20, field);
+    highp float edgeBandB = smoothstep(threshold + feather * 0.20, threshold + feather * 1.00, field);
+    highp float edgeBand = clamp(edgeBandA - edgeBandB, 0.0, 1.0);
+
+    COLOR = baseColor;
+    COLOR.rgb *= colorFactor;
+    COLOR.rgb += vec3(0.06, 0.13, 0.18) * edgeBand * coverage * 0.35;
+    COLOR.a *= alphaFactor;
+}

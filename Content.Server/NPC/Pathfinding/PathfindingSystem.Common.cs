@@ -1,8 +1,4 @@
-using Content.Shared.Gravity;
-using Content.Shared.Maps;
 using Content.Shared.NPC;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Spawners;
 
 namespace Content.Server.NPC.Pathfinding;
 
@@ -45,6 +41,12 @@ public sealed partial class PathfindingSystem
     private float GetTileCost(PathRequest request, PathPoly start, PathPoly end)
     {
         var modifier = 1f;
+        var isHazard = (end.Data.Flags & PathfindingBreadcrumbFlag.Hazard) != 0x0;
+        var profile = request.Profile;
+        var doorScale = GetDoorPenaltyScale(profile);
+        var smashScale = GetSmashPenaltyScale(profile);
+        var climbScale = GetClimbPenaltyScale(profile);
+        var hazardScale = GetHazardPenaltyScale(profile);
 
         // TODO
         if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)
@@ -61,22 +63,24 @@ public sealed partial class PathfindingSystem
 
             // TODO: Handling power + door prying
             // Door we should be able to open
-            if (isDoor && !isAccess && (request.Flags & PathFlags.Interact) != 0x0)
+            if (isDoor)
             {
-                modifier += 0.5f;
-            }
-            // Door we can force open one way or another
-            else if (isDoor && isAccess && (request.Flags & PathFlags.Prying) != 0x0)
-            {
-                modifier += 10f;
+                if (!isAccess && (request.Flags & PathFlags.Interact) != 0x0)
+                    modifier += 0.5f * doorScale;
+                else if (isAccess && (request.Flags & PathFlags.Prying) != 0x0)
+                    modifier += 10f * doorScale;
+                else
+                    // Last ditch - try to bump the door if it's the only feasible option.
+                    modifier += 20f * doorScale;
             }
             else if ((request.Flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
             {
-                modifier += 10f + end.Data.Damage / 100f;
+                // Breaking stuff should be usually last resort, especially because we WILL try to punch walls.
+                modifier += (10f + end.Data.Damage / 10f) * smashScale;
             }
             else if (isClimb && (request.Flags & PathFlags.Climbing) != 0x0)
             {
-                modifier += 0.5f;
+                modifier += 0.5f * climbScale;
             }
             else
             {
@@ -84,7 +88,59 @@ public sealed partial class PathfindingSystem
             }
         }
 
+        if (isHazard)
+        {
+            // Severe slow/damage contacts such as barbed wire should be avoided even when they
+            // don't fully block the tile. Keep them traversable as a last resort, but far costlier
+            // than a normal detour so squads stop choosing hazard strips as the "shortest" lane.
+            modifier += (16f + MathF.Min(12f, end.Data.Damage / 6f)) * hazardScale;
+        }
+
         return modifier * OctileDistance(end, start);
+    }
+
+    private static float GetDoorPenaltyScale(PathCostProfile profile)
+    {
+        return profile switch
+        {
+            PathCostProfile.Assault => 0.78f,
+            PathCostProfile.Breach => 0.55f,
+            PathCostProfile.Safe => 1.35f,
+            _ => 1f,
+        };
+    }
+
+    private static float GetSmashPenaltyScale(PathCostProfile profile)
+    {
+        return profile switch
+        {
+            PathCostProfile.Assault => 0.72f,
+            PathCostProfile.Breach => 0.45f,
+            PathCostProfile.Safe => 1.5f,
+            _ => 1f,
+        };
+    }
+
+    private static float GetClimbPenaltyScale(PathCostProfile profile)
+    {
+        return profile switch
+        {
+            PathCostProfile.Assault => 0.9f,
+            PathCostProfile.Breach => 0.82f,
+            PathCostProfile.Safe => 1.15f,
+            _ => 1f,
+        };
+    }
+
+    private static float GetHazardPenaltyScale(PathCostProfile profile)
+    {
+        return profile switch
+        {
+            PathCostProfile.Assault => 0.82f,
+            PathCostProfile.Breach => 0.9f,
+            PathCostProfile.Safe => 1.65f,
+            _ => 1f,
+        };
     }
 
     #region Simplifier
@@ -156,3 +212,4 @@ public sealed partial class PathfindingSystem
 
     #endregion
 }
+

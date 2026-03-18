@@ -1,16 +1,80 @@
 - type: job
   id: HSergeant
   name: job-name-hsergeant
-  description: job-description-sergeant
+  description: job-description-hsergeant
   playTimeTracker: JobHSergeant
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: HeresySergeantGear
-  icon: "JobIconSergeant"
+  icon: "JobIconHSergeant"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: job
+  id: HSergeantSWS
+  name: job-name-hsergeant-sws
+  description: job-description-hsergeant-sws
+  playTimeTracker: JobHSergeantSWS
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: HeresySergeantGear
+  icon: "JobIconHSergeant"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: job
+  id: HSergeantHWS
+  name: job-name-hsergeant-hws
+  description: job-description-hsergeant-hws
+  playTimeTracker: JobHSergeantHWS
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: HeresySergeantGear
+  icon: "JobIconHSergeant"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: HeresySergeantGear
@@ -18,6 +82,7 @@
     jumpsuit: ClothingUniformJumpsuitCultist2
     back: ClothingBackpackSatchelChaosWheel
     shoes: ClothingShoesChaosBoots2
+    ears: ClothingHeadsetVoxBackpackHeretics
     belt: chaosbelt
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy

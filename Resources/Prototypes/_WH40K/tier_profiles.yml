@@ -1,0 +1,28 @@
+- type: wh40kTierThresholdProfile
+  id: WH40KTierThresholdsStandard
+  tier1MinBaseLevel: 2
+  tier2MinBaseLevel: 3
+  tier3MinBaseLevel: 4
+
+- type: wh40kTierMachineProfile
+  id: WH40KTierMachineStandard
+  thresholdProfile: WH40KTierThresholdsStandard
+  globalTimeMultiplier: 1
+  minProcessSecondsTier0: 10
+  minProcessSecondsTier1: 8
+  minProcessSecondsTier2: 5
+  minProcessSecondsTier3: 3
+  materialStorageLimitTier0: 10
+  materialStorageLimitTier1: 15
+  materialStorageLimitTier2: 20
+  materialStorageLimitTier3: 30
+
+- type: wh40kTierLogisticsProfile
+  id: WH40KTierLogisticsStandard
+  thresholdProfile: WH40KTierThresholdsStandard
+  tier1MaxItemsBonus: 2
+  tier2MaxItemsBonus: 5
+  tier3MaxItemsBonus: 10
+  tier1DeliveryMinutesReduction: 1
+  tier2DeliveryMinutesReduction: 2
+  tier3DeliveryMinutesReduction: 5

@@ -84,7 +84,7 @@
     sprite: _WH40K/Clothing/Back/Backpacks/guardpack.rsi
 
 - type: entity
-  parent: [ Clothing, StorePresetVox ]
+  parent: Clothing
   id: ClothingBackpackVox
   suffix: WH40K, Гвардия
   components:
@@ -98,12 +98,66 @@
   - type: UserInterface
     interfaces:
       enum.StoreUiKey.Key:
-        type: StoreBoundUserInterface
+        type: WH40KVoxStoreBoundUserInterface
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
-  - type: Store
-    balance:
-      intelligence_imp: 0
+  - type: WH40KVoxSupplyDropStore
+    account: WH40KImperium
+    teamId: Imperium
+    fundsCurrency: WH40KFactionFunds
+    dropDelaySeconds: 30
+    cooldownSeconds: 180
+    markerPrototype: WH40KSupplyDropParachuteCrateVisual
+    deliveryCratePrototype: WH40KVoxSupplyDropCrate
+    listingDropAmounts:
+      VoxSupplyDropNutribrick: 4
+      VoxSupplyDropMagazineStubRifle: 4
+    listings:
+    - VoxSupplyDropNutribrick
+    - VoxSupplyDropWHSoup
+    - VoxSupplyDropBasicMedkit
+    - VoxSupplyDropLasgunPowerCell
+    - VoxSupplyDropMagazineStubRifle
+    - VoxSupplyDropAutogunAmmoBox
+  - type: Item
+    size: Ginormous
+
+- type: entity
+  parent: Clothing
+  id: ClothingBackpackVoxChaos
+  suffix: WH40K, Heretics
+  components:
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - back
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/cultchaospack.rsi
+    state: icon
+  - type: UserInterface
+    interfaces:
+      enum.StoreUiKey.Key:
+        type: WH40KVoxStoreBoundUserInterface
+  - type: ActivatableUI
+    key: enum.StoreUiKey.Key
+  - type: WH40KVoxSupplyDropStore
+    account: WH40KHeretics
+    teamId: Heretics
+    fundsCurrency: WH40KFactionFunds
+    dropDelaySeconds: 30
+    cooldownSeconds: 180
+    markerPrototype: WH40KSupplyDropParachuteCrateVisual
+    deliveryCratePrototype: WH40KVoxSupplyDropCrate
+    listingDropAmounts:
+      VoxSupplyDropNutribrick: 4
+      VoxSupplyDropMagazineStubRifle: 4
+    listings:
+    - VoxSupplyDropNutribrick
+    - VoxSupplyDropWHSoup
+    - VoxSupplyDropBasicMedkit
+    - VoxSupplyDropLasgunPowerCell
+    - VoxSupplyDropMagazineStubRifle
+    - VoxSupplyDropAutogunAmmoBox
   - type: Item
     size: Ginormous
 

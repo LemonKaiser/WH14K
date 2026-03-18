@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
@@ -20,6 +22,7 @@ public sealed partial class ServerDbPostgres
         BanManager.BanNotificationChannel,
         MultiServerKickManager.NotificationChannel,
     ];
+    private static readonly HashSet<string> NotificationChannelSet = new(NotificationChannels, StringComparer.Ordinal);
 
     private static readonly TimeSpan ReconnectWaitIncrease = TimeSpan.FromSeconds(10);
 
@@ -76,8 +79,15 @@ public sealed partial class ServerDbPostgres
 
                 foreach (var channel in NotificationChannels)
                 {
+                    if (!IsValidNotificationChannelName(channel))
+                    {
+                        _notifyLog.Error($"Skipping invalid notification channel name '{channel}'.");
+                        continue;
+                    }
+
+                    var escapedChannel = channel.Replace("\"", "\"\"");
                     _notifyLog.Verbose($"Listening on channel {channel}");
-                    await using var cmd = new NpgsqlCommand($"LISTEN {channel}", _notificationConnection);
+                    await using var cmd = new NpgsqlCommand($"LISTEN \"{escapedChannel}\"", _notificationConnection);
                     await cmd.ExecuteNonQueryAsync(cancellationToken);
                 }
 
@@ -105,6 +115,12 @@ public sealed partial class ServerDbPostgres
 
     private void OnNotification(object _, NpgsqlNotificationEventArgs notification)
     {
+        if (!NotificationChannelSet.Contains(notification.Channel))
+        {
+            _notifyLog.Warning($"Ignoring notification from unsupported channel '{notification.Channel}'.");
+            return;
+        }
+
         _notifyLog.Verbose($"Received notification on channel {notification.Channel}");
         NotificationReceived(new DatabaseNotification
         {
@@ -115,10 +131,31 @@ public sealed partial class ServerDbPostgres
 
     public override async Task SendNotification(DatabaseNotification notification)
     {
+        if (!NotificationChannelSet.Contains(notification.Channel))
+        {
+            throw new ArgumentException(
+                $"Unsupported database notification channel '{notification.Channel}'.",
+                nameof(notification));
+        }
+
         await using var db = await GetDbImpl();
 
         await db.PgDbContext.Database.ExecuteSqlAsync(
             $"SELECT pg_notify({notification.Channel}, {notification.Payload})");
+    }
+
+    private static bool IsValidNotificationChannelName(string channel)
+    {
+        if (string.IsNullOrWhiteSpace(channel))
+            return false;
+
+        foreach (var ch in channel)
+        {
+            if (!(char.IsLetterOrDigit(ch) || ch == '_'))
+                return false;
+        }
+
+        return true;
     }
 
     public override void Shutdown()

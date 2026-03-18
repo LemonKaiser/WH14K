@@ -3,13 +3,26 @@
   name: job-name-specialist-sws
   description: job-description-specialist-sws
   playTimeTracker: JobSpecialistSWS
+  setPreference: false
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: GuardsmanSpesSpecGear
   icon: "JobIconSpecialistSWS"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
 
 - type: startingGear

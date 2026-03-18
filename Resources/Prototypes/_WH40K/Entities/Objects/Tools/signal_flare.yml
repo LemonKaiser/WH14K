@@ -1,0 +1,50 @@
+- type: entity
+  id: WH40KSignalFlareBase
+  parent: Flare
+  abstract: true
+  name: tactical signal flare
+  description: A tactical flare that marks a temporary coordinate beacon once lit and grounded.
+  components:
+  - type: ExpendableLight
+    glowDuration: 180
+    fadeOutDuration: 20
+  - type: PointLight
+    color: "#8CFF9D"
+  - type: WH40KFlareSignal
+    markerPrototype: WH40KSignalFlareMarker
+    markerLifetime: 50
+    groundedSampleCount: 8
+    groundedTolerance: 0.08
+    userCooldown: 6
+    rateLimitWindow: 45
+    maxSignalsPerWindow: 3
+    maxActiveMarkersPerTeam: 3
+    markerLabel: wh40k-signal-flare-marker-label
+    markerRadius: 6
+    markerColor: "#7CFF95"
+
+- type: entity
+  id: WH40KSignalFlareImperium
+  parent: WH40KSignalFlareBase
+  name: imperium signal flare
+  description: A tactical signal flare calibrated to Imperium command channels.
+  components:
+  - type: PointLight
+    color: "#7BA4FF"
+  - type: WH40KFlareSignal
+    allowedTeamIds:
+    - Imperium
+    markerColor: "#7BA4FF"
+
+- type: entity
+  id: WH40KSignalFlareHeretics
+  parent: WH40KSignalFlareBase
+  name: heretics signal flare
+  description: A tactical signal flare calibrated to Heretics command channels.
+  components:
+  - type: PointLight
+    color: "#FF7A7A"
+  - type: WH40KFlareSignal
+    allowedTeamIds:
+    - Heretics
+    markerColor: "#FF7A7A"

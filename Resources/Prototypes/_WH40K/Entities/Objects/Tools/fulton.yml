@@ -1,0 +1,69 @@
+- type: stack
+  id: WH40KTacticalFulton
+  name: wh40k-tactical-fulton-stack-name
+  icon:
+    sprite: /Textures/Objects/Tools/fulton.rsi
+    state: extraction_pack
+  spawn: WH40KTacticalFultonImperium
+  maxCount: 20
+
+- type: entity
+  id: WH40KTacticalFultonBase
+  parent: BaseItem
+  abstract: true
+  name: tactical fulton
+  description: Field extraction device for evacuating high-value battlefield targets.
+  components:
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: inhand-left-fulton
+      right:
+      - state: inhand-right-fulton
+  - type: Stack
+    stackType: WH40KTacticalFulton
+    count: 1
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: WH40KTacticalFulton
+    attachDelay: 3
+    extractionDelay: 12
+    defaultCorpseFrontReward: 4
+    defaultCorpseCommandReward: 4
+    userCooldown: 8
+    rateLimitWindow: 45
+    maxUsesPerWindow: 3
+    maxPendingExtractionsPerTeam: 4
+
+- type: entity
+  id: WH40KTacticalFultonImperium
+  parent: WH40KTacticalFultonBase
+  name: tactical fulton (Imperium)
+  suffix: WH40K
+  components:
+  - type: WH40KTacticalFulton
+    allowedTeamIds:
+    - Imperium
+
+- type: entity
+  id: WH40KTacticalFultonHeretics
+  parent: WH40KTacticalFultonBase
+  name: tactical fulton (Heretics)
+  suffix: WH40K
+  components:
+  - type: WH40KTacticalFulton
+    allowedTeamIds:
+    - Heretics

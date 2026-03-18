@@ -92,6 +92,14 @@
     path: /Audio/_WH40K/Voice/Tyranid/zoanthropespeech.ogg
   exclaimSound:
     path: /Audio/_WH40K/Voice/Tyranid/zoanthropespeech.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipZoanthrope
+  dialogueBlipPitch: 0.62
+  dialogueBlipVariation: 0.05
+  dialogueBlipVolume: -9
+  dialogueCharsPerSecond: 14
+  dialogueCharsPerBlip: 3
+  dialoguePunctuationPause: 0.11
 
 - type: soundCollection
   id: ZoanthropeDeath

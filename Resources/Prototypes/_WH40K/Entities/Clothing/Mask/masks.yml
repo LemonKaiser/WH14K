@@ -16,6 +16,8 @@
     modifiers:
       coefficients:
         Radiation: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
 
 - type: entity
   parent: ClothingMaskPullableBase
@@ -49,6 +51,8 @@
     modifiers:
       coefficients:
         Radiation: 0.8
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
 
 - type: entity
   parent: ClothingMaskGas
@@ -106,6 +110,8 @@
     modifiers:
       coefficients:
         Radiation: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
 
 - type: entity
   parent: ClothingMaskGas
@@ -125,3 +131,15 @@
     modifiers:
       coefficients:
         Radiation: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.7
+
+- type: entity
+  parent: ClothingMaskGasGuardsman
+  id: ClothingMaskGasKrieg
+  suffix: WH40K, Krieg
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi

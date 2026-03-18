@@ -170,25 +170,40 @@ namespace Content.Server.Lathe
             return ev.Recipes.ToList();
         }
 
-        public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, int quantity, LatheComponent? component = null)
+        public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, int quantity, bool infinite = false, LatheComponent? component = null)
         {
             if (!Resolve(uid, ref component))
                 return false;
 
-            if (quantity <= 0)
-                return false;
-            quantity = int.Min(quantity, MaxItemsPerRequest);
-
-            if (!CanProduce(uid, recipe, quantity, component))
+            if (!HasRecipe(uid, recipe, component))
                 return false;
 
-            foreach (var (mat, amount) in GetAdjustedAmount(component, recipe))
-                _materialStorage.TryChangeMaterialAmount(uid, mat, -amount * quantity);
+            if (!infinite && quantity <= 0)
+                return false;
 
-            if (component.Queue.Last is { } node && node.ValueRef.Recipe == recipe.ID)
-                node.ValueRef.ItemsRequested += quantity;
+            quantity = infinite ? 1 : int.Min(quantity, MaxItemsPerRequest);
+
+            if (!infinite && !CanProduce(uid, recipe, quantity, component))
+                return false;
+
+            if (!infinite)
+            {
+                foreach (var (mat, amount) in GetAdjustedAmount(component, recipe))
+                    _materialStorage.TryChangeMaterialAmount(uid, mat, -amount * quantity);
+            }
+
+            if (component.Queue.Last is { } node &&
+                node.ValueRef.Recipe == recipe.ID &&
+                node.ValueRef.Infinite == infinite)
+            {
+                if (!infinite)
+                    node.ValueRef.ItemsRequested += quantity;
+            }
             else
-                component.Queue.AddLast(new LatheRecipeBatch(recipe.ID, 0, quantity));
+            {
+                var requested = infinite ? 0 : quantity;
+                component.Queue.AddLast(new LatheRecipeBatch(recipe.ID, 0, requested, infinite));
+            }
 
             return true;
         }
@@ -201,17 +216,37 @@ namespace Content.Server.Lathe
                 return false;
 
             var batch = component.Queue.First();
-            batch.ItemsPrinted++;
-            if (batch.ItemsPrinted >= batch.ItemsRequested || batch.ItemsPrinted < 0) // Rollover sanity check
-                component.Queue.RemoveFirst();
             var recipe = _proto.Index(batch.Recipe);
+            component.CurrentRecipe = recipe;
+
+            if (batch.Infinite)
+            {
+                if (!CanProduce(uid, recipe, 1, component))
+                {
+                    component.CurrentRecipe = null;
+                    return false;
+                }
+
+                foreach (var (mat, amount) in GetAdjustedAmount(component, recipe))
+                    _materialStorage.TryChangeMaterialAmount(uid, mat, -amount);
+
+                batch.ItemsPrinted++;
+            }
+            else
+            {
+                batch.ItemsPrinted++;
+                if (batch.ItemsPrinted >= batch.ItemsRequested || batch.ItemsPrinted < 0) // Rollover sanity check
+                    component.Queue.RemoveFirst();
+            }
 
             var time = _reagentSpeed.ApplySpeed(uid, recipe.CompleteTime) * component.TimeMultiplier;
+            var getTimeEv = new LatheGetProductionTimeEvent(recipe, time);
+            RaiseLocalEvent(uid, ref getTimeEv);
+            time = getTimeEv.Time < TimeSpan.Zero ? TimeSpan.Zero : getTimeEv.Time;
 
             var lathe = EnsureComp<LatheProducingComponent>(uid);
             lathe.StartTime = _timing.CurTime;
             lathe.ProductionLength = time;
-            component.CurrentRecipe = recipe;
 
             var ev = new LatheStartPrintingEvent(recipe);
             RaiseLocalEvent(uid, ref ev);
@@ -260,6 +295,9 @@ namespace Content.Server.Lathe
                         _puddle.TrySpillAt(uid, toAdd, out _);
                     }
                 }
+
+                var finishEv = new LatheFinishPrintingEvent(currentRecipe);
+                RaiseLocalEvent(uid, ref finishEv);
             }
 
             comp.CurrentRecipe = null;
@@ -282,7 +320,28 @@ namespace Content.Server.Lathe
             if (producing == null && component.Queue.First is { } node)
                 producing = node.Value.Recipe;
 
-            var state = new LatheUpdateState(GetAvailableRecipes(uid, component), component.Queue.ToArray(), producing);
+            var isProducing = false;
+            TimeSpan? productionStart = null;
+            TimeSpan? productionLength = null;
+            if (component.CurrentRecipe != null && TryComp<LatheProducingComponent>(uid, out var prodComp))
+            {
+                isProducing = true;
+                productionStart = prodComp.StartTime;
+                productionLength = prodComp.ProductionLength;
+            }
+
+            int? materialStorageLimit = null;
+            if (TryComp<MaterialStorageComponent>(uid, out var materialStorage))
+                materialStorageLimit = materialStorage.StorageLimit;
+
+            var state = new LatheUpdateState(
+                GetAvailableRecipes(uid, component),
+                component.Queue.ToArray(),
+                producing,
+                isProducing,
+                productionStart,
+                productionLength,
+                materialStorageLimit);
             _uiSys.SetUiState(uid, LatheUiKey.Key, state);
         }
 
@@ -329,6 +388,8 @@ namespace Content.Server.Lathe
 
         private void OnMaterialAmountChanged(EntityUid uid, LatheComponent component, ref MaterialAmountChangedEvent args)
         {
+            if (component.CurrentRecipe == null)
+                TryStartProducing(uid, component);
             UpdateUserInterfaceState(uid, component);
         }
 
@@ -456,6 +517,9 @@ namespace Content.Server.Lathe
         /// </summary>
         private void RefundBatch(EntityUid uid, LatheComponent lathe, LatheRecipeBatch batch)
         {
+            if (batch.Infinite)
+                return;
+
             var delta = batch.ItemsRequested - batch.ItemsPrinted;
 
             _proto.Resolve(batch.Recipe, out var recipe);
@@ -500,11 +564,12 @@ namespace Content.Server.Lathe
         {
             if (_proto.TryIndex(args.ID, out LatheRecipePrototype? recipe))
             {
-                if (TryAddToQueue(uid, recipe, args.Quantity, component))
+                if (TryAddToQueue(uid, recipe, args.Quantity, args.Infinite, component))
                 {
+                    var amountText = args.Infinite ? "infinite" : args.Quantity.ToString();
                     _adminLogger.Add(LogType.Action,
                         LogImpact.Low,
-                        $"{ToPrettyString(args.Actor):player} queued {args.Quantity} {GetRecipeName(recipe)} at {ToPrettyString(uid):lathe}");
+                        $"{ToPrettyString(args.Actor):player} queued {amountText} {GetRecipeName(recipe)} at {ToPrettyString(uid):lathe}");
                 }
             }
             TryStartProducing(uid, component);
@@ -536,9 +601,10 @@ namespace Content.Server.Lathe
                 return;
 
             var batch = node.Value;
+            var amountText = batch.Infinite ? "infinite" : $"{batch.ItemsPrinted}/{batch.ItemsRequested}";
             _adminLogger.Add(LogType.Action,
                 LogImpact.Low,
-                $"{ToPrettyString(args.Actor):player} deleted a lathe job for ({batch.ItemsPrinted}/{batch.ItemsRequested}) {GetRecipeName(batch.Recipe)} at {ToPrettyString(uid):lathe}");
+                $"{ToPrettyString(args.Actor):player} deleted a lathe job for ({amountText}) {GetRecipeName(batch.Recipe)} at {ToPrettyString(uid):lathe}");
 
             RefundBatch(uid, component, batch);
             component.Queue.Remove(node);

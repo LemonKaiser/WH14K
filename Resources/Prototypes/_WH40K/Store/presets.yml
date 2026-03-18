@@ -5,65 +5,13 @@
   - type: Store
     name: resupply-station
     categories:
+    - VoxBasics
     - VoxWeaponry
     - VoxAmmo
+    - VoxArmor
+    - VoxSupport
+    - VoxReinforcements
     currencyWhitelist:
     - intelligence_imp
     balance:
-      intelligence_imp: 0
-
-- type: entity
-  id: StorePresetStore
-  abstract: true
-  components:
-  - type: Store
-    name: resupply-station
-    categories:
-    - VoxWeaponry
-    - VoxAmmo
-    currencyWhitelist:
-    - intelligence_imp
-    balance:
-      intelligence_imp: 0
-
-- type: entity
-  id: StorePresetStoreCmd
-  abstract: true
-  components:
-  - type: Store
-    name: resupply-station
-    categories:
-    - VoxWeaponry
-    - VoxAmmo
-    currencyWhitelist:
-    - intelligence_imp
-    balance:
-      intelligence_imp: 0
-
-- type: entity
-  id: StorePresetAltar
-  abstract: true
-  components:
-  - type: Store
-    name: altar-dark-gods
-    categories:
-    - AltarWeaponry
-    - AltarAmmo
-    currencyWhitelist:
-    - intelligence_ch
-    balance:
-      intelligence_ch: 0
-
-- type: entity
-  id: StorePresetAltarCmd
-  abstract: true
-  components:
-  - type: Store
-    name: altar-dark-gods
-    categories:
-    - AltarWeaponry
-    - AltarAmmo
-    currencyWhitelist:
-    - intelligence_ch
-    balance:
-      intelligence_ch: 0
+      intelligence_imp: 50

@@ -1,0 +1,27 @@
+wh40k-chat-emote-name-commissar-consider-it-done = Consider It Done
+wh40k-chat-emote-name-commissar-you-will-be-executed = You Will Be Executed
+wh40k-chat-emote-name-commissar-attack = Attack
+wh40k-chat-emote-name-commissar-forward-to-victory = Forward to Victory
+wh40k-chat-emote-name-commissar-where-am-i-needed = Where Am I Needed?
+wh40k-chat-emote-name-commissar-their-days-are-numbered = Their Days Are Numbered
+wh40k-chat-emote-name-commissar-retreat-is-a-bad-decision = Retreat Is a Bad Decision
+wh40k-chat-emote-name-commissar-i-sentence-you-to-death = I Sentence You to Death
+wh40k-chat-emote-name-commissar-order-received-and-understood = Order Received and Understood
+wh40k-chat-emote-name-commissar-spread-out = Spread Out
+wh40k-chat-emote-name-commissar-you-dared-to-shoot-at-me = You Dared to Shoot at Me
+wh40k-chat-emote-name-commissar-what-do-you-want = What Do You Want?
+wh40k-chat-emote-name-commissar-i-am-leaving = I Am Leaving
+
+wh40k-chat-emote-msg-commissar-consider-it-done = says, "Consider it done."
+wh40k-chat-emote-msg-commissar-you-will-be-executed = snarls, "You will be executed."
+wh40k-chat-emote-msg-commissar-attack = commands, "Attack!"
+wh40k-chat-emote-msg-commissar-forward-to-victory = roars, "Forward to victory!"
+wh40k-chat-emote-msg-commissar-where-am-i-needed = asks, "Where am I needed?"
+wh40k-chat-emote-msg-commissar-their-days-are-numbered = declares, "Their days are numbered."
+wh40k-chat-emote-msg-commissar-retreat-is-a-bad-decision = barks, "Retreat is a bad decision."
+wh40k-chat-emote-msg-commissar-i-sentence-you-to-death = pronounces, "I sentence you to death."
+wh40k-chat-emote-msg-commissar-order-received-and-understood = says, "Order received and understood."
+wh40k-chat-emote-msg-commissar-spread-out = orders, "Spread out!"
+wh40k-chat-emote-msg-commissar-you-dared-to-shoot-at-me = hisses, "You dared to shoot at me?"
+wh40k-chat-emote-msg-commissar-what-do-you-want = asks, "What do you want?"
+wh40k-chat-emote-msg-commissar-i-am-leaving = says, "I am leaving."

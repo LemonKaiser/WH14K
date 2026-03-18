@@ -9,7 +9,7 @@
   - type: BallisticAmmoProvider
     mayTransfer: true
     proto: CartridgeBolter
-    capacity: 20
+    capacity: 16
     whitelist:
       tags:
         - CartridgeBolter75
@@ -30,7 +30,7 @@
   - type: BallisticAmmoProvider
     mayTransfer: true
     proto: CartridgeBolter
-    capacity: 9
+    capacity: 7
     whitelist:
       tags:
         - CartridgeBolter75
@@ -39,3 +39,33 @@
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
+
+- type: entity
+  id: WH40KMagazineHeavyBolter
+  parent: BaseMagazineLightRifle
+  name: heavy bolter magazine
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - WH40KMagazineHeavyBolter
+      - MagazineLightRifleBox
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeHeavyBolter
+    capacity: 100
+    whitelist:
+      tags:
+        - CartridgeHeavyBolter
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/heavy_bolter.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance

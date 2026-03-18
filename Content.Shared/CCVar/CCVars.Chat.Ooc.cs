@@ -1,4 +1,6 @@
-﻿using Robust.Shared.Configuration;
+using Content.Shared.Administration;
+using Content.Shared.CCVar.CVarAccess;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -22,6 +24,15 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> OocEnableDuringRound =
         CVarDef.Create("ooc.enable_during_round", false, CVar.NOTIFY | CVar.REPLICATED | CVar.SERVER);
 
+    /// <summary>
+    ///     If true, players that remain in lobby can use OOC even while normal in-round OOC is disabled.
+    ///     During this mode, non-admin lobby OOC messages are only shown to players still in lobby.
+    ///     If normal OOC gets enabled during the round, this restriction no longer applies.
+    /// </summary>
+    [CVarControl(AdminFlags.Admin)]
+    public static readonly CVarDef<bool> OocLobbyIsolatedDuringRound =
+        CVarDef.Create("ooc.lobby_isolated_during_round", true, CVar.NOTIFY | CVar.SERVERONLY);
+
     public static readonly CVarDef<bool> ShowOocPatronColor =
         CVarDef.Create("ooc.show_ooc_patron_color", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.CLIENT);
 
@@ -31,3 +42,4 @@ public sealed partial class CCVars
     public static readonly CVarDef<string> OocDiscordChannelId =
         CVarDef.Create("ooc.discord_channel_id", string.Empty, CVar.SERVERONLY);
 }
+

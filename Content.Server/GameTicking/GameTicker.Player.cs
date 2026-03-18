@@ -1,6 +1,7 @@
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
+using Content.Shared.Ghost;
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
 using Content.Shared.Players;
@@ -126,6 +127,7 @@ namespace Content.Server.GameTicking
 
                 case SessionStatus.Disconnected:
                 {
+                    _lobbyInfoCultures.Remove(session.UserId);
                     _chatManager.SendAdminAnnouncement(Loc.GetString("player-leave-message", ("name", args.Session.Name)));
                     if (mindId != null)
                     {
@@ -192,7 +194,9 @@ namespace Content.Server.GameTicking
             if (!silent)
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
 
+            ConsumeRoundParticipationBypass(session);
             _playerGameStatuses[session.UserId] = PlayerGameStatus.JoinedGame;
+            _roundJoinedUsers.Add(session.UserId);
             _db.AddRoundPlayers(RoundId, session.UserId);
 
             if (_adminManager.HasAdminFlag(session, AdminFlags.Admin))
@@ -215,8 +219,30 @@ namespace Content.Server.GameTicking
             var client = session.Channel;
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), client);
             RaiseNetworkEvent(GetStatusMsg(session), client);
-            RaiseNetworkEvent(GetInfoMsg(), client);
+            RaiseNetworkEvent(GetInfoMsg(session), client);
+            RaiseNetworkEvent(new TickerLateJoinStatusEvent(IsLateJoinDisallowedFor(session)), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
+        }
+
+        public bool ReturnGhostToLobby(ICommonSession session)
+        {
+            if (RunLevel == GameRunLevel.PreRoundLobby)
+                return false;
+
+            if (session.AttachedEntity is not { Valid: true } attached ||
+                !HasComp<GhostComponent>(attached))
+            {
+                return false;
+            }
+
+            _mind.WipeMind(session);
+
+            if (session.AttachedEntity != null)
+                _playerManager.SetAttachedEntity(session, null);
+
+            PlayerJoinLobby(session);
+            UpdateLateJoinStatus();
+            return true;
         }
 
         private void ReqWindowAttentionAll()

@@ -1,0 +1,15 @@
+- type: cargoAccount
+  id: WH40KImperium
+  name: wh40k-cargo-account-imperium-name-clean
+  code: wh40k-cargo-account-imperium-code-clean
+  color: "#c7a96a"
+  radioChannel: Supply
+  acquisitionSlip: PaperAcquisitionSlipCargo
+
+- type: cargoAccount
+  id: WH40KHeretics
+  name: wh40k-cargo-account-heretics-name-clean
+  code: wh40k-cargo-account-heretics-code-clean
+  color: "#b15050"
+  radioChannel: Supply
+  acquisitionSlip: PaperAcquisitionSlipCargo

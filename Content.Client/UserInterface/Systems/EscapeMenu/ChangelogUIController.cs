@@ -39,4 +39,17 @@ public sealed class ChangelogUIController : UIController
             OpenWindow();
         }
     }
+
+    public void RefreshLocalization()
+    {
+        if (_changeLogWindow is not { Disposed: false })
+            return;
+
+        var wasOpen = _changeLogWindow.IsOpen;
+        _changeLogWindow.Dispose();
+        _changeLogWindow = default!;
+
+        if (wasOpen)
+            OpenWindow();
+    }
 }

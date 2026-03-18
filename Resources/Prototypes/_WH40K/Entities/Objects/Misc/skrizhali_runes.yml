@@ -1,0 +1,128 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KRuneSkrizhalBase
+  name: скрижаль-руна
+  description: Руническая скрижаль.
+  abstract: true
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Tiny
+  - type: UserInterface
+    interfaces:
+      enum.WH40KChaosSkrizhalUiKey.PatronSelection:
+        type: WH40KChaosSkrizhalBoundUserInterface
+      enum.WH40KChaosSkrizhalUiKey.PatronBranch:
+        type: WH40KChaosSkrizhalBranchBoundUserInterface
+  - type: ItemToggle
+  - type: Appearance
+
+- type: entity
+  parent: WH40KRuneSkrizhalBase
+  id: WH40KRuneSkrizhalChaos
+  name: скрижаль-руна Хаоса
+  components:
+  - type: WH40KChaosSkrizhal
+    patron: Undivided
+    attunementXpReward: 22
+    attunementXpMultiplier: 1.15
+    attunementInstabilityGain: 2.5
+  - type: Sprite
+    sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+    layers:
+    - state: skrizhal_chaos_tuchlo
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: skrizhal_chaos }
+          False: { state: skrizhal_chaos_tuchlo }
+
+- type: entity
+  parent: WH40KRuneSkrizhalBase
+  id: WH40KRuneSkrizhalKhorn
+  name: скрижаль-руна Кхорна
+  components:
+  - type: WH40KChaosSkrizhal
+    patron: Khorne
+    attunementXpReward: 26
+    attunementXpMultiplier: 1.2
+    attunementInstabilityGain: 3
+  - type: Sprite
+    sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+    layers:
+    - state: skrizhal_khorn_tuchlo
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: skrizhal_khorn }
+          False: { state: skrizhal_khorn_tuchlo }
+
+- type: entity
+  parent: WH40KRuneSkrizhalBase
+  id: WH40KRuneSkrizhalNurgk
+  name: скрижаль-руна Нургла
+  components:
+  - type: WH40KChaosSkrizhal
+    patron: Nurgle
+    attunementXpReward: 24
+    attunementXpMultiplier: 1.18
+    attunementInstabilityGain: 2.8
+  - type: Sprite
+    sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+    layers:
+    - state: skrizhal_nurgl_tuchlo
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: skrizhal_nurgk }
+          False: { state: skrizhal_nurgl_tuchlo }
+
+- type: entity
+  parent: WH40KRuneSkrizhalBase
+  id: WH40KRuneSkrizhalSlaanesh
+  name: скрижаль-руна Слаанеш
+  components:
+  - type: WH40KChaosSkrizhal
+    patron: Slaanesh
+    attunementXpReward: 25
+    attunementXpMultiplier: 1.22
+    attunementInstabilityGain: 3.2
+  - type: Sprite
+    sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+    layers:
+    - state: skrizhal_slaanesh_tuchlo
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: skrizhal_slaanesh }
+          False: { state: skrizhal_slaanesh_tuchlo }
+
+- type: entity
+  parent: WH40KRuneSkrizhalBase
+  id: WH40KRuneSkrizhalTzinch
+  name: скрижаль-руна Тзинча
+  components:
+  - type: WH40KChaosSkrizhal
+    patron: Tzeentch
+    attunementXpReward: 27
+    attunementXpMultiplier: 1.25
+    attunementInstabilityGain: 3.5
+  - type: Sprite
+    sprite: _WH40K/Interface/Abilities/skrizhali_runes.rsi
+    layers:
+    - state: skrizhal_tzinch_tuchlo
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: skrizhal_tzinch }
+          False: { state: skrizhal_tzinch_tuchlo }

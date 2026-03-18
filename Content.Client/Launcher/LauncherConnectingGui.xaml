@@ -34,6 +34,10 @@
                                     VerticalAlignment="Bottom"
                                     StyleClasses="OpenLeft"/>
                         </BoxContainer>
+                        <Button Name="DiscordAuthButton"
+                                Text="{Loc 'connecting-discord-auth-link'}"
+                                HorizontalAlignment="Center"
+                                Visible="False" />
                     </BoxContainer>
                     <BoxContainer Orientation="Vertical" Name="Disconnected" Visible="False" SeparationOverride="10">
                         <Label Text="{Loc 'connecting-disconnected'}" Align="Center" />

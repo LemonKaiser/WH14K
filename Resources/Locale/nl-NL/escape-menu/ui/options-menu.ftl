@@ -1,0 +1,1 @@
+ui-options-language = Speltaal:

@@ -1,3 +1,4 @@
+using Content.Shared._WH40K.Administration.ScreenCheck;
 using Content.Shared.Eui;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
@@ -16,7 +17,15 @@ public sealed class PlayerPanelEuiState(
     bool? whitelisted,
     bool canFreeze,
     bool frozen,
-    bool canAhelp)
+    bool canAhelp,
+    bool canScreenCheck,
+    bool hasActiveScreenCheck,
+    string activeScreenCheckAdmin,
+    DateTime activeScreenCheckSinceUtc,
+    bool hasLastScreenCheck,
+    string lastScreenCheckAdmin,
+    DateTime lastScreenCheckAtUtc,
+    ScreenCheckUiStatus lastScreenCheckStatus)
     : EuiStateBase
 {
     public readonly NetUserId Guid = guid;
@@ -30,6 +39,14 @@ public sealed class PlayerPanelEuiState(
     public readonly bool CanFreeze = canFreeze;
     public readonly bool Frozen = frozen;
     public readonly bool CanAhelp = canAhelp;
+    public readonly bool CanScreenCheck = canScreenCheck;
+    public readonly bool HasActiveScreenCheck = hasActiveScreenCheck;
+    public readonly string ActiveScreenCheckAdmin = activeScreenCheckAdmin;
+    public readonly DateTime ActiveScreenCheckSinceUtc = activeScreenCheckSinceUtc;
+    public readonly bool HasLastScreenCheck = hasLastScreenCheck;
+    public readonly string LastScreenCheckAdmin = lastScreenCheckAdmin;
+    public readonly DateTime LastScreenCheckAtUtc = lastScreenCheckAtUtc;
+    public readonly ScreenCheckUiStatus LastScreenCheckStatus = lastScreenCheckStatus;
 }
 
 
@@ -55,3 +72,6 @@ public sealed class PlayerPanelRejuvenationMessage: EuiMessageBase;
 
 [Serializable, NetSerializable]
 public sealed class PlayerPanelFollowMessage: EuiMessageBase;
+
+[Serializable, NetSerializable]
+public sealed class PlayerPanelScreenCheckMessage : EuiMessageBase;

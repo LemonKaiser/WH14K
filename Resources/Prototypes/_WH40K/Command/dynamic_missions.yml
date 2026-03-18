@@ -1,0 +1,349 @@
+- type: wh40kCommandDynamicMissionProfile
+  id: WH40KCommandDynamicMissionProfileDefault
+  enabled: true
+  firstSpawnAfterRoundStartSeconds: 900
+  respawnIntervalSecondsMin: 720
+  respawnIntervalSecondsMax: 1080
+  maxActiveGlobalMissions: 1
+  maxActiveFactionMissionsPerTeam: 1
+  missions:
+  # Imperium missions (10)
+  - id: imp_omnissiah_convoy
+    scope: Faction
+    teamId: Imperium
+    title: Omnissiah Convoy
+    description: Deliver a critical tech shipment from neutral zone to Imperium command node.
+    baseWeight: 1.0
+    durationSeconds: 420
+    tags: [imperium, convoy, logistics]
+  - id: imp_vox_litany_relay
+    scope: Faction
+    teamId: Imperium
+    title: Vox Litany Relay
+    description: Activate and hold an Imperial relay until full signal uplink.
+    baseWeight: 0.95
+    durationSeconds: 360
+    rewardTokenId: intel_event_roll_haste
+    rewardTokenDurationSeconds: 120
+    tags: [imperium, hold, relay]
+  - id: imp_regimental_relic_recovery
+    scope: Faction
+    teamId: Imperium
+    title: Regimental Relic Recovery
+    description: Secure a lost relic and return it to safe command sector.
+    baseWeight: 0.9
+    durationSeconds: 420
+    tags: [imperium, recovery]
+  - id: imp_bastion_reinforcement
+    scope: Faction
+    teamId: Imperium
+    title: Bastion Reinforcement
+    description: Deliver materials and finish a frontline defense anchor.
+    baseWeight: 0.9
+    durationSeconds: 360
+    tags: [imperium, fortification]
+  - id: imp_field_medicae_hub
+    scope: Faction
+    teamId: Imperium
+    title: Field Medicae Hub
+    description: Supply and hold a stabilization point under pressure.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [imperium, medicae, hold]
+  - id: imp_artillery_calibration_run
+    scope: Faction
+    teamId: Imperium
+    title: Artillery Calibration Run
+    description: Calibrate battery controls and survive counterpush until done.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [imperium, artillery]
+  - id: imp_ruin_purge
+    scope: Faction
+    teamId: Imperium
+    title: Ruin Purge
+    description: Clear a marked ruin sector and confirm control at beacon node.
+    baseWeight: 0.8
+    durationSeconds: 360
+    tags: [imperium, control]
+  - id: imp_raise_the_standard
+    scope: Faction
+    teamId: Imperium
+    title: Raise the Standard
+    description: Plant and hold Imperial banner on contested objective.
+    baseWeight: 0.8
+    durationSeconds: 360
+    objectiveType: BannerHold
+    objectiveRequiredEntityPrototypes: [WHGvardiaBanner, WHGvardiaBanner2, MechanicusBanner]
+    tags: [imperium, hold, objective, banner]
+  - id: imp_counter_saboteur_sweep
+    scope: Faction
+    teamId: Imperium
+    title: Counter-Saboteur Sweep
+    description: Locate and destroy enemy sabotage node in rearline sector.
+    baseWeight: 0.75
+    durationSeconds: 360
+    tags: [imperium, sabotage]
+  - id: imp_fireline_ammunition_lift
+    scope: Faction
+    teamId: Imperium
+    title: Fireline Ammunition Lift
+    description: Deliver high-priority ammo package to active defense line.
+    baseWeight: 0.75
+    durationSeconds: 360
+    tags: [imperium, ammo, logistics]
+
+  # Heretics missions (11)
+  - id: her_blood_tithe_run
+    scope: Faction
+    teamId: Heretics
+    title: Blood Tithe Run
+    description: Secure battlefield trophies and deliver them to the altar.
+    baseWeight: 1.0
+    durationSeconds: 420
+    tags: [heretics, convoy, ritual]
+  - id: her_desecration_rite
+    scope: Faction
+    teamId: Heretics
+    title: Desecration Rite
+    description: Channel a rite in marked zone while defending the circle.
+    baseWeight: 0.95
+    durationSeconds: 360
+    tags: [heretics, ritual, hold]
+  - id: her_dark_beacon_sync
+    scope: Faction
+    teamId: Heretics
+    title: Dark Beacon Sync
+    description: Activate warp beacon and protect it until full synchronization.
+    baseWeight: 0.9
+    durationSeconds: 360
+    tags: [heretics, relay, hold]
+  - id: her_tech_seer_abduction
+    scope: Faction
+    teamId: Heretics
+    title: Tech-Seer Abduction
+    description: Capture key specialist and escort to extraction point.
+    baseWeight: 0.9
+    durationSeconds: 420
+    tags: [heretics, escort]
+  - id: her_loyalist_depot_plunder
+    scope: Faction
+    teamId: Heretics
+    title: Loyalist Depot Plunder
+    description: Breach Imperium depot and extract the cargo.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [heretics, raid, logistics]
+  - id: her_heretek_forge_cycle
+    scope: Faction
+    teamId: Heretics
+    title: Heretek Forge Cycle
+    description: Start dark-forge production cycle and hold against assault.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [heretics, industry, hold]
+  - id: her_heresy_broadcast
+    scope: Faction
+    teamId: Heretics
+    title: Heresy Broadcast
+    description: Hijack communication relay and transmit false directives.
+    baseWeight: 0.8
+    durationSeconds: 360
+    rewardTokenId: intel_event_roll_haste
+    rewardTokenDurationSeconds: 120
+    tags: [heretics, intel, relay]
+  - id: her_ritual_of_dread
+    scope: Faction
+    teamId: Heretics
+    title: Ritual of Dread
+    description: Hold a ritual sector long enough to complete fear pulse.
+    baseWeight: 0.8
+    durationSeconds: 360
+    tags: [heretics, ritual, control]
+  - id: her_bastion_sabotage
+    scope: Faction
+    teamId: Heretics
+    title: Bastion Sabotage
+    description: Plant charges on enemy fortification and deny disarm.
+    baseWeight: 0.75
+    durationSeconds: 360
+    tags: [heretics, sabotage]
+  - id: her_mutant_breakout
+    scope: Faction
+    teamId: Heretics
+    title: Mutant Breakout
+    description: Open holding cells and escort released unit to frontline.
+    baseWeight: 0.75
+    durationSeconds: 420
+    tags: [heretics, escort, breakthrough]
+  - id: her_raise_the_warp_standard
+    scope: Faction
+    teamId: Heretics
+    title: Raise the Warp Standard
+    description: Plant a Chaos banner on the objective and hold the ritual circle.
+    baseWeight: 0.72
+    durationSeconds: 360
+    objectiveType: BannerHold
+    objectiveRequiredEntityPrototypes: [WHChaosBanner]
+    tags: [heretics, hold, objective, banner]
+
+  # Global missions (20)
+  - id: global_high_value_cargo
+    scope: Global
+    title: High-Value Cargo
+    description: Capture and deliver one shared high-value crate.
+    baseWeight: 1.0
+    durationSeconds: 420
+    objectiveType: CargoDelivery
+    rewardMajorDevelopmentPoints: 14
+    rewardMinorDevelopmentPoints: 6
+    rewardTimeoutDevelopmentPoints: 1
+    rewardFailureDevelopmentPoints: 0
+    rewardTempoBonusPercent: 5
+    rewardTokenId: tactical_call_discount
+    rewardTokenDurationSeconds: 600
+    tags: [global, cargo, convoy]
+  - id: global_broken_relay_tower
+    scope: Global
+    title: Broken Relay Tower
+    description: Repair and defend neutral relay until activation complete.
+    baseWeight: 0.95
+    durationSeconds: 360
+    tags: [global, relay, hold]
+  - id: global_neutral_field_hospital
+    scope: Global
+    title: Neutral Field Hospital
+    description: Control contested medical outpost for full timer.
+    baseWeight: 0.9
+    durationSeconds: 360
+    tags: [global, medicae, control]
+  - id: global_fuel_terminal_seizure
+    scope: Global
+    title: Fuel Terminal Seizure
+    description: Capture and hold fuel throughput line.
+    baseWeight: 0.9
+    durationSeconds: 360
+    tags: [global, logistics, control]
+  - id: global_artillery_stockpile_raid
+    scope: Global
+    title: Artillery Stockpile Raid
+    description: Breach shell depot and extract tactical supplies.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [global, raid]
+  - id: global_radar_tower_uplink
+    scope: Global
+    title: Radar Tower Uplink
+    description: Reboot tower and defend long enough to complete scan cycle.
+    baseWeight: 0.85
+    durationSeconds: 360
+    rewardTokenId: intel_event_roll_haste
+    rewardTokenDurationSeconds: 90
+    tags: [global, relay, intel]
+  - id: global_field_generator_restart
+    scope: Global
+    title: Field Generator Restart
+    description: Bring generator online and hold power stability.
+    baseWeight: 0.85
+    durationSeconds: 360
+    tags: [global, power, hold]
+  - id: global_tactical_archive_recovery
+    scope: Global
+    title: Tactical Archive Recovery
+    description: Extract strategic records from damaged data vault.
+    baseWeight: 0.8
+    durationSeconds: 360
+    rewardTokenId: intel_event_roll_haste
+    rewardTokenDurationSeconds: 90
+    tags: [global, recovery, intel]
+  - id: global_crashed_supply_shuttle
+    scope: Global
+    title: Crashed Supply Shuttle
+    description: Secure and evacuate cargo from crash site first.
+    baseWeight: 0.8
+    durationSeconds: 360
+    tags: [global, convoy, recovery]
+  - id: global_bridgehead_under_fire
+    scope: Global
+    title: Bridgehead Under Fire
+    description: Hold crossing node and secure transport route.
+    baseWeight: 0.8
+    durationSeconds: 360
+    tags: [global, hold, objective]
+  - id: global_chemical_reserve_capture
+    scope: Global
+    title: Chemical Reserve Capture
+    description: Seize reagent reserve in hazardous sector.
+    baseWeight: 0.78
+    durationSeconds: 360
+    tags: [global, control, hazard]
+  - id: global_servo_crystal_mine_claim
+    scope: Global
+    title: Servo-Crystal Mine Claim
+    description: Secure rare resource extraction and escort output.
+    baseWeight: 0.78
+    durationSeconds: 420
+    tags: [global, resource, escort]
+  - id: global_orbital_beacon_alignment
+    scope: Global
+    title: Orbital Beacon Alignment
+    description: Restore targeting beacon for limited strike window.
+    baseWeight: 0.76
+    durationSeconds: 360
+    tags: [global, orbital, relay]
+  - id: global_observation_bunker_breach
+    scope: Global
+    title: Observation Bunker Breach
+    description: Break into bunker and maintain surveillance channel.
+    baseWeight: 0.76
+    durationSeconds: 360
+    tags: [global, assault, intel]
+  - id: global_smuggler_caravan_intercept
+    scope: Global
+    title: Smuggler Caravan Intercept
+    description: Capture neutral caravan payload before enemy.
+    baseWeight: 0.74
+    durationSeconds: 420
+    tags: [global, convoy, intercept]
+  - id: global_wreckfield_salvage
+    scope: Global
+    title: Wreckfield Salvage
+    description: Extract valuable components from armored wreck zone.
+    baseWeight: 0.74
+    durationSeconds: 360
+    tags: [global, salvage]
+  - id: global_aa_node_reboot
+    scope: Global
+    title: AA Node Reboot
+    description: Restart anti-air node and hold it online.
+    baseWeight: 0.72
+    durationSeconds: 360
+    tags: [global, reboot, hold]
+  - id: global_distress_signal_response
+    scope: Global
+    title: Distress Signal Response
+    description: Reach emergency beacon and escort survivors.
+    baseWeight: 0.72
+    durationSeconds: 420
+    tags: [global, rescue, escort]
+  - id: global_storm_shelter_control
+    scope: Global
+    title: Storm Shelter Control
+    description: Hold shelter perimeter during weather anomaly.
+    baseWeight: 0.7
+    durationSeconds: 360
+    tags: [global, weather, control]
+  - id: global_water_purification_plant
+    scope: Global
+    title: Water Purification Plant
+    description: Restart and protect purification cycle to completion.
+    baseWeight: 0.7
+    durationSeconds: 360
+    tags: [global, restart, hold]
+
+- type: wh40kCommandDynamicMissionTeamMap
+  id: WH40KCommandDynamicMissionTeamMap
+  defaultProfile: WH40KCommandDynamicMissionProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandDynamicMissionProfileDefault
+    Heretics: WH40KCommandDynamicMissionProfileDefault

@@ -8,7 +8,8 @@ namespace Content.Shared._WH40K.Objectives;
 [Serializable, NetSerializable]
 public enum WH40KObjectiveVisuals : byte
 {
-    State
+    State,
+    Shielded
 }
 
 [Serializable, NetSerializable]
@@ -24,5 +25,6 @@ public enum WH40KObjectiveVisualLayers : byte
 {
     Base,
     Destroying,
-    Destroyed
+    Destroyed,
+    Shield
 }

@@ -88,8 +88,6 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
         var random = IoCManager.Resolve<IRobustRandom>();
         var markingManager = IoCManager.Resolve<MarkingManager>();
 
-        // TODO: Add random markings
-
         var newEyeColor = random.Pick(_realisticEyeColors);
 
         var protoMan = IoCManager.Resolve<IPrototypeManager>();
@@ -103,7 +101,73 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
             _ => strategy.ClosestSkinColor(new Color(random.NextFloat(1), random.NextFloat(1), random.NextFloat(1), 1)),
         };
 
-        return new HumanoidCharacterAppearance(newEyeColor, newSkinColor, new());
+        var markings = new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>();
+        var hairColor = random.Pick(HairStyles.RealisticHairColors);
+
+        foreach (var (organ, organData) in markingManager.GetMarkingData(species))
+        {
+            TryAddRandomHairLayerMarking(markings, random, markingManager, organ, organData, HumanoidVisualLayers.Hair, sex, newSkinColor, newEyeColor, hairColor, 1f);
+            TryAddRandomHairLayerMarking(markings, random, markingManager, organ, organData, HumanoidVisualLayers.FacialHair, sex, newSkinColor, newEyeColor, hairColor, sex == Sex.Male ? 0.6f : 0.2f);
+        }
+
+        return new HumanoidCharacterAppearance(newEyeColor, newSkinColor, markings);
+    }
+
+    private static void TryAddRandomHairLayerMarking(
+        Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings,
+        IRobustRandom random,
+        MarkingManager markingManager,
+        ProtoId<OrganCategoryPrototype> organ,
+        OrganMarkingData organData,
+        HumanoidVisualLayers layer,
+        Sex sex,
+        Color skinColor,
+        Color eyeColor,
+        Color hairColor,
+        float chance)
+    {
+        if (!organData.Layers.Contains(layer) || !random.Prob(chance))
+            return;
+
+        var candidates = markingManager.MarkingsByLayerAndGroupAndSex(layer, organData.Group, sex).Values.ToList();
+        if (candidates.Count == 0)
+            return;
+
+        var visibleCandidates = candidates.Where(proto => !IsMinimalStyle(layer, proto.ID)).ToList();
+        var picked = random.Pick(visibleCandidates.Count > 0 ? visibleCandidates : candidates);
+
+        if (!markings.TryGetValue(organ, out var organMarkings))
+        {
+            organMarkings = new();
+            markings[organ] = organMarkings;
+        }
+
+        if (!organMarkings.TryGetValue(layer, out var layerMarkings))
+        {
+            layerMarkings = new();
+            organMarkings[layer] = layerMarkings;
+        }
+
+        var colors = MarkingColoring.GetMarkingLayerColors(picked, skinColor, eyeColor, layerMarkings);
+        if (!picked.ForcedColoring)
+        {
+            for (var i = 0; i < colors.Count; i++)
+            {
+                colors[i] = hairColor;
+            }
+        }
+
+        layerMarkings.Add(new Marking(picked.ID, colors));
+    }
+
+    private static bool IsMinimalStyle(HumanoidVisualLayers layer, string markingId)
+    {
+        return layer switch
+        {
+            HumanoidVisualLayers.Hair => markingId.Contains("bald", StringComparison.OrdinalIgnoreCase) || markingId.Contains("shaved", StringComparison.OrdinalIgnoreCase),
+            HumanoidVisualLayers.FacialHair => markingId.Contains("shaved", StringComparison.OrdinalIgnoreCase),
+            _ => false,
+        };
     }
 
     public static Color ClampColor(Color color)

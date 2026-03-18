@@ -1,3 +1,4 @@
+using System.Globalization;
 using Content.Shared.Database;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
@@ -71,6 +72,16 @@ namespace Content.Shared.Verbs
         public string Text = string.Empty;
 
         /// <summary>
+        ///     Optional localization identifier for <see cref="Text"/>.
+        /// </summary>
+        public string? TextLocId;
+
+        /// <summary>
+        ///     If true, the localized display text should be lower-cased after resolving <see cref="TextLocId"/>.
+        /// </summary>
+        public bool TextForceLowercase;
+
+        /// <summary>
         ///     Sprite of the icon that the user sees on the verb button.
         /// </summary>
         public SpriteSpecifier? Icon;
@@ -99,6 +110,16 @@ namespace Content.Shared.Verbs
         ///     disabled verbs to inform users about why they cannot perform a given action.
         /// </remarks>
         public string? Message;
+
+        /// <summary>
+        ///     Optional localization identifier for <see cref="Message"/>.
+        /// </summary>
+        public string? MessageLocId;
+
+        /// <summary>
+        ///     If true, the display message should be rendered as "&lt;text&gt;: &lt;message&gt;" using the localized text.
+        /// </summary>
+        public bool MessageUsesTextPrefix;
 
         /// <summary>
         ///     Determines the priority of the verb. This affects both how the verb is displayed in the context menu
@@ -133,6 +154,36 @@ namespace Content.Shared.Verbs
         ///     If this is just opening a UI or ejecting an id card, this should probably be low.
         /// </remarks>
         public LogImpact Impact = LogImpact.Low;
+
+        public string GetDisplayText()
+        {
+            var text = TextLocId != null
+                ? Loc.GetString(TextLocId)
+                : Text;
+
+            if (TextForceLowercase)
+                text = text.ToLower(CultureInfo.CurrentCulture);
+
+            return text;
+        }
+
+        public string? GetDisplayMessage()
+        {
+            string? message = MessageLocId != null
+                ? Loc.GetString(MessageLocId)
+                : Message;
+
+            if (message == null)
+                return null;
+
+            if (!MessageUsesTextPrefix)
+                return message;
+
+            var text = GetDisplayText();
+            return string.IsNullOrWhiteSpace(text)
+                ? message
+                : $"{text}: {message}";
+        }
 
         /// <summary>
         ///     Whether this verb requires confirmation before being executed.
@@ -178,15 +229,19 @@ namespace Content.Shared.Verbs
                 return otherVerb.Priority - Priority;
 
             // Then try use alphabetical verb categories. Uncategorized verbs always appear first.
-            if (Category?.Text != otherVerb.Category?.Text)
+            var categoryText = Category?.TextLocId ?? Category?.Text;
+            var otherCategoryText = otherVerb.Category?.TextLocId ?? otherVerb.Category?.Text;
+            if (categoryText != otherCategoryText)
             {
-                return string.Compare(Category?.Text, otherVerb.Category?.Text, StringComparison.CurrentCulture);
+                return string.Compare(categoryText, otherCategoryText, StringComparison.CurrentCulture);
             }
 
             // Then try use alphabetical verb text.
-            if (Text != otherVerb.Text)
+            var text = TextLocId ?? Text;
+            var otherText = otherVerb.TextLocId ?? otherVerb.Text;
+            if (text != otherText)
             {
-                return string.Compare(Text, otherVerb.Text, StringComparison.CurrentCulture);
+                return string.Compare(text, otherText, StringComparison.CurrentCulture);
             }
 
             if (IconEntity != otherVerb.IconEntity)

@@ -1,6 +1,10 @@
 {
     "recommendations": [
         "ms-dotnettools.csharp",
-        "editorconfig.editorconfig"
+        "editorconfig.editorconfig",
+        "redhat.vscode-yaml",
+        "slava0135.robust-yaml",
+        "ms-vscode.powershell",
+        "eamodio.gitlens"
     ]
 }

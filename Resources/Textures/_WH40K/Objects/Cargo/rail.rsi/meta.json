@@ -1,0 +1,14 @@
+﻿{
+  "version": 1,
+  "license": "Custom",
+  "copyright": "by WH40K project contributor",
+  "size": {
+    "x": 32,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "icon"
+    }
+  ]
+}

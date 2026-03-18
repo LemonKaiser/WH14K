@@ -167,9 +167,9 @@ public abstract partial class SharedBuckleSystem
             InteractionVerb verb = new()
             {
                 Act = () => TryBuckle(args.User, args.User, args.Target, buckle),
-                Category = VerbCategory.Buckle,
-                Text = Loc.GetString("verb-self-target-pronoun")
+                Category = VerbCategory.Buckle
             };
+            verb.TextLocId = "verb-self-target-pronoun";
             args.Verbs.Add(verb);
         }
 
@@ -210,9 +210,9 @@ public abstract partial class SharedBuckleSystem
         InteractionVerb verb = new()
         {
             Act = () => TryUnbuckle(uid, args.User, buckleComp: component),
-            Text = Loc.GetString("verb-categories-unbuckle"),
             Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/unbuckle.svg.192dpi.png"))
         };
+        verb.TextLocId = "verb-categories-unbuckle";
 
         if (args.Target == args.User && args.Using == null)
         {

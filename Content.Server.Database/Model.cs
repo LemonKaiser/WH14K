@@ -42,6 +42,11 @@ namespace Content.Server.Database
         public DbSet<ServerBanHit> ServerBanHit { get; set; } = default!;
 
         public DbSet<PlayTime> PlayTime { get; set; } = default!;
+        public DbSet<WH40KMetaProgress> WH40KMetaProgress { get; set; } = default!;
+        public DbSet<WH40KMetaAchievementProgress> WH40KMetaAchievementProgress { get; set; } = default!;
+        public DbSet<WH40KMetaDecorationUnlock> WH40KMetaDecorationUnlock { get; set; } = default!;
+        public DbSet<WH40KMetaDevelopmentUnlock> WH40KMetaDevelopmentUnlock { get; set; } = default!;
+        public DbSet<WH40KDiscordLink> WH40KDiscordLink { get; set; } = default!;
         public DbSet<UploadedResourceLog> UploadedResourceLog { get; set; } = default!;
         public DbSet<AdminNote> AdminNotes { get; set; } = null!;
         public DbSet<AdminWatchlist> AdminWatchlists { get; set; } = null!;
@@ -132,6 +137,69 @@ namespace Content.Server.Database
             modelBuilder.Entity<PlayTime>()
                 .HasIndex(v => new { v.PlayerId, Role = v.Tracker })
                 .IsUnique();
+
+            modelBuilder.Entity<WH40KMetaProgress>()
+                .HasKey(v => v.PlayerUserId);
+
+            modelBuilder.Entity<WH40KMetaProgress>()
+                .HasOne(v => v.Player)
+                .WithMany()
+                .HasForeignKey(v => v.PlayerUserId)
+                .HasPrincipalKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WH40KMetaAchievementProgress>()
+                .HasKey(v => new { v.PlayerUserId, v.AchievementId });
+
+            modelBuilder.Entity<WH40KMetaAchievementProgress>()
+                .HasIndex(v => v.PlayerUserId);
+
+            modelBuilder.Entity<WH40KMetaAchievementProgress>()
+                .HasOne(v => v.Player)
+                .WithMany()
+                .HasForeignKey(v => v.PlayerUserId)
+                .HasPrincipalKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WH40KMetaDecorationUnlock>()
+                .HasKey(v => new { v.PlayerUserId, v.UnlockId });
+
+            modelBuilder.Entity<WH40KMetaDecorationUnlock>()
+                .HasIndex(v => v.PlayerUserId);
+
+            modelBuilder.Entity<WH40KMetaDecorationUnlock>()
+                .HasOne(v => v.Player)
+                .WithMany()
+                .HasForeignKey(v => v.PlayerUserId)
+                .HasPrincipalKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WH40KMetaDevelopmentUnlock>()
+                .HasKey(v => new { v.PlayerUserId, v.NodeId });
+
+            modelBuilder.Entity<WH40KMetaDevelopmentUnlock>()
+                .HasIndex(v => v.PlayerUserId);
+
+            modelBuilder.Entity<WH40KMetaDevelopmentUnlock>()
+                .HasOne(v => v.Player)
+                .WithMany()
+                .HasForeignKey(v => v.PlayerUserId)
+                .HasPrincipalKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WH40KDiscordLink>()
+                .HasKey(v => v.PlayerUserId);
+
+            modelBuilder.Entity<WH40KDiscordLink>()
+                .HasIndex(v => v.DiscordUserId)
+                .IsUnique();
+
+            modelBuilder.Entity<WH40KDiscordLink>()
+                .HasOne(v => v.Player)
+                .WithMany()
+                .HasForeignKey(v => v.PlayerUserId)
+                .HasPrincipalKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AdminLogPlayer>()
                 .HasOne(player => player.Player)
@@ -330,6 +398,7 @@ namespace Content.Server.Database
         public int Age { get; set; }
         public string Sex { get; set; } = null!;
         public string Gender { get; set; } = null!;
+        public string VoiceTone { get; set; } = "Normal";
         public string Species { get; set; } = null!;
         [Column(TypeName = "jsonb")] public JsonDocument? OrganMarkings { get; set; } = null!;
         [Column(TypeName = "jsonb")] public JsonDocument? Markings { get; set; } = null!;
@@ -757,7 +826,9 @@ namespace Content.Server.Database
         /// Results from rejected connections with external API checking tools
         IPChecks = 5,
         /// Results from rejected connections who are authenticated but have no modern hwid associated with them.
-        NoHwid = 6
+        NoHwid = 6,
+        /// Results from WH40K Discord authorization policy denying server entry.
+        DiscordAuth = 7
     }
 
     public class ServerBanHit
@@ -783,6 +854,142 @@ namespace Content.Server.Database
         public string Tracker { get; set; } = null!;
 
         public TimeSpan TimeSpent { get; set; }
+    }
+
+    [Table("wh40k_meta_progress")]
+    public sealed class WH40KMetaProgress
+    {
+        [Required, Key, ForeignKey("player")]
+        public Guid PlayerUserId { get; set; }
+
+        public Player Player { get; set; } = null!;
+
+        public int LifetimeXp { get; set; }
+
+        public int SeasonXp { get; set; }
+
+        public DateTime LastProgressAt { get; set; }
+
+        [MaxLength(128)]
+        public string? SelectedGhostSkinId { get; set; }
+
+        [MaxLength(128)]
+        public string? SelectedOocTitleId { get; set; }
+
+        [MaxLength(128)]
+        public string? SelectedOocNameColorId { get; set; }
+    }
+
+    [Table("wh40k_meta_achievement_progress")]
+    public sealed class WH40KMetaAchievementProgress
+    {
+        [Required, ForeignKey("player")]
+        public Guid PlayerUserId { get; set; }
+
+        public Player Player { get; set; } = null!;
+
+        [Required, MaxLength(128)]
+        public string AchievementId { get; set; } = string.Empty;
+
+        public int ProgressValue { get; set; }
+
+        public bool Unlocked { get; set; }
+
+        public DateTime? UnlockedAt { get; set; }
+
+        public bool Claimed { get; set; }
+
+        public int Version { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    [Table("wh40k_meta_decoration_unlock")]
+    public sealed class WH40KMetaDecorationUnlock
+    {
+        [Required, ForeignKey("player")]
+        public Guid PlayerUserId { get; set; }
+
+        public Player Player { get; set; } = null!;
+
+        [Required, MaxLength(128)]
+        public string UnlockId { get; set; } = string.Empty;
+
+        public bool Unlocked { get; set; }
+
+        public DateTime? UnlockedAt { get; set; }
+
+        public int SourceLevel { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    [Table("wh40k_meta_development_unlock")]
+    public sealed class WH40KMetaDevelopmentUnlock
+    {
+        [Required, ForeignKey("player")]
+        public Guid PlayerUserId { get; set; }
+
+        public Player Player { get; set; } = null!;
+
+        [Required, MaxLength(128)]
+        public string NodeId { get; set; } = string.Empty;
+
+        public DateTime UnlockedAt { get; set; }
+
+        public int SpentCost { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+    }
+
+    [Table("wh40k_discord_link")]
+    public sealed class WH40KDiscordLink
+    {
+        [Required, Key, ForeignKey("player")]
+        public Guid PlayerUserId { get; set; }
+
+        public Player Player { get; set; } = null!;
+
+        [Required, MaxLength(64)]
+        public string DiscordUserId { get; set; } = string.Empty;
+
+        [Required, MaxLength(128)]
+        public string Username { get; set; } = string.Empty;
+
+        [MaxLength(128)]
+        public string? GlobalName { get; set; }
+
+        [MaxLength(128)]
+        public string? AvatarHash { get; set; }
+
+        [Required]
+        public string AccessToken { get; set; } = string.Empty;
+
+        public string? RefreshToken { get; set; }
+
+        [Required, MaxLength(32)]
+        public string TokenType { get; set; } = string.Empty;
+
+        [Required, MaxLength(256)]
+        public string Scope { get; set; } = string.Empty;
+
+        public DateTime LinkedAt { get; set; }
+
+        public DateTime TokenExpiresAt { get; set; }
+
+        public DateTime LastRefreshAt { get; set; }
+
+        [MaxLength(64)]
+        public string? GuildIdCached { get; set; }
+
+        public DateTime? LastGuildRefreshAt { get; set; }
+
+        public bool GuildMemberCached { get; set; }
+
+        [MaxLength(128)]
+        public string? GuildNickname { get; set; }
+
+        public string RoleCacheJson { get; set; } = "[]";
     }
 
     [Table("uploaded_resource_log")]

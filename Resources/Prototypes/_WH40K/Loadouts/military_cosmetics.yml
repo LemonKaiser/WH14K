@@ -1,0 +1,551 @@
+- type: loadoutEffectGroup
+  id: WH40KVeteranService
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 2h
+
+- type: loadoutEffectGroup
+  id: WH40KBattleHardened
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 6h
+
+- type: loadoutEffectGroup
+  id: WH40KEliteService
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 12h
+
+- type: loadout
+  id: WH40KBandanaBlack
+  equipment:
+    head: ClothingHeadBandBlack
+
+- type: loadout
+  id: WH40KBandanaBrown
+  equipment:
+    head: ClothingHeadBandBrown
+
+- type: loadout
+  id: WH40KBandanaGreen
+  equipment:
+    head: ClothingHeadBandGreen
+
+- type: loadout
+  id: WH40KBandanaRed
+  equipment:
+    head: ClothingHeadBandRed
+
+- type: loadout
+  id: WH40KBandanaSkull
+  equipment:
+    head: ClothingHeadBandSkull
+
+- type: loadout
+  id: WH40KBandanaMerc
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    head: ClothingHeadBandMerc
+
+- type: loadout
+  id: WH40KBandanaGold
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    head: ClothingHeadBandGold
+
+- type: loadout
+  id: WH40KImperialVeteranBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    head: ClothingHeadVet
+
+- type: loadout
+  id: WH40KQuartermasterBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  equipment:
+    head: ClothingHeadHatBeretQM
+
+- type: loadout
+  id: WH40KMedicBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    head: ClothingHeadHatBeretMedic
+
+- type: loadout
+  id: WH40KSeniorMedicBeret
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    head: ClothingHeadHatBeretSeniorPhysician
+
+- type: loadout
+  id: WH40KOfficerCap
+  equipment:
+    head: ClothingHeadOfficer
+
+- type: loadout
+  id: WH40KSergeantCap
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    head: ClothingHeadSgt
+
+- type: loadout
+  id: WH40KCommandBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    head: ClothingHeadHatBeretCommand
+
+- type: loadout
+  id: WH40KChaosScarf
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    head: ClothingHeadScarfChaos
+
+- type: loadout
+  id: WH40KHeresyHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    head: ClothingHeadHelmetrHeresy
+
+- type: loadout
+  id: WH40KBloodPactHelmet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  equipment:
+    head: ClothingHeadHelmetBloodPact
+
+- type: loadout
+  id: WH40KKriegHelmet
+  equipment:
+    head: ClothingHeadHelmetKrieg
+
+- type: loadout
+  id: WH40KBronzeheart
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    neck: ClothingNeckBronzeheart
+
+- type: loadout
+  id: WH40KSecurityMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    neck: ClothingNeckSecuritymedal
+
+- type: loadout
+  id: WH40KMedicalMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    neck: ClothingNeckMedicalmedal
+
+- type: loadout
+  id: WH40KCargoMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    neck: ClothingNeckCargomedal
+
+- type: loadout
+  id: WH40KGoldMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 9
+  equipment:
+    neck: ClothingNeckGoldmedal
+
+- type: loadout
+  id: WH40KGorget
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    neck: Gorjet
+
+- type: loadout
+  id: WH40KColonelCloak
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  equipment:
+    neck: Colonelcloak
+
+- type: loadout
+  id: WH40KChaosNecklace
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    neck: NecklaceChaosCultistReflectWeak
+
+- type: loadout
+  id: WH40KOfficerCoat
+  equipment:
+    outerClothing: ClothingOuterArmorOfficer
+
+- type: loadout
+  id: WH40KJuniorOfficerJacket
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    outerClothing: ClothingOuterArmorJuniorOfficerArmoredJacket
+
+- type: loadout
+  id: WH40KSeniorOfficerJacket
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  equipment:
+    outerClothing: ClothingOuterArmorSeniorOfficerArmoredJacket
+
+- type: loadout
+  id: WH40KCommissarCoat
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 9
+  equipment:
+    outerClothing: ClothingOuterArmorCommissar
+
+- type: loadout
+  id: WH40KChaosCoat
+  equipment:
+    outerClothing: ClothingOuterArmorCultistCoat
+
+- type: loadout
+  id: WH40KBloodPactArmor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    outerClothing: ClothingOuterArmorBloodpact
+
+- type: loadout
+  id: WH40KKriegCoat
+  equipment:
+    outerClothing: ClothingOuterArmorKriegCoat
+
+- type: loadout
+  id: WH40KBlackGloves
+  equipment:
+    gloves: ClothingHandsGlovesColorBlack
+
+- type: loadout
+  id: WH40KCommissarGloves
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    gloves: ClothingHandsGlovesCombatCommissar
+
+- type: loadout
+  id: WH40KColonelGloves
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 7
+  equipment:
+    gloves: ClothingHandsGlovesCombatColonel
+
+- type: loadout
+  id: WH40KChaosCombatGloves
+  equipment:
+    gloves: ClothingHandsGlovesCombatcult
+
+- type: loadout
+  id: WH40KBloodPactGloves
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    gloves: ClothingHandsGlovesBloodPact
+
+- type: loadout
+  id: WH40KChaosMask1
+  equipment:
+    mask: ClothingMaskGasChaosCultist1
+
+- type: loadout
+  id: WH40KChaosMask2
+  equipment:
+    mask: ClothingMaskGasChaosCultist2
+
+- type: loadout
+  id: WH40KChaosMask3
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  equipment:
+    mask: ClothingMaskGasCultist3
+
+- type: loadout
+  id: WH40KKriegGasmask
+  equipment:
+    mask: ClothingMaskGasKrieg
+
+- type: loadout
+  id: WH40KKriegWebbing
+  equipment:
+    belt: ClothingBeltKriegWebbing
+
+- type: loadout
+  id: WH40KLighterKit
+  storage:
+    belt:
+    - Lighter
+  groupBy: "ignition"
+
+- type: loadout
+  id: WH40KFlippoKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  storage:
+    belt:
+    - FlippoLighter
+  groupBy: "ignition"
+
+- type: loadout
+  id: WH40KCigaretteKit
+  storage:
+    belt:
+    - Cigarette
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KCigarKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  storage:
+    belt:
+    - Cigar
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KCigarCaseKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  storage:
+    belt:
+    - CigarCase
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KPipeKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  storage:
+    belt:
+    - SmokingPipeFilledTobacco
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KGoldCigarKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  storage:
+    belt:
+    - CigarGold
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KGoldCigarCaseKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 12
+  storage:
+    belt:
+    - CigarGoldCase
+  groupBy: "smokeables"
+
+- type: loadout
+  id: WH40KCrowbarKit
+  storage:
+    belt:
+    - CrowbarRed
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KCombatKnifeKit
+  storage:
+    belt:
+    - CombatKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KSurvivalKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  storage:
+    belt:
+    - SurvivalKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KSapperShovelKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  storage:
+    belt:
+    - WHSapperShovel
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KTruncheonKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  storage:
+    belt:
+    - Truncheon
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KKukriKnifeKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 7
+  storage:
+    belt:
+    - KukriKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosCrowbarKit
+  storage:
+    belt:
+    - CrowbarRed
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosKnifeKit
+  storage:
+    belt:
+    - CombatKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosTrenchKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  storage:
+    belt:
+    - TrenchKnifeChaos
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosSapperShovelKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  storage:
+    belt:
+    - WHSapperShovel
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosTruncheonKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  storage:
+    belt:
+    - Truncheon
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosMacheteKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  storage:
+    belt:
+    - ChaosMachete
+  groupBy: "melee"

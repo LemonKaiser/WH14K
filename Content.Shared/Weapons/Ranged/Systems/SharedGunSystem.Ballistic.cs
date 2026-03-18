@@ -67,11 +67,9 @@ public abstract partial class SharedGunSystem
             args.Target == null ||
             args.Used == args.Target ||
             Deleted(args.Target) ||
-            !TryComp<BallisticAmmoProviderComponent>(args.Target, out var targetComponent) ||
-            targetComponent.Whitelist == null)
-        {
+            !TryComp<BallisticAmmoProviderComponent>(args.Target, out var target) ||
+            target.Whitelist == null)
             return;
-        }
 
         args.Handled = true;
 

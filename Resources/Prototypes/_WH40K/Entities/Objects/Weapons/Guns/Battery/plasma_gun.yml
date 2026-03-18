@@ -18,6 +18,7 @@
   - type: Gun
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmagun.wav
+  - type: WH40KGunPrediction
   - type: ItemSlots
     slots:
       gun_magazine:

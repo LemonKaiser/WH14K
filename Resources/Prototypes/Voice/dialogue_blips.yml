@@ -1,0 +1,139 @@
+- type: soundCollection
+  id: DialogueBlipOrganic
+  files:
+    - /Audio/Voice/Talk/speak_1.ogg
+    - /Audio/Voice/Talk/speak_2.ogg
+    - /Audio/Voice/Talk/speak_3.ogg
+    - /Audio/Voice/Talk/speak_4.ogg
+    - /Audio/Voice/Talk/vulp.ogg
+
+- type: soundCollection
+  id: DialogueBlipMechanical
+  files:
+    - /Audio/Voice/Talk/Silicon/borg.ogg
+    - /Audio/Voice/Talk/Silicon/syndieborg.ogg
+    - /Audio/Voice/Talk/pai.ogg
+
+- type: soundCollection
+  id: DialogueBlipAlien
+  files:
+    - /Audio/Voice/Talk/arachnid.ogg
+    - /Audio/Voice/Talk/lizard.ogg
+    - /Audio/Voice/Talk/slime.ogg
+    - /Audio/Voice/Talk/vox.ogg
+
+- type: soundCollection
+  id: DialogueBlipBass
+  files:
+    - /Audio/Voice/Talk/speak_4.ogg
+    - /Audio/Voice/Talk/speak_4_ask.ogg
+    - /Audio/Voice/Talk/speak_4_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipBaritone
+  files:
+    - /Audio/Voice/Talk/speak_1.ogg
+    - /Audio/Voice/Talk/speak_1_ask.ogg
+    - /Audio/Voice/Talk/speak_1_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipTenor
+  files:
+    - /Audio/Voice/Talk/speak_3.ogg
+    - /Audio/Voice/Talk/speak_3_ask.ogg
+    - /Audio/Voice/Talk/speak_3_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipAlto
+  files:
+    - /Audio/Voice/Talk/speak_2.ogg
+    - /Audio/Voice/Talk/speak_2_ask.ogg
+    - /Audio/Voice/Talk/speak_2_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipBorg
+  files:
+    - /Audio/Voice/Talk/Silicon/borg.ogg
+    - /Audio/Voice/Talk/Silicon/borg_ask.ogg
+    - /Audio/Voice/Talk/Silicon/borg_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipSyndieBorg
+  files:
+    - /Audio/Voice/Talk/Silicon/syndieborg.ogg
+    - /Audio/Voice/Talk/Silicon/syndieborg_ask.ogg
+    - /Audio/Voice/Talk/Silicon/syndieborg_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipPai
+  files:
+    - /Audio/Voice/Talk/pai.ogg
+    - /Audio/Voice/Talk/pai_ask.ogg
+    - /Audio/Voice/Talk/pai_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipLizard
+  files:
+    - /Audio/Voice/Talk/lizard.ogg
+    - /Audio/Voice/Talk/lizard_ask.ogg
+    - /Audio/Voice/Talk/lizard_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipSlime
+  files:
+    - /Audio/Voice/Talk/slime.ogg
+    - /Audio/Voice/Talk/slime_ask.ogg
+    - /Audio/Voice/Talk/slime_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipVox
+  files:
+    - /Audio/Voice/Talk/vox.ogg
+    - /Audio/Voice/Talk/vox_ask.ogg
+    - /Audio/Voice/Talk/vox_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipArachnid
+  files:
+    - /Audio/Voice/Talk/arachnid.ogg
+    - /Audio/Voice/Talk/arachnid_ask.ogg
+    - /Audio/Voice/Talk/arachnid_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipVulpkanin
+  files:
+    - /Audio/Voice/Talk/vulp.ogg
+    - /Audio/Voice/Talk/vulp_ask.ogg
+    - /Audio/Voice/Talk/vulp_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipXenoborg
+  files:
+    - /Audio/Voice/Xenoborg/xenoborg_talk.ogg
+    - /Audio/Voice/Xenoborg/xenoborg_ask.ogg
+    - /Audio/Voice/Xenoborg/xenoborg_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipWawa
+  files:
+    - /Audio/Animals/wawa_statement.ogg
+    - /Audio/Animals/wawa_question.ogg
+    - /Audio/Animals/wawa_exclaim.ogg
+
+- type: soundCollection
+  id: DialogueBlipMegaphone
+  files:
+    - /Audio/Voice/Talk/speak_1.ogg
+    - /Audio/Voice/Talk/speak_2.ogg
+    - /Audio/Voice/Talk/speak_3.ogg
+    - /Audio/Voice/Talk/speak_4.ogg
+
+- type: soundCollection
+  id: DialogueBlipGenestealer
+  files:
+    - /Audio/_WH40K/Voice/Tyranid/genestealerspeech.ogg
+
+- type: soundCollection
+  id: DialogueBlipZoanthrope
+  files:
+    - /Audio/_WH40K/Voice/Tyranid/zoanthropespeech.ogg

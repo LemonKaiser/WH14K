@@ -1,0 +1,69 @@
+- type: entity
+  parent: InflatableWall
+  id: WH40KInflatableWallImperium
+  name: imperium inflatable wall
+  description: Rapid frontline cover membrane. Deflates over time to prevent area spam.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: wall
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Inflatable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: WH40KInflatableWallStackImperium1
+    disassembleTime: 3
+  - type: TimedDespawn
+    lifetime: 240
+
+- type: entity
+  parent: InflatableDoor
+  id: WH40KInflatableDoorImperium
+  name: imperium inflatable door
+  description: Rapid frontline cover membrane with a simple passage hatch.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/inflatable_door.rsi
+    state: closed
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Inflatable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: WH40KInflatableDoorStackImperium1
+    disassembleTime: 3
+  - type: TimedDespawn
+    lifetime: 240
+
+- type: entity
+  parent: WH40KInflatableWallImperium
+  id: WH40KInflatableWallHeretics
+  name: heretics inflatable wall
+  components:
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: WH40KInflatableWallStackHeretics1
+    disassembleTime: 3
+
+- type: entity
+  parent: WH40KInflatableDoorImperium
+  id: WH40KInflatableDoorHeretics
+  name: heretics inflatable door
+  components:
+  - type: DisassembleOnAltVerb
+    prototypeToSpawn: WH40KInflatableDoorStackHeretics1
+    disassembleTime: 3

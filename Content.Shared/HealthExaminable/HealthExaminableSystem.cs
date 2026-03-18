@@ -34,10 +34,10 @@ public sealed class HealthExaminableSystem : EntitySystem
                 var markup = CreateMarkup(uid, component, damage);
                 _examineSystem.SendExamineTooltip(args.User, uid, markup, false, false);
             },
-            Text = Loc.GetString("health-examinable-verb-text"),
+            TextLocId = "health-examinable-verb-text",
             Category = VerbCategory.Examine,
             Disabled = !detailsRange,
-            Message = detailsRange ? null : Loc.GetString("health-examinable-verb-disabled"),
+            MessageLocId = detailsRange ? null : "health-examinable-verb-disabled",
             Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png"))
         };
 

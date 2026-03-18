@@ -14,6 +14,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using static Content.IntegrationTests.Tests.Destructible.DestructibleTestPrototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Destructible
 {
     [TestFixture]

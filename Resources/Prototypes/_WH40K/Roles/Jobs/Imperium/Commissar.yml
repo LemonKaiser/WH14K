@@ -3,14 +3,39 @@
   name: job-name-commissar
   description: job-description-commissar
   playTimeTracker: JobCommissar
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: CommissarGear
   icon: "JobIconCommissar"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KCommissarVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KCommissarMaleHuman
+          Female: WH40KCommissarFemaleHuman
+          Unsexed: WH40KCommissarMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: CommissarGear
@@ -19,8 +44,9 @@
     gloves: ClothingHandsGlovesCombatCommissar
     shoes: ClothingShoesCommissarBoots
     belt: Comibelt
-    ears: ClothingHeadsetVoxBackpack
+    ears: ClothingHeadsetVoxBackpackImperium
     head: ClothingHeadCommissar
+    outerClothing: ClothingOuterArmorCommissar
     id: CommissarDogTag
     pocket1: Bugle
   inhand:

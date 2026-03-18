@@ -1,0 +1,50 @@
+- type: entity
+  id: WH40KSentryLaptopBase
+  parent: BaseItem
+  abstract: true
+  name: sentry laptop
+  description: A rugged command laptop for linking and monitoring frontline sentry turrets.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+  - type: Item
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    size: Normal
+  - type: Clothing
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    slots:
+    - belt
+    - suitstorage
+  - type: UserInterface
+    interfaces:
+      enum.WH40KSentryLaptopUiKey.Key:
+        type: WH40KSentryLaptopBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KSentryLaptopUiKey.Key
+    inHandsOnly: false
+  - type: UseDelay
+    delay: 0.4
+  - type: WH40KSentryLaptop
+    requireTeam: true
+    maxLinkedTurrets: 8
+
+- type: entity
+  id: WH40KSentryLaptopImperium
+  parent: WH40KSentryLaptopBase
+  name: imperium sentry laptop
+  description: Sentry network console calibrated for Imperium turret teams.
+  components:
+  - type: WH40KSentryLaptop
+    allowedTeamIds:
+    - Imperium
+
+- type: entity
+  id: WH40KSentryLaptopHeretics
+  parent: WH40KSentryLaptopBase
+  name: heretics sentry laptop
+  description: Sentry network console calibrated for Heretics turret teams.
+  components:
+  - type: WH40KSentryLaptop
+    allowedTeamIds:
+    - Heretics

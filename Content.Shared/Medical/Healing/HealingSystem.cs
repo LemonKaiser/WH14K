@@ -13,6 +13,8 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.RoundEvents;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
@@ -121,7 +123,11 @@ public sealed class HealingSystem : EntitySystem
 
         // Update our self heal delay so it shortens as we heal more damage.
         if (args.User == target.Owner)
-            args.Args.Delay = healing.Delay * GetScaledHealingPenalty(target.Owner, healing.SelfHealPenaltyMultiplier);
+        {
+            args.Args.Delay = ApplyWh40KMedicalDelayMultipliers(
+                args.User,
+                healing.Delay * GetScaledHealingPenalty(target.Owner, healing.SelfHealPenaltyMultiplier));
+        }
     }
 
     private bool HasDamage(Entity<HealingComponent> healing, Entity<DamageableComponent> target)
@@ -212,6 +218,8 @@ public sealed class HealingSystem : EntitySystem
             ? healing.Comp.Delay
             : healing.Comp.Delay * GetScaledHealingPenalty(target, healing.Comp.SelfHealPenaltyMultiplier);
 
+        delay = ApplyWh40KMedicalDelayMultipliers(user, delay);
+
         var doAfterEventArgs =
             new DoAfterArgs(EntityManager, user, delay, new HealingDoAfterEvent(), target, target: target, used: healing)
             {
@@ -224,6 +232,29 @@ public sealed class HealingSystem : EntitySystem
 
         _doAfter.TryStartDoAfter(doAfterEventArgs);
         return true;
+    }
+
+    private TimeSpan ApplyWh40KMedicalDelayMultipliers(EntityUid user, TimeSpan baseDelay)
+    {
+        if (baseDelay <= TimeSpan.Zero)
+            return TimeSpan.Zero;
+
+        var multiplier = 1f;
+
+        if (TryComp<WH40KRoundEventBuffComponent>(user, out var roundBuff) &&
+            roundBuff.MedicalDelayMultiplier > 0f)
+        {
+            multiplier *= roundBuff.MedicalDelayMultiplier;
+        }
+
+        if (TryComp<WH40KTeamEventEffectComponent>(user, out var teamEventBuff) &&
+            teamEventBuff.MedicalDelayMultiplier > 0f)
+        {
+            multiplier *= teamEventBuff.MedicalDelayMultiplier;
+        }
+
+        var scaledSeconds = (float) baseDelay.TotalSeconds * multiplier;
+        return TimeSpan.FromSeconds(MathF.Max(0.05f, scaledSeconds));
     }
 
     /// <summary>

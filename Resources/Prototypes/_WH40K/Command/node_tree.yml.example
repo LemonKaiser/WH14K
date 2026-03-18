@@ -1,0 +1,262 @@
+# DRAFT ONLY
+# This file is not loaded by runtime prototype loader.
+# Copy to `node_tree.yml` only after implementing corresponding prototype definitions in code.
+
+meta:
+  profile: wh40k_command_tree_vnext
+  level_cap: 5
+  upgrade_points_per_level: 3
+  doctrine_pick_level: 3
+  initial_upgrade_points_at_level1: true
+
+domains:
+  - id: engineering
+    name: engineering
+  - id: logistics
+    name: logistics
+  - id: research
+    name: research
+
+nodes:
+  - id: eng_root_time
+    domain: engineering
+    tier: 1
+    cost: 1
+    parents: []
+    effects:
+      - type: machine_time_multiplier
+        target: wh40k_all_machines
+        value: 0.95
+
+  - id: eng_t2_time_1
+    domain: engineering
+    tier: 2
+    cost: 1
+    parents: [eng_root_time]
+    doctrine_locks: [engineering_focus_time]
+    effects:
+      - type: machine_time_multiplier
+        target: wh40k_extractors
+        value: 0.9
+
+  - id: eng_t2_cost_1
+    domain: engineering
+    tier: 2
+    cost: 1
+    parents: [eng_root_time]
+    doctrine_locks: [engineering_focus_cost]
+    effects:
+      - type: machine_cost_multiplier
+        target: wh40k_machine_recipes
+        value: 0.95
+
+  - id: eng_t3_time_2
+    domain: engineering
+    tier: 3
+    cost: 1
+    parents: [eng_t2_time_1]
+    effects:
+      - type: machine_time_multiplier
+        target: wh40k_lathes
+        value: 0.88
+
+  - id: eng_t3_cost_2
+    domain: engineering
+    tier: 3
+    cost: 1
+    parents: [eng_t2_cost_1]
+    effects:
+      - type: machine_cost_multiplier
+        target: wh40k_lathe_recipes
+        value: 0.9
+
+  - id: eng_t4_bridge
+    domain: engineering
+    tier: 4
+    cost: 1
+    parents: [eng_t3_time_2, eng_t3_cost_2]
+    effects:
+      - type: machine_tier_uplift
+        target: wh40k_core_prod_machines
+        value: 1
+
+  - id: eng_capstone
+    domain: engineering
+    tier: 5
+    cost: 2
+    parents: [eng_t4_bridge]
+    effects:
+      - type: machine_cluster_overclock
+        target: wh40k_core_prod_machines
+        duration_seconds: 120
+        cooldown_seconds: 900
+
+  - id: log_root_flow
+    domain: logistics
+    tier: 1
+    cost: 1
+    parents: []
+    effects:
+      - type: reinforcement_cooldown_multiplier
+        value: 0.95
+
+  - id: log_t2_capacity_1
+    domain: logistics
+    tier: 2
+    cost: 1
+    parents: [log_root_flow]
+    doctrine_locks: [logistics_focus_capacity]
+    effects:
+      - type: cargo_pending_capacity_bonus
+        value: 3
+
+  - id: log_t2_transit_1
+    domain: logistics
+    tier: 2
+    cost: 1
+    parents: [log_root_flow]
+    doctrine_locks: [logistics_focus_transit]
+    effects:
+      - type: cargo_eta_multiplier
+        value: 0.9
+
+  - id: log_t3_capacity_2
+    domain: logistics
+    tier: 3
+    cost: 1
+    parents: [log_t2_capacity_1]
+    effects:
+      - type: cargo_pending_capacity_bonus
+        value: 5
+
+  - id: log_t3_transit_2
+    domain: logistics
+    tier: 3
+    cost: 1
+    parents: [log_t2_transit_1]
+    effects:
+      - type: cargo_eta_multiplier
+        value: 0.8
+
+  - id: log_t4_bridge
+    domain: logistics
+    tier: 4
+    cost: 1
+    parents: [log_t3_capacity_2, log_t3_transit_2]
+    effects:
+      - type: reinforcement_cost_multiplier
+        value: 0.9
+
+  - id: log_capstone
+    domain: logistics
+    tier: 5
+    cost: 2
+    parents: [log_t4_bridge]
+    effects:
+      - type: rapid_convoy_window
+        eta_multiplier: 0.6
+        duration_seconds: 90
+        cooldown_seconds: 900
+
+  - id: res_root_doctrine
+    domain: research
+    tier: 1
+    cost: 1
+    parents: []
+    effects:
+      - type: research_speed_multiplier
+        value: 1.08
+
+  - id: res_t2_survive_1
+    domain: research
+    tier: 2
+    cost: 1
+    parents: [res_root_doctrine]
+    doctrine_locks: [research_focus_survival]
+    effects:
+      - type: team_health_multiplier
+        value: 1.05
+
+  - id: res_t2_offense_1
+    domain: research
+    tier: 2
+    cost: 1
+    parents: [res_root_doctrine]
+    doctrine_locks: [research_focus_offense]
+    effects:
+      - type: team_damage_multiplier
+        value: 1.04
+
+  - id: res_t3_survive_2
+    domain: research
+    tier: 3
+    cost: 1
+    parents: [res_t2_survive_1]
+    effects:
+      - type: incoming_damage_multiplier
+        value: 0.96
+
+  - id: res_t3_offense_2
+    domain: research
+    tier: 3
+    cost: 1
+    parents: [res_t2_offense_1]
+    effects:
+      - type: weapon_handling_multiplier
+        value: 1.08
+
+  - id: res_t4_bridge
+    domain: research
+    tier: 4
+    cost: 1
+    parents: [res_t3_survive_2, res_t3_offense_2]
+    effects:
+      - type: doctrine_pulse_cooldown_multiplier
+        value: 0.9
+
+  - id: res_capstone
+    domain: research
+    tier: 5
+    cost: 2
+    parents: [res_t4_bridge]
+    effects:
+      - type: doctrine_pulse
+        damage_multiplier: 1.06
+        defense_multiplier: 0.95
+        duration_seconds: 60
+        cooldown_seconds: 900
+
+doctrines:
+  - id: engineering_focus_time
+    domain: engineering
+    lock_level: 3
+    locks_out: [eng_t2_cost_1]
+  - id: engineering_focus_cost
+    domain: engineering
+    lock_level: 3
+    locks_out: [eng_t2_time_1]
+
+  - id: logistics_focus_capacity
+    domain: logistics
+    lock_level: 3
+    locks_out: [log_t2_transit_1]
+  - id: logistics_focus_transit
+    domain: logistics
+    lock_level: 3
+    locks_out: [log_t2_capacity_1]
+
+  - id: research_focus_survival
+    domain: research
+    lock_level: 3
+    locks_out: [res_t2_offense_1]
+  - id: research_focus_offense
+    domain: research
+    lock_level: 3
+    locks_out: [res_t2_survive_1]
+
+limits:
+  machine_time_multiplier_floor: 0.60
+  machine_cost_multiplier_floor: 0.70
+  cargo_eta_multiplier_floor: 0.50
+  reinforcement_cost_multiplier_floor: 0.65
+  reinforcement_cooldown_multiplier_floor: 0.55

@@ -78,6 +78,11 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         UpdateChildColors();
     }
 
+    public void RefreshLocalization()
+    {
+        Popup.RefreshLocalization();
+    }
+
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

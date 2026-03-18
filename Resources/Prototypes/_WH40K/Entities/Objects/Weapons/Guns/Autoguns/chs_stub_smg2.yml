@@ -41,6 +41,7 @@
     selectedMode: FullAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_3.wav
+  - type: WH40KGunPrediction
   - type: HeldSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98

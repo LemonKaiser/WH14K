@@ -1,0 +1,16 @@
+- type: entity
+  id: WH40KLaserDesignatorMarker
+  name: laser designator marker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _RMC14/Effects/laser.rsi
+    state: laser_target_coordinate
+    color: "#ff5959"
+  - type: PointLight
+    enabled: true
+    radius: 2
+    color: "#ff3b3b"

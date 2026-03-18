@@ -14,10 +14,17 @@ public sealed partial class LobbyBackgroundPrototype : IPrototype
     public string ID { get; set; } = default!;
 
     /// <summary>
-    /// The sprite to use as the background. This should ideally be 1920x1080.
+    /// The static sprite to use as the background. This should ideally be 1920x1080.
     /// </summary>
-    [DataField(required: true)]
-    public ResPath Background = default!;
+    [DataField]
+    public ResPath? Background;
+
+    /// <summary>
+    /// Optional animated GIF path for lobby background.
+    /// If set, client will decode frames and play them as an animated background.
+    /// </summary>
+    [DataField]
+    public ResPath? BackgroundGif;
 
     /// <summary>
     /// The title of the background to be displayed in the lobby.

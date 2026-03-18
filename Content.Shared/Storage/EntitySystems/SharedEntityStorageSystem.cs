@@ -182,12 +182,12 @@ public abstract class SharedEntityStorageSystem : EntitySystem
         InteractionVerb verb = new();
         if (component.Open)
         {
-            verb.Text = Loc.GetString("verb-common-close");
+            verb.TextLocId = "verb-common-close";
             verb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/close.svg.192dpi.png"));
         }
         else
         {
-            verb.Text = Loc.GetString("verb-common-open");
+            verb.TextLocId = "verb-common-open";
             verb.Icon = new SpriteSpecifier.Texture(
                 new("/Textures/Interface/VerbIcons/open.svg.192dpi.png"));
         }

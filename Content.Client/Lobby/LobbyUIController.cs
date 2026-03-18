@@ -139,8 +139,25 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
     public void OnStateExited(LobbyState state)
     {
         PreviewPanel?.SetLoaded(false);
-        _profileEditor?.Dispose();
-        _characterSetup?.Dispose();
+
+        if (_savePanel != null)
+        {
+            _savePanel.Close();
+            _savePanel.Dispose();
+            _savePanel = null;
+        }
+
+        if (_profileEditor != null)
+        {
+            _profileEditor.Orphan();
+            _profileEditor.Dispose();
+        }
+
+        if (_characterSetup != null)
+        {
+            _characterSetup.Orphan();
+            _characterSetup.Dispose();
+        }
 
         _characterSetup = null;
         _profileEditor = null;
@@ -157,6 +174,14 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         profileEditor.SetProfile(
             _preferencesManager.Preferences?.SelectedCharacter,
             _preferencesManager.Preferences?.SelectedCharacterIndex);
+    }
+
+    public void RefreshLocalization()
+    {
+        RefreshLobbyPreview();
+        _characterSetup?.Relocalize();
+        _profileEditor?.Relocalize();
+        _savePanel?.Relocalize();
     }
 
     /// <summary>

@@ -1,2 +1,10 @@
 marking-CatEars = Cat Ears
+marking-CatEars-ears_cat_outer = Outer Ear
+marking-CatEars-ears_cat_inner = Inner Ear
 marking-CatTail = Cat Tail
+marking-CatTail-tail_cat = Main
+marking-FelinidEars = Cat Ears
+marking-FelinidEars-ears_cat_outer = Outer Ear
+marking-FelinidEars-ears_cat_inner = Inner Ear
+marking-FelinidTail = Cat Tail
+marking-FelinidTail-tail_cat = Main

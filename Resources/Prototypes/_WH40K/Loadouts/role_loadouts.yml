@@ -41,9 +41,292 @@
 - type: roleLoadout
   id: JobGuardsman
   groups:
-  - GuardsmanHead
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobSpecialistSWS
+  groups:
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KImperialSpecialistMask
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobSpecialistHWS
+  groups:
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KImperialSpecialistMask
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobVoxScout
+  groups:
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobTanker
+  groups:
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobPsyker
+  groups:
+  - WH40KImperialLineHead
+  - WH40KImperialLineHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobMedic
+  groups:
+  - WH40KImperialMedicHead
+  - WH40KImperialMedicHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobTitheSupplier
+  groups:
+  - WH40KImperialLogisticsHead
+  - WH40KImperialLogisticsHonours
+  - WH40KImperialFieldOuter
+  - WH40KImperialFieldBelt
+  - WH40KImperialLineFeet
+  - WH40KFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobSergeant
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobSergeantSWS
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobSergeantHWS
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobTankComm
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobLieutenant
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobCommissar
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+- type: roleLoadout
+  id: JobColonel
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialCommandNeck
+  - WH40KImperialCommandOuter
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
 
 - type: roleLoadout
   id: JobHGuardsman
   groups:
-  - HGuardsmanHead
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHSpecialistSWS
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHSpecialistHWS
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHVoxScout
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHTanker
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHMedic
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHBandSupplier
+  groups:
+  - WH40KHereticLineHead
+  - WH40KHereticLineMask
+  - WH40KHereticLineHands
+  - WH40KHereticFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHSergeant
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHSergeantSWS
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHSergeantHWS
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHTankComm
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHLieutenant
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHCommissar
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobHColonel
+  groups:
+  - WH40KHereticCommandHead
+  - WH40KHereticCommandNeck
+  - WH40KHereticCommandOuter
+  - WH40KHereticCommandHands
+  - WH40KHereticCommandFieldKit
+  - WH40KHereticMelee

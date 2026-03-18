@@ -1,0 +1,23 @@
+﻿{
+    "GeneratedAt":  "2026-03-05 11:36:51",
+    "TotalEntityPrototypes":  11858,
+    "TotalActionPrototypes":  168,
+    "TotalEffectTaggedEntities":  518,
+    "ChaosActionCount":  12,
+    "ChaosActionIds":  [
+                           "ActionWH40KChaosKhorneBloodstorm",
+                           "ActionWH40KChaosKhorneExecutionStep",
+                           "ActionWH40KChaosKhorneRepulse",
+                           "ActionWH40KChaosNurgleCorpseBloom",
+                           "ActionWH40KChaosNurgleMiasma",
+                           "ActionWH40KChaosNurgleRepulse",
+                           "ActionWH40KChaosSlaaneshExquisiteTempo",
+                           "ActionWH40KChaosSlaaneshMiasma",
+                           "ActionWH40KChaosSlaaneshSwap",
+                           "ActionWH40KChaosTzeentchBarrier",
+                           "ActionWH40KChaosTzeentchMindTwist",
+                           "ActionWH40KChaosTzeentchWarpRewrite"
+                       ],
+    "ActionCsv":  "Resources\\\\Prototypes\\\\_WH40K\\ability_effects_actions_2026-03-05.csv",
+    "EffectCsv":  "Resources\\\\Prototypes\\\\_WH40K\\ability_effects_effect_entities_2026-03-05.csv"
+}

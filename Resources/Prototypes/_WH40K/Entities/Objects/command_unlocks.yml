@@ -1,0 +1,65 @@
+- type: entity
+  id: WH40KTacticalWhistle
+  parent: WH40KTacticalWhistleBase
+  suffix: WH40K
+
+- type: entity
+  id: WH40KSignalFlare
+  parent: WH40KSignalFlareBase
+  suffix: WH40K
+
+- type: entity
+  id: WH40KIntelDetector
+  parent: WH40KIntelDetectorBase
+  suffix: WH40K
+
+- type: entity
+  id: WH40KSentryLaptop
+  parent: WH40KSentryLaptopBase
+  suffix: WH40K
+
+- type: entity
+  id: WH40KTacticalFultonField
+  parent: WH40KTacticalFultonBase
+  suffix: WH40K
+
+- type: entity
+  id: WH40KMissionPinpointerRelay
+  parent: WH40KMissionPinpointerBase
+  name: relay mission pinpointer
+  description: Tracks active relay-control objectives for the current team.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Relay
+
+- type: entity
+  id: WH40KMissionPinpointerCargo
+  parent: WH40KMissionPinpointerBase
+  name: cargo mission pinpointer
+  description: Tracks active cargo-delivery objectives for the current team.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Cargo
+
+- type: entity
+  id: WH40KMissionPinpointerBanner
+  parent: WH40KMissionPinpointerBase
+  name: banner mission pinpointer
+  description: Tracks active banner-hold objectives for the current team.
+  components:
+  - type: WH40KMissionPinpointer
+    preset: Banner
+
+- type: entity
+  id: WH40KMissionPinpointerKit
+  parent: BoxCardboard
+  name: mission pinpointer kit
+  description: Command kit with relay, cargo, and banner mission pinpointers for the current team.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: WH40KMissionPinpointerRelay
+        - id: WH40KMissionPinpointerCargo
+        - id: WH40KMissionPinpointerBanner

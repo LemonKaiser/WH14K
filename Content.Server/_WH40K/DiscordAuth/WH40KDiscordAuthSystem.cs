@@ -1,0 +1,1206 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using Content.Server.Database;
+using Content.Server.GameTicking;
+using Content.Server._WH40K.MetaProgress;
+using Content.Shared.CCVar;
+using Content.Shared.Popups;
+using Content.Shared._WH40K.DiscordAuth;
+using Robust.Server.Player;
+using Robust.Server.ServerStatus;
+using Robust.Shared.Asynchronous;
+using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
+using Robust.Shared.Localization;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+
+namespace Content.Server._WH40K.DiscordAuth;
+
+public sealed partial class WH40KDiscordAuthSystem : EntitySystem
+{
+    private const string DefaultScope = "identify guilds.members.read";
+    private const string DefaultCallbackPath = "/wh40k/discord-auth/callback";
+    private static readonly JsonSerializerOptions RoleCacheJsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
+    [Dependency] private readonly IWH40KDiscordAuthApi _api = default!;
+    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IStatusHost _statusHost = default!;
+    [Dependency] private readonly ITaskManager _task = default!;
+    [Dependency] private readonly UserDbDataManager _userDb = default!;
+    [Dependency] private readonly WH40KMetaProgressSystem _metaProgress = default!;
+
+    private readonly Dictionary<NetUserId, RuntimeState> _states = new();
+    private readonly Dictionary<NetUserId, DateTimeOffset> _connectRefreshAttempts = new();
+    private readonly Dictionary<string, PendingLinkRequest> _pendingRequests = new(StringComparer.Ordinal);
+    private readonly Dictionary<NetUserId, string> _pendingRequestByUser = new();
+    private readonly object _stateLock = new();
+    private readonly object _pendingRequestLock = new();
+
+    private ISawmill _sawmill = default!;
+
+    private bool _enabled;
+    private bool _gateOnConnect;
+    private bool _requireGuildMember;
+    private bool _requireLink;
+    private string _clientId = string.Empty;
+    private string _clientSecret = string.Empty;
+    private string _guildId = string.Empty;
+    private string _redirectUri = string.Empty;
+    private HashSet<string> _requiredRoleIds = new(StringComparer.Ordinal);
+    private TimeSpan _cacheTtl = TimeSpan.FromHours(2);
+    private TimeSpan _connectRefreshCooldown = TimeSpan.FromSeconds(15);
+    private TimeSpan _linkRequestTtl = TimeSpan.FromMinutes(10);
+    private TimeSpan _refreshCooldown = TimeSpan.FromSeconds(30);
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _sawmill = _logManager.GetSawmill("wh40k.discord_auth");
+
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthEnabled, value =>
+        {
+            _enabled = value;
+            PushSnapshotToAllOnline();
+        }, true);
+
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthClientId, value => _clientId = value.Trim(), true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthClientSecret, value => _clientSecret = value.Trim(), true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRedirectUri, value =>
+        {
+            _redirectUri = value.Trim();
+            PushSnapshotToAllOnline();
+        }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthGuildId, value =>
+        {
+            _guildId = value.Trim();
+            PushSnapshotToAllOnline();
+        }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRequireLink, value =>
+        {
+            _requireLink = value;
+            PushSnapshotToAllOnline();
+        }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthGateOnConnect, value => _gateOnConnect = value, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRequireGuildMember, value =>
+        {
+            _requireGuildMember = value;
+            PushSnapshotToAllOnline();
+        }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRequiredRoleIds, value =>
+        {
+            _requiredRoleIds = ParseCsvIds(value);
+            PushSnapshotToAllOnline();
+        }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthLinkRequestTtlSeconds, value => _linkRequestTtl = TimeSpan.FromSeconds(Math.Max(30, value)), true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRefreshCooldownSeconds, value => _refreshCooldown = TimeSpan.FromSeconds(Math.Max(0, value)), true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthConnectRefreshCooldownSeconds, value => _connectRefreshCooldown = TimeSpan.FromSeconds(Math.Max(0, value)), true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthCacheTtlMinutes, value =>
+        {
+            _cacheTtl = TimeSpan.FromMinutes(Math.Max(1, value));
+            PushSnapshotToAllOnline();
+        }, true);
+        _userDb.AddOnLoadPlayer(LoadPlayerDataAsync);
+        _userDb.AddOnFinishLoad(FinishPlayerLoad);
+        _userDb.AddOnPlayerDisconnect(OnPlayerDisconnected);
+
+        _statusHost.AddHandler(HandleCallbackRequestAsync);
+
+        SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
+        SubscribeNetworkEvent<WH40KDiscordAuthRequestStateEvent>(OnRequestState);
+        SubscribeNetworkEvent<WH40KDiscordAuthStartLinkEvent>(OnStartLink);
+        SubscribeNetworkEvent<WH40KDiscordAuthRefreshProfileEvent>(OnRefreshProfile);
+        SubscribeNetworkEvent<WH40KDiscordAuthUnlinkEvent>(OnUnlink);
+    }
+
+    private async Task LoadPlayerDataAsync(ICommonSession session, CancellationToken cancel)
+    {
+        var link = await _db.GetWH40KDiscordLink(session.UserId, cancel);
+        cancel.ThrowIfCancellationRequested();
+        link = await TryAutoRefreshStaleLinkAsync(session.UserId, link, cancel);
+        cancel.ThrowIfCancellationRequested();
+
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(session.UserId, out var state))
+            {
+                state = new RuntimeState();
+                _states[session.UserId] = state;
+            }
+
+            state.Link = link;
+            state.LoadComplete = true;
+        }
+    }
+
+    private void FinishPlayerLoad(ICommonSession session)
+    {
+        _task.RunOnMainThread(() =>
+        {
+            if (_players.TryGetSessionById(session.UserId, out var current))
+            {
+                SendSnapshot(current);
+                _metaProgress.RefreshDiscordRequirementsForUser(session.UserId);
+            }
+        });
+    }
+
+    private void OnPlayerDisconnected(ICommonSession session)
+    {
+        lock (_stateLock)
+        {
+            _states.Remove(session.UserId);
+        }
+
+        lock (_pendingRequestLock)
+        {
+            if (_pendingRequestByUser.Remove(session.UserId, out var requestId))
+                _pendingRequests.Remove(requestId);
+        }
+    }
+
+    private void OnPlayerJoinedLobby(PlayerJoinedLobbyEvent ev)
+    {
+        if (_userDb.IsLoadComplete(ev.PlayerSession))
+            SendSnapshot(ev.PlayerSession);
+    }
+
+    private void OnRequestState(WH40KDiscordAuthRequestStateEvent ev, EntitySessionEventArgs args)
+    {
+        SendSnapshot(args.SenderSession);
+    }
+
+    private void OnStartLink(WH40KDiscordAuthStartLinkEvent ev, EntitySessionEventArgs args)
+    {
+        if (!TryStartLinkFlow(args.SenderSession))
+            SendSnapshot(args.SenderSession);
+    }
+
+    private async void OnRefreshProfile(WH40KDiscordAuthRefreshProfileEvent ev, EntitySessionEventArgs args)
+    {
+        if (!_enabled)
+        {
+            Popup(args.SenderSession, "wh40k-discord-auth-popup-disabled");
+            SendSnapshot(args.SenderSession);
+            return;
+        }
+
+        if (!TryGetLinkedData(args.SenderSession.UserId, out var current))
+        {
+            Popup(args.SenderSession, "wh40k-discord-auth-popup-link-required");
+            SendSnapshot(args.SenderSession);
+            return;
+        }
+
+        if (!TryMarkRefreshAttempt(args.SenderSession.UserId))
+        {
+            Popup(args.SenderSession, "wh40k-discord-auth-popup-refresh-cooldown");
+            SendSnapshot(args.SenderSession);
+            return;
+        }
+
+        var refreshResult = await RefreshFromDiscordAsync(current);
+        if (!refreshResult.Success || refreshResult.Data == null)
+        {
+            if (refreshResult.RequiresReauth)
+            {
+                _sawmill.Info($"Discord auth refresh requires reauthorization for {args.SenderSession.Name} ({args.SenderSession.UserId}).");
+                if (!TryStartLinkFlow(args.SenderSession, "wh40k-discord-auth-popup-reauth-opening"))
+                    Popup(args.SenderSession, refreshResult.UserErrorKey ?? "wh40k-discord-auth-popup-reauth-required");
+
+                SendSnapshot(args.SenderSession);
+                return;
+            }
+
+            _sawmill.Warning($"Discord auth refresh failed for {args.SenderSession.Name} ({args.SenderSession.UserId}): {refreshResult.Error}");
+            Popup(args.SenderSession, refreshResult.UserErrorKey ?? "wh40k-discord-auth-popup-refresh-failed");
+            SendSnapshot(args.SenderSession);
+            return;
+        }
+
+        await _db.SetWH40KDiscordLink(args.SenderSession.UserId, refreshResult.Data);
+        ApplyLinkedState(args.SenderSession.UserId, refreshResult.Data);
+        Popup(args.SenderSession, "wh40k-discord-auth-popup-refresh-success");
+        SendSnapshotIfOnline(args.SenderSession.UserId);
+        _metaProgress.RefreshDiscordRequirementsForUser(args.SenderSession.UserId);
+    }
+
+    private async void OnUnlink(WH40KDiscordAuthUnlinkEvent ev, EntitySessionEventArgs args)
+    {
+        if (!TryGetLinkedData(args.SenderSession.UserId, out _))
+        {
+            Popup(args.SenderSession, "wh40k-discord-auth-popup-link-required");
+            SendSnapshot(args.SenderSession);
+            return;
+        }
+
+        await _db.ClearWH40KDiscordLink(args.SenderSession.UserId);
+        ApplyLinkedState(args.SenderSession.UserId, null);
+        Popup(args.SenderSession, "wh40k-discord-auth-popup-unlink-success");
+        SendSnapshotIfOnline(args.SenderSession.UserId);
+        _metaProgress.RefreshDiscordRequirementsForUser(args.SenderSession.UserId);
+    }
+
+    private async Task<bool> HandleCallbackRequestAsync(IStatusHandlerContext context)
+    {
+        if (context.RequestMethod != HttpMethod.Get || context.Url.AbsolutePath != GetCallbackPath())
+            return false;
+
+        CleanupExpiredPendingRequests();
+
+        var query = ParseQuery(context.Url.Query);
+        var stateId = GetQueryValue(query, "state");
+
+        if (string.IsNullOrWhiteSpace(stateId) || !TryConsumePendingRequest(stateId, out var pending))
+        {
+            await RespondHtmlAsync(context, HttpStatusCode.Gone, false, "Запрос привязки истёк или уже был использован.");
+            return true;
+        }
+
+        if (!_enabled || !IsOAuthConfigured())
+        {
+            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-misconfigured");
+            await RespondHtmlAsync(context, HttpStatusCode.ServiceUnavailable, false, "Discord OAuth2 не настроен на сервере.");
+            return true;
+        }
+
+        var error = GetQueryValue(query, "error");
+        if (!string.IsNullOrWhiteSpace(error))
+        {
+            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-access-denied");
+            await RespondHtmlAsync(context, HttpStatusCode.BadRequest, false, "Авторизация Discord была отклонена.");
+            return true;
+        }
+
+        var code = GetQueryValue(query, "code");
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-callback-invalid");
+            await RespondHtmlAsync(context, HttpStatusCode.BadRequest, false, "Discord не вернул код авторизации.");
+            return true;
+        }
+
+        var tokenResult = await ExchangeAuthorizationCodeAsync(code);
+        if (!tokenResult.Success || tokenResult.Token == null)
+        {
+            await NotifyCallbackFailureAsync(pending.UserId, tokenResult.UserErrorKey ?? "wh40k-discord-auth-popup-token-failed");
+            await RespondHtmlAsync(context, HttpStatusCode.BadGateway, false, "Не удалось обменять код Discord на токен.");
+            return true;
+        }
+
+        var resolved = await ResolveLinkDataAsync(tokenResult.Token);
+        if (!resolved.Success || resolved.Data == null)
+        {
+            await NotifyCallbackFailureAsync(pending.UserId, resolved.UserErrorKey ?? "wh40k-discord-auth-popup-fetch-failed");
+            await RespondHtmlAsync(context, HttpStatusCode.BadGateway, false, "Не удалось получить профиль Discord.");
+            return true;
+        }
+
+        try
+        {
+            await _db.SetWH40KDiscordLink(pending.UserId, resolved.Data);
+        }
+        catch (InvalidOperationException e)
+        {
+            _sawmill.Warning($"Discord link callback rejected for {pending.UserId}: {e.Message}");
+            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-duplicate-link");
+            await RespondHtmlAsync(context, HttpStatusCode.Conflict, false, "Этот Discord уже привязан к другому игровому аккаунту.");
+            return true;
+        }
+
+        await RunOnMainThreadAsync(() =>
+        {
+            ApplyLinkedState(pending.UserId, resolved.Data);
+            if (_players.TryGetSessionById(pending.UserId, out var session))
+            {
+                Popup(session, "wh40k-discord-auth-popup-link-success");
+                SendSnapshot(session);
+            }
+
+            _metaProgress.RefreshDiscordRequirementsForUser(pending.UserId);
+        });
+
+        await RespondHtmlAsync(context, HttpStatusCode.OK, true, "Discord успешно привязан. Можно возвращаться в игру.");
+        return true;
+    }
+
+    private WH40KDiscordAuthSnapshot BuildSnapshot(NetUserId userId)
+    {
+        var link = default(WH40KDiscordAuthDbData);
+        var loadComplete = false;
+        var lastManualRefreshAt = DateTimeOffset.MinValue;
+
+        lock (_stateLock)
+        {
+            if (_states.TryGetValue(userId, out var state))
+            {
+                link = state.Link;
+                loadComplete = state.LoadComplete;
+                lastManualRefreshAt = state.LastManualRefreshAt;
+            }
+        }
+
+        var now = DateTimeOffset.UtcNow;
+        var evaluation = WH40KDiscordAuthPolicyEvaluator.Evaluate(BuildPolicyConfig(), link, loadComplete, now);
+        var displayName = link == null ? string.Empty : GetDisplayName(link);
+        var username = link?.Username ?? string.Empty;
+        var discordUserId = link?.DiscordUserId ?? string.Empty;
+        var refreshCooldownRemaining = GetRefreshCooldownRemaining(lastManualRefreshAt, now);
+
+        return new WH40KDiscordAuthSnapshot(
+            _enabled,
+            link != null,
+            displayName,
+            username,
+            discordUserId,
+            evaluation.GuildConfigured,
+            evaluation.GuildMemberKnown,
+            evaluation.IsGuildMember,
+            evaluation.RoleConfigured,
+            evaluation.RoleGatePassed,
+            ParseRoleCacheIds(link?.RoleCacheJson),
+            evaluation.CacheStale,
+            refreshCooldownRemaining,
+            evaluation.BlockReason);
+    }
+
+    public bool TryGetSharedSnapshot(NetUserId userId, out WH40KDiscordAuthSnapshot snapshot)
+    {
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(userId, out var state) || !state.LoadComplete)
+            {
+                snapshot = default!;
+                return false;
+            }
+        }
+
+        snapshot = BuildSnapshot(userId);
+        return true;
+    }
+
+    public async Task<WH40KDiscordAuthGateBlockReason> GetConnectionBlockReasonAsync(NetUserId userId, CancellationToken cancel = default)
+    {
+        var config = BuildPolicyConfig();
+        if (!_gateOnConnect || !WH40KDiscordAuthPolicyEvaluator.IsPolicyActive(config))
+        {
+            SetConnectGateRequiresReauth(userId, false);
+            return WH40KDiscordAuthGateBlockReason.None;
+        }
+
+        if (GetConnectGateRequiresReauth(userId))
+            return WH40KDiscordAuthGateBlockReason.CacheStale;
+
+        var link = await _db.GetWH40KDiscordLink(userId, cancel);
+        cancel.ThrowIfCancellationRequested();
+
+        if (ShouldAttemptConnectRefreshOnConnect(config, link))
+        {
+            var now = DateTimeOffset.UtcNow;
+            if (TryMarkConnectRefreshAttempt(userId, now, out _))
+            {
+                var refreshResult = await RefreshFromDiscordAsync(link!);
+                cancel.ThrowIfCancellationRequested();
+
+                if (refreshResult.Success && refreshResult.Data != null)
+                {
+                    await _db.SetWH40KDiscordLink(userId, refreshResult.Data);
+                    ApplyLinkedState(userId, refreshResult.Data);
+                    _task.RunOnMainThread(() => _metaProgress.RefreshDiscordRequirementsForUser(userId));
+                    link = refreshResult.Data;
+                }
+                else if (refreshResult.RequiresReauth)
+                {
+                    SetConnectGateRequiresReauth(userId, true);
+                    return WH40KDiscordAuthGateBlockReason.CacheStale;
+                }
+                else
+                {
+                    _sawmill.Warning($"Discord auth connect refresh failed for {userId}: {refreshResult.Error}");
+                }
+            }
+        }
+
+        var evaluation = WH40KDiscordAuthPolicyEvaluator.Evaluate(config, link, true, DateTimeOffset.UtcNow);
+        SetConnectGateRequiresReauth(userId, false);
+        return evaluation.BlockReason;
+    }
+
+    public string GetConnectionDenyMessage(WH40KDiscordAuthGateBlockReason reason)
+    {
+        var key = reason switch
+        {
+            WH40KDiscordAuthGateBlockReason.LinkRequired => "wh40k-discord-auth-connect-deny-link-required",
+            WH40KDiscordAuthGateBlockReason.GuildMembershipRequired => "wh40k-discord-auth-connect-deny-guild-required",
+            WH40KDiscordAuthGateBlockReason.RoleRequired => "wh40k-discord-auth-connect-deny-role-required",
+            WH40KDiscordAuthGateBlockReason.Misconfigured => "wh40k-discord-auth-connect-deny-misconfigured",
+            WH40KDiscordAuthGateBlockReason.CacheStale => "wh40k-discord-auth-connect-deny-cache-stale",
+            _ => "wh40k-discord-auth-connect-deny-generic",
+        };
+
+        var message = Loc.GetString(key);
+        message = $"{message} {GetDefaultSupportMessage()}";
+
+        return message;
+    }
+
+    public NetDenyReason BuildConnectionDenyReason(NetUserId userId, WH40KDiscordAuthGateBlockReason reason)
+    {
+        var properties = new Dictionary<string, object>();
+        var requiresReauth = GetConnectGateRequiresReauth(userId);
+        var effectiveReason = requiresReauth && reason != WH40KDiscordAuthGateBlockReason.LinkRequired
+            ? WH40KDiscordAuthGateBlockReason.CacheStale
+            : reason;
+        var action = requiresReauth
+            ? WH40KDiscordAuthConstants.ConnectDenyAuthActionLink
+            : GetConnectAuthAction(effectiveReason);
+
+        if (action == WH40KDiscordAuthConstants.ConnectDenyAuthActionLink
+            && ShouldOfferExternalConnectAuth(effectiveReason)
+            && TryCreatePendingLinkUrl(userId, out var url))
+        {
+            properties[WH40KDiscordAuthConstants.ConnectDenyAuthUrlKey] = url;
+        }
+
+        if (ShouldOfferExternalConnectAuth(effectiveReason))
+            properties[WH40KDiscordAuthConstants.ConnectDenyAuthActionKey] = action;
+
+        if (action == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh)
+        {
+            var cooldownRemaining = GetConnectRefreshCooldownRemaining(userId, DateTimeOffset.UtcNow);
+            if (cooldownRemaining > TimeSpan.Zero)
+            {
+                properties[WH40KDiscordAuthConstants.ConnectDenyRefreshCooldownKey] =
+                    Math.Max(1, (int) Math.Ceiling(cooldownRemaining.TotalSeconds));
+            }
+        }
+
+        return new NetDenyReason(GetConnectionDenyMessage(effectiveReason), properties);
+    }
+
+    private void SendSnapshot(ICommonSession session)
+    {
+        RaiseNetworkEvent(new WH40KDiscordAuthStateEvent(BuildSnapshot(session.UserId)), session);
+    }
+
+    private void SendSnapshotIfOnline(NetUserId userId)
+    {
+        if (_players.TryGetSessionById(userId, out var session) && session.Status != SessionStatus.Disconnected)
+            SendSnapshot(session);
+    }
+
+    private void PushSnapshotToAllOnline()
+    {
+        foreach (var session in _players.Sessions)
+        {
+            if (session.Status != SessionStatus.Disconnected)
+                SendSnapshot(session);
+        }
+    }
+
+    private bool TryGetLinkedData(NetUserId userId, out WH40KDiscordAuthDbData data)
+    {
+        lock (_stateLock)
+        {
+            if (_states.TryGetValue(userId, out var state) && state.Link != null)
+            {
+                data = state.Link;
+                return true;
+            }
+        }
+
+        data = default!;
+        return false;
+    }
+
+    private bool GetConnectGateRequiresReauth(NetUserId userId)
+    {
+        lock (_stateLock)
+        {
+            return _states.TryGetValue(userId, out var state) && state.ConnectGateRequiresReauth;
+        }
+    }
+
+    private void SetConnectGateRequiresReauth(NetUserId userId, bool value)
+    {
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(userId, out var state))
+            {
+                if (!value)
+                    return;
+
+                state = new RuntimeState();
+                _states[userId] = state;
+            }
+
+            state.ConnectGateRequiresReauth = value;
+        }
+    }
+
+    private async Task<WH40KDiscordAuthDbData?> TryAutoRefreshStaleLinkAsync(
+        NetUserId userId,
+        WH40KDiscordAuthDbData? link,
+        CancellationToken cancel = default)
+    {
+        if (!ShouldAutoRefreshStaleLink(link, DateTimeOffset.UtcNow))
+            return link;
+
+        cancel.ThrowIfCancellationRequested();
+
+        var refreshResult = await RefreshFromDiscordAsync(link!);
+        cancel.ThrowIfCancellationRequested();
+
+        if (!refreshResult.Success || refreshResult.Data == null)
+        {
+            var reason = refreshResult.RequiresReauth ? "reauth-required" : "refresh-failed";
+            _sawmill.Warning($"Discord auth auto-refresh {reason} for {userId}: {refreshResult.Error}");
+            return link;
+        }
+
+        await _db.SetWH40KDiscordLink(userId, refreshResult.Data);
+        cancel.ThrowIfCancellationRequested();
+
+        lock (_stateLock)
+        {
+            if (_states.TryGetValue(userId, out var state))
+                state.Link = refreshResult.Data;
+        }
+
+        _task.RunOnMainThread(() => _metaProgress.RefreshDiscordRequirementsForUser(userId));
+
+        return refreshResult.Data;
+    }
+
+    private bool ShouldAutoRefreshStaleLink(WH40KDiscordAuthDbData? link, DateTimeOffset now)
+    {
+        if (!_enabled || link == null || !IsOAuthConfigured() || string.IsNullOrWhiteSpace(_guildId))
+            return false;
+
+        if (!string.Equals(link.GuildIdCached, _guildId, StringComparison.Ordinal))
+            return true;
+
+        if (link.LastGuildRefreshAt == null)
+            return true;
+
+        return now - link.LastGuildRefreshAt.Value > _cacheTtl;
+    }
+
+    private bool TryMarkRefreshAttempt(NetUserId userId)
+    {
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(userId, out var state))
+            {
+                state = new RuntimeState();
+                _states[userId] = state;
+            }
+
+            var now = DateTimeOffset.UtcNow;
+            if (_refreshCooldown > TimeSpan.Zero && now - state.LastManualRefreshAt < _refreshCooldown)
+                return false;
+
+            state.LastManualRefreshAt = now;
+            return true;
+        }
+    }
+
+    private bool TryMarkConnectRefreshAttempt(NetUserId userId, DateTimeOffset now, out TimeSpan cooldownRemaining)
+    {
+        lock (_stateLock)
+        {
+            CleanupExpiredConnectRefreshAttempts(now);
+
+            if (_connectRefreshCooldown <= TimeSpan.Zero)
+            {
+                _connectRefreshAttempts[userId] = now;
+                cooldownRemaining = TimeSpan.Zero;
+                return true;
+            }
+
+            if (_connectRefreshAttempts.TryGetValue(userId, out var lastAttempt))
+            {
+                cooldownRemaining = GetCooldownRemaining(lastAttempt, now, _connectRefreshCooldown);
+                if (cooldownRemaining > TimeSpan.Zero)
+                    return false;
+            }
+
+            _connectRefreshAttempts[userId] = now;
+            cooldownRemaining = TimeSpan.Zero;
+            return true;
+        }
+    }
+
+    private TimeSpan GetRefreshCooldownRemaining(DateTimeOffset lastManualRefreshAt, DateTimeOffset now)
+    {
+        return GetCooldownRemaining(lastManualRefreshAt, now, _refreshCooldown);
+    }
+
+    private TimeSpan GetConnectRefreshCooldownRemaining(NetUserId userId, DateTimeOffset now)
+    {
+        lock (_stateLock)
+        {
+            if (!_connectRefreshAttempts.TryGetValue(userId, out var lastAttempt))
+                return TimeSpan.Zero;
+
+            var remaining = GetCooldownRemaining(lastAttempt, now, _connectRefreshCooldown);
+            if (remaining <= TimeSpan.Zero)
+                _connectRefreshAttempts.Remove(userId);
+
+            return remaining;
+        }
+    }
+
+    private static TimeSpan GetCooldownRemaining(DateTimeOffset lastAttemptAt, DateTimeOffset now, TimeSpan cooldown)
+    {
+        if (cooldown <= TimeSpan.Zero || lastAttemptAt == DateTimeOffset.MinValue)
+            return TimeSpan.Zero;
+
+        var nextAllowedAt = lastAttemptAt + cooldown;
+        if (nextAllowedAt <= now)
+            return TimeSpan.Zero;
+
+        return nextAllowedAt - now;
+    }
+
+    private void CleanupExpiredConnectRefreshAttempts(DateTimeOffset now)
+    {
+        if (_connectRefreshAttempts.Count == 0)
+            return;
+
+        var expired = _connectRefreshAttempts
+            .Where(pair => GetCooldownRemaining(pair.Value, now, _connectRefreshCooldown) <= TimeSpan.Zero)
+            .Select(pair => pair.Key)
+            .ToList();
+
+        foreach (var key in expired)
+        {
+            _connectRefreshAttempts.Remove(key);
+        }
+    }
+
+    private void ApplyLinkedState(NetUserId userId, WH40KDiscordAuthDbData? data)
+    {
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(userId, out var state))
+            {
+                state = new RuntimeState();
+                _states[userId] = state;
+            }
+
+            state.Link = data;
+            state.LoadComplete = true;
+            state.ConnectGateRequiresReauth = false;
+        }
+    }
+
+    private void Popup(ICommonSession session, string locKey)
+    {
+        var message = Loc.GetString(locKey);
+        if (locKey == "wh40k-discord-auth-popup-misconfigured")
+        {
+            message = $"{message} {GetDefaultSupportMessage()}";
+        }
+
+        _popup.PopupCursor(message, session, PopupType.Medium);
+    }
+
+    private async Task NotifyCallbackFailureAsync(NetUserId userId, string locKey)
+    {
+        await RunOnMainThreadAsync(() =>
+        {
+            if (_players.TryGetSessionById(userId, out var session))
+            {
+                Popup(session, locKey);
+                SendSnapshot(session);
+            }
+        });
+    }
+
+    private string BuildAuthorizeUrl(string requestId)
+    {
+        return _api.BuildAuthorizeUrl(_clientId, _redirectUri, requestId, DefaultScope);
+    }
+
+    private bool TryCreatePendingLinkUrl(NetUserId userId, out string url)
+    {
+        url = string.Empty;
+
+        if (!_enabled || !IsOAuthConfigured())
+            return false;
+
+        CleanupExpiredPendingRequests();
+
+        var now = DateTimeOffset.UtcNow;
+
+        lock (_pendingRequestLock)
+        {
+            if (_pendingRequestByUser.TryGetValue(userId, out var existingRequestId))
+            {
+                if (_pendingRequests.TryGetValue(existingRequestId, out var existingRequest)
+                    && existingRequest.ExpiresAt > now)
+                {
+                    url = BuildAuthorizeUrl(existingRequestId);
+                    return true;
+                }
+
+                _pendingRequestByUser.Remove(userId);
+                _pendingRequests.Remove(existingRequestId);
+            }
+
+            var requestId = CreateRequestToken();
+            _pendingRequests[requestId] = new PendingLinkRequest(userId, now + _linkRequestTtl);
+            _pendingRequestByUser[userId] = requestId;
+            url = BuildAuthorizeUrl(requestId);
+        }
+        return true;
+    }
+
+    private bool TryStartLinkFlow(ICommonSession session, string openedPopupKey = "wh40k-discord-auth-popup-browser-opened")
+    {
+        if (!_enabled)
+        {
+            Popup(session, "wh40k-discord-auth-popup-disabled");
+            return false;
+        }
+
+        if (!IsOAuthConfigured())
+        {
+            Popup(session, "wh40k-discord-auth-popup-misconfigured");
+            return false;
+        }
+
+        if (!TryCreatePendingLinkUrl(session.UserId, out var url))
+        {
+            Popup(session, "wh40k-discord-auth-popup-misconfigured");
+            return false;
+        }
+
+        RaiseNetworkEvent(new WH40KDiscordAuthOpenUrlEvent(url), session);
+        Popup(session, openedPopupKey);
+        return true;
+    }
+
+    private async Task<TokenExchangeResult> ExchangeAuthorizationCodeAsync(string code)
+    {
+        var result = await _api.ExchangeAuthorizationCodeAsync(_clientId, _clientSecret, _redirectUri, code);
+        if (!result.Success || result.Value == null)
+        {
+            if (result.StatusCode != null)
+                _sawmill.Warning($"Discord token exchange failed (authorization_code) with status {(int) result.StatusCode.Value}.");
+
+            return new TokenExchangeResult(null, false, result.Error, "wh40k-discord-auth-popup-token-failed");
+        }
+
+        var payload = result.Value;
+        var token = new DiscordTokenPayload(
+            payload.AccessToken,
+            payload.RefreshToken,
+            string.IsNullOrWhiteSpace(payload.TokenType) ? "Bearer" : payload.TokenType,
+            string.IsNullOrWhiteSpace(payload.Scope) ? DefaultScope : payload.Scope,
+            DateTimeOffset.UtcNow.AddSeconds(Math.Max(60, payload.ExpiresIn)));
+
+        return new TokenExchangeResult(token, true, null, null);
+    }
+
+    private async Task<TokenExchangeResult> RefreshAccessTokenAsync(WH40KDiscordAuthDbData link)
+    {
+        if (string.IsNullOrWhiteSpace(link.RefreshToken))
+            return new TokenExchangeResult(null, false, "missing_refresh_token", "wh40k-discord-auth-popup-reauth-required", true);
+
+        var result = await _api.RefreshAccessTokenAsync(_clientId, _clientSecret, link.RefreshToken!);
+        if (!result.Success || result.Value == null)
+        {
+            if (result.StatusCode != null)
+                _sawmill.Warning($"Discord token exchange failed (refresh_token) with status {(int) result.StatusCode.Value}.");
+
+            var requiresReauth = WH40KDiscordAuthRefreshFailureClassifier.RequiresReauthAfterRefreshTokenFailure(result.StatusCode);
+            return new TokenExchangeResult(
+                null,
+                false,
+                result.Error,
+                requiresReauth ? "wh40k-discord-auth-popup-reauth-required" : "wh40k-discord-auth-popup-refresh-failed",
+                requiresReauth);
+        }
+
+        var payload = result.Value;
+        var token = new DiscordTokenPayload(
+            payload.AccessToken,
+            payload.RefreshToken,
+            string.IsNullOrWhiteSpace(payload.TokenType) ? "Bearer" : payload.TokenType,
+            string.IsNullOrWhiteSpace(payload.Scope) ? DefaultScope : payload.Scope,
+            DateTimeOffset.UtcNow.AddSeconds(Math.Max(60, payload.ExpiresIn)));
+
+        return new TokenExchangeResult(token, true, null, null);
+    }
+
+    private async Task<RefreshResult> RefreshFromDiscordAsync(WH40KDiscordAuthDbData current)
+    {
+        var token = new DiscordTokenPayload(
+            current.AccessToken,
+            current.RefreshToken,
+            current.TokenType,
+            current.Scope,
+            current.TokenExpiresAt);
+        var tokenWasRefreshed = false;
+
+        if (DateTimeOffset.UtcNow >= current.TokenExpiresAt - TimeSpan.FromMinutes(1))
+        {
+            var refresh = await RefreshAccessTokenAsync(current);
+            if (!refresh.Success || refresh.Token == null)
+                return new RefreshResult(null, false, refresh.Error, refresh.UserErrorKey, refresh.RequiresReauth);
+
+            token = refresh.Token;
+            tokenWasRefreshed = true;
+        }
+
+        var resolved = await ResolveLinkDataAsync(token);
+        if (resolved.Success && resolved.Data != null)
+            return new RefreshResult(resolved.Data, true, null, null, false);
+
+        if (!tokenWasRefreshed && resolved.RequiresReauth)
+        {
+            var refresh = await RefreshAccessTokenAsync(current);
+            if (!refresh.Success || refresh.Token == null)
+                return new RefreshResult(null, false, refresh.Error, refresh.UserErrorKey, refresh.RequiresReauth);
+
+            resolved = await ResolveLinkDataAsync(refresh.Token);
+            if (resolved.Success && resolved.Data != null)
+                return new RefreshResult(resolved.Data, true, null, null, false);
+        }
+
+        return new RefreshResult(resolved.Data, resolved.Success, resolved.Error, resolved.UserErrorKey, resolved.RequiresReauth);
+    }
+
+    private async Task<ResolveResult> ResolveLinkDataAsync(DiscordTokenPayload token)
+    {
+        try
+        {
+            var userResult = await _api.GetCurrentUserAsync(token.AccessToken);
+            if (!userResult.Success || userResult.Value == null)
+            {
+                var requiresReauth = WH40KDiscordAuthRefreshFailureClassifier.RequiresReauthAfterResolveFailure(userResult.StatusCode);
+                return new ResolveResult(
+                    null,
+                    false,
+                    "user_fetch_failed",
+                    requiresReauth ? "wh40k-discord-auth-popup-reauth-required" : "wh40k-discord-auth-popup-fetch-failed",
+                    requiresReauth);
+            }
+
+            var user = userResult.Value;
+            var now = DateTimeOffset.UtcNow;
+            string? guildIdCached = null;
+            var guildMember = false;
+            DateTimeOffset? lastGuildRefreshAt = null;
+            string? guildNickname = null;
+            var roles = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(_guildId))
+            {
+                guildIdCached = _guildId;
+                var memberResult = await _api.GetGuildMemberAsync(token.AccessToken, _guildId);
+                if (!memberResult.Success)
+                {
+                    var requiresReauth = WH40KDiscordAuthRefreshFailureClassifier.RequiresReauthAfterResolveFailure(memberResult.StatusCode);
+                    return new ResolveResult(
+                        null,
+                        false,
+                        memberResult.Error,
+                        requiresReauth ? "wh40k-discord-auth-popup-reauth-required" : "wh40k-discord-auth-popup-fetch-failed",
+                        requiresReauth);
+                }
+
+                lastGuildRefreshAt = now;
+
+                var member = memberResult.Value;
+                if (member != null)
+                {
+                    guildMember = true;
+                    guildNickname = string.IsNullOrWhiteSpace(member.Nick) ? null : member.Nick.Trim();
+                    roles.AddRange(member.Roles.Where(role => !string.IsNullOrWhiteSpace(role)).Select(role => role.Trim()));
+                }
+            }
+
+            var data = new WH40KDiscordAuthDbData(
+                user.Id.Trim(),
+                user.Username.Trim(),
+                string.IsNullOrWhiteSpace(user.GlobalName) ? null : user.GlobalName.Trim(),
+                string.IsNullOrWhiteSpace(user.Avatar) ? null : user.Avatar.Trim(),
+                token.AccessToken,
+                token.RefreshToken,
+                token.TokenType,
+                token.Scope,
+                now,
+                token.ExpiresAt,
+                now,
+                guildIdCached,
+                lastGuildRefreshAt,
+                guildMember,
+                guildNickname,
+                JsonSerializer.Serialize(roles, JsonOptions));
+
+            return new ResolveResult(data, true, null, null);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Discord profile resolve failed: {e}");
+            return new ResolveResult(null, false, e.Message, "wh40k-discord-auth-popup-fetch-failed", false);
+        }
+    }
+
+    private bool IsOAuthConfigured()
+    {
+        return WH40KDiscordAuthPolicyEvaluator.IsOAuthConfigured(_clientId, _clientSecret, _redirectUri);
+    }
+
+    private bool CanUseServerRefresh()
+    {
+        return _enabled
+               && !string.IsNullOrWhiteSpace(_clientId)
+               && !string.IsNullOrWhiteSpace(_clientSecret);
+    }
+
+    private bool ShouldAttemptConnectRefreshOnConnect(WH40KDiscordAuthPolicyConfig config, WH40KDiscordAuthDbData? link)
+    {
+        if (link == null || !CanUseServerRefresh())
+            return false;
+
+        return config.RequireGuildMember || config.RequiredRoleIds.Count > 0;
+    }
+
+    private static bool ShouldOfferExternalConnectAuth(WH40KDiscordAuthGateBlockReason reason)
+    {
+        return reason == WH40KDiscordAuthGateBlockReason.LinkRequired
+               || reason == WH40KDiscordAuthGateBlockReason.CacheStale
+               || reason == WH40KDiscordAuthGateBlockReason.GuildMembershipRequired
+               || reason == WH40KDiscordAuthGateBlockReason.RoleRequired;
+    }
+
+    private static string GetConnectAuthAction(WH40KDiscordAuthGateBlockReason reason)
+    {
+        return reason == WH40KDiscordAuthGateBlockReason.LinkRequired
+            ? WH40KDiscordAuthConstants.ConnectDenyAuthActionLink
+            : WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh;
+    }
+
+    private static List<string> ParseRoleCacheIds(string? roleCacheJson)
+    {
+        if (string.IsNullOrWhiteSpace(roleCacheJson))
+            return new List<string>();
+
+        try
+        {
+            var roles = JsonSerializer.Deserialize<List<string>>(roleCacheJson, RoleCacheJsonOptions);
+            return WH40KDiscordAuthRequirementEvaluator.NormalizeRoleIds(roles);
+        }
+        catch (JsonException)
+        {
+            return new List<string>();
+        }
+    }
+
+    private WH40KDiscordAuthPolicyConfig BuildPolicyConfig()
+    {
+        return new WH40KDiscordAuthPolicyConfig(
+            _enabled,
+            _requireLink,
+            _requireGuildMember,
+            _clientId,
+            _clientSecret,
+            _redirectUri,
+            _guildId,
+            _requiredRoleIds,
+            _cacheTtl);
+    }
+
+    private string GetCallbackPath()
+    {
+        if (Uri.TryCreate(_redirectUri, UriKind.Absolute, out var uri))
+            return string.IsNullOrWhiteSpace(uri.AbsolutePath) ? DefaultCallbackPath : uri.AbsolutePath;
+
+        return DefaultCallbackPath;
+    }
+
+    private static HashSet<string> ParseCsvIds(string value)
+    {
+        return value
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .ToHashSet(StringComparer.Ordinal);
+    }
+
+    private static Dictionary<string, string> ParseQuery(string query)
+    {
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (string.IsNullOrWhiteSpace(query))
+            return result;
+
+        var span = query.AsSpan();
+        if (span.Length > 0 && span[0] == '?')
+            span = span[1..];
+
+        foreach (var pair in span.ToString().Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var split = pair.Split('=', 2);
+            var key = WebUtility.UrlDecode(split[0]);
+            if (string.IsNullOrWhiteSpace(key))
+                continue;
+
+            var value = split.Length > 1 ? WebUtility.UrlDecode(split[1]) : string.Empty;
+            result[key] = value;
+        }
+
+        return result;
+    }
+
+    private static string? GetQueryValue(IReadOnlyDictionary<string, string> query, string key)
+    {
+        return query.TryGetValue(key, out var value) ? value : null;
+    }
+
+    private void CleanupExpiredPendingRequests()
+    {
+        lock (_pendingRequestLock)
+        {
+            if (_pendingRequests.Count == 0)
+                return;
+
+            var now = DateTimeOffset.UtcNow;
+            var expired = _pendingRequests
+                .Where(pair => pair.Value.ExpiresAt <= now)
+                .Select(pair => pair.Key)
+                .ToList();
+
+            foreach (var key in expired)
+            {
+                var userId = _pendingRequests[key].UserId;
+                _pendingRequests.Remove(key);
+                if (_pendingRequestByUser.TryGetValue(userId, out var pending) && pending == key)
+                    _pendingRequestByUser.Remove(userId);
+            }
+        }
+    }
+
+    private bool TryConsumePendingRequest(string requestId, out PendingLinkRequest request)
+    {
+        lock (_pendingRequestLock)
+        {
+            request = default!;
+            if (!_pendingRequests.Remove(requestId, out var removed))
+                return false;
+
+            request = removed;
+
+            if (_pendingRequestByUser.TryGetValue(request.UserId, out var current) && current == requestId)
+                _pendingRequestByUser.Remove(request.UserId);
+
+            return request.ExpiresAt > DateTimeOffset.UtcNow;
+        }
+    }
+
+    private static string CreateRequestToken()
+    {
+        return Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
+    }
+
+    private static string GetDisplayName(WH40KDiscordAuthDbData link)
+    {
+        if (!string.IsNullOrWhiteSpace(link.GlobalName))
+            return link.GlobalName!;
+
+        return link.Username;
+    }
+
+    private string GetDefaultSupportMessage()
+    {
+        return Loc.GetString("wh40k-discord-auth-support-default");
+    }
+
+    private async Task RunOnMainThreadAsync(Action action)
+    {
+        var tcs = new TaskCompletionSource();
+        _task.RunOnMainThread(() =>
+        {
+            try
+            {
+                action();
+                tcs.TrySetResult();
+            }
+            catch (Exception e)
+            {
+                tcs.TrySetException(e);
+            }
+        });
+
+        await tcs.Task;
+    }
+
+    private static async Task RespondHtmlAsync(IStatusHandlerContext context, HttpStatusCode code, bool success, string message)
+    {
+        context.ResponseHeaders["Cache-Control"] = "no-store";
+        var title = success ? "Discord linked" : "Discord link failed";
+        var color = success ? "#6ab04c" : "#d35454";
+        var badgeText = success ? "OK" : "ERROR";
+        var html = $@"
+<!doctype html>
+<html lang=""ru"">
+<head>
+    <meta charset=""utf-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
+    <title>{WebUtility.HtmlEncode(title)}</title>
+    <style>
+        body {{ background:#12151c; color:#f1f3f5; font-family:Segoe UI, sans-serif; margin:0; padding:32px; }}
+        .card {{ max-width:560px; margin:0 auto; background:#1b2230; border:1px solid #2f3a4d; border-radius:14px; padding:24px; }}
+        .badge {{ display:inline-block; padding:6px 10px; border-radius:999px; background:{color}; color:#fff; font-weight:700; margin-bottom:16px; }}
+        h1 {{ margin:0 0 12px 0; font-size:24px; }}
+        p {{ margin:0; line-height:1.5; color:#d9dde5; }}
+    </style>
+</head>
+<body>
+    <div class=""card"">
+        <div class=""badge"">{WebUtility.HtmlEncode(badgeText)}</div>
+        <h1>{WebUtility.HtmlEncode(title)}</h1>
+        <p>{WebUtility.HtmlEncode(message)}</p>
+    </div>
+</body>
+</html>";
+
+        await context.RespondAsync(html, code, "text/html; charset=utf-8");
+    }
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
+    private sealed class RuntimeState
+    {
+        public bool LoadComplete;
+        public bool ConnectGateRequiresReauth;
+        public DateTimeOffset LastManualRefreshAt;
+        public WH40KDiscordAuthDbData? Link;
+    }
+
+    private sealed record PendingLinkRequest(NetUserId UserId, DateTimeOffset ExpiresAt);
+    private sealed record DiscordTokenPayload(string AccessToken, string? RefreshToken, string TokenType, string Scope, DateTimeOffset ExpiresAt);
+    private sealed record TokenExchangeResult(DiscordTokenPayload? Token, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
+    private sealed record ResolveResult(WH40KDiscordAuthDbData? Data, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
+    private sealed record RefreshResult(WH40KDiscordAuthDbData? Data, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
+}

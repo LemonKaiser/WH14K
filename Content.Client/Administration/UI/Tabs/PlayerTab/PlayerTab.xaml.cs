@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client.Localization;
 using Content.Client.Administration.Systems;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Administration;
@@ -15,7 +16,7 @@ using static Robust.Client.UserInterface.Controls.BaseButton;
 namespace Content.Client.Administration.UI.Tabs.PlayerTab;
 
 [GenerateTypedNameReferences]
-public sealed partial class PlayerTab : Control
+public sealed partial class PlayerTab : Control, ILocalizedControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
@@ -64,6 +65,7 @@ public sealed partial class PlayerTab : Control
         SearchList.DataFilterCondition += DataFilterCondition;
         SearchList.ItemKeyBindDown += (args, data) => OnEntryKeyBindDown?.Invoke(args, data);
 
+        Relocalize();
         RefreshPlayerList(_adminSystem.PlayerList);
 
     }
@@ -261,6 +263,15 @@ public sealed partial class PlayerTab : Control
             _ascending = true;
         }
 
+        RefreshPlayerList(_adminSystem.PlayerList);
+    }
+
+    public void Relocalize()
+    {
+        SearchLineEdit.PlaceHolder = Loc.GetString("player-tab-filter-line-edit-placeholder");
+        ShowDisconnectedButton.Text = Loc.GetString("player-tab-show-disconnected");
+        OverlayButton.Text = Loc.GetString("player-tab-overlay");
+        ListHeader.ResetHeaderText();
         RefreshPlayerList(_adminSystem.PlayerList);
     }
 

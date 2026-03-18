@@ -3,6 +3,7 @@ using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Silicons.Laws;
 using Content.Shared.Silicons.Laws.Components;
+using Content.Shared.Station;
 using Robust.Shared.Random;
 using System.Linq;
 using Content.Shared.Random;
@@ -18,6 +19,7 @@ public sealed class IonStormSystem : EntitySystem
     [Dependency] private readonly SiliconLawSystem _siliconLaw = default!;
     [Dependency] private readonly IRobustRandom _robustRandom = default!;
     [Dependency] private readonly IonLawSystem _ionLaw = default!;
+    [Dependency] private readonly SharedStationSystem _station = default!;
 
     /// <summary>
     /// Randomly alters the laws of an individual silicon.
@@ -71,7 +73,8 @@ public sealed class IonStormSystem : EntitySystem
         }
 
         // generate a new law...
-        var newLaw = _ionLaw.GetIonLaw();
+        var station = _station.GetOwningStation(ent.Owner);
+        var newLaw = _ionLaw.GetIonLaw(station);
 
         if (string.IsNullOrEmpty(newLaw))
             return;

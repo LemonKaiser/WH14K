@@ -27,6 +27,31 @@ public sealed partial class StaminaComponent : Component
     public float Decay = 3f;
 
     /// <summary>
+    /// Stamina damage taken per second while sprinting.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float SprintDrain = 2f;
+
+    /// <summary>
+    /// Minimum stamina reserve (in stamina points) that sprint drain will never consume.
+    /// This prevents entering stamina crit purely from movement drain.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float SprintMinRemaining;
+
+    /// <summary>
+    /// Stamina recovered per second while walking.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float WalkRecovery = 0.75f;
+
+    /// <summary>
+    /// Stamina recovered per second while standing still.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]
+    public float IdleRecovery = 3f;
+
+    /// <summary>
     /// How much time after receiving damage until stamina starts decreasing.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField]

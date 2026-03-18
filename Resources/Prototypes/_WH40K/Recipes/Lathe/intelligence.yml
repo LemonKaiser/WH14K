@@ -1,7 +1,7 @@
 - type: latheRecipe
   id: DataChipImp
   result: DataChipImp
-  completetime: 2
+  completetime: 10
   materials:
    DataChip: 1
 
@@ -11,9 +11,45 @@
   - DataChipImp
 
 - type: latheRecipe
+  id: DataChipImpTier1
+  result: DataChipImp2
+  completetime: 8
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForImpTier1
+  recipes:
+  - DataChipImpTier1
+
+- type: latheRecipe
+  id: DataChipImpTier2
+  result: DataChipImp3
+  completetime: 5
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForImpTier2
+  recipes:
+  - DataChipImpTier2
+
+- type: latheRecipe
+  id: DataChipImpTier3
+  result: DataChipImp4
+  completetime: 3
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForImpTier3
+  recipes:
+  - DataChipImpTier3
+
+- type: latheRecipe
   id: DataChipCh
   result: DataChipChaos
-  completetime: 2
+  completetime: 10
   materials:
    DataChip: 1
 
@@ -21,3 +57,39 @@
   id: DataChipsForCh
   recipes:
   - DataChipCh
+
+- type: latheRecipe
+  id: DataChipChTier1
+  result: DataChipChaos2
+  completetime: 8
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForChTier1
+  recipes:
+  - DataChipChTier1
+
+- type: latheRecipe
+  id: DataChipChTier2
+  result: DataChipChaos3
+  completetime: 5
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForChTier2
+  recipes:
+  - DataChipChTier2
+
+- type: latheRecipe
+  id: DataChipChTier3
+  result: DataChipChaos4
+  completetime: 3
+  materials:
+   DataChip: 1
+
+- type: latheRecipePack
+  id: DataChipsForChTier3
+  recipes:
+  - DataChipChTier3

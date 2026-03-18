@@ -1,0 +1,11 @@
+- type: alert
+  id: WH40KMoraleExecution
+  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  name: wh40k-morale-execution-alert-name
+  description: wh40k-morale-execution-alert-desc
+
+- type: alert
+  id: WH40KMoraleBoosted
+  icons: [ /Textures/_WH40K/Interface/Alerts/morale_boost.png ]
+  name: wh40k-morale-boosted-alert-name
+  description: wh40k-morale-boosted-alert-desc

@@ -1,10 +1,13 @@
 - type: job
   id: HEnginseer
   name: job-name-henginseer
-  description: job-description-enginseer
+  description: job-description-henginseer
   playTimeTracker: JobHEnginseer
   setPreference: false
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
     - !type:DepartmentTimeRequirement
       department: Imperium
       time: 4h
@@ -15,6 +18,10 @@
   icon: "JobIconEnginseer"
   supervisors: job-supervisors-ce
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
   access:
   - Maintenance
   - Engineering

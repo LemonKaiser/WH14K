@@ -1,0 +1,132 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: WH40KDeployableBarricadeKitBase
+  name: deployable barricade kit
+  description: Crated field barricade kit. Deploys one barricade on a nearby tile.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+    state: icon
+  - type: Icon
+    sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+    size: Huge
+    inhandVisuals:
+      left:
+      - sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+        state: icon
+      right:
+      - sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+        state: icon
+  - type: HandheldEntityPlacement
+    entityType: BarricadeWarhammer
+    previewEntityType: BarricadeWarhammer
+    placementMode: SnapgridCenter
+    range: 2
+    canRotate: true
+  - type: WH40KDeployableBarricade
+    deployTime: 1.4
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeWarhammer
+  name: imperial barricade kit
+  description: Basic Imperium barricade in a deployment crate.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: BarricadeWarhammer
+    previewEntityType: BarricadeWarhammer
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeSandbags
+  name: sandbag barricade kit
+  description: Field-deployable sandbag cover section.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: BarricadeSandbags
+    previewEntityType: BarricadeSandbags
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeChaosBlack
+  name: chaos black barricade kit
+  description: Crated chaos barricade section with firing loophole.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: BarricadeWarhammerChaos
+    previewEntityType: BarricadeWarhammerChaos
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeChaosGreen
+  name: chaos green barricade kit
+  description: Crated chaos barricade section with firing loophole.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: BarricadeWarhammerChaosgreen
+    previewEntityType: BarricadeWarhammerChaosgreen
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeHedgehog
+  name: anti-tank hedgehog kit
+  description: Heavy anti-vehicle hedgehog barricade in crate form.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades
+    previewEntityType: FalloutBarricades
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeHedgehogA
+  name: anti-tank hedgehog kit A
+  description: Heavy anti-vehicle hedgehog barricade in crate form.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades3
+    previewEntityType: FalloutBarricades3
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeHedgehog2
+  name: anti-tank hedgehog kit B
+  description: Heavy anti-vehicle hedgehog barricade in crate form.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades4
+    previewEntityType: FalloutBarricades4
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeHedgehog2A
+  name: anti-tank hedgehog kit C
+  description: Heavy anti-vehicle hedgehog barricade in crate form.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades5
+    previewEntityType: FalloutBarricades5
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeBoarded
+  name: boarded barricade kit
+  description: Boarded fortification segment packed for rapid deployment.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades6
+    previewEntityType: FalloutBarricades6
+
+- type: entity
+  parent: WH40KDeployableBarricadeKitBase
+  id: WH40KDeployableBarricadeBars
+  name: bars barricade kit
+  description: Metal bars barricade segment packed for rapid deployment.
+  components:
+  - type: HandheldEntityPlacement
+    entityType: FalloutBarricades7
+    previewEntityType: FalloutBarricades7

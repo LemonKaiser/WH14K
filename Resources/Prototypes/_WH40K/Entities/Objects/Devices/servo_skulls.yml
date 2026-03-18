@@ -1,0 +1,133 @@
+- type: entity
+  id: WH40KServoSkull
+  name: servo skull
+  description: A compact servo skull chassis. Deploy it to create a friendly support skull.
+  parent: BaseItem
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Devices/servo_skull.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: WH40KCombineWithPrototype
+    requiredPrototype: MeltaGrenade
+    resultPrototype: WH40KServoSkullMelta
+  - type: WH40KDeployServoSkull
+    mobPrototype: WH40KServoSkullMob
+
+- type: entity
+  id: WH40KServoSkullMelta
+  name: melta servo skull
+  description: A servo skull rigged with a melta charge. Deploy it and it will hunt nearby enemies for your team.
+  parent: BaseItem
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Devices/servo_skull_melta.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: WH40KDeployServoSkull
+    mobPrototype: WH40KServoSkullMeltaMob
+
+- type: entity
+  id: WH40KServoSkullMobBase
+  abstract: true
+  parent: [BaseMob, MobDamageable, MobPolymorphable, FlyingMobBase]
+  name: servo skull
+  description: A compact servo skull hovering on stationkeeping thrusters.
+  suffix: WH40K
+  components:
+  - type: Physics
+    bodyType: KinematicController
+    bodyStatus: InAir
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.20
+        density: 20
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      45: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+  - type: Tag
+    tags:
+    - CannotSuicide
+  - type: WH40KServoSkullMob
+    followSpeed: 4
+    chargeSpeed: 8
+    followStopRange: 1.25
+    chargeStopRange: 0.25
+    hostileDetectionRange: 6
+    scanInterval: 0.2
+
+- type: entity
+  id: WH40KServoSkullMob
+  parent: WH40KServoSkullMobBase
+  name: servo skull
+  description: A friendly servo skull awaiting a command.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: false
+    sprite: _WH40K/Objects/Devices/servo_skull.rsi
+    state: icon
+
+- type: entity
+  id: WH40KServoSkullMeltaMob
+  parent: WH40KServoSkullMobBase
+  name: melta servo skull
+  description: A friendly servo skull carrying a live melta charge.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: false
+    sprite: _WH40K/Objects/Devices/servo_skull_melta.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: Appearance
+  - type: AnimationPlayer
+  - type: GenericVisualizer
+    visuals:
+      enum.Trigger.TriggerVisuals.VisualState:
+        enum.TriggerVisualLayers.Base:
+          Primed: { state: primed }
+          Unprimed: { state: icon }
+  - type: WH40KServoSkullMob
+    triggerOnHostile: true
+    followSpeed: 4.5
+    chargeSpeed: 9
+    hostileDetectionRange: 7
+    scanInterval: 0.15
+  - type: TimerTrigger
+    delay: 3
+  - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: Explosive
+    explosionType: MicroBomb
+    totalIntensity: 700
+    intensitySlope: 45
+    maxIntensity: 10
+    canCreateVacuum: false
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/Items/smoke_grenade_prime.ogg

@@ -30,6 +30,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/revolver.ogg
+  - type: WH40KGunPrediction
   - type: UseDelay
     delay: 0.66
   - type: ContainerContainer

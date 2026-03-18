@@ -1,0 +1,17 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               Title="{Loc 'wh40k-supplydrop-window-title'}">
+    <BoxContainer Orientation="Vertical" SeparationOverride="4" MinWidth="340">
+        <Label Name="TeamLabel" Access="Public" />
+        <Label Name="AccountLabel" Access="Public" />
+        <Label Name="BalanceLabel" Access="Public" />
+        <Label Name="CostLabel" Access="Public" />
+        <Label Name="EtaLabel" Access="Public" />
+        <Label Name="CooldownLabel" Access="Public" />
+        <Button Name="LaunchButton"
+                Access="Public"
+                Text="{Loc 'wh40k-supplydrop-launch-button'}"
+                StyleClasses="OpenBoth" />
+    </BoxContainer>
+</controls:FancyWindow>

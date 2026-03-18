@@ -3,13 +3,28 @@
   name: job-name-guardsman
   description: job-description-guardsman
   playTimeTracker: JobGuardsman
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
   startingGear: GuardsmanGear
   icon: "JobIconGuardsman"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KMoraleExecutionTarget
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: WH40KGuardsmanMaleHuman
+          Female: WH40KGuardsmanFemaleHuman
+          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
 
 - type: startingGear
@@ -19,5 +34,6 @@
     back: ClothingBackpackGuard
     shoes: ClothingShoesAnkleBoots
     belt: guardbelt
+    head: ClothingHeadHelmetFlak
     outerClothing: ClothingOuterArmorFlakVestLight
     id: GuardsmanDogTag

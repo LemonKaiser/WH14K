@@ -2,16 +2,24 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Content.Server.Administration.Managers;
+using Content.Server.NPC.Components;
 using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.CPUJob.JobQueues.Queues;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Server.NPC.Systems;
+using Content.Shared.CCVar;
+using Content.Shared.CombatMode;
 using Content.Shared.Administration;
 using Content.Shared.Mobs;
 using Content.Shared.NPC;
 using JetBrains.Annotations;
+using Robust.Server.GameObjects;
+using Robust.Shared.Configuration;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Server.NPC.HTN;
@@ -19,13 +27,26 @@ namespace Content.Server.NPC.HTN;
 public sealed class HTNSystem : EntitySystem
 {
     [Dependency] private readonly IAdminManager _admin = default!;
+    [Dependency] private readonly NPCBenchmarkSystem _bench = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly NPCUtilitySystem _utility = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly JobQueue _planQueue = new(0.004);
 
     private readonly HashSet<ICommonSession> _subscribers = new();
+    private readonly List<MapCoordinates> _playerPositions = new(64);
+
+    private bool _adaptiveSchedulingEnabled = true;
+    private float _adaptiveNearRange = 12f;
+    private float _adaptiveMidRange = 28f;
+    private float _adaptiveMidIntervalSeconds = 0.06f;
+    private float _adaptiveFarIntervalSeconds = 0.16f;
+    private float _adaptiveJitterSeconds = 0.03f;
 
     // Hierarchical Task Network
     public override void Initialize()
@@ -39,6 +60,12 @@ public sealed class HTNSystem : EntitySystem
         SubscribeLocalEvent<HTNComponent, ComponentShutdown>(OnHTNShutdown);
         SubscribeNetworkEvent<RequestHTNMessage>(OnHTNMessage);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypeLoad);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingEnabled, value => _adaptiveSchedulingEnabled = value, true);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingNearRange, value => _adaptiveNearRange = MathF.Max(0f, value), true);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingMidRange, value => _adaptiveMidRange = MathF.Max(0f, value), true);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingMidIntervalSeconds, value => _adaptiveMidIntervalSeconds = MathF.Max(0f, value), true);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingFarIntervalSeconds, value => _adaptiveFarIntervalSeconds = MathF.Max(0f, value), true);
+        Subs.CVar(_cfg, CCVars.NPCAdaptiveSchedulingJitterSeconds, value => _adaptiveJitterSeconds = MathF.Max(0f, value), true);
         OnLoad();
     }
 
@@ -149,6 +176,7 @@ public sealed class HTNSystem : EntitySystem
 
         ent.Comp.Enabled = state;
         ent.Comp.PlanAccumulator = planCooldown;
+        ent.Comp.NextAdaptiveUpdateTime = TimeSpan.Zero;
 
         ent.Comp.PlanningToken?.Cancel();
         ent.Comp.PlanningToken = null;
@@ -174,11 +202,27 @@ public sealed class HTNSystem : EntitySystem
     public void Replan(HTNComponent component)
     {
         component.PlanAccumulator = 0f;
+        component.NextAdaptiveUpdateTime = TimeSpan.Zero;
     }
 
     public void UpdateNPC(ref int count, int maxUpdates, float frameTime)
     {
+        using var benchScope = _bench.Measure("npc.htn.update_npc");
+
         _planQueue.Process();
+        var curTime = _timing.CurTime;
+
+        _playerPositions.Clear();
+        if (_adaptiveSchedulingEnabled)
+        {
+            var actorQuery = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+
+            while (actorQuery.MoveNext(out _, out _, out var actorXform))
+            {
+                _playerPositions.Add(_transform.ToMapCoordinates(actorXform.Coordinates));
+            }
+        }
+
         var query = EntityQueryEnumerator<ActiveNPCComponent, HTNComponent>();
 
         // Move ahead "count" entries in the query.
@@ -193,15 +237,24 @@ public sealed class HTNSystem : EntitySystem
         var updates = 0;
         while (query.MoveNext(out var uid, out _, out var comp))
         {
+            count++;
+
             // If we're over our max count or it's not MapInit then ignore the NPC.
             if (updates >= maxUpdates)
             {
+                _bench.RecordCount("npc.htn.updated_entities", updates);
                 // Intentional return. We don't want to go to the end logic and reset count.
                 return;
             }
 
             if (!comp.Enabled)
                 continue;
+
+            if (_adaptiveSchedulingEnabled && comp.NextAdaptiveUpdateTime > curTime)
+            {
+                _bench.RecordCount("npc.htn.skipped_adaptive", 1);
+                continue;
+            }
 
             if (comp.PlanningJob != null)
             {
@@ -287,13 +340,99 @@ public sealed class HTNSystem : EntitySystem
             }
 
             Update(comp, frameTime);
-            count++;
             updates++;
+
+            if (_adaptiveSchedulingEnabled)
+            {
+                var interval = GetAdaptiveInterval(uid, comp);
+                if (interval > 0f)
+                {
+                    comp.NextAdaptiveUpdateTime = curTime + TimeSpan.FromSeconds(interval + _random.NextFloat(0f, _adaptiveJitterSeconds));
+                }
+                else
+                {
+                    comp.NextAdaptiveUpdateTime = curTime;
+                }
+            }
         }
+
+        _bench.RecordCount("npc.htn.updated_entities", updates);
 
         // only reset our counter back to 0 if we finish iterating.
         // otherwise it lets us know where we left off.
         count = 0;
+    }
+
+    private float GetAdaptiveInterval(EntityUid uid, HTNComponent component)
+    {
+        if (component.Blackboard.TryGetValue<EntityUid>("Target", out var target, EntityManager) &&
+            target.IsValid() &&
+            Exists(target))
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.full", 1);
+            return 0f;
+        }
+
+        if (component.Blackboard.TryGetValue<EntityUid>(NPCBlackboard.CurrentOrderedTarget, out var orderedTarget, EntityManager) &&
+            orderedTarget.IsValid() &&
+            Exists(orderedTarget))
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.full", 1);
+            return 0f;
+        }
+
+        if (TryComp(uid, out CombatModeComponent? combatMode) && combatMode.IsInCombatMode)
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.full", 1);
+            return 0f;
+        }
+
+        if (TryComp(uid, out NPCSteeringComponent? steering) &&
+            (steering.Status == SteeringStatus.Moving || steering.Pathfind || steering.CurrentPath.Count > 0))
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.full", 1);
+            return 0f;
+        }
+
+        if (_playerPositions.Count == 0)
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.far", 1);
+            return _adaptiveFarIntervalSeconds;
+        }
+
+        var map = _transform.ToMapCoordinates(Transform(uid).Coordinates);
+        var minDistanceSquared = float.MaxValue;
+
+        foreach (var playerPos in _playerPositions)
+        {
+            if (playerPos.MapId != map.MapId)
+                continue;
+
+            var distanceSquared = (playerPos.Position - map.Position).LengthSquared();
+            if (distanceSquared < minDistanceSquared)
+                minDistanceSquared = distanceSquared;
+        }
+
+        if (minDistanceSquared == float.MaxValue)
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.far", 1);
+            return _adaptiveFarIntervalSeconds;
+        }
+
+        if (minDistanceSquared <= _adaptiveNearRange * _adaptiveNearRange)
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.full", 1);
+            return 0f;
+        }
+
+        if (minDistanceSquared <= _adaptiveMidRange * _adaptiveMidRange)
+        {
+            _bench.RecordCount("npc.htn.adaptive.tier.mid", 1);
+            return _adaptiveMidIntervalSeconds;
+        }
+
+        _bench.RecordCount("npc.htn.adaptive.tier.far", 1);
+        return _adaptiveFarIntervalSeconds;
     }
 
     private void AppendDebugText(HTNTask task, StringBuilder text, List<int> planBtr, List<int> btr, ref int level)
@@ -342,6 +481,8 @@ public sealed class HTNSystem : EntitySystem
 
     private void Update(HTNComponent component, float frameTime)
     {
+        using var benchScope = _bench.Measure("npc.htn.component_update");
+
         // If we're not planning then countdown to next one.
         if (component.PlanningJob == null)
             component.PlanAccumulator -= frameTime;
@@ -362,6 +503,7 @@ public sealed class HTNSystem : EntitySystem
         // Continuously run operators until we can't anymore.
         while (status != HTNOperatorStatus.Continuing && component.Plan != null)
         {
+            using var operatorScope = _bench.Measure("npc.htn.operator_iteration");
             // Run the existing operator
             var currentOperator = component.Plan.CurrentOperator;
             var currentTask = component.Plan.CurrentTask;
@@ -370,6 +512,7 @@ public sealed class HTNSystem : EntitySystem
             // Service still on cooldown.
             if (component.CheckServices)
             {
+                using var serviceScope = _bench.Measure("npc.htn.services");
                 foreach (var service in currentTask.Services)
                 {
                     var serviceResult = _utility.GetEntities(blackboard, service.Prototype);

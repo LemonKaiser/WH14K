@@ -1,4 +1,6 @@
 #nullable enable
+using Content.Server.Body.Components;
+using Content.Server.Body.Systems;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -11,6 +13,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Medical;
 
 /// <summary>
@@ -98,5 +101,61 @@ public sealed class DefibrillatorTest : InteractionTest
 
         // The target should be revived, but in crit.
         Assert.That(targetMobState.CurrentState, Is.EqualTo(MobState.Critical), "Target mob was not revived from being defibrillated.");
+    }
+
+    /// <summary>
+    /// Successful revives should give a brief air buffer so the target does not immediately suffocate again.
+    /// </summary>
+    [Test]
+    public async Task SuccessfulReviveRestoresRespirationBuffer()
+    {
+        var damageableSystem = SEntMan.System<DamageableSystem>();
+        var mobThresholdsSystem = SEntMan.System<MobThresholdSystem>();
+        var respiratorSystem = SEntMan.System<RespiratorSystem>();
+
+        await AddAtmosphere();
+        await SpawnTarget(TargetProtoId);
+
+        var targetMobState = Comp<MobStateComponent>();
+        var targetDamageable = Comp<DamageableComponent>();
+        var targetRespirator = Comp<RespiratorComponent>();
+
+        var critThreshold = mobThresholdsSystem.GetThresholdForState(STarget.Value, MobState.Critical);
+        var deathThreshold = mobThresholdsSystem.GetThresholdForState(STarget.Value, MobState.Dead);
+        var critDamage = new DamageSpecifier(ProtoMan.Index(BluntDamageTypeId), (critThreshold + deathThreshold) / 2);
+        var deathDamage = new DamageSpecifier(ProtoMan.Index(BluntDamageTypeId), deathThreshold);
+
+        await Server.WaitPost(() => damageableSystem.SetDamage((STarget.Value, targetDamageable), deathDamage));
+        await RunTicks(3);
+
+        Assert.That(targetMobState.CurrentState, Is.EqualTo(MobState.Dead), "Target mob did not die from deadly damage amount.");
+
+        await Server.WaitPost(() =>
+        {
+            damageableSystem.SetDamage((STarget.Value, targetDamageable), critDamage);
+            respiratorSystem.UpdateSaturation(
+                STarget.Value,
+                targetRespirator.MinSaturation - targetRespirator.Saturation,
+                targetRespirator);
+        });
+        await RunTicks(3);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(targetMobState.CurrentState, Is.EqualTo(MobState.Dead), "Target mob revived on its own.");
+            Assert.That(targetRespirator.Saturation, Is.EqualTo(targetRespirator.MinSaturation), "Dead target respiration state changed before defibrillation.");
+        });
+
+        var defib = await PlaceInHands(DefibrillatorProtoId, enableToggleable: true);
+        var cooldown = Comp<DefibrillatorComponent>(defib).ZapDelay;
+
+        await RunSeconds((float)cooldown.TotalSeconds);
+        await Interact();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(targetMobState.CurrentState, Is.EqualTo(MobState.Critical), "Target mob was not revived from being defibrillated.");
+            Assert.That(targetRespirator.Saturation, Is.EqualTo(targetRespirator.MaxSaturation), "Defibrillation did not restore the target's respiration buffer.");
+        });
     }
 }

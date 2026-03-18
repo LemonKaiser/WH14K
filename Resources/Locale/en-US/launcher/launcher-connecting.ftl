@@ -2,9 +2,13 @@
 
 connecting-title = Space Station 14
 connecting-exit = Exit
+connecting-back = Back
 connecting-retry = Retry
 connecting-reconnect = Reconnect
 connecting-copy = Copy Message
+connecting-discord-auth-link = Link Discord
+connecting-discord-auth-refresh = Refresh Discord
+connecting-discord-auth-refresh-cooldown = Refresh Discord ({ $seconds }s)
 connecting-redial = Relaunch
 connecting-redial-wait = Please wait: { TOSTRING($time, "G3") }
 connecting-in-progress = Connecting to server...

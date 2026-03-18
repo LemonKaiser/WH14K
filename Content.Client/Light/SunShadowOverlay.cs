@@ -54,6 +54,8 @@ public sealed class SunShadowOverlay : Overlay
         var mapId = args.MapId;
         var worldBounds = args.WorldBounds;
         var targetSize = viewport.LightRenderTarget.Size;
+        var mapEntity = _mapManager.GetMapEntityId(mapId);
+        var hasMapShadow = _entManager.TryGetComponent(mapEntity, out SunShadowComponent? mapSunShadow);
 
         var res = _resources.GetForViewport(args.Viewport, static _ => new CachedResources());
 
@@ -76,10 +78,23 @@ public sealed class SunShadowOverlay : Overlay
 
         foreach (var grid in _grids)
         {
-            if (!_entManager.TryGetComponent(grid.Owner, out SunShadowComponent? sun))
+            // Planet lighting is usually map-wide; prefer map-level sun settings to avoid
+            // inconsistent per-grid behavior when grids carry stale / zero-valued overrides.
+            SunShadowComponent? sun;
+            if (hasMapShadow &&
+                mapSunShadow != null &&
+                !mapSunShadow.Direction.Equals(Vector2.Zero) &&
+                mapSunShadow.Alpha > 0f)
             {
-                continue;
+                sun = mapSunShadow;
             }
+            else
+            {
+                _entManager.TryGetComponent(grid.Owner, out sun);
+            }
+
+            if (sun == null)
+                continue;
 
             var direction = sun.Direction;
             var alpha = Math.Clamp(sun.Alpha, 0f, 1f);

@@ -64,7 +64,7 @@ public sealed class MoverController : SharedMoverController
         PhysicsSystem.UpdateIsPredicted(entity.Owner);
         PhysicsSystem.UpdateIsPredicted(entity.Comp.RelayEntity);
         if (MoverQuery.TryGetComponent(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
     }
 
     private void OnRelayPlayerDetached(Entity<RelayInputMoverComponent> entity, ref LocalPlayerDetachedEvent args)
@@ -72,17 +72,17 @@ public sealed class MoverController : SharedMoverController
         PhysicsSystem.UpdateIsPredicted(entity.Owner);
         PhysicsSystem.UpdateIsPredicted(entity.Comp.RelayEntity);
         if (MoverQuery.TryGetComponent(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
     }
 
     private void OnPlayerAttached(Entity<InputMoverComponent> entity, ref LocalPlayerAttachedEvent args)
     {
-        SetMoveInput(entity, MoveButtons.None);
+        SetMoveInput(entity, MoveButtons.Walk);
     }
 
     private void OnPlayerDetached(Entity<InputMoverComponent> entity, ref LocalPlayerDetachedEvent args)
     {
-        SetMoveInput(entity, MoveButtons.None);
+        SetMoveInput(entity, MoveButtons.Walk);
     }
 
     public override void UpdateBeforeSolve(bool prediction, float frameTime)

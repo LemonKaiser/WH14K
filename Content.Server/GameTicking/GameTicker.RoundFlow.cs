@@ -738,6 +738,8 @@ namespace Content.Server.GameTicking
 
             DisallowLateJoin = false;
             _playerGameStatuses.Clear();
+            _roundJoinedUsers.Clear();
+            _roundParticipationBypassUsers.Clear();
             foreach (var session in _playerManager.Sessions)
             {
                 _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;

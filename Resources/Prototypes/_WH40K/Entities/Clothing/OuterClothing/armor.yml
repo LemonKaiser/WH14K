@@ -31,6 +31,16 @@
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/medflakvest.rsi
 
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorFlakVestCyan
+  suffix: WH40K, Guard Cyan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_cyan.rsi
+
 # броня бладпакта
 - type: entity
   parent: ClothingOuterArmorFlakVest
@@ -72,6 +82,16 @@
         Heat: 0.7
   - type: ExplosionResistance
     damageCoefficient: 0.7
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorFlakVestLightCyan
+  suffix: WH40K, Guard Cyan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestlight_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestlight_cyan.rsi
 
 # Осквернённая бронижелет хаоса
 - type: entity

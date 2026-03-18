@@ -1,0 +1,232 @@
+- type: entity
+  id: WH40KDecorPropBase
+  abstract: true
+  parent: BaseStructure
+  suffix: WH40K, Decor
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+    fixtures: {}
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/decor_props.rsi
+
+- type: entity
+  id: WH40KDecorBarrelBlue
+  parent: WH40KDecorPropBase
+  name: blue barrel
+  description: A decorative blue barrel.
+  components:
+  - type: Sprite
+    state: barrel_blue
+
+- type: entity
+  id: WH40KDecorBarrelBlueBroken
+  parent: WH40KDecorPropBase
+  name: broken blue barrel
+  description: A broken decorative blue barrel.
+  components:
+  - type: Sprite
+    state: barrel_blue_broken
+
+- type: entity
+  id: WH40KDecorBarrelRed
+  parent: WH40KDecorPropBase
+  name: red barrel
+  description: A decorative red barrel.
+  components:
+  - type: Sprite
+    state: barrel_red
+
+- type: entity
+  id: WH40KDecorBarrelRedBroken
+  parent: WH40KDecorPropBase
+  name: broken red barrel
+  description: A broken decorative red barrel.
+  components:
+  - type: Sprite
+    state: barrel_red_broken
+
+- type: entity
+  id: WH40KDecorBarrelSteel
+  parent: WH40KDecorPropBase
+  name: steel barrel
+  description: A decorative steel barrel.
+  components:
+  - type: Sprite
+    state: barrel_steel
+
+- type: entity
+  id: WH40KDecorBarrelSteelBroken
+  parent: WH40KDecorPropBase
+  name: broken steel barrel
+  description: A broken decorative steel barrel.
+  components:
+  - type: Sprite
+    state: barrel_steel_broken
+
+- type: entity
+  id: WH40KDecorBoxOpenedWood
+  parent: WH40KDecorPropBase
+  name: opened wooden box
+  description: An opened decorative wooden box.
+  components:
+  - type: Sprite
+    state: box_opened_wood
+
+- type: entity
+  id: WH40KDecorBoxOpenedWoodBroken
+  parent: WH40KDecorPropBase
+  name: broken opened wooden box
+  description: A broken opened decorative wooden box.
+  components:
+  - type: Sprite
+    state: box_opened_wood_broken
+
+- type: entity
+  id: WH40KDecorBoxWood
+  parent: WH40KDecorPropBase
+  name: wooden box
+  description: A decorative wooden box.
+  components:
+  - type: Sprite
+    state: box_wood
+
+- type: entity
+  id: WH40KDecorBoxWoodBroken
+  parent: WH40KDecorPropBase
+  name: broken wooden box
+  description: A broken decorative wooden box.
+  components:
+  - type: Sprite
+    state: box_wood_broken
+
+- type: entity
+  id: WH40KDecorBricksVertical
+  parent: WH40KDecorPropBase
+  name: brick stack
+  description: A decorative stack of bricks.
+  components:
+  - type: Sprite
+    state: bricksv
+
+- type: entity
+  id: WH40KDecorBricksHorizontal
+  parent: WH40KDecorPropBase
+  name: brick pile
+  description: A decorative pile of bricks.
+  components:
+  - type: Sprite
+    state: briksh
+
+- type: entity
+  id: WH40KDecorCrateWood
+  parent: WH40KDecorPropBase
+  name: wooden crate
+  description: A decorative wooden crate.
+  components:
+  - type: Sprite
+    state: create_wood
+
+- type: entity
+  id: WH40KDecorCrateWoodBroken
+  parent: WH40KDecorPropBase
+  name: broken wooden crate
+  description: A broken decorative wooden crate.
+  components:
+  - type: Sprite
+    state: create_wood_broken
+
+- type: entity
+  id: WH40KDecorCrateWoodCross
+  parent: WH40KDecorPropBase
+  name: cross-braced wooden crate
+  description: A decorative cross-braced wooden crate.
+  components:
+  - type: Sprite
+    state: createx_wood
+
+- type: entity
+  id: WH40KDecorCrateWoodCrossBroken
+  parent: WH40KDecorPropBase
+  name: broken cross-braced wooden crate
+  description: A broken decorative cross-braced wooden crate.
+  components:
+  - type: Sprite
+    state: createx_wood_broken
+
+- type: entity
+  id: WH40KDecorFurnaceA
+  parent: WH40KDecorPropBase
+  name: decorative furnace A
+  description: A visual-only furnace prop.
+  components:
+  - type: Sprite
+    state: furnance_a
+
+- type: entity
+  id: WH40KDecorFurnaceB
+  parent: WH40KDecorPropBase
+  name: decorative furnace B
+  description: A visual-only furnace prop.
+  components:
+  - type: Sprite
+    state: furnance_b
+
+- type: entity
+  id: WH40KDecorFurnaceC
+  parent: WH40KDecorPropBase
+  name: decorative furnace C
+  description: A visual-only furnace prop.
+  components:
+  - type: Sprite
+    state: furnance_c
+
+- type: entity
+  id: WH40KDecorFurnaceD
+  parent: WH40KDecorPropBase
+  name: decorative furnace D
+  description: A visual-only furnace prop.
+  components:
+  - type: Sprite
+    state: furnance_d
+
+- type: entity
+  id: WH40KDecorPallet
+  parent: WH40KDecorPropBase
+  name: wooden pallet
+  description: A decorative wooden pallet.
+  components:
+  - type: Sprite
+    state: paller
+
+- type: entity
+  id: WH40KDecorTire
+  parent: WH40KDecorPropBase
+  name: tire pile
+  description: A decorative tire pile.
+  components:
+  - type: Sprite
+    state: tire
+
+- type: entity
+  id: WH40KDecorTireTall
+  parent: WH40KDecorPropBase
+  name: stacked tires
+  description: A decorative stack of tires.
+  components:
+  - type: Sprite
+    state: tire2
+
+- type: entity
+  id: WH40KDecorTumba
+  parent: WH40KDecorPropBase
+  name: bedside cabinet
+  description: A decorative bedside cabinet.
+  components:
+  - type: Sprite
+    state: tumba

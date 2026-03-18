@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Content.Server._WH40K.Research.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Research.Components;
+using Content.Shared.Research.Prototypes;
 
 namespace Content.Server.Research.Systems;
 
@@ -31,8 +35,9 @@ public sealed partial class ResearchSystem
 
     private void OnServerDatabaseModified(EntityUid uid, ResearchServerComponent component, ref TechnologyDatabaseModifiedEvent args)
     {
-        foreach (var client in component.Clients)
+        foreach (var client in new List<EntityUid>(component.Clients))
         {
+            SyncClientWithServer(client);
             RaiseLocalEvent(client, ref args);
         }
     }
@@ -42,6 +47,40 @@ public sealed partial class ResearchSystem
         return this.IsPowered(uid, EntityManager);
     }
 
+    private void NotifyTimedResearchUpdated(EntityUid uid, ResearchServerComponent component)
+    {
+        var ev = new ResearchServerTimedResearchUpdatedEvent(uid);
+        foreach (var client in component.Clients)
+        {
+            RaiseLocalEvent(client, ref ev);
+        }
+    }
+
+    private bool TryCompleteActiveResearch(EntityUid uid, ResearchServerComponent component)
+    {
+        if (component.ActiveTechnologyId is not { } technologyId)
+            return false;
+
+        if (!PrototypeManager.TryIndex<TechnologyPrototype>(technologyId, out var technology))
+        {
+            component.ActiveTechnologyId = null;
+            component.ActiveTechnologyRemainingSeconds = 0f;
+            Dirty(uid, component);
+            NotifyTimedResearchUpdated(uid, component);
+            return false;
+        }
+
+        component.ActiveTechnologyId = null;
+        component.ActiveTechnologyRemainingSeconds = 0f;
+        Dirty(uid, component);
+        NotifyTimedResearchUpdated(uid, component);
+
+        AddTechnology(uid, technology);
+        TrySetMainDiscipline(technology, uid);
+        UpdateTechnologyCards(uid);
+        return true;
+    }
+
     private void UpdateServer(EntityUid uid, int time, ResearchServerComponent? component = null)
     {
         if (!Resolve(uid, ref component))
@@ -49,6 +88,34 @@ public sealed partial class ResearchSystem
 
         if (!CanRun(uid))
             return;
+
+        if (component.TimedResearchEnabled &&
+            component.ActiveTechnologyId != null)
+        {
+            var timeStep = (float) time;
+            if (TryComp<WH40KResearchTeamComponent>(uid, out var team) &&
+                !string.IsNullOrWhiteSpace(team.TeamId))
+            {
+                var bonuses = _treeBonuses.GetTeamBonuses(team.TeamId);
+                if (bonuses.ResearchTimeSpeedBonusPercent > 0)
+                {
+                    timeStep *= 1f + bonuses.ResearchTimeSpeedBonusPercent / 100f;
+                }
+            }
+
+            component.ActiveTechnologyRemainingSeconds = Math.Max(0f, component.ActiveTechnologyRemainingSeconds - timeStep);
+
+            if (component.ActiveTechnologyRemainingSeconds <= 0f)
+            {
+                TryCompleteActiveResearch(uid, component);
+            }
+            else
+            {
+                Dirty(uid, component);
+                NotifyTimedResearchUpdated(uid, component);
+            }
+        }
+
         ModifyServerPoints(uid, GetPointsPerSecond(uid, component) * time, component);
     }
 

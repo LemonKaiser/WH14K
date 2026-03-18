@@ -52,6 +52,7 @@
 - type: entity
   parent: BaseItem
   id: DataChipImp
+  categories: [ HideSpawnMenu ]
   suffix: WH40K
   components:
   - type: Sprite
@@ -74,10 +75,41 @@
     layerFunction: Threshold
   - type: StackLayerThreshold
     thresholds: [ 2, 3, 4 ]
+  - type: StackPrice
+    price: 1000
   - type: Currency
     price:
       intelligence_imp: 1
+  - type: WH40KResearchPointChip
+    pointsPerUnit: 1000
   - type: Appearance
+
+- type: entity
+  parent: DataChipImp
+  id: DataChipImp2
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 2
+
+- type: entity
+  parent: DataChipImp
+  id: DataChipImp3
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 3
+
+- type: entity
+  parent: DataChipImp
+  id: DataChipImp4
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 4
 
 - type: material
   id: DataChip

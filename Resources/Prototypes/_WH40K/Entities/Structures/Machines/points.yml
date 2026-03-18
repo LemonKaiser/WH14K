@@ -23,32 +23,47 @@
   - type: TimedSpawner
     prototypes:
       - DataChip1
-    chance: 0.99
+    chance: 1
     intervalSeconds: 60
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 1
+  - type: WH40KPhaseTimedSpawner
+    enabledFromPhase: Assault
+    resetTimerOnEnable: true
   - type: NavMapBeacon
     color: "#ff0000"
-    text: точка захвата
+    text: Capture point
+  - type: WH40KInfluencePoint
+    captureRadius: 2.67
+    captureTimeSeconds: 20
+    captureEnabledFromPhase: Assault
+    rewardIntervalSeconds: 120
+    frontPointsPerInterval: 1
   - type: SpriteFade
 
 - type: entity
   parent: MachineChipProduser
   id: MachineChipProduserCenter
-  suffix: WH40K, Центральный
+  suffix: WH40K, Center
   components:
   - type: TimedSpawner
     prototypes:
       - DataChip4
-    chance: 0.99
+    chance: 1
     intervalSeconds: 120
     minimumEntitiesSpawned: 1
     maximumEntitiesSpawned: 1
+  - type: WH40KInfluencePoint
+    captureRadius: 3
+    captureTimeSeconds: 30
+    captureEnabledFromPhase: Assault
+    rewardIntervalSeconds: 120
+    frontPointsPerInterval: 2
 
 - type: entity
-  id: ImpPointConverter
+  id: ImpPointLathe
   parent: BaseLathe
-  suffix: WH40K, Гвардия
+  suffix: WH40K, Imperium
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Machines/data_conventer.rsi
@@ -66,12 +81,45 @@
     runningState: building
     staticPacks:
     - DataChipsForImp
+  - type: WH40KTieredLatheProcessing
+    teamId: Imperium
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: DataChipsForImp
+    tier1Pack: DataChipsForImpTier1
+    tier2Pack: DataChipsForImpTier2
+    tier3Pack: DataChipsForImpTier3
   - type: SpriteFade
 
 - type: entity
-  id: ChPointConverter
+  id: MachineChipProduserImperiumOwned
+  parent: MachineChipProduser
+  suffix: WH40K, Империум-владение
+  components:
+  - type: WH40KInfluencePoint
+    ownerTeamId: Imperium
+    captureRadius: 2.67
+    captureTimeSeconds: 20
+    captureEnabledFromPhase: Assault
+    rewardIntervalSeconds: 120
+    frontPointsPerInterval: 1
+
+- type: entity
+  id: MachineChipProduserHereticsOwned
+  parent: MachineChipProduser
+  suffix: WH40K, Еретики-владение
+  components:
+  - type: WH40KInfluencePoint
+    ownerTeamId: Heretics
+    captureRadius: 2.67
+    captureTimeSeconds: 20
+    captureEnabledFromPhase: Assault
+    rewardIntervalSeconds: 120
+    frontPointsPerInterval: 1
+
+- type: entity
+  id: ChPointLathe
   parent: BaseLathe
-  suffix: WH40K, Хаос
+  suffix: WH40K, Heretics
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Machines/data_conventer_ch.rsi
@@ -89,4 +137,11 @@
     runningState: building
     staticPacks:
     - DataChipsForCh
+  - type: WH40KTieredLatheProcessing
+    teamId: Heretics
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: DataChipsForCh
+    tier1Pack: DataChipsForChTier1
+    tier2Pack: DataChipsForChTier2
+    tier3Pack: DataChipsForChTier3
   - type: SpriteFade

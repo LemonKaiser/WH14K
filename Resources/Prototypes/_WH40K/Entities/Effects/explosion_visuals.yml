@@ -1,0 +1,27 @@
+- type: entity
+  id: WH40KExplosionEffectShockWave
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: WH40KExplosionShockWave
+
+- type: entity
+  id: WH40KExplosionEffectDebris
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.55
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      map: [ "enum.EffectLayers.Unshaded" ]
+      sprite: _RMC14/Effects/effects.rsi
+      state: chempuff
+      color: "#7a5f44cc"
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu

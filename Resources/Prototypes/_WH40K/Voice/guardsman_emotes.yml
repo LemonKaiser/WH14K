@@ -1,0 +1,231 @@
+- type: emote
+  id: WH40KGuardsmanReadyForOrders
+  name: wh40k-chat-emote-name-guardsman-ready-for-orders
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-ready-for-orders"]
+  chatTriggers:
+    - guardsman ready for orders
+
+- type: emote
+  id: WH40KGuardsmanAwaitingOrders
+  name: wh40k-chat-emote-name-guardsman-awaiting-orders
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-awaiting-orders"]
+  chatTriggers:
+    - guardsman awaiting orders
+
+- type: emote
+  id: WH40KGuardsmanAttackTheEnemy
+  name: wh40k-chat-emote-name-guardsman-attack-the-enemy
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-attack-the-enemy"]
+  chatTriggers:
+    - guardsman attack the enemy
+
+- type: emote
+  id: WH40KGuardsmanOpenFire
+  name: wh40k-chat-emote-name-guardsman-open-fire
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-open-fire"]
+  chatTriggers:
+    - guardsman open fire
+
+- type: emote
+  id: WH40KGuardsmanCharge
+  name: wh40k-chat-emote-name-guardsman-charge
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-charge"]
+  chatTriggers:
+    - guardsman charge
+
+- type: emote
+  id: WH40KGuardsmanIntoTheFight
+  name: wh40k-chat-emote-name-guardsman-into-the-fight
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-into-the-fight"]
+  chatTriggers:
+    - guardsman into the fight
+
+- type: emote
+  id: WH40KGuardsmanCaptureTheStrategicPoint
+  name: wh40k-chat-emote-name-guardsman-capture-the-strategic-point
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-capture-the-strategic-point"]
+  chatTriggers:
+    - guardsman capture the strategic point
+
+- type: emote
+  id: WH40KGuardsmanSecureTheStrategicPoint
+  name: wh40k-chat-emote-name-guardsman-secure-the-strategic-point
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-secure-the-strategic-point"]
+  chatTriggers:
+    - guardsman secure the strategic point
+
+- type: emote
+  id: WH40KGuardsmanEnemySpotted
+  name: wh40k-chat-emote-name-guardsman-enemy-spotted
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-enemy-spotted"]
+  chatTriggers:
+    - guardsman enemy spotted
+
+- type: emote
+  id: WH40KGuardsmanChaosMarineSpotted
+  name: wh40k-chat-emote-name-guardsman-chaos-marine-spotted
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-chaos-marine-spotted"]
+  chatTriggers:
+    - guardsman chaos marine spotted
+
+- type: emote
+  id: WH40KGuardsmanHoldTheLine
+  name: wh40k-chat-emote-name-guardsman-hold-the-line
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-hold-the-line"]
+  chatTriggers:
+    - guardsman hold the line
+
+- type: emote
+  id: WH40KGuardsmanMoraleRestored
+  name: wh40k-chat-emote-name-guardsman-morale-restored
+  category: RoleVocal
+  icon: Interface/Emotes/scream.png
+  whitelist:
+    requireAll: true
+    components:
+    - Vocal
+    - WH40KGuardsmanVoice
+  chatMessages: ["wh40k-chat-emote-msg-guardsman-morale-restored"]
+  chatTriggers:
+    - guardsman morale restored
+
+- type: emoteSounds
+  id: WH40KGuardsmanMaleHuman
+  parent: [MaleHuman]
+  params:
+    volume: -5
+    variation: 0.05
+  sounds:
+    WH40KGuardsmanReadyForOrders:
+      path: /Audio/_WH40K/Voice/Guardsman/ready_for_orders.ogg
+    WH40KGuardsmanAwaitingOrders:
+      path: /Audio/_WH40K/Voice/Guardsman/awaiting_orders.ogg
+    WH40KGuardsmanAttackTheEnemy:
+      path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
+    WH40KGuardsmanOpenFire:
+      path: /Audio/_WH40K/Voice/Guardsman/open_fire.ogg
+    WH40KGuardsmanCharge:
+      path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
+    WH40KGuardsmanIntoTheFight:
+      path: /Audio/_WH40K/Voice/Guardsman/into_the_fight.ogg
+    WH40KGuardsmanCaptureTheStrategicPoint:
+      path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
+    WH40KGuardsmanSecureTheStrategicPoint:
+      path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
+    WH40KGuardsmanEnemySpotted:
+      path: /Audio/_WH40K/Voice/Guardsman/enemy_spotted.ogg
+    WH40KGuardsmanChaosMarineSpotted:
+      path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
+    WH40KGuardsmanHoldTheLine:
+      path: /Audio/_WH40K/Voice/Guardsman/hold_the_line.ogg
+    WH40KGuardsmanMoraleRestored:
+      path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg
+
+- type: emoteSounds
+  id: WH40KGuardsmanFemaleHuman
+  parent: [FemaleHuman]
+  params:
+    volume: -5
+    variation: 0.05
+  sounds:
+    WH40KGuardsmanReadyForOrders:
+      path: /Audio/_WH40K/Voice/Guardsman/ready_for_orders.ogg
+    WH40KGuardsmanAwaitingOrders:
+      path: /Audio/_WH40K/Voice/Guardsman/awaiting_orders.ogg
+    WH40KGuardsmanAttackTheEnemy:
+      path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
+    WH40KGuardsmanOpenFire:
+      path: /Audio/_WH40K/Voice/Guardsman/open_fire.ogg
+    WH40KGuardsmanCharge:
+      path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
+    WH40KGuardsmanIntoTheFight:
+      path: /Audio/_WH40K/Voice/Guardsman/into_the_fight.ogg
+    WH40KGuardsmanCaptureTheStrategicPoint:
+      path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
+    WH40KGuardsmanSecureTheStrategicPoint:
+      path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
+    WH40KGuardsmanEnemySpotted:
+      path: /Audio/_WH40K/Voice/Guardsman/enemy_spotted.ogg
+    WH40KGuardsmanChaosMarineSpotted:
+      path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
+    WH40KGuardsmanHoldTheLine:
+      path: /Audio/_WH40K/Voice/Guardsman/hold_the_line.ogg
+    WH40KGuardsmanMoraleRestored:
+      path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg

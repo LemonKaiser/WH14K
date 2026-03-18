@@ -192,6 +192,11 @@ namespace Content.Client.Ghost
             RaiseNetworkEvent(msg);
         }
 
+        public void ReturnToLobby()
+        {
+            RaiseNetworkEvent(new GhostReturnToLobbyRequest());
+        }
+
         public void OpenGhostRoles()
         {
             _console.RemoteExecuteCommand(null, "ghostroles");

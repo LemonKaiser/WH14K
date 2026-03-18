@@ -1,0 +1,61 @@
+# A1 root compounds that map each wave-defense role to its dedicated role compound.
+
+- type: htnCompound
+  id: WH40KWaveAssaultRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveAssaultRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveBreacherRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveBreacherRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveSapperRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveSapperRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveSupportRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveSupportRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveLogisticsRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveLogisticsRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveCoordinatorRoot
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveCoordinatorRoleCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound

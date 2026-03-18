@@ -84,9 +84,10 @@ public abstract class SharedMaterialReclaimerSystem : EntitySystem
     }
 
     /// <summary>
-    /// Tries to start processing an item via a <see cref="MaterialReclaimerComponent"/>.
+    /// Dry-run check for whether this reclaimer can start processing the specified item now.
+    /// This performs no mutation and does not start reclaiming.
     /// </summary>
-    public bool TryStartProcessItem(EntityUid uid, EntityUid item, MaterialReclaimerComponent? component = null, EntityUid? user = null)
+    public bool CanAcceptItem(EntityUid uid, EntityUid item, MaterialReclaimerComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return false;
@@ -94,11 +95,33 @@ public abstract class SharedMaterialReclaimerSystem : EntitySystem
         if (!CanStart(uid, component))
             return false;
 
-        if (HasComp<MobStateComponent>(item) && !CanGib(uid, item, component)) // whitelist? We be gibbing, boy!
+        if (HasComp<MobStateComponent>(item) && !CanGib(uid, item, component))
             return false;
 
         if (_whitelistSystem.IsWhitelistFail(component.Whitelist, item) ||
             _whitelistSystem.IsWhitelistPass(component.Blacklist, item))
+        {
+            return false;
+        }
+
+        if (Container.TryGetContainingContainer((item, null, null), out var containingContainer) &&
+            !Container.CanRemove(item, containingContainer))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Tries to start processing an item via a <see cref="MaterialReclaimerComponent"/>.
+    /// </summary>
+    public bool TryStartProcessItem(EntityUid uid, EntityUid item, MaterialReclaimerComponent? component = null, EntityUid? user = null)
+    {
+        if (!CanAcceptItem(uid, item, component))
+            return false;
+
+        if (!Resolve(uid, ref component))
             return false;
 
         if (Container.TryGetContainingContainer((item, null, null), out _) && !Container.TryRemoveFromContainer(item))

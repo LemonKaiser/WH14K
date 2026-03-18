@@ -51,7 +51,7 @@ public abstract class SharedCursedMaskSystem : EntitySystem
     private void OnMovementSpeedModifier(Entity<CursedMaskComponent> ent, ref InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
     {
         if (ent.Comp.CurrentState == CursedMaskExpression.Joy)
-            args.Args.ModifySpeed(ent.Comp.JoySpeedModifier);
+            args.Args.ModifySpeed(ent.Comp.JoySpeedModifier, MovementSpeedModifierLayer.Equipment);
     }
 
     private void OnModifyDamage(Entity<CursedMaskComponent> ent, ref InventoryRelayedEvent<DamageModifyEvent> args)

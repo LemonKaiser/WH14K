@@ -94,6 +94,14 @@
     path: /Audio/_WH40K/Voice/Tyranid/genestealerspeech.ogg
   exclaimSound:
     path: /Audio/_WH40K/Voice/Tyranid/genestealerspeech.ogg
+  dialogueBlipSound:
+    collection: DialogueBlipGenestealer
+  dialogueBlipPitch: 0.84
+  dialogueBlipVariation: 0.07
+  dialogueBlipVolume: -9.5
+  dialogueCharsPerSecond: 20
+  dialogueCharsPerBlip: 2
+  dialoguePunctuationPause: 0.08
 
 - type: soundCollection
   id: GenestealerAttack

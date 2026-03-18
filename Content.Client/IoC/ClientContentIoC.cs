@@ -1,4 +1,8 @@
 using Content.Client.Administration.Managers;
+using Content.Client._WH40K.MetaProgress;
+using Content.Client._WH40K.DiscordAuth;
+using Content.Client._WH40K.Administration.ScreenCheck;
+using Content.Client._WH40K.Roadmap;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.Clickable;
@@ -28,6 +32,8 @@ using Content.Shared.FeedbackSystem;
 using Content.Shared.IoC;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
+using Content.Shared._WH40K.DiscordAuth;
+using Content.Shared._WH40K.MetaProgress;
 
 namespace Content.Client.IoC
 {
@@ -43,6 +49,7 @@ namespace Content.Client.IoC
             collection.Register<IClientPreferencesManager, ClientPreferencesManager>();
             collection.Register<IStylesheetManager, StylesheetManager>();
             collection.Register<IScreenshotHook, ScreenshotHook>();
+            collection.Register<ScreenCheckClientManager>();
             collection.Register<FullscreenHook, FullscreenHook>();
             collection.Register<IClickMapManager, ClickMapManager>();
             collection.Register<IClientAdminManager, ClientAdminManager>();
@@ -50,14 +57,18 @@ namespace Content.Client.IoC
             collection.Register<EuiManager, EuiManager>();
             collection.Register<IVoteManager, VoteManager>();
             collection.Register<ChangelogManager, ChangelogManager>();
+            collection.Register<RoadmapManager, RoadmapManager>();
             collection.Register<ViewportManager, ViewportManager>();
             collection.Register<ISharedAdminLogManager, SharedAdminLogManager>();
             collection.Register<GhostKickManager>();
             collection.Register<ExtendedDisconnectInformationManager>();
+            collection.Register<ConnectingTargetManager>();
             collection.Register<JobRequirementsManager>();
             collection.Register<DocumentParsingManager>();
             collection.Register<ContentReplayPlaybackManager>();
             collection.Register<ISharedPlaytimeManager, JobRequirementsManager>();
+            collection.Register<ISharedWH40KDiscordAuthManager, WH40KDiscordAuthManager>();
+            collection.Register<ISharedWH40KMetaProgressManager, WH40KMetaProgressManager>();
             collection.Register<MappingManager>();
             collection.Register<DebugMonitorManager>();
             collection.Register<PlayerRateLimitManager>();

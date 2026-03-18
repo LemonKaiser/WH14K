@@ -1,0 +1,175 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KMortarKit
+  name: M402 mortar portable kit
+  description: Manual crew-operated mortar. Deploy it, set map coordinates and fire shells at long range.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/mortar/classic.rsi
+    layers:
+    - map: [ "mortar" ]
+      state: mortar_m402_carry
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      mortar:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 20
+        layer:
+        - Impassable
+        mask:
+        - Impassable
+        hard: false
+  - type: CollisionWake
+    enabled: false
+  - type: Anchorable
+    flags:
+    - Unanchorable
+  - type: Item
+    size: Huge
+  - type: HandheldEntityPlacement
+    entityType: WH40KMortarKit
+    previewEntityType: WH40KMortarPlacementPreview
+    placementMode: SnapgridCenter
+    range: 2
+    canRotate: true
+  - type: WH40KMortar
+    minimumRange: 15
+    maximumRange: 65
+    fireDelay: 10
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: UserInterface
+    interfaces:
+      enum.WH40KMortarUiKey.Key:
+        type: WH40KMortarBoundUserInterface
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.WH40KMortarVisualLayers.State:
+        mortar:
+          Item: { state: mortar_m402_carry }
+          Deployed: { state: mortar_m402 }
+
+- type: entity
+  id: WH40KMortarPlacementPreview
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/mortar/classic.rsi
+    state: mortar_m402
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: WH40KMortarShellBase
+  name: 80mm mortar shell
+  description: Standard 80mm mortar shell casing.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_cas
+  - type: Item
+    size: Huge
+  - type: WH40KMortarShell
+    incomingSoundLeadTime: 0.8
+
+- type: entity
+  parent: WH40KMortarShellBase
+  id: WH40KMortarShellHE
+  name: 80mm HE mortar shell
+  description: 80mm high-explosive shell for mortar fire support.
+  components:
+  - type: Item
+    heldPrefix: he
+  - type: Sprite
+    state: mortar_ammo_he
+  - type: WH40KMortarShell
+    uiShellType: he
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 10
+    intensitySlope: 2.5
+    totalIntensity: 250
+    canCreateVacuum: false
+
+- type: entity
+  parent: WH40KMortarShellBase
+  id: WH40KMortarShellFlare
+  name: 80mm flare mortar shell
+  description: 80mm shell that deploys a flare at target impact point.
+  components:
+  - type: Item
+    heldPrefix: flr
+  - type: Sprite
+    state: mortar_ammo_flr
+  - type: WH40KMortarShell
+    uiShellType: flare
+    triggerExplosion: false
+    spawnOnLand: Flare
+
+- type: entity
+  parent: WH40KMortarShellBase
+  id: WH40KMortarShellSmoke
+  name: 80mm smoke mortar shell
+  description: 80mm shell that deploys a dense smoke cloud on impact.
+  components:
+  - type: Item
+    heldPrefix: he
+  - type: Sprite
+    state: mortar_ammo_smk
+  - type: WH40KMortarShell
+    uiShellType: smoke
+    triggerExplosion: false
+    spawnOnLand: SmokeGrenade
+    spawnOnLandTriggerKey: timer
+
+- type: entity
+  parent: WH40KMortarShellBase
+  id: WH40KMortarShellIncendiary
+  name: 80mm incendiary mortar shell
+  description: 80mm shell that spreads burning incendiary fragments on impact.
+  components:
+  - type: Item
+    heldPrefix: he
+  - type: Sprite
+    state: mortar_ammo_cin
+  - type: WH40KMortarShell
+    uiShellType: incendiary
+    triggerExplosion: false
+    spawnOnLand: GrenadeIncendiary
+    spawnOnLandTriggerKey: timer
+
+- type: entity
+  parent: WH40KMortarShellBase
+  id: WH40KMortarShellEMP
+  name: 80mm EMP mortar shell
+  description: 80mm shell that detonates an EMP pulse on impact.
+  components:
+  - type: Item
+    heldPrefix: he
+  - type: Sprite
+    state: morta_ammo_fsh
+  - type: WH40KMortarShell
+    uiShellType: emp
+    triggerExplosion: false
+    spawnOnLand: EmpGrenade
+    spawnOnLandTriggerKey: trigger

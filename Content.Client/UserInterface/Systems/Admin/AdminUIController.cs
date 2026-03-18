@@ -154,6 +154,11 @@ public sealed class AdminUIController : UIController,
         _window = null;
     }
 
+    public void RefreshLocalization()
+    {
+        _window?.Relocalize();
+    }
+
     private void AdminStatusUpdated()
     {
         if (AdminButton != null)

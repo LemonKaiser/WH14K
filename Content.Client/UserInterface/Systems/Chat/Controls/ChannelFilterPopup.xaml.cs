@@ -130,4 +130,14 @@ public sealed partial class ChannelFilterPopup : Popup
         if (_filterStates.TryGetValue(channel, out var checkbox))
             checkbox.UpdateUnreadCount(unread);
     }
+
+    public void RefreshLocalization()
+    {
+        HighlightEdit.Placeholder = new Rope.Leaf(Loc.GetString("hud-chatbox-highlights-placeholder"));
+
+        foreach (var checkbox in _filterStates.Values)
+        {
+            checkbox.RefreshLocalization();
+        }
+    }
 }

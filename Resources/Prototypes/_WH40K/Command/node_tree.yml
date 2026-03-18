@@ -1,0 +1,439 @@
+- type: wh40kCommandTreeProfile
+  id: WH40KCommandTreeProfileDefault
+  domains:
+  - id: engineering
+  - id: logistics
+  - id: research
+  - id: weaponry
+  - id: equipment
+  nodes:
+  - id: eng_root
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-root-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-root-description
+    parents: []
+    cost: 9
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
+    machineSpeedBonusPercent: 5
+  - id: eng_left_2
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-2-description
+    parents: [eng_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    machineSpeedBonusPercent: 5
+  - id: eng_right_2
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-2-description
+    parents: [eng_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    machineStorageBonus: 5
+  - id: eng_left_3
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-3-description
+    parents: [eng_left_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    machineSpeedBonusPercent: 7
+  - id: eng_right_3
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-3-description
+    parents: [eng_right_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    machineStorageBonus: 10
+  - id: eng_left_4
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-4-description
+    parents: [eng_left_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    machineSpeedBonusPercent: 8
+  - id: eng_right_4
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-4-description
+    parents: [eng_right_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    machineStorageBonus: 15
+  - id: eng_cap
+    domain: engineering
+    titleKey: wh40k-command-node-upgrade-tree-node-eng-cap-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-cap-description
+    parents: [eng_left_4, eng_right_4]
+    cost: 23
+    minBaseLevel: 5
+    minRoundTimeSeconds: 5400
+    machineSpeedBonusPercent: 10
+    machineStorageBonus: 20
+  - id: log_root
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-root-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-root-description
+    parents: []
+    cost: 9
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
+    cargoMaxItemsBonusPercent: 10
+    cargoDeliverySpeedBonusPercent: 5
+  - id: log_left_2
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-left-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-2-description
+    parents: [log_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    cargoMaxItemsBonusPercent: 15
+  - id: log_right_2
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-right-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-2-description
+    parents: [log_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    cargoDeliverySpeedBonusPercent: 10
+  - id: log_left_3
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-left-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-3-description
+    parents: [log_left_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    cargoMaxItemsBonusPercent: 20
+  - id: log_right_3
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-right-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-3-description
+    parents: [log_right_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    cargoDeliverySpeedBonusPercent: 15
+  - id: log_left_4
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-left-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-4-description
+    parents: [log_left_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    cargoMaxItemsBonusPercent: 25
+  - id: log_right_4
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-right-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-4-description
+    parents: [log_right_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    cargoDeliverySpeedBonusPercent: 20
+  - id: log_cap
+    domain: logistics
+    titleKey: wh40k-command-node-upgrade-tree-node-log-cap-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-log-cap-description
+    parents: [log_left_4, log_right_4]
+    cost: 23
+    minBaseLevel: 5
+    minRoundTimeSeconds: 5400
+    cargoMaxItemsBonusPercent: 15
+    cargoDeliverySpeedBonusPercent: 10
+    cargoPriceDiscountPercent: 10
+  - id: res_root
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-root-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-root-description
+    parents: []
+    cost: 9
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
+    researchPointGrant: 250
+    researchPointBonusPercent: 5
+    researchTimeSpeedBonusPercent: 5
+  - id: res_left_2
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-left-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-2-description
+    parents: [res_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    researchPointGrant: 500
+    researchPointBonusPercent: 10
+  - id: res_right_2
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-right-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-2-description
+    parents: [res_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    researchPointGrant: 500
+    researchTimeSpeedBonusPercent: 10
+  - id: res_left_3
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-left-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-3-description
+    parents: [res_left_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    researchPointGrant: 750
+    researchPointBonusPercent: 15
+  - id: res_right_3
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-right-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-3-description
+    parents: [res_right_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    researchPointGrant: 750
+    researchTimeSpeedBonusPercent: 15
+  - id: res_left_4
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-left-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-4-description
+    parents: [res_left_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    researchPointGrant: 1000
+    researchPointBonusPercent: 20
+  - id: res_right_4
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-right-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-4-description
+    parents: [res_right_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    researchPointGrant: 1000
+    researchTimeSpeedBonusPercent: 20
+  - id: res_cap
+    domain: research
+    titleKey: wh40k-command-node-upgrade-tree-node-res-cap-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-res-cap-description
+    parents: [res_left_4, res_right_4]
+    cost: 23
+    minBaseLevel: 5
+    minRoundTimeSeconds: 5400
+    researchPointGrant: 1500
+    researchPointBonusPercent: 10
+    researchTimeSpeedBonusPercent: 10
+  - id: wep_root
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-root-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-root-description
+    parents: []
+    cost: 9
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
+    technologyUnlocks: [WH40KWeaponryAuthRoot]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumChainsword]
+      Heretics: [WH40KHereticsMachete]
+  - id: wep_left_2
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-2-description
+    parents: [wep_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    technologyUnlocks: [WH40KWeaponryAuthLeft2]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumBolter]
+      Heretics: [WH40KHereticsSmg]
+  - id: wep_right_2
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-2-description
+    parents: [wep_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    technologyUnlocks: [WH40KWeaponryAuthRight2]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumPlasmaGun]
+      Heretics: [WH40KHereticsPlasmaPistol]
+  - id: wep_left_3
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-3-description
+    parents: [wep_left_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    technologyUnlocks: [WH40KWeaponryAuthLeft3]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryTurret]
+      Heretics: [WH40KHereticsSentryTurret]
+  - id: wep_right_3
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-3-description
+    parents: [wep_right_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    technologyUnlocks: [WH40KWeaponryAuthRight3]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryTurretMini]
+      Heretics: [WH40KHereticsSentryTurretMini]
+  - id: wep_left_4
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-4-description
+    parents: [wep_left_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    technologyUnlocks: [WH40KWeaponryAuthLeft4]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryTurretDmr]
+      Heretics: [WH40KHereticsSentryTurretDmr]
+  - id: wep_right_4
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-4-description
+    parents: [wep_right_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    technologyUnlocks: [WH40KWeaponryAuthRight4]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryTurretShotgun]
+      Heretics: [WH40KHereticsSentryTurretShotgun]
+  - id: wep_cap
+    domain: weaponry
+    titleKey: wh40k-command-node-upgrade-tree-node-wep-cap-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-cap-description
+    parents: [wep_left_4, wep_right_4]
+    cost: 23
+    minBaseLevel: 5
+    minRoundTimeSeconds: 5400
+    technologyUnlocks: [WH40KWeaponryAuthCap]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryTurretLaser, WH40KImperiumSentinel]
+      Heretics: [WH40KHereticsSentryTurretLaser, WH40KHereticsSentinel]
+  - id: eqp_root
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-root-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-root-description
+    parents: []
+    cost: 9
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
+    technologyUnlocks: [WH40KEquipmentAuthRoot]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumCombatMedkit]
+      Heretics: [WH40KHereticsCombatMedkit]
+  - id: eqp_left_2
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-description
+    parents: [eqp_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    technologyUnlocks: [WH40KEquipmentAuthLeft2]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumInflatableCoverKit]
+      Heretics: [WH40KHereticsInflatableCoverKit]
+  - id: eqp_right_2
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-2-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-2-description
+    parents: [eqp_root]
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 720
+    technologyUnlocks: [WH40KEquipmentAuthRight2]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumMissionPinpointerKit]
+      Heretics: [WH40KHereticsMissionPinpointerKit]
+  - id: eqp_left_3
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-3-description
+    parents: [eqp_left_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    technologyUnlocks: [WH40KEquipmentAuthLeft3]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumIntelDetector]
+      Heretics: [WH40KHereticsIntelDetector]
+  - id: eqp_right_3
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-3-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-3-description
+    parents: [eqp_right_2]
+    cost: 14
+    minBaseLevel: 3
+    minRoundTimeSeconds: 2100
+    technologyUnlocks: [WH40KEquipmentAuthRight3]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumTacticalWhistle]
+      Heretics: [WH40KHereticsTacticalWhistle]
+  - id: eqp_left_4
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-4-description
+    parents: [eqp_left_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    technologyUnlocks: [WH40KEquipmentAuthLeft4]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSignalFlare]
+      Heretics: [WH40KHereticsSignalFlare]
+  - id: eqp_right_4
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-4-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-4-description
+    parents: [eqp_right_3]
+    cost: 17
+    minBaseLevel: 4
+    minRoundTimeSeconds: 3900
+    technologyUnlocks: [WH40KEquipmentAuthRight4]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumSentryLaptop]
+      Heretics: [WH40KHereticsSentryLaptop]
+  - id: eqp_cap
+    domain: equipment
+    titleKey: wh40k-command-node-upgrade-tree-node-eqp-cap-title
+    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-cap-description
+    parents: [eqp_left_4, eqp_right_4]
+    cost: 23
+    minBaseLevel: 5
+    minRoundTimeSeconds: 5400
+    technologyUnlocks: [WH40KEquipmentAuthCap]
+    teamCargoProductUnlocks:
+      Imperium: [WH40KImperiumTacticalFulton]
+      Heretics: [WH40KHereticsTacticalFulton]
+
+- type: wh40kCommandTreeTeamMap
+  id: WH40KCommandTreeTeamMap
+  defaultProfile: WH40KCommandTreeProfileDefault
+  teamProfiles:
+    Imperium: WH40KCommandTreeProfileDefault
+    Heretics: WH40KCommandTreeProfileDefault
+

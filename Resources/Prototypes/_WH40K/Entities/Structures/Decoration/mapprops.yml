@@ -1,9 +1,10 @@
 - type: entity
   id: MapPropCrates
-  parent: BaseStructureDynamic
+  parent: BaseStructure
   suffix: WH40K, Пропы
   components:
   - type: Transform
+    anchored: true
     noRot: true
   - type: Fixtures
     fixtures:
@@ -17,7 +18,6 @@
         layer:
         - MidImpassable
         - LowImpassable
-  - type: Pullable
   - type: Destructible
     thresholds:
     - trigger:
@@ -46,7 +46,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "0,0.6,-0.03,0"
+          bounds: "-0.16,-0.48,0.16,0.48"
         density: 150
         mask:
         - MachineMask
@@ -66,7 +66,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.25,0.3,0.25,0.2"
+          bounds: "-0.47,-0.28,0.47,0.16"
         density: 150
         mask:
         - MachineMask
@@ -80,18 +80,11 @@
   id: MapPropRock
   parent: MapPropCrates
   components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
   - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,0.37,0,0.35"
-        density: 150
-        mask:
-        - MachineMask
-        layer:
-        - MidImpassable
-        - LowImpassable
+    fixtures: {}
   - type: Sprite
     state: map_prop2
 
@@ -104,7 +97,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.1,0.37,0.1,0.5"
+          bounds: "-0.25,-0.22,0.25,0.22"
         density: 150
         mask:
         - MachineMask
@@ -137,18 +130,13 @@
   id: MapPropCoil
   parent: MapPropCrates
   components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
   - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,0.37,0,0.35"
-        density: 150
-        mask:
-        - MachineMask
-        layer:
-        - MidImpassable
-        - LowImpassable
+    fixtures: {}
+  - type: Climbable
+    vaultable: false
   - type: Sprite
     state: map_prop5
 
@@ -161,7 +149,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.1,0.37,0.1,0.5"
+          bounds: "-0.30,-0.34,0.30,0.31"
         density: 250
         mask:
         - MachineMask

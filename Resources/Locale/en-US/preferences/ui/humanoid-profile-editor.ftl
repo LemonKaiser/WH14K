@@ -12,6 +12,10 @@ humanoid-profile-editor-age-label = Age:
 humanoid-profile-editor-skin-color-label = Skin color:
 humanoid-profile-editor-species-label = Species:
 humanoid-profile-editor-pronouns-label = Pronouns:
+humanoid-profile-editor-voice-tone-label = Voice tone:
+humanoid-profile-editor-voice-tone-low = Low
+humanoid-profile-editor-voice-tone-normal = Normal
+humanoid-profile-editor-voice-tone-high = High
 humanoid-profile-editor-pronouns-male-text = He / Him
 humanoid-profile-editor-pronouns-female-text = She / Her
 humanoid-profile-editor-pronouns-epicene-text = They / Them
@@ -62,3 +66,5 @@ humanoid-profile-editor-trait-count-hint = Points available: [{$current}/{$max}]
 trait-category-disabilities = Disabilities
 trait-category-speech = Speech traits
 trait-category-quirks = Quirks
+
+humanoid-profile-editor-development-tab = Character Development

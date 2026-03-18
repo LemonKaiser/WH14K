@@ -1279,6 +1279,9 @@
   id: RemoteSignaller # Storage whitelist: BaseClothingBeltEngineering
 
 - type: Tag
+  id: RMCDetector # RMC/WH40K motion detector compatibility tag.
+
+- type: Tag
   id: ReptilianFood # SpecialDigestible: OrganReptilianStomach
 
 - type: Tag
@@ -1610,6 +1613,9 @@
 
 - type: Tag
   id: WetFloorSign # Storage whitelist: ClothingBeltJanitor, JanitorialTrolley. ItemMapper: JanitorialTrolley
+
+- type: Tag
+  id: WH40K # WH40K-specific compatibility tag used by modified dome/tool/entity prototypes.
 
 - type: Tag
   id: Wheat # SpecialDigestible: OrganAnimalRuminantStomach. ConstructionGraph: StrawHat

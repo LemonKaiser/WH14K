@@ -171,6 +171,17 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: EnergyDomeDirectionalTurtle
+  result: EnergyDomeDirectionalTurtle
+  completetime: 12
+  materials:
+    Steel: 1000
+    Plastic: 500
+    Gold: 250
+    Uranium: 50
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: Flash
   result: Flash
   materials:

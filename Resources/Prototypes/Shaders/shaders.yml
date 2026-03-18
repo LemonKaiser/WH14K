@@ -115,3 +115,29 @@
   id: Hologram
   kind: source
   path: "/Textures/Shaders/hologram.swsl"
+
+- type: shader
+  id: EnergyDomeDamageHoles
+  kind: source
+  path: "/Textures/Shaders/energy_dome_holes.swsl"
+  params:
+    holeCoverage: 0.0
+    holeScale: 16.0
+    edgeSoftness: 0.06
+    speed: 0.9
+    debugView: 0.0
+    darkenCoreStrength: 0.42
+    darkenHazeStrength: 0.12
+    alphaCoreStrength: 0.24
+    alphaHazeStrength: 0.10
+    minColorFactor: 0.18
+    minAlphaFactor: 0.35
+
+- type: shader
+  id: WH40KRadialGreyscale
+  kind: source
+  path: "/Textures/Shaders/radial_greyscale.swsl"
+  params:
+    position: 0, 0
+    radius: 64
+    feather: 12

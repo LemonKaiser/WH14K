@@ -88,42 +88,54 @@
                     Name="FabricatingContainer"
                     Orientation="Horizontal"
                     HorizontalExpand="True"
+                    SeparationOverride="4"
                     SizeFlagsStretchRatio="2">
-                    <PanelContainer
-                        VerticalExpand="True"
+                    <ProgressBar
+                        Name="FabricatingProgressBar"
+                        MinValue="0"
+                        MaxValue="1"
+                        Value="0"
                         HorizontalExpand="True"
-                        SizeFlagsStretchRatio="3">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#408040" />
-                        </PanelContainer.PanelOverride>
-                        <Label
-                            RectClipContent="False"
-                            HorizontalAlignment="Left"
-                            Margin="5 0 0 0"
-                            Text="{Loc 'lathe-menu-fabricating-message'}">
-                        </Label>
-                        <BoxContainer Name="FabricatingDisplayContainer"
-                                      HorizontalAlignment="Left"
-                                      Margin="100 0 0 0"/>
-                        <Label
-                            Name="NameLabel"
-                            RectClipContent="True"
-                            HorizontalAlignment="Left"
-                            Margin="130 0 0 0">
-                        </Label>
-                        <Button
-                            Name="DeleteFabricating"
-                            Margin="0"
-                            Text="✖"
-                            SetSize="38 32"
-                            HorizontalAlignment="Right"
-                            ToolTip="{Loc 'lathe-menu-delete-fabricating-tooltip'}">
-                            <Button.StyleClasses>
-                                <system:String>Caution</system:String>
-                                <system:String>OpenLeft</system:String>
-                            </Button.StyleClasses>
-                        </Button>
-                    </PanelContainer>
+                        SetHeight="30">
+                        <ProgressBar.BackgroundStyleBoxOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#4A4A4A" />
+                        </ProgressBar.BackgroundStyleBoxOverride>
+                        <ProgressBar.ForegroundStyleBoxOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#3B8A3B" />
+                        </ProgressBar.ForegroundStyleBoxOverride>
+                        <BoxContainer
+                            Orientation="Horizontal"
+                            HorizontalExpand="True"
+                            VerticalExpand="True"
+                            SeparationOverride="6"
+                            Margin="6 0 6 0">
+                            <Label
+                                VerticalAlignment="Center"
+                                Text="{Loc 'lathe-menu-fabricating-message'}">
+                            </Label>
+                            <BoxContainer
+                                Name="FabricatingDisplayContainer"
+                                VerticalAlignment="Center"/>
+                            <Label
+                                Name="NameLabel"
+                                VerticalAlignment="Center"
+                                HorizontalExpand="True"
+                                ClipText="True">
+                            </Label>
+                        </BoxContainer>
+                    </ProgressBar>
+                    <Button
+                        Name="DeleteFabricating"
+                        Margin="0"
+                        Text="X"
+                        MinSize="34 30"
+                        VerticalAlignment="Center"
+                        ToolTip="{Loc 'lathe-menu-delete-fabricating-tooltip'}">
+                        <Button.StyleClasses>
+                            <system:String>Caution</system:String>
+                            <system:String>OpenLeft</system:String>
+                        </Button.StyleClasses>
+                    </Button>
                 </BoxContainer>
                 <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                     <BoxContainer
@@ -139,7 +151,7 @@
             VerticalExpand="True"
             HorizontalExpand="True"
             Orientation="Vertical">
-            <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
+            <Label Name="MaterialsTitleLabel" Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
             <PanelContainer VerticalExpand="True">
                 <PanelContainer.PanelOverride>
                     <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />

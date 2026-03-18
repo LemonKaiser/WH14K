@@ -15,11 +15,14 @@ namespace Content.Shared.Examine
 
             public readonly bool GetVerbs;
 
-            public RequestExamineInfoMessage(NetEntity netEntity, int id, bool getVerbs=false)
+            public readonly string? CultureName;
+
+            public RequestExamineInfoMessage(NetEntity netEntity, int id, bool getVerbs=false, string? cultureName = null)
             {
                 NetEntity = netEntity;
                 Id = id;
                 GetVerbs = getVerbs;
+                CultureName = cultureName;
             }
         }
 
@@ -29,6 +32,7 @@ namespace Content.Shared.Examine
             public readonly NetEntity EntityUid;
             public readonly int Id;
             public readonly FormattedMessage Message;
+            public readonly string? CultureName;
 
             public List<Verb>? Verbs;
 
@@ -38,11 +42,12 @@ namespace Content.Shared.Examine
             public readonly bool KnowTarget;
 
             public ExamineInfoResponseMessage(NetEntity entityUid, int id, FormattedMessage message, List<Verb>? verbs=null,
-                bool centerAtCursor=true, bool openAtOldTooltip=true, bool knowTarget = true)
+                bool centerAtCursor=true, bool openAtOldTooltip=true, bool knowTarget = true, string? cultureName = null)
             {
                 EntityUid = entityUid;
                 Id = id;
                 Message = message;
+                CultureName = cultureName;
                 Verbs = verbs;
                 CenterAtCursor = centerAtCursor;
                 OpenAtOldTooltip = openAtOldTooltip;

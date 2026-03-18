@@ -7,6 +7,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
+using Content.Shared.Speech;
 using Content.Shared.Traits;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
@@ -31,7 +32,7 @@ namespace Content.Shared.Preferences
     public sealed partial class HumanoidCharacterProfile
     {
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
-        private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Corvax-Localization
+        private static readonly Regex RestrictedNameRegex = new("[^A-Za-zА-Яа-яёЁ0-9' -]"); // Corvax-Localization
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
 
         /// <summary>
@@ -89,6 +90,9 @@ namespace Content.Shared.Preferences
         [DataField]
         public Gender Gender { get; private set; } = Gender.Male;
 
+        [DataField]
+        public VoiceTone VoiceTone { get; private set; } = VoiceTone.Normal;
+
         /// <summary>
         /// Stores markings, eye colors, etc for the profile.
         /// </summary>
@@ -130,6 +134,7 @@ namespace Content.Shared.Preferences
             int age,
             Sex sex,
             Gender gender,
+            VoiceTone voiceTone,
             HumanoidCharacterAppearance appearance,
             SpawnPriorityPreference spawnPriority,
             Dictionary<ProtoId<JobPrototype>, JobPriority> jobPriorities,
@@ -144,6 +149,7 @@ namespace Content.Shared.Preferences
             Age = age;
             Sex = sex;
             Gender = gender;
+            VoiceTone = voiceTone;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
             _jobPriorities = jobPriorities;
@@ -175,6 +181,7 @@ namespace Content.Shared.Preferences
                 other.Age,
                 other.Sex,
                 other.Gender,
+                other.VoiceTone,
                 other.Appearance.Clone(),
                 other.SpawnPriority,
                 new Dictionary<ProtoId<JobPrototype>, JobPriority>(other.JobPriorities),
@@ -291,6 +298,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithGender(Gender gender)
         {
             return new(this) { Gender = gender };
+        }
+
+        public HumanoidCharacterProfile WithVoiceTone(VoiceTone voiceTone)
+        {
+            return new(this) { VoiceTone = voiceTone };
         }
 
         public HumanoidCharacterProfile WithSpecies(string species)
@@ -455,7 +467,7 @@ namespace Content.Shared.Preferences
         public string Summary =>
             Loc.GetString(
                 "humanoid-character-profile-summary",
-                ("name", Name),
+                ("name", HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(Name)),
                 ("gender", Gender.ToString().ToLowerInvariant()),
                 ("age", Age)
             );
@@ -466,6 +478,7 @@ namespace Content.Shared.Preferences
             if (Age != other.Age) return false;
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
+            if (VoiceTone != other.VoiceTone) return false;
             if (Species != other.Species) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
@@ -511,6 +524,14 @@ namespace Content.Shared.Preferences
                 _ => Gender.Epicene // Invalid enum values.
             };
 
+            var voiceTone = VoiceTone switch
+            {
+                Content.Shared.Speech.VoiceTone.Low => Content.Shared.Speech.VoiceTone.Low,
+                Content.Shared.Speech.VoiceTone.High => Content.Shared.Speech.VoiceTone.High,
+                Content.Shared.Speech.VoiceTone.Normal => Content.Shared.Speech.VoiceTone.Normal,
+                _ => Content.Shared.Speech.VoiceTone.Normal,
+            };
+
             string name;
             var maxNameLength = configManager.GetCVar(CCVars.MaxNameLength);
             if (string.IsNullOrEmpty(Name))
@@ -527,6 +548,14 @@ namespace Content.Shared.Preferences
             }
 
             name = name.Trim();
+
+            if (HumanoidNameScriptHelper.ContainsUnresolvedDatasetId(name))
+            {
+                name = HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(name);
+
+                if (HumanoidNameScriptHelper.ContainsUnresolvedDatasetId(name))
+                    name = GetName(Species, gender);
+            }
 
             if (configManager.GetCVar(CCVars.RestrictedNames))
             {
@@ -606,6 +635,7 @@ namespace Content.Shared.Preferences
             Age = age;
             Sex = sex;
             Gender = gender;
+            VoiceTone = voiceTone;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
 
@@ -726,6 +756,7 @@ namespace Content.Shared.Preferences
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             hashCode.Add((int)Gender);
+            hashCode.Add((int)VoiceTone);
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
             hashCode.Add((int)PreferenceUnavailable);

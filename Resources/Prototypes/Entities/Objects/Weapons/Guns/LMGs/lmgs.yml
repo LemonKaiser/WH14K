@@ -37,6 +37,7 @@
       path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: WH40KGunPrediction
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/lmg_cock.ogg
@@ -107,6 +108,7 @@
         path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
       soundEmpty:
         path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+    - type: WH40KGunPrediction
     - type: Sprite
       sprite: Objects/Weapons/Guns/LMGs/l6.rsi
       layers:

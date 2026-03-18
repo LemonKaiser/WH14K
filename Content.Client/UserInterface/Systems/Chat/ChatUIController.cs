@@ -23,6 +23,8 @@ using Content.Shared.Decals;
 using Content.Shared.Input;
 using Content.Shared.Radio;
 using Content.Shared.Roles.RoleCodeword;
+using Content.Shared.StatusIcon;
+using Content.Shared.StatusIcon.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -64,10 +66,17 @@ public sealed partial class ChatUIController : UIController
     [UISystemDependency] private readonly TypingIndicatorSystem? _typingIndicator = default;
     [UISystemDependency] private readonly ChatSystem? _chatSys = default;
     [UISystemDependency] private readonly TransformSystem? _transform = default;
+    [UISystemDependency] private readonly JobSystem? _jobSystem = default!;
     [UISystemDependency] private readonly MindSystem? _mindSystem = default!;
     [UISystemDependency] private readonly RoleCodewordSystem? _roleCodewordSystem = default!;
 
     private static readonly ProtoId<ColorPalettePrototype> ChatNamePalette = "ChatNames";
+    private const string RoleIconMarkupTag = "wh40kjobicon";
+    private const string NameTagOpen = "[Name]";
+    private const string BubbleHeaderTagOpen = "[BubbleHeader]";
+    private const string JobIconNoId = "JobIconNoId";
+    private const string JobIconUnknown = "JobIconUnknown";
+    private const int SenderRoleIconCacheLimit = 512;
     private string[] _chatNameColors = default!;
     private bool _chatNameColorsEnabled;
 
@@ -103,7 +112,7 @@ public sealed partial class ChatUIController : UIController
     /// <summary>
     ///     The max amount of chars allowed to fit in a single speech bubble.
     /// </summary>
-    private const int SingleBubbleCharLimit = 100;
+    private const int SingleBubbleCharLimit = SpeechBubbleDisplayPolicy.MaxVisibleTextElements;
 
     /// <summary>
     ///     Base queue delay each speech bubble has.
@@ -119,6 +128,11 @@ public sealed partial class ChatUIController : UIController
     ///     The max amount of speech bubbles over a single entity at once.
     /// </summary>
     private const int SpeechBubbleCap = 4;
+
+    /// <summary>
+    ///     The max queued speech bubbles kept per entity before oldest queued entries are dropped.
+    /// </summary>
+    private const int SpeechBubbleQueueCap = SpeechBubbleDisplayPolicy.MaxQueuedBubblesPerEntity;
 
     private LayoutContainer _speechBubbleRoot = default!;
 
@@ -151,6 +165,7 @@ public sealed partial class ChatUIController : UIController
 
     // TODO add a cap for this for non-replays
     public readonly List<(GameTick Tick, ChatMessage Msg)> History = new();
+    private readonly Dictionary<int, string> _senderRoleIconCache = new();
 
     // Maintains which channels a client should be able to filter (for showing in the chatbox)
     // and select (for attempting to send on).
@@ -251,6 +266,9 @@ public sealed partial class ChatUIController : UIController
         SetSpeechBubbleRoot(viewportContainer);
 
         SetChatWindowOpacity(_config.GetCVar(CCVars.ChatWindowOpacity));
+
+        var chatBox = UIManager.ActiveScreen.GetWidget<ChatBox>() ?? UIManager.ActiveScreen.GetWidget<ResizableChatBox>();
+        chatBox?.Relocalize();
     }
 
     public void OnScreenUnload()
@@ -408,6 +426,8 @@ public sealed partial class ChatUIController : UIController
 
     private void StateChanged(StateChangedEventArgs args)
     {
+        _senderRoleIconCache.Clear();
+
         if (args.NewState is GameplayState)
         {
             PreferredChannel = ChatSelectChannel.Local;
@@ -492,6 +512,12 @@ public sealed partial class ChatUIController : UIController
         {
             queueData = new SpeechBubbleQueueData();
             _queuedSpeechBubbles.Add(entity, queueData);
+        }
+
+        while (queueData.MessageQueue.Count >= SpeechBubbleQueueCap)
+        {
+            // Keep the most recent speech backlog bounded while chat history still preserves full message flow.
+            queueData.MessageQueue.Dequeue();
         }
 
         queueData.MessageQueue.Enqueue(new SpeechBubbleData(message, speechType));
@@ -823,8 +849,15 @@ public sealed partial class ChatUIController : UIController
         // color the name unless it's something like "the old man"
         if ((msg.Channel == ChatChannel.Local || msg.Channel == ChatChannel.Whisper) && _chatNameColorsEnabled)
         {
-            var grammar = _ent.GetComponentOrNull<GrammarComponent>(_ent.GetEntity(msg.SenderEntity));
-            if (grammar != null && grammar.ProperNoun == true)
+            var properNoun = msg.SenderNameIsProperNoun;
+            if (properNoun == null)
+            {
+                var sender = _ent.GetEntity(msg.SenderEntity);
+                if (_ent.EntityExists(sender))
+                    properNoun = _ent.GetComponentOrNull<GrammarComponent>(sender)?.ProperNoun;
+            }
+
+            if (properNoun == true)
                 msg.WrappedMessage = SharedChatSystem.InjectTagInsideTag(msg, "Name", "color", GetNameColor(SharedChatSystem.GetStringInsideTag(msg, "Name")));
         }
 
@@ -897,6 +930,115 @@ public sealed partial class ChatUIController : UIController
         }
     }
 
+    public string GetChatDisplayMessage(ChatMessage msg)
+    {
+        if (msg.SenderEntity == default || msg.WrappedMessage.Contains($"[{RoleIconMarkupTag}", StringComparison.Ordinal))
+            return msg.WrappedMessage;
+
+        var iconId = TryGetMessageJobIconId(msg);
+        if (!string.IsNullOrWhiteSpace(iconId))
+            CacheSenderRoleIcon(msg.SenderKey, iconId);
+        else
+            iconId = TryGetCachedSenderRoleIcon(msg.SenderKey);
+
+        if (string.IsNullOrWhiteSpace(iconId))
+            return msg.WrappedMessage;
+
+        return InjectRoleIconMarkup(msg.WrappedMessage, iconId);
+    }
+
+    private string? TryGetMessageJobIconId(ChatMessage msg)
+    {
+        if (!string.IsNullOrWhiteSpace(msg.SenderJobIconId) &&
+            _prototypeManager.HasIndex<JobIconPrototype>(msg.SenderJobIconId) &&
+            !IsNonSpecificJobIcon(msg.SenderJobIconId))
+        {
+            return msg.SenderJobIconId;
+        }
+
+        return TryGetSenderJobIconId(msg.SenderEntity);
+    }
+
+    private string? TryGetSenderJobIconId(NetEntity senderNetEntity)
+    {
+        var sender = _ent.GetEntity(senderNetEntity);
+        if (!_ent.EntityExists(sender))
+            return null;
+
+        if (_ent.TryGetComponent(sender, out JobStatusComponent? jobStatus) &&
+            jobStatus.JobStatusIcon is { } statusIcon &&
+            _prototypeManager.HasIndex<JobIconPrototype>(statusIcon))
+        {
+            var statusIconId = statusIcon.Id;
+            if (!IsNonSpecificJobIcon(statusIconId))
+                return statusIconId;
+        }
+
+        if (_mindSystem == null || _jobSystem == null)
+            return null;
+
+        if (!_mindSystem.TryGetMind(sender, out var mindId, out _))
+            return null;
+
+        if (!_jobSystem.MindTryGetJob(mindId, out var job))
+            return null;
+
+        if (!_prototypeManager.HasIndex<JobIconPrototype>(job.Icon))
+            return null;
+
+        var jobIconId = job.Icon.Id;
+        return IsNonSpecificJobIcon(jobIconId)
+            ? null
+            : jobIconId;
+    }
+
+    private static bool IsNonSpecificJobIcon(string iconId)
+    {
+        return string.Equals(iconId, JobIconNoId, StringComparison.Ordinal) ||
+               string.Equals(iconId, JobIconUnknown, StringComparison.Ordinal);
+    }
+
+    private void CacheSenderRoleIcon(int? senderKey, string iconId)
+    {
+        if (senderKey is not { } key)
+            return;
+
+        _senderRoleIconCache[key] = iconId;
+
+        if (_senderRoleIconCache.Count > SenderRoleIconCacheLimit)
+            _senderRoleIconCache.Clear();
+    }
+
+    private string? TryGetCachedSenderRoleIcon(int? senderKey)
+    {
+        if (senderKey is not { } key ||
+            !_senderRoleIconCache.TryGetValue(key, out var iconId))
+        {
+            return null;
+        }
+
+        if (_prototypeManager.HasIndex<JobIconPrototype>(iconId))
+            return iconId;
+
+        _senderRoleIconCache.Remove(key);
+        return null;
+    }
+
+    private static string InjectRoleIconMarkup(string wrappedMessage, string iconId)
+    {
+        var iconMarkup = $"[{RoleIconMarkupTag} icon=\"{iconId}\"/] ";
+
+        var nameIndex = wrappedMessage.IndexOf(NameTagOpen, StringComparison.Ordinal);
+        if (nameIndex >= 0)
+            return wrappedMessage.Insert(nameIndex, iconMarkup);
+
+        var headerIndex = wrappedMessage.IndexOf(BubbleHeaderTagOpen, StringComparison.Ordinal);
+        if (headerIndex >= 0)
+            return wrappedMessage.Insert(headerIndex + BubbleHeaderTagOpen.Length, iconMarkup);
+
+        return iconMarkup + wrappedMessage;
+    }
+
     public void OnDeleteChatMessagesBy(MsgDeleteChatMessagesBy msg)
     {
         // This will delete messages from an entity even if different players were the author.
@@ -904,6 +1046,7 @@ public sealed partial class ChatUIController : UIController
         // Otherwise the client would need to know that one entity has multiple author players,
         // or the server would need to track when and which entities a player sent messages as.
         History.RemoveAll(h => h.Msg.SenderKey == msg.Key || msg.Entities.Contains(h.Msg.SenderEntity));
+        _senderRoleIconCache.Remove(msg.Key);
         Repopulate();
     }
 

@@ -2,6 +2,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Maps;
@@ -445,6 +446,12 @@ public sealed partial class ExplosionSystem
         float? fireStacksOnIgnite,
         EntityUid? cause)
     {
+        if (_deleteOnExplosionQuery.HasComp(uid))
+        {
+            QueueDel(uid);
+            return;
+        }
+
         if (originalDamage is not null)
         {
             GetEntitiesToDamage(uid, originalDamage, id);
@@ -456,7 +463,7 @@ public sealed partial class ExplosionSystem
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
                 // WH40K
                 EntityUid? origin = null;
-                if (cause is { } causeUid && EntityManager.EntityExists(causeUid) && !EntityManager.IsQueuedForDeletion(causeUid))
+                if (cause is { } causeUid && Exists(causeUid) && !EntityManager.IsQueuedForDeletion(causeUid))
                     origin = causeUid;
 
                 _damageableSystem.TryChangeDamage((entity, damageable), damage, ignoreResistances: true, origin: origin, ignoreGlobalModifiers: true);

@@ -1,0 +1,25 @@
+wh40k-chat-emote-name-officer-unit-complete-1 = Задача выполнена I
+wh40k-chat-emote-name-officer-unit-complete-2 = Задача выполнена II
+wh40k-chat-emote-name-officer-selection-response = Ответ на вызов
+wh40k-chat-emote-name-officer-move-order = Приказ на движение
+wh40k-chat-emote-name-officer-attack-order-1 = Приказ на атаку I
+wh40k-chat-emote-name-officer-attack-order-2 = Приказ на атаку II
+wh40k-chat-emote-name-officer-attack-order-3 = Приказ на атаку III
+wh40k-chat-emote-name-officer-attack-order-4 = Приказ на атаку IV
+wh40k-chat-emote-name-officer-charge-order-1 = Приказ на штурм I
+wh40k-chat-emote-name-officer-charge-order-2 = Приказ на штурм II
+wh40k-chat-emote-name-officer-charge-order-3 = Приказ на штурм III
+wh40k-chat-emote-name-officer-morale-order = Приказ поднять дух
+
+wh40k-chat-emote-msg-officer-unit-complete-1 = подтверждает выполнение задачи.
+wh40k-chat-emote-msg-officer-unit-complete-2 = подтверждает завершение приказа.
+wh40k-chat-emote-msg-officer-selection-response = откликается на вызов.
+wh40k-chat-emote-msg-officer-move-order = отдает приказ на движение.
+wh40k-chat-emote-msg-officer-attack-order-1 = отдает приказ на атаку.
+wh40k-chat-emote-msg-officer-attack-order-2 = приказывает перейти в наступление.
+wh40k-chat-emote-msg-officer-attack-order-3 = приказывает вступить в бой.
+wh40k-chat-emote-msg-officer-attack-order-4 = приказывает продолжать штурм.
+wh40k-chat-emote-msg-officer-charge-order-1 = приказывает идти в штурм.
+wh40k-chat-emote-msg-officer-charge-order-2 = ведет строй вперед.
+wh40k-chat-emote-msg-officer-charge-order-3 = требует полного наступления.
+wh40k-chat-emote-msg-officer-morale-order = воодушевляет войска.

@@ -1,5 +1,6 @@
-﻿using Content.Shared.Trigger.Components.Triggers;
+using Content.Shared.Projectiles;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Trigger.Components.Triggers;
 using Robust.Shared.Physics.Events;
 
 namespace Content.Shared.Trigger.Systems;
@@ -18,6 +19,14 @@ public sealed partial class TriggerSystem
 
     private void OnCollide(Entity<TriggerOnCollideComponent> ent, ref StartCollideEvent args)
     {
+        // ProjectileSystem pre-marks pass-through collisions so trigger effects
+        // are skipped for obstacles that should not stop this projectile.
+        if (TryComp<ProjectileTriggerBypassComponent>(ent, out var bypass)
+            && bypass.PassThroughTargets.Remove(args.OtherEntity))
+        {
+            return;
+        }
+
         if (
             args.OurFixtureId == ent.Comp.FixtureID
             && (!ent.Comp.IgnoreOtherNonHard || args.OtherFixture.Hard)

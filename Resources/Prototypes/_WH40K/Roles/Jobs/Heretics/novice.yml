@@ -1,13 +1,21 @@
 - type: job
   id: HNovice
   name: job-name-hnovice
-  description: job-description-novice
+  description: job-description-hnovice
   playTimeTracker: JobHNovice
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: NoviceGear
   setPreference: false
   icon: "JobIconNovice"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
   access:
   - Maintenance
   - Engineering

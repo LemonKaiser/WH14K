@@ -1,0 +1,464 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      xmlns:ui="clr-namespace:Content.Client._WH40K.TacticalMap.UI"
+                      Title="{Loc 'wh40k-tactical-map-window-title'}"
+                      Resizable="True"
+                      SetSize="1420 900"
+                      MinSize="1080 720">
+    <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10 10 10 10">
+        <PanelContainer>
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0D1520"
+                                  BorderColor="#41556E"
+                                  BorderThickness="2"
+                                  ContentMarginLeftOverride="14"
+                                  ContentMarginTopOverride="12"
+                                  ContentMarginRightOverride="14"
+                                  ContentMarginBottomOverride="12" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="3">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-tactical-map-header-title'}"
+                           StyleClasses="LabelHeading" />
+                    <Label Name="StationName"
+                           Text="{Loc 'station-map-unknown-station'}"
+                           StyleClasses="LabelBig" />
+                    <Label Name="HeaderSubtitleLabel"
+                           Text="{Loc 'wh40k-tactical-map-header-subtitle'}"
+                           StyleClasses="LabelSubText" />
+                </BoxContainer>
+
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalAlignment="Center">
+                    <PanelContainer Name="SyncBadge">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#203227"
+                                              BorderColor="#63A77A"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="10"
+                                              ContentMarginTopOverride="4"
+                                              ContentMarginRightOverride="10"
+                                              ContentMarginBottomOverride="4" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="SyncBadgeLabel"
+                               Text="{Loc 'wh40k-tactical-map-sync-badge-team'}"
+                               Align="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="DraftBadge">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#203327"
+                                              BorderColor="#63A77A"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="10"
+                                              ContentMarginTopOverride="4"
+                                              ContentMarginRightOverride="10"
+                                              ContentMarginBottomOverride="4" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="DraftBadgeLabel"
+                               Text="{Loc 'wh40k-tactical-map-draft-badge-saved'}"
+                               Align="Center" />
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="8">
+            <PanelContainer Name="LeftRail"
+                            SetWidth="308"
+                            VerticalExpand="True"
+                            HorizontalExpand="False">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#111924"
+                                      BorderColor="#33475F"
+                                      BorderThickness="2"
+                                      ContentMarginLeftOverride="0"
+                                      ContentMarginTopOverride="0"
+                                      ContentMarginRightOverride="0"
+                                      ContentMarginBottomOverride="0" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#162231"
+                                              BorderColor="#42566C"
+                                              BorderThickness="0 0 0 1"
+                                              ContentMarginLeftOverride="12"
+                                              ContentMarginTopOverride="10"
+                                              ContentMarginRightOverride="12"
+                                              ContentMarginBottomOverride="10" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                            <Label Name="LeftTitleLabel"
+                                   Text="{Loc 'wh40k-tactical-map-left-title'}"
+                                   StyleClasses="LabelHeading"
+                                   ClipText="True" />
+                            <Label Name="LeftSubtitleLabel"
+                                   Text="{Loc 'wh40k-tactical-map-left-subtitle'}"
+                                   StyleClasses="LabelSubText"
+                                   ClipText="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="12 12 12 12" SeparationOverride="10">
+                            <PanelContainer Name="StatusPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Text="{Loc 'wh40k-tactical-map-status-title'}" StyleClasses="LabelHeading" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                        <Label Text="{Loc 'wh40k-tactical-map-status-tool'}"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="ToolSummaryLabel"
+                                               Text="{Loc 'wh40k-tactical-map-tool-pan-summary'}"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                        <Label Text="{Loc 'wh40k-tactical-map-status-sync'}"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="OverlaySyncLabel"
+                                               Text="{Loc 'wh40k-tactical-map-sync-ready'}"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                        <Label Text="{Loc 'wh40k-tactical-map-status-document'}"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="AnnotationsStatus"
+                                               Text="{Loc 'wh40k-tactical-map-annotations-saved'}"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <BoxContainer Name="AnnotationControlsStack"
+                                          Orientation="Vertical"
+                                          SeparationOverride="10">
+                                <PanelContainer Name="ToolsPanel">
+                                    <PanelContainer.PanelOverride>
+                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                          BorderColor="#324459"
+                                                          BorderThickness="1"
+                                                          ContentMarginLeftOverride="10"
+                                                          ContentMarginTopOverride="10"
+                                                          ContentMarginRightOverride="10"
+                                                          ContentMarginBottomOverride="10" />
+                                    </PanelContainer.PanelOverride>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                        <Label Text="{Loc 'wh40k-tactical-map-tools-title'}" StyleClasses="LabelHeading" />
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                            <Button Name="PanToolButton"
+                                                    ToggleMode="True"
+                                                    Text="{Loc 'wh40k-tactical-map-tool-pan-button'}"
+                                                    HorizontalExpand="True" />
+                                            <Button Name="BrushToolButton"
+                                                    ToggleMode="True"
+                                                    Text="{Loc 'wh40k-tactical-map-tool-brush-button'}"
+                                                    HorizontalExpand="True" />
+                                            <Button Name="EraserToolButton"
+                                                    ToggleMode="True"
+                                                    Text="{Loc 'wh40k-tactical-map-tool-eraser-button'}"
+                                                    HorizontalExpand="True" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="ColorPanel">
+                                    <PanelContainer.PanelOverride>
+                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                          BorderColor="#324459"
+                                                          BorderThickness="1"
+                                                          ContentMarginLeftOverride="10"
+                                                          ContentMarginTopOverride="10"
+                                                          ContentMarginRightOverride="10"
+                                                          ContentMarginBottomOverride="10" />
+                                    </PanelContainer.PanelOverride>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                                <Label Text="{Loc 'wh40k-tactical-map-color-title'}" StyleClasses="LabelHeading" />
+                                                <Label Name="CurrentColorLabel"
+                                                       Text="#FF0000"
+                                                       StyleClasses="LabelSubText" />
+                                            </BoxContainer>
+                                            <PanelContainer Name="CurrentColorPreview" SetSize="42 42">
+                                                <PanelContainer.PanelOverride>
+                                                    <gfx:StyleBoxFlat BackgroundColor="#D43B3B"
+                                                                      BorderColor="#F1F1F1"
+                                                                      BorderThickness="1" />
+                                                </PanelContainer.PanelOverride>
+                                            </PanelContainer>
+                                        </BoxContainer>
+
+                                        <GridContainer Name="ColorSwatches"
+                                                       Columns="4"
+                                                       HSeparationOverride="6"
+                                                       VSeparationOverride="6"
+                                                       HorizontalExpand="True" />
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="ThicknessPanel">
+                                    <PanelContainer.PanelOverride>
+                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                          BorderColor="#324459"
+                                                          BorderThickness="1"
+                                                          ContentMarginLeftOverride="10"
+                                                          ContentMarginTopOverride="10"
+                                                          ContentMarginRightOverride="10"
+                                                          ContentMarginBottomOverride="10" />
+                                    </PanelContainer.PanelOverride>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                        <BoxContainer Orientation="Horizontal">
+                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-title'}" StyleClasses="LabelHeading" HorizontalExpand="True" />
+                                            <Label Name="ThicknessValue" Text="1.50" Align="Right" />
+                                        </BoxContainer>
+                                        <Slider Name="ThicknessSlider"
+                                                MinValue="0.25"
+                                                MaxValue="6"
+                                                Value="1.5"
+                                                RoundingDecimals="2" />
+                                        <BoxContainer Orientation="Horizontal">
+                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-fine'}" StyleClasses="LabelSubText" />
+                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-heavy'}"
+                                                   StyleClasses="LabelSubText"
+                                                   HorizontalExpand="True"
+                                                   Align="Right" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="AnnotationActionsPanel">
+                                    <PanelContainer.PanelOverride>
+                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                          BorderColor="#324459"
+                                                          BorderThickness="1"
+                                                          ContentMarginLeftOverride="10"
+                                                          ContentMarginTopOverride="10"
+                                                          ContentMarginRightOverride="10"
+                                                          ContentMarginBottomOverride="10" />
+                                    </PanelContainer.PanelOverride>
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                        <Label Name="AnnotationActionsTitleLabel"
+                                               Text="{Loc 'wh40k-tactical-map-actions-title'}"
+                                               StyleClasses="LabelHeading" />
+                                        <Button Name="ReloadSavedButton"
+                                                Text="{Loc 'wh40k-tactical-map-action-reload'}" />
+                                        <Button Name="ClearAnnotationsButton"
+                                                Text="{Loc 'wh40k-tactical-map-action-clear'}"
+                                                StyleClasses="ButtonColorRed" />
+                                        <Button Name="SaveAnnotationsButton"
+                                                Text="{Loc 'wh40k-tactical-map-action-save'}"
+                                                StyleClasses="ButtonColorGreen" />
+                                    </BoxContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+
+                            <PanelContainer Name="ActionsPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Name="OverviewTitleLabel"
+                                           Text="{Loc 'wh40k-tactical-map-actions-title-readonly'}"
+                                           StyleClasses="LabelHeading" />
+                                    <Button Name="RecenterButton"
+                                            Text="{Loc 'wh40k-tactical-map-action-recenter'}" />
+                                </BoxContainer>
+                            </PanelContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#0D141D"
+                                      BorderColor="#3A4E66"
+                                      BorderThickness="2"
+                                      ContentMarginLeftOverride="6"
+                                      ContentMarginTopOverride="6"
+                                      ContentMarginRightOverride="6"
+                                      ContentMarginBottomOverride="6" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#162231"
+                                              BorderColor="#42566C"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="12"
+                                              ContentMarginTopOverride="8"
+                                              ContentMarginRightOverride="12"
+                                              ContentMarginBottomOverride="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="10" VerticalAlignment="Center">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                <Label Text="{Loc 'wh40k-tactical-map-viewport-title'}" StyleClasses="LabelHeading" />
+                                <Label Name="ViewportSubtitleLabel"
+                                       Text="{Loc 'wh40k-tactical-map-viewport-subtitle'}"
+                                       StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalAlignment="Right">
+                                <Label Text="{Loc 'wh40k-tactical-map-zoom-label'}" StyleClasses="LabelSubText" Align="Right" />
+                                <Label Name="ZoomValueLabel" Text="1.00x" Align="Right" />
+                            </BoxContainer>
+                            <PanelContainer>
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#223B2F"
+                                                      BorderColor="#5FA27E"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="4"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="4" />
+                                </PanelContainer.PanelOverride>
+                                <Label Name="MapModeBadgeLabel" Text="{Loc 'wh40k-tactical-map-mode-active'}" />
+                            </PanelContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#080C11"
+                                              BorderColor="#233549"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="0"
+                                              ContentMarginTopOverride="0"
+                                              ContentMarginRightOverride="0"
+                                              ContentMarginBottomOverride="0" />
+                        </PanelContainer.PanelOverride>
+                        <ui:WH40KTacticalMapControl Name="TacticalMapScreen"
+                                                    HorizontalExpand="True"
+                                                    VerticalExpand="True" />
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer SetWidth="250"
+                            VerticalExpand="True"
+                            HorizontalExpand="False">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#111924"
+                                      BorderColor="#33475F"
+                                      BorderThickness="2"
+                                      ContentMarginLeftOverride="0"
+                                      ContentMarginTopOverride="0"
+                                      ContentMarginRightOverride="0"
+                                      ContentMarginBottomOverride="0" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#162231"
+                                              BorderColor="#42566C"
+                                              BorderThickness="0 0 0 1"
+                                              ContentMarginLeftOverride="12"
+                                              ContentMarginTopOverride="10"
+                                              ContentMarginRightOverride="12"
+                                              ContentMarginBottomOverride="10" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                            <Label Text="{Loc 'wh40k-tactical-map-capture-points-title'}" StyleClasses="LabelHeading" />
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="{Loc 'wh40k-tactical-map-capture-points-subtitle'}" HorizontalExpand="True" StyleClasses="LabelSubText" />
+                                <Label Name="BeaconCountLabel" Text="0" Align="Right" StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="12 12 12 12"
+                                  SeparationOverride="10"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True">
+                        <Button Name="ToggleAlliesButton"
+                                Text=""
+                                HorizontalExpand="True" />
+                        <Button Name="ToggleAllyNamesButton"
+                                Text=""
+                                HorizontalExpand="True" />
+                        <Button Name="ToggleGridButton"
+                                Text=""
+                                HorizontalExpand="True" />
+
+                        <PanelContainer>
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                  BorderColor="#324459"
+                                                  BorderThickness="1"
+                                                  ContentMarginLeftOverride="6"
+                                                  ContentMarginTopOverride="6"
+                                                  ContentMarginRightOverride="6"
+                                                  ContentMarginBottomOverride="6" />
+                            </PanelContainer.PanelOverride>
+                            <LineEdit Name="FilterBar"
+                                      PlaceHolder="{Loc 'station-map-filter-placeholder'}"
+                                      HorizontalExpand="True" />
+                        </PanelContainer>
+
+                        <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#0F1822"
+                                                  BorderColor="#324459"
+                                                  BorderThickness="1"
+                                                  ContentMarginLeftOverride="6"
+                                                  ContentMarginTopOverride="6"
+                                                  ContentMarginRightOverride="6"
+                                                  ContentMarginBottomOverride="6" />
+                            </PanelContainer.PanelOverride>
+                            <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                                <BoxContainer Name="BeaconButtons"
+                                              Orientation="Vertical"
+                                              HorizontalExpand="True" />
+                            </ScrollContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+
+        <PanelContainer>
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0E141C"
+                                  BorderColor="#314055"
+                                  BorderThickness="1"
+                                  ContentMarginLeftOverride="10"
+                                  ContentMarginTopOverride="6"
+                                  ContentMarginRightOverride="10"
+                                  ContentMarginBottomOverride="6" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" VerticalAlignment="Center">
+                <Label Name="FooterLeftLabel"
+                       Text="{Loc 'wh40k-tactical-map-footer-left'}"
+                       StyleClasses="WindowFooterText" />
+                <Label Name="FooterRightLabel"
+                       Text="{Loc 'wh40k-tactical-map-footer-right'}"
+                       StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right"
+                       HorizontalExpand="True"
+                       Margin="0 0 2 0" />
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+</controls:FancyWindow>

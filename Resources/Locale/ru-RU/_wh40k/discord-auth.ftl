@@ -1,0 +1,44 @@
+wh40k-discord-auth-button = Discord
+wh40k-discord-auth-button-link = Привязать Discord
+
+wh40k-discord-auth-window-title = Discord
+wh40k-discord-auth-window-name = Discord: {$name}
+wh40k-discord-auth-window-id = ID: {$id}
+wh40k-discord-auth-window-guild = Участник discord сервера: {$status}
+wh40k-discord-auth-window-role-gate = Доступ по ролям: {$status}
+wh40k-discord-auth-window-refresh = Обновить профиль
+wh40k-discord-auth-window-refresh-pending = Обновление...
+wh40k-discord-auth-window-refresh-cooldown = Обновить профиль ({$seconds}с)
+wh40k-discord-auth-window-unlink = Отвязать аккаунт
+
+wh40k-discord-auth-window-status-yes = да
+wh40k-discord-auth-window-status-no = нет
+wh40k-discord-auth-window-status-unknown = не проверено
+wh40k-discord-auth-window-status-not-configured = не настроено
+wh40k-discord-auth-window-status-passed = пройден
+wh40k-discord-auth-window-status-failed = не пройден
+wh40k-discord-auth-window-status-stale = {$status} (кэш устарел)
+
+wh40k-discord-auth-popup-disabled = Привязка Discord отключена на этом сервере.
+wh40k-discord-auth-popup-misconfigured = Привязка Discord настроена неверно.
+wh40k-discord-auth-popup-browser-opened = Браузер открыт для авторизации Discord.
+wh40k-discord-auth-popup-link-required = Сначала привяжите Discord-аккаунт.
+wh40k-discord-auth-popup-refresh-cooldown = Обновление профиля пока на кд.
+wh40k-discord-auth-popup-refresh-failed = Не удалось обновить профиль Discord.
+wh40k-discord-auth-popup-refresh-success = Профиль Discord обновлен.
+wh40k-discord-auth-popup-reauth-required = Требуется повторная авторизация Discord.
+wh40k-discord-auth-popup-reauth-opening = Токен Discord устарел или был отозван. Браузер открыт для повторной авторизации.
+wh40k-discord-auth-popup-unlink-success = Discord-аккаунт отвязан.
+wh40k-discord-auth-popup-access-denied = Авторизация Discord была отклонена.
+wh40k-discord-auth-popup-callback-invalid = От Discord пришли некорректные callback-данные.
+wh40k-discord-auth-popup-token-failed = Не удалось обменять код Discord на токен.
+wh40k-discord-auth-popup-fetch-failed = Не удалось получить данные профиля Discord.
+wh40k-discord-auth-popup-duplicate-link = Этот Discord уже привязан к другому аккаунту.
+wh40k-discord-auth-popup-link-success = Discord-аккаунт успешно привязан.
+wh40k-discord-auth-support-default = Если есть проблемы с привязкой, напишите администрации.
+wh40k-discord-auth-connect-deny-link-required = Вход на сервер ограничен: сначала привяжите Discord-аккаунт.
+wh40k-discord-auth-connect-deny-guild-required = Вход на сервер ограничен: ваш Discord-аккаунт не состоит на нашем сервере.
+wh40k-discord-auth-connect-deny-role-required = Вход на сервер ограничен: у вашего Discord-аккаунта нет нужной роли на Discord-сервере.
+wh40k-discord-auth-connect-deny-misconfigured = Вход на сервер ограничен, но Discord-авторизация на сервере настроена неверно.
+wh40k-discord-auth-connect-deny-cache-stale = Вход на сервер ограничен: Discord-кэш устарел и не смог обновиться автоматически.
+wh40k-discord-auth-connect-deny-generic = Вход на сервер ограничен политикой Discord-авторизации.

@@ -36,8 +36,8 @@ namespace Content.Shared.Examine
                         SendExamineGroup(args.User, args.Target, group);
                         group.Entries.Clear();
                     },
-                    Text = Loc.GetString(group.ContextText),
-                    Message = Loc.GetString(group.HoverMessage),
+                    TextLocId = group.ContextText,
+                    MessageLocId = string.IsNullOrWhiteSpace(group.HoverMessage) ? null : group.HoverMessage,
                     Category = VerbCategory.Examine,
                     Icon = group.Icon,
                 };

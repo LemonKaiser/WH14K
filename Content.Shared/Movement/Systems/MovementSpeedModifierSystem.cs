@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.CCVar;
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
@@ -15,6 +16,7 @@ namespace Content.Shared.Movement.Systems
         private float _frictionModifier;
         private float _airDamping;
         private float _offGridDamping;
+        private readonly Dictionary<EntityUid, MovementModifierRefreshFlags> _queuedRefreshes = new();
 
         public override void Initialize()
         {
@@ -23,9 +25,32 @@ namespace Content.Shared.Movement.Systems
             SubscribeLocalEvent<MovementSpeedModifierComponent, DownedEvent>(OnDowned);
             SubscribeLocalEvent<MovementSpeedModifierComponent, StoodEvent>(OnStand);
 
+            UpdatesAfter.Add(typeof(SpeedModifierContactsSystem));
+            UpdatesAfter.Add(typeof(FrictionContactsSystem));
+
             Subs.CVar(_configManager, CCVars.TileFrictionModifier, value => _frictionModifier = value, true);
             Subs.CVar(_configManager, CCVars.AirFriction, value => _airDamping = value, true);
             Subs.CVar(_configManager, CCVars.OffgridFriction, value => _offGridDamping = value, true);
+        }
+
+        public override void Update(float frameTime)
+        {
+            base.Update(frameTime);
+
+            if (_timing.ApplyingState || _queuedRefreshes.Count == 0)
+                return;
+
+            // Coalesce all requests per entity and apply at most once per tick.
+            var pending = new List<KeyValuePair<EntityUid, MovementModifierRefreshFlags>>(_queuedRefreshes);
+            _queuedRefreshes.Clear();
+
+            foreach (var (uid, flags) in pending)
+            {
+                if (!TryComp(uid, out MovementSpeedModifierComponent? move))
+                    continue;
+
+                RefreshMovementProfile(uid, flags, move);
+            }
         }
 
         private void OnModMapInit(Entity<MovementSpeedModifierComponent> ent, ref MapInitEvent args)
@@ -44,14 +69,12 @@ namespace Content.Shared.Movement.Systems
 
         private void OnDowned(Entity<MovementSpeedModifierComponent> entity, ref DownedEvent args)
         {
-            RefreshFrictionModifiers(entity);
-            RefreshMovementSpeedModifiers(entity);
+            QueueRefresh(entity, MovementModifierRefreshFlags.Speed | MovementModifierRefreshFlags.Friction);
         }
 
         private void OnStand(Entity<MovementSpeedModifierComponent> entity, ref StoodEvent args)
         {
-            RefreshFrictionModifiers(entity);
-            RefreshMovementSpeedModifiers(entity);
+            QueueRefresh(entity, MovementModifierRefreshFlags.Speed | MovementModifierRefreshFlags.Friction);
         }
 
         /// <summary>
@@ -64,65 +87,17 @@ namespace Content.Shared.Movement.Systems
                 return;
 
             CopyComp(source, target, source.Comp);
-            RefreshWeightlessModifiers(target);
-            RefreshMovementSpeedModifiers(target);
-            RefreshFrictionModifiers(target);
+            QueueRefresh(target, MovementModifierRefreshFlags.All);
         }
 
         public void RefreshWeightlessModifiers(EntityUid uid, MovementSpeedModifierComponent? move = null)
         {
-            if (!Resolve(uid, ref move, false))
-                return;
-
-            if (_timing.ApplyingState)
-                return;
-
-            var ev = new RefreshWeightlessModifiersEvent()
-            {
-                WeightlessAcceleration = move.BaseWeightlessAcceleration,
-                WeightlessAccelerationMod = 1.0f,
-                WeightlessModifier = move.BaseWeightlessModifier,
-                WeightlessFriction = move.BaseWeightlessFriction,
-                WeightlessFrictionMod = 1.0f,
-                WeightlessFrictionNoInput = move.BaseWeightlessFriction,
-                WeightlessFrictionNoInputMod = 1.0f,
-            };
-
-            RaiseLocalEvent(uid, ref ev);
-
-            if (MathHelper.CloseTo(ev.WeightlessAcceleration, move.WeightlessAcceleration) &&
-                MathHelper.CloseTo(ev.WeightlessModifier, move.WeightlessModifier) &&
-                MathHelper.CloseTo(ev.WeightlessFriction, move.WeightlessFriction) &&
-                MathHelper.CloseTo(ev.WeightlessFrictionNoInput, move.WeightlessFrictionNoInput))
-            {
-                return;
-            }
-
-            move.WeightlessAcceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
-            move.WeightlessModifier = ev.WeightlessModifier;
-            move.WeightlessFriction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
-            move.WeightlessFrictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
-            Dirty(uid, move);
+            QueueRefresh(uid, MovementModifierRefreshFlags.Weightless, move);
         }
 
         public void RefreshMovementSpeedModifiers(EntityUid uid, MovementSpeedModifierComponent? move = null)
         {
-            if (!Resolve(uid, ref move, false))
-                return;
-
-            if (_timing.ApplyingState)
-                return;
-
-            var ev = new RefreshMovementSpeedModifiersEvent();
-            RaiseLocalEvent(uid, ev);
-
-            if (MathHelper.CloseTo(ev.WalkSpeedModifier, move.WalkSpeedModifier) &&
-                MathHelper.CloseTo(ev.SprintSpeedModifier, move.SprintSpeedModifier))
-                return;
-
-            move.WalkSpeedModifier = ev.WalkSpeedModifier;
-            move.SprintSpeedModifier = ev.SprintSpeedModifier;
-            Dirty(uid, move);
+            QueueRefresh(uid, MovementModifierRefreshFlags.Speed, move);
         }
 
         public void ChangeBaseSpeed(EntityUid uid, float baseWalkSpeed, float baseSprintSpeed, float acceleration, MovementSpeedModifierComponent? move = null)
@@ -141,27 +116,7 @@ namespace Content.Shared.Movement.Systems
             if (!Resolve(uid, ref move, false))
                 return;
 
-            if (_timing.ApplyingState)
-                return;
-
-            var ev = new RefreshFrictionModifiersEvent()
-            {
-                Friction = move.BaseFriction,
-                FrictionNoInput = move.BaseFriction,
-                Acceleration = move.BaseAcceleration,
-            };
-            RaiseLocalEvent(uid, ref ev);
-
-            if (MathHelper.CloseTo(ev.Friction, move.Friction)
-                && MathHelper.CloseTo(ev.FrictionNoInput, move.FrictionNoInput)
-                && MathHelper.CloseTo(ev.Acceleration, move.Acceleration))
-                return;
-
-            move.Friction = _frictionModifier * ev.Friction;
-            move.FrictionNoInput = _frictionModifier * ev.FrictionNoInput;
-            move.Acceleration = ev.Acceleration;
-
-            Dirty(uid, move);
+            QueueRefresh(uid, MovementModifierRefreshFlags.Friction, move);
         }
 
         public void ChangeBaseFriction(EntityUid uid, float friction, float frictionNoInput, float acceleration, MovementSpeedModifierComponent? move = null)
@@ -174,6 +129,118 @@ namespace Content.Shared.Movement.Systems
             move.BaseAcceleration = acceleration;
             Dirty(uid, move);
         }
+
+        public void QueueRefresh(EntityUid uid, MovementModifierRefreshFlags flags, MovementSpeedModifierComponent? move = null)
+        {
+            if (!Resolve(uid, ref move, false))
+                return;
+
+            if (_timing.ApplyingState)
+                return;
+
+            if (_queuedRefreshes.TryGetValue(uid, out var existing))
+                _queuedRefreshes[uid] = existing | flags;
+            else
+                _queuedRefreshes[uid] = flags;
+        }
+
+        private void RefreshMovementProfile(EntityUid uid, MovementModifierRefreshFlags flags, MovementSpeedModifierComponent move)
+        {
+            var dirty = false;
+
+            if ((flags & MovementModifierRefreshFlags.Weightless) != 0)
+            {
+                var ev = new RefreshWeightlessModifiersEvent()
+                {
+                    WeightlessAcceleration = move.BaseWeightlessAcceleration,
+                    WeightlessAccelerationMod = 1.0f,
+                    WeightlessModifier = move.BaseWeightlessModifier,
+                    WeightlessFriction = move.BaseWeightlessFriction,
+                    WeightlessFrictionMod = 1.0f,
+                    WeightlessFrictionNoInput = move.BaseWeightlessFriction,
+                    WeightlessFrictionNoInputMod = 1.0f,
+                };
+
+                RaiseLocalEvent(uid, ref ev);
+
+                var weightlessAcceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
+                var weightlessModifier = ev.WeightlessModifier;
+                var weightlessFriction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
+                var weightlessFrictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
+
+                if (!MathHelper.CloseTo(weightlessAcceleration, move.WeightlessAcceleration) ||
+                    !MathHelper.CloseTo(weightlessModifier, move.WeightlessModifier) ||
+                    !MathHelper.CloseTo(weightlessFriction, move.WeightlessFriction) ||
+                    !MathHelper.CloseTo(weightlessFrictionNoInput, move.WeightlessFrictionNoInput))
+                {
+                    move.WeightlessAcceleration = weightlessAcceleration;
+                    move.WeightlessModifier = weightlessModifier;
+                    move.WeightlessFriction = weightlessFriction;
+                    move.WeightlessFrictionNoInput = weightlessFrictionNoInput;
+                    dirty = true;
+                }
+            }
+
+            if ((flags & MovementModifierRefreshFlags.Speed) != 0)
+            {
+                var ev = new RefreshMovementSpeedModifiersEvent();
+                RaiseLocalEvent(uid, ev);
+
+                if (!MathHelper.CloseTo(ev.WalkSpeedModifier, move.WalkSpeedModifier) ||
+                    !MathHelper.CloseTo(ev.SprintSpeedModifier, move.SprintSpeedModifier))
+                {
+                    move.WalkSpeedModifier = ev.WalkSpeedModifier;
+                    move.SprintSpeedModifier = ev.SprintSpeedModifier;
+                    dirty = true;
+                }
+            }
+
+            if ((flags & MovementModifierRefreshFlags.Friction) != 0)
+            {
+                var ev = new RefreshFrictionModifiersEvent()
+                {
+                    Friction = move.BaseFriction,
+                    FrictionNoInput = move.BaseFriction,
+                    Acceleration = move.BaseAcceleration,
+                };
+                RaiseLocalEvent(uid, ref ev);
+
+                var friction = _frictionModifier * ev.Friction;
+                var frictionNoInput = _frictionModifier * ev.FrictionNoInput;
+                var acceleration = ev.Acceleration;
+
+                if (!MathHelper.CloseTo(friction, move.Friction) ||
+                    !MathHelper.CloseTo(frictionNoInput, move.FrictionNoInput) ||
+                    !MathHelper.CloseTo(acceleration, move.Acceleration))
+                {
+                    move.Friction = friction;
+                    move.FrictionNoInput = frictionNoInput;
+                    move.Acceleration = acceleration;
+                    dirty = true;
+                }
+            }
+
+            if (dirty)
+                Dirty(uid, move);
+        }
+    }
+
+    [Flags]
+    public enum MovementModifierRefreshFlags : byte
+    {
+        None = 0,
+        Speed = 1 << 0,
+        Friction = 1 << 1,
+        Weightless = 1 << 2,
+        All = Speed | Friction | Weightless,
+    }
+
+    public enum MovementSpeedModifierLayer : byte
+    {
+        Generic = 0,
+        Environment = 1,
+        Status = 2,
+        Equipment = 3,
     }
 
     /// <summary>
@@ -185,18 +252,63 @@ namespace Content.Shared.Movement.Systems
     {
         public SlotFlags TargetSlots { get; } = ~SlotFlags.POCKET;
 
-        public float WalkSpeedModifier { get; private set; } = 1.0f;
-        public float SprintSpeedModifier { get; private set; } = 1.0f;
+        private float _genericWalk = 1.0f;
+        private float _genericSprint = 1.0f;
+        private float _environmentWalk = 1.0f;
+        private float _environmentSprint = 1.0f;
+        private float _statusWalk = 1.0f;
+        private float _statusSprint = 1.0f;
+        private float _equipmentWalk = 1.0f;
+        private float _equipmentSprint = 1.0f;
+
+        public float WalkSpeedModifier => _environmentWalk * _statusWalk * _equipmentWalk * _genericWalk;
+        public float SprintSpeedModifier => _environmentSprint * _statusSprint * _equipmentSprint * _genericSprint;
+
+        public float EnvironmentWalkSpeedModifier => _environmentWalk;
+        public float EnvironmentSprintSpeedModifier => _environmentSprint;
+        public float StatusWalkSpeedModifier => _statusWalk;
+        public float StatusSprintSpeedModifier => _statusSprint;
+        public float EquipmentWalkSpeedModifier => _equipmentWalk;
+        public float EquipmentSprintSpeedModifier => _equipmentSprint;
+        public float GenericWalkSpeedModifier => _genericWalk;
+        public float GenericSprintSpeedModifier => _genericSprint;
 
         public void ModifySpeed(float walk, float sprint)
         {
-            WalkSpeedModifier *= walk;
-            SprintSpeedModifier *= sprint;
+            ModifySpeed(walk, sprint, MovementSpeedModifierLayer.Generic);
         }
 
         public void ModifySpeed(float mod)
         {
             ModifySpeed(mod, mod);
+        }
+
+        public void ModifySpeed(float walk, float sprint, MovementSpeedModifierLayer layer)
+        {
+            switch (layer)
+            {
+                case MovementSpeedModifierLayer.Environment:
+                    _environmentWalk *= walk;
+                    _environmentSprint *= sprint;
+                    break;
+                case MovementSpeedModifierLayer.Status:
+                    _statusWalk *= walk;
+                    _statusSprint *= sprint;
+                    break;
+                case MovementSpeedModifierLayer.Equipment:
+                    _equipmentWalk *= walk;
+                    _equipmentSprint *= sprint;
+                    break;
+                default:
+                    _genericWalk *= walk;
+                    _genericSprint *= sprint;
+                    break;
+            }
+        }
+
+        public void ModifySpeed(float mod, MovementSpeedModifierLayer layer)
+        {
+            ModifySpeed(mod, mod, layer);
         }
     }
 
@@ -217,7 +329,7 @@ namespace Content.Shared.Movement.Systems
         public void ModifyFriction(float friction, float noInput)
         {
             WeightlessFrictionMod *= friction;
-            WeightlessFrictionNoInput *= noInput;
+            WeightlessFrictionNoInputMod *= noInput;
         }
 
         public void ModifyFriction(float friction)

@@ -9,7 +9,6 @@ using Content.Shared.Interaction;
 using Robust.Shared.Audio.Effects;
 using Content.Shared.Stray.AudioLoop;
 using JetBrains.Annotations;
-using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 
 

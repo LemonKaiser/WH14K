@@ -18,6 +18,7 @@ using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
+#pragma warning disable CS0618
 namespace Content.IntegrationTests.Tests.Commands;
 
 [TestFixture]

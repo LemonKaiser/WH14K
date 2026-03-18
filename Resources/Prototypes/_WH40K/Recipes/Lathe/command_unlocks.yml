@@ -1,0 +1,185 @@
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserLasgun
+  result: WeaponLaserLasgun
+  materials:
+    Steel: 1000
+    Glass: 400
+    Plastic: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeMelee
+  id: WH40KRecipeChainsword
+  result: Chainsword
+  materials:
+    Steel: 1200
+    Plastic: 400
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponStubRifle
+  result: WeaponStubRifle
+  materials:
+    Steel: 1400
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserLasgunAccatran
+  result: WeaponLaserLasgunAccatran
+  materials:
+    Steel: 1200
+    Glass: 500
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponRifleBolter
+  result: WeaponRifleBolter
+  materials:
+    Steel: 1600
+    Plastic: 500
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeMortarKit
+  result: WH40KMortarKit
+  completetime: 8
+  materials:
+    Steel: 2500
+    Plastic: 800
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserPlasmagun
+  result: WeaponLaserPlasmagun
+  materials:
+    Steel: 1500
+    Glass: 800
+    Gold: 400
+    Plasma: 600
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeHeavyBolter
+  result: WH40KHeavyBolter
+  completetime: 10
+  materials:
+    Steel: 3000
+    Plastic: 1000
+    Gold: 300
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserLasgunVoss
+  result: WeaponLaserLasgunVoss
+  materials:
+    Steel: 1800
+    Glass: 700
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeTacticalWhistle
+  result: WH40KTacticalWhistle
+  materials:
+    Steel: 100
+    Plastic: 50
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeSignalFlare
+  result: WH40KSignalFlare
+  materials:
+    Steel: 100
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeIntelDetector
+  result: WH40KIntelDetector
+  materials:
+    Steel: 250
+    Glass: 100
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeSentryLaptop
+  result: WH40KSentryLaptop
+  materials:
+    Steel: 300
+    Glass: 200
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeTacticalFulton
+  result: WH40KTacticalFultonField
+  materials:
+    Steel: 250
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerRelay
+  result: WH40KMissionPinpointerRelay
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerCargo
+  result: WH40KMissionPinpointerCargo
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerBanner
+  result: WH40KMissionPinpointerBanner
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerKit
+  result: WH40KMissionPinpointerKit
+  completetime: 4
+  materials:
+    Steel: 250
+    Glass: 250
+    Plastic: 250
+
+- type: latheRecipePack
+  id: WH40KCommandWeaponryResearch
+  recipes:
+  - WH40KRecipeWeaponLaserLasgun
+  - WH40KRecipeChainsword
+  - WH40KRecipeWeaponStubRifle
+  - WH40KRecipeWeaponLaserLasgunAccatran
+  - WH40KRecipeWeaponRifleBolter
+  - WH40KRecipeMortarKit
+  - WH40KRecipeWeaponLaserPlasmagun
+  - WH40KRecipeHeavyBolter
+  - WH40KRecipeWeaponLaserLasgunVoss
+
+- type: latheRecipePack
+  id: WH40KCommandEquipmentResearch
+  recipes:
+  - WH40KRecipeTacticalWhistle
+  - WH40KRecipeSignalFlare
+  - WH40KRecipeIntelDetector
+  - WH40KRecipeSentryLaptop
+  - WH40KRecipeTacticalFulton
+  - WH40KRecipeMissionPinpointerRelay
+  - WH40KRecipeMissionPinpointerCargo
+  - WH40KRecipeMissionPinpointerBanner
+  - WH40KRecipeMissionPinpointerKit

@@ -14,11 +14,21 @@
             <Control>
                 <PanelContainer StyleClasses="WindowHeadingBackground" />
 
-                <BoxContainer Margin="6">
+                <BoxContainer Margin="6"
+                    Orientation="Horizontal">
                     <Label Name="Title"
                            Access="Public"
                            MaxHeight="28"
+                           HorizontalExpand="True"
                            StyleClasses="LabelKeyText"/>
+
+                    <Button Name="RemoveRequestButton"
+                            Access="Public"
+                            Visible="False"
+                            Text="X"
+                            ToolTip="{Loc 'cargo-console-menu-order-row-button-cancel'}"
+                            MinSize="22 22"
+                            HorizontalAlignment="Right"/>
                 </BoxContainer>
             </Control>
 
@@ -49,16 +59,17 @@
                        VerticalExpand="True"
                        StyleClasses="LabelSubText" />
 
-                <Label Name="Description"
+                <RichTextLabel Name="Description"
                        Access="Public"
                        HorizontalExpand="True"
                        VerticalExpand="True"
-                       StyleClasses="LabelSubText"
-                       ClipText="True" />
+                       StyleClasses="LabelSubText" />
             </BoxContainer>
         </BoxContainer>
 
-        <BoxContainer Orientation="Vertical">
+        <BoxContainer Name="Actions"
+            Access="Public"
+            Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />
 
             <!-- Buttons -->

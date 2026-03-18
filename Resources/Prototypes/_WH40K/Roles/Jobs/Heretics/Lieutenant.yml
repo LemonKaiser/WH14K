@@ -1,13 +1,52 @@
 - type: job
   id: HLieutenant
   name: job-name-hlieutenant
-  description: job-description-lieutenant
+  description: job-description-hlieutenant
   playTimeTracker: JobHLieutenant
-  startingGear: HeresySergeantGear
-  icon: "JobIconLieutenant"
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: HeresyLieutenantGear
+  icon: "JobIconHLieutenant"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KChaosGiftRole
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KOfficerMaleHuman
+          Female: WH40KOfficerFemaleHuman
+          Unsexed: WH40KOfficerMaleHuman
   access:
   - Maintenance
-  - Engineering
   - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: startingGear
+  id: HeresyLieutenantGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist2
+    back: ClothingBackpackSatchelChaosWheel
+    shoes: ClothingShoesChaosBoots2
+    ears: ClothingHeadsetVoxBackpackHeretics
+    belt: chaosbelt
+    neck: NecklaceChaosCultistReflectWeak
+    head: ClothingHeadHelmetrHeresy
+    outerClothing: ClothingOuterArmorCultistCoat
+    id: HLieutenantDogTag

@@ -1,0 +1,89 @@
+- type: wh40kCommandTeamCompositionProfile
+  id: WH40KCommandTeamCompositionProfileImperium
+  commandStaffing:
+  - roleId: Colonel
+    target: 1
+  - roleId: Commissar
+    target: 1
+  - roleId: Lieutenant
+    target: 1
+  - roleId: Sergeant
+    target: 1
+  - roleId: SergeantSWS
+    target: 1
+  - roleId: SergeantHWS
+    target: 1
+  - roleId: TankComm
+    target: 1
+  officerRoles:
+  - Colonel
+  - Commissar
+  - Lieutenant
+  - Sergeant
+  - SergeantSWS
+  - SergeantHWS
+  - TankComm
+  coreRoles:
+  - Guardsman
+  - Psyker
+  - VoxScout
+  - Medic
+  - SpecialistSWS
+  - SpecialistHWS
+  - Tanker
+  - TitheSupplier
+  mechanicusRoles:
+  - Magos
+  - Explorator
+  - Lexmechanic
+  - Genetor
+  - Enginseer
+  - Novice
+
+- type: wh40kCommandTeamCompositionProfile
+  id: WH40KCommandTeamCompositionProfileHeretics
+  commandStaffing:
+  - roleId: HColonel
+    target: 1
+  - roleId: HCommissar
+    target: 1
+  - roleId: HLieutenant
+    target: 1
+  - roleId: HSergeant
+    target: 1
+  - roleId: HSergeantSWS
+    target: 1
+  - roleId: HSergeantHWS
+    target: 1
+  - roleId: HTankComm
+    target: 1
+  officerRoles:
+  - HColonel
+  - HCommissar
+  - HLieutenant
+  - HSergeant
+  - HSergeantSWS
+  - HSergeantHWS
+  - HTankComm
+  coreRoles:
+  - HGuardsman
+  - HVoxScout
+  - HMedic
+  - HSpecialistSWS
+  - HSpecialistHWS
+  - HTanker
+  - HBandSupplier
+  mechanicusRoles:
+  - HMagos
+  - HExplorator
+  - HLexmechanic
+  - HGenetor
+  - HEnginseer
+  - HNovice
+
+- type: wh40kCommandTeamCompositionTeamMap
+  id: WH40KCommandTeamCompositionTeamMap
+  defaultProfile: WH40KCommandTeamCompositionProfileImperium
+  teamProfiles:
+    Imperium: WH40KCommandTeamCompositionProfileImperium
+    Heretics: WH40KCommandTeamCompositionProfileHeretics
