@@ -23,6 +23,7 @@ public sealed partial class StencilOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> CircleShader = "WorldGradientCircle";
     private static readonly ProtoId<ShaderPrototype> StencilMask = "StencilMask";
     private static readonly ProtoId<ShaderPrototype> StencilDraw = "StencilDraw";
+    internal static readonly ProtoId<ShaderPrototype> WeatherStencilDraw = "StencilEqualDraw";
 
     [Dependency] private readonly IClyde _clyde = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
