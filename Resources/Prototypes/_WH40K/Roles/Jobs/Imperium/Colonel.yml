@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Colonel
   name: job-name-colonel
   description: job-description-colonel
@@ -14,6 +14,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KOfficerVoice
       - type: WH40KMoraleExecution
@@ -47,6 +48,8 @@
     head: ClothingHeadOfficer
     belt: colbelt
     neck: Colonelcloak
+    pocket1: WH40KCommandTacticalMapTablet
     id: ColonelDogTag
   inhand:
     - WHPowerSaberImperial
+

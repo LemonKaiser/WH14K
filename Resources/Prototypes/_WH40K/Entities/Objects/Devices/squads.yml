@@ -1,0 +1,10 @@
+﻿- type: entity
+  id: WH40KSquadConsoleController
+  name: squad console controller
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: UserInterface
+    interfaces:
+      enum.WH40KSquadUiKey.Key:
+        type: WH40KSquadBoundUserInterface
+  - type: WH40KSquadConsole

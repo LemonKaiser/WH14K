@@ -60,6 +60,7 @@
     mask: ClothingGasTechPriest
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriestMarsMagos
+    pocket1: WH40KCommandTacticalMapTablet
     id: MagosDogTag
   inhand:
     - WHOmnissianAxe

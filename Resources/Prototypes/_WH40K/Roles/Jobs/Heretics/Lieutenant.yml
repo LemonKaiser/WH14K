@@ -1,12 +1,8 @@
-- type: job
+﻿- type: job
   id: HLieutenant
   name: job-name-hlieutenant
   description: job-description-hlieutenant
   playTimeTracker: JobHLieutenant
-  requirements:
-    - !type:SpeciesRequirement
-      species:
-      - Human
   startingGear: HeresyLieutenantGear
   icon: "JobIconHLieutenant"
   supervisors: job-supervisors-engineering
@@ -14,6 +10,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
       - type: WH40KFriendlyFireAllowed
       - type: WH40KOfficerVoice
@@ -49,4 +46,6 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy
     outerClothing: ClothingOuterArmorCultistCoat
+    pocket1: WH40KCommandTacticalMapTablet
     id: HLieutenantDogTag
+

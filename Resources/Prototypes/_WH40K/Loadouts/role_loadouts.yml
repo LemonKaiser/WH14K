@@ -2,46 +2,55 @@
   id: JobEnginseer
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobNovice
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobExplorator
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobLexmechanic
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobHEnginseer
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobHNovice
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobHExplorator
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobHLexmechanic
   groups:
   - TechpriestNeck
+  - TechpriestMask
 
 - type: roleLoadout
   id: JobGuardsman
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt
@@ -77,6 +86,7 @@
   id: JobVoxScout
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt
@@ -88,6 +98,7 @@
   id: JobTanker
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt
@@ -99,6 +110,7 @@
   id: JobPsyker
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt
@@ -110,6 +122,7 @@
   id: JobMedic
   groups:
   - WH40KImperialMedicHead
+  - WH40KImperialLineMask
   - WH40KImperialMedicHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt
@@ -121,6 +134,7 @@
   id: JobTitheSupplier
   groups:
   - WH40KImperialLogisticsHead
+  - WH40KImperialLineMask
   - WH40KImperialLogisticsHonours
   - WH40KImperialFieldOuter
   - WH40KImperialFieldBelt

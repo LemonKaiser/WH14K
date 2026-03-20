@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HTankComm
   name: job-name-htank-comm
   description: job-description-htank-comm
@@ -15,6 +15,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
   access:
   - Maintenance
@@ -36,4 +37,6 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy
     outerClothing: ClothingOuterArmorCultistCoat
+    pocket1: WH40KCommandTacticalMapTablet
     id: HTankCommDogTag
+

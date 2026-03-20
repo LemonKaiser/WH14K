@@ -11,6 +11,14 @@
   - RobeTechpriestStygiesVIII
 
 - type: loadoutGroup
+  id: TechpriestMask
+  name: loadout-group-techpriest-mask
+  minLimit: 0
+  loadouts:
+  - WH40KTechPriestBreather
+  - WH40KTechPriestGasmask
+
+- type: loadoutGroup
   id: WH40KImperialLineHead
   name: loadout-group-wh40k-imperial-line-head
   minLimit: 0
@@ -31,7 +39,6 @@
   loadouts:
   - WH40KBronzeheart
   - WH40KSecurityMedal
-  - WH40KGorget
   - WH40KGoldMedal
 
 - type: loadoutGroup
@@ -87,6 +94,15 @@
   name: loadout-group-wh40k-imperial-specialist-mask
   minLimit: 0
   loadouts:
+  - WH40KGuardsmanGasmask
+  - WH40KKriegGasmask
+
+- type: loadoutGroup
+  id: WH40KImperialLineMask
+  name: loadout-group-wh40k-imperial-line-mask
+  minLimit: 0
+  loadouts:
+  - WH40KGuardsmanGasmask
   - WH40KKriegGasmask
 
 - type: loadoutGroup
@@ -145,7 +161,6 @@
   loadouts:
   - WH40KBronzeheart
   - WH40KSecurityMedal
-  - WH40KGorget
   - WH40KColonelCloak
   - WH40KGoldMedal
 
@@ -254,7 +269,6 @@
   loadouts:
   - WH40KChaosNecklace
   - WH40KBronzeheart
-  - WH40KGorget
   - WH40KGoldMedal
 
 - type: loadoutGroup

@@ -1,7 +1,6 @@
 using System.Numerics;
 using System.Linq;
 using Content.Client.LateJoin;
-using Content.Client._WH40K.Interface;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.Roles;
 using Robust.Client.GameObjects;
@@ -39,7 +38,6 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
     private readonly WH40KFactionSystem _factionSystem;
-    private readonly WH40KInterfaceThemeSystem _themeSystem;
     private readonly SpriteSystem _sprites;
     private readonly ISawmill _sawmill;
 
@@ -54,7 +52,6 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         IoCManager.InjectDependencies(this);
 
         _factionSystem = _entitySystem.GetEntitySystem<WH40KFactionSystem>();
-        _themeSystem = _entitySystem.GetEntitySystem<WH40KInterfaceThemeSystem>();
         _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
         _sawmill = _logManager.GetSawmill("wh40k.factionjoin");
 
@@ -130,7 +127,20 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         var topSpacer = new Control
         {
             VerticalExpand = true,
-            SizeFlagsStretchRatio = 1.3f,
+            SizeFlagsStretchRatio = 1f,
+        };
+
+        var countLabel = new Label
+        {
+            HorizontalAlignment = HAlignment.Center,
+            Align = Label.AlignMode.Center,
+            Text = faction.PlayerCount.ToString()
+        };
+        countLabel.FontOverride = _resourceCache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf", 22);
+
+        var countSpacer = new Control
+        {
+            MinSize = new Vector2(0, 8),
         };
 
         var icon = new TextureRect
@@ -165,6 +175,8 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
             SizeFlagsStretchRatio = 0.4f,
         };
 
+        inner.AddChild(countLabel);
+        inner.AddChild(countSpacer);
         inner.AddChild(topSpacer);
         inner.AddChild(icon);
         inner.AddChild(labelSpacer);
@@ -186,7 +198,6 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
                 _sawmill.Info($"Faction '{faction.Id}' has no departments; late join list will be empty.");
             }
 
-            _themeSystem.NotifyFactionSelected(faction.Id);
             OpenLateJoinWindow(departments, hiddenJobs);
             Close();
         };

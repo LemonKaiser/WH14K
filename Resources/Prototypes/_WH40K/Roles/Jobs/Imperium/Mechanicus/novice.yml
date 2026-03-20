@@ -23,6 +23,7 @@
     back: ClothingBackpackTechpriest
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
+    pocket1: WH40KStandardTacticalMapTablet
     id: NoviceDogTag
 
 - type: chameleonOutfit

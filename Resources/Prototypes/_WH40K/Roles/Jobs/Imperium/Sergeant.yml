@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Sergeant
   name: job-name-sergeant
   description: job-description-sergeant
@@ -14,6 +14,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
@@ -47,6 +48,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
@@ -80,6 +82,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
@@ -104,7 +107,8 @@
     shoes: ClothingShoesGenBoots
     ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
-    neck: Gorjet
     head: ClothingHeadOfficer
     outerClothing: ClothingOuterArmorOfficer
+    pocket1: WH40KCommandTacticalMapTablet
     id: SergeantDogTag
+

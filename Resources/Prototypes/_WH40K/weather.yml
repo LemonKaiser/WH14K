@@ -12,6 +12,7 @@
       params:
         loop: true
         volume: -7
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -35,6 +36,7 @@
       params:
         loop: true
         volume: -6
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -63,6 +65,7 @@
       params:
         loop: true
         volume: -6
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -98,6 +101,7 @@
       params:
         loop: true
         volume: -8
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -126,6 +130,7 @@
       params:
         loop: true
         volume: -7
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -149,6 +154,7 @@
       params:
         loop: true
         volume: -8
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -180,6 +186,7 @@
       params:
         loop: true
         volume: -7
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 0.25
@@ -210,6 +217,7 @@
       params:
         loop: true
         volume: -6
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -237,6 +245,7 @@
       params:
         loop: true
         volume: -9
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 1
@@ -342,6 +351,7 @@
       params:
         loop: true
         volume: -7
+    exposureMode: UnroofedOnly
     respectTileWeather: false
     effects:
       tickInterval: 0.8

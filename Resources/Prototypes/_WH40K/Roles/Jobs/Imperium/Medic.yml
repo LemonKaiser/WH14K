@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Medic
   name: job-name-medic
   description: job-description-medic
@@ -7,6 +7,10 @@
   icon: "JobIconMedic"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
   access:
   - Maintenance
   - External
@@ -21,4 +25,6 @@
     belt: guardbelt
     head: ClothingHeadHelmetFlakMed
     outerClothing: ClothingOuterArmorFlakVestMed
+    pocket1: WH40KStandardTacticalMapTablet
     id: MedicDogTag
+

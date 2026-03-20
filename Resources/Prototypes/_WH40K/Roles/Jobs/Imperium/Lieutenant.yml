@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Lieutenant
   name: job-name-lieutenant
   description: job-description-lieutenant
@@ -14,6 +14,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KOfficerVoice
       - type: WH40KMoraleExecution
@@ -44,7 +45,8 @@
     shoes: ClothingShoesGenBoots
     ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
-    neck: Gorjet
     head: ClothingHeadOfficer
     outerClothing: ClothingOuterArmorOfficer
+    pocket1: WH40KCommandTacticalMapTablet
     id: LieutenantDogTag
+

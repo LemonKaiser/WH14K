@@ -31,6 +31,7 @@
         WH40KImperium:
           - WH40KImperiumLantern
           - WH40KImperiumMedkit
+          - WH40KImperiumMissionPinpointerKit
           - WH40KImperiumLasgun
           - WH40KImperiumStubRifle
           - WH40KImperiumLasCellBox
@@ -39,6 +40,7 @@
         WH40KHeretics:
           - WH40KHereticsLantern
           - WH40KHereticsMedkit
+          - WH40KHereticsMissionPinpointerKit
           - WH40KHereticsLasgun
           - WH40KHereticsStubRifle
           - WH40KHereticsLasCellBox

@@ -20,8 +20,8 @@
     damageCoefficient: 0.9
   - type: BreathMask
   - type: HideLayerClothing
-    slots:
-    - Hair
+    layers:
+      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadHelmetFlakAdv
@@ -54,8 +54,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.95
   - type: HideLayerClothing
-    slots:
-    - Hair
+    layers:
+      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadHelmetFlak
@@ -135,8 +135,8 @@
   - type: ExplosionResistance
     damageCoefficient: 0.95
   - type: HideLayerClothing
-    slots:
-    - Hair
+    layers:
+      Hair: HEAD
 
 - type: entity
   parent: [ClothingHeadHelmetFlak, ShowMedicalIcons]

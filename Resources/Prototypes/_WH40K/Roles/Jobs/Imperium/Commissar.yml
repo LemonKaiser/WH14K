@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Commissar
   name: job-name-commissar
   description: job-description-commissar
@@ -14,6 +14,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
       - type: WH40KCommissarVoice
       - type: WH40KMoraleExecution
@@ -49,5 +50,7 @@
     outerClothing: ClothingOuterArmorCommissar
     id: CommissarDogTag
     pocket1: Bugle
+    pocket2: WH40KCommandTacticalMapTablet
   inhand:
     - WeaponLaserPistol
+

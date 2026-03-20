@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
@@ -17,12 +18,16 @@ public abstract class SharedWeatherSystem : EntitySystem
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly IPrototypeManager ProtoMan = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
 
     private EntityQuery<BlockWeatherComponent> _blockQuery;
     private EntityQuery<WeatherStatusEffectComponent> _weatherQuery;
+    private readonly Dictionary<(MapId MapId, Vector2i Position), bool> _roovedCache = new();
+    private List<Entity<MapGridComponent>> _roovedGridBuffer = new();
+    private GameTick _roovedCacheTick = GameTick.Zero;
 
     public static readonly TimeSpan StartupTime = TimeSpan.FromSeconds(15);
     public static readonly TimeSpan ShutdownTime = TimeSpan.FromSeconds(15);
@@ -159,7 +164,64 @@ public abstract class SharedWeatherSystem : EntitySystem
         if (HasComp<ImplicitRoofComponent>(uid))
             return true;
 
-        return Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileIndices);
+        if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileIndices))
+            return true;
+
+        var mapCoords = _mapSystem.GridTileToWorld(uid, grid, tileIndices);
+        return IsRoovedOnOverlappingGrids(mapCoords, uid);
+    }
+
+    private bool IsRoovedOnOverlappingGrids(MapCoordinates mapCoords, EntityUid currentGridUid)
+    {
+        if (_roovedCacheTick != Timing.CurTick)
+        {
+            _roovedCacheTick = Timing.CurTick;
+            _roovedCache.Clear();
+        }
+
+        var quantizedPosition = new Vector2i(
+            (int) MathF.Round(mapCoords.Position.X * 8f),
+            (int) MathF.Round(mapCoords.Position.Y * 8f));
+        var cacheKey = (mapCoords.MapId, quantizedPosition);
+        if (_roovedCache.TryGetValue(cacheKey, out var cached))
+            return cached;
+
+        _roovedGridBuffer.Clear();
+        var searchBounds = Box2.CenteredAround(mapCoords.Position, new Vector2(0.02f, 0.02f));
+        _mapManager.FindGridsIntersecting(mapCoords.MapId, searchBounds, ref _roovedGridBuffer, approx: true, includeMap: false);
+
+        foreach (var (gridUid, grid) in _roovedGridBuffer)
+        {
+            if (gridUid == currentGridUid)
+                continue;
+
+            var tileIndices = _mapSystem.WorldToTile(gridUid, grid, mapCoords.Position);
+            // Roof flags are independent from tile occupancy; check explicit roof data first.
+            if (TryComp<RoofComponent>(gridUid, out var roofComp) &&
+                _roof.IsRooved((gridUid, grid, roofComp), tileIndices))
+            {
+                _roovedCache[cacheKey] = true;
+                return true;
+            }
+
+            // For implicit roofs, require a real non-space tile at this location.
+            if (!HasComp<ImplicitRoofComponent>(gridUid) ||
+                !_mapSystem.TryGetTileRef(gridUid, grid, tileIndices, out var tileRef) ||
+                tileRef.Tile.IsEmpty)
+            {
+                continue;
+            }
+
+            var tileDef = (ContentTileDefinition) _tileDefManager[tileRef.Tile.TypeId];
+            if (tileDef.MapAtmosphere)
+                continue;
+
+            _roovedCache[cacheKey] = true;
+            return true;
+        }
+
+        _roovedCache[cacheKey] = false;
+        return false;
     }
 
     /// <summary>

@@ -6,6 +6,7 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Events;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CCVar;
+using Content.Shared.Stacks;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -32,8 +33,11 @@ public sealed partial class CargoSystem
     }
 
     #region Console
-    private void UpdatePalletConsoleInterface(EntityUid uid)
+    private void UpdatePalletConsoleInterface(EntityUid uid, CargoPalletConsoleComponent? console = null)
     {
+        if (!Resolve(uid, ref console, false))
+            return;
+
         if (Transform(uid).GridUid is not { } gridUid)
         {
             _uiSystem.SetUiState(uid,
@@ -41,7 +45,8 @@ public sealed partial class CargoSystem
                 new CargoPalletConsoleInterfaceState(0, 0, false));
             return;
         }
-        GetPalletGoods(gridUid, out var toSell, out var goods);
+
+        GetPalletGoods(gridUid, out var toSell, out var goods, console);
         var totalAmount = goods.Sum(t => t.Item3);
         _uiSystem.SetUiState(uid,
             CargoPalletConsoleUiKey.Sale,
@@ -50,7 +55,7 @@ public sealed partial class CargoSystem
 
     private void OnPalletUIOpen(EntityUid uid, CargoPalletConsoleComponent component, BoundUIOpenedEvent args)
     {
-        UpdatePalletConsoleInterface(uid);
+        UpdatePalletConsoleInterface(uid, component);
     }
 
     /// <summary>
@@ -63,7 +68,7 @@ public sealed partial class CargoSystem
 
     private void OnPalletAppraise(EntityUid uid, CargoPalletConsoleComponent component, CargoPalletAppraiseMessage args)
     {
-        UpdatePalletConsoleInterface(uid);
+        UpdatePalletConsoleInterface(uid, component);
     }
 
     #endregion
@@ -131,9 +136,13 @@ public sealed partial class CargoSystem
 
     #region Station
 
-    private bool SellPallets(EntityUid gridUid, EntityUid station, out HashSet<(EntityUid, OverrideSellComponent?, double)> goods)
+    private bool SellPallets(
+        EntityUid gridUid,
+        EntityUid station,
+        CargoPalletConsoleComponent? console,
+        out HashSet<(EntityUid, OverrideSellComponent?, double)> goods)
     {
-        GetPalletGoods(gridUid, out var toSell, out goods);
+        GetPalletGoods(gridUid, out var toSell, out goods, console);
 
         if (toSell.Count == 0)
             return false;
@@ -149,7 +158,11 @@ public sealed partial class CargoSystem
         return true;
     }
 
-    private void GetPalletGoods(EntityUid gridUid, out HashSet<EntityUid> toSell,  out HashSet<(EntityUid, OverrideSellComponent?, double)> goods)
+    private void GetPalletGoods(
+        EntityUid gridUid,
+        out HashSet<EntityUid> toSell,
+        out HashSet<(EntityUid, OverrideSellComponent?, double)> goods,
+        CargoPalletConsoleComponent? console = null)
     {
         goods = new HashSet<(EntityUid, OverrideSellComponent?, double)>();
         toSell = new HashSet<EntityUid>();
@@ -180,6 +193,9 @@ public sealed partial class CargoSystem
                 if (_blacklistQuery.HasComponent(ent))
                     continue;
 
+                if (!IsAllowedByConsoleFilter(ent, console))
+                    continue;
+
                 var price = _pricing.GetPrice(ent);
                 if (price == 0)
                     continue;
@@ -187,6 +203,17 @@ public sealed partial class CargoSystem
                 goods.Add((ent, CompOrNull<OverrideSellComponent>(ent), price));
             }
         }
+    }
+
+    private bool IsAllowedByConsoleFilter(EntityUid ent, CargoPalletConsoleComponent? console)
+    {
+        if (console == null || console.AcceptedStackTypes.Count == 0)
+            return true;
+
+        if (!TryComp<StackComponent>(ent, out var stack))
+            return false;
+
+        return console.AcceptedStackTypes.Contains(stack.StackTypeId);
     }
 
     private bool CanSell(EntityUid uid, TransformComponent xform)
@@ -230,7 +257,7 @@ public sealed partial class CargoSystem
             return;
         }
 
-        if (!SellPallets(gridUid, station, out var goods))
+        if (!SellPallets(gridUid, station, component, out var goods))
             return;
 
         var baseDistribution = CreateAccountDistribution((station, bankAccount));
@@ -256,7 +283,7 @@ public sealed partial class CargoSystem
 
         Dirty(station, bankAccount);
         _audio.PlayPvs(ApproveSound, uid);
-        UpdatePalletConsoleInterface(uid);
+        UpdatePalletConsoleInterface(uid, component);
     }
 
     #endregion

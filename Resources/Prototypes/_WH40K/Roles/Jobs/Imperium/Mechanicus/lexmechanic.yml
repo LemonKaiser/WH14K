@@ -29,6 +29,7 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     mask: ClothingMaskGasTechPriest
+    pocket1: WH40KStandardTacticalMapTablet
     id: LexmechanicDogTag
 
 - type: chameleonOutfit

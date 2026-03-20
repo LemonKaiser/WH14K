@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: SpecialistSWS
   name: job-name-specialist-sws
   description: job-description-specialist-sws
@@ -15,6 +15,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadAssignable
       - type: WH40KGuardsmanVoice
       - type: Vocal
         sounds:
@@ -36,4 +37,6 @@
     head: ClothingHeadHelmetFlakResp
     eyes: ClothingEyesHudGuard
     outerClothing: ClothingOuterArmorFlakVestLight
+    pocket1: WH40KStandardTacticalMapTablet
     id: GuardsmanDogTag
+

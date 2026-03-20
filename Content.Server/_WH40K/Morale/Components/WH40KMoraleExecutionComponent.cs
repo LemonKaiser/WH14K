@@ -10,6 +10,9 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
     public float CooldownSeconds = 1200f;
 
     [DataField]
+    public float ExecutionRange = 2f;
+
+    [DataField]
     public float AuraRadius = 10f;
 
     [DataField]
@@ -29,6 +32,12 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
 
     [DataField]
     public ProtoId<AlertPrototype> CooldownAlert = "WH40KMoraleExecution";
+
+    [DataField]
+    public EntProtoId ActionPrototype = "ActionWH40KMoraleExecution";
+
+    [DataField]
+    public EntityUid? ActionEntity;
 
     [DataField]
     public float BlockedKillPopupCooldownSeconds = 1.5f;
