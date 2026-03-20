@@ -7,9 +7,6 @@
     sprite: _WH40K/Clothing/Head/Hats/commissar.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/commissar.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
   - type: Armor
     modifiers:
       coefficients:
@@ -29,9 +26,6 @@
     sprite: _WH40K/Clothing/Head/Hats/officer.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/officer.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
   parent: ClothingHeadOfficer
@@ -52,9 +46,6 @@
     sprite: _WH40K/Clothing/Head/Hats/sgt.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/sgt.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
   parent: ClothingHeadBase
@@ -65,6 +56,9 @@
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadBase
@@ -78,5 +72,5 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Head/headscarf/Headscrafcult.rsi
   - type: HideLayerClothing
-    slots:
-    - Hair
+    layers:
+      Hair: HEAD

@@ -29,6 +29,7 @@ figurines-ifi-4 = "Write it down, recolor"
 materials-datapoint = raw data
 
 loadout-group-techpriest-neck = robe, tech-priest
+loadout-group-techpriest-mask = tech-priest respirators
 loadout-group-wh40k-imperial-line-head = imperial frontline headgear
 loadout-group-wh40k-imperial-line-honours = imperial frontline honours
 loadout-group-wh40k-imperial-field-outer = imperial field outerwear
@@ -37,6 +38,7 @@ loadout-group-wh40k-imperial-line-feet = imperial frontline boots
 loadout-group-wh40k-field-kit = frontline field kit
 loadout-group-wh40k-imperial-melee = imperial melee sidearm
 loadout-group-wh40k-imperial-specialist-mask = specialist respirators
+loadout-group-wh40k-imperial-line-mask = imperial frontline respirators
 loadout-group-wh40k-imperial-medic-head = medic headgear
 loadout-group-wh40k-imperial-medic-honours = medic honours
 loadout-group-wh40k-imperial-logistics-head = logistics headgear

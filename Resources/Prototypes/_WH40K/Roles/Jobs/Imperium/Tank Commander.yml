@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: TankComm
   name: job-name-tank-comm
   description: job-description-tank-comm
@@ -12,6 +12,10 @@
   icon: "JobIconTankComm"
   supervisors: job-supervisors-engineering
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadLeader
   access:
   - Maintenance
   - External
@@ -28,7 +32,8 @@
     shoes: ClothingShoesGenBoots
     ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
-    neck: Gorjet
     head: ClothingHeadOfficer
     outerClothing: ClothingOuterArmorOfficer
+    pocket1: WH40KCommandTacticalMapTablet
     id: TankCommDogTag
+

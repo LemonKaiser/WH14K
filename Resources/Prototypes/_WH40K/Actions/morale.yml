@@ -1,0 +1,15 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KMoraleExecution
+  name: Моральная казнь
+  description: Мгновенно казнит союзника с меткой казни в радиусе 2 тайлов и активирует ауру морали.
+  components:
+  - type: Action
+    icon: /Textures/_WH40K/Interface/Alerts/execute.png
+  - type: TargetAction
+    checkCanAccess: true
+    range: 2
+    repeat: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:WH40KMoraleExecutionActionEvent

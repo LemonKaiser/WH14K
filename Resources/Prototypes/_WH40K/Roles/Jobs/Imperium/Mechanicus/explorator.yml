@@ -35,6 +35,7 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
     mask: ClothingMaskGasTechPriest
+    pocket1: WH40KStandardTacticalMapTablet
     id: ExploratorDogTag
 
 - type: chameleonOutfit

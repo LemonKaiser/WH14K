@@ -61,7 +61,8 @@ public sealed partial class StencilOverlay
             var alpha = _weather.GetWeatherPercent((uid, status));
             var sprite = _sprite.GetFrame(weather.Sprite, curTime);
 
-            worldHandle.UseShader(_protoManager.Index(StencilDraw).Instance());
+            // Weather should render on the masked tiles themselves, not on the inverse of the mask.
+            worldHandle.UseShader(_protoManager.Index(WeatherStencilDraw).Instance());
             _parallax.DrawParallax(worldHandle,
                 worldAABB,
                 sprite,

@@ -32,16 +32,19 @@ public sealed class WH40KFactionInfo
     public LocId Name { get; }
     public SpriteSpecifier? Logo { get; }
     public List<ProtoId<DepartmentPrototype>> Departments { get; }
+    public int PlayerCount { get; }
 
     public WH40KFactionInfo(
         string id,
         LocId name,
         SpriteSpecifier? logo,
-        List<ProtoId<DepartmentPrototype>> departments)
+        List<ProtoId<DepartmentPrototype>> departments,
+        int playerCount = 0)
     {
         Id = id;
         Name = name;
         Logo = logo;
         Departments = departments;
+        PlayerCount = Math.Max(0, playerCount);
     }
 }

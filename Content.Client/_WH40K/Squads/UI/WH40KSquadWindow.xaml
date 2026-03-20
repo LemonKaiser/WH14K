@@ -1,0 +1,293 @@
+﻿<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      Title="{Loc 'wh40k-squad-window-title'}"
+                      Resizable="True"
+                      SetSize="1220 760"
+                      MinSize="980 620">
+    <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10 10 10 10">
+        <PanelContainer Name="HeaderPanel">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0D1520"
+                                  BorderColor="#41556E"
+                                  BorderThickness="2"
+                                  ContentMarginLeftOverride="14"
+                                  ContentMarginTopOverride="12"
+                                  ContentMarginRightOverride="14"
+                                  ContentMarginBottomOverride="12" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="3">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-squad-header-title'}"
+                           StyleClasses="LabelHeading" />
+                    <Label Name="HeaderSubtitleLabel"
+                           Text="{Loc 'wh40k-squad-header-subtitle'}"
+                           StyleClasses="LabelSubText" />
+                </BoxContainer>
+
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalAlignment="Center">
+                    <PanelContainer Name="TeamBadge">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#203227"
+                                              BorderColor="#63A77A"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="10"
+                                              ContentMarginTopOverride="4"
+                                              ContentMarginRightOverride="10"
+                                              ContentMarginBottomOverride="4" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="TeamBadgeLabel"
+                               Text="{Loc 'wh40k-squad-team-badge-idle'}"
+                               Align="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="AvailabilityBadge">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#26314A"
+                                              BorderColor="#7FA0D8"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="10"
+                                              ContentMarginTopOverride="4"
+                                              ContentMarginRightOverride="10"
+                                              ContentMarginBottomOverride="4" />
+                        </PanelContainer.PanelOverride>
+                        <Label Name="AvailabilityBadgeLabel"
+                               Text="{Loc 'wh40k-squad-roster-badge-inactive'}"
+                               Align="Center" />
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="8">
+            <PanelContainer Name="CommandRail"
+                            SetWidth="382"
+                            VerticalExpand="True"
+                            HorizontalExpand="False">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#111924"
+                                      BorderColor="#33475F"
+                                      BorderThickness="2"
+                                      ContentMarginLeftOverride="0"
+                                      ContentMarginTopOverride="0"
+                                      ContentMarginRightOverride="0"
+                                      ContentMarginBottomOverride="0" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
+                    <PanelContainer Name="RailHeaderPanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#162231"
+                                              BorderColor="#42566C"
+                                              BorderThickness="0 0 0 1"
+                                              ContentMarginLeftOverride="12"
+                                              ContentMarginTopOverride="10"
+                                              ContentMarginRightOverride="12"
+                                              ContentMarginBottomOverride="10" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                            <Label Text="{Loc 'wh40k-squad-command-title'}"
+                                   StyleClasses="LabelHeading" />
+                            <Label Text="{Loc 'wh40k-squad-command-subtitle'}"
+                                   StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="12 12 12 12" SeparationOverride="10">
+                            <PanelContainer Name="LeaderPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Text="{Loc 'wh40k-squad-leader-title'}" StyleClasses="LabelHeading" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="1">
+                                        <Label Name="LeaderNameLabel"
+                                               Text="-"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="LeaderRoleLabel"
+                                               Text="-"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="LeaderStateLabel"
+                                               Text="{Loc 'wh40k-squad-leader-status-ready'}"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="OverviewPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Text="{Loc 'wh40k-squad-overview-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="SquadSummaryLabel"
+                                           Text="-"
+                                           ClipText="True" />
+                                    <Label Name="RosterSummaryLabel"
+                                           Text="-"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Label Name="InstructionLabel"
+                                           Text="{Loc 'wh40k-squad-command-instruction-idle'}"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="ActionPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Text="{Loc 'wh40k-squad-actions-title'}" StyleClasses="LabelHeading" />
+                                    <Button Name="CreateSquadButton"
+                                            Text="{Loc 'wh40k-squad-action-create'}"
+                                            StyleClasses="ButtonColorGreen" />
+                                    <Button Name="DisbandSquadButton"
+                                            Text="{Loc 'wh40k-squad-action-disband'}"
+                                            StyleClasses="ButtonColorRed" />
+                                    <Button Name="RefreshButton"
+                                            Text="{Loc 'wh40k-squad-action-refresh'}" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="SlotsPanel">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                                      BorderColor="#324459"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="10"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="10" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                                    <Label Text="{Loc 'wh40k-squad-slots-title'}" StyleClasses="LabelHeading" />
+                                    <BoxContainer Name="SlotList" Orientation="Vertical" SeparationOverride="8" />
+                                </BoxContainer>
+                            </PanelContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="RosterPanel" HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#0D141D"
+                                      BorderColor="#3A4E66"
+                                      BorderThickness="2"
+                                      ContentMarginLeftOverride="6"
+                                      ContentMarginTopOverride="6"
+                                      ContentMarginRightOverride="6"
+                                      ContentMarginBottomOverride="6" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer Name="RosterHeaderPanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#162231"
+                                              BorderColor="#42566C"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="12"
+                                              ContentMarginTopOverride="8"
+                                              ContentMarginRightOverride="12"
+                                              ContentMarginBottomOverride="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="10" VerticalAlignment="Center">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                <Label Text="{Loc 'wh40k-squad-roster-title'}" StyleClasses="LabelHeading" />
+                                <Label Text="{Loc 'wh40k-squad-roster-subtitle'}" StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <PanelContainer Name="RosterCountBadge">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#223B2F"
+                                                      BorderColor="#5FA27E"
+                                                      BorderThickness="1"
+                                                      ContentMarginLeftOverride="10"
+                                                      ContentMarginTopOverride="4"
+                                                      ContentMarginRightOverride="10"
+                                                      ContentMarginBottomOverride="4" />
+                                </PanelContainer.PanelOverride>
+                                <Label Name="AvailableCountLabel"
+                                       Text="0"
+                                       Align="Center" />
+                            </PanelContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="FilterPanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#121C28"
+                                              BorderColor="#324459"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="6"
+                                              ContentMarginTopOverride="6"
+                                              ContentMarginRightOverride="6"
+                                              ContentMarginBottomOverride="6" />
+                        </PanelContainer.PanelOverride>
+                        <LineEdit Name="FilterBar"
+                                  PlaceHolder="{Loc 'wh40k-squad-filter-placeholder'}"
+                                  HorizontalExpand="True" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="CandidatePanel" HorizontalExpand="True" VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#0F1822"
+                                              BorderColor="#324459"
+                                              BorderThickness="1"
+                                              ContentMarginLeftOverride="6"
+                                              ContentMarginTopOverride="6"
+                                              ContentMarginRightOverride="6"
+                                              ContentMarginBottomOverride="6" />
+                        </PanelContainer.PanelOverride>
+                        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                            <BoxContainer Name="CandidateList"
+                                          Orientation="Vertical"
+                                          SeparationOverride="8"
+                                          HorizontalExpand="True"
+                                          Margin="6 6 6 6" />
+                        </ScrollContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+
+        <PanelContainer Name="FooterPanel">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0E141C"
+                                  BorderColor="#314055"
+                                  BorderThickness="1"
+                                  ContentMarginLeftOverride="10"
+                                  ContentMarginTopOverride="6"
+                                  ContentMarginRightOverride="10"
+                                  ContentMarginBottomOverride="6" />
+            </PanelContainer.PanelOverride>
+            <Label Name="FooterLabel"
+                   Text="{Loc 'wh40k-squad-footer-idle'}"
+                   StyleClasses="WindowFooterText" />
+        </PanelContainer>
+    </BoxContainer>
+</controls:FancyWindow>

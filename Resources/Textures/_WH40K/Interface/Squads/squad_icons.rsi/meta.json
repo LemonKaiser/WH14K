@@ -1,0 +1,23 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Imported from local llicons set for WH14K squad markers.",
+  "size": {
+    "x": 8,
+    "y": 8
+  },
+  "states": [
+    { "name": "imperium_leader" },
+    { "name": "imperium_1" },
+    { "name": "imperium_2" },
+    { "name": "imperium_3" },
+    { "name": "imperium_4" },
+    { "name": "imperium_5" },
+    { "name": "heretics_leader" },
+    { "name": "heretics_1" },
+    { "name": "heretics_2" },
+    { "name": "heretics_3" },
+    { "name": "heretics_4" },
+    { "name": "heretics_5" }
+  ]
+}

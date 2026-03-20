@@ -76,3 +76,6 @@ loadout-group-wh40k-heretic-command-neck = Хаос, командование, �
 loadout-group-wh40k-heretic-command-outer = Хаос, командование, верхняя одежда
 loadout-group-wh40k-heretic-command-hands = Хаос, командование, перчатки
 loadout-group-wh40k-heretic-command-field-kit = Хаос, командный походный набор
+
+loadout-group-techpriest-mask = техножрец, респираторы
+loadout-group-wh40k-imperial-line-mask = Имперская пехота, респираторы

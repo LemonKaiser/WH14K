@@ -1,12 +1,8 @@
-- type: job
+﻿- type: job
   id: HColonel
   name: job-name-hcolonel
   description: job-description-hcolonel
   playTimeTracker: JobHColonel
-  requirements:
-    - !type:SpeciesRequirement
-      species:
-      - Human
   startingGear: HeresyColonelGear
   icon: "JobIconHColonel"
   supervisors: job-supervisors-engineering
@@ -14,6 +10,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
       - type: WH40KFriendlyFireAllowed
       - type: WH40KOfficerVoice
@@ -49,6 +46,8 @@
     belt: chaosbelt
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadScarfChaos
+    pocket1: WH40KCommandTacticalMapTablet
     id: HColonelDogTag
   inhand:
     - ChaosMachete
+

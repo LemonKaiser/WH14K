@@ -1,0 +1,11 @@
+﻿- type: entity
+  parent: BaseAction
+  id: ActionWH40KOpenSquadConsole
+  name: Управление отрядом
+  description: Откройте штабной интерфейс отряда и распределите бойцов своей команды.
+  components:
+  - type: Action
+    icon: /Textures/_WH40K/Interface/Actions/squad_command.png
+  - type: InstantAction
+    event: !type:OpenUiActionEvent
+      key: enum.WH40KSquadUiKey.Key

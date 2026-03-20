@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HSpecialistHWS
   name: job-name-hspecialist-hws
   description: job-description-hspecialist-hws
@@ -15,6 +15,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
       - type: WH40KGuardsmanVoice
       - type: Vocal
@@ -25,3 +26,4 @@
   access:
   - Maintenance
   - External
+

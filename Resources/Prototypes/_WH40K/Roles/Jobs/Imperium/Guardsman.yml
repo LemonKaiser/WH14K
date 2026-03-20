@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Guardsman
   name: job-name-guardsman
   description: job-description-guardsman
@@ -16,6 +16,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadAssignable
       - type: WH40KMoraleExecutionTarget
       - type: WH40KGuardsmanVoice
       - type: Vocal
@@ -36,4 +37,6 @@
     belt: guardbelt
     head: ClothingHeadHelmetFlak
     outerClothing: ClothingOuterArmorFlakVestLight
+    pocket1: WH40KStandardTacticalMapTablet
     id: GuardsmanDogTag
+

@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HGuardsman
   name: job-name-hguardsman
   description: job-description-hguardsman
@@ -16,6 +16,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
       - type: WH40KMoraleExecutionTarget
       - type: WH40KGuardsmanVoice
@@ -37,4 +38,6 @@
     belt: chaosbelt2
     head: ClothingHeadHelmetFlakCHAOS
     outerClothing: ClothingOuterArmorChaosVest
+    pocket1: WH40KStandardTacticalMapTablet
     id: HGuardsmanDogTag
+

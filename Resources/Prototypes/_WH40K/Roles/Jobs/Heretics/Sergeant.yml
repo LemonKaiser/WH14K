@@ -1,12 +1,8 @@
-- type: job
+﻿- type: job
   id: HSergeant
   name: job-name-hsergeant
   description: job-description-hsergeant
   playTimeTracker: JobHSergeant
-  requirements:
-    - !type:SpeciesRequirement
-      species:
-      - Human
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
   supervisors: job-supervisors-engineering
@@ -14,6 +10,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
   access:
   - Maintenance
@@ -40,6 +37,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
   access:
   - Maintenance
@@ -66,6 +64,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
   access:
   - Maintenance
@@ -87,4 +86,6 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy
     outerClothing: ClothingOuterArmorCultistCoat
+    pocket1: WH40KCommandTacticalMapTablet
     id: HSergeantDogTag
+

@@ -33,6 +33,7 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
+    pocket1: WH40KStandardTacticalMapTablet
     id: EnginseerDogTag
 
 - type: chameleonOutfit

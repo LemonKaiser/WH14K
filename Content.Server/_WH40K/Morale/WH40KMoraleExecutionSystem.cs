@@ -2,16 +2,25 @@ using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Morale.Components;
 using Content.Server.Popups;
+using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.CCVar;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Morale;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Actions.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Physics;
@@ -22,18 +31,26 @@ namespace Content.Server._WH40K.Morale;
 
 public sealed class WH40KMoraleExecutionSystem : EntitySystem
 {
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
 
     private static readonly ProtoId<AlertPrototype> MoraleBuffAlert = "WH40KMoraleBoosted";
+    private static readonly ProtoId<DamageTypePrototype> MoraleExecutionDamageType = "Piercing";
+    private static readonly FixedPoint2 MoraleExecutionDamage = FixedPoint2.New(200);
     private readonly HashSet<EntityUid> _nearby = new();
 
     public override void Initialize()
@@ -43,8 +60,8 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         SubscribeLocalEvent<WH40KMoraleExecutionComponent, ComponentStartup>(OnExecutionStartup);
         SubscribeLocalEvent<WH40KMoraleExecutionComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WH40KMoraleExecutionComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<WH40KMoraleExecutionComponent, WH40KMoraleExecutionActionEvent>(OnMoraleExecutionAction);
         SubscribeLocalEvent<DamageableComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnFriendlyFireAllowedStartup(
@@ -81,43 +98,103 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
 
             execution.CooldownShown = false;
             execution.NextUseTime = TimeSpan.Zero;
-            ShowReadyAlert(uid, execution);
+            _actions.RemoveCooldown(execution.ActionEntity);
             Dirty(uid, execution);
         }
     }
 
     private void OnMapInit(EntityUid uid, WH40KMoraleExecutionComponent component, MapInitEvent args)
     {
+        EnsureExecutionAction(uid, component);
+        CleanupDuplicateExecutionActions(uid, component);
         InitializeExecutionState(uid, component);
     }
 
     private void OnExecutionStartup(EntityUid uid, WH40KMoraleExecutionComponent component, ComponentStartup args)
     {
+        EnsureExecutionAction(uid, component);
+        CleanupDuplicateExecutionActions(uid, component);
         InitializeExecutionState(uid, component);
     }
 
     private void InitializeExecutionState(EntityUid uid, WH40KMoraleExecutionComponent component)
     {
+        // We use the action cooldown UI for morale execution. Keep alert bar clean.
+        _alerts.ClearAlert(uid, component.CooldownAlert);
         component.NextBlockedKillPopupTime = TimeSpan.Zero;
+        var cooldown = TimeSpan.FromSeconds(Math.Max(1f, component.CooldownSeconds));
+        _actions.SetUseDelay(component.ActionEntity, cooldown);
 
         var now = _timing.CurTime;
         if (component.NextUseTime > now)
         {
             component.CooldownShown = true;
-            ShowCooldownAlert(uid, component, now);
+            _actions.SetCooldown(component.ActionEntity, now, component.NextUseTime);
             Dirty(uid, component);
             return;
         }
 
         component.CooldownShown = false;
         component.NextUseTime = TimeSpan.Zero;
-        ShowReadyAlert(uid, component);
+        _actions.RemoveCooldown(component.ActionEntity);
         Dirty(uid, component);
     }
 
     private void OnShutdown(EntityUid uid, WH40KMoraleExecutionComponent component, ComponentShutdown args)
     {
         _alerts.ClearAlert(uid, component.CooldownAlert);
+        _actions.RemoveAction(uid, component.ActionEntity);
+        component.ActionEntity = null;
+    }
+
+    private void OnMoraleExecutionAction(Entity<WH40KMoraleExecutionComponent> ent, ref WH40KMoraleExecutionActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (args.Performer != ent.Owner)
+            return;
+
+        var now = _timing.CurTime;
+        if (now < ent.Comp.NextUseTime)
+        {
+            TryShowBlockedKillPopup(ent.Owner, ent.Comp);
+            return;
+        }
+
+        if (!TryGetSameTeam(ent.Owner, args.Target) ||
+            !IsAllowedMoraleExecutionTarget(args.Target) ||
+            !IsWithinExecutionRange(ent.Owner, args.Target, ent.Comp))
+        {
+            TryShowInvalidTargetPopup(ent.Owner, ent.Comp);
+            return;
+        }
+
+        if (!TryComp<MobStateComponent>(args.Target, out var targetMobState) ||
+            targetMobState.CurrentState == MobState.Dead)
+        {
+            TryShowInvalidTargetPopup(ent.Owner, ent.Comp);
+            return;
+        }
+
+        if (!TryPerformExecutionWeaponAction(ent.Owner, args.Target))
+        {
+            TryShowInvalidTargetPopup(ent.Owner, ent.Comp);
+            return;
+        }
+
+        TryApplyMoraleExecutionDamage(args.Target);
+
+        // Keep historical behavior: target should always die on successful morale execution.
+        if (targetMobState.CurrentState != MobState.Dead)
+            _mobState.ChangeMobState(args.Target, MobState.Dead, targetMobState, ent.Owner);
+
+        if (targetMobState.CurrentState != MobState.Dead)
+            return;
+
+        StartExecutionCooldown(ent.Owner, ent.Comp, now);
+        ApplyMoraleAura(ent.Owner, ent.Comp, now);
+        args.Handled = true;
     }
 
     private void OnBeforeDamageChanged(EntityUid uid, DamageableComponent component, ref BeforeDamageChangedEvent args)
@@ -167,26 +244,7 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         }
 
         if (_config.GetCVar(CCVars.WH40KFriendlyFireDisabled) &&
-            ShouldBlockFriendlyDamageDuringCooldown(attacker, uid, out var execution))
-        {
-            args.Cancelled = true;
-            TryShowBlockedKillPopup(attacker, execution);
-            return;
-        }
-
-        if (_config.GetCVar(CCVars.WH40KFriendlyFireDisabled) &&
-            TryComp<WH40KMoraleExecutionComponent>(attacker, out var activeExecution) &&
-            TryGetSameTeam(attacker, uid) &&
-            !IsAllowedMoraleExecutionTarget(uid, activeExecution))
-        {
-            args.Cancelled = true;
-            TryShowInvalidTargetPopup(attacker, activeExecution);
-            return;
-        }
-
-        if (_config.GetCVar(CCVars.WH40KFriendlyFireDisabled) &&
-            TryGetSameTeam(attacker, uid) &&
-            !HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
+            TryGetSameTeam(attacker, uid))
         {
             args.Cancelled = true;
             return;
@@ -206,61 +264,6 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         return false;
     }
 
-    private void OnMobStateChanged(MobStateChangedEvent args)
-    {
-        if (args.OldMobState == MobState.Dead || args.NewMobState != MobState.Dead || args.Origin == null)
-            return;
-
-        if (!_attackerResolver.TryResolveAttacker(args.Origin.Value, out var attacker, out _))
-            attacker = args.Origin.Value;
-
-        if (attacker == args.Target)
-            return;
-
-        if (!HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
-            return;
-
-        if (!TryComp<WH40KMoraleExecutionComponent>(attacker, out var execution))
-            return;
-
-        var now = _timing.CurTime;
-        if (now < execution.NextUseTime)
-            return;
-
-        if (!TryGetSameTeam(attacker, args.Target))
-            return;
-
-        if (!IsAllowedMoraleExecutionTarget(args.Target, execution))
-            return;
-
-        StartExecutionCooldown(attacker, execution, now);
-        ApplyMoraleAura(attacker, execution, now);
-    }
-
-    private bool ShouldBlockFriendlyDamageDuringCooldown(
-        EntityUid attacker,
-        EntityUid victim,
-        out WH40KMoraleExecutionComponent execution)
-    {
-        execution = null!;
-
-        if (!HasComp<WH40KFriendlyFireAllowedComponent>(attacker))
-            return false;
-
-        if (!TryComp<WH40KMoraleExecutionComponent>(attacker, out var moraleExecution))
-            return false;
-
-        execution = moraleExecution!;
-
-        if (_timing.CurTime >= execution.NextUseTime)
-            return false;
-
-        if (!TryGetSameTeam(attacker, victim))
-            return false;
-
-        return true;
-    }
-
     private bool TryGetSameTeam(EntityUid attacker, EntityUid victim)
     {
         if (!_teamRule.TryGetTeamIdFromEntity(attacker, out var attackerTeam) ||
@@ -272,9 +275,93 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         return attackerTeam == victimTeam;
     }
 
-    private bool IsAllowedMoraleExecutionTarget(EntityUid victim, WH40KMoraleExecutionComponent execution)
+    private bool IsAllowedMoraleExecutionTarget(EntityUid victim)
     {
         return HasComp<WH40KMoraleExecutionTargetComponent>(victim);
+    }
+
+    private bool IsWithinExecutionRange(EntityUid attacker, EntityUid victim, WH40KMoraleExecutionComponent execution)
+    {
+        var attackerCoords = _transform.GetMapCoordinates(attacker);
+        var victimCoords = _transform.GetMapCoordinates(victim);
+
+        if (attackerCoords.MapId != victimCoords.MapId)
+            return false;
+
+        var range = Math.Max(0.5f, execution.ExecutionRange);
+        return (victimCoords.Position - attackerCoords.Position).LengthSquared() <= range * range;
+    }
+
+    private void EnsureExecutionAction(EntityUid uid, WH40KMoraleExecutionComponent component)
+    {
+        _actions.AddAction(uid, ref component.ActionEntity, component.ActionPrototype, uid);
+        var cooldown = TimeSpan.FromSeconds(Math.Max(1f, component.CooldownSeconds));
+        _actions.SetUseDelay(component.ActionEntity, cooldown);
+    }
+
+    private void CleanupDuplicateExecutionActions(EntityUid uid, WH40KMoraleExecutionComponent component)
+    {
+        if (!TryComp<ActionsComponent>(uid, out var actions))
+            return;
+
+        EntityUid? primary = null;
+        var duplicates = new List<EntityUid>();
+
+        foreach (var actionUid in actions.Actions)
+        {
+            if (!TryComp(actionUid, out MetaDataComponent? meta) ||
+                meta.EntityPrototype is not { ID: { } prototypeId } ||
+                prototypeId != component.ActionPrototype.Id)
+            {
+                continue;
+            }
+
+            if (primary == null)
+            {
+                primary = actionUid;
+                continue;
+            }
+
+            duplicates.Add(actionUid);
+        }
+
+        foreach (var duplicate in duplicates)
+        {
+            _actions.RemoveAction(uid, duplicate);
+        }
+
+        if (primary != null)
+            component.ActionEntity = primary;
+    }
+
+    private bool TryPerformExecutionWeaponAction(EntityUid attacker, EntityUid target)
+    {
+        if (!_hands.TryGetActiveItem(attacker, out var activeItem))
+            return false;
+
+        var weapon = activeItem.Value;
+        if (TryComp<GunComponent>(weapon, out var gun))
+        {
+            var targetCoords = Transform(target).Coordinates;
+            return _gun.AttemptShoot(attacker, (weapon, gun), targetCoords, target);
+        }
+
+        if (!TryComp<MeleeWeaponComponent>(weapon, out var melee))
+            return false;
+
+        return _melee.AttemptLightAttack(attacker, weapon, melee, target);
+    }
+
+    private void TryApplyMoraleExecutionDamage(EntityUid target)
+    {
+        if (!TryComp<DamageableComponent>(target, out var damageable))
+            return;
+
+        var piercing = _prototypeManager.Index(MoraleExecutionDamageType);
+        var damage = new DamageSpecifier(piercing, MoraleExecutionDamage);
+
+        // Morale execution must go through even when team damage is disabled.
+        _damageable.TryChangeDamage((target, damageable), damage, ignoreResistances: true, origin: null, ignoreGlobalModifiers: true);
     }
 
     private void StartExecutionCooldown(EntityUid attacker, WH40KMoraleExecutionComponent execution, TimeSpan now)
@@ -282,8 +369,8 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         var cooldown = TimeSpan.FromSeconds(Math.Max(1f, execution.CooldownSeconds));
         execution.NextUseTime = now + cooldown;
         execution.CooldownShown = true;
+        _actions.SetUseDelay(execution.ActionEntity, cooldown);
         Dirty(attacker, execution);
-        ShowCooldownAlert(attacker, execution, now);
     }
 
     private void ApplyMoraleAura(EntityUid attacker, WH40KMoraleExecutionComponent execution, TimeSpan now)
@@ -338,16 +425,6 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         Dirty(uid, buff);
         ShowMoraleBuffAlert(uid, buff);
         _movement.RefreshMovementSpeedModifiers(uid);
-    }
-
-    private void ShowReadyAlert(EntityUid uid, WH40KMoraleExecutionComponent execution)
-    {
-        _alerts.ShowAlert(uid, execution.CooldownAlert, cooldown: null, autoRemove: false, showCooldown: false);
-    }
-
-    private void ShowCooldownAlert(EntityUid uid, WH40KMoraleExecutionComponent execution, TimeSpan start)
-    {
-        _alerts.ShowAlert(uid, execution.CooldownAlert, cooldown: (start, execution.NextUseTime), autoRemove: false, showCooldown: true);
     }
 
     private void ShowMoraleBuffAlert(EntityUid uid, WH40KMoraleBoostedComponent buff)

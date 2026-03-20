@@ -1,0 +1,95 @@
+﻿- type: factionIcon
+  id: WH40KSquadIconImperiumLeader
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_leader
+
+- type: factionIcon
+  id: WH40KSquadIconHereticsLeader
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_leader
+
+- type: factionIcon
+  id: WH40KSquadIconImperium1
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_1
+
+- type: factionIcon
+  id: WH40KSquadIconImperium2
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_2
+
+- type: factionIcon
+  id: WH40KSquadIconImperium3
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_3
+
+- type: factionIcon
+  id: WH40KSquadIconImperium4
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_4
+
+- type: factionIcon
+  id: WH40KSquadIconImperium5
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: imperium_5
+
+- type: factionIcon
+  id: WH40KSquadIconHeretics1
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_1
+
+- type: factionIcon
+  id: WH40KSquadIconHeretics2
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_2
+
+- type: factionIcon
+  id: WH40KSquadIconHeretics3
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_3
+
+- type: factionIcon
+  id: WH40KSquadIconHeretics4
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_4
+
+- type: factionIcon
+  id: WH40KSquadIconHeretics5
+  priority: 5
+  locationPreference: Right
+  icon:
+    sprite: /Textures/_WH40K/Interface/Squads/squad_icons.rsi
+    state: heretics_5

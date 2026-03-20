@@ -7,6 +7,21 @@
   ruleEntry: true
   priority: 10
   text: "/ServerInfo/Guidebook/ServerRules/DefaultRules.xml"
+  children:
+  - WH40KRulesRU
+  - WH40KRulesEN
+
+- type: guideEntry
+  id: WH40KRulesRU
+  name: guide-entry-rules-wh40k-ru
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/ProjectRules/WH40KRulesRU.xml"
+
+- type: guideEntry
+  id: WH40KRulesEN
+  name: guide-entry-rules-wh40k-en
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/ServerRules/ProjectRules/WH40KRulesEN.xml"
 
 - type: guideEntry
   id: CoreRuleset

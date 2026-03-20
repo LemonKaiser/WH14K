@@ -146,6 +146,8 @@ guide-entry-wizard = Wizard
 guide-entry-xenoborgs = Xenoborgs
 
 guide-entry-rules = Server Rules
+guide-entry-rules-wh40k-ru = Russian Rules
+guide-entry-rules-wh40k-en = English Rules
 guide-entry-rules-core-only = Core Only Ruleset
 guide-entry-rules-lrp = Standard Ruleset
 guide-entry-rules-mrp = MRP Ruleset

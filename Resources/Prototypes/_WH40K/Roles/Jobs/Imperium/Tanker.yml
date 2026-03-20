@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Tanker
   name: job-name-tanker
   description: job-description-tanker
@@ -14,6 +14,7 @@
   special:
   - !type:AddComponentSpecial
     components:
+      - type: WH40KSquadAssignable
       - type: WH40KGuardsmanVoice
       - type: Vocal
         sounds:
@@ -24,3 +25,4 @@
   - Maintenance
   - External
   - Engineering
+
