@@ -127,6 +127,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_descriptionLabel = new RichTextLabel
 		{
 			HorizontalExpand = true,
+			HorizontalAlignment = HAlignment.Left,
 			VerticalExpand = false,
 			MaxWidth = InfoDescriptionMaxWidth,
 			MinHeight = 44f,
