@@ -126,6 +126,300 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
     }
 
     [Test]
+    public async Task DiscordDecorationRequirementsFallbackToLevelWhenAuthDisabled()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var userId = new NetUserId(Guid.NewGuid());
+        var config = server.ResolveDependency<IConfigurationManager>();
+
+        await db.UpdatePlayerRecordAsync(userId, "MetaDiscordDecorFallbackTest", IPAddress.Loopback, null);
+
+        var originalEnabled = config.GetCVar(CCVars.WH40KDiscordAuthEnabled);
+
+        try
+        {
+            await server.WaitPost(() => config.SetCVar(CCVars.WH40KDiscordAuthEnabled, true));
+            await pair.RunTicksSync(5);
+
+            await server.WaitAssertion(() =>
+            {
+                var meta = server.System<WH40KMetaProgressSystem>();
+                var snapshot = meta.GetSnapshot(userId);
+                var fish = snapshot.Decorations.Single(x => x.Id == "decor-title-fish");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(fish.Unlocked, Is.False, "Fish title must stay locked while Discord auth is enabled and no Discord link exists.");
+                    Assert.That(fish.Requirement.RequiredDiscordGuildMember, Is.True);
+                    Assert.That(fish.Requirement.RequiredDiscordRoleIds, Does.Contain("1479487752960737505"));
+                });
+            });
+
+            await server.WaitPost(() => config.SetCVar(CCVars.WH40KDiscordAuthEnabled, false));
+            await pair.RunTicksSync(5);
+
+            await server.WaitAssertion(() =>
+            {
+                var meta = server.System<WH40KMetaProgressSystem>();
+                var snapshot = meta.GetSnapshot(userId);
+                var fish = snapshot.Decorations.Single(x => x.Id == "decor-title-fish");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(fish.Unlocked, Is.True, "Fish title must fallback to level-only unlock when Discord auth is disabled.");
+                    Assert.That(fish.Requirement.RequiredLevel, Is.EqualTo(1));
+                    Assert.That(fish.Requirement.RequiredDiscordGuildMember, Is.False);
+                    Assert.That(fish.Requirement.RequiredDiscordRoleIds, Is.Empty);
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() => config.SetCVar(CCVars.WH40KDiscordAuthEnabled, originalEnabled));
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AchievementRewardsGrantXpAndDecorationOnlyOnce()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var userId = new NetUserId(Guid.NewGuid());
+
+        await db.UpdatePlayerRecordAsync(userId, "MetaAchievementRewardTest", IPAddress.Loopback, null);
+
+        await server.WaitPost(() =>
+        {
+            var meta = server.System<WH40KMetaProgressSystem>();
+            var ok = meta.TrySetAchievementUnlocked(
+                userId,
+                "wh40k-ach-fireline-initiation",
+                true,
+                out _,
+                out _,
+                out _,
+                out var error);
+
+            Assert.That(ok, Is.True, error);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId);
+            var achievement = snapshot.Achievements.Single(x => x.Id == "wh40k-ach-fireline-initiation");
+            var decoration = snapshot.Decorations.Single(x => x.Id == "decor-title-legend");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(snapshot.LifetimeXp, Is.EqualTo(200));
+                Assert.That(achievement.Completed, Is.True);
+                Assert.That(decoration.Unlocked, Is.True);
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            var meta = server.System<WH40KMetaProgressSystem>();
+            var ok = meta.TrySetAchievementUnlocked(
+                userId,
+                "wh40k-ach-fireline-initiation",
+                true,
+                out _,
+                out _,
+                out _,
+                out var error);
+
+            Assert.That(ok, Is.True, error);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId);
+            Assert.That(snapshot.LifetimeXp, Is.EqualTo(200));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LegacyDbLoadBackfillsMissingAchievementRewardsOnce()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var userId = new NetUserId(Guid.NewGuid());
+        var now = DateTimeOffset.UtcNow;
+
+        await db.UpdatePlayerRecordAsync(userId, "MetaLegacyRewardBackfillTest", IPAddress.Loopback, null);
+        await db.SetWH40KMetaProgress(userId, new WH40KMetaProgressDbData(
+            LifetimeXp: 0,
+            SeasonXp: 0,
+            LastProgressAt: now,
+            SelectedGhostSkinId: null,
+            SelectedOocTitleId: null,
+            SelectedOocNameColorId: null));
+        await db.SetWH40KMetaAchievements(userId, new[]
+        {
+            new WH40KMetaAchievementDbData(
+                AchievementId: "wh40k-ach-fireline-initiation",
+                ProgressValue: 50,
+                Unlocked: true,
+                UnlockedAt: now,
+                Claimed: false,
+                Version: 1,
+                UpdatedAt: now)
+        });
+
+        WH40KMetaProgressSnapshot snapshot = null!;
+        var loaded = false;
+        for (var i = 0; i < 180; i++)
+        {
+            await server.WaitPost(() => snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId));
+
+            var legend = snapshot.Decorations.Single(x => x.Id == "decor-title-legend");
+            if (snapshot.LifetimeXp == 200 && legend.Unlocked)
+            {
+                loaded = true;
+                break;
+            }
+
+            await pair.RunTicksSync(1);
+        }
+
+        Assert.That(loaded, Is.True, "Legacy completed achievement must backfill its missing reward on DB load.");
+
+        WH40KMetaProgressDbData? persistedProgress = null;
+        List<WH40KMetaAchievementDbData>? persistedAchievements = null;
+        for (var i = 0; i < 180; i++)
+        {
+            persistedProgress = await db.GetWH40KMetaProgress(userId);
+            persistedAchievements = await db.GetWH40KMetaAchievements(userId);
+
+            if (persistedProgress?.LifetimeXp == 200 &&
+                persistedAchievements?.Any(a => a.AchievementId == "wh40k-ach-fireline-initiation" && a.Claimed) == true)
+            {
+                break;
+            }
+
+            await pair.RunTicksSync(1);
+        }
+
+        Assert.That(persistedProgress?.LifetimeXp, Is.EqualTo(200));
+        Assert.That(
+            persistedAchievements?.Any(a => a.AchievementId == "wh40k-ach-fireline-initiation" && a.Claimed),
+            Is.True,
+            "Backfilled reward must be marked claimed in DB.");
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            entMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+        });
+        await pair.RunTicksSync(5);
+
+        WH40KMetaProgressSnapshot reloaded = null!;
+        var restored = false;
+        for (var i = 0; i < 180; i++)
+        {
+            await server.WaitPost(() => reloaded = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId));
+
+            if (reloaded.LifetimeXp == 200)
+            {
+                restored = true;
+                break;
+            }
+
+            await pair.RunTicksSync(1);
+        }
+
+        Assert.That(restored, Is.True, "Reloaded runtime state must keep the already-backfilled XP without double-granting.");
+        Assert.That(reloaded.LifetimeXp, Is.EqualTo(200));
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ClaimedAchievementRewardRepairsMissingDecorationWithoutGrantingExtraXp()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var userId = new NetUserId(Guid.NewGuid());
+        var now = DateTimeOffset.UtcNow;
+
+        await db.UpdatePlayerRecordAsync(userId, "MetaRewardDecorationRepairTest", IPAddress.Loopback, null);
+        await db.SetWH40KMetaProgress(userId, new WH40KMetaProgressDbData(
+            LifetimeXp: 0,
+            SeasonXp: 0,
+            LastProgressAt: now,
+            SelectedGhostSkinId: null,
+            SelectedOocTitleId: null,
+            SelectedOocNameColorId: null));
+        await db.SetWH40KMetaAchievements(userId, new[]
+        {
+            new WH40KMetaAchievementDbData(
+                AchievementId: "wh40k-ach-fireline-initiation",
+                ProgressValue: 50,
+                Unlocked: true,
+                UnlockedAt: now,
+                Claimed: true,
+                Version: 1,
+                UpdatedAt: now)
+        });
+
+        WH40KMetaProgressSnapshot snapshot = null!;
+        var loaded = false;
+        for (var i = 0; i < 180; i++)
+        {
+            await server.WaitPost(() => snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId));
+
+            var legend = snapshot.Decorations.Single(x => x.Id == "decor-title-legend");
+            if (legend.Unlocked)
+            {
+                loaded = true;
+                break;
+            }
+
+            await pair.RunTicksSync(1);
+        }
+
+        Assert.That(loaded, Is.True, "Completed claimed reward must restore its reward decoration if the unlock state is missing.");
+
+        var legendSnapshot = snapshot.Decorations.Single(x => x.Id == "decor-title-legend");
+        Assert.Multiple(() =>
+        {
+            Assert.That(snapshot.LifetimeXp, Is.EqualTo(0), "Claimed reward repair must not duplicate XP.");
+            Assert.That(legendSnapshot.Unlocked, Is.True);
+        });
+
+        List<WH40KMetaDecorationDbData>? persistedDecorations = null;
+        for (var i = 0; i < 180; i++)
+        {
+            persistedDecorations = await db.GetWH40KMetaDecorations(userId);
+            if (persistedDecorations.Any(d => d.UnlockId == "decor-title-legend" && d.Unlocked))
+                break;
+
+            await pair.RunTicksSync(1);
+        }
+
+        Assert.That(
+            persistedDecorations?.Any(d => d.UnlockId == "decor-title-legend" && d.Unlocked),
+            Is.True,
+            "Repaired reward decoration must be persisted.");
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task RuntimeStateReloadRestoresPersistedMetaProgress()
     {
         await using var pair = await PoolManager.GetServerClient();

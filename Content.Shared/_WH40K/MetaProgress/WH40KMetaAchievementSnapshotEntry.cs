@@ -19,6 +19,10 @@ public sealed class WH40KMetaAchievementSnapshotEntry
 
 	public string RewardKey { get; }
 
+	public int RewardXp { get; }
+
+	public List<string> RewardDecorationIds { get; }
+
 	public int Progress { get; }
 
 	public int Target { get; }
@@ -27,7 +31,7 @@ public sealed class WH40KMetaAchievementSnapshotEntry
 
 	public bool Completed { get; }
 
-	public WH40KMetaAchievementSnapshotEntry(string id, WH40KMetaAchievementCategory category, string titleKey, string descriptionKey, string taskKey, string rewardKey, int progress, int target, bool hidden, bool completed)
+	public WH40KMetaAchievementSnapshotEntry(string id, WH40KMetaAchievementCategory category, string titleKey, string descriptionKey, string taskKey, string rewardKey, int rewardXp, List<string> rewardDecorationIds, int progress, int target, bool hidden, bool completed)
 	{
 		Id = id;
 		Category = category;
@@ -35,6 +39,8 @@ public sealed class WH40KMetaAchievementSnapshotEntry
 		DescriptionKey = descriptionKey;
 		TaskKey = taskKey;
 		RewardKey = rewardKey;
+		RewardXp = rewardXp;
+		RewardDecorationIds = rewardDecorationIds;
 		Progress = progress;
 		Target = target;
 		Hidden = hidden;

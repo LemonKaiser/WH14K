@@ -1,4 +1,5 @@
 using System;
+using Content.Shared.Mech;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared.Mech.Components;
 using Content.Shared._WH40K.GameTicking.Rules;
@@ -17,10 +18,14 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
     {
         SubscribeLocalEvent<MechPilotComponent, ComponentStartup>(OnPilotStartup);
         SubscribeLocalEvent<MechPilotComponent, ComponentShutdown>(OnPilotShutdown);
+        SubscribeLocalEvent<MechPilotComponent, MechPilotAssignedEvent>(OnPilotAssigned);
     }
 
     private void OnPilotStartup(Entity<MechPilotComponent> ent, ref ComponentStartup args)
     {
+        if (!ent.Comp.Mech.IsValid() || Deleted(ent.Comp.Mech))
+            return;
+
         SyncMechFactionIcon(ent.Comp.Mech, ent.Owner);
     }
 
@@ -40,8 +45,19 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         RemComp<WH40KTeamBattleFactionIconComponent>(ent.Comp.Mech);
     }
 
+    private void OnPilotAssigned(Entity<MechPilotComponent> ent, ref MechPilotAssignedEvent args)
+    {
+        if (!args.Mech.IsValid() || Deleted(args.Mech))
+            return;
+
+        SyncMechFactionIcon(args.Mech, ent.Owner);
+    }
+
     private void SyncMechFactionIcon(EntityUid mech, EntityUid pilot)
     {
+        if (!mech.IsValid() || Deleted(mech))
+            return;
+
         if (!TryResolvePilotTeamId(pilot, out var teamId))
         {
             RemComp<WH40KTeamBattleFactionIconComponent>(mech);

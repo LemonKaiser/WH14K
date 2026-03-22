@@ -12,7 +12,6 @@ using Robust.Shared.Localization;
 using Robust.Shared.Log;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Command;
 
@@ -62,13 +61,18 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
     private readonly IPrototypeManager _prototype = IoCManager.Resolve<IPrototypeManager>();
     private readonly StyleBoxFlat _headerStyle;
+    private readonly Label _headerTitleLabel;
     private readonly Label _teamLine;
     private readonly Label _phaseLine;
     private readonly Label _summaryLine;
+    private readonly PanelContainer _teamBadge;
+    private readonly Label _teamBadgeLabel;
+    private readonly PanelContainer _phaseBadge;
+    private readonly Label _phaseBadgeLabel;
     private readonly BoxContainer _activeRows;
     private readonly BoxContainer _tierRows;
     private readonly BoxContainer _forecastRows;
-    private readonly RichTextLabel _forecastSummary;
+    private readonly Label _forecastSummary;
     private readonly List<TacticalPreset> _presetPool = new();
     private Color _accent = ImperiumColor;
     private string _activeDoctrineId = string.Empty;
@@ -79,42 +83,39 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     public WH40KCommandNodeTacticalBonusesWindow()
     {
         Title = Loc.GetString("wh40k-command-node-tactical-bonuses-window-title");
-        MinSize = SetSize = new Vector2(940, 650);
+        MinSize = SetSize = new Vector2(920, 600);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 8
+            SeparationOverride = 5,
+            Margin = new Thickness(6)
         };
         ContentsContainer.AddChild(root);
 
         var header = new PanelContainer
         {
-            PanelOverride = _headerStyle = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = ImperiumColor,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = _headerStyle = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.HeaderBackground,
+                ImperiumColor,
+                2)
         };
         root.AddChild(header);
 
         var body = new PanelContainer
         {
             VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1F2433"),
-                BorderColor = Color.FromHex("#56607A"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackgroundAlt,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
         root.AddChild(body);
 
         var bodyRoot = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 10,
+            SeparationOverride = 6,
             Margin = new Thickness(8),
             VerticalExpand = true
         };
@@ -123,32 +124,86 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         var topRow = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 10,
+            SeparationOverride = 6,
             VerticalExpand = true
         };
         bodyRoot.AddChild(topRow);
 
         var headerBox = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 6,
+            Margin = new Thickness(10, 8),
+            VerticalAlignment = VAlignment.Center
         };
         header.AddChild(headerBox);
 
-        _teamLine = new Label();
-        _phaseLine = new Label();
-        _summaryLine = new Label();
-        headerBox.AddChild(_teamLine);
-        headerBox.AddChild(_phaseLine);
-        headerBox.AddChild(_summaryLine);
+        var headerInfo = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 2,
+            HorizontalExpand = true
+        };
+        headerBox.AddChild(headerInfo);
+
+        _headerTitleLabel = new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-tactical-bonuses-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        };
+        _teamLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _phaseLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _summaryLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_headerTitleLabel);
+        headerInfo.AddChild(_teamLine);
+        headerInfo.AddChild(_phaseLine);
+        headerInfo.AddChild(_summaryLine);
+
+        var badgeRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 5,
+            VerticalAlignment = VAlignment.Center
+        };
+        headerBox.AddChild(badgeRow);
+
+        _teamBadge = new PanelContainer();
+        _teamBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _teamBadge.AddChild(_teamBadgeLabel);
+        badgeRow.AddChild(_teamBadge);
+
+        _phaseBadge = new PanelContainer();
+        _phaseBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _phaseBadge.AddChild(_phaseBadgeLabel);
+        badgeRow.AddChild(_phaseBadge);
 
         var activeSection = CreateSection(
             Loc.GetString("wh40k-command-node-tactical-bonuses-active-header"),
             out var activeContent,
             verticalExpand: true);
         activeSection.HorizontalExpand = true;
-        activeSection.SizeFlagsStretchRatio = 1.05f;
+        activeSection.SizeFlagsStretchRatio = 1.1f;
         topRow.AddChild(activeSection);
 
         var activeScroll = new ScrollContainer
@@ -161,7 +216,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         _activeRows = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
+            SeparationOverride = 4,
             VerticalExpand = true
         };
         activeScroll.AddChild(_activeRows);
@@ -170,8 +225,8 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
             Loc.GetString("wh40k-command-node-tactical-bonuses-tiers-header"),
             out var tierContent,
             verticalExpand: true);
-        tiersSection.MinWidth = 330;
-        tiersSection.SizeFlagsStretchRatio = 0.95f;
+        tiersSection.MinWidth = 240;
+        tiersSection.SizeFlagsStretchRatio = 0.85f;
         tiersSection.VerticalExpand = true;
         topRow.AddChild(tiersSection);
 
@@ -196,9 +251,11 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
             verticalExpand: false);
         bodyRoot.AddChild(forecastSection);
 
-        _forecastSummary = new RichTextLabel
+        _forecastSummary = new Label
         {
-            HorizontalExpand = true
+            HorizontalExpand = true,
+            ClipText = true,
+            StyleClasses = { "LabelSubText" }
         };
         forecastContent.AddChild(_forecastSummary);
         forecastContent.AddChild(new HSeparator());
@@ -207,14 +264,14 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            SetHeight = 220f
+            SetHeight = 128f
         };
         forecastContent.AddChild(forecastScroll);
 
         _forecastRows = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
+            SeparationOverride = 5,
             HorizontalExpand = true
         };
         forecastScroll.AddChild(_forecastRows);
@@ -227,18 +284,23 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         EnsurePresetProfileLoaded(state.TeamId);
 
         _headerStyle.BorderColor = _accent;
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _phaseLine.Text = Loc.GetString("wh40k-command-node-phase",
-            ("phase", Loc.GetString(GetPhaseKey(state.Phase))));
+        _headerTitleLabel.ModulateSelfOverride = _accent;
+        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
+        _phaseLine.Text = CompactLine(Loc.GetString("wh40k-command-node-phase",
+            ("phase", Loc.GetString(GetPhaseKey(state.Phase)))));
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _phaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase);
+        _phaseBadgeLabel.Text = CompactLine(Loc.GetString(GetPhaseKey(state.Phase)));
 
         var doctrineName = string.IsNullOrWhiteSpace(_activeDoctrineId)
             ? Loc.GetString("wh40k-command-node-tactical-bonuses-doctrine-none-short")
             : WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(_activeDoctrineId, state.TeamId).Name;
 
-        _summaryLine.Text = Loc.GetString("wh40k-command-node-tactical-bonuses-summary-line",
+        _summaryLine.Text = CompactLine(Loc.GetString("wh40k-command-node-tactical-bonuses-summary-line",
             ("node_tier", Math.Clamp(state.UpgradeLevel + 1, 1, 5)),
             ("development_points", state.CommandPoints),
-            ("doctrine", doctrineName));
+            ("doctrine", doctrineName)));
 
         RandomBonusEntry activeRandomBonus;
         List<RandomBonusEntry> nextBonuses;
@@ -265,12 +327,10 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     {
         var section = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1F2433"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackground,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
 
         var sectionRoot = new BoxContainer
@@ -282,19 +342,15 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         var titleBar = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(0, 0, 0, 1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
         sectionRoot.AddChild(titleBar);
 
         titleBar.AddChild(new Label
         {
-            Margin = new Thickness(6, 4),
-            Text = title
+            Text = title,
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
         });
 
         content = new BoxContainer
@@ -525,14 +581,14 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         if (useRuntimeSnapshot)
         {
-            ApplyWrappedText(_forecastSummary, Loc.GetString(
+            _forecastSummary.Text = CompactLine(Loc.GetString(
                 "wh40k-command-node-tactical-bonuses-runtime-forecast-summary",
                 ("next_roll", FormatDuration(nextRollSeconds)),
                 ("cooldowns", nextBonuses.Count)));
         }
         else
         {
-            ApplyWrappedText(_forecastSummary, Loc.GetString(
+            _forecastSummary.Text = CompactLine(Loc.GetString(
                 "wh40k-command-node-tactical-bonuses-forecast-summary",
                 ("time_left", FormatDuration(activeRandomBonus.RemainingSeconds)),
                 ("visible", nextBonuses.Count)));
@@ -841,51 +897,78 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         var card = new PanelContainer
         {
             HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = emphasized ? Color.FromHex("#2A344D") : Color.FromHex("#232A3B"),
-                BorderColor = emphasized ? _accent : Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                emphasized ? WH40KCommandUiStyles.CardBackground : WH40KCommandUiStyles.CardBackgroundAlt,
+                emphasized ? _accent : WH40KCommandUiStyles.MutedBorder)
         };
         target.AddChild(card);
 
         var cardBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(6)
+            SeparationOverride = 4
         };
         card.AddChild(cardBox);
 
         cardBox.AddChild(new Label
         {
             Text = title,
-            ModulateSelfOverride = emphasized ? _accent : Color.White
+            StyleClasses = { emphasized ? "LabelBig" : "LabelHeading" },
+            ModulateSelfOverride = emphasized ? _accent : Color.White,
+            ClipText = true
         });
 
-        var valueLabel = new RichTextLabel
+        var valueLabel = new Label
         {
-            HorizontalExpand = true
+            HorizontalExpand = true,
+            ClipText = true,
+            StyleClasses = { "LabelBig" },
+            ModulateSelfOverride = _accent
         };
-        ApplyWrappedText(valueLabel, value, _accent);
+        valueLabel.Text = CompactLine(value);
         cardBox.AddChild(valueLabel);
 
-        var descriptionLabel = new RichTextLabel
+        var descriptionLabel = new Label
         {
-            HorizontalExpand = true
+            HorizontalExpand = true,
+            ClipText = true,
+            StyleClasses = { "LabelSubText" }
         };
-        ApplyWrappedText(descriptionLabel, description);
+        descriptionLabel.Text = CompactLine(description);
         cardBox.AddChild(descriptionLabel);
     }
 
-    private static void ApplyWrappedText(RichTextLabel label, string text, Color? color = null)
+    private static string CompactLine(string text)
     {
-        var normalized = text.Replace("\\n", "\n", StringComparison.Ordinal);
-        label.SetMessage(
-            FormattedMessage.FromMarkupPermissive(FormattedMessage.EscapeText(normalized)),
-            tagsAllowed: null,
-            defaultColor: color ?? Color.White);
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var compact = text
+            .Replace("\\n", " ", StringComparison.Ordinal)
+            .Replace('\n', ' ')
+            .Replace('\r', ' ');
+
+        var line = string.Join(' ', compact.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+        return line.Length <= 180 ? line : line[..177] + "...";
+    }
+
+    private static StyleBoxFlat ResolvePhaseBadgeStyle(WH40KBattlePhase phase)
+    {
+        return phase switch
+        {
+            WH40KBattlePhase.Preparation => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.InfoBadge),
+            WH40KBattlePhase.Assault => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2E1D".AsSpan()),
+                WH40KCommandUiStyles.WarningBadge),
+            WH40KBattlePhase.Apocalypse => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2A2A".AsSpan()),
+                WH40KCommandUiStyles.DangerBadge),
+            _ => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.InfoBadge)
+        };
     }
 
     private static string FormatDecimal(float value)

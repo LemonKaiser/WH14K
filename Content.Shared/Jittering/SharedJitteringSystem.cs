@@ -1,5 +1,6 @@
 using Content.Shared.Rejuvenate;
 using Content.Shared.StatusEffect;
+using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.Jittering
@@ -47,6 +48,13 @@ namespace Content.Shared.Jittering
             StatusEffectsComponent? status = null)
         {
             if (!Resolve(uid, ref status, false))
+                return;
+
+            var ev = new WH40KModifyJitterDurationEvent(time);
+            RaiseLocalEvent(uid, ref ev);
+            time = ev.Time;
+
+            if (time <= TimeSpan.Zero)
                 return;
 
             amplitude = Math.Clamp(amplitude, MinAmplitude, MaxAmplitude);

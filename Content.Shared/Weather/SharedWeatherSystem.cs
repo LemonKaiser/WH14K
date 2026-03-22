@@ -247,35 +247,44 @@ public abstract class SharedWeatherSystem : EntitySystem
     {
         weatherEnt = null;
 
-        if (!_mapSystem.TryGetMap(mapId, out var mapUid))
+        if (!TryResolveWeatherMap(mapId, out var mapUid))
             return false;
 
-        return TryAddWeather(mapUid.Value, weatherProto, out weatherEnt, duration);
+        return TryAddWeather(mapUid, weatherProto, out weatherEnt, duration);
     }
 
     public bool TryAddWeather(EntityUid mapUid, EntProtoId weatherProto, [NotNullWhen(true)] out EntityUid? weatherEnt, TimeSpan? duration = null)
     {
+        if (!mapUid.IsValid() || !Exists(mapUid))
+        {
+            weatherEnt = null;
+            return false;
+        }
+
         return _statusEffects.TrySetStatusEffectDuration(mapUid, weatherProto, out weatherEnt, duration);
     }
 
     public bool HasWeather(MapId mapId, EntProtoId weatherProto)
     {
-        if (!_mapSystem.TryGetMap(mapId, out var mapUid))
+        if (!TryResolveWeatherMap(mapId, out var mapUid))
             return false;
 
-        return _statusEffects.TryGetStatusEffect(mapUid.Value, weatherProto, out _);
+        return _statusEffects.TryGetStatusEffect(mapUid, weatherProto, out _);
     }
 
     public bool TryRemoveWeather(MapId mapId, EntProtoId weatherProto)
     {
-        if (!_mapSystem.TryGetMap(mapId, out var mapUid))
+        if (!TryResolveWeatherMap(mapId, out var mapUid))
             return false;
 
-        return TryRemoveWeather(mapUid.Value, weatherProto);
+        return TryRemoveWeather(mapUid, weatherProto);
     }
 
     public bool TryRemoveWeather(EntityUid mapUid, EntProtoId weatherProto)
     {
+        if (!mapUid.IsValid() || !Exists(mapUid))
+            return false;
+
         if (!_statusEffects.TryGetStatusEffect(mapUid, weatherProto, out var weatherEnt))
             return false;
 
@@ -289,7 +298,7 @@ public abstract class SharedWeatherSystem : EntitySystem
     {
         weatherEnt = null;
 
-        if (!_mapSystem.TryGetMap(mapId, out var mapUid))
+        if (!TryResolveWeatherMap(mapId, out var mapUid))
             return false;
 
         if (_statusEffects.TryEffectsWithComp<WeatherStatusEffectComponent>(mapUid, out var effects))
@@ -301,7 +310,7 @@ public abstract class SharedWeatherSystem : EntitySystem
                     continue;
 
                 if (effectProto != weatherProto)
-                    TryRemoveWeather(mapUid.Value, effectProto);
+                    TryRemoveWeather(mapUid, effectProto);
                 else
                     weatherEnt = effect;
             }
@@ -312,10 +321,21 @@ public abstract class SharedWeatherSystem : EntitySystem
 
         if (weatherEnt != null)
         {
-            TryAddWeather(mapUid.Value, weatherProto.Value, out weatherEnt, duration);
+            TryAddWeather(mapUid, weatherProto.Value, out weatherEnt, duration);
             return true;
         }
 
-        return TryAddWeather(mapUid.Value, weatherProto.Value, out weatherEnt, duration);
+        return TryAddWeather(mapUid, weatherProto.Value, out weatherEnt, duration);
+    }
+
+    private bool TryResolveWeatherMap(MapId mapId, out EntityUid mapUid)
+    {
+        mapUid = EntityUid.Invalid;
+
+        if (mapId == MapId.Nullspace || !_mapSystem.TryGetMap(mapId, out var mapEntity))
+            return false;
+
+        mapUid = mapEntity.Value;
+        return mapUid.IsValid() && Exists(mapUid);
     }
 }

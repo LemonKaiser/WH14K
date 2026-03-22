@@ -51,6 +51,7 @@ public sealed partial class MechSystem : SharedMechSystem
     {
         base.Initialize();
 
+        SubscribeLocalEvent<MechComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<MechComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<MechComponent, EntInsertedIntoContainerMessage>(OnInsertBattery);
         SubscribeLocalEvent<MechComponent, MapInitEvent>(OnMapInit);
@@ -83,6 +84,20 @@ public sealed partial class MechSystem : SharedMechSystem
     {
         if (component.Broken || component.Integrity <= 0 || component.Energy <= 0)
             args.Cancel();
+    }
+
+    private void OnInteractHand(EntityUid uid, MechComponent component, InteractHandEvent args)
+    {
+        if (args.Handled || component.Broken || !CanInsert(uid, args.User, component))
+            return;
+
+        var doAfterEventArgs = new DoAfterArgs(EntityManager, args.User, component.EntryDelay, new MechEntryEvent(), uid, target: uid)
+        {
+            BreakOnMove = true,
+        };
+
+        if (_doAfter.TryStartDoAfter(doAfterEventArgs))
+            args.Handled = true;
     }
 
     private void OnInteractUsing(EntityUid uid, MechComponent component, InteractUsingEvent args)

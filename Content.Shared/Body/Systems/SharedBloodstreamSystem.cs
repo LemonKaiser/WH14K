@@ -330,6 +330,50 @@ public abstract class SharedBloodstreamSystem : EntitySystem
     }
 
     /// <summary>
+    /// Updates bloodstream profile values used by passive regeneration and bloodloss calculations.
+    /// </summary>
+    public void SetBloodstreamProfile(
+        Entity<BloodstreamComponent?> ent,
+        FixedPoint2 bloodRefreshAmount,
+        float bleedReductionAmount,
+        float bloodlossThreshold,
+        float maxVolumeModifier)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        ent.Comp.BloodRefreshAmount = bloodRefreshAmount;
+        ent.Comp.BleedReductionAmount = bleedReductionAmount;
+        ent.Comp.BloodlossThreshold = bloodlossThreshold;
+        ent.Comp.MaxVolumeModifier = maxVolumeModifier;
+
+        DirtyFields(
+            ent,
+            ent.Comp,
+            null,
+            nameof(BloodstreamComponent.BloodRefreshAmount),
+            nameof(BloodstreamComponent.BleedReductionAmount),
+            nameof(BloodstreamComponent.BloodlossThreshold),
+            nameof(BloodstreamComponent.MaxVolumeModifier));
+
+        UpdateBloodstreamSolutionCapacities((ent.Owner, ent.Comp));
+    }
+
+    public FixedPoint2 GetBloodRefreshAmount(Entity<BloodstreamComponent?> ent)
+    {
+        return Resolve(ent, ref ent.Comp, false)
+            ? ent.Comp.BloodRefreshAmount
+            : FixedPoint2.Zero;
+    }
+
+    public float GetBleedReductionAmount(Entity<BloodstreamComponent?> ent)
+    {
+        return Resolve(ent, ref ent.Comp, false)
+            ? ent.Comp.BleedReductionAmount
+            : 0f;
+    }
+
+    /// <summary>
     /// Attempt to transfer a provided solution to internal solution.
     /// </summary>
     public bool TryAddToBloodstream(Entity<BloodstreamComponent?> ent, Solution solution)
@@ -366,6 +410,55 @@ public abstract class SharedBloodstreamSystem : EntitySystem
 
             var reagentFlushAmount = SolutionContainer.RemoveReagent(ent.Comp.BloodSolution.Value, reagentId, quantity);
             flushedSolution.AddReagent(reagentId, reagentFlushAmount);
+        }
+
+        return flushedSolution.Volume == 0 ? null : flushedSolution;
+    }
+
+    /// <summary>
+    /// Removes up to a specified total amount of reagents from the bloodstream that belong to a single reagent group.
+    /// Blood reference reagents are never removed.
+    /// </summary>
+    /// <returns>
+    /// Solution of removed chemicals or null if none were removed.
+    /// </returns>
+    public Solution? FlushChemicalsByGroup(
+        Entity<BloodstreamComponent?> ent,
+        FixedPoint2 quantity,
+        string reagentGroup,
+        ProtoId<ReagentPrototype>? excludedReagent = null)
+    {
+        if (!Resolve(ent, ref ent.Comp, logMissing: false)
+            || !SolutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution, out var bloodSolution))
+        {
+            return null;
+        }
+
+        var remaining = quantity;
+        var flushedSolution = new Solution();
+
+        for (var i = bloodSolution.Contents.Count - 1; i >= 0 && remaining > FixedPoint2.Zero; i--)
+        {
+            var (reagentId, _) = bloodSolution.Contents[i];
+            if (ent.Comp.BloodReferenceSolution.ContainsPrototype(reagentId.Prototype) ||
+                reagentId.Prototype == excludedReagent ||
+                !PrototypeManager.TryIndex<ReagentPrototype>(reagentId.Prototype, out var proto) ||
+                !string.Equals(proto.Group, reagentGroup, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            var available = bloodSolution.GetTotalPrototypeQuantity(reagentId.Prototype);
+            if (available <= FixedPoint2.Zero)
+                continue;
+
+            var toRemove = FixedPoint2.Min(remaining, available);
+            var removed = SolutionContainer.RemoveReagent(ent.Comp.BloodSolution!.Value, reagentId, toRemove);
+            if (removed <= FixedPoint2.Zero)
+                continue;
+
+            flushedSolution.AddReagent(reagentId, removed);
+            remaining -= removed;
         }
 
         return flushedSolution.Volume == 0 ? null : flushedSolution;
@@ -424,6 +517,25 @@ public abstract class SharedBloodstreamSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private void UpdateBloodstreamSolutionCapacities(Entity<BloodstreamComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
+        var maxVolume = FixedPoint2.New(ent.Comp.BloodReferenceSolution.Volume.Float() * ent.Comp.MaxVolumeModifier);
+
+        if (SolutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution) &&
+            !TerminatingOrDeleted(ent.Comp.BloodSolution.Value.Owner))
+            SolutionContainer.SetCapacity(ent.Comp.BloodSolution.Value, maxVolume);
+
+        if (SolutionContainer.ResolveSolution(ent.Owner, ent.Comp.MetabolitesSolutionName, ref ent.Comp.MetabolitesSolution) &&
+            !TerminatingOrDeleted(ent.Comp.MetabolitesSolution.Value.Owner))
+            SolutionContainer.SetCapacity(ent.Comp.MetabolitesSolution.Value, maxVolume);
     }
 
     public void TickBleed(Entity<BloodstreamComponent> entity)

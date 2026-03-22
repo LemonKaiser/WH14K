@@ -5,7 +5,6 @@ using System.Numerics;
 using Content.Server.Popups;
 using Content.Server._WH40K.Command;
 using Content.Server._WH40K.GameTicking.Rules;
-using Content.Shared._RMC14.MotionDetector;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Intel.Detector;
 using Content.Shared.Coordinates;
@@ -226,7 +225,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
                 if (direction.LengthSquared() <= 0.0001f)
                     continue;
 
-                detector.Blips.Add(new Blip(
+                detector.Blips.Add(new WH40KIntelDetectorBlip(
                     markerCoords,
                     Special: false,
                     Direction: Vector2.Normalize(direction)));

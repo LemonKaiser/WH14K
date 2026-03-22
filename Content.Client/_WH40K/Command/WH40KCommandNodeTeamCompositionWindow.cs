@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Content.Client.Administration.UI.CustomControls;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Robust.Client.Graphics;
@@ -15,59 +14,90 @@ namespace Content.Client._WH40K.Command;
 
 public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 {
-    private static readonly Color ImperiumColor = Color.FromHex("#F3C548");
-
+    private readonly StyleBoxFlat _headerStyle;
+    private readonly Label _headerTitleLabel;
     private readonly Label _teamLine;
     private readonly Label _summaryLine;
-    private readonly StyleBoxFlat _headerStyle;
-    private readonly Label _staffingHeaderLine;
-    private readonly Label _rolesHeaderLine;
-    private readonly Label _membersHeaderLine;
+    private readonly PanelContainer _teamBadge;
+    private readonly Label _teamBadgeLabel;
     private readonly BoxContainer _staffingRows;
     private readonly BoxContainer _roleRows;
     private readonly BoxContainer _memberRows;
-    private Color _accent = ImperiumColor;
+
+    private Color _accent = WH40KCommandUiStyles.DefaultAccent;
 
     public WH40KCommandNodeTeamCompositionWindow()
     {
         Title = Loc.GetString("wh40k-command-node-team-composition-window-title");
-        MinSize = SetSize = new Vector2(980, 640);
+        MinSize = SetSize = new Vector2(960, 620);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 8
+            SeparationOverride = 4,
+            Margin = new Thickness(8)
         };
         ContentsContainer.AddChild(root);
 
         var header = new PanelContainer
         {
-            PanelOverride = _headerStyle = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = ImperiumColor,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = _headerStyle = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.HeaderBackground,
+                _accent,
+                2)
         };
         root.AddChild(header);
 
         var headerBox = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 8,
+            Margin = new Thickness(10, 8),
+            VerticalAlignment = VAlignment.Center
         };
         header.AddChild(headerBox);
 
-        _teamLine = new Label();
-        _summaryLine = new Label();
-        headerBox.AddChild(_teamLine);
-        headerBox.AddChild(_summaryLine);
+        var headerInfo = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 2,
+            HorizontalExpand = true
+        };
+        headerBox.AddChild(headerInfo);
+
+        _headerTitleLabel = new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-team-composition-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        };
+        _teamLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _summaryLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_headerTitleLabel);
+        headerInfo.AddChild(_teamLine);
+        headerInfo.AddChild(_summaryLine);
+
+        _teamBadge = new PanelContainer();
+        _teamBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _teamBadge.AddChild(_teamBadgeLabel);
+        headerBox.AddChild(_teamBadge);
 
         var body = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 10,
+            SeparationOverride = 6,
             VerticalExpand = true
         };
         root.AddChild(body);
@@ -75,32 +105,31 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         var left = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 8,
+            SeparationOverride = 6,
             HorizontalExpand = true,
             VerticalExpand = true,
-            SizeFlagsStretchRatio = 0.95f
+            SizeFlagsStretchRatio = 0.92f
         };
         body.AddChild(left);
 
         var staffingSection = CreateSection(
             Loc.GetString("wh40k-command-node-team-composition-section-staffing"),
-            out var staffingBox,
-            out _staffingHeaderLine,
+            out var staffingContent,
             verticalExpand: false);
         left.AddChild(staffingSection);
 
         _staffingRows = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 5
+            SeparationOverride = 6
         };
-        staffingBox.AddChild(_staffingRows);
+        staffingContent.AddChild(_staffingRows);
 
         var rolesSection = CreateSection(
             Loc.GetString("wh40k-command-node-team-composition-section-roles"),
             out var rolesContent,
-            out _rolesHeaderLine,
             verticalExpand: true);
+        rolesSection.VerticalExpand = true;
         left.AddChild(rolesSection);
 
         var rolesScroll = new ScrollContainer
@@ -119,10 +148,9 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         var membersSection = CreateSection(
             Loc.GetString("wh40k-command-node-team-composition-section-members"),
-            out var membersBox,
-            out _membersHeaderLine,
+            out var membersContent,
             verticalExpand: true);
-        membersSection.MinWidth = 360;
+        membersSection.MinWidth = 300;
         membersSection.VerticalExpand = true;
         membersSection.SizeFlagsStretchRatio = 1.05f;
         body.AddChild(membersSection);
@@ -131,12 +159,12 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         {
             VerticalExpand = true
         };
-        membersBox.AddChild(membersScroll);
+        membersContent.AddChild(membersScroll);
 
         _memberRows = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 5,
+            SeparationOverride = 6,
             VerticalExpand = true
         };
         membersScroll.AddChild(_memberRows);
@@ -144,15 +172,17 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
-        _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, ImperiumColor);
+        _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
 
         _headerStyle.BorderColor = _accent;
+        _headerTitleLabel.ModulateSelfOverride = _accent;
         Title = Loc.GetString("wh40k-command-node-team-composition-window-title-team", ("team", state.TeamName));
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _summaryLine.Text = state.TeamCompositionSummary;
-        _staffingHeaderLine.ModulateSelfOverride = _accent;
-        _rolesHeaderLine.ModulateSelfOverride = _accent;
-        _membersHeaderLine.ModulateSelfOverride = _accent;
+
+        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
+        _summaryLine.Text = CompactLine(state.TeamCompositionSummary);
+
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
 
         var officerRoles = state.TeamCompositionOfficerRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
         var coreRoles = state.TeamCompositionCoreRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
@@ -160,74 +190,47 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         var members = state.TeamCompositionMembers ?? Array.Empty<WH40KTeamCompositionMemberEntry>();
 
         RebuildStaffing(state.TeamCompositionStaffingLines);
-
-        try
-        {
-            RebuildRoles(
-                officerRoles,
-                coreRoles,
-                mechanicusRoles);
-        }
-        catch (Exception)
-        {
-            _roleRows.RemoveAllChildren();
-            _roleRows.AddChild(new Label
-            {
-                Text = Loc.GetString("wh40k-command-node-team-composition-group-empty")
-            });
-        }
-
+        RebuildRoles(officerRoles, coreRoles, mechanicusRoles);
         RebuildMembers(members);
     }
 
-    private PanelContainer CreateSection(
-        string title,
-        out BoxContainer content,
-        out Label titleLabel,
-        bool verticalExpand)
+    private PanelContainer CreateSection(string title, out BoxContainer content, bool verticalExpand)
     {
         var section = new PanelContainer
         {
             VerticalExpand = verticalExpand,
             HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1F2433"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackgroundAlt,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
 
         var sectionRoot = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 0,
             VerticalExpand = verticalExpand
         };
         section.AddChild(sectionRoot);
 
         var titleBar = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(0, 0, 0, 1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
-        sectionRoot.AddChild(titleBar);
-
-        titleLabel = new Label
+        titleBar.AddChild(new Label
         {
             Text = title,
-            Margin = new Thickness(6, 4)
-        };
-        titleBar.AddChild(titleLabel);
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        });
+        sectionRoot.AddChild(titleBar);
 
         content = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             SeparationOverride = 6,
-            Margin = new Thickness(8),
+            Margin = new Thickness(10),
             VerticalExpand = verticalExpand
         };
         sectionRoot.AddChild(content);
@@ -241,16 +244,13 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         if (staffingLines.Count == 0)
         {
-            _staffingRows.AddChild(new Label
-            {
-                Text = Loc.GetString("wh40k-command-node-team-composition-empty")
-            });
+            _staffingRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
             return;
         }
 
         foreach (var line in staffingLines)
         {
-            _staffingRows.AddChild(CreateSingleLineRow(line));
+            _staffingRows.AddChild(CreateSingleLineRow(line, highlight: true));
         }
     }
 
@@ -275,10 +275,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         if (hasAnyRoles)
             return;
 
-        _roleRows.AddChild(new Label
-        {
-            Text = Loc.GetString("wh40k-command-node-team-composition-empty")
-        });
+        _roleRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
     }
 
     private bool AddRoleGroupRows(string groupName, IReadOnlyCollection<WH40KTeamCompositionRoleEntry> roles)
@@ -287,21 +284,37 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
             .Where(role => role != null)
             .ToList();
 
-        _roleRows.AddChild(new Label
+        var card = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackground,
+                safeRoles.Count > 0 ? _accent : WH40KCommandUiStyles.MutedBorder)
+        };
+        _roleRows.AddChild(card);
+
+        var cardBox = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 4
+        };
+        card.AddChild(cardBox);
+
+        cardBox.AddChild(new Label
         {
             Text = groupName,
-            Margin = new Thickness(2, 2, 2, 0),
-            ModulateSelfOverride = _accent
+            StyleClasses = { "LabelBig" },
+            ModulateSelfOverride = _accent,
+            ClipText = true
         });
 
         if (safeRoles.Count == 0)
         {
-            _roleRows.AddChild(new Label
+            cardBox.AddChild(new Label
             {
                 Text = Loc.GetString("wh40k-command-node-team-composition-group-empty"),
-                Margin = new Thickness(10, 0, 2, 4)
+                StyleClasses = { "LabelSubText" },
+                ClipText = true
             });
-            _roleRows.AddChild(new HSeparator { Margin = new Thickness(2, 0, 2, 4) });
             return false;
         }
 
@@ -310,11 +323,9 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
             var roleName = string.IsNullOrWhiteSpace(role.RoleName)
                 ? Loc.GetString("wh40k-command-node-team-composition-role-unknown")
                 : role.RoleName;
-
-            _roleRows.AddChild(CreateSingleLineRow($"{roleName}: {role.Count}"));
+            cardBox.AddChild(CreateSingleLineRow($"{roleName}: {role.Count}", inset: true));
         }
 
-        _roleRows.AddChild(new HSeparator { Margin = new Thickness(2, 0, 2, 4) });
         return true;
     }
 
@@ -324,10 +335,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         if (members.Count == 0)
         {
-            _memberRows.AddChild(new Label
-            {
-                Text = Loc.GetString("wh40k-command-node-team-composition-empty")
-            });
+            _memberRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
             return;
         }
 
@@ -337,25 +345,36 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         }
     }
 
-    private Control CreateSingleLineRow(string text)
+    private Control CreateSingleLineRow(string text, bool highlight = false, bool inset = false)
     {
         var row = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#232A3B"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            MinHeight = 28f,
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                inset ? WH40KCommandUiStyles.CardBackgroundAlt : WH40KCommandUiStyles.CardBackground,
+                highlight ? _accent : WH40KCommandUiStyles.MutedBorder)
         };
 
         row.AddChild(new Label
         {
-            Text = text,
-            Margin = new Thickness(6, 4)
+            Text = CompactLine(text),
+            ClipText = true,
+            StyleClasses = { inset ? "LabelSubText" : "LabelBig" }
         });
 
         return row;
     }
 
+    private static string CompactLine(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var compact = text
+            .Replace("\\n", " ", StringComparison.Ordinal)
+            .Replace('\n', ' ')
+            .Replace('\r', ' ');
+
+        return string.Join(' ', compact.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+    }
 }

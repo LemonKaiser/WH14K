@@ -306,6 +306,16 @@ public abstract partial class SharedStaminaSystem : EntitySystem
     /// Tries to take stamina damage without raising the entity over the crit threshold.
     /// </summary>
     public bool TryTakeStamina(EntityUid uid, float value, StaminaComponent? component = null, EntityUid? source = null, EntityUid? with = null, bool visual = false)
+        => TryTakeStamina(uid, value, component, source, with, visual, StaminaDamageType.Generic);
+
+    public bool TryTakeStamina(
+        EntityUid uid,
+        float value,
+        StaminaComponent? component = null,
+        EntityUid? source = null,
+        EntityUid? with = null,
+        bool visual = false,
+        StaminaDamageType damageType = StaminaDamageType.Generic)
     {
         // Something that has no Stamina component automatically passes stamina checks
         if (!Resolve(uid, ref component, false))
@@ -316,18 +326,19 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         if (oldStam + value >= component.CritThreshold || component.Critical)
             return false;
 
-        TakeStaminaDamage(uid, value, component, source, with, visual: visual);
+        TakeStaminaDamage(uid, value, component, source, with, visual: visual, damageType: damageType);
         return true;
     }
 
     public void TakeStaminaDamage(EntityUid uid, float value, StaminaComponent? component = null,
         EntityUid? source = null, EntityUid? with = null, bool visual = true, SoundSpecifier? sound = null,
-        bool ignoreResist = false, bool log = true, bool applyCooldown = true)
+        bool ignoreResist = false, bool log = true, bool applyCooldown = true,
+        StaminaDamageType damageType = StaminaDamageType.Generic)
     {
         if (!Resolve(uid, ref component, false))
             return;
 
-        var ev = new BeforeStaminaDamageEvent(value);
+        var ev = new BeforeStaminaDamageEvent(value, damageType);
         RaiseLocalEvent(uid, ref ev);
         if (ev.Cancelled)
             return;

@@ -16,11 +16,11 @@
             - !type:TargetInLOSPrecondition
               targetKey: Target
               rangeKey: RangedRange
-              opaqueKey: true
+              opaqueKey: false
           operator: !type:GunOperator
             targetKey: Target
             requireLOS: true
-            opaqueKey: true
+            opaqueKey: false
           services:
             - !type:UtilityService
               id: RangedService

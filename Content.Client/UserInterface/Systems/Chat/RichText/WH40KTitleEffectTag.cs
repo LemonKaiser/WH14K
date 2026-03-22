@@ -83,12 +83,14 @@ public sealed class WH40KTitleEffectTag : IMarkupTagHandler
         {
             "binary" => WH40KTitleFxMode.Binary,
             "scan" => WH40KTitleFxMode.Scan,
+            "fish" or "fish-swim" => WH40KTitleFxMode.Fish,
             "scramble-decode" or "scramble" => WH40KTitleFxMode.ScrambleDecode,
             "typewriter-cursor" or "typewriter" => WH40KTitleFxMode.TypewriterCursor,
             "wave" => WH40KTitleFxMode.Wave,
             "glitch-slice" or "glitch" => WH40KTitleFxMode.GlitchSlice,
             "noise-dissolve" or "dissolve-noise" or "noise" => WH40KTitleFxMode.NoiseDissolve,
             "scanline" => WH40KTitleFxMode.Scanline,
+            "flip" or "discord-flip" => WH40KTitleFxMode.Flip,
             _ => WH40KTitleFxMode.None,
         };
     }
@@ -197,12 +199,14 @@ internal enum WH40KTitleFxMode : byte
     None = 0,
     Binary = 1,
     Scan = 2,
-    ScrambleDecode = 3,
-    TypewriterCursor = 4,
-    Wave = 5,
-    GlitchSlice = 6,
-    NoiseDissolve = 7,
-    Scanline = 8,
+    Fish = 3,
+    ScrambleDecode = 4,
+    TypewriterCursor = 5,
+    Wave = 6,
+    GlitchSlice = 7,
+    NoiseDissolve = 8,
+    Scanline = 9,
+    Flip = 10,
 }
 
 internal sealed class WH40KTitleEffectControl : Control
@@ -210,6 +214,7 @@ internal sealed class WH40KTitleEffectControl : Control
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly Rune[] NoiseRunes = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-?".EnumerateRunes().ToArray();
+    private static readonly Rune FishRune = new(0x1F41F);
 
     private readonly List<Rune> _runes;
     private readonly List<Color> _palette;
@@ -291,8 +296,17 @@ internal sealed class WH40KTitleEffectControl : Control
         var baseline = SizeBox.TopLeft + new Vector2(0f, font.GetAscent(UIScale));
         var elapsedMs = _timing.RealTime.TotalMilliseconds + _phaseMs;
         var shift = ResolveGradientShift(elapsedMs);
+
+        if (_mode == WH40KTitleFxMode.Fish)
+        {
+            DrawFish(handle, font, baseline, elapsedMs, shift);
+            return;
+        }
+
+        var flipAngle = _mode == WH40KTitleFxMode.Flip
+            ? ResolveFlipAngle(elapsedMs)
+            : 0f;
         var divisor = Math.Max(1, _runes.Count - 1);
-        var tick = (long) (elapsedMs / 50.0);
 
         for (var index = 0; index < _runes.Count; index++)
         {
@@ -310,6 +324,8 @@ internal sealed class WH40KTitleEffectControl : Control
                     break;
                 case WH40KTitleFxMode.Scan:
                     drawColor = ApplyScanColor(index, drawColor, elapsedMs);
+                    break;
+                case WH40KTitleFxMode.Fish:
                     break;
                 case WH40KTitleFxMode.ScrambleDecode:
                     drawRune = ResolveScrambleDecodeRune(index, sourceRune, elapsedMs);
@@ -329,10 +345,17 @@ internal sealed class WH40KTitleEffectControl : Control
                 case WH40KTitleFxMode.Scanline:
                     drawColor = ApplyScanlineColor(index, drawColor, elapsedMs);
                     break;
+                case WH40KTitleFxMode.Flip:
+                    break;
             }
 
             drawColor = drawColor.WithAlpha(Math.Clamp(drawColor.A * alpha, 0.02f, 1f));
             var drawPos = baseline + offset;
+            var baseTransform = handle.GetTransform();
+            var applyFlipTransform = MathF.Abs(flipAngle) > 0.001f && drawRune.Value != ' ';
+
+            if (applyFlipTransform)
+                handle.SetTransform(CreateGlyphFlipTransform(baseTransform, drawPos, font, sourceRune, flipAngle));
 
             if (_outlineEnabled && drawRune.Value != ' ')
             {
@@ -347,8 +370,127 @@ internal sealed class WH40KTitleEffectControl : Control
             }
 
             font.DrawChar(handle, drawRune, drawPos, UIScale, drawColor);
+
+            if (applyFlipTransform)
+                handle.SetTransform(baseTransform);
+
             baseline += new Vector2(GetRuneAdvance(font, sourceRune), 0f);
         }
+    }
+
+    private void DrawFish(
+        DrawingHandleScreen handle,
+        Font font,
+        Vector2 baseline,
+        double elapsedMs,
+        float shift)
+    {
+        var displayRunes = ResolveFishDisplayRunes(elapsedMs);
+        if (displayRunes.Count == 0)
+            return;
+
+        var divisor = Math.Max(1, displayRunes.Count - 1);
+        for (var index = 0; index < displayRunes.Count; index++)
+        {
+            var drawRune = displayRunes[index];
+            var drawColor = SampleGradient(_palette, ((displayRunes.Count == 1 ? 0f : index / (float) divisor) + shift) % 1f);
+
+            if (_outlineEnabled && drawRune.Value != ' ')
+            {
+                var outlineAlpha = Math.Clamp(_outlineAlphaPercent / 100f, 0.02f, 1f);
+                DrawOutline(handle, font, drawRune, baseline, _outlineColor.WithAlpha(outlineAlpha));
+            }
+
+            font.DrawChar(handle, drawRune, baseline, UIScale, drawColor);
+            baseline += new Vector2(GetRuneAdvance(font, drawRune), 0f);
+        }
+    }
+
+    private List<Rune> ResolveFishDisplayRunes(double elapsedMs)
+    {
+        var normalHoldMs = Math.Max(100, _holdMs);
+        var swimStepMs = Math.Max(100, _revealMs);
+
+        if (_runes.Count == 0)
+            return _runes;
+
+        var hasWrappingParens = _runes.Count >= 2 &&
+                                _runes[0].Value == '(' &&
+                                _runes[^1].Value == ')';
+
+        var prefixCount = hasWrappingParens ? 1 : 0;
+        var suffixCount = hasWrappingParens ? 1 : 0;
+        var coreCount = Math.Max(0, _runes.Count - prefixCount - suffixCount);
+        if (coreCount <= 0)
+            return _runes;
+
+        var swimSteps = coreCount;
+        var cycleMs = normalHoldMs + (swimSteps * swimStepMs);
+        var cyclePosition = elapsedMs % cycleMs;
+        if (cyclePosition < 0)
+            cyclePosition += cycleMs;
+
+        if (cyclePosition < normalHoldMs)
+            return _runes;
+
+        cyclePosition -= normalHoldMs;
+        var step = Math.Clamp((int) (cyclePosition / swimStepMs), 0, swimSteps - 1);
+        var result = new List<Rune>(_runes);
+        var fishIndex = prefixCount + (coreCount - 1 - step);
+        result[fishIndex] = FishRune;
+
+        return result;
+    }
+
+    private float ResolveFlipAngle(double elapsedMs)
+    {
+        const int normalHoldMs = 5000;
+        var toUpsideDownMs = Math.Max(1, _dissolveMs);
+        var upsideDownHoldMs = Math.Max(1, _holdMs);
+        var toNormalMs = Math.Max(1, _revealMs);
+        var cycleMs = normalHoldMs + toUpsideDownMs + upsideDownHoldMs + toNormalMs;
+
+        var cyclePosition = elapsedMs % cycleMs;
+        if (cyclePosition < 0)
+            cyclePosition += cycleMs;
+
+        if (cyclePosition < normalHoldMs)
+            return 0f;
+
+        cyclePosition -= normalHoldMs;
+        if (cyclePosition < toUpsideDownMs)
+        {
+            var progress = (float) (cyclePosition / toUpsideDownMs);
+            return EaseInOutSine(progress) * MathF.PI;
+        }
+
+        cyclePosition -= toUpsideDownMs;
+        if (cyclePosition < upsideDownHoldMs)
+            return MathF.PI;
+
+        cyclePosition -= upsideDownHoldMs;
+        var restoreProgress = (float) (cyclePosition / toNormalMs);
+        return MathF.PI * (1f - EaseInOutSine(restoreProgress));
+    }
+
+    private Matrix3x2 CreateGlyphFlipTransform(
+        Matrix3x2 baseTransform,
+        Vector2 drawPos,
+        Font font,
+        Rune sourceRune,
+        float angle)
+    {
+        var advance = GetRuneAdvance(font, sourceRune);
+        var ascent = font.GetAscent(UIScale);
+        var lineHeight = font.GetLineHeight(UIScale);
+        var pivot = new Vector2(
+            drawPos.X + (advance / 2f),
+            drawPos.Y - ascent + (lineHeight / 2f));
+
+        return Matrix3x2.CreateTranslation(-pivot) *
+               Matrix3x2.CreateRotation(angle) *
+               Matrix3x2.CreateTranslation(pivot) *
+               baseTransform;
     }
 
     private float ResolveGradientShift(double elapsedMs)
@@ -684,6 +826,12 @@ internal sealed class WH40KTitleEffectControl : Control
     {
         var value = Hash(cycleIndex, index, salt);
         return (value % 1_000_000UL) / 1_000_000f;
+    }
+
+    private static float EaseInOutSine(float progress)
+    {
+        var clamped = Math.Clamp(progress, 0f, 1f);
+        return 0.5f - (MathF.Cos(clamped * MathF.PI) * 0.5f);
     }
 
     private bool ShouldUseBinary(int index, double elapsedMs, int salt)

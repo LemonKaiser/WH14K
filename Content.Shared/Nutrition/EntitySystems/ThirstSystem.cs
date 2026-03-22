@@ -105,6 +105,19 @@ public sealed class ThirstSystem : EntitySystem
         DirtyField(uid, component, nameof(ThirstComponent.CurrentThirst));
     }
 
+    /// <summary>
+    /// Updates the base thirst decay and refreshes the effective decay for the current threshold.
+    /// </summary>
+    public void SetBaseDecayRate(EntityUid uid, float baseDecayRate, ThirstComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        component.BaseDecayRate = baseDecayRate;
+        DirtyField(uid, component, nameof(ThirstComponent.BaseDecayRate));
+        UpdateEffects(uid, component);
+    }
+
     private bool IsMovementThreshold(ThirstThreshold threshold)
     {
         switch (threshold)

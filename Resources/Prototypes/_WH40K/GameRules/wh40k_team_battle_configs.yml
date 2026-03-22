@@ -61,54 +61,58 @@
   defaultDanger: 3
   weatherDanger:
   - weatherId: WHAsh
-    danger: 1
+    danger: 3
   - weatherId: WHBlackIce
-    danger: 2
+    danger: 3
   - weatherId: WHSporeDrift
-    danger: 2
+    danger: 3
   - weatherId: WHRadFront
-    danger: 2
+    danger: 3
   - weatherId: WHMetalHail
-    danger: 3
+    danger: 4
   - weatherId: WHIonStorm
-    danger: 3
+    danger: 2
   - weatherId: WHAcidRain
-    danger: 3
+    danger: 4
   - weatherId: WHSandHurricane
-    danger: 3
+    danger: 2
   - weatherId: WHToxicAshFront
     danger: 4
   - weatherId: WHGellarTremor
-    danger: 4
+    danger: 1
   - weatherId: WHMachineCorrosionStorm
-    danger: 4
+    danger: 3
+  - weatherId: WHBlackFront
+    danger: 2
 
 - type: wh40kWeatherDangerProfile
   id: WH40KWeatherDangerProfileDefault
   defaultDanger: 3
   weatherDanger:
   - weatherId: WHAsh
-    danger: 1
+    danger: 3
   - weatherId: WHBlackIce
-    danger: 2
+    danger: 3
   - weatherId: WHSporeDrift
-    danger: 2
+    danger: 3
   - weatherId: WHRadFront
-    danger: 2
+    danger: 3
   - weatherId: WHMetalHail
-    danger: 3
+    danger: 4
   - weatherId: WHIonStorm
-    danger: 3
+    danger: 2
   - weatherId: WHAcidRain
-    danger: 3
+    danger: 4
   - weatherId: WHSandHurricane
-    danger: 3
+    danger: 2
   - weatherId: WHToxicAshFront
     danger: 4
   - weatherId: WHGellarTremor
-    danger: 4
+    danger: 1
   - weatherId: WHMachineCorrosionStorm
-    danger: 4
+    danger: 3
+  - weatherId: WHBlackFront
+    danger: 2
 
 - type: wh40kTeamBattleRoundEventsProfile
   id: WH40KTeamBattleEvents120m

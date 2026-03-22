@@ -365,6 +365,12 @@ public readonly record struct StatusEffectRemovedEvent(EntityUid Target);
 public record struct BeforeStatusEffectAddedEvent(EntProtoId Effect, bool Cancelled = false);
 
 /// <summary>
+/// Raised on the target entity before a status effect duration is applied or updated.
+/// </summary>
+[ByRefEvent]
+public record struct ModifyStatusEffectDurationEvent(EntProtoId EffectProtoId, TimeSpan Duration);
+
+/// <summary>
 /// Raised on an effect entity when its <see cref="StatusEffectComponent.EndEffectTime"/> is updated in any way.
 /// </summary>
 /// <param name="Target">The entity the effect is attached to.</param>

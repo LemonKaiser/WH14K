@@ -13,7 +13,6 @@ using Robust.Shared.Localization;
 using Robust.Shared.Log;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Command;
 
@@ -81,17 +80,22 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
     public event Action<string>? OnDoctrineAssigned;
 
     private readonly StyleBoxFlat _headerStyle;
+    private readonly Label _headerTitleLabel;
     private readonly Label _teamLine;
     private readonly Label _phaseLine;
     private readonly Label _availabilityLine;
     private readonly Label _activeDoctrineLine;
+    private readonly PanelContainer _teamBadge;
+    private readonly Label _teamBadgeLabel;
+    private readonly PanelContainer _phaseBadge;
+    private readonly Label _phaseBadgeLabel;
     private readonly BoxContainer _cardsRow;
     private readonly Dictionary<string, StyleBoxFlat> _rowStyles = new();
     private readonly Dictionary<string, Label> _rowTitleLabels = new();
-    private readonly Dictionary<string, RichTextLabel> _rowFocusLabels = new();
-    private readonly Dictionary<string, RichTextLabel> _rowEffectLabels = new();
-    private readonly Dictionary<string, RichTextLabel> _rowLockLabels = new();
-    private readonly Dictionary<string, RichTextLabel> _rowDebuffLabels = new();
+    private readonly Dictionary<string, Label> _rowFocusLabels = new();
+    private readonly Dictionary<string, Label> _rowEffectLabels = new();
+    private readonly Dictionary<string, Label> _rowLockLabels = new();
+    private readonly Dictionary<string, Label> _rowDebuffLabels = new();
     private readonly Dictionary<string, Button> _rowButtons = new();
     private readonly List<DoctrinePreset> _presets = new();
     private DoctrineDetailWindow? _detailWindow;
@@ -108,81 +112,152 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
     public WH40KCommandNodeDoctrineWindow()
     {
         Title = Loc.GetString("wh40k-command-node-doctrine-window-title");
-        MinSize = new Vector2(980, 560);
-        SetSize = new Vector2(1000, 580);
+        MinSize = new Vector2(940, 600);
+        SetSize = new Vector2(980, 620);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6
+            SeparationOverride = 6,
+            Margin = new Thickness(6)
         };
         ContentsContainer.AddChild(root);
 
         var header = new PanelContainer
         {
-            PanelOverride = _headerStyle = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = ImperiumColor,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = _headerStyle = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.HeaderBackground,
+                ImperiumColor,
+                2)
         };
         root.AddChild(header);
 
         var headerBox = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 8,
+            Margin = new Thickness(10, 8),
+            VerticalAlignment = VAlignment.Center
         };
         header.AddChild(headerBox);
 
-        _teamLine = new Label();
-        _phaseLine = new Label();
-        _availabilityLine = new Label();
-        _activeDoctrineLine = new Label();
-        headerBox.AddChild(_teamLine);
-        headerBox.AddChild(_phaseLine);
-        headerBox.AddChild(_availabilityLine);
-        headerBox.AddChild(_activeDoctrineLine);
+        var headerInfo = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 3,
+            HorizontalExpand = true
+        };
+        headerBox.AddChild(headerInfo);
+
+        _headerTitleLabel = new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-doctrine-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        };
+        _teamLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _phaseLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _availabilityLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _activeDoctrineLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_headerTitleLabel);
+        headerInfo.AddChild(_teamLine);
+        headerInfo.AddChild(_phaseLine);
+        headerInfo.AddChild(_availabilityLine);
+        headerInfo.AddChild(_activeDoctrineLine);
+
+        var badgeRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 6,
+            VerticalAlignment = VAlignment.Center
+        };
+        headerBox.AddChild(badgeRow);
+
+        _teamBadge = new PanelContainer();
+        _teamBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _teamBadge.AddChild(_teamBadgeLabel);
+        badgeRow.AddChild(_teamBadge);
+
+        _phaseBadge = new PanelContainer();
+        _phaseBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _phaseBadge.AddChild(_phaseBadgeLabel);
+        badgeRow.AddChild(_phaseBadge);
 
         var cardsSection = new PanelContainer
         {
             VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1F2433"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackgroundAlt,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
         root.AddChild(cardsSection);
+
+        var cardsRoot = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 0,
+            VerticalExpand = true
+        };
+        cardsSection.AddChild(cardsRoot);
+
+        var cardsHeader = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
+        };
+        cardsRoot.AddChild(cardsHeader);
+        cardsHeader.AddChild(new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-doctrine-window-list-header"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        });
 
         var cardsSectionBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 4,
-            Margin = new Thickness(6),
+            SeparationOverride = 5,
+            Margin = new Thickness(8),
             VerticalExpand = true
         };
-        cardsSection.AddChild(cardsSectionBox);
-        cardsSectionBox.AddChild(new Label
-        {
-            Text = Loc.GetString("wh40k-command-node-doctrine-window-list-header")
-        });
+        cardsRoot.AddChild(cardsSectionBox);
 
         var cardsScroll = new ScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            SetHeight = 360f
+            SetHeight = 300f
         };
         cardsSectionBox.AddChild(cardsScroll);
 
         _cardsRow = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
+            SeparationOverride = 6,
             HorizontalExpand = true
         };
         cardsScroll.AddChild(_cardsRow);
@@ -230,9 +305,14 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         EnsureProfileLoaded(_teamId);
 
         _headerStyle.BorderColor = _accent;
+        _headerTitleLabel.ModulateSelfOverride = _accent;
         _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
         _phaseLine.Text = Loc.GetString("wh40k-command-node-phase",
             ("phase", Loc.GetString(GetPhaseKey(state.Phase))));
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _phaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase);
+        _phaseBadgeLabel.Text = Loc.GetString(GetPhaseKey(state.Phase));
 
         _activeDoctrineId = string.IsNullOrWhiteSpace(activeDoctrineId)
             ? string.Empty
@@ -304,17 +384,14 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
     private void AddDoctrineCard(DoctrinePreset preset)
     {
-        var rowStyle = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#232A3B"),
-            BorderColor = Color.FromHex("#59617B"),
-            BorderThickness = new Thickness(1)
-        };
+        var rowStyle = WH40KCommandUiStyles.CreateCardStyle(
+            WH40KCommandUiStyles.CardBackgroundAlt,
+            WH40KCommandUiStyles.MutedBorder);
 
         var card = new PanelContainer
         {
-            MinWidth = 292,
-            MinHeight = 360,
+            MinWidth = 280,
+            MinHeight = 240,
             VerticalAlignment = VAlignment.Top,
             PanelOverride = rowStyle
         };
@@ -323,24 +400,25 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         var cardBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 4,
-            Margin = new Thickness(6)
+            SeparationOverride = 6
         };
         card.AddChild(cardBox);
 
-            var title = new Label
-            {
-                Text = UsesHereticsDoctrinePresentation(_teamId)
-                    ? Loc.GetString(preset.NameHereticsKey)
-                    : Loc.GetString(preset.NameImperiumKey)
-            };
+        var title = new Label
+        {
+            Text = UsesHereticsDoctrinePresentation(_teamId)
+                ? Loc.GetString(preset.NameHereticsKey)
+                : Loc.GetString(preset.NameImperiumKey),
+            StyleClasses = { "LabelBig" },
+            ClipText = true
+        };
         cardBox.AddChild(title);
         cardBox.AddChild(new HSeparator());
 
         var detailStack = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 4
+            SeparationOverride = 2
         };
         cardBox.AddChild(detailStack);
 
@@ -437,15 +515,15 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
                            string.Equals(preset.Id, _activeDoctrineId, StringComparison.OrdinalIgnoreCase);
 
             rowStyle.BackgroundColor = isSelected
-                ? Color.FromHex("#2A344D")
+                ? WH40KCommandUiStyles.CardBackground
                 : isActive
-                    ? Color.FromHex("#283043")
-                    : Color.FromHex("#232A3B");
+                    ? WH40KCommandUiStyles.CardBackgroundMuted
+                    : WH40KCommandUiStyles.CardBackgroundAlt;
             rowStyle.BorderColor = isSelected
                 ? _accent
                 : isActive
                     ? ActiveColor
-                    : Color.FromHex("#59617B");
+                    : WH40KCommandUiStyles.MutedBorder;
 
             title.ModulateSelfOverride = isSelected ? _accent : Color.White;
 
@@ -465,10 +543,10 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
             var display = ResolveDoctrineDisplay(preset.Id, _teamId);
             _rowTitleLabels[preset.Id].Text = display.Name;
-            SetWrappedText(_rowFocusLabels[preset.Id], display.BriefFocus, _accent);
-            SetWrappedText(_rowEffectLabels[preset.Id], display.BriefEffect, Color.FromHex("#D9E6FF"));
-            SetWrappedText(_rowLockLabels[preset.Id], display.LockText, Color.FromHex("#E7BFAF"));
-            SetWrappedText(_rowDebuffLabels[preset.Id], display.DebuffText, Color.FromHex("#E19797"));
+            _rowFocusLabels[preset.Id].Text = CompactText(display.BriefFocus, 56);
+            _rowEffectLabels[preset.Id].Text = CompactText(display.BriefEffect, 56);
+            _rowLockLabels[preset.Id].Text = CompactText(display.LockText, 56);
+            _rowDebuffLabels[preset.Id].Text = CompactText(display.DebuffText, 56);
         }
     }
 
@@ -604,42 +682,46 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             string blockReason)
         {
             Title = Loc.GetString("wh40k-command-node-doctrine-detail-window-title", ("doctrine", doctrine.Name));
-            MinSize = SetSize = new Vector2(760, 620);
+            MinSize = SetSize = new Vector2(760, 600);
 
             var root = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                SeparationOverride = 8
+                SeparationOverride = 6,
+                Margin = new Thickness(6)
             };
             ContentsContainer.AddChild(root);
 
             var summaryPanel = new PanelContainer
             {
-                PanelOverride = new StyleBoxFlat
-                {
-                    BackgroundColor = Color.FromHex("#232A3B"),
-                    BorderColor = accent,
-                    BorderThickness = new Thickness(1)
-                }
+                PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                    WH40KCommandUiStyles.HeaderBackground,
+                    accent,
+                    2)
             };
             root.AddChild(summaryPanel);
 
             var summaryBox = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                SeparationOverride = 3,
-                Margin = new Thickness(8)
+                SeparationOverride = 5,
+                Margin = new Thickness(10, 8)
             };
             summaryPanel.AddChild(summaryBox);
 
             summaryBox.AddChild(new Label
             {
                 Text = doctrine.Name,
-                ModulateSelfOverride = accent
+                StyleClasses = { "LabelHeading" },
+                ModulateSelfOverride = accent,
+                ClipText = true
             });
 
-            var summaryText = new RichTextLabel();
-            SetWrappedText(summaryText, doctrine.Summary);
+            var summaryText = new Label
+            {
+                ClipText = true,
+                Text = CompactText(doctrine.Summary, 120)
+            };
             summaryBox.AddChild(summaryText);
 
             var sectionsScroll = new ScrollContainer
@@ -651,7 +733,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             var sections = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                SeparationOverride = 6
+                SeparationOverride = 8
             };
             sectionsScroll.AddChild(sections);
 
@@ -688,17 +770,36 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
             if (!string.IsNullOrWhiteSpace(blockReason))
             {
-                var blocker = new RichTextLabel();
-                SetWrappedText(blocker, blockReason, Color.FromHex("#E7BFAF"));
-                root.AddChild(blocker);
+                var blockerPanel = new PanelContainer
+                {
+                    PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                        WH40KCommandUiStyles.CardBackgroundAlt,
+                        WH40KCommandUiStyles.WarningBadge)
+                };
+                var blocker = new Label
+                {
+                    ClipText = true,
+                    Text = CompactText(blockReason, 120)
+                };
+                blockerPanel.AddChild(blocker);
+                root.AddChild(blockerPanel);
             }
+
+            var actionsPanel = new PanelContainer
+            {
+                PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                    WH40KCommandUiStyles.FooterBackground,
+                    WH40KCommandUiStyles.MutedBorder,
+                    1)
+            };
+            root.AddChild(actionsPanel);
 
             var actions = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Horizontal,
-                SeparationOverride = 8
+                SeparationOverride = 6
             };
-            root.AddChild(actions);
+            actionsPanel.AddChild(actions);
 
             var backButton = new Button
             {
@@ -728,30 +829,31 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         {
             var panel = new PanelContainer
             {
-                PanelOverride = new StyleBoxFlat
-                {
-                    BackgroundColor = Color.FromHex("#202636"),
-                    BorderColor = Color.FromHex("#59617B"),
-                    BorderThickness = new Thickness(1)
-                }
+                PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                    WH40KCommandUiStyles.CardBackground,
+                    WH40KCommandUiStyles.MutedBorder)
             };
             parent.AddChild(panel);
 
             var box = new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Vertical,
-                SeparationOverride = 3,
-                Margin = new Thickness(6)
+                SeparationOverride = 4
             };
             panel.AddChild(box);
 
             box.AddChild(new Label
             {
-                Text = header
+                Text = header,
+                StyleClasses = { "LabelHeading" },
+                ClipText = true
             });
 
-            var text = new RichTextLabel();
-            SetWrappedText(text, body, bodyColor);
+            var text = new RichTextLabel
+            {
+                SetHeight = 42f
+            };
+            WH40KCommandUiStyles.SetWrappedText(text, body, bodyColor);
             box.AddChild(text);
         }
     }
@@ -772,45 +874,77 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         };
     }
 
-    private static void SetWrappedText(RichTextLabel label, string text, Color? color = null)
-    {
-        var normalized = text.Replace("\\n", "\n", StringComparison.Ordinal);
-        label.SetMessage(
-            FormattedMessage.FromMarkupPermissive(FormattedMessage.EscapeText(normalized)),
-            tagsAllowed: null,
-            defaultColor: color ?? Color.White);
-    }
-
-    private static RichTextLabel AddCardSection(BoxContainer parent, string header, Color headerColor)
+    private static Label AddCardSection(BoxContainer parent, string header, Color headerColor)
     {
         var panel = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#262E42"),
-                BorderColor = Color.FromHex("#55607A"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackground,
+                WH40KCommandUiStyles.MutedBorder)
         };
         parent.AddChild(panel);
 
         var box = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 2,
-            Margin = new Thickness(6, 4)
+            SeparationOverride = 2
         };
         panel.AddChild(box);
 
         box.AddChild(new Label
         {
             Text = header,
-            ModulateSelfOverride = headerColor
+            StyleClasses = { "LabelSubText" },
+            ModulateSelfOverride = headerColor,
+            ClipText = true
         });
         box.AddChild(new HSeparator());
 
-        var body = new RichTextLabel();
+        var body = new Label
+        {
+            ClipText = true
+        };
         box.AddChild(body);
         return body;
+    }
+
+    private static string CompactText(string text, int maxLength)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var compact = text.Trim()
+            .Replace("\r", " ", StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal)
+            .Replace("\t", " ", StringComparison.Ordinal);
+
+        while (compact.Contains("  ", StringComparison.Ordinal))
+        {
+            compact = compact.Replace("  ", " ", StringComparison.Ordinal);
+        }
+
+        if (compact.Length <= maxLength)
+            return compact;
+
+        return compact[..Math.Max(0, maxLength - 3)].TrimEnd() + "...";
+    }
+
+    private static StyleBoxFlat ResolvePhaseBadgeStyle(WH40KBattlePhase phase)
+    {
+        return phase switch
+        {
+            WH40KBattlePhase.Preparation => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.InfoBadge),
+            WH40KBattlePhase.Assault => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2E1D".AsSpan()),
+                WH40KCommandUiStyles.WarningBadge),
+            WH40KBattlePhase.Apocalypse => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2A2A".AsSpan()),
+                WH40KCommandUiStyles.DangerBadge),
+            _ => WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.InfoBadge)
+        };
     }
 }

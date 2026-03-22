@@ -21,35 +21,39 @@ namespace Content.Client._WH40K.Command.Controls;
 /// </summary>
 public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 {
-    private static readonly Color CanvasBackgroundColor = Color.FromHex("#21242E");
-    private static readonly Color CanvasBorderColor = Color.FromHex("#4D5670");
-    private static readonly Color AvailableBackgroundColor = Color.FromHex("#3A3A3A");
-    private static readonly Color AvailableBorderColor = Color.FromHex("#DADADA");
-    private static readonly Color AvailableHoverBackgroundColor = Color.FromHex("#474A53");
-    private static readonly Color LockedBackgroundColor = Color.FromHex("#2B2D33");
-    private static readonly Color LockedBorderColor = Color.FromHex("#616773");
-    private static readonly Color LockedHoverBackgroundColor = Color.FromHex("#353944");
-    private static readonly Color PurchasedBackgroundColor = Color.FromHex("#1F3D2A");
-    private static readonly Color PurchasedBorderColor = Color.FromHex("#63C285");
-    private static readonly Color PurchasedHoverBackgroundColor = Color.FromHex("#2A4A35");
-    private static readonly Color DoctrineLockBackgroundColor = Color.FromHex("#392528");
-    private static readonly Color DoctrineLockBorderColor = Color.FromHex("#D46A6A");
-    private static readonly Color DoctrineLockHoverBackgroundColor = Color.FromHex("#4A2F33");
-    private static readonly Color PointLockBackgroundColor = Color.FromHex("#40311D");
-    private static readonly Color PointLockBorderColor = Color.FromHex("#D99B47");
-    private static readonly Color PointLockHoverBackgroundColor = Color.FromHex("#533F24");
-    private static readonly Color InactiveBackgroundColor = Color.FromHex("#24262D");
-    private static readonly Color InactiveBorderColor = Color.FromHex("#515766");
-    private static readonly Color InactiveHoverBackgroundColor = Color.FromHex("#2E323C");
-    private static readonly Vector2 NodeSize = new(108f, 40f);
-    private const int MarqueeVisibleChars = 13;
+    private static readonly Color CanvasBackgroundColor = WH40KCommandUiStyles.PanelBackgroundAlt;
+    private static readonly Color CanvasBorderColor = WH40KCommandUiStyles.StrongBorder;
+    private static readonly Color DomainBackgroundColor = Color.FromHex("#101821");
+    private static readonly Color DomainBackgroundAltColor = Color.FromHex("#0F1822");
+    private static readonly Color DomainBorderColor = Color.FromHex("#243549");
+    private static readonly Color TierGuideColor = Color.FromHex("#243549");
+    private static readonly Color AvailableBackgroundColor = Color.FromHex("#162231");
+    private static readonly Color AvailableBorderColor = WH40KCommandUiStyles.DefaultAccent;
+    private static readonly Color AvailableHoverBackgroundColor = Color.FromHex("#1C2B3D");
+    private static readonly Color LockedBackgroundColor = Color.FromHex("#121C28");
+    private static readonly Color LockedBorderColor = WH40KCommandUiStyles.MutedBorder;
+    private static readonly Color LockedHoverBackgroundColor = Color.FromHex("#172434");
+    private static readonly Color PurchasedBackgroundColor = Color.FromHex("#182A21");
+    private static readonly Color PurchasedBorderColor = WH40KCommandUiStyles.ReadyBadge;
+    private static readonly Color PurchasedHoverBackgroundColor = Color.FromHex("#203628");
+    private static readonly Color DoctrineLockBackgroundColor = Color.FromHex("#291B21");
+    private static readonly Color DoctrineLockBorderColor = WH40KCommandUiStyles.DangerBadge;
+    private static readonly Color DoctrineLockHoverBackgroundColor = Color.FromHex("#34222B");
+    private static readonly Color PointLockBackgroundColor = Color.FromHex("#2F2417");
+    private static readonly Color PointLockBorderColor = WH40KCommandUiStyles.WarningBadge;
+    private static readonly Color PointLockHoverBackgroundColor = Color.FromHex("#3A2D1C");
+    private static readonly Color InactiveBackgroundColor = Color.FromHex("#101821");
+    private static readonly Color InactiveBorderColor = Color.FromHex("#26384A");
+    private static readonly Color InactiveHoverBackgroundColor = Color.FromHex("#152131");
+    private static readonly Vector2 NodeSize = new(100f, 36f);
+    private const int MarqueeVisibleChars = 12;
     private const float MarqueeTickSeconds = 0.12f;
     private const float MarqueePauseSeconds = 0.65f;
-    private const float HorizontalPadding = 24f;
-    private const float DomainInnerPadding = 10f;
-    private const float VerticalPaddingTop = 20f;
-    private const float VerticalPaddingBottom = 20f;
-    private const float HorizontalRankSpread = 1.6f;
+    private const float HorizontalPadding = 18f;
+    private const float DomainInnerPadding = 8f;
+    private const float VerticalPaddingTop = 14f;
+    private const float VerticalPaddingBottom = 14f;
+    private const float HorizontalRankSpread = 1.45f;
     private const string CommandTreeTeamMapId = "WH40KCommandTreeTeamMap";
     private const string CommandTreeDefaultProfileId = "WH40KCommandTreeProfileDefault";
     private const string CommandTreeCostTeamMapId = "WH40KCommandTreeCostTeamMap";
@@ -121,7 +125,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private string _activeCostProfileId = string.Empty;
     private string _activeDoctrineId = string.Empty;
     private string _lockedDomainId = string.Empty;
-    private Color _accentColor = Color.FromHex("#F3C548");
+    private Color _accentColor = WH40KCommandUiStyles.DefaultAccent;
     private WH40KCommandTreeCostProfilePrototype? _activeCostProfile;
 
     public Color AccentColor
@@ -140,8 +144,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         HorizontalExpand = true;
         VerticalExpand = true;
-        MinHeight = 640f;
-        MinWidth = 760f;
+        MinHeight = 520f;
+        MinWidth = 660f;
         LoadTreeForTeam(string.Empty);
         LoadCostProfileForTeam(string.Empty);
         EmitDefaultInfo();
@@ -183,6 +187,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         handle.DrawRect(PixelSizeBox, CanvasBackgroundColor);
         handle.DrawRect(PixelSizeBox, CanvasBorderColor, false);
+        DrawDomainColumns(handle);
+        DrawTierGuides(handle);
 
         foreach (var (parentId, childId) in _connections)
         {
@@ -245,6 +251,53 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private static Vector2 SnapToPixel(Vector2 point)
     {
         return new Vector2(MathF.Round(point.X), MathF.Round(point.Y));
+    }
+
+    private void DrawDomainColumns(DrawingHandleScreen handle)
+    {
+        var size = PixelSize;
+        if (size.X <= 0f || size.Y <= 0f)
+            return;
+
+        var usableWidth = MathF.Max(1f, size.X - HorizontalPadding * 2f);
+        var domainCount = Math.Max(1, _domainIndices.Count);
+        var domainWidth = usableWidth / domainCount;
+        var top = VerticalPaddingTop * 0.5f;
+        var bottom = MathF.Max(top + 1f, size.Y - VerticalPaddingBottom * 0.5f);
+
+        for (var index = 0; index < domainCount; index++)
+        {
+            var left = HorizontalPadding + domainWidth * index;
+            var right = left + domainWidth;
+            var box = new UIBox2(left, top, right, bottom);
+            var fill = index % 2 == 0 ? DomainBackgroundColor : DomainBackgroundAltColor;
+            handle.DrawRect(box, fill);
+            handle.DrawRect(box, DomainBorderColor.WithAlpha(0.75f), false);
+        }
+    }
+
+    private void DrawTierGuides(DrawingHandleScreen handle)
+    {
+        var size = PixelSize;
+        if (size.X <= 0f || size.Y <= 0f)
+            return;
+
+        var left = HorizontalPadding;
+        var right = MathF.Max(left + 1f, size.X - HorizontalPadding);
+        var rowTop = VerticalPaddingTop + NodeSize.Y * 0.5f;
+        var rowBottom = MathF.Max(rowTop + 1f, size.Y - VerticalPaddingBottom - NodeSize.Y * 0.5f);
+        var maxTier = Math.Max(1, _maxComputedTier);
+        var rowStep = (rowBottom - rowTop) / maxTier;
+
+        for (var tier = 0; tier <= maxTier; tier++)
+        {
+            var y = MathF.Round(rowTop + rowStep * tier);
+            var alpha = tier == 0 ? 0.55f : 0.22f;
+            handle.DrawLine(
+                new Vector2(left, y),
+                new Vector2(right, y),
+                TierGuideColor.WithAlpha(alpha));
+        }
     }
 
     private void LoadTreeForTeam(string teamId)
@@ -408,7 +461,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         var button = new Button
         {
             ClipText = true,
-            TextAlign = Label.AlignMode.Left,
+            TextAlign = Label.AlignMode.Center,
             HorizontalExpand = false,
             VerticalExpand = false,
             SetSize = NodeSize,

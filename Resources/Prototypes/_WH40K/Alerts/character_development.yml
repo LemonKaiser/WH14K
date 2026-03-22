@@ -1,0 +1,67 @@
+- type: alertCategory
+  id: WH40KCharacterDevelopmentStomachImpulse
+
+- type: alertCategory
+  id: WH40KCharacterDevelopmentKidneyPurge
+
+- type: alertCategory
+  id: WH40KCharacterDevelopmentWarFurnace
+
+- type: alert
+  id: WH40KCharacterDevelopmentStomachImpulseActive
+  category: WH40KCharacterDevelopmentStomachImpulse
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
+  name: wh40k-character-development-alert-stomach-impulse-active-name
+  description: wh40k-character-development-alert-stomach-impulse-active-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentStomachImpulseCooldown
+  category: WH40KCharacterDevelopmentStomachImpulse
+  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  name: wh40k-character-development-alert-stomach-impulse-cooldown-name
+  description: wh40k-character-development-alert-stomach-impulse-cooldown-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentKidneyPurgeReady
+  category: WH40KCharacterDevelopmentKidneyPurge
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: kidney-l
+  clickEvent: !type:WH40KCharacterDevelopmentKidneyPurgeAlertEvent
+  name: wh40k-character-development-alert-kidney-purge-ready-name
+  description: wh40k-character-development-alert-kidney-purge-ready-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentKidneyPurgeCooldown
+  category: WH40KCharacterDevelopmentKidneyPurge
+  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  name: wh40k-character-development-alert-kidney-purge-cooldown-name
+  description: wh40k-character-development-alert-kidney-purge-cooldown-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentWarFurnaceReady
+  category: WH40KCharacterDevelopmentWarFurnace
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
+  clickEvent: !type:WH40KCharacterDevelopmentWarFurnaceAlertEvent
+  name: wh40k-character-development-alert-war-furnace-ready-name
+  description: wh40k-character-development-alert-war-furnace-ready-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentWarFurnaceActive
+  category: WH40KCharacterDevelopmentWarFurnace
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
+  name: wh40k-character-development-alert-war-furnace-active-name
+  description: wh40k-character-development-alert-war-furnace-active-desc
+
+- type: alert
+  id: WH40KCharacterDevelopmentWarFurnaceCooldown
+  category: WH40KCharacterDevelopmentWarFurnace
+  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  name: wh40k-character-development-alert-war-furnace-cooldown-name
+  description: wh40k-character-development-alert-war-furnace-cooldown-desc

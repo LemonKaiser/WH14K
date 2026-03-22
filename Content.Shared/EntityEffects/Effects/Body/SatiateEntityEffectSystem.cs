@@ -1,5 +1,6 @@
-﻿using Content.Shared.Nutrition.Components;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.EntityEffects.Effects.Body;
@@ -13,9 +14,12 @@ namespace Content.Shared.EntityEffects.Effects.Body;
 public sealed partial class SatiateThirstEntityEffectsSystem : EntityEffectSystem<ThirstComponent, SatiateThirst>
 {
     [Dependency] private readonly ThirstSystem _thirst = default!;
+
     protected override void Effect(Entity<ThirstComponent> entity, ref EntityEffectEvent<SatiateThirst> args)
     {
-        _thirst.ModifyThirst(entity, entity.Comp, args.Effect.Factor * args.Scale);
+        var amount = new WH40KModifyThirstSatiationEvent(args.Effect.Factor * args.Scale);
+        RaiseLocalEvent(entity.Owner, ref amount);
+        _thirst.ModifyThirst(entity, entity.Comp, amount.Amount);
     }
 }
 
@@ -26,9 +30,12 @@ public sealed partial class SatiateThirstEntityEffectsSystem : EntityEffectSyste
 public sealed partial class SatiateHungerEntityEffectsSystem : EntityEffectSystem<HungerComponent, SatiateHunger>
 {
     [Dependency] private readonly HungerSystem _hunger = default!;
+
     protected override void Effect(Entity<HungerComponent> entity, ref EntityEffectEvent<SatiateHunger> args)
     {
-        _hunger.ModifyHunger(entity, args.Effect.Factor * args.Scale, entity.Comp);
+        var amount = new WH40KModifyHungerSatiationEvent(args.Effect.Factor * args.Scale);
+        RaiseLocalEvent(entity.Owner, ref amount);
+        _hunger.ModifyHunger(entity, amount.Amount, entity.Comp);
     }
 }
 

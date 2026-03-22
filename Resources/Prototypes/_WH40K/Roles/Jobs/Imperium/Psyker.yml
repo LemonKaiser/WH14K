@@ -15,7 +15,6 @@
   - !type:AddComponentSpecial
     components:
       - type: WH40KSquadAssignable
-      - type: WH40KPsykerRole
       - type: WH40KMoraleExecutionTarget
   access:
   - Maintenance

@@ -173,6 +173,9 @@ public sealed class MindSystem : SharedMindSystem
         if (mind == null && !Resolve(mindId, ref mind))
             return;
 
+        if (entity is { } target && (!target.IsValid() || Deleted(target)))
+            return;
+
         if (entity == mind.OwnedEntity)
             return;
 

@@ -63,7 +63,7 @@
   description: Швырните нестабильный огонь Варпа в цель.
   components:
   - type: Action
-    useDelay: 16
+    useDelay: 60
   - type: WH40KWarpActionCost
     warpChargeCost: 22
     instabilityGain: 10
@@ -221,7 +221,7 @@
   description: Выпустите перегруженный варп-взрыв с сокрушительной силой.
   components:
   - type: Action
-    useDelay: 12
+    useDelay: 60
   - type: WH40KWarpActionCost
     warpChargeCost: 30
     instabilityGain: 16
@@ -404,7 +404,7 @@
   description: Выпустите мутирующий огонь Варпа, вынуждая врага срочно перестраиваться.
   components:
   - type: Action
-    useDelay: 14
+    useDelay: 60
   - type: WH40KWarpActionCost
     warpChargeCost: 26
     instabilityGain: 14

@@ -601,13 +601,15 @@ namespace Content.Server.Lathe
                 return;
 
             var batch = node.Value;
+            if (!component.Queue.Remove(batch))
+                return;
+
             var amountText = batch.Infinite ? "infinite" : $"{batch.ItemsPrinted}/{batch.ItemsRequested}";
             _adminLogger.Add(LogType.Action,
                 LogImpact.Low,
                 $"{ToPrettyString(args.Actor):player} deleted a lathe job for ({amountText}) {GetRecipeName(batch.Recipe)} at {ToPrettyString(uid):lathe}");
 
             RefundBatch(uid, component, batch);
-            component.Queue.Remove(node);
             UpdateUserInterfaceState(uid, component);
         }
 

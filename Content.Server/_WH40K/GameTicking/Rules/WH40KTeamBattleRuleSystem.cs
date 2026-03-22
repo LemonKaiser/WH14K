@@ -2139,7 +2139,16 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var duration = _random.NextFloat(minDuration, maxDuration);
 
         var endTime = now + TimeSpan.FromSeconds(duration);
-        _weather.TrySetWeather(_gameTicker.DefaultMap, weatherId.Value, out _, endTime - now);
+        if (!_weather.TrySetWeather(_gameTicker.DefaultMap, weatherId.Value, out _, endTime - now))
+        {
+            _sawmill.Warning($"Failed to start WH40K weather '{weatherId.Value}' on map {_gameTicker.DefaultMap}.");
+            component.ActiveWeather = null;
+            component.ActiveWeatherEnd = null;
+            component.PendingWeather = weatherId.Value;
+            component.LastWeatherWarningForStart = null;
+            ScheduleNextWeather(component, now);
+            return;
+        }
 
         component.ActiveWeather = weatherId.Value;
         component.ActiveWeatherEnd = endTime;
@@ -2147,7 +2156,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.PendingWeather = null;
         component.LastWeatherWarningForStart = null;
 
-        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-start-announce"));
+        var weatherKey = weatherId.ToString() ?? "Unknown";
+        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-start-announce",
+            ("weather", GetWeatherDisplayName(weatherKey)),
+            ("danger", Loc.GetString(GetWeatherDangerKey(GetWeatherDanger(component, weatherKey)))),
+            ("summary", GetWeatherSummary(weatherKey)),
+            ("protection", GetWeatherProtectionAdvice(weatherKey))));
     }
 
     private EntProtoId? PickWeather(Components.WH40KTeamBattleRuleComponent component)
@@ -2178,17 +2192,14 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.LastWeatherWarningForStart = nextStart;
         var weatherId = component.PendingWeather?.ToString() ?? "Unknown";
         var danger = GetWeatherDanger(component, weatherId);
-        var dangerKey = danger switch
-        {
-            1 => "wh40k-weather-danger-low",
-            2 => "wh40k-weather-danger-medium",
-            3 => "wh40k-weather-danger-high",
-            _ => "wh40k-weather-danger-extreme"
-        };
+        var warningSeconds = Math.Max(1, (int) Math.Ceiling((nextStart - now).TotalSeconds));
 
         _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-warning-announce",
-            ("seconds", (int) leadSeconds),
-            ("danger", Loc.GetString(dangerKey))));
+            ("seconds", warningSeconds),
+            ("weather", GetWeatherDisplayName(weatherId)),
+            ("danger", Loc.GetString(GetWeatherDangerKey(danger))),
+            ("summary", GetWeatherSummary(weatherId)),
+            ("protection", GetWeatherProtectionAdvice(weatherId))));
     }
 
     private void InitializeRoundEventState(Components.WH40KTeamBattleRuleComponent component)
@@ -2713,7 +2724,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         var end = now + duration;
-        _weather.TrySetWeather(_gameTicker.DefaultMap, component.BlackFrontWeatherId, out _, end - now);
+        if (!_weather.TrySetWeather(_gameTicker.DefaultMap, component.BlackFrontWeatherId, out _, end - now))
+            _sawmill.Warning($"Failed to start WH40K black front weather '{component.BlackFrontWeatherId}' on map {_gameTicker.DefaultMap}.");
     }
 
     private void StopBlackFrontWeather(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
@@ -2781,6 +2793,72 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         return Math.Clamp(profile.DefaultDanger, 1, 4);
+    }
+
+    private static string GetWeatherDangerKey(int danger)
+    {
+        return danger switch
+        {
+            1 => "wh40k-weather-danger-low",
+            2 => "wh40k-weather-danger-medium",
+            3 => "wh40k-weather-danger-high",
+            _ => "wh40k-weather-danger-extreme"
+        };
+    }
+
+    private string GetWeatherDisplayName(string weatherId)
+    {
+        return GetWeatherLocString("wh40k-weather-name", weatherId, "wh40k-weather-name-unknown");
+    }
+
+    private string GetWeatherSummary(string weatherId)
+    {
+        return GetWeatherLocString("wh40k-weather-summary", weatherId, "wh40k-weather-summary-unknown");
+    }
+
+    private string GetWeatherProtectionAdvice(string weatherId)
+    {
+        if (TryGetWeatherLocString("wh40k-weather-protection", weatherId) is { } overrideText)
+            return overrideText;
+
+        if (!_weather.TryGetWeatherPrototype(weatherId, out var weather) ||
+            weather.Effects is not { } effects)
+        {
+            return Loc.GetString("wh40k-weather-protection-generic");
+        }
+
+        if (effects.ProtectedByGasMask && effects.ProtectedByHardsuit)
+            return Loc.GetString("wh40k-weather-protection-gasmask-or-hardsuit");
+
+        if (effects.ProtectedByHardsuit)
+            return Loc.GetString("wh40k-weather-protection-hardsuit");
+
+        if (effects.ProtectedByGasMask)
+            return Loc.GetString("wh40k-weather-protection-gasmask");
+
+        if (effects.Emp != null)
+            return Loc.GetString("wh40k-weather-protection-emp");
+
+        if (effects.StructureDamage != null)
+            return Loc.GetString("wh40k-weather-protection-structures");
+
+        if (effects.Wind != null || effects.Slowdown != null || effects.HazardSpawn != null)
+            return Loc.GetString("wh40k-weather-protection-cover");
+
+        return Loc.GetString("wh40k-weather-protection-generic");
+    }
+
+    private string GetWeatherLocString(string prefix, string weatherId, string fallbackKey)
+    {
+        return TryGetWeatherLocString(prefix, weatherId) ?? Loc.GetString(fallbackKey);
+    }
+
+    private string? TryGetWeatherLocString(string prefix, string weatherId)
+    {
+        var key = $"{prefix}-{weatherId}";
+        return Loc.TryGetString(key, out var localized) && !string.IsNullOrWhiteSpace(localized)
+            ? localized
+            : null;
     }
 
     private void ApplyMapStabilitySafeguards()

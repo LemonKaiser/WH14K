@@ -41,6 +41,16 @@ public readonly record struct MechEquipmentRemovedEvent(EntityUid Mech)
 }
 
 /// <summary>
+/// Raised on a pilot after its <see cref="Content.Shared.Mech.Components.MechPilotComponent"/>
+/// has been assigned to a mech.
+/// </summary>
+[ByRefEvent]
+public readonly record struct MechPilotAssignedEvent(EntityUid Mech)
+{
+    public readonly EntityUid Mech = Mech;
+}
+
+/// <summary>
 /// Raised on the mech equipment before it is going to be removed.
 /// </summary>
 [ByRefEvent]

@@ -14,6 +14,7 @@ namespace Content.Client._WH40K.MetaProgress;
 public sealed partial class PlayerMetaProgressPanel : PanelContainer
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    private const int DefaultPreviewLevelCap = 40;
 
     public PlayerMetaProgressPanel()
     {
@@ -85,25 +86,23 @@ public sealed partial class PlayerMetaProgressPanel : PanelContainer
     public static (int Level, int CurrentXp, int RequiredXp, int TotalXp) CalculatePreviewProgress(TimeSpan playtime)
     {
         var totalXp = WH40KMetaProgressMath.LifetimeXpFromOverallPlaytime(playtime);
-        var result = WH40KMetaProgressMath.CalculateFromLifetimeXp(totalXp);
+        var result = WH40KMetaProgressMath.CalculateFromLifetimeXp(totalXp, DefaultPreviewLevelCap);
         return (result.Level, result.CurrentXp, result.RequiredXp, result.LifetimeXp);
     }
 
     private static int GetNextRewardLevel(int currentLevel)
     {
-        var normalizedLevel = Math.Max(1, currentLevel);
-        var nextMilestone = ((normalizedLevel + 4) / 5) * 5;
-        return nextMilestone > normalizedLevel ? nextMilestone : normalizedLevel + 5;
+        return Math.Max(1, currentLevel) + 1;
     }
 
     private static int GetPreviewDecorationReward(int currentLevel)
     {
-        return 4;
+        return 3;
     }
 
     private static int GetPreviewSkillPointReward(int currentLevel)
     {
-        return 3;
+        return 1;
     }
 
     private void ApplyStyles()

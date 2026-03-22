@@ -2,7 +2,7 @@
   id: WH40KGuardsmanReadyForOrders
   name: wh40k-chat-emote-name-guardsman-ready-for-orders
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -16,7 +16,7 @@
   id: WH40KGuardsmanAwaitingOrders
   name: wh40k-chat-emote-name-guardsman-awaiting-orders
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -30,7 +30,7 @@
   id: WH40KGuardsmanAttackTheEnemy
   name: wh40k-chat-emote-name-guardsman-attack-the-enemy
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -44,7 +44,7 @@
   id: WH40KGuardsmanOpenFire
   name: wh40k-chat-emote-name-guardsman-open-fire
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/whistle.png
   whitelist:
     requireAll: true
     components:
@@ -58,7 +58,7 @@
   id: WH40KGuardsmanCharge
   name: wh40k-chat-emote-name-guardsman-charge
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -72,7 +72,7 @@
   id: WH40KGuardsmanIntoTheFight
   name: wh40k-chat-emote-name-guardsman-into-the-fight
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -86,7 +86,7 @@
   id: WH40KGuardsmanCaptureTheStrategicPoint
   name: wh40k-chat-emote-name-guardsman-capture-the-strategic-point
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -100,7 +100,7 @@
   id: WH40KGuardsmanSecureTheStrategicPoint
   name: wh40k-chat-emote-name-guardsman-secure-the-strategic-point
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -114,7 +114,7 @@
   id: WH40KGuardsmanEnemySpotted
   name: wh40k-chat-emote-name-guardsman-enemy-spotted
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/ping.png
   whitelist:
     requireAll: true
     components:
@@ -128,7 +128,7 @@
   id: WH40KGuardsmanChaosMarineSpotted
   name: wh40k-chat-emote-name-guardsman-chaos-marine-spotted
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/ping.png
   whitelist:
     requireAll: true
     components:
@@ -142,7 +142,7 @@
   id: WH40KGuardsmanHoldTheLine
   name: wh40k-chat-emote-name-guardsman-hold-the-line
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/whistle.png
   whitelist:
     requireAll: true
     components:
@@ -156,7 +156,7 @@
   id: WH40KGuardsmanMoraleRestored
   name: wh40k-chat-emote-name-guardsman-morale-restored
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/chime.png
   whitelist:
     requireAll: true
     components:
@@ -180,11 +180,11 @@
     WH40KGuardsmanAttackTheEnemy:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
     WH40KGuardsmanOpenFire:
-      path: /Audio/_WH40K/Voice/Guardsman/open_fire.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
     WH40KGuardsmanCharge:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
     WH40KGuardsmanIntoTheFight:
-      path: /Audio/_WH40K/Voice/Guardsman/into_the_fight.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
     WH40KGuardsmanCaptureTheStrategicPoint:
       path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
     WH40KGuardsmanSecureTheStrategicPoint:
@@ -194,7 +194,7 @@
     WH40KGuardsmanChaosMarineSpotted:
       path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
     WH40KGuardsmanHoldTheLine:
-      path: /Audio/_WH40K/Voice/Guardsman/hold_the_line.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
     WH40KGuardsmanMoraleRestored:
       path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg
 
@@ -212,11 +212,11 @@
     WH40KGuardsmanAttackTheEnemy:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
     WH40KGuardsmanOpenFire:
-      path: /Audio/_WH40K/Voice/Guardsman/open_fire.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
     WH40KGuardsmanCharge:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
     WH40KGuardsmanIntoTheFight:
-      path: /Audio/_WH40K/Voice/Guardsman/into_the_fight.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
     WH40KGuardsmanCaptureTheStrategicPoint:
       path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
     WH40KGuardsmanSecureTheStrategicPoint:
@@ -226,6 +226,6 @@
     WH40KGuardsmanChaosMarineSpotted:
       path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
     WH40KGuardsmanHoldTheLine:
-      path: /Audio/_WH40K/Voice/Guardsman/hold_the_line.ogg
+      path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
     WH40KGuardsmanMoraleRestored:
       path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg

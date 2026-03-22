@@ -73,7 +73,8 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         var tier = SelectTier(effectiveLevel, processing);
         var teamBonuses = GetBestTrackedTeamBonuses(processing);
         var desiredTimeMultiplier = GetEffectiveGlobalTimeMultiplier(processing, teamBonuses);
-        var desiredStorageLimit = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
+        var desiredStorageUnits = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
+        var desiredStorageLimit = WH40KMaterialStorageUnits.ToRawMaterialVolume(desiredStorageUnits);
         var desiredPack = SelectPackForTier(tier, processing);
 
         var changed = false;
@@ -100,8 +101,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
             }
         }
 
-        if (desiredStorageLimit != null &&
-            TryComp<MaterialStorageComponent>(uid, out var materialStorage) &&
+        if (TryComp<MaterialStorageComponent>(uid, out var materialStorage) &&
             _materialStorage.SetStorageLimit(uid, desiredStorageLimit, materialStorage))
         {
             changed = true;
@@ -139,9 +139,9 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         var teamBonuses = GetBestTrackedTeamBonuses(processing);
         timeMultiplier = GetEffectiveGlobalTimeMultiplier(processing, teamBonuses);
         minSeconds = GetEffectiveMinProcessSeconds(tier, processing, teamBonuses);
-        var storageLimit = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
-        var storageText = storageLimit is > 0
-            ? storageLimit.Value.ToString()
+        var storageUnits = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
+        var storageText = storageUnits is > 0
+            ? storageUnits.Value.ToString()
             : Loc.GetString("wh40k-tiered-machine-storage-unlimited");
 
         args.PushMarkup(Loc.GetString(

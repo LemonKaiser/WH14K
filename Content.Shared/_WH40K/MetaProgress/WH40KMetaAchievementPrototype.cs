@@ -24,6 +24,12 @@ public sealed partial class WH40KMetaAchievementPrototype : IPrototype
     [DataField("reward")]
     public string RewardKey = "wh40k-meta-progress-achievements-reward-none";
 
+    [DataField("rewardXp")]
+    public int RewardXp;
+
+    [DataField("rewardDecorations")]
+    public List<string> RewardDecorationIds = new();
+
     [DataField("target", required: true)]
     public int Target = 1;
 

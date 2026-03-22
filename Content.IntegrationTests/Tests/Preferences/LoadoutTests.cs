@@ -16,6 +16,12 @@ public sealed class LoadoutTests
 - type: playTimeTracker
   id: PlayTimeLoadoutTester
 
+- type: playTimeTracker
+  id: PlayTimeLoadoutTesterStorage
+
+- type: playTimeTracker
+  id: PlayTimeLoadoutTesterFallback
+
 - type: loadout
   id: TestJumpsuit
   equipment:
@@ -35,6 +41,63 @@ public sealed class LoadoutTests
 - type: job
   id: LoadoutTester
   playTimeTracker: PlayTimeLoadoutTester
+
+- type: startingGear
+  id: LoadoutTesterStorageGear
+  equipment:
+    belt: guardbelt
+
+- type: loadout
+  id: TestBeltStorageItem
+  storage:
+    belt:
+    - Cigarette
+
+- type: loadoutGroup
+  id: LoadoutTesterStorageGroup
+  name: generic-unknown
+  minLimit: 1
+  loadouts:
+  - TestBeltStorageItem
+
+- type: roleLoadout
+  id: JobLoadoutTesterStorage
+  groups:
+  - LoadoutTesterStorageGroup
+
+- type: job
+  id: LoadoutTesterStorage
+  playTimeTracker: PlayTimeLoadoutTesterStorage
+  startingGear: LoadoutTesterStorageGear
+
+- type: startingGear
+  id: LoadoutTesterFallbackGear
+  equipment:
+    belt: ClothingBeltUtilityEngineering
+    back: ClothingBackpack
+
+- type: loadout
+  id: TestBeltFallbackItem
+  storage:
+    belt:
+    - CombatKnife
+
+- type: loadoutGroup
+  id: LoadoutTesterFallbackGroup
+  name: generic-unknown
+  minLimit: 1
+  loadouts:
+  - TestBeltFallbackItem
+
+- type: roleLoadout
+  id: JobLoadoutTesterFallback
+  groups:
+  - LoadoutTesterFallbackGroup
+
+- type: job
+  id: LoadoutTesterFallback
+  playTimeTracker: PlayTimeLoadoutTesterFallback
+  startingGear: LoadoutTesterFallbackGear
 ";
 
     private readonly Dictionary<string, EntProtoId> _expectedEquipment = new()
@@ -89,5 +152,84 @@ public sealed class LoadoutTests
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TestLoadoutStorageUsesStartingGearContainer()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings()
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var stationSystem = entManager.System<StationSpawningSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var profile = new HumanoidCharacterProfile();
+            var tester = stationSystem.SpawnPlayerMob(testMap.GridCoords, job: "LoadoutTesterStorage", profile, station: null);
+
+            Assert.That(HasDescendantWithPrototype(entManager, tester, "Cigarette"), Is.True,
+                "Loadout storage items should use containers from job starting gear.");
+
+            entManager.DeleteEntity(tester);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TestLoadoutStorageFallsBackWhenTargetContainerRejectsItem()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings()
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var stationSystem = entManager.System<StationSpawningSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var profile = new HumanoidCharacterProfile();
+            var tester = stationSystem.SpawnPlayerMob(testMap.GridCoords, job: "LoadoutTesterFallback", profile, station: null);
+
+            Assert.That(HasDescendantWithPrototype(entManager, tester, "CombatKnife"), Is.True,
+                "Rejected loadout storage items should be moved into the rest of the inventory instead of being dropped or lost.");
+
+            entManager.DeleteEntity(tester);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static bool HasDescendantWithPrototype(IEntityManager entManager, EntityUid root, string prototypeId)
+    {
+        var queue = new Queue<EntityUid>();
+        queue.Enqueue(root);
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+            if (current != root)
+            {
+                var meta = entManager.GetComponent<MetaDataComponent>(current);
+                if (meta.EntityPrototype?.ID == prototypeId)
+                    return true;
+            }
+
+            var children = entManager.GetComponent<TransformComponent>(current).ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                queue.Enqueue(child);
+            }
+        }
+
+        return false;
     }
 }

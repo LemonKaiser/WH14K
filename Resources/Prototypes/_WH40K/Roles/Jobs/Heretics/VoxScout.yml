@@ -13,12 +13,6 @@
       - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
       - type: WH40KMoraleExecutionTarget
-      - type: WH40KGuardsmanVoice
-      - type: Vocal
-        sounds:
-          Male: WH40KGuardsmanMaleHuman
-          Female: WH40KGuardsmanFemaleHuman
-          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
   - External
@@ -33,7 +27,6 @@
     belt: chaosbelt2
     head: ClothingHeadHelmetFlakCHAOS
     outerClothing: ClothingOuterArmorChaosVest
-    pocket1: RMCMotionDetector
     pocket2: WH40KStandardTacticalMapTablet
     id: HGuardsmanDogTag
 

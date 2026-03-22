@@ -9,6 +9,9 @@
     - alertType: SuitPower
     - alertType: WH40KMoraleExecution
     - alertType: WH40KMoraleBoosted
+    - category: WH40KCharacterDevelopmentWarFurnace
+    - category: WH40KCharacterDevelopmentKidneyPurge
+    - category: WH40KCharacterDevelopmentStomachImpulse
     - category: Internals
     - alertType: Fire
     - alertType: Handcuffed

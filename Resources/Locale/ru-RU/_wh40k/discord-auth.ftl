@@ -1,4 +1,4 @@
-wh40k-discord-auth-button = Discord
+wh40k-discord-auth-button = Привязать Discord
 wh40k-discord-auth-button-link = Привязать Discord
 
 wh40k-discord-auth-window-title = Discord
@@ -42,3 +42,5 @@ wh40k-discord-auth-connect-deny-role-required = Вход на сервер ог�
 wh40k-discord-auth-connect-deny-misconfigured = Вход на сервер ограничен, но Discord-авторизация на сервере настроена неверно.
 wh40k-discord-auth-connect-deny-cache-stale = Вход на сервер ограничен: Discord-кэш устарел и не смог обновиться автоматически.
 wh40k-discord-auth-connect-deny-generic = Вход на сервер ограничен политикой Discord-авторизации.
+wh40k-discord-auth-connect-deny-linked-account = Сейчас привязан Discord: {$name} (ID: {$id}).
+wh40k-discord-auth-connect-deny-change-hint = Если это не тот аккаунт, используйте кнопку «Сменить привязанный Discord».

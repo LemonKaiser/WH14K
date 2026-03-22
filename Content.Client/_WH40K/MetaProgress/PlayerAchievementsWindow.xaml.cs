@@ -11,6 +11,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
 namespace Content.Client._WH40K.MetaProgress;
@@ -18,6 +19,8 @@ namespace Content.Client._WH40K.MetaProgress;
 [GenerateTypedNameReferences]
 public sealed partial class PlayerAchievementsWindow : FancyWindow
 {
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+
     private readonly List<WH40KMetaAchievementSnapshotEntry> _entries = new();
     private readonly WH40KMetaProgressSystem _metaProgress;
     private AchievementFilterCategory _activeCategory = AchievementFilterCategory.All;
@@ -26,6 +29,7 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow
     public PlayerAchievementsWindow()
     {
         RobustXamlLoader.Load(this);
+        IoCManager.InjectDependencies(this);
         _metaProgress = IoCManager.Resolve<IEntityManager>().System<WH40KMetaProgressSystem>();
 
         ApplyStyles();
@@ -303,13 +307,52 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow
         {
             Text = Loc.GetString(
                 "wh40k-meta-progress-achievements-reward-line",
-                ("reward", Loc.GetString(entry.RewardKey))),
+                ("reward", BuildRewardText(entry))),
             HorizontalExpand = true,
         });
 
         card.AddChild(root);
 
         return card;
+    }
+
+    private string BuildRewardText(WH40KMetaAchievementSnapshotEntry entry)
+    {
+        var parts = new List<string>();
+
+        if (entry.RewardXp > 0)
+        {
+            parts.Add(Loc.GetString(
+                "wh40k-meta-progress-achievements-reward-xp",
+                ("xp", entry.RewardXp)));
+        }
+
+        var decorationNames = entry.RewardDecorationIds
+            .Select(ResolveDecorationTitle)
+            .Where(title => !string.IsNullOrWhiteSpace(title))
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+
+        if (decorationNames.Count > 0)
+        {
+            parts.Add(Loc.GetString(
+                "wh40k-meta-progress-achievements-reward-decorations",
+                ("decorations", string.Join(", ", decorationNames))));
+        }
+
+        if (parts.Count == 0)
+            return Loc.GetString(entry.RewardKey);
+
+        return string.Join(Environment.NewLine, parts);
+    }
+
+    private string ResolveDecorationTitle(string decorationId)
+    {
+        if (!_prototype.TryIndex<WH40KMetaDecorationPrototype>(decorationId, out var prototype) ||
+            string.IsNullOrWhiteSpace(prototype?.TitleKey))
+            return decorationId;
+
+        return Loc.GetString(prototype.TitleKey);
     }
 
     private void ApplyStyles()

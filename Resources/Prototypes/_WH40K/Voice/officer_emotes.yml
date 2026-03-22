@@ -2,7 +2,7 @@
   id: WH40KOfficerUnitCompleteOne
   name: wh40k-chat-emote-name-officer-unit-complete-1
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -16,7 +16,7 @@
   id: WH40KOfficerUnitCompleteTwo
   name: wh40k-chat-emote-name-officer-unit-complete-2
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -30,7 +30,7 @@
   id: WH40KOfficerSelectionResponse
   name: wh40k-chat-emote-name-officer-selection-response
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -44,7 +44,7 @@
   id: WH40KOfficerMoveOrder
   name: wh40k-chat-emote-name-officer-move-order
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/whistle.png
   whitelist:
     requireAll: true
     components:
@@ -58,7 +58,7 @@
   id: WH40KOfficerAttackOrderOne
   name: wh40k-chat-emote-name-officer-attack-order-1
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -72,7 +72,7 @@
   id: WH40KOfficerAttackOrderTwo
   name: wh40k-chat-emote-name-officer-attack-order-2
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -86,7 +86,7 @@
   id: WH40KOfficerAttackOrderThree
   name: wh40k-chat-emote-name-officer-attack-order-3
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -100,7 +100,7 @@
   id: WH40KOfficerAttackOrderFour
   name: wh40k-chat-emote-name-officer-attack-order-4
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -114,7 +114,7 @@
   id: WH40KOfficerChargeOrderOne
   name: wh40k-chat-emote-name-officer-charge-order-1
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -128,7 +128,7 @@
   id: WH40KOfficerChargeOrderTwo
   name: wh40k-chat-emote-name-officer-charge-order-2
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -142,7 +142,7 @@
   id: WH40KOfficerChargeOrderThree
   name: wh40k-chat-emote-name-officer-charge-order-3
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -156,7 +156,7 @@
   id: WH40KOfficerMoraleOrder
   name: wh40k-chat-emote-name-officer-morale-order
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/chime.png
   whitelist:
     requireAll: true
     components:
@@ -176,7 +176,7 @@
     WH40KOfficerUnitCompleteOne:
       path: /Audio/_WH40K/Voice/Officer/unit_complete_1.ogg
     WH40KOfficerUnitCompleteTwo:
-      path: /Audio/_WH40K/Voice/Officer/unit_complete_2.ogg
+      path: /Audio/_WH40K/Voice/Officer/unit_complete_1.ogg
     WH40KOfficerSelectionResponse:
       path: /Audio/_WH40K/Voice/Officer/selection_response.ogg
     WH40KOfficerMoveOrder:
@@ -188,15 +188,15 @@
     WH40KOfficerAttackOrderThree:
       path: /Audio/_WH40K/Voice/Officer/attack_order_3.ogg
     WH40KOfficerAttackOrderFour:
-      path: /Audio/_WH40K/Voice/Officer/attack_order_4.ogg
-    WH40KOfficerChargeOrderOne:
-      path: /Audio/_WH40K/Voice/Officer/charge_order_1.ogg
-    WH40KOfficerChargeOrderTwo:
       path: /Audio/_WH40K/Voice/Officer/charge_order_2.ogg
-    WH40KOfficerChargeOrderThree:
+    WH40KOfficerChargeOrderOne:
+      path: /Audio/_WH40K/Voice/Officer/attack_order_1.ogg
+    WH40KOfficerChargeOrderTwo:
       path: /Audio/_WH40K/Voice/Officer/charge_order_3.ogg
+    WH40KOfficerChargeOrderThree:
+      path: /Audio/_WH40K/Voice/Officer/charge_order_1.ogg
     WH40KOfficerMoraleOrder:
-      path: /Audio/_WH40K/Voice/Officer/morale_order.ogg
+      path: /Audio/_WH40K/Voice/Officer/unit_complete_2.ogg
 
 - type: emoteSounds
   id: WH40KOfficerFemaleHuman
@@ -208,7 +208,7 @@
     WH40KOfficerUnitCompleteOne:
       path: /Audio/_WH40K/Voice/Officer/unit_complete_1.ogg
     WH40KOfficerUnitCompleteTwo:
-      path: /Audio/_WH40K/Voice/Officer/unit_complete_2.ogg
+      path: /Audio/_WH40K/Voice/Officer/unit_complete_1.ogg
     WH40KOfficerSelectionResponse:
       path: /Audio/_WH40K/Voice/Officer/selection_response.ogg
     WH40KOfficerMoveOrder:
@@ -220,12 +220,12 @@
     WH40KOfficerAttackOrderThree:
       path: /Audio/_WH40K/Voice/Officer/attack_order_3.ogg
     WH40KOfficerAttackOrderFour:
-      path: /Audio/_WH40K/Voice/Officer/attack_order_4.ogg
-    WH40KOfficerChargeOrderOne:
-      path: /Audio/_WH40K/Voice/Officer/charge_order_1.ogg
-    WH40KOfficerChargeOrderTwo:
       path: /Audio/_WH40K/Voice/Officer/charge_order_2.ogg
-    WH40KOfficerChargeOrderThree:
+    WH40KOfficerChargeOrderOne:
+      path: /Audio/_WH40K/Voice/Officer/attack_order_1.ogg
+    WH40KOfficerChargeOrderTwo:
       path: /Audio/_WH40K/Voice/Officer/charge_order_3.ogg
+    WH40KOfficerChargeOrderThree:
+      path: /Audio/_WH40K/Voice/Officer/charge_order_1.ogg
     WH40KOfficerMoraleOrder:
-      path: /Audio/_WH40K/Voice/Officer/morale_order.ogg
+      path: /Audio/_WH40K/Voice/Officer/unit_complete_2.ogg
