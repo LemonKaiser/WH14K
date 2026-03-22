@@ -6,6 +6,7 @@ using Content.Server._WH40K.Store.Components;
 using Content.Server.Lathe;
 using Content.Server.Materials;
 using Content.Server.Stack;
+using Content.Shared._WH40K.Tiers;
 using Content.Shared.Examine;
 using Content.Shared.Lathe;
 using Content.Shared.Lathe.Prototypes;
@@ -69,7 +70,8 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         var tier = SelectTier(effectiveLevel, converter);
         var desiredPack = SelectPack(tier, converter);
         var desiredConcurrentLimit = GetConcurrentLimit(tier, converter);
-        var desiredStorageLimit = GetMaterialStorageLimit(tier, converter);
+        var desiredStorageUnits = GetMaterialStorageLimit(tier, converter);
+        var desiredStorageLimit = WH40KMaterialStorageUnits.ToRawMaterialVolume(desiredStorageUnits);
         var changed = false;
 
         if (lathe.StaticPacks.Count != 1 || lathe.StaticPacks[0] != desiredPack)
@@ -135,7 +137,7 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         var effectiveLevel = GetEffectiveLevel(converter.TeamId);
         var tier = SelectTier(effectiveLevel, converter);
         var jobs = GetConcurrentLimit(tier, converter);
-        var storage = GetMaterialStorageLimit(tier, converter);
+        var storageUnits = GetMaterialStorageLimit(tier, converter);
 
         args.PushMarkup(Loc.GetString(
             "wh40k-chip-converter-examine-tier",
@@ -144,7 +146,7 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         args.PushMarkup(Loc.GetString(
             "wh40k-chip-converter-examine-bonuses",
             ("jobs", jobs),
-            ("storage", storage)));
+            ("storage", storageUnits)));
     }
 
     private int GetEffectiveLevel(string teamId)

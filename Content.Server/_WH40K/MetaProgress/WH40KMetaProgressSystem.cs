@@ -86,6 +86,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 		public readonly HashSet<string> CompletedAchievements = new HashSet<string>();
 
+		public readonly HashSet<string> ClaimedAchievementRewards = new HashSet<string>();
+
 		public readonly Dictionary<string, RuntimeDecorationUnlockState> DecorationUnlockState = new Dictionary<string, RuntimeDecorationUnlockState>(StringComparer.Ordinal);
 
 		public readonly Dictionary<string, RuntimeDevelopmentUnlockState> DevelopmentUnlockState = new Dictionary<string, RuntimeDevelopmentUnlockState>(StringComparer.Ordinal);
@@ -384,6 +386,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		runtimeProgressState.AchievementProgress[achievementId] = resolvedProgress;
 		RecordAchievementMutation(userId, achievementId, target, value, resolvedProgress, previousCompleted, completed, unlocked ? "unlock" : "lock");
 		SyncAllCompleteAchievement(userId, runtimeProgressState);
+		GrantPendingAchievementRewards(userId, runtimeProgressState, unlocked ? "unlock" : "lock");
 		runtimeProgressState.StateVersion++;
 		QueuePersistState(userId);
 		PushSnapshotIfOnline(userId);
@@ -418,6 +421,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		}
 		RecordAchievementMutation(userId, achievementId, target, value, resolvedProgress, previousCompleted, completed, "set");
 		SyncAllCompleteAchievement(userId, runtimeProgressState);
+		GrantPendingAchievementRewards(userId, runtimeProgressState, "set");
 		runtimeProgressState.StateVersion++;
 		QueuePersistState(userId);
 		PushSnapshotIfOnline(userId);
@@ -452,6 +456,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		}
 		RecordAchievementMutation(userId, achievementId, target, value, resolvedProgress, previousCompleted, completed, "add");
 		SyncAllCompleteAchievement(userId, runtimeProgressState);
+		GrantPendingAchievementRewards(userId, runtimeProgressState, "add");
 		runtimeProgressState.StateVersion++;
 		QueuePersistState(userId);
 		PushSnapshotIfOnline(userId);
@@ -1239,12 +1244,16 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		{
 			TraceStats($"Stat event ignored: empty key for user={userId}.");
 		}
-		else if (!RefreshStatDrivenAchievements(userId, value, (IReadOnlyCollection<string>?)(object)new string[1] { ev.Entry.Key }))
-		{
-			TraceStats($"Stat event processed with no achievement changes: user={userId}, key={ev.Entry.Key}.");
-		}
 		else
 		{
+			bool changed = RefreshStatDrivenAchievements(userId, value, (IReadOnlyCollection<string>?)(object)new string[1] { ev.Entry.Key });
+			changed |= GrantPendingAchievementRewards(userId, value, "stats:" + ev.Entry.Key);
+			if (!changed)
+			{
+				TraceStats($"Stat event processed with no achievement changes: user={userId}, key={ev.Entry.Key}.");
+				return;
+			}
+
 			TraceStats($"Stat event changed achievements: user={userId}, key={ev.Entry.Key}.");
 			value.StateVersion++;
 			QueuePersistState(userId);
@@ -1401,6 +1410,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 						}
 						value2.AchievementProgress.Clear();
 						value2.CompletedAchievements.Clear();
+						value2.ClaimedAchievementRewards.Clear();
 						value2.LifetimeAchievementSourceCursor.Clear();
 						value2.DecorationUnlockState.Clear();
 						value2.DevelopmentUnlockState.Clear();
@@ -1431,6 +1441,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 								if (flag3)
 								{
 									value2.CompletedAchievements.Add(item.AchievementId);
+								}
+								if (item.Claimed)
+								{
+									value2.ClaimedAchievementRewards.Add(item.AchievementId);
 								}
 							}
 						}
@@ -1463,6 +1477,14 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 						}
 						Recalculate(value2);
 						flag2 |= NormalizeDevelopmentUnlockState(value2);
+						if (SyncAchievementRewardDecorations(value2))
+						{
+							flag = true;
+						}
+						if (GrantPendingAchievementRewards(userId, value2, "db_load", emitTelemetry: false))
+						{
+							flag = true;
+						}
 						PushSnapshotIfOnline(userId);
 						if (progress == null || flag || flag2)
 						{
@@ -1495,6 +1517,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		WH40KMetaProgressDbData progressData = new WH40KMetaProgressDbData(value.LifetimeXp, value.SeasonXp, utcNow, NormalizeSelectedId(value.SelectedGhostSkinId), NormalizeSelectedId(value.SelectedOocTitleId), NormalizeSelectedId(value.SelectedOocNameColorId));
 		HashSet<string> hashSet = new HashSet<string>(value.AchievementProgress.Keys, StringComparer.Ordinal);
 		hashSet.UnionWith(value.CompletedAchievements);
+		hashSet.UnionWith(value.ClaimedAchievementRewards);
 		List<WH40KMetaAchievementDbData> list = new List<WH40KMetaAchievementDbData>(hashSet.Count);
 		foreach (string item in hashSet)
 		{
@@ -1509,7 +1532,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 					num = (flag ? num2 : WH40KMetaProgressMath.ClampAchievementProgress(num, num2));
 					flag = flag || WH40KMetaProgressMath.IsAchievementCompleted(num, num2);
 				}
-				list.Add(new WH40KMetaAchievementDbData(item, num, flag, flag ? new DateTimeOffset?(utcNow) : ((DateTimeOffset?)null), Claimed: false, 1, utcNow));
+				list.Add(new WH40KMetaAchievementDbData(item, num, flag, flag ? new DateTimeOffset?(utcNow) : ((DateTimeOffset?)null), Claimed: value.ClaimedAchievementRewards.Contains(item), 1, utcNow));
 			}
 		}
 		List<WH40KMetaDecorationDbData> list2 = new List<WH40KMetaDecorationDbData>(value.DecorationUnlockState.Count);
@@ -1884,18 +1907,142 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		int totalAchievements;
 		bool achievementStateChanged;
 		List<WH40KMetaAchievementSnapshotEntry> achievements = BuildAchievementSnapshotEntries(state, out completedAchievements, out totalAchievements, out achievementStateChanged);
+		bool rewardDecorationStateChanged = false;
+		bool rewardClaimStateChanged = false;
+		if (state.DbLoadCompleted)
+		{
+			rewardDecorationStateChanged = SyncAchievementRewardDecorations(state);
+			rewardClaimStateChanged = GrantPendingAchievementRewards(userId, state, "snapshot_reconcile", emitTelemetry: false);
+		}
 		bool unlockStateChanged;
 		List<WH40KMetaDecorationSnapshotEntry> decorations = BuildDecorationSnapshotEntries(userId, state, out unlockStateChanged);
 		bool selectionChanged;
 		WH40KMetaDecorationSelectionSnapshot decorationSelection = BuildDecorationSelectionSnapshot(state, decorations, out selectionChanged);
 		bool developmentStateChanged;
 		WH40KMetaDevelopmentSnapshot development = BuildDevelopmentSnapshot(state, out developmentStateChanged);
-		if ((achievementStateChanged || unlockStateChanged || selectionChanged || developmentStateChanged) && state.DbLoadCompleted)
+		if ((achievementStateChanged || rewardDecorationStateChanged || rewardClaimStateChanged || unlockStateChanged || selectionChanged || developmentStateChanged) && state.DbLoadCompleted)
 		{
 			state.StateVersion++;
 			QueuePersistState(userId);
 		}
 		return new WH40KMetaProgressSnapshot(state.Level, state.CurrentXp, state.RequiredXp, state.LifetimeXp, _levelCap, completedAchievements, totalAchievements, achievements, BuildNextRewardPreview(state.Level), decorations, decorationSelection, development);
+	}
+
+	private bool SyncAchievementRewardDecorations(RuntimeProgressState state)
+	{
+		var changed = false;
+		var rewardedAt = DateTimeOffset.UtcNow;
+
+		foreach (var prototype in _proto.EnumeratePrototypes<WH40KMetaAchievementPrototype>())
+		{
+			if (!state.CompletedAchievements.Contains(prototype.ID))
+				continue;
+
+			foreach (var decorationId in prototype.RewardDecorationIds
+				.Where(id => !string.IsNullOrWhiteSpace(id))
+				.Select(id => id.Trim())
+				.Distinct(StringComparer.Ordinal))
+			{
+				if (!_proto.TryIndex(decorationId, out WH40KMetaDecorationPrototype _))
+					continue;
+
+				if (state.DecorationUnlockState.TryGetValue(decorationId, out var existing) && existing.Unlocked)
+					continue;
+
+				state.DecorationUnlockState[decorationId] = new RuntimeDecorationUnlockState(
+					unlocked: true,
+					rewardedAt,
+					state.Level,
+					rewardedAt);
+				changed = true;
+			}
+		}
+
+		return changed;
+	}
+
+	private bool GrantPendingAchievementRewards(NetUserId userId, RuntimeProgressState state, string source, bool emitTelemetry = true)
+	{
+		var changed = false;
+		var totalRewardXp = 0;
+		var rewardedAchievementIds = new List<string>();
+		var rewardedAt = DateTimeOffset.UtcNow;
+
+		foreach (var prototype in _proto.EnumeratePrototypes<WH40KMetaAchievementPrototype>())
+		{
+			if (!state.CompletedAchievements.Contains(prototype.ID) ||
+				state.ClaimedAchievementRewards.Contains(prototype.ID))
+			{
+				continue;
+			}
+
+			var rewardXp = Math.Max(0, prototype.RewardXp);
+			var rewardDecorationIds = prototype.RewardDecorationIds
+				.Where(id => !string.IsNullOrWhiteSpace(id))
+				.Select(id => id.Trim())
+				.Distinct(StringComparer.Ordinal)
+				.ToList();
+
+			if (rewardXp <= 0 && rewardDecorationIds.Count == 0)
+				continue;
+
+			state.ClaimedAchievementRewards.Add(prototype.ID);
+			rewardedAchievementIds.Add(prototype.ID);
+			totalRewardXp += rewardXp;
+			changed = true;
+
+			foreach (var decorationId in rewardDecorationIds)
+			{
+				if (!_proto.TryIndex(decorationId, out WH40KMetaDecorationPrototype _))
+					continue;
+
+				state.DecorationUnlockState[decorationId] = new RuntimeDecorationUnlockState(
+					unlocked: true,
+					rewardedAt,
+					state.Level,
+					rewardedAt);
+			}
+		}
+
+		if (!changed)
+			return false;
+
+		if (totalRewardXp > 0)
+		{
+			state.LifetimeXp = Math.Max(0, state.LifetimeXp + totalRewardXp);
+			Recalculate(state);
+		}
+
+		if (!emitTelemetry)
+			return true;
+
+		foreach (var achievementId in rewardedAchievementIds)
+		{
+			if (!_proto.TryIndex(achievementId, out WH40KMetaAchievementPrototype prototype))
+				continue;
+
+			var rewardXp = Math.Max(0, prototype.RewardXp);
+			var rewardDecorationCount = prototype.RewardDecorationIds
+				.Where(id => !string.IsNullOrWhiteSpace(id))
+				.Select(id => id.Trim())
+				.Distinct(StringComparer.Ordinal)
+				.Count();
+
+			var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+			{
+				["achievementId"] = achievementId,
+				["source"] = source,
+				["rewardXp"] = rewardXp.ToString(),
+				["rewardDecorations"] = rewardDecorationCount.ToString()
+			};
+
+			_stats.Record(userId, "meta.achievement.reward_claimed", 1L, metadata);
+
+			if (rewardXp > 0)
+				_stats.Record(userId, "meta.xp.achievement", rewardXp, metadata);
+		}
+
+		return true;
 	}
 
 	private List<WH40KMetaAchievementSnapshotEntry> BuildAchievementSnapshotEntries(RuntimeProgressState state, out int completedAchievements, out int totalAchievements, out bool achievementStateChanged)
@@ -1949,7 +2096,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				completedAchievements++;
 			}
 			string rewardKey = (string.IsNullOrWhiteSpace(item2.RewardKey) ? "wh40k-meta-progress-achievements-reward-none" : item2.RewardKey);
-			list.Add(new WH40KMetaAchievementSnapshotEntry(item2.ID, item2.Category, item2.TitleKey, item2.DescriptionKey, item2.TaskKey, rewardKey, num2, num, item2.Hidden, flag4));
+			list.Add(new WH40KMetaAchievementSnapshotEntry(item2.ID, item2.Category, item2.TitleKey, item2.DescriptionKey, item2.TaskKey, rewardKey, Math.Max(0, item2.RewardXp), new List<string>(item2.RewardDecorationIds), num2, num, item2.Hidden, flag4));
 		}
 		totalAchievements = list.Count;
 		return list;
@@ -1959,6 +2106,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	{
 		unlockStateChanged = false;
 		List<WH40KMetaDecorationSnapshotEntry> list = new List<WH40KMetaDecorationSnapshotEntry>();
+		bool discordRequirementsActive = AreDecorationDiscordRequirementsActive();
 		WH40KDiscordAuthSnapshot? discordSnapshot = _discordAuth.TryGetSnapshot(userId, out var cachedDiscordSnapshot)
 			? cachedDiscordSnapshot
 			: null;
@@ -1972,8 +2120,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			int num = Math.Max(1, item.RequiredLevel);
 			bool adminOnly = item.AdminOnly;
 			List<string> list2 = item.RequiredAchievements.Where((string id) => !string.IsNullOrWhiteSpace(id)).Distinct<string>(StringComparer.Ordinal).ToList();
-			bool flag = !_unlockRequirementsBypassed && item.RequiredDiscordGuildMember;
-			List<string> list3 = _unlockRequirementsBypassed ? new List<string>() : WH40KDiscordAuthRequirementEvaluator.NormalizeRoleIds(item.RequiredDiscordRoleIds);
+			bool flag = discordRequirementsActive && item.RequiredDiscordGuildMember;
+			List<string> list3 = discordRequirementsActive
+				? WH40KDiscordAuthRequirementEvaluator.NormalizeRoleIds(item.RequiredDiscordRoleIds)
+				: new List<string>();
 			int num2 = (_unlockRequirementsBypassed ? 1 : num);
 			List<string> list4 = (_unlockRequirementsBypassed ? new List<string>() : list2);
 			bool flag2 = state.Level >= num2;
@@ -2066,10 +2216,11 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		List<string> requiredAchievements = _unlockRequirementsBypassed
 			? new List<string>()
 			: prototype.RequiredAchievements.Where((string id) => !string.IsNullOrWhiteSpace(id)).Distinct<string>(StringComparer.Ordinal).ToList();
-		bool requireDiscordGuildMember = !_unlockRequirementsBypassed && prototype.RequiredDiscordGuildMember;
-		List<string> requiredDiscordRoleIds = _unlockRequirementsBypassed
-			? new List<string>()
-			: WH40KDiscordAuthRequirementEvaluator.NormalizeRoleIds(prototype.RequiredDiscordRoleIds);
+		bool discordRequirementsActive = AreDecorationDiscordRequirementsActive();
+		bool requireDiscordGuildMember = discordRequirementsActive && prototype.RequiredDiscordGuildMember;
+		List<string> requiredDiscordRoleIds = discordRequirementsActive
+			? WH40KDiscordAuthRequirementEvaluator.NormalizeRoleIds(prototype.RequiredDiscordRoleIds)
+			: new List<string>();
 		bool baseUnlocked = (!prototype.AdminOnly && state.Level >= requiredLevel && requiredAchievements.All(state.CompletedAchievements.Contains))
 			|| (state.DecorationUnlockState.TryGetValue(prototype.ID, out var unlockState) && unlockState.Unlocked);
 		if (!baseUnlocked)
@@ -2079,6 +2230,11 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			? cachedDiscordSnapshot
 			: null;
 		return WH40KDiscordAuthRequirementEvaluator.MeetsRequirements(discordSnapshot, requireDiscordGuildMember, requiredDiscordRoleIds);
+	}
+
+	private bool AreDecorationDiscordRequirementsActive()
+	{
+		return !_unlockRequirementsBypassed && _config.GetCVar(CCVars.WH40KDiscordAuthEnabled);
 	}
 
 	private WH40KMetaNextRewardPreview? BuildNextRewardPreview(int currentLevel)

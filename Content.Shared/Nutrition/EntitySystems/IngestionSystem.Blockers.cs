@@ -8,6 +8,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Storage;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared._WH40K.MetaProgress;
 
 namespace Content.Shared.Nutrition.EntitySystems;
 
@@ -88,6 +89,10 @@ public sealed partial class IngestionSystem
 
         // Time is additive because I said so.
         args.Time += entity.Comp.Delay;
+
+        var delayEv = new WH40KModifyEdibleDelayEvent(args.Time);
+        RaiseLocalEvent(args.User, ref delayEv);
+        args.Time = delayEv.Time;
     }
 
     private void OnStorageEdible(Entity<StorageComponent> ent, ref EdibleEvent args)

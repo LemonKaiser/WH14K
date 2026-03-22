@@ -1,4 +1,4 @@
-wh40k-discord-auth-button = Discord
+wh40k-discord-auth-button = Link Discord
 wh40k-discord-auth-button-link = Link Discord
 
 wh40k-discord-auth-window-title = Discord Auth
@@ -42,3 +42,5 @@ wh40k-discord-auth-connect-deny-role-required = Server entry is restricted: your
 wh40k-discord-auth-connect-deny-misconfigured = Server entry is restricted, but Discord authorization is misconfigured on the server.
 wh40k-discord-auth-connect-deny-cache-stale = Server entry is restricted: the Discord cache is stale and could not be refreshed automatically.
 wh40k-discord-auth-connect-deny-generic = Server entry is restricted by Discord authorization policy.
+wh40k-discord-auth-connect-deny-linked-account = Currently linked Discord: {$name} (ID: {$id}).
+wh40k-discord-auth-connect-deny-change-hint = If this is the wrong account, use Change Linked Discord.

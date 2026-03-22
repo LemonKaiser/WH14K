@@ -56,7 +56,7 @@ public sealed partial class CCVars
     ///     Account-level cap for WH40K player meta progression. 0 means no cap.
     /// </summary>
     public static readonly CVarDef<int> WH40KMetaLevelCap =
-        CVarDef.Create("wh40k.meta.level_cap", 20, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.meta.level_cap", 40, CVar.SERVERONLY);
 
     /// <summary>
     ///     XP multiplier for WH40K player meta progression.

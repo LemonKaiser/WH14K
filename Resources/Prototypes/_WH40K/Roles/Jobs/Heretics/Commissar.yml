@@ -13,7 +13,6 @@
       - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
       - type: WH40KFriendlyFireAllowed
-      - type: WH40KCommissarVoice
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
         auraRadius: 10
@@ -21,11 +20,6 @@
         speedMultiplier: 1.1
         outgoingDamageMultiplier: 1.1
         incomingDamageMultiplier: 0.9
-      - type: Vocal
-        sounds:
-          Male: WH40KCommissarMaleHuman
-          Female: WH40KCommissarFemaleHuman
-          Unsexed: WH40KCommissarMaleHuman
   access:
   - Maintenance
   - External

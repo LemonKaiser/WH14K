@@ -15,6 +15,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Client.Utility;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BoxContainer;
 
@@ -25,6 +26,7 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IResourceCache _resources = default!;
 
     private static readonly Direction[] GhostPreviewDirections =
@@ -418,7 +420,7 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow
             ("level", requirement.RequiredLevel));
     }
 
-    private static string? BuildLockedActionTooltip(WH40KMetaDecorationRequirementSnapshot requirement)
+    private string? BuildLockedActionTooltip(WH40KMetaDecorationRequirementSnapshot requirement)
     {
         if (requirement.AdminOnly)
             return Loc.GetString("wh40k-meta-progress-decorations-tooltip-admin-only");
@@ -434,9 +436,23 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow
 
         if (requirement.RequiredAchievements.Count > 0)
         {
-            lines.Add(Loc.GetString(
-                "wh40k-meta-progress-decorations-tooltip-achievements",
-                ("count", requirement.RequiredAchievements.Count)));
+            var titles = requirement.RequiredAchievements
+                .Select(ResolveAchievementTitle)
+                .Where(title => !string.IsNullOrWhiteSpace(title))
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+
+            if (titles.Count == 0)
+            {
+                lines.Add(Loc.GetString(
+                    "wh40k-meta-progress-decorations-tooltip-achievements",
+                    ("count", requirement.RequiredAchievements.Count)));
+            }
+            else
+            {
+                lines.Add(Loc.GetString("wh40k-meta-progress-decorations-tooltip-achievements-header"));
+                lines.AddRange(titles.Select(title => $"- {title}"));
+            }
         }
 
         if (requirement.RequiredDiscordGuildMember || requirement.RequiredDiscordRoleIds.Count > 0)
@@ -460,6 +476,15 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow
             return null;
 
         return string.Join(Environment.NewLine, lines);
+    }
+
+    private string ResolveAchievementTitle(string achievementId)
+    {
+        if (!_prototype.TryIndex<WH40KMetaAchievementPrototype>(achievementId, out var prototype) ||
+            string.IsNullOrWhiteSpace(prototype?.TitleKey))
+            return achievementId;
+
+        return Loc.GetString(prototype.TitleKey);
     }
 
     private Control BuildPreviewContent(WH40KMetaDecorationSnapshotEntry entry)
@@ -695,12 +720,22 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow
         if (string.IsNullOrWhiteSpace(source))
             return false;
 
-        var normalized = source.Trim().ToLowerInvariant();
-        if (normalized is not ("binary" or "scan" or "scramble-decode" or "typewriter-cursor" or "wave" or "glitch-slice" or "noise-dissolve" or "scanline"))
-            return false;
+        effect = source.Trim().ToLowerInvariant() switch
+        {
+            "binary" => "binary",
+            "scan" => "scan",
+            "fish" or "fish-swim" => "fish",
+            "scramble-decode" or "scramble" => "scramble-decode",
+            "typewriter-cursor" or "typewriter" => "typewriter-cursor",
+            "wave" => "wave",
+            "glitch-slice" or "glitch" => "glitch-slice",
+            "noise-dissolve" or "dissolve-noise" or "noise" => "noise-dissolve",
+            "scanline" => "scanline",
+            "flip" or "discord-flip" => "flip",
+            _ => string.Empty,
+        };
 
-        effect = normalized;
-        return true;
+        return effect.Length > 0;
     }
 
     private void BuildTitlePreviewParts(string titlePreviewName, out string titleText, out string nameText)

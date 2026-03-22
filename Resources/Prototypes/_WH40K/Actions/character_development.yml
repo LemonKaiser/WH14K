@@ -1,0 +1,23 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KCharacterDevelopmentKidneyPurge
+  name: Kidney Purge
+  description: Flush up to 5 units of toxin reagents from your bloodstream.
+  components:
+  - type: Action
+    icon: /Textures/_WH40K/Interface/Actions/squad_command.png
+    useDelay: 600
+  - type: InstantAction
+    event: !type:WH40KCharacterDevelopmentKidneyPurgeActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KCharacterDevelopmentWarFurnace
+  name: War Furnace
+  description: For 5 seconds, recover 2.5 damage every second.
+  components:
+  - type: Action
+    icon: /Textures/_WH40K/Interface/Alerts/morale_boost.png
+    useDelay: 600
+  - type: InstantAction
+    event: !type:WH40KCharacterDevelopmentWarFurnaceActionEvent

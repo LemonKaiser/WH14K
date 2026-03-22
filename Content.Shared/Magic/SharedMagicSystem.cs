@@ -503,6 +503,15 @@ public abstract class SharedMagicSystem : EntitySystem
         if (ev.Handled || !PassesSpellPrerequisites(ev.Action, ev.Performer))
             return;
 
+        if (!ev.Performer.IsValid() ||
+            Deleted(ev.Performer) ||
+            !ev.Target.IsValid() ||
+            Deleted(ev.Target) ||
+            ev.Performer == ev.Target)
+        {
+            return;
+        }
+
         ev.Handled = true;
 
         // Need performer mind, but target mind is unnecessary, such as taking over a NPC

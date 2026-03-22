@@ -2,7 +2,7 @@
   id: RobeTechpriestMars
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 1
+    requiredLevel: 2
   equipment:
     neck: ClothingNeckRobeTechpriestMars
 
@@ -10,7 +10,7 @@
   id: RobeTechpriestAgripinaa
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 3
+    requiredLevel: 5
   equipment:
     neck: ClothingNeckRobeTechpriestAgripinaa
 
@@ -18,7 +18,7 @@
   id: RobeTechpriestGraia
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 5
+    requiredLevel: 7
   equipment:
     neck: ClothingNeckRobeTechpriestGraia
 
@@ -26,7 +26,7 @@
   id: RobeTechpriestLucius
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 7
+    requiredLevel: 8
   equipment:
     neck: ClothingNeckRobeTechpriestLucius
 
@@ -34,7 +34,7 @@
   id: RobeTechpriestMetalica
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 9
+    requiredLevel: 10
   equipment:
     neck: ClothingNeckRobeTechpriestMetalica
 
@@ -42,7 +42,7 @@
   id: RobeTechpriestRiza
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 12
+    requiredLevel: 11
   equipment:
     neck: ClothingNeckRobeTechpriestRiza
 
@@ -50,6 +50,6 @@
   id: RobeTechpriestStygiesVIII
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 13
   equipment:
     neck: ClothingNeckRobeTechpriestStygiesVIII

@@ -151,7 +151,7 @@
   parent: RMCContainerBase
   id: RMCContainerPathosLeft
   name: Pathos Cargo Container
-  description: "A huge industrial shipping container.\nThis one is from Pathos, a computer parts and motion detector manufacturer.\nYou still wonder why we have a container of old Motion Detectors, and if they even still work."
+  description: "A huge industrial shipping container.\nThis one is from Pathos, a computer parts manufacturer.\nYou still wonder why we have a container of old Pathos stock, and if any of it still works."
   suffix: Pathos, Left
   components:
   - type: Sprite

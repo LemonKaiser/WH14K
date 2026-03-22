@@ -34,8 +34,8 @@
                                     VerticalAlignment="Bottom"
                                     StyleClasses="OpenLeft"/>
                         </BoxContainer>
-                        <Button Name="DiscordAuthButton"
-                                Text="{Loc 'connecting-discord-auth-link'}"
+                        <Button Name="DiscordAuthChangeButton"
+                                Text="{Loc 'connecting-discord-auth-change'}"
                                 HorizontalAlignment="Center"
                                 Visible="False" />
                     </BoxContainer>

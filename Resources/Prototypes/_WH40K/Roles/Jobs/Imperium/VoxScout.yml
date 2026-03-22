@@ -32,7 +32,6 @@
     belt: guardbelt
     head: ClothingHeadHelmetFlak
     outerClothing: ClothingOuterArmorFlakVestLight
-    pocket1: RMCMotionDetector
     pocket2: WH40KStandardTacticalMapTablet
     id: GuardsmanDogTag
 

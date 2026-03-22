@@ -12,6 +12,7 @@ using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.EntityConditions;
@@ -362,6 +363,28 @@ public sealed class RespiratorSystem : EntitySystem
         respirator.Saturation += amount;
         respirator.Saturation =
             Math.Clamp(respirator.Saturation, respirator.MinSaturation, respirator.MaxSaturation);
+    }
+
+    public void SetRespiratorProfile(
+        EntityUid uid,
+        float maxSaturation,
+        DamageSpecifier damage,
+        bool refillIfPreviouslyFull = false,
+        RespiratorComponent? respirator = null)
+    {
+        if (!Resolve(uid, ref respirator, false))
+            return;
+
+        var oldMax = respirator.MaxSaturation;
+        var wasFull = respirator.Saturation >= oldMax - 0.01f;
+
+        respirator.MaxSaturation = maxSaturation;
+        respirator.Damage = damage;
+
+        if (refillIfPreviouslyFull && wasFull)
+            respirator.Saturation = respirator.MaxSaturation;
+        else
+            respirator.Saturation = Math.Clamp(respirator.Saturation, respirator.MinSaturation, respirator.MaxSaturation);
     }
 
     /// <summary>

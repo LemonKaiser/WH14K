@@ -162,13 +162,22 @@ public abstract class SharedStationSpawningSystem : EntitySystem
                     InventorySystem.TryGetSlotEntity(entity, slotName, out var slotEnt, inventoryComponent: inventoryComp) &&
                     _storageQuery.TryComp(slotEnt, out var storage))
                 {
-
                     foreach (var entProto in entProtos)
                     {
                         var spawnedEntity = Spawn(entProto, coords);
+                        if (_storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false))
+                            continue;
 
-                        _storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false);
+                        Del(spawnedEntity);
+                        InventorySystem.SpawnItemOnEntity(entity, entProto);
                     }
+
+                    continue;
+                }
+
+                foreach (var entProto in entProtos)
+                {
+                    InventorySystem.SpawnItemOnEntity(entity, entProto);
                 }
             }
         }

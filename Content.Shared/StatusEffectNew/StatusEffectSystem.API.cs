@@ -27,7 +27,11 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
-        if (duration == TimeSpan.Zero)
+        var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration);
+        RaiseLocalEvent(target, ref durationEvent);
+        duration = durationEvent.Duration;
+
+        if (duration <= TimeSpan.Zero)
         {
             statusEffect = null;
             return false;
@@ -68,6 +72,13 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
+        if (duration is not null)
+        {
+            var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration.Value);
+            RaiseLocalEvent(target, ref durationEvent);
+            duration = durationEvent.Duration;
+        }
+
         if (duration <= TimeSpan.Zero)
         {
             statusEffect = null;
@@ -111,6 +122,13 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
+        if (duration is not null)
+        {
+            var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration.Value);
+            RaiseLocalEvent(target, ref durationEvent);
+            duration = durationEvent.Duration;
+        }
+
         if (duration <= TimeSpan.Zero)
         {
             statusEffect = null;

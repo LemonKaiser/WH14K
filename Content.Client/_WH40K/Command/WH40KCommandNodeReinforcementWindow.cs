@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Client.Administration.UI.CustomControls;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
@@ -10,77 +9,141 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
-using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Command;
 
 public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 {
-    private static readonly Color ImperiumColor = Color.FromHex("#F3C548");
-
     public event Action<string, int>? OnCallRequested;
 
+    private readonly StyleBoxFlat _headerStyle;
+    private readonly Label _headerTitleLabel;
     private readonly Label _teamLine;
     private readonly Label _statusLine;
+    private readonly PanelContainer _teamBadge;
+    private readonly Label _teamBadgeLabel;
+    private readonly PanelContainer _statusBadge;
+    private readonly Label _statusBadgeLabel;
     private readonly ScrollContainer _cardsScroll;
     private readonly BoxContainer _cardsRoot;
-    private readonly StyleBoxFlat _headerStyle;
     private readonly Dictionary<string, int> _selectedCounts = new();
+
+    private Color _accent = WH40KCommandUiStyles.DefaultAccent;
 
     public WH40KCommandNodeReinforcementWindow()
     {
         Title = Loc.GetString("wh40k-command-node-reinforcement-window-title");
-        MinSize = SetSize = new Vector2(1120, 620);
+        MinSize = SetSize = new Vector2(960, 580);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 8
+            SeparationOverride = 8,
+            Margin = new Thickness(6)
         };
         ContentsContainer.AddChild(root);
 
         var header = new PanelContainer
         {
-            PanelOverride = _headerStyle = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = ImperiumColor,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = _headerStyle = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.HeaderBackground,
+                _accent,
+                2)
         };
         root.AddChild(header);
 
         var headerBox = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 10,
+            Margin = new Thickness(10, 8),
+            VerticalAlignment = VAlignment.Center
         };
         header.AddChild(headerBox);
 
-        _teamLine = new Label();
-        _statusLine = new Label();
-        headerBox.AddChild(_teamLine);
-        headerBox.AddChild(_statusLine);
+        var headerInfo = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 3,
+            HorizontalExpand = true
+        };
+        headerBox.AddChild(headerInfo);
+
+        _headerTitleLabel = new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-reinforcement-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_headerTitleLabel);
+
+        _teamLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _statusLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_teamLine);
+        headerInfo.AddChild(_statusLine);
+
+        var badgeRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 6,
+            VerticalAlignment = VAlignment.Center
+        };
+        headerBox.AddChild(badgeRow);
+
+        _teamBadge = new PanelContainer();
+        _teamBadgeLabel = new Label { Align = Label.AlignMode.Center, ClipText = true };
+        _teamBadge.AddChild(_teamBadgeLabel);
+        badgeRow.AddChild(_teamBadge);
+
+        _statusBadge = new PanelContainer();
+        _statusBadgeLabel = new Label { Align = Label.AlignMode.Center, ClipText = true };
+        _statusBadge.AddChild(_statusBadgeLabel);
+        badgeRow.AddChild(_statusBadge);
 
         var body = new PanelContainer
         {
             VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1F2433"),
-                BorderColor = Color.FromHex("#56607A"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackgroundAlt,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
         root.AddChild(body);
+
+        var bodyRoot = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 0,
+            VerticalExpand = true
+        };
+        body.AddChild(bodyRoot);
+
+        var bodyHeader = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
+        };
+        bodyRoot.AddChild(bodyHeader);
+        bodyHeader.AddChild(new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-reinforcement-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        });
 
         _cardsScroll = new ScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true
         };
-        body.AddChild(_cardsScroll);
+        bodyRoot.AddChild(_cardsScroll);
 
         _cardsRoot = new BoxContainer
         {
@@ -95,14 +158,51 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
-        var accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, ImperiumColor);
-        _headerStyle.BorderColor = accent;
+        _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
+        _headerStyle.BorderColor = _accent;
+        _headerTitleLabel.ModulateSelfOverride = _accent;
 
         Title = Loc.GetString("wh40k-command-node-reinforcement-window-title-team", ("team", state.TeamName));
         _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _teamLine.ModulateSelfOverride = accent;
         _statusLine.Text = BuildStatusLine(state);
-        RebuildCards(state, accent);
+
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+
+        ApplyStatusBadge(state);
+        RebuildCards(state);
+    }
+
+    private void ApplyStatusBadge(WH40KCommandNodeBoundUserInterfaceState state)
+    {
+        if (state.ReinforcementCooldownSeconds > 0)
+        {
+            _statusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2E1D".AsSpan()),
+                WH40KCommandUiStyles.WarningBadge);
+            _statusBadgeLabel.Text = $"{state.ReinforcementCooldownSeconds:000}s";
+            return;
+        }
+
+        if (state.Phase == WH40KBattlePhase.Assault)
+        {
+            _statusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#223B2F".AsSpan()),
+                WH40KCommandUiStyles.ReadyBadge);
+            _statusBadgeLabel.Text = Loc.GetString("wh40k-command-node-status-badge-ready");
+            return;
+        }
+
+        _statusBadge.PanelOverride = state.Phase >= WH40KBattlePhase.Apocalypse
+            ? WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#3A2A2A".AsSpan()),
+                WH40KCommandUiStyles.DangerBadge)
+            : WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#22313B".AsSpan()),
+                WH40KCommandUiStyles.InfoBadge);
+        _statusBadgeLabel.Text = Loc.GetString(state.Phase >= WH40KBattlePhase.Apocalypse
+            ? "wh40k-phase-apocalypse-name"
+            : "wh40k-phase-preparation-name");
     }
 
     private string BuildStatusLine(WH40KCommandNodeBoundUserInterfaceState state)
@@ -123,16 +223,24 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         return Loc.GetString("wh40k-command-node-reinforcement-readiness-ready");
     }
 
-    private void RebuildCards(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
+    private void RebuildCards(WH40KCommandNodeBoundUserInterfaceState state)
     {
         _cardsRoot.RemoveAllChildren();
         var options = state.ReinforcementOptions ?? Array.Empty<WH40KCommandNodeReinforcementOptionState>();
         if (options.Length == 0)
         {
-            _cardsRoot.AddChild(new Label
+            var empty = new PanelContainer
             {
-                Text = Loc.GetString("wh40k-command-node-reinforcement-window-empty")
+                PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                    WH40KCommandUiStyles.CardBackgroundMuted,
+                    WH40KCommandUiStyles.MutedBorder)
+            };
+            empty.AddChild(new Label
+            {
+                Text = Loc.GetString("wh40k-command-node-reinforcement-window-empty"),
+                StyleClasses = { "LabelSubText" }
             });
+            _cardsRoot.AddChild(empty);
             return;
         }
 
@@ -143,74 +251,105 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 
         foreach (var option in options)
         {
-            _cardsRoot.AddChild(CreateOptionCard(state, option, accent, compactMode));
+            _cardsRoot.AddChild(CreateOptionCard(state, option, compactMode));
         }
     }
 
     private Control CreateOptionCard(
         WH40KCommandNodeBoundUserInterfaceState state,
         WH40KCommandNodeReinforcementOptionState option,
-        Color accent,
         bool compactMode)
     {
         var selectedCount = ResolveSelectedCount(option.OptionId, option.MaxCount);
+        var selectedCost = GetCostByCount(option, selectedCount);
+        var canCall = CanCall(state, selectedCount, option.MaxCount, selectedCost);
+
         var card = new PanelContainer
         {
-            MinWidth = compactMode ? 0 : 320,
-            VerticalExpand = true,
+            MinWidth = compactMode ? 0 : 280,
             HorizontalExpand = compactMode,
             SizeFlagsStretchRatio = 1f,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#252A3A"),
-                BorderColor = accent,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackground,
+                canCall ? _accent : WH40KCommandUiStyles.MutedBorder)
         };
         if (!compactMode)
-            card.MaxWidth = 360;
+            card.MaxWidth = 300;
 
         var box = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Margin = new Thickness(8),
-            VerticalExpand = true
+            SeparationOverride = 6
         };
         card.AddChild(box);
 
-        box.AddChild(new Label
+        var header = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 8
+        };
+        box.AddChild(header);
+
+        header.AddChild(new Label
         {
             Text = option.Name,
-            ModulateSelfOverride = accent
+            StyleClasses = { "LabelBig" },
+            HorizontalExpand = true,
+            ModulateSelfOverride = _accent,
+            ClipText = true
         });
+
+        var countBadge = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+                Color.FromHex("#22313B".AsSpan()),
+                canCall ? _accent : WH40KCommandUiStyles.InfoBadge)
+        };
+        countBadge.AddChild(new Label
+        {
+            Text = $"x{selectedCount}",
+            ClipText = true
+        });
+        header.AddChild(countBadge);
 
         var previewHolder = new PanelContainer
         {
-            MinHeight = compactMode ? 156 : 170,
+            MinHeight = compactMode ? 108 : 120,
             HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1C2030"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackgroundAlt,
+                WH40KCommandUiStyles.MutedBorder)
         };
         box.AddChild(previewHolder);
         BuildPreviewCluster(previewHolder, option.PreviewPrototypeId, selectedCount);
 
-        box.AddChild(CreateWrappedLabel(option.Description, compactMode ? 336f : 300f));
-
-        box.AddChild(CreateWrappedLabel(
-            Loc.GetString(
-                "wh40k-command-node-reinforcement-window-gear",
-                ("gear", option.GearSummary)),
-            compactMode ? 336f : 300f));
-
-        box.AddChild(new Control
+        var description = new Label
         {
-            VerticalExpand = true
-        });
+            HorizontalExpand = true,
+            ClipText = true,
+            StyleClasses = { "LabelSubText" }
+        };
+        description.Text = CompactText(option.Description, 96);
+        box.AddChild(description);
+
+        var gearCard = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackgroundAlt,
+                WH40KCommandUiStyles.MutedBorder)
+        };
+        box.AddChild(gearCard);
+
+        var gearLabel = new Label
+        {
+            HorizontalExpand = true,
+            ClipText = true,
+            StyleClasses = { "LabelSubText" }
+        };
+        gearLabel.Text = CompactText(
+            Loc.GetString("wh40k-command-node-reinforcement-window-gear", ("gear", option.GearSummary)),
+            90);
+        gearCard.AddChild(gearLabel);
 
         var selectorRow = new BoxContainer
         {
@@ -232,9 +371,11 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
                     "wh40k-command-node-reinforcement-window-count-button",
                     ("count", currentCount),
                     ("cost", cost)),
-                Disabled = !selectable,
-                Modulate = selectedCount == currentCount ? accent : Color.White
+                Disabled = !selectable
             };
+            if (selectedCount == currentCount)
+                button.Modulate = _accent;
+
             button.OnPressed += _ =>
             {
                 _selectedCounts[option.OptionId] = currentCount;
@@ -243,8 +384,6 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             selectorRow.AddChild(button);
         }
 
-        var selectedCost = GetCostByCount(option, selectedCount);
-        var canCall = CanCall(state, selectedCount, option.MaxCount, selectedCost);
         var callButton = new Button
         {
             HorizontalExpand = true,
@@ -273,18 +412,18 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         switch (Math.Clamp(count, 1, 3))
         {
             case 1:
-                AddPreview(layout, previewPrototypeId, Vector2.Zero, 2.45f, 1f);
+                AddPreview(layout, previewPrototypeId, Vector2.Zero, 2.2f, 1f);
                 break;
 
             case 2:
-                AddPreview(layout, previewPrototypeId, new Vector2(-34f, 4f), 2.2f);
-                AddPreview(layout, previewPrototypeId, new Vector2(34f, 4f), 2.2f);
+                AddPreview(layout, previewPrototypeId, new Vector2(-32f, 6f), 2.0f);
+                AddPreview(layout, previewPrototypeId, new Vector2(32f, 6f), 2.0f);
                 break;
 
             default:
-                AddPreview(layout, previewPrototypeId, new Vector2(-44f, 8f), 1.95f);
-                AddPreview(layout, previewPrototypeId, new Vector2(44f, 8f), 1.95f);
-                AddPreview(layout, previewPrototypeId, new Vector2(0f, -6f), 2.45f, 1f);
+                AddPreview(layout, previewPrototypeId, new Vector2(-40f, 10f), 1.8f);
+                AddPreview(layout, previewPrototypeId, new Vector2(40f, 10f), 1.8f);
+                AddPreview(layout, previewPrototypeId, new Vector2(0f, -6f), 2.1f, 1f);
                 break;
         }
     }
@@ -298,7 +437,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
     {
         var preview = new EntityPrototypeView
         {
-            MinSize = new Vector2(140, 140),
+            MinSize = new Vector2(108, 108),
             Scale = new Vector2(scale, scale),
             ModulateSelfOverride = Color.White.WithAlpha(Math.Clamp(alpha, 0f, 1f))
         };
@@ -308,7 +447,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 
         layout.AddChild(preview);
 
-        const float halfSize = 70f;
+        const float halfSize = 54f;
         LayoutContainer.SetAnchorLeft(preview, 0.5f);
         LayoutContainer.SetAnchorRight(preview, 0.5f);
         LayoutContainer.SetAnchorTop(preview, 0.5f);
@@ -317,25 +456,6 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         LayoutContainer.SetMarginRight(preview, offset.X + halfSize);
         LayoutContainer.SetMarginTop(preview, offset.Y - halfSize);
         LayoutContainer.SetMarginBottom(preview, offset.Y + halfSize);
-    }
-
-    private static RichTextLabel CreateWrappedLabel(string text, float maxWidth, Color? color = null)
-    {
-        var label = new RichTextLabel
-        {
-            HorizontalExpand = true,
-            MaxWidth = maxWidth
-        };
-
-        var normalized = string.IsNullOrWhiteSpace(text)
-            ? string.Empty
-            : text.Replace("\\n", "\n", StringComparison.Ordinal);
-        label.SetMessage(
-            FormattedMessage.FromMarkupPermissive(FormattedMessage.EscapeText(normalized)),
-            tagsAllowed: null,
-            defaultColor: color ?? Color.White);
-
-        return label;
     }
 
     private int ResolveSelectedCount(string optionId, int maxCount)
@@ -372,5 +492,26 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             2 => option.CostX2,
             _ => option.CostX1
         };
+    }
+
+    private static string CompactText(string text, int maxLength)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var compact = text.Trim()
+            .Replace("\r", " ", StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal)
+            .Replace("\t", " ", StringComparison.Ordinal);
+
+        while (compact.Contains("  ", StringComparison.Ordinal))
+        {
+            compact = compact.Replace("  ", " ", StringComparison.Ordinal);
+        }
+
+        if (compact.Length <= maxLength)
+            return compact;
+
+        return compact[..Math.Max(0, maxLength - 3)].TrimEnd() + "...";
     }
 }

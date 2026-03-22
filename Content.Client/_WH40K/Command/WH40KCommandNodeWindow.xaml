@@ -1,0 +1,289 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+                      Title="{Loc 'wh40k-command-node-window-title'}"
+                      Resizable="True"
+                      SetSize="1180 760"
+                      MinSize="980 640">
+    <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="6 6 6 6">
+        <PanelContainer Name="HeaderPanel">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="10" Margin="10 8 10 8">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="3">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-command-node-header-title'}"
+                           StyleClasses="LabelHeading" />
+                    <Label Name="HeaderSubtitleLabel"
+                           Text="{Loc 'wh40k-command-node-header-subtitle'}"
+                           ClipText="True"
+                           StyleClasses="LabelSubText" />
+                </BoxContainer>
+
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" VerticalAlignment="Center">
+                    <PanelContainer Name="TeamBadge">
+                        <Label Name="TeamBadgeLabel" Align="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="PhaseBadge">
+                        <Label Name="PhaseBadgeLabel" Align="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="LevelBadge">
+                        <Label Name="LevelBadgeLabel" Align="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="StatusBadge">
+                        <Label Name="StatusBadgeLabel" Align="Center" />
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="6">
+            <PanelContainer Name="CommandRail"
+                            SetWidth="340"
+                            VerticalExpand="True"
+                            HorizontalExpand="False">
+                <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
+                    <PanelContainer Name="RailHeaderPanel">
+                        <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                            <Label Text="{Loc 'wh40k-command-node-rail-title'}"
+                                   StyleClasses="LabelHeading" />
+                            <Label Text="{Loc 'wh40k-command-node-rail-subtitle'}"
+                                   StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="8 8 8 8" SeparationOverride="8">
+                            <PanelContainer Name="BaseStatusCard">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                    <Label Text="{Loc 'wh40k-command-node-base-card-title'}"
+                                           StyleClasses="LabelHeading" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                                        <Label Name="BaseLevelLineLabel" ClipText="True" />
+                                        <Label Name="FrontPointsLineLabel" ClipText="True" />
+                                        <Label Name="CommandPointsLineLabel" ClipText="True" />
+                                        <Label Name="DevelopmentPointsLineLabel" ClipText="True" />
+                                        <Label Name="NextLevelLineLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="BattlePostureCard">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                    <Label Text="{Loc 'wh40k-command-node-battle-card-title'}"
+                                           StyleClasses="LabelHeading" />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                                        <Label Name="DoctrineNameLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="DoctrineThemeLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                    <cc:HSeparator />
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="2">
+                                        <Label Name="BattleTacticNameLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="BattleTacticSummaryLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="ReadinessCard">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                    <Label Text="{Loc 'wh40k-command-node-readiness-card-title'}"
+                                           StyleClasses="LabelHeading" />
+                                    <Label Name="ReinforcementStatusLabel" ClipText="True" />
+                                    <Label Name="EventStatusLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Label Name="FocusLineLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="ImmediateActionsCard">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                    <Label Text="{Loc 'wh40k-command-node-actions-card-title'}"
+                                           StyleClasses="LabelHeading" />
+                                    <Label Name="UpgradeLineLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Button Name="UpgradeButton"
+                                            Text="{Loc 'wh40k-command-node-upgrade-button'}"
+                                            StyleClasses="ButtonColorGreen" />
+                                    <Label Name="ReinforcementLineLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Button Name="ReinforcementButton"
+                                            Text="{Loc 'wh40k-command-node-reinforcement-button'}"
+                                            StyleClasses="ButtonColorGreen" />
+                                </BoxContainer>
+                            </PanelContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="OperationsPanel" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer Name="OperationsHeaderPanel">
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalAlignment="Center">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
+                                <Label Text="{Loc 'wh40k-command-node-operations-title'}"
+                                       StyleClasses="LabelHeading" />
+                                <Label Text="{Loc 'wh40k-command-node-operations-subtitle'}"
+                                       StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <PanelContainer Name="RoundBadge">
+                                <Label Name="RoundBadgeLabel" Align="Center" />
+                            </PanelContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="8 8 8 8"
+                                      SeparationOverride="8"
+                                      HorizontalExpand="True">
+                            <PanelContainer Name="ProgressCard">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                    <Label Text="{Loc 'wh40k-command-node-progress-card-title'}"
+                                           StyleClasses="LabelHeading" />
+                                    <ProgressBar Name="BaseProgressBar"
+                                                 MinValue="0"
+                                                 MaxValue="1"
+                                                 Value="0"
+                                                 SetHeight="16"
+                                                 HorizontalExpand="True" />
+                                    <Label Name="BaseProgressLineLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Label Name="ThresholdsLineLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Label Name="PurchasedNodesLabel"
+                                           StyleClasses="LabelSubText"
+                                           ClipText="True" />
+                                    <Button Name="UpgradeSketchButton"
+                                            Text="{Loc 'wh40k-command-node-upgrade-sketch-open-button'}"
+                                            HorizontalExpand="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True">
+                                <PanelContainer Name="MissionCard"
+                                                HorizontalExpand="True"
+                                                SizeFlagsStretchRatio="1.08">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <Label Text="{Loc 'wh40k-command-node-mission-card-title'}"
+                                               StyleClasses="LabelHeading" />
+                                        <Label Name="MissionTitleLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="MissionStatusLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="MissionRewardLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="MissionDescriptionLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Button Name="MissionBoardButton"
+                                                Text="{Loc 'wh40k-command-node-mission-board-open-button'}"
+                                                HorizontalExpand="True" />
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="DoctrineCard"
+                                                HorizontalExpand="True"
+                                                SizeFlagsStretchRatio="0.92">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <Label Text="{Loc 'wh40k-command-node-doctrine-card-title'}"
+                                               StyleClasses="LabelHeading" />
+                                        <Label Name="DoctrineCardStateLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="DoctrineCardThemeLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="BattleTacticCooldownLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                            <Button Name="DoctrineButton"
+                                                    Text="{Loc 'wh40k-command-node-doctrine-open-button'}"
+                                                    HorizontalExpand="True" />
+                                            <Button Name="BattleTacticButton"
+                                                    Text="{Loc 'wh40k-command-node-battle-tactic-open-button'}"
+                                                    HorizontalExpand="True" />
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True">
+                                <PanelContainer Name="CompositionCard"
+                                                HorizontalExpand="True"
+                                                SizeFlagsStretchRatio="1.15">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <Label Text="{Loc 'wh40k-command-node-composition-card-title'}"
+                                               StyleClasses="LabelHeading" />
+                                        <Label Name="CompositionSummaryLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="CompositionStaffingLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Label Name="CompositionRosterLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Button Name="TeamCompositionButton"
+                                                Text="{Loc 'wh40k-command-node-team-composition-open-button'}"
+                                                HorizontalExpand="True" />
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="IntelCard"
+                                                HorizontalExpand="True"
+                                                SizeFlagsStretchRatio="0.85">
+                                    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                        <Label Text="{Loc 'wh40k-command-node-intel-card-title'}"
+                                               StyleClasses="LabelHeading" />
+                                        <Label Name="IntelSummaryLabel"
+                                               StyleClasses="LabelBig"
+                                               ClipText="True" />
+                                        <Label Name="IntelDetailLabel"
+                                               StyleClasses="LabelSubText"
+                                               ClipText="True" />
+                                        <Button Name="TacticalBonusesButton"
+                                                Text="{Loc 'wh40k-command-node-tactical-bonuses-open-button'}"
+                                                HorizontalExpand="True" />
+                                    </BoxContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+
+        <PanelContainer Name="FooterPanel">
+            <Label Name="FooterLabel"
+                   Text="{Loc 'wh40k-command-node-footer-idle'}"
+                   ClipText="True"
+                   StyleClasses="WindowFooterText" />
+        </PanelContainer>
+    </BoxContainer>
+</controls:FancyWindow>

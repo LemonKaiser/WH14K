@@ -172,6 +172,8 @@ namespace Content.Server.Database
 
         Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel = default);
 
+        Task<NetUserId?> GetWH40KDiscordLinkOwner(string discordUserId, CancellationToken cancel = default);
+
         Task SetWH40KDiscordLink(NetUserId player, WH40KDiscordAuthDbData data);
 
         Task ClearWH40KDiscordLink(NetUserId player);
@@ -644,6 +646,12 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetWH40KDiscordLink(player, cancel));
+        }
+
+        public Task<NetUserId?> GetWH40KDiscordLinkOwner(string discordUserId, CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetWH40KDiscordLinkOwner(discordUserId, cancel));
         }
 
         public Task SetWH40KDiscordLink(NetUserId player, WH40KDiscordAuthDbData data)

@@ -817,12 +817,22 @@ internal sealed partial class ChatManager : IChatManager
         if (string.IsNullOrWhiteSpace(source))
             return false;
 
-        var normalized = source.Trim().ToLowerInvariant();
-        if (normalized is not ("binary" or "scan" or "scramble-decode" or "typewriter-cursor" or "wave" or "glitch-slice" or "noise-dissolve" or "scanline"))
-            return false;
+        effect = source.Trim().ToLowerInvariant() switch
+        {
+            "binary" => "binary",
+            "scan" => "scan",
+            "fish" or "fish-swim" => "fish",
+            "scramble-decode" or "scramble" => "scramble-decode",
+            "typewriter-cursor" or "typewriter" => "typewriter-cursor",
+            "wave" => "wave",
+            "glitch-slice" or "glitch" => "glitch-slice",
+            "noise-dissolve" or "dissolve-noise" or "noise" => "noise-dissolve",
+            "scanline" => "scanline",
+            "flip" or "discord-flip" => "flip",
+            _ => string.Empty,
+        };
 
-        effect = normalized;
-        return true;
+        return effect.Length > 0;
     }
 
     private static int CountRunes(string value)

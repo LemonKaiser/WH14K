@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Robust.Client;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
@@ -69,6 +70,11 @@ namespace Content.Client.Launcher
 
         protected override void Startup()
         {
+            foreach (var staleControl in _userInterfaceManager.StateRoot.Children.OfType<LauncherConnectingGui>().ToArray())
+            {
+                staleControl.Dispose();
+            }
+
             _control = new LauncherConnectingGui(this, _random, _prototypeManager, _cfg, _clipboard);
 
             _sawmill = _logManager.GetSawmill("launcher-ui");
@@ -84,6 +90,7 @@ namespace Content.Client.Launcher
         protected override void Shutdown()
         {
             _control?.Dispose();
+            _control = null;
 
             _clientNetManager.ConnectFailed -= OnConnectFailed;
             _clientNetManager.ClientConnectStateChanged -= OnConnectStateChanged;

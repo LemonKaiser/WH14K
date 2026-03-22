@@ -77,6 +77,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         {
             _enabled = value;
             PushSnapshotToAllOnline();
+            RefreshMetaProgressForAllOnline();
         }, true);
 
         Subs.CVar(_config, CCVars.WH40KDiscordAuthClientId, value => _clientId = value.Trim(), true);
@@ -134,18 +135,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         cancel.ThrowIfCancellationRequested();
         link = await TryAutoRefreshStaleLinkAsync(session.UserId, link, cancel);
         cancel.ThrowIfCancellationRequested();
-
-        lock (_stateLock)
-        {
-            if (!_states.TryGetValue(session.UserId, out var state))
-            {
-                state = new RuntimeState();
-                _states[session.UserId] = state;
-            }
-
-            state.Link = link;
-            state.LoadComplete = true;
-        }
+        SetRuntimeLinkData(session.UserId, link, markLoadComplete: true);
     }
 
     private void FinishPlayerLoad(ICommonSession session)
@@ -249,11 +239,8 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             return;
         }
 
-        await _db.ClearWH40KDiscordLink(args.SenderSession.UserId);
-        ApplyLinkedState(args.SenderSession.UserId, null);
+        await ClearLinkAsync(args.SenderSession.UserId);
         Popup(args.SenderSession, "wh40k-discord-auth-popup-unlink-success");
-        SendSnapshotIfOnline(args.SenderSession.UserId);
-        _metaProgress.RefreshDiscordRequirementsForUser(args.SenderSession.UserId);
     }
 
     private async Task<bool> HandleCallbackRequestAsync(IStatusHandlerContext context)
@@ -408,6 +395,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
         var link = await _db.GetWH40KDiscordLink(userId, cancel);
         cancel.ThrowIfCancellationRequested();
+        SetRuntimeLinkData(userId, link);
 
         if (ShouldAttemptConnectRefreshOnConnect(config, link))
         {
@@ -441,7 +429,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         return evaluation.BlockReason;
     }
 
-    public string GetConnectionDenyMessage(WH40KDiscordAuthGateBlockReason reason)
+    public string GetConnectionDenyMessage(NetUserId userId, WH40KDiscordAuthGateBlockReason reason)
     {
         var key = reason switch
         {
@@ -453,10 +441,28 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             _ => "wh40k-discord-auth-connect-deny-generic",
         };
 
-        var message = Loc.GetString(key);
-        message = $"{message} {GetDefaultSupportMessage()}";
+        var lines = new List<string>
+        {
+            Loc.GetString(key),
+        };
 
-        return message;
+        if (TryBuildLinkedAccountSummary(userId, out var linkedName, out var linkedId))
+        {
+            lines.Add(Loc.GetString(
+                "wh40k-discord-auth-connect-deny-linked-account",
+                ("name", linkedName),
+                ("id", string.IsNullOrWhiteSpace(linkedId) ? "-" : linkedId)));
+
+            if (reason is WH40KDiscordAuthGateBlockReason.GuildMembershipRequired
+                or WH40KDiscordAuthGateBlockReason.RoleRequired
+                or WH40KDiscordAuthGateBlockReason.CacheStale)
+            {
+                lines.Add(Loc.GetString("wh40k-discord-auth-connect-deny-change-hint"));
+            }
+        }
+
+        lines.Add(GetDefaultSupportMessage());
+        return string.Join("\n", lines);
     }
 
     public NetDenyReason BuildConnectionDenyReason(NetUserId userId, WH40KDiscordAuthGateBlockReason reason)
@@ -466,19 +472,23 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         var effectiveReason = requiresReauth && reason != WH40KDiscordAuthGateBlockReason.LinkRequired
             ? WH40KDiscordAuthGateBlockReason.CacheStale
             : reason;
+        var hasLinkedAccount = TryGetLinkedData(userId, out _);
         var action = requiresReauth
             ? WH40KDiscordAuthConstants.ConnectDenyAuthActionLink
             : GetConnectAuthAction(effectiveReason);
+        var linkMode = GetConnectAuthLinkMode(effectiveReason, hasLinkedAccount, requiresReauth);
 
-        if (action == WH40KDiscordAuthConstants.ConnectDenyAuthActionLink
-            && ShouldOfferExternalConnectAuth(effectiveReason)
+        if (ShouldOfferExternalConnectAuth(effectiveReason)
             && TryCreatePendingLinkUrl(userId, out var url))
         {
             properties[WH40KDiscordAuthConstants.ConnectDenyAuthUrlKey] = url;
         }
 
         if (ShouldOfferExternalConnectAuth(effectiveReason))
+        {
             properties[WH40KDiscordAuthConstants.ConnectDenyAuthActionKey] = action;
+            properties[WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeKey] = linkMode;
+        }
 
         if (action == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh)
         {
@@ -490,7 +500,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             }
         }
 
-        return new NetDenyReason(GetConnectionDenyMessage(effectiveReason), properties);
+        return new NetDenyReason(GetConnectionDenyMessage(userId, effectiveReason), properties);
     }
 
     private void SendSnapshot(ICommonSession session)
@@ -510,6 +520,15 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         {
             if (session.Status != SessionStatus.Disconnected)
                 SendSnapshot(session);
+        }
+    }
+
+    private void RefreshMetaProgressForAllOnline()
+    {
+        foreach (var session in _players.Sessions)
+        {
+            if (session.Status != SessionStatus.Disconnected)
+                _metaProgress.RefreshDiscordRequirementsForUser(session.UserId);
         }
     }
 
@@ -575,12 +594,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
         await _db.SetWH40KDiscordLink(userId, refreshResult.Data);
         cancel.ThrowIfCancellationRequested();
-
-        lock (_stateLock)
-        {
-            if (_states.TryGetValue(userId, out var state))
-                state.Link = refreshResult.Data;
-        }
+        SetRuntimeLinkData(userId, refreshResult.Data);
 
         _task.RunOnMainThread(() => _metaProgress.RefreshDiscordRequirementsForUser(userId));
 
@@ -694,20 +708,17 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         }
     }
 
+    public async Task ClearLinkAsync(NetUserId userId)
+    {
+        await _db.ClearWH40KDiscordLink(userId);
+        ApplyLinkedState(userId, null);
+        SendSnapshotIfOnline(userId);
+        _metaProgress.RefreshDiscordRequirementsForUser(userId);
+    }
+
     private void ApplyLinkedState(NetUserId userId, WH40KDiscordAuthDbData? data)
     {
-        lock (_stateLock)
-        {
-            if (!_states.TryGetValue(userId, out var state))
-            {
-                state = new RuntimeState();
-                _states[userId] = state;
-            }
-
-            state.Link = data;
-            state.LoadComplete = true;
-            state.ConnectGateRequiresReauth = false;
-        }
+        SetRuntimeLinkData(userId, data, markLoadComplete: true, clearConnectGateRequiresReauth: true);
     }
 
     private void Popup(ICommonSession session, string locKey)
@@ -1000,6 +1011,20 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             : WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh;
     }
 
+    private static string GetConnectAuthLinkMode(
+        WH40KDiscordAuthGateBlockReason reason,
+        bool hasLinkedAccount,
+        bool requiresReauth)
+    {
+        if (requiresReauth)
+            return WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeReauth;
+
+        if (reason == WH40KDiscordAuthGateBlockReason.LinkRequired || !hasLinkedAccount)
+            return WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeLink;
+
+        return WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeChange;
+    }
+
     private static List<string> ParseRoleCacheIds(string? roleCacheJson)
     {
         if (string.IsNullOrWhiteSpace(roleCacheJson))
@@ -1126,6 +1151,49 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             return link.GlobalName!;
 
         return link.Username;
+    }
+
+    private bool TryBuildLinkedAccountSummary(NetUserId userId, out string displayName, out string discordUserId)
+    {
+        if (!TryGetLinkedData(userId, out var link))
+        {
+            displayName = string.Empty;
+            discordUserId = string.Empty;
+            return false;
+        }
+
+        var resolvedName = WH40KDiscordAuthDisplayNameSanitizer.Sanitize(GetDisplayName(link));
+        if (string.IsNullOrWhiteSpace(resolvedName))
+            resolvedName = WH40KDiscordAuthDisplayNameSanitizer.Sanitize(link.Username);
+        if (string.IsNullOrWhiteSpace(resolvedName))
+            resolvedName = link.DiscordUserId;
+
+        displayName = WH40KDiscordAuthDisplayNameSanitizer.Ellipsize(resolvedName, 48);
+        discordUserId = link.DiscordUserId.Trim();
+        return !string.IsNullOrWhiteSpace(displayName) || !string.IsNullOrWhiteSpace(discordUserId);
+    }
+
+    private void SetRuntimeLinkData(
+        NetUserId userId,
+        WH40KDiscordAuthDbData? data,
+        bool markLoadComplete = false,
+        bool clearConnectGateRequiresReauth = false)
+    {
+        lock (_stateLock)
+        {
+            if (!_states.TryGetValue(userId, out var state))
+            {
+                state = new RuntimeState();
+                _states[userId] = state;
+            }
+
+            state.Link = data;
+            if (markLoadComplete)
+                state.LoadComplete = true;
+
+            if (clearConnectGateRequiresReauth)
+                state.ConnectGateRequiresReauth = false;
+        }
     }
 
     private string GetDefaultSupportMessage()

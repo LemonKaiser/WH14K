@@ -256,6 +256,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not {} user)
             return;
 
+        if (!user.IsValid() || Deleted(user))
+            return;
+
         if (!TryGetWeapon(user, out var weaponUid, out var weapon) ||
             weaponUid != GetEntity(msg.Weapon))
         {
@@ -270,6 +273,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not {} user)
             return;
 
+        if (!user.IsValid() || Deleted(user))
+            return;
+
         if (!TryGetWeapon(user, out var weaponUid, out var weapon) ||
             weaponUid != GetEntity(msg.Weapon))
         {
@@ -282,6 +288,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     private void OnDisarmAttack(DisarmAttackEvent msg, EntitySessionEventArgs args)
     {
         if (args.SenderSession.AttachedEntity is not {} user)
+            return;
+
+        if (!user.IsValid() || Deleted(user))
             return;
 
         if (TryGetWeapon(user, out var weaponUid, out var weapon))
@@ -538,6 +547,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         // If I do not come back later to fix Light Attacks being Heavy Attacks you can throw me in the spider pit -Errant
         var damage = GetDamage(meleeUid, user, component) * GetHeavyDamageModifier(meleeUid, user, component);
         var target = GetEntity(ev.Target);
+        if (target == null || !target.Value.IsValid())
+            return;
+
         var resistanceBypass = GetResistanceBypass(meleeUid, user, component);
 
         // For consistency with wide attacks stuff needs damageable.
@@ -649,6 +661,12 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         var damage = GetDamage(meleeUid, user, component);
         var resistanceBypass = GetResistanceBypass(meleeUid, user, component);
         var entities = GetEntityList(ev.Entities);
+
+        for (var i = entities.Count - 1; i >= 0; i--)
+        {
+            if (!entities[i].IsValid() || Deleted(entities[i]))
+                entities.RemoveAt(i);
+        }
 
         if (entities.Count == 0)
         {
@@ -908,7 +926,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     {
         var target = GetEntity(ev.Target);
 
-        if (Deleted(target) ||
+        if (target == null ||
+            !target.Value.IsValid() ||
+            Deleted(target) ||
             user == target)
         {
             return false;

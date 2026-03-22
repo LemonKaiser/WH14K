@@ -108,6 +108,26 @@ public sealed class HungerSystem : EntitySystem
     }
 
     /// <summary>
+    /// Updates the base hunger decay without changing the entity's current hunger amount.
+    /// </summary>
+    public void SetBaseDecayRate(EntityUid uid, float baseDecayRate, HungerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        var current = GetHunger(component);
+        component.BaseDecayRate = baseDecayRate;
+
+        if (component.HungerThresholdDecayModifiers.TryGetValue(component.CurrentThreshold, out var modifier))
+            component.ActualDecayRate = component.BaseDecayRate * modifier;
+        else
+            component.ActualDecayRate = component.BaseDecayRate;
+
+        DirtyField(uid, component, nameof(HungerComponent.ActualDecayRate));
+        SetAuthoritativeHungerValue((uid, component), current);
+    }
+
+    /// <summary>
     /// Sets <see cref="HungerComponent.LastAuthoritativeHungerValue"/> and
     /// <see cref="HungerComponent.LastAuthoritativeHungerChangeTime"/>, and dirties this entity. This "resets" the
     /// starting point for <see cref="GetHunger"/>'s calculation.

@@ -1020,7 +1020,18 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		}
 		BranchDefinition branchDefinition = _branches[value.BranchId];
 		NodeVisualState nodeVisualState = ResolveNodeState(value);
-		WH40KCharacterDevelopmentNodePresentation wH40KCharacterDevelopmentNodePresentation = (CurrentHoverInfo = new WH40KCharacterDevelopmentNodePresentation(branchDefinition.TitleKey, branchDefinition.SubtitleKey, value.TitleKey, value.DescriptionKey, ResolveStateKey(nodeVisualState), value.Cost, nodeVisualState == NodeVisualState.Planned, nodeVisualState == NodeVisualState.Available || nodeVisualState == NodeVisualState.Planned || nodeVisualState == NodeVisualState.Opened, branchDefinition.Organ, branchDefinition.Accent));
+		WH40KCharacterDevelopmentNodePresentation wH40KCharacterDevelopmentNodePresentation = (CurrentHoverInfo = new WH40KCharacterDevelopmentNodePresentation(
+			branchDefinition.TitleKey,
+			branchDefinition.SubtitleKey,
+			value.TitleKey,
+			value.DescriptionKey,
+			BuildStateText(value, nodeVisualState),
+			BuildDescriptionSupplement(value, nodeVisualState),
+			value.Cost,
+			nodeVisualState == NodeVisualState.Planned,
+			nodeVisualState == NodeVisualState.Available || nodeVisualState == NodeVisualState.Planned || nodeVisualState == NodeVisualState.Opened,
+			branchDefinition.Organ,
+			branchDefinition.Accent));
 		_dollView.SetActiveOrgan(branchDefinition.Organ, branchDefinition.Accent);
 		if (!object.Equals(currentHoverInfo, wH40KCharacterDevelopmentNodePresentation))
 		{
@@ -1028,16 +1039,50 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		}
 	}
 
-	private static string ResolveStateKey(NodeVisualState state)
+	private string BuildStateText(NodeDefinition node, NodeVisualState state)
 	{
 		return state switch
 		{
-			NodeVisualState.Opened => "wh40k-character-development-state-opened", 
-			NodeVisualState.Planned => "wh40k-character-development-state-planned", 
-			NodeVisualState.Available => "wh40k-character-development-state-available", 
-			NodeVisualState.LockedByPoints => "wh40k-character-development-state-locked-points", 
-			_ => "wh40k-character-development-state-locked-chain", 
+			NodeVisualState.Opened => Loc.GetString("wh40k-character-development-state-opened"),
+			NodeVisualState.Planned => Loc.GetString("wh40k-character-development-state-planned"),
+			NodeVisualState.Available => Loc.GetString("wh40k-character-development-state-available"),
+			NodeVisualState.LockedByPoints => Loc.GetString(
+				"wh40k-character-development-state-locked-points-detail",
+				("missing", GetMissingPoints(node))),
+			_ => Loc.GetString(
+				"wh40k-character-development-state-locked-chain-detail",
+				("parent", GetParentTitle(node))),
 		};
+	}
+
+	private string? BuildDescriptionSupplement(NodeDefinition node, NodeVisualState state)
+	{
+		return state switch
+		{
+			NodeVisualState.Opened => Loc.GetString("wh40k-character-development-note-opened"),
+			NodeVisualState.Planned => Loc.GetString("wh40k-character-development-note-planned"),
+			NodeVisualState.Available => Loc.GetString("wh40k-character-development-note-available"),
+			NodeVisualState.LockedByPoints => Loc.GetString(
+				"wh40k-character-development-note-locked-points",
+				("missing", GetMissingPoints(node))),
+			_ => Loc.GetString(
+				"wh40k-character-development-note-locked-parent",
+				("parent", GetParentTitle(node))),
+		};
+	}
+
+	private string GetParentTitle(NodeDefinition node)
+	{
+		if (node.ParentId == null)
+			return Loc.GetString("wh40k-character-development-default-node");
+
+		return _nodeTitles.GetValueOrDefault(node.ParentId, node.ParentId);
+	}
+
+	private int GetMissingPoints(NodeDefinition node)
+	{
+		var remainingPoints = Math.Max(0, TotalSkillPoints - OpenedCost - PlannedCost - SubmittedCost);
+		return Math.Max(0, node.Cost - remainingPoints);
 	}
 
 	private Vector2 ComputeRootPosition(bool leftSide, BranchLane lane, Vector2 maxRootSize, Vector2 maxNodeSize)

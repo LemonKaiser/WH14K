@@ -1,0 +1,4 @@
+- type: entity
+  parent: StatusEffectSpeed
+  id: WH40KStomachImpulseSpeedStatusEffect
+  name: wh40k stomach impulse speed

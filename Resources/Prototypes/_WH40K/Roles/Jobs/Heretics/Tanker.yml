@@ -12,12 +12,6 @@
     components:
       - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
-      - type: WH40KGuardsmanVoice
-      - type: Vocal
-        sounds:
-          Male: WH40KGuardsmanMaleHuman
-          Female: WH40KGuardsmanFemaleHuman
-          Unsexed: WH40KGuardsmanMaleHuman
   access:
   - Maintenance
   - External

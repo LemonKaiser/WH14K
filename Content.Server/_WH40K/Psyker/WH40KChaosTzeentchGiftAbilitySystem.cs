@@ -32,7 +32,7 @@ public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
 
     private const float BarrierBaseCooldown = 16f;
     private const float MindTwistBaseCooldown = 130f;
-    private const float WarpRewriteBaseCooldown = 14f;
+    private const float WarpRewriteBaseCooldown = 60f;
 
     public override void Initialize()
     {
@@ -82,7 +82,7 @@ public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
         if (!TryGetTzeentchProgression(ent.Owner, args.Action.Owner, TzeentchWarpRewriteAction, out var progression))
             return;
 
-        ApplyTieredCooldown(args.Action, WarpRewriteBaseCooldown, progression.KhorneGiftThreeCooldownTier);
+        ApplyFixedCooldown(args.Action, WarpRewriteBaseCooldown);
         args.Prototype = ResolveWarpRewriteProjectile(
             progression.KhorneGiftThreePowerTier,
             progression.KhorneGiftThreeUtilityTier,
@@ -92,6 +92,12 @@ public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
     private void ApplyTieredCooldown(Entity<ActionComponent> action, float baseSeconds, byte tier)
     {
         var duration = MathF.Max(0.1f, baseSeconds * WH40KChaosGiftUpgradeMath.CooldownMultiplier(tier));
+        _actions.SetUseDelay((action.Owner, action.Comp), TimeSpan.FromSeconds(duration));
+    }
+
+    private void ApplyFixedCooldown(Entity<ActionComponent> action, float seconds)
+    {
+        var duration = MathF.Max(0.1f, seconds);
         _actions.SetUseDelay((action.Owner, action.Comp), TimeSpan.FromSeconds(duration));
     }
 

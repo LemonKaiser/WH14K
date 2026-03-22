@@ -14,6 +14,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.MetaProgress;
 using Content.Shared._WH40K.RoundEvents;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
@@ -60,12 +61,19 @@ public sealed class HealingSystem : EntitySystem
         }
 
         TryComp<BloodstreamComponent>(target, out var bloodstream);
+        var isSelfHeal = args.User == target.Owner;
+        var healingEffectMultiplier = isSelfHeal
+            ? GetWh40KSelfHealingEffectMultiplier(args.User)
+            : 1f;
+        var bloodlossModifier = healing.BloodlossModifier * healingEffectMultiplier;
+        var bloodLevelModifier = healing.ModifyBloodLevel * healingEffectMultiplier;
+        var healingDamage = healing.Damage * (_damageable.UniversalTopicalsHealModifier * healingEffectMultiplier);
 
         // Heal some bloodloss damage.
-        if (healing.BloodlossModifier != 0 && bloodstream != null)
+        if (bloodlossModifier != 0 && bloodstream != null)
         {
             var isBleeding = bloodstream.BleedAmount > 0;
-            _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), healing.BloodlossModifier);
+            _bloodstreamSystem.TryModifyBleedAmount((target.Owner, bloodstream), bloodlossModifier);
             if (isBleeding != bloodstream.BleedAmount > 0)
             {
                 var popup = (args.User == target.Owner)
@@ -76,10 +84,10 @@ public sealed class HealingSystem : EntitySystem
         }
 
         // Restores missing blood
-        if (healing.ModifyBloodLevel != 0 && bloodstream != null)
-            _bloodstreamSystem.TryModifyBloodLevel((target.Owner, bloodstream), healing.ModifyBloodLevel);
+        if (bloodLevelModifier != 0 && bloodstream != null)
+            _bloodstreamSystem.TryModifyBloodLevel((target.Owner, bloodstream), FixedPoint2.New(bloodLevelModifier));
 
-        if (!_damageable.TryChangeDamage(target.Owner, healing.Damage * _damageable.UniversalTopicalsHealModifier, out var healed, true, origin: args.Args.User) && healing.BloodlossModifier != 0)
+        if (!_damageable.TryChangeDamage(target.Owner, healingDamage, out var healed, true, origin: args.Args.User) && bloodlossModifier != 0)
             return;
 
         var total = healed.GetTotal();
@@ -122,11 +130,9 @@ public sealed class HealingSystem : EntitySystem
         }
 
         // Update our self heal delay so it shortens as we heal more damage.
-        if (args.User == target.Owner)
+        if (isSelfHeal)
         {
-            args.Args.Delay = ApplyWh40KMedicalDelayMultipliers(
-                args.User,
-                healing.Delay * GetScaledHealingPenalty(target.Owner, healing.SelfHealPenaltyMultiplier));
+            args.Args.Delay = GetWh40KSelfHealingDelay(args.User, target.Owner, healing);
         }
     }
 
@@ -215,10 +221,8 @@ public sealed class HealingSystem : EntitySystem
         }
 
         var delay = isNotSelf
-            ? healing.Comp.Delay
-            : healing.Comp.Delay * GetScaledHealingPenalty(target, healing.Comp.SelfHealPenaltyMultiplier);
-
-        delay = ApplyWh40KMedicalDelayMultipliers(user, delay);
+            ? ApplyWh40KMedicalDelayMultipliers(user, healing.Comp.Delay)
+            : GetWh40KSelfHealingDelay(user, target.Owner, healing.Comp);
 
         var doAfterEventArgs =
             new DoAfterArgs(EntityManager, user, delay, new HealingDoAfterEvent(), target, target: target, used: healing)
@@ -254,7 +258,43 @@ public sealed class HealingSystem : EntitySystem
         }
 
         var scaledSeconds = (float) baseDelay.TotalSeconds * multiplier;
-        return TimeSpan.FromSeconds(MathF.Max(0.05f, scaledSeconds));
+        return ClampHealingDelay(TimeSpan.FromSeconds(scaledSeconds));
+    }
+
+    private TimeSpan GetWh40KSelfHealingDelay(EntityUid user, EntityUid target, HealingComponent healing)
+    {
+        var penalty = GetScaledHealingPenalty(target, healing.SelfHealPenaltyMultiplier);
+        penalty = ApplyWh40KSelfHealPenaltyModifiers(user, penalty);
+
+        var delay = ApplyWh40KMedicalDelayMultipliers(user, healing.Delay * penalty);
+        var ev = new WH40KModifySelfHealingDelayEvent(delay);
+        RaiseLocalEvent(user, ref ev);
+        return ClampHealingDelay(ev.Time);
+    }
+
+    private float ApplyWh40KSelfHealPenaltyModifiers(EntityUid user, float penalty)
+    {
+        if (penalty <= 1f)
+            return 1f;
+
+        var ev = new WH40KModifySelfHealPenaltyEvent(penalty);
+        RaiseLocalEvent(user, ref ev);
+        return MathF.Max(1f, ev.PenaltyMultiplier);
+    }
+
+    private float GetWh40KSelfHealingEffectMultiplier(EntityUid user)
+    {
+        var ev = new WH40KModifySelfHealingEffectEvent(1f);
+        RaiseLocalEvent(user, ref ev);
+        return MathF.Max(0.01f, ev.Multiplier);
+    }
+
+    private static TimeSpan ClampHealingDelay(TimeSpan delay)
+    {
+        if (delay <= TimeSpan.Zero)
+            return TimeSpan.Zero;
+
+        return TimeSpan.FromSeconds(MathF.Max(0.05f, (float) delay.TotalSeconds));
     }
 
     /// <summary>

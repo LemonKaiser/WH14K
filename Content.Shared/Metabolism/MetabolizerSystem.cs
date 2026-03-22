@@ -15,6 +15,7 @@ using Content.Shared.EntityEffects.Effects.Solution;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Random.Helpers;
+using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -156,6 +157,7 @@ public sealed class MetabolizerSystem : EntitySystem
         rand.Shuffle(list);
 
         var isDead = _mobStateSystem.IsDead(solutionOwner.Value);
+        var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
 
         int reagents = 0;
         foreach (var (reagent, quantity) in list)
@@ -178,9 +180,11 @@ public sealed class MetabolizerSystem : EntitySystem
                 }
                 else
                 {
-                    solution.RemoveReagent(reagent, FixedPoint2.New(1));
+                    mostToTransfer = FixedPoint2.Min(mostToTransfer, FixedPoint2.New(1));
+                    solution.RemoveReagent(reagent, mostToTransfer);
                 }
 
+                ApplyAdditionalFilteredRemoval(actualEntity, proto, solution, reagent, mostToTransfer);
                 continue;
             }
 
@@ -202,8 +206,6 @@ public sealed class MetabolizerSystem : EntitySystem
             // still remove reagents
             if (isDead && !proto.WorksOnTheDead)
                 continue;
-
-            var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
 
             // do all effects, if conditions apply
             foreach (var effect in entry.Effects)
@@ -255,6 +257,8 @@ public sealed class MetabolizerSystem : EntitySystem
                     }
                 }
             }
+
+            ApplyAdditionalFilteredRemoval(actualEntity, proto, solution, reagent, mostToRemove);
         }
 
         _solutionContainerSystem.UpdateChemicals(solutionEntity.Value);
@@ -262,6 +266,20 @@ public sealed class MetabolizerSystem : EntitySystem
         {
             _solutionContainerSystem.UpdateChemicals(transferSolutionEntity.Value);
         }
+    }
+
+    private void ApplyAdditionalFilteredRemoval(EntityUid uid, ReagentPrototype proto, Solution solution, ReagentId reagent, FixedPoint2 baseAmount)
+    {
+        if (baseAmount <= FixedPoint2.Zero)
+            return;
+
+        var ev = new WH40KModifyFilteredReagentRemovalEvent(proto.ID, proto.Group, baseAmount);
+        RaiseLocalEvent(uid, ref ev);
+
+        if (ev.AdditionalAmount <= FixedPoint2.Zero)
+            return;
+
+        solution.RemoveReagent(reagent, ev.AdditionalAmount);
     }
 
     private void TryMetabolize(Entity<MetabolizerComponent, OrganComponent?, SolutionContainerManagerComponent?> ent)

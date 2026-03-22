@@ -795,6 +795,21 @@ namespace Content.Server.Database
                 string.IsNullOrWhiteSpace(link.RoleCacheJson) ? "[]" : link.RoleCacheJson);
         }
 
+        public async Task<NetUserId?> GetWH40KDiscordLinkOwner(string discordUserId, CancellationToken cancel)
+        {
+            await using var db = await GetDb(cancel);
+
+            var normalizedDiscordUserId = discordUserId.Trim();
+            if (string.IsNullOrWhiteSpace(normalizedDiscordUserId))
+                return null;
+
+            var link = await db.DbContext.WH40KDiscordLink
+                .AsNoTracking()
+                .SingleOrDefaultAsync(p => p.DiscordUserId == normalizedDiscordUserId, cancel);
+
+            return link == null ? null : new NetUserId(link.PlayerUserId);
+        }
+
         public async Task SetWH40KDiscordLink(NetUserId player, WH40KDiscordAuthDbData data)
         {
             await using var db = await GetDb();

@@ -152,11 +152,16 @@ public sealed class WH40KDiscordAuthStatusWindow : DefaultWindow, ILocalizedCont
         _roleLabel.Visible = snapshot.RoleGateConfigured;
         if (snapshot.RoleGateConfigured)
         {
+            var roleStatus = Loc.GetString(snapshot.RoleGatePassed
+                ? "wh40k-discord-auth-window-status-passed"
+                : "wh40k-discord-auth-window-status-failed");
+
+            if (_refreshShouldWarn)
+                roleStatus = Loc.GetString("wh40k-discord-auth-window-status-stale", ("status", roleStatus));
+
             _roleLabel.Text = Loc.GetString(
                 "wh40k-discord-auth-window-role-gate",
-                ("status", Loc.GetString(snapshot.RoleGatePassed
-                    ? "wh40k-discord-auth-window-status-passed"
-                    : "wh40k-discord-auth-window-status-failed")));
+                ("status", roleStatus));
         }
 
         UpdateRefreshButtonState();

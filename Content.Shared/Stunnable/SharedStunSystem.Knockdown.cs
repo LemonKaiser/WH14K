@@ -2,6 +2,7 @@ using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -435,7 +436,7 @@ public abstract partial class SharedStunSystem
         var ev = new TryForceStandEvent(entity.Comp.ForceStandStamina);
         RaiseLocalEvent(entity, ref ev);
 
-        if (!Stamina.TryTakeStamina(entity, ev.Stamina, entity.Comp, visual: true))
+        if (!Stamina.TryTakeStamina(entity, ev.Stamina, entity.Comp, visual: true, damageType: StaminaDamageType.ForceStand))
         {
             _popup.PopupClient(Loc.GetString("knockdown-component-pushup-failure"), entity, entity, PopupType.MediumCaution);
             return false;

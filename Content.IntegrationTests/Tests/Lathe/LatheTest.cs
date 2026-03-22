@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Lathe;
@@ -69,7 +71,7 @@ public sealed class LatheTest
                             continue;
 
                         // Mark the lathe as accepting each material in the entity
-                        foreach (var (material, _) in compositionComponent.MaterialComposition)
+                        foreach (var (material, _) in compositionComponent!.MaterialComposition)
                         {
                             acceptedMaterials.Add(material);
                         }
@@ -130,6 +132,26 @@ public sealed class LatheTest
                 if (recipe.Result == null)
                     Assert.That(recipe.ResultReagents, Is.Not.Null, $"Recipe '{recipe.ID}' has no result or result reagents.");
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task Wh40kLatheStorageLimitUsesRawMaterialVolume()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var lathe = server.EntMan.SpawnEntity("WH40KAutolatheImperium", map.GridCoords);
+            Assert.That(server.EntMan.TryGetComponent(lathe, out MaterialStorageComponent? storage), Is.True);
+            Assert.That(storage!.StorageLimit, Is.EqualTo(1000),
+                "WH40K lathe tier storage should be converted from sheet-sized units to raw material volume.");
+
+            server.EntMan.DeleteEntity(lathe);
         });
 
         await pair.CleanReturnAsync();

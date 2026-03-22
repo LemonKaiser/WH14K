@@ -1279,9 +1279,6 @@
   id: RemoteSignaller # Storage whitelist: BaseClothingBeltEngineering
 
 - type: Tag
-  id: RMCDetector # RMC/WH40K motion detector compatibility tag.
-
-- type: Tag
   id: ReptilianFood # SpecialDigestible: OrganReptilianStomach
 
 - type: Tag

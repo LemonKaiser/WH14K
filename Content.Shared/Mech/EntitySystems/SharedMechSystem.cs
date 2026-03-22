@@ -139,6 +139,8 @@ public abstract partial class SharedMechSystem : EntitySystem
         _interaction.SetRelay(pilot, mech, irelay);
         rider.Mech = mech;
         Dirty(pilot, rider);
+        var assignedEv = new MechPilotAssignedEvent(mech);
+        RaiseLocalEvent(pilot, ref assignedEv);
 
         if (_net.IsClient)
             return;

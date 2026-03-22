@@ -6,12 +6,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 2.5
+        Heat: 0.5
   - type: Explosive
     explosionType: Default
-    maxIntensity: 10
-    intensitySlope: 6
-    totalIntensity: 50
+    maxIntensity: 1.5
+    intensitySlope: 2
+    totalIntensity: 8
     maxTileBreak: 0
 
 - type: entity
@@ -22,12 +22,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 3.2
+        Heat: 0.5
   - type: Explosive
     explosionType: Default
-    maxIntensity: 11
-    intensitySlope: 6
-    totalIntensity: 58
+    maxIntensity: 2
+    intensitySlope: 2
+    totalIntensity: 10
     maxTileBreak: 0
 
 - type: entity
@@ -38,12 +38,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 4.2
+        Heat: 0.75
   - type: Explosive
     explosionType: Default
-    maxIntensity: 12
-    intensitySlope: 6
-    totalIntensity: 67
+    maxIntensity: 2
+    intensitySlope: 2
+    totalIntensity: 12
     maxTileBreak: 0
 
 - type: entity
@@ -54,12 +54,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 5.4
+        Heat: 1
   - type: Explosive
     explosionType: Default
-    maxIntensity: 13
-    intensitySlope: 7
-    totalIntensity: 78
+    maxIntensity: 2.5
+    intensitySlope: 2
+    totalIntensity: 14
     maxTileBreak: 0
 
 - type: entity
@@ -70,12 +70,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 6.8
+        Heat: 1.25
   - type: Explosive
     explosionType: Default
-    maxIntensity: 14
-    intensitySlope: 7
-    totalIntensity: 92
+    maxIntensity: 3
+    intensitySlope: 2
+    totalIntensity: 16
     maxTileBreak: 0
 
 - type: entity

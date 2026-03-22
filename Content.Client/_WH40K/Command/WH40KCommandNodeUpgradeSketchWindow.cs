@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Client.Administration.UI.CustomControls;
 using Content.Client._WH40K.Command.Controls;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
@@ -9,90 +8,132 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
-using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Command;
 
 public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 {
-    private static readonly Color ImperiumColor = Color.FromHex("#F3C548");
     public event Action<string>? OnTreeNodePurchaseRequested;
 
+    private readonly StyleBoxFlat _headerStyle;
+    private readonly Label _headerTitleLabel;
     private readonly Label _teamLine;
     private readonly Label _upgradePointsLine;
     private readonly Label _doctrineLine;
-    private readonly StyleBoxFlat _headerStyle;
+    private readonly PanelContainer _teamBadge;
+    private readonly Label _teamBadgeLabel;
+    private readonly PanelContainer _hoverPanel;
     private readonly BoxContainer _domainHeaderRow;
     private readonly WH40KCommandTreeSketchControl _treeSketch;
     private readonly Label _hoverTitleLine;
-    private readonly RichTextLabel _hoverDescriptionLine;
+    private readonly Label _hoverDescriptionLine;
+
+    private Color _accent = WH40KCommandUiStyles.DefaultAccent;
 
     public WH40KCommandNodeUpgradeSketchWindow()
     {
         Title = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title");
-        MinSize = SetSize = new Vector2(1060, 760);
+        MinSize = SetSize = new Vector2(960, 660);
 
         var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 8
+            SeparationOverride = 6,
+            Margin = new Thickness(8)
         };
         ContentsContainer.AddChild(root);
 
         var header = new PanelContainer
         {
-            PanelOverride = _headerStyle = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#2B3246"),
-                BorderColor = ImperiumColor,
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = _headerStyle = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.HeaderBackground,
+                _accent,
+                2)
         };
         root.AddChild(header);
 
         var headerBox = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 8,
+            Margin = new Thickness(10, 8),
+            VerticalAlignment = VAlignment.Center
         };
         header.AddChild(headerBox);
 
-        _teamLine = new Label();
-        _upgradePointsLine = new Label();
-        _doctrineLine = new Label();
-        headerBox.AddChild(_teamLine);
-        headerBox.AddChild(_upgradePointsLine);
-        headerBox.AddChild(_doctrineLine);
-        headerBox.AddChild(new Label
+        var headerInfo = new BoxContainer
         {
-            Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-draft-note")
-        });
-
-        var hoverPanel = new PanelContainer
-        {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#232A3B"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 2,
+            HorizontalExpand = true
         };
-        root.AddChild(hoverPanel);
+        headerBox.AddChild(headerInfo);
+
+        _headerTitleLabel = new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title"),
+            StyleClasses = { "LabelHeading" },
+            ClipText = true
+        };
+        _teamLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _upgradePointsLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        _doctrineLine = new Label
+        {
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        };
+        headerInfo.AddChild(_headerTitleLabel);
+        headerInfo.AddChild(new Label
+        {
+            Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-draft-note"),
+            StyleClasses = { "LabelSubText" },
+            ClipText = true
+        });
+        headerInfo.AddChild(_teamLine);
+        headerInfo.AddChild(_upgradePointsLine);
+        headerInfo.AddChild(_doctrineLine);
+
+        _teamBadge = new PanelContainer();
+        _teamBadgeLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true
+        };
+        _teamBadge.AddChild(_teamBadgeLabel);
+        headerBox.AddChild(_teamBadge);
+
+        _hoverPanel = new PanelContainer
+        {
+            PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                WH40KCommandUiStyles.CardBackground,
+                _accent)
+        };
+        root.AddChild(_hoverPanel);
 
         var hoverBox = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 3,
-            Margin = new Thickness(8)
+            SeparationOverride = 4
         };
-        hoverPanel.AddChild(hoverBox);
+        _hoverPanel.AddChild(hoverBox);
 
-        _hoverTitleLine = new Label();
-        _hoverDescriptionLine = new RichTextLabel
+        _hoverTitleLine = new Label
+        {
+            StyleClasses = { "LabelBig" }
+        };
+        _hoverDescriptionLine = new Label
         {
             HorizontalExpand = true,
-            SetHeight = 74f
+            ClipText = true,
+            StyleClasses = { "LabelSubText" }
         };
         hoverBox.AddChild(_hoverTitleLine);
         hoverBox.AddChild(_hoverDescriptionLine);
@@ -100,32 +141,24 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         var canvasFrame = new PanelContainer
         {
             VerticalExpand = true,
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#1C2029"),
-                BorderColor = Color.FromHex("#4D5670"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+                WH40KCommandUiStyles.PanelBackgroundAlt,
+                WH40KCommandUiStyles.StrongBorder,
+                2)
         };
         root.AddChild(canvasFrame);
 
         var treeArea = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Margin = new Thickness(8),
+            SeparationOverride = 0,
             VerticalExpand = true
         };
         canvasFrame.AddChild(treeArea);
 
         var domainsPanel = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#232A3B"),
-                BorderColor = Color.FromHex("#59617B"),
-                BorderThickness = new Thickness(1)
-            }
+            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
         treeArea.AddChild(domainsPanel);
 
@@ -133,7 +166,7 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             SeparationOverride = 8,
-            Margin = new Thickness(6, 4)
+            Margin = new Thickness(0)
         };
         domainsPanel.AddChild(_domainHeaderRow);
 
@@ -149,7 +182,7 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            MinSize = new Vector2(760f, 680f)
+            MinSize = new Vector2(700f, 540f)
         };
         _treeSketch.OnNodeInfoChanged += OnNodeInfoChanged;
         _treeSketch.OnPurchaseRequested += OnTreeNodePurchaseRequestedInternal;
@@ -163,18 +196,26 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state, string activeDoctrineId)
     {
-        var accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, ImperiumColor);
-        _headerStyle.BorderColor = accent;
-        _treeSketch.AccentColor = accent;
+        _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
+        _headerStyle.BorderColor = _accent;
+        _headerTitleLabel.ModulateSelfOverride = _accent;
+        _hoverPanel.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+            WH40KCommandUiStyles.CardBackground,
+            _accent);
+
+        _treeSketch.AccentColor = _accent;
 
         Title = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title-team", ("team", state.TeamName));
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _upgradePointsLine.Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-points",
-            ("points", state.CommandPoints));
-        _doctrineLine.Text = string.IsNullOrWhiteSpace(activeDoctrineId)
+        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
+        _upgradePointsLine.Text = CompactLine(Loc.GetString("wh40k-command-node-upgrade-sketch-window-points",
+            ("points", state.CommandPoints)));
+        _doctrineLine.Text = CompactLine(string.IsNullOrWhiteSpace(activeDoctrineId)
             ? Loc.GetString("wh40k-command-node-upgrade-sketch-window-doctrine-none")
             : Loc.GetString("wh40k-command-node-upgrade-sketch-window-doctrine-active",
-                ("doctrine", WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(activeDoctrineId, state.TeamId).Name));
+                ("doctrine", WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(activeDoctrineId, state.TeamId).Name)));
+
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadgeLabel.Text = CompactLine(string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant());
 
         _treeSketch.UpdateState(state, activeDoctrineId);
         RebuildDomainHeaders(_treeSketch.ActiveDomainIds);
@@ -183,19 +224,21 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
     private void OnNodeInfoChanged(string title, string description)
     {
         _hoverTitleLine.Text = title;
-        var normalizedDescription = NormalizeMultiline(description);
-        _hoverDescriptionLine.SetMessage(
-            FormattedMessage.FromMarkupPermissive(FormattedMessage.EscapeText(normalizedDescription)),
-            tagsAllowed: null,
-            defaultColor: Color.White);
+        _hoverTitleLine.ModulateSelfOverride = _accent;
+        _hoverDescriptionLine.Text = CompactLine(description);
     }
 
-    private static string NormalizeMultiline(string text)
+    private static string CompactLine(string text)
     {
         if (string.IsNullOrEmpty(text))
             return string.Empty;
 
-        return text.Replace("\\n", "\n", StringComparison.Ordinal);
+        var compact = text
+            .Replace("\\n", " ", StringComparison.Ordinal)
+            .Replace('\n', ' ')
+            .Replace('\r', ' ');
+
+        return string.Join(' ', compact.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
     }
 
     private void RebuildDomainHeaders(IReadOnlyList<string> domainIds)
@@ -204,12 +247,21 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 
         foreach (var domainId in domainIds)
         {
-            _domainHeaderRow.AddChild(new Label
+            var badge = new PanelContainer
+            {
+                HorizontalExpand = true,
+                PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+                    Color.FromHex("#22313B".AsSpan()),
+                    _accent)
+            };
+            badge.AddChild(new Label
             {
                 HorizontalExpand = true,
                 HorizontalAlignment = HAlignment.Center,
+                ClipText = true,
                 Text = ResolveDomainLabel(domainId)
             });
+            _domainHeaderRow.AddChild(badge);
         }
     }
 
@@ -223,5 +275,4 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         if (!string.IsNullOrWhiteSpace(nodeId))
             OnTreeNodePurchaseRequested?.Invoke(nodeId);
     }
-
 }

@@ -35,8 +35,10 @@ namespace Content.Client.Launcher
         private readonly IClyde _clyde;
         private readonly IGameTiming _timing;
         private readonly IUriOpener _uri;
+        private readonly ExtendedDisconnectInformationManager _extendedDisconnectInformationManager;
         private string? _discordAuthUrl;
         private string _discordAuthAction = WH40KDiscordAuthConstants.ConnectDenyAuthActionLink;
+        private string _discordAuthLinkMode = WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeLink;
         private TimeSpan _discordAuthRefreshAvailableAt;
         private bool _awaitingDiscordBrowserReturn;
         private bool _discordBrowserFocusLost;
@@ -57,6 +59,7 @@ namespace Content.Client.Launcher
             _clyde = IoCManager.Resolve<IClyde>();
             _timing = IoCManager.Resolve<IGameTiming>();
             _uri = IoCManager.Resolve<IUriOpener>();
+            _extendedDisconnectInformationManager = IoCManager.Resolve<ExtendedDisconnectInformationManager>();
 
             RobustXamlLoader.Load(this);
 
@@ -71,8 +74,8 @@ namespace Content.Client.Launcher
 
             CopyButton.OnPressed += CopyButtonPressed;
             CopyButtonDisconnected.OnPressed += CopyButtonDisconnectedPressed;
-            DiscordAuthButton.OnPressed += DiscordAuthButtonPressed;
-            ExitButton.OnPressed += _ => _state.Leave();
+            DiscordAuthChangeButton.OnPressed += DiscordAuthChangeButtonPressed;
+            ExitButton.OnPressed += ExitButtonPressed;
 
             var addr = state.Address;
             if (addr != null)
@@ -86,9 +89,8 @@ namespace Content.Client.Launcher
             ConnectionStateChanged(state.ConnectionState);
 
             // Redial flag setup
-            var edim = IoCManager.Resolve<ExtendedDisconnectInformationManager>();
-            edim.LastNetDisconnectedArgsChanged += LastNetDisconnectedArgsChanged;
-            LastNetDisconnectedArgsChanged(edim.LastNetDisconnectedArgs);
+            _extendedDisconnectInformationManager.LastNetDisconnectedArgsChanged += LastNetDisconnectedArgsChanged;
+            LastNetDisconnectedArgsChanged(_extendedDisconnectInformationManager.LastNetDisconnectedArgs);
         }
 
         protected override void EnteredTree()
@@ -103,9 +105,40 @@ namespace Content.Client.Launcher
             _clyde.OnWindowFocused -= OnWindowFocused;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _state.PageChanged -= OnPageChanged;
+                _state.ConnectFailReasonChanged -= ConnectFailReasonChanged;
+                _state.ConnectionStateChanged -= ConnectionStateChanged;
+                _state.ConnectFailed -= HandleDisconnectReason;
+                _extendedDisconnectInformationManager.LastNetDisconnectedArgsChanged -= LastNetDisconnectedArgsChanged;
+
+                RetryButton.OnPressed -= ReconnectButtonPressed;
+                ReconnectButton.OnPressed -= ReconnectButtonPressed;
+                CopyButton.OnPressed -= CopyButtonPressed;
+                CopyButtonDisconnected.OnPressed -= CopyButtonDisconnectedPressed;
+                DiscordAuthChangeButton.OnPressed -= DiscordAuthChangeButtonPressed;
+                ExitButton.OnPressed -= ExitButtonPressed;
+            }
+
+            base.Dispose(disposing);
+        }
+
         // Just button, there's only one at once anyways :)
         private void ReconnectButtonPressed(BaseButton.ButtonEventArgs args)
         {
+            if (_state.CurrentPage == LauncherConnecting.Page.ConnectFailed
+                && _discordAuthAction == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh)
+            {
+                if (GetDiscordRefreshCooldownRemaining() > TimeSpan.Zero)
+                    return;
+
+                _state.RetryConnect();
+                return;
+            }
+
             if (_redial)
             {
                 // Redial shouldn't fail, but if it does, try a reconnect (maybe we're being run from debug)
@@ -134,22 +167,18 @@ namespace Content.Client.Launcher
             }
         }
 
-        private void DiscordAuthButtonPressed(BaseButton.ButtonEventArgs args)
+        private void DiscordAuthChangeButtonPressed(BaseButton.ButtonEventArgs args)
         {
-            if (_discordAuthAction == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh)
-            {
-                if (GetDiscordRefreshCooldownRemaining() > TimeSpan.Zero)
-                    return;
-
-                _state.RetryConnect();
-                return;
-            }
-
             if (!string.IsNullOrWhiteSpace(_discordAuthUrl))
             {
                 BeginAwaitingDiscordBrowserReturn();
                 _uri.OpenUri(_discordAuthUrl);
             }
+        }
+
+        private void ExitButtonPressed(BaseButton.ButtonEventArgs args)
+        {
+            _state.Leave();
         }
 
         private void ConnectFailReasonChanged(string? reason)
@@ -168,6 +197,7 @@ namespace Content.Client.Launcher
         {
             _discordAuthUrl = null;
             _discordAuthAction = WH40KDiscordAuthConstants.ConnectDenyAuthActionLink;
+            _discordAuthLinkMode = WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeLink;
             _discordAuthRefreshAvailableAt = TimeSpan.Zero;
 
             if (reason == null)
@@ -195,13 +225,15 @@ namespace Content.Client.Launcher
                 _discordAuthUrl = reason.Message.StringOf(WH40KDiscordAuthConstants.ConnectDenyAuthUrlKey);
                 _discordAuthAction = reason.Message.StringOf(WH40KDiscordAuthConstants.ConnectDenyAuthActionKey)
                     ?? WH40KDiscordAuthConstants.ConnectDenyAuthActionLink;
+                _discordAuthLinkMode = reason.Message.StringOf(WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeKey)
+                    ?? WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeLink;
                 if (reason.Message.Int32Of(WH40KDiscordAuthConstants.ConnectDenyRefreshCooldownKey) is { } refreshCooldown
                     && refreshCooldown > 0)
                 {
                     _discordAuthRefreshAvailableAt = _timing.RealTime + TimeSpan.FromSeconds(refreshCooldown);
                 }
 
-                if (_discordAuthAction != WH40KDiscordAuthConstants.ConnectDenyAuthActionLink)
+                if (string.IsNullOrWhiteSpace(_discordAuthUrl))
                 {
                     _awaitingDiscordBrowserReturn = false;
                     _discordBrowserFocusLost = false;
@@ -211,7 +243,7 @@ namespace Content.Client.Launcher
 
             }
 
-            UpdateDiscordAuthButtonState();
+            UpdateDiscordAuthControls();
             UpdateDiscordAutoRetry();
         }
 
@@ -265,7 +297,7 @@ namespace Content.Client.Launcher
                 button.Text = Loc.GetString("connecting-redial-wait", ("time", seconds));
             }
 
-            UpdateDiscordAuthButtonState();
+            UpdateDiscordAuthControls();
             UpdateDiscordAutoRetry();
         }
 
@@ -283,7 +315,7 @@ namespace Content.Client.Launcher
                 _discordAutoRetryUntil = TimeSpan.Zero;
             }
 
-            UpdateDiscordAuthButtonState();
+            UpdateDiscordAuthControls();
 
             if (page == LauncherConnecting.Page.Disconnected)
                 DisconnectReason.Text = _state.LastDisconnectReason;
@@ -303,14 +335,24 @@ namespace Content.Client.Launcher
             return remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
         }
 
-        private void UpdateDiscordAuthButtonState()
+        private void UpdateDiscordAuthControls()
         {
-            var visible = _state.CurrentPage == LauncherConnecting.Page.ConnectFailed
-                          && (_discordAuthAction == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh
-                              || _discordAuthUrl != null);
+            UpdateRetryButtonState();
 
-            DiscordAuthButton.Visible = visible;
-            if (!visible)
+            var showChangeButton = _state.CurrentPage == LauncherConnecting.Page.ConnectFailed
+                && !string.IsNullOrWhiteSpace(_discordAuthUrl);
+
+            DiscordAuthChangeButton.Visible = showChangeButton;
+            if (!showChangeButton)
+                return;
+
+            DiscordAuthChangeButton.Disabled = false;
+            DiscordAuthChangeButton.Text = GetDiscordChangeButtonText();
+        }
+
+        private void UpdateRetryButtonState()
+        {
+            if (_state.CurrentPage != LauncherConnecting.Page.ConnectFailed || _waitTime > 0)
                 return;
 
             if (_discordAuthAction == WH40KDiscordAuthConstants.ConnectDenyAuthActionRefresh)
@@ -319,20 +361,30 @@ namespace Content.Client.Launcher
                 if (remaining > TimeSpan.Zero)
                 {
                     var seconds = Math.Max(1, (int) Math.Ceiling(remaining.TotalSeconds));
-                    DiscordAuthButton.Disabled = true;
-                    DiscordAuthButton.Text = Loc.GetString("connecting-discord-auth-refresh-cooldown", ("seconds", seconds));
+                    RetryButton.Disabled = true;
+                    RetryButton.Text = Loc.GetString("connecting-discord-auth-retry-cooldown", ("seconds", seconds));
                 }
                 else
                 {
-                    DiscordAuthButton.Disabled = false;
-                    DiscordAuthButton.Text = Loc.GetString("connecting-discord-auth-refresh");
+                    RetryButton.Disabled = false;
+                    RetryButton.Text = Loc.GetString("connecting-discord-auth-retry");
                 }
 
                 return;
             }
 
-            DiscordAuthButton.Disabled = string.IsNullOrWhiteSpace(_discordAuthUrl);
-            DiscordAuthButton.Text = Loc.GetString("connecting-discord-auth-link");
+            RetryButton.Disabled = false;
+            RetryButton.Text = Loc.GetString("connecting-reconnect");
+        }
+
+        private string GetDiscordChangeButtonText()
+        {
+            return _discordAuthLinkMode switch
+            {
+                WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeChange => Loc.GetString("connecting-discord-auth-change"),
+                WH40KDiscordAuthConstants.ConnectDenyAuthLinkModeReauth => Loc.GetString("connecting-discord-auth-reauth"),
+                _ => Loc.GetString("connecting-discord-auth-link"),
+            };
         }
 
         private void BeginAwaitingDiscordBrowserReturn()
@@ -367,7 +419,7 @@ namespace Content.Client.Launcher
                 return;
 
             if (_state.CurrentPage != LauncherConnecting.Page.ConnectFailed ||
-                _discordAuthAction != WH40KDiscordAuthConstants.ConnectDenyAuthActionLink)
+                string.IsNullOrWhiteSpace(_discordAuthUrl))
             {
                 _awaitingDiscordBrowserReturn = false;
                 return;

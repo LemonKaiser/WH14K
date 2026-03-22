@@ -46,6 +46,10 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 
 	private readonly Label _pointsLabel;
 
+	private readonly Label _plannedLabel;
+
+	private readonly Label _remainingLabel;
+
 	private readonly Label _zoomLabel;
 
 	private readonly Button _resetViewButton;
@@ -57,6 +61,8 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 	private readonly StyleBoxFlat _costChipStyle;
 
 	private int _accountLevel = 1;
+
+	private bool _confirmPlanHovered;
 
 	public WH40KCharacterDevelopmentView()
 	{
@@ -185,6 +191,8 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		};
 		_levelLabel = new Label();
 		_pointsLabel = new Label();
+		_plannedLabel = new Label();
+		_remainingLabel = new Label();
 		_zoomLabel = new Label();
 		_resetViewButton = new Button
 		{
@@ -213,6 +221,16 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 			}
 			RefreshSummary();
 		};
+		_confirmPlanButton.OnMouseEntered += delegate
+		{
+			_confirmPlanHovered = true;
+			RefreshInfoPanel();
+		};
+		_confirmPlanButton.OnMouseExited += delegate
+		{
+			_confirmPlanHovered = false;
+			RefreshInfoPanel();
+		};
 		BoxContainer boxContainer6 = new BoxContainer
 		{
 			Orientation = LayoutOrientation.Vertical,
@@ -223,6 +241,8 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		boxContainer6.AddChild(_confirmPlanButton);
 		boxContainer5.AddChild(_levelLabel);
 		boxContainer5.AddChild(_pointsLabel);
+		boxContainer5.AddChild(_plannedLabel);
+		boxContainer5.AddChild(_remainingLabel);
 		boxContainer5.AddChild(_zoomLabel);
 		boxContainer5.AddChild(boxContainer6);
 		panelContainer3.AddChild(boxContainer5);
@@ -281,43 +301,21 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_sectionLabel.Text = Loc.GetString("wh40k-character-development-section-label");
 		_resetViewButton.Text = Loc.GetString("wh40k-character-development-action-center");
 		_confirmPlanButton.Text = Loc.GetString("wh40k-character-development-action-confirm");
+		_resetViewButton.ToolTip = Loc.GetString("wh40k-character-development-action-center-tooltip");
 
-		var hoverInfo = _viewport.CurrentHoverInfo;
-		if (hoverInfo != null)
-		{
-			ApplyHoverInfo(hoverInfo);
-		}
-		else
-		{
-			ApplyDefaultInfo();
-		}
+		RefreshInfoPanel();
 		RefreshSummary();
 	}
 
 	private void OnHoverChanged(WH40KCharacterDevelopmentNodePresentation? presentation)
 	{
-		if (presentation == null)
-		{
-			ApplyDefaultInfo();
-		}
-		else
-		{
-			ApplyHoverInfo(presentation);
-		}
+		RefreshInfoPanel();
 		RefreshSummary();
 	}
 
 	private void OnPlannerChanged()
 	{
-		var hoverInfo = _viewport.CurrentHoverInfo;
-		if (hoverInfo != null)
-		{
-			ApplyHoverInfo(hoverInfo);
-		}
-		else
-		{
-			ApplyDefaultInfo();
-		}
+		RefreshInfoPanel();
 		RefreshSummary();
 	}
 
@@ -334,12 +332,17 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 			num = CalculateTotalSkillPoints(_accountLevel);
 			_viewport.SetAvailableSkillPoints(num);
 		}
-		int num2 = _viewport.OpenedCost + _viewport.PlannedCost + _viewport.SubmittedCost;
-		int num3 = Math.Max(0, num - num2);
+		int num2 = Math.Max(0, num - _viewport.OpenedCost - _viewport.SubmittedCost);
+		int num3 = Math.Max(0, num2 - _viewport.PlannedCost);
 		_levelLabel.Text = Loc.GetString("wh40k-character-development-summary-level", ("level", _accountLevel));
-		_pointsLabel.Text = Loc.GetString("wh40k-character-development-summary-points", ("available", num3));
+		_pointsLabel.Text = Loc.GetString("wh40k-character-development-summary-available-now", ("available", num2));
+		_plannedLabel.Text = Loc.GetString("wh40k-character-development-summary-planned", ("nodes", _viewport.PlannedNodeCount), ("cost", _viewport.PlannedCost));
+		_remainingLabel.Text = Loc.GetString("wh40k-character-development-summary-after-confirm", ("remaining", num3));
 		_zoomLabel.Text = Loc.GetString("wh40k-character-development-summary-zoom", ("value", (int)MathF.Round(_viewport.ZoomPercent * 100f)));
 		_confirmPlanButton.Disabled = _viewport.PlannedNodeCount == 0;
+		_confirmPlanButton.ToolTip = Loc.GetString(_viewport.PlannedNodeCount == 0
+			? "wh40k-character-development-action-confirm-tooltip-disabled"
+			: "wh40k-character-development-action-confirm-tooltip");
 	}
 
 	private int CalculateTotalSkillPoints(int level)
@@ -372,8 +375,12 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 	{
 		_branchLabel.Text = Loc.GetString(presentation.BranchTitleKey);
 		_nodeLabel.Text = Loc.GetString(presentation.NodeTitleKey);
-		_descriptionLabel.SetMessage(Loc.GetString(presentation.DescriptionKey), Color.FromHex("#C6D4DD".AsSpan()));
-		_stateChipLabel.Text = Loc.GetString(presentation.StateKey);
+		var description = Loc.GetString(presentation.DescriptionKey);
+		if (!string.IsNullOrWhiteSpace(presentation.DescriptionSupplement))
+			description += "\n\n" + presentation.DescriptionSupplement;
+
+		_descriptionLabel.SetMessage(description, Color.FromHex("#C6D4DD".AsSpan()));
+		_stateChipLabel.Text = presentation.StateText;
 		_costChipLabel.Text = Loc.GetString("wh40k-character-development-cost-chip", ("cost", presentation.Cost));
 		_costChipContainer.Visible = true;
 		_branchLabel.FontColorOverride = presentation.Accent.WithAlpha(0.96f);
@@ -381,6 +388,52 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_stateChipStyle.BackgroundColor = Blend(Color.FromHex("#233443".AsSpan()), presentation.Accent.WithAlpha(0.22f), 0.55f);
 		_costChipStyle.BorderColor = Blend(Color.FromHex("#A98C4C".AsSpan()), presentation.Accent.WithAlpha(0.65f), 0.35f);
 		_costChipStyle.BackgroundColor = Blend(Color.FromHex("#2B2A1B".AsSpan()), presentation.Accent.WithAlpha(0.15f), 0.25f);
+	}
+
+	private void ApplyConfirmWarningInfo()
+	{
+		var warningAccent = Color.FromHex("#D9915B".AsSpan());
+		var availableNow = Math.Max(0, _viewport.TotalSkillPoints - _viewport.OpenedCost - _viewport.SubmittedCost);
+		var remainingAfterConfirm = Math.Max(0, availableNow - _viewport.PlannedCost);
+
+		_branchLabel.Text = Loc.GetString("wh40k-character-development-confirm-title");
+		_nodeLabel.Text = Loc.GetString("wh40k-character-development-confirm-node");
+		_descriptionLabel.SetMessage(
+			Loc.GetString(
+				"wh40k-character-development-confirm-description",
+				("nodes", _viewport.PlannedNodeCount),
+				("cost", _viewport.PlannedCost),
+				("remaining", remainingAfterConfirm)),
+			Color.FromHex("#F0DDD1".AsSpan()));
+		_stateChipLabel.Text = Loc.GetString("wh40k-character-development-confirm-state");
+		_costChipLabel.Text = Loc.GetString(
+			"wh40k-character-development-confirm-cost",
+			("nodes", _viewport.PlannedNodeCount),
+			("cost", _viewport.PlannedCost));
+		_costChipContainer.Visible = true;
+		_branchLabel.FontColorOverride = warningAccent;
+		_stateChipStyle.BorderColor = warningAccent.WithAlpha(0.95f);
+		_stateChipStyle.BackgroundColor = Blend(Color.FromHex("#233443".AsSpan()), warningAccent.WithAlpha(0.22f), 0.6f);
+		_costChipStyle.BorderColor = Blend(Color.FromHex("#A98C4C".AsSpan()), warningAccent.WithAlpha(0.8f), 0.45f);
+		_costChipStyle.BackgroundColor = Blend(Color.FromHex("#2B2A1B".AsSpan()), warningAccent.WithAlpha(0.18f), 0.3f);
+	}
+
+	private void RefreshInfoPanel()
+	{
+		if (_confirmPlanHovered)
+		{
+			ApplyConfirmWarningInfo();
+			return;
+		}
+
+		var hoverInfo = _viewport.CurrentHoverInfo;
+		if (hoverInfo != null)
+		{
+			ApplyHoverInfo(hoverInfo);
+			return;
+		}
+
+		ApplyDefaultInfo();
 	}
 
 	private static StyleBoxFlat CreatePanelStyle(string backgroundHex, string borderHex, int horizontalPadding, int verticalPadding)

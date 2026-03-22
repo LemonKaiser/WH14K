@@ -98,6 +98,30 @@ public sealed class WH40KMetaProgressMathTests : RobustUnitTest
     }
 
     [Test]
+    public void TotalSkillPointsUsesPerLevelEntriesAndDefaults()
+    {
+#pragma warning disable RA0039
+        var table = new WH40KMetaLevelRewardTablePrototype
+        {
+            DefaultSkillPoints = 1,
+            Entries = new()
+            {
+                new WH40KMetaLevelRewardEntry { Level = 1, SkillPoints = 0 },
+                new WH40KMetaLevelRewardEntry { Level = 4, SkillPoints = 2 },
+            },
+        };
+#pragma warning restore RA0039
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(WH40KMetaProgressMath.CalculateTotalSkillPointsForLevel(1, table), Is.EqualTo(0));
+            Assert.That(WH40KMetaProgressMath.CalculateTotalSkillPointsForLevel(3, table), Is.EqualTo(2));
+            Assert.That(WH40KMetaProgressMath.CalculateTotalSkillPointsForLevel(4, table), Is.EqualTo(4));
+            Assert.That(WH40KMetaProgressMath.CalculateTotalSkillPointsForLevel(5, table), Is.EqualTo(5));
+        });
+    }
+
+    [Test]
     public void AchievementProgressIsClampedToTarget()
     {
         Assert.Multiple(() =>

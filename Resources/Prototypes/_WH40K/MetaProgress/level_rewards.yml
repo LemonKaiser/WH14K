@@ -7,34 +7,119 @@
     decorations: 0
     skillPoints: 0
   - level: 2
-    decorations: 1
+    decorations: 3
     skillPoints: 1
   - level: 3
-    decorations: 1
+    decorations: 3
     skillPoints: 1
   - level: 4
-    decorations: 2
-    skillPoints: 2
+    decorations: 3
+    skillPoints: 1
   - level: 5
-    decorations: 4
-    skillPoints: 3
-    unlockIds:
-    - decor-ghost-star
-    - decor-title-legend
+    decorations: 3
+    skillPoints: 1
+  - level: 6
+    decorations: 3
+    skillPoints: 1
+  - level: 7
+    decorations: 3
+    skillPoints: 1
+  - level: 8
+    decorations: 3
+    skillPoints: 1
+  - level: 9
+    decorations: 3
+    skillPoints: 1
   - level: 10
-    decorations: 5
-    skillPoints: 3
-    unlockIds:
-    - decor-ghost-warp
-    - decor-title-saint
+    decorations: 3
+    skillPoints: 1
+  - level: 11
+    decorations: 3
+    skillPoints: 1
+  - level: 12
+    decorations: 3
+    skillPoints: 1
+  - level: 13
+    decorations: 3
+    skillPoints: 1
+  - level: 14
+    decorations: 3
+    skillPoints: 1
   - level: 15
-    decorations: 6
-    skillPoints: 4
-    unlockIds:
-    - decor-color-violet
+    decorations: 3
+    skillPoints: 1
+  - level: 16
+    decorations: 3
+    skillPoints: 1
+  - level: 17
+    decorations: 3
+    skillPoints: 1
+  - level: 18
+    decorations: 3
+    skillPoints: 1
+  - level: 19
+    decorations: 3
+    skillPoints: 1
   - level: 20
-    decorations: 8
-    skillPoints: 5
-    requiredAchievements:
-    - wh40k-ach-perfect-campaign
-
+    decorations: 3
+    skillPoints: 1
+  - level: 21
+    decorations: 3
+    skillPoints: 1
+  - level: 22
+    decorations: 3
+    skillPoints: 1
+  - level: 23
+    decorations: 3
+    skillPoints: 1
+  - level: 24
+    decorations: 3
+    skillPoints: 1
+  - level: 25
+    decorations: 3
+    skillPoints: 1
+  - level: 26
+    decorations: 3
+    skillPoints: 1
+  - level: 27
+    decorations: 3
+    skillPoints: 1
+  - level: 28
+    decorations: 3
+    skillPoints: 1
+  - level: 29
+    decorations: 3
+    skillPoints: 1
+  - level: 30
+    decorations: 3
+    skillPoints: 1
+  - level: 31
+    decorations: 3
+    skillPoints: 1
+  - level: 32
+    decorations: 3
+    skillPoints: 1
+  - level: 33
+    decorations: 3
+    skillPoints: 1
+  - level: 34
+    decorations: 3
+    skillPoints: 1
+  - level: 35
+    decorations: 3
+    skillPoints: 1
+  - level: 36
+    decorations: 3
+    skillPoints: 1
+  - level: 37
+    decorations: 3
+    skillPoints: 1
+  - level: 38
+    decorations: 3
+    skillPoints: 1
+  - level: 39
+    decorations: 3
+    skillPoints: 1
+  - level: 40
+    decorations: 3
+    skillPoints: 1

@@ -18,9 +18,9 @@ namespace Content.Client.Info
     public sealed class LinkBanner : BoxContainer, ILocalizedControl
     {
         private const float DiscordAuthIdleButtonMinWidth = 0f;
-        private const float DiscordAuthLinkButtonMinWidth = 96f;
+        private const float DiscordAuthLinkButtonMinWidth = 168f;
         private const float DiscordAuthLinkedButtonMinWidth = 0f;
-        private const float DiscordAuthButtonMaxWidth = 144f;
+        private const float DiscordAuthButtonMaxWidth = 192f;
         private const int DiscordAuthButtonMaxTextElements = 20;
 
         private readonly IConfigurationManager _cfg;

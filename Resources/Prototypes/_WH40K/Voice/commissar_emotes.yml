@@ -2,7 +2,7 @@
   id: WH40KCommissarConsiderItDone
   name: wh40k-chat-emote-name-commissar-consider-it-done
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -16,7 +16,7 @@
   id: WH40KCommissarYouWillBeExecuted
   name: wh40k-chat-emote-name-commissar-you-will-be-executed
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/deathgasp.png
   whitelist:
     requireAll: true
     components:
@@ -30,7 +30,7 @@
   id: WH40KCommissarAttack
   name: wh40k-chat-emote-name-commissar-attack
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -44,7 +44,7 @@
   id: WH40KCommissarForwardToVictory
   name: wh40k-chat-emote-name-commissar-forward-to-victory
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/hew.png
   whitelist:
     requireAll: true
     components:
@@ -58,7 +58,7 @@
   id: WH40KCommissarWhereAmINeeded
   name: wh40k-chat-emote-name-commissar-where-am-i-needed
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -72,7 +72,7 @@
   id: WH40KCommissarTheirDaysAreNumbered
   name: wh40k-chat-emote-name-commissar-their-days-are-numbered
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/deathgasp.png
   whitelist:
     requireAll: true
     components:
@@ -86,7 +86,7 @@
   id: WH40KCommissarRetreatIsABadDecision
   name: wh40k-chat-emote-name-commissar-retreat-is-a-bad-decision
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/whistle.png
   whitelist:
     requireAll: true
     components:
@@ -100,7 +100,7 @@
   id: WH40KCommissarISentenceYouToDeath
   name: wh40k-chat-emote-name-commissar-i-sentence-you-to-death
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/deathgasp.png
   whitelist:
     requireAll: true
     components:
@@ -114,7 +114,7 @@
   id: WH40KCommissarOrderReceivedAndUnderstood
   name: wh40k-chat-emote-name-commissar-order-received-and-understood
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -128,7 +128,7 @@
   id: WH40KCommissarSpreadOut
   name: wh40k-chat-emote-name-commissar-spread-out
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/whistle.png
   whitelist:
     requireAll: true
     components:
@@ -142,7 +142,7 @@
   id: WH40KCommissarYouDaredToShootAtMe
   name: wh40k-chat-emote-name-commissar-you-dared-to-shoot-at-me
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/deathgasp.png
   whitelist:
     requireAll: true
     components:
@@ -156,7 +156,7 @@
   id: WH40KCommissarWhatDoYouWant
   name: wh40k-chat-emote-name-commissar-what-do-you-want
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/salute.png
   whitelist:
     requireAll: true
     components:
@@ -170,7 +170,7 @@
   id: WH40KCommissarIAmLeaving
   name: wh40k-chat-emote-name-commissar-i-am-leaving
   category: RoleVocal
-  icon: Interface/Emotes/scream.png
+  icon: Interface/Emotes/sigh.png
   whitelist:
     requireAll: true
     components:
