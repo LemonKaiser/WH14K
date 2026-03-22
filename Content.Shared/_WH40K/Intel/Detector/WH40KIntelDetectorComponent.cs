@@ -11,7 +11,7 @@ public sealed partial class WH40KIntelDetectorComponent : Component
     [DataField, AutoNetworkedField]
     public bool Enabled;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextScanAt;
 
     [DataField, AutoNetworkedField]

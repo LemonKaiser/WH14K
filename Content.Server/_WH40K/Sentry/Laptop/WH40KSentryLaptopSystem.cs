@@ -59,7 +59,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
     private readonly Dictionary<(EntityUid Laptop, EntityUid Turret), DeployableTurretState> _lastTurretStates = new();
 
     private TimeSpan _nextPeriodicUpdate = TimeSpan.Zero;
-    private static readonly TimeSpan PeriodicUpdateInterval = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan PeriodicUpdateInterval = TimeSpan.FromSeconds(5);
 
     public override void Initialize()
     {

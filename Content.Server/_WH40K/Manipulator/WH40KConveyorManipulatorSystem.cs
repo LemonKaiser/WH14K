@@ -79,16 +79,15 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         }
 
         ReleaseClaim(ent.Comp.ActiveItem);
-        ent.Comp.ActiveItem = null;
-        ent.Comp.Busy = false;
-        ent.Comp.Status = WH40KManipulatorStatus.Idle;
         ent.Comp.SelectionCursor = 0;
+        var stateDirty = ApplyOperationalState(ent.Owner, ent.Comp, busy: false, activeItem: null, WH40KManipulatorStatus.Idle);
 
         var cooldown = MathF.Max(0.05f, ent.Comp.TransferCooldown);
         ent.Comp.NextTransferAt = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(0f, cooldown));
 
         _activeTransfers.Remove(ent.Owner);
-        Dirty(ent);
+        if (!stateDirty)
+            Dirty(ent);
     }
 
     private void OnShutdown(Entity<WH40KConveyorManipulatorComponent> ent, ref ComponentShutdown args)
@@ -311,11 +310,8 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
             Mode = mode,
         };
 
-        component.Busy = true;
-        component.ActiveItem = item;
-        component.Status = WH40KManipulatorStatus.Busy;
         component.SelectionCursor = selectedIndex + 1;
-        Dirty(uid, component);
+        ApplyOperationalState(uid, component, busy: true, activeItem: item, WH40KManipulatorStatus.Busy);
 
         RaiseNetworkEvent(
             new WH40KManipulatorArcAnimationEvent(
@@ -393,14 +389,10 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         var (uid, component, _) = manipulator;
 
         ReleaseClaim(component.ActiveItem);
-
-        component.Busy = false;
-        component.ActiveItem = null;
-        component.Status = status;
         component.NextTransferAt = now + TimeSpan.FromSeconds(MathF.Max(0.05f, component.TransferCooldown));
 
+        ApplyOperationalState(uid, component, busy: false, activeItem: null, status);
         _activeTransfers.Remove(uid);
-        Dirty(uid, component);
     }
 
     private void SetStatus(Entity<WH40KConveyorManipulatorComponent, TransformComponent> manipulator, WH40KManipulatorStatus status)
@@ -410,6 +402,39 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
 
         manipulator.Comp1.Status = status;
         Dirty(manipulator.Owner, manipulator.Comp1);
+    }
+
+    private bool ApplyOperationalState(
+        EntityUid uid,
+        WH40KConveyorManipulatorComponent component,
+        bool busy,
+        EntityUid? activeItem,
+        WH40KManipulatorStatus status)
+    {
+        var changed = false;
+
+        if (component.Busy != busy)
+        {
+            component.Busy = busy;
+            changed = true;
+        }
+
+        if (component.ActiveItem != activeItem)
+        {
+            component.ActiveItem = activeItem;
+            changed = true;
+        }
+
+        if (component.Status != status)
+        {
+            component.Status = status;
+            changed = true;
+        }
+
+        if (changed)
+            Dirty(uid, component);
+
+        return changed;
     }
 
     private bool TrySelectPassThroughCandidate(

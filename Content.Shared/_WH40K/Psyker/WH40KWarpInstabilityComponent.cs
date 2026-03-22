@@ -16,4 +16,10 @@ public sealed partial class WH40KWarpInstabilityComponent : Component
 
     [DataField("decayPerSecond"), AutoNetworkedField]
     public float DecayPerSecond = 1.2f;
+
+    /// <summary>
+    /// Server-side debounce for passive decay replication.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextNetworkSyncAt;
 }

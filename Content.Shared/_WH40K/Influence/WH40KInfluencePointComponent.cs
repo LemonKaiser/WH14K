@@ -86,7 +86,7 @@ public sealed partial class WH40KInfluencePointComponent : Component
     /// Lower values make radial fill look smoother.
     /// </summary>
     [DataField("captureProgressSyncStep")]
-    public float CaptureProgressSyncStep = 0.12f;
+    public float CaptureProgressSyncStep = 0.25f;
 
     [ViewVariables]
     public TimeSpan NextRewardTick;

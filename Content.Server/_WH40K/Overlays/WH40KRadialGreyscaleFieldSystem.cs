@@ -9,6 +9,7 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Tag;
 using Content.Shared.Throwing;
+using Content.Shared.GameTicking;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Map;
@@ -30,6 +31,7 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
     private const float UpdateInterval = 0.02f;
     private const float Epsilon = 0.0001f;
     private const float MinEffectiveMeleeMultiplier = 0.25f;
+    private static readonly TimeSpan NetworkSyncInterval = TimeSpan.FromMilliseconds(200);
     private static readonly ProtoId<TagPrototype> HandGrenadeTag = "HandGrenade";
 
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -50,7 +52,18 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
     private readonly Dictionary<EntityUid, float> _desiredGrenadeTimer = new();
     private readonly Dictionary<EntityUid, float> _appliedMovement = new();
     private readonly Dictionary<EntityUid, float> _appliedPhysics = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _syncedGrenadeTimers = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _syncedThrownLandTimes = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _syncedMeleeCooldowns = new();
+    private readonly Dictionary<EntityUid, float> _desiredMeleeCooldowns = new();
     private readonly List<EntityUid> _toRemove = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
 
     public override void Update(float frameTime)
     {
@@ -95,6 +108,27 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
 
         _appliedPhysics.Clear();
         _appliedMovement.Clear();
+        _syncedGrenadeTimers.Clear();
+        _syncedThrownLandTimes.Clear();
+        _syncedMeleeCooldowns.Clear();
+        _desiredMeleeCooldowns.Clear();
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _accumulator = 0f;
+        _desiredMovement.Clear();
+        _desiredPhysics.Clear();
+        _desiredTimedDespawn.Clear();
+        _desiredGrenadeTimer.Clear();
+        _appliedMovement.Clear();
+        _appliedPhysics.Clear();
+        _syncedGrenadeTimers.Clear();
+        _syncedThrownLandTimes.Clear();
+        _syncedMeleeCooldowns.Clear();
+        _desiredMeleeCooldowns.Clear();
+        _nearby.Clear();
+        _toRemove.Clear();
     }
 
     private void BuildDesiredEffects()
@@ -172,6 +206,8 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
 
     private void ApplyMovementEffects()
     {
+        _desiredMeleeCooldowns.Clear();
+
         // Drop deleted entities from movement tracking and fully restore entities that left all zones.
         _toRemove.Clear();
         foreach (var uid in _appliedMovement.Keys)
@@ -228,6 +264,8 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
 
             _appliedMovement[uid] = desiredMultiplier;
         }
+
+        PruneSyncedTimes(_syncedMeleeCooldowns, _desiredMeleeCooldowns);
     }
 
     private void ApplyTimedDespawnEffects(float tickDelta)
@@ -254,6 +292,8 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
         if (tickDelta <= 0f)
             return;
 
+        PruneSyncedTimes(_syncedGrenadeTimers, _desiredGrenadeTimer);
+
         foreach (var (uid, desiredMultiplier) in _desiredGrenadeTimer)
         {
             if (Deleted(uid) ||
@@ -271,12 +311,16 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
             var compensation = TimeSpan.FromSeconds(compensationSeconds);
             timer.NextTrigger += compensation;
             timer.NextBeep += compensation;
-            Dirty(uid, timer);
+
+            if (ShouldDirtySyncedTime(_syncedGrenadeTimers, uid, timer.NextTrigger))
+                Dirty(uid, timer);
         }
     }
 
     private void ApplyPhysicsEffects()
     {
+        PruneSyncedTimes(_syncedThrownLandTimes, _desiredPhysics);
+
         _toRemove.Clear();
         foreach (var uid in _appliedPhysics.Keys)
         {
@@ -350,7 +394,9 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
         var scale = fromMultiplier / Math.Max(toMultiplier, 0.01f);
         var adjustedTicks = Math.Max(1L, (long) (remaining.Ticks * scale));
         thrown.LandTime = now + TimeSpan.FromTicks(adjustedTicks);
-        Dirty(uid, thrown);
+
+        if (ShouldDirtySyncedTime(_syncedThrownLandTimes, uid, thrown.LandTime.Value))
+            Dirty(uid, thrown);
     }
 
     private void ScaleMeleeCooldown(EntityUid userUid, float fromMultiplier, float toMultiplier)
@@ -375,13 +421,17 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
             if (!TryComp<MeleeWeaponComponent>(weaponUid, out var melee))
                 return;
 
+            _desiredMeleeCooldowns[weaponUid] = 1f;
+
             var remaining = melee.NextAttack - now;
             if (remaining <= TimeSpan.Zero)
                 return;
 
             var adjustedTicks = Math.Max(1L, (long) (remaining.Ticks * scale));
             melee.NextAttack = now + TimeSpan.FromTicks(adjustedTicks);
-            Dirty(weaponUid, melee);
+
+            if (ShouldDirtySyncedTime(_syncedMeleeCooldowns, weaponUid, melee.NextAttack))
+                Dirty(weaponUid, melee);
         }
 
         // Unarmed melee can use the user entity itself as a weapon source.
@@ -410,6 +460,40 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
 
         if (value < current)
             map[uid] = value;
+    }
+
+    private void PruneSyncedTimes(Dictionary<EntityUid, TimeSpan> syncedValues, Dictionary<EntityUid, float> desiredValues)
+    {
+        _toRemove.Clear();
+
+        foreach (var uid in syncedValues.Keys)
+        {
+            if (Deleted(uid) || !desiredValues.ContainsKey(uid))
+                _toRemove.Add(uid);
+        }
+
+        foreach (var uid in _toRemove)
+        {
+            syncedValues.Remove(uid);
+        }
+    }
+
+    private bool ShouldDirtySyncedTime(
+        Dictionary<EntityUid, TimeSpan> syncedValues,
+        EntityUid uid,
+        TimeSpan currentValue)
+    {
+        if (!syncedValues.TryGetValue(uid, out var lastSynced))
+        {
+            syncedValues[uid] = currentValue;
+            return true;
+        }
+
+        if (Math.Abs((currentValue - lastSynced).TotalMilliseconds) < NetworkSyncInterval.TotalMilliseconds)
+            return false;
+
+        syncedValues[uid] = currentValue;
+        return true;
     }
 
     private static float GetEffectiveMeleeMultiplier(float value)

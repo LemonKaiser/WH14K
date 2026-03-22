@@ -28,16 +28,16 @@ public sealed partial class WH40KConveyorManipulatorComponent : Component
 {
     public const string TransferContainerId = "wh40k-manipulator-transfer";
 
-    [DataField("transferCooldown"), AutoNetworkedField]
+    [DataField("transferCooldown")]
     public float TransferCooldown = 0.2f;
 
-    [DataField("transferDuration"), AutoNetworkedField]
+    [DataField("transferDuration")]
     public float TransferDuration = 0.45f;
 
-    [DataField("arcHeight"), AutoNetworkedField]
+    [DataField("arcHeight")]
     public float ArcHeight = 0.3f;
 
-    [DataField("requirePowered"), AutoNetworkedField]
+    [DataField("requirePowered")]
     public bool RequirePowered = true;
 
     [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
