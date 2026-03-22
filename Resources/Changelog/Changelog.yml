@@ -1,18 +1,4 @@
 ﻿Entries:
-- author: PicklOH
-  changes:
-  - message: Added more Syndie ammo to the EMAG lathe inventory
-    type: Add
-  id: 9072
-  time: '2025-10-11T05:14:34.0000000+00:00'
-  url: https://github.com/space-wizards/space-station-14/pull/40822
-- author: TrixxedHeart
-  changes:
-  - message: Updated Xenoarchaeology guidebook page to current system.
-    type: Tweak
-  id: 9073
-  time: '2025-10-11T17:32:21.0000000+00:00'
-  url: https://github.com/space-wizards/space-station-14/pull/40621
 - author: HTMLSystem
   changes:
   - message: Added infectious anom sprites for moths and arachnids.
@@ -4029,3 +4015,17 @@
   id: 9583
   time: '2026-03-18T06:31:14.0000000+00:00'
   url: https://github.com/space-wizards/space-station-14/pull/43285
+- author: ProPeperos
+  changes:
+  - message: Changed the hitbox of borg chargers, so they no longer get stuck in doorways.
+    type: Tweak
+  id: 9584
+  time: '2026-03-20T14:35:35.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/43300
+- author: slarticodefast
+  changes:
+  - message: Fixed melee attack animations being rotated wrong if your camera is rotated.
+    type: Fix
+  id: 9585
+  time: '2026-03-21T17:02:28.0000000+00:00'
+  url: https://github.com/space-wizards/space-station-14/pull/43307
