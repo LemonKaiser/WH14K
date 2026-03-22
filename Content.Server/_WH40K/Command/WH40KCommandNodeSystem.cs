@@ -72,6 +72,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     private const string CommandTreeCostDefaultProfileId = "WH40KCommandTreeCostProfileDefault";
     private const int MissionBoardOfferCount = 3;
     private const uint ReinforcementRaffleDurationSeconds = 15;
+    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(5);
 
     private readonly record struct TeamMemberInfo(string RoleId, string RoleName, string Name);
     private readonly record struct StaffingRolePlan(string RoleId, int Target);
@@ -165,7 +166,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             if (node.NextUiRefresh > now)
                 continue;
 
-            node.NextUiRefresh = now + TimeSpan.FromSeconds(1);
+            node.NextUiRefresh = now + UiRefreshInterval;
             UpdateUi((uid, node));
         }
     }

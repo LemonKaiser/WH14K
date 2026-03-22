@@ -1,5 +1,6 @@
 using Content.Shared.Actions.Events;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._WH40K.Psyker;
 
@@ -9,13 +10,18 @@ namespace Content.Shared._WH40K.Psyker;
 /// </summary>
 public sealed class SharedWH40KWarpResourceSystem : EntitySystem
 {
+    private static readonly TimeSpan PassiveNetworkSyncCooldown = TimeSpan.FromSeconds(0.25);
+
     [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         // ComponentStartup is exclusive per (component,event), so role bootstrap stays centralized here.
         SubscribeLocalEvent<WH40KPsykerRoleComponent, ComponentStartup>(OnPsykerRoleStartup);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, ComponentStartup>(OnChaosRoleStartup);
+        SubscribeLocalEvent<WH40KWarpResourceComponent, ComponentStartup>(OnWarpResourceStartup);
+        SubscribeLocalEvent<WH40KWarpInstabilityComponent, ComponentStartup>(OnWarpInstabilityStartup);
         SubscribeLocalEvent<WH40KWarpActionCostComponent, ActionValidateEvent>(OnValidateWarpAction);
         SubscribeLocalEvent<WH40KWarpActionCostComponent, ActionPerformedEvent>(OnWarpActionPerformed);
     }
@@ -26,6 +32,8 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
 
         if (!_netManager.IsServer || frameTime <= 0f)
             return;
+
+        var now = _timing.CurTime;
 
         var warpQuery = EntityQueryEnumerator<WH40KWarpResourceComponent>();
         while (warpQuery.MoveNext(out var uid, out var warp))
@@ -38,6 +46,10 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
                 continue;
 
             warp.CurrentCharge = next;
+            if (now < warp.NextNetworkSyncAt)
+                continue;
+
+            warp.NextNetworkSyncAt = now + PassiveNetworkSyncCooldown;
             Dirty(uid, warp);
         }
 
@@ -52,6 +64,10 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
                 continue;
 
             instability.CurrentInstability = next;
+            if (now < instability.NextNetworkSyncAt)
+                continue;
+
+            instability.NextNetworkSyncAt = now + PassiveNetworkSyncCooldown;
             Dirty(uid, instability);
         }
     }
@@ -86,6 +102,7 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             if (next < warp.CurrentCharge)
             {
                 warp.CurrentCharge = next;
+                warp.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
                 Dirty(args.Performer, warp);
             }
         }
@@ -100,6 +117,7 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             if (next > instability.CurrentInstability)
             {
                 instability.CurrentInstability = next;
+                instability.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
                 Dirty(args.Performer, instability);
             }
         }
@@ -134,6 +152,22 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
         EnsureComp<WH40KWarpInstabilityComponent>(uid);
         EnsureComp<WH40KPsykerProgressionComponent>(uid);
         EnsureComp<WH40KPsykerStarterActionLoadoutComponent>(uid);
+    }
+
+    private void OnWarpResourceStartup(EntityUid uid, WH40KWarpResourceComponent component, ref ComponentStartup args)
+    {
+        if (!_netManager.IsServer)
+            return;
+
+        component.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
+    }
+
+    private void OnWarpInstabilityStartup(EntityUid uid, WH40KWarpInstabilityComponent component, ref ComponentStartup args)
+    {
+        if (!_netManager.IsServer)
+            return;
+
+        component.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
     }
 
     private void OnChaosRoleStartup(EntityUid uid, WH40KChaosGiftRoleComponent component, ref ComponentStartup args)

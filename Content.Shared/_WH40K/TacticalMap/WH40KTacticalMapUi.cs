@@ -152,6 +152,17 @@ public sealed class WH40KTacticalMapBuiState : BoundUserInterfaceState
 }
 
 [Serializable, NetSerializable]
+public sealed class WH40KTacticalMapOverlayState(
+    int overlayRevision,
+    WH40KTacticalMapAllyMarker[] alliedMarkers,
+    WH40KTacticalMapCapturePointMarker[] capturePoints)
+{
+    public int OverlayRevision { get; } = overlayRevision;
+    public WH40KTacticalMapAllyMarker[] AlliedMarkers { get; } = alliedMarkers ?? Array.Empty<WH40KTacticalMapAllyMarker>();
+    public WH40KTacticalMapCapturePointMarker[] CapturePoints { get; } = capturePoints ?? Array.Empty<WH40KTacticalMapCapturePointMarker>();
+}
+
+[Serializable, NetSerializable]
 public sealed class WH40KTacticalMapSaveAnnotationsMessage(WH40KTacticalMapAnnotationStroke[] strokes) : BoundUserInterfaceMessage
 {
     public WH40KTacticalMapAnnotationStroke[] Strokes { get; } = strokes ?? Array.Empty<WH40KTacticalMapAnnotationStroke>();
@@ -162,6 +173,13 @@ public sealed class WH40KTacticalMapStateEvent(NetEntity tacticalMap, WH40KTacti
 {
     public NetEntity TacticalMap { get; } = tacticalMap;
     public WH40KTacticalMapBuiState State { get; } = state;
+}
+
+[Serializable, NetSerializable]
+public sealed class WH40KTacticalMapOverlayEvent(NetEntity tacticalMap, WH40KTacticalMapOverlayState state) : EntityEventArgs
+{
+    public NetEntity TacticalMap { get; } = tacticalMap;
+    public WH40KTacticalMapOverlayState State { get; } = state;
 }
 
 [Serializable, NetSerializable]

@@ -31,6 +31,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
 {
     private const float DropVisualStartOffsetY = 18f;
     private const int MaxListingDropAmount = 50;
+    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(10);
 
     [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
@@ -96,7 +97,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
             if (pad.NextUiRefresh > now)
                 continue;
 
-            pad.NextUiRefresh = now + TimeSpan.FromSeconds(1);
+            pad.NextUiRefresh = now + UiRefreshInterval;
             UpdateUi((uid, pad));
         }
 
@@ -109,7 +110,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
             if (store.NextUiRefresh > now)
                 continue;
 
-            store.NextUiRefresh = now + TimeSpan.FromSeconds(1);
+            store.NextUiRefresh = now + UiRefreshInterval;
             UpdateVoxUi((uid, store));
         }
     }

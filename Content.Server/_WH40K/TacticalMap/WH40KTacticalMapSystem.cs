@@ -34,6 +34,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private const float MinAnnotationThickness = 0.25f;
     private const float MaxAnnotationThickness = 6f;
     private static readonly TimeSpan FogRevealUpdateInterval = TimeSpan.FromSeconds(0.75);
+    private static readonly TimeSpan OverlayRefreshInterval = TimeSpan.FromSeconds(0.5);
     private static readonly Color NeutralMarkerColor = Color.FromHex("#7F8790".AsSpan());
 
     private readonly record struct TeamMapKey(EntityUid GridUid, string TeamId);
@@ -57,6 +58,14 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         public readonly List<WH40KTacticalMapAnnotationStroke> Strokes = new();
     }
 
+    private sealed class TeamOverlayState
+    {
+        public bool Initialized;
+        public TimeSpan NextRefreshAt;
+        public WH40KTacticalMapAllyMarker[] AlliedMarkers = Array.Empty<WH40KTacticalMapAllyMarker>();
+        public WH40KTacticalMapCapturePointMarker[] CapturePoints = Array.Empty<WH40KTacticalMapCapturePointMarker>();
+    }
+
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly PowerCellSystem _cell = default!;
     [Dependency] private readonly SharedStationSystem _station = default!;
@@ -70,6 +79,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private readonly Dictionary<EntityUid, FogGridConfig> _fogGridConfigs = new();
     private readonly Dictionary<TeamMapKey, TeamFogState> _teamFogStates = new();
     private readonly Dictionary<TeamMapKey, TeamAnnotationState> _teamAnnotationStates = new();
+    private readonly Dictionary<TeamMapKey, TeamOverlayState> _teamOverlayStates = new();
     private TimeSpan _nextFogRevealUpdateAt = TimeSpan.Zero;
 
     public override void Initialize()
@@ -185,6 +195,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         _fogGridConfigs.Clear();
         _teamFogStates.Clear();
         _teamAnnotationStates.Clear();
+        _teamOverlayStates.Clear();
         _nextFogRevealUpdateAt = TimeSpan.Zero;
     }
 
@@ -446,15 +457,34 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 
         if (targetGrid is { } overlayGridUid)
         {
-            alliedMarkers = BuildAlliedMarkers(user.Owner, overlayGridUid, teamId);
-            capturePoints = BuildCapturePointMarkers(overlayGridUid);
+            var overlayState = GetOrRefreshOverlayState(overlayGridUid, teamId);
+            alliedMarkers = FilterAlliedMarkersForViewer(overlayState.AlliedMarkers, user.Owner);
+            capturePoints = overlayState.CapturePoints;
             overlayRevision = ComputeOverlayRevision(alliedMarkers, capturePoints);
         }
 
-        if (user.Comp.LastFogRevision == fogRevision &&
-            user.Comp.LastAnnotationRevision == annotationRevision &&
-            user.Comp.LastOverlayRevision == overlayRevision)
+        var fogChanged = user.Comp.LastFogRevision != fogRevision;
+        var annotationChanged = user.Comp.LastAnnotationRevision != annotationRevision;
+        var overlayChanged = user.Comp.LastOverlayRevision != overlayRevision;
+
+        if (!fogChanged &&
+            !annotationChanged &&
+            !overlayChanged)
         {
+            return;
+        }
+
+        if (!fogChanged &&
+            !annotationChanged &&
+            overlayChanged)
+        {
+            var overlayState = new WH40KTacticalMapOverlayState(
+                overlayRevision,
+                alliedMarkers,
+                capturePoints);
+
+            RaiseNetworkEvent(new WH40KTacticalMapOverlayEvent(GetNetEntity(map.Owner), overlayState), actor.PlayerSession);
+            user.Comp.LastOverlayRevision = overlayRevision;
             return;
         }
 
@@ -532,7 +562,63 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         return LiveRefreshRuntimeEnabled && component.LiveRefreshEnabled;
     }
 
-    private WH40KTacticalMapAllyMarker[] BuildAlliedMarkers(EntityUid viewer, EntityUid gridUid, string teamId)
+    private TeamOverlayState GetOrRefreshOverlayState(EntityUid gridUid, string teamId)
+    {
+        var key = new TeamMapKey(gridUid, teamId);
+        if (!_teamOverlayStates.TryGetValue(key, out var state))
+        {
+            state = new TeamOverlayState();
+            _teamOverlayStates[key] = state;
+        }
+
+        var now = _timing.CurTime;
+        if (state.Initialized && now < state.NextRefreshAt)
+            return state;
+
+        state.AlliedMarkers = BuildAlliedMarkers(gridUid, teamId);
+        state.CapturePoints = BuildCapturePointMarkers(gridUid);
+        state.Initialized = true;
+        state.NextRefreshAt = now + OverlayRefreshInterval;
+        return state;
+    }
+
+    private WH40KTacticalMapAllyMarker[] FilterAlliedMarkersForViewer(
+        IReadOnlyList<WH40KTacticalMapAllyMarker> alliedMarkers,
+        EntityUid viewer)
+    {
+        if (alliedMarkers.Count == 0)
+            return Array.Empty<WH40KTacticalMapAllyMarker>();
+
+        var viewerNetEntity = GetNetEntity(viewer);
+        var count = 0;
+
+        foreach (var ally in alliedMarkers)
+        {
+            if (ally.Entity != viewerNetEntity)
+                count++;
+        }
+
+        if (count == alliedMarkers.Count && alliedMarkers is WH40KTacticalMapAllyMarker[] cachedMarkers)
+            return cachedMarkers;
+
+        if (count == 0)
+            return Array.Empty<WH40KTacticalMapAllyMarker>();
+
+        var filtered = new WH40KTacticalMapAllyMarker[count];
+        var index = 0;
+
+        foreach (var ally in alliedMarkers)
+        {
+            if (ally.Entity == viewerNetEntity)
+                continue;
+
+            filtered[index++] = ally;
+        }
+
+        return filtered;
+    }
+
+    private WH40KTacticalMapAllyMarker[] BuildAlliedMarkers(EntityUid gridUid, string teamId)
     {
         if (string.IsNullOrWhiteSpace(teamId))
             return Array.Empty<WH40KTacticalMapAllyMarker>();
@@ -547,8 +633,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         {
             EnsureComp<WH40KTacticalMapTrackedComponent>(uid);
 
-            if (uid == viewer ||
-                xform.MapID != mapId ||
+            if (xform.MapID != mapId ||
                 !string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
             {
                 continue;

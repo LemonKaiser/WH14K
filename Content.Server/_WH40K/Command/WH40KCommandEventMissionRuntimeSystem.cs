@@ -1195,17 +1195,24 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             if (!string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            var effect = EnsureComp<WH40KTeamEventEffectComponent>(uid);
-            effect.TeamId = teamId;
-            effect.EventId = eventId;
-            effect.OutgoingDamageMultiplier = Math.Max(0.05f, profile.OutgoingDamageMultiplier);
-            effect.IncomingDamageMultiplier = Math.Max(0.05f, profile.IncomingDamageMultiplier);
-            effect.MedicalDelayMultiplier = Math.Max(0.05f, profile.MedicalDelayMultiplier);
-            effect.ConstructionDelayMultiplier = Math.Max(0.05f, profile.ConstructionDelayMultiplier);
-            effect.IgnorePullSlowdown = profile.IgnorePullSlowdown;
+            var hadEffect = TryComp(uid, out WH40KTeamEventEffectComponent? effect);
+            effect ??= EnsureComp<WH40KTeamEventEffectComponent>(uid);
 
-            Dirty(uid, effect);
-            _movement.RefreshMovementSpeedModifiers(uid);
+            var ignorePullSlowdownChanged = effect.IgnorePullSlowdown != profile.IgnorePullSlowdown;
+            var changed = false;
+            changed |= SetIfDifferent(ref effect.TeamId, teamId);
+            changed |= SetIfDifferent(ref effect.EventId, eventId);
+            changed |= SetIfDifferent(ref effect.OutgoingDamageMultiplier, Math.Max(0.05f, profile.OutgoingDamageMultiplier));
+            changed |= SetIfDifferent(ref effect.IncomingDamageMultiplier, Math.Max(0.05f, profile.IncomingDamageMultiplier));
+            changed |= SetIfDifferent(ref effect.MedicalDelayMultiplier, Math.Max(0.05f, profile.MedicalDelayMultiplier));
+            changed |= SetIfDifferent(ref effect.ConstructionDelayMultiplier, Math.Max(0.05f, profile.ConstructionDelayMultiplier));
+            changed |= SetIfDifferent(ref effect.IgnorePullSlowdown, profile.IgnorePullSlowdown);
+
+            if (!hadEffect || changed)
+                Dirty(uid, effect);
+
+            if (!hadEffect || ignorePullSlowdownChanged)
+                _movement.RefreshMovementSpeedModifiers(uid);
         }
     }
 
@@ -1286,6 +1293,33 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                     ("team", ResolveTeamName(teamId)),
                     ("points", profile.PeriodicDevelopmentPoints)));
         }
+    }
+
+    private static bool SetIfDifferent(ref string current, string next)
+    {
+        if (string.Equals(current, next, StringComparison.Ordinal))
+            return false;
+
+        current = next;
+        return true;
+    }
+
+    private static bool SetIfDifferent(ref float current, float next)
+    {
+        if (MathF.Abs(current - next) <= 0.0001f)
+            return false;
+
+        current = next;
+        return true;
+    }
+
+    private static bool SetIfDifferent(ref bool current, bool next)
+    {
+        if (current == next)
+            return false;
+
+        current = next;
+        return true;
     }
 
     private bool TryInitializeMissionObjective(

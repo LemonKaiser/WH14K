@@ -25,7 +25,6 @@ public sealed class WH40KSquadSystem : EntitySystem
 {
     private static readonly Color DefaultImperiumColor = Color.FromHex("#D6B24A".AsSpan());
     private static readonly Color DefaultHereticsColor = Color.FromHex("#A64747".AsSpan());
-    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(1);
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
@@ -34,9 +33,6 @@ public sealed class WH40KSquadSystem : EntitySystem
     [Dependency] private readonly SharedRoleSystem _roles = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-
-    private TimeSpan _nextUiRefresh = TimeSpan.Zero;
 
     public override void Initialize()
     {
@@ -48,6 +44,7 @@ public sealed class WH40KSquadSystem : EntitySystem
         SubscribeLocalEvent<WH40KSquadLeaderComponent, MobStateChangedEvent>(OnLeaderMobStateChanged);
 
         SubscribeLocalEvent<WH40KSquadAssignableComponent, ComponentShutdown>(OnAssignableShutdown);
+        SubscribeLocalEvent<WH40KSquadAssignableComponent, MobStateChangedEvent>(OnAssignableMobStateChanged);
         SubscribeLocalEvent<WH40KSquadConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
 
         Subs.BuiEvents<WH40KSquadConsoleComponent>(WH40KSquadUiKey.Key, subs =>
@@ -58,28 +55,6 @@ public sealed class WH40KSquadSystem : EntitySystem
             subs.Event<WH40KSquadRemoveMessage>(OnRemoveRequested);
             subs.Event<WH40KSquadRefreshMessage>(OnRefreshRequested);
         });
-    }
-
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        if (_timing.CurTime < _nextUiRefresh)
-            return;
-
-        _nextUiRefresh = _timing.CurTime + UiRefreshInterval;
-
-        var query = EntityQueryEnumerator<WH40KSquadLeaderComponent>();
-        while (query.MoveNext(out var leaderUid, out var leader))
-        {
-            if (!leader.ControllerEntity.HasValue || TerminatingOrDeleted(leader.ControllerEntity.Value))
-                continue;
-
-            if (!_ui.IsUiOpen(leader.ControllerEntity.Value, WH40KSquadUiKey.Key))
-                continue;
-
-            RefreshUi((leaderUid, leader));
-        }
     }
 
     private void OnLeaderMapInit(Entity<WH40KSquadLeaderComponent> ent, ref MapInitEvent args)
@@ -132,6 +107,14 @@ public sealed class WH40KSquadSystem : EntitySystem
 
         if (TryComp<WH40KSquadLeaderComponent>(leaderUid, out var leaderComp))
             RefreshUi((leaderUid, leaderComp));
+
+        RefreshAllOpenUis();
+    }
+
+    private void OnAssignableMobStateChanged(Entity<WH40KSquadAssignableComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.OldMobState == args.NewMobState)
+            return;
 
         RefreshAllOpenUis();
     }

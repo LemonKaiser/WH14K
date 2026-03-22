@@ -94,6 +94,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
             return;
 
         ent.Comp.Enabled = false;
+        ent.Comp.LastScan = _timing.CurTime;
         ent.Comp.Blips.Clear();
         Dirty(ent);
         UpdateAppearance(ent);
@@ -189,22 +190,21 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
             if (!detector.Enabled || now < detector.NextScanAt)
                 continue;
 
-            detector.LastScan = now;
             detector.NextScanAt = now + GetRefreshRate(detector);
-            detector.Blips.Clear();
+            var newBlips = new List<WH40KIntelDetectorBlip>();
 
             if (!TryResolveScannerUser(uid, detector, out var scanner, out var scannerTeamId, out var hasTeam))
             {
-                Dirty(uid, detector);
-                UpdateAppearance((uid, detector));
+                CommitScanResults((uid, detector), newBlips, now);
+                _audio.PlayPvs(detector.ScanEmptySound, uid);
                 continue;
             }
 
             var scannerCoords = _transform.GetMapCoordinates(scanner);
             if (scannerCoords.MapId == MapId.Nullspace)
             {
-                Dirty(uid, detector);
-                UpdateAppearance((uid, detector));
+                CommitScanResults((uid, detector), newBlips, now);
+                _audio.PlayPvs(detector.ScanEmptySound, uid);
                 continue;
             }
 
@@ -225,22 +225,14 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
                 if (direction.LengthSquared() <= 0.0001f)
                     continue;
 
-                detector.Blips.Add(new WH40KIntelDetectorBlip(
+                newBlips.Add(new WH40KIntelDetectorBlip(
                     markerCoords,
                     Special: false,
                     Direction: Vector2.Normalize(direction)));
             }
 
-            Dirty(uid, detector);
-            UpdateAppearance((uid, detector));
-
-            if (detector.Blips.Count == 0)
-            {
-                _audio.PlayPvs(detector.ScanEmptySound, uid);
-                continue;
-            }
-
-            _audio.PlayPvs(detector.ScanSound, uid);
+            CommitScanResults((uid, detector), newBlips, now);
+            _audio.PlayPvs(newBlips.Count == 0 ? detector.ScanEmptySound : detector.ScanSound, uid);
         }
     }
 
@@ -251,6 +243,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
 
         ent.Comp.Enabled = !ent.Comp.Enabled;
         ent.Comp.LastUser = user;
+        ent.Comp.LastScan = _timing.CurTime;
         ent.Comp.Blips.Clear();
         ent.Comp.NextScanAt = ent.Comp.Enabled
             ? _timing.CurTime + GetRefreshRate(ent.Comp)
@@ -272,6 +265,66 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
     private static TimeSpan GetRefreshRate(WH40KIntelDetectorComponent detector)
     {
         return detector.Short ? detector.ShortRefresh : detector.LongRefresh;
+    }
+
+    private void CommitScanResults(
+        Entity<WH40KIntelDetectorComponent> detector,
+        List<WH40KIntelDetectorBlip> newBlips,
+        TimeSpan now)
+    {
+        newBlips.Sort(CompareBlips);
+
+        var currentBlips = detector.Comp.Blips;
+        var hadBlips = currentBlips.Count > 0;
+        var hasBlips = newBlips.Count > 0;
+
+        if (!hadBlips && !hasBlips)
+            return;
+
+        detector.Comp.LastScan = now;
+
+        if (!BlipListsEqual(currentBlips, newBlips))
+            detector.Comp.Blips = newBlips;
+
+        Dirty(detector);
+        UpdateAppearance(detector);
+    }
+
+    private static bool BlipListsEqual(
+        IReadOnlyList<WH40KIntelDetectorBlip> currentBlips,
+        IReadOnlyList<WH40KIntelDetectorBlip> newBlips)
+    {
+        if (currentBlips.Count != newBlips.Count)
+            return false;
+
+        for (var i = 0; i < currentBlips.Count; i++)
+        {
+            if (!currentBlips[i].Equals(newBlips[i]))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static int CompareBlips(WH40KIntelDetectorBlip left, WH40KIntelDetectorBlip right)
+    {
+        var positionOrder = left.Coordinates.Position.X.CompareTo(right.Coordinates.Position.X);
+        if (positionOrder != 0)
+            return positionOrder;
+
+        positionOrder = left.Coordinates.Position.Y.CompareTo(right.Coordinates.Position.Y);
+        if (positionOrder != 0)
+            return positionOrder;
+
+        var specialOrder = left.Special.CompareTo(right.Special);
+        if (specialOrder != 0)
+            return specialOrder;
+
+        var directionOrder = left.Direction.X.CompareTo(right.Direction.X);
+        if (directionOrder != 0)
+            return directionOrder;
+
+        return left.Direction.Y.CompareTo(right.Direction.Y);
     }
 
     private void UpdateAppearance(Entity<WH40KIntelDetectorComponent> detector)

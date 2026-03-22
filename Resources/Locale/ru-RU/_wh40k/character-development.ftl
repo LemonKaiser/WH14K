@@ -32,7 +32,7 @@ wh40k-character-development-note-locked-parent = Сначала откройте
 wh40k-character-development-note-locked-points = Для этого узла не хватает ещё { $missing } ОР.
 wh40k-character-development-confirm-title = Подтверждение плана
 wh40k-character-development-confirm-node = Подтверждение необратимо
-wh40k-character-development-confirm-description = В текущем плане { $nodes } узл. на { $cost } ОР. После подтверждения игрок не сможет сбросить эту прокачку самостоятельно. В будущем помочь со сбросом сможет только администрация, и это нужно учитывать при развитии персонажа. После подтверждения останется: { $remaining }.
+wh40k-character-development-confirm-description = В плане { $nodes } узл. на { $cost } ОР. Подтверждение необратимо: самостоятельный сброс недоступен. После подтверждения останется: { $remaining }.
 wh40k-character-development-confirm-state = Необратимо
 wh40k-character-development-confirm-cost = В плане: { $nodes } узл., { $cost } ОР
 

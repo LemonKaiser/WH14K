@@ -29,6 +29,7 @@ using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.MetaProgress;
 
@@ -134,6 +135,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private const string DefaultAchievementRewardLocKey = "wh40k-meta-progress-achievements-reward-none";
 
+	private static readonly TimeSpan BackgroundSnapshotPushDelay = TimeSpan.FromSeconds(0.5);
+
 	private const float RequestStateRateLimitPeriodSeconds = 1f;
 
 	private const int RequestStateRateLimitCount = 8;
@@ -176,6 +179,9 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	[Dependency]
 	private readonly PlayTimeTrackingManager _playTime = default!;
 
+	[Dependency]
+	private readonly IGameTiming _timing = default!;
+
 	private readonly Dictionary<NetUserId, RuntimeProgressState> _states = new Dictionary<NetUserId, RuntimeProgressState>();
 
 	private readonly Dictionary<NetUserId, int> _roundKillXpGrants = new Dictionary<NetUserId, int>();
@@ -199,6 +205,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private readonly object _persistQueueLock = new object();
 
 	private readonly Dictionary<NetUserId, Task> _persistQueueTail = new Dictionary<NetUserId, Task>();
+
+	private readonly Dictionary<NetUserId, TimeSpan> _queuedSnapshotPushes = new Dictionary<NetUserId, TimeSpan>();
+
+	private readonly HashSet<NetUserId> _networkSnapshotSubscribers = new HashSet<NetUserId>();
 
 	private ISawmill _sawmill;
 
@@ -270,6 +280,22 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		if (array.Length != 0)
 		{
 			_task.BlockWaitOnTask(Task.WhenAll(array));
+		}
+	}
+
+	public override void Update(float frameTime)
+	{
+		base.Update(frameTime);
+		if (_queuedSnapshotPushes.Count == 0)
+		{
+			return;
+		}
+		TimeSpan curTime = _timing.CurTime;
+		NetUserId[] array = _queuedSnapshotPushes.Where((KeyValuePair<NetUserId, TimeSpan> entry) => entry.Value <= curTime).Select((KeyValuePair<NetUserId, TimeSpan> entry) => entry.Key).ToArray();
+		foreach (NetUserId userId in array)
+		{
+			_queuedSnapshotPushes.Remove(userId);
+			PushSnapshotIfOnline(userId);
 		}
 	}
 
@@ -718,6 +744,15 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_setDecorationRateLimits.Clear();
 		_confirmDevelopmentRateLimits.Clear();
 		_processedMissionOutcomeRewardKeys.Clear();
+		_networkSnapshotSubscribers.IntersectWith(connectedUsers);
+		if (_queuedSnapshotPushes.Count > 0)
+		{
+			NetUserId[] array2 = _queuedSnapshotPushes.Keys.Where((NetUserId userId) => !connectedUsers.Contains(userId)).ToArray();
+			foreach (NetUserId key2 in array2)
+			{
+				_queuedSnapshotPushes.Remove(key2);
+			}
+		}
 		_lastProcessedRoundWinRewardRoundId = -1;
 	}
 
@@ -1257,7 +1292,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			TraceStats($"Stat event changed achievements: user={userId}, key={ev.Entry.Key}.");
 			value.StateVersion++;
 			QueuePersistState(userId);
-			PushSnapshotIfOnline(userId);
+			QueueSnapshotIfOnline(userId, BackgroundSnapshotPushDelay);
 		}
 	}
 
@@ -1266,6 +1301,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		NetUserId userId = args.SenderSession.UserId;
 		if (!IsRateLimited(userId, _requestStateRateLimits, 1f, 8))
 		{
+			MarkNetworkSnapshotInterested(userId);
 			EnsureState(userId, args.SenderSession);
 			SendSnapshot(args.SenderSession);
 		}
@@ -1276,6 +1312,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		NetUserId userId = args.SenderSession.UserId;
 		if (!IsRateLimited(userId, _setDecorationRateLimits, 1f, 4))
 		{
+			MarkNetworkSnapshotInterested(userId);
 			EnsureState(userId, args.SenderSession);
 			if (!TrySetDecorationSelection(userId, ev.Category, ev.DecorationId, out string _, out string error))
 			{
@@ -1290,6 +1327,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		NetUserId userId = args.SenderSession.UserId;
 		if (!IsRateLimited(userId, _confirmDevelopmentRateLimits, 1f, 4))
 		{
+			MarkNetworkSnapshotInterested(userId);
 			EnsureState(userId, args.SenderSession);
 			if (!TryConfirmDevelopmentPlan(userId, ev.NodeIds, out int unlockedCount, out string error))
 			{
@@ -1321,6 +1359,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			_requestStateRateLimits.Remove(args.Session.UserId);
 			_setDecorationRateLimits.Remove(args.Session.UserId);
 			_confirmDevelopmentRateLimits.Remove(args.Session.UserId);
+			_networkSnapshotSubscribers.Remove(args.Session.UserId);
+			_queuedSnapshotPushes.Remove(args.Session.UserId);
 		}
 		else
 		{
@@ -2424,10 +2464,38 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		return true;
 	}
 
+	private void MarkNetworkSnapshotInterested(NetUserId userId)
+	{
+		_networkSnapshotSubscribers.Add(userId);
+	}
+
+	private void QueueSnapshotIfOnline(NetUserId userId, TimeSpan delay)
+	{
+		if (!_players.TryGetSessionById(userId, out ICommonSession session) || session.Status == SessionStatus.Disconnected)
+		{
+			return;
+		}
+		TimeSpan value = _timing.CurTime + delay;
+		if (_queuedSnapshotPushes.TryGetValue(userId, out var value2) && value2 <= value)
+		{
+			return;
+		}
+		_queuedSnapshotPushes[userId] = value;
+	}
+
+	private bool ShouldSendSnapshotToClient(ICommonSession session)
+	{
+		return session.Status != SessionStatus.Disconnected && _networkSnapshotSubscribers.Contains(session.UserId);
+	}
+
 	private void SendSnapshot(ICommonSession session)
 	{
+		_queuedSnapshotPushes.Remove(session.UserId);
 		WH40KMetaProgressSnapshot snapshot = GetSnapshot(session.UserId);
-		RaiseNetworkEvent(new WH40KMetaProgressStateEvent(snapshot), session);
+		if (ShouldSendSnapshotToClient(session))
+		{
+			RaiseNetworkEvent(new WH40KMetaProgressStateEvent(snapshot), session);
+		}
 		this.SnapshotPushed?.Invoke(session.UserId, snapshot);
 	}
 

@@ -16,4 +16,10 @@ public sealed partial class WH40KWarpResourceComponent : Component
 
     [DataField("regenPerSecond"), AutoNetworkedField]
     public float RegenPerSecond = 3f;
+
+    /// <summary>
+    /// Server-side debounce for passive regen replication.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextNetworkSyncAt;
 }
