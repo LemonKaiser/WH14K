@@ -46,6 +46,7 @@
     key: enum.WH40KCommandNodeUiKey.Key
   - type: WH40KCommandNode
     teamId: Imperium
+    passiveFrontPointsPerInterval: 2
     trackedCategories:
     - VoxBasics
     - VoxWeaponry
@@ -128,6 +129,7 @@
       key: enum.WH40KCommandNodeUiKey.Key
     - type: WH40KCommandNode
       teamId: Heretics
+      passiveFrontPointsPerInterval: 2
       trackedCategories:
       - AltarBasics
       - AltarWeaponry

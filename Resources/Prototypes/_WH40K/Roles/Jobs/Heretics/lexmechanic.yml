@@ -7,10 +7,10 @@
   icon: "JobIconHLexmechanic"
   supervisors: job-supervisors-ce
   canBeAntag: false
-  special:
-  - !type:AddComponentSpecial
-    components:
-      - type: WH40KChaosGiftRole
+#  special:
+#  - !type:AddComponentSpecial
+#    components:
+#      - type: WH40KChaosGiftRole
   access:
   - Maintenance
   - Engineering
