@@ -256,11 +256,11 @@
     parents: [wep_root]
     cost: 11
     minBaseLevel: 2
-    minRoundTimeSeconds: 360
+    minRoundTimeSeconds: 3
     technologyUnlocks: [WH40KWeaponryAuthLeft2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumBolter]
-      Heretics: [WH40KHereticsSmg]
+      Imperium: [WH40KImperiumBolter, WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineRifle]
+      Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineRifle]
   - id: wep_right_2
     domain: weaponry
     titleKey: wh40k-command-node-upgrade-tree-node-wep-right-2-title
@@ -343,8 +343,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumCombatMedkit]
-      Heretics: [WH40KHereticsCombatMedkit]
+      Imperium: [WH40KImperiumCombatMedkit, WH40KImperiumPlastic]
+      Heretics: [WH40KHereticsCombatMedkit, WH40KHereticsPlastic]
   - id: eqp_left_2
     domain: equipment
     titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-title

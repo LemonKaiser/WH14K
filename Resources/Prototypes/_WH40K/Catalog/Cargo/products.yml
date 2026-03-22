@@ -19,6 +19,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumPlastic
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: CrateMaterialPlastic
+  cost: 2000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumLasgun
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -35,6 +45,46 @@
     state: icon
   product: WeaponStubRifle
   cost: 2500
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineSMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubSMG
+  cost: 100
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazinePistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubPistol
+  cost: 75
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubMG
+  cost: 200
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineRifle
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubRifle
+  cost: 75
   category: cargoproduct-category-name-armory
   group: WH40KImperiumMarket
 
@@ -65,6 +115,66 @@
     state: icon
   product: WeaponLaserPlasmagun
   cost: 19000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubSMG2
+  cost: 9000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubSMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubPistol
+  cost: 1000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubSMG3
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubSMG3
+  cost: 9000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubMG
+  cost: 13000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubShotgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubShotgun
+  cost: 7000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumStubLMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubLMG
+  cost: 13000
   category: cargoproduct-category-name-armory
   group: WH40KImperiumMarket
 
@@ -259,6 +369,16 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsPlastic
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: CrateMaterialPlastic
+  cost: 2000
+  category: cargoproduct-category-name-medical
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsLasgun
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -289,14 +409,105 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineSMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubSMG
+  cost: 100
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazinePistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubPistol
+  cost: 75
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubMG
+  cost: 200
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineRifle
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStubRifle
+  cost: 75
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsSmg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponChsStubSMG2
+  cost: 9000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubSMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubSMG
+  cost: 1000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubSMG3
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponChsStubSMG3
+  cost: 9000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubMG
   cost: 13000
   category: cargoproduct-category-name-armory
   group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubShotgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponChsStubShotgun
+  cost: 7000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsStubLMG
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponStubLMG
+  cost: 13000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
 
 - type: cargoProduct
   id: WH40KHereticsBolterPistol
