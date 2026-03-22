@@ -23,6 +23,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 	private readonly IPrototypeManager _prototypeManager = default!;
 
 	private const string RewardTableId = "WH40KMetaLevelRewardTableDefault";
+	private const float InfoDescriptionMaxWidth = 720f;
 
 	private readonly WH40KCharacterDevelopmentViewport _viewport;
 
@@ -127,6 +128,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		{
 			HorizontalExpand = true,
 			VerticalExpand = false,
+			MaxWidth = InfoDescriptionMaxWidth,
 			MinHeight = 44f,
 			Visible = true
 		};
@@ -420,7 +422,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 
 	private void RefreshInfoPanel()
 	{
-		if (_confirmPlanHovered)
+		if (_confirmPlanHovered && _viewport.PlannedNodeCount > 0)
 		{
 			ApplyConfirmWarningInfo();
 			return;
