@@ -5,7 +5,7 @@
   suffix: WH40K, АдМехи, Марс
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_mars.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_mars.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -14,7 +14,7 @@
   suffix: WH40K, АдМехи, Агрипинаа
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_agripinaa.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_agripinaa.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -23,7 +23,7 @@
   suffix: WH40K, АдМехи, Грайя
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_graia.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_graia.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -32,7 +32,7 @@
   suffix: WH40K, АдМехи, Люций
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_lucius.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_lucius.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -41,7 +41,7 @@
   suffix: WH40K, АдМехи, Металика
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_metalica.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_metalica.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -50,7 +50,7 @@
   suffix: WH40K, АдМехи, Риза
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_riza.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_riza.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -59,7 +59,7 @@
   suffix: WH40K, АдМехи, Стигии VIII
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/techpriest_stygies_viii.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/techpriest_stygies_viii.rsi
 
 - type: entity
   parent: ClothingNeckBase
@@ -68,4 +68,51 @@
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Robes/genetor_mars.rsi
+    sprite: _WH40K/Clothing/Neck/Robes/AM/genetor_mars.rsi
+
+# Тёмный Механикум
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeTechpriestMarsChaos
+  description: desc-darkmech-m
+  suffix: WH40K, ТёмнМех, Марс
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_mars.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeTechpriestSamexChaos
+  description: desc-darkmech-sam
+  suffix: WH40K, ТёмнМех, Самех
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_samex.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeTechpriestSarumChaos
+  description: desc-darkmech-sar
+  suffix: WH40K, ТёмнМех, Сарум
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_sarum.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeTechpriestXanaChaos
+  description: desc-darkmech-xan
+  suffix: WH40K, ТёмнМех, Ксана II
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_xana_ii.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeGenetorTechpriestMarsChaos
+  description: desc-gen-darkmech-m
+  suffix: WH40K, ТёмнМех
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/genetor_mars.rsi

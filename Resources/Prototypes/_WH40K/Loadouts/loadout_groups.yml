@@ -11,6 +11,15 @@
   - RobeTechpriestStygiesVIII
 
 - type: loadoutGroup
+  id: HTechpriestNeck
+  name: loadout-group-techpriest-neck
+  loadouts:
+  - RobeTechpriestChaos
+  - RobeTechpriestSamex
+  - RobeTechpriestSarum
+  - RobeTechpriestXanaII
+
+- type: loadoutGroup
   id: TechpriestMask
   name: loadout-group-techpriest-mask
   minLimit: 0
