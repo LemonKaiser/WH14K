@@ -42,13 +42,15 @@ public sealed class ManipulatorIntegrationTests
                 "Manipulator entity did not replicate to the client.");
             Assert.That(clientManipulator, Is.Not.Null);
             Assert.That(entMan.TryGetComponent<WH40KConveyorManipulatorComponent>(clientManipulator!.Value, out var component), Is.True);
+            Assert.That(component, Is.Not.Null);
+            var clientComponent = component!;
 
             Assert.Multiple(() =>
             {
-                Assert.That(component.TransferCooldown, Is.EqualTo(0.2f).Within(0.0001f));
-                Assert.That(component.TransferDuration, Is.EqualTo(0.45f).Within(0.0001f));
-                Assert.That(component.ArcHeight, Is.EqualTo(0.3f).Within(0.0001f));
-                Assert.That(component.RequirePowered, Is.True);
+                Assert.That(clientComponent.TransferCooldown, Is.EqualTo(0.2f).Within(0.0001f));
+                Assert.That(clientComponent.TransferDuration, Is.EqualTo(0.45f).Within(0.0001f));
+                Assert.That(clientComponent.ArcHeight, Is.EqualTo(0.3f).Within(0.0001f));
+                Assert.That(clientComponent.RequirePowered, Is.True);
             });
         });
 
@@ -73,16 +75,18 @@ public sealed class ManipulatorIntegrationTests
                 "Manipulator entity disappeared from the client before the verification tick.");
             Assert.That(clientManipulator, Is.Not.Null);
             Assert.That(entMan.TryGetComponent<WH40KConveyorManipulatorComponent>(clientManipulator!.Value, out var component), Is.True);
+            Assert.That(component, Is.Not.Null);
+            var clientComponent = component!;
 
             Assert.Multiple(() =>
             {
-                Assert.That(component.TransferCooldown, Is.EqualTo(0.2f).Within(0.0001f),
+                Assert.That(clientComponent.TransferCooldown, Is.EqualTo(0.2f).Within(0.0001f),
                     "TransferCooldown leaked to the client even though it should be server-only.");
-                Assert.That(component.TransferDuration, Is.EqualTo(0.45f).Within(0.0001f),
+                Assert.That(clientComponent.TransferDuration, Is.EqualTo(0.45f).Within(0.0001f),
                     "TransferDuration leaked to the client even though it should be server-only.");
-                Assert.That(component.ArcHeight, Is.EqualTo(0.3f).Within(0.0001f),
+                Assert.That(clientComponent.ArcHeight, Is.EqualTo(0.3f).Within(0.0001f),
                     "ArcHeight leaked to the client even though it should be server-only.");
-                Assert.That(component.RequirePowered, Is.True,
+                Assert.That(clientComponent.RequirePowered, Is.True,
                     "RequirePowered leaked to the client even though it should be server-only.");
             });
         });
