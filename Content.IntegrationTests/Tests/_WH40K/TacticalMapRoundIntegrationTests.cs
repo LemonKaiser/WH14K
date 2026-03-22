@@ -18,6 +18,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests._WH40K;
@@ -126,6 +127,73 @@ public sealed class TacticalMapRoundIntegrationTests
                 "Tactical-map allied markers did not include a same-team tracked mob without ActorComponent.");
             Assert.That(labels, Does.Not.Contain("Tactical Enemy"),
                 "Tactical-map allied markers leaked an opposing-team mob into the same-team overlay.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task TacticalMapOverlayRefreshIsThrottledButStillCatchesUp()
+    {
+        await using var pair = await StartWh40KRoundAsync();
+        var context = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
+
+        EntityUid ally = default;
+        const string allyName = "Moving Ally";
+        var movedPosition = Vector2.Lerp(context.PointA, context.PointB, 0.35f);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var entMan = pair.Server.ResolveDependency<IEntityManager>();
+            var metaData = entMan.EntitySysManager.GetEntitySystem<MetaDataSystem>();
+
+            ally = entMan.SpawnEntity("MobHuman", new EntityCoordinates(context.GridUid, context.PointB));
+            entMan.EnsureComponent<WH40KTeamMemberComponent>(ally).TeamId = Imperium;
+            metaData.SetEntityName(ally, allyName);
+        });
+
+        await pair.RunTicksSync(20);
+
+        var initialState = await OpenTabletAndReadStateAsync(pair, context.Tablet, context.ClientTablet, Imperium);
+        var initialMarker = initialState.AlliedMarkers.Single(marker => marker.Label == allyName);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var entMan = pair.Server.ResolveDependency<IEntityManager>();
+            var xform = entMan.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
+            xform.SetCoordinates(ally, new EntityCoordinates(context.GridUid, movedPosition));
+        });
+
+        await RunForServerTimeAsync(pair, TimeSpan.FromMilliseconds(250));
+
+        await pair.Client.WaitAssertion(() =>
+        {
+            var throttledState = GetCachedState(pair, context.ClientTablet);
+            var throttledMarker = throttledState.AlliedMarkers.Single(marker => marker.Label == allyName);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(throttledState.OverlayRevision, Is.EqualTo(initialState.OverlayRevision),
+                    "Tactical-map overlay refreshed again before the server-side throttle window elapsed.");
+                Assert.That(Vector2.Distance(throttledMarker.Position, initialMarker.Position), Is.LessThan(0.001f),
+                    "Allied marker moved on the client before the throttled overlay refresh window elapsed.");
+            });
+        });
+
+        await RunForServerTimeAsync(pair, TimeSpan.FromMilliseconds(400));
+
+        await pair.Client.WaitAssertion(() =>
+        {
+            var refreshedState = GetCachedState(pair, context.ClientTablet);
+            var refreshedMarker = refreshedState.AlliedMarkers.Single(marker => marker.Label == allyName);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(refreshedState.OverlayRevision, Is.Not.EqualTo(initialState.OverlayRevision),
+                    "Tactical-map overlay never refreshed after the throttle window elapsed.");
+                Assert.That(Vector2.Distance(refreshedMarker.Position, movedPosition), Is.LessThan(0.15f),
+                    "Allied marker did not catch up to the moved server position after the throttle window elapsed.");
+            });
         });
 
         await pair.CleanReturnAsync();
@@ -545,6 +613,36 @@ public sealed class TacticalMapRoundIntegrationTests
         });
 
         return state!;
+    }
+
+    private static async Task RunForServerTimeAsync(TestPair pair, TimeSpan duration)
+    {
+        if (duration <= TimeSpan.Zero)
+            return;
+
+        var targetTime = TimeSpan.Zero;
+        await pair.Server.WaitPost(() =>
+        {
+            var timing = pair.Server.ResolveDependency<IGameTiming>();
+            targetTime = timing.CurTime + duration;
+        });
+
+        for (var i = 0; i < 240; i++)
+        {
+            await pair.RunTicksSync(1);
+
+            var reachedTarget = false;
+            await pair.Server.WaitPost(() =>
+            {
+                var timing = pair.Server.ResolveDependency<IGameTiming>();
+                reachedTarget = timing.CurTime >= targetTime;
+            });
+
+            if (reachedTarget)
+                return;
+        }
+
+        Assert.Fail($"Server time failed to advance by {duration} within the allotted tick budget.");
     }
 
     private static async Task SeedServerFogAsync(

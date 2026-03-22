@@ -90,41 +90,24 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
             return;
         }
 
-        var modifierComp = EnsureComp<WH40KCharacterDevelopmentModifiersComponent>(uid);
-        modifierComp.HungerDecayMultiplier = modifiers.HungerDecayMultiplier;
-        modifierComp.ThirstDecayMultiplier = modifiers.ThirstDecayMultiplier;
-        modifierComp.HungerSatiationMultiplier = modifiers.HungerSatiationMultiplier;
-        modifierComp.ThirstSatiationMultiplier = modifiers.ThirstSatiationMultiplier;
-        modifierComp.EatDelayMultiplier = modifiers.EatDelayMultiplier;
-        modifierComp.StaminaSprintDrainMultiplier = modifiers.StaminaSprintDrainMultiplier;
-        modifierComp.StaminaWalkRecoveryMultiplier = modifiers.StaminaWalkRecoveryMultiplier;
-        modifierComp.StaminaCooldownMultiplier = modifiers.StaminaCooldownMultiplier;
-        modifierComp.MaxSaturationMultiplier = modifiers.MaxSaturationMultiplier;
-        modifierComp.SuffocationDamageMultiplier = modifiers.SuffocationDamageMultiplier;
-        modifierComp.BloodRefreshMultiplier = modifiers.BloodRefreshMultiplier;
-        modifierComp.BleedReductionMultiplier = modifiers.BleedReductionMultiplier;
-        modifierComp.BloodlossThresholdMultiplier = modifiers.BloodlossThresholdMultiplier;
-        modifierComp.MaxBloodVolumeMultiplier = modifiers.MaxBloodVolumeMultiplier;
-        modifierComp.ToxinFilterMultiplier = modifiers.ToxinFilterMultiplier;
-        modifierComp.StaminaIncomingDamageMultiplier = modifiers.StaminaIncomingDamageMultiplier;
-        modifierComp.StaminaCritThresholdMultiplier = modifiers.StaminaCritThresholdMultiplier;
-        modifierComp.ForceStandStaminaMultiplier = modifiers.ForceStandStaminaMultiplier;
-        modifierComp.StaminaAfterCritRecoveryMultiplier = modifiers.StaminaAfterCritRecoveryMultiplier;
-        modifierComp.StaminaCritStunTimeMultiplier = modifiers.StaminaCritStunTimeMultiplier;
-        modifierComp.KnockdownStandUpTimeMultiplier = modifiers.KnockdownStandUpTimeMultiplier;
-        modifierComp.SelfHealPenaltyMultiplier = modifiers.SelfHealPenaltyMultiplier;
-        modifierComp.SelfMedicalDelayMultiplier = modifiers.SelfMedicalDelayMultiplier;
-        modifierComp.SelfHealingEffectMultiplier = modifiers.SelfHealingEffectMultiplier;
-        modifierComp.DrunkDurationMultiplier = modifiers.DrunkDurationMultiplier;
-        modifierComp.JitterDurationMultiplier = modifiers.JitterDurationMultiplier;
-        modifierComp.DrowsinessDurationMultiplier = modifiers.DrowsinessDurationMultiplier;
-        modifierComp.VomitSlowdownDurationMultiplier = modifiers.VomitSlowdownDurationMultiplier;
-        modifierComp.StomachImpulseUnlocked = modifiers.StomachImpulseUnlocked;
-        modifierComp.WarFurnaceUnlocked = modifiers.WarFurnaceUnlocked;
-        modifierComp.KidneyPurgeUnlocked = modifiers.KidneyPurgeUnlocked;
-        Dirty(uid, modifierComp);
+        var hadModifierComp = TryComp(uid, out WH40KCharacterDevelopmentModifiersComponent? modifierComp);
+        modifierComp ??= EnsureComp<WH40KCharacterDevelopmentModifiersComponent>(uid);
 
-        _abilities.SyncAbilities(uid, modifierComp);
+        var hadStomachImpulse = modifierComp.StomachImpulseUnlocked;
+        var hadWarFurnace = modifierComp.WarFurnaceUnlocked;
+        var hadKidneyPurge = modifierComp.KidneyPurgeUnlocked;
+        var modifierChanged = ApplyModifierComponentValues(modifierComp, modifiers);
+
+        if (!hadModifierComp || modifierChanged)
+            Dirty(uid, modifierComp);
+
+        if ((!hadModifierComp && (modifierComp.StomachImpulseUnlocked || modifierComp.WarFurnaceUnlocked || modifierComp.KidneyPurgeUnlocked)) ||
+            hadStomachImpulse != modifierComp.StomachImpulseUnlocked ||
+            hadWarFurnace != modifierComp.WarFurnaceUnlocked ||
+            hadKidneyPurge != modifierComp.KidneyPurgeUnlocked)
+        {
+            _abilities.SyncAbilities(uid, modifierComp);
+        }
 
         if (TryComp(uid, out HungerComponent? hunger))
             ApplyHunger(uid, hunger, baseline, modifiers.HungerDecayMultiplier);
@@ -200,7 +183,11 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
             baseline.HungerBaseDecayRate = hunger.BaseDecayRate;
         }
 
-        _hunger.SetBaseDecayRate(uid, baseline.HungerBaseDecayRate * multiplier, hunger);
+        var targetBaseDecayRate = baseline.HungerBaseDecayRate * multiplier;
+        if (CloseTo(hunger.BaseDecayRate, targetBaseDecayRate))
+            return;
+
+        _hunger.SetBaseDecayRate(uid, targetBaseDecayRate, hunger);
     }
 
     private void ApplyThirst(EntityUid uid, ThirstComponent thirst, WH40KCharacterDevelopmentBaselineComponent baseline, float multiplier)
@@ -211,7 +198,11 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
             baseline.ThirstBaseDecayRate = thirst.BaseDecayRate;
         }
 
-        _thirst.SetBaseDecayRate(uid, baseline.ThirstBaseDecayRate * multiplier, thirst);
+        var targetBaseDecayRate = baseline.ThirstBaseDecayRate * multiplier;
+        if (CloseTo(thirst.BaseDecayRate, targetBaseDecayRate))
+            return;
+
+        _thirst.SetBaseDecayRate(uid, targetBaseDecayRate, thirst);
     }
 
     private void ApplyStamina(
@@ -231,14 +222,20 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
             baseline.StaminaStunTime = stamina.StunTime;
         }
 
-        stamina.SprintDrain = baseline.StaminaSprintDrain * modifiers.StaminaSprintDrainMultiplier;
-        stamina.WalkRecovery = baseline.StaminaWalkRecovery * modifiers.StaminaWalkRecoveryMultiplier;
-        stamina.Cooldown = baseline.StaminaCooldown * modifiers.StaminaCooldownMultiplier;
-        stamina.AfterCritDecayMultiplier = baseline.StaminaAfterCritDecayMultiplier * modifiers.StaminaAfterCritRecoveryMultiplier;
-        stamina.ForceStandStamina = baseline.StaminaForceStandStamina * modifiers.ForceStandStaminaMultiplier;
-        stamina.StunTime = ScaleTimeSpan(baseline.StaminaStunTime, modifiers.StaminaCritStunTimeMultiplier);
+        var changed = false;
+        changed |= SetIfDifferent(ref stamina.SprintDrain, baseline.StaminaSprintDrain * modifiers.StaminaSprintDrainMultiplier);
+        changed |= SetIfDifferent(ref stamina.WalkRecovery, baseline.StaminaWalkRecovery * modifiers.StaminaWalkRecoveryMultiplier);
+        changed |= SetIfDifferent(ref stamina.Cooldown, baseline.StaminaCooldown * modifiers.StaminaCooldownMultiplier);
+        changed |= SetIfDifferent(ref stamina.AfterCritDecayMultiplier, baseline.StaminaAfterCritDecayMultiplier * modifiers.StaminaAfterCritRecoveryMultiplier);
+        changed |= SetIfDifferent(ref stamina.ForceStandStamina, baseline.StaminaForceStandStamina * modifiers.ForceStandStaminaMultiplier);
+        changed |= SetIfDifferent(ref stamina.StunTime, ScaleTimeSpan(baseline.StaminaStunTime, modifiers.StaminaCritStunTimeMultiplier));
+
+        var previousCritThreshold = stamina.CritThreshold;
         _staminaSystem.RefreshStaminaCritThreshold((uid, stamina));
-        Dirty(uid, stamina);
+        changed |= !CloseTo(previousCritThreshold, stamina.CritThreshold);
+
+        if (changed)
+            Dirty(uid, stamina);
     }
 
     private void ApplyRespirator(
@@ -276,12 +273,96 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
             baseline.MaxBloodVolumeModifier = bloodstream.MaxVolumeModifier;
         }
 
+        var targetRefreshAmount = FixedPoint2.New(baseline.BloodRefreshAmount.Float() * modifiers.BloodRefreshMultiplier);
+        var targetBleedReductionAmount = baseline.BleedReductionAmount * modifiers.BleedReductionMultiplier;
+        var targetBloodlossThreshold = baseline.BloodlossThreshold * modifiers.BloodlossThresholdMultiplier;
+        var targetMaxVolumeModifier = baseline.MaxBloodVolumeModifier * modifiers.MaxBloodVolumeMultiplier;
+
+        if (bloodstream.BloodRefreshAmount == targetRefreshAmount &&
+            CloseTo(bloodstream.BleedReductionAmount, targetBleedReductionAmount) &&
+            CloseTo(bloodstream.BloodlossThreshold, targetBloodlossThreshold) &&
+            CloseTo(bloodstream.MaxVolumeModifier, targetMaxVolumeModifier))
+        {
+            return;
+        }
+
         _bloodstream.SetBloodstreamProfile(
             (uid, bloodstream),
-            FixedPoint2.New(baseline.BloodRefreshAmount.Float() * modifiers.BloodRefreshMultiplier),
-            baseline.BleedReductionAmount * modifiers.BleedReductionMultiplier,
-            baseline.BloodlossThreshold * modifiers.BloodlossThresholdMultiplier,
-            baseline.MaxBloodVolumeModifier * modifiers.MaxBloodVolumeMultiplier);
+            targetRefreshAmount,
+            targetBleedReductionAmount,
+            targetBloodlossThreshold,
+            targetMaxVolumeModifier);
+    }
+
+    private static bool ApplyModifierComponentValues(
+        WH40KCharacterDevelopmentModifiersComponent modifierComp,
+        WH40KCharacterDevelopmentModifierSet modifiers)
+    {
+        var changed = false;
+        changed |= SetIfDifferent(ref modifierComp.HungerDecayMultiplier, modifiers.HungerDecayMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.ThirstDecayMultiplier, modifiers.ThirstDecayMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.HungerSatiationMultiplier, modifiers.HungerSatiationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.ThirstSatiationMultiplier, modifiers.ThirstSatiationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.EatDelayMultiplier, modifiers.EatDelayMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaSprintDrainMultiplier, modifiers.StaminaSprintDrainMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaWalkRecoveryMultiplier, modifiers.StaminaWalkRecoveryMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaCooldownMultiplier, modifiers.StaminaCooldownMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.MaxSaturationMultiplier, modifiers.MaxSaturationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.SuffocationDamageMultiplier, modifiers.SuffocationDamageMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.BloodRefreshMultiplier, modifiers.BloodRefreshMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.BleedReductionMultiplier, modifiers.BleedReductionMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.BloodlossThresholdMultiplier, modifiers.BloodlossThresholdMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.MaxBloodVolumeMultiplier, modifiers.MaxBloodVolumeMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.ToxinFilterMultiplier, modifiers.ToxinFilterMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaIncomingDamageMultiplier, modifiers.StaminaIncomingDamageMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaCritThresholdMultiplier, modifiers.StaminaCritThresholdMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.ForceStandStaminaMultiplier, modifiers.ForceStandStaminaMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaAfterCritRecoveryMultiplier, modifiers.StaminaAfterCritRecoveryMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StaminaCritStunTimeMultiplier, modifiers.StaminaCritStunTimeMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.KnockdownStandUpTimeMultiplier, modifiers.KnockdownStandUpTimeMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.SelfHealPenaltyMultiplier, modifiers.SelfHealPenaltyMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.SelfMedicalDelayMultiplier, modifiers.SelfMedicalDelayMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.SelfHealingEffectMultiplier, modifiers.SelfHealingEffectMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.DrunkDurationMultiplier, modifiers.DrunkDurationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.JitterDurationMultiplier, modifiers.JitterDurationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.DrowsinessDurationMultiplier, modifiers.DrowsinessDurationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.VomitSlowdownDurationMultiplier, modifiers.VomitSlowdownDurationMultiplier);
+        changed |= SetIfDifferent(ref modifierComp.StomachImpulseUnlocked, modifiers.StomachImpulseUnlocked);
+        changed |= SetIfDifferent(ref modifierComp.WarFurnaceUnlocked, modifiers.WarFurnaceUnlocked);
+        changed |= SetIfDifferent(ref modifierComp.KidneyPurgeUnlocked, modifiers.KidneyPurgeUnlocked);
+        return changed;
+    }
+
+    private static bool SetIfDifferent(ref float current, float next)
+    {
+        if (CloseTo(current, next))
+            return false;
+
+        current = next;
+        return true;
+    }
+
+    private static bool SetIfDifferent(ref bool current, bool next)
+    {
+        if (current == next)
+            return false;
+
+        current = next;
+        return true;
+    }
+
+    private static bool SetIfDifferent(ref TimeSpan current, TimeSpan next)
+    {
+        if (current == next)
+            return false;
+
+        current = next;
+        return true;
+    }
+
+    private static bool CloseTo(float left, float right)
+    {
+        return MathF.Abs(left - right) <= 0.0001f;
     }
 
     private static DamageSpecifier ScaleDamageSpecifier(DamageSpecifier source, float multiplier)

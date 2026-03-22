@@ -19,6 +19,7 @@ public sealed class WH40KTacticalMapStateSystem : EntitySystem
         base.Initialize();
 
         SubscribeNetworkEvent<WH40KTacticalMapStateEvent>(OnStateEvent);
+        SubscribeNetworkEvent<WH40KTacticalMapOverlayEvent>(OnOverlayEvent);
         SubscribeNetworkEvent<WH40KTacticalMapLiveRefreshEvent>(OnLiveRefreshEvent);
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
@@ -57,6 +58,39 @@ public sealed class WH40KTacticalMapStateSystem : EntitySystem
 
         if (_ui.TryGetOpenUi<WH40KTacticalMapBoundUserInterface>(tacticalMapUid, WH40KTacticalMapUiKey.Key, out var bui))
             bui.ApplyTacticalState(ev.State);
+    }
+
+    private void OnOverlayEvent(WH40KTacticalMapOverlayEvent ev, EntitySessionEventArgs args)
+    {
+        var tacticalMapUid = GetEntity(ev.TacticalMap);
+        if (tacticalMapUid == EntityUid.Invalid)
+            return;
+
+        if (!_cachedStates.TryGetValue(tacticalMapUid, out var cachedState))
+            return;
+
+        var mergedState = new WH40KTacticalMapBuiState(
+            cachedState.TargetGrid,
+            cachedState.GridName,
+            cachedState.SnapshotTexturePath,
+            cachedState.TrackedEntity,
+            cachedState.CanAnnotate,
+            cachedState.LiveRefreshEnabled,
+            cachedState.TeamId,
+            cachedState.FogEnabled,
+            cachedState.FogChunkSize,
+            cachedState.RevealRevision,
+            cachedState.RevealedChunks,
+            cachedState.AnnotationRevision,
+            cachedState.AnnotationStrokes,
+            ev.State.OverlayRevision,
+            ev.State.AlliedMarkers,
+            ev.State.CapturePoints);
+
+        _cachedStates[tacticalMapUid] = mergedState;
+
+        if (_ui.TryGetOpenUi<WH40KTacticalMapBoundUserInterface>(tacticalMapUid, WH40KTacticalMapUiKey.Key, out var bui))
+            bui.ApplyTacticalState(mergedState);
     }
 
     private void OnLiveRefreshEvent(WH40KTacticalMapLiveRefreshEvent ev, EntitySessionEventArgs args)
