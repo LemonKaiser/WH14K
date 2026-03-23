@@ -200,6 +200,14 @@
     neck: ClothingNeckGoldmedal
 
 - type: loadout
+  id: WH40KGorgetZero
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  equipment:
+    neck: Gorjet
+
+- type: loadout
   id: WH40KGorget
   effects:
   - !type:GroupLoadoutEffect
@@ -218,6 +226,14 @@
     requiredLevel: 21
   equipment:
     neck: Colonelcloak
+
+- type: loadout
+  id: WH40KChaosNecklaceZero
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  equipment:
+    neck: NecklaceChaosCultistReflectWeak
 
 - type: loadout
   id: WH40KChaosNecklace

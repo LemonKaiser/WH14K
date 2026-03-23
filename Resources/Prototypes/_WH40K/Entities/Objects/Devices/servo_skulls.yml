@@ -81,7 +81,7 @@
   parent: WH40KServoSkullMobBase
   name: servo skull
   description: A friendly servo skull awaiting a command.
-  suffix: WH40K
+  suffix: WH40K, non-activated
   components:
   - type: Sprite
     drawdepth: Mobs

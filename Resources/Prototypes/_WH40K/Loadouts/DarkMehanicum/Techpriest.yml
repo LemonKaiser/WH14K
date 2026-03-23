@@ -2,7 +2,7 @@
   id: RobeTechpriestChaos
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 1
+    requiredLevel: 0
   equipment:
     neck: ClothingNeckRobeTechpriestMarsChaos
 
@@ -10,7 +10,7 @@
   id: RobeTechpriestSamex
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 3
+    requiredLevel: 1
   equipment:
     neck: ClothingNeckRobeTechpriestSamexChaos
 
@@ -18,7 +18,7 @@
   id: RobeTechpriestSarum
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 5
+    requiredLevel: 3
   equipment:
     neck: ClothingNeckRobeTechpriestSarumChaos
 
@@ -26,6 +26,6 @@
   id: RobeTechpriestXanaII
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 7
+    requiredLevel: 5
   equipment:
     neck: ClothingNeckRobeTechpriestXanaChaos

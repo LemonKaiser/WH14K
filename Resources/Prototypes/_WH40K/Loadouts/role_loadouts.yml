@@ -186,7 +186,7 @@
   id: JobLieutenant
   groups:
   - WH40KImperialCommandHead
-  - WH40KImperialCommandNeck
+  - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
@@ -196,7 +196,7 @@
   id: JobCommissar
   groups:
   - WH40KImperialCommandHead
-  - WH40KImperialCommandNeck
+  - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
@@ -319,7 +319,7 @@
   id: JobHLieutenant
   groups:
   - WH40KHereticCommandHead
-  - WH40KHereticCommandNeck
+  - WH40KHereticCommandNecklace
   - WH40KHereticCommandOuter
   - WH40KHereticCommandHands
   - WH40KHereticCommandFieldKit
@@ -329,7 +329,7 @@
   id: JobHCommissar
   groups:
   - WH40KHereticCommandHead
-  - WH40KHereticCommandNeck
+  - WH40KHereticCommandNecklace
   - WH40KHereticCommandOuter
   - WH40KHereticCommandHands
   - WH40KHereticCommandFieldKit

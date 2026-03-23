@@ -335,8 +335,8 @@
     state: trench
   discipline: WH40KEquipment
   tier: 1
-  cost: 5000
-  researchTimeSeconds: 135
+  cost: 5
+  researchTimeSeconds: 1
   technologyPrerequisites:
   - WH40KEquipmentAuthRoot
   recipeUnlocks:
@@ -357,6 +357,38 @@
   - WH40KEquipmentSignalDoctrine
   recipeUnlocks:
   - WH40KRecipeSignalFlare
+
+- type: technology
+  id: WH40KEquipmentBarricades
+  name: research-technology-wh40k-equipment-intel-detectors
+  icon:
+    sprite: _WH40K/Objects/Misc/barricade_kit.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 5000
+  researchTimeSeconds: 135
+  technologyPrerequisites:
+  - WH40KEquipmentAuthLeft2
+  recipeUnlocks:
+  - WH40KRecipeBarricadeSandbags
+  - WH40KRecipeBarbedWire
+  - WH40KRecipeBarricadeHedgehog
+
+- type: technology
+  id: WH40KEquipmentServoSkull
+  name: research-technology-wh40k-equipment-intel-detectors
+  icon:
+    sprite: Clothing/Head/Helmets/bone_helmet.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 7000
+  researchTimeSeconds: 165
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRight2
+  recipeUnlocks:
+  - WH40KRecipeServoSkull
 
 - type: technology
   id: WH40KEquipmentIntelDetectors
