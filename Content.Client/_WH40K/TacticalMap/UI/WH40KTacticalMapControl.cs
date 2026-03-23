@@ -105,6 +105,7 @@ public sealed class WH40KTacticalMapControl : Control
     private bool _showAllies = true;
     private bool _showAllyNames;
     private bool _annotationsEnabled = true;
+    private NetEntity _trackedEntity = NetEntity.Invalid;
     private NetEntity? _hoveredAllyEntity;
 
     public event Action? AnnotationStateChanged;
@@ -318,6 +319,7 @@ public sealed class WH40KTacticalMapControl : Control
         FogEnabled = state.FogEnabled;
         FogChunkSize = Math.Max(1, state.FogChunkSize);
         _liveRefreshEnabled = state.LiveRefreshEnabled;
+        _trackedEntity = state.TrackedEntity;
         _revealedFogChunks.Clear();
 
         foreach (var chunk in state.RevealedChunks)
@@ -371,10 +373,31 @@ public sealed class WH40KTacticalMapControl : Control
     public void ApplyOverlayState(WH40KTacticalMapOverlayState state)
     {
         _alliedMarkers.Clear();
-        _alliedMarkers.AddRange(state.AlliedMarkers);
+        _alliedMarkers.AddRange(FilterDisplayedAllies(state.AlliedMarkers));
         _capturePointMarkers.Clear();
         _capturePointMarkers.AddRange(state.CapturePoints);
         InvalidateArrange();
+    }
+
+    private IEnumerable<WH40KTacticalMapAllyMarker> FilterDisplayedAllies(IReadOnlyList<WH40KTacticalMapAllyMarker> alliedMarkers)
+    {
+        if (_trackedEntity == NetEntity.Invalid)
+        {
+            foreach (var ally in alliedMarkers)
+            {
+                yield return ally;
+            }
+
+            yield break;
+        }
+
+        foreach (var ally in alliedMarkers)
+        {
+            if (ally.Entity == _trackedEntity)
+                continue;
+
+            yield return ally;
+        }
     }
 
     public void ApplyLiveRefreshState(WH40KTacticalMapLiveRefreshState state)

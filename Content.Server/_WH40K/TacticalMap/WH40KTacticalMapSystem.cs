@@ -65,6 +65,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     {
         public bool Initialized;
         public TimeSpan NextRefreshAt;
+        public int OverlayRevision;
         public WH40KTacticalMapAllyMarker[] AlliedMarkers = Array.Empty<WH40KTacticalMapAllyMarker>();
         public WH40KTacticalMapCapturePointMarker[] CapturePoints = Array.Empty<WH40KTacticalMapCapturePointMarker>();
     }
@@ -464,9 +465,9 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         if (targetGrid is { } overlayGridUid)
         {
             var overlayState = GetOrRefreshOverlayState(overlayGridUid, teamId);
-            alliedMarkers = FilterAlliedMarkersForViewer(overlayState.AlliedMarkers, user.Owner);
+            alliedMarkers = overlayState.AlliedMarkers;
             capturePoints = overlayState.CapturePoints;
-            overlayRevision = ComputeOverlayRevision(alliedMarkers, capturePoints);
+            overlayRevision = overlayState.OverlayRevision;
         }
 
         var fogChanged = user.Comp.LastFogRevision != fogRevision;
@@ -590,45 +591,10 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 
         state.AlliedMarkers = BuildAlliedMarkers(gridUid, teamId);
         state.CapturePoints = BuildCapturePointMarkers(gridUid);
+        state.OverlayRevision = ComputeOverlayRevision(state.AlliedMarkers, state.CapturePoints);
         state.Initialized = true;
         state.NextRefreshAt = now + ResolveOverlayRefreshInterval(teamId);
         return state;
-    }
-
-    private WH40KTacticalMapAllyMarker[] FilterAlliedMarkersForViewer(
-        IReadOnlyList<WH40KTacticalMapAllyMarker> alliedMarkers,
-        EntityUid viewer)
-    {
-        if (alliedMarkers.Count == 0)
-            return Array.Empty<WH40KTacticalMapAllyMarker>();
-
-        var viewerNetEntity = GetNetEntity(viewer);
-        var count = 0;
-
-        foreach (var ally in alliedMarkers)
-        {
-            if (ally.Entity != viewerNetEntity)
-                count++;
-        }
-
-        if (count == alliedMarkers.Count && alliedMarkers is WH40KTacticalMapAllyMarker[] cachedMarkers)
-            return cachedMarkers;
-
-        if (count == 0)
-            return Array.Empty<WH40KTacticalMapAllyMarker>();
-
-        var filtered = new WH40KTacticalMapAllyMarker[count];
-        var index = 0;
-
-        foreach (var ally in alliedMarkers)
-        {
-            if (ally.Entity == viewerNetEntity)
-                continue;
-
-            filtered[index++] = ally;
-        }
-
-        return filtered;
     }
 
     private WH40KTacticalMapAllyMarker[] BuildAlliedMarkers(EntityUid gridUid, string teamId)
