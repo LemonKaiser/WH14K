@@ -26,7 +26,6 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
     private static readonly ProtoId<AlertPrototype> StomachImpulseCooldownAlert = "WH40KCharacterDevelopmentStomachImpulseCooldown";
     private static readonly ProtoId<AlertPrototype> KidneyPurgeReadyAlert = "WH40KCharacterDevelopmentKidneyPurgeReady";
     private static readonly ProtoId<AlertPrototype> KidneyPurgeCooldownAlert = "WH40KCharacterDevelopmentKidneyPurgeCooldown";
-    private static readonly ProtoId<AlertPrototype> WarFurnaceReadyAlert = "WH40KCharacterDevelopmentWarFurnaceReady";
     private static readonly ProtoId<AlertPrototype> WarFurnaceActiveAlert = "WH40KCharacterDevelopmentWarFurnaceActive";
     private static readonly ProtoId<AlertPrototype> WarFurnaceCooldownAlert = "WH40KCharacterDevelopmentWarFurnaceCooldown";
 
@@ -49,8 +48,6 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<WH40KCharacterDevelopmentModifiersComponent, WH40KCharacterDevelopmentKidneyPurgeActionEvent>(OnKidneyPurgeAction);
         SubscribeLocalEvent<WH40KCharacterDevelopmentModifiersComponent, WH40KCharacterDevelopmentKidneyPurgeAlertEvent>(OnKidneyPurgeAlert);
-        SubscribeLocalEvent<WH40KCharacterDevelopmentModifiersComponent, WH40KCharacterDevelopmentWarFurnaceActionEvent>(OnWarFurnaceAction);
-        SubscribeLocalEvent<WH40KCharacterDevelopmentModifiersComponent, WH40KCharacterDevelopmentWarFurnaceAlertEvent>(OnWarFurnaceAlert);
         SubscribeLocalEvent<WH40KCharacterDevelopmentModifiersComponent, IngestingEvent>(OnFoodIngested);
     }
 
@@ -119,7 +116,7 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
 
     private void OnFoodIngested(Entity<WH40KCharacterDevelopmentModifiersComponent> ent, ref IngestingEvent args)
     {
-        if (!ent.Comp.StomachImpulseUnlocked ||
+        if ((!ent.Comp.StomachImpulseUnlocked && !ent.Comp.WarFurnaceUnlocked) ||
             !TryComp(args.Food, out EdibleComponent? edible) ||
             edible.Edible != IngestionSystem.Food)
         {
@@ -128,12 +125,15 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
 
         var state = EnsureComp<WH40KCharacterDevelopmentAbilityStateComponent>(ent.Owner);
         var now = _timing.CurTime;
-        if (now < state.NextStomachImpulseTime)
-            return;
+        if (ent.Comp.StomachImpulseUnlocked && now >= state.NextStomachImpulseTime)
+        {
+            ApplyStomachImpulse(ent.Owner);
+            state.NextStomachImpulseTime = now + StomachImpulseCooldown;
+            SyncStomachImpulseAlert(ent.Owner, ent.Comp, state);
+        }
 
-        ApplyStomachImpulse(ent.Owner);
-        state.NextStomachImpulseTime = now + StomachImpulseCooldown;
-        SyncStomachImpulseAlert(ent.Owner, ent.Comp, state);
+        if (ent.Comp.WarFurnaceUnlocked)
+            TryActivateWarFurnace(ent.Owner, ent.Comp, state);
     }
 
     private void OnKidneyPurgeAction(
@@ -158,30 +158,6 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
             return;
 
         args.Handled = TryActivateKidneyPurge(ent.Owner, ent.Comp);
-    }
-
-    private void OnWarFurnaceAction(
-        Entity<WH40KCharacterDevelopmentModifiersComponent> ent,
-        ref WH40KCharacterDevelopmentWarFurnaceActionEvent args)
-    {
-        if (args.Handled ||
-            args.Performer != ent.Owner ||
-            !ent.Comp.WarFurnaceUnlocked)
-        {
-            return;
-        }
-
-        args.Handled = TryActivateWarFurnace(ent.Owner, ent.Comp);
-    }
-
-    private void OnWarFurnaceAlert(
-        Entity<WH40KCharacterDevelopmentModifiersComponent> ent,
-        ref WH40KCharacterDevelopmentWarFurnaceAlertEvent args)
-    {
-        if (args.Handled || args.User != ent.Owner)
-            return;
-
-        args.Handled = TryActivateWarFurnace(ent.Owner, ent.Comp);
     }
 
     private void ApplyStomachImpulse(EntityUid uid)
@@ -352,6 +328,6 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
             return;
         }
 
-        _alerts.ShowAlert(uid, WarFurnaceReadyAlert, autoRemove: false, showCooldown: false);
+        _alerts.ClearAlertCategory(uid, WarFurnaceAlertCategory);
     }
 }

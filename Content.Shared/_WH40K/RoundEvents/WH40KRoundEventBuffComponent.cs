@@ -5,6 +5,8 @@ namespace Content.Shared._WH40K.RoundEvents;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class WH40KRoundEventBuffComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     /// <summary>
     /// If true, pulling movement slowdown is neutralized while actively pulling.
     /// </summary>

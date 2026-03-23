@@ -8,4 +8,5 @@ namespace Content.Shared._WH40K.Psyker;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class WH40KPsykerRoleComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
 }

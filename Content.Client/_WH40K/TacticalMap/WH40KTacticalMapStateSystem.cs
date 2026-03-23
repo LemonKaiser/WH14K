@@ -90,7 +90,7 @@ public sealed class WH40KTacticalMapStateSystem : EntitySystem
         _cachedStates[tacticalMapUid] = mergedState;
 
         if (_ui.TryGetOpenUi<WH40KTacticalMapBoundUserInterface>(tacticalMapUid, WH40KTacticalMapUiKey.Key, out var bui))
-            bui.ApplyTacticalState(mergedState);
+            bui.ApplyOverlayState(ev.State);
     }
 
     private void OnLiveRefreshEvent(WH40KTacticalMapLiveRefreshEvent ev, EntitySessionEventArgs args)

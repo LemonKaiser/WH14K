@@ -8,6 +8,8 @@ namespace Content.Shared._WH40K.Psyker;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WH40KWarpResourceComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField("currentCharge"), AutoNetworkedField]
     public float CurrentCharge = 100f;
 

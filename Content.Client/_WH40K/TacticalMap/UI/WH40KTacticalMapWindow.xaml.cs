@@ -121,8 +121,6 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow
             ? Loc.GetString("station-map-unknown-station")
             : gridName;
 
-        TacticalMapScreen.ForceSnapshotUpdate();
-
         if (mapChanged)
         {
             TacticalMapScreen.ResetView();
@@ -151,6 +149,13 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow
         RefreshAnnotationUi();
         RefreshOverlayUi();
         RefreshViewUi();
+    }
+
+    public void ApplyOverlayState(WH40KTacticalMapOverlayState state)
+    {
+        TacticalMapScreen.ApplyOverlayState(state);
+        UpdateCapturePointList(TacticalMapScreen.MapUid, state.CapturePoints);
+        RefreshOverlayUi();
     }
 
     public void ApplyLiveRefreshState(WH40KTacticalMapLiveRefreshState state)

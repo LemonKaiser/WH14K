@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Construction;
+using Content.Server.GameTicking;
 using Robust.Shared.CPUJob.JobQueues.Queues;
 using Content.Server.Decals;
 using Content.Server.GameTicking.Events;
@@ -27,8 +28,11 @@ namespace Content.Server.Procedural;
 
 public sealed partial class DungeonSystem : SharedDungeonSystem
 {
+    private const string WH40KTeamBattlePresetId = "WH40KTeamBattle";
+
     [Dependency] private readonly IConfigurationManager _configManager = default!;
     [Dependency] private readonly IConsoleHost _console = default!;
+    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
@@ -94,6 +98,9 @@ public sealed partial class DungeonSystem : SharedDungeonSystem
         {
             QueueDel(uid);
         }
+
+        if (_gameTicker.CurrentPreset?.ID == WH40KTeamBattlePresetId)
+            return;
 
         if (!_configManager.GetCVar(CCVars.ProcgenPreload))
             return;
