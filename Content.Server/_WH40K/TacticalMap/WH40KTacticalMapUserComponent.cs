@@ -20,6 +20,9 @@ public sealed partial class WH40KTacticalMapUserComponent : Component
     [DataField("nextRefreshAt")]
     public TimeSpan NextRefreshAt;
 
+    [DataField("nextStateSyncAt")]
+    public TimeSpan NextStateSyncAt;
+
     [DataField("teamId")]
     public string TeamId = string.Empty;
 

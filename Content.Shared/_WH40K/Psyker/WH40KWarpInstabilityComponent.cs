@@ -8,6 +8,8 @@ namespace Content.Shared._WH40K.Psyker;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WH40KWarpInstabilityComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField("currentInstability"), AutoNetworkedField]
     public float CurrentInstability;
 

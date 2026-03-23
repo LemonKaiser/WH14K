@@ -34,7 +34,10 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private const float MinAnnotationThickness = 0.25f;
     private const float MaxAnnotationThickness = 6f;
     private static readonly TimeSpan FogRevealUpdateInterval = TimeSpan.FromSeconds(0.75);
+    private static readonly TimeSpan StateSyncInterval = TimeSpan.FromSeconds(0.25);
+    private static readonly TimeSpan StateSyncNoTeamInterval = TimeSpan.FromSeconds(1.0);
     private static readonly TimeSpan OverlayRefreshInterval = TimeSpan.FromSeconds(0.5);
+    private static readonly TimeSpan OverlayRefreshIntervalNoTeam = TimeSpan.FromSeconds(1.0);
     private static readonly Color NeutralMarkerColor = Color.FromHex("#7F8790".AsSpan());
 
     private readonly record struct TeamMapKey(EntityUid GridUid, string TeamId);
@@ -116,7 +119,11 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
             if (!TryComp(user.Map, out WH40KTacticalMapComponent? map))
                 continue;
 
-            SyncStateToViewer((uid, user), (user.Map, map), actor);
+            if (now >= user.NextStateSyncAt)
+            {
+                SyncStateToViewer((uid, user), (user.Map, map), actor);
+                user.NextStateSyncAt = now + ResolveStateSyncInterval(user.TeamId);
+            }
 
             if (user.Scanner is not { } scanner || Deleted(scanner))
                 continue;
@@ -212,6 +219,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         user.LastAnnotationRevision = -1;
         user.LastOverlayRevision = -1;
         user.LastLiveRefreshRevision = -1;
+        user.NextStateSyncAt = TimeSpan.Zero;
 
         if (ResolveTargetGrid((uid, component)) is { } targetGrid)
             EnsureFogGridConfig((uid, component), targetGrid);
@@ -427,28 +435,26 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         var trackedEntity = map.Comp.ShowLocation ? GetNetEntity(user.Owner) : NetEntity.Invalid;
         var fogChunkSize = Math.Max(1, map.Comp.FogChunkSize);
         var fogRevision = 0;
-        var revealedChunks = Array.Empty<Vector2i>();
+        TeamFogState? fogState = null;
 
         if (fogEnabled &&
             !string.IsNullOrWhiteSpace(teamId) &&
             targetGrid is { } fogGridUid)
         {
             EnsureFogGridConfig(map, fogGridUid);
-            var fogState = GetOrCreateFogState(fogGridUid, teamId, ResolveFogGridConfig(fogGridUid));
+            fogState = GetOrCreateFogState(fogGridUid, teamId, ResolveFogGridConfig(fogGridUid));
             fogChunkSize = fogState.ChunkSize;
             fogRevision = fogState.Revision;
-            revealedChunks = fogState.RevealedChunks.ToArray();
         }
 
         var annotationRevision = 0;
-        var annotationStrokes = Array.Empty<WH40KTacticalMapAnnotationStroke>();
+        TeamAnnotationState? annotationState = null;
 
         if (!string.IsNullOrWhiteSpace(teamId) &&
             targetGrid is { } annotationGridUid)
         {
-            var annotationState = GetOrCreateAnnotationState(annotationGridUid, teamId);
+            annotationState = GetOrCreateAnnotationState(annotationGridUid, teamId);
             annotationRevision = annotationState.Revision;
-            annotationStrokes = annotationState.Strokes.ToArray();
         }
 
         var overlayRevision = 0;
@@ -487,6 +493,13 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
             user.Comp.LastOverlayRevision = overlayRevision;
             return;
         }
+
+        var revealedChunks = fogState != null
+            ? fogState.RevealedChunks.ToArray()
+            : Array.Empty<Vector2i>();
+        var annotationStrokes = annotationState != null
+            ? annotationState.Strokes.ToArray()
+            : Array.Empty<WH40KTacticalMapAnnotationStroke>();
 
         var state = new WH40KTacticalMapBuiState(
             targetGridNet,
@@ -578,7 +591,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         state.AlliedMarkers = BuildAlliedMarkers(gridUid, teamId);
         state.CapturePoints = BuildCapturePointMarkers(gridUid);
         state.Initialized = true;
-        state.NextRefreshAt = now + OverlayRefreshInterval;
+        state.NextRefreshAt = now + ResolveOverlayRefreshInterval(teamId);
         return state;
     }
 
@@ -625,16 +638,19 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 
         var results = new List<WH40KTacticalMapAllyMarker>();
         var gridXform = Transform(gridUid);
-        var mapId = gridXform.MapID;
         var invGridMatrix = _xform.GetInvWorldMatrix(gridXform);
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent, TransformComponent, MetaDataComponent>();
 
         while (query.MoveNext(out var uid, out var member, out var xform, out var meta))
         {
-            EnsureComp<WH40KTacticalMapTrackedComponent>(uid);
-
-            if (xform.MapID != mapId ||
+            if (xform.GridUid != gridUid ||
                 !string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            if (!HasComp<ActorComponent>(uid) &&
+                !HasComp<WH40KTacticalMapTrackedComponent>(uid))
             {
                 continue;
             }
@@ -732,6 +748,20 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         }
 
         return hash.ToHashCode();
+    }
+
+    private static TimeSpan ResolveStateSyncInterval(string teamId)
+    {
+        return string.IsNullOrWhiteSpace(teamId)
+            ? StateSyncNoTeamInterval
+            : StateSyncInterval;
+    }
+
+    private static TimeSpan ResolveOverlayRefreshInterval(string teamId)
+    {
+        return string.IsNullOrWhiteSpace(teamId)
+            ? OverlayRefreshIntervalNoTeam
+            : OverlayRefreshInterval;
     }
 
     private Color ResolveTeamColor(string? teamId)

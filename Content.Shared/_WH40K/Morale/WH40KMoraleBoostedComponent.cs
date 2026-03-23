@@ -5,6 +5,8 @@ namespace Content.Shared._WH40K.Morale;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class WH40KMoraleBoostedComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField, AutoNetworkedField]
     public TimeSpan ExpiresAt = TimeSpan.Zero;
 

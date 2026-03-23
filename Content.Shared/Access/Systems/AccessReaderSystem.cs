@@ -109,9 +109,7 @@ public sealed class AccessReaderSystem : EntitySystem
             component.DenyTags,
             component.AccessLists,
             component.AccessListsOriginal,
-            _recordsSystem.Convert(component.AccessKeys),
-            component.AccessLog,
-            component.AccessLogLimit);
+            _recordsSystem.Convert(component.AccessKeys));
     }
 
     private void OnHandleState(EntityUid uid, AccessReaderComponent component, ref ComponentHandleState args)
@@ -132,8 +130,6 @@ public sealed class AccessReaderSystem : EntitySystem
         component.AccessLists = new(state.AccessLists);
         component.AccessListsOriginal = state.AccessListsOriginal == null ? null : new(state.AccessListsOriginal);
         component.DenyTags = new(state.DenyTags);
-        component.AccessLog = new(state.AccessLog);
-        component.AccessLogLimit = state.AccessLogLimit;
     }
 
     private void OnLinkAttempt(EntityUid uid, AccessReaderComponent component, LinkAttemptEvent args)
@@ -942,8 +938,6 @@ public sealed class AccessReaderSystem : EntitySystem
 
         var stationTime = accessTime ?? _gameTiming.CurTime.Subtract(_gameTicker.RoundStartTimeSpan);
         ent.Comp.AccessLog.Enqueue(new AccessRecord(stationTime, name));
-
-        Dirty(ent);
     }
 
     private List<string> GetLocalizedAccessNames(List<HashSet<ProtoId<AccessLevelPrototype>>> accessLists)

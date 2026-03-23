@@ -19,7 +19,9 @@
 - type: alert
   id: WH40KCharacterDevelopmentStomachImpulseCooldown
   category: WH40KCharacterDevelopmentStomachImpulse
-  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
   name: wh40k-character-development-alert-stomach-impulse-cooldown-name
   description: wh40k-character-development-alert-stomach-impulse-cooldown-desc
 
@@ -36,7 +38,9 @@
 - type: alert
   id: WH40KCharacterDevelopmentKidneyPurgeCooldown
   category: WH40KCharacterDevelopmentKidneyPurge
-  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: kidney-l
   name: wh40k-character-development-alert-kidney-purge-cooldown-name
   description: wh40k-character-development-alert-kidney-purge-cooldown-desc
 
@@ -46,7 +50,6 @@
   icons:
   - sprite: /Textures/Mobs/Species/Human/organs.rsi
     state: stomach
-  clickEvent: !type:WH40KCharacterDevelopmentWarFurnaceAlertEvent
   name: wh40k-character-development-alert-war-furnace-ready-name
   description: wh40k-character-development-alert-war-furnace-ready-desc
 
@@ -62,6 +65,8 @@
 - type: alert
   id: WH40KCharacterDevelopmentWarFurnaceCooldown
   category: WH40KCharacterDevelopmentWarFurnace
-  icons: [ /Textures/_WH40K/Interface/Alerts/execute.png ]
+  icons:
+  - sprite: /Textures/Mobs/Species/Human/organs.rsi
+    state: stomach
   name: wh40k-character-development-alert-war-furnace-cooldown-name
   description: wh40k-character-development-alert-war-furnace-cooldown-desc

@@ -8,6 +8,8 @@ namespace Content.Shared._WH40K.Command;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class WH40KTeamEventEffectComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField, AutoNetworkedField]
     public string TeamId = string.Empty;
 

@@ -368,6 +368,15 @@ public sealed class WH40KTacticalMapControl : Control
         InvalidateArrange();
     }
 
+    public void ApplyOverlayState(WH40KTacticalMapOverlayState state)
+    {
+        _alliedMarkers.Clear();
+        _alliedMarkers.AddRange(state.AlliedMarkers);
+        _capturePointMarkers.Clear();
+        _capturePointMarkers.AddRange(state.CapturePoints);
+        InvalidateArrange();
+    }
+
     public void ApplyLiveRefreshState(WH40KTacticalMapLiveRefreshState state)
     {
         _liveRefreshActive = state.Active;

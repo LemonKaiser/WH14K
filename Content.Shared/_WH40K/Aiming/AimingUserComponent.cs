@@ -11,6 +11,8 @@ namespace Content.Shared._WH40K.Aiming;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class AimingUserComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField]
     public bool Enabled;
 

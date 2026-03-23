@@ -56,7 +56,6 @@ public sealed class WH40KCharacterDevelopmentIntegrationTests : MovementTest
     private static readonly ProtoId<AlertPrototype> StomachImpulseCooldownAlert = "WH40KCharacterDevelopmentStomachImpulseCooldown";
     private static readonly ProtoId<AlertPrototype> KidneyPurgeReadyAlert = "WH40KCharacterDevelopmentKidneyPurgeReady";
     private static readonly ProtoId<AlertPrototype> KidneyPurgeCooldownAlert = "WH40KCharacterDevelopmentKidneyPurgeCooldown";
-    private static readonly ProtoId<AlertPrototype> WarFurnaceReadyAlert = "WH40KCharacterDevelopmentWarFurnaceReady";
     private static readonly ProtoId<AlertPrototype> WarFurnaceActiveAlert = "WH40KCharacterDevelopmentWarFurnaceActive";
     private static readonly ProtoId<AlertPrototype> WarFurnaceCooldownAlert = "WH40KCharacterDevelopmentWarFurnaceCooldown";
 
@@ -214,7 +213,7 @@ public sealed class WH40KCharacterDevelopmentIntegrationTests : MovementTest
                 Assert.That(abilityState.NextKidneyPurgeReadyTime, Is.EqualTo(TimeSpan.Zero));
                 Assert.That(abilityState.NextWarFurnaceReadyTime, Is.EqualTo(TimeSpan.Zero));
                 Assert.That(GetShownAlertType(alerts, respawned, KidneyPurgeAlertCategory), Is.EqualTo(KidneyPurgeReadyAlert));
-                Assert.That(GetShownAlertType(alerts, respawned, WarFurnaceAlertCategory), Is.EqualTo(WarFurnaceReadyAlert));
+                Assert.That(GetShownAlertType(alerts, respawned, WarFurnaceAlertCategory), Is.EqualTo(default(ProtoId<AlertPrototype>)));
             });
         });
     }
@@ -622,7 +621,7 @@ public sealed class WH40KCharacterDevelopmentIntegrationTests : MovementTest
     }
 
     [Test]
-    public async Task WarFurnaceActionHealsOverTimeAndStartsCooldown()
+    public async Task WarFurnaceTriggersOnFoodIngestionHealsOverTimeAndStartsCooldown()
     {
         float damageBefore = 0f;
         float damageAfter = 0f;
@@ -649,16 +648,19 @@ public sealed class WH40KCharacterDevelopmentIntegrationTests : MovementTest
         {
             Assert.Multiple(() =>
             {
-                Assert.That(GetShownAlertType(sAlert, SPlayer, WarFurnaceAlertCategory), Is.EqualTo(WarFurnaceReadyAlert));
+                Assert.That(GetShownAlertType(sAlert, SPlayer, WarFurnaceAlertCategory), Is.EqualTo(default(ProtoId<AlertPrototype>)));
             });
         });
 
         await Client.WaitAssertion(() =>
         {
-            Assert.That(GetShownAlertType(cAlert, CPlayer, WarFurnaceAlertCategory), Is.EqualTo(WarFurnaceReadyAlert));
+            Assert.That(GetShownAlertType(cAlert, CPlayer, WarFurnaceAlertCategory), Is.EqualTo(default(ProtoId<AlertPrototype>)));
         });
 
-        await Client.WaitPost(() => Client.System<ClientAlertsSystem>().AlertClicked(WarFurnaceReadyAlert));
+        await Server.WaitPost(() =>
+        {
+            TriggerFoodIngestion(SPlayer);
+        });
         await RunTicks(5);
 
         await Server.WaitAssertion(() =>

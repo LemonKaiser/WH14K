@@ -32,12 +32,6 @@ public sealed class WH40KTacticalMapBoundUserInterface(EntityUid owner, Enum uiK
             ApplyLiveRefreshState(cachedLiveRefreshState);
         }
 
-        if (_latestState != null)
-            _window.ApplyState(_latestState);
-
-        if (_latestLiveRefreshState != null)
-            _window.ApplyLiveRefreshState(_latestLiveRefreshState);
-
         _window.OnClose += OnWindowClosed;
     }
 
@@ -55,6 +49,32 @@ public sealed class WH40KTacticalMapBoundUserInterface(EntityUid owner, Enum uiK
     {
         _latestState = state;
         _window?.ApplyState(state);
+    }
+
+    public void ApplyOverlayState(WH40KTacticalMapOverlayState state)
+    {
+        if (_latestState == null)
+            return;
+
+        _latestState = new WH40KTacticalMapBuiState(
+            _latestState.TargetGrid,
+            _latestState.GridName,
+            _latestState.SnapshotTexturePath,
+            _latestState.TrackedEntity,
+            _latestState.CanAnnotate,
+            _latestState.LiveRefreshEnabled,
+            _latestState.TeamId,
+            _latestState.FogEnabled,
+            _latestState.FogChunkSize,
+            _latestState.RevealRevision,
+            _latestState.RevealedChunks,
+            _latestState.AnnotationRevision,
+            _latestState.AnnotationStrokes,
+            state.OverlayRevision,
+            state.AlliedMarkers,
+            state.CapturePoints);
+
+        _window?.ApplyOverlayState(state);
     }
 
     public void ApplyLiveRefreshState(WH40KTacticalMapLiveRefreshState state)

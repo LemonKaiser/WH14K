@@ -5,6 +5,8 @@ namespace Content.Shared._WH40K.MetaProgress;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class WH40KCharacterDevelopmentModifiersComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField, AutoNetworkedField]
     public float HungerDecayMultiplier = 1f;
 

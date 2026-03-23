@@ -10,6 +10,8 @@ namespace Content.Shared._WH40K.Psyker;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class WH40KChaosGiftProgressionComponent : Component
 {
+    public override bool SendOnlyToOwner => true;
+
     [DataField("level"), AutoNetworkedField]
     public int Level = 1;
 
