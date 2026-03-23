@@ -9,6 +9,36 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumAmmo10mmLong
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBox10mmLong
+  cost: 1500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumAmmo10mm
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBox10mm
+  cost: 1500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumAmmoAutogun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBoxAutogun
+  cost: 1500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMedkit
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -105,6 +135,46 @@
     state: icon
   product: WeaponRifleBolter
   cost: 13000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumHeavyBolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KHeavyBolter
+  cost: 17000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineHeavyBolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMagazineHeavyBolter
+  cost: 5000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortar
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMortarKit
+  cost: 20000
+  category: cargoproduct-category-name-armory
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortarHE
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMortarShellHE
+  cost: 5000
   category: cargoproduct-category-name-armory
   group: WH40KImperiumMarket
 
@@ -289,12 +359,82 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumBarricadeBars
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeBars
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBarricadeBoarded
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeBoarded
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBarricadeWarhammer
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeWarhammer
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBarricadeSandbags
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeSandbags
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBarricadeHedgehog
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeHedgehog
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBarbedWire
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: MaterialWH40KBarbedWire
+  cost: 2500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMissionPinpointerKit
   icon:
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KMissionPinpointerKitImperium
   cost: 6500
+  category: cargoproduct-category-name-cargo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumServoSkull
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  product: WH40KServoSkullMob
+  cost: 7500
   category: cargoproduct-category-name-cargo
   group: WH40KImperiumMarket
 
@@ -354,6 +494,36 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FlashlightLantern
+  cost: 500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmo10mmLong
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBox10mmLong
+  cost: 500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmo10mm
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBox10mm
+  cost: 500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmoAutogun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBoxAutogun
   cost: 500
   category: cargoproduct-category-name-cargo
   group: WH40KHereticsMarket
@@ -520,6 +690,46 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsHeavyBolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KHeavyBolter
+  cost: 17000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineHeavyBolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMagazineHeavyBolter
+  cost: 5000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortar
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMortarKit
+  cost: 20000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortarHE
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KMortarShellHE
+  cost: 5000
+  category: cargoproduct-category-name-armory
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsPlasmaPistol
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -640,12 +850,92 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsBarricadeBars
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeBars
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarricadeBoarded
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeBoarded
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarricadeChaosGreen
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeChaosGreen
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarricadeChaosBlack
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeChaosBlack
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarricadeSandbags
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeSandbags
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarricadeHedgehog
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: WH40KDeployableBarricadeHedgehog
+  cost: 1000
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBarbedWire
+  icon:
+    sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
+    state: folded_wall
+  product: MaterialWH40KBarbedWire
+  cost: 2500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMissionPinpointerKit
   icon:
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KMissionPinpointerKitHeretics
   cost: 6500
+  category: cargoproduct-category-name-cargo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsServoSkull
+  icon:
+    sprite: Objects/Devices/pinpointer.rsi
+    state: pinpointer
+  product: WH40KServoSkullMob
+  cost: 7500
   category: cargoproduct-category-name-cargo
   group: WH40KHereticsMarket
 

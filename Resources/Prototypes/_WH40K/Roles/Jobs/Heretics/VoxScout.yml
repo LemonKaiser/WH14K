@@ -6,6 +6,7 @@
   startingGear: HVoxScoutGear
   icon: "JobIconHVoxScout"
   supervisors: job-supervisors-engineering
+  setPreference: false
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -29,4 +30,3 @@
     outerClothing: ClothingOuterArmorChaosVest
     pocket2: WH40KStandardTacticalMapTablet
     id: HGuardsmanDogTag
-

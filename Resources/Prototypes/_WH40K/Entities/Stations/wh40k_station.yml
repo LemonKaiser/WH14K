@@ -38,6 +38,9 @@
           - WH40KImperiumFlakVest
           - WH40KImperiumFlakHelmet
         WH40KHeretics:
+          - WH40KHereticsAmmo10mmLong
+          - WH40KHereticsAmmo10mm
+          - WH40KHereticsAmmoAutogun
           - WH40KHereticsLantern
           - WH40KHereticsMedkit
           - WH40KHereticsMissionPinpointerKit

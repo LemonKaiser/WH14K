@@ -106,6 +106,72 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeSandbags
+  result: WH40KDeployableBarricadeSandbags
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeAmmoAutogun
+  result: WH40KAmmoBoxAutogun
+  materials:
+    Steel: 1000
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeAmmo10mm
+  result: WH40KAmmoBox10mm
+  materials:
+    Steel: 1000
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeAmmo10mmLong
+  result: WH40KAmmoBox10mmLong
+  materials:
+    Steel: 1000
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeAmmoLethalshot
+  result: BoxLethalshot
+  materials:
+    Steel: 1000
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarbedWire
+  result: MaterialWH40KBarbedWire1
+  materials:
+    Steel: 20
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeHedgehog
+  result: WH40KDeployableBarricadeHedgehog
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeWarhammer
+  result: WH40KDeployableBarricadeWarhammer
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeServoSkull
+  result: WH40KServoSkullMob
+  materials:
+    Steel: 500
+    Glass: 100
+    Plastic: 100
+    Plasma: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeSentryLaptop
   result: WH40KSentryLaptop
   materials:
@@ -176,6 +242,11 @@
   recipes:
   - WH40KRecipeTacticalWhistle
   - WH40KRecipeSignalFlare
+  - WH40KRecipeServoSkull
+  - WH40KRecipeBarricadeSandbags
+  - WH40KRecipeBarbedWire
+  - WH40KRecipeBarricadeHedgehog
+  - WH40KRecipeBarricadeWarhammer
   - WH40KRecipeIntelDetector
   - WH40KRecipeSentryLaptop
   - WH40KRecipeTacticalFulton

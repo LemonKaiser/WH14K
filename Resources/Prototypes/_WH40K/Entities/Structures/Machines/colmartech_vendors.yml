@@ -62,6 +62,45 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: ColMarTechAutoGuns
+  name: ColMarTech automated weapons rack
+  description: Standard laser-weapon rack.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
+  - type: CMAutomatedVendor
+    sections:
+    - name: cm-automated-vendor-section-primary-firearms
+      entries:
+      - id: WeaponChsStubSMG3
+        amount: 12
+      - id: WeaponChsStubSMG2
+        amount: 12
+      - id: WeaponChsStubShotgun
+        amount: 4
+      - id: WeaponStubRifle
+        amount: 2
+    - name: cm-automated-vendor-section-primary-ammunition
+      entries:
+      - id: MagazineStubSMG
+        amount: 48
+      - id: MagazineStubRifle
+        amount: 4
+      - id: WH40KAmmoBox10mmLong
+        amount: 12
+      - id: WH40KAmmoBoxAutogun
+        amount: 2
+      - id: BoxLethalshot
+        amount: 4
+    - name: cm-automated-vendor-section-sidearms
+      entries:
+      - id: WeaponStubSMG
+        amount: 10
+
+- type: entity
+  parent: ColMarTechBase
   id: ColMarTechEquipment
   name: ColMarTech automated marine equipment rack
   description: Starter equipment rack.

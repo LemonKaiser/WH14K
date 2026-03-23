@@ -16,6 +16,7 @@
     minBaseLevel: 1
     minRoundTimeSeconds: 0
     machineSpeedBonusPercent: 5
+    machineStorageBonus: 10
   - id: eng_left_2
     domain: engineering
     titleKey: wh40k-command-node-upgrade-tree-node-eng-left-2-title
@@ -33,7 +34,7 @@
     cost: 11
     minBaseLevel: 2
     minRoundTimeSeconds: 360
-    machineStorageBonus: 5
+    machineStorageBonus: 10
   - id: eng_left_3
     domain: engineering
     titleKey: wh40k-command-node-upgrade-tree-node-eng-left-3-title
@@ -247,7 +248,7 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumChainsword]
+      Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun]
       Heretics: [WH40KHereticsMachete]
   - id: wep_left_2
     domain: weaponry
@@ -295,8 +296,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KWeaponryAuthRight3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretMini]
-      Heretics: [WH40KHereticsSentryTurretMini]
+      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter]
+      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter]
   - id: wep_left_4
     domain: weaponry
     titleKey: wh40k-command-node-upgrade-tree-node-wep-left-4-title
@@ -307,8 +308,8 @@
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretDmr]
-      Heretics: [WH40KHereticsSentryTurretDmr]
+      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumMortar, WH40KImperiumMortarHE]
+      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsMortar, WH40KHereticsMortarHE]
   - id: wep_right_4
     domain: weaponry
     titleKey: wh40k-command-node-upgrade-tree-node-wep-right-4-title
@@ -350,13 +351,13 @@
     titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-title
     descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-description
     parents: [eqp_root]
-    cost: 11
-    minBaseLevel: 2
-    minRoundTimeSeconds: 360
+    cost: 1
+    minBaseLevel: 1
+    minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthLeft2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumInflatableCoverKit]
-      Heretics: [WH40KHereticsInflatableCoverKit]
+      Imperium: [WH40KImperiumInflatableCoverKit, WH40KImperiumBarricadeBars, WH40KImperiumBarricadeBoarded, WH40KImperiumBarricadeWarhammer, WH40KImperiumBarricadeSandbags, WH40KImperiumBarricadeHedgehog, WH40KImperiumBarbedWire]
+      Heretics: [WH40KHereticsInflatableCoverKit, WH40KHereticsBarricadeBars, WH40KHereticsBarricadeBoarded, WH40KHereticsBarricadeChaosGreen, WH40KHereticsBarricadeChaosBlack, WH40KHereticsBarricadeSandbags, WH40KHereticsBarricadeHedgehog, WH40KHereticsBarbedWire]
   - id: eqp_right_2
     domain: equipment
     titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-2-title
@@ -367,8 +368,8 @@
     minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KEquipmentAuthRight2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumMissionPinpointerKit]
-      Heretics: [WH40KHereticsMissionPinpointerKit]
+      Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumServoSkull]
+      Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsServoSkull]
   - id: eqp_left_3
     domain: equipment
     titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-3-title
