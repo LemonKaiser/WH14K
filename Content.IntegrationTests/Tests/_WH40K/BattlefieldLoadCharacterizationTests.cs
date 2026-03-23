@@ -556,7 +556,7 @@ public sealed class BattlefieldLoadCharacterizationTests
 
         await pair.Client.WaitPost(() =>
         {
-            if (!TryGetOpenBui(pair, ctx.ClientTablet, out var bui) || !bui.IsOpened)
+            if (!TryGetOpenBui(pair, ctx.ClientTablet, out var bui) || bui is not { IsOpened: true })
                 return;
 
             bui.SendMessage(new WH40KTacticalMapSaveAnnotationsMessage(new[] { stroke }));
