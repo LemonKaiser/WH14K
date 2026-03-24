@@ -46,4 +46,4 @@ job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит тёмного механикума
 
 job-name-tithe-supplier = снабженец десятин
-job-name-hband-supplier = снабженец банды
+job-name-hband-supplier = логистик Муниторума

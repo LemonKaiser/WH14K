@@ -48,8 +48,8 @@
     head: ClothingHeadOfficer
     belt: colbelt
     neck: Colonelcloak
+    outerClothing: ClothingOuterArmorFlakVestGen
     pocket1: WH40KCommandTacticalMapTablet
     id: ColonelDogTag
   inhand:
     - WHPowerSaberImperial
-

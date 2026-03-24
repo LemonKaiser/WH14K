@@ -31,6 +31,6 @@
             HLieutenant: [ 2, 2 ]
             HMedic: [ 3, 3 ]
             HSergeant: [ 2, 2 ]
-            HBandSupplier: [ 2, 2 ]
+            HBandSupplier: [ 3, 3 ]
             HTanker: [ 3, 3 ]
             #HVoxScout: [ 3, 3 ]

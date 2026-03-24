@@ -12,10 +12,10 @@
   minProcessSecondsTier1: 8
   minProcessSecondsTier2: 5
   minProcessSecondsTier3: 3
-  materialStorageLimitTier0: 10
-  materialStorageLimitTier1: 15
-  materialStorageLimitTier2: 20
-  materialStorageLimitTier3: 30
+  materialStorageLimitTier0: 40
+  materialStorageLimitTier1: 60
+  materialStorageLimitTier2: 90
+  materialStorageLimitTier3: 120
 
 - type: wh40kTierLogisticsProfile
   id: WH40KTierLogisticsStandard

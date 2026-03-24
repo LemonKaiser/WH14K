@@ -351,9 +351,9 @@
     titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-title
     descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-description
     parents: [eqp_root]
-    cost: 1
-    minBaseLevel: 1
-    minRoundTimeSeconds: 0
+    cost: 11
+    minBaseLevel: 2
+    minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KEquipmentAuthLeft2]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumInflatableCoverKit, WH40KImperiumBarricadeBars, WH40KImperiumBarricadeBoarded, WH40KImperiumBarricadeWarhammer, WH40KImperiumBarricadeSandbags, WH40KImperiumBarricadeHedgehog, WH40KImperiumBarbedWire]

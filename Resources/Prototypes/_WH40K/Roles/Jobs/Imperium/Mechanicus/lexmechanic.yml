@@ -8,6 +8,16 @@
       species:
       - Human
   startingGear: LexmechanicGear
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Binary
+      - type: ActiveRadio
+        channels:
+        - Binary
+      - type: IntrinsicRadioReceiver
   icon: "JobIconLexmechanic"
   supervisors: job-supervisors-ce
   canBeAntag: false
@@ -29,6 +39,7 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     mask: ClothingMaskGasTechPriest
+    ears: ClothingHeadsetVoxBackpackImperium
     pocket1: WH40KStandardTacticalMapTablet
     id: LexmechanicDogTag
 
@@ -41,4 +52,3 @@
     belt: ClothingBeltUtilityEngineering
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
-    mask: ClothingMaskGasTechPriest

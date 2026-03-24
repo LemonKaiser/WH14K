@@ -45,6 +45,8 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Imperium
+  - type: Machine
+    board: AutolatheMachineCircuitboardImperium
 
 - type: entity
   id: WH40KAutolatheHeretics
@@ -65,6 +67,8 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
+  - type: Machine
+    board: AutolatheMachineCircuitboardHeretics
 
 - type: entity
   id: WH40KProtolathe
@@ -119,6 +123,8 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Imperium
+  - type: Machine
+    board: ProtolatheMachineCircuitboardImperium
 
 - type: entity
   id: WH40KProtolatheHeretics
@@ -143,6 +149,8 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
+  - type: Machine
+    board: ProtolatheMachineCircuitboardHeretics
 
 - type: entity
   id: WH40KOreProcessor
@@ -201,6 +209,8 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Imperium
+  - type: Machine
+    board: OreProcessorMachineCircuitboardImperium
 
 - type: entity
   id: WH40KOreProcessorHeretics
@@ -221,3 +231,5 @@
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
+  - type: Machine
+    board: OreProcessorMachineCircuitboardHeretics

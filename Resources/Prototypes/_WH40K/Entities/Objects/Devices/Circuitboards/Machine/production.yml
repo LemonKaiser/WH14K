@@ -1,0 +1,83 @@
+- type: entity
+  id: ProtolatheMachineCircuitboardImperium
+  parent: BaseMachineCircuitboard
+  name: protolathe machine board
+  description: A machine printed circuit board for a protolathe.
+  components:
+  - type: Sprite
+    state: science
+  - type: MachineBoard
+    prototype: WH40KProtolatheImperium
+    stackRequirements:
+      Manipulator: 4
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: ProtolatheMachineCircuitboardHeretics
+  parent: BaseMachineCircuitboard
+  name: protolathe machine board
+  description: A machine printed circuit board for a protolathe.
+  components:
+  - type: Sprite
+    state: science
+  - type: MachineBoard
+    prototype: WH40KProtolatheHeretics
+    stackRequirements:
+      Manipulator: 4
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  id: AutolatheMachineCircuitboardImperium
+  parent: BaseMachineCircuitboard
+  name: autolathe machine board
+  description: A machine printed circuit board for an autolathe.
+  components:
+    - type: MachineBoard
+      prototype: WH40KAutolatheImperium
+      stackRequirements:
+        Manipulator: 4
+        Glass: 1
+
+- type: entity
+  id: AutolatheMachineCircuitboardHeretics
+  parent: BaseMachineCircuitboard
+  name: autolathe machine board
+  description: A machine printed circuit board for an autolathe.
+  components:
+    - type: MachineBoard
+      prototype: WH40KAutolatheHeretics
+      stackRequirements:
+        Manipulator: 4
+        Glass: 1
+
+- type: entity
+  id: OreProcessorMachineCircuitboardImperium
+  parent: BaseMachineCircuitboard
+  name: ore processor machine board
+  components:
+    - type: Sprite
+      state: supply
+    - type: MachineBoard
+      prototype: WH40KOreProcessorImperium
+      stackRequirements:
+        Manipulator: 4
+        Glass: 1
+
+- type: entity
+  id: OreProcessorMachineCircuitboardHeretics
+  parent: BaseMachineCircuitboard
+  name: ore processor machine board
+  components:
+    - type: Sprite
+      state: supply
+    - type: MachineBoard
+      prototype: WH40KOreProcessorHeretics
+      stackRequirements:
+        Manipulator: 4
+        Glass: 1

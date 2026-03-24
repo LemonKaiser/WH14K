@@ -109,6 +109,5 @@
     belt: offbelt
     head: ClothingHeadOfficer
     outerClothing: ClothingOuterArmorOfficer
-    pocket1: WH40KCommandTacticalMapTablet
+    pocket1: WH40KStandardTacticalMapTablet
     id: SergeantDogTag
-

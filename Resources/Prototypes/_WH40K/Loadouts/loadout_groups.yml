@@ -22,7 +22,6 @@
 - type: loadoutGroup
   id: TechpriestMask
   name: loadout-group-techpriest-mask
-  minLimit: 0
   loadouts:
   - WH40KTechPriestBreather
   - WH40KTechPriestGasmask
@@ -30,8 +29,8 @@
 - type: loadoutGroup
   id: WH40KImperialLineHead
   name: loadout-group-wh40k-imperial-line-head
-  minLimit: 0
   loadouts:
+  - FlakHelmet
   - WH40KBandanaBlack
   - WH40KBandanaGreen
   - WH40KBandanaMerc
@@ -55,9 +54,11 @@
   name: loadout-group-wh40k-imperial-field-outer
   minLimit: 0
   loadouts:
+  - WH40KLightFlakArmor
   - WH40KKriegCoat
   - WH40KCyanLightFlakArmor
   - WH40KCyanFlakArmor
+  - WH40KFlakArmor
 
 - type: loadoutGroup
   id: WH40KImperialFieldBelt
@@ -170,7 +171,6 @@
   loadouts:
   - WH40KBronzeheart
   - WH40KSecurityMedal
-  - WH40KColonelCloak
   - WH40KGoldMedal
 
 - type: loadoutGroup
@@ -190,7 +190,6 @@
   - WH40KOfficerCoat
   - WH40KJuniorOfficerJacket
   - WH40KSeniorOfficerJacket
-  - WH40KCommissarCoat
 
 - type: loadoutGroup
   id: WH40KImperialCommandHands
@@ -198,8 +197,6 @@
   minLimit: 0
   loadouts:
   - WH40KBlackGloves
-  - WH40KCommissarGloves
-  - WH40KColonelGloves
 
 - type: loadoutGroup
   id: WH40KCommandFieldKit
