@@ -24,6 +24,11 @@
     head: ClothingHeadHelmetFlakAdvCyan
 
 - type: loadout
+  id: WH40KLightFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestLight
+
+- type: loadout
   id: WH40KCyanLightFlakArmor
   equipment:
     outerClothing: ClothingOuterArmorFlakVestLightCyan
@@ -37,6 +42,16 @@
     requiredLevel: 5
   equipment:
     outerClothing: ClothingOuterArmorFlakVestCyan
+
+- type: loadout
+  id: WH40KFlakArmor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVest
 
 - type: loadout
   id: WH40KCyanCombatBoots

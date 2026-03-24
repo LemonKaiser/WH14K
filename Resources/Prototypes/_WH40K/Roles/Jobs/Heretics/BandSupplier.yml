@@ -24,6 +24,7 @@
     shoes: ClothingShoesChaosBoots1
     belt: chaosbelt2
     head: ClothingHeadHelmetFlakCHAOS
+    ears: ClothingHeadsetVoxBackpackHeretics
     outerClothing: ClothingOuterArmorChaosVest
     pocket1: WH40KStandardTacticalMapTablet
     id: HBandSupplierDogTag

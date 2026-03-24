@@ -20,6 +20,7 @@
     shoes: ClothingShoesAnkleBoots
     belt: guardbelt
     head: ClothingHeadHelmetFlak
+    ears: ClothingHeadsetVoxBackpackImperium
     outerClothing: ClothingOuterArmorFlakVestLight
     pocket1: WH40KStandardTacticalMapTablet
     id: TitheSupplierDogTag

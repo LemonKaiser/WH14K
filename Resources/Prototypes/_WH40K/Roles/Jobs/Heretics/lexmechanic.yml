@@ -4,6 +4,16 @@
   description: job-description-hlexmechanic
   playTimeTracker: JobHLexmechanic
   startingGear: LexmechanicGear
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: IntrinsicRadioTransmitter
+        channels:
+        - Binary1
+      - type: ActiveRadio
+        channels:
+        - Binary1
+      - type: IntrinsicRadioReceiver
   icon: "JobIconHLexmechanic"
   supervisors: job-supervisors-ce
   canBeAntag: false
@@ -27,5 +37,5 @@
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
     gloves: ClothingHandsGlovesTechpriest
+    ears: ClothingHeadsetVoxBackpackHeretics
     eyes: ClothingEyesHudTechPriest
-    mask: ClothingMaskGasTechPriest

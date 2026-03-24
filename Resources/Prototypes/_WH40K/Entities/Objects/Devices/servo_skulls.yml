@@ -3,25 +3,30 @@
   name: servo skull
   description: A compact servo skull chassis. Deploy it to create a friendly support skull.
   parent: BaseItem
-  suffix: WH40K
+  suffix: WH40K, non-activated
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Devices/servo_skull.rsi
     state: icon
   - type: Item
-    size: Tiny
+    size: Normal
   - type: WH40KCombineWithPrototype
     requiredPrototype: MeltaGrenade
     resultPrototype: WH40KServoSkullMelta
   - type: WH40KDeployServoSkull
     mobPrototype: WH40KServoSkullMob
+  - type: AmbientSound
+    range: 10
+    volume: -10
+    sound:
+       path: /Audio/Ambience/Objects/portable_scrubber.ogg
 
 - type: entity
   id: WH40KServoSkullMelta
   name: melta servo skull
   description: A servo skull rigged with a melta charge. Deploy it and it will hunt nearby enemies for your team.
   parent: BaseItem
-  suffix: WH40K
+  suffix: WH40K, non-activated
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Devices/servo_skull_melta.rsi
@@ -30,6 +35,11 @@
     size: Tiny
   - type: WH40KDeployServoSkull
     mobPrototype: WH40KServoSkullMeltaMob
+  - type: AmbientSound
+    range: 10
+    volume: -10
+    sound:
+       path: /Audio/Ambience/Objects/portable_scrubber.ogg
 
 - type: entity
   id: WH40KServoSkullMobBase
@@ -75,13 +85,18 @@
     chargeStopRange: 0.25
     hostileDetectionRange: 6
     scanInterval: 0.2
+  - type: AmbientSound
+    range: 10
+    volume: -10
+    sound:
+       path: /Audio/Ambience/Objects/portable_scrubber.ogg
 
 - type: entity
   id: WH40KServoSkullMob
   parent: WH40KServoSkullMobBase
   name: servo skull
   description: A friendly servo skull awaiting a command.
-  suffix: WH40K, non-activated
+  suffix: WH40K
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -124,10 +139,15 @@
     - timer
   - type: Explosive
     explosionType: MicroBomb
-    totalIntensity: 700
+    totalIntensity: 90
     intensitySlope: 45
     maxIntensity: 10
     canCreateVacuum: false
   - type: TimerTriggerVisuals
     primingSound:
       path: /Audio/Items/smoke_grenade_prime.ogg
+  - type: AmbientSound
+    range: 10
+    volume: -10
+    sound:
+       path: /Audio/Ambience/Objects/portable_scrubber.ogg

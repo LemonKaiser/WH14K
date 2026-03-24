@@ -163,12 +163,13 @@
 - type: latheRecipe
   parent: BaseToolRecipe
   id: WH40KRecipeServoSkull
-  result: WH40KServoSkullMob
+  result: WH40KServoSkullMelta
   materials:
     Steel: 500
     Glass: 100
-    Plastic: 100
-    Plasma: 100
+    Plastic: 250
+    Plasma: 200
+    Gold: 300
 
 - type: latheRecipe
   parent: BaseToolRecipe

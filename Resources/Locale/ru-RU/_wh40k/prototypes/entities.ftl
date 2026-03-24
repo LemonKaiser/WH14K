@@ -985,3 +985,7 @@ ent-WH40KServoSkullMob = сервочереп
     .desc = Союзный сервочереп, ожидающий приказа.
 ent-WH40KServoSkullMeltaMob = сервочереп с мельта-зарядом
     .desc = Союзный сервочереп, несущий боевой мельта-заряд.
+
+ent-WH40KAmmoBox10mm = ящик автопатрон (10mm)
+
+ent-WH40KAmmoBox10mmLong = ящик автопатрон (10mm удлинённые)

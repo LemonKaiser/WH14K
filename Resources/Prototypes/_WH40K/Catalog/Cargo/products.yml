@@ -433,7 +433,7 @@
   icon:
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
-  product: WH40KServoSkullMob
+  product: WH40KServoSkullMelta
   cost: 7500
   category: cargoproduct-category-name-cargo
   group: WH40KImperiumMarket
@@ -934,7 +934,7 @@
   icon:
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
-  product: WH40KServoSkullMob
+  product: WH40KServoSkullMelta
   cost: 7500
   category: cargoproduct-category-name-cargo
   group: WH40KHereticsMarket

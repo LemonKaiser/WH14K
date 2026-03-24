@@ -5,7 +5,7 @@
   frequency: 1845
   color: "#E0FFFF"
   longRange: true
-  
+
 - type: radioChannel
   id: VoxImperium
   name: chat-radio-vox-imperium
@@ -20,4 +20,12 @@
   keycode: 'e'
   frequency: 2051
   color: "#8B3A3A"
+  longRange: true
+
+- type: radioChannel
+  id: Binary1
+  name: chat-radio-binary
+  keycode: '1'
+  frequency: 1010
+  color: "#5ed7aa"
   longRange: true

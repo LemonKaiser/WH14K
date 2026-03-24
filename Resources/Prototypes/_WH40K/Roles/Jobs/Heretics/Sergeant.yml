@@ -86,6 +86,5 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy
     outerClothing: ClothingOuterArmorCultistCoat
-    pocket1: WH40KCommandTacticalMapTablet
+    pocket1: WH40KStandardTacticalMapTablet
     id: HSergeantDogTag
-

@@ -335,8 +335,8 @@
     state: trench
   discipline: WH40KEquipment
   tier: 1
-  cost: 5
-  researchTimeSeconds: 1
+  cost: 5000
+  researchTimeSeconds: 135
   technologyPrerequisites:
   - WH40KEquipmentAuthRoot
   recipeUnlocks:
