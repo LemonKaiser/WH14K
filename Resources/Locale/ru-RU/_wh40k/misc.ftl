@@ -53,6 +53,7 @@ loadout-group-wh40k-imperial-line-head = Имперская пехота, гол
 loadout-group-wh40k-imperial-line-honours = Имперская пехота, награды
 loadout-group-wh40k-imperial-field-outer = Имперские полевые шинели
 loadout-group-wh40k-imperial-field-belt = Имперская разгрузка
+loadout-group-wh40k-imperial-eyes = Имперские очки
 loadout-group-wh40k-imperial-line-feet = Имперская пехота, ботинки
 loadout-group-wh40k-field-kit = Походный набор
 loadout-group-wh40k-imperial-melee = Имперское оружие ближнего боя
@@ -78,4 +79,6 @@ loadout-group-wh40k-heretic-command-hands = Хаос, командование, 
 loadout-group-wh40k-heretic-command-field-kit = Хаос, командный походный набор
 
 loadout-group-techpriest-mask = техножрец, респираторы
+loadout-group-techpriest-eyes = техножрец, глаза
+loadout-group-techpriest-back = техножрец, ранец
 loadout-group-wh40k-imperial-line-mask = Имперская пехота, респираторы

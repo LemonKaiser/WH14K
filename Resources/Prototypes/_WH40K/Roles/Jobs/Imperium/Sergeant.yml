@@ -107,7 +107,7 @@
     shoes: ClothingShoesGenBoots
     ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
-    head: ClothingHeadOfficer
-    outerClothing: ClothingOuterArmorOfficer
+    eyes: ClothingEyesHudGuard
+    mask: ClothingMaskGasGuardsman
     pocket1: WH40KStandardTacticalMapTablet
     id: SergeantDogTag

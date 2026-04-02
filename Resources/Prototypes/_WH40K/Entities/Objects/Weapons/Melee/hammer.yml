@@ -47,7 +47,7 @@
 
 - type: entity
   parent: BaseItem
-  id: WHOmnissianAxe
+  id: WHOmnissianAxeBattle
   suffix: WH40K
   components:
   - type: Execution
@@ -70,3 +70,71 @@
   - type: Item
     size: Ginormous
     sprite: _WH40K/Objects/Weapons/Melee/omnissia_axe/omnissiahaxe_inhand.rsi
+
+- type: entity
+  parent: BaseItem
+  id: WHOmnissianAxe
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/omnissiah_axe.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: 135
+    swingLeft: true
+    attackRate: 0.65
+    damage:
+      types:
+        Blunt: 20
+        Structural: 30
+    angle: 100
+    soundHit:
+      collection: MetalThud
+  - type: Wieldable
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Blunt: 20
+        Structural: 20
+  - type: IgniteOnMeleeHit
+    fireStacks: -4
+  - type: Item
+    size: Ginormous
+    sprite: _WH40K/Objects/Weapons/Melee/omnissiah_axe.rsi
+  - type: Tag
+    tags:
+    - Multitool
+  - type: Prying
+    enabled: false
+  - type: Tool
+    qualities:
+      - Screwing
+    speedModifier: 1.2 # Kept for future adjustments. Currently 1.2x for balance
+    useSound: /Audio/Items/drill_use.ogg
+  - type: ToolTileCompatible
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Screwing
+        useSound:
+          path: /Audio/Items/drill_use.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Prying
+        useSound:
+          path: /Audio/Items/jaws_pry.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Anchoring
+        useSound:
+          path: /Audio/Items/ratchet.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Cutting
+        useSound:
+          path: /Audio/Items/jaws_cut.ogg
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Pulsing
+        changeSound:
+          path: /Audio/Items/change_drill.ogg

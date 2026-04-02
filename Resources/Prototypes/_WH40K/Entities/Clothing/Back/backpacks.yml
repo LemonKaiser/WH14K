@@ -6,9 +6,12 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/skitarii.rsi
   - type: GasTank
-    outputPressure: 21.3
+    outputPressure: 22.4
     air:
       volume: 10
+      moles:
+        Oxygen: 0.270782035
+        NitrousOxide: 0.014251686
       temperature: 293.15
     tankLowPressure: 30.0
   - type: InteractionOutline
@@ -57,24 +60,29 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/techpriest.rsi
   - type: GasTank
-    outputPressure: 21.3
+    outputPressure: 22.4
     air:
       volume: 10
+      moles:
+        Oxygen: 0.270782035
+        NitrousOxide: 0.014251686
       temperature: 293.15
     tankLowPressure: 30.0
-  - type: TelecomServer
-  - type: ContainerContainer
-    containers:
-      key_slots: !type:Container
-      storagebase: !type:Container
-        ents: []
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - EncryptionKeyCommon
-  - type: EncryptionKeyHolder
-    keysExtractionMethod: Prying
-    keySlots: 1
+
+- type: entity
+  parent: ClothingBackpackTechpriest
+  id: ClothingBackpackTechpriestDendrite
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/techpriest_dendrite.rsi
+  - type: Unremoveable
+  - type: ExtraHandsEquipment
+    hands:
+      extra_hand_1:
+        location: Middle
+      extra_hand_2:
+        location: Middle
 
 - type: entity
   parent: ClothingBackpack

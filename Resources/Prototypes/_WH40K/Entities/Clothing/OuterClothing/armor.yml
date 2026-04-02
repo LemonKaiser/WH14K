@@ -13,7 +13,7 @@
       coefficients:
         Blunt: 0.6
         Slash: 0.6
-        Piercing: 0.7
+        Piercing: 0.6
         Heat: 0.6
   - type: ExplosionResistance
     damageCoefficient: 0.6
@@ -125,9 +125,6 @@
         Heat: 0.4
   - type: ExplosionResistance
     damageCoefficient: 0.4
-  - type: ClothingSpeedModifier
-    walkModifier: 0.9
-    sprintModifier: 0.9
 
 # панцирный нагрудник
 - type: entity

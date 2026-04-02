@@ -53,3 +53,37 @@
     requiredLevel: 5
   equipment:
     neck: ClothingNeckRobeTechpriestStygiesVIII
+
+- type: loadout
+  id: TechPriestHud
+  equipment:
+    eyes: ClothingEyesHudTechPriest
+
+- type: loadout
+  id: TechPriestHudMed
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    eyes: ClothingEyesHudTechPriestMed
+
+- type: loadout
+  id: TechPriestHudAdm
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    eyes: ClothingEyesHudTechPriestAdm
+
+- type: loadout
+  id: BackpackTechpriest
+  equipment:
+    back: ClothingBackpackTechpriest
+
+- type: loadout
+  id: BackpackTechpriestDendrite
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    back: ClothingBackpackTechpriestDendrite

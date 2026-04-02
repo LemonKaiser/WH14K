@@ -13,7 +13,48 @@
       - state: equipped-EYES
   - type: FlashImmunity
   - type: EyeProtection
+  - type: Unremoveable
   - type: ShowHealthBars
     damageContainers:
     - Biological
     - Inorganic
+
+- type: entity
+  parent: ClothingEyesHudTechPriest
+  id: ClothingEyesHudTechPriestMed
+  description: Filler
+  suffix: WH40K, адмехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Eyes/hud_med.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Eyes/hud_med.rsi
+    clothingVisuals:
+      eyes:
+      - state: equipped-EYES
+      - state: equipped-EYES-unshaded
+        shader: unshaded
+  - type: ShowHealthIcons
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological
+    - Inorganic
+    - Silicon
+
+- type: entity
+  parent: ClothingEyesHudTechPriest
+  id: ClothingEyesHudTechPriestAdm
+  description: Filler
+  suffix: WH40K, адмехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Eyes/hud_adm.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Eyes/hud_adm.rsi
+    clothingVisuals:
+      eyes:
+      - state: equipped-EYES
+      - state: equipped-EYES-unshaded
+        shader: unshaded
+  - type: ShowJobIcons
+  - type: ShowAccessReaderSettings

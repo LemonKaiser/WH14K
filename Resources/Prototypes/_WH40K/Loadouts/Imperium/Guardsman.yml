@@ -54,6 +54,11 @@
     outerClothing: ClothingOuterArmorFlakVest
 
 - type: loadout
+  id: WH40KCombatBoots
+  equipment:
+    shoes: ClothingShoesAnkleBoots
+
+- type: loadout
   id: WH40KCyanCombatBoots
   equipment:
     shoes: ClothingShoesAnkleBootsCyan
@@ -62,3 +67,31 @@
   id: WH40KCyanOfficerCap
   equipment:
     head: ClothingHeadOfficerCyan
+
+- type: loadout
+  id: WH40KEyesGuard
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    eyes: ClothingEyesHudGuard
+
+- type: loadout
+  id: WH40KKriegWebbing
+  equipment:
+    belt: ClothingBeltKriegWebbing
+
+- type: loadout
+  id: WH40KGuardBelt
+  equipment:
+    belt: guardbelt
+
+- type: loadout
+  id: WH40KCyanFlakArmorSrg
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestCyan
+
+- type: loadout
+  id: WH40KFlakArmorSrg
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVest

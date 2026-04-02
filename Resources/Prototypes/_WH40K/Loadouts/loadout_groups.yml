@@ -11,6 +11,21 @@
   - RobeTechpriestStygiesVIII
 
 - type: loadoutGroup
+  id: TechpriestEyes
+  name: loadout-group-techpriest-eyes
+  loadouts:
+  - TechPriestHud
+  - TechPriestHudMed
+  - TechPriestHudAdm
+
+- type: loadoutGroup
+  id: TechpriestBack
+  name: loadout-group-techpriest-back
+  loadouts:
+  - BackpackTechpriest
+  - BackpackTechpriestDendrite
+
+- type: loadoutGroup
   id: HTechpriestNeck
   name: loadout-group-techpriest-neck
   loadouts:
@@ -27,10 +42,18 @@
   - WH40KTechPriestGasmask
 
 - type: loadoutGroup
+  id: WH40KImperialEyes
+  name: loadout-group-wh40k-imperial-eyes
+  minLimit: 0
+  loadouts:
+  - WH40KEyesGuard
+
+- type: loadoutGroup
   id: WH40KImperialLineHead
   name: loadout-group-wh40k-imperial-line-head
   loadouts:
   - FlakHelmet
+  - FlakHelmetCandle
   - WH40KBandanaBlack
   - WH40KBandanaGreen
   - WH40KBandanaMerc
@@ -52,7 +75,6 @@
 - type: loadoutGroup
   id: WH40KImperialFieldOuter
   name: loadout-group-wh40k-imperial-field-outer
-  minLimit: 0
   loadouts:
   - WH40KLightFlakArmor
   - WH40KKriegCoat
@@ -63,15 +85,15 @@
 - type: loadoutGroup
   id: WH40KImperialFieldBelt
   name: loadout-group-wh40k-imperial-field-belt
-  minLimit: 0
   loadouts:
+  - WH40KGuardBelt
   - WH40KKriegWebbing
 
 - type: loadoutGroup
   id: WH40KImperialLineFeet
   name: loadout-group-wh40k-imperial-line-feet
-  minLimit: 0
   loadouts:
+  - WH40KCombatBoots
   - WH40KCyanCombatBoots
 
 - type: loadoutGroup
@@ -92,6 +114,21 @@
   name: loadout-group-wh40k-imperial-melee
   minLimit: 0
   loadouts:
+  - WH40KCrowbarKit
+  - WH40KCombatKnifeKit
+  - WH40KSurvivalKnifeKit
+  - WH40KSapperShovelKit
+  - WH40KTruncheonKit
+  - WH40KKukriKnifeKit
+
+- type: loadoutGroup
+  id: WH40KImperialCmdMelee
+  name: loadout-group-wh40k-imperial-melee
+  minLimit: 0
+  loadouts:
+  - WH40KChainsword
+  - WH40KSaber
+  - WH40KMace
   - WH40KCrowbarKit
   - WH40KCombatKnifeKit
   - WH40KSurvivalKnifeKit
@@ -154,13 +191,30 @@
   - WH40KGoldMedal
 
 - type: loadoutGroup
+  id: WH40KImperialSergeantHead
+  name: loadout-group-wh40k-imperial-command-head
+  loadouts:
+  - WH40KSergeantCap
+  - WH40KCyanOfficerCap
+  - WH40KCommandBeret
+  - WH40KImperialVeteranBeret
+
+- type: loadoutGroup
+  id: WH40KImperialSergeantOuter
+  name: loadout-group-wh40k-imperial-command-outer
+  loadouts:
+  - WH40KFlakArmorSrg
+  - WH40KCyanFlakArmorSrg
+  - WH40KJuniorOfficerJacket
+  - WH40KSeniorOfficerJacket
+
+- type: loadoutGroup
   id: WH40KImperialCommandHead
   name: loadout-group-wh40k-imperial-command-head
   minLimit: 0
   loadouts:
   - WH40KOfficerCap
   - WH40KCyanOfficerCap
-  - WH40KSergeantCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
 
@@ -222,6 +276,7 @@
   - WH40KBandanaSkull
   - WH40KChaosScarf
   - WH40KHeresyHelmet
+  - HFlakHelmetCandle
   - WH40KBloodPactHelmet
 
 - type: loadoutGroup
@@ -325,17 +380,3 @@
   - WH40KPipeKit
   - WH40KGoldCigarKit
   - WH40KGoldCigarCaseKit
-
-- type: loadoutGroup
-  id: GuardsmanHead
-  name: loadout-group-guardsman-head
-  loadouts:
-  - FlakHelmet
-  - FlakHelmetCandle
-
-- type: loadoutGroup
-  id: HGuardsmanHead
-  name: loadout-group-guardsman-head
-  loadouts:
-  - HFlakHelmet
-  - HFlakHelmetCandle

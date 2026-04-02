@@ -33,12 +33,10 @@
   id: LexmechanicGear
   equipment:
     jumpsuit: ClothingUniformJumpsuitTechpriest
-    back: ClothingBackpackTechpriest
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
     gloves: ClothingHandsGlovesTechpriest
-    eyes: ClothingEyesHudTechPriest
-    mask: ClothingMaskGasTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriestUnremoveadble
     ears: ClothingHeadsetVoxBackpackImperium
     pocket1: WH40KStandardTacticalMapTablet
     id: LexmechanicDogTag
