@@ -20,6 +20,8 @@
   id: JobLexmechanic
   groups:
   - TechpriestNeck
+  - TechpriestEyes
+  - TechpriestBack
   - TechpriestMask
 
 - type: roleLoadout
@@ -44,6 +46,8 @@
   id: JobHLexmechanic
   groups:
   - HTechpriestNeck
+  - TechpriestEyes
+  - TechpriestBack
   - TechpriestMask
 
 - type: roleLoadout
@@ -145,12 +149,12 @@
 - type: roleLoadout
   id: JobSergeant
   groups:
-  - WH40KImperialCommandHead
+  - WH40KImperialSergeantHead
   - WH40KImperialCommandNeck
-  - WH40KImperialCommandOuter
+  - WH40KImperialSergeantOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobSergeantSWS
@@ -160,7 +164,7 @@
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobSergeantHWS
@@ -170,22 +174,24 @@
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobTankComm
   groups:
   - WH40KImperialCommandHead
+  - WH40KImperialEyes
   - WH40KImperialCommandNeck
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobLieutenant
   groups:
   - WH40KImperialCommandHead
+  - WH40KImperialEyes
   - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
@@ -196,26 +202,29 @@
   id: JobCommissar
   groups:
   - WH40KImperialCommandHead
+  - WH40KImperialEyes
   - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobColonel
   groups:
   - WH40KImperialCommandHead
+  - WH40KImperialEyes
   - WH40KImperialCommandNeck
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialMelee
+  - WH40KImperialCmdMelee
 
 - type: roleLoadout
   id: JobHGuardsman
   groups:
   - WH40KHereticLineHead
+  - WH40KImperialEyes
   - WH40KHereticLineMask
   - WH40KHereticLineHands
   - WH40KHereticFieldKit
@@ -243,6 +252,7 @@
   id: JobHVoxScout
   groups:
   - WH40KHereticLineHead
+  - WH40KImperialEyes
   - WH40KHereticLineMask
   - WH40KHereticLineHands
   - WH40KHereticFieldKit

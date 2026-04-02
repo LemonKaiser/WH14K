@@ -78,10 +78,10 @@
         amount: 12
       - id: WeaponChsStubSMG2
         amount: 12
-      - id: WeaponChsStubShotgun
-        amount: 4
       - id: WeaponStubRifle
         amount: 2
+      - id: WeaponChsStubShotgun
+        amount: 1
     - name: cm-automated-vendor-section-primary-ammunition
       entries:
       - id: MagazineStubSMG
@@ -93,7 +93,7 @@
       - id: WH40KAmmoBoxAutogun
         amount: 2
       - id: BoxLethalshot
-        amount: 4
+        amount: 1
     - name: cm-automated-vendor-section-sidearms
       entries:
       - id: WeaponStubSMG

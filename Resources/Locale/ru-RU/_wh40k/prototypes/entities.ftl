@@ -989,3 +989,12 @@ ent-WH40KServoSkullMeltaMob = сервочереп с мельта-зарядо�
 ent-WH40KAmmoBox10mm = ящик автопатрон (10mm)
 
 ent-WH40KAmmoBox10mmLong = ящик автопатрон (10mm удлинённые)
+
+ent-ClothingEyesHudTechPriestMed = визор повреждений
+    .desc = Этот визор позволяет техножрецам лучше отслеживать урон и статус цели
+
+ent-ClothingEyesHudTechPriestAdm = визор должностей
+    .desc = Этот визор позволяет техножрецам отслеживать должности и доступы
+
+ent-ClothingBackpackTechpriestDendrite = ранец с дендритами
+    .desc = Этот ранец техножрецов оснащён двумя дополнительными меха-дендритами

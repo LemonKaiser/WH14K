@@ -33,6 +33,4 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitGuardsman
     back: ClothingBackpackGuard
-    shoes: ClothingShoesAnkleBoots
-    belt: guardbelt
     id: GuardsmanDogTag
