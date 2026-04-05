@@ -1,0 +1,83 @@
+- type: entity
+  id: MobQueenChrysalis
+  parent: SimpleSpaceMobBase
+  suffix: WH40K, Ксенос
+  components: 
+  - type: TypingIndicator
+    proto: alien
+  - type: Speech
+    speechSounds: Genestealer #заглушка
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/QueenChrysalis.rsi
+    layers:
+      - map: ["enum.DamageStateVisualLayers.Base", "movement"]
+        state: QueenChrysalis
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.75
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: QueenChrysalis
+      Critical:
+        Base: crit
+      Dead:
+        Base: dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      300: Critical
+      400: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5
+    baseSprintSpeed: 7.5
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 0.7
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      collection: GenestealerAttack #Заглушка
+    damage:
+      types:
+        Piercing: 35
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hive
+  - type: ActiveRadio
+    channels:
+    - Hive
+  - type: Puller
+    needsHands: false
+  - type: Tag
+    tags:
+      - FootstepSound
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: walking
+    noMovementLayers:
+      movement:
+        state: QueenChrysalis
