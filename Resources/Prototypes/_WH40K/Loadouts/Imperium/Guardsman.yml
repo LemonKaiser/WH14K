@@ -95,3 +95,28 @@
   id: WH40KFlakArmorSrg
   equipment:
     outerClothing: ClothingOuterArmorFlakVest
+
+- type: loadout
+  id: WH40KJumpsuitGuardVst
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsmanVst
+
+- type: loadout
+  id: WH40KHelmetVst
+  equipment:
+    head: ClothingHeadHelmetFlakAdvVst
+
+- type: loadout
+  id: WH40KCoatVst
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestVst
+
+- type: loadout
+  id: WH40KGasmaskVst
+  equipment:
+    mask: ClothingMaskGasVst
+
+- type: loadout
+  id: WH40KBootsVst
+  equipment:
+    shoes: ClothingShoesBootsVst

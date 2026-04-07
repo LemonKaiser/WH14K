@@ -1,10 +1,10 @@
 - type: entity
   parent: ClothingNeckBase
-  id: Colonelcloak
+  id: ClothingNeckInqusition
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Cloaks/colonelcloak.rsi
+    sprite: _WH40K/Clothing/Neck/Misc/inqusition.rsi
     state: icon
   - type: Clothing
-    sprite: _WH40K/Clothing/Neck/Cloaks/colonelcloak.rsi
+    sprite: _WH40K/Clothing/Neck/Misc/inqusition.rsi

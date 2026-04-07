@@ -999,8 +999,68 @@ ent-ClothingEyesHudTechPriestAdm = визор должностей
 ent-ClothingBackpackTechpriestDendrite = ранец с дендритами
     .desc = Этот ранец техножрецов оснащён двумя дополнительными меха-дендритами
 
-ent-MobQueenChrysalis = КОРОЛЕВА ЕБАННЫХ КОНЕЙ ИЗ-ЗА КОТОРОЙ Я ПРОЕБУ ПОСТРОЕНИЕ И АНИКИН БЛЯТЬ МЕНЯ ЕБАТЬ БУДЕТ:(((((
+ent-MobQueenChrysalis = королева Кризалис
     .desc = Я хочу спать блять, спасите пожалуйста.
+
+ent-ClothingBeltChaplain = пояс клерика
+    .desc = Одежна священнослужителя.
+
+ent-WH40KClothingUniformJumpsuitChaplain = униформа Эклезиарии
+    .desc = Одежна священнослужителей малых чинов.
+
+ent-ClothingShoesBootsChaplain = ботинки клерика
+    .desc = Одежна священнослужителя.
+
+ent-ClothingOuterChaplainRobe = роба клерика
+    .desc = Одежна священнослужителя.
+
+ent-ClothingNeckInqusition = цель Экклезиархии
+    .desc = Цепочка с знаком Экклезиархии.
+
+ent-WH40KBible = библия
+    .desc = Священное писание.
+
+ent-ClothingNeckCloakRainImp = плащ-палатка
+    .desc = Полезно при дожде.
+
+ent-ClothingHeadHoodRainImp = капюшон плаща-палатки
+    .desc = Полезно при дожде.
+
+ent-ClothingNeckCloakRainChs = плащ-палатка
+    .desc = Полезно при дожде.
+
+ent-ClothingHeadHoodRainChs = капюшон плаща-палатки
+    .desc = Полезно при дожде.
+
+ent-ClothingUniformJumpsuitGuardsmanVst = униформа востроянцев
+    .desc = Обычная униформа.
+
+ent-ClothingHeadHelmetFlakAdvSergVst = шлем сержанта востроянцев
+    .desc = Обычная униформа.
+
+ent-ClothingHeadHelmetFlakAdvVst = шлем востроянца
+    .desc = Обычная униформа.
+
+ent-ClothingOuterArmorFlakVestVst = броня востроянца
+    .desc = Обычная униформа.
+
+ent-ClothingOuterArmorFlakVestLietVst = броня лейтенанта востроянцев
+    .desc = Обычная униформа.
+
+ent-ClothingMaskGasVst = противогаз вотроянца
+    .desc = Обычная униформа.
+
+ent-ClothingHandsGlovesVst = перчатки востроянца
+    .desc = Обычная униформа.
+
+ent-ClothingShoesBootsVst = ботинки востроянца
+    .desc = Обычная униформа.
+
+ent-ClothingNeckCloakVst = накидка лейтенанта востроянцев
+    .desc = Обычная униформа.
+
+ent-ClothingOuterArmorFlakVestMajor = шинель офицера
+    .desc = Офицерская шинель - вот он, символ власти на поле боя.
 
 ent-MobHormagaunt = Хормагаунт
     .desc = Кажется, он уже почувствовал запах твоей крови...

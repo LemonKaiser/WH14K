@@ -112,3 +112,19 @@
     sprite: _WH40K/Clothing/Belt/krieg_webbing.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Belt/krieg_webbing.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltChaplain
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/chaplain_unloading.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/chaplain_unloading.rsi
+  - type: ItemMapper
+    sprite: &BeltOverlay _WH40K/Clothing/Belt/belt_overlay.rsi
+    mapLayers:
+      bible:
+        whitelist:
+          tags:
+          - WH40KBible

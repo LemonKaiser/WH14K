@@ -596,3 +596,31 @@
     belt:
     - ChaosMachete
   groupBy: "melee"
+
+- type: loadout
+  id: WH40KHelmetSergVst
+  equipment:
+    head: ClothingHeadHelmetFlakAdvSergVst
+
+- type: loadout
+  id: WH40KCoatLietVst
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestLietVst
+
+- type: loadout
+  id: WH40KNeckVst
+  equipment:
+    neck: ClothingNeckCloakVst
+
+- type: loadout
+  id: WH40KArmorFlakCoatLiet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestMajor
+
+- type: loadout
+  id: WH40KArmorMajor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestMajor
