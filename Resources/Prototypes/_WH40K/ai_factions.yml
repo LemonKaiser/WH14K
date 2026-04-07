@@ -11,6 +11,7 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Tyranids
 
 - type: npcFaction
   id: Heretics
@@ -26,3 +27,20 @@
   - AllHostile
   - Wizard
   - Xenoborg
+  - Tyranids
+
+- type: npcFaction
+  id: Tyranids
+  hostile: 
+  - Imperium
+  - SimpleHostile
+  - NanoTrasen
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg
+  - Heretics

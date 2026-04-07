@@ -1061,3 +1061,6 @@ ent-ClothingNeckCloakVst = накидка лейтенанта востроян�
 
 ent-ClothingOuterArmorFlakVestMajor = шинель офицера
     .desc = Офицерская шинель - вот он, символ власти на поле боя.
+
+ent-MobHormagaunt = Хормагаунт
+    .desc = Кажется, он уже почувствовал запах твоей крови...

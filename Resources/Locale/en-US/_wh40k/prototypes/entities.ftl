@@ -986,3 +986,75 @@ ent-ColMarTechUtilities = ColMarTech automated utilities squad vendor
 
 ent-MobQueenChrysalis = Queen Chrysalis
     .desc = A female werewolf, and also a werewolf queen.
+
+ent-ClothingBeltChaplain = Cleric Belt
+    .desc = Clerical Garb.
+
+ent-WH40KClothingUniformJumpsuitChaplain = Ecclesiarchal Uniform
+    .desc = Garb for minor clergy.
+
+ent-ClothingShoesBootsChaplain = Cleric Boots
+    .desc = Clerical Garb.
+
+ent-ClothingOuterChaplainRobe = Cleric Robe
+    .desc = Clerical Garb.
+
+ent-ClothingNeckInqusition = Ecclesiarchal Inquisition
+    .desc = Chain with the Ecclesiarchal Insignia.
+
+ent-WH40KBible = Bible
+    .desc = Holy Scripture.
+
+ent-ClothingNeckCloakRainImp = Raincoat
+    .desc = Useful in the rain.
+
+ent-ClothingHeadHoodRainImp = Raincoat Hood
+    .desc = Useful in rain.
+
+ent-ClothingNeckCloakRainChs = Raincoat
+    .desc = Useful in rain.
+
+ent-ClothingHeadHoodRainChs = Raincoat Hood
+    .desc = Useful in rain.
+
+ent-ClothingUniformJumpsuitGuardsmanVst = Vostroyan Uniform
+    .desc = Normal Uniform.
+
+ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan Sergeant's Helmet
+    .desc = Normal Uniform.
+
+ent-ClothingHeadHelmetFlakAdvVst = Vostroyan Helmet
+    .desc = Normal Uniform.
+
+ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
+    .desc = Standard uniform.
+
+ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan sergeant's helmet
+    .desc = Normal uniform.
+
+ent-ClothingHeadHelmetFlakAdvVst = Vostroyan helmet
+    .desc = Normal uniform.
+
+ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
+    .desc = Normal uniform.
+
+ent-ClothingOuterArmorFlakVestLietVst = Vostroyan lieutenant's armor
+    .desc = Normal uniform.
+
+ent-ClothingMaskGasVst = Vostroyan gas mask
+    .desc = Normal uniform.
+
+ent-ClothingHandsGlovesVst = Vostroyan gloves
+    .desc = Standard uniform.
+
+ent-ClothingShoesBootsVst = Vostroyan boots
+    .desc = Standard uniform.
+
+ent-ClothingNeckCloakVst = Vostroyan lieutenant's cloak
+    .desc = Standard uniform.
+
+ent-ClothingOuterArmorFlakVestMajor = Officer's greatcoat
+    .desc = An officer's greatcoat—here it is, a symbol of authority on the battlefield.
+
+ent-MobHormagaunt = Hormagaunt
+    .desc = I think he can already smell your blood...
