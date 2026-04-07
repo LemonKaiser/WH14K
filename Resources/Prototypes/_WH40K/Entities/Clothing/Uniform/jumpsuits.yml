@@ -39,6 +39,26 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/guardsman.rsi
 
 - type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitGuardsmanVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: WH40KClothingUniformJumpsuitChaplain
+  suffix: WH40K, Империум
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi
+
+- type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitTechpriest
   suffix: WH40K, АдМехи
@@ -89,7 +109,7 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
-    
+
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitCultist2

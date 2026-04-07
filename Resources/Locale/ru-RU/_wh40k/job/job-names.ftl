@@ -11,6 +11,7 @@ job-name-recruit = рекрут
 job-name-voidsman = войдсман
 job-name-colonel = полковник
 job-name-commissar = комиссар
+job-name-major = майор
 job-name-lieutenant = лейтенант
 job-name-sergeant-hws = сержант ОТВ
 job-name-sergeant-sws = сержант ОСВ

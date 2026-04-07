@@ -71,6 +71,9 @@
   id: JobLieutenant
 
 - type: playTimeTracker
+  id: JobMajor
+
+- type: playTimeTracker
   id: JobSergeantHWS
 
 - type: playTimeTracker

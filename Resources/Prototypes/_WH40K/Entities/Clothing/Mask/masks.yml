@@ -143,3 +143,13 @@
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
+
+- type: entity
+  parent: ClothingMaskGasGuardsman
+  id: ClothingMaskGasVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
