@@ -56,8 +56,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      300: Critical
-      400: Dead
+      100: Critical
+      125: Dead
   - type: MovementSpeedModifier
     baseWalkSpeed: 6
     baseSprintSpeed: 7.8
@@ -72,7 +72,7 @@
       collection: GenestealerAttack #Заглушка
     damage:
       types:
-        Slash: 25
+        Slash: 10
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:
