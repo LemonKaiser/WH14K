@@ -1,0 +1,88 @@
+- type: entity
+  id: MobHormagaunt
+  parent: SimpleSpaceMobBase
+  suffix: WH40K, Тираниды
+  components:
+  - type: TypingIndicator
+    proto: alien
+  - type: Speech
+    speechSounds: Genestealer #Заглушка
+  - type: NpcFactionMember
+    factions:
+    - Tyranids
+  - type: Tool
+    speedModifier: 2.5
+    qualities:
+      - Prying
+  - type: Prying
+    pryPowered: !type:Bool
+        true
+    force: !type:Bool
+      true
+    useSound:
+      path: /Audio/Items/crowbar.ogg
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/hormagaunt.rsi
+    layers:
+      - map: [ "enum.DamageStateVisualLayers.Base" ]
+        state: hormagaunt
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.75
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: hormagaunt
+      Critical:
+        Base: crit
+      Dead:
+        Base: dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      125: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 6
+    baseSprintSpeed: 7.8
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 2.7
+    angle: 0
+    animation: WeaponArcSlash
+    soundHit:
+      collection: GenestealerAttack #Заглушка
+    damage:
+      types:
+        Slash: 10
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hive
+  - type: ActiveRadio
+    channels:
+    - Hive
+  - type: Puller
+    needsHands: false
+  - type: Tag
+    tags:
+      - FootstepSound
+      - DoorBumpOpener

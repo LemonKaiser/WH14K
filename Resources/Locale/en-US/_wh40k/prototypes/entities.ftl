@@ -983,3 +983,6 @@ ent-ColMarTechSGGear = ColMarTech squad smart gun operator gear rack
 
 ent-ColMarTechUtilities = ColMarTech automated utilities squad vendor
     .desc = An automated supply rack hooked up to a small storage of various utilities and tools. Can be accessed by any Marine Rifleman.
+
+ent-MobHormagaunt = Hormagaunt
+    .desc = I think he can already smell your blood...
