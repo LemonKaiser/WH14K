@@ -2153,16 +2153,16 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		int num2 = 0;
 		foreach (WH40KMetaAchievementPrototype item in _proto.EnumeratePrototypes<WH40KMetaAchievementPrototype>())
 		{
-			if (!string.Equals(item.ID, "wh40k-ach-all-complete", StringComparison.Ordinal))
+			if (string.Equals(item.ID, AllCompleteAchievementId, StringComparison.Ordinal) || !item.CountForAllComplete)
+				continue;
+
+			num2++;
+			state.AchievementProgress.TryGetValue(item.ID, out var value);
+			int target = WH40KMetaProgressMath.NormalizeAchievementTarget(item.Target);
+			int progress = WH40KMetaProgressMath.ClampAchievementProgress(value, target);
+			if (state.CompletedAchievements.Contains(item.ID) || WH40KMetaProgressMath.IsAchievementCompleted(progress, target))
 			{
-				num2++;
-				state.AchievementProgress.TryGetValue(item.ID, out var value);
-				int target = WH40KMetaProgressMath.NormalizeAchievementTarget(item.Target);
-				int progress = WH40KMetaProgressMath.ClampAchievementProgress(value, target);
-				if (state.CompletedAchievements.Contains(item.ID) || WH40KMetaProgressMath.IsAchievementCompleted(progress, target))
-				{
-					num++;
-				}
+				num++;
 			}
 		}
 		return (CompletedOther: num, TotalOther: Math.Max(1, num2));
@@ -2380,6 +2380,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private List<WH40KMetaAchievementSnapshotEntry> BuildAchievementSnapshotEntries(RuntimeProgressState state, out int completedAchievements, out int totalAchievements, out bool achievementStateChanged)
 	{
 		completedAchievements = 0;
+		totalAchievements = 0;
 		achievementStateChanged = false;
 		List<WH40KMetaAchievementSnapshotEntry> list = new List<WH40KMetaAchievementSnapshotEntry>();
 		foreach (WH40KMetaAchievementPrototype item2 in GetSortedAchievementPrototypes())
@@ -2421,14 +2422,17 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				state.CompletedAchievements.Remove(item2.ID);
 				achievementStateChanged = true;
 			}
-			if (flag4)
+			if (item2.CountInTotalAchievements)
 			{
-				completedAchievements++;
+				totalAchievements++;
+				if (flag4)
+				{
+					completedAchievements++;
+				}
 			}
 			string rewardKey = (string.IsNullOrWhiteSpace(item2.RewardKey) ? "wh40k-meta-progress-achievements-reward-none" : item2.RewardKey);
 			list.Add(new WH40KMetaAchievementSnapshotEntry(item2.ID, item2.Category, item2.TitleKey, item2.DescriptionKey, item2.TaskKey, rewardKey, Math.Max(0, item2.RewardXp), new List<string>(item2.RewardDecorationIds), num2, num, item2.Hidden, flag4));
 		}
-		totalAchievements = list.Count;
 		return list;
 	}
 

@@ -45,6 +45,12 @@ public sealed partial class WH40KMetaAchievementPrototype : IPrototype
     [DataField("hidden")]
     public bool Hidden;
 
+    [DataField("countInTotalAchievements")]
+    public bool CountInTotalAchievements = true;
+
+    [DataField("countForAllComplete")]
+    public bool CountForAllComplete = true;
+
     [DataField("sortOrder")]
     public int SortOrder;
 }

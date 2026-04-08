@@ -13,6 +13,7 @@ using Content.Shared.GameTicking;
 using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests._WH40K.MetaProgress;
 
@@ -452,6 +453,57 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
             Assert.That(achievement.Target, Is.EqualTo(8));
             Assert.That(achievement.Progress, Is.EqualTo(8));
             Assert.That(achievement.Completed, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ExcludedAchievementsDoNotSoftLockSummaryOrAllComplete()
+    {
+        var (pair, userId) = await SetupPairAndUser("AchExclusions", waitDbLoad: false);
+        var server = pair.Server;
+
+        await server.WaitPost(() =>
+        {
+            var meta = server.System<WH40KMetaProgressSystem>();
+            var proto = server.ResolveDependency<IPrototypeManager>();
+            var achievements = proto.EnumeratePrototypes<WH40KMetaAchievementPrototype>().ToList();
+
+            var allCompleteProto = achievements.Single(a => a.ID == "wh40k-ach-all-complete");
+            var excludedProto = achievements.Single(a => a.ID == "wh40k-ach-whispers-in-void");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(excludedProto.CountInTotalAchievements, Is.False);
+                Assert.That(excludedProto.CountForAllComplete, Is.False);
+                Assert.That(allCompleteProto.CountInTotalAchievements, Is.True);
+            });
+
+            foreach (var achievement in achievements.Where(a =>
+                         a.CountForAllComplete &&
+                         !string.Equals(a.ID, "wh40k-ach-all-complete", StringComparison.Ordinal)))
+            {
+                var unlocked = meta.TrySetAchievementUnlocked(userId, achievement.ID, true, out _, out _, out _, out var error);
+                Assert.That(unlocked, Is.True, error);
+            }
+
+            var snapshot = meta.GetSnapshot(userId);
+            var allComplete = snapshot.Achievements.Single(a => a.Id == "wh40k-ach-all-complete");
+            var excluded = snapshot.Achievements.Single(a => a.Id == "wh40k-ach-whispers-in-void");
+            var expectedTotal = achievements.Count(a => a.CountInTotalAchievements);
+            var expectedAllCompleteTarget = achievements.Count(a =>
+                a.CountForAllComplete &&
+                !string.Equals(a.ID, "wh40k-ach-all-complete", StringComparison.Ordinal));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(excluded.Completed, Is.False, "Excluded hidden achievement should remain individually locked.");
+                Assert.That(allComplete.Target, Is.EqualTo(expectedAllCompleteTarget));
+                Assert.That(allComplete.Completed, Is.True, "All-complete must unlock after all countable achievements are done.");
+                Assert.That(snapshot.TotalAchievements, Is.EqualTo(expectedTotal));
+                Assert.That(snapshot.CompletedAchievements, Is.EqualTo(expectedTotal), "Excluded achievements must not prevent 100% completion.");
+            });
         });
 
         await pair.CleanReturnAsync();

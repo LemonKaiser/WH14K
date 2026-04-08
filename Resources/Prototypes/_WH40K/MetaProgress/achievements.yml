@@ -104,6 +104,8 @@
   progressStatKey: mission.outcome
   progressScope: Lifetime
   hidden: true
+  countInTotalAchievements: false
+  countForAllComplete: false
   sortOrder: 70
 
 - type: wh40kMetaAchievement
