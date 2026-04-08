@@ -205,7 +205,17 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         Title = Loc.GetString("w40k-cmd-team-composition-window-title-team", ("team", resolvedTeamName));
 
         _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeamName)));
-        _summaryLine.Text = CompactLine(WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamCompositionSummary));
+        var staffing = state.StaffingData;
+        if (staffing != null)
+        {
+            _summaryLine.Text = CompactLine(Loc.GetString("w40k-cmd-team-composition-summary",
+                ("members", staffing.MemberCount),
+                ("roles", staffing.RoleCount)));
+        }
+        else
+        {
+            _summaryLine.Text = CompactLine(WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamCompositionSummary));
+        }
 
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
         _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(resolvedTeamName) ? "?" : resolvedTeamName.ToUpperInvariant();
@@ -215,7 +225,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         var mechanicusRoles = state.TeamCompositionMechanicusRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
         var members = state.TeamCompositionMembers ?? Array.Empty<WH40KTeamCompositionMemberEntry>();
 
-        RebuildStaffing(state.TeamCompositionStaffingLines);
+        RebuildStaffing(state.StaffingData, state.TeamCompositionStaffingLines);
         RebuildRoles(officerRoles, coreRoles, mechanicusRoles);
         RebuildMembers(members);
     }
@@ -265,9 +275,24 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         return section;
     }
 
-    private void RebuildStaffing(IReadOnlyCollection<string> staffingLines)
+    private void RebuildStaffing(WH40KTeamCompositionStaffingData? staffingData, IReadOnlyCollection<string> staffingLines)
     {
         _staffingRows.RemoveAllChildren();
+
+        if (staffingData != null)
+        {
+            _staffingRows.AddChild(CreateSingleLineRow(
+                Loc.GetString("w40k-cmd-team-composition-command-staff-line",
+                    ("current", staffingData.CommandCurrent),
+                    ("max", staffingData.CommandMax)),
+                highlight: true));
+            _staffingRows.AddChild(CreateSingleLineRow(
+                Loc.GetString("w40k-cmd-team-composition-line-staff-line",
+                    ("current", staffingData.LineCurrent),
+                    ("max", staffingData.LineMax)),
+                highlight: true));
+            return;
+        }
 
         if (staffingLines.Count == 0)
         {

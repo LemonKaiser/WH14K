@@ -211,7 +211,11 @@ namespace Content.Server.Voting.Managers
             var start = _timing.RealTime;
             var end = start + options.Duration;
             var reg = new VoteReg(id, entries, options.Title, options.InitiatorText,
-                options.InitiatorPlayer, start, end, options.VoterEligibility, options.DisplayVotes, options.TargetEntity);
+                options.InitiatorPlayer, start, end, options.VoterEligibility, options.DisplayVotes, options.TargetEntity)
+            {
+                TitleLocKey = options.TitleLocKey,
+                OptionLocKeys = options.OptionLocKeys?.ToArray(),
+            };
 
             var handle = new VoteHandle(this, reg);
 
@@ -292,6 +296,9 @@ namespace Content.Server.Voting.Managers
                 ref var entry = ref v.Entries[i];
                 msg.Options[i] = (msg.DisplayVotes ? (ushort) entry.Votes : (ushort) 0, entry.Text);
             }
+
+            msg.TitleLocKey = v.TitleLocKey;
+            msg.OptionLocKeys = v.OptionLocKeys;
 
             player.Channel.SendMessage(msg);
         }
@@ -506,6 +513,9 @@ namespace Content.Server.Voting.Managers
             public readonly VoterEligibility VoterEligibility;
             public readonly bool DisplayVotes;
             public readonly NetEntity? TargetEntity;
+
+            public string? TitleLocKey;
+            public string?[]? OptionLocKeys;
 
             public bool Cancelled;
             public bool Finished;

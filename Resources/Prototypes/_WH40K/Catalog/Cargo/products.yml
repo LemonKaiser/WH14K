@@ -110,6 +110,8 @@
 
 - type: cargoProduct
   id: WH40KImperiumMagazineMG
+  name: cargoproduct-name-wh40k-magazine-stub-mg
+  description: cargoproduct-description-wh40k-magazine-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -119,7 +121,21 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumMagazineLMG
+  name: cargoproduct-name-wh40k-magazine-stub-lmg
+  description: cargoproduct-description-wh40k-magazine-stub-lmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStabLMG
+  cost: 150
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMagazineRifle
+  name: cargoproduct-name-wh40k-magazine-stub-rifle
+  description: cargoproduct-description-wh40k-magazine-stub-rifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -145,6 +161,18 @@
     state: icon
   product: WeaponRifleBolter
   cost: 13000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineBolter
+  name: cargoproduct-name-wh40k-magazine-bolter
+  description: cargoproduct-description-wh40k-magazine-bolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolter
+  cost: 800
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -250,6 +278,8 @@
 
 - type: cargoProduct
   id: WH40KImperiumStubMG
+  name: cargoproduct-name-wh40k-stub-mg
+  description: cargoproduct-description-wh40k-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -270,6 +300,8 @@
 
 - type: cargoProduct
   id: WH40KImperiumStubLMG
+  name: cargoproduct-name-wh40k-stub-lmg
+  description: cargoproduct-description-wh40k-stub-lmg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -670,6 +702,8 @@
 
 - type: cargoProduct
   id: WH40KHereticsMagazineMG
+  name: cargoproduct-name-wh40k-magazine-stub-mg
+  description: cargoproduct-description-wh40k-magazine-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -679,7 +713,21 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineLMG
+  name: cargoproduct-name-wh40k-magazine-stub-lmg
+  description: cargoproduct-description-wh40k-magazine-stub-lmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStabLMG
+  cost: 150
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMagazineRifle
+  name: cargoproduct-name-wh40k-magazine-stub-rifle
+  description: cargoproduct-description-wh40k-magazine-stub-rifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -720,6 +768,8 @@
 
 - type: cargoProduct
   id: WH40KHereticsStubMG
+  name: cargoproduct-name-wh40k-stub-mg
+  description: cargoproduct-description-wh40k-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -740,6 +790,8 @@
 
 - type: cargoProduct
   id: WH40KHereticsStubLMG
+  name: cargoproduct-name-wh40k-stub-lmg
+  description: cargoproduct-description-wh40k-stub-lmg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
@@ -756,6 +808,18 @@
     state: icon
   product: WeaponPistolBolter
   cost: 16000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineBolterPistol
+  name: cargoproduct-name-wh40k-magazine-bolter-pistol
+  description: cargoproduct-description-wh40k-magazine-bolter-pistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolterPistol
+  cost: 400
   category: cpcat-arm
   group: WH40KHereticsMarket
 

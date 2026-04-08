@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Station.Events;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
@@ -36,7 +36,6 @@ public sealed class WH40KFactionSystem : EntitySystem
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattleRule = default!;
 
@@ -86,7 +85,7 @@ public sealed class WH40KFactionSystem : EntitySystem
         RaiseNetworkEvent(new WH40KFactionSelectionResultEvent(msg.Purpose, canonicalFactionId, accepted, messageLocKey, factions), session);
 
         if (!accepted && !string.IsNullOrWhiteSpace(messageLocKey))
-            _chat.DispatchServerMessage(session, Loc.GetString(messageLocKey));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = messageLocKey }, session);
     }
 
     private void OnCancelFactionSelection(WH40KCancelFactionSelectionEvent msg, EntitySessionEventArgs args)
@@ -160,7 +159,7 @@ public sealed class WH40KFactionSystem : EntitySystem
         if (!_lateJoinSelections.TryGetValue(args.Player.UserId, out var pendingSelection))
         {
             args.Cancelled = true;
-            _chat.DispatchServerMessage(args.Player, Loc.GetString(LateJoinSelectionRequiredLocKey));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = LateJoinSelectionRequiredLocKey }, args.Player);
             return;
         }
 
@@ -170,7 +169,7 @@ public sealed class WH40KFactionSystem : EntitySystem
                 continue;
 
             args.Cancelled = true;
-            _chat.DispatchServerMessage(args.Player, Loc.GetString(InvalidJobSelectionLocKey));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = InvalidJobSelectionLocKey }, args.Player);
             return;
         }
     }
@@ -186,7 +185,7 @@ public sealed class WH40KFactionSystem : EntitySystem
             _lobbySelections.Remove(args.Player.UserId);
     }
 
-    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _) 
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
     {
         _lobbySelections.Clear();
         _lateJoinSelections.Clear();

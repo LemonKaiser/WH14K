@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Content.Server.Combat;
 using Content.Server.NPC.HTN;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -5,19 +9,31 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server.KillTracking;
 
 /// <summary>
-/// This handles <see cref="KillTrackerComponent"/> and recording who is damaging and killing entities.
+/// Tracks damage attribution over an entity's life and emits down / kill attribution events.
 /// </summary>
 public sealed class KillTrackingSystem : EntitySystem
 {
+    [Dependency] private readonly CombatAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+
+    public void SetKillState(EntityUid uid, MobState state, KillTrackerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false))
+            return;
+
+        component.KillState = state;
+    }
+
     /// <inheritdoc/>
     public override void Initialize()
     {
-        // Add damage to LifetimeDamage before MobStateChangedEvent gets raised
-        SubscribeLocalEvent<KillTrackerComponent, DamageChangedEvent>(OnDamageChanged, before: [ typeof(MobThresholdSystem) ]);
+        // Record damage before mob thresholds process the same delta.
+        SubscribeLocalEvent<KillTrackerComponent, DamageChangedEvent>(OnDamageChanged, before: [typeof(MobThresholdSystem)]);
         SubscribeLocalEvent<KillTrackerComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
@@ -26,107 +42,226 @@ public sealed class KillTrackingSystem : EntitySystem
         if (args.DamageDelta == null)
             return;
 
+        PruneExpiredContributors(component);
+
         if (!args.DamageIncreased)
         {
-            foreach (var key in component.LifetimeDamage.Keys)
-            {
-                component.LifetimeDamage[key] -= args.DamageDelta.GetTotal();
-            }
-
+            ApplyHealing(component, args.DamageDelta);
             return;
         }
 
+        var totalDamage = GetPositiveDamage(args.DamageDelta);
+        if (totalDamage <= FixedPoint2.Zero)
+            return;
+
         var source = GetKillSource(args.Origin);
-        var damage = component.LifetimeDamage.GetValueOrDefault(source);
-        component.LifetimeDamage[source] = damage + args.DamageDelta.GetTotal();
+        if (!component.DamageLedger.TryGetValue(source, out var record))
+        {
+            record = new KillAttributionRecord();
+            component.DamageLedger[source] = record;
+        }
+
+        record.TotalDamage += totalDamage;
+        record.LastDamageTime = _timing.CurTime;
     }
 
     private void OnMobStateChanged(EntityUid uid, KillTrackerComponent component, MobStateChangedEvent args)
     {
-        if (args.NewMobState != component.KillState || args.OldMobState >= args.NewMobState)
+        if (args.OldMobState >= args.NewMobState)
+        {
+            if (args.NewMobState == MobState.Alive && args.OldMobState > MobState.Alive)
+                component.DamageLedger.Clear();
+
+            return;
+        }
+
+        if (args.NewMobState == MobState.Critical)
+        {
+            var attribution = BuildAttribution(uid, component, args.Origin);
+            var downed = new AttributedDownedEvent(uid, attribution.Primary, attribution.Assists, attribution.Suicide);
+            RaiseLocalEvent(uid, ref downed, true);
+
+            if (component.KillState == MobState.Critical)
+                RaiseCompatibilityKillEvent(uid, attribution);
+
+            return;
+        }
+
+        if (args.NewMobState == MobState.Dead)
+        {
+            var attribution = BuildAttribution(uid, component, args.Origin);
+            var killed = new AttributedKilledEvent(uid, attribution.Primary, attribution.Assists, attribution.Suicide);
+            RaiseLocalEvent(uid, ref killed, true);
+
+            if (component.KillState == MobState.Dead)
+                RaiseCompatibilityKillEvent(uid, attribution);
+        }
+    }
+
+    private void RaiseCompatibilityKillEvent(EntityUid uid, KillAttributionResult attribution)
+    {
+        var compatibility = new KillReportedEvent(
+            uid,
+            attribution.Primary,
+            attribution.Assists.Length > 0 ? attribution.Assists[0] : null,
+            attribution.Suicide);
+        RaiseLocalEvent(uid, ref compatibility, true);
+    }
+
+    private KillAttributionResult BuildAttribution(EntityUid uid, KillTrackerComponent component, EntityUid? origin)
+    {
+        PruneExpiredContributors(component);
+
+        var impulse = GetKillSource(origin);
+        var recentContributors = component.DamageLedger
+            .Where(pair => pair.Value.TotalDamage > FixedPoint2.Zero)
+            .OrderByDescending(pair => pair.Value.TotalDamage)
+            .ToArray();
+
+        var strongestContributor = recentContributors
+            .FirstOrDefault(pair => pair.Key is not KillEnvironmentSource);
+
+        var primary = impulse;
+        if (primary is KillEnvironmentSource && strongestContributor.Key != null)
+            primary = strongestContributor.Key;
+
+        if (primary is KillEnvironmentSource && recentContributors.Length > 0)
+            primary = recentContributors[0].Key;
+
+        component.DamageLedger.TryGetValue(primary, out var primaryRecord);
+        var primaryDamage = primaryRecord?.TotalDamage ?? FixedPoint2.Zero;
+        var assistDamageThreshold = FixedPoint2.New(Math.Max(
+            component.MinimumAssistDamage.Float(),
+            primaryDamage.Float() * component.AssistFractionThreshold));
+
+        var assists = recentContributors
+            .Where(pair => pair.Key != primary)
+            .Where(pair => pair.Key is not KillEnvironmentSource)
+            .Where(pair => !IsSourceEntity(pair.Key, uid))
+            .Where(pair => pair.Value.TotalDamage >= assistDamageThreshold)
+            .Select(pair => pair.Key)
+            .ToArray();
+
+        var suicide = IsSourceEntity(primary, uid);
+        return new KillAttributionResult(primary, assists, suicide);
+    }
+
+    private void ApplyHealing(KillTrackerComponent component, DamageSpecifier delta)
+    {
+        if (component.DamageLedger.Count == 0)
             return;
 
-        // impulse is the entity that did the finishing blow.
-        var killImpulse = GetKillSource(args.Origin);
+        var healAmount = GetHealingAmount(delta);
+        if (healAmount <= FixedPoint2.Zero)
+            return;
 
-        // source is the kill tracker source with the most damage dealt.
-        var largestSource = GetLargestSource(component.LifetimeDamage);
-        largestSource ??= killImpulse;
-
-        KillSource killSource;
-        KillSource? assistSource = null;
-
-        if (killImpulse is KillEnvironmentSource)
+        var totalTrackedDamage = FixedPoint2.Zero;
+        foreach (var record in component.DamageLedger.Values)
         {
-            // if the kill was environmental, whatever did the most damage gets the kill.
-            killSource = largestSource;
-        }
-        else if (killImpulse == largestSource)
-        {
-            // if the impulse and the source are the same, there's no assist
-            killSource = killImpulse;
-        }
-        else
-        {
-            // the impulse gets the kill and the most damage gets the assist
-            killSource = killImpulse;
-
-            // no assist is given to environmental kills
-            if (largestSource is not KillEnvironmentSource
-                && component.LifetimeDamage.TryGetValue(largestSource, out var largestDamage))
-            {
-                var killDamage = component.LifetimeDamage.GetValueOrDefault(killSource);
-                // you have to do at least twice as much damage as the killing source to get the assist.
-                if (largestDamage >= killDamage / 2)
-                    assistSource = largestSource;
-            }
+            if (record.TotalDamage > FixedPoint2.Zero)
+                totalTrackedDamage += record.TotalDamage;
         }
 
-        // it's a suicide if:
-        // - you caused your own death
-        // - the kill source was the entity that died
-        // - the entity that died had an assist on themselves
-        var suicide = args.Origin == uid ||
-                      killSource is KillNpcSource npc && npc.NpcEnt == uid ||
-                      killSource is KillPlayerSource player && player.PlayerId == CompOrNull<ActorComponent>(uid)?.PlayerSession.UserId ||
-                      assistSource is KillNpcSource assistNpc && assistNpc.NpcEnt == uid ||
-                      assistSource is KillPlayerSource assistPlayer && assistPlayer.PlayerId == CompOrNull<ActorComponent>(uid)?.PlayerSession.UserId;
+        if (totalTrackedDamage <= FixedPoint2.Zero)
+            return;
 
-        var ev = new KillReportedEvent(uid, killSource, assistSource, suicide);
-        RaiseLocalEvent(uid, ref ev, true);
+        var healFraction = Math.Clamp(healAmount.Float() / totalTrackedDamage.Float(), 0f, 1f);
+        var keys = component.DamageLedger.Keys.ToArray();
+
+        foreach (var key in keys)
+        {
+            var record = component.DamageLedger[key];
+            record.TotalDamage = FixedPoint2.New(record.TotalDamage.Float() * (1f - healFraction));
+            if (record.TotalDamage <= FixedPoint2.Zero)
+                component.DamageLedger.Remove(key);
+        }
+    }
+
+    private void PruneExpiredContributors(KillTrackerComponent component)
+    {
+        var expiry = TimeSpan.FromSeconds(Math.Max(1f, component.AssistWindowSeconds));
+        var now = _timing.CurTime;
+        var expired = component.DamageLedger
+            .Where(pair => now - pair.Value.LastDamageTime > expiry || pair.Value.TotalDamage <= FixedPoint2.Zero)
+            .Select(pair => pair.Key)
+            .ToArray();
+
+        foreach (var key in expired)
+        {
+            component.DamageLedger.Remove(key);
+        }
+    }
+
+    private FixedPoint2 GetPositiveDamage(DamageSpecifier delta)
+    {
+        var total = FixedPoint2.Zero;
+        foreach (var damage in delta.DamageDict.Values)
+        {
+            if (damage > FixedPoint2.Zero)
+                total += damage;
+        }
+
+        return total;
+    }
+
+    private FixedPoint2 GetHealingAmount(DamageSpecifier delta)
+    {
+        var total = FixedPoint2.Zero;
+        foreach (var damage in delta.DamageDict.Values)
+        {
+            if (damage < FixedPoint2.Zero)
+                total += -damage;
+        }
+
+        return total;
     }
 
     private KillSource GetKillSource(EntityUid? sourceEntity)
     {
-        if (TryComp<ActorComponent>(sourceEntity, out var actor))
+        if (sourceEntity == null)
+            return new KillEnvironmentSource();
+
+        var resolved = sourceEntity.Value;
+        if (_attackerResolver.TryResolveResponsibleEntity(sourceEntity.Value, out var responsible))
+            resolved = responsible;
+
+        if (TryComp<ActorComponent>(resolved, out var actor))
             return new KillPlayerSource(actor.PlayerSession.UserId);
-        if (HasComp<HTNComponent>(sourceEntity))
-            return new KillNpcSource(sourceEntity.Value);
+
+        if (HasComp<HTNComponent>(resolved))
+            return new KillNpcSource(resolved);
+
         return new KillEnvironmentSource();
     }
 
-    private KillSource? GetLargestSource(Dictionary<KillSource, FixedPoint2> lifetimeDamages)
+    private bool IsSourceEntity(KillSource source, EntityUid uid)
     {
-        KillSource? maxSource = null;
-        var maxDamage = FixedPoint2.Zero;
-        foreach (var (source, damage) in lifetimeDamages)
-        {
-            if (damage < maxDamage)
-                continue;
-            maxSource = source;
-            maxDamage = damage;
-        }
+        if (source is KillNpcSource npc)
+            return npc.NpcEnt == uid;
 
-        return maxSource;
+        if (source is not KillPlayerSource player)
+            return false;
+
+        return player.PlayerId == CompOrNull<ActorComponent>(uid)?.PlayerSession.UserId;
     }
+
+    private sealed record KillAttributionResult(KillSource Primary, KillSource[] Assists, bool Suicide);
 }
 
 /// <summary>
-/// Event broadcasted and raised by-ref on an entity with <see cref="KillTrackerComponent"/> when they are killed.
+/// Raised when a tracked entity enters critical and a downing source can be attributed.
 /// </summary>
-/// <param name="Entity">The entity that was killed</param>
-/// <param name="Primary">The primary source of the kill</param>
-/// <param name="Assist">A secondary source of the kill. Can be null.</param>
-/// <param name="Suicide">True if the entity that was killed caused their own death.</param>
+[ByRefEvent]
+public readonly record struct AttributedDownedEvent(EntityUid Entity, KillSource Primary, KillSource[] Assists, bool Suicide);
+
+/// <summary>
+/// Raised when a tracked entity dies and a killing source can be attributed.
+/// </summary>
+[ByRefEvent]
+public readonly record struct AttributedKilledEvent(EntityUid Entity, KillSource Primary, KillSource[] Assists, bool Suicide);
+
+/// <summary>
+/// Compatibility kill event for systems that still expect a single optional assist.
+/// </summary>
 [ByRefEvent]
 public readonly record struct KillReportedEvent(EntityUid Entity, KillSource Primary, KillSource? Assist, bool Suicide);

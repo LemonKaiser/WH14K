@@ -269,12 +269,12 @@ public sealed class WH40KTacticalWhistleSystem : EntitySystem
 
     private void PopupCaution(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.SmallCaution);
     }
 
     private void PopupSuccess(EntityUid user, string key)
     {
-        _popup.PopupEntity(Loc.GetString(key), user, user, PopupType.Small);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key), user, user, PopupType.Small);
     }
 
     private static SignalProfile GetSignalProfile(WH40KWhistleSignalType signalType, WH40KTacticalWhistleComponent whistle)

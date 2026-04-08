@@ -172,6 +172,22 @@
   - HolopadMachineCircuitboard
 
 - type: latheRecipePack
+  id: WH40KAutolatheStaticHeretics
+  parent: WH40KAutolatheStatic
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier1Heretics
+  parent: WH40KAutolatheTier1
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier2Heretics
+  parent: WH40KAutolatheTier2
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier3Heretics
+  parent: WH40KAutolatheTier3
+
+- type: latheRecipePack
   id: WH40KProtolatheStatic
   recipes:
   - WH40KRecipeAmmoAutogun
@@ -308,6 +324,185 @@
   - WH40KRecipeAmmo10mmLong
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
+  - Beaker
+  - LargeBeaker
+  - Syringe
+  - PillCanister
+  - HandLabeler
+  - ChemistryEmptyVial
+  - ChemistryEmptyVialSmall
+  - Dropper
+  - Jug
+  - ChemistryEmptyBottle01
+  - ClothingEyesGlassesChemical
+  - Scalpel
+  - Retractor
+  - Cautery
+  - Drill
+  - Saw
+  - Hemostat
+  - Brutepack
+  - Ointment
+  - Gauze
+  - Implanter
+  - WH40KDefibrillator
+  - HandheldHealthAnalyzer
+  - DiseaseSwab
+  - BodyBag
+  - JetInjector
+  - RollerBedSpawnFolded
+  - CheapRollerBedSpawnFolded
+  - EmergencyRollerBedSpawnFolded
+  - Medkit
+  - MedkitBurn
+  - MedkitToxin
+  - MedkitO2
+  - MedkitBrute
+  - MedkitAdvanced
+  - MedkitRadiation
+  - MedkitCombat
+  - PowerCellSmall
+  - PowerCellMedium
+  - SignallerAdvanced
+  - HandHeldMassScanner
+
+- type: latheRecipePack
+  id: WH40KProtolatheStaticHeretics
+  recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeChaosBlack
+  - Beaker
+  - LargeBeaker
+  - Syringe
+  - PillCanister
+  - HandLabeler
+  - ChemistryEmptyVial
+  - ChemistryEmptyVialSmall
+  - Dropper
+  - Jug
+  - ChemistryEmptyBottle01
+  - ClothingEyesGlassesChemical
+  - Scalpel
+  - Retractor
+  - Cautery
+  - Drill
+  - Saw
+  - Hemostat
+  - Brutepack
+  - Ointment
+  - Gauze
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier1Heretics
+  recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeChaosBlack
+  - Beaker
+  - LargeBeaker
+  - Syringe
+  - PillCanister
+  - HandLabeler
+  - ChemistryEmptyVial
+  - ChemistryEmptyVialSmall
+  - Dropper
+  - Jug
+  - ChemistryEmptyBottle01
+  - ClothingEyesGlassesChemical
+  - Scalpel
+  - Retractor
+  - Cautery
+  - Drill
+  - Saw
+  - Hemostat
+  - Brutepack
+  - Ointment
+  - Gauze
+  - Implanter
+  - WH40KDefibrillator
+  - HandheldHealthAnalyzer
+  - DiseaseSwab
+  - BodyBag
+  - JetInjector
+  - RollerBedSpawnFolded
+  - CheapRollerBedSpawnFolded
+  - EmergencyRollerBedSpawnFolded
+  - Medkit
+  - MedkitBurn
+  - MedkitToxin
+  - MedkitO2
+  - MedkitBrute
+  - MedkitAdvanced
+  - MedkitRadiation
+  - MedkitCombat
+  - PowerCellSmall
+  - PowerCellMedium
+  - SignallerAdvanced
+  - HandHeldMassScanner
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier2Heretics
+  recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeChaosBlack
+  - Beaker
+  - LargeBeaker
+  - Syringe
+  - PillCanister
+  - HandLabeler
+  - ChemistryEmptyVial
+  - ChemistryEmptyVialSmall
+  - Dropper
+  - Jug
+  - ChemistryEmptyBottle01
+  - ClothingEyesGlassesChemical
+  - Scalpel
+  - Retractor
+  - Cautery
+  - Drill
+  - Saw
+  - Hemostat
+  - Brutepack
+  - Ointment
+  - Gauze
+  - Implanter
+  - WH40KDefibrillator
+  - HandheldHealthAnalyzer
+  - DiseaseSwab
+  - BodyBag
+  - JetInjector
+  - RollerBedSpawnFolded
+  - CheapRollerBedSpawnFolded
+  - EmergencyRollerBedSpawnFolded
+  - Medkit
+  - MedkitBurn
+  - MedkitToxin
+  - MedkitO2
+  - MedkitBrute
+  - MedkitAdvanced
+  - MedkitRadiation
+  - MedkitCombat
+  - PowerCellSmall
+  - PowerCellMedium
+  - SignallerAdvanced
+  - HandHeldMassScanner
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier3Heretics
+  recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
   - Syringe

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Reflection;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Localizations;
@@ -30,6 +32,11 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
         SubscribeNetworkEvent<RequestServerVerbsEvent>(OnVerbsRequest);
 
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
+
+        if (LocalizationCultureScope.FlushCacheAction == null)
+        {
+            LocalizationCultureScope.FlushCacheAction = ResolveFlushAction(_loc);
+        }
     }
 
     public override void Shutdown()
@@ -37,8 +44,6 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
         base.Shutdown();
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
     }
-
-    // ── Public API ──────────────────────────────────────────────────────
 
     public string? GetCulture(ICommonSession session)
     {
@@ -86,8 +91,6 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
             : null;
     }
 
-    // ── Event handlers ──────────────────────────────────────────────────
-
     private void OnLobbyInfoRefresh(RequestLobbyInfoRefreshEvent msg, EntitySessionEventArgs args)
     {
         UpdateCulture(args.SenderSession, msg.CultureName);
@@ -108,8 +111,6 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
         if (args.NewStatus == SessionStatus.Disconnected)
             _cultures.Remove(args.Session.UserId);
     }
-
-    // ── Internals ───────────────────────────────────────────────────────
 
     private void UpdateCulture(ICommonSession? session, string? cultureName)
     {
@@ -136,6 +137,39 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
 
         if (cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase))
             return "EN";
+
+        return null;
+    }
+
+    private static Action<ILocalizationManager>? ResolveFlushAction(ILocalizationManager loc)
+    {
+        try
+        {
+            FieldInfo? field = null;
+            var type = loc.GetType();
+            while (type != null)
+            {
+                field = type.GetField("_entityCache",
+                    BindingFlags.NonPublic | BindingFlags.Instance);
+                if (field != null)
+                    break;
+                type = type.BaseType;
+            }
+
+            if (field != null)
+            {
+                var captured = field;
+                return manager =>
+                {
+                    if (captured.GetValue(manager) is IDictionary dict)
+                        dict.Clear();
+                };
+            }
+        }
+        catch
+        {
+            // Reflection failed — cache flush will be a no-op.
+        }
 
         return null;
     }

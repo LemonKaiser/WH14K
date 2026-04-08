@@ -1,10 +1,10 @@
 using System;
 using System.Numerics;
 using Content.Server.Administration;
-using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.Command.Comms.Megaphone;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
@@ -28,7 +28,6 @@ namespace Content.Server._WH40K.Command.Comms.Megaphone;
 public sealed class WH40KMegaphoneSystem : EntitySystem
 {
     [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
@@ -291,20 +290,28 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
         }
 
         matched.Reverse();
-        _chatManager.DispatchServerMessage(
-            actor.PlayerSession,
-            Loc.GetString("wh40k-megaphone-replay-header", ("count", matched.Count)));
+        RaiseNetworkEvent(new WH40KLocalizedChatEvent
+        {
+            LocKey = "wh40k-megaphone-replay-header",
+            LocArgs = new Dictionary<string, string>
+            {
+                ["count"] = matched.Count.ToString()
+            }
+        }, actor.PlayerSession);
 
         foreach (var entry in matched)
         {
             var age = Math.Max(0, (int) Math.Ceiling((now - entry.Timestamp).TotalSeconds));
-            _chatManager.DispatchServerMessage(
-                actor.PlayerSession,
-                Loc.GetString(
-                    "wh40k-megaphone-replay-line",
-                    ("seconds", age),
-                    ("speaker", entry.SpeakerName),
-                    ("message", entry.Message)));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-megaphone-replay-line",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["seconds"] = age.ToString(),
+                    ["speaker"] = entry.SpeakerName,
+                    ["message"] = entry.Message
+                }
+            }, actor.PlayerSession);
         }
     }
 
@@ -356,7 +363,7 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
 
     private void PopupCaution(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.SmallCaution);
     }
 
     private static bool CanReplayForTeam(string? userTeamId, string? entryTeamId)

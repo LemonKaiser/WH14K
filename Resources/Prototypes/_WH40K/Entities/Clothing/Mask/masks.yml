@@ -159,3 +159,5 @@
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
+  - type: WH40KSpeechSoundOverride
+    speechSounds: WH40KKriegMask

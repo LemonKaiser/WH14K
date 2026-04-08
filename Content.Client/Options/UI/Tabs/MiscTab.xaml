@@ -10,6 +10,13 @@
                 <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'ui-options-hud-theme'}" />
                 <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'ui-options-hud-layout'}" />
                 <ui:OptionDropDown Name="DropDownLanguage" Title="{Loc 'ui-options-language'}" />
+                <Label Name="LobbyHeaderLabel" Text="{Loc 'ui-options-general-lobby'}"
+                       StyleClasses="LabelKeyText"/>
+                <ui:OptionDropDown Name="DropDownLobbyBackgroundType" Title="{Loc 'ui-options-lobby-background-type'}" />
+                <ui:OptionDropDown Name="DropDownLobbyStaticBackground" Title="{Loc 'ui-options-lobby-static-background'}" />
+                <ui:OptionDropDown Name="DropDownLobbyAnimatedBackground" Title="{Loc 'ui-options-lobby-animated-background'}" />
+                <ui:OptionSlider Name="LobbyPanelOpacitySlider" Title="{Loc 'ui-options-lobby-panel-opacity'}" />
+                <ui:OptionSlider Name="CustomizationPanelOpacitySlider" Title="{Loc 'ui-options-customization-panel-opacity'}" />
                 <Label Name="DiscordHeaderLabel" Text="{Loc 'ui-options-general-discord'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="DiscordRich" Text="{Loc 'ui-options-discordrich'}" />

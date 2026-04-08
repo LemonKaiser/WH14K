@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Lobby;
 using Content.Client._WH40K.LateJoin;
+using Content.Shared.CCVar;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Interface;
 using Content.Shared._WH40K.LateJoin;
@@ -16,16 +16,13 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._WH40K.Interface;
 
 /// <summary>
-/// Auto-assigns WH40K UI themes once per round based on team selection/spawn.
-/// Players can still manually switch themes mid-round.
+/// Resolves WH40K UI themes from the player's saved preference.
+/// Auto follows faction assignment; explicit themes stay fixed until changed by the player.
 /// </summary>
 public sealed class WH40KInterfaceThemeSystem : EntitySystem
 {
     private const string TeamIdentityMapId = "WH40KTeamIdentityMap";
     private const string TeamIdentityDefaultProfileId = "WH40KTeamIdentityProfileImperium";
-    private const string DefaultThemeId = "SS14DefaultTheme";
-    private const string ImperiumThemeId = "WH40KImperiumTheme";
-    private const string HereticsThemeId = "WH40KChaosTheme";
 
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IClientConsoleHost _console = default!;
@@ -35,11 +32,9 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
     private ClientGameTicker _ticker = default!;
     private WH40KFactionSystem _factions = default!;
     private bool _lastRoundStarted;
-    private bool _autoAssignedThisRound;
-    private bool _manualOverrideThisRound;
     private bool _wh40kRoundActive;
-    private bool _settingThemeInternally;
-    private bool _trackManualThemeChanges;
+    private bool _settingPreferenceInternally;
+    private string? _currentTeamId;
 
     public override void Initialize()
     {
@@ -51,12 +46,13 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
 
         _ticker.LobbyStatusUpdated += OnLobbyStatusUpdated;
         _factions.FactionsUpdated += OnFactionsUpdated;
+        _factions.FactionSelectionResultReceived += OnFactionSelectionResultReceived;
         _console.AnyCommandExecuted += OnAnyCommandExecuted;
 
         SubscribeNetworkEvent<WH40KTeamThemeAssignedEvent>(OnThemeAssignment);
 
-        Subs.CVar(_cfg, CVars.InterfaceTheme, OnInterfaceThemeChanged, true);
-        _trackManualThemeChanges = true;
+        MigrateLegacyThemePreference();
+        Subs.CVar(_cfg, CCVars.WH40KInterfaceThemePreference, OnThemePreferenceChanged, true);
 
         if (_ticker.IsGameStarted)
             _factions.RequestFactions(WH40KFactionSelectionPurpose.Preview, force: true);
@@ -67,15 +63,14 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         base.Shutdown();
         _ticker.LobbyStatusUpdated -= OnLobbyStatusUpdated;
         _factions.FactionsUpdated -= OnFactionsUpdated;
+        _factions.FactionSelectionResultReceived -= OnFactionSelectionResultReceived;
         _console.AnyCommandExecuted -= OnAnyCommandExecuted;
     }
 
     public void NotifyFactionSelected(string factionId)
     {
-        if (!_ticker.IsGameStarted || !_wh40kRoundActive)
-            return;
-
-        TryApplyTeamTheme(factionId);
+        _currentTeamId = NormalizeTeamId(factionId);
+        RefreshThemeForCurrentContext();
     }
 
     private void OnLobbyStatusUpdated()
@@ -84,45 +79,50 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
 
         if (started && !_lastRoundStarted)
         {
-            _autoAssignedThisRound = false;
-            _manualOverrideThisRound = false;
+            _currentTeamId = null;
         }
         else if (!started && _lastRoundStarted)
         {
-            _autoAssignedThisRound = false;
-            _manualOverrideThisRound = false;
             _wh40kRoundActive = false;
+            _currentTeamId = null;
         }
 
         _lastRoundStarted = started;
 
         if (started)
             _factions.RequestFactions(WH40KFactionSelectionPurpose.Preview, force: true);
+
+        RefreshThemeForCurrentContext();
     }
 
     private void OnFactionsUpdated(WH40KFactionsEvent ev)
     {
         _wh40kRoundActive = _ticker.IsGameStarted && ev.Factions.Count > 0;
+
+        if (!_wh40kRoundActive)
+            _currentTeamId = null;
+
+        RefreshThemeForCurrentContext();
+    }
+
+    private void OnFactionSelectionResultReceived(WH40KFactionSelectionResultEvent ev)
+    {
+        if (!ev.Accepted)
+            return;
+
+        _currentTeamId = NormalizeTeamId(ev.FactionId);
+        RefreshThemeForCurrentContext();
     }
 
     private void OnThemeAssignment(WH40KTeamThemeAssignedEvent ev, EntitySessionEventArgs args)
     {
         _wh40kRoundActive = true;
-
-        if (string.IsNullOrWhiteSpace(ev.TeamId))
-        {
-            ApplyTheme(DefaultThemeId);
-            return;
-        }
-
-        TryApplyTeamTheme(ev.TeamId);
+        _currentTeamId = NormalizeTeamId(ev.TeamId);
+        RefreshThemeForCurrentContext();
     }
 
     private void OnAnyCommandExecuted(IConsoleShell _shell, string commandName, string _argStr, string[] args)
     {
-        if (!_ticker.IsGameStarted || !_wh40kRoundActive)
-            return;
-
         if (!commandName.Equals("observe", StringComparison.OrdinalIgnoreCase))
             return;
 
@@ -132,32 +132,21 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         if (args.Length > 0 && args[0].Equals("admin", StringComparison.OrdinalIgnoreCase))
             return;
 
-        ApplyTheme(DefaultThemeId);
+        _currentTeamId = null;
+        RefreshThemeForCurrentContext();
     }
 
-    private void OnInterfaceThemeChanged(string _)
+    private void OnThemePreferenceChanged(string preference)
     {
-        if (!_trackManualThemeChanges || _settingThemeInternally)
+        if (_settingPreferenceInternally)
             return;
 
-        if (_ticker.IsGameStarted && _wh40kRoundActive)
-            _manualOverrideThisRound = true;
+        ApplyThemePreference(preference);
     }
 
-    private void TryApplyTeamTheme(string teamId)
+    private void RefreshThemeForCurrentContext()
     {
-        if (_manualOverrideThisRound || _autoAssignedThisRound)
-            return;
-
-        var theme = ResolveThemeByTeam(teamId);
-        if (theme == null)
-        {
-            ApplyTheme(DefaultThemeId);
-            return;
-        }
-
-        ApplyTheme(theme);
-        _autoAssignedThisRound = true;
+        ApplyThemePreference(_cfg.GetCVar(CCVars.WH40KInterfaceThemePreference));
     }
 
     private string? ResolveThemeByTeam(string teamId)
@@ -169,10 +158,10 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         }
 
         if (teamId.Equals("Imperium", StringComparison.OrdinalIgnoreCase))
-            return ImperiumThemeId;
+            return WH40KInterfaceThemes.Imperium;
 
         if (teamId.Equals("Heretics", StringComparison.OrdinalIgnoreCase))
-            return HereticsThemeId;
+            return WH40KInterfaceThemes.Heretics;
 
         return null;
     }
@@ -216,13 +205,65 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         return teamMap.DefaultProfile;
     }
 
+    private void ApplyThemePreference(string preference)
+    {
+        if (WH40KInterfaceThemes.IsAuto(preference))
+        {
+            ApplyTheme(ResolveAutoTheme());
+            return;
+        }
+
+        ApplyTheme(preference);
+    }
+
+    private string ResolveAutoTheme()
+    {
+        if (!_ticker.IsGameStarted || !_wh40kRoundActive || string.IsNullOrWhiteSpace(_currentTeamId))
+            return WH40KInterfaceThemes.Default;
+
+        return ResolveThemeByTeam(_currentTeamId) ?? WH40KInterfaceThemes.Default;
+    }
+
+    private void MigrateLegacyThemePreference()
+    {
+        var preference = _cfg.GetCVar(CCVars.WH40KInterfaceThemePreference);
+        if (!WH40KInterfaceThemes.IsAuto(preference))
+            return;
+
+        var currentTheme = _cfg.GetCVar(CVars.InterfaceTheme);
+        if (!IsLegacyManualTheme(currentTheme))
+            return;
+
+        SetThemePreference(currentTheme);
+    }
+
+    private bool IsLegacyManualTheme(string themeId)
+    {
+        return !string.IsNullOrWhiteSpace(themeId) &&
+               !string.Equals(themeId, WH40KInterfaceThemes.Default, StringComparison.Ordinal) &&
+               !WH40KInterfaceThemes.IsFactionTheme(themeId);
+    }
+
+    private void SetThemePreference(string preference)
+    {
+        if (_cfg.GetCVar(CCVars.WH40KInterfaceThemePreference) == preference)
+            return;
+
+        _settingPreferenceInternally = true;
+        _cfg.SetCVar(CCVars.WH40KInterfaceThemePreference, preference);
+        _settingPreferenceInternally = false;
+    }
+
+    private static string? NormalizeTeamId(string? teamId)
+    {
+        return string.IsNullOrWhiteSpace(teamId) ? null : teamId;
+    }
+
     private void ApplyTheme(string themeId)
     {
         if (_cfg.GetCVar(CVars.InterfaceTheme) == themeId)
             return;
 
-        _settingThemeInternally = true;
         _cfg.SetCVar(CVars.InterfaceTheme, themeId);
-        _settingThemeInternally = false;
     }
 }

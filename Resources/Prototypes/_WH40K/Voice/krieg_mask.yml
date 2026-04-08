@@ -1,0 +1,17 @@
+- type: speechSounds
+  id: WH40KKriegMask
+  variation: 0
+  saySound:
+    collection: WH40KKriegMaskSpeech
+  askSound:
+    collection: WH40KKriegMaskSpeech
+  exclaimSound:
+    collection: WH40KKriegMaskSpeech
+
+- type: soundCollection
+  id: WH40KKriegMaskSpeech
+  files:
+    - /Audio/_WH40K/Voice/Krieg/pyro_taunts01.ogg
+    - /Audio/_WH40K/Voice/Krieg/pyro_taunts02.ogg
+    - /Audio/_WH40K/Voice/Krieg/pyro_taunts03.ogg
+    - /Audio/_WH40K/Voice/Krieg/pyro_taunts04.ogg

@@ -131,14 +131,14 @@
   components:
   - type: Lathe
     staticPacks:
-    - WH40KAutolatheStatic
+    - WH40KAutolatheStaticHeretics
   - type: WH40KTieredLatheProcessing
     teamId: Heretics
     tierMachineProfile: WH40KTierMachineStandard
-    tier0Pack: WH40KAutolatheStatic
-    tier1Pack: WH40KAutolatheTier1
-    tier2Pack: WH40KAutolatheTier2
-    tier3Pack: WH40KAutolatheTier3
+    tier0Pack: WH40KAutolatheStaticHeretics
+    tier1Pack: WH40KAutolatheTier1Heretics
+    tier2Pack: WH40KAutolatheTier2Heretics
+    tier3Pack: WH40KAutolatheTier3Heretics
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
@@ -224,7 +224,7 @@
   components:
   - type: Lathe
     staticPacks:
-    - WH40KProtolatheStatic
+    - WH40KProtolatheStaticHeretics
     dynamicPacks:
     - WH40KProtolatheDynamic
     - WH40KCommandWeaponryResearchHeretics
@@ -232,10 +232,10 @@
   - type: WH40KTieredLatheProcessing
     teamId: Heretics
     tierMachineProfile: WH40KTierMachineStandard
-    tier0Pack: WH40KProtolatheStatic
-    tier1Pack: WH40KProtolatheTier1
-    tier2Pack: WH40KProtolatheTier2
-    tier3Pack: WH40KProtolatheTier3
+    tier0Pack: WH40KProtolatheStaticHeretics
+    tier1Pack: WH40KProtolatheTier1Heretics
+    tier2Pack: WH40KProtolatheTier2Heretics
+    tier3Pack: WH40KProtolatheTier3Heretics
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics

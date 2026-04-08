@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Globalization;
-using System.Reflection;
 
 namespace Content.Shared.Localizations;
 
@@ -15,9 +13,12 @@ public readonly struct LocalizationCultureScope : IDisposable
     private readonly CultureInfo? _previousCulture;
     private readonly bool _active;
 
-    // Lazily-resolved reflection accessor for the engine's entity loc cache.
-    private static Action<ILocalizationManager>? _flushAction;
-    private static bool _flushResolved;
+    /// <summary>
+    ///     Optional callback to flush engine caches when culture changes.
+    ///     Must be registered by the server during initialization (reflection
+    ///     is not allowed in the client-side sandbox).
+    /// </summary>
+    public static Action<ILocalizationManager>? FlushCacheAction { get; set; }
 
     public LocalizationCultureScope(ILocalizationManager localizationManager, string? cultureName)
     {
@@ -64,39 +65,6 @@ public readonly struct LocalizationCultureScope : IDisposable
     /// </summary>
     private static void FlushEntityCache(ILocalizationManager loc)
     {
-        if (!_flushResolved)
-        {
-            _flushResolved = true;
-            try
-            {
-                // Walk up to the base LocalizationManager that owns _entityCache.
-                FieldInfo? field = null;
-                var type = loc.GetType();
-                while (type != null)
-                {
-                    field = type.GetField("_entityCache",
-                        BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (field != null)
-                        break;
-                    type = type.BaseType;
-                }
-
-                if (field != null)
-                {
-                    var captured = field;
-                    _flushAction = manager =>
-                    {
-                        if (captured.GetValue(manager) is IDictionary dict)
-                            dict.Clear();
-                    };
-                }
-            }
-            catch
-            {
-                _flushAction = null;
-            }
-        }
-
-        _flushAction?.Invoke(loc);
+        FlushCacheAction?.Invoke(loc);
     }
 }

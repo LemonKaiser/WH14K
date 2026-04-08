@@ -168,8 +168,10 @@ namespace Content.Client.Examine
             var entity = GetEntity(ev.EntityUid);
             var message = ev.Message;
 
-            // Keep localization override only for item examine text.
-            if (ShouldUseClientItemLocalization(entity))
+            // Keep localization override only for the initial examine request (id == _idCounter).
+            // Verb-triggered responses (id == 0, e.g. group examine Damage/Clothing) must keep
+            // the server's detailed message and NOT be replaced with basic examine text.
+            if (ev.Id != 0 && ShouldUseClientItemLocalization(entity))
                 message = GetExamineText(entity, player.Value);
 
             OpenTooltip(player.Value, entity, ev.CenterAtCursor, ev.OpenAtOldTooltip, ev.KnowTarget);

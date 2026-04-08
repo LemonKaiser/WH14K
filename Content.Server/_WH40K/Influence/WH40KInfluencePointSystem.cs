@@ -4,11 +4,11 @@ using Content.Server.Pinpointer;
 using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
 using Content.Shared.GameTicking;
 using Content.Shared.Pinpointer;
-using Content.Server.Chat.Managers;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Localization;
 using Robust.Shared.Physics;
@@ -55,7 +55,6 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -302,7 +301,12 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(capturedByTeamId) &&
             _teamRule.TryGetTeamDisplayName(capturedByTeamId, out var teamName))
         {
-            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-influence-captured", ("team", Loc.GetString(teamName))));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-influence-captured",
+                LocArgs = new Dictionary<string, string> { ["team"] = teamName },
+                ResolveArgValues = true,
+            });
         }
 
         if (!string.IsNullOrWhiteSpace(capturedByTeamId))

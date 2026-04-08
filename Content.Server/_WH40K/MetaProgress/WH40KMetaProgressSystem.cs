@@ -281,6 +281,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 		SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
 		SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
+		SubscribeLocalEvent<AttributedKilledEvent>(OnAttributedKilled);
 		SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
 		SubscribeLocalEvent<WH40KTeamBattleHealingDoneEvent>(OnTeamBattleHealingDone);
 		SubscribeLocalEvent<WH40KInfluencePointCapturedEvent>(OnInfluencePointCaptured);
@@ -1205,6 +1206,62 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		if (_xpKillCapPerRound > 0)
 		{
 			_roundKillXpGrants[killPlayerSource.PlayerId] = value + 1;
+		}
+	}
+
+	private void OnAttributedKilled(ref AttributedKilledEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound || ev.Suicide)
+			return;
+
+		if (ev.Primary is not KillPlayerSource primaryPlayer)
+			return;
+
+		if (!_teamBattleRule.TryGetTeamIdForUser(primaryPlayer.PlayerId, out var killerTeamId))
+			return;
+
+		if (!_teamBattleRule.TryGetTeamIdFromEntity(ev.Entity, out var victimTeamId))
+			return;
+
+		if (string.Equals(killerTeamId, victimTeamId, StringComparison.Ordinal))
+			return;
+
+		var recordedAssistIds = new HashSet<NetUserId>();
+		if (ev.Assists.Length > 0 && ev.Assists[0] is KillPlayerSource firstAssist)
+			recordedAssistIds.Add(firstAssist.PlayerId);
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["killerTeamId"] = killerTeamId,
+			["victimTeamId"] = victimTeamId
+		};
+
+		foreach (var assist in ev.Assists)
+		{
+			if (assist is not KillPlayerSource assistPlayer)
+				continue;
+
+			if (assistPlayer.PlayerId == primaryPlayer.PlayerId || !recordedAssistIds.Add(assistPlayer.PlayerId))
+				continue;
+
+			if (!_states.ContainsKey(assistPlayer.PlayerId))
+				continue;
+
+			if (!_teamBattleRule.TryGetTeamIdForUser(assistPlayer.PlayerId, out var assistTeamId))
+				continue;
+
+			if (!string.Equals(assistTeamId, killerTeamId, StringComparison.Ordinal) ||
+			    string.Equals(assistTeamId, victimTeamId, StringComparison.Ordinal))
+			{
+				continue;
+			}
+
+			_stats.Record(
+				assistPlayer.PlayerId,
+				"combat.assist.enemy",
+				1L,
+				new Dictionary<string, string>(metadata, StringComparer.Ordinal) { ["assistTeamId"] = assistTeamId });
+			TraceStats($"Recorded extra enemy assist stat for user={assistPlayer.PlayerId}, killer={primaryPlayer.PlayerId}, team={assistTeamId}->{victimTeamId}.");
 		}
 	}
 

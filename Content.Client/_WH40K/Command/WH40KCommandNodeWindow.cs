@@ -287,11 +287,31 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
 
     private void ApplyCompositionCard(WH40KCommandNodeBoundUserInterfaceState state)
     {
-        CompositionSummaryLabel.Text = ResolveLocalizedOrRaw(state.TeamCompositionSummary);
-        CompositionStaffingLabel.Text = BuildPreviewBlock(
-            state.TeamCompositionStaffingLines,
-            2,
-            "w40k-cmd-composition-card-no-staffing");
+        var staffing = state.StaffingData;
+        if (staffing != null)
+        {
+            CompositionSummaryLabel.Text = Loc.GetString("w40k-cmd-team-composition-summary",
+                ("members", staffing.MemberCount),
+                ("roles", staffing.RoleCount));
+            CompositionStaffingLabel.Text = string.Join("\n", new[]
+            {
+                Loc.GetString("w40k-cmd-team-composition-command-staff-line",
+                    ("current", staffing.CommandCurrent),
+                    ("max", staffing.CommandMax)),
+                Loc.GetString("w40k-cmd-team-composition-line-staff-line",
+                    ("current", staffing.LineCurrent),
+                    ("max", staffing.LineMax)),
+            });
+        }
+        else
+        {
+            CompositionSummaryLabel.Text = ResolveLocalizedOrRaw(state.TeamCompositionSummary);
+            CompositionStaffingLabel.Text = BuildPreviewBlock(
+                state.TeamCompositionStaffingLines,
+                2,
+                "w40k-cmd-composition-card-no-staffing");
+        }
+
         CompositionStaffingLabel.ModulateSelfOverride = WH40KCommandUiStyles.SoftText;
     }
 

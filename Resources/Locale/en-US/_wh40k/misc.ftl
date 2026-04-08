@@ -30,6 +30,10 @@ materials-datapoint = raw data
 
 loadout-group-techpriest-neck = robe, tech-priest
 loadout-group-techpriest-mask = tech-priest respirators
+loadout-group-guardsman-head = head, guardsman
+loadout-group-wh40k-imperial-eyes = imperial eyewear
+loadout-group-techpriest-eyes = tech-priest, eyes
+loadout-group-techpriest-back = tech-priest, backpack
 loadout-group-wh40k-imperial-line-head = imperial frontline headgear
 loadout-group-wh40k-imperial-line-honours = imperial frontline honours
 loadout-group-wh40k-imperial-field-outer = imperial field outerwear

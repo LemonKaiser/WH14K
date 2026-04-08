@@ -81,6 +81,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         string Summary,
         string[] LegacyLines,
         string[] StaffingLines,
+        WH40KTeamCompositionStaffingData StaffingData,
         WH40KTeamCompositionRoleEntry[] OfficerRoles,
         WH40KTeamCompositionRoleEntry[] CoreRoles,
         WH40KTeamCompositionRoleEntry[] MechanicusRoles,
@@ -286,6 +287,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             composition.CoreRoles,
             composition.MechanicusRoles,
             composition.Members,
+            composition.StaffingData,
             bonusIntel,
             teamEventRuntime,
             globalMissionRuntime,
@@ -1951,7 +1953,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var coreRoleIds = hasCompositionProfile
             ? GetOrderedCoreRoleIds(teamRoleIdSet, compositionProfile.CoreRoles, officerRoleIds, mechanicusRoleIds)
             : GetOrderedCoreRoleIds(teamRoleIdSet, Array.Empty<ProtoId<JobPrototype>>(), officerRoleIds, mechanicusRoleIds);
-        var staffingLines = BuildStaffingOverview(
+        var staffingResult = BuildStaffingOverview(
             roleIdCounts,
             teamRoleIdSet,
             hasCompositionProfile ? compositionProfile : null);
@@ -1962,7 +1964,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var memberEntries = BuildMemberEntries(members, officerRoleIds, coreRoleIds, mechanicusRoleIds);
 
         var lines = new List<string>();
-        lines.AddRange(staffingLines);
+        lines.AddRange(staffingResult.Lines);
         lines.Add(string.Empty);
         lines.Add(Loc.GetString("w40k-cmd-team-composition-roles-header"));
         AppendRoleGroupLines(lines,
@@ -1995,17 +1997,26 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             ("members", memberEntries.Length),
             ("roles", teamRoleIds.Length));
 
+        var staffingData = new WH40KTeamCompositionStaffingData(
+            memberEntries.Length,
+            teamRoleIds.Length,
+            staffingResult.CommandCurrent,
+            staffingResult.CommandMax,
+            staffingResult.LineCurrent,
+            staffingResult.LineMax);
+
         return new TeamCompositionData(
             summary,
             lines.ToArray(),
-            staffingLines,
+            staffingResult.Lines,
+            staffingData,
             officerRoles,
             coreRoles,
             mechanicusRoles,
             memberEntries);
     }
 
-    private string[] BuildStaffingOverview(
+    private (string[] Lines, int CommandCurrent, int CommandMax, int LineCurrent, int LineMax) BuildStaffingOverview(
         IReadOnlyDictionary<string, int> roleIdCounts,
         IReadOnlyCollection<string> teamRoleIds,
         WH40KCommandTeamCompositionProfilePrototype? profile)
@@ -2034,7 +2045,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             ("current", lineCurrent),
             ("max", lineMax)));
 
-        return lines.ToArray();
+        return (lines.ToArray(), commandCurrent, commandMax, lineCurrent, lineMax);
     }
 
     private List<StaffingRolePlan> BuildCommandStaffingPlan(

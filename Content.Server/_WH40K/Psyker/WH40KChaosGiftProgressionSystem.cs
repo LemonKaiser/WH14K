@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Popups;
+using Content.Server._WH40K.Localizations;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -34,6 +35,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
     [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
@@ -2130,12 +2132,12 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void PopupCaution(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.SmallCaution);
     }
 
     private void PopupSuccess(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.Small);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.Small);
     }
 
     private static string GetPatronLocKey(WH40KChaosPatron patron)

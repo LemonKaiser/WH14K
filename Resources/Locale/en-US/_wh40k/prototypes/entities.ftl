@@ -510,8 +510,8 @@ ent-WeaponLaserCarabin = lascarbine
 ent-WeaponLaserLasgun = M36 Cantrael
     .desc = The standard weapon of the Cadian Assault Troops and all regiments that derive their military traditions and doctrines from them.
 
-ent-WeaponLaserLasgunKrieg = krieg-pattern lasgun
-    .desc = A Krieg-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
+ent-WeaponLaserLasgunKrieg = lucius-pattern lasgun
+    .desc = A Lucius-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
 
 ent-WeaponLaserLasgunAccatran = Accatran VI D
     .desc = Assault version of the legendary Accatran model range, model - Six De.
@@ -1061,3 +1061,274 @@ ent-ClothingOuterArmorMunitorumRig = Munitorum rig
 
 ent-ClothingOuterArmorMunitorumVest = Munitorum vest
     .desc = A compact armored vest for Munitorum logisticians and warehouse crews.
+
+ent-ClothingHeadHelmetFlakCandle = flak helmet with candle
+    .desc = Is this idiocy or a forced necessity?
+
+ent-ClothingHeadHelmetFlakCandleChaos = flak helmet with candle
+    .desc = Is this idiocy or a forced necessity?
+
+ent-Bugle = vox-horn
+    .desc = It can probably attract some attention...
+
+ent-WH40KAmmoBox10mm = autogun ammo box (10mm)
+
+ent-WH40KAmmoBox10mmLong = autogun ammo box (10mm long)
+
+ent-ClothingEyesHudTechPriestMed = damage HUD visor
+    .desc = This visor allows Tech-Priests to better track damage and target status.
+
+ent-ClothingEyesHudTechPriestAdm = job HUD visor
+    .desc = This visor allows Tech-Priests to track roles and access levels.
+
+ent-ClothingBackpackTechpriestDendrite = dendrite backpack
+    .desc = This Tech-Priest backpack is equipped with two additional mecha-dendrites.
+
+ent-MobQueenChrysalis = Queen Chrysalis
+    .desc = A shape-shifting pony who can assume many different forms.
+
+# --- Floor tiles ---
+
+ent-NecronFloorWH40k = necron tile
+ent-NecronFloorWH40k1 = brick floor
+ent-BrickFloorWH40k = brick floor
+ent-BrickFloorWH40k1 = brick floor
+ent-BrickFloorWH40k2 = brick floor
+ent-BrickFloorWH40k3 = chaos brick floor
+ent-ChaosBrickAshFloorWH40k = concrete tile
+ent-ConcreteFloorWH40k = concrete tile
+ent-ConcreteFloorWH40k1 = concrete tile
+ent-ConcreteFloorWH40k2 = concrete tile
+ent-ConcreteFloorWH40k3 = concrete tile
+
+# --- Actions ---
+
+ent-ActionWH40KMoraleExecution = Morale Execution
+    .desc = Instantly execute an ally with an execution mark within 2 tiles and activate a morale aura.
+
+ent-ActionWH40KChaosWarpBlast = Warp Blast
+    .desc = Hurl unstable Warp fire at a target.
+
+ent-ActionWH40KChaosWarpKnock = Defiled Breach
+    .desc = Breach nearby doors by desecrating their machine spirits.
+
+ent-ActionWH40KChaosUndividedBlink = Step of the Undivided
+    .desc = Slide through the Warp in the name of Chaos Undivided.
+
+ent-ActionWH40KChaosKhorneRepulse = Champion's Blade
+    .desc = Summon a warp blade for close-quarters carnage and melee breaching.
+
+ent-ActionWH40KChaosNurgleMiasma = Miasma of Nurgle
+    .desc = Spread a plague fog to obscure vision and suppress the field.
+
+ent-ActionWH40KChaosSlaaneshSwap = Exchange of Ecstasy
+    .desc = Lash the fabric of reality and swap positions with a chosen target.
+
+ent-ActionWH40KChaosTzeentchBarrier = Barrier of Tzeentch
+    .desc = Form a short-lived wall of mutating Warp strands.
+
+ent-ActionWH40KChaosTzeentchFireball = Inferno of Tzeentch
+    .desc = Unleash a powerful bolt of shifting flame with a long cooldown.
+
+ent-ActionWH40KChaosWarpBlastSurge = Warp Blast Surge
+    .desc = Unleash an overcharged warp blast with devastating force.
+
+ent-ActionWH40KChaosWarpRiftStep = Rift Step
+    .desc = Tear open a brief rift and burst through it in a dash.
+
+ent-ActionWH40KChaosUndividedAegis = Aegis of the Undivided
+    .desc = Erect a crude but resilient wall for any warband.
+
+ent-ActionWH40KChaosKhorneExecutionStep = Blood Feast
+    .desc = Burn your blood to rapidly close wounds and continue the slaughter.
+
+ent-ActionWH40KChaosNurgleRepulse = Acid Spit
+    .desc = Spit a concentrated glob of caustic bile that burns through flesh and armour.
+
+ent-ActionWH40KChaosSlaaneshMiasma = Ecstatic Chorus
+    .desc = Infuse nearby Slaanesh cultists with stimulants and combat chem.
+
+ent-ActionWH40KChaosTzeentchMindTwist = Conspiracy of Change
+    .desc = For 30 seconds, speed up and enlighten nearby Tzeentch cultists; chosen ones also get reduced cooldowns.
+
+ent-ActionWH40KChaosKhorneBloodstorm = Bloody Onslaught
+    .desc = Charge through the ranks, knocking down and stunning everyone in your path.
+
+ent-ActionWH40KChaosKhorneGroxMorph = Grox Form
+    .desc = Transform into a raging grox for a brief window of blood-mad fury.
+
+ent-ActionWH40KChaosNurgleCorpseBloom = Corpse Rise
+    .desc = Raise the selected corpse as an allied Nurgle zombie.
+
+ent-ActionWH40KChaosSlaaneshExquisiteTempo = Sacred Self-Flagellation
+    .desc = Tear yourself with the lash of ecstasy, converting pain into potent healing.
+
+ent-ActionWH40KChaosTzeentchWarpRewrite = Weaver's Dash
+    .desc = Instantly displace to a chosen point, escaping danger or changing your angle of attack.
+
+ent-ActionWH40KChaosSlaaneshArena = Arena of Ecstasy
+    .desc = Pull a target to you, stun both combatants, and seal the duel in a brief warp arena.
+
+ent-ActionWH40KChaosLeaderSacrifice = Ashen Sacrifice
+    .desc = Instantly turn your follower of the same pantheon to ash, restore 100 Warp energy, and grant the cult 100 XP.
+
+ent-ActionWH40KOpenSquadConsole = Squad Command
+    .desc = Open the squad command interface and assign your team's fighters.
+
+# --- Space Marine equipment ---
+
+ent-ClothingBackpackAstartesMk2Powerpack = Mk II power pack
+    .desc = An early Astartes power pack.
+
+ent-ClothingBackpackAstartesMk3Powerpack = Mk III power pack
+    .desc = A heavy Astartes power pack.
+
+ent-ClothingBackpackAstartesMk4Powerpack = Mk IV power pack
+    .desc = An improved-pattern Astartes power pack.
+
+ent-ClothingBackpackAstartesMk5Powerpack = Mk V power pack
+    .desc = A field-pattern Astartes power pack.
+
+ent-ClothingBackpackAstartesMk6Powerpack = Mk VI power pack
+    .desc = A lightweight Astartes power pack.
+
+ent-ClothingBackpackAstartesMk7JumpPack = Mk VII jump pack
+    .desc = A jump pack for Astartes power armour.
+
+ent-ClothingBackpackAstartesMk23JumpPack = Mk II/III jump pack
+    .desc = An early jump pack for Astartes power armour.
+
+ent-ClothingHeadHelmetAstartesMk7 = Mk VII "Aquila" helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk2 = Mk II helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk3 = Mk III helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk4 = Mk IV helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk5 = Mk V helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk6 = Mk VI helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk7 = Mk VII "Aquila" power armour
+    .desc = A servo-enhanced suit of Adeptus Astartes power armour. Superior to standard carapace armour and fitted for a Space Marine.
+
+ent-ClothingOuterArmorAstartesMk2 = Mk II power armour
+    .desc = An early Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk3 = Mk III power armour
+    .desc = A heavy Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk4A = Mk IV power armour, variant I
+    .desc = An improved Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk4B = Mk IV power armour, variant II
+    .desc = An improved Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk5 = Mk V power armour
+    .desc = A field-pattern Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk6 = Mk VI power armour
+    .desc = A reconnaissance Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingBackpackAstartesChaosPowerpack = Chaos Space Marine power pack
+    .desc = A defiled power pack for Space Marine armour, adorned with the symbols of Chaos.
+
+ent-ClothingHeadHelmetAstartesChaos = Chaos Space Marine helmet
+    .desc = A sealed helmet of corrupted Space Marine power armour, built for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesChaos = Chaos Space Marine power armour
+    .desc = A corrupted suit of power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+
+ent-MobAstartesWH40KImperiumMk2 = Imperium Space Marine Mk II
+ent-MobAstartesWH40KImperiumMk4 = Imperium Space Marine Mk IV
+ent-MobAstartesWH40KHereticsChaos = Chaos Space Marine
+
+# --- Chaos cultist equipment ---
+
+ent-ClothingBackpackCULT1 = Chaos cultist backpack
+    .desc = A backpack woven from skin of unknown origin; it holds supplies, weapons, and the hidden tomes of servants of Chaos.
+
+ent-ClothingBackpackCULT2 = Chaos cultist skull backpack
+    .desc = A backpack woven from skin of unknown origin and adorned with a skull; it holds supplies, weapons, and the hidden tomes of servants of Chaos.
+
+ent-ClothingBackpackSatchelChaosWheel = Chaos Wheel satchel
+    .desc = A battered cultist satchel decorated with a Chaos Star motif. Warp symbols on its surface flare occasionally, inspiring dread and offering strange protection.
+
+ent-chaosbelt = Chaos ritual webbing
+    .desc = A sinister belt stitched from unknown hide and steeped in the whispers of the Warp.
+
+ent-chaosbelt2 = Chaos Cult belt
+    .desc = A sinister belt stitched from unknown hide and soaked in blood.
+
+ent-ClothingHandsGlovesCombatcult = combat gloves
+    .desc = Cult combat gloves.
+
+ent-ClothingHeadScarfChaos = head sack
+    .desc = A simple head sack, but its fabric is infused with symbols of Chaos. Protects the head and gives the cultist a sinister appearance.
+
+ent-ClothingHeadHelmetFlakCHAOS = Chaos Cult composite helmet
+    .desc = A standard helmet forged from dark metal and defiled with Chaos runes. It protects the cultist's head but inspires terror.
+
+ent-ClothingMaskGasChaosCultist1 = Chaos gas mask
+    .desc = Does it even work? Washed in the blood of children.
+
+ent-ClothingMaskGasChaosCultist2 = Chaos gas mask
+    .desc = Does it even work? Made from human skin.
+
+ent-ClothingMaskGasCultist3 = cultist respirator
+    .desc = A sinister respirator adorned with symbols of Chaos. It protects the airways and occasionally softens blows to the face thanks to its rigid frame.
+
+ent-NecklaceChaosCultistReflectWeak = cultist necklace
+    .desc = A sinister necklace adorned with symbols of Chaos. It flares with warp energy and projects a weak protective shield.
+
+ent-ClothingOuterArmorChaosVest = Chaos flak vest
+    .desc = A full set of defiled Chaos armour for a rank-and-file cultist. Provides solid protection, but its alien metal presses on the body and restricts movement.
+
+ent-ClothingOuterArmorCultistCoat = cultist greatcoat
+    .desc = A dark greatcoat infused with symbols of Chaos. It inspires dread.
+
+ent-ClothingShoesChaosBoots1 = Chaos cultist boots
+    .desc = Sinister boots stitched from unknown hide and steeped in the whispers of the Warp. They serve not only as protection but as a symbol of devotion to Chaos.
+
+ent-ClothingShoesChaosBoots2 = Chaos cultist jackboots
+    .desc = Cultist jackboots made from strangely soft, tender skin whose smoothness horrifies, as if it still holds the warmth of its former owners.
+
+ent-ClothingUniformJumpsuitCultist1 = cultist jumpsuit
+    .desc = A dark jumpsuit covered in symbols of Chaos. It inspires dread but offers no protection.
+
+ent-ClothingUniformJumpsuitCultist2 = cultist vestments
+    .desc = A sinister jumpsuit woven from dark fabrics and covered in Warp runes. Its appearance inspires awe and underscores devotion to the Chaos cult.
+
+# --- Rune tablets ---
+
+ent-WH40KRuneSkrizhalBase = rune tablet
+    .desc = A runic tablet.
+ent-WH40KRuneSkrizhalChaos = Chaos rune tablet
+ent-WH40KRuneSkrizhalKhorn = Khorne rune tablet
+ent-WH40KRuneSkrizhalNurgk = Nurgle rune tablet
+ent-WH40KRuneSkrizhalSlaanesh = Slaanesh rune tablet
+ent-WH40KRuneSkrizhalTzinch = Tzeentch rune tablet
+
+# --- Misc ---
+
+ent-WH40KChaosKhorneStealerBlade = Khorne stealer blade
+    .desc = A living geno-blade woven from the fury and hunger of Khorne.
+
+ent-BarricadeWarhammerChaos = Chaos barricade
+    .desc = This might save your life one day. Or the opposite.
+ent-BarricadeWarhammerChaosgreen = Chaos barricade
+    .desc = This might save your life one day. Or the opposite.
+
+ent-ShuttleComputerModular = modular shuttle console
+    .desc = A terminal used for piloting the ship and maintaining communications.
+ent-AdMechComputerModular = Adeptus Mechanicus modular console
+    .desc = A terminal used for technical operations.
+
+ent-Battlecry = battle cry

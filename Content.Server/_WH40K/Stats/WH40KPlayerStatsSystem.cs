@@ -24,6 +24,7 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
     private readonly LinkedList<WH40KPlayerStatLogEntry> _recent = new();
     private ISawmill _sawmill = default!;
     private bool _traceEnabled;
+    private bool _traceConfigured;
 
     public event Action<WH40KPlayerStatLogEntry>? ActionRecorded;
 
@@ -38,8 +39,14 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
 
     private void OnStatsTraceChanged(bool value)
     {
+        var previous = _traceEnabled;
         _traceEnabled = value;
-        _sawmill.Info($"WH40K stats trace logging {(value ? "enabled" : "disabled")}.");
+
+        // Stay quiet on startup when tracing is already disabled by default.
+        if (value || (_traceConfigured && previous != value))
+            _sawmill.Info($"WH40K stats trace logging {(value ? "enabled" : "disabled")}.");
+
+        _traceConfigured = true;
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -80,9 +87,6 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
         PushRecent(entry);
         RaiseLocalEvent(new WH40KPlayerStatRecordedEvent(entry));
         ActionRecorded?.Invoke(entry);
-
-        _sawmill.Debug(
-            $"Recorded stat: user={userId}, key={normalizedKey}, delta={delta}, meta={FormatMetadata(entry.Metadata)}");
 
         if (_traceEnabled)
         {

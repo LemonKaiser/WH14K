@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.GameTicking;
+using Content.Server._WH40K.Localizations;
 using Content.Server._WH40K.MetaProgress;
 using Content.Shared.CCVar;
 using Content.Shared.Popups;
@@ -45,6 +46,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     [Dependency] private readonly ILogManager _logManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly IStatusHost _statusHost = default!;
     [Dependency] private readonly ITaskManager _task = default!;
     [Dependency] private readonly UserDbDataManager _userDb = default!;
@@ -852,6 +854,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
     private void Popup(ICommonSession session, string locKey)
     {
+        using var scope = _culture.CreateScope(session);
         var message = Loc.GetString(locKey);
         if (locKey == "wh40k-discord-auth-popup-misconfigured")
         {

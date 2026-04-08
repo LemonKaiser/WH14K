@@ -162,7 +162,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
 
         args.Handled = true;
         _popup.PopupEntity(
-            Loc.GetString("wh40k-fulton-popup-attach-start", ("target", Name(target))),
+            _culture.GetPlayerString(args.User, "wh40k-fulton-popup-attach-start", ("target", Name(target))),
             args.User,
             args.User,
             PopupType.Small);
@@ -697,7 +697,6 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(teamId))
             return;
 
-        var message = Loc.GetString(messageKey, args);
         foreach (var session in _players.Sessions)
         {
             if (!_teamRule.TryGetTeamIdForUser(session.UserId, out var sessionTeam))
@@ -706,7 +705,8 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
             if (!string.Equals(sessionTeam, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            _chat.DispatchServerMessage(session, message);
+            using var scope = _culture.CreateScope(session);
+            _chat.DispatchServerMessage(session, Loc.GetString(messageKey, args));
         }
     }
 

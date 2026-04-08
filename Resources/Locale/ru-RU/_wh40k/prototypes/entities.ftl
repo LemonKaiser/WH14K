@@ -520,8 +520,8 @@ ent-WeaponLaserCarabin = лазкарабин
 ent-WeaponLaserLasgun = М36 Кантраэль
     .desc = стандартное оружие Кадианских штурмовых войск и всех полков, ведущих свои воинские традиции и доктрины от них.
 
-ent-WeaponLaserLasgunKrieg = кригский лазган
-    .desc = Лазган кригского образца, подготовленный для жёсткой окопной службы и долгих переходов по мёртвым фронтам.
+ent-WeaponLaserLasgunKrieg = люций лазган
+    .desc = Лазган модели Люций, подготовленный для жёсткой окопной службы и долгих переходов по мёртвым фронтам.
 
 ent-WeaponLaserLasgunAccatran = Аккатран VI D
     .desc = Штурмовая версия легендарного модельного ряда Аккатран, модель - Шесть Дэ.
@@ -1105,3 +1105,78 @@ ent-ClothingBackpackTechpriestDendrite = ранец с дендритами
 
 ent-MobQueenChrysalis = королева Крисалис
     .desc = Пони оборотень, который может принимать самые разные формы.
+
+# --- Снаряжение космодесанта ---
+
+ent-ClothingBackpackAstartesMk2Powerpack = силовой ранец Mk II
+    .desc = Ранний силовой ранец космодесантника.
+
+ent-ClothingBackpackAstartesMk3Powerpack = силовой ранец Mk III
+    .desc = Тяжёлый силовой ранец космодесантника.
+
+ent-ClothingBackpackAstartesMk4Powerpack = силовой ранец Mk IV
+    .desc = Силовой ранец космодесантника улучшенного образца.
+
+ent-ClothingBackpackAstartesMk5Powerpack = силовой ранец Mk V
+    .desc = Полевой силовой ранец космодесантника.
+
+ent-ClothingBackpackAstartesMk6Powerpack = силовой ранец Mk VI
+    .desc = Облегчённый силовой ранец космодесантника.
+
+ent-ClothingBackpackAstartesMk7JumpPack = прыжковый ранец Mk VII
+    .desc = Прыжковый ранец силовой брони космодесантника.
+
+ent-ClothingBackpackAstartesMk23JumpPack = прыжковый ранец Mk II/III
+    .desc = Ранний прыжковый ранец силовой брони космодесантника.
+
+ent-ClothingBackpackAstartesChaosPowerpack = силовой ранец хаоситского космодесантника
+    .desc = Осквернённый силовой ранец для брони космодесантника, украшенный символами Хаоса.
+
+ent-ClothingHeadHelmetAstartesMk7 = шлем Mk VII "Аквила"
+    .desc = Герметичный шлем силовой брони космодесанта. Его крепления и уплотнения рассчитаны на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesMk2 = шлем Mk II
+    .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesMk3 = шлем Mk III
+    .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesMk4 = шлем Mk IV
+    .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesMk5 = шлем Mk V
+    .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesMk6 = шлем Mk VI
+    .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingHeadHelmetAstartesChaos = шлем хаоситского космодесантника
+    .desc = Герметичный шлем осквернённой силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk7 = силовая броня Mk VII "Аквила"
+    .desc = Сервоусиленный комплект силовой брони Адептус Астартес. Защищает лучше обычной панцирной брони и рассчитан на тело космодесантника.
+
+ent-ClothingOuterArmorAstartesMk2 = силовая броня Mk II
+    .desc = Ранний комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk3 = силовая броня Mk III
+    .desc = Тяжёлый комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk4A = силовая броня Mk IV, вариант I
+    .desc = Усовершенствованный комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk4B = силовая броня Mk IV, вариант II
+    .desc = Усовершенствованный комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk5 = силовая броня Mk V
+    .desc = Полевой комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesMk6 = силовая броня Mk VI
+    .desc = Разведывательный комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+
+ent-ClothingOuterArmorAstartesChaos = силовая броня хаоситского космодесантника
+    .desc = Осквернённый комплект силовой брони, переделанный под анатомию Адептус Астартес и укреплённый варп-скверной.
+
+ent-MobAstartesWH40KImperiumMk2 = космодесантник Империума Mk II
+ent-MobAstartesWH40KImperiumMk4 = космодесантник Империума Mk IV
+ent-MobAstartesWH40KHereticsChaos = хаоситский космодесантник

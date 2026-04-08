@@ -24,6 +24,9 @@
   - type: Item
     sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmapistol.rsi
     size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
   - type: Tag
     tags:
     - Sidearm

@@ -20,6 +20,10 @@ namespace Content.Shared.Voting
         public bool DisplayVotes;
         public int TargetEntity;
 
+        public string? TitleLocKey;
+
+        public string?[]? OptionLocKeys;
+
         public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
         {
             VoteId = buffer.ReadVariableInt32();
@@ -46,6 +50,18 @@ namespace Content.Shared.Voting
             if (IsYourVoteDirty)
             {
                 YourVote = buffer.ReadBoolean() ? buffer.ReadByte() : null;
+            }
+
+            // Locale keys for client-side resolution.
+            var hasLocKeys = buffer.ReadBoolean();
+            if (hasLocKeys)
+            {
+                TitleLocKey = buffer.ReadBoolean() ? buffer.ReadString() : null;
+                OptionLocKeys = new string?[Options.Length];
+                for (var i = 0; i < Options.Length; i++)
+                {
+                    OptionLocKeys[i] = buffer.ReadBoolean() ? buffer.ReadString() : null;
+                }
             }
         }
 
@@ -79,6 +95,24 @@ namespace Content.Shared.Voting
                 if (YourVote.HasValue)
                 {
                     buffer.Write(YourVote.Value);
+                }
+            }
+
+            // Locale keys for client-side resolution.
+            var hasLocKeys = TitleLocKey != null || OptionLocKeys != null;
+            buffer.Write(hasLocKeys);
+            if (hasLocKeys)
+            {
+                buffer.Write(TitleLocKey != null);
+                if (TitleLocKey != null)
+                    buffer.Write(TitleLocKey);
+
+                for (var i = 0; i < Options.Length; i++)
+                {
+                    var key = OptionLocKeys != null && i < OptionLocKeys.Length ? OptionLocKeys[i] : null;
+                    buffer.Write(key != null);
+                    if (key != null)
+                        buffer.Write(key);
                 }
             }
         }

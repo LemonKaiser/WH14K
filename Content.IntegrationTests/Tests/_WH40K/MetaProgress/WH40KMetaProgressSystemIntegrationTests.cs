@@ -8,6 +8,7 @@ using Content.IntegrationTests.Pair;
 using Content.Server.Database;
 using Content.Server.GameTicking.Events;
 using Content.Server._WH40K.MetaProgress;
+using Content.Server._WH40K.Stats;
 using Content.Shared.GameTicking;
 using Content.Shared._WH40K.MetaProgress;
 using Robust.Shared.GameObjects;
@@ -304,6 +305,157 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
     // ─────────────────────────────────────────────
     // Decorations — lock, unlock, selection fallback
     // ─────────────────────────────────────────────
+
+    [Test]
+    public async Task RoundAchievementBlockerPreventsUnlockUntilFreshRound()
+    {
+        var (pair, userId) = await SetupPairAndUser("RoundBlocker", waitDbLoad: false);
+        var server = pair.Server;
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 11);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatDeaths, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 1);
+
+            var achievement = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
+            Assert.That(achievement.Target, Is.EqualTo(12));
+            Assert.That(achievement.Progress, Is.EqualTo(0), "Death blocker must zero round progress before unlock.");
+            Assert.That(achievement.Completed, Is.False);
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.ResolveDependency<IEntityManager>()
+                .EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+        });
+        await pair.RunTicksSync(2);
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 12);
+
+            var achievement = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
+            Assert.That(achievement.Progress, Is.EqualTo(12));
+            Assert.That(achievement.Completed, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LifetimeStatAchievementsUseDeltaProgressAcrossMultipleRecords()
+    {
+        var (pair, userId) = await SetupPairAndUser("LifetimeStats", waitDbLoad: false);
+        var server = pair.Server;
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 100);
+
+            var huntmaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-huntmaster");
+            Assert.That(huntmaster.Target, Is.EqualTo(150));
+            Assert.That(huntmaster.Progress, Is.EqualTo(100));
+            Assert.That(huntmaster.Completed, Is.False);
+
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 50);
+
+            huntmaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-huntmaster");
+            Assert.That(huntmaster.Progress, Is.EqualTo(150), "Lifetime achievements must advance by delta, not re-add prior total.");
+            Assert.That(huntmaster.Completed, Is.True);
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.ResolveDependency<IEntityManager>()
+                .EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+        });
+        await pair.RunTicksSync(2);
+
+        await server.WaitAssertion(() =>
+        {
+            var huntmaster = server.System<WH40KMetaProgressSystem>()
+                .GetSnapshot(userId)
+                .Achievements.Single(a => a.Id == "wh40k-ach-huntmaster");
+            Assert.That(huntmaster.Progress, Is.EqualTo(150), "Round cleanup must not wipe lifetime achievement progress.");
+            Assert.That(huntmaster.Completed, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LogisticsAchievementsMatchCargoMissionStatsSemantics()
+    {
+        var (pair, userId) = await SetupPairAndUser("CargoAch", waitDbLoad: false);
+        var server = pair.Server;
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            stats.Record(userId, WH40KPlayerStatKeys.LogisticsDeliverySuccess, 1);
+
+            var freightRunner = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-freight-runner");
+            var convoyMaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-convoy-master");
+            Assert.That(freightRunner.Target, Is.EqualTo(1));
+            Assert.That(freightRunner.Completed, Is.True, "One completed cargo mission should satisfy the entry logistics achievement.");
+            Assert.That(convoyMaster.Target, Is.EqualTo(2));
+            Assert.That(convoyMaster.Progress, Is.EqualTo(1));
+            Assert.That(convoyMaster.Completed, Is.False);
+
+            stats.Record(userId, WH40KPlayerStatKeys.LogisticsDeliverySuccess, 1);
+            convoyMaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-convoy-master");
+            Assert.That(convoyMaster.Progress, Is.EqualTo(2));
+            Assert.That(convoyMaster.Completed, Is.True);
+
+            stats.Record(userId, WH40KPlayerStatKeys.LogisticsDeliveryValue, 14);
+            var supplyChief = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-supply-line-chief");
+            Assert.That(supplyChief.Target, Is.EqualTo(14));
+            Assert.That(supplyChief.Progress, Is.EqualTo(14));
+            Assert.That(supplyChief.Completed, Is.True);
+
+            stats.Record(userId, WH40KPlayerStatKeys.LogisticsDeliveryValue, 106);
+            var highValueCargo = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-high-value-cargo");
+            Assert.That(highValueCargo.Target, Is.EqualTo(120));
+            Assert.That(highValueCargo.Progress, Is.EqualTo(120));
+            Assert.That(highValueCargo.Completed, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PatronAttunementAchievementsAdvanceFromRecordedAttunementStats()
+    {
+        var (pair, userId) = await SetupPairAndUser("PatronAttune", waitDbLoad: false);
+        var server = pair.Server;
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            stats.Record(userId, WH40KPlayerStatKeys.ChaosPatronAttunementKhorne, 8);
+
+            var achievement = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-khorne-attunement-veteran");
+            Assert.That(achievement.Target, Is.EqualTo(8));
+            Assert.That(achievement.Progress, Is.EqualTo(8));
+            Assert.That(achievement.Completed, Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task DecorationLockUnlockAndSelectionFallback()

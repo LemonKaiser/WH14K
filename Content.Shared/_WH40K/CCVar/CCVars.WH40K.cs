@@ -7,6 +7,13 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
+    ///     Stores the player's WH40K HUD theme preference.
+    ///     Auto follows faction theme assignment; any concrete theme stays fixed.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KInterfaceThemePreference =
+        CVarDef.Create("wh40k.interface_theme_preference", "WH40KAutoTheme", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
     ///     Seconds between WH40K team rule victory checks.
     /// </summary>
     public static readonly CVarDef<float> WH40KTeamCheckInterval =
@@ -471,6 +478,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> WH40KEconomyTelemetryTrace =
         CVarDef.Create("wh40k.economy.telemetry_trace", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables verbose WH40K mission-runtime debug logs (objective anchors, cargo routing, mission flow).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KMissionRuntimeDebugTrace =
+        CVarDef.Create("wh40k.mission_runtime.debug_trace", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     Seconds between periodic WH40K economy telemetry snapshots.

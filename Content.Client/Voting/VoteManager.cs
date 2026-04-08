@@ -9,6 +9,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.IoC;
+using Robust.Shared.Localization;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 using Robust.Shared.Player;
@@ -154,7 +155,17 @@ namespace Content.Client.Voting
                 var vote = new ActiveVote(voteId)
                 {
                     Entries = message.Options
-                        .Select(c => new VoteEntry(c.name))
+                        .Select((c, idx) =>
+                        {
+                            var text = c.name;
+                            if (message.OptionLocKeys != null && idx < message.OptionLocKeys.Length
+                                && message.OptionLocKeys[idx] is { } locKey
+                                && Loc.TryGetString(locKey, out var locText))
+                            {
+                                text = locText;
+                            }
+                            return new VoteEntry(text);
+                        })
                         .ToArray()
                 };
 
@@ -181,7 +192,9 @@ namespace Content.Client.Voting
             // On the server, most of these params can't change.
             // It can't hurt to just re-set this stuff since I'm lazy and the server is sending it anyways, so...
             existingVote.Initiator = message.VoteInitiator;
-            existingVote.Title = message.VoteTitle;
+            existingVote.Title = message.TitleLocKey is { } titleLocKey && Loc.TryGetString(titleLocKey, out var resolvedTitle)
+                ? resolvedTitle
+                : message.VoteTitle;
             existingVote.StartTime = _gameTiming.RealServerToLocal(message.StartTime);
             existingVote.EndTime = _gameTiming.RealServerToLocal(message.EndTime);
             existingVote.DisplayVotes = message.DisplayVotes;

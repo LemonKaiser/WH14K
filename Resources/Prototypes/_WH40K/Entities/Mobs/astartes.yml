@@ -1,0 +1,74 @@
+- type: startingGear
+  id: WH40KAstartesImperiumMk2Gear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackImperium
+    head: ClothingHeadHelmetAstartesMk2
+    outerClothing: ClothingOuterArmorAstartesMk2
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineBolter
+    id: SergeantDogTag
+  inhand:
+    - WeaponRifleBolter
+
+- type: startingGear
+  id: WH40KAstartesImperiumMk4Gear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackImperium
+    head: ClothingHeadHelmetAstartesMk4
+    outerClothing: ClothingOuterArmorAstartesMk4A
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineBolter
+    id: SergeantDogTag
+  inhand:
+    - WeaponRifleBolter
+
+- type: startingGear
+  id: WH40KAstartesHereticsChaosGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackHeretics
+    head: ClothingHeadHelmetAstartesChaos
+    outerClothing: ClothingOuterArmorAstartesChaos
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineBolter
+    id: HSergeantDogTag
+  inhand:
+    - WeaponRifleBolter
+
+- type: entity
+  parent: MobAstartes
+  id: MobAstartesWH40KImperiumMk2
+  suffix: WH40K, Imperium, Astartes
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KAstartesImperiumMk2Gear
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+
+- type: entity
+  parent: MobAstartes
+  id: MobAstartesWH40KImperiumMk4
+  suffix: WH40K, Imperium, Astartes
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KAstartesImperiumMk4Gear
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+
+- type: entity
+  parent: MobAstartes
+  id: MobAstartesWH40KHereticsChaos
+  suffix: WH40K, Heretics, Astartes
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KAstartesHereticsChaosGear
+  - type: WH40KTeamMember
+    teamId: Heretics
+  - type: WH40KSquadAssignable
+    teamId: Heretics

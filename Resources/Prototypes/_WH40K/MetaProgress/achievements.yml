@@ -8,7 +8,7 @@
   rewardXp: 200
   rewardDecorations:
     - decor-title-legend
-  target: 50
+  target: 12
   progressStatKey: combat.kill.enemy
   progressScope: Round
   roundBlockerStatKeys:
@@ -25,7 +25,7 @@
   rewardXp: 150
   rewardDecorations:
     - decor-ghost-star
-  target: 20
+  target: 8
   progressStatKey: combat.kill.enemy
   progressScope: Round
   sortOrder: 20
@@ -40,7 +40,7 @@
   rewardXp: 250
   rewardDecorations:
     - decor-title-war-choir
-  target: 20
+  target: 8
   progressStatKey: support.stabilize
   progressScope: Round
   sortOrder: 30
@@ -55,7 +55,7 @@
   rewardXp: 300
   rewardDecorations:
     - decor-title-iron-priest
-  target: 40
+  target: 2
   progressStatKey: logistics.delivery.success
   progressScope: Round
   sortOrder: 40
@@ -85,7 +85,7 @@
   rewardXp: 500
   rewardDecorations:
     - decor-title-vanguard
-  target: 100
+  target: 40
   progressStatKey: round.completed.faction
   progressScope: Lifetime
   sortOrder: 60
@@ -116,7 +116,7 @@
   rewardXp: 325
   rewardDecorations:
     - decor-title-storm-herald
-  target: 35
+  target: 15
   progressStatKey: combat.kill.enemy
   progressScope: Round
   sortOrder: 90
@@ -131,7 +131,7 @@
   rewardXp: 350
   rewardDecorations:
     - decor-title-iron-oath
-  target: 25
+  target: 10
   progressStatKey: combat.kill.enemy
   progressScope: Round
   roundBlockerStatKeys:
@@ -148,7 +148,7 @@
   rewardXp: 225
   rewardDecorations:
     - decor-color-sunset-static
-  target: 20
+  target: 8
   progressStatKey: combat.assist.enemy
   progressScope: Round
   sortOrder: 110
@@ -163,7 +163,7 @@
   rewardXp: 650
   rewardDecorations:
     - decor-ghost-pack-shadowkin
-  target: 500
+  target: 150
   progressStatKey: combat.kill.enemy
   progressScope: Lifetime
   sortOrder: 120
@@ -178,7 +178,7 @@
   rewardXp: 900
   rewardDecorations:
     - decor-title-hellforged
-  target: 1000
+  target: 300
   progressStatKey: combat.kill.enemy
   progressScope: Lifetime
   sortOrder: 130
@@ -193,7 +193,7 @@
   rewardXp: 250
   rewardDecorations:
     - decor-color-mint-solid
-  target: 8
+  target: 4
   progressStatKey: support.revive
   progressScope: Round
   sortOrder: 140
@@ -208,7 +208,7 @@
   rewardXp: 700
   rewardDecorations:
     - decor-title-bone-guard
-  target: 120
+  target: 40
   progressStatKey: support.revive
   progressScope: Lifetime
   sortOrder: 150
@@ -223,7 +223,7 @@
   rewardXp: 250
   rewardDecorations:
     - decor-color-jade-solid
-  target: 25
+  target: 12
   progressStatKey: support.stabilize
   progressScope: Round
   sortOrder: 160
@@ -238,7 +238,7 @@
   rewardXp: 800
   rewardDecorations:
     - decor-color-glacier-static
-  target: 300
+  target: 120
   progressStatKey: support.heal.bucket100
   progressScope: Lifetime
   sortOrder: 170
@@ -253,7 +253,7 @@
   rewardXp: 400
   rewardDecorations:
     - decor-title-night-warden
-  target: 12
+  target: 6
   progressStatKey: support.revive
   progressScope: Round
   roundBlockerStatKeys:
@@ -270,7 +270,7 @@
   rewardXp: 250
   rewardDecorations:
     - decor-color-copper-static
-  target: 20
+  target: 1
   progressStatKey: logistics.delivery.success
   progressScope: Round
   sortOrder: 190
@@ -285,7 +285,7 @@
   rewardXp: 800
   rewardDecorations:
     - decor-title-rune-bearer
-  target: 250
+  target: 20
   progressStatKey: logistics.delivery.success
   progressScope: Lifetime
   sortOrder: 200
@@ -300,7 +300,7 @@
   rewardXp: 650
   rewardDecorations:
     - decor-color-gold
-  target: 10000
+  target: 120
   progressStatKey: logistics.delivery.value
   progressScope: Lifetime
   sortOrder: 210
@@ -315,7 +315,7 @@
   rewardXp: 400
   rewardDecorations:
     - decor-color-obsidian-solid
-  target: 3000
+  target: 14
   progressStatKey: logistics.delivery.value
   progressScope: Round
   sortOrder: 220
@@ -330,7 +330,7 @@
   rewardXp: 900
   rewardDecorations:
     - decor-ghost-iron
-  target: 50000
+  target: 350
   progressStatKey: logistics.delivery.value
   progressScope: Lifetime
   sortOrder: 230
@@ -345,7 +345,7 @@
   rewardXp: 250
   rewardDecorations:
     - decor-title-blood-banner
-  target: 6
+  target: 4
   progressStatKey: objective.capture.success
   progressScope: Round
   sortOrder: 240
@@ -375,7 +375,7 @@
   rewardXp: 650
   rewardDecorations:
     - decor-title-astral-sentinel
-  target: 80
+  target: 40
   progressStatKey: objective.capture.success
   progressScope: Lifetime
   sortOrder: 260
@@ -405,7 +405,7 @@
   rewardXp: 450
   rewardDecorations:
     - decor-title-pyre-marshal
-  target: 12
+  target: 6
   progressStatKey: objective.capture.success
   progressScope: Round
   roundBlockerStatKeys:
@@ -422,7 +422,7 @@
   rewardXp: 300
   rewardDecorations:
     - decor-title-marshal
-  target: 25
+  target: 15
   progressStatKey: round.participation.active
   progressScope: Lifetime
   sortOrder: 290
@@ -437,7 +437,7 @@
   rewardXp: 650
   rewardDecorations:
     - decor-title-saint
-  target: 40
+  target: 20
   progressStatKey: round.win
   progressScope: Lifetime
   sortOrder: 300
@@ -452,7 +452,7 @@
   rewardXp: 850
   rewardDecorations:
     - decor-title-ember-sigil
-  target: 250
+  target: 100
   progressStatKey: round.completed.faction
   progressScope: Lifetime
   sortOrder: 310
@@ -467,7 +467,7 @@
   rewardXp: 1000
   rewardDecorations:
     - decor-title-dusk-commander
-  target: 400
+  target: 120
   progressStatKey: round.participation.active
   progressScope: Lifetime
   sortOrder: 320
@@ -482,7 +482,7 @@
   rewardXp: 500
   rewardDecorations:
     - decor-title-sigil-master
-  target: 60
+  target: 20
   progressStatKey: mission.outcome
   progressScope: Lifetime
   sortOrder: 330
@@ -495,7 +495,7 @@
   task: w40k-ach-khorne-attunement-veteran-k
   reward: w40k-ach-khorne-attunement-veteran-r
   rewardXp: 0
-  target: 20
+  target: 8
   progressStatKey: chaos.patron.attunement.khorne
   progressScope: Lifetime
   sortOrder: 340
@@ -508,7 +508,7 @@
   task: w40k-ach-nurgle-attunement-veteran-k
   reward: w40k-ach-nurgle-attunement-veteran-r
   rewardXp: 0
-  target: 20
+  target: 8
   progressStatKey: chaos.patron.attunement.nurgle
   progressScope: Lifetime
   sortOrder: 350
@@ -521,7 +521,7 @@
   task: w40k-ach-slaanesh-attunement-veteran-k
   reward: w40k-ach-slaanesh-attunement-veteran-r
   rewardXp: 0
-  target: 20
+  target: 8
   progressStatKey: chaos.patron.attunement.slaanesh
   progressScope: Lifetime
   sortOrder: 360
@@ -534,7 +534,7 @@
   task: w40k-ach-tzeentch-attunement-veteran-k
   reward: w40k-ach-tzeentch-attunement-veteran-r
   rewardXp: 0
-  target: 20
+  target: 8
   progressStatKey: chaos.patron.attunement.tzeentch
   progressScope: Lifetime
   sortOrder: 370

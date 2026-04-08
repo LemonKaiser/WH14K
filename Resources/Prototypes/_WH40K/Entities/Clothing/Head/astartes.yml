@@ -1,8 +1,6 @@
 - type: entity
-  parent: ClothingHeadHelmetBasic
+  parent: [ClothingHeadHelmetBasic, ShowMedicalIcons]
   id: ClothingHeadHelmetAstartesMk7
-  name: шлем Mk VII "Аквила"
-  description: Герметичный шлем силовой брони космодесанта. Его крепления и уплотнения рассчитаны на анатомию Адептус Астартес.
   suffix: WH40K, Astartes
   components:
   - type: Sprite
@@ -57,8 +55,6 @@
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7
   id: ClothingHeadHelmetAstartesMk2
-  name: шлем Mk II
-  description: Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk2.rsi
@@ -68,8 +64,6 @@
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7
   id: ClothingHeadHelmetAstartesMk3
-  name: шлем Mk III
-  description: Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk3.rsi
@@ -79,8 +73,6 @@
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7
   id: ClothingHeadHelmetAstartesMk4
-  name: шлем Mk IV
-  description: Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk4.rsi
@@ -90,8 +82,6 @@
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7
   id: ClothingHeadHelmetAstartesMk5
-  name: шлем Mk V
-  description: Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk5.rsi
@@ -101,10 +91,44 @@
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7
   id: ClothingHeadHelmetAstartesMk6
-  name: шлем Mk VI
-  description: Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk6.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk6.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetBasic
+  id: ClothingHeadHelmetAstartesChaos
+  suffix: WH40K, Astartes, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_chaos.rsi
+  - type: Item
+    size: Normal
+  - type: BreathMask
+  - type: IngestionBlocker
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.75
+        Piercing: 0.8
+        Heat: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
