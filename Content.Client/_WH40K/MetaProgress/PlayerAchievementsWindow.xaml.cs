@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.MetaProgress;
@@ -25,6 +26,8 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
     private readonly List<WH40KMetaAchievementSnapshotEntry> _entries = new();
     private readonly WH40KMetaProgressSystem _metaProgress;
     private AchievementFilterCategory _activeCategory = AchievementFilterCategory.All;
+    private int _completedAchievements;
+    private int _totalAchievements;
     private bool _snapshotLoaded;
 
     public PlayerAchievementsWindow()
@@ -68,6 +71,8 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
         _entries.AddRange(snapshot.Achievements
             .OrderBy(entry => GetCategoryOrder(entry.Category))
             .ThenBy(entry => Loc.GetString(entry.TitleKey)));
+        _completedAchievements = snapshot.CompletedAchievements;
+        _totalAchievements = snapshot.TotalAchievements;
 
         _snapshotLoaded = true;
         RefreshView();
@@ -110,6 +115,7 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
     {
         _activeCategory = category;
         RefreshView();
+        AchievementsScroll.SetScrollValue(Vector2.Zero);
     }
 
     private void RefreshView()
@@ -129,8 +135,8 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
 
     private void RefreshSummary()
     {
-        var completed = _entries.Count(entry => entry.Completed);
-        var total = _entries.Count;
+        var completed = _completedAchievements;
+        var total = _totalAchievements;
         var percent = total == 0
             ? 0
             : (int) Math.Floor(completed * 100f / total);
@@ -205,6 +211,7 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
         var displayProgress = unlocked
             ? Math.Max(entry.Progress, entry.Target)
             : entry.Progress;
+        var maskSecretDetails = WH40KMetaAchievementDisplayHelper.ShouldMaskSecretDetails(entry);
 
         var stateKey = unlocked
             ? "wh40k-meta-progress-achievements-status-unlocked"
@@ -280,7 +287,9 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
 
         root.AddChild(new Label
         {
-            Text = Loc.GetString(entry.DescriptionKey),
+            Text = maskSecretDetails
+                ? WH40KMetaAchievementDisplayHelper.HiddenPlaceholder
+                : Loc.GetString(entry.DescriptionKey),
             HorizontalExpand = true,
         });
 
@@ -288,7 +297,9 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
         {
             Text = Loc.GetString(
                 "wh40k-meta-progress-achievements-task-line",
-                ("task", Loc.GetString(entry.TaskKey))),
+                ("task", maskSecretDetails
+                    ? WH40KMetaAchievementDisplayHelper.HiddenPlaceholder
+                    : Loc.GetString(entry.TaskKey))),
             HorizontalExpand = true,
         });
 

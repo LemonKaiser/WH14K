@@ -337,6 +337,11 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		return BuildSnapshot(userId, state);
 	}
 
+	public async Task EnsureStateLoadedForUserAsync(NetUserId userId)
+	{
+		await EnsureStateLoadedAsync(userId);
+	}
+
 	public void RefreshDiscordRequirementsForUser(NetUserId userId)
 	{
 		PushSnapshotIfOnline(userId);

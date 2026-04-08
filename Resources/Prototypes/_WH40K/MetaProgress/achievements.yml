@@ -101,8 +101,6 @@
   rewardDecorations:
     - decor-title-warp-seer
   target: 1
-  progressStatKey: mission.outcome
-  progressScope: Lifetime
   hidden: true
   countInTotalAchievements: false
   countForAllComplete: false

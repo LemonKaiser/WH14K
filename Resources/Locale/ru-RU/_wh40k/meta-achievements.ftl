@@ -149,8 +149,12 @@ w40k-ach-campaign-planner-k = Завершите 20 миссий.
 
 # Скрытые
 w40k-ach-whispers-in-void-t = Шёпот в пустоте
-w40k-ach-whispers-in-void-d = ???
-w40k-ach-whispers-in-void-k = ???
+w40k-ach-whispers-in-void-d = Иногда машинный дух отвечает только на имя, которому не место ни в уставах, ни в брифингах.
+w40k-ach-whispers-in-void-k = Введите в консоль команду "kaiser".
+
+wh40k-meta-progress-secret-kaiser-unlocked = В ответ из пустоты доносится шёпот. Достижение получено.
+wh40k-meta-progress-secret-kaiser-already = Пустота уже запомнила это имя.
+wh40k-meta-progress-secret-kaiser-error = Не удалось открыть секретное достижение: {$error}
 
 # Особые
 w40k-ach-all-complete-t = Идеальная компания

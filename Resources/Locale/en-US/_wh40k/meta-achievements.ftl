@@ -149,8 +149,12 @@ w40k-ach-campaign-planner-k = Complete 20 missions.
 
 # Hidden
 w40k-ach-whispers-in-void-t = Whispers in the Void
-w40k-ach-whispers-in-void-d = ???
-w40k-ach-whispers-in-void-k = ???
+w40k-ach-whispers-in-void-d = Sometimes the machine spirit answers only to a name that belongs in neither doctrine nor briefing.
+w40k-ach-whispers-in-void-k = Type the command "kaiser" in the console.
+
+wh40k-meta-progress-secret-kaiser-unlocked = A whisper answers from the void. Achievement unlocked.
+wh40k-meta-progress-secret-kaiser-already = The void already remembers that name.
+wh40k-meta-progress-secret-kaiser-error = Failed to unlock the secret achievement: {$error}
 
 # Special
 w40k-ach-all-complete-t = Completionist

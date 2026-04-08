@@ -39,7 +39,7 @@
                 </lobby:HighlightedContainer>
 
                 <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True">
-                    <ScrollContainer VerticalExpand="True">
+                    <ScrollContainer Name="AchievementsScroll" VerticalExpand="True">
                         <BoxContainer Name="AchievementsList" Orientation="Vertical" SeparationOverride="6" />
                     </ScrollContainer>
                 </lobby:HighlightedContainer>
