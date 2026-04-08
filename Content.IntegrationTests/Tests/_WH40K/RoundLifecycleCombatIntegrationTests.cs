@@ -1,6 +1,8 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Linq;
+using System.Reflection;
 using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
 using Content.Server.KillTracking;
@@ -11,15 +13,26 @@ using Content.Server._WH40K.Influence;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server._WH40K.Stats;
 using Content.Shared.CCVar;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.LateJoin;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests._WH40K;
 
@@ -30,6 +43,43 @@ public sealed class RoundLifecycleCombatIntegrationTests
     private const string Heretics = "Heretics";
     private const string ImperiumReinforcementPrototype = "MobHumanWH40KImperiumReinforcement";
     private const string HereticReinforcementPrototype = "MobHumanWH40KHereticReinforcement";
+    private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
+
+    [Test]
+    public async Task TeamBattleUsesThreeHourRoundLimitAndOneHourAssaultProfile()
+    {
+        await using var pair = await StartWh40KRoundAsync(requireAttachedEntities: false);
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var ticker = server.System<GameTicker>();
+
+            var query = entMan.EntityQueryEnumerator<WH40KTeamBattleRuleComponent, GameRuleComponent>();
+            WH40KTeamBattleRuleComponent? activeRule = null;
+
+            while (query.MoveNext(out var uid, out var rule, out var gameRule))
+            {
+                if (!ticker.IsGameRuleActive(uid, gameRule))
+                    continue;
+
+                activeRule = rule;
+                break;
+            }
+
+            Assert.That(activeRule, Is.Not.Null, "Expected active WH40K team-battle rule.");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(activeRule!.RoundTimeLimitSeconds, Is.EqualTo(10800f));
+                Assert.That(activeRule.AssaultDurationSeconds, Is.EqualTo(3600f));
+                Assert.That(activeRule.PreparationDurationSeconds, Is.EqualTo(600f));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task RoundEndWithoutOutcomeRecordsCompletionButNoWinRewards()
@@ -317,14 +367,70 @@ public sealed class RoundLifecycleCombatIntegrationTests
     }
 
     [Test]
-    public async Task SupportHealingBucketsRespectThresholdAndIgnoreInvalidEvents()
+    public async Task DeathAndObjectiveAndSupportStats()
     {
         await using var pair = await StartWh40KRoundAsync();
         var server = pair.Server;
 
-        var (sourceUserId, sourceTeamId) = await EnsureSinglePlayerTeamAsync(pair);
+        var (userId, teamId) = await EnsureSinglePlayerTeamAsync(pair);
+        await EnsureRuntimeMetaStateAsync(pair, userId);
+
+        // ── Part 1: Suicide death counts but grants no kill or XP rewards ───────
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var player = server.ResolveDependency<IPlayerManager>().Sessions.Single().AttachedEntity!.Value;
+            entMan.EventBus.RaiseEvent(
+                EventSource.Local,
+                new KillReportedEvent(player, new KillPlayerSource(userId), null, true));
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+            var snapshot = meta.GetSnapshot(userId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatDeaths), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(0));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.MetaXpKill), Is.EqualTo(0));
+                Assert.That(snapshot.LifetimeXp, Is.EqualTo(0));
+            });
+        });
+
+        // ── Part 2: Influence capture and defense events record objective stats ─
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var userEntity = GetAttachedEntity(playerMan, userId);
+
+            entMan.EventBus.RaiseEvent(
+                EventSource.Local,
+                new WH40KInfluencePointCapturedEvent(teamId, userEntity));
+            entMan.EventBus.RaiseEvent(
+                EventSource.Local,
+                new WH40KInfluencePointRewardTickEvent(teamId, userEntity, 3));
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveCaptureSuccess), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess), Is.EqualTo(1));
+            });
+        });
+
+        // ── Part 3: Support healing buckets respect threshold, ignore invalid ────
         var targetUserId = new NetUserId(Guid.NewGuid());
-        await EnsureRuntimeMetaStateAsync(pair, sourceUserId);
 
         await server.WaitAssertion(() =>
         {
@@ -332,27 +438,27 @@ public sealed class RoundLifecycleCombatIntegrationTests
 
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, sourceTeamId, 60));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, teamId, 60));
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, sourceTeamId, 30));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, teamId, 30));
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, sourceTeamId, 20));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, teamId, 20));
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, sourceTeamId, 190));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, teamId, 190));
 
             // Invalid events must be ignored.
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, sourceUserId, sourceTeamId, 100));
+                new WH40KTeamBattleHealingDoneEvent(userId, userId, teamId, 100));
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, sourceTeamId, 0));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, teamId, 0));
             entMan.EventBus.RaiseEvent(
                 EventSource.Local,
-                new WH40KTeamBattleHealingDoneEvent(sourceUserId, targetUserId, " ", 100));
+                new WH40KTeamBattleHealingDoneEvent(userId, targetUserId, " ", 100));
         });
 
         await pair.RunTicksSync(10);
@@ -363,11 +469,11 @@ public sealed class RoundLifecycleCombatIntegrationTests
             Assert.Multiple(() =>
             {
                 Assert.That(
-                    stats.GetRoundCounter(sourceUserId, WH40KPlayerStatKeys.SupportHealBucket100),
+                    stats.GetRoundCounter(userId, WH40KPlayerStatKeys.SupportHealBucket100),
                     Is.EqualTo(3),
                     "Heal bucket stat must count every full 100 HP bucket in round.");
                 Assert.That(
-                    stats.GetLifetimeCounter(sourceUserId, WH40KPlayerStatKeys.SupportHealBucket100),
+                    stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.SupportHealBucket100),
                     Is.EqualTo(3),
                     "Lifetime heal bucket stat must match applied round buckets.");
             });
@@ -376,12 +482,14 @@ public sealed class RoundLifecycleCombatIntegrationTests
         await pair.CleanReturnAsync();
     }
 
+
     [Test]
-    public async Task SupportReviveAndStabilizeRequireValidAlliedSourceAndTarget()
+    public async Task SupportReviveStabilizeAndEnemyAssist()
     {
         await using var pair = await StartWh40KRoundAsync(dummySessions: 2);
         var server = pair.Server;
 
+        // ── Part 1: Support revive and stabilize require valid allied source/target
         var (sourceUserId, targetUserId, sourceTeamId) = await EnsureTwoPlayersSameTeamAsync(pair);
         await EnsureRuntimeMetaStateAsync(pair, sourceUserId);
         await EnsureRuntimeMetaStateAsync(pair, targetUserId);
@@ -429,53 +537,17 @@ public sealed class RoundLifecycleCombatIntegrationTests
             });
         });
 
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task SuicideDeathCountsButGrantsNoKillOrXpRewards()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var server = pair.Server;
-
-        var (userId, _) = await EnsureSinglePlayerTeamAsync(pair);
-        await EnsureRuntimeMetaStateAsync(pair, userId);
-
+        // Restore target team so EnsureTwoPlayersSameTeamAsync can find two same-team players.
         await server.WaitAssertion(() =>
         {
+            var playerMan = server.ResolveDependency<IPlayerManager>();
             var entMan = server.ResolveDependency<IEntityManager>();
-            var player = server.ResolveDependency<IPlayerManager>().Sessions.Single().AttachedEntity!.Value;
-            entMan.EventBus.RaiseEvent(
-                EventSource.Local,
-                new KillReportedEvent(player, new KillPlayerSource(userId), null, true));
+            var targetEntity = GetAttachedEntity(playerMan, targetUserId);
+            var targetMember = entMan.EnsureComponent<WH40KTeamMemberComponent>(targetEntity);
+            targetMember.TeamId = sourceTeamId;
         });
 
-        await pair.RunTicksSync(10);
-
-        await server.WaitAssertion(() =>
-        {
-            var stats = server.System<WH40KPlayerStatsSystem>();
-            var meta = server.System<WH40KMetaProgressSystem>();
-            var snapshot = meta.GetSnapshot(userId);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatDeaths), Is.EqualTo(1));
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(0));
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.MetaXpKill), Is.EqualTo(0));
-                Assert.That(snapshot.LifetimeXp, Is.EqualTo(0));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task EnemyAssistIsRecordedForValidTeammateOnly()
-    {
-        await using var pair = await StartWh40KRoundAsync(dummySessions: 2);
-        var server = pair.Server;
-
+        // ── Part 2: Enemy assist is recorded for valid teammate only ─────────────
         var (killerUserId, assistUserId, killerTeamId) = await EnsureTwoPlayersSameTeamAsync(pair);
         var enemyTeamId = ResolveEnemyTeamId(killerTeamId);
         await EnsureRuntimeMetaStateAsync(pair, killerUserId);
@@ -513,6 +585,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
         await pair.CleanReturnAsync();
     }
 
+
     [Test]
     public async Task KillReportedOnPlayerVictimRecordsVictimDeathStat()
     {
@@ -543,6 +616,245 @@ public sealed class RoundLifecycleCombatIntegrationTests
         {
             var stats = server.System<WH40KPlayerStatsSystem>();
             Assert.That(stats.GetLifetimeCounter(victimUserId, WH40KPlayerStatKeys.CombatDeaths), Is.EqualTo(1));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CombatAttributionCountsOnDeadOnlyAndCreditsEnvironmentFinishToHeldItemAttacker()
+    {
+        await using var pair = await StartWh40KRoundAsync(dummySessions: 1);
+        var server = pair.Server;
+
+        var (killerUserId, victimUserId, killerTeamId) = await EnsureTwoDistinctPlayersAsync(pair);
+        await EnsureRuntimeMetaStateAsync(pair, killerUserId);
+        await EnsureRuntimeMetaStateAsync(pair, victimUserId);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var hands = entMan.System<SharedHandsSystem>();
+            var damageable = entMan.System<DamageableSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+
+            capture.Reset();
+
+            var killerEntity = GetAttachedEntity(playerMan, killerUserId);
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+            var killerCoords = entMan.GetComponent<TransformComponent>(killerEntity).Coordinates;
+
+            entMan.EnsureComponent<WH40KTeamMemberComponent>(victimEntity).TeamId = ResolveEnemyTeamId(killerTeamId);
+
+            var heldItem = entMan.SpawnEntity("Crowbar", killerCoords);
+            Assert.That(
+                hands.TryPickupAnyHand(killerEntity, heldItem, checkActionBlocker: false, animateUser: false, animate: false),
+                Is.True);
+
+            var blunt = protoMan.Index(BluntDamageType);
+            var (criticalThreshold, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
+
+            Assert.That(
+                damageable.TryChangeDamage(
+                    victimEntity,
+                    new DamageSpecifier(blunt, criticalThreshold),
+                    ignoreResistances: true,
+                    origin: heldItem),
+                Is.True);
+
+            Assert.That(deadThreshold > criticalThreshold, Is.True);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var mobState = entMan.System<MobStateSystem>();
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(mobState.IsCritical(victimEntity), Is.True, "Victim should be downed but not dead after the first hit.");
+                Assert.That(stats.GetLifetimeCounter(killerUserId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(0));
+                Assert.That(stats.GetLifetimeCounter(victimUserId, WH40KPlayerStatKeys.CombatDeaths), Is.EqualTo(0));
+                Assert.That(capture.DownedCount, Is.EqualTo(1));
+                Assert.That(capture.KilledCount, Is.EqualTo(0));
+                Assert.That(capture.CompatibilityKillCount, Is.EqualTo(0), "WH40K kill compatibility event must not fire on Critical.");
+                Assert.That(capture.LastDowned?.Primary, Is.EqualTo(new KillPlayerSource(killerUserId)));
+            });
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var damageable = entMan.System<DamageableSystem>();
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+            var blunt = protoMan.Index(BluntDamageType);
+            var (_, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
+            var currentDamage = damageable.GetTotalDamage(victimEntity);
+            var finishingDamage = deadThreshold - currentDamage + FixedPoint2.New(5);
+
+            Assert.That(
+                damageable.TryChangeDamage(
+                    victimEntity,
+                    new DamageSpecifier(blunt, finishingDamage),
+                    ignoreResistances: true,
+                    origin: null),
+                Is.True);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var mobState = entMan.System<MobStateSystem>();
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(mobState.IsDead(victimEntity), Is.True);
+                Assert.That(stats.GetLifetimeCounter(killerUserId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(victimUserId, WH40KPlayerStatKeys.CombatDeaths), Is.EqualTo(1));
+                Assert.That(capture.DownedCount, Is.EqualTo(1));
+                Assert.That(capture.KilledCount, Is.EqualTo(1));
+                Assert.That(capture.CompatibilityKillCount, Is.EqualTo(1));
+                Assert.That(capture.LastKilled?.Primary, Is.EqualTo(new KillPlayerSource(killerUserId)));
+                Assert.That(capture.LastCompatibilityKill?.Primary, Is.EqualTo(new KillPlayerSource(killerUserId)));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CombatAttributionRecordsMultipleAssistsFromRealDamage()
+    {
+        await using var pair = await StartWh40KRoundAsync(dummySessions: 3);
+        var server = pair.Server;
+
+        var (killerUserId, assistUserIdOne, assistUserIdTwo, victimUserId, killerTeamId) = await EnsureThreeAttackersAndVictimAsync(pair);
+        await EnsureRuntimeMetaStateAsync(pair, killerUserId);
+        await EnsureRuntimeMetaStateAsync(pair, assistUserIdOne);
+        await EnsureRuntimeMetaStateAsync(pair, assistUserIdTwo);
+        await EnsureRuntimeMetaStateAsync(pair, victimUserId);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var damageable = entMan.System<DamageableSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+
+            capture.Reset();
+
+            var assistOneEntity = GetAttachedEntity(playerMan, assistUserIdOne);
+            var assistTwoEntity = GetAttachedEntity(playerMan, assistUserIdTwo);
+            var killerEntity = GetAttachedEntity(playerMan, killerUserId);
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+
+            entMan.EnsureComponent<WH40KTeamMemberComponent>(victimEntity).TeamId = ResolveEnemyTeamId(killerTeamId);
+
+            var blunt = protoMan.Index(BluntDamageType);
+            var (_, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
+
+            Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, FixedPoint2.New(30)), ignoreResistances: true, origin: assistOneEntity), Is.True);
+            Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, FixedPoint2.New(20)), ignoreResistances: true, origin: assistTwoEntity), Is.True);
+
+            var currentDamage = damageable.GetTotalDamage(victimEntity);
+            var lethalFinisher = deadThreshold - currentDamage + FixedPoint2.New(5);
+            Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, lethalFinisher), ignoreResistances: true, origin: killerEntity), Is.True);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(stats.GetLifetimeCounter(killerUserId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(assistUserIdOne, WH40KPlayerStatKeys.CombatEnemyAssists), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(assistUserIdTwo, WH40KPlayerStatKeys.CombatEnemyAssists), Is.EqualTo(1));
+                Assert.That(capture.KilledCount, Is.EqualTo(1));
+                Assert.That(capture.LastKilled?.Primary, Is.EqualTo(new KillPlayerSource(killerUserId)));
+                Assert.That(capture.LastKilled?.Assists.Length, Is.EqualTo(2));
+                Assert.That(capture.LastKilled?.Assists, Does.Contain(new KillPlayerSource(assistUserIdOne)));
+                Assert.That(capture.LastKilled?.Assists, Does.Contain(new KillPlayerSource(assistUserIdTwo)));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CombatAttributionFullHealRemovesOldAssistCredit()
+    {
+        await using var pair = await StartWh40KRoundAsync(dummySessions: 2);
+        var server = pair.Server;
+
+        var (killerUserId, assistUserId, victimUserId, killerTeamId) = await EnsureTwoAttackersAndVictimAsync(pair);
+        await EnsureRuntimeMetaStateAsync(pair, killerUserId);
+        await EnsureRuntimeMetaStateAsync(pair, assistUserId);
+        await EnsureRuntimeMetaStateAsync(pair, victimUserId);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var damageable = entMan.System<DamageableSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+
+            capture.Reset();
+
+            var assistEntity = GetAttachedEntity(playerMan, assistUserId);
+            var killerEntity = GetAttachedEntity(playerMan, killerUserId);
+            var victimEntity = GetAttachedEntity(playerMan, victimUserId);
+            var victimDamageable = entMan.GetComponent<DamageableComponent>(victimEntity);
+
+            entMan.EnsureComponent<WH40KTeamMemberComponent>(victimEntity).TeamId = ResolveEnemyTeamId(killerTeamId);
+
+            var blunt = protoMan.Index(BluntDamageType);
+            Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, FixedPoint2.New(40)), ignoreResistances: true, origin: assistEntity), Is.True);
+
+            var healedAmount = damageable.GetTotalDamage(victimEntity);
+            damageable.HealEvenly((victimEntity, victimDamageable), -healedAmount, origin: null, ignoreGlobalModifiers: true);
+
+            var (_, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
+            var lethalFinisher = deadThreshold + FixedPoint2.New(5);
+            Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, lethalFinisher), ignoreResistances: true, origin: killerEntity), Is.True);
+        });
+
+        await pair.RunTicksSync(10);
+
+        await server.WaitAssertion(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var capture = server.System<WH40KKillAttributionTestSystem>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(stats.GetLifetimeCounter(killerUserId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(assistUserId, WH40KPlayerStatKeys.CombatEnemyAssists), Is.EqualTo(0), "A fully healed-out contribution must not linger as an assist.");
+                Assert.That(capture.KilledCount, Is.EqualTo(1));
+                Assert.That(capture.LastKilled?.Primary, Is.EqualTo(new KillPlayerSource(killerUserId)));
+                Assert.That(capture.LastKilled?.Assists.Length, Is.EqualTo(0));
+            });
         });
 
         await pair.CleanReturnAsync();
@@ -741,45 +1053,10 @@ public sealed class RoundLifecycleCombatIntegrationTests
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task InfluenceCaptureAndDefenseEventsRecordObjectiveStats()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var server = pair.Server;
-
-        var (userId, teamId) = await EnsureSinglePlayerTeamAsync(pair);
-        await EnsureRuntimeMetaStateAsync(pair, userId);
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.ResolveDependency<IEntityManager>();
-            var playerMan = server.ResolveDependency<IPlayerManager>();
-            var userEntity = GetAttachedEntity(playerMan, userId);
-
-            entMan.EventBus.RaiseEvent(
-                EventSource.Local,
-                new WH40KInfluencePointCapturedEvent(teamId, userEntity));
-            entMan.EventBus.RaiseEvent(
-                EventSource.Local,
-                new WH40KInfluencePointRewardTickEvent(teamId, userEntity, 3));
-        });
-
-        await pair.RunTicksSync(10);
-
-        await server.WaitAssertion(() =>
-        {
-            var stats = server.System<WH40KPlayerStatsSystem>();
-            Assert.Multiple(() =>
-            {
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveCaptureSuccess), Is.EqualTo(1));
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess), Is.EqualTo(1));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    private static async Task<TestPair> StartWh40KRoundAsync(int dummySessions = 0, bool freshPair = true)
+    private static async Task<TestPair> StartWh40KRoundAsync(
+        int dummySessions = 0,
+        bool freshPair = true,
+        bool requireAttachedEntities = true)
     {
         var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -799,14 +1076,68 @@ public sealed class RoundLifecycleCombatIntegrationTests
             await pair.RunTicksSync(10);
         }
 
+        await pair.WaitCommand("startround");
+        await pair.RunTicksSync(60);
+
         await pair.Server.WaitAssertion(() =>
         {
             var ticker = pair.Server.System<GameTicker>();
-            ticker.ToggleReadyAll(true);
+            var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+            var sessions = playerMan.Sessions.ToArray();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
+                Assert.That(sessions.Length, Is.GreaterThanOrEqualTo(1));
+            });
         });
 
-        await pair.WaitCommand("startround");
-        await pair.RunTicksSync(80);
+        if (!requireAttachedEntities)
+            return pair;
+
+        // WH40K requires faction selection before late-join.
+        // Main client session selects via the normal network path.
+        await pair.Client.WaitPost(() =>
+        {
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", WH40KFactionSelectionPurpose.LateJoin);
+        });
+        await pair.RunTicksSync(10);
+
+        // Dummy sessions have no client; inject selections via reflection.
+        if (dummySessions > 0)
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                var serverFactionSys = pair.Server.System<Content.Server._WH40K.LateJoin.WH40KFactionSystem>();
+                var sysType = serverFactionSys.GetType();
+                var dictField = sysType.GetField("_lateJoinSelections",
+                    BindingFlags.NonPublic | BindingFlags.Instance)!;
+                var dict = (IDictionary)dictField.GetValue(serverFactionSys)!;
+                var pendingType = sysType.GetNestedType("PendingLateJoinSelection",
+                    BindingFlags.NonPublic)!;
+                var timing = pair.Server.ResolveDependency<IGameTiming>();
+                var pending = Activator.CreateInstance(pendingType,
+                    "Imperium", timing.CurTime + TimeSpan.FromMinutes(2))!;
+
+                var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+                foreach (var session in playerMan.Sessions)
+                {
+                    if (!dict.Contains(session.UserId))
+                        dict[session.UserId] = pending;
+                }
+            });
+            await pair.RunTicksSync(5);
+        }
+
+        await pair.Server.WaitPost(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+            foreach (var session in playerMan.Sessions)
+                ticker.MakeJoinGame(session, EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -891,6 +1222,66 @@ public sealed class RoundLifecycleCombatIntegrationTests
         return (first, second, teamId);
     }
 
+    private static async Task<(NetUserId KillerUserId, NetUserId AssistUserIdOne, NetUserId AssistUserIdTwo, NetUserId VictimUserId, string TeamId)> EnsureThreeAttackersAndVictimAsync(TestPair pair)
+    {
+        NetUserId killer = default;
+        NetUserId assistOne = default;
+        NetUserId assistTwo = default;
+        NetUserId victim = default;
+        var teamId = string.Empty;
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var teamBattle = server.System<WH40KTeamBattleRuleSystem>();
+            var grouped = playerMan.Sessions
+                .Select(session => (session.UserId, HasTeam: teamBattle.TryGetTeamIdForUser(session.UserId, out var resolvedTeamId), TeamId: resolvedTeamId))
+                .Where(entry => entry.HasTeam && !string.IsNullOrWhiteSpace(entry.TeamId))
+                .GroupBy(entry => entry.TeamId, StringComparer.Ordinal)
+                .Select(group => group.Select(entry => entry.UserId).ToArray())
+                .FirstOrDefault(group => group.Length >= 4);
+
+            Assert.That(grouped, Is.Not.Null);
+            killer = grouped![0];
+            assistOne = grouped[1];
+            assistTwo = grouped[2];
+            victim = grouped[3];
+            Assert.That(teamBattle.TryGetTeamIdForUser(killer, out teamId), Is.True);
+        });
+
+        return (killer, assistOne, assistTwo, victim, teamId);
+    }
+
+    private static async Task<(NetUserId KillerUserId, NetUserId AssistUserId, NetUserId VictimUserId, string TeamId)> EnsureTwoAttackersAndVictimAsync(TestPair pair)
+    {
+        NetUserId killer = default;
+        NetUserId assist = default;
+        NetUserId victim = default;
+        var teamId = string.Empty;
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var playerMan = server.ResolveDependency<IPlayerManager>();
+            var teamBattle = server.System<WH40KTeamBattleRuleSystem>();
+            var grouped = playerMan.Sessions
+                .Select(session => (session.UserId, HasTeam: teamBattle.TryGetTeamIdForUser(session.UserId, out var resolvedTeamId), TeamId: resolvedTeamId))
+                .Where(entry => entry.HasTeam && !string.IsNullOrWhiteSpace(entry.TeamId))
+                .GroupBy(entry => entry.TeamId, StringComparer.Ordinal)
+                .Select(group => group.Select(entry => entry.UserId).ToArray())
+                .FirstOrDefault(group => group.Length >= 3);
+
+            Assert.That(grouped, Is.Not.Null);
+            killer = grouped![0];
+            assist = grouped[1];
+            victim = grouped[2];
+            Assert.That(teamBattle.TryGetTeamIdForUser(killer, out teamId), Is.True);
+        });
+
+        return (killer, assist, victim, teamId);
+    }
+
     private static async Task<(NetUserId KillerUserId, NetUserId VictimUserId, string KillerTeamId)> EnsureTwoDistinctPlayersAsync(TestPair pair)
     {
         NetUserId killerUserId = default;
@@ -921,6 +1312,24 @@ public sealed class RoundLifecycleCombatIntegrationTests
     {
         var session = playerMan.Sessions.Single(session => session.UserId == userId);
         return session.AttachedEntity!.Value;
+    }
+
+    private static (FixedPoint2 CriticalThreshold, FixedPoint2 DeadThreshold) GetCriticalAndDeadThresholds(MobThresholdsComponent thresholds)
+    {
+        var critical = thresholds.Thresholds
+            .Where(entry => entry.Value == MobState.Critical)
+            .Select(entry => entry.Key)
+            .DefaultIfEmpty(FixedPoint2.Zero)
+            .Max();
+        var dead = thresholds.Thresholds
+            .Where(entry => entry.Value == MobState.Dead)
+            .Select(entry => entry.Key)
+            .DefaultIfEmpty(FixedPoint2.Zero)
+            .Max();
+
+        Assert.That(critical > FixedPoint2.Zero, Is.True, "Expected a critical threshold for the target mob.");
+        Assert.That(dead > critical, Is.True, "Expected a dead threshold above the critical threshold for the target mob.");
+        return (critical, dead);
     }
 
     private static string ResolveEnemyTeamId(string killerTeamId)

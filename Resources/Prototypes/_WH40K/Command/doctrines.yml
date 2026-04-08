@@ -4,93 +4,93 @@
   defaultDoctrineId: doctrine_adaptive_reserve
   doctrines:
   - id: doctrine_adaptive_reserve
-    nameImperiumKey: wh40k-command-node-doctrine-adaptive-reserve-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-adaptive-reserve-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-adaptive-reserve-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-adaptive-reserve-brief-effect
-    debuffKey: wh40k-command-node-doctrine-adaptive-reserve-debuff
-    summaryKey: wh40k-command-node-doctrine-adaptive-reserve-summary
-    positiveKey: wh40k-command-node-doctrine-adaptive-reserve-positive
-    negativeKey: wh40k-command-node-doctrine-adaptive-reserve-negative
-    lockKey: wh40k-command-node-doctrine-adaptive-reserve-lock
-    fullBriefingKey: wh40k-command-node-doctrine-adaptive-reserve-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-adaptive-reserve-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-adaptive-reserve-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-adaptive-reserve-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-adaptive-reserve-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-adaptive-reserve-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-adaptive-reserve-brief-effect
+    debuffKey: w40k-cmd-doctrine-adaptive-reserve-debuff
+    summaryKey: w40k-cmd-doctrine-adaptive-reserve-summary
+    positiveKey: w40k-cmd-doctrine-adaptive-reserve-positive
+    negativeKey: w40k-cmd-doctrine-adaptive-reserve-negative
+    lockKey: w40k-cmd-doctrine-adaptive-reserve-lock
+    fullBriefingKey: w40k-cmd-doctrine-adaptive-reserve-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-adaptive-reserve-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-adaptive-reserve-theme-heretics
     lockedDomain: ""
     isNeutral: true
   - id: doctrine_iron_forge
-    nameImperiumKey: wh40k-command-node-doctrine-iron-forge-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-iron-forge-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-iron-forge-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-iron-forge-brief-effect
-    debuffKey: wh40k-command-node-doctrine-iron-forge-debuff
-    summaryKey: wh40k-command-node-doctrine-iron-forge-summary
-    positiveKey: wh40k-command-node-doctrine-iron-forge-positive
-    negativeKey: wh40k-command-node-doctrine-iron-forge-negative
-    lockKey: wh40k-command-node-doctrine-iron-forge-lock
-    fullBriefingKey: wh40k-command-node-doctrine-iron-forge-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-iron-forge-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-iron-forge-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-iron-forge-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-iron-forge-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-iron-forge-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-iron-forge-brief-effect
+    debuffKey: w40k-cmd-doctrine-iron-forge-debuff
+    summaryKey: w40k-cmd-doctrine-iron-forge-summary
+    positiveKey: w40k-cmd-doctrine-iron-forge-positive
+    negativeKey: w40k-cmd-doctrine-iron-forge-negative
+    lockKey: w40k-cmd-doctrine-iron-forge-lock
+    fullBriefingKey: w40k-cmd-doctrine-iron-forge-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-iron-forge-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-iron-forge-theme-heretics
     lockedDomain: research
     isNeutral: false
   - id: doctrine_convoy_dominion
-    nameImperiumKey: wh40k-command-node-doctrine-convoy-dominion-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-convoy-dominion-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-convoy-dominion-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-convoy-dominion-brief-effect
-    debuffKey: wh40k-command-node-doctrine-convoy-dominion-debuff
-    summaryKey: wh40k-command-node-doctrine-convoy-dominion-summary
-    positiveKey: wh40k-command-node-doctrine-convoy-dominion-positive
-    negativeKey: wh40k-command-node-doctrine-convoy-dominion-negative
-    lockKey: wh40k-command-node-doctrine-convoy-dominion-lock
-    fullBriefingKey: wh40k-command-node-doctrine-convoy-dominion-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-convoy-dominion-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-convoy-dominion-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-convoy-dominion-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-convoy-dominion-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-convoy-dominion-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-convoy-dominion-brief-effect
+    debuffKey: w40k-cmd-doctrine-convoy-dominion-debuff
+    summaryKey: w40k-cmd-doctrine-convoy-dominion-summary
+    positiveKey: w40k-cmd-doctrine-convoy-dominion-positive
+    negativeKey: w40k-cmd-doctrine-convoy-dominion-negative
+    lockKey: w40k-cmd-doctrine-convoy-dominion-lock
+    fullBriefingKey: w40k-cmd-doctrine-convoy-dominion-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-convoy-dominion-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-convoy-dominion-theme-heretics
     lockedDomain: research
     isNeutral: false
   - id: doctrine_lexmechanicus
-    nameImperiumKey: wh40k-command-node-doctrine-lexmechanicus-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-lexmechanicus-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-lexmechanicus-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-lexmechanicus-brief-effect
-    debuffKey: wh40k-command-node-doctrine-lexmechanicus-debuff
-    summaryKey: wh40k-command-node-doctrine-lexmechanicus-summary
-    positiveKey: wh40k-command-node-doctrine-lexmechanicus-positive
-    negativeKey: wh40k-command-node-doctrine-lexmechanicus-negative
-    lockKey: wh40k-command-node-doctrine-lexmechanicus-lock
-    fullBriefingKey: wh40k-command-node-doctrine-lexmechanicus-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-lexmechanicus-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-lexmechanicus-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-lexmechanicus-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-lexmechanicus-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-lexmechanicus-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-lexmechanicus-brief-effect
+    debuffKey: w40k-cmd-doctrine-lexmechanicus-debuff
+    summaryKey: w40k-cmd-doctrine-lexmechanicus-summary
+    positiveKey: w40k-cmd-doctrine-lexmechanicus-positive
+    negativeKey: w40k-cmd-doctrine-lexmechanicus-negative
+    lockKey: w40k-cmd-doctrine-lexmechanicus-lock
+    fullBriefingKey: w40k-cmd-doctrine-lexmechanicus-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-lexmechanicus-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-lexmechanicus-theme-heretics
     lockedDomain: logistics
     isNeutral: false
   - id: doctrine_spear_of_assault
-    nameImperiumKey: wh40k-command-node-doctrine-spear-of-assault-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-spear-of-assault-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-spear-of-assault-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-spear-of-assault-brief-effect
-    debuffKey: wh40k-command-node-doctrine-spear-of-assault-debuff
-    summaryKey: wh40k-command-node-doctrine-spear-of-assault-summary
-    positiveKey: wh40k-command-node-doctrine-spear-of-assault-positive
-    negativeKey: wh40k-command-node-doctrine-spear-of-assault-negative
-    lockKey: wh40k-command-node-doctrine-spear-of-assault-lock
-    fullBriefingKey: wh40k-command-node-doctrine-spear-of-assault-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-spear-of-assault-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-spear-of-assault-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-spear-of-assault-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-spear-of-assault-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-spear-of-assault-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-spear-of-assault-brief-effect
+    debuffKey: w40k-cmd-doctrine-spear-of-assault-debuff
+    summaryKey: w40k-cmd-doctrine-spear-of-assault-summary
+    positiveKey: w40k-cmd-doctrine-spear-of-assault-positive
+    negativeKey: w40k-cmd-doctrine-spear-of-assault-negative
+    lockKey: w40k-cmd-doctrine-spear-of-assault-lock
+    fullBriefingKey: w40k-cmd-doctrine-spear-of-assault-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-spear-of-assault-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-spear-of-assault-theme-heretics
     lockedDomain: logistics
     isNeutral: false
   - id: doctrine_void_bulwark
-    nameImperiumKey: wh40k-command-node-doctrine-void-bulwark-name-imperium
-    nameHereticsKey: wh40k-command-node-doctrine-void-bulwark-name-heretics
-    briefFocusKey: wh40k-command-node-doctrine-void-bulwark-brief-focus
-    briefEffectKey: wh40k-command-node-doctrine-void-bulwark-brief-effect
-    debuffKey: wh40k-command-node-doctrine-void-bulwark-debuff
-    summaryKey: wh40k-command-node-doctrine-void-bulwark-summary
-    positiveKey: wh40k-command-node-doctrine-void-bulwark-positive
-    negativeKey: wh40k-command-node-doctrine-void-bulwark-negative
-    lockKey: wh40k-command-node-doctrine-void-bulwark-lock
-    fullBriefingKey: wh40k-command-node-doctrine-void-bulwark-full-briefing
-    themeImperiumKey: wh40k-command-node-doctrine-void-bulwark-theme-imperium
-    themeHereticsKey: wh40k-command-node-doctrine-void-bulwark-theme-heretics
+    nameImperiumKey: w40k-cmd-doctrine-void-bulwark-name-imperium
+    nameHereticsKey: w40k-cmd-doctrine-void-bulwark-name-heretics
+    briefFocusKey: w40k-cmd-doctrine-void-bulwark-brief-focus
+    briefEffectKey: w40k-cmd-doctrine-void-bulwark-brief-effect
+    debuffKey: w40k-cmd-doctrine-void-bulwark-debuff
+    summaryKey: w40k-cmd-doctrine-void-bulwark-summary
+    positiveKey: w40k-cmd-doctrine-void-bulwark-positive
+    negativeKey: w40k-cmd-doctrine-void-bulwark-negative
+    lockKey: w40k-cmd-doctrine-void-bulwark-lock
+    fullBriefingKey: w40k-cmd-doctrine-void-bulwark-full-briefing
+    themeImperiumKey: w40k-cmd-doctrine-void-bulwark-theme-imperium
+    themeHereticsKey: w40k-cmd-doctrine-void-bulwark-theme-heretics
     lockedDomain: engineering
     isNeutral: false
 

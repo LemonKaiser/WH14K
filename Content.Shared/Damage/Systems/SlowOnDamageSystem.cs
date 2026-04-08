@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Clothing;
 using Content.Shared.Damage.Components;
 using Content.Shared.Examine;
@@ -34,7 +35,9 @@ public sealed class SlowOnDamageSystem : EntitySystem
         if (!TryComp<DamageableComponent>(uid, out var damage))
             return;
 
+#pragma warning disable CS0618
         var totalDamage = _damage.GetTotalDamage((uid, damage));
+#pragma warning restore CS0618
 
         if (totalDamage == FixedPoint2.Zero)
             return;
@@ -78,7 +81,11 @@ public sealed class SlowOnDamageSystem : EntitySystem
 
     private void OnExamined(Entity<ClothingSlowOnDamageModifierComponent> ent, ref ExaminedEvent args)
     {
-        var msg = Loc.GetString("slow-on-damage-modifier-examine", ("mod", (1 - ent.Comp.Modifier) * 100));
+        var modifierPercent = (int) Math.Clamp(
+            MathF.Round((1f - ent.Comp.Modifier) * 100f, MidpointRounding.AwayFromZero),
+            0f,
+            100f);
+        var msg = Loc.GetString("slow-on-damage-modifier-examine", ("mod", modifierPercent));
         args.PushMarkup(msg);
     }
 

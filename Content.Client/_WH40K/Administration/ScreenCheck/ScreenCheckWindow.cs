@@ -1,5 +1,6 @@
 using System.IO;
 using System.Numerics;
+using Content.Client.Localization;
 using Content.Shared._WH40K.Administration.ScreenCheck;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
@@ -9,7 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Content.Client._WH40K.Administration.ScreenCheck;
 
-public sealed class ScreenCheckWindow : DefaultWindow
+public sealed class ScreenCheckWindow : DefaultWindow, ILocalizedControl
 {
     [Dependency] private readonly IClyde _clyde = default!;
     [Dependency] private readonly ILogManager _logs = default!;
@@ -18,6 +19,7 @@ public sealed class ScreenCheckWindow : DefaultWindow
     private readonly TextureRect _imageRect;
     private ISawmill _sawmill = default!;
     private OwnedTexture? _texture;
+    private ScreenCheckEuiState? _latestState;
 
     public ScreenCheckWindow()
     {
@@ -58,10 +60,24 @@ public sealed class ScreenCheckWindow : DefaultWindow
             Visible = false
         };
         panel.AddChild(_imageRect);
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        if (_latestState != null)
+        {
+            UpdateState(_latestState);
+            return;
+        }
+
+        Title = Loc.GetString("screen-check-window-title", ("player", "?"));
+        _statusLabel.Text = Loc.GetString("screen-check-status-pending");
     }
 
     public void UpdateState(ScreenCheckEuiState state)
     {
+        _latestState = state;
         Title = Loc.GetString("screen-check-window-title", ("player", state.TargetName));
 
         if (state.Status == ScreenCheckUiStatus.Success && TryLoadTexture(state.ImageData))

@@ -292,7 +292,9 @@ namespace Content.Client.Verbs.UI
             if (OpenMenu == null)
                 return;
 
-            OpenMenu.Close();
+            if (!OpenMenu.Disposed)
+                OpenMenu.Close();
+
             OpenMenu = null;
         }
 

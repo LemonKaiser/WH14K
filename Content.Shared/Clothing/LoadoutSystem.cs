@@ -148,11 +148,25 @@ public sealed class LoadoutSystem : EntitySystem
     public void Equip(EntityUid uid, List<ProtoId<StartingGearPrototype>>? startingGear,
         List<ProtoId<RoleLoadoutPrototype>>? loadoutGroups)
     {
+        RoleLoadoutPrototype? selectedRoleProto = null;
+        RoleLoadout? selectedLoadout = null;
+
+        if (loadoutGroups != null && loadoutGroups.Count > 0)
+        {
+            var id = _random.Pick(loadoutGroups);
+            selectedRoleProto = _protoMan.Index(id);
+            selectedLoadout = new RoleLoadout(id);
+            selectedLoadout.SetDefault(GetProfile(uid), _actors.GetSession(uid), _protoMan, true);
+        }
+
         // First, randomly pick a startingGear profile from those specified, and equip it.
         if (startingGear != null && startingGear.Count > 0)
-            _station.EquipStartingGear(uid, _random.Pick(startingGear), false);
+        {
+            var excludedSlots = _station.GetLoadoutEquipmentOverrides(selectedLoadout, selectedRoleProto);
+            _station.EquipStartingGear(uid, _random.Pick(startingGear), excludedSlots, false);
+        }
 
-        if (loadoutGroups == null)
+        if (selectedLoadout == null || selectedRoleProto == null)
         {
             GearEquipped(uid);
             return;
@@ -160,11 +174,7 @@ public sealed class LoadoutSystem : EntitySystem
 
         // Then, randomly pick a RoleLoadout profile from those specified, and process/equip all LoadoutGroups from it.
         // For non-roundstart mobs there is no SelectedLoadout data, so minValue must be set in each LoadoutGroup to force selection.
-        var id = _random.Pick(loadoutGroups);
-        var proto = _protoMan.Index(id);
-        var loadout = new RoleLoadout(id);
-        loadout.SetDefault(GetProfile(uid), _actors.GetSession(uid), _protoMan, true);
-        _station.EquipRoleLoadout(uid, loadout, proto);
+        _station.EquipRoleLoadout(uid, selectedLoadout, selectedRoleProto);
 
         GearEquipped(uid);
     }

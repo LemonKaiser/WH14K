@@ -3,6 +3,13 @@
   name: job-name-hband-supplier
   description: job-description-hband-supplier
   playTimeTracker: JobHBandSupplier
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+      - Vulpkanin
   startingGear: HBandSupplierGear
   icon: "JobIconHCargo"
   supervisors: job-supervisors-engineering

@@ -1,13 +1,13 @@
 <ui:FancyWindow xmlns="https://spacestation14.io"
                 xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
                 xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
-                Title="{Loc wh40k-meta-progress-decorations-window-title}"
+                Title="{Loc w40k-decs-window-title}"
                 SetSize="1000 640">
     <Control>
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
             <lobby:HighlightedContainer>
                 <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
-                    <Label Text="{Loc wh40k-meta-progress-decorations-menu-header}" StyleClasses="LabelHeadingBigger" />
+                    <Label Name="MenuHeaderLabel" Text="{Loc w40k-decs-menu-header}" StyleClasses="LabelHeadingBigger" />
                     <BoxContainer Orientation="Horizontal">
                         <PanelContainer Name="SummaryProgressHighlight" HorizontalExpand="True">
                             <Label Name="SummaryProgressLabel"

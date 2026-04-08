@@ -8,6 +8,8 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.Controllers;
+using Robust.Shared;
+using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.Psyker.UI;
@@ -15,6 +17,7 @@ namespace Content.Client._WH40K.Psyker.UI;
 [UsedImplicitly]
 public sealed class WH40KWarpUiController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
@@ -29,6 +32,26 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
         gameplayStateLoad.OnScreenUnload += OnScreenUnload;
+
+        _cfg.OnValueChanged(CVars.LocCultureName, OnCultureChanged);
+    }
+
+    private void OnCultureChanged(string _)
+    {
+        // Force an immediate refresh of open Psyker/Chaos windows so labels update in the new language.
+        if (_player.LocalEntity is not { } uid)
+            return;
+
+        if (_psykerWindow is { IsOpen: true } && EntityManager.HasComponent<WH40KPsykerRoleComponent>(uid))
+            RefreshPsykerWindow(uid);
+
+        if (_chaosWindow is { IsOpen: true } &&
+            EntityManager.HasComponent<WH40KChaosGiftRoleComponent>(uid) &&
+            EntityManager.TryGetComponent<WH40KChaosGiftProgressionComponent>(uid, out var prog) &&
+            prog?.EffectiveLeader == true)
+        {
+            RefreshChaosWindow(uid);
+        }
     }
 
     public void OnStateEntered(GameplayState state)
@@ -45,6 +68,9 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
     {
         base.FrameUpdate(args);
 
+        if (_hud is { Disposed: true })
+            _hud = null;
+
         if (_hud == null)
             return;
 
@@ -56,7 +82,10 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
 
         var hasPsykerRole = EntityManager.HasComponent<WH40KPsykerRoleComponent>(uid);
         var hasChaosRole = EntityManager.HasComponent<WH40KChaosGiftRoleComponent>(uid);
-        if (!hasPsykerRole && !hasChaosRole)
+        var chaosProgression = EntityManager.GetComponentOrNull<WH40KChaosGiftProgressionComponent>(uid);
+        var hasChaosHudRole = hasChaosRole;
+        var hasChaosUiRole = hasChaosRole && chaosProgression?.EffectiveLeader == true;
+        if (!hasPsykerRole && !hasChaosHudRole)
         {
             HideAllUi();
             return;
@@ -69,9 +98,29 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         var warpMax = Math.Max(1f, warp?.MaxCharge ?? 100f);
         var instabilityCurrent = instability?.CurrentInstability ?? 0f;
         var instabilityMax = Math.Max(1f, instability?.MaxInstability ?? 100f);
-
         var warpFraction = Math.Clamp(warpCurrent / warpMax, 0f, 1f);
         var instabilityFraction = Math.Clamp(instabilityCurrent / instabilityMax, 0f, 1f);
+        var chaosTheme = hasChaosHudRole && !hasPsykerRole;
+        var patron = WH40KChaosPatron.None;
+
+        string detailText;
+        if (chaosTheme && chaosProgression != null)
+        {
+            patron = chaosProgression.AttunedPatron;
+            detailText = patron == WH40KChaosPatron.None
+                ? Loc.GetString("wh40k-chaos-window-patron-none")
+                : Loc.GetString(GetPatronLocKey(patron));
+        }
+        else if (!chaosTheme && EntityManager.TryGetComponent<WH40KPsykerProgressionComponent>(uid, out var psykerProgression) && psykerProgression != null)
+        {
+            detailText = Loc.GetString("wh40k-warp-ui-psyker-detail", ("level", psykerProgression.Level));
+        }
+        else
+        {
+            detailText = Loc.GetString(chaosTheme
+                ? "wh40k-chaos-window-role"
+                : "wh40k-psyker-window-role");
+        }
 
         _hud.ApplyState(new WH40KWarpHudViewState(
             true,
@@ -79,12 +128,14 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
             $"{MathF.Round(instabilityCurrent, 1)}/{MathF.Round(instabilityMax, 1)}",
             warpFraction,
             instabilityFraction,
-            hasChaosRole && !hasPsykerRole));
+            chaosTheme,
+            patron,
+            detailText));
 
         if (_psykerWindow != null && _psykerWindow.IsOpen && hasPsykerRole)
             RefreshPsykerWindow(uid);
 
-        if (_chaosWindow != null && _chaosWindow.IsOpen && hasChaosRole)
+        if (_chaosWindow != null && _chaosWindow.IsOpen && hasChaosUiRole)
             RefreshChaosWindow(uid);
 
         var psykerWindow = _psykerWindow;
@@ -92,7 +143,7 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
             psykerWindow.Close();
 
         var chaosWindow = _chaosWindow;
-        if (chaosWindow is { IsOpen: true } && !hasChaosRole)
+        if (chaosWindow is { IsOpen: true } && !hasChaosUiRole)
             chaosWindow.Close();
     }
 
@@ -108,6 +159,9 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
 
     private void EnsureHud()
     {
+        if (_hud is { Disposed: true })
+            _hud = null;
+
         if (_hud != null)
             return;
 
@@ -119,8 +173,7 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         if (UIManager.ActiveScreen.GetWidget<MainViewport>()?.Parent is LayoutContainer layout)
         {
             layout.AddChild(_hud);
-            LayoutContainer.SetAnchorAndMarginPreset(_hud, LayoutContainer.LayoutPreset.BottomRight, margin: 12);
-            LayoutContainer.SetMarginBottom(_hud, 58);
+            LayoutContainer.SetAnchorAndMarginPreset(_hud, LayoutContainer.LayoutPreset.BottomRight, margin: 10);
         }
         else
         {
@@ -146,7 +199,10 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
 
     private void ToggleChaosWindow()
     {
-        if (_player.LocalEntity is not { } uid || !EntityManager.HasComponent<WH40KChaosGiftRoleComponent>(uid))
+        if (_player.LocalEntity is not { } uid ||
+            !EntityManager.HasComponent<WH40KChaosGiftRoleComponent>(uid) ||
+            !EntityManager.TryGetComponent<WH40KChaosGiftProgressionComponent>(uid, out var progression) ||
+            progression?.EffectiveLeader != true)
             return;
 
         _chaosWindow ??= UIManager.CreateWindow<WH40KChaosGiftsWindow>();
@@ -219,6 +275,8 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         var warpMax = Math.Max(1f, warp?.MaxCharge ?? 100f);
         var instabilityCurrent = instability?.CurrentInstability ?? 0f;
         var instabilityMax = Math.Max(1f, instability?.MaxInstability ?? 100f);
+        var warpFraction = Math.Clamp(warpCurrent / warpMax, 0f, 1f);
+        var instabilityFraction = Math.Clamp(instabilityCurrent / instabilityMax, 0f, 1f);
 
         var nextLevelXp = GetXpForNextChaosLevel(progression);
         var levelProgress = progression.Level >= progression.MaxLevel || nextLevelXp <= 0f
@@ -237,6 +295,7 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         var passiveIncomeSeconds = Math.Max(1, (int) Math.Round(progression.PassiveXpInterval.TotalSeconds));
 
         _chaosWindow.ApplyState(new WH40KChaosGiftsViewState(
+            progression.AttunedPatron,
             Loc.GetString("wh40k-chaos-window-role"),
             Loc.GetString("wh40k-chaos-window-patron", ("patron", Loc.GetString(GetPatronLocKey(progression.AttunedPatron)))),
             Loc.GetString(
@@ -256,36 +315,54 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
             Loc.GetString("wh40k-chaos-window-altar-risk"),
             Loc.GetString("wh40k-chaos-window-dev-points", ("points", progression.DevelopmentPoints)),
             Loc.GetString("wh40k-chaos-window-hint"),
+            warpFraction,
+            instabilityFraction,
             levelProgress));
     }
 
     private void HideAllUi()
     {
+        if (_hud is { Disposed: true })
+            _hud = null;
+
+        if (_psykerWindow is { Disposed: true })
+            _psykerWindow = null;
+
+        if (_chaosWindow is { Disposed: true })
+            _chaosWindow = null;
+
         _hud?.ApplyState(WH40KWarpHudViewState.Hidden);
-        _psykerWindow?.Close();
-        _chaosWindow?.Close();
+
+        if (_psykerWindow != null)
+            _psykerWindow.Close();
+
+        if (_chaosWindow != null)
+            _chaosWindow.Close();
     }
 
     private void ShutdownUi()
     {
         if (_hud != null)
         {
-            _hud.Orphan();
-            _hud.Dispose();
+            if (!_hud.Disposed)
+                _hud.Orphan();
+
             _hud = null;
         }
 
         if (_psykerWindow != null)
         {
-            _psykerWindow.Close();
-            _psykerWindow.Dispose();
+            if (!_psykerWindow.Disposed)
+                _psykerWindow.Close();
+
             _psykerWindow = null;
         }
 
         if (_chaosWindow != null)
         {
-            _chaosWindow.Close();
-            _chaosWindow.Dispose();
+            if (!_chaosWindow.Disposed)
+                _chaosWindow.Close();
+
             _chaosWindow = null;
         }
     }
@@ -336,7 +413,9 @@ public readonly record struct WH40KWarpHudViewState(
     string WarpInstabilityText,
     float WarpChargeFraction,
     float WarpInstabilityFraction,
-    bool ChaosTheme)
+    bool ChaosTheme,
+    WH40KChaosPatron Patron,
+    string DetailText)
 {
     public static readonly WH40KWarpHudViewState Hidden = new(
         false,
@@ -344,7 +423,9 @@ public readonly record struct WH40KWarpHudViewState(
         string.Empty,
         0f,
         0f,
-        false);
+        false,
+        WH40KChaosPatron.None,
+        string.Empty);
 }
 
 public readonly record struct WH40KPsykerProgressionViewState(
@@ -360,6 +441,7 @@ public readonly record struct WH40KPsykerProgressionViewState(
     float LevelProgress);
 
 public readonly record struct WH40KChaosGiftsViewState(
+    WH40KChaosPatron Patron,
     string RoleText,
     string PatronText,
     string SoulsText,
@@ -376,4 +458,6 @@ public readonly record struct WH40KChaosGiftsViewState(
     string AltarRiskText,
     string DevelopmentPointsText,
     string HintText,
+    float WarpChargeFraction,
+    float WarpInstabilityFraction,
     float LevelProgress);

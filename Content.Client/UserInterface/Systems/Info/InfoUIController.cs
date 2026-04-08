@@ -54,7 +54,9 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
         if (_infoWindow == null)
             return;
 
-        _infoWindow.Dispose();
+        if (!_infoWindow.Disposed)
+            _infoWindow.Orphan();
+
         _infoWindow = null;
     }
 
@@ -84,7 +86,9 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
         var message = new RulesAcceptedMessage() { FuckRules = fuckRules };
         _netManager.ClientSendMessage(message);
 
-        _rulesPopup?.Orphan();
+        if (_rulesPopup is { Disposed: false })
+            _rulesPopup.Orphan();
+
         _rulesPopup = null;
     }
 
@@ -114,7 +118,7 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
             return;
 
         var wasOpen = _infoWindow.IsOpen;
-        _infoWindow.Dispose();
+        _infoWindow.Orphan();
         _infoWindow = null;
 
         if (wasOpen)

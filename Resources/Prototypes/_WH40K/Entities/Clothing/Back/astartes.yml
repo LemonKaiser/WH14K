@@ -1,0 +1,104 @@
+- type: entity
+  abstract: true
+  parent: ClothingBackpack
+  id: ClothingBackpackAstartesBase
+  suffix: WH40K, Astartes
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+      color: "#2F5DB3"
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#2F5DB3"
+      right:
+      - state: inhand-right
+        color: "#2F5DB3"
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+        color: "#2F5DB3"
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk2Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk2_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk2_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk3Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk3_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk3_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk4Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk4_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk4_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk5Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk5_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk5_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk6Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk7JumpPack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk23JumpPack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackAstartesChaosPowerpack
+  suffix: WH40K, Astartes, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_chaos_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_chaos_powerpack.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

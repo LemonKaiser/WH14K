@@ -5,7 +5,7 @@
     state: orebox
   product: OreBox
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: market
 
 - type: cargoProduct
@@ -15,7 +15,7 @@
     state: icon
   product: CrateCargoLuxuryHardsuit
   cost: 15000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: market
 
 - type: cargoProduct
@@ -25,7 +25,7 @@
     state: brown
   product: CrateCargoParcelWrap
   cost: 750
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: market
 
 - type: cargoProduct
@@ -35,7 +35,7 @@
     state: icon
   product: CrateCrusherDagger
   cost: 2500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: market
 
 - type: cargoProduct
@@ -45,5 +45,5 @@
       state: icon
   product: MailCart
   cost: 300
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: market

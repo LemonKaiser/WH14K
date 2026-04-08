@@ -33,12 +33,17 @@ public sealed class WH40KTacticalMapControl : Control
     private const float DefaultAnnotationThickness = 1.5f;
     private const float MinAnnotationThickness = 0.25f;
     private const float MaxAnnotationThickness = 6f;
-    private const int MaxLocalStrokePoints = 2048;
+    private const int MaxLocalStrokePoints = 384;
     private const float DefaultZoom = 1f;
     private const float MinZoom = 1f;
     private const float MaxZoom = 6f;
     private const float ViewMarginPixels = 16f;
     private const float AllyMarkerHoverRadius = 12f;
+    private const float MinAnnotationWorldSpacing = 0.05f;
+    private const float MinAnnotationPixelSpacing = 3.25f;
+    private const int MaxAnnotationCacheDimension = 2048;
+    private const float AnnotationRasterThicknessScale = 0.28f;
+    private const float AnnotationRasterSampleSpacingFactor = 0.55f;
     private static readonly Color TacticalBlackoutColor = Color.Black;
 
     [Dependency] private readonly IEntityManager _entMan = default!;
@@ -56,6 +61,7 @@ public sealed class WH40KTacticalMapControl : Control
     private readonly EntityQuery<WH40KTacticalMapBlackoutComponent> _blackoutQuery;
 
     private OwnedTexture? _snapshotTexture;
+    private OwnedTexture? _annotationCacheTexture;
     private IClydeViewport? _refreshViewport;
     private ResPath? _loadedTexturePath;
 
@@ -71,6 +77,9 @@ public sealed class WH40KTacticalMapControl : Control
     private readonly List<Vector2> _activeStrokePoints = new();
     private readonly List<WH40KTacticalMapAllyMarker> _alliedMarkers = new();
     private readonly List<WH40KTacticalMapCapturePointMarker> _capturePointMarkers = new();
+    private Rgba32[]? _annotationCachePixels;
+    private Vector2i _annotationCacheSize = Vector2i.Zero;
+    private bool _annotationCacheDirty = true;
 
     private int _queuedLiveRefreshRevision = -1;
     private int _capturedLiveRefreshRevision = -1;
@@ -113,7 +122,7 @@ public sealed class WH40KTacticalMapControl : Control
 
     public EntityUid? MapUid;
     public EntityUid? TacticalMapUid;
-    public ResPath SnapshotTexturePath = new("/Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png");
+    public ResPath SnapshotTexturePath = ResPath.Empty;
     public Dictionary<EntityCoordinates, (bool Visible, Color Color)> TrackedCoordinates = new();
     public bool FogEnabled = true;
     public int FogChunkSize = 8;
@@ -273,6 +282,7 @@ public sealed class WH40KTacticalMapControl : Control
         {
             _currentGridUid = MapUid;
             _viewInitialized = false;
+            InvalidateAnnotationCache();
         }
     }
 
@@ -338,15 +348,27 @@ public sealed class WH40KTacticalMapControl : Control
         var matchesPendingSave = _savePending &&
                                  _pendingSaveSnapshot != null &&
                                  AreAnnotationsEquivalent(_pendingSaveSnapshot, incomingAnnotations);
+        var localMatchesPendingSave = _savePending &&
+                                      _pendingSaveSnapshot != null &&
+                                      AreAnnotationsEquivalent(_workingAnnotations, _pendingSaveSnapshot);
         var teamChanged = !string.Equals(previousTeamId, TeamId, StringComparison.Ordinal);
 
         _savedAnnotations.Clear();
         _savedAnnotations.AddRange(incomingAnnotations);
         _savedAnnotationRevision = state.AnnotationRevision;
 
-        if (teamChanged || !_annotationDirty || matchesPendingSave)
+        if (teamChanged || !_annotationDirty)
         {
             ReplaceWorkingAnnotations(incomingAnnotations, false);
+            _remoteAnnotationDirty = false;
+            _savePending = false;
+            _pendingSaveSnapshot = null;
+        }
+        else if (matchesPendingSave)
+        {
+            if (localMatchesPendingSave)
+                ReplaceWorkingAnnotations(incomingAnnotations, false);
+
             _remoteAnnotationDirty = false;
             _savePending = false;
             _pendingSaveSnapshot = null;
@@ -459,6 +481,7 @@ public sealed class WH40KTacticalMapControl : Control
             return;
 
         _workingAnnotations.Clear();
+        InvalidateAnnotationCache();
         SetAnnotationDirty(true);
         InvalidateArrange();
     }
@@ -482,9 +505,14 @@ public sealed class WH40KTacticalMapControl : Control
         if (!_annotationsEnabled)
             return;
 
+        if (_isAnnotating)
+            CommitActiveAnnotation();
+
+        NormalizeWorkingAnnotationsForSave();
         _savePending = true;
         _pendingSaveSnapshot = CloneAnnotations(_workingAnnotations);
         AnnotationStateChanged?.Invoke();
+        InvalidateArrange();
     }
 
     public WH40KTacticalMapSaveAnnotationsMessage BuildSaveMessage()
@@ -499,6 +527,7 @@ public sealed class WH40KTacticalMapControl : Control
     {
         CancelInteraction(clearDraftPreview: true);
         DisposeRefreshViewport();
+        DisposeAnnotationCache();
         DisposeSnapshotTexture();
         base.ExitedTree();
     }
@@ -507,8 +536,12 @@ public sealed class WH40KTacticalMapControl : Control
     {
         base.FrameUpdate(args);
 
-        if (MapUid != null)
+        if (MapUid != null &&
+            _liveRefreshEnabled &&
+            (_liveRefreshActive || _pendingLiveRefresh != null))
+        {
             InvalidateArrange();
+        }
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -578,6 +611,7 @@ public sealed class WH40KTacticalMapControl : Control
         if (_annotationTool == WH40KTacticalMapAnnotationTool.Eraser)
             ApplyEraserAt(localPosition);
 
+        InvalidateArrange();
         args.Handle();
     }
 
@@ -1155,9 +1189,25 @@ public sealed class WH40KTacticalMapControl : Control
 
     private void DrawAnnotations(DrawingHandleScreen handle, ViewState view)
     {
-        foreach (var stroke in _workingAnnotations)
+        if (_workingAnnotations.Count == 0 &&
+            _activeStrokePoints.Count == 0)
         {
-            DrawStroke(handle, stroke.Points, stroke.Color, stroke.Thickness, view);
+            return;
+        }
+
+        if (_workingAnnotations.Count > 0 && _grid != null)
+        {
+            if (TryEnsureAnnotationCache(_grid.LocalAABB))
+            {
+                handle.DrawTextureRect(_annotationCacheTexture!, GetMapRect(view, _grid.LocalAABB));
+            }
+            else
+            {
+                foreach (var stroke in _workingAnnotations)
+                {
+                    DrawStroke(handle, stroke.Points, stroke.Color, stroke.Thickness, view);
+                }
+            }
         }
 
         if (_annotationTool == WH40KTacticalMapAnnotationTool.Brush && _activeStrokePoints.Count > 0)
@@ -1259,15 +1309,24 @@ public sealed class WH40KTacticalMapControl : Control
             if (!IsCapturePointVisible(point.Position))
                 continue;
 
-            var ownerColor = string.IsNullOrWhiteSpace(point.OwnerTeamId)
-                ? Color.FromHex("#7F8790".AsSpan())
-                : point.OwnerColor;
+            var ownerColor = ResolveStrategicMarkerColor(point);
             var position = view.WorldToScreen(point.Position);
-            var radius = 9f;
+            var radius = point.Kind == WH40KTacticalMapStrategicMarkerKind.CommandNode ? 10f : 9f;
 
-            handle.DrawCircle(position, radius + 2f, Color.Black.WithAlpha(0.35f), true);
-            handle.DrawCircle(position, radius, ownerColor.WithAlpha(0.2f), true);
-            handle.DrawCircle(position, radius, ownerColor.WithAlpha(0.95f), false);
+            if (point.Kind == WH40KTacticalMapStrategicMarkerKind.CommandNode)
+            {
+                var frame = UIBox2.FromDimensions(position - new Vector2(radius, radius), new Vector2(radius * 2f, radius * 2f));
+                var borderFrame = new UIBox2(frame.Left - 2f, frame.Top - 2f, frame.Right + 2f, frame.Bottom + 2f);
+                handle.DrawRect(borderFrame, Color.Black.WithAlpha(0.35f), true);
+                handle.DrawRect(frame, ownerColor.WithAlpha(0.18f), true);
+                handle.DrawRect(frame, ownerColor.WithAlpha(0.95f), false);
+            }
+            else
+            {
+                handle.DrawCircle(position, radius + 2f, Color.Black.WithAlpha(0.35f), true);
+                handle.DrawCircle(position, radius, ownerColor.WithAlpha(0.2f), true);
+                handle.DrawCircle(position, radius, ownerColor.WithAlpha(0.95f), false);
+            }
 
             if (!string.IsNullOrWhiteSpace(point.CapturingTeamId) && point.CaptureProgress > 0f)
             {
@@ -1279,9 +1338,255 @@ public sealed class WH40KTacticalMapControl : Control
             if (point.Contested)
                 handle.DrawCircle(position, radius * 0.55f, point.CapturingColor.WithAlpha(0.88f), false);
 
-            var title = WH40KTacticalMapLoc.LocalizeCaptureLabel(point.Callsign, point.Label).ToUpperInvariant();
-            DrawMapLabel(handle, title, position + new Vector2(12f, -16f), ownerColor);
+            DrawStrategicMarkerIcon(handle, point, position, ownerColor);
+
+            var title = WH40KTacticalMapLoc.LocalizeStrategicLabel(point).ToUpperInvariant();
+            DrawMapLabel(handle, title, position + new Vector2(10f, -16f), ownerColor);
         }
+    }
+
+    private bool TryEnsureAnnotationCache(Box2 bounds)
+    {
+        if (_workingAnnotations.Count == 0 || _snapshotTexture == null)
+            return false;
+
+        var targetSize = GetAnnotationCacheSize(_snapshotTexture.Size);
+        if (targetSize.X <= 0 || targetSize.Y <= 0)
+            return false;
+
+        EnsureAnnotationCacheTexture(targetSize);
+
+        if (_annotationCacheTexture == null || _annotationCachePixels == null)
+            return false;
+
+        if (_annotationCacheDirty)
+            RebuildAnnotationCache(bounds);
+
+        return !_annotationCacheDirty;
+    }
+
+    private Vector2i GetAnnotationCacheSize(Vector2i sourceSize)
+    {
+        if (sourceSize.X <= 0 || sourceSize.Y <= 0)
+            return Vector2i.Zero;
+
+        var largestDimension = Math.Max(sourceSize.X, sourceSize.Y);
+        if (largestDimension <= MaxAnnotationCacheDimension)
+            return sourceSize;
+
+        var scale = MaxAnnotationCacheDimension / (float) largestDimension;
+        return new Vector2i(
+            Math.Max(1, (int) MathF.Round(sourceSize.X * scale)),
+            Math.Max(1, (int) MathF.Round(sourceSize.Y * scale)));
+    }
+
+    private void EnsureAnnotationCacheTexture(Vector2i size)
+    {
+        if (_annotationCacheTexture != null && _annotationCacheSize == size)
+            return;
+
+        DisposeAnnotationCache();
+        _annotationCacheTexture = _clyde.CreateBlankTexture<Rgba32>(
+            size,
+            "WH40KTacticalMapAnnotations",
+            new TextureLoadParameters
+            {
+                SampleParameters = new TextureSampleParameters
+                {
+                    Filter = true,
+                },
+                Srgb = true,
+                Preload = false,
+            });
+        _annotationCachePixels = new Rgba32[size.X * size.Y];
+        _annotationCacheSize = size;
+        _annotationCacheDirty = true;
+    }
+
+    private void RebuildAnnotationCache(Box2 bounds)
+    {
+        if (_annotationCacheTexture == null || _annotationCachePixels == null || _annotationCacheSize == Vector2i.Zero)
+            return;
+
+        Array.Clear(_annotationCachePixels);
+
+        foreach (var stroke in _workingAnnotations)
+        {
+            RasterizeStrokeToAnnotationCache(stroke, bounds, _annotationCachePixels, _annotationCacheSize);
+        }
+
+        _annotationCacheTexture.SetSubImage(Vector2i.Zero, _annotationCacheSize, _annotationCachePixels);
+        _annotationCacheDirty = false;
+    }
+
+    private void RasterizeStrokeToAnnotationCache(
+        WH40KTacticalMapAnnotationStroke stroke,
+        Box2 bounds,
+        Rgba32[] pixels,
+        Vector2i textureSize)
+    {
+        if (stroke.Points.Length == 0 || bounds.Width <= 0f || bounds.Height <= 0f)
+            return;
+
+        var texelsPerWorld = MathF.Min(
+            textureSize.X / MathF.Max(0.001f, bounds.Width),
+            textureSize.Y / MathF.Max(0.001f, bounds.Height));
+        var radius = MathF.Max(1f, stroke.Thickness * AnnotationRasterThicknessScale * texelsPerWorld);
+        var rasterColor = new Rgba32(stroke.Color.RByte, stroke.Color.GByte, stroke.Color.BByte, stroke.Color.AByte);
+
+        var previousPixel = WorldToAnnotationPixel(stroke.Points[0], bounds, textureSize);
+        StampAnnotationCircle(pixels, textureSize, previousPixel, radius, rasterColor);
+
+        for (var i = 1; i < stroke.Points.Length; i++)
+        {
+            var currentPixel = WorldToAnnotationPixel(stroke.Points[i], bounds, textureSize);
+            var delta = currentPixel - previousPixel;
+            var distance = delta.Length();
+
+            if (distance <= 0.001f)
+            {
+                StampAnnotationCircle(pixels, textureSize, currentPixel, radius, rasterColor);
+                previousPixel = currentPixel;
+                continue;
+            }
+
+            var sampleSpacing = MathF.Max(0.65f, radius * AnnotationRasterSampleSpacingFactor);
+            var steps = Math.Max(1, (int) MathF.Ceiling(distance / sampleSpacing));
+
+            for (var step = 1; step <= steps; step++)
+            {
+                var sample = Vector2.Lerp(previousPixel, currentPixel, step / (float) steps);
+                StampAnnotationCircle(pixels, textureSize, sample, radius, rasterColor);
+            }
+
+            previousPixel = currentPixel;
+        }
+    }
+
+    private static Vector2 WorldToAnnotationPixel(Vector2 worldPoint, Box2 bounds, Vector2i textureSize)
+    {
+        var u = (worldPoint.X - bounds.Left) / MathF.Max(0.001f, bounds.Width);
+        var v = (bounds.Top - worldPoint.Y) / MathF.Max(0.001f, bounds.Height);
+
+        return new Vector2(
+            Math.Clamp(u, 0f, 1f) * Math.Max(0, textureSize.X - 1),
+            Math.Clamp(v, 0f, 1f) * Math.Max(0, textureSize.Y - 1));
+    }
+
+    private static void StampAnnotationCircle(
+        Rgba32[] pixels,
+        Vector2i textureSize,
+        Vector2 center,
+        float radius,
+        Rgba32 color)
+    {
+        if (textureSize.X <= 0 || textureSize.Y <= 0 || radius <= 0f)
+            return;
+
+        var minX = Math.Max(0, (int) MathF.Floor(center.X - radius));
+        var maxX = Math.Min(textureSize.X - 1, (int) MathF.Ceiling(center.X + radius));
+        var minY = Math.Max(0, (int) MathF.Floor(center.Y - radius));
+        var maxY = Math.Min(textureSize.Y - 1, (int) MathF.Ceiling(center.Y + radius));
+        var radiusSquared = radius * radius;
+
+        for (var y = minY; y <= maxY; y++)
+        {
+            var rowOffset = y * textureSize.X;
+            for (var x = minX; x <= maxX; x++)
+            {
+                var sampleX = x + 0.5f;
+                var sampleY = y + 0.5f;
+                var dx = sampleX - center.X;
+                var dy = sampleY - center.Y;
+                if (dx * dx + dy * dy > radiusSquared)
+                    continue;
+
+                BlendAnnotationPixel(ref pixels[rowOffset + x], color);
+            }
+        }
+    }
+
+    private static void BlendAnnotationPixel(ref Rgba32 destination, Rgba32 source)
+    {
+        if (source.A == 0)
+            return;
+
+        if (destination.A == 0 || source.A == byte.MaxValue)
+        {
+            destination = source;
+            return;
+        }
+
+        var srcA = source.A / 255f;
+        var dstA = destination.A / 255f;
+        var outA = srcA + dstA * (1f - srcA);
+        if (outA <= 0.0001f)
+        {
+            destination = default;
+            return;
+        }
+
+        var srcWeight = srcA / outA;
+        var dstWeight = dstA * (1f - srcA) / outA;
+        destination = new Rgba32(
+            (byte) Math.Clamp(MathF.Round(source.R * srcWeight + destination.R * dstWeight), 0f, 255f),
+            (byte) Math.Clamp(MathF.Round(source.G * srcWeight + destination.G * dstWeight), 0f, 255f),
+            (byte) Math.Clamp(MathF.Round(source.B * srcWeight + destination.B * dstWeight), 0f, 255f),
+            (byte) Math.Clamp(MathF.Round(outA * 255f), 0f, 255f));
+    }
+
+    private void InvalidateAnnotationCache()
+    {
+        _annotationCacheDirty = true;
+    }
+
+    private Color ResolveStrategicMarkerColor(WH40KTacticalMapCapturePointMarker marker)
+    {
+        if (marker.Relation == WH40KTacticalMapStrategicRelation.Contested &&
+            !string.IsNullOrWhiteSpace(marker.CapturingTeamId))
+        {
+            return marker.CapturingColor;
+        }
+
+        if (!string.IsNullOrWhiteSpace(marker.OwnerTeamId))
+            return marker.OwnerColor;
+
+        if (!string.IsNullOrWhiteSpace(marker.CapturingTeamId))
+            return marker.CapturingColor;
+
+        return Color.FromHex("#B7C1CF".AsSpan());
+    }
+
+    private void DrawStrategicMarkerIcon(
+        DrawingHandleScreen handle,
+        WH40KTacticalMapCapturePointMarker marker,
+        Vector2 center,
+        Color color)
+    {
+        if (marker.Kind == WH40KTacticalMapStrategicMarkerKind.CommandNode)
+        {
+            var half = 2.8f;
+            var frame = UIBox2.FromDimensions(center - new Vector2(half, half), new Vector2(half * 2f, half * 2f));
+            handle.DrawRect(frame, color.WithAlpha(0.92f), true);
+            handle.DrawRect(frame, Color.Black.WithAlpha(0.75f), false);
+            return;
+        }
+
+        if (marker.Relation == WH40KTacticalMapStrategicRelation.Neutral)
+        {
+            handle.DrawCircle(center, 2.6f, color.WithAlpha(0.92f), false);
+            return;
+        }
+
+        if (marker.Relation == WH40KTacticalMapStrategicRelation.Contested)
+        {
+            var arm = 2.8f;
+            handle.DrawLine(center - new Vector2(arm, arm), center + new Vector2(arm, arm), color.WithAlpha(0.95f));
+            handle.DrawLine(center + new Vector2(arm, -arm), center - new Vector2(arm, -arm), color.WithAlpha(0.95f));
+            return;
+        }
+
+        handle.DrawCircle(center, 2.4f, color.WithAlpha(0.95f), true);
     }
 
     private void DrawMapLabel(DrawingHandleScreen handle, string text, Vector2 topLeft, Color color)
@@ -1418,8 +1723,8 @@ public sealed class WH40KTacticalMapControl : Control
         var lastPoint = _activeStrokePoints[^1];
         var worldDistance = Vector2.Distance(lastPoint, localPosition);
         var pixelDistance = Vector2.Distance(_lastAnnotationPixel, relativePixelPosition);
-        var worldSpacing = MathF.Max(0.02f, _annotationThickness * 0.04f);
-        var pixelSpacing = MathF.Max(1.25f, _annotationThickness * 0.35f);
+        var worldSpacing = MathF.Max(MinAnnotationWorldSpacing, _annotationThickness * 0.09f);
+        var pixelSpacing = MathF.Max(MinAnnotationPixelSpacing, _annotationThickness * 1.1f);
 
         if (worldDistance < 0.0001f)
             return;
@@ -1455,6 +1760,7 @@ public sealed class WH40KTacticalMapControl : Control
                 _activeStrokePoints.ToArray(),
                 _annotationColor,
                 _annotationThickness));
+            InvalidateAnnotationCache();
             SetAnnotationDirty(true);
         }
 
@@ -1491,6 +1797,7 @@ public sealed class WH40KTacticalMapControl : Control
 
         _workingAnnotations.Clear();
         _workingAnnotations.AddRange(next);
+        InvalidateAnnotationCache();
         SetAnnotationDirty(true);
     }
 
@@ -1499,6 +1806,7 @@ public sealed class WH40KTacticalMapControl : Control
         CancelInteraction(clearDraftPreview: true);
         _workingAnnotations.Clear();
         _workingAnnotations.AddRange(CloneAnnotations(source));
+        InvalidateAnnotationCache();
         SetAnnotationDirty(dirty);
     }
 
@@ -1513,10 +1821,77 @@ public sealed class WH40KTacticalMapControl : Control
                 _activeStrokePoints.ToArray(),
                 _annotationColor,
                 _annotationThickness));
+            InvalidateAnnotationCache();
             SetAnnotationDirty(true);
         }
 
         CancelInteraction(clearDraftPreview: true);
+        InvalidateArrange();
+    }
+
+    private void NormalizeWorkingAnnotationsForSave()
+    {
+        if (_workingAnnotations.Count == 0)
+            return;
+
+        var normalized = BuildNormalizedAnnotationSnapshot(_workingAnnotations);
+        if (AreAnnotationsEquivalent(_workingAnnotations, normalized))
+            return;
+
+        _workingAnnotations.Clear();
+        _workingAnnotations.AddRange(normalized);
+        InvalidateAnnotationCache();
+        SetAnnotationDirty(true);
+    }
+
+    private WH40KTacticalMapAnnotationStroke[] BuildNormalizedAnnotationSnapshot(
+        IReadOnlyList<WH40KTacticalMapAnnotationStroke> source)
+    {
+        var result = new List<WH40KTacticalMapAnnotationStroke>(source.Count);
+
+        foreach (var stroke in source)
+        {
+            var thickness = Math.Clamp(stroke.Thickness, MinAnnotationThickness, MaxAnnotationThickness);
+            var points = new List<Vector2>(Math.Min(stroke.Points.Length, MaxLocalStrokePoints));
+
+            void Flush(bool carryTail)
+            {
+                if (points.Count == 0)
+                    return;
+
+                result.Add(new WH40KTacticalMapAnnotationStroke(points.ToArray(), stroke.Color, thickness));
+
+                if (!carryTail || points.Count == 1)
+                {
+                    points.Clear();
+                    return;
+                }
+
+                var lastPoint = points[^1];
+                points.Clear();
+                points.Add(lastPoint);
+            }
+
+            foreach (var point in stroke.Points)
+            {
+                if (!float.IsFinite(point.X) || !float.IsFinite(point.Y))
+                    continue;
+
+                if (points.Count > 0 &&
+                    Vector2.DistanceSquared(points[^1], point) < 0.0001f)
+                {
+                    continue;
+                }
+
+                points.Add(point);
+                if (points.Count >= MaxLocalStrokePoints)
+                    Flush(true);
+            }
+
+            Flush(false);
+        }
+
+        return result.ToArray();
     }
 
     private void CancelInteraction(bool clearDraftPreview)
@@ -1599,10 +1974,19 @@ public sealed class WH40KTacticalMapControl : Control
     {
         var path = SnapshotTexturePath;
 
+        if (path == ResPath.Empty)
+        {
+            DisposeAnnotationCache();
+            DisposeSnapshotTexture();
+            _loadedTexturePath = null;
+            return false;
+        }
+
         if (_snapshotTexture != null && _loadedTexturePath == path)
             return true;
 
         DisposeSnapshotTexture();
+        DisposeAnnotationCache();
 
         try
         {
@@ -1783,22 +2167,35 @@ public sealed class WH40KTacticalMapControl : Control
         _refreshViewport = null;
     }
 
+    private void DisposeAnnotationCache()
+    {
+        _annotationCacheTexture?.Dispose();
+        _annotationCacheTexture = null;
+        _annotationCachePixels = null;
+        _annotationCacheSize = Vector2i.Zero;
+        _annotationCacheDirty = true;
+    }
+
     private void DisposeSnapshotTexture()
     {
         _snapshotTexture?.Dispose();
         _snapshotTexture = null;
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             DisposeRefreshViewport();
+            DisposeAnnotationCache();
             DisposeSnapshotTexture();
             _ownedFogNoiseTexture?.Dispose();
         }
 
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
     }
 
     private static WH40KTacticalMapAnnotationStroke[] CloneAnnotations(IReadOnlyList<WH40KTacticalMapAnnotationStroke> strokes)

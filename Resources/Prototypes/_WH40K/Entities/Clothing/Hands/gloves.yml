@@ -49,6 +49,17 @@
 
 - type: entity
   parent: ClothingHandsGlovesColorBlack
+  id: ClothingHandsGlovesKrieg
+  suffix: WH40K, Криг
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Hands/Gloves/krieg.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Hands/Gloves/krieg.rsi
+  - type: Insulated
+
+- type: entity
+  parent: ClothingHandsGlovesColorBlack
   id: ClothingHandsGlovesCombatColonel
   suffix: WH40K, Гвардия
   components:
@@ -67,16 +78,13 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Hands/Gloves/gloves_fingerless_cult.rsi
+  - type: Item
+    sprite: Clothing/Hands/Gloves/fingerless.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/gloves_fingerless_cult.rsi
   - type: Insulated
-
-- type: entity
-  parent: ClothingHandsBase
-  id: ClothingHandsGlovesVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi

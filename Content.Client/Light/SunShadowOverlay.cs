@@ -5,6 +5,7 @@ using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 
@@ -54,7 +55,7 @@ public sealed class SunShadowOverlay : Overlay
         var mapId = args.MapId;
         var worldBounds = args.WorldBounds;
         var targetSize = viewport.LightRenderTarget.Size;
-        var mapEntity = _mapManager.GetMapEntityId(mapId);
+        var mapEntity = _entManager.System<SharedMapSystem>().GetMap(mapId);
         var hasMapShadow = _entManager.TryGetComponent(mapEntity, out SunShadowComponent? mapSunShadow);
 
         var res = _resources.GetForViewport(args.Viewport, static _ => new CachedResources());

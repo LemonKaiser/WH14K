@@ -6,6 +6,7 @@ using Content.Server.Cargo.Systems;
 using Content.Server._WH40K.Cargo.Components;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.Command.Pinpointer;
+using Content.Server._WH40K.Localizations;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.OreExtractor.Components;
@@ -80,6 +81,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         string Summary,
         string[] LegacyLines,
         string[] StaffingLines,
+        WH40KTeamCompositionStaffingData StaffingData,
         WH40KTeamCompositionRoleEntry[] OfficerRoles,
         WH40KTeamCompositionRoleEntry[] CoreRoles,
         WH40KTeamCompositionRoleEntry[] MechanicusRoles,
@@ -89,6 +91,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     private readonly List<EntityCoordinates> _reinforcementMapSpawnPoints = new();
 
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -118,15 +121,28 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
         SubscribeLocalEvent<WH40KReinforcementGhostRoleOneShotComponent, MindAddedMessage>(OnReinforcementMindAdded);
 
+        SubscribeLocalEvent<WH40KCommandNodeComponent, BoundUIOpenedEvent>(OnAnyUiOpened);
+
         Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.Key, subs =>
         {
-            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
             subs.Event<WH40KCommandNodeUpgradePressedMessage>(OnUpgradePressed);
-            subs.Event<WH40KCommandNodePurchaseTreeNodeMessage>(OnTreeNodePurchaseRequested);
-            subs.Event<WH40KCommandNodeCallReinforcementMessage>(OnReinforcementCalled);
             subs.Event<WH40KCommandNodeTeamCompositionPressedMessage>(OnTeamCompositionPressed);
             subs.Event<WH40KCommandNodeAssignDoctrineMessage>(OnDoctrineAssigned);
             subs.Event<WH40KCommandNodeAssignBattleTacticMessage>(OnBattleTacticAssigned);
+        });
+
+        Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.Reinforcement, subs =>
+        {
+            subs.Event<WH40KCommandNodeCallReinforcementMessage>(OnReinforcementCalled);
+        });
+
+        Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.UpgradeTree, subs =>
+        {
+            subs.Event<WH40KCommandNodePurchaseTreeNodeMessage>(OnTreeNodePurchaseRequested);
+        });
+
+        Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.MissionBoard, subs =>
+        {
             subs.Event<WH40KCommandNodeAssignMissionTaskMessage>(OnMissionTaskAssigned);
             subs.Event<WH40KCommandNodeSyncMissionPinpointerMessage>(OnMissionPinpointerSyncRequested);
         });
@@ -151,16 +167,26 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             if (node.NextPassivePointTick == TimeSpan.Zero)
                 node.NextPassivePointTick = now + passiveInterval;
 
-            while (node.NextPassivePointTick <= now)
+            if (node.PassiveFrontPointsPerInterval > 0)
             {
-                if (!string.IsNullOrWhiteSpace(node.TeamId))
-                    _teamRule.AddTeamFrontPoints(node.TeamId, GetPassiveFrontPointGain(node), "command-node-passive");
+                while (node.NextPassivePointTick <= now)
+                {
+                    if (!string.IsNullOrWhiteSpace(node.TeamId))
+                        _teamRule.AddTeamFrontPoints(node.TeamId, GetPassiveFrontPointGain(node), "command-node-passive");
 
-                passiveInterval = TimeSpan.FromSeconds(GetPassiveIntervalSeconds(node));
-                node.NextPassivePointTick += passiveInterval;
+                    passiveInterval = TimeSpan.FromSeconds(GetPassiveIntervalSeconds(node));
+                    node.NextPassivePointTick += passiveInterval;
+                }
+            }
+            else
+            {
+                node.NextPassivePointTick = now + passiveInterval;
             }
 
-            if (!_ui.IsUiOpen(uid, WH40KCommandNodeUiKey.Key))
+            if (!_ui.IsUiOpen(uid, WH40KCommandNodeUiKey.Key)
+                && !_ui.IsUiOpen(uid, WH40KCommandNodeUiKey.Reinforcement)
+                && !_ui.IsUiOpen(uid, WH40KCommandNodeUiKey.UpgradeTree)
+                && !_ui.IsUiOpen(uid, WH40KCommandNodeUiKey.MissionBoard))
                 continue;
 
             if (node.NextUiRefresh > now)
@@ -171,12 +197,12 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         }
     }
 
-    private void OnUiOpened(Entity<WH40KCommandNodeComponent> ent, ref BoundUIOpenedEvent args)
+    private void OnAnyUiOpened(Entity<WH40KCommandNodeComponent> ent, ref BoundUIOpenedEvent args)
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
-            _ui.CloseUi(ent.Owner, WH40KCommandNodeUiKey.Key, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _ui.CloseUi(ent.Owner, args.UiKey, args.Actor);
             return;
         }
 
@@ -195,7 +221,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         args.Verbs.Add(new AlternativeVerb
         {
-            Text = Loc.GetString("wh40k-command-node-open-verb"),
+            Text = Loc.GetString("w40k-cmd-open-verb"),
             Priority = 2,
             Act = () =>
             {
@@ -261,6 +287,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             composition.CoreRoles,
             composition.MechanicusRoles,
             composition.Members,
+            composition.StaffingData,
             bonusIntel,
             teamEventRuntime,
             globalMissionRuntime,
@@ -268,6 +295,9 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             missionBoard);
 
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.Key, state);
+        _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.Reinforcement, state);
+        _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.UpgradeTree, state);
+        _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.MissionBoard, state);
     }
 
     private void OnTreeNodePurchaseRequested(
@@ -276,7 +306,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -284,14 +314,14 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         if (!TryResolveTreeNodeForTeam(ent.Comp.TeamId, args.NodeId, out _, out var nodeConfig))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-tree-node-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-missing"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
 
         if (nodeConfig.Cost <= 0)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-tree-node-inactive"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-inactive"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -299,7 +329,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var canonicalNodeId = nodeConfig.Id;
         if (ContainsNodeId(ent.Comp.PurchasedTreeNodeIds, canonicalNodeId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-tree-node-already-purchased"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-already-purchased"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -308,7 +338,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(lockedDomainId) &&
             string.Equals(lockedDomainId, nodeConfig.Domain, StringComparison.OrdinalIgnoreCase))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-tree-node-doctrine-locked"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-doctrine-locked"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -318,7 +348,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             if (ContainsNodeId(ent.Comp.PurchasedTreeNodeIds, parentId))
                 continue;
 
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-tree-node-parent-locked"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-parent-locked"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -332,7 +362,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         {
             _popup.PopupEntity(
                 Loc.GetString(
-                    "wh40k-command-node-tree-node-level-locked",
+                    "w40k-cmd-tree-node-level-locked",
                     ("level", requiredLevel)),
                 ent.Owner,
                 args.Actor);
@@ -349,7 +379,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
                 var remainingSeconds = requiredRoundTime - elapsedSeconds;
                 _popup.PopupEntity(
                     Loc.GetString(
-                        "wh40k-command-node-tree-node-time-locked",
+                        "w40k-cmd-tree-node-time-locked",
                         ("time", FormatClock(requiredRoundTime)),
                         ("left", FormatClock(remainingSeconds))),
                     ent.Owner,
@@ -371,7 +401,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, cost, out _, source: "tree-node"))
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-tree-node-denied", ("cost", cost)),
+                Loc.GetString("w40k-cmd-tree-node-denied", ("cost", cost)),
                 ent.Owner,
                 args.Actor);
             UpdateUi(ent);
@@ -391,7 +421,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         _popup.PopupEntity(
             Loc.GetString(
-                "wh40k-command-node-tree-node-purchased",
+                "w40k-cmd-tree-node-purchased",
                 ("node", Loc.GetString(nodeConfig.TitleKey)),
                 ("cost", cost)),
             ent.Owner,
@@ -403,20 +433,20 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
         if (ent.Comp.UpgradeLevel >= Math.Max(0, ent.Comp.UpgradeMaxLevel))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-upgrade-max"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-upgrade-max"), ent.Owner, args.Actor);
             return;
         }
 
         var cost = GetUpgradeCost(ent.Comp);
         if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, cost, out _, source: "command-upgrade"))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-upgrade-denied"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-upgrade-denied"), ent.Owner, args.Actor);
             return;
         }
 
@@ -434,8 +464,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             "command-upgrade",
             null);
 
-        _popup.PopupEntity(Loc.GetString("wh40k-command-node-upgrade-ok",
-            ("level", ent.Comp.UpgradeLevel)), ent.Owner, args.Actor);
+        _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-upgrade-ok", ("level", ent.Comp.UpgradeLevel)), ent.Owner, args.Actor);
         UpdateUi(ent);
     }
 
@@ -443,54 +472,54 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
         var phase = _teamRule.GetCurrentPhase();
         if (phase < WH40KBattlePhase.Assault)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-phase-lock"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-phase-lock"), ent.Owner, args.Actor);
             return;
         }
 
         if (phase >= WH40KBattlePhase.Apocalypse)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-apocalypse-lock"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-apocalypse-lock"), ent.Owner, args.Actor);
             return;
         }
 
         if (_timing.CurTime < ent.Comp.NextReinforcementAvailable)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-cooldown"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-cooldown"), ent.Owner, args.Actor);
             return;
         }
 
         if (!TryResolveReinforcementProfileForTeam(ent.Comp.TeamId, out var reinforcementProfile) ||
             !TryResolveReinforcementOption(reinforcementProfile, args.OptionId, out var option))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-option-invalid"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-option-invalid"), ent.Owner, args.Actor);
             return;
         }
 
         var maxCount = Math.Max(1, option.MaxCount);
         if (args.Count < 1 || args.Count > maxCount)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-option-invalid"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-option-invalid"), ent.Owner, args.Actor);
             return;
         }
 
         var callCost = GetCurrentReinforcementCost(ent.Comp, option, args.Count);
         if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, callCost, out _, source: "reinforcement"))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-denied"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-denied"), ent.Owner, args.Actor);
             return;
         }
 
         if (!TrySpawnReinforcementSquad(ent, option, args.Count, out var spawnedCount))
         {
             _teamRule.TryAdjustTeamCommandPoints(ent.Comp.TeamId, callCost, out _, out _, source: "reinforcement-refund");
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-reinforcement-spawnpoints-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-spawnpoints-missing"), ent.Owner, args.Actor);
             return;
         }
 
@@ -508,7 +537,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         _popup.PopupEntity(
             Loc.GetString(
-                "wh40k-command-node-reinforcement-ok-spawned",
+                "w40k-cmd-reinforcement-ok-spawned",
                 ("count", spawnedCount),
                 ("option", ResolveLocalizedOrRaw(option.NameKey))),
             ent.Owner,
@@ -521,7 +550,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -532,7 +561,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -540,7 +569,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         if (ent.Comp.DoctrineLocked)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-doctrine-window-state-locked"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-doctrine-window-state-locked"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -559,7 +588,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (teamLevel < unlockLevel)
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-doctrine-window-state-wait-level", ("level", unlockLevel)),
+                Loc.GetString("w40k-cmd-doctrine-window-state-wait-level", ("level", unlockLevel)),
                 ent.Owner,
                 args.Actor);
             UpdateUi(ent);
@@ -577,7 +606,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         var doctrineName = ResolveDoctrineName(profile, doctrineId, ent.Comp.TeamId);
         _popup.PopupEntity(
-            Loc.GetString("wh40k-command-node-doctrine-window-active-set", ("doctrine", doctrineName)),
+            Loc.GetString("w40k-cmd-doctrine-window-active-set", ("doctrine", doctrineName)),
             ent.Owner,
             args.Actor);
 
@@ -588,7 +617,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -598,7 +627,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         if (string.Equals(activeTacticId, selectedTacticId, StringComparison.OrdinalIgnoreCase))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-command-node-battle-tactic-already-active"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-battle-tactic-already-active"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -607,7 +636,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (cooldownSeconds > 0)
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-battle-tactic-cooldown-popup",
+                Loc.GetString("w40k-cmd-battle-tactic-cooldown-popup",
                     ("time", FormatClock(cooldownSeconds))),
                 ent.Owner,
                 args.Actor);
@@ -622,7 +651,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var tacticName = Loc.GetString(WH40KCommandNodeTactics.FindOrDefault(selectedTacticId).NameLocKey);
         NotifyTeamBattleTacticChanged(ent.Comp.TeamId, tacticName);
         _popup.PopupEntity(
-            Loc.GetString("wh40k-command-node-battle-tactic-assigned-ok", ("tactic", tacticName)),
+            Loc.GetString("w40k-cmd-battle-tactic-assigned-ok", ("tactic", tacticName)),
             ent.Owner,
             args.Actor);
 
@@ -633,14 +662,14 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
         if (_runtime.BuildTeamMissionRuntimeState(ent.Comp.TeamId).IsActive)
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-mission-board-select-denied-active"),
+                Loc.GetString("w40k-cmd-mission-board-select-denied-active"),
                 ent.Owner,
                 args.Actor);
             UpdateUi(ent);
@@ -652,7 +681,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!TryMatchOfferedTaskId(ent.Comp, args.TaskId, out var taskId))
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-mission-board-select-denied-unavailable"),
+                Loc.GetString("w40k-cmd-mission-board-select-denied-unavailable"),
                 ent.Owner,
                 args.Actor);
             UpdateUi(ent);
@@ -662,7 +691,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!_runtime.TryStartFactionMission(ent.Comp.TeamId, taskId, out var startedMission))
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-mission-board-select-denied-unavailable"),
+                Loc.GetString("w40k-cmd-mission-board-select-denied-unavailable"),
                 ent.Owner,
                 args.Actor);
             RerollMissionBoardOfferSet(ent.Comp);
@@ -674,7 +703,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         ent.Comp.MissionBoardHadActiveFactionMission = true;
         _popup.PopupEntity(
             Loc.GetString(
-                "wh40k-command-node-mission-board-select-ok",
+                "w40k-cmd-mission-board-select-ok",
                 ("task", ResolveLocalizedOrRaw(startedMission.MissionTitle))),
             ent.Owner,
             args.Actor);
@@ -689,7 +718,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -698,7 +727,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!teamMission.IsActive && !globalMission.IsActive)
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-mission-board-pinpointer-sync-no-mission"),
+                Loc.GetString("w40k-cmd-mission-board-pinpointer-sync-no-mission"),
                 ent.Owner,
                 args.Actor);
             return;
@@ -707,7 +736,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!_missionPinpointer.TryForceRefreshForTeam(ent.Comp.TeamId, out var refreshedCount))
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-command-node-mission-board-pinpointer-sync-empty"),
+                Loc.GetString("w40k-cmd-mission-board-pinpointer-sync-empty"),
                 ent.Owner,
                 args.Actor);
             return;
@@ -715,7 +744,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         _popup.PopupEntity(
             Loc.GetString(
-                "wh40k-command-node-mission-board-pinpointer-sync-ok",
+                "w40k-cmd-mission-board-pinpointer-sync-ok",
                 ("count", refreshedCount)),
             ent.Owner,
             args.Actor);
@@ -825,11 +854,11 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var selectableTasks = BuildMissionBoardSelectableTasks(component, selectedTaskId);
 
         return new WH40KCommandMissionBoardState(
-            "wh40k-command-node-mission-board-no-active-title",
-            "wh40k-command-node-mission-board-no-active-description",
+            "w40k-cmd-mission-board-no-active-title",
+            "w40k-cmd-mission-board-no-active-description",
             0,
-            "wh40k-command-node-mission-board-no-active-timer",
-            "wh40k-command-node-mission-board-no-active-timer",
+            "w40k-cmd-mission-board-no-active-timer",
+            "w40k-cmd-mission-board-no-active-timer",
             selectedTaskId,
             systemTasks,
             selectableTasks);
@@ -907,7 +936,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             tasks.Add(new WH40KCommandMissionBoardSystemTaskState(
                 counter.MissionId,
                 counter.Title,
-                "wh40k-command-node-mission-board-counter-reward",
+                "w40k-cmd-mission-board-counter-reward",
                 counter.Description,
                 WH40KCommandMissionBoardTaskStatus.Queued));
         }
@@ -952,7 +981,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
                 offer.MissionId,
                 offer.Title,
                 rewardLine,
-                Loc.GetString("wh40k-command-node-mission-board-duration-line", ("duration", FormatClock(offer.DurationSeconds))),
+                Loc.GetString("w40k-cmd-mission-board-duration-line", ("duration", FormatClock(offer.DurationSeconds))),
                 offer.Description));
         }
 
@@ -973,7 +1002,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             : $"{ResolveLocalizedOrRaw(tokenId)} ({FormatClock(tokenDurationSeconds)})";
 
         return Loc.GetString(
-            "wh40k-command-node-mission-board-reward-line",
+            "w40k-cmd-mission-board-reward-line",
             ("major", Math.Max(0, major)),
             ("minor", Math.Max(0, minor)),
             ("timeout", Math.Max(0, timeout)),
@@ -1505,7 +1534,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
     private void NotifyTeamBattleTacticChanged(string teamId, string tacticName)
     {
-        var message = Loc.GetString("wh40k-command-node-battle-tactic-change-notice",
+        var message = Loc.GetString("w40k-cmd-battle-tactic-change-notice",
             ("tactic", tacticName));
 
         foreach (var player in _players.Sessions)
@@ -1585,8 +1614,8 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
             options.Add(new WH40KCommandNodeReinforcementOptionState(
                 option.Id,
-                ResolveLocalizedOrRaw(option.NameKey),
-                ResolveLocalizedOrRaw(option.DescriptionKey),
+                option.NameKey,
+                option.DescriptionKey,
                 BuildReinforcementEquipmentSummary(option.Job),
                 option.PreviewPrototype.ToString(),
                 Math.Max(1, costX1),
@@ -1742,13 +1771,12 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
     private void AddGearName(EntProtoId entityId, HashSet<string> names)
     {
-        if (!_proto.TryIndex<EntityPrototype>(entityId, out var entity))
+        if (!_proto.TryIndex<EntityPrototype>(entityId, out _))
             return;
 
-        if (string.IsNullOrWhiteSpace(entity.Name))
-            return;
-
-        names.Add(entity.Name);
+        // Send FTL entity key so the client can resolve the name in its own culture.
+        var locKey = $"ent-{entityId}";
+        names.Add(locKey);
     }
 
     private bool IsUserAllowedForTeam(EntityUid user, string teamId)
@@ -1925,7 +1953,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var coreRoleIds = hasCompositionProfile
             ? GetOrderedCoreRoleIds(teamRoleIdSet, compositionProfile.CoreRoles, officerRoleIds, mechanicusRoleIds)
             : GetOrderedCoreRoleIds(teamRoleIdSet, Array.Empty<ProtoId<JobPrototype>>(), officerRoleIds, mechanicusRoleIds);
-        var staffingLines = BuildStaffingOverview(
+        var staffingResult = BuildStaffingOverview(
             roleIdCounts,
             teamRoleIdSet,
             hasCompositionProfile ? compositionProfile : null);
@@ -1936,50 +1964,59 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var memberEntries = BuildMemberEntries(members, officerRoleIds, coreRoleIds, mechanicusRoleIds);
 
         var lines = new List<string>();
-        lines.AddRange(staffingLines);
+        lines.AddRange(staffingResult.Lines);
         lines.Add(string.Empty);
-        lines.Add(Loc.GetString("wh40k-command-node-team-composition-roles-header"));
+        lines.Add(Loc.GetString("w40k-cmd-team-composition-roles-header"));
         AppendRoleGroupLines(lines,
-            Loc.GetString("wh40k-command-node-team-composition-role-group-officers"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-officers"),
             officerRoles);
         AppendRoleGroupLines(lines,
-            Loc.GetString("wh40k-command-node-team-composition-role-group-core"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-core"),
             coreRoles);
         AppendRoleGroupLines(lines,
-            Loc.GetString("wh40k-command-node-team-composition-role-group-mechanicus"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-mechanicus"),
             mechanicusRoles);
         lines.Add(string.Empty);
-        lines.Add(Loc.GetString("wh40k-command-node-team-composition-members-header"));
+        lines.Add(Loc.GetString("w40k-cmd-team-composition-members-header"));
 
         if (memberEntries.Length == 0)
         {
-            lines.Add(Loc.GetString("wh40k-command-node-team-composition-empty"));
+            lines.Add(Loc.GetString("w40k-cmd-team-composition-empty"));
         }
         else
         {
             foreach (var member in memberEntries)
             {
-                lines.Add(Loc.GetString("wh40k-command-node-team-composition-member-line",
+                lines.Add(Loc.GetString("w40k-cmd-team-composition-member-line",
                     ("name", member.Name),
-                    ("role", member.RoleName)));
+                    ("role", Loc.GetString(member.RoleName))));
             }
         }
 
-        var summary = Loc.GetString("wh40k-command-node-team-composition-summary",
+        var summary = Loc.GetString("w40k-cmd-team-composition-summary",
             ("members", memberEntries.Length),
             ("roles", teamRoleIds.Length));
+
+        var staffingData = new WH40KTeamCompositionStaffingData(
+            memberEntries.Length,
+            teamRoleIds.Length,
+            staffingResult.CommandCurrent,
+            staffingResult.CommandMax,
+            staffingResult.LineCurrent,
+            staffingResult.LineMax);
 
         return new TeamCompositionData(
             summary,
             lines.ToArray(),
-            staffingLines,
+            staffingResult.Lines,
+            staffingData,
             officerRoles,
             coreRoles,
             mechanicusRoles,
             memberEntries);
     }
 
-    private string[] BuildStaffingOverview(
+    private (string[] Lines, int CommandCurrent, int CommandMax, int LineCurrent, int LineMax) BuildStaffingOverview(
         IReadOnlyDictionary<string, int> roleIdCounts,
         IReadOnlyCollection<string> teamRoleIds,
         WH40KCommandTeamCompositionProfilePrototype? profile)
@@ -2001,14 +2038,14 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var lineMax = lineRoleIds.Length;
         var lineCurrent = lineRoleIds.Sum(roleId => roleIdCounts.GetValueOrDefault(roleId));
 
-        lines.Add(Loc.GetString("wh40k-command-node-team-composition-command-staff-line",
+        lines.Add(Loc.GetString("w40k-cmd-team-composition-command-staff-line",
             ("current", commandCurrent),
             ("max", commandMax)));
-        lines.Add(Loc.GetString("wh40k-command-node-team-composition-line-staff-line",
+        lines.Add(Loc.GetString("w40k-cmd-team-composition-line-staff-line",
             ("current", lineCurrent),
             ("max", lineMax)));
 
-        return lines.ToArray();
+        return (lines.ToArray(), commandCurrent, commandMax, lineCurrent, lineMax);
     }
 
     private List<StaffingRolePlan> BuildCommandStaffingPlan(
@@ -2149,13 +2186,13 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
 
         if (roles.Count == 0)
         {
-            lines.Add(Loc.GetString("wh40k-command-node-team-composition-empty"));
+            lines.Add(Loc.GetString("w40k-cmd-team-composition-empty"));
             return;
         }
 
         foreach (var role in roles)
         {
-            lines.Add(Loc.GetString("wh40k-command-node-team-composition-role-line",
+            lines.Add(Loc.GetString("w40k-cmd-team-composition-role-line",
                 ("role", role.RoleName),
                 ("count", role.Count)));
         }
@@ -2323,7 +2360,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         {
             var roleId = jobId.Value;
             if (_proto.TryIndex<JobPrototype>(jobId.Value, out var job))
-                return (roleId, Loc.GetString(job.Name));
+                return (roleId, job.Name);
 
             return (roleId, roleId);
         }
@@ -2335,7 +2372,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     private string GetRoleDisplayName(string roleId)
     {
         if (_proto.TryIndex<JobPrototype>(roleId, out var job))
-            return Loc.GetString(job.Name);
+            return job.Name;
 
         return roleId;
     }
@@ -2382,7 +2419,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(entityName))
             return entityName;
 
-        return Loc.GetString("wh40k-command-node-team-composition-role-unknown");
+        return Loc.GetString("w40k-cmd-team-composition-role-unknown");
     }
 
     private WH40KCommandNodeBonusIntelState BuildBonusIntel(string teamId, WH40KCommandNodeComponent node)
@@ -2491,7 +2528,6 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var bestTier = -1;
         var bestSpeedBonus = int.MinValue;
         var bestMinProcessSeconds = float.MaxValue;
-        var bestStorageLimit = int.MinValue;
 
         var query = EntityQueryEnumerator<WH40KTieredLatheProcessingComponent>();
         while (query.MoveNext(out _, out var processing))
@@ -2517,16 +2553,6 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
                 1 => processing.MinProcessSecondsTier1,
                 _ => processing.MinProcessSecondsTier0
             });
-
-            var currentStorageLimit = currentTier switch
-            {
-                3 => processing.MaterialStorageLimitTier3,
-                2 => processing.MaterialStorageLimitTier2,
-                1 => processing.MaterialStorageLimitTier1,
-                _ => processing.MaterialStorageLimitTier0
-            };
-
-            var safeStorageLimit = currentStorageLimit is > 0 ? currentStorageLimit.Value : 0;
             var currentGlobalMultiplier = Math.Max(0.01f, processing.GlobalTimeMultiplier);
             var currentSpeedBonus = CalculateSpeedBonusPercent(processing.MinProcessSecondsTier0, currentMinProcess);
 
@@ -2544,25 +2570,16 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
                 {
                     continue;
                 }
-
-                if (currentTier == bestTier &&
-                    currentSpeedBonus == bestSpeedBonus &&
-                    Math.Abs(currentMinProcess - bestMinProcessSeconds) < 0.001f &&
-                    safeStorageLimit <= bestStorageLimit)
-                {
-                    continue;
-                }
             }
 
             tier = currentTier;
             speedBonusPercent = currentSpeedBonus;
             minProcessSeconds = currentMinProcess;
-            materialStorageLimit = safeStorageLimit;
+            materialStorageLimit = 0;
             globalTimeMultiplier = currentGlobalMultiplier;
             bestTier = currentTier;
             bestSpeedBonus = currentSpeedBonus;
             bestMinProcessSeconds = currentMinProcess;
-            bestStorageLimit = safeStorageLimit;
             found = true;
         }
 
@@ -2597,7 +2614,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             tier = 0;
             spawnIntervalSeconds = 0f;
             spawnCount = 0;
-            allowedOreNames = Loc.GetString("wh40k-command-node-tactical-bonuses-no-ores");
+            allowedOreNames = Loc.GetString("w40k-cmd-tactical-bonuses-no-ores");
         }
 
         var found = false;
@@ -2734,14 +2751,6 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
                 processing.Tier3MinBaseLevel);
 
             var currentProcessSeconds = GetSpecialLatheProcessSecondsForTier(processing, currentTier);
-            var currentMaterialStorageLimit = Math.Max(1, currentTier switch
-            {
-                3 => processing.MaterialStorageLimitTier3 ?? 0,
-                2 => processing.MaterialStorageLimitTier2 ?? 0,
-                1 => processing.MaterialStorageLimitTier1 ?? 0,
-                _ => processing.MaterialStorageLimitTier0 ?? 0
-            });
-
             var currentOutputMultiplier = GetSpecialLatheOutputMultiplierForTier(processing, currentTier);
             var tier0Seconds = GetSpecialLatheProcessSecondsForTier(processing, 0);
             var currentSpeedBonus = CalculateSpeedBonusPercent(tier0Seconds, currentProcessSeconds);
@@ -2765,7 +2774,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             tier = currentTier;
             speedBonusPercent = currentSpeedBonus;
             processSeconds = currentProcessSeconds;
-            materialStorageLimit = currentMaterialStorageLimit;
+            materialStorageLimit = 0;
             outputMultiplier = currentOutputMultiplier;
             bestTier = currentTier;
             bestOutputMultiplier = currentOutputMultiplier;
@@ -2891,7 +2900,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             AddOreIds(ids, extractor.Tier3Ores);
 
         if (ids.Count == 0)
-            return Loc.GetString("wh40k-command-node-tactical-bonuses-no-ores");
+            return Loc.GetString("w40k-cmd-tactical-bonuses-no-ores");
 
         var oreNames = ids
             .Select(GetOreDisplayNameForIntel)
@@ -2900,7 +2909,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             .ToArray();
 
         if (oreNames.Length == 0)
-            return Loc.GetString("wh40k-command-node-tactical-bonuses-no-ores");
+            return Loc.GetString("w40k-cmd-tactical-bonuses-no-ores");
 
         return string.Join(", ", oreNames);
     }
@@ -2917,7 +2926,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             AddOreIds(ids, profile.Tier3Ores);
 
         if (ids.Count == 0)
-            return Loc.GetString("wh40k-command-node-tactical-bonuses-no-ores");
+            return Loc.GetString("w40k-cmd-tactical-bonuses-no-ores");
 
         var oreNames = ids
             .Select(GetOreDisplayNameForIntel)
@@ -2926,7 +2935,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             .ToArray();
 
         if (oreNames.Length == 0)
-            return Loc.GetString("wh40k-command-node-tactical-bonuses-no-ores");
+            return Loc.GetString("w40k-cmd-tactical-bonuses-no-ores");
 
         return string.Join(", ", oreNames);
     }

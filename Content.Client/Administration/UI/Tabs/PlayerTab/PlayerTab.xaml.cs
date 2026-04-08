@@ -102,9 +102,12 @@ public sealed partial class PlayerTab : Control, ILocalizedControl
         RefreshPlayerList(_players);
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
 
         if (disposing)
         {

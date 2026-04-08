@@ -6,23 +6,21 @@ using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Store.Components;
 using Content.Server.Lathe;
-using Content.Server.Materials;
 using Content.Shared._WH40K.Tiers;
 using Content.Shared.Examine;
 using Content.Shared.Lathe;
 using Content.Shared.Lathe.Prototypes;
-using Content.Shared.Materials;
 using Content.Shared.Research.Prototypes;
 using Content.Shared.Stacks;
-using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Store;
 
 /// <summary>
 /// Applies WH40K tier progression to generic lathes:
-/// tiered cycle cap, material cap, and optional tier-pack profile remap.
+/// tiered cycle timing and optional tier-pack profile remap.
 /// </summary>
 public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
 {
@@ -31,7 +29,8 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
     [Dependency] private readonly LatheSystem _lathe = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
+    [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -52,6 +51,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        using var scope = _attribution.EnterScope("store.auto_tiered_lathe_processing");
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<WH40KTieredLatheProcessingComponent>();
         while (query.MoveNext(out var uid, out var processing))
@@ -73,8 +73,6 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         var tier = SelectTier(effectiveLevel, processing);
         var teamBonuses = GetBestTrackedTeamBonuses(processing);
         var desiredTimeMultiplier = GetEffectiveGlobalTimeMultiplier(processing, teamBonuses);
-        var desiredStorageUnits = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
-        var desiredStorageLimit = WH40KMaterialStorageUnits.ToRawMaterialVolume(desiredStorageUnits);
         var desiredPack = SelectPackForTier(tier, processing);
 
         var changed = false;
@@ -99,12 +97,6 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
             {
                 changed = true;
             }
-        }
-
-        if (TryComp<MaterialStorageComponent>(uid, out var materialStorage) &&
-            _materialStorage.SetStorageLimit(uid, desiredStorageLimit, materialStorage))
-        {
-            changed = true;
         }
 
         if (changed)
@@ -132,6 +124,8 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        using var scope = _culture.CreateScope(args.Examiner);
+
         var effectiveLevel = GetEffectiveLevel(processing);
         var tier = SelectTier(effectiveLevel, processing);
         var timeMultiplier = GetGlobalTimeMultiplier(processing);
@@ -139,10 +133,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         var teamBonuses = GetBestTrackedTeamBonuses(processing);
         timeMultiplier = GetEffectiveGlobalTimeMultiplier(processing, teamBonuses);
         minSeconds = GetEffectiveMinProcessSeconds(tier, processing, teamBonuses);
-        var storageUnits = GetEffectiveMaterialStorageLimit(tier, processing, teamBonuses);
-        var storageText = storageUnits is > 0
-            ? storageUnits.Value.ToString()
-            : Loc.GetString("wh40k-tiered-machine-storage-unlimited");
+        var storageText = Loc.GetString("wh40k-tiered-machine-storage-unlimited");
 
         args.PushMarkup(Loc.GetString(
             "wh40k-tiered-machine-examine-tier",
@@ -232,10 +223,6 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
             processing.MinProcessSecondsTier1 = profile.MinProcessSecondsTier1;
             processing.MinProcessSecondsTier2 = profile.MinProcessSecondsTier2;
             processing.MinProcessSecondsTier3 = profile.MinProcessSecondsTier3;
-            processing.MaterialStorageLimitTier0 = profile.MaterialStorageLimitTier0;
-            processing.MaterialStorageLimitTier1 = profile.MaterialStorageLimitTier1;
-            processing.MaterialStorageLimitTier2 = profile.MaterialStorageLimitTier2;
-            processing.MaterialStorageLimitTier3 = profile.MaterialStorageLimitTier3;
         }
 
         var (tier1, tier2, tier3) = WH40KTierMath.NormalizeThresholds(
@@ -262,19 +249,6 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
             1 => processing.MinProcessSecondsTier1,
             _ => processing.MinProcessSecondsTier0
         });
-    }
-
-    private static int? GetMaterialStorageLimit(int tier, WH40KTieredLatheProcessingComponent processing)
-    {
-        var limit = tier switch
-        {
-            3 => processing.MaterialStorageLimitTier3,
-            2 => processing.MaterialStorageLimitTier2,
-            1 => processing.MaterialStorageLimitTier1,
-            _ => processing.MaterialStorageLimitTier0
-        };
-
-        return limit is > 0 ? limit : null;
     }
 
     private WH40KCommandTreeTeamBonuses GetBestTrackedTeamBonuses(WH40KTieredLatheProcessingComponent processing)
@@ -319,18 +293,6 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
 
         var speedMultiplier = Math.Max(0.05f, 1f - bonuses.MachineSpeedBonusPercent / 100f);
         return MathF.Max(0.1f, baseMinSeconds * speedMultiplier);
-    }
-
-    private static int? GetEffectiveMaterialStorageLimit(
-        int tier,
-        WH40KTieredLatheProcessingComponent processing,
-        WH40KCommandTreeTeamBonuses bonuses)
-    {
-        var baseLimit = GetMaterialStorageLimit(tier, processing);
-        if (baseLimit == null)
-            return null;
-
-        return Math.Max(1, baseLimit.Value + Math.Max(0, bonuses.MachineStorageBonus));
     }
 
     private static ProtoId<LatheRecipePackPrototype>? SelectPackForTier(

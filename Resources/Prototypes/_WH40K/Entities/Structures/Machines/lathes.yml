@@ -1,6 +1,56 @@
 - type: entity
+  id: WH40KBaseLatheMachine
+  parent: BaseStructure
+  abstract: true
+  components:
+  - type: Animateable
+  - type: InteractionOutline
+  - type: Appearance
+  - type: WiresVisuals
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+          - MachineLayer
+  - type: Lathe
+  - type: MaterialStorage
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: WiresPanel
+  - type: ActivatableUI
+    key: enum.LatheUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.LatheUiKey.Key:
+        type: LatheBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+  - type: Pullable
+  - type: StaticPrice
+    price: 800
+  - type: ResearchClient
+  - type: TechnologyDatabase
+  - type: ApcPowerReceiver
+    powerLoad: 150
+  - type: ExtensionCableReceiver
+  - type: LightningTarget
+    priority: 1
+  - type: PowerState
+    idlePowerDraw: 150
+    workingPowerDraw: 1000
+
+- type: entity
   id: WH40KAutolathe
-  parent: Autolathe
+  parent: WH40KBaseLatheMachine
   name: autolathe
   suffix: WH40K
   components:
@@ -25,6 +75,31 @@
     unlitRunningState: unlit-building
     staticPacks:
     - WH40KAutolatheStockEmpty
+  - type: Machine
+    board: AutolatheMachineCircuitboard
+  - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
+  - type: OreSiloClient
+  - type: EmagLatheRecipes
+    emagStaticPacks:
+    - SecurityAmmoStatic
+    - SyndicateAmmoStatic
+  - type: BlueprintReceiver
+    whitelist:
+      tags:
+      - BlueprintAutolathe
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+      blueprint: !type:Container
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - blueprint
 
 - type: entity
   id: WH40KAutolatheImperium
@@ -56,14 +131,14 @@
   components:
   - type: Lathe
     staticPacks:
-    - WH40KAutolatheStatic
+    - WH40KAutolatheStaticHeretics
   - type: WH40KTieredLatheProcessing
     teamId: Heretics
     tierMachineProfile: WH40KTierMachineStandard
-    tier0Pack: WH40KAutolatheStatic
-    tier1Pack: WH40KAutolatheTier1
-    tier2Pack: WH40KAutolatheTier2
-    tier3Pack: WH40KAutolatheTier3
+    tier0Pack: WH40KAutolatheStaticHeretics
+    tier1Pack: WH40KAutolatheTier1Heretics
+    tier2Pack: WH40KAutolatheTier2Heretics
+    tier3Pack: WH40KAutolatheTier3Heretics
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
@@ -72,7 +147,7 @@
 
 - type: entity
   id: WH40KProtolathe
-  parent: Protolathe
+  parent: WH40KBaseLatheMachine
   name: protolathe
   suffix: WH40K
   components:
@@ -99,6 +174,21 @@
     staticPacks:
     - WH40KProtolatheStockEmpty
     dynamicPacks: []
+  - type: Machine
+    board: ProtolatheMachineCircuitboard
+  - type: MaterialStorage
+    whitelist:
+      tags:
+      - Sheet
+      - RawMaterial
+      - Ingot
+  - type: OreSiloClient
+  - type: EmagLatheRecipes
+    emagStaticPacks:
+    - SecurityAmmo
+    - SecurityExplosives
+    - SecurityEquipment
+    - SecurityWeapons
 
 - type: entity
   id: WH40KProtolatheImperium
@@ -111,8 +201,8 @@
     - WH40KProtolatheStatic
     dynamicPacks:
     - WH40KProtolatheDynamic
-    - WH40KCommandWeaponryResearch
-    - WH40KCommandEquipmentResearch
+    - WH40KCommandWeaponryResearchImperium
+    - WH40KCommandEquipmentResearchImperium
   - type: WH40KTieredLatheProcessing
     teamId: Imperium
     tierMachineProfile: WH40KTierMachineStandard
@@ -134,18 +224,18 @@
   components:
   - type: Lathe
     staticPacks:
-    - WH40KProtolatheStatic
+    - WH40KProtolatheStaticHeretics
     dynamicPacks:
     - WH40KProtolatheDynamic
-    - WH40KCommandWeaponryResearch
-    - WH40KCommandEquipmentResearch
+    - WH40KCommandWeaponryResearchHeretics
+    - WH40KCommandEquipmentResearchHeretics
   - type: WH40KTieredLatheProcessing
     teamId: Heretics
     tierMachineProfile: WH40KTierMachineStandard
-    tier0Pack: WH40KProtolatheStatic
-    tier1Pack: WH40KProtolatheTier1
-    tier2Pack: WH40KProtolatheTier2
-    tier3Pack: WH40KProtolatheTier3
+    tier0Pack: WH40KProtolatheStaticHeretics
+    tier1Pack: WH40KProtolatheTier1Heretics
+    tier2Pack: WH40KProtolatheTier2Heretics
+    tier3Pack: WH40KProtolatheTier3Heretics
     remapQueueToSelectedTierPack: false
   - type: WH40KResearchTeam
     teamId: Heretics
@@ -154,7 +244,7 @@
 
 - type: entity
   id: WH40KOreProcessor
-  parent: OreProcessor
+  parent: WH40KBaseLatheMachine
   name: ore processor
   suffix: WH40K
   components:
@@ -186,9 +276,19 @@
     idleState: icon
     runningState: building
     defaultProductionAmount: 10
-    producingSound: /Audio/_WH40K/Machines/MCRW.ogg
+    producingSound: !type:SoundPathSpecifier
+      path: /Audio/_WH40K/Machines/MCRW.ogg
+      params:
+        volume: -10
     staticPacks:
     - WH40KOreProcessorStockEmpty
+  - type: Machine
+    board: OreProcessorMachineCircuitboard
+  - type: MaterialStorage
+    ignoreColor: true
+    whitelist:
+      tags:
+      - Ore
 
 - type: entity
   id: WH40KOreProcessorImperium

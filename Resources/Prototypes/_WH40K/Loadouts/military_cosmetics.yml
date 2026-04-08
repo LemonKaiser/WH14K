@@ -74,6 +74,30 @@
     head: ClothingHeadVet
 
 - type: loadout
+  id: WH40KCatachanBandana
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanBandana
+
+- type: loadout
+  id: WH40KCatachanBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanBeret
+
+- type: loadout
+  id: WH40KCatachanHeadband
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanHeadband
+
+- type: loadout
   id: WH40KQuartermasterBeret
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -145,56 +169,99 @@
 
 - type: loadout
   id: WH40KKriegHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
   equipment:
     head: ClothingHeadHelmetKrieg
 
 - type: loadout
-  id: WH40KBronzeheart
+  id: WH40KImperialAquilaMedal
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 17
   equipment:
-    neck: ClothingNeckBronzeheart
+    neck: ClothingNeckImperialAquilaMedal
 
 - type: loadout
-  id: WH40KSecurityMedal
+  id: WH40KChaosUndividedMedal
   effects:
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 17
   equipment:
-    neck: ClothingNeckSecuritymedal
+    neck: ClothingNeckChaosUndividedMedal
 
 - type: loadout
-  id: WH40KMedicalMedal
+  id: WH40KImperialCrossMedal
   effects:
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 18
   equipment:
-    neck: ClothingNeckMedicalmedal
+    neck: ClothingNeckImperialCrossMedal
 
 - type: loadout
-  id: WH40KCargoMedal
+  id: WH40KChaosKhorneMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-khorne-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosKhorneMedal
+
+- type: loadout
+  id: WH40KImperialInquisitionSeal
   effects:
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 19
   equipment:
-    neck: ClothingNeckCargomedal
+    neck: ClothingNeckImperialInquisitionSeal
 
 - type: loadout
-  id: WH40KGoldMedal
+  id: WH40KChaosNurgleMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-nurgle-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosNurgleMedal
+
+- type: loadout
+  id: WH40KImperialGoldenPrize
   effects:
   - !type:GroupLoadoutEffect
     proto: WH40KEliteService
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 20
   equipment:
-    neck: ClothingNeckGoldmedal
+    neck: ClothingNeckImperialGoldenPrize
+
+- type: loadout
+  id: WH40KChaosSlaaneshMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-slaanesh-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosSlaaneshMedal
+
+- type: loadout
+  id: WH40KChaosTzeentchMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-tzeentch-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosTzeentchMedal
 
 - type: loadout
   id: WH40KGorgetZero
@@ -292,13 +359,105 @@
 
 - type: loadout
   id: WH40KKriegCoat
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
   equipment:
     outerClothing: ClothingOuterArmorKriegCoat
+
+- type: loadout
+  id: WH40KCatachanLightArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanLight
+
+- type: loadout
+  id: WH40KCatachanMediumArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanMedium
+
+- type: loadout
+  id: WH40KCatachanVest
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanVest
+
+- type: loadout
+  id: WH40KMunitorumCoat
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumCoat
+
+- type: loadout
+  id: WH40KMunitorumGreatcoat
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumGreatcoat
+
+- type: loadout
+  id: WH40KMunitorumRig
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumRig
+
+- type: loadout
+  id: WH40KMunitorumVest
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumVest
+
+- type: loadout
+  id: WH40KKriegUniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitKrieg
+
+- type: loadout
+  id: WH40KCatachanUniform1
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan1
+
+- type: loadout
+  id: WH40KCatachanUniform2
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan2
+
+- type: loadout
+  id: WH40KCatachanUniform3
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan3
+
+- type: loadout
+  id: WH40KBloodPactUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitBloodPact
 
 - type: loadout
   id: WH40KBlackGloves
   equipment:
     gloves: ClothingHandsGlovesColorBlack
+
+- type: loadout
+  id: WH40KKriegGloves
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    gloves: ClothingHandsGlovesKrieg
 
 - type: loadout
   id: WH40KCommissarGloves
@@ -336,6 +495,11 @@
     gloves: ClothingHandsGlovesBloodPact
 
 - type: loadout
+  id: WH40KBloodPactBoots
+  equipment:
+    shoes: ClothingShoesBootsBloodPact
+
+- type: loadout
   id: WH40KChaosMask1
   equipment:
     mask: ClothingMaskGasChaosCultist1
@@ -354,7 +518,15 @@
     mask: ClothingMaskGasCultist3
 
 - type: loadout
+  id: WH40KBloodPactMask
+  equipment:
+    mask: ClothingMaskGasBloodPact
+
+- type: loadout
   id: WH40KKriegGasmask
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
   equipment:
     mask: ClothingMaskGasKrieg
 
@@ -375,6 +547,14 @@
     requiredLevel: 29
   equipment:
     mask: ClothingGasTechPriest
+
+- type: loadout
+  id: WH40KKriegWebbing
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    belt: ClothingBeltKriegWebbing
 
 - type: loadout
   id: WH40KLighterKit
@@ -496,6 +676,16 @@
   groupBy: "melee"
 
 - type: loadout
+  id: WH40KCatachanKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  storage:
+    belt:
+    - CatachanKnife
+  groupBy: "melee"
+
+- type: loadout
   id: WH40KSurvivalKnifeKit
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -538,6 +728,48 @@
     belt:
     - KukriKnife
   groupBy: "melee"
+
+- type: loadout
+  id: WH40KCommandLaspistolWillOfTheEmperor
+  inhand:
+  - WeaponLaserPistolCommissar
+
+- type: loadout
+  id: WH40KCommandBoltPistol
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WeaponPistolBolter
+
+- type: loadout
+  id: WH40KCommandPlasmaPistol
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - WeaponLaserPlasmaPistol
+
+- type: loadout
+  id: WH40KCommandChainsword
+  inhand:
+  - Chainsword
+
+- type: loadout
+  id: WH40KCommandPowerSaber
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WHPowerSaberImperial
+
+- type: loadout
+  id: WH40KCommandWarHammer
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - WHHammerImperial
 
 - type: loadout
   id: WH40KChaosCrowbarKit
@@ -596,31 +828,3 @@
     belt:
     - ChaosMachete
   groupBy: "melee"
-
-- type: loadout
-  id: WH40KHelmetSergVst
-  equipment:
-    head: ClothingHeadHelmetFlakAdvSergVst
-
-- type: loadout
-  id: WH40KCoatLietVst
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestLietVst
-
-- type: loadout
-  id: WH40KNeckVst
-  equipment:
-    neck: ClothingNeckCloakVst
-
-- type: loadout
-  id: WH40KArmorFlakCoatLiet
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 30
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestMajor
-
-- type: loadout
-  id: WH40KArmorMajor
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestMajor

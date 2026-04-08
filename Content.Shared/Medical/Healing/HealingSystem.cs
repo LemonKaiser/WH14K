@@ -138,7 +138,9 @@ public sealed class HealingSystem : EntitySystem
 
     private bool HasDamage(Entity<HealingComponent> healing, Entity<DamageableComponent> target)
     {
+#pragma warning disable CS0618
         var damageableDict = _damageable.GetAllDamage(target.AsNullable()).DamageDict;
+#pragma warning restore CS0618
         var healingDict = healing.Comp.Damage.DamageDict;
         foreach (var type in healingDict)
         {
@@ -311,7 +313,9 @@ public sealed class HealingSystem : EntitySystem
         if (!_mobThresholdSystem.TryGetThresholdForState(ent, MobState.Critical, out var amount, ent.Comp2))
             return 1;
 
+#pragma warning disable CS0618
         var percentDamage = (float)(_damageable.GetTotalDamage(ent) / amount);
+#pragma warning restore CS0618
         //basically make it scale from 1 to the multiplier.
 
         var output = percentDamage * (mod - 1) + 1;

@@ -516,8 +516,8 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		BranchDefinition value = new BranchDefinition
 		{
 			Id = sharedBranch.Id,
-			TitleKey = "wh40k-character-development-" + sharedBranch.Id + "-branch-title",
-			SubtitleKey = "wh40k-character-development-" + sharedBranch.Id + "-branch-subtitle",
+			TitleKey = $"w40k-cd-{sharedBranch.Id}-branch-title",
+			SubtitleKey = $"w40k-cd-{sharedBranch.Id}-branch-subtitle",
 			Organ = sharedBranch.Organ,
 			Accent = item,
 			LeftSide = item2,
@@ -546,8 +546,8 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		{
 			Id = sharedNodeDefinition.Id,
 			BranchId = sharedNodeDefinition.BranchId,
-			TitleKey = $"wh40k-character-development-{sharedNodeDefinition.BranchId}-node-{sharedNodeDefinition.NodeKey}-title",
-			DescriptionKey = $"wh40k-character-development-{sharedNodeDefinition.BranchId}-node-{sharedNodeDefinition.NodeKey}-description",
+			TitleKey = $"w40k-cd-{sharedNodeDefinition.BranchId}-node-{sharedNodeDefinition.NodeKey}-title",
+			DescriptionKey = $"w40k-cd-{sharedNodeDefinition.BranchId}-node-{sharedNodeDefinition.NodeKey}-description",
 			Cost = sharedNodeDefinition.Cost,
 			ParentId = sharedNodeDefinition.ParentId,
 			WorldPosition = Vector2.Zero,
@@ -572,13 +572,13 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 	{
 		return branchId switch
 		{
-			"brain" => (Accent: Color.FromHex("#7EC8FF".AsSpan()), LeftSide: true, Lane: BranchLane.Top), 
-			"lungs" => (Accent: Color.FromHex("#73E3C7".AsSpan()), LeftSide: true, Lane: BranchLane.Middle), 
-			"kidneys" => (Accent: Color.FromHex("#8FD77A".AsSpan()), LeftSide: true, Lane: BranchLane.Bottom), 
-			"heart" => (Accent: Color.FromHex("#E86968".AsSpan()), LeftSide: false, Lane: BranchLane.Top), 
-			"liver" => (Accent: Color.FromHex("#D4A757".AsSpan()), LeftSide: false, Lane: BranchLane.Middle), 
-			"stomach" => (Accent: Color.FromHex("#8C6239".AsSpan()), LeftSide: false, Lane: BranchLane.Bottom), 
-			_ => (Accent: Color.White, LeftSide: true, Lane: BranchLane.Middle), 
+			"brain" => (Accent: Color.FromHex("#7EC8FF".AsSpan()), LeftSide: true, Lane: BranchLane.Top),
+			"lungs" => (Accent: Color.FromHex("#73E3C7".AsSpan()), LeftSide: true, Lane: BranchLane.Middle),
+			"kidneys" => (Accent: Color.FromHex("#8FD77A".AsSpan()), LeftSide: true, Lane: BranchLane.Bottom),
+			"heart" => (Accent: Color.FromHex("#E86968".AsSpan()), LeftSide: false, Lane: BranchLane.Top),
+			"liver" => (Accent: Color.FromHex("#D4A757".AsSpan()), LeftSide: false, Lane: BranchLane.Middle),
+			"stomach" => (Accent: Color.FromHex("#8C6239".AsSpan()), LeftSide: false, Lane: BranchLane.Bottom),
+			_ => (Accent: Color.White, LeftSide: true, Lane: BranchLane.Middle),
 		};
 	}
 
@@ -625,7 +625,7 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		_branchSubtitles.Clear();
 		_nodeTitles.Clear();
 		_nodeCostChips.Clear();
-		_nodeCostLabel = Loc.GetString("wh40k-character-development-node-cost-label");
+		_nodeCostLabel = Loc.GetString("w40k-cd-node-cost-label");
 		foreach (BranchDefinition value in _branches.Values)
 		{
 			_branchTitles[value.Id] = Loc.GetString(value.TitleKey);
@@ -634,7 +634,7 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		foreach (NodeDefinition value2 in _nodes.Values)
 		{
 			_nodeTitles[value2.Id] = Loc.GetString(value2.TitleKey);
-			_nodeCostChips[value2.Id] = Loc.GetString("wh40k-character-development-node-cost-short", ("cost", value2.Cost));
+			_nodeCostChips[value2.Id] = Loc.GetString("w40k-cd-node-cost-short", ("cost", value2.Cost));
 		}
 	}
 
@@ -1043,14 +1043,14 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 	{
 		return state switch
 		{
-			NodeVisualState.Opened => Loc.GetString("wh40k-character-development-state-opened"),
-			NodeVisualState.Planned => Loc.GetString("wh40k-character-development-state-planned"),
-			NodeVisualState.Available => Loc.GetString("wh40k-character-development-state-available"),
+			NodeVisualState.Opened => Loc.GetString("w40k-cd-state-opened"),
+			NodeVisualState.Planned => Loc.GetString("w40k-cd-state-planned"),
+			NodeVisualState.Available => Loc.GetString("w40k-cd-state-available"),
 			NodeVisualState.LockedByPoints => Loc.GetString(
-				"wh40k-character-development-state-locked-points-detail",
+				"w40k-cd-state-locked-points-detail",
 				("missing", GetMissingPoints(node))),
 			_ => Loc.GetString(
-				"wh40k-character-development-state-locked-chain-detail",
+				"w40k-cd-state-locked-chain-detail",
 				("parent", GetParentTitle(node))),
 		};
 	}
@@ -1059,14 +1059,14 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 	{
 		return state switch
 		{
-			NodeVisualState.Opened => Loc.GetString("wh40k-character-development-note-opened"),
-			NodeVisualState.Planned => Loc.GetString("wh40k-character-development-note-planned"),
-			NodeVisualState.Available => Loc.GetString("wh40k-character-development-note-available"),
+			NodeVisualState.Opened => Loc.GetString("w40k-cd-note-opened"),
+			NodeVisualState.Planned => Loc.GetString("w40k-cd-note-planned"),
+			NodeVisualState.Available => Loc.GetString("w40k-cd-note-available"),
 			NodeVisualState.LockedByPoints => Loc.GetString(
-				"wh40k-character-development-note-locked-points",
+				"w40k-cd-note-locked-points",
 				("missing", GetMissingPoints(node))),
 			_ => Loc.GetString(
-				"wh40k-character-development-note-locked-parent",
+				"w40k-cd-note-locked-parent",
 				("parent", GetParentTitle(node))),
 		};
 	}
@@ -1074,7 +1074,7 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 	private string GetParentTitle(NodeDefinition node)
 	{
 		if (node.ParentId == null)
-			return Loc.GetString("wh40k-character-development-default-node");
+			return Loc.GetString("w40k-cd-default-node");
 
 		return _nodeTitles.GetValueOrDefault(node.ParentId, node.ParentId);
 	}
@@ -1092,10 +1092,10 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		float num2 = branchRowOffsetY * 2f + maxNodeSize.Y + 10f;
 		float y = lane switch
 		{
-			BranchLane.Top => 0f - num2, 
-			BranchLane.Middle => 0f, 
-			BranchLane.Bottom => num2, 
-			_ => 0f, 
+			BranchLane.Top => 0f - num2,
+			BranchLane.Middle => 0f,
+			BranchLane.Bottom => num2,
+			_ => 0f,
 		};
 		return new Vector2(leftSide ? (0f - num) : num, y);
 	}

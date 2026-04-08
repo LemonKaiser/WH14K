@@ -134,6 +134,35 @@ namespace Content.IntegrationTests.Tests
             await pair.CleanReturnAsync();
         }
 
+    [Test]
+    public async Task TestBinocularsFitBackIntoPocket()
+    {
+      await using var pair = await PoolManager.GetServerClient();
+      var server = pair.Server;
+      var testMap = await pair.CreateTestMap();
+      var coordinates = testMap.GridCoords;
+
+      var entityMan = server.ResolveDependency<IEntityManager>();
+      var invSystem = entityMan.System<InventorySystem>();
+      var mapSystem = server.System<SharedMapSystem>();
+
+      await server.WaitAssertion(() =>
+      {
+        var human = entityMan.SpawnEntity("HumanUniformDummy", coordinates);
+        var uniform = entityMan.SpawnEntity("UniformDummy", coordinates);
+        var binoculars = entityMan.SpawnEntity("Binoculars", coordinates);
+
+        Assert.That(invSystem.TryEquip(human, uniform, "jumpsuit"));
+        Assert.That(invSystem.CanEquip(human, binoculars, "pocket1", out _), Is.True);
+        Assert.That(invSystem.TryEquip(human, binoculars, "pocket1"), Is.True);
+        Assert.That(IsDescendant(binoculars, human, entityMan), Is.True);
+
+        mapSystem.DeleteMap(testMap.MapId);
+      });
+
+      await pair.CleanReturnAsync();
+    }
+
         private static bool IsDescendant(EntityUid descendant, EntityUid parent, IEntityManager entManager)
         {
             var xforms = entManager.GetEntityQuery<TransformComponent>();

@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Client.Lobby.UI;
 using Content.Client.Message;
+using Content.Client.Resources;
+using Content.Client.Resources.Gif;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking.Prototypes;
 using Robust.Client.Graphics;
@@ -29,6 +31,7 @@ internal sealed class LobbyBackgroundController
     private readonly IClyde _clyde;
     private readonly IGameTiming _gameTiming;
     private readonly Func<string> _getServerBackgroundId;
+    private readonly ISawmill _sawmill = Logger.GetSawmill("lobby");
 
     private LobbyGui? _lobby;
     private Texture[]? _backgroundFrames;
@@ -42,11 +45,11 @@ internal sealed class LobbyBackgroundController
     private int _gifRequestGeneration;
 
     private CancellationTokenSource? _gifDecodeCts;
-    private Task<LobbyGifTextureLoader.DecodedAnimation>? _gifDecodeTask;
+    private Task<GifDecoder.DecodedAnimation>? _gifDecodeTask;
     private LobbyGifCacheKey? _gifDecodeKey;
     private int _gifDecodeGeneration;
     private CancellationTokenSource? _gifFirstFrameDecodeCts;
-    private Task<LobbyGifTextureLoader.DecodedAnimation>? _gifFirstFrameDecodeTask;
+    private Task<GifDecoder.DecodedAnimation>? _gifFirstFrameDecodeTask;
     private LobbyGifCacheKey? _gifFirstFrameDecodeKey;
     private int _gifFirstFrameDecodeGeneration;
     private PendingGifUpload? _pendingGifUpload;
@@ -112,7 +115,7 @@ internal sealed class LobbyBackgroundController
 
     private sealed class PendingGifUpload
     {
-        public PendingGifUpload(LobbyGifCacheKey key, LobbyGifTextureLoader.DecodedAnimation decoded, int generation)
+        public PendingGifUpload(LobbyGifCacheKey key, GifDecoder.DecodedAnimation decoded, int generation)
         {
             Key = key;
             Generation = generation;
@@ -128,7 +131,7 @@ internal sealed class LobbyBackgroundController
         public int Generation { get; }
         public int Width { get; }
         public int Height { get; }
-        public LobbyGifTextureLoader.DecodedFrame[] DecodedFrames { get; }
+        public GifDecoder.DecodedFrame[] DecodedFrames { get; }
         public Texture?[] UploadedFrames { get; }
         public float[] Delays { get; }
         public int NextFrameIndex { get; set; }
@@ -417,7 +420,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to load static lobby background '{Path}': {Error}", path, e);
+            _sawmill.Error("Failed to load static lobby background '{Path}': {Error}", path, e);
             return false;
         }
     }
@@ -496,7 +499,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to read animated lobby background GIF '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to read animated lobby background GIF '{Path}': {Error}", key.Path, e);
             return false;
         }
     }
@@ -509,12 +512,12 @@ internal sealed class LobbyBackgroundController
             _gifDecodeCts = cts;
             _gifDecodeKey = key;
             _gifDecodeGeneration = generation;
-            _gifDecodeTask = Task.Run(() => LobbyGifTextureLoader.DecodeGif(gifData, cts.Token), cts.Token);
+            _gifDecodeTask = Task.Run(() => GifDecoder.Decode(gifData, cts.Token), cts.Token);
             return true;
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to start animated lobby background decode '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to start animated lobby background decode '{Path}': {Error}", key.Path, e);
             return false;
         }
     }
@@ -527,12 +530,12 @@ internal sealed class LobbyBackgroundController
             _gifFirstFrameDecodeCts = cts;
             _gifFirstFrameDecodeKey = key;
             _gifFirstFrameDecodeGeneration = generation;
-            _gifFirstFrameDecodeTask = Task.Run(() => LobbyGifTextureLoader.DecodeGifFirstFrame(gifData, cts.Token), cts.Token);
+            _gifFirstFrameDecodeTask = Task.Run(() => GifDecoder.DecodeFirstFrame(gifData, cts.Token), cts.Token);
             return true;
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to start animated lobby background first-frame decode '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to start animated lobby background first-frame decode '{Path}': {Error}", key.Path, e);
             return false;
         }
     }
@@ -563,7 +566,7 @@ internal sealed class LobbyBackgroundController
         if (task.IsCanceled)
             return;
 
-        LobbyGifTextureLoader.DecodedAnimation decoded;
+        GifDecoder.DecodedAnimation decoded;
         try
         {
             decoded = task.GetAwaiter().GetResult();
@@ -574,7 +577,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to decode animated lobby background first-frame GIF '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to decode animated lobby background first-frame GIF '{Path}': {Error}", key.Path, e);
             return;
         }
 
@@ -587,7 +590,7 @@ internal sealed class LobbyBackgroundController
         try
         {
             var firstFrame = decoded.Frames[0];
-            var firstTexture = LobbyGifTextureLoader.UploadTextureFrame(
+            var firstTexture = RgbaTextureUploader.UploadTexture(
                 _clyde,
                 decoded.Width,
                 decoded.Height,
@@ -602,7 +605,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to upload animated lobby background first-frame '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to upload animated lobby background first-frame '{Path}': {Error}", key.Path, e);
         }
     }
 
@@ -627,7 +630,7 @@ internal sealed class LobbyBackgroundController
         if (task.IsCanceled)
             return;
 
-        LobbyGifTextureLoader.DecodedAnimation decoded;
+        GifDecoder.DecodedAnimation decoded;
         try
         {
             decoded = task.GetAwaiter().GetResult();
@@ -638,7 +641,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to decode animated lobby background GIF '{Path}': {Error}", key.Path, e);
+            _sawmill.Error("Failed to decode animated lobby background GIF '{Path}': {Error}", key.Path, e);
             return;
         }
 
@@ -675,7 +678,7 @@ internal sealed class LobbyBackgroundController
             {
                 var frameIndex = pending.NextFrameIndex;
                 var frame = pending.DecodedFrames[frameIndex];
-                var texture = LobbyGifTextureLoader.UploadTextureFrame(
+                var texture = RgbaTextureUploader.UploadTexture(
                     _clyde,
                     pending.Width,
                     pending.Height,
@@ -717,7 +720,7 @@ internal sealed class LobbyBackgroundController
         }
         catch (Exception e)
         {
-            Logger.ErrorS("lobby", "Failed to upload animated lobby background GIF '{Path}': {Error}", pending.Key.Path, e);
+            _sawmill.Error("Failed to upload animated lobby background GIF '{Path}': {Error}", pending.Key.Path, e);
             QueueGifDisposal(pending.Key, pending.UploadedFrames);
             _pendingGifUpload = null;
         }

@@ -1,7 +1,7 @@
 - type: entity
   abstract: true
   id: WH40KOreExtractorBase
-  parent: BaseMachinePowered
+  parent: BaseStructure
   name: ore extractor
   description: Extracts and outputs ore on the tile in front.
   suffix: WH40K
@@ -9,6 +9,7 @@
   - type: Transform
     anchored: true
     noRot: false
+  - type: InteractionOutline
   - type: Rotatable
   - type: Sprite
     sprite: _WH40K/Structures/Machines/ore_extractor.rsi
@@ -17,16 +18,20 @@
   - type: Icon
     sprite: _WH40K/Structures/Machines/ore_extractor.rsi
     state: icon
+  - type: UserInterface
+    interfaces:
+      enum.WH40KOreExtractorUiKey.Key:
+        type: WH40KOreExtractorBoundUserInterface
   - type: WH40KOreExtractor
     tierThresholdProfile: WH40KTierThresholdsStandard
-    spawnIntervalTier0: 8
-    spawnIntervalTier1: 6
-    spawnIntervalTier2: 4
-    spawnIntervalTier3: 2
+    spawnIntervalTier0: 30
+    spawnIntervalTier1: 20
+    spawnIntervalTier2: 15
+    spawnIntervalTier3: 10
     spawnCountTier0: 1
-    spawnCountTier1: 2
-    spawnCountTier2: 3
-    spawnCountTier3: 4
+    spawnCountTier1: 1
+    spawnCountTier2: 2
+    spawnCountTier3: 2
     requirePowered: true
     enabled: true
     maxItemsOnOutputTile: 30
@@ -44,6 +49,9 @@
     - OreUranium
   - type: ApcPowerReceiver
     powerLoad: 250
+  - type: ExtensionCableReceiver
+  - type: LightningTarget
+    priority: 1
   - type: PowerState
     idlePowerDraw: 250
     workingPowerDraw: 250

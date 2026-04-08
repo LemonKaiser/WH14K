@@ -1,17 +1,45 @@
 <psykerUi:WH40KWarpHudControl
     xmlns="https://spacestation14.io"
     xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
-    MinSize="240 44"
-    MaxSize="240 44"
+    MinSize="304 116"
+    MaxSize="304 116"
     Access="Public">
-    <BoxContainer Orientation="Vertical" SeparationOverride="4">
-        <LayoutContainer Name="WarpChargeRow" Access="Public" MinSize="240 20" MaxSize="240 20">
-            <ProgressBar Name="WarpChargeBar" Access="Public" MinSize="240 20" MaxSize="240 20" />
-            <Label Name="WarpChargeValueLabel" Access="Public" Text="" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <PanelContainer Name="RootFrame" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
+        <LayoutContainer Name="HudCanvas" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
+            <TextureRect Name="CriticalFog" MinSize="220 112" SetSize="220 112" Stretch="KeepAspectCentered" MouseFilter="Ignore" />
+
+            <BoxContainer Name="ContentRoot" Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                <PanelContainer Name="TopAccent" MinHeight="2" />
+
+                <BoxContainer Orientation="Horizontal" SeparationOverride="7" HorizontalExpand="True">
+                    <PanelContainer Name="HeaderGlyphPanel" MinSize="28 28" SetSize="28 28">
+                        <TextureRect Name="ModeIcon" Stretch="KeepAspectCentered" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </PanelContainer>
+
+                    <Label Name="ModeTitleLabel" HorizontalExpand="True" VerticalAlignment="Center" />
+                    <Label Name="TierBadgeLabel" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                </BoxContainer>
+
+                <PanelContainer Name="TelemetryPanel" MinHeight="60" HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                        <LayoutContainer Name="WarpChargeRow" Access="Public" MinSize="0 22" HorizontalExpand="True">
+                            <ProgressBar Name="WarpChargeBar" Access="Public" MinValue="0" MaxValue="1" Value="0" MinSize="0 22" HorizontalExpand="True" />
+                            <BoxContainer Name="WarpChargeOverlay" Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+                                <Label Name="WarpChargeTitleLabel" HorizontalExpand="True" VerticalAlignment="Center" />
+                                <Label Name="WarpChargeValueLabel" Access="Public" Text="" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                        </LayoutContainer>
+
+                        <LayoutContainer Name="WarpInstabilityRow" Access="Public" MinSize="0 22" HorizontalExpand="True">
+                            <ProgressBar Name="WarpInstabilityBar" Access="Public" MinValue="0" MaxValue="1" Value="0" MinSize="0 22" HorizontalExpand="True" />
+                            <BoxContainer Name="WarpInstabilityOverlay" Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+                                <Label Name="WarpInstabilityTitleLabel" HorizontalExpand="True" VerticalAlignment="Center" />
+                                <Label Name="WarpInstabilityValueLabel" Access="Public" Text="" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                        </LayoutContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
         </LayoutContainer>
-        <LayoutContainer Name="WarpInstabilityRow" Access="Public" MinSize="240 20" MaxSize="240 20">
-            <ProgressBar Name="WarpInstabilityBar" Access="Public" MinSize="240 20" MaxSize="240 20" />
-            <Label Name="WarpInstabilityValueLabel" Access="Public" Text="" HorizontalExpand="True" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </LayoutContainer>
-    </BoxContainer>
+    </PanelContainer>
 </psykerUi:WH40KWarpHudControl>

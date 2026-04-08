@@ -1,8 +1,12 @@
-﻿- type: job
+- type: job
   id: HLieutenant
   name: job-name-hlieutenant
   description: job-description-hlieutenant
   playTimeTracker: JobHLieutenant
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: HeresyLieutenantGear
   icon: "JobIconHLieutenant"
   supervisors: job-supervisors-engineering
@@ -12,14 +16,7 @@
     components:
       - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
-      - type: WH40KFriendlyFireAllowed
-      - type: WH40KMoraleExecution
-        cooldownSeconds: 1200
-        auraRadius: 10
-        buffDurationSeconds: 300
-        speedMultiplier: 1.1
-        outgoingDamageMultiplier: 1.1
-        incomingDamageMultiplier: 0.9
+      - type: WH40KChaosLeaderRole
   access:
   - Maintenance
   - External

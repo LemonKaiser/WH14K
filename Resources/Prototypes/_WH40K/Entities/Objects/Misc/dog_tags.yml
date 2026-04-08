@@ -89,6 +89,13 @@
 
 - type: entity
   parent: StandardDogTag
+  id: MunitorumOfficerDogTag
+  components:
+  - type: PresetIdCard
+    job: MunitorumOfficer
+
+- type: entity
+  parent: StandardDogTag
   id: EnginseerDogTag
   components:
   - type: PresetIdCard
@@ -147,24 +154,10 @@
 
 - type: entity
   parent: StandardDogTag
-  id: HCommissarDogTag
-  components:
-  - type: PresetIdCard
-    job: HCommissar
-
-- type: entity
-  parent: StandardDogTag
   id: HLieutenantDogTag
   components:
   - type: PresetIdCard
     job: HLieutenant
-
-- type: entity
-  parent: StandardDogTag
-  id: HMedicDogTag
-  components:
-  - type: PresetIdCard
-    job: HMedic
 
 - type: entity
   parent: StandardDogTag

@@ -1,92 +1,85 @@
 <PanelContainer
     xmlns="https://spacestation14.io"
-    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     HorizontalExpand="True"
-    StyleClasses="BackgroundPanel">
+    StyleClasses="BackgroundPanel"
+    Name="CardPanel">
 
-    <!-- Main Container -->
     <BoxContainer Orientation="Vertical"
-                  HorizontalExpand="True"
-                  SeparationOverride="6"
-                  Margin="-14 -2">
+        HorizontalExpand="True"
+        SeparationOverride="6">
 
-        <BoxContainer Orientation="Vertical">
-            <Control>
-                <PanelContainer StyleClasses="WindowHeadingBackground" />
+        <PanelContainer Name="HeaderPanel">
+            <BoxContainer Margin="8 6"
+                Orientation="Horizontal"
+                SeparationOverride="6">
+                <Label Name="Title"
+                    Access="Public"
+                    MaxHeight="28"
+                    HorizontalExpand="True"
+                    StyleClasses="LabelKeyText"
+                    ClipText="True" />
 
-                <BoxContainer Margin="6"
-                    Orientation="Horizontal">
-                    <Label Name="Title"
-                           Access="Public"
-                           MaxHeight="28"
-                           HorizontalExpand="True"
-                           StyleClasses="LabelKeyText"/>
+                <Button Name="RemoveRequestButton"
+                    Access="Public"
+                    Visible="False"
+                    Text="X"
+                    ToolTip="{Loc 'cargo-console-menu-order-row-button-cancel'}"
+                    MinSize="22 22"
+                    HorizontalAlignment="Right" />
+            </BoxContainer>
+        </PanelContainer>
 
-                    <Button Name="RemoveRequestButton"
-                            Access="Public"
-                            Visible="False"
-                            Text="X"
-                            ToolTip="{Loc 'cargo-console-menu-order-row-button-cancel'}"
-                            MinSize="22 22"
-                            HorizontalAlignment="Right"/>
-                </BoxContainer>
-            </Control>
-
-            <PanelContainer Name="Stride"
-                Access="Public"
-                StyleClasses="LowDivider" />
-        </BoxContainer>
-
-        <!-- Info -->
-        <BoxContainer>
-            <TextureRect Name="Icon"
-                         Access="Public"
-                         MinSize="32 32"
-                         Margin="4"
-                         Stretch="KeepAspectCentered"
-                         RectClipContent="True"
-                         VerticalAlignment="Center"/>
-
-            <PanelContainer StyleClasses="LowDivider" Margin="4 0"/>
+        <BoxContainer Name="BodyPanel"
+            Margin="8 0 8 0"
+            SeparationOverride="8">
+            <PanelContainer Name="IconPanel"
+                VerticalAlignment="Top">
+                <TextureRect Name="Icon"
+                    Access="Public"
+                    MinSize="36 36"
+                    Margin="2"
+                    Stretch="KeepAspectCentered"
+                    RectClipContent="True"
+                    VerticalAlignment="Center" />
+            </PanelContainer>
 
             <BoxContainer Orientation="Vertical"
-                          HorizontalExpand="True"
-                          VerticalExpand="True">
+                HorizontalExpand="True"
+                VerticalExpand="True"
+                SeparationOverride="3">
 
                 <RichTextLabel Name="ProductName"
-                       Access="Public"
-                       HorizontalExpand="True"
-                       VerticalExpand="True"
-                       StyleClasses="LabelSubText" />
+                    Access="Public"
+                    HorizontalExpand="True"
+                    VerticalExpand="False"
+                    StyleClasses="LabelSubText" />
 
                 <RichTextLabel Name="Description"
-                       Access="Public"
-                       HorizontalExpand="True"
-                       VerticalExpand="True"
-                       StyleClasses="LabelSubText" />
+                    Access="Public"
+                    HorizontalExpand="True"
+                    VerticalExpand="True"
+                    StyleClasses="LabelSubText" />
             </BoxContainer>
         </BoxContainer>
 
-        <BoxContainer Name="Actions"
-            Access="Public"
-            Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
+        <PanelContainer Name="Stride"
+            Access="Public" />
 
-            <!-- Buttons -->
-            <!-- Btn's position hardcoded (args.Button.Parent?.Parent?.Parent type) in CargoConsoleBUI 158 & 166 line -->
-            <BoxContainer Margin="6">
+        <PanelContainer Name="Actions"
+            Access="Public"
+            Visible="False">
+            <BoxContainer Margin="8 8"
+                SeparationOverride="6">
                 <Button Name="Approve"
-                        Access="Public"
-                        Text="{Loc 'cargo-console-menu-order-row-button-approve'}"
-                        StyleClasses="OpenRight"
-                        HorizontalExpand="True"/>
+                    Access="Public"
+                    Text="{Loc 'cargo-console-menu-order-row-button-approve'}"
+                    HorizontalExpand="True" />
 
                 <Button Name="Cancel"
-                        Access="Public"
-                        Text="{Loc 'cargo-console-menu-order-row-button-cancel'}"
-                        StyleClasses="OpenLeft"
-                        HorizontalExpand="True" />
+                    Access="Public"
+                    Text="{Loc 'cargo-console-menu-order-row-button-cancel'}"
+                    HorizontalExpand="True" />
             </BoxContainer>
-        </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
 </PanelContainer>

@@ -80,14 +80,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconMajor
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Major
-  jobName: job-name-major
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconSergeantSWS
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -152,6 +144,14 @@
 
 - type: jobIcon
   parent: JobIcon
+  id: JobIconCargoOfficer
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Cargo
+  jobName: job-name-munitorum-officer
+
+- type: jobIcon
+  parent: JobIcon
   id: JobIconMedic
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -192,14 +192,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconHCommissar
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HCommissar
-  jobName: job-name-hcommissar
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconHLieutenant
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -229,14 +221,6 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: HVoxScout
   jobName: job-name-hvox-scout
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconHMedic
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HMedic
-  jobName: job-name-hmedic
 
 - type: jobIcon
   parent: JobIcon

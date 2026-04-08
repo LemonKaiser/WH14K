@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using Content.IntegrationTests;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
@@ -12,6 +13,8 @@ namespace Content.IntegrationTests.Tests._WH40K;
 [TestFixture]
 public sealed class PsykerInfluenceNetworkIntegrationTests : InteractionTest
 {
+    protected override PoolSettings Settings => new() { Connected = true, Dirty = true, Fresh = true };
+
     [Test]
     public async Task WarpResourcesDoNotReplicateEveryPassiveTick()
     {
@@ -29,9 +32,10 @@ public sealed class PsykerInfluenceNetworkIntegrationTests : InteractionTest
             entMan.Dirty(actor, warp);
 
             var instability = entMan.EnsureComponent<WH40KWarpInstabilityComponent>(actor);
-            instability.CurrentInstability = 1f;
-            instability.MaxInstability = 100f;
-            instability.DecayPerSecond = 1.2f;
+            instability.NextNetworkSyncAt = timing.CurTime + TimeSpan.FromSeconds(0.6);
+            entMan.Dirty(actor, instability);
+
+            entMan.EventBus.RaiseEvent(EventSource.Local, new WH40KWarpInstabilityContributionEvent(actor, 8f, "tests.network"));
             instability.NextNetworkSyncAt = timing.CurTime + TimeSpan.FromSeconds(0.6);
             entMan.Dirty(actor, instability);
         });
@@ -83,7 +87,7 @@ public sealed class PsykerInfluenceNetworkIntegrationTests : InteractionTest
             {
                 Assert.That(warp.CurrentCharge, Is.GreaterThan(initialCharge + 0.05f),
                     "Warp regen never reached the client after the debounce window.");
-                Assert.That(instability.CurrentInstability, Is.LessThan(initialInstability - 0.01f),
+                Assert.That(instability.CurrentInstability, Is.LessThan(initialInstability - 0.05f),
                     "Warp instability never reached the client after the debounce window.");
             });
         });

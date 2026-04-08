@@ -162,3 +162,177 @@
       - DataChipChaos
     - type: WH40KStoreTeam
       teamId: Heretics
+
+# ── Reinforcement Consoles ──────────────────────────────────────────────
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumReinforcement
+  name: imperium reinforcement terminal
+  description: Reinforcement request terminal for imperial command.
+  suffix: "WH40K, Imperium, Reinforcement Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/reinforcementsimp.rsi
+    drawdepth: SmallObjects
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 200
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.Reinforcement:
+        type: WH40KReinforcementConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.Reinforcement
+  - type: WH40KCommandNode
+    teamId: Imperium
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsReinforcement
+  name: heretic reinforcement terminal
+  description: Reinforcement request terminal for heretic command.
+  suffix: "WH40K, Heretics, Reinforcement Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/reinforcementschaos.rsi
+    drawdepth: SmallObjects
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 200
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.Reinforcement:
+        type: WH40KReinforcementConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.Reinforcement
+  - type: WH40KCommandNode
+    teamId: Heretics
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade
+
+# ── Upgrade Tree Consoles ───────────────────────────────────────────────
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumUpgradeTree
+  name: imperium upgrade tree terminal
+  description: Upgrade tree planning terminal for imperial command.
+  suffix: "WH40K, Imperium, Upgrade Tree Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/upgardeimp.rsi
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.UpgradeTree:
+        type: WH40KUpgradeTreeConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.UpgradeTree
+  - type: WH40KCommandNode
+    teamId: Imperium
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsUpgradeTree
+  name: heretic upgrade tree terminal
+  description: Upgrade tree planning terminal for heretic command.
+  suffix: "WH40K, Heretics, Upgrade Tree Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/upgardechaos.rsi
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.UpgradeTree:
+        type: WH40KUpgradeTreeConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.UpgradeTree
+  - type: WH40KCommandNode
+    teamId: Heretics
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade
+
+# ── Mission Board Consoles ──────────────────────────────────────────────
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleImperiumMissionBoard
+  name: imperium mission board terminal
+  description: Mission board terminal for imperial command.
+  suffix: "WH40K, Imperium, Mission Board Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/taskcomp.rsi
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.MissionBoard:
+        type: WH40KMissionBoardConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.MissionBoard
+  - type: WH40KCommandNode
+    teamId: Imperium
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: StructureLogisticsConsoleHereticsMissionBoard
+  name: heretic mission board terminal
+  description: Mission board terminal for heretic command.
+  suffix: "WH40K, Heretics, Mission Board Terminal"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/taskchaos.rsi
+    layers:
+    - state: computer
+    - state: decorative_monitor
+      shader: unshaded
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.MissionBoard:
+        type: WH40KMissionBoardConsoleBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.MissionBoard
+  - type: WH40KCommandNode
+    teamId: Heretics
+    passiveFrontPointsPerInterval: 0
+  - type: SpriteFade

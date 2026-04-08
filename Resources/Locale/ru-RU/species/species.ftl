@@ -11,7 +11,8 @@ species-name-moth = Ниан
 species-name-skeleton = Скелет
 species-name-vox = Вокс
 species-name-gingerbread = вкуснейшая выпечка
-species-name-vulpkanin = Вульпканин
+species-name-vulpkanin = Кровогоры
+species-name-astartes = Космодесантник
 
 ## Misc species things
 

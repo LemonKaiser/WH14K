@@ -1,0 +1,77 @@
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumCommon
+  name: imperium wall
+  suffix: WH40K, common
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_common
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_common
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumMedical
+  name: imperium medicae wall
+  suffix: WH40K, medical
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_medical
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_medical
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumSupply
+  name: imperium supply wall
+  suffix: WH40K, supply
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_supply
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_supply
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumCommand
+  name: imperium command wall
+  suffix: WH40K, command
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_command
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_command
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumArmory
+  name: imperium armory wall
+  suffix: WH40K, armory
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_armory
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_armory
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalImperiumMess
+  name: imperium mess wall
+  suffix: WH40K, mess
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_imp_mess
+  - type: IconSmooth
+    key: walls
+    base: reinf_imp_mess

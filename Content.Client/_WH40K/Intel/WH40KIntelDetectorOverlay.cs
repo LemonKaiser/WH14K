@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Numerics;
 using Content.Client.Hands.Systems;
 using Content.Shared.Inventory;
@@ -8,6 +7,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -31,6 +31,7 @@ public sealed class WH40KIntelDetectorOverlay : Overlay
 
     private TimeSpan _last;
     private readonly List<(Vector2 Direction, int Octant, bool Special)> _blips = new();
+    private readonly int[] _stackPerOctant = new int[8];
 
     private readonly SpriteSystem _sprite;
     private static readonly ResPath IntelDetectorRsi = new("/Textures/_RMC14/Objects/Tools/intel_detector.rsi");
@@ -59,64 +60,68 @@ public sealed class WH40KIntelDetectorOverlay : Overlay
         var playerCoords = transform.GetMapCoordinates(player);
         var time = _timing.CurTime;
 
-        var entities = hands.EnumerateHeld(player).ToList();
+        // Process held items without allocating a temporary list
+        foreach (var held in hands.EnumerateHeld(player))
+        {
+            if (_entity.TryGetComponent(held, out WH40KIntelDetectorComponent? detector))
+                DrawDetectorBlips(handle, detector, playerCoords, time, texture, specialTexture);
+        }
+
         if (inventory.TryGetContainerSlotEnumerator(player, out var inv))
         {
             while (inv.NextItem(out var item))
             {
-                entities.Add(item);
+                if (_entity.TryGetComponent(item, out WH40KIntelDetectorComponent? detector))
+                    DrawDetectorBlips(handle, detector, playerCoords, time, texture, specialTexture);
+            }
+        }
+    }
+
+    private void DrawDetectorBlips(DrawingHandleWorld handle, WH40KIntelDetectorComponent detector, MapCoordinates playerCoords, TimeSpan time, Texture texture, Texture specialTexture)
+    {
+        var duration = detector.ScanDuration;
+        if (_net.ServerChannel is { } channel)
+            duration += TimeSpan.FromMilliseconds(channel.Ping / 2f);
+
+        if (time > detector.LastScan + duration)
+            return;
+
+        if (_last != detector.LastScan)
+        {
+            _last = detector.LastScan;
+            _blips.Clear();
+
+            foreach (var blip in detector.Blips)
+            {
+                if (playerCoords.MapId != blip.Coordinates.MapId)
+                    continue;
+
+                var diff = blip.Coordinates.Position - playerCoords.Position;
+                if (diff.LengthSquared() <= 0.0001f)
+                    diff = blip.Direction;
+
+                if (diff.LengthSquared() <= 0.0001f)
+                    continue;
+
+                var octant = GetOctant(diff);
+                _blips.Add((OctantDirection(octant), octant, blip.Special));
             }
         }
 
-        foreach (var held in entities)
+        Array.Clear(_stackPerOctant);
+        foreach (var blip in _blips)
         {
-            if (!_entity.TryGetComponent(held, out WH40KIntelDetectorComponent? detector))
-                continue;
+            var textureToDraw = blip.Special ? specialTexture : texture;
+            var color = blip.Special ? SpecialArrowColor : ArrowColor;
+            var stack = _stackPerOctant[blip.Octant]++;
 
-            var duration = detector.ScanDuration;
-            if (_net.ServerChannel is { } channel)
-                duration += TimeSpan.FromMilliseconds(channel.Ping / 2f);
-
-            if (time > detector.LastScan + duration)
-                continue;
-
-            if (_last != detector.LastScan)
-            {
-                _last = detector.LastScan;
-                _blips.Clear();
-
-                foreach (var blip in detector.Blips)
-                {
-                    if (playerCoords.MapId != blip.Coordinates.MapId)
-                        continue;
-
-                    var diff = blip.Coordinates.Position - playerCoords.Position;
-                    if (diff.LengthSquared() <= 0.0001f)
-                        diff = blip.Direction;
-
-                    if (diff.LengthSquared() <= 0.0001f)
-                        continue;
-
-                    var octant = GetOctant(diff);
-                    _blips.Add((OctantDirection(octant), octant, blip.Special));
-                }
-            }
-
-            var stackPerOctant = new int[8];
-            foreach (var blip in _blips)
-            {
-                var textureToDraw = blip.Special ? specialTexture : texture;
-                var color = blip.Special ? SpecialArrowColor : ArrowColor;
-                var stack = stackPerOctant[blip.Octant]++;
-
-                var drawPos = playerCoords.Position + blip.Direction * (ArrowRadius + stack * ArrowRadiusStackStep);
-                var offset = new Vector2(textureToDraw.Width * 0.5f, textureToDraw.Height * 0.5f) / EyeManager.PixelsPerMeter;
-                handle.DrawTexture(
-                    textureToDraw,
-                    drawPos - offset,
-                    (-blip.Direction).ToWorldAngle(),
-                    color);
-            }
+            var drawPos = playerCoords.Position + blip.Direction * (ArrowRadius + stack * ArrowRadiusStackStep);
+            var offset = new Vector2(textureToDraw.Width * 0.5f, textureToDraw.Height * 0.5f) / EyeManager.PixelsPerMeter;
+            handle.DrawTexture(
+                textureToDraw,
+                drawPos - offset,
+                (-blip.Direction).ToWorldAngle(),
+                color);
         }
     }
 

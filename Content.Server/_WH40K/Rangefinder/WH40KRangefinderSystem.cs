@@ -12,10 +12,10 @@ using Content.Shared.Verbs;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Rangefinder;
 
@@ -29,6 +29,7 @@ public sealed class WH40KRangefinderSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<int, EntityUid> _designatorMarkers = new();
     private int _nextDesignatorId = 100;
@@ -127,6 +128,8 @@ public sealed class WH40KRangefinderSystem : EntitySystem
         if (!_useDelay.TryResetDelay(rangefinder.Owner, checkDelayed: true, id: rangefinder.Comp.TargetUseDelayId))
             return;
 
+        using var scope = _culture.CreateScope(args.User);
+
         if (!TryResolveClickTile(
                 args.ClickLocation,
                 out var gridUid,
@@ -135,7 +138,7 @@ public sealed class WH40KRangefinderSystem : EntitySystem
                 out var snappedCoordinates,
                 out var mapCoordinates))
         {
-            _popup.PopupClient(Loc.GetString("wh40k-rangefinder-invalid-target"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupClient(_culture.GetPlayerString(args.User, "wh40k-rangefinder-invalid-target"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -165,6 +168,7 @@ public sealed class WH40KRangefinderSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || !rangefinder.Comp.CanDesignate)
             return;
 
+        using var scope = _culture.CreateScope(args.User);
         var user = args.User;
         var nextMode = rangefinder.Comp.Mode == WH40KRangefinderMode.Rangefinder
             ? WH40KRangefinderMode.Designator
@@ -183,6 +187,7 @@ public sealed class WH40KRangefinderSystem : EntitySystem
 
     private void OnExamined(Entity<WH40KRangefinderComponent> rangefinder, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KRangefinderComponent)))
         {
             var modeLoc = rangefinder.Comp.Mode == WH40KRangefinderMode.Designator
@@ -374,7 +379,7 @@ public sealed class WH40KRangefinderSystem : EntitySystem
         if (TryComp(rangefinder, out WieldableComponent? wieldable) && wieldable.Wielded)
             return true;
 
-        _popup.PopupClient(Loc.GetString("wh40k-rangefinder-requires-wield"), user, user, PopupType.SmallCaution);
+        _popup.PopupClient(_culture.GetPlayerString(user, "wh40k-rangefinder-requires-wield"), user, user, PopupType.SmallCaution);
         return false;
     }
 

@@ -3,7 +3,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.Administration.Managers;
+using Content.Server._WH40K.MetaProgress;
 using Content.Server.Database;
+using Content.Server.Preferences;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
@@ -15,9 +18,11 @@ using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Speech;
 using Content.Shared.Traits;
+using Content.Shared._WH40K.MetaProgress;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -37,7 +42,9 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private readonly IServerDbManager _db = default!;
         [Dependency] private readonly IPlayerManager _playerManager = default!;
         [Dependency] private readonly IDependencyCollection _dependencies = default!;
+        [Dependency] private readonly IAdminManager _adminManager = default!;
         [Dependency] private readonly ILogManager _log = default!;
+        [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
         [Dependency] private readonly UserDbDataManager _userDb = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly MarkingManager _marking = default!;
@@ -252,7 +259,7 @@ namespace Content.Server.Preferences.Managers
             var curPrefs = prefsData.Prefs!;
             var session = _playerManager.GetSessionById(userId);
 
-            profile.EnsureValid(session, _dependencies);
+            profile = SpeciesSelectionValidator.ValidateProfile(profile, session, _dependencies, _prototypeManager, _adminManager, _entitySystems);
 
             var profiles = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters)
             {
@@ -279,6 +286,72 @@ namespace Content.Server.Preferences.Managers
             var session = _playerManager.GetSessionById(userId);
             if (ShouldStorePrefs(session.Channel.AuthType))
                 await _db.SaveConstructionFavoritesAsync(userId, favorites);
+        }
+
+        public async Task<WH40KMetaProfileRepairResult> RevalidateWH40KMetaLoadoutsAsync(NetUserId userId, WH40KMetaProgressSnapshot snapshot, CancellationToken cancel = default)
+        {
+            return await RepairWH40KMetaLoadoutsAsync(userId, snapshot, resetSelections: false, cancel);
+        }
+
+        public async Task<WH40KMetaProfileRepairResult> ResetWH40KMetaSelectionsAsync(NetUserId userId, WH40KMetaProgressSnapshot snapshot, CancellationToken cancel = default)
+        {
+            return await RepairWH40KMetaLoadoutsAsync(userId, snapshot, resetSelections: true, cancel);
+        }
+
+        private async Task<WH40KMetaProfileRepairResult> RepairWH40KMetaLoadoutsAsync(NetUserId userId, WH40KMetaProgressSnapshot snapshot, bool resetSelections, CancellationToken cancel)
+        {
+            PlayerPreferences? preferences = null;
+
+            if (_cachedPlayerPrefs.TryGetValue(userId, out var cachedPrefs) && cachedPrefs.PrefsLoaded && cachedPrefs.Prefs != null)
+            {
+                preferences = cachedPrefs.Prefs;
+            }
+            else
+            {
+                var dbPrefs = await _db.GetPlayerPreferencesAsync(userId, cancel);
+                if (dbPrefs == null)
+                    return new WH40KMetaProfileRepairResult(false, 0, 0, 0);
+
+                preferences = ConvertPreferences(dbPrefs);
+            }
+
+            var result = resetSelections
+                ? WH40KMetaLoadoutRevalidator.ResetSelections(
+                    preferences,
+                    _prototypeManager,
+                    snapshot,
+                    _cfg.GetCVar(CCVars.WH40KMetaUnlocksEnforced))
+                : WH40KMetaLoadoutRevalidator.Revalidate(
+                    preferences,
+                    _prototypeManager,
+                    snapshot,
+                    _cfg.GetCVar(CCVars.WH40KMetaUnlocksEnforced));
+
+            if (!result.Changed)
+                return new WH40KMetaProfileRepairResult(true, 0, 0, 0);
+
+            foreach (var entry in result.Preferences.Characters)
+            {
+                if (preferences.Characters.TryGetValue(entry.Key, out var currentProfile) && ReferenceEquals(currentProfile, entry.Value))
+                    continue;
+
+                await _db.SaveCharacterSlotAsync(userId, entry.Value, entry.Key);
+            }
+
+            if (_cachedPlayerPrefs.TryGetValue(userId, out cachedPrefs) && cachedPrefs.PrefsLoaded)
+            {
+                cachedPrefs.Prefs = result.Preferences;
+                if (_playerManager.TryGetSessionById(userId, out var session) && session.Status != SessionStatus.Disconnected)
+                {
+                    SendPreferencesAndSettings(session, cachedPrefs);
+                }
+            }
+
+            return new WH40KMetaProfileRepairResult(
+                true,
+                result.ProfilesChanged,
+                result.RemovedSelections,
+                result.DefaultSelectionsApplied);
         }
 
         private async void HandleDeleteCharacterMessage(MsgDeleteCharacter message)
@@ -411,15 +484,7 @@ namespace Content.Server.Preferences.Managers
             prefsData.Prefs = SanitizePreferences(session, prefsData.Prefs, _dependencies);
 
             prefsData.PrefsLoaded = true;
-
-            var msg = new MsgPreferencesAndSettings();
-            msg.Preferences = prefsData.Prefs;
-            msg.Settings = new GameSettings
-            {
-                MaxCharacterSlots = MaxCharacterSlots
-            };
-            msg.NewlyInitialized = prefsData.NewlyInitialized;
-            _netManager.ServerSendMessage(msg, session.Channel);
+            SendPreferencesAndSettings(session, prefsData);
         }
 
         public void OnClientDisconnected(ICommonSession session)
@@ -499,7 +564,8 @@ namespace Content.Server.Preferences.Managers
 
             return new PlayerPreferences(prefs.Characters.Select(p =>
             {
-                return new KeyValuePair<int, HumanoidCharacterProfile>(p.Key, p.Value.Validated(session, collection));
+                var validated = SpeciesSelectionValidator.ValidateProfile(p.Value, session, collection, _prototypeManager, _adminManager, _entitySystems);
+                return new KeyValuePair<int, HumanoidCharacterProfile>(p.Key, validated);
             }), prefs.SelectedCharacterIndex, prefs.AdminOOCColor, prefs.ConstructionFavorites);
         }
 
@@ -515,6 +581,21 @@ namespace Content.Server.Preferences.Managers
         internal static bool ShouldStorePrefs(LoginType loginType)
         {
             return loginType.HasStaticUserId();
+        }
+
+        private void SendPreferencesAndSettings(ICommonSession session, PlayerPrefData prefsData)
+        {
+            var msg = new MsgPreferencesAndSettings
+            {
+                Preferences = prefsData.Prefs!,
+                Settings = new GameSettings
+                {
+                    MaxCharacterSlots = MaxCharacterSlots
+                },
+                NewlyInitialized = prefsData.NewlyInitialized
+            };
+
+            _netManager.ServerSendMessage(msg, session.Channel);
         }
 
         private sealed class PlayerPrefData

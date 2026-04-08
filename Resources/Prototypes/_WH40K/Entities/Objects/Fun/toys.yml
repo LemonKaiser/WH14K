@@ -145,6 +145,8 @@
   - type: AudioLoop
     sound:
       path: /Audio/_WH40K/Fun/funkytown.ogg
+      params:
+        volume: -50
 
 - type: entity
   parent: BasePlushie
@@ -241,5 +243,45 @@
     wideAnimationRotation: 180
     soundHit:
       path: /Audio/_WH40K/Fun/yarishon-squee.ogg
+      params:
+        volume: -5
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieRad
+  suffix: WH40K, Rad
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/Plushies/rad.rsi
+    state: icon
+  - type: EmitSoundOnUse
+    sound:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
+      params:
+        volume: -5
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
+      params:
+        volume: -5
+  - type: EmitSoundOnCollide
+    sound:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
+      params:
+        volume: -5
+  - type: EmitSoundOnActivate
+    sound:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
+      params:
+        volume: -5
+  - type: EmitSoundOnTrigger
+    sound:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
+      params:
+        volume: -5
+  - type: MeleeWeapon
+    wideAnimationRotation: 180
+    soundHit:
+      path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
       params:
         volume: -5

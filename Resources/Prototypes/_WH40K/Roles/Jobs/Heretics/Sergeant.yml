@@ -3,6 +3,11 @@
   name: job-name-hsergeant
   description: job-description-hsergeant
   playTimeTracker: JobHSergeant
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
   supervisors: job-supervisors-engineering
@@ -12,6 +17,7 @@
     components:
       - type: WH40KSquadLeader
       - type: WH40KChaosGiftRole
+      - type: WH40KChaosLeaderRole
   access:
   - Maintenance
   - External
@@ -30,6 +36,7 @@
     - !type:SpeciesRequirement
       species:
       - Human
+      - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
   supervisors: job-supervisors-engineering
@@ -57,6 +64,7 @@
     - !type:SpeciesRequirement
       species:
       - Human
+      - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
   supervisors: job-supervisors-engineering

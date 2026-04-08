@@ -117,9 +117,9 @@
                                                       ContentMarginBottomOverride="10" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                    <Label Text="{Loc 'wh40k-tactical-map-status-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="StatusTitleLabel" Text="{Loc 'wh40k-tactical-map-status-title'}" StyleClasses="LabelHeading" />
                                     <BoxContainer Orientation="Vertical" SeparationOverride="1">
-                                        <Label Text="{Loc 'wh40k-tactical-map-status-tool'}"
+                                        <Label Name="StatusToolLabel" Text="{Loc 'wh40k-tactical-map-status-tool'}"
                                                StyleClasses="LabelSubText"
                                                ClipText="True" />
                                         <Label Name="ToolSummaryLabel"
@@ -127,7 +127,7 @@
                                                ClipText="True" />
                                     </BoxContainer>
                                     <BoxContainer Orientation="Vertical" SeparationOverride="1">
-                                        <Label Text="{Loc 'wh40k-tactical-map-status-sync'}"
+                                             <Label Name="StatusSyncLabel" Text="{Loc 'wh40k-tactical-map-status-sync'}"
                                                StyleClasses="LabelSubText"
                                                ClipText="True" />
                                         <Label Name="OverlaySyncLabel"
@@ -135,7 +135,7 @@
                                                ClipText="True" />
                                     </BoxContainer>
                                     <BoxContainer Orientation="Vertical" SeparationOverride="1">
-                                        <Label Text="{Loc 'wh40k-tactical-map-status-document'}"
+                                             <Label Name="StatusDocumentLabel" Text="{Loc 'wh40k-tactical-map-status-document'}"
                                                StyleClasses="LabelSubText"
                                                ClipText="True" />
                                         <Label Name="AnnotationsStatus"
@@ -159,7 +159,7 @@
                                                           ContentMarginBottomOverride="10" />
                                     </PanelContainer.PanelOverride>
                                     <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                        <Label Text="{Loc 'wh40k-tactical-map-tools-title'}" StyleClasses="LabelHeading" />
+                                        <Label Name="ToolsTitleLabel" Text="{Loc 'wh40k-tactical-map-tools-title'}" StyleClasses="LabelHeading" />
                                         <BoxContainer Orientation="Horizontal" SeparationOverride="6">
                                             <Button Name="PanToolButton"
                                                     ToggleMode="True"
@@ -190,7 +190,7 @@
                                     <BoxContainer Orientation="Vertical" SeparationOverride="8">
                                         <BoxContainer Orientation="Horizontal" SeparationOverride="8">
                                             <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
-                                                <Label Text="{Loc 'wh40k-tactical-map-color-title'}" StyleClasses="LabelHeading" />
+                                                <Label Name="ColorTitleLabel" Text="{Loc 'wh40k-tactical-map-color-title'}" StyleClasses="LabelHeading" />
                                                 <Label Name="CurrentColorLabel"
                                                        Text="#FF0000"
                                                        StyleClasses="LabelSubText" />
@@ -224,7 +224,7 @@
                                     </PanelContainer.PanelOverride>
                                     <BoxContainer Orientation="Vertical" SeparationOverride="8">
                                         <BoxContainer Orientation="Horizontal">
-                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-title'}" StyleClasses="LabelHeading" HorizontalExpand="True" />
+                                            <Label Name="ThicknessTitleLabel" Text="{Loc 'wh40k-tactical-map-thickness-title'}" StyleClasses="LabelHeading" HorizontalExpand="True" />
                                             <Label Name="ThicknessValue" Text="1.50" Align="Right" />
                                         </BoxContainer>
                                         <Slider Name="ThicknessSlider"
@@ -233,8 +233,8 @@
                                                 Value="1.5"
                                                 RoundingDecimals="2" />
                                         <BoxContainer Orientation="Horizontal">
-                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-fine'}" StyleClasses="LabelSubText" />
-                                            <Label Text="{Loc 'wh40k-tactical-map-thickness-heavy'}"
+                                              <Label Name="ThicknessFineLabel" Text="{Loc 'wh40k-tactical-map-thickness-fine'}" StyleClasses="LabelSubText" />
+                                              <Label Name="ThicknessHeavyLabel" Text="{Loc 'wh40k-tactical-map-thickness-heavy'}"
                                                    StyleClasses="LabelSubText"
                                                    HorizontalExpand="True"
                                                    Align="Right" />
@@ -314,13 +314,13 @@
                         </PanelContainer.PanelOverride>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="10" VerticalAlignment="Center">
                             <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
-                                <Label Text="{Loc 'wh40k-tactical-map-viewport-title'}" StyleClasses="LabelHeading" />
+                                <Label Name="ViewportTitleLabel" Text="{Loc 'wh40k-tactical-map-viewport-title'}" StyleClasses="LabelHeading" />
                                 <Label Name="ViewportSubtitleLabel"
                                        Text="{Loc 'wh40k-tactical-map-viewport-subtitle'}"
                                        StyleClasses="LabelSubText" />
                             </BoxContainer>
                             <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalAlignment="Right">
-                                <Label Text="{Loc 'wh40k-tactical-map-zoom-label'}" StyleClasses="LabelSubText" Align="Right" />
+                                <Label Name="ZoomLabel" Text="{Loc 'wh40k-tactical-map-zoom-label'}" StyleClasses="LabelSubText" Align="Right" />
                                 <Label Name="ZoomValueLabel" Text="1.00x" Align="Right" />
                             </BoxContainer>
                             <PanelContainer>
@@ -379,9 +379,9 @@
                                               ContentMarginBottomOverride="10" />
                         </PanelContainer.PanelOverride>
                         <BoxContainer Orientation="Vertical" SeparationOverride="2">
-                            <Label Text="{Loc 'wh40k-tactical-map-capture-points-title'}" StyleClasses="LabelHeading" />
+                            <Label Name="CapturePointsTitleLabel" Text="{Loc 'wh40k-tactical-map-capture-points-title'}" StyleClasses="LabelHeading" />
                             <BoxContainer Orientation="Horizontal">
-                                <Label Text="{Loc 'wh40k-tactical-map-capture-points-subtitle'}" HorizontalExpand="True" StyleClasses="LabelSubText" />
+                                <Label Name="CapturePointsSubtitleLabel" Text="{Loc 'wh40k-tactical-map-capture-points-subtitle'}" HorizontalExpand="True" StyleClasses="LabelSubText" />
                                 <Label Name="BeaconCountLabel" Text="0" Align="Right" StyleClasses="LabelSubText" />
                             </BoxContainer>
                         </BoxContainer>

@@ -6,12 +6,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 0.5
+        Heat: 3
   - type: Explosive
     explosionType: Default
-    maxIntensity: 1.5
+    maxIntensity: 5
     intensitySlope: 2
-    totalIntensity: 8
+    totalIntensity: 24
     maxTileBreak: 0
 
 - type: entity
@@ -22,12 +22,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 0.5
+        Heat: 5
   - type: Explosive
     explosionType: Default
-    maxIntensity: 2
+    maxIntensity: 7
     intensitySlope: 2
-    totalIntensity: 10
+    totalIntensity: 36
     maxTileBreak: 0
 
 - type: entity
@@ -38,12 +38,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 0.75
+        Heat: 7
   - type: Explosive
     explosionType: Default
-    maxIntensity: 2
+    maxIntensity: 9
     intensitySlope: 2
-    totalIntensity: 12
+    totalIntensity: 50
     maxTileBreak: 0
 
 - type: entity
@@ -54,12 +54,12 @@
   - type: Projectile
     damage:
       types:
-        Heat: 1
+        Heat: 9
   - type: Explosive
     explosionType: Default
-    maxIntensity: 2.5
+    maxIntensity: 11
     intensitySlope: 2
-    totalIntensity: 14
+    totalIntensity: 64
     maxTileBreak: 0
 
 - type: entity
@@ -70,13 +70,63 @@
   - type: Projectile
     damage:
       types:
-        Heat: 1.25
+        Heat: 12
   - type: Explosive
     explosionType: Default
-    maxIntensity: 3
+    maxIntensity: 14
     intensitySlope: 2
-    totalIntensity: 16
+    totalIntensity: 82
     maxTileBreak: 0
+
+- type: entity
+  id: WH40KProjectileChaosNurgleAcidSpit
+  parent: BulletAcid
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 7
+
+- type: entity
+  id: WH40KProjectileChaosNurgleAcidSpitTier1
+  parent: WH40KProjectileChaosNurgleAcidSpit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 10
+
+- type: entity
+  id: WH40KProjectileChaosNurgleAcidSpitTier2
+  parent: WH40KProjectileChaosNurgleAcidSpit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 14
+
+- type: entity
+  id: WH40KProjectileChaosNurgleAcidSpitTier3
+  parent: WH40KProjectileChaosNurgleAcidSpit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 18
+
+- type: entity
+  id: WH40KProjectileChaosNurgleAcidSpitEx
+  parent: WH40KProjectileChaosNurgleAcidSpit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Caustic: 24
 
 - type: entity
   id: WHBulletPlasmaPistol
@@ -330,3 +380,20 @@
     intensitySlope: 1
     totalIntensity: 4
     maxTileBreak: 0
+
+- type: entity
+  id: WH40KBulletRocketHE
+  parent: BulletRocket
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  id: WH40KBulletRocketAP
+  parent: BulletRocket
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 28
+    intensitySlope: 14
+    totalIntensity: 56
+    maxTileBreak: 1

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
 using Content.Shared.CCVar;
+using NUnit.Framework;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests;
@@ -71,6 +72,12 @@ public static partial class PoolManager
         PoolSettings? settings = null,
         ITestContextLike? testContext = null)
     {
+        if (testContext == null)
+        {
+            var testName = TestContext.CurrentContext.Test.FullName;
+            testContext = new Robust.UnitTesting.Pool.ExternalTestContext(testName, TestContext.Out);
+        }
+
         return await Instance.GetPair(settings, testContext);
     }
 

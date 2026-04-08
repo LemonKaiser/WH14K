@@ -36,6 +36,9 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.25
     baseSprintSpeed: 3.6
+  - type: MeleeWeapon
+    animation: WeaponArcSmash
+    wideAnimation: WeaponArcSmash
 
 - type: entity
   id: MechSentinelBatteryAutogun

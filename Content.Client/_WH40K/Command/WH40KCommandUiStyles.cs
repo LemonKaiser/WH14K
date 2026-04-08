@@ -1,6 +1,7 @@
 using System;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
@@ -116,7 +117,7 @@ public static class WH40KCommandUiStyles
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        if (Loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
+        if (IoCManager.Resolve<ILocalizationManager>().TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
             return localized!;
 
         return value;

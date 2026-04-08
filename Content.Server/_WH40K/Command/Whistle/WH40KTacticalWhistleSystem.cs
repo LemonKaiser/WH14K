@@ -14,11 +14,11 @@ using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Command.Whistle;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Command.Whistle;
 
@@ -34,6 +34,7 @@ public sealed class WH40KTacticalWhistleSystem : EntitySystem
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -64,6 +65,7 @@ public sealed class WH40KTacticalWhistleSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || !ent.Comp.EnableSignalVerbs)
             return;
 
+        using var scope = _culture.CreateScope(args.User);
         var user = args.User;
         if (!IsHoldingWhistle(user, ent.Owner))
             return;
@@ -95,6 +97,7 @@ public sealed class WH40KTacticalWhistleSystem : EntitySystem
 
     private void OnExamined(Entity<WH40KTacticalWhistleComponent> ent, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KTacticalWhistleComponent)))
         {
             args.PushMarkup(Loc.GetString(
@@ -266,12 +269,12 @@ public sealed class WH40KTacticalWhistleSystem : EntitySystem
 
     private void PopupCaution(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.SmallCaution);
     }
 
     private void PopupSuccess(EntityUid user, string key)
     {
-        _popup.PopupEntity(Loc.GetString(key), user, user, PopupType.Small);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key), user, user, PopupType.Small);
     }
 
     private static SignalProfile GetSignalProfile(WH40KWhistleSignalType signalType, WH40KTacticalWhistleComponent whistle)

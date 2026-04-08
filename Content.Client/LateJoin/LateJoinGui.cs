@@ -46,11 +46,13 @@ namespace Content.Client.LateJoin
         private readonly HashSet<ProtoId<DepartmentPrototype>>? _departmentFilter;
         private readonly HashSet<ProtoId<JobPrototype>>? _hiddenJobs;
 
+        public bool SelectionCommitted { get; private set; }
+
         public LateJoinGui(
             IReadOnlyCollection<ProtoId<DepartmentPrototype>>? departmentFilter = null,
             IReadOnlyCollection<ProtoId<JobPrototype>>? hiddenJobs = null)
         {
-            MinSize = SetSize = new Vector2(360, 560);
+            MinSize = SetSize = new Vector2(420, 560);
             IoCManager.InjectDependencies(this);
             _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
             _crewManifest = _entitySystem.GetEntitySystem<CrewManifestSystem>();
@@ -77,6 +79,7 @@ namespace Content.Client.LateJoin
             SelectedId += x =>
             {
                 var (station, jobId) = x;
+                SelectionCommitted = true;
                 _sawmill.Info($"Late joining as ID: {jobId}");
                 _consoleHost.ExecuteCommand($"joingame {CommandParsing.Escape(jobId)} {station}");
                 Close();
@@ -343,9 +346,12 @@ namespace Content.Client.LateJoin
             }
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
 
             if (disposing)
             {

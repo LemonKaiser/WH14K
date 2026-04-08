@@ -1,22 +1,25 @@
-using System.Numerics;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Content.Client.LateJoin;
+using System.Numerics;
+using Content.Client.Localization;
+using Content.Client.Resources;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.Roles;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
-using Content.Client.Resources;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.LateJoin;
 
-public sealed class WH40KFactionJoinGui : DefaultWindow
+public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
 {
     private static readonly ProtoId<DepartmentPrototype> MechanicusDepartment = "Mechanicus";
     private static readonly ProtoId<DepartmentPrototype> DarkMechanicumDepartment = "DarkMechanicum";
@@ -33,35 +36,44 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         "HSpecialistSWS"
     ];
 
-    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    private static readonly Dictionary<string, Color> FactionAccentColors = new()
+    {
+        { "Imperium", Color.FromHex("#F3C548") },
+        { "Heretics", Color.FromHex("#C7483F") },
+    };
+
+    private static readonly Color CardBackground = Color.FromHex("#16161E");
+    private static readonly Color CardHoverBackground = Color.FromHex("#22222E");
+    private static readonly Color SeparatorColor = Color.FromHex("#3D4059");
+
+    [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
 
-    private readonly WH40KFactionSystem _factionSystem;
     private readonly SpriteSystem _sprites;
-    private readonly ISawmill _sawmill;
-
     private readonly BoxContainer _root;
     private readonly BoxContainer _row;
-    private bool _selectionHandled;
-    private bool _subscribed;
+    private IReadOnlyList<WH40KFactionInfo> _latestFactions;
 
-    public WH40KFactionJoinGui(IReadOnlyList<WH40KFactionInfo>? initialFactions = null)
+    public event Action<string>? FactionSelected;
+
+    public WH40KFactionSelectionPurpose Purpose { get; }
+
+    public WH40KFactionJoinGui(WH40KFactionSelectionPurpose purpose, IReadOnlyList<WH40KFactionInfo> initialFactions)
     {
-        MinSize = SetSize = new Vector2(460, 360);
+        MinSize = SetSize = new Vector2(500, 380);
         IoCManager.InjectDependencies(this);
 
-        _factionSystem = _entitySystem.GetEntitySystem<WH40KFactionSystem>();
-        _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
-        _sawmill = _logManager.GetSawmill("wh40k.factionjoin");
-
-        Title = Loc.GetString("wh40k-faction-join-title");
+        Purpose = purpose;
+        _latestFactions = initialFactions;
+        _sprites = _entitySystems.GetEntitySystem<SpriteSystem>();
 
         _row = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             HorizontalExpand = true,
             VerticalExpand = true,
+            Margin = new Thickness(8, 8, 8, 8),
+            SeparationOverride = 8,
         };
 
         _root = new BoxContainer
@@ -73,164 +85,22 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         };
 
         ContentsContainer.AddChild(_root);
-
-        _factionSystem.FactionsUpdated += OnFactionsUpdated;
-        _subscribed = true;
-        OnClose += HandleClosed;
-        if (initialFactions != null)
-            ApplyFactions(initialFactions);
-        _factionSystem.RequestFactions();
+        ApplyFactions(initialFactions);
+        Relocalize();
     }
 
-    private void OnFactionsUpdated(IReadOnlyList<WH40KFactionInfo> factions)
+    public void Relocalize()
+    {
+        Title = Loc.GetString("wh40k-faction-join-title");
+        ApplyFactions(_latestFactions);
+    }
+
+    public void UpdateFactions(IReadOnlyList<WH40KFactionInfo> factions)
     {
         ApplyFactions(factions);
     }
 
-    private void ApplyFactions(IReadOnlyList<WH40KFactionInfo> factions)
-    {
-        _row.RemoveAllChildren();
-
-        if (factions.Count == 0)
-        {
-            OpenLateJoinWindow();
-            Close();
-            return;
-        }
-
-        for (var i = 0; i < factions.Count; i++)
-        {
-            if (i > 0)
-                _row.AddChild(BuildSeparator());
-
-            var button = BuildFactionButton(factions[i]);
-            _row.AddChild(button);
-        }
-    }
-
-    private Control BuildFactionButton(WH40KFactionInfo faction)
-    {
-        var button = new ContainerButton
-        {
-            MinSize = new Vector2(140, 220),
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-
-        var inner = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-
-        var topSpacer = new Control
-        {
-            VerticalExpand = true,
-            SizeFlagsStretchRatio = 1f,
-        };
-
-        var countLabel = new Label
-        {
-            HorizontalAlignment = HAlignment.Center,
-            Align = Label.AlignMode.Center,
-            Text = faction.PlayerCount.ToString()
-        };
-        countLabel.FontOverride = _resourceCache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf", 22);
-
-        var countSpacer = new Control
-        {
-            MinSize = new Vector2(0, 8),
-        };
-
-        var icon = new TextureRect
-        {
-            TextureScale = new Vector2(4f, 4f),
-            Stretch = TextureRect.StretchMode.KeepCentered,
-            MinSize = new Vector2(96, 96),
-            HorizontalAlignment = HAlignment.Center,
-        };
-
-        if (faction.Logo != null)
-            icon.Texture = _sprites.Frame0(faction.Logo);
-        else
-            icon.Visible = false;
-
-        var labelSpacer = new Control
-        {
-            MinSize = new Vector2(0, 30),
-        };
-
-        var label = new Label
-        {
-            HorizontalAlignment = HAlignment.Center,
-            Align = Label.AlignMode.Center,
-            Text = Loc.GetString(faction.Name)
-        };
-        label.FontOverride = _resourceCache.GetFont("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf", 28);
-
-        var bottomSpacer = new Control
-        {
-            VerticalExpand = true,
-            SizeFlagsStretchRatio = 0.4f,
-        };
-
-        inner.AddChild(countLabel);
-        inner.AddChild(countSpacer);
-        inner.AddChild(topSpacer);
-        inner.AddChild(icon);
-        inner.AddChild(labelSpacer);
-        inner.AddChild(label);
-        inner.AddChild(bottomSpacer);
-        button.AddChild(inner);
-
-        button.OnPressed += _ =>
-        {
-            if (_selectionHandled)
-                return;
-
-            _selectionHandled = true;
-            var departments = BuildDepartmentFilterForFaction(faction);
-            var hiddenJobs = BuildHiddenJobsForFaction(faction.Id);
-
-            if (departments.Count == 0)
-            {
-                _sawmill.Info($"Faction '{faction.Id}' has no departments; late join list will be empty.");
-            }
-
-            OpenLateJoinWindow(departments, hiddenJobs);
-            Close();
-        };
-
-        return button;
-    }
-
-    private Control BuildSeparator()
-    {
-        var separator = new PanelContainer
-        {
-            MinSize = new Vector2(2, 0),
-            VerticalExpand = true,
-        };
-
-        separator.PanelOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#3D4059"),
-        };
-
-        return separator;
-    }
-
-    private void HandleClosed()
-    {
-        if (!_subscribed)
-            return;
-
-        _subscribed = false;
-        _factionSystem.FactionsUpdated -= OnFactionsUpdated;
-    }
-
-    private static IReadOnlyList<ProtoId<DepartmentPrototype>> BuildDepartmentFilterForFaction(WH40KFactionInfo faction)
+    public static IReadOnlyList<ProtoId<DepartmentPrototype>> BuildDepartmentFilterForFaction(WH40KFactionInfo faction)
     {
         return faction.Id switch
         {
@@ -240,7 +110,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         };
     }
 
-    private static IReadOnlyCollection<ProtoId<JobPrototype>>? BuildHiddenJobsForFaction(string factionId)
+    public static IReadOnlyCollection<ProtoId<JobPrototype>>? BuildHiddenJobsForFaction(string factionId)
     {
         return factionId switch
         {
@@ -250,14 +120,225 @@ public sealed class WH40KFactionJoinGui : DefaultWindow
         };
     }
 
-    private static void OpenLateJoinWindow(
-        IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null,
-        IReadOnlyCollection<ProtoId<JobPrototype>>? hiddenJobs = null)
+    private void ApplyFactions(IReadOnlyList<WH40KFactionInfo> factions)
     {
-        if (departments == null)
-            new LateJoinGui(hiddenJobs: hiddenJobs).OpenCentered();
-        else
-            new LateJoinGui(departments, hiddenJobs).OpenCentered();
+        _latestFactions = factions;
+        _row.RemoveAllChildren();
+
+        if (factions.Count == 0)
+        {
+            _row.AddChild(new Label
+            {
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                HorizontalAlignment = HAlignment.Center,
+                VerticalAlignment = VAlignment.Center,
+                Text = Loc.GetString("wh40k-faction-join-empty"),
+            });
+            return;
+        }
+
+        for (var index = 0; index < factions.Count; index++)
+        {
+            if (index > 0)
+                _row.AddChild(BuildSeparator());
+
+            _row.AddChild(BuildFactionButton(factions[index]));
+        }
     }
 
+    private Control BuildFactionButton(WH40KFactionInfo faction)
+    {
+        var accent = FactionAccentColors.GetValueOrDefault(faction.Id, Color.White);
+        var accentDim = accent.WithAlpha(0.5f);
+        var disabled = !faction.CanSelect;
+
+        var button = new ContainerButton
+        {
+            MinSize = new Vector2(200, 280),
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            SizeFlagsStretchRatio = 1f,
+            Disabled = disabled,
+        };
+
+        if (disabled && !string.IsNullOrWhiteSpace(faction.DisabledReason))
+            button.ToolTip = Loc.GetString(faction.DisabledReason);
+
+        var normalStyle = new StyleBoxFlat
+        {
+            BackgroundColor = disabled ? CardBackground.WithAlpha(0.85f) : CardBackground,
+            BorderColor = disabled ? accentDim.WithAlpha(0.5f) : accentDim,
+            BorderThickness = new Thickness(2),
+            ContentMarginLeftOverride = 16,
+            ContentMarginRightOverride = 16,
+            ContentMarginTopOverride = 12,
+            ContentMarginBottomOverride = 12,
+        };
+
+        var hoverStyle = new StyleBoxFlat
+        {
+            BackgroundColor = CardHoverBackground,
+            BorderColor = accent,
+            BorderThickness = new Thickness(2),
+            ContentMarginLeftOverride = 16,
+            ContentMarginRightOverride = 16,
+            ContentMarginTopOverride = 12,
+            ContentMarginBottomOverride = 12,
+        };
+
+        var cardPanel = new PanelContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            PanelOverride = normalStyle,
+        };
+
+        var accentBar = new PanelContainer
+        {
+            MinSize = new Vector2(0, 3),
+            HorizontalExpand = true,
+            PanelOverride = new StyleBoxFlat { BackgroundColor = accent },
+        };
+
+        var inner = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+            VerticalExpand = true,
+        };
+
+        var countLabel = new Label
+        {
+            HorizontalAlignment = HAlignment.Center,
+            Align = Label.AlignMode.Center,
+            Text = faction.PlayerCount.ToString(),
+            FontColorOverride = disabled ? accentDim : accent,
+        };
+        countLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 24);
+
+        var topSpacer = new Control
+        {
+            VerticalExpand = true,
+            SizeFlagsStretchRatio = 0.6f,
+        };
+
+        var icon = new TextureRect
+        {
+            TextureScale = new Vector2(4.5f, 4.5f),
+            Stretch = TextureRect.StretchMode.KeepCentered,
+            MinSize = new Vector2(110, 110),
+            HorizontalAlignment = HAlignment.Center,
+            ModulateSelfOverride = disabled ? Color.White.WithAlpha(0.55f) : Color.White,
+        };
+
+        if (faction.Logo != null)
+            icon.Texture = _sprites.Frame0(faction.Logo);
+        else
+            icon.Visible = false;
+
+        var bottomSpacer = new Control
+        {
+            VerticalExpand = true,
+            SizeFlagsStretchRatio = 0.4f,
+        };
+
+        var nameLabel = new Label
+        {
+            HorizontalAlignment = HAlignment.Center,
+            Align = Label.AlignMode.Center,
+            Text = Loc.GetString(faction.Name),
+            FontColorOverride = disabled ? accentDim : accent,
+        };
+        nameLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 26);
+
+        inner.AddChild(accentBar);
+        inner.AddChild(countLabel);
+        inner.AddChild(topSpacer);
+        inner.AddChild(icon);
+        inner.AddChild(bottomSpacer);
+        inner.AddChild(nameLabel);
+
+        if (disabled && !string.IsNullOrWhiteSpace(faction.DisabledReason))
+        {
+            var reasonLabel = new Label
+            {
+                HorizontalAlignment = HAlignment.Center,
+                Align = Label.AlignMode.Center,
+                Text = Loc.GetString(faction.DisabledReason),
+                FontColorOverride = Color.FromHex("#8D90AA"),
+                Margin = new Thickness(0, 10, 0, 0),
+                HorizontalExpand = true,
+            };
+            reasonLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSans/NotoSans-Regular.ttf"), 12);
+            inner.AddChild(reasonLabel);
+        }
+
+        inner.AddChild(new Control
+        {
+            VerticalExpand = true,
+            SizeFlagsStretchRatio = 0.2f,
+        });
+
+        cardPanel.AddChild(inner);
+        button.AddChild(cardPanel);
+
+        button.OnMouseEntered += _ =>
+        {
+            if (!disabled)
+                cardPanel.PanelOverride = hoverStyle;
+        };
+        button.OnMouseExited += _ => cardPanel.PanelOverride = normalStyle;
+        button.OnPressed += _ =>
+        {
+            if (!faction.CanSelect)
+                return;
+
+            FactionSelected?.Invoke(faction.Id);
+        };
+
+        return button;
+    }
+
+    private Control BuildSeparator()
+    {
+        var container = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            VerticalExpand = true,
+            MinSize = new Vector2(44, 0),
+            HorizontalAlignment = HAlignment.Center,
+        };
+
+        var topLine = new PanelContainer
+        {
+            VerticalExpand = true,
+            HorizontalAlignment = HAlignment.Center,
+            MinSize = new Vector2(2, 0),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = SeparatorColor },
+        };
+
+        var vsLabel = new Label
+        {
+            HorizontalAlignment = HAlignment.Center,
+            Align = Label.AlignMode.Center,
+            Text = "VS",
+            FontColorOverride = Color.FromHex("#6D7099"),
+            Margin = new Thickness(0, 6, 0, 6),
+        };
+        vsLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 16);
+
+        var bottomLine = new PanelContainer
+        {
+            VerticalExpand = true,
+            HorizontalAlignment = HAlignment.Center,
+            MinSize = new Vector2(2, 0),
+            PanelOverride = new StyleBoxFlat { BackgroundColor = SeparatorColor },
+        };
+
+        container.AddChild(topLine);
+        container.AddChild(vsLabel);
+        container.AddChild(bottomLine);
+        return container;
+    }
 }

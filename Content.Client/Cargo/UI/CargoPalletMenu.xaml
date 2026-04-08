@@ -1,25 +1,165 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-            SetSize="300 150"
-            MinSize="300 150"
+                      SetSize="920 450"
+                      MinSize="760 420"
                       Title="{Loc 'cargo-pallet-console-menu-title'}">
-    <BoxContainer Orientation="Vertical" Margin="5">
-        <BoxContainer Orientation="Horizontal">
-            <Label Text="{Loc 'cargo-pallet-menu-appraisal-label'}"
-                   StyleClasses="LabelKeyText" />
-            <Label Name="AppraisalLabel"
-                   Text="{Loc 'cargo-pallet-menu-no-goods-text'}" />
+    <BoxContainer Name="RootLayout"
+                  Orientation="Vertical"
+                  VerticalExpand="True">
+
+        <PanelContainer Name="MainFrame"
+                        HorizontalExpand="True"
+                        VerticalExpand="True">
+            <BoxContainer Orientation="Vertical"
+                          VerticalExpand="True"
+                          Margin="10 8 10 8"
+                          SeparationOverride="10">
+
+                <PanelContainer Name="HeaderPanel">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="12 10 12 10"
+                                  SeparationOverride="3">
+                        <Label Name="HeaderTitle"
+                               Text="{Loc 'cargo-pallet-console-menu-title'}"
+                               StyleClasses="LabelKeyText" />
+                        <RichTextLabel Name="HeaderSubtitle"
+                                       Text="{Loc 'cargo-pallet-menu-subtitle'}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="8">
+                    <PanelContainer Name="AppraisalCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="4">
+                            <Label Name="AppraisalKeyLabel"
+                                   Text="{Loc 'cargo-pallet-menu-appraisal-label'}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="AppraisalLabel"
+                                   Text="в‚®0" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="CountCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="4">
+                            <Label Name="CountKeyLabel"
+                                   Text="{Loc 'cargo-pallet-menu-count-label'}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="CountLabel"
+                                   Text="0" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="AverageCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="4">
+                            <Label Name="AverageKeyLabel"
+                                   Text="{Loc 'cargo-pallet-menu-average-label'}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="AverageValueLabel"
+                                   Text="в‚®0" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <PanelContainer Name="DetailsFrame">
+                    <BoxContainer Orientation="Vertical">
+                        <PanelContainer Name="DetailsHeaderPanel">
+                            <Label Name="DetailsHeaderTitle"
+                                   Text="{Loc 'cargo-pallet-menu-details-header'}"
+                                   HorizontalAlignment="Center"
+                                   Margin="10 8" />
+                        </PanelContainer>
+
+                        <PanelContainer Name="DetailsBodyPanel">
+                            <GridContainer Columns="3"
+                                           Margin="12 10 12 10">
+                                <Label Name="StatusLabel"
+                                       Text="{Loc 'cargo-pallet-menu-status-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <PanelContainer Name="StatusDivider" Margin="0 -2 0 -1" />
+                                <Label Name="StatusValueLabel"
+                                       Text="{Loc 'cargo-pallet-menu-status-offline'}"
+                                       Margin="4 0" />
+
+                                <Label Name="RoutingLabel"
+                                       Text="{Loc 'cargo-pallet-menu-routing-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <PanelContainer Name="RoutingDivider" Margin="0 -2 0 -1" />
+                                <RichTextLabel Name="RoutingValueLabel"
+                                               Text="{Loc 'cargo-pallet-menu-routing-default'}"
+                                               HorizontalExpand="True"
+                                               Margin="4 0" />
+
+                                <Label Name="AcceptedGoodsLabel"
+                                       Text="{Loc 'cargo-pallet-menu-accepted-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <PanelContainer Name="AcceptedDivider" Margin="0 -2 0 -1" />
+                                <RichTextLabel Name="AcceptedGoodsValueLabel"
+                                               Text="{Loc 'cargo-pallet-menu-accepted-default'}"
+                                               HorizontalExpand="True"
+                                               Margin="4 0" />
+                            </GridContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="ButtonsFrame">
+                    <BoxContainer Name="ButtonsPanel"
+                                  Orientation="Horizontal"
+                                  Margin="8 8 8 8"
+                                  SeparationOverride="8">
+                        <Button Name="AppraiseButton"
+                                Text="{Loc 'cargo-pallet-appraise-button'}"
+                                HorizontalExpand="True"
+                                MinHeight="40" />
+                        <Button Name="SellButton"
+                                Text="{Loc 'cargo-pallet-sell-button'}"
+                                HorizontalExpand="True"
+                                MinHeight="40" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Name="FooterWrapper"
+                      Orientation="Vertical"
+                      VerticalAlignment="Bottom">
+
+            <PanelContainer Name="FooterDivider" />
+
+            <BoxContainer Name="FooterBar"
+                          Orientation="Horizontal"
+                          Margin="12 0 6 2"
+                          VerticalAlignment="Bottom">
+
+                <Label Name="FooterLeftLabel"
+                       Text="{Loc 'cargo-pallet-menu-footer-status'}"
+                       StyleClasses="WindowFooterText" />
+
+                <Label Name="FooterRightLabel"
+                       Text="{Loc 'cargo-pallet-menu-footer-right'}"
+                       StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right"
+                       HorizontalExpand="True"
+                       Margin="0 0 4 0" />
+
+                <TextureRect Name="FooterLogo"
+                             StyleClasses="NTLogoDark"
+                             Stretch="KeepAspectCentered"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Right"
+                             SetSize="19 19" />
+            </BoxContainer>
         </BoxContainer>
-        <BoxContainer Orientation="Horizontal">
-            <Label Text="{Loc 'cargo-pallet-menu-count-label'}"
-                   StyleClasses="LabelKeyText" />
-            <Label Name="CountLabel"
-                   Text="{Loc 'cargo-pallet-menu-no-goods-text'}" />
-        </BoxContainer>
-        <Button Name="AppraiseButton"
-                Text="{Loc 'cargo-pallet-appraise-button'}"/>
-        <Button Name="SellButton"
-                Text="{Loc 'cargo-pallet-sell-button'}"/>
-        <TextureButton VerticalExpand="True" />
     </BoxContainer>
 </controls:FancyWindow>

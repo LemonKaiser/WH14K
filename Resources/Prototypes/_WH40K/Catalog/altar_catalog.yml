@@ -141,12 +141,51 @@
 - type: listing
   id: AltarRocketLauncher
   name: Rocket launcher
-  description: Heavy anti-armor launcher.
-  productEntity: WeaponRocketLauncher
+  description: Reusable shielded launcher for anti-armor work.
+  productEntity: WeaponRocketLauncherChaos
   cost:
     intelligence_ch: 16
   categories:
   - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 5
+
+- type: listing
+  id: AltarDisposableRocketLauncher
+  name: Disposable RPG
+  description: Single-use launcher for quick anti-armor shots.
+  productEntity: WeaponRocketLauncherChaosDisposable
+  cost:
+    intelligence_ch: 10
+  categories:
+  - AltarWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: AltarRocketAmmoHE
+  name: HE rocket
+  description: High-explosive rocket for reusable launchers.
+  productEntity: CartridgeRocketHE
+  cost:
+    intelligence_ch: 4
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: AltarRocketAmmoAP
+  name: AP rocket
+  description: Armor-piercing rocket for reusable launchers.
+  productEntity: CartridgeRocketAP
+  cost:
+    intelligence_ch: 6
+  categories:
+  - AltarAmmo
   conditions:
   - !type:WH40KMinBaseLevelCondition
     level: 5

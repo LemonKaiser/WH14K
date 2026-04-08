@@ -13,6 +13,13 @@ namespace Content.Client.Administration.UI.CustomControls
         {
             if (WindowType == null)
                 return;
+
+            if (_window?.IsOpen == true)
+            {
+                _window.MoveToFront();
+                return;
+            }
+
             _window = (DefaultWindow) IoCManager.Resolve<IDynamicTypeFactory>().CreateInstance(WindowType);
             _window?.OpenCentered();
         }

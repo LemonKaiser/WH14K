@@ -153,8 +153,10 @@ public sealed class MetabolizerSystem : EntitySystem
 
         // randomize the reagent list so we don't have any weird quirks
         // like alphabetical order or insertion order mattering for processing
+    #pragma warning disable CS0618
         var rand = SharedRandomExtensions.PredictedRandom(_gameTiming, GetNetEntity(ent), GetNetEntity(solutionOwner));
         rand.Shuffle(list);
+    #pragma warning restore CS0618
 
         var isDead = _mobStateSystem.IsDead(solutionOwner.Value);
         var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
@@ -213,7 +215,9 @@ public sealed class MetabolizerSystem : EntitySystem
                 if (scale < effect.MinScale)
                     continue;
 
+#pragma warning disable CS0618
                 if (rand.NextFloat() >= effect.Probability)
+#pragma warning restore CS0618
                     continue;
 
                 // See if conditions apply

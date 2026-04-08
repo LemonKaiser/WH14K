@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.Administration.UI.CustomControls;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Robust.Client.Graphics;
@@ -11,7 +12,7 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
+public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow, ILocalizedControl
 {
     private static readonly IReadOnlyList<WH40KCommandNodeTacticPreset> Presets = WH40KCommandNodeTactics.Presets;
 
@@ -19,6 +20,7 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
 
     private readonly StyleBoxFlat _headerStyle;
     private readonly Label _headerTitleLabel;
+    private readonly Label _headerDraftNoteLabel;
     private readonly Label _teamLine;
     private readonly Label _activeBattleTacticLine;
     private readonly PanelContainer _teamBadge;
@@ -26,6 +28,8 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
     private readonly PanelContainer _cooldownBadge;
     private readonly Label _cooldownBadgeLabel;
     private readonly PanelContainer _selectionPanel;
+    private readonly Label _listSectionTitleLabel;
+    private readonly Label _selectionSectionTitleLabel;
     private readonly Label _selectedBattleTacticLine;
     private readonly Label _cooldownLine;
     private readonly Label _selectedDescription;
@@ -39,10 +43,11 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
     private int _battleTacticCooldownSeconds;
     private string _activeBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
     private string _selectedBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
 
     public WH40KCommandNodeBattleTacticWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-battle-tactic-window-title");
+        Title = Loc.GetString("w40k-cmd-battle-tactic-window-title");
         MinSize = SetSize = new Vector2(900, 560);
 
         var root = new BoxContainer
@@ -81,17 +86,19 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-battle-tactic-window-title"),
+            Text = Loc.GetString("w40k-cmd-battle-tactic-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
         headerInfo.AddChild(_headerTitleLabel);
-        headerInfo.AddChild(new Label
+
+        _headerDraftNoteLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-battle-tactic-window-draft-note"),
+            Text = Loc.GetString("w40k-cmd-battle-tactic-window-draft-note"),
             StyleClasses = { "LabelSubText" },
             ClipText = true
-        });
+        };
+        headerInfo.AddChild(_headerDraftNoteLabel);
 
         _teamLine = new Label
         {
@@ -141,8 +148,9 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         root.AddChild(body);
 
         var listPanel = CreateSection(
-            Loc.GetString("wh40k-command-node-battle-tactic-window-list-header"),
+            Loc.GetString("w40k-cmd-battle-tactic-window-list-header"),
             out var listContent,
+            out _listSectionTitleLabel,
             verticalExpand: true);
         listPanel.HorizontalExpand = true;
         listPanel.VerticalExpand = true;
@@ -203,7 +211,7 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
             var selectButton = new Button
             {
                 HorizontalExpand = true,
-                Text = Loc.GetString("wh40k-command-node-battle-tactic-window-select-button")
+                Text = Loc.GetString("w40k-cmd-battle-tactic-window-select-button")
             };
             selectButton.OnPressed += _ => SelectBattleTactic(preset.Id);
             rowBox.AddChild(selectButton);
@@ -215,8 +223,9 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         }
 
         _selectionPanel = CreateSection(
-            Loc.GetString("wh40k-command-node-battle-tactic-window-selection-header"),
+            Loc.GetString("w40k-cmd-battle-tactic-window-selection-header"),
             out var selectionContent,
+            out _selectionSectionTitleLabel,
             verticalExpand: true);
         _selectionPanel.MinWidth = 280;
         _selectionPanel.VerticalExpand = true;
@@ -257,6 +266,28 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         };
         _assignButton.OnPressed += _ => AssignSelectedBattleTactic();
         selectionContent.AddChild(_assignButton);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-battle-tactic-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-battle-tactic-window-title");
+        _headerDraftNoteLabel.Text = Loc.GetString("w40k-cmd-battle-tactic-window-draft-note");
+        _listSectionTitleLabel.Text = Loc.GetString("w40k-cmd-battle-tactic-window-list-header");
+        _selectionSectionTitleLabel.Text = Loc.GetString("w40k-cmd-battle-tactic-window-selection-header");
+
+        RefreshRowText();
+
+        if (_latestState != null)
+        {
+            UpdateState(_latestState);
+            return;
+        }
+
+        RefreshSelectionPreview();
+        RefreshRows();
     }
 
     public static (string Name, string Description) ResolveBattleTacticDisplay(string? tacticId)
@@ -267,13 +298,15 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        _latestState = state;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
 
-        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+        _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeam)));
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : resolvedTeam.ToUpperInvariant();
 
         _activeBattleTacticId = FindTacticPreset(state.ActiveBattleTacticId).Id;
         _battleTacticCooldownSeconds = Math.Max(0, state.BattleTacticCooldownSeconds);
@@ -285,7 +318,7 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
             _accent,
             2);
 
-        _activeBattleTacticLine.Text = Loc.GetString("wh40k-command-node-battle-tactic-window-active",
+        _activeBattleTacticLine.Text = Loc.GetString("w40k-cmd-battle-tactic-window-active",
             ("tactic", ResolveBattleTacticDisplay(_activeBattleTacticId).Name));
         _activeBattleTacticLine.Text = CompactLine(_activeBattleTacticLine.Text);
 
@@ -293,7 +326,7 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         RefreshRows();
     }
 
-    private PanelContainer CreateSection(string title, out BoxContainer content, bool verticalExpand)
+    private PanelContainer CreateSection(string title, out BoxContainer content, out Label titleLabel, bool verticalExpand)
     {
         var section = new PanelContainer
         {
@@ -317,12 +350,13 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         {
             PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
-        titleBar.AddChild(new Label
+        titleLabel = new Label
         {
             Text = title,
             StyleClasses = { "LabelHeading" },
             ClipText = true
-        });
+        };
+        titleBar.AddChild(titleLabel);
         sectionRoot.AddChild(titleBar);
 
         content = new BoxContainer
@@ -335,6 +369,15 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         sectionRoot.AddChild(content);
 
         return section;
+    }
+
+    private void RefreshRowText()
+    {
+        foreach (var preset in Presets)
+        {
+            _rowTitleLabels[preset.Id].Text = Loc.GetString(preset.NameLocKey);
+            _rowSummaryLabels[preset.Id].Text = CompactLine(Loc.GetString(preset.SummaryLocKey));
+        }
     }
 
     private void SelectBattleTactic(string tacticId)
@@ -352,7 +395,7 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
     private void RefreshSelectionPreview()
     {
         var display = ResolveBattleTacticDisplay(_selectedBattleTacticId);
-        _selectedBattleTacticLine.Text = CompactLine(Loc.GetString("wh40k-command-node-battle-tactic-window-selected",
+        _selectedBattleTacticLine.Text = CompactLine(Loc.GetString("w40k-cmd-battle-tactic-window-selected",
             ("tactic", display.Name)));
         _selectedBattleTacticLine.ModulateSelfOverride = _accent;
 
@@ -363,8 +406,8 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         var time = FormatCooldownTime(_battleTacticCooldownSeconds);
 
         _cooldownLine.Text = cooldownActive
-            ? Loc.GetString("wh40k-command-node-battle-tactic-window-cooldown-active", ("time", time))
-            : Loc.GetString("wh40k-command-node-battle-tactic-window-cooldown-ready");
+            ? Loc.GetString("w40k-cmd-battle-tactic-window-cooldown-active", ("time", time))
+            : Loc.GetString("w40k-cmd-battle-tactic-window-cooldown-ready");
         _cooldownLine.ModulateSelfOverride = cooldownActive
             ? WH40KCommandUiStyles.WarningBadge
             : WH40KCommandUiStyles.ReadyBadge;
@@ -372,14 +415,14 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
         _cooldownBadge.PanelOverride = cooldownActive
             ? WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#3A2E1D".AsSpan()), WH40KCommandUiStyles.WarningBadge)
             : WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#223B2F".AsSpan()), WH40KCommandUiStyles.ReadyBadge);
-        _cooldownBadgeLabel.Text = cooldownActive ? time : Loc.GetString("wh40k-command-node-status-badge-ready");
+        _cooldownBadgeLabel.Text = cooldownActive ? time : Loc.GetString("w40k-cmd-status-badge-ready");
 
         _assignButton.Disabled = assigned || cooldownActive;
         _assignButton.Text = assigned
-            ? Loc.GetString("wh40k-command-node-battle-tactic-window-assigned-button")
+            ? Loc.GetString("w40k-cmd-battle-tactic-window-assigned-button")
             : cooldownActive
-                ? Loc.GetString("wh40k-command-node-battle-tactic-window-cooldown-button", ("time", time))
-                : Loc.GetString("wh40k-command-node-battle-tactic-window-assign-button");
+                ? Loc.GetString("w40k-cmd-battle-tactic-window-cooldown-button", ("time", time))
+                : Loc.GetString("w40k-cmd-battle-tactic-window-assign-button");
     }
 
     private void RefreshRows()
@@ -411,10 +454,10 @@ public sealed class WH40KCommandNodeBattleTacticWindow : FancyWindow
                 : WH40KCommandUiStyles.MutedText;
 
             button.Text = isActive
-                ? Loc.GetString("wh40k-command-node-battle-tactic-window-row-active-button")
+                ? Loc.GetString("w40k-cmd-battle-tactic-window-row-active-button")
                 : isSelected
-                    ? Loc.GetString("wh40k-command-node-battle-tactic-window-row-selected-button")
-                    : Loc.GetString("wh40k-command-node-battle-tactic-window-select-button");
+                    ? Loc.GetString("w40k-cmd-battle-tactic-window-row-selected-button")
+                    : Loc.GetString("w40k-cmd-battle-tactic-window-select-button");
             button.Disabled = isActive;
         }
     }

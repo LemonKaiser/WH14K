@@ -54,6 +54,7 @@ namespace Content.Client.Lathe.UI
                     _menu?.PopulateQueueList(msg.Queue);
                     _menu?.SetQueueInfo(
                         msg.CurrentlyProducing,
+                        msg.ActiveBatch,
                         msg.Queue,
                         msg.IsProducing,
                         msg.ProductionStartTime,

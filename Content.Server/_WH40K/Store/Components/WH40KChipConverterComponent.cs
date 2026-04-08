@@ -37,15 +37,6 @@ public sealed partial class WH40KChipConverterComponent : Component
     [DataField]
     public int MaxConcurrentJobsTier3 = 3;
 
-    [DataField]
-    public int MaterialStorageLimitTier1 = 10;
-
-    [DataField]
-    public int MaterialStorageLimitTier2 = 25;
-
-    [DataField]
-    public int MaterialStorageLimitTier3 = 50;
-
     [ViewVariables]
     public TimeSpan NextUpdate;
 }

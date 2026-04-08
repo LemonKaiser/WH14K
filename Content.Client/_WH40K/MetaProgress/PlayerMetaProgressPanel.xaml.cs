@@ -121,11 +121,14 @@ public sealed partial class PlayerMetaProgressPanel : PanelContainer
         LobbyPanelOpacityHelper.ApplyPanelOpacity(LevelBadgeContainer, opacity);
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
         if (disposing)
             _cfg.UnsubValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged);
 
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
     }
 }

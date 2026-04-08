@@ -12,8 +12,10 @@
     interfaces:
       enum.WH40KChaosSkrizhalUiKey.PatronSelection:
         type: WH40KChaosSkrizhalBoundUserInterface
+      enum.WH40KChaosSkrizhalUiKey.PatronCultistInfo:
+        type: WH40KChaosSkrizhalCultistBoundUserInterface
       enum.WH40KChaosSkrizhalUiKey.PatronBranch:
-        type: WH40KChaosSkrizhalBranchBoundUserInterface
+        type: WH40KChaosSkrizhalLeaderBoundUserInterface
   - type: ItemToggle
   - type: Appearance
 

@@ -71,10 +71,10 @@
     delay: 10.0
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: Gorjet
   id: NecklaceChaosCultistReflectWeak
   name: ожерелье культиста
-  description: Зловещее ожерелье, украшенное символами Хаоса. Лишь изредка, почти случайно, оно вспыхивает энергией варпа и отражает снаряды обратно.
+  description: Зловещее ожерелье, украшенное символами Хаоса. Оно вспыхивает энергией варпа и разворачивает слабый защитный щит.
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
@@ -82,14 +82,9 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
-
-- type: entity
-  parent: Gorjet
-  id: ClothingNeckCloakVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi
-    state: icon
-  - type: Clothing
-    sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi
+  - type: EnergyDomeGenerator
+    teamId: Heretics
+    color: Red
+    domePrototype: EnergyDomeSmallRed
+    bubbleDomePrototype: EnergyDomeSmallRed
+    wallDomePrototype: EnergyDomeSmallRedDirected

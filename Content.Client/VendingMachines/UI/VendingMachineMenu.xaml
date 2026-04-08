@@ -3,20 +3,163 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:co="clr-namespace:Content.Client.UserInterface.Controls"
-    MinHeight="210">
-    <BoxContainer Name="MainContainer" Orientation="Vertical">
-        <LineEdit Name="SearchBar" PlaceHolder="{Loc 'vending-machine-component-search-filter'}" HorizontalExpand="True"  Margin ="4 4"/>
-        <co:SearchListContainer Name="VendingContents" VerticalExpand="True" Margin="4 4"/>
-         <!-- Footer -->
-        <BoxContainer Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
-            <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'vending-machine-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'vending-machine-flavor-right'}" StyleClasses="WindowFooterText"
-                        HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
-                <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
-                        VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
-            </BoxContainer>
+    MinSize="980 680"
+    SetSize="1080 760">
+    <PanelContainer Name="RootFrame">
+        <BoxContainer Name="RootLayout"
+                      Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <PanelContainer Name="HeaderPanel"
+                            Margin="10 8 10 0">
+                <BoxContainer Orientation="Vertical"
+                              Margin="14 12 14 12"
+                              SeparationOverride="12">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="12">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="3">
+                            <Label Name="HeaderTitleLabel"
+                                   Text="Vending Machine"
+                                   StyleClasses="LabelKeyText" />
+                            <RichTextLabel Name="HeaderSubtitleLabel"
+                                           Text="{Loc 'vending-machine-ui-header-subtitle-fallback'}"
+                                           HorizontalExpand="True" />
+                        </BoxContainer>
+
+                        <PanelContainer Name="StatusPanel"
+                                        MinWidth="290">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="6">
+                                <Label Name="StatusPanelTitleLabel"
+                                       Text="{Loc 'vending-machine-ui-status-panel-title'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="StatusValueLabel"
+                                       Text="{Loc 'vending-machine-ui-status-ready'}" />
+                                <RichTextLabel Name="StatusHintLabel"
+                                               Text="{Loc 'vending-machine-ui-status-hint-ready'}"
+                                               HorizontalExpand="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8">
+                        <PanelContainer Name="StockCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="StockCardLabel"
+                                       Text="{Loc 'vending-machine-ui-summary-stock-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="StockValueLabel"
+                                       Text="0/0" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="CatalogCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="CatalogCardLabel"
+                                       Text="{Loc 'vending-machine-ui-summary-catalog-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="CatalogValueLabel"
+                                       Text="0/0" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="FilterCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="FilterCardLabel"
+                                       Text="{Loc 'vending-machine-ui-summary-filter-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="FilterValueLabel"
+                                       Text="{Loc 'vending-machine-ui-filter-all'}" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="SpecialCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="SpecialCardLabel"
+                                       Text="{Loc 'vending-machine-ui-summary-special-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="SpecialValueLabel"
+                                       Text="0" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+
+                    <PanelContainer Name="SearchPanel">
+                        <BoxContainer Orientation="Horizontal"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="8">
+                            <LineEdit Name="SearchBar"
+                                      PlaceHolder="{Loc 'vending-machine-component-search-filter'}"
+                                      HorizontalExpand="True" />
+                            <controls:ThemedOptionButton Name="FilterOption"
+                                                          MinWidth="220" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="CatalogPanel"
+                            Margin="10 10 10 0"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True">
+                    <PanelContainer Name="CatalogHeaderPanel">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="3">
+                            <Label Name="CatalogTitleLabel"
+                                   Text="{Loc 'vending-machine-ui-catalog-title'}"
+                                   StyleClasses="LabelKeyText" />
+                            <RichTextLabel Name="CatalogSubtitleLabel"
+                                           Text="{Loc 'vending-machine-ui-catalog-subtitle'}"
+                                           HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="CatalogBodyPanel"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True"
+                                    Margin="8 8 8 8">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      SeparationOverride="6">
+                            <Label Name="CatalogEmptyLabel"
+                                   Text="{Loc 'vending-machine-ui-catalog-empty-filter'}"
+                                   HorizontalAlignment="Center"
+                                   Visible="False" />
+                            <co:SearchListContainer Name="VendingContents"
+                                                    HorizontalExpand="True"
+                                                    VerticalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="FooterDivider"
+                            Margin="10 10 10 0" />
+            <RichTextLabel Name="FooterLabel"
+                           Text="{Loc 'vending-machine-ui-footer-default'}"
+                           Margin="12 6 12 10"
+                           HorizontalExpand="True" />
         </BoxContainer>
-    </BoxContainer>
+    </PanelContainer>
 </controls:FancyWindow>

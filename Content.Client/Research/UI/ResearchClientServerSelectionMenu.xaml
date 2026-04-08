@@ -1,9 +1,132 @@
-﻿<DefaultWindow xmlns="https://spacestation14.io"
-            Title="{Loc 'research-client-server-selection-menu-title'}"
-            MinSize="300 300"
-            SetSize="300 300">
-    <ItemList Name="Servers"
-              SelectMode="Single">
-        <!-- Servers are added here by code -->
-    </ItemList>
-</DefaultWindow>
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'research-client-server-selection-menu-title'}"
+                      MinSize="420 360"
+                      SetSize="470 440">
+    <BoxContainer Name="RootLayout"
+                  Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True">
+
+        <PanelContainer Name="MainFrame"
+                        HorizontalExpand="True"
+                        VerticalExpand="True">
+            <BoxContainer Orientation="Vertical"
+                          VerticalExpand="True"
+                          Margin="10 8 10 8"
+                          SeparationOverride="10">
+
+                <PanelContainer Name="HeaderPanel">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="12 10 12 10"
+                                  SeparationOverride="3">
+                        <Label Name="HeaderTitleLabel"
+                               Text="{Loc 'research-client-server-selection-menu-title'}"
+                               StyleClasses="LabelKeyText" />
+                        <RichTextLabel Name="HeaderSubtitleLabel"
+                                       Text="{Loc 'research-client-server-selection-menu-subtitle'}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="8">
+                    <PanelContainer Name="SelectedServerCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="4">
+                            <Label Name="SelectedServerCardLabel"
+                                   Text="{Loc 'research-client-server-selection-menu-selected-label'}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="SelectedServerValueLabel"
+                                   Text="{Loc 'research-client-server-selection-menu-none'}"
+                                   ClipText="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="ServerCountCard"
+                                    MinWidth="132">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="12 10 12 10"
+                                      SeparationOverride="4">
+                            <Label Name="ServerCountCardLabel"
+                                   Text="{Loc 'research-client-server-selection-menu-count-label'}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="ServerCountValueLabel"
+                                   Text="0" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <PanelContainer Name="ServerListPanel"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  VerticalExpand="True">
+                        <PanelContainer Name="ServerListHeaderPanel">
+                            <BoxContainer Orientation="Horizontal"
+                                          Margin="12 9 12 9"
+                                          SeparationOverride="6">
+                                <Label Name="ServerListHeaderLabel"
+                                       Text="{Loc 'research-client-server-selection-menu-list-label'}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="ServerListCountLabel"
+                                       Text="0"
+                                       HorizontalAlignment="Right"
+                                       StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="ServerListBodyPanel"
+                                        VerticalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          VerticalExpand="True">
+                                <Label Name="NoServersLabel"
+                                       Text="{Loc 'research-client-server-selection-menu-empty'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0 18 0 0"
+                                       Visible="False" />
+
+                                <ScrollContainer Name="ServerListScroll"
+                                                 HScrollEnabled="False"
+                                                 HorizontalExpand="True"
+                                                 VerticalExpand="True">
+                                    <BoxContainer Name="ServerCardsContainer"
+                                                  Orientation="Vertical"
+                                                  VerticalExpand="True"
+                                                  Margin="6"
+                                                  SeparationOverride="4" />
+                                </ScrollContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Name="FooterWrapper"
+                      Orientation="Vertical"
+                      VerticalAlignment="Bottom">
+            <PanelContainer Name="FooterDivider" />
+
+            <BoxContainer Name="FooterBar"
+                          Orientation="Horizontal"
+                          Margin="12 0 6 2"
+                          VerticalAlignment="Bottom">
+                <Label Name="FooterLeftLabel"
+                       Text="{Loc 'research-client-server-selection-menu-footer-ready'}"
+                       StyleClasses="WindowFooterText" />
+
+                <Label Name="FooterRightLabel"
+                       Text="{Loc 'research-console-footer-right-panel'}"
+                       StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right"
+                       HorizontalExpand="True"
+                       Margin="0 0 4 0" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

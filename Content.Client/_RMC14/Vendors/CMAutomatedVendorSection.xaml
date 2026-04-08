@@ -1,11 +1,27 @@
 <controls:CMAutomatedVendorSection
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Vendors"
-    xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-    Margin="0 15 0 0">
-    <BoxContainer Orientation="Vertical">
-        <RichTextLabel Name="Label" Access="Public" />
-        <customControls:HSeparator />
-        <BoxContainer Orientation="Vertical" Name="Entries" Access="Public" SeparationOverride="2" Margin="0 10 0 0" />
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Margin="0 4 0 0">
+    <BoxContainer Orientation="Vertical" SeparationOverride="2">
+        <!-- SECTION HEADER -->
+        <PanelContainer>
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat BackgroundColor="#0E0F14"
+                                       BorderColor="#3D3422"
+                                       BorderThickness="2 0 0 0"
+                                       ContentMarginLeftOverride="10"
+                                       ContentMarginRightOverride="8"
+                                       ContentMarginTopOverride="5"
+                                       ContentMarginBottomOverride="5" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <Label Text="◆" FontColorOverride="#7A6832" />
+                <RichTextLabel Name="Label" Access="Public" />
+            </BoxContainer>
+        </PanelContainer>
+        <!-- ENTRIES -->
+        <BoxContainer Orientation="Vertical" Name="Entries" Access="Public"
+                      SeparationOverride="1" Margin="0 1 0 0" />
     </BoxContainer>
 </controls:CMAutomatedVendorSection>

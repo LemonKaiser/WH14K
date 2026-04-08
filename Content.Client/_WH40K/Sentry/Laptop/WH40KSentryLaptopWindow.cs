@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Client.Localization;
 using Content.Client.Viewport;
 using Content.Shared._WH40K.Sentry.Laptop;
 using Content.Shared.Turrets;
@@ -13,7 +14,7 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Sentry.Laptop;
 
-public sealed class WH40KSentryLaptopWindow : DefaultWindow
+public sealed class WH40KSentryLaptopWindow : DefaultWindow, ILocalizedControl
 {
     private readonly Label _summaryLabel;
     private readonly Button _refreshButton;
@@ -21,12 +22,17 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
     private readonly Button _powerAllOnButton;
     private readonly Button _powerAllOffButton;
     private readonly Button _resetAllButton;
+    private readonly Label _globalIffTitleLabel;
     private readonly BoxContainer _globalIffContainer;
     private readonly BoxContainer _turretList;
+    private readonly Label _alertsTitleLabel;
     private readonly BoxContainer _alertList;
     private readonly PanelContainer _cameraPanel;
     private readonly Label _cameraTitle;
     private readonly Button _closeCameraButton;
+    private WH40KSentryLaptopBuiState? _latestState;
+    private bool _cameraEnabled;
+    private string? _cameraTitleText;
 
     private Action? _onRefresh;
     private Action? _onUnlinkAll;
@@ -45,7 +51,6 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
 
     public WH40KSentryLaptopWindow()
     {
-        Title = Loc.GetString("wh40k-sentry-laptop-ui-title");
         MinSize = SetSize = new Vector2(1220, 760);
 
         var root = new BoxContainer
@@ -119,11 +124,12 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
         globalButtons.AddChild(_resetAllButton);
         globalRoot.AddChild(globalButtons);
 
-        globalRoot.AddChild(new Label
+        _globalIffTitleLabel = new Label
         {
             Text = Loc.GetString("wh40k-sentry-laptop-ui-global-iff"),
             Modulate = Color.LightGray,
-        });
+        };
+        globalRoot.AddChild(_globalIffTitleLabel);
 
         _globalIffContainer = new BoxContainer
         {
@@ -186,7 +192,8 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
             VerticalExpand = true,
         };
 
-        alertRoot.AddChild(new Label { Text = Loc.GetString("wh40k-sentry-laptop-ui-alerts-title") });
+        _alertsTitleLabel = new Label { Text = Loc.GetString("wh40k-sentry-laptop-ui-alerts-title") };
+        alertRoot.AddChild(_alertsTitleLabel);
 
         var alertScroll = new ScrollContainer
         {
@@ -259,6 +266,26 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
         content.AddChild(side);
         root.AddChild(content);
         ContentsContainer.AddChild(root);
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("wh40k-sentry-laptop-ui-title");
+        _refreshButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-refresh");
+        _unlinkAllButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-unlink-all");
+        _powerAllOnButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-power-all-on");
+        _powerAllOffButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-power-all-off");
+        _resetAllButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-reset-all-targeting");
+        _globalIffTitleLabel.Text = Loc.GetString("wh40k-sentry-laptop-ui-global-iff");
+        _alertsTitleLabel.Text = Loc.GetString("wh40k-sentry-laptop-ui-alerts-title");
+        _closeCameraButton.Text = Loc.GetString("wh40k-sentry-laptop-ui-close-camera");
+        _cameraTitle.Text = _cameraEnabled
+            ? _cameraTitleText ?? Loc.GetString("wh40k-sentry-laptop-ui-camera-title-unavailable")
+            : Loc.GetString("wh40k-sentry-laptop-ui-camera-title-idle");
+
+        if (_latestState != null)
+            ApplyState(_latestState);
     }
 
     public void BindActions(
@@ -289,6 +316,7 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
 
     public void ApplyState(WH40KSentryLaptopBuiState state)
     {
+        _latestState = state;
         _summaryLabel.Text = Loc.GetString(
             "wh40k-sentry-laptop-ui-summary",
             ("linked", state.LinkedCount),
@@ -362,6 +390,8 @@ public sealed class WH40KSentryLaptopWindow : DefaultWindow
 
     public void SetCameraState(bool enabled, string title)
     {
+        _cameraEnabled = enabled;
+        _cameraTitleText = title;
         _cameraPanel.Visible = enabled;
         _cameraTitle.Text = title;
 

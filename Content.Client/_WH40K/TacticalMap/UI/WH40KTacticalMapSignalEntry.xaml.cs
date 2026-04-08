@@ -23,7 +23,7 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
-        var title = WH40KTacticalMapLoc.LocalizeCaptureLabel(marker.Callsign, marker.Label);
+        var title = WH40KTacticalMapLoc.LocalizeStrategicLabel(marker);
         var ownerName = WH40KTacticalMapLoc.LocalizeTeamName(marker.OwnerTeamId, marker.OwnerDisplayName);
         var capturingName = WH40KTacticalMapLoc.LocalizeTeamName(marker.CapturingTeamId, marker.CapturingDisplayName);
 
@@ -56,6 +56,27 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
         var rewardText = marker.FrontReward > 0
             ? Loc.GetString("wh40k-tactical-map-front-reward-short", ("reward", marker.FrontReward))
             : string.Empty;
+
+        if (marker.Kind == WH40KTacticalMapStrategicMarkerKind.CommandNode)
+        {
+            var teamName = string.IsNullOrWhiteSpace(ownerName)
+                ? marker.OwnerDisplayName
+                : ownerName;
+
+            return marker.Relation switch
+            {
+                WH40KTacticalMapStrategicRelation.Allied => Loc.GetString(
+                    "wh40k-tactical-map-command-node-status-allied",
+                    ("reward", rewardText)),
+                WH40KTacticalMapStrategicRelation.Hostile => Loc.GetString(
+                    "wh40k-tactical-map-command-node-status-hostile",
+                    ("team", teamName),
+                    ("reward", rewardText)),
+                _ => Loc.GetString(
+                    "wh40k-tactical-map-command-node-status-neutral",
+                    ("reward", rewardText))
+            };
+        }
 
         if (!string.IsNullOrWhiteSpace(marker.CapturingTeamId) && marker.CaptureProgress > 0f)
         {
@@ -100,6 +121,6 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
         if (!string.IsNullOrWhiteSpace(marker.OwnerTeamId))
             return marker.OwnerColor;
 
-        return Color.FromHex("#7F8790".AsSpan());
+        return Color.FromHex("#B7C1CF".AsSpan());
     }
 }

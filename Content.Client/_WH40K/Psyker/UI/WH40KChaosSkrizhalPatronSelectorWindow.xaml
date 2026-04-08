@@ -3,142 +3,190 @@
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc 'wh40k-chaos-selector-title'}"
-    MinSize="1120 700"
-    SetSize="1180 720">
-    <PanelContainer Margin="6">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat
-                BackgroundColor="#111017"
-                BorderColor="#5E4F66"
-                BorderThickness="2"
-                ContentMarginLeftOverride="12"
-                ContentMarginTopOverride="12"
-                ContentMarginRightOverride="12"
-                ContentMarginBottomOverride="12" />
-        </PanelContainer.PanelOverride>
-        <BoxContainer Orientation="Vertical" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
-            <PanelContainer>
+    MinSize="1360 840"
+    SetSize="1440 900">
+    <BoxContainer Orientation="Vertical" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer Name="CardStagePanel" HorizontalExpand="True" VerticalExpand="True">
                 <PanelContainer.PanelOverride>
                     <gfx:StyleBoxFlat
-                        BackgroundColor="#1B1824"
-                        BorderColor="#6A5A73"
-                        BorderThickness="1"
-                        ContentMarginLeftOverride="10"
-                        ContentMarginTopOverride="8"
-                        ContentMarginRightOverride="10"
-                        ContentMarginBottomOverride="8" />
+                        BackgroundColor="#00000000"
+                        BorderColor="#00000000"
+                        BorderThickness="0"
+                        ContentMarginLeftOverride="0"
+                        ContentMarginTopOverride="0"
+                        ContentMarginRightOverride="0"
+                        ContentMarginBottomOverride="0" />
                 </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" SeparationOverride="5">
-                    <Label Name="SelectorHeaderLabel" HorizontalAlignment="Center" FontColorOverride="#F3E3CF" />
-                    <RichTextLabel Name="SelectorStatusLabel" HorizontalExpand="True" />
-                </BoxContainer>
+                <LayoutContainer Name="CardCanvas" HorizontalExpand="True" VerticalExpand="True" RectClipContent="False">
+                    <PanelContainer Name="FocusSigilPanel" MinSize="62 62" SetSize="62 62">
+                        <TextureRect Name="FocusSigilIcon" MinSize="40 40" SetSize="40 40" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </PanelContainer>
+
+                    <PanelContainer Name="KhorneEntryPanel" MinSize="286 620">
+                        <BoxContainer Orientation="Vertical" SeparationOverride="9" HorizontalExpand="True" VerticalExpand="True">
+                            <PanelContainer Name="KhorneAccentBar" MinHeight="5" />
+                            <PanelContainer Name="KhorneHaloPanel" MinSize="108 108" SetSize="108 108" HorizontalAlignment="Center">
+                                <TextureRect Name="KhorneIcon" MinSize="74 74" SetSize="74 74" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </PanelContainer>
+                            <Label Name="KhorneTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F5E8D4" />
+                            <Label Name="KhorneDomainLabel" HorizontalAlignment="Center" FontColorOverride="#C7797D" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-doctrine-header'}" FontColorOverride="#D7BC72" />
+                            <RichTextLabel Name="KhorneDescriptionLabel" HorizontalExpand="True" MaxHeight="84" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-gifts-header'}" FontColorOverride="#D7BC72" />
+                            <Control MinHeight="6" />
+                            <BoxContainer Name="KhorneGiftIconRow" Orientation="Horizontal" SeparationOverride="14" HorizontalAlignment="Center" HorizontalExpand="True">
+                                <PanelContainer Name="KhorneGiftOnePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="KhorneGiftOneIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="KhorneGiftTwoPanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="KhorneGiftTwoIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="KhorneGiftThreePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="KhorneGiftThreeIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                            </BoxContainer>
+                            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False" MinHeight="104">
+                                <RichTextLabel Name="KhorneGiftSummaryLabel" HorizontalExpand="True" RectClipContent="True" />
+                            </ScrollContainer>
+                            <Control MinHeight="4" />
+                            <PanelContainer Name="KhorneLeaderPanel" HorizontalExpand="True" MinHeight="76">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True" VerticalExpand="True">
+                                    <Label Text="{Loc 'wh40k-chaos-selector-leader-header'}" HorizontalAlignment="Center" FontColorOverride="#D7BC72" />
+                                    <Label Name="KhorneStatusLabel" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#F5E8D4" />
+                                </BoxContainer>
+                            </PanelContainer>
+                            <Control MinHeight="10" />
+                            <Button Name="KhorneSelectButton" MinSize="0 42" HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="NurgleEntryPanel" MinSize="286 620">
+                        <BoxContainer Orientation="Vertical" SeparationOverride="9" HorizontalExpand="True" VerticalExpand="True">
+                            <PanelContainer Name="NurgleAccentBar" MinHeight="5" />
+                            <PanelContainer Name="NurgleHaloPanel" MinSize="108 108" SetSize="108 108" HorizontalAlignment="Center">
+                                <TextureRect Name="NurgleIcon" MinSize="74 74" SetSize="74 74" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </PanelContainer>
+                            <Label Name="NurgleTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F5E8D4" />
+                            <Label Name="NurgleDomainLabel" HorizontalAlignment="Center" FontColorOverride="#8DCA8F" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-doctrine-header'}" FontColorOverride="#D7BC72" />
+                            <RichTextLabel Name="NurgleDescriptionLabel" HorizontalExpand="True" MaxHeight="84" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-gifts-header'}" FontColorOverride="#D7BC72" />
+                            <Control MinHeight="6" />
+                            <BoxContainer Name="NurgleGiftIconRow" Orientation="Horizontal" SeparationOverride="14" HorizontalAlignment="Center" HorizontalExpand="True">
+                                <PanelContainer Name="NurgleGiftOnePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="NurgleGiftOneIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="NurgleGiftTwoPanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="NurgleGiftTwoIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="NurgleGiftThreePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="NurgleGiftThreeIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                            </BoxContainer>
+                            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False" MinHeight="104">
+                                <RichTextLabel Name="NurgleGiftSummaryLabel" HorizontalExpand="True" RectClipContent="True" />
+                            </ScrollContainer>
+                            <Control MinHeight="4" />
+                            <PanelContainer Name="NurgleLeaderPanel" HorizontalExpand="True" MinHeight="76">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True" VerticalExpand="True">
+                                    <Label Text="{Loc 'wh40k-chaos-selector-leader-header'}" HorizontalAlignment="Center" FontColorOverride="#D7BC72" />
+                                    <Label Name="NurgleStatusLabel" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#F5E8D4" />
+                                </BoxContainer>
+                            </PanelContainer>
+                            <Control MinHeight="10" />
+                            <Button Name="NurgleSelectButton" MinSize="0 42" HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="SlaaneshEntryPanel" MinSize="286 620">
+                        <BoxContainer Orientation="Vertical" SeparationOverride="9" HorizontalExpand="True" VerticalExpand="True">
+                            <PanelContainer Name="SlaaneshAccentBar" MinHeight="5" />
+                            <PanelContainer Name="SlaaneshHaloPanel" MinSize="108 108" SetSize="108 108" HorizontalAlignment="Center">
+                                <TextureRect Name="SlaaneshIcon" MinSize="74 74" SetSize="74 74" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </PanelContainer>
+                            <Label Name="SlaaneshTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F5E8D4" />
+                            <Label Name="SlaaneshDomainLabel" HorizontalAlignment="Center" FontColorOverride="#C68FE6" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-doctrine-header'}" FontColorOverride="#D7BC72" />
+                            <RichTextLabel Name="SlaaneshDescriptionLabel" HorizontalExpand="True" MaxHeight="84" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-gifts-header'}" FontColorOverride="#D7BC72" />
+                            <Control MinHeight="6" />
+                            <BoxContainer Name="SlaaneshGiftIconRow" Orientation="Horizontal" SeparationOverride="14" HorizontalAlignment="Center" HorizontalExpand="True">
+                                <PanelContainer Name="SlaaneshGiftOnePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="SlaaneshGiftOneIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="SlaaneshGiftTwoPanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="SlaaneshGiftTwoIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="SlaaneshGiftThreePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="SlaaneshGiftThreeIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                            </BoxContainer>
+                            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False" MinHeight="104">
+                                <RichTextLabel Name="SlaaneshGiftSummaryLabel" HorizontalExpand="True" RectClipContent="True" />
+                            </ScrollContainer>
+                            <Control MinHeight="4" />
+                            <PanelContainer Name="SlaaneshLeaderPanel" HorizontalExpand="True" MinHeight="76">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True" VerticalExpand="True">
+                                    <Label Text="{Loc 'wh40k-chaos-selector-leader-header'}" HorizontalAlignment="Center" FontColorOverride="#D7BC72" />
+                                    <Label Name="SlaaneshStatusLabel" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#F5E8D4" />
+                                </BoxContainer>
+                            </PanelContainer>
+                            <Control MinHeight="10" />
+                            <Button Name="SlaaneshSelectButton" MinSize="0 42" HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="TzeentchEntryPanel" MinSize="286 620">
+                        <BoxContainer Orientation="Vertical" SeparationOverride="9" HorizontalExpand="True" VerticalExpand="True">
+                            <PanelContainer Name="TzeentchAccentBar" MinHeight="5" />
+                            <PanelContainer Name="TzeentchHaloPanel" MinSize="108 108" SetSize="108 108" HorizontalAlignment="Center">
+                                <TextureRect Name="TzeentchIcon" MinSize="74 74" SetSize="74 74" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </PanelContainer>
+                            <Label Name="TzeentchTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F5E8D4" />
+                            <Label Name="TzeentchDomainLabel" HorizontalAlignment="Center" FontColorOverride="#86C0E7" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-doctrine-header'}" FontColorOverride="#D7BC72" />
+                            <RichTextLabel Name="TzeentchDescriptionLabel" HorizontalExpand="True" MaxHeight="84" />
+                            <Label Text="{Loc 'wh40k-chaos-selector-gifts-header'}" FontColorOverride="#D7BC72" />
+                            <Control MinHeight="6" />
+                            <BoxContainer Name="TzeentchGiftIconRow" Orientation="Horizontal" SeparationOverride="14" HorizontalAlignment="Center" HorizontalExpand="True">
+                                <PanelContainer Name="TzeentchGiftOnePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="TzeentchGiftOneIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="TzeentchGiftTwoPanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="TzeentchGiftTwoIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                                <PanelContainer Name="TzeentchGiftThreePanel" MinSize="60 60" SetSize="60 60">
+                                    <TextureRect Name="TzeentchGiftThreeIcon" MinSize="46 46" SetSize="46 46" Stretch="KeepAspectCentered" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="" />
+                                </PanelContainer>
+                            </BoxContainer>
+                            <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False" MinHeight="104">
+                                <RichTextLabel Name="TzeentchGiftSummaryLabel" HorizontalExpand="True" RectClipContent="True" />
+                            </ScrollContainer>
+                            <Control MinHeight="4" />
+                            <PanelContainer Name="TzeentchLeaderPanel" HorizontalExpand="True" MinHeight="76">
+                                <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True" VerticalExpand="True">
+                                    <Label Text="{Loc 'wh40k-chaos-selector-leader-header'}" HorizontalAlignment="Center" FontColorOverride="#D7BC72" />
+                                    <Label Name="TzeentchStatusLabel" HorizontalAlignment="Center" HorizontalExpand="True" FontColorOverride="#F5E8D4" />
+                                </BoxContainer>
+                            </PanelContainer>
+                            <Control MinHeight="10" />
+                            <Button Name="TzeentchSelectButton" MinSize="0 42" HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </LayoutContainer>
             </PanelContainer>
 
-            <BoxContainer Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
-                <BoxContainer Orientation="Vertical" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
-                    <PanelContainer MinSize="0 278" HorizontalExpand="True" VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat
-                                BackgroundColor="#221116"
-                                BorderColor="#A63D48"
-                                BorderThickness="2"
-                                ContentMarginLeftOverride="10"
-                                ContentMarginTopOverride="8"
-                                ContentMarginRightOverride="10"
-                                ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
-                            <PanelContainer SetHeight="24">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#7C2931" BorderColor="#CD6972" BorderThickness="0 0 0 1" />
-                                </PanelContainer.PanelOverride>
-                                <Label Text="{Loc 'wh40k-chaos-selector-khorne-domain'}" HorizontalAlignment="Center" VerticalAlignment="Center" FontColorOverride="#FFECEC" />
-                            </PanelContainer>
-                            <Label Name="KhorneTitleLabel" HorizontalAlignment="Center" FontColorOverride="#FDE4E5" />
-                            <TextureRect Name="KhorneIcon" MinSize="64 64" SetSize="64 64" Stretch="KeepAspectCentered" HorizontalAlignment="Center" />
-                            <RichTextLabel Name="KhorneDescriptionLabel" VerticalExpand="True" HorizontalExpand="True" MaxWidth="520" />
-                            <Button Name="KhorneSelectButton" HorizontalAlignment="Center" MinSize="240 34" />
+            <PanelContainer Name="PreviewPanel" MinHeight="98" Visible="False">
+                <BoxContainer Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True">
+                    <PanelContainer Name="PreviewAccentBar" MinHeight="4" />
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="12" HorizontalExpand="True" VerticalExpand="True">
+                        <Label Name="PreviewPatronLabel" MinWidth="260" FontColorOverride="#E7F2F7" VerticalAlignment="Center" />
+                        <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" VerticalAlignment="Center">
+                            <Label Name="PreviewStatusLabel" />
+                            <Label Name="PreviewCommitNoteLabel" FontColorOverride="#9FB0BC" />
                         </BoxContainer>
-                    </PanelContainer>
-
-                    <PanelContainer MinSize="0 278" HorizontalExpand="True" VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat
-                                BackgroundColor="#24172C"
-                                BorderColor="#8C56A1"
-                                BorderThickness="2"
-                                ContentMarginLeftOverride="10"
-                                ContentMarginTopOverride="8"
-                                ContentMarginRightOverride="10"
-                                ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
-                            <PanelContainer SetHeight="24">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#603D73" BorderColor="#B982D2" BorderThickness="0 0 0 1" />
-                                </PanelContainer.PanelOverride>
-                                <Label Text="{Loc 'wh40k-chaos-selector-slaanesh-domain'}" HorizontalAlignment="Center" VerticalAlignment="Center" FontColorOverride="#F9EEFF" />
-                            </PanelContainer>
-                            <Label Name="SlaaneshTitleLabel" HorizontalAlignment="Center" FontColorOverride="#F9E9FF" />
-                            <TextureRect Name="SlaaneshIcon" MinSize="64 64" SetSize="64 64" Stretch="KeepAspectCentered" HorizontalAlignment="Center" />
-                            <RichTextLabel Name="SlaaneshDescriptionLabel" VerticalExpand="True" HorizontalExpand="True" MaxWidth="520" />
-                            <Button Name="SlaaneshSelectButton" HorizontalAlignment="Center" MinSize="240 34" />
-                        </BoxContainer>
-                    </PanelContainer>
+                    </BoxContainer>
                 </BoxContainer>
-
-                <BoxContainer Orientation="Vertical" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
-                    <PanelContainer MinSize="0 278" HorizontalExpand="True" VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat
-                                BackgroundColor="#152217"
-                                BorderColor="#4D8C56"
-                                BorderThickness="2"
-                                ContentMarginLeftOverride="10"
-                                ContentMarginTopOverride="8"
-                                ContentMarginRightOverride="10"
-                                ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
-                            <PanelContainer SetHeight="24">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#2D5B33" BorderColor="#7FC588" BorderThickness="0 0 0 1" />
-                                </PanelContainer.PanelOverride>
-                                <Label Text="{Loc 'wh40k-chaos-selector-nurgle-domain'}" HorizontalAlignment="Center" VerticalAlignment="Center" FontColorOverride="#F2FFF3" />
-                            </PanelContainer>
-                            <Label Name="NurgleTitleLabel" HorizontalAlignment="Center" FontColorOverride="#E9FDEB" />
-                            <TextureRect Name="NurgleIcon" MinSize="64 64" SetSize="64 64" Stretch="KeepAspectCentered" HorizontalAlignment="Center" />
-                            <RichTextLabel Name="NurgleDescriptionLabel" VerticalExpand="True" HorizontalExpand="True" MaxWidth="520" />
-                            <Button Name="NurgleSelectButton" HorizontalAlignment="Center" MinSize="240 34" />
-                        </BoxContainer>
-                    </PanelContainer>
-
-                    <PanelContainer MinSize="0 278" HorizontalExpand="True" VerticalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat
-                                BackgroundColor="#142232"
-                                BorderColor="#4E82AD"
-                                BorderThickness="2"
-                                ContentMarginLeftOverride="10"
-                                ContentMarginTopOverride="8"
-                                ContentMarginRightOverride="10"
-                                ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
-                            <PanelContainer SetHeight="24">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#2F587A" BorderColor="#84B8DE" BorderThickness="0 0 0 1" />
-                                </PanelContainer.PanelOverride>
-                                <Label Text="{Loc 'wh40k-chaos-selector-tzeentch-domain'}" HorizontalAlignment="Center" VerticalAlignment="Center" FontColorOverride="#EFF8FF" />
-                            </PanelContainer>
-                            <Label Name="TzeentchTitleLabel" HorizontalAlignment="Center" FontColorOverride="#E8F6FF" />
-                            <TextureRect Name="TzeentchIcon" MinSize="64 64" SetSize="64 64" Stretch="KeepAspectCentered" HorizontalAlignment="Center" />
-                            <RichTextLabel Name="TzeentchDescriptionLabel" VerticalExpand="True" HorizontalExpand="True" MaxWidth="520" />
-                            <Button Name="TzeentchSelectButton" HorizontalAlignment="Center" MinSize="240 34" />
-                        </BoxContainer>
-                    </PanelContainer>
-                </BoxContainer>
-            </BoxContainer>
-        </BoxContainer>
-    </PanelContainer>
+            </PanelContainer>
+    </BoxContainer>
 </controls:FancyWindow>

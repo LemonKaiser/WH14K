@@ -60,6 +60,10 @@ humanoid-profile-editor-flavortext-tab = Description
 # Traits
 humanoid-profile-editor-traits-tab = Traits
 humanoid-profile-editor-no-traits = No traits available
+humanoid-profile-editor-species-entry-admin-only = { $species } [Admin Only]
+humanoid-profile-editor-species-entry-level-locked = { $species } [Level { $level }]
+humanoid-profile-editor-species-entry-admin-level-locked = { $species } [Admin Only, Level { $level }]
+humanoid-profile-editor-species-entry-locked = { $species } [Locked]
 
 humanoid-profile-editor-trait-count-hint = Points available: [{$current}/{$max}]
 

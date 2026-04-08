@@ -27,6 +27,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
+using Content.Server._WH40K.Localizations;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -63,6 +64,7 @@ public sealed class WH40KMortarSystem : EntitySystem
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<EntityUid, int> _lastUiCooldownSeconds = new();
     private readonly Dictionary<(EntityUid User, string Key), TimeSpan> _popupCooldowns = new();
@@ -277,7 +279,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (!TryGetLoadedShell(mortar, out var shellId, out var shellComp))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-no-shell-loaded"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-no-shell-loaded", ("mortar", mortar)), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-no-shell-loaded", ("mortar", mortar)), mortar, user);
 
             UpdateUi(mortar);
             return;
@@ -354,7 +356,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (!foldRequest.Handled)
             return;
 
-        _popup.PopupClient(Loc.GetString("wh40k-mortar-fold-start", ("mortar", mortar)), user, user);
+        _popup.PopupClient(_culture.GetPlayerString(user, "wh40k-mortar-fold-start", ("mortar", mortar)), user, user);
     }
 
     private void OnInteractHand(Entity<WH40KMortarComponent> mortar, ref InteractHandEvent args)
@@ -462,7 +464,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         Dirty(mortar);
         UpdateUi(mortar);
 
-        _popup.PopupEntity(Loc.GetString("wh40k-mortar-target-set"), mortar, args.Actor);
+        _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-mortar-target-set"), mortar, args.Actor);
     }
 
     private void OnSetDial(Entity<WH40KMortarComponent> mortar, ref WH40KMortarSetDialMessage args)
@@ -479,7 +481,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         Dirty(mortar);
         UpdateUi(mortar);
 
-        _popup.PopupEntity(Loc.GetString("wh40k-mortar-dial-set"), mortar, args.Actor);
+        _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-mortar-dial-set"), mortar, args.Actor);
     }
 
     private void OnSetLinkedDesignator(Entity<WH40KMortarComponent> mortar, ref WH40KMortarSetLinkedDesignatorMessage args)
@@ -497,7 +499,7 @@ public sealed class WH40KMortarSystem : EntitySystem
 
         if (designatorId == null)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-link-cleared"), mortar, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-mortar-laser-link-cleared"), mortar, args.Actor);
             return;
         }
 
@@ -522,7 +524,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         var loc = mortar.Comp.LaserTargetingMode
             ? "wh40k-mortar-laser-mode-enabled"
             : "wh40k-mortar-laser-mode-disabled";
-        _popup.PopupEntity(Loc.GetString(loc), mortar, args.Actor);
+        _popup.PopupEntity(_culture.GetPlayerString(args.Actor, loc), mortar, args.Actor);
     }
 
     private void OnInteractUsing(Entity<WH40KMortarComponent> mortar, ref InteractUsingEvent args)
@@ -540,7 +542,7 @@ public sealed class WH40KMortarSystem : EntitySystem
             if (rangefinder.Id is not { } designatorId || designatorId <= 0)
             {
                 if (TryTakeUserPopupCooldown(args.User, "wh40k-mortar-laser-link-invalid"))
-                    _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-link-invalid"), mortar, args.User);
+                    _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-mortar-laser-link-invalid"), mortar, args.User);
                 return;
             }
 
@@ -548,7 +550,7 @@ public sealed class WH40KMortarSystem : EntitySystem
             Dirty(mortar);
             UpdateUi(mortar);
 
-            _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-link-set", ("id", designatorId)), mortar, args.User);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-mortar-laser-link-set", ("id", designatorId)), mortar, args.User);
             return;
         }
 
@@ -560,7 +562,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (TryGetLoadedShell(mortar, out _, out _))
         {
             if (TryTakeUserPopupCooldown(args.User, "wh40k-mortar-shell-busy"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-shell-busy", ("mortar", mortar)), mortar, args.User);
+                _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-mortar-shell-busy", ("mortar", mortar)), mortar, args.User);
 
             return;
         }
@@ -597,7 +599,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (TryGetLoadedShell(mortar, out _, out _))
         {
             if (TryTakeUserPopupCooldown(args.User, "wh40k-mortar-shell-busy"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-shell-busy", ("mortar", mortar)), mortar, args.User);
+                _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-mortar-shell-busy", ("mortar", mortar)), mortar, args.User);
 
             return;
         }
@@ -606,7 +608,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (!_container.Insert(shellId, container))
         {
             if (TryTakeUserPopupCooldown(args.User, "wh40k-mortar-cant-insert"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-cant-insert", ("shell", shellId), ("mortar", mortar)), mortar, args.User);
+                _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-mortar-cant-insert", ("shell", shellId), ("mortar", mortar)), mortar, args.User);
 
             return;
         }
@@ -631,7 +633,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (!TryGetLoadedShell(mortar, out var shellId, out _))
         {
             if (TryTakeUserPopupCooldown(args.Actor, "wh40k-mortar-no-shell-loaded"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-no-shell-loaded", ("mortar", mortar)), mortar, args.Actor);
+                _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-mortar-no-shell-loaded", ("mortar", mortar)), mortar, args.Actor);
 
             UpdateUi(mortar);
             return;
@@ -688,7 +690,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (now < mortar.Comp.LastFiredAt + mortar.Comp.FireDelay)
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-fire-cooldown"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-fire-cooldown", ("mortar", mortar)), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-fire-cooldown", ("mortar", mortar)), mortar, user);
 
             return false;
         }
@@ -697,7 +699,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (!TryGetGroundTile(mortarCoordinates, out var mortarGridUid, out var mortarGrid, out var mortarTile))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-bad-origin"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-bad-origin", ("mortar", mortar)), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-bad-origin", ("mortar", mortar)), mortar, user);
 
             return false;
         }
@@ -705,7 +707,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (IsRoovedTile(mortarGridUid, mortarGrid, mortarTile))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-origin-roofed"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-origin-roofed", ("mortar", mortar)), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-origin-roofed", ("mortar", mortar)), mortar, user);
 
             return false;
         }
@@ -716,7 +718,7 @@ public sealed class WH40KMortarSystem : EntitySystem
             if (mortar.Comp.LinkedDesignatorId is not { } linkedDesignatorId || linkedDesignatorId <= 0)
             {
                 if (TryTakeUserPopupCooldown(user, "wh40k-mortar-laser-no-designator"))
-                    _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-no-designator"), mortar, user);
+                    _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-laser-no-designator"), mortar, user);
                 return false;
             }
 
@@ -727,14 +729,14 @@ public sealed class WH40KMortarSystem : EntitySystem
             if (!resolvedLinkedTarget)
             {
                 if (TryTakeUserPopupCooldown(user, "wh40k-mortar-laser-no-target"))
-                    _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-no-target", ("id", linkedDesignatorId)), mortar, user);
+                    _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-laser-no-target", ("id", linkedDesignatorId)), mortar, user);
                 return false;
             }
 
             if (designatorGridUid != mortarGridUid)
             {
                 if (TryTakeUserPopupCooldown(user, "wh40k-mortar-laser-different-grid"))
-                    _popup.PopupEntity(Loc.GetString("wh40k-mortar-laser-different-grid"), mortar, user);
+                    _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-laser-different-grid"), mortar, user);
                 return false;
             }
 
@@ -785,7 +787,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (target == Vector2i.Zero)
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-not-aimed"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-not-aimed", ("mortar", mortar)), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-not-aimed", ("mortar", mortar)), mortar, user);
 
             return false;
         }
@@ -796,7 +798,7 @@ public sealed class WH40KMortarSystem : EntitySystem
             _turf.IsSpace(tileRef))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-target-invalid"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-target-invalid"), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-target-invalid"), mortar, user);
 
             return false;
         }
@@ -806,7 +808,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (distance < mortar.Comp.MinimumRange)
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-target-too-close"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-target-too-close"), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-target-too-close"), mortar, user);
 
             return false;
         }
@@ -814,7 +816,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (distance > mortar.Comp.MaximumRange)
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-target-too-far"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-target-too-far"), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-target-too-far"), mortar, user);
 
             return false;
         }
@@ -822,7 +824,7 @@ public sealed class WH40KMortarSystem : EntitySystem
         if (IsRoovedTile(mortarGridUid, mortarGrid, finalTile))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-mortar-target-roofed"))
-                _popup.PopupEntity(Loc.GetString("wh40k-mortar-target-roofed"), mortar, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-mortar-target-roofed"), mortar, user);
 
             return false;
         }

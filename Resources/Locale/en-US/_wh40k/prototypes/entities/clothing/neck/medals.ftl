@@ -1,0 +1,19 @@
+ent-ClothingNeckImperialAquilaMedal = aquila medal
+    .desc = An imperial decoration bearing the double-headed Aquila.
+ent-ClothingNeckImperialCrossMedal = merit cross
+    .desc = An imperial decoration for exemplary service.
+ent-ClothingNeckImperialInquisitionSeal = Inquisition seal
+    .desc = A mark of special favor from the Holy Inquisition.
+ent-ClothingNeckImperialGoldenPrize = golden prize
+    .desc = An ornate imperial award cast in gold.
+
+ent-ClothingNeckChaosUndividedMedal = mark of Chaos Undivided
+    .desc = A trophy devoted to the entire pantheon of Chaos.
+ent-ClothingNeckChaosKhorneMedal = mark of Khorne
+    .desc = A blood-soaked trophy honoring the Blood God.
+ent-ClothingNeckChaosNurgleMedal = mark of Nurgle
+    .desc = A rotting mark of Grandfather Nurgle's favor.
+ent-ClothingNeckChaosSlaaneshMedal = mark of Slaanesh
+    .desc = An exquisite trophy honoring the Dark Prince.
+ent-ClothingNeckChaosTzeentchMedal = mark of Tzeentch
+    .desc = A cunning token of the Architect of Fate's patronage.

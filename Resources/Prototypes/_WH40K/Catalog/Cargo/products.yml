@@ -5,7 +5,7 @@
     state: icon
   product: FlashlightLantern
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -15,7 +15,7 @@
     state: icon
   product: WH40KAmmoBox10mmLong
   cost: 1500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -25,7 +25,7 @@
     state: icon
   product: WH40KAmmoBox10mm
   cost: 1500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -35,7 +35,7 @@
     state: icon
   product: WH40KAmmoBoxAutogun
   cost: 1500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -45,7 +45,17 @@
     state: icon
   product: MedkitFilled
   cost: 1200
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumDefibrillator
+  icon:
+    sprite: Objects/Specific/Medical/defib.rsi
+    state: icon
+  product: WH40KDefibrillator
+  cost: 4000
+  category: cpcat-med
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -55,7 +65,7 @@
     state: icon
   product: CrateMaterialPlastic
   cost: 2000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -65,7 +75,7 @@
     state: icon
   product: WeaponLaserLasgun
   cost: 2500
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -75,7 +85,7 @@
     state: icon
   product: WeaponStubRifle
   cost: 2500
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -85,7 +95,7 @@
     state: icon
   product: MagazineStubSMG
   cost: 100
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -95,27 +105,43 @@
     state: icon
   product: MagazineStubPistol
   cost: 75
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
   id: WH40KImperiumMagazineMG
+  name: cargoproduct-name-wh40k-magazine-stub-mg
+  description: cargoproduct-description-wh40k-magazine-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
   cost: 200
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineLMG
+  name: cargoproduct-name-wh40k-magazine-stub-lmg
+  description: cargoproduct-description-wh40k-magazine-stub-lmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStabLMG
+  cost: 150
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
   id: WH40KImperiumMagazineRifle
+  name: cargoproduct-name-wh40k-magazine-stub-rifle
+  description: cargoproduct-description-wh40k-magazine-stub-rifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubRifle
   cost: 75
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -125,7 +151,7 @@
     state: icon
   product: Chainsword
   cost: 6000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -135,7 +161,19 @@
     state: icon
   product: WeaponRifleBolter
   cost: 13000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineBolter
+  name: cargoproduct-name-wh40k-magazine-bolter
+  description: cargoproduct-description-wh40k-magazine-bolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolter
+  cost: 800
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -145,7 +183,7 @@
     state: icon
   product: WH40KHeavyBolter
   cost: 17000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -155,7 +193,7 @@
     state: icon
   product: WH40KMagazineHeavyBolter
   cost: 5000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -165,7 +203,7 @@
     state: icon
   product: WH40KMortarKit
   cost: 20000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -175,7 +213,7 @@
     state: icon
   product: WH40KMortarShellHE
   cost: 5000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -185,7 +223,27 @@
     state: icon
   product: WeaponLaserPlasmagun
   cost: 19000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumHellgun
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
+    state: base
+  product: WeaponHellgun
+  cost: 22000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumHellgunPowerPack
+  icon:
+    sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
+    state: icon
+  product: ClothingBackpackHellEnergy
+  cost: 6000
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -195,7 +253,7 @@
     state: icon
   product: WeaponStubSMG2
   cost: 9000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -205,7 +263,7 @@
     state: icon
   product: WeaponStubPistol
   cost: 1000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -215,17 +273,19 @@
     state: icon
   product: WeaponStubSMG3
   cost: 9000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
   id: WH40KImperiumStubMG
+  name: cargoproduct-name-wh40k-stub-mg
+  description: cargoproduct-description-wh40k-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubMG
   cost: 13000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -235,17 +295,19 @@
     state: icon
   product: WeaponStubShotgun
   cost: 7000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
   id: WH40KImperiumStubLMG
+  name: cargoproduct-name-wh40k-stub-lmg
+  description: cargoproduct-description-wh40k-stub-lmg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubLMG
   cost: 13000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -255,7 +317,7 @@
     state: icon
   product: BoxLasgunPowerCell
   cost: 1250
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -265,7 +327,7 @@
     state: icon
   product: ClothingOuterArmorFlakVest
   cost: 1800
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -275,7 +337,27 @@
     state: icon
   product: ClothingHeadHelmetFlak
   cost: 1200
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumCarapaceArmor
+  icon:
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadv.rsi
+    state: icon
+  product: ClothingOuterArmorAdvancedFlakVest
+  cost: 4200
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumCarapaceHelmet
+  icon:
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetadv.rsi
+    state: icon
+  product: ClothingHeadHelmetFlakAdv
+  cost: 2600
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -285,7 +367,7 @@
     state: icon
   product: MedkitCombatFilled
   cost: 6000
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -295,7 +377,7 @@
     state: icon
   product: MechSentinelBatteryAutogun
   cost: 50000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -305,7 +387,7 @@
     state: base
   product: WH40KWeaponTurretImperium
   cost: 22000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -315,7 +397,7 @@
     state: mini_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumMini
   cost: 18000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -325,7 +407,7 @@
     state: dmr_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumDmr
   cost: 28000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -335,7 +417,7 @@
     state: shotgun_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumShotgun
   cost: 30000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -345,7 +427,7 @@
     state: multilas
   product: WH40KWeaponTurretImperiumLaser
   cost: 34000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -355,7 +437,7 @@
     state: folded_wall
   product: WH40KInflatableCoverKitImperium
   cost: 5500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -365,7 +447,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeBars
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -375,7 +457,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -385,7 +467,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeWarhammer
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -395,7 +477,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeSandbags
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -405,7 +487,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -415,7 +497,17 @@
     state: folded_wall
   product: MaterialWH40KBarbedWire
   cost: 2500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMineExplosive
+  icon:
+    sprite: Objects/Misc/landmine.rsi
+    state: landmine
+  product: WH40KDeployableMineKit
+  cost: 2000
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -425,7 +517,7 @@
     state: pinpointer
   product: WH40KMissionPinpointerKitImperium
   cost: 6500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -435,7 +527,7 @@
     state: pinpointer
   product: WH40KServoSkullMelta
   cost: 7500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -445,7 +537,7 @@
     state: datadetector
   product: WH40KIntelDetectorImperium
   cost: 7000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -455,7 +547,7 @@
     state: trench
   product: WH40KTacticalWhistleImperium
   cost: 3500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -465,7 +557,7 @@
     state: icon
   product: WH40KSignalFlareImperium
   cost: 4200
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -475,7 +567,7 @@
     state: sentrycomp_cl
   product: WH40KSentryLaptopImperium
   cost: 9000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -485,7 +577,7 @@
     state: extraction_pack
   product: WH40KTacticalFultonImperium
   cost: 12000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -495,7 +587,7 @@
     state: icon
   product: FlashlightLantern
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -505,7 +597,7 @@
     state: icon
   product: WH40KAmmoBox10mmLong
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -515,7 +607,7 @@
     state: icon
   product: WH40KAmmoBox10mm
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -525,7 +617,7 @@
     state: icon
   product: WH40KAmmoBoxAutogun
   cost: 500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -535,7 +627,17 @@
     state: icon
   product: MedkitFilled
   cost: 1250
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsDefibrillator
+  icon:
+    sprite: Objects/Specific/Medical/defib.rsi
+    state: icon
+  product: WH40KDefibrillator
+  cost: 4000
+  category: cpcat-med
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -545,7 +647,7 @@
     state: icon
   product: CrateMaterialPlastic
   cost: 2000
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -555,7 +657,7 @@
     state: icon
   product: WeaponLaserLasgun
   cost: 2500
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -565,7 +667,7 @@
     state: icon
   product: WeaponStubRifle
   cost: 2500
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -575,7 +677,7 @@
     state: icon
   product: ChaosMachete
   cost: 6000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -585,7 +687,7 @@
     state: icon
   product: MagazineStubSMG
   cost: 100
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -595,27 +697,43 @@
     state: icon
   product: MagazineStubPistol
   cost: 75
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
   id: WH40KHereticsMagazineMG
+  name: cargoproduct-name-wh40k-magazine-stub-mg
+  description: cargoproduct-description-wh40k-magazine-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
   cost: 200
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineLMG
+  name: cargoproduct-name-wh40k-magazine-stub-lmg
+  description: cargoproduct-description-wh40k-magazine-stub-lmg
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStabLMG
+  cost: 150
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
   id: WH40KHereticsMagazineRifle
+  name: cargoproduct-name-wh40k-magazine-stub-rifle
+  description: cargoproduct-description-wh40k-magazine-stub-rifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubRifle
   cost: 75
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -625,7 +743,7 @@
     state: icon
   product: WeaponChsStubSMG2
   cost: 9000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -635,7 +753,7 @@
     state: icon
   product: WeaponStubSMG
   cost: 1000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -645,17 +763,19 @@
     state: icon
   product: WeaponChsStubSMG3
   cost: 9000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
   id: WH40KHereticsStubMG
+  name: cargoproduct-name-wh40k-stub-mg
+  description: cargoproduct-description-wh40k-stub-mg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubMG
   cost: 13000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -665,17 +785,19 @@
     state: icon
   product: WeaponChsStubShotgun
   cost: 7000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
   id: WH40KHereticsStubLMG
+  name: cargoproduct-name-wh40k-stub-lmg
+  description: cargoproduct-description-wh40k-stub-lmg
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubLMG
   cost: 13000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 
@@ -686,7 +808,19 @@
     state: icon
   product: WeaponPistolBolter
   cost: 16000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineBolterPistol
+  name: cargoproduct-name-wh40k-magazine-bolter-pistol
+  description: cargoproduct-description-wh40k-magazine-bolter-pistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolterPistol
+  cost: 400
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -696,7 +830,7 @@
     state: icon
   product: WH40KHeavyBolter
   cost: 17000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -706,7 +840,7 @@
     state: icon
   product: WH40KMagazineHeavyBolter
   cost: 5000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -716,7 +850,7 @@
     state: icon
   product: WH40KMortarKit
   cost: 20000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -726,7 +860,7 @@
     state: icon
   product: WH40KMortarShellHE
   cost: 5000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -736,7 +870,27 @@
     state: icon
   product: WeaponLaserPlasmaPistol
   cost: 19000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsHellgun
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
+    state: base
+  product: WeaponHellgun
+  cost: 22000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsHellgunPowerPack
+  icon:
+    sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
+    state: icon
+  product: ClothingBackpackHellEnergy
+  cost: 6000
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -746,7 +900,7 @@
     state: icon
   product: BoxLasgunPowerCell
   cost: 1250
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -756,7 +910,7 @@
     state: icon
   product: ClothingOuterArmorFlakVestHeretic
   cost: 1800
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -766,7 +920,27 @@
     state: icon
   product: ClothingHeadHelmetFlakCHAOS
   cost: 1200
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsCarapaceArmor
+  icon:
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
+    state: icon
+  product: ClothingOuterArmorAdvancedFlakVestHeretic
+  cost: 4200
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsCarapaceHelmet
+  icon:
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+    state: icon
+  product: ClothingHeadHelmetFlakAdvHeresy
+  cost: 2600
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -776,7 +950,7 @@
     state: icon
   product: MedkitCombatFilled
   cost: 6000
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -786,7 +960,7 @@
     state: icon
   product: MechSentinelBatteryAutogun
   cost: 50000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -796,7 +970,7 @@
     state: base
   product: WH40KWeaponTurretHeretics
   cost: 22000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -806,7 +980,7 @@
     state: mini_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsMini
   cost: 18000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -816,7 +990,7 @@
     state: dmr_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsDmr
   cost: 28000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -826,7 +1000,7 @@
     state: shotgun_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsShotgun
   cost: 30000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -836,7 +1010,7 @@
     state: multilas
   product: WH40KWeaponTurretHereticsLaser
   cost: 34000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -846,7 +1020,7 @@
     state: folded_wall
   product: WH40KInflatableCoverKitHeretics
   cost: 5500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -856,7 +1030,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeBars
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -866,7 +1040,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -876,7 +1050,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeChaosGreen
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -886,7 +1060,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeChaosBlack
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -896,7 +1070,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeSandbags
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -906,7 +1080,7 @@
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
   cost: 1000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -916,7 +1090,17 @@
     state: folded_wall
   product: MaterialWH40KBarbedWire
   cost: 2500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMineExplosive
+  icon:
+    sprite: Objects/Misc/landmine.rsi
+    state: landmine
+  product: WH40KDeployableMineKit
+  cost: 2000
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -926,7 +1110,7 @@
     state: pinpointer
   product: WH40KMissionPinpointerKitHeretics
   cost: 6500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -936,7 +1120,7 @@
     state: pinpointer
   product: WH40KServoSkullMelta
   cost: 7500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -946,7 +1130,7 @@
     state: datadetector
   product: WH40KIntelDetectorHeretics
   cost: 7000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -956,7 +1140,7 @@
     state: trench
   product: WH40KTacticalWhistleHeretics
   cost: 3500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -966,7 +1150,7 @@
     state: icon
   product: WH40KSignalFlareHeretics
   cost: 4200
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -976,7 +1160,7 @@
     state: sentrycomp_cl
   product: WH40KSentryLaptopHeretics
   cost: 9000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -986,5 +1170,5 @@
     state: extraction_pack
   product: WH40KTacticalFultonHeretics
   cost: 12000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: WH40KHereticsMarket

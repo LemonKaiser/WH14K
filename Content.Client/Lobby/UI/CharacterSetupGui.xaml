@@ -28,7 +28,7 @@
                         Text="{Loc 'wh40k-meta-progress-achievements-button'}"
                         StyleClasses="ButtonBig"/>
                 <Button Name="DecorationsButton"
-                        Text="{Loc 'wh40k-meta-progress-decorations-button'}"
+                        Text="{Loc 'w40k-decs-button'}"
                         StyleClasses="ButtonBig"/>
                 <Button Name="CloseButton"
                         Access="Public"

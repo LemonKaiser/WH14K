@@ -12,6 +12,7 @@ namespace Content.Shared.Light.EntitySystems;
 public abstract class SharedRoofSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
 
     private HashSet<Entity<IsRoofComponent>> _roofSet = new();
 
@@ -87,17 +88,30 @@ public abstract class SharedRoofSystem : EntitySystem
 
     public void SetRoof(Entity<MapGridComponent?, RoofComponent?> grid, Vector2i index, bool value)
     {
-        if (!Resolve(grid, ref grid.Comp1, ref grid.Comp2, false))
+        if (!Resolve(grid, ref grid.Comp1, false))
             return;
+
+        var convertedImplicitRoof = TryEnsureExplicitRoof(ref grid);
 
         var chunkOrigin = SharedMapSystem.GetChunkIndices(index, RoofComponent.ChunkSize);
         var roof = grid.Comp2;
+
+        if (roof == null)
+        {
+            if (!value)
+                return;
+
+            roof = EnsureComp<RoofComponent>(grid.Owner);
+            grid.Comp2 = roof;
+        }
 
         if (!roof.Data.TryGetValue(chunkOrigin, out var chunkData))
         {
             // No value to remove so leave it.
             if (!value)
             {
+                if (convertedImplicitRoof)
+                    Dirty(grid.Owner, roof);
                 return;
             }
 
@@ -111,7 +125,11 @@ public abstract class SharedRoofSystem : EntitySystem
         {
             // Already set
             if ((chunkData & bitFlag) == bitFlag)
+            {
+                if (convertedImplicitRoof)
+                    Dirty(grid.Owner, roof);
                 return;
+            }
 
             chunkData |= bitFlag;
         }
@@ -119,12 +137,43 @@ public abstract class SharedRoofSystem : EntitySystem
         {
             // Not already set
             if ((chunkData & bitFlag) == 0x0)
+            {
+                if (convertedImplicitRoof)
+                    Dirty(grid.Owner, roof);
                 return;
+            }
 
             chunkData &= ~bitFlag;
         }
 
         roof.Data[chunkOrigin] = chunkData;
         Dirty(grid.Owner, roof);
+    }
+
+    private bool TryEnsureExplicitRoof(ref Entity<MapGridComponent?, RoofComponent?> grid)
+    {
+        if (!TryComp<ImplicitRoofComponent>(grid.Owner, out var implicitRoof))
+            return false;
+
+        if (!Resolve(grid.Owner, ref grid.Comp2, false))
+        {
+            grid.Comp2 = EnsureComp<RoofComponent>(grid.Owner);
+            grid.Comp2.Color = implicitRoof.Color;
+        }
+
+        foreach (var tile in _mapSystem.GetAllTiles(grid.Owner, grid.Comp1!))
+        {
+            var chunkOrigin = SharedMapSystem.GetChunkIndices(tile.GridIndices, RoofComponent.ChunkSize);
+            var chunkRelative = SharedMapSystem.GetChunkRelative(tile.GridIndices, RoofComponent.ChunkSize);
+            var bitFlag = (ulong) 1 << (chunkRelative.X + chunkRelative.Y * RoofComponent.ChunkSize);
+
+            if (!grid.Comp2.Data.TryGetValue(chunkOrigin, out var chunkData))
+                chunkData = 0;
+
+            grid.Comp2.Data[chunkOrigin] = chunkData | bitFlag;
+        }
+
+        RemComp<ImplicitRoofComponent>(grid.Owner);
+        return true;
     }
 }

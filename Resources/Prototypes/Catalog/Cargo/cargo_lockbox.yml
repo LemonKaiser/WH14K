@@ -15,7 +15,7 @@
     state: icon
   product: CrateLockBoxMedical
   cost: 100
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: market
 
 - type: cargoProduct

@@ -11,7 +11,9 @@ namespace Content.Shared.Jittering
     public abstract class SharedJitteringSystem : EntitySystem
     {
         [Dependency] protected readonly IGameTiming GameTiming = default!;
+#pragma warning disable CS0618
         [Dependency] protected readonly StatusEffectsSystem StatusEffects = default!;
+#pragma warning restore CS0618
 
         public float MaxAmplitude = 300f;
         public float MinAmplitude = 1f;
@@ -60,7 +62,9 @@ namespace Content.Shared.Jittering
             amplitude = Math.Clamp(amplitude, MinAmplitude, MaxAmplitude);
             frequency = Math.Clamp(frequency, MinFrequency, MaxFrequency);
 
+#pragma warning disable CS0618
             if (StatusEffects.TryAddStatusEffect<JitteringComponent>(uid, "Jitter", time, refresh, status))
+#pragma warning restore CS0618
             {
                 var jittering = Comp<JitteringComponent>(uid);
 

@@ -76,7 +76,9 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     {
         if (_escapeWindow != null)
         {
-            _escapeWindow.Dispose();
+            if (!_escapeWindow.Disposed)
+                _escapeWindow.Orphan();
+
             _escapeWindow = null;
         }
 
@@ -189,7 +191,7 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
             return;
 
         var wasOpen = _escapeWindow.IsOpen;
-        _escapeWindow.Dispose();
+        _escapeWindow.Orphan();
         _escapeWindow = CreateEscapeWindow();
 
         if (!wasOpen)

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from https://github.com/ParadiseSS13/Paradise/ and modified by FoxxoTrystan",
+  "copyright": "Taken from https://github.com/ParadiseSS13/Paradise/ and modified by FoxxoTrystan; WH14K imperium department wall variants and chaos brick/steel walls by Codex",
   "size": {
     "x": 32,
     "y": 32
@@ -62,6 +62,321 @@
     },
     {
       "name": "rgeneric"
+    },
+    {
+      "name": "rgeneric_imp_common"
+    },
+    {
+      "name": "reinf_imp_common0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_common7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_imp_medical"
+    },
+    {
+      "name": "reinf_imp_medical0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_medical7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_imp_supply"
+    },
+    {
+      "name": "reinf_imp_supply0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_supply7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_imp_command"
+    },
+    {
+      "name": "reinf_imp_command0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_command7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_imp_armory"
+    },
+    {
+      "name": "reinf_imp_armory0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_armory7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_imp_mess"
+    },
+    {
+      "name": "reinf_imp_mess0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_imp_mess7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_chaos_brick"
+    },
+    {
+      "name": "reinf_chaos_brick0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_brick7",
+      "directions": 4
+    },
+    {
+      "name": "full_chaos_steel"
+    },
+    {
+      "name": "solid_chaos_steel0",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel1",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel2",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel3",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel4",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel5",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel6",
+      "directions": 4
+    },
+    {
+      "name": "solid_chaos_steel7",
+      "directions": 4
+    },
+    {
+      "name": "rgeneric_chaos_steel"
+    },
+    {
+      "name": "reinf_chaos_steel0",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel1",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel2",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel3",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel4",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel5",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel6",
+      "directions": 4
+    },
+    {
+      "name": "reinf_chaos_steel7",
+      "directions": 4
     },
     {
       "name": "wall_girder"

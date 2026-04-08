@@ -1,5 +1,4 @@
 using Content.Client.Credits;
-using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
@@ -13,6 +12,7 @@ public sealed class RoadmapUIController : UIController
     [Dependency] private readonly IUriOpener _uriOpener = default!;
 
     private RoadmapWindow? _window;
+    private CreditsWindow? _creditsWindow;
 
     public void ToggleRoadmap()
     {
@@ -29,12 +29,22 @@ public sealed class RoadmapUIController : UIController
         if (_config.GetCVar(CCVars.InfoLinksDiscord) is { Length: > 0 } discordLink)
         {
             _window.DiscordButton.Visible = true;
-            _window.DiscordButton.StyleClasses.Add(StyleNano.ButtonCaution);
+            _window.DiscordButton.StyleClasses.Add("negative");
             _window.DiscordButton.OnPressed += _ => _uriOpener.OpenUri(discordLink);
         }
 
-        _window.CreditsButton.StyleClasses.Add(StyleNano.ButtonCaution);
-        _window.CreditsButton.OnPressed += _ => new CreditsWindow().OpenCentered();
+        _window.CreditsButton.StyleClasses.Add("negative");
+        _window.CreditsButton.OnPressed += _ =>
+        {
+            if (_creditsWindow?.IsOpen == true)
+            {
+                _creditsWindow.MoveToFront();
+                return;
+            }
+
+            _creditsWindow = new CreditsWindow();
+            _creditsWindow.OpenCentered();
+        };
 
         _window.OpenCentered();
     }
@@ -45,7 +55,7 @@ public sealed class RoadmapUIController : UIController
             return;
 
         var wasOpen = _window.IsOpen;
-        _window.Dispose();
+        _window.Close();
         _window = null;
 
         if (wasOpen)

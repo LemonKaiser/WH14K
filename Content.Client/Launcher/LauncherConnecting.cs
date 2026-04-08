@@ -72,7 +72,7 @@ namespace Content.Client.Launcher
         {
             foreach (var staleControl in _userInterfaceManager.StateRoot.Children.OfType<LauncherConnectingGui>().ToArray())
             {
-                staleControl.Dispose();
+                staleControl.Orphan();
             }
 
             _control = new LauncherConnectingGui(this, _random, _prototypeManager, _cfg, _clipboard);
@@ -89,7 +89,7 @@ namespace Content.Client.Launcher
 
         protected override void Shutdown()
         {
-            _control?.Dispose();
+            _control?.Orphan();
             _control = null;
 
             _clientNetManager.ConnectFailed -= OnConnectFailed;

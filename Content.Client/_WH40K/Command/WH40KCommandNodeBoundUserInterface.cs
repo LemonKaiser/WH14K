@@ -10,12 +10,9 @@ public sealed class WH40KCommandNodeBoundUserInterface : BoundUserInterface
 {
     private WH40KCommandNodeWindow? _window;
     private WH40KCommandNodeTeamCompositionWindow? _teamCompositionWindow;
-    private WH40KCommandNodeUpgradeSketchWindow? _upgradeSketchWindow;
-    private WH40KCommandNodeMissionBoardWindow? _missionBoardWindow;
     private WH40KCommandNodeTacticalBonusesWindow? _tacticalBonusesWindow;
     private WH40KCommandNodeDoctrineWindow? _doctrineWindow;
     private WH40KCommandNodeBattleTacticWindow? _battleTacticWindow;
-    private WH40KCommandNodeReinforcementWindow? _reinforcementWindow;
     private WH40KCommandNodeBoundUserInterfaceState? _latestState;
     private string _activeBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
 
@@ -28,10 +25,7 @@ public sealed class WH40KCommandNodeBoundUserInterface : BoundUserInterface
         base.Open();
         _window = this.CreateWindow<WH40KCommandNodeWindow>();
         _window.OnUpgradePressed += () => SendMessage(new WH40KCommandNodeUpgradePressedMessage());
-        _window.OnReinforcementPressed += OnReinforcementPressed;
         _window.OnTeamCompositionPressed += OnTeamCompositionPressed;
-        _window.OnUpgradeSketchPressed += OnUpgradeSketchPressed;
-        _window.OnMissionBoardPressed += OnMissionBoardPressed;
         _window.OnTacticalBonusesPressed += OnTacticalBonusesPressed;
         _window.OnDoctrinePressed += OnDoctrinePressed;
         _window.OnBattleTacticPressed += OnBattleTacticPressed;
@@ -54,12 +48,6 @@ public sealed class WH40KCommandNodeBoundUserInterface : BoundUserInterface
         var activeDoctrineId = cast.ActiveDoctrineId;
         var doctrineLocked = cast.DoctrineLocked;
 
-        if (_upgradeSketchWindow is { Disposed: false } sketchWindow)
-            sketchWindow.UpdateState(cast, activeDoctrineId);
-
-        if (_missionBoardWindow is { Disposed: false } missionWindow)
-            missionWindow.UpdateState(cast);
-
         if (_tacticalBonusesWindow is { Disposed: false } tacticalWindow)
             tacticalWindow.UpdateState(cast, activeDoctrineId);
 
@@ -68,40 +56,6 @@ public sealed class WH40KCommandNodeBoundUserInterface : BoundUserInterface
 
         if (_battleTacticWindow is { Disposed: false } battleTacticWindow)
             battleTacticWindow.UpdateState(cast);
-
-        if (_reinforcementWindow is { Disposed: false } reinforcementWindow)
-            reinforcementWindow.UpdateState(cast);
-    }
-
-    private void OnReinforcementPressed()
-    {
-        if (_latestState == null)
-            return;
-
-        if (_reinforcementWindow is not { Disposed: false })
-        {
-            _reinforcementWindow = this.CreateDisposableControl<WH40KCommandNodeReinforcementWindow>();
-            _reinforcementWindow.OnCallRequested += OnReinforcementCallRequested;
-            _reinforcementWindow.OpenCentered();
-        }
-        else if (_reinforcementWindow.IsOpen)
-        {
-            _reinforcementWindow.MoveToFront();
-        }
-        else
-        {
-            _reinforcementWindow.OpenCentered();
-        }
-
-        _reinforcementWindow.UpdateState(_latestState);
-    }
-
-    private void OnReinforcementCallRequested(string optionId, int count)
-    {
-        if (string.IsNullOrWhiteSpace(optionId))
-            return;
-
-        SendMessage(new WH40KCommandNodeCallReinforcementMessage(optionId, count));
     }
 
     private void OnTeamCompositionPressed()
@@ -125,76 +79,6 @@ public sealed class WH40KCommandNodeBoundUserInterface : BoundUserInterface
 
         _teamCompositionWindow.UpdateState(_latestState);
         SendMessage(new WH40KCommandNodeTeamCompositionPressedMessage());
-    }
-
-    private void OnUpgradeSketchPressed()
-    {
-        if (_latestState == null)
-            return;
-
-        var activeDoctrineId = _latestState.ActiveDoctrineId;
-
-        if (_upgradeSketchWindow is not { Disposed: false })
-        {
-            _upgradeSketchWindow = this.CreateDisposableControl<WH40KCommandNodeUpgradeSketchWindow>();
-            _upgradeSketchWindow.OnTreeNodePurchaseRequested += OnTreeNodePurchaseRequested;
-            _upgradeSketchWindow.OpenCentered();
-        }
-        else if (_upgradeSketchWindow.IsOpen)
-        {
-            _upgradeSketchWindow.MoveToFront();
-        }
-        else
-        {
-            _upgradeSketchWindow.OpenCentered();
-        }
-
-        _upgradeSketchWindow.UpdateState(_latestState, activeDoctrineId);
-    }
-
-    private void OnTreeNodePurchaseRequested(string nodeId)
-    {
-        if (string.IsNullOrWhiteSpace(nodeId))
-            return;
-
-        SendMessage(new WH40KCommandNodePurchaseTreeNodeMessage(nodeId));
-    }
-
-    private void OnMissionBoardPressed()
-    {
-        if (_latestState == null)
-            return;
-
-        if (_missionBoardWindow is not { Disposed: false })
-        {
-            _missionBoardWindow = this.CreateDisposableControl<WH40KCommandNodeMissionBoardWindow>();
-            _missionBoardWindow.OnTaskSelected += OnMissionTaskSelected;
-            _missionBoardWindow.OnPinpointerSyncRequested += OnMissionPinpointerSyncRequested;
-            _missionBoardWindow.OpenCentered();
-        }
-        else if (_missionBoardWindow.IsOpen)
-        {
-            _missionBoardWindow.MoveToFront();
-        }
-        else
-        {
-            _missionBoardWindow.OpenCentered();
-        }
-
-        _missionBoardWindow.UpdateState(_latestState);
-    }
-
-    private void OnMissionTaskSelected(string taskId)
-    {
-        if (string.IsNullOrWhiteSpace(taskId))
-            return;
-
-        SendMessage(new WH40KCommandNodeAssignMissionTaskMessage(taskId));
-    }
-
-    private void OnMissionPinpointerSyncRequested()
-    {
-        SendMessage(new WH40KCommandNodeSyncMissionPinpointerMessage());
     }
 
     private void OnTacticalBonusesPressed()

@@ -1,4 +1,5 @@
-﻿using Content.Shared.FixedPoint;
+using System;
+using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Robust.Shared.Network;
 
@@ -11,16 +12,39 @@ namespace Content.Server.KillTracking;
 public sealed partial class KillTrackerComponent : Component
 {
     /// <summary>
-    /// The mobstate that registers as a "kill"
+    /// The mobstate that registers as a compatibility "kill" event.
     /// </summary>
     [DataField("killState")]
     public MobState KillState = MobState.Critical;
 
     /// <summary>
-    /// A dictionary of sources and how much damage they've done to this entity over time.
+    /// How long a contributor remains eligible for kill and assist attribution.
     /// </summary>
-    [DataField("lifetimeDamage")]
-    public Dictionary<KillSource, FixedPoint2> LifetimeDamage = new();
+    [DataField("assistWindowSeconds")]
+    public float AssistWindowSeconds = 30f;
+
+    /// <summary>
+    /// Minimum damage fraction relative to the killer required for an assist.
+    /// </summary>
+    [DataField("assistFractionThreshold")]
+    public float AssistFractionThreshold = 0.1f;
+
+    /// <summary>
+    /// Minimum absolute damage required for an assist.
+    /// </summary>
+    [DataField("minimumAssistDamage")]
+    public FixedPoint2 MinimumAssistDamage = FixedPoint2.New(1);
+
+    /// <summary>
+    /// Runtime damage ledger for the current life / recovery window.
+    /// </summary>
+    public Dictionary<KillSource, KillAttributionRecord> DamageLedger = new();
+}
+
+public sealed class KillAttributionRecord
+{
+    public FixedPoint2 TotalDamage = FixedPoint2.Zero;
+    public TimeSpan LastDamageTime = TimeSpan.Zero;
 }
 
 public abstract record KillSource;

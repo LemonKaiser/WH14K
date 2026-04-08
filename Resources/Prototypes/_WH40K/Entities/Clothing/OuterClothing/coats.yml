@@ -95,37 +95,20 @@
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
-  id: ClothingOuterChaplainRobe
-  suffix: WH40K, Империум
+  id: ClothingOuterArmorMunitorumCoat
+  suffix: WH40K, Munitorum
   components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.6
-        Slash: 0.6
-        Piercing: 0.6
-        Heat: 0.6
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Robes/chaplain_robe.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/munitorum_coat.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Robes/chaplain_robe.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/munitorum_coat.rsi
 
 - type: entity
-  parent: ClothingOuterArmorCommissar
-  id: ClothingOuterArmorFlakVestMajor
-  suffix: WH40K, Майор
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorMunitorumGreatcoat
+  suffix: WH40K, Munitorum
   components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.35
-        Slash: 0.35
-        Piercing: 0.4
-        Heat: 0.45
-        Caustic: 0.8
-  - type: ExplosionResistance
-    damageCoefficient: 0.6
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/munitorum_greatcoat.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Coats/munitorum_greatcoat.rsi

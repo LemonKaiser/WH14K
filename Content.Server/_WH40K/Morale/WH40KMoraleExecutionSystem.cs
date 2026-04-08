@@ -1,5 +1,6 @@
 using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.Localizations;
 using Content.Server._WH40K.Morale.Components;
 using Content.Server.Popups;
 using Content.Shared.Actions;
@@ -43,6 +44,7 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
@@ -447,7 +449,7 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
 
         var remaining = execution.NextUseTime - now;
         var seconds = Math.Max(1, (int)Math.Ceiling(remaining.TotalSeconds));
-        _popup.PopupEntity(Loc.GetString("wh40k-morale-execution-cooldown-blocked", ("seconds", seconds)), attacker, attacker);
+        _popup.PopupEntity(_culture.GetPlayerString(attacker, "wh40k-morale-execution-cooldown-blocked", ("seconds", seconds)), attacker, attacker);
 
         execution.NextBlockedKillPopupTime =
             now + TimeSpan.FromSeconds(Math.Max(0.1f, execution.BlockedKillPopupCooldownSeconds));
@@ -460,7 +462,7 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         if (now < execution.NextBlockedKillPopupTime)
             return;
 
-        _popup.PopupEntity(Loc.GetString("wh40k-morale-execution-invalid-target"), attacker, attacker);
+        _popup.PopupEntity(_culture.GetPlayerString(attacker, "wh40k-morale-execution-invalid-target"), attacker, attacker);
 
         execution.NextBlockedKillPopupTime =
             now + TimeSpan.FromSeconds(Math.Max(0.1f, execution.BlockedKillPopupCooldownSeconds));

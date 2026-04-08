@@ -1,0 +1,132 @@
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorAstartesMk7
+  suffix: WH40K, Astartes
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7.rsi
+    layers:
+    - state: icon
+      color: "#2F5DB3"
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#2F5DB3"
+      right:
+      - state: inhand-right
+        color: "#2F5DB3"
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+        color: "#2F5DB3"
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.35
+        Heat: 0.45
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
+  - type: ExplosionResistance
+    damageCoefficient: 0.45
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk2
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk2.rsi
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk3
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk3.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk3.rsi
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk4A
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk4a.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk4a.rsi
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk4B
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk4b.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk4b.rsi
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk5
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk5.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk5.rsi
+
+- type: entity
+  parent: ClothingOuterArmorAstartesMk7
+  id: ClothingOuterArmorAstartesMk6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk6.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk6.rsi
+
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorAstartesChaos
+  suffix: WH40K, Astartes, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_chaos.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.35
+        Heat: 0.45
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
+  - type: ExplosionResistance
+    damageCoefficient: 0.45
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

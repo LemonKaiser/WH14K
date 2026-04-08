@@ -69,3 +69,12 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/banners.rsi
     state: mechanicus
+
+- type: entity
+  id: WHMedicalBanner
+  parent: WHChaosBanner
+  suffix: WH40K, Медикаэ
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: medical_banner

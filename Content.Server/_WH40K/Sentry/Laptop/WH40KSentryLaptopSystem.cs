@@ -5,10 +5,12 @@ using Content.Server.Destructible;
 using Content.Server.Popups;
 using Content.Server.Turrets;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.Localizations;
 using Content.Shared._WH40K.Sentry.Laptop;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
+using Content.Shared.GameTicking;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.Ghost;
 using Content.Shared.Interaction;
@@ -48,6 +50,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly NpcFactionSystem _npcFactions = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ViewSubscriberSystem _viewSubscribers = default!;
@@ -69,6 +72,8 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         SubscribeLocalEvent<WH40KSentryLaptopComponent, ComponentShutdown>(OnLaptopShutdown);
         SubscribeLocalEvent<WH40KSentryLaptopComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<WH40KSentryLaptopComponent, BoundUIClosedEvent>(OnUiClosed);
+
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         SubscribeLocalEvent<DeployableTurretComponent, ComponentShutdown>(OnTurretShutdown);
 
@@ -133,7 +138,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             if (UnlinkTurret(laptop, target))
             {
                 _popup.PopupEntity(
-                    Loc.GetString("wh40k-sentry-laptop-popup-unlinked", ("turret", Name(target))),
+                    _culture.GetPlayerString(args.User, "wh40k-sentry-laptop-popup-unlinked", ("turret", Name(target))),
                     laptop.Owner,
                     args.User);
                 UpdateUi(laptop);
@@ -146,7 +151,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         if (laptop.Comp.LinkedTurrets.Count >= laptop.Comp.MaxLinkedTurrets)
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-sentry-laptop-popup-link-limit", ("max", laptop.Comp.MaxLinkedTurrets)),
+                _culture.GetPlayerString(args.User, "wh40k-sentry-laptop-popup-link-limit", ("max", laptop.Comp.MaxLinkedTurrets)),
                 laptop.Owner,
                 args.User);
             return;
@@ -158,7 +163,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             !TerminatingOrDeleted(otherLaptop))
         {
             _popup.PopupEntity(
-                Loc.GetString("wh40k-sentry-laptop-popup-already-linked"),
+                _culture.GetPlayerString(args.User, "wh40k-sentry-laptop-popup-already-linked"),
                 laptop.Owner,
                 args.User);
             return;
@@ -170,7 +175,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             !string.IsNullOrWhiteSpace(turretTeamId) &&
             !string.Equals(userTeamId, turretTeamId, StringComparison.OrdinalIgnoreCase))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-team-mismatch"), laptop.Owner, args.User);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-sentry-laptop-popup-team-mismatch"), laptop.Owner, args.User);
             return;
         }
 
@@ -178,7 +183,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             return;
 
         _popup.PopupEntity(
-            Loc.GetString("wh40k-sentry-laptop-popup-linked", ("turret", Name(target))),
+            _culture.GetPlayerString(args.User, "wh40k-sentry-laptop-popup-linked", ("turret", Name(target))),
             laptop.Owner,
             args.User);
 
@@ -191,6 +196,13 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         UnlinkAllTurrets(laptop);
         ClearWatchersForLaptop(laptop.Owner);
         ClearLaptopRuntimeState(laptop.Owner);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _alertsByLaptop.Clear();
+        _alertCooldowns.Clear();
+        _lastTurretStates.Clear();
     }
 
     private void OnUiOpened(Entity<WH40KSentryLaptopComponent> laptop, ref BoundUIOpenedEvent args)
@@ -262,7 +274,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             return;
 
         _popup.PopupEntity(
-            Loc.GetString("wh40k-sentry-laptop-popup-unlinked", ("turret", Name(turretUid.Value))),
+            _culture.GetPlayerString(args.Actor, "wh40k-sentry-laptop-popup-unlinked", ("turret", Name(turretUid.Value))),
             laptop.Owner,
             args.Actor);
         UpdateUi(laptop);
@@ -274,7 +286,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             return;
 
         UnlinkAllTurrets(laptop);
-        _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-unlinked-all"), laptop.Owner, args.Actor);
+        _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-sentry-laptop-popup-unlinked-all"), laptop.Owner, args.Actor);
         UpdateUi(laptop);
     }
 
@@ -413,7 +425,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         if (!TryResolveUserTeam(user, out var resolvedTeam))
         {
             if (popupOnFail)
-                _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-no-team"), laptop.Owner, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-sentry-laptop-popup-no-team"), laptop.Owner, user);
             return false;
         }
 
@@ -429,7 +441,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         }
 
         if (popupOnFail)
-            _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-wrong-team"), laptop.Owner, user);
+            _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-sentry-laptop-popup-wrong-team"), laptop.Owner, user);
 
         return false;
     }
@@ -578,7 +590,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
             !string.IsNullOrWhiteSpace(primaryTeam) &&
             string.Equals(primaryTeam, teamId, StringComparison.OrdinalIgnoreCase))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-iff-cannot-disable-primary"), laptop.Owner, actor);
+            _popup.PopupEntity(_culture.GetPlayerString(actor, "wh40k-sentry-laptop-popup-iff-cannot-disable-primary"), laptop.Owner, actor);
             return false;
         }
 
@@ -590,7 +602,7 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
 
         if (factions.Factions.Count <= 1 && HasFaction(factions.Factions, teamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-sentry-laptop-popup-iff-cannot-remove-last-team"), laptop.Owner, actor);
+            _popup.PopupEntity(_culture.GetPlayerString(actor, "wh40k-sentry-laptop-popup-iff-cannot-remove-last-team"), laptop.Owner, actor);
             return false;
         }
 
@@ -841,7 +853,9 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         if (maxHealth <= 0f)
             maxHealth = 100f;
 
+#pragma warning disable CS0618 // GetTotalDamage: no alternative API for health calculation
         var damage = _damageable.GetTotalDamage((turret, damageable)).Float();
+#pragma warning restore CS0618
         health = Math.Max(0f, maxHealth - damage);
         return true;
     }

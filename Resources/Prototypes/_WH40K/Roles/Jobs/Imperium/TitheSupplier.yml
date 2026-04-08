@@ -3,8 +3,34 @@
   name: job-name-tithe-supplier
   description: job-description-tithe-supplier
   playTimeTracker: JobTitheSupplier
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
   startingGear: TitheSupplierGear
   icon: "JobIconCargo"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+  - Cargo
+
+- type: job
+  id: MunitorumOfficer
+  name: job-name-munitorum-officer
+  description: job-description-munitorum-officer
+  playTimeTracker: JobMunitorumOfficer
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+  startingGear: MunitorumOfficerGear
+  icon: "JobIconCargoOfficer"
   supervisors: job-supervisors-engineering
   canBeAntag: false
   access:
@@ -21,6 +47,19 @@
     belt: guardbelt
     head: ClothingHeadHelmetFlak
     ears: ClothingHeadsetVoxBackpackImperium
-    outerClothing: ClothingOuterArmorFlakVestLight
+    outerClothing: ClothingOuterArmorMunitorumVest
     pocket1: WH40KStandardTacticalMapTablet
     id: TitheSupplierDogTag
+
+- type: startingGear
+  id: MunitorumOfficerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackGuard
+    shoes: ClothingShoesAnkleBoots
+    belt: guardbelt
+    head: ClothingHeadHelmetFlak
+    ears: ClothingHeadsetVoxBackpackImperium
+    outerClothing: ClothingOuterArmorMunitorumCoat
+    pocket1: WH40KStandardTacticalMapTablet
+    id: MunitorumOfficerDogTag

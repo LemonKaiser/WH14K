@@ -37,6 +37,12 @@ public interface IWH40KDiscordAuthApi
         string accessToken,
         string guildId,
         CancellationToken cancel = default);
+
+    Task RevokeTokenAsync(
+        string clientId,
+        string clientSecret,
+        string token,
+        CancellationToken cancel = default);
 }
 
 public sealed record WH40KDiscordAuthApiResult<T>(bool Success, T? Value, HttpStatusCode? StatusCode, string? Error);
@@ -62,8 +68,10 @@ public sealed class WH40KDiscordAuthApi : IWH40KDiscordAuthApi
 {
     private const string DiscordAuthorizeUrl = "https://discord.com/oauth2/authorize";
     private const string DiscordTokenUrl = "https://discord.com/api/v10/oauth2/token";
+    private const string DiscordRevokeUrl = "https://discord.com/api/v10/oauth2/token/revoke";
     private const string DiscordCurrentUserUrl = "https://discord.com/api/v10/users/@me";
     private const string DiscordCurrentMemberUrlFormat = "https://discord.com/api/v10/users/@me/guilds/{0}/member";
+    private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(15);
 
     private readonly HttpClient _http;
 
@@ -126,7 +134,7 @@ public sealed class WH40KDiscordAuthApi : IWH40KDiscordAuthApi
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, DiscordCurrentUserUrl);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            using var response = await _http.SendAsync(request, cancel);
+            using var response = await SendWithTimeoutAsync(request, cancel);
 
             if (!response.IsSuccessStatusCode)
                 return new WH40KDiscordAuthApiResult<WH40KDiscordAuthApiUser>(false, null, response.StatusCode, $"discord_user_status_{(int) response.StatusCode}");
@@ -159,7 +167,7 @@ public sealed class WH40KDiscordAuthApi : IWH40KDiscordAuthApi
             var uri = string.Format(DiscordCurrentMemberUrlFormat, Uri.EscapeDataString(guildId));
             using var request = new HttpRequestMessage(HttpMethod.Get, uri);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            using var response = await _http.SendAsync(request, cancel);
+            using var response = await SendWithTimeoutAsync(request, cancel);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
                 return new WH40KDiscordAuthApiResult<WH40KDiscordAuthApiGuildMember?>(true, null, response.StatusCode, null);
@@ -188,7 +196,7 @@ public sealed class WH40KDiscordAuthApi : IWH40KDiscordAuthApi
         try
         {
             using var content = new FormUrlEncodedContent(formData);
-            using var response = await _http.PostAsync(DiscordTokenUrl, content, cancel);
+            using var response = await PostWithTimeoutAsync(DiscordTokenUrl, content, cancel);
 
             if (!response.IsSuccessStatusCode)
                 return new WH40KDiscordAuthApiResult<WH40KDiscordAuthApiToken>(false, null, response.StatusCode, $"discord_token_status_{(int) response.StatusCode}");
@@ -244,5 +252,40 @@ public sealed class WH40KDiscordAuthApi : IWH40KDiscordAuthApi
     {
         public string? Nick { get; set; }
         public List<string>? Roles { get; set; }
+    }
+
+    public async Task RevokeTokenAsync(
+        string clientId,
+        string clientSecret,
+        string token,
+        CancellationToken cancel = default)
+    {
+        using var content = new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["client_id"] = clientId,
+            ["client_secret"] = clientSecret,
+            ["token"] = token,
+        });
+        using var response = await PostWithTimeoutAsync(DiscordRevokeUrl, content, cancel);
+        // Discord returns 200 OK even for invalid tokens; nothing to check.
+    }
+
+    private async Task<HttpResponseMessage> SendWithTimeoutAsync(
+        HttpRequestMessage request,
+        CancellationToken cancel)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+        cts.CancelAfter(RequestTimeout);
+        return await _http.SendAsync(request, cts.Token);
+    }
+
+    private async Task<HttpResponseMessage> PostWithTimeoutAsync(
+        string url,
+        HttpContent content,
+        CancellationToken cancel)
+    {
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+        cts.CancelAfter(RequestTimeout);
+        return await _http.PostAsync(url, content, cts.Token);
     }
 }

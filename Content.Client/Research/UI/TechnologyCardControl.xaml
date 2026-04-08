@@ -1,45 +1,59 @@
-﻿<Control xmlns="https://spacestation14.io"
-         xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls">
-    <BoxContainer Name="MainContainer" Orientation="Vertical" Margin="10 0 10 10">
-        <PanelContainer Name="Background"
-                        Access="Public"
-                        StyleClasses="PdaBackground"
-                        MinHeight="15"
-                        VerticalExpand="False"
-                        HorizontalExpand="True"
-                        Margin="0 0 0 -5"/>
-        <Button Name="MainButton"
-                Disabled="True"
-                HorizontalExpand="True"
-                VerticalExpand="True"
-                StyleClasses="ButtonSquare"
-                Margin="0">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          Margin="5">
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+<Control xmlns="https://spacestation14.io">
+    <PanelContainer Name="CardPanel"
+                    HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      SeparationOverride="4">
+        <PanelContainer Name="HeaderPanel">
+            <BoxContainer Orientation="Horizontal"
+                          Margin="10 6 10 6"
+                          SeparationOverride="8">
+                <PanelContainer Name="TechnologyIconPanel">
                     <TextureRect Name="TechnologyTexture"
+                                 MinSize="32 32"
+                                 Margin="3"
                                  TextureScale="2 2"
                                  VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"/>
-                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center" Margin="10 0 0 0">
-                        <BoxContainer Orientation="Horizontal">
-                            <Label Name="TechnologyNameLabel" StyleClasses="LabelKeyText" HorizontalExpand="True" ClipText="True"/>
-                            <TextureRect Name="DisciplineTexture" TextureScale="2 2" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                        </BoxContainer>
-                        <customControls:HSeparator StyleClasses="LowDivider" Margin="0 5 0 5"/>
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                            <RichTextLabel Name="TierLabel" HorizontalAlignment="Left" StyleClasses="LabelSubText" HorizontalExpand="True"/>
-                            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 2 0 0">
-                                <Control HorizontalExpand="True"/>
-                                <Button Name="ResearchButton" Text="{Loc 'research-console-menu-server-research-button'}"/>
-                            </BoxContainer>
+                                 HorizontalAlignment="Center" />
+                </PanelContainer>
+
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              SeparationOverride="4">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="6">
+                        <Label Name="TechnologyNameLabel"
+                               HorizontalExpand="True"
+                               ClipText="True"
+                               StyleClasses="LabelKeyText" />
+                        <BoxContainer Orientation="Vertical"
+                                      SeparationOverride="6">
+                            <TextureRect Name="DisciplineTexture"
+                                         MinSize="20 20"
+                                         TextureScale="2 2"
+                                         HorizontalAlignment="Right"
+                                         VerticalAlignment="Top" />
+                            <Button Name="ResearchButton"
+                                    Text="{Loc 'research-console-menu-server-research-button'}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    MinHeight="28"
+                                    MinWidth="132" />
                         </BoxContainer>
                     </BoxContainer>
+                    <Label Name="DisciplineLineLabel"
+                           ClipText="True"
+                           StyleClasses="LabelSubText" />
                 </BoxContainer>
-                <Control MinHeight="5"></Control>
-                <RichTextLabel Name="UnlocksLabel" HorizontalExpand="True" StyleClasses="LabelSubText"></RichTextLabel>
             </BoxContainer>
-        </Button>
-    </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Vertical"
+                      Margin="10 0 10 0"
+                      SeparationOverride="4">
+            <RichTextLabel Name="UnlocksLabel"
+                           HorizontalExpand="True" />
+        </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
 </Control>

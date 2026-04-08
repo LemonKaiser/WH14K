@@ -5,8 +5,10 @@ using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.OreExtractor.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Shared._WH40K.OreExtractor;
 using Content.Shared._WH40K.Tiers;
 using Content.Shared.Examine;
+using Content.Shared.Interaction;
 using Content.Shared.Item;
 using Content.Shared.Maps;
 using Content.Shared.Mining;
@@ -14,7 +16,9 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Random;
 using Content.Shared.Stacks;
+using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
+using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -24,6 +28,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.OreExtractor;
 
@@ -41,6 +46,8 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<EntityUid> _tileEntities = new();
     private readonly CollisionGroup _outputCollisionMask =
@@ -52,7 +59,16 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
 
         SubscribeLocalEvent<WH40KOreExtractorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WH40KOreExtractorComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<WH40KOreExtractorComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<WH40KOreExtractorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
+
+        Subs.BuiEvents<WH40KOreExtractorComponent>(WH40KOreExtractorUiKey.Key, subs =>
+        {
+            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<WH40KOreExtractorSetEnabledMessage>(OnSetEnabledMessage);
+            subs.Event<WH40KOreExtractorSetRandomModeMessage>(OnSetRandomModeMessage);
+            subs.Event<WH40KOreExtractorSelectOreMessage>(OnSelectOreMessage);
+        });
     }
 
     private void OnMapInit(Entity<WH40KOreExtractorComponent> ent, ref MapInitEvent args)
@@ -62,6 +78,7 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         var tier = SelectTier(GetEffectiveLevel(ent.Comp), ent.Comp);
         var interval = GetSpawnIntervalSeconds(tier, ent.Comp);
         ent.Comp.NextSpawnAt = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(0f, interval));
+        ent.Comp.NextUiRefreshAt = TimeSpan.Zero;
     }
 
     private void OnExamined(Entity<WH40KOreExtractorComponent> ent, ref ExaminedEvent args)
@@ -69,6 +86,7 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        using var scope = _culture.CreateScope(args.Examiner);
         EnsureConfiguredOres(ent.Comp);
         var enabledState = ent.Comp.Enabled
             ? Loc.GetString("wh40k-ore-extractor-state-enabled")
@@ -121,52 +139,58 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract)
             return;
 
-        EnsureConfiguredOres(ent.Comp);
-        var tier = SelectTier(GetEffectiveLevel(ent.Comp), ent.Comp);
-        var availableByTier = GetAllowedOreIdsForTier(ent.Comp, tier);
         var user = args.User;
 
         args.Verbs.Add(new AlternativeVerb
         {
-            Text = ent.Comp.Enabled
-                ? Loc.GetString("wh40k-ore-extractor-verb-disable")
-                : Loc.GetString("wh40k-ore-extractor-verb-enable"),
-            Category = VerbCategory.SelectType,
+            Text = Loc.GetString("wh40k-ore-extractor-verb-open-ui"),
             Priority = 20,
             Act = () =>
             {
-                SetEnabled(ent, !ent.Comp.Enabled, user);
+                if (_ui.TryOpenUi(ent.Owner, WH40KOreExtractorUiKey.Key, user))
+                    UpdateUi(ent);
             },
         });
+    }
 
-        args.Verbs.Add(new AlternativeVerb
-        {
-            Text = Loc.GetString("wh40k-ore-extractor-verb-select-random"),
-            Category = VerbCategory.SelectType,
-            Priority = 10,
-            Disabled = ent.Comp.SelectedOre == null,
-            Act = () =>
-            {
-                SetRandomOre(ent, user);
-            },
-        });
+    private void OnInteractHand(Entity<WH40KOreExtractorComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled)
+            return;
 
-        var priority = 9;
-        foreach (var oreId in availableByTier)
-        {
-            var oreName = GetOreDisplayName(oreId);
-            args.Verbs.Add(new AlternativeVerb
-            {
-                Text = Loc.GetString("wh40k-ore-extractor-verb-select-ore", ("ore", oreName)),
-                Category = VerbCategory.SelectType,
-                Priority = priority--,
-                Disabled = string.Equals(ent.Comp.SelectedOre, oreId, StringComparison.Ordinal),
-                Act = () =>
-                {
-                    SetSelectedOre(ent, oreId, user);
-                },
-            });
-        }
+        EnsureConfiguredOres(ent.Comp);
+        args.Handled = _ui.TryOpenUi(ent.Owner, WH40KOreExtractorUiKey.Key, args.User);
+    }
+
+    private void OnUiOpened(Entity<WH40KOreExtractorComponent> ent, ref BoundUIOpenedEvent args)
+    {
+        EnsureConfiguredOres(ent.Comp);
+        ent.Comp.NextUiRefreshAt = TimeSpan.Zero;
+        UpdateUi(ent);
+    }
+
+    private void OnSetEnabledMessage(Entity<WH40KOreExtractorComponent> ent, ref WH40KOreExtractorSetEnabledMessage args)
+    {
+        EnsureConfiguredOres(ent.Comp);
+        SetEnabled(ent, args.Enabled, args.Actor);
+        ent.Comp.NextUiRefreshAt = TimeSpan.Zero;
+        UpdateUi(ent);
+    }
+
+    private void OnSetRandomModeMessage(Entity<WH40KOreExtractorComponent> ent, ref WH40KOreExtractorSetRandomModeMessage args)
+    {
+        EnsureConfiguredOres(ent.Comp);
+        SetRandomOre(ent, args.Actor);
+        ent.Comp.NextUiRefreshAt = TimeSpan.Zero;
+        UpdateUi(ent);
+    }
+
+    private void OnSelectOreMessage(Entity<WH40KOreExtractorComponent> ent, ref WH40KOreExtractorSelectOreMessage args)
+    {
+        EnsureConfiguredOres(ent.Comp);
+        SetSelectedOre(ent, args.OreId, args.Actor);
+        ent.Comp.NextUiRefreshAt = TimeSpan.Zero;
+        UpdateUi(ent);
     }
 
     public override void Update(float frameTime)
@@ -177,8 +201,19 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         var query = EntityQueryEnumerator<WH40KOreExtractorComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var extractor, out var xform))
         {
+            var shouldRefreshUi = _ui.IsUiOpen(uid, WH40KOreExtractorUiKey.Key) &&
+                                  now >= extractor.NextUiRefreshAt;
+
             if (extractor.NextSpawnAt > now)
+            {
+                if (shouldRefreshUi)
+                {
+                    extractor.NextUiRefreshAt = now + TimeSpan.FromSeconds(1);
+                    UpdateUi((uid, extractor));
+                }
+
                 continue;
+            }
 
             EnsureConfiguredOres(extractor);
             var tier = SelectTier(GetEffectiveLevel(extractor), extractor);
@@ -217,6 +252,12 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
 
                 Spawn(oreEntity, outputCoords);
             }
+
+            if (!shouldRefreshUi)
+                continue;
+
+            extractor.NextUiRefreshAt = now + TimeSpan.FromSeconds(1);
+            UpdateUi((uid, extractor));
         }
     }
 
@@ -329,6 +370,11 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         if (maxItemsOnTile <= 0)
             return false;
 
+        return CountOutputOccupancy(extractorUid, outputTile) >= maxItemsOnTile;
+    }
+
+    private int CountOutputOccupancy(EntityUid extractorUid, TileRef outputTile)
+    {
         _tileEntities.Clear();
         _lookup.GetLocalEntitiesIntersecting(
             outputTile.GridUid,
@@ -346,12 +392,9 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
             count += TryComp<StackComponent>(entity, out var stack) && stack.Count > 0
                 ? stack.Count
                 : 1;
-
-            if (count >= maxItemsOnTile)
-                return true;
         }
 
-        return false;
+        return count;
     }
 
     private bool IsOutputOccupant(EntityUid extractorUid, EntityUid entity)
@@ -422,6 +465,63 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         return WH40KTierMath.SelectTier(level, extractor.Tier1MinBaseLevel, extractor.Tier2MinBaseLevel, extractor.Tier3MinBaseLevel);
     }
 
+    private void UpdateUi(Entity<WH40KOreExtractorComponent> ent)
+    {
+        var state = BuildUiState(ent);
+        _ui.SetUiState(ent.Owner, WH40KOreExtractorUiKey.Key, state);
+    }
+
+    private WH40KOreExtractorBuiState BuildUiState(Entity<WH40KOreExtractorComponent> ent)
+    {
+        EnsureConfiguredOres(ent.Comp);
+
+        var trackedTeams = GetTrackedTeams(ent.Comp);
+        var effectiveLevel = GetEffectiveLevel(ent.Comp);
+        var tier = SelectTier(effectiveLevel, ent.Comp);
+        var allowedByTier = GetAllowedOreIdsForTier(ent.Comp, tier);
+        var oreEntries = GetOreEntries(ent.Comp);
+        EnsureSelectedOreAllowed(ent.Comp, allowedByTier);
+
+        var orderedAllowedOres = GetOrderedAllowedOreIdsForTier(ent.Comp, tier, allowedByTier);
+        var powered = !ent.Comp.RequirePowered || this.IsPowered(ent.Owner, EntityManager);
+        var hasOutputTile = TryGetOutputTile(Transform(ent), out var outputTile, out _, out var outputDirection);
+        var outputOccupancy = hasOutputTile ? CountOutputOccupancy(ent.Owner, outputTile) : 0;
+        var outputBlocked = hasOutputTile && _turf.IsTileBlocked(outputTile, _outputCollisionMask);
+        var outputSaturated = hasOutputTile &&
+                              ent.Comp.MaxItemsOnOutputTile > 0 &&
+                              outputOccupancy >= ent.Comp.MaxItemsOnOutputTile;
+        var nextTierLevel = GetNextTierLevel(tier, ent.Comp);
+        var status = ResolveUiStatus(ent.Comp, powered, hasOutputTile, outputBlocked, outputSaturated, orderedAllowedOres.Count > 0);
+        var nextSpawnSeconds = status == WH40KOreExtractorUiStatus.Ready
+            ? Math.Max(0, (int) Math.Ceiling((ent.Comp.NextSpawnAt - _timing.CurTime).TotalSeconds))
+            : 0;
+
+        return new WH40KOreExtractorBuiState(
+            ResolveThemeTeamId(ent.Comp),
+            trackedTeams.ToArray(),
+            hasOutputTile
+                ? GetDirectionLocKey(outputDirection)
+                : "wh40k-ore-extractor-direction-unknown",
+            oreEntries.ToArray(),
+            orderedAllowedOres.ToArray(),
+            ent.Comp.SelectedOre,
+            status,
+            ent.Comp.Enabled,
+            powered,
+            ent.Comp.RequirePowered,
+            hasOutputTile,
+            outputOccupancy,
+            ent.Comp.MaxItemsOnOutputTile,
+            tier,
+            effectiveLevel,
+            GetBestNodeUpgrade(trackedTeams),
+            nextTierLevel,
+            nextTierLevel <= 0 ? 0 : Math.Max(0, nextTierLevel - effectiveLevel),
+            GetSpawnIntervalSeconds(tier, ent.Comp),
+            GetSpawnCount(tier, ent.Comp),
+            nextSpawnSeconds);
+    }
+
     private void ApplyTierThresholdProfile(WH40KOreExtractorComponent extractor)
     {
         if (extractor.TierThresholdProfile is { } profileId &&
@@ -481,12 +581,89 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
         return allowed;
     }
 
+    private List<string> GetOrderedAllowedOreIdsForTier(
+        WH40KOreExtractorComponent extractor,
+        int tier,
+        IReadOnlySet<string> allowedByTier)
+    {
+        var ordered = new List<string>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        TryAddOrderedAllowedOres(ordered, seen, extractor.Tier0Ores, allowedByTier);
+        if (tier >= 1)
+            TryAddOrderedAllowedOres(ordered, seen, extractor.Tier1Ores, allowedByTier);
+        if (tier >= 2)
+            TryAddOrderedAllowedOres(ordered, seen, extractor.Tier2Ores, allowedByTier);
+        if (tier >= 3)
+            TryAddOrderedAllowedOres(ordered, seen, extractor.Tier3Ores, allowedByTier);
+
+        if (ordered.Count == 0)
+            TryAddOrderedAllowedOres(ordered, seen, extractor.AvailableOres, allowedByTier);
+
+        return ordered;
+    }
+
+    private List<WH40KOreExtractorUiOreEntry> GetOreEntries(WH40KOreExtractorComponent extractor)
+    {
+        var ordered = new List<WH40KOreExtractorUiOreEntry>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        TryAddOreEntries(ordered, seen, extractor.Tier0Ores, 0);
+        TryAddOreEntries(ordered, seen, extractor.Tier1Ores, 1);
+        TryAddOreEntries(ordered, seen, extractor.Tier2Ores, 2);
+        TryAddOreEntries(ordered, seen, extractor.Tier3Ores, 3);
+
+        if (ordered.Count == 0)
+            TryAddOreEntries(ordered, seen, extractor.AvailableOres, 0);
+
+        return ordered;
+    }
+
     private void TryAddAllowedOres(HashSet<string> destination, List<string> source)
     {
         foreach (var oreId in source)
         {
             if (!string.IsNullOrWhiteSpace(oreId) && _prototype.HasIndex<OrePrototype>(oreId))
                 destination.Add(oreId);
+        }
+    }
+
+    private void TryAddOrderedAllowedOres(
+        List<string> destination,
+        HashSet<string> seen,
+        List<string> source,
+        IReadOnlySet<string> allowedByTier)
+    {
+        foreach (var oreId in source)
+        {
+            if (string.IsNullOrWhiteSpace(oreId) ||
+                !allowedByTier.Contains(oreId) ||
+                !_prototype.HasIndex<OrePrototype>(oreId) ||
+                !seen.Add(oreId))
+            {
+                continue;
+            }
+
+            destination.Add(oreId);
+        }
+    }
+
+    private void TryAddOreEntries(
+        List<WH40KOreExtractorUiOreEntry> destination,
+        HashSet<string> seen,
+        List<string> source,
+        int unlockTier)
+    {
+        foreach (var oreId in source)
+        {
+            if (string.IsNullOrWhiteSpace(oreId) ||
+                !_prototype.HasIndex<OrePrototype>(oreId) ||
+                !seen.Add(oreId))
+            {
+                continue;
+            }
+
+            destination.Add(new WH40KOreExtractorUiOreEntry(oreId, unlockTier));
         }
     }
 
@@ -637,6 +814,70 @@ public sealed class WH40KOreExtractorSystem : EntitySystem
             return oreId;
 
         return oreEntityProto.Name;
+    }
+
+    private static WH40KOreExtractorUiStatus ResolveUiStatus(
+        WH40KOreExtractorComponent extractor,
+        bool powered,
+        bool hasOutputTile,
+        bool outputBlocked,
+        bool outputSaturated,
+        bool hasConfiguredOres)
+    {
+        if (!hasOutputTile)
+            return WH40KOreExtractorUiStatus.NoOutput;
+
+        if (!hasConfiguredOres)
+            return WH40KOreExtractorUiStatus.NoConfiguredOres;
+
+        if (!extractor.Enabled)
+            return WH40KOreExtractorUiStatus.Disabled;
+
+        if (extractor.RequirePowered && !powered)
+            return WH40KOreExtractorUiStatus.Unpowered;
+
+        if (outputBlocked)
+            return WH40KOreExtractorUiStatus.OutputBlocked;
+
+        if (outputSaturated)
+            return WH40KOreExtractorUiStatus.OutputSaturated;
+
+        return WH40KOreExtractorUiStatus.Ready;
+    }
+
+    private static int GetNextTierLevel(int tier, WH40KOreExtractorComponent extractor)
+    {
+        return tier switch
+        {
+            <= 0 => extractor.Tier1MinBaseLevel,
+            1 => extractor.Tier2MinBaseLevel,
+            2 => extractor.Tier3MinBaseLevel,
+            _ => 0,
+        };
+    }
+
+    private int GetBestNodeUpgrade(IReadOnlyCollection<string> teamIds)
+    {
+        var best = 0;
+        foreach (var teamId in teamIds)
+        {
+            if (string.IsNullOrWhiteSpace(teamId))
+                continue;
+
+            best = Math.Max(best, GetTeamNodeUpgrade(teamId));
+        }
+
+        return best;
+    }
+
+    private static string ResolveThemeTeamId(WH40KOreExtractorComponent extractor)
+    {
+        if (!string.IsNullOrWhiteSpace(extractor.TeamId))
+            return extractor.TeamId;
+
+        return extractor.TeamIds.Count == 1
+            ? extractor.TeamIds[0]
+            : string.Empty;
     }
 
     private static string GetDirectionLocKey(Direction direction)

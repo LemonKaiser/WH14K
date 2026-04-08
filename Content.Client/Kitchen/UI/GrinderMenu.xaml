@@ -1,18 +1,246 @@
 <controls:FancyWindow xmlns="https://spacestation14.io"
-            xmlns:ui="clr-namespace:Content.Client.Kitchen.UI"
-            xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-            Title="{Loc grinder-menu-title}" MinSize="768 256">
-    <BoxContainer Orientation="Horizontal">
-        <BoxContainer Orientation="Vertical" VerticalAlignment="Top" Margin="8" MinWidth="100">
-            <Label Text="{Loc grinder-menu-auto-label}" HorizontalAlignment="Center"/>
-            <Button Name="AutoModeButton" Text="{Loc grinder-menu-auto-button-off}" TextAlign="Center" MinSize="64 48" Margin="0 0 0 16" />
-            <Label Text="{Loc grinder-menu-manual-label}" HorizontalAlignment="Center"/>
-            <Button Name="GrindButton" Text="{Loc grinder-menu-grind-button}" TextAlign="Center" MinSize="64 48" Margin="0 0 0 16" />
-            <Button Name="JuiceButton" Text="{Loc grinder-menu-juice-button}" TextAlign="Center" MinSize="64 48" />
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc grinder-menu-title}"
+                      MinSize="1000 610"
+                      SetSize="1040 640"
+                      Resizable="False">
+    <BoxContainer Name="RootLayout"
+                  Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True">
+        <PanelContainer Name="RootFrame"
+                        HorizontalExpand="True"
+                        VerticalExpand="True">
+            <BoxContainer Orientation="Vertical"
+                          Margin="8 6 8 6"
+                          SeparationOverride="8"
+                          VerticalExpand="True">
+                <PanelContainer Name="HeaderPanel">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="HeaderTitleLabel"
+                               Text="{Loc grinder-menu-title}"
+                               StyleClasses="LabelKeyText" />
+                        <RichTextLabel Name="HeaderSubtitleLabel"
+                                       Text="{Loc grinder-menu-header-subtitle}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="6">
+                    <PanelContainer Name="StatusCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="3">
+                            <Label Name="StatusCardLabel"
+                                   Text="{Loc grinder-menu-status-card}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="StatusValueLabel"
+                                   Text="{Loc grinder-menu-status-ready}" />
+                            <RichTextLabel Name="StatusHintLabel"
+                                           Text="{Loc grinder-menu-status-note-ready}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="DoctrineCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="3">
+                            <Label Name="DoctrineCardLabel"
+                                   Text="{Loc grinder-menu-doctrine-card}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="DoctrineValueLabel"
+                                   Text="{Loc grinder-menu-doctrine-off}" />
+                            <RichTextLabel Name="DoctrineHintLabel"
+                                           Text="{Loc grinder-menu-doctrine-note-off}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="VesselCard"
+                                    HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="3">
+                            <Label Name="VesselCardLabel"
+                                   Text="{Loc grinder-menu-vessel-card}"
+                                   StyleClasses="LabelKeyText" />
+                            <Label Name="VesselValueLabel"
+                                   Text="{Loc grinder-menu-vessel-missing}" />
+                            <RichTextLabel Name="VesselHintLabel"
+                                           Text="{Loc grinder-menu-vessel-note-missing}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <BoxContainer Name="WorkspaceRow"
+                              Orientation="Horizontal"
+                              SeparationOverride="6"
+                              HorizontalExpand="True"
+                              VerticalExpand="True">
+                    <PanelContainer Name="ActionPanel"
+                                    MinWidth="205"
+                                    MaxWidth="225"
+                                    VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="6"
+                                      VerticalExpand="True">
+                            <Label Name="ActionTitleLabel"
+                                   Text="{Loc grinder-menu-action-title}"
+                                   StyleClasses="LabelKeyText" />
+                            <RichTextLabel Name="ActionSubtitleLabel"
+                                           Text="{Loc grinder-menu-action-subtitle}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+
+                            <Label Name="AutoSectionLabel"
+                                   Text="{Loc grinder-menu-auto-label}"
+                                   StyleClasses="LabelKeyText" />
+                            <Button Name="AutoModeButton"
+                                    Text="{Loc grinder-menu-auto-button-mode-off}"
+                                    HorizontalExpand="True"
+                                    MinHeight="44"
+                                    TextAlign="Center" />
+
+                            <Label Name="ManualSectionLabel"
+                                   Text="{Loc grinder-menu-manual-label}"
+                                   StyleClasses="LabelKeyText" />
+                            <Button Name="GrindButton"
+                                    Text="{Loc grinder-menu-grind-button-wh40k}"
+                                    HorizontalExpand="True"
+                                    MinHeight="38"
+                                    TextAlign="Center" />
+                            <Button Name="JuiceButton"
+                                    Text="{Loc grinder-menu-juice-button-wh40k}"
+                                    HorizontalExpand="True"
+                                    MinHeight="38"
+                                    TextAlign="Center" />
+
+                            <RichTextLabel Name="OperationStatusLabel"
+                                           Text="{Loc grinder-menu-status-note-ready}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="ChamberPanel"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True"
+                                    SizeFlagsStretchRatio="6">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="6"
+                                      VerticalExpand="True">
+                            <BoxContainer Orientation="Horizontal"
+                                          SeparationOverride="6">
+                                <Label Name="ChamberPanelTitleLabel"
+                                       Text="{Loc grinder-menu-panel-chamber-title}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="ChamberCounterLabel"
+                                       Text="0/0"
+                                       StyleClasses="LabelSubText" />
+                            </BoxContainer>
+
+                            <RichTextLabel Name="ChamberNoteLabel"
+                                           Text="{Loc grinder-menu-panel-chamber-note}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+
+                            <Button Name="ChamberEjectButton"
+                                    Text="{Loc grinder-menu-chamber-content-box-button-wh40k}"
+                                    HorizontalExpand="True"
+                                    MinHeight="36"
+                                    TextAlign="Center" />
+
+                            <ScrollContainer Name="ChamberScroll"
+                                             HorizontalExpand="True"
+                                             VerticalExpand="True"
+                                             HScrollEnabled="False"
+                                             ReserveScrollbarSpace="False">
+                                <BoxContainer Name="ChamberContentsList"
+                                              Orientation="Vertical"
+                                              SeparationOverride="6" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="BeakerPanel"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True"
+                                    SizeFlagsStretchRatio="5">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="10 8 10 8"
+                                      SeparationOverride="6"
+                                      VerticalExpand="True">
+                            <BoxContainer Orientation="Horizontal"
+                                          SeparationOverride="6">
+                                <Label Name="BeakerPanelTitleLabel"
+                                       Text="{Loc grinder-menu-panel-beaker-title}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="BeakerCounterLabel"
+                                       Text="0"
+                                       StyleClasses="LabelSubText" />
+                            </BoxContainer>
+
+                            <RichTextLabel Name="BeakerNoteLabel"
+                                           Text="{Loc grinder-menu-panel-beaker-note-missing}"
+                                           HorizontalExpand="True"
+                                           StyleClasses="LabelSubText" />
+
+                            <Button Name="BeakerEjectButton"
+                                    Text="{Loc grinder-menu-beaker-content-box-button-wh40k}"
+                                    HorizontalExpand="True"
+                                    MinHeight="36"
+                                    TextAlign="Center" />
+
+                            <ScrollContainer Name="BeakerScroll"
+                                             HorizontalExpand="True"
+                                             VerticalExpand="True"
+                                             HScrollEnabled="False"
+                                             ReserveScrollbarSpace="False">
+                                <BoxContainer Name="BeakerContentsList"
+                                              Orientation="Vertical"
+                                              SeparationOverride="6" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Name="FooterWrapper"
+                      Orientation="Vertical"
+                      VerticalAlignment="Bottom">
+            <PanelContainer Name="FooterDivider" />
+            <BoxContainer Name="FooterBar"
+                          Orientation="Horizontal"
+                          Margin="12 0 6 2"
+                          VerticalAlignment="Bottom">
+                <Label Name="FooterLeftLabel"
+                       ClipText="True"
+                       Text="{Loc grinder-menu-footer-ready}"
+                       StyleClasses="WindowFooterText" />
+                <Label Name="FooterRightLabel"
+                       ClipText="True"
+                       Text="{Loc grinder-menu-footer-right}"
+                       StyleClasses="WindowFooterText"
+                       HorizontalAlignment="Right"
+                       HorizontalExpand="True"
+                       Margin="0 0 4 0" />
+            </BoxContainer>
         </BoxContainer>
-
-        <ui:LabelledContentBox Name="ChamberContentBox" LabelText="{Loc grinder-menu-chamber-content-box-label}" ButtonText="{Loc grinder-menu-chamber-content-box-button}" VerticalExpand="True" HorizontalExpand="True" Margin="8" SizeFlagsStretchRatio="2"/>
-
-        <ui:LabelledContentBox Name="BeakerContentBox" LabelText="{Loc grinder-menu-beaker-content-box-label}" ButtonText="{Loc grinder-menu-beaker-content-box-button}" VerticalExpand="True" HorizontalExpand="True" Margin="8" SizeFlagsStretchRatio="2"/>
     </BoxContainer>
 </controls:FancyWindow>

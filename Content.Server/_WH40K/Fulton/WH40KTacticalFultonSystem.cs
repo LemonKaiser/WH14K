@@ -20,9 +20,9 @@ using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Fulton;
 
@@ -42,6 +42,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private const string FultonEffectPrototype = "FultonEffect";
 
@@ -161,7 +162,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
 
         args.Handled = true;
         _popup.PopupEntity(
-            Loc.GetString("wh40k-fulton-popup-attach-start", ("target", Name(target))),
+            _culture.GetPlayerString(args.User, "wh40k-fulton-popup-attach-start", ("target", Name(target))),
             args.User,
             args.User,
             PopupType.Small);
@@ -253,6 +254,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
 
     private void OnFultonExamined(Entity<WH40KTacticalFultonComponent> ent, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KTacticalFultonComponent)))
         {
             args.PushMarkup(Loc.GetString(
@@ -275,6 +277,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
         if (!ent.Comp.Enabled)
             return;
 
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KTacticalFultonTargetComponent)))
         {
             args.PushMarkup(Loc.GetString(
@@ -290,6 +293,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
             ? Math.Max(0, (int) Math.Ceiling((ent.Comp.NextStateAt - _timing.CurTime).TotalSeconds))
             : 0;
 
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KActiveFultonExtractionComponent)))
         {
             switch (ent.Comp.State)
@@ -693,7 +697,6 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(teamId))
             return;
 
-        var message = Loc.GetString(messageKey, args);
         foreach (var session in _players.Sessions)
         {
             if (!_teamRule.TryGetTeamIdForUser(session.UserId, out var sessionTeam))
@@ -702,13 +705,14 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
             if (!string.Equals(sessionTeam, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            _chat.DispatchServerMessage(session, message);
+            using var scope = _culture.CreateScope(session);
+            _chat.DispatchServerMessage(session, Loc.GetString(messageKey, args));
         }
     }
 
     private void PopupCaution(EntityUid user, string key, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(key, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, key, args), user, user, PopupType.SmallCaution);
     }
 
     private void PopupOwner(
@@ -720,7 +724,7 @@ public sealed class WH40KTacticalFultonSystem : EntitySystem
         if (user == null || !Exists(user.Value))
             return;
 
-        _popup.PopupEntity(Loc.GetString(key, args), user.Value, user.Value, type);
+        _popup.PopupEntity(_culture.GetPlayerString(user.Value, key, args), user.Value, user.Value, type);
     }
 
     private readonly record struct ExtractionProfile(

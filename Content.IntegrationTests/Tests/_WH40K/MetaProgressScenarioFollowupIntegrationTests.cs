@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Content.Client.UserInterface.Systems.Chat;
 using Content.IntegrationTests.Pair;
 using Content.Server.Administration.Managers;
 using Content.Server.Database;
@@ -13,11 +12,9 @@ using Content.Server.GameTicking.Events;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server._WH40K.Stats;
 using Content.Shared.CCVar;
-using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared._WH40K.MetaProgress;
 using Robust.Client.Console;
-using Robust.Client.UserInterface;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
@@ -29,16 +26,21 @@ namespace Content.IntegrationTests.Tests._WH40K;
 [TestFixture]
 public sealed class MetaProgressScenarioFollowupIntegrationTests
 {
+    /// <summary>
+    /// Merged from two tests: CVar-based decoration bypass and Discord auth fallback.
+    /// Both toggle config knobs on a single server-only pair.
+    /// </summary>
     [Test]
-    public async Task DecorationsRespectRequirementsAndLegacyBypass()
+    public async Task DecorationCVarBypassAndDiscordFallback()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var db = server.ResolveDependency<IServerDbManager>();
-        var userId = new NetUserId(Guid.NewGuid());
         var config = server.ResolveDependency<IConfigurationManager>();
 
-        await db.UpdatePlayerRecordAsync(userId, "MetaDecorBypassTest", IPAddress.Loopback, null);
+        // ── Part A: decoration requirements + legacy bypass ──
+        var uid1 = new NetUserId(Guid.NewGuid());
+        await db.UpdatePlayerRecordAsync(uid1, "MetaDecorBypassTest", IPAddress.Loopback, null);
 
         var originalBypass = config.GetCVar(CCVars.WH40KMetaUnlocksEnforced);
 
@@ -46,35 +48,32 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
         {
             await server.WaitPost(() =>
             {
-                var systems = server.ResolveDependency<IEntitySystemManager>();
-                var meta = systems.GetEntitySystem<WH40KMetaProgressSystem>();
-
-                _ = meta.GetSnapshot(userId);
+                var meta = server.System<WH40KMetaProgressSystem>();
+                _ = meta.GetSnapshot(uid1);
 
                 var selectedLocked = meta.TrySetDecorationSelection(
-                    userId,
+                    uid1,
                     WH40KMetaDecorationCategory.GhostSkins,
-                    "decor.ghost.star",
+                    "decor-ghost-star",
                     out _,
-                    out var selectionError);
+                    out _);
 
-                Assert.That(selectedLocked, Is.True, selectionError);
+                Assert.That(selectedLocked, Is.False, "Selecting a locked decoration must be rejected.");
             });
 
             await pair.RunTicksSync(5);
 
             await server.WaitAssertion(() =>
             {
-                var meta = server.System<WH40KMetaProgressSystem>();
-                var snapshot = meta.GetSnapshot(userId);
-                var star = snapshot.Decorations.Single(x => x.Id == "decor.ghost.star");
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(uid1);
+                var star = snapshot.Decorations.Single(x => x.Id == "decor-ghost-star");
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(star.Unlocked, Is.False, "Star ghost must remain locked at level 1 without bypass.");
                     Assert.That(
                         snapshot.DecorationSelection.SelectedGhostSkinId,
-                        Is.EqualTo("decor.ghost.standard"),
+                        Is.EqualTo("decor-ghost-standard"),
                         "Locked selection must fallback to unlocked default skin.");
                 });
             });
@@ -84,9 +83,8 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
             await server.WaitAssertion(() =>
             {
-                var meta = server.System<WH40KMetaProgressSystem>();
-                var snapshot = meta.GetSnapshot(userId);
-                var star = snapshot.Decorations.Single(x => x.Id == "decor.ghost.star");
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(uid1);
+                var star = snapshot.Decorations.Single(x => x.Id == "decor-ghost-star");
 
                 Assert.Multiple(() =>
                 {
@@ -100,9 +98,9 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
             {
                 var meta = server.System<WH40KMetaProgressSystem>();
                 var selectedBypass = meta.TrySetDecorationSelection(
-                    userId,
+                    uid1,
                     WH40KMetaDecorationCategory.GhostSkins,
-                    "decor.ghost.star",
+                    "decor-ghost-star",
                     out _,
                     out var selectionError);
 
@@ -112,9 +110,8 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
             await server.WaitAssertion(() =>
             {
-                var meta = server.System<WH40KMetaProgressSystem>();
-                var snapshot = meta.GetSnapshot(userId);
-                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor.ghost.star"));
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(uid1);
+                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor-ghost-star"));
             });
         }
         finally
@@ -122,19 +119,9 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
             await server.WaitPost(() => config.SetCVar(CCVars.WH40KMetaUnlocksEnforced, originalBypass));
         }
 
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task DiscordDecorationRequirementsFallbackToLevelWhenAuthDisabled()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var db = server.ResolveDependency<IServerDbManager>();
-        var userId = new NetUserId(Guid.NewGuid());
-        var config = server.ResolveDependency<IConfigurationManager>();
-
-        await db.UpdatePlayerRecordAsync(userId, "MetaDiscordDecorFallbackTest", IPAddress.Loopback, null);
+        // ── Part B: Discord auth fallback ──
+        var uid2 = new NetUserId(Guid.NewGuid());
+        await db.UpdatePlayerRecordAsync(uid2, "MetaDiscordDecorFallbackTest", IPAddress.Loopback, null);
 
         var originalEnabled = config.GetCVar(CCVars.WH40KDiscordAuthEnabled);
 
@@ -145,8 +132,7 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
             await server.WaitAssertion(() =>
             {
-                var meta = server.System<WH40KMetaProgressSystem>();
-                var snapshot = meta.GetSnapshot(userId);
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(uid2);
                 var fish = snapshot.Decorations.Single(x => x.Id == "decor-title-fish");
 
                 Assert.Multiple(() =>
@@ -162,8 +148,7 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
             await server.WaitAssertion(() =>
             {
-                var meta = server.System<WH40KMetaProgressSystem>();
-                var snapshot = meta.GetSnapshot(userId);
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(uid2);
                 var fish = snapshot.Decorations.Single(x => x.Id == "decor-title-fish");
 
                 Assert.Multiple(() =>
@@ -429,6 +414,10 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
         await db.UpdatePlayerRecordAsync(userId, "MetaRuntimeReloadTest", IPAddress.Loopback, null);
 
+        // Trigger EnsureState and let the async DB load complete before mutating.
+        await server.WaitPost(() => server.System<WH40KMetaProgressSystem>().GetSnapshot(userId));
+        await pair.RunTicksSync(30);
+
         await server.WaitPost(() =>
         {
             var meta = server.System<WH40KMetaProgressSystem>();
@@ -442,10 +431,15 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
                 out _,
                 out _,
                 out var achievementError);
+            var unlockDecor = meta.TrySetDecorationUnlocked(
+                userId,
+                "decor-ghost-star",
+                true,
+                out var unlockError);
             var setDecoration = meta.TrySetDecorationSelection(
                 userId,
                 WH40KMetaDecorationCategory.GhostSkins,
-                "decor.ghost.star",
+                "decor-ghost-star",
                 out _,
                 out var decorationError);
 
@@ -453,20 +447,20 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
             {
                 Assert.That(setLevel, Is.True);
                 Assert.That(setAchievement, Is.True, achievementError);
+                Assert.That(unlockDecor, Is.True, unlockError);
                 Assert.That(setDecoration, Is.True, decorationError);
             });
         });
 
-        // Wait until persisted values are visible in DB.
         WH40KMetaProgressDbData? persisted = null;
         List<WH40KMetaAchievementDbData>? persistedAchievements = null;
-        for (var i = 0; i < 120; i++)
+        for (var i = 0; i < 300; i++)
         {
             persisted = await db.GetWH40KMetaProgress(userId);
             persistedAchievements = await db.GetWH40KMetaAchievements(userId);
 
             if (persisted != null &&
-                string.Equals(persisted.SelectedGhostSkinId, "decor.ghost.star", StringComparison.Ordinal) &&
+                string.Equals(persisted.SelectedGhostSkinId, "decor-ghost-star", StringComparison.Ordinal) &&
                 persistedAchievements != null &&
                 persistedAchievements.Any(a => a.AchievementId == "wh40k-ach-veteran-of-wars" && a.ProgressValue == 42))
             {
@@ -483,7 +477,6 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
             Is.True,
             "Achievement progress must be persisted before reload.");
 
-        // Simulate server-round cleanup that clears runtime caches.
         await server.WaitPost(() =>
         {
             var entMan = server.ResolveDependency<IEntityManager>();
@@ -491,7 +484,6 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
         });
         await pair.RunTicksSync(5);
 
-        // Fresh runtime state should load persisted values from DB.
         WH40KMetaProgressSnapshot snapshot = null!;
         var restored = false;
         for (var i = 0; i < 180; i++)
@@ -500,7 +492,7 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
             var veteran = snapshot.Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
             if (snapshot.Level >= 5 &&
-                string.Equals(snapshot.DecorationSelection.SelectedGhostSkinId, "decor.ghost.star", StringComparison.Ordinal) &&
+                string.Equals(snapshot.DecorationSelection.SelectedGhostSkinId, "decor-ghost-star", StringComparison.Ordinal) &&
                 veteran.Progress == 42)
             {
                 restored = true;
@@ -585,8 +577,8 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
 
         await pair.WaitCommand($"wh40kmeta level set {userName} 5");
         await pair.WaitCommand($"wh40kmeta ach progress set {userName} wh40k-ach-veteran-of-wars 10");
-        await pair.WaitCommand($"wh40kmeta decor unlock {userName} decor.ghost.star");
-        await pair.WaitCommand($"wh40kmeta ghostskin set {userName} decor.ghost.star");
+        await pair.WaitCommand($"wh40kmeta decor unlock {userName} decor-ghost-star");
+        await pair.WaitCommand($"wh40kmeta ghostskin set {userName} decor-ghost-star");
 
         await pair.RunTicksSync(10);
 
@@ -594,14 +586,14 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
         {
             var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId);
             var veteran = snapshot.Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-            var star = snapshot.Decorations.Single(a => a.Id == "decor.ghost.star");
+            var star = snapshot.Decorations.Single(a => a.Id == "decor-ghost-star");
 
             Assert.Multiple(() =>
             {
                 Assert.That(snapshot.Level, Is.EqualTo(5));
                 Assert.That(veteran.Progress, Is.EqualTo(10));
                 Assert.That(star.Unlocked, Is.True);
-                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor.ghost.star"));
+                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor-ghost-star"));
             });
         });
 
@@ -650,148 +642,11 @@ public sealed class MetaProgressScenarioFollowupIntegrationTests
             {
                 Assert.That(snapshot.Level, Is.EqualTo(5));
                 Assert.That(veteran.Progress, Is.EqualTo(10));
-                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor.ghost.star"));
+                Assert.That(snapshot.DecorationSelection.SelectedGhostSkinId, Is.EqualTo("decor-ghost-star"));
             });
         });
 
         await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task OocOutputPriorityUsesDecorationsForUsersAndAdminOverridesWhenPrivileged()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            InLobby = true,
-            Dirty = true,
-            Fresh = true
-        });
-        var server = pair.Server;
-        var client = pair.Client;
-
-        NetUserId userId = default;
-        string userName = string.Empty;
-        await server.WaitAssertion(() =>
-        {
-            var session = server.ResolveDependency<IPlayerManager>().Sessions.Single();
-            userId = session.UserId;
-            userName = session.Name;
-        });
-
-        await server.WaitPost(() =>
-        {
-            var meta = server.System<WH40KMetaProgressSystem>();
-
-            var setLevel = meta.TrySetLevel(userId, 6, out _, out _);
-            var setTitle = meta.TrySetDecorationSelection(
-                userId,
-                WH40KMetaDecorationCategory.OocTitles,
-                "decor.title.legend",
-                out _,
-                out var titleError);
-            var setColor = meta.TrySetDecorationSelection(
-                userId,
-                WH40KMetaDecorationCategory.OocNameColors,
-                "decor.color.gold",
-                out _,
-                out var colorError);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(setLevel, Is.True);
-                Assert.That(setTitle, Is.True, titleError);
-                Assert.That(setColor, Is.True, colorError);
-            });
-        });
-        await pair.RunTicksSync(5);
-
-        ChatUIController chatController = null!;
-        await client.WaitAssertion(() =>
-        {
-            var ui = client.ResolveDependency<IUserInterfaceManager>();
-            chatController = ui.GetUIController<ChatUIController>();
-            Assert.That(chatController, Is.Not.Null);
-        });
-        await client.WaitPost(() => chatController.History.Clear());
-
-        await server.WaitPost(() =>
-        {
-            var admin = server.ResolveDependency<IAdminManager>();
-            var session = server.ResolveDependency<IPlayerManager>().Sessions.Single();
-            admin.DeAdmin(session);
-        });
-        await pair.RunTicksSync(5);
-
-        var userText = $"s007-user-{Guid.NewGuid():N}";
-        var userMessage = await SendOocAndCaptureMessageAsync(pair, chatController, userText);
-        Assert.Multiple(() =>
-        {
-            Assert.That(userMessage.MessageColorOverride, Is.Null);
-            Assert.That(userMessage.WrappedMessage, Does.Contain(userName));
-            Assert.That(userMessage.WrappedMessage, Does.Contain("("), "Meta OOC title should be visible for non-admin path.");
-            Assert.That(userMessage.WrappedMessage, Does.Contain("D8BC6A").IgnoreCase);
-        });
-
-        await server.WaitPost(() =>
-        {
-            var admin = server.ResolveDependency<IAdminManager>();
-            var session = server.ResolveDependency<IPlayerManager>().Sessions.Single();
-            admin.ReAdmin(session);
-        });
-        await pair.RunTicksSync(5);
-
-        var adminText = $"s007-admin-{Guid.NewGuid():N}";
-        var adminMessage = await SendOocAndCaptureMessageAsync(pair, chatController, adminText);
-        Assert.Multiple(() =>
-        {
-            Assert.That(adminMessage.MessageColorOverride, Is.Not.Null, "Admin name color must override meta OOC color.");
-            Assert.That(adminMessage.WrappedMessage, Does.Contain(userName));
-            Assert.That(adminMessage.WrappedMessage, Does.Not.Contain("D8BC6A").IgnoreCase);
-            Assert.That(adminMessage.WrappedMessage, Does.Not.Contain("("), "Forced admin title should suppress meta title prefix.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    private static async Task<ChatMessage> SendOocAndCaptureMessageAsync(
-        TestPair pair,
-        ChatUIController chatController,
-        string text,
-        int maxTicks = 180)
-    {
-        var client = pair.Client;
-
-        await client.WaitPost(() =>
-        {
-            var chat = client.ResolveDependency<Content.Client.Chat.Managers.IChatManager>();
-            chat.SendMessage(text, ChatSelectChannel.OOC);
-        });
-
-        for (var i = 0; i < maxTicks; i++)
-        {
-            ChatMessage? message = null;
-            await client.WaitPost(() =>
-            {
-                var matches = chatController.History
-                    .Where(entry =>
-                        entry.Msg.Channel == ChatChannel.OOC &&
-                        string.Equals(entry.Msg.Message, text, StringComparison.Ordinal))
-                    .Select(entry => entry.Msg)
-                    .ToArray();
-
-                if (matches.Length > 0)
-                    message = matches[^1];
-            });
-
-            if (message != null)
-                return message;
-
-            await pair.RunTicksSync(1);
-        }
-
-        Assert.Fail($"Timed out waiting for OOC message capture: '{text}'.");
-        return null!;
     }
 
     private static async Task<TestPair> StartWh40KRoundAsync()

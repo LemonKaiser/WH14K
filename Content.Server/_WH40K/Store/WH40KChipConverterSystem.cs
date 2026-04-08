@@ -4,17 +4,14 @@ using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Store.Components;
 using Content.Server.Lathe;
-using Content.Server.Materials;
 using Content.Server.Stack;
-using Content.Shared._WH40K.Tiers;
 using Content.Shared.Examine;
 using Content.Shared.Lathe;
 using Content.Shared.Lathe.Prototypes;
-using Content.Shared.Materials;
 using Content.Shared.Research.Prototypes;
-using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Store;
 
@@ -28,8 +25,8 @@ public sealed class WH40KChipConverterSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly LatheSystem _lathe = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
     [Dependency] private readonly StackSystem _stack = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -70,8 +67,6 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         var tier = SelectTier(effectiveLevel, converter);
         var desiredPack = SelectPack(tier, converter);
         var desiredConcurrentLimit = GetConcurrentLimit(tier, converter);
-        var desiredStorageUnits = GetMaterialStorageLimit(tier, converter);
-        var desiredStorageLimit = WH40KMaterialStorageUnits.ToRawMaterialVolume(desiredStorageUnits);
         var changed = false;
 
         if (lathe.StaticPacks.Count != 1 || lathe.StaticPacks[0] != desiredPack)
@@ -91,12 +86,6 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         if (lathe.DefaultProductionAmount != desiredConcurrentLimit)
         {
             lathe.DefaultProductionAmount = desiredConcurrentLimit;
-            changed = true;
-        }
-
-        if (TryComp<MaterialStorageComponent>(uid, out var materialStorage) &&
-            _materialStorage.SetStorageLimit(uid, desiredStorageLimit, materialStorage))
-        {
             changed = true;
         }
 
@@ -134,10 +123,12 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        using var scope = _culture.CreateScope(args.Examiner);
+
         var effectiveLevel = GetEffectiveLevel(converter.TeamId);
         var tier = SelectTier(effectiveLevel, converter);
         var jobs = GetConcurrentLimit(tier, converter);
-        var storageUnits = GetMaterialStorageLimit(tier, converter);
+        var storageText = Loc.GetString("wh40k-tiered-machine-storage-unlimited");
 
         args.PushMarkup(Loc.GetString(
             "wh40k-chip-converter-examine-tier",
@@ -146,7 +137,7 @@ public sealed class WH40KChipConverterSystem : EntitySystem
         args.PushMarkup(Loc.GetString(
             "wh40k-chip-converter-examine-bonuses",
             ("jobs", jobs),
-            ("storage", storageUnits)));
+            ("storage", storageText)));
     }
 
     private int GetEffectiveLevel(string teamId)
@@ -213,17 +204,6 @@ public sealed class WH40KChipConverterSystem : EntitySystem
             2 => converter.MaxConcurrentJobsTier2,
             1 => converter.MaxConcurrentJobsTier1,
             _ => converter.MaxConcurrentJobsTier1
-        });
-    }
-
-    private static int GetMaterialStorageLimit(int tier, WH40KChipConverterComponent converter)
-    {
-        return Math.Max(1, tier switch
-        {
-            3 => converter.MaterialStorageLimitTier3,
-            2 => converter.MaterialStorageLimitTier2,
-            1 => converter.MaterialStorageLimitTier1,
-            _ => converter.MaterialStorageLimitTier1
         });
     }
 

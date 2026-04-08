@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using Content.Client.Localization;
-using Content.Client.Stylesheets;
 using Content.Shared._WH40K.DiscordAuth;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -64,7 +63,7 @@ public sealed class WH40KDiscordAuthStatusWindow : DefaultWindow, ILocalizedCont
             TextAlign = Label.AlignMode.Center,
         };
         UnlinkButton.MinWidth = 472f;
-        UnlinkButton.StyleClasses.Add(StyleNano.ButtonCaution);
+        UnlinkButton.StyleClasses.Add("negative");
         UnlinkButton.Label.FontColorOverride = Color.White;
 
         var buttons = new BoxContainer
@@ -187,12 +186,12 @@ public sealed class WH40KDiscordAuthStatusWindow : DefaultWindow, ILocalizedCont
 
         if (_refreshShouldWarn)
         {
-            if (!RefreshButton.StyleClasses.Contains(StyleNano.ButtonCaution))
-                RefreshButton.StyleClasses.Add(StyleNano.ButtonCaution);
+            if (!RefreshButton.StyleClasses.Contains("negative"))
+                RefreshButton.StyleClasses.Add("negative");
         }
         else
         {
-            RefreshButton.StyleClasses.Remove(StyleNano.ButtonCaution);
+            RefreshButton.StyleClasses.Remove("negative");
         }
 
         if (cooldownRemaining > TimeSpan.Zero)

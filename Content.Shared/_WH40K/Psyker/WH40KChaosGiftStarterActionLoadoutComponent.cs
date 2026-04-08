@@ -90,10 +90,10 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
     };
 
     [DataField("khornePassiveExActions")]
-    public List<string> KhornePassiveExActions = new()
-    {
-        "ActionWH40KChaosKhorneGroxMorph",
-    };
+    public List<string> KhornePassiveExActions = new();
+
+    [DataField("khorneBonusActions")]
+    public List<string> KhorneBonusActions = new();
 
     [DataField("nurgleBranchActions")]
     public List<string> NurgleBranchActions = new()
@@ -103,6 +103,9 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
         "ActionWH40KChaosNurgleCorpseBloom",
     };
 
+    [DataField("nurgleBonusActions")]
+    public List<string> NurgleBonusActions = new();
+
     [DataField("slaaneshBranchActions")]
     public List<string> SlaaneshBranchActions = new()
     {
@@ -111,12 +114,30 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
         "ActionWH40KChaosSlaaneshExquisiteTempo",
     };
 
+    [DataField("slaaneshBonusActions")]
+    public List<string> SlaaneshBonusActions = new()
+    {
+        "ActionWH40KChaosSlaaneshArena",
+    };
+
     [DataField("tzeentchBranchActions")]
     public List<string> TzeentchBranchActions = new()
     {
+        "ActionWH40KChaosTzeentchFireball",
         "ActionWH40KChaosTzeentchBarrier",
-        "ActionWH40KChaosTzeentchMindTwist",
         "ActionWH40KChaosTzeentchWarpRewrite",
+    };
+
+    [DataField("tzeentchBonusActions")]
+    public List<string> TzeentchBonusActions = new()
+    {
+        "ActionWH40KChaosTzeentchMindTwist",
+    };
+
+    [DataField("leaderActions")]
+    public List<string> LeaderActions = new()
+    {
+        "ActionWH40KChaosLeaderSacrifice",
     };
 
     [DataField]
@@ -136,4 +157,10 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
 
     [DataField]
     public bool AppliedKhornePassiveEx;
+
+    [DataField]
+    public bool AppliedLeaderState;
+
+    [DataField]
+    public bool AppliedCatastropheLockdown;
 }

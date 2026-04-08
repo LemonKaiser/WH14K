@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Content.Client.Gameplay;
+using Content.Client.GameTicking.Managers;
 using Content.Client.Localization;
 using Content.Client.Lobby;
 using Content.Client.Options.UI;
@@ -20,15 +21,17 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared;
 using Robust.Shared.Configuration;
+using Robust.Shared.IoC;
 
 namespace Content.Client.UserInterface.Systems.Localization;
 
 public sealed class LocalizationUIController : UIController
 {
-    private const string DefaultCultureName = "ru-RU";
+    private const string DefaultCultureName = ContentLocalizationManager.DefaultCultureName;
 
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ContentLocalizationManager _contentLoc = default!;
+    [Dependency] private readonly IDependencyCollection _dependencies = default!;
     [Dependency] private readonly ILocalizationManager _loc = default!;
     [Dependency] private readonly Robust.Client.State.IStateManager _state = default!;
 
@@ -71,6 +74,10 @@ public sealed class LocalizationUIController : UIController
         TriggerSystem.TimerOptions.RefreshLocalization();
 
         RefreshCurrentCulture();
+
+        if (_state.CurrentState is GameplayState &&
+            _dependencies.TryResolveType<ClientGameTicker>(out var gameTicker))
+            gameTicker.RequestLobbyInfoRefresh();
     }
 
     public void RefreshCurrentCulture()

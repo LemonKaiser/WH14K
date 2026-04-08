@@ -1,0 +1,49 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-4.0",
+    "copyright": "from needtouse",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "computer",
+            "directions": 4
+        },
+        {
+            "name": "computer-broken",
+            "directions": 4
+        },
+        {
+            "name": "decorative_monitor",
+            "directions": 4,
+            "delays": [
+                [
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                ],
+                [
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                ],
+                [
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                ],
+                [
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                ]
+            ]
+        }
+    ]
+}

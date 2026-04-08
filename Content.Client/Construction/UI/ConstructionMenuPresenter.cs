@@ -237,7 +237,9 @@ namespace Content.Client.Construction.UI
 
                 var itemButtonPanelContainer = new PanelContainer
                 {
+#pragma warning disable CS0618
                     PanelOverride = new StyleBoxFlat { BackgroundColor = StyleNano.ButtonColorDefault },
+#pragma warning restore CS0618
                     Children = { itemButton },
                 };
 
@@ -324,7 +326,9 @@ namespace Content.Client.Construction.UI
                 return;
 
             button.Children.Single().Modulate = select ? Color.Green : Color.White;
+#pragma warning disable CS0618
             var buttonColor = select ? StyleNano.ButtonColorDefault : Color.Transparent;
+#pragma warning restore CS0618
             buttonPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = buttonColor };
         }
 

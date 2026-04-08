@@ -26,12 +26,6 @@
         maxVol: 100
       tank:
         maxVol: 500
-  - type: SolutionRegeneration
-    solution: tank
-    generated:
-      reagents:
-      - ReagentId: Water
-        Quantity: 1
   - type: DrainableSolution
     solution: tank
   - type: ReagentTank
@@ -78,9 +72,10 @@
       drainBuffer:
         maxVol: 200
       tank:
+        maxVol: 5000
         reagents:
         - ReagentId: Water
-          Quantity: 500
+          Quantity: 5000
 
 - type: entity
   name: wide sink
@@ -125,6 +120,7 @@
       drainBuffer:
         maxVol: 100
       tank:
+        maxVol: 5000
         reagents:
         - ReagentId: Water
-          Quantity: 500
+          Quantity: 5000

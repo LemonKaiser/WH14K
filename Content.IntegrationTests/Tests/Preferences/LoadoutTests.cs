@@ -22,6 +22,9 @@ public sealed class LoadoutTests
 - type: playTimeTracker
   id: PlayTimeLoadoutTesterFallback
 
+- type: playTimeTracker
+  id: PlayTimeLoadoutTesterReplace
+
 - type: loadout
   id: TestJumpsuit
   equipment:
@@ -98,6 +101,33 @@ public sealed class LoadoutTests
   id: LoadoutTesterFallback
   playTimeTracker: PlayTimeLoadoutTesterFallback
   startingGear: LoadoutTesterFallbackGear
+
+- type: startingGear
+  id: LoadoutTesterReplaceGear
+  equipment:
+    gloves: ClothingHandsGlovesColorWhite
+
+- type: loadout
+  id: TestGloveReplacement
+  equipment:
+    gloves: ClothingHandsGlovesColorBlack
+
+- type: loadoutGroup
+  id: LoadoutTesterReplaceGroup
+  name: generic-unknown
+  minLimit: 1
+  loadouts:
+  - TestGloveReplacement
+
+- type: roleLoadout
+  id: JobLoadoutTesterReplace
+  groups:
+  - LoadoutTesterReplaceGroup
+
+- type: job
+  id: LoadoutTesterReplace
+  playTimeTracker: PlayTimeLoadoutTesterReplace
+  startingGear: LoadoutTesterReplaceGear
 ";
 
     private readonly Dictionary<string, EntProtoId> _expectedEquipment = new()
@@ -207,6 +237,55 @@ public sealed class LoadoutTests
 
         await pair.CleanReturnAsync();
     }
+
+      [Test]
+      public async Task TestLoadoutEquipmentReplacesJobStartingGearWithoutDroppingOldItem()
+      {
+        var pair = await PoolManager.GetServerClient(new PoolSettings()
+        {
+          Dirty = true,
+        });
+        var server = pair.Server;
+
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var stationSystem = entManager.System<StationSpawningSystem>();
+        var inventorySystem = entManager.System<InventorySystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+          var profile = new HumanoidCharacterProfile();
+          profile.SetLoadout(new RoleLoadout("LoadoutTesterReplace"));
+
+          var tester = stationSystem.SpawnPlayerMob(testMap.GridCoords, job: "LoadoutTesterReplace", profile, station: null);
+
+          Assert.That(inventorySystem.TryGetSlotEntity(tester, "gloves", out var gloves), Is.True,
+            "Expected replacement gloves to be equipped in the gloves slot.");
+
+          Assert.That(entManager.GetComponent<MetaDataComponent>(gloves!.Value).EntityPrototype?.ID,
+            Is.EqualTo("ClothingHandsGlovesColorBlack"),
+            "Loadout gloves should replace the job starting gloves in-slot.");
+
+          var testerMapId = entManager.GetComponent<TransformComponent>(tester).MapID;
+          var whiteGloveCount = 0;
+          var query = entManager.EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
+          while (query.MoveNext(out _, out var meta, out var xform))
+          {
+            if (xform.MapID != testerMapId)
+              continue;
+
+            if (meta.EntityPrototype?.ID == "ClothingHandsGlovesColorWhite")
+              whiteGloveCount++;
+          }
+
+          Assert.That(whiteGloveCount, Is.EqualTo(0),
+            "Default job gloves should not be spawned and dropped when a loadout overrides the same slot.");
+
+          entManager.DeleteEntity(tester);
+        });
+
+        await pair.CleanReturnAsync();
+      }
 
     private static bool HasDescendantWithPrototype(IEntityManager entManager, EntityUid root, string prototypeId)
     {

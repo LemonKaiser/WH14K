@@ -273,6 +273,20 @@
       - state: green
       - state: guardsman
 
+- type: entity
+  id: SpawnPointMunitorumOfficer
+  parent: SpawnPointJobBase
+  name: MunitorumOfficer
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: MunitorumOfficer
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
 # Heretics
 
 - type: entity
@@ -289,21 +303,6 @@
       - state: green
       - state: heretic
       - state: colonel
-
-- type: entity
-  id: SpawnPointHCommissar
-  parent: SpawnPointJobBase
-  name: HCommissar
-  suffix: WH40K, Еретик
-  components:
-  - type: SpawnPoint
-    job_id: HCommissar
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: commissar
 
 - type: entity
   id: SpawnPointHGuardsman
@@ -349,21 +348,6 @@
       - state: green
       - state: heretic
       - state: lieutenant
-
-- type: entity
-  id: SpawnPointHMedic
-  parent: SpawnPointJobBase
-  name: Medic
-  suffix: WH40K, Еретик
-  components:
-  - type: SpawnPoint
-    job_id: HMedic
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: medic
 
 - type: entity
   id: SpawnPointHSergeant

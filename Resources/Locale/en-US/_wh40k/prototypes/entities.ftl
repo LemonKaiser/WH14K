@@ -128,6 +128,9 @@ ent-ClothingHandsGlovesTechpriest = Tech-Priest Gloves
 ent-ClothingHandsGlovesBloodPact = bloodpact gloves
     .desc = combat gloves
 
+ent-ClothingHandsGlovesKrieg = krieg gloves
+    .desc = Thick trench gloves made to keep mud, frost, and brutal fieldwork off a trooper's hands.
+
 ent-ClothingHandsGlovesCombatColonel = Colonel's gloves
     .desc = filler
 
@@ -139,6 +142,9 @@ ent-ClothingHeadHelmetFlakCyan = cyan-pattern flak helmet
 
 ent-ClothingHeadHelmetBloodPact = bloodpact helmet
     .desc = Standard helmet
+
+ent-ClothingMaskGasBloodPact = bloodpact mask
+    .desc = A crude Blood Pact combat mask that conceals the face and offers basic breathing protection.
 
 ent-ClothingHeadHelmetrHeresy = Heretic's Helm
     .desc = Standard Traitor Guard Helm
@@ -206,6 +212,9 @@ ent-ClothingHeadHelmetFlakAdv = armored helmet
 ent-ClothingHeadHelmetFlakAdvCyan = cyan-pattern armored helmet
     .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
+ent-ClothingHeadHelmetFlakAdvHeresy = heretic carapace helmet
+    .desc = A heavier traitor guard helmet built on a carapace pattern, using scavenged seals and reinforced plates for front-line assaults.
+
 ent-ClothingMaskGasTechPriest = respirator
     .desc = A standard respirator that protects only the respiratory tract.
 
@@ -218,21 +227,29 @@ ent-Colonelcloak = colonel's cloak
 ent-Gorjet = gorget
     .desc = An officer's insignia with a built-in force field that repels projectiles. Some kind of hit to the head should not distract an officer from his wise plans!
 
-ent-ClothingNeckRobeTechpriestMars = tech-priest's robe
+ent-WH40KCommandTacticalMapTablet = command tactical map tablet
+    .desc = A command tactical tablet with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestAgripinaa = tech-priest's robe
+ent-WH40KStandardTacticalMapTablet = field tactical map tablet
+    .desc = A standard battlefield tactical tablet with read-only access to the command feed.
 
-ent-ClothingNeckRobeTechpriestGraia = tech-priest's robe
+ent-WH40KCommandTacticalMapConsole = imperium command tactical map console
+    .desc = A command tactical console on an imperium chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestLucius = tech-priest's robe
+ent-WH40KStandardTacticalMapConsole = imperium field tactical map console
+    .desc = A field tactical console on an imperium chassis with read-only access to the command feed.
 
-ent-ClothingNeckRobeTechpriestMetalica = tech-priest's robe
+ent-WH40KCommandTacticalMapConsoleImperium = imperium command tactical map console
+    .desc = A command tactical console on an imperium chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestRiza = tech-priest's robe
+ent-WH40KCommandTacticalMapConsoleHeretics = heretic command tactical map console
+    .desc = A command tactical console on a heretic chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestStygiesVIII = tech-priest's robe
+ent-WH40KStandardTacticalMapConsoleImperium = imperium field tactical map console
+    .desc = A field tactical console on an imperium chassis with read-only access to the command feed.
 
-ent-ClothingNeckRobeGenetorTechpriestMars = Genetus robe
+ent-WH40KStandardTacticalMapConsoleHeretics = heretic field tactical map console
+    .desc = A field tactical console on a heretic chassis with read-only access to the command feed.
 
 ent-ClothingOuterArmorAdvancedFlakVest = carapace armor
     .desc = Strong armor that almost completely covers the body and provides good protection from most types of damage.
@@ -339,6 +356,9 @@ ent-ClothingUniformJumpsuitCommissar = commissar uniform
 ent-ClothingUniformJumpsuitGuardsman = guard uniform
     .desc = The uniform issued to members of the regular army of the imperium - the imperial guard.
 
+ent-ClothingUniformJumpsuitKrieg = krieg uniform
+    .desc = A disciplined Krieg-pattern field uniform built for trench warfare and endless marches.
+
 ent-ClothingUniformJumpsuitTechpriest = tech-priest jumpsuit
     .desc = A jumpsuit issued to all tech-priests who still have a humanoid body shape.
 
@@ -351,8 +371,11 @@ ent-ClothingUniformJumpsuitOfficer = officer uniform
 ent-ClothingUniformJumpsuitColonel = colonel uniform
     .desc = Common uniform of an Imperial Guard Colonel
 
-ent-GuardFlag = Regimental Banner (Cadia)
+ent-GuardFlag = Imperial regimental banner
     .desc = The regiment's banner is its pride, its physical embodiment, do not let the enemy take possession of it! Hurray!
+
+ent-ChaosFlag = Chaos banner
+    .desc = A profaned war banner carried by heretics as they advance and spread fear.
 
 ent-PlushieFull = plush Full
     .desc = A plush version of the once great creature. Two snow-white wings protrude from his back, and in his hands is a massive hammer and... a twenty-sided die? Interesting set of items.
@@ -398,6 +421,9 @@ ent-PlushieOliva = Oliva
 
 ent-PlushieFizzo = Plush FizzoGhoster
     .desc = Do you know what true love is?.. Never mind. Chrysalis is the best pony.
+
+ent-PlushieRad = Plush Rad
+    .desc = A tiny masked arsonist plush. When used to bonk someone, it laughs far too happily.
 
 ent-StrangeToster = Strange toaster
     .desc = There's a lazy spirit in it, so you can't get this toaster to work.
@@ -483,6 +509,9 @@ ent-WeaponLaserCarabin = lascarbine
 
 ent-WeaponLaserLasgun = M36 Cantrael
     .desc = The standard weapon of the Cadian Assault Troops and all regiments that derive their military traditions and doctrines from them.
+
+ent-WeaponLaserLasgunKrieg = lucius-pattern lasgun
+    .desc = A Lucius-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
 
 ent-WeaponLaserLasgunAccatran = Accatran VI D
     .desc = Assault version of the legendary Accatran model range, model - Six De.
@@ -773,17 +802,6 @@ ent-GeneratorPlasmaHardDamaged = Damaged Jupiter drive
 ent-CrateNecron = necron box
     .desc = This is a storage facility belonging to the mysterious civilization of machines made of living steel - the Necrons. Do you have the will to open it?
 
-ent-FragGrenade = fragmentation grenade
-    .desc = The standard frag grenade of the Imperium, used by Imperial Guard forces and Space Marines to destroy enemies.
-
-ent-KrakGrenade = crack grenade
-    .desc = An explosive armor-piercing grenade used by Imperial forces to blow up light vehicles and fortifications.
-
-ent-OrkGrenade = cool grenade
-    .desc = Big bangs for big Waagh!
-
-ent-MeltaGrenade = melta charge
-    .desc = A short-range anti-tank grenade that creates a powerful melting explosion capable of destroying heavily armored targets.
 ent-WH40KServoSkull = servo skull
     .desc = A compact servo skull chassis. Deploy it to create a friendly support skull.
 ent-WH40KServoSkullMelta = melta servo skull
@@ -984,77 +1002,333 @@ ent-ColMarTechSGGear = ColMarTech squad smart gun operator gear rack
 ent-ColMarTechUtilities = ColMarTech automated utilities squad vendor
     .desc = An automated supply rack hooked up to a small storage of various utilities and tools. Can be accessed by any Marine Rifleman.
 
+ent-ClothingHeadHatCatachanBandana = catachan bandana
+    .desc = A bright red bandana worn by jungle fighters.
+
+ent-ClothingHeadHatCatachanBeret = catachan beret
+    .desc = A red beret favored by hardened Catachan veterans.
+
+ent-ClothingHeadHatCatachanHeadband = catachan headband
+    .desc = A simple headband that keeps sweat out of your eyes.
+
+ent-ClothingOuterArmorCatachanLight = catachan light armor
+    .desc = Light field armor built for speed and freedom of movement.
+
+ent-ClothingOuterArmorCatachanMedium = catachan armor
+    .desc = Reinforced field armor for frontline jungle assaults.
+
+ent-ClothingOuterArmorCatachanVest = catachan web vest
+    .desc = A practical combat vest covered in pouches for long patrols.
+
+ent-ClothingUniformJumpsuitCatachan1 = catachan fatigues
+    .desc = Sleeveless jungle fatigues made for heat, mud, and close fighting.
+
+ent-ClothingUniformJumpsuitCatachan2 = catachan patrol fatigues
+    .desc = Rugged field wear cut down for hard patrol work.
+
+ent-ClothingUniformJumpsuitCatachan3 = catachan tank top
+    .desc = A stripped-down jungle fighter shirt for the hottest warzones.
+
+ent-CatachanKnife = catachan knife
+    .desc = A sturdy fighting knife favored by Catachan jungle fighters.
+
+ent-WeaponRocketLauncherImperial = imperial rocket launcher
+    .desc = A reusable rocket launcher with a blast shield, issued to Imperial heavy teams.
+
+ent-WeaponRocketLauncherChaos = chaos rocket launcher
+    .desc = A reusable rocket launcher with a blast shield, favored by Chaos warbands.
+
+ent-WeaponRocketLauncherImperialDisposable = disposable imperial RPG
+    .desc = A single-use Imperial rocket tube. Once fired, it is done.
+
+ent-WeaponRocketLauncherChaosDisposable = disposable chaos RPG
+    .desc = A single-use Chaos rocket tube. Brutal, simple, and not reloadable.
+
+ent-CartridgeRocketHE = HE rocket
+    .desc = A high-explosive rocket round for reusable RPG launchers.
+
+ent-CartridgeRocketAP = AP rocket
+    .desc = An armor-piercing rocket round for reusable RPG launchers.
+
+ent-ClothingOuterArmorMunitorumCoat = Munitorum coat
+    .desc = A logistics service coat with light armor inserts and plenty of utility attachment points.
+
+ent-ClothingOuterArmorMunitorumGreatcoat = reinforced Munitorum coat
+    .desc = A heavier Munitorum service coat for the personnel who keep the regiment's rear echelon alive.
+
+ent-ClothingOuterArmorMunitorumRig = Munitorum rig
+    .desc = A Munitorum working rig with armor plates, utility mounts, and service markings.
+
+ent-ClothingOuterArmorMunitorumVest = Munitorum vest
+    .desc = A compact armored vest for Munitorum logisticians and warehouse crews.
+
+ent-ClothingHeadHelmetFlakCandle = flak helmet with candle
+    .desc = Is this idiocy or a forced necessity?
+
+ent-ClothingHeadHelmetFlakCandleChaos = flak helmet with candle
+    .desc = Is this idiocy or a forced necessity?
+
+ent-Bugle = vox-horn
+    .desc = It can probably attract some attention...
+
+ent-WH40KAmmoBox10mm = autogun ammo box (10mm)
+
+ent-WH40KAmmoBox10mmLong = autogun ammo box (10mm long)
+
+ent-ClothingEyesHudTechPriestMed = damage HUD visor
+    .desc = This visor allows Tech-Priests to better track damage and target status.
+
+ent-ClothingEyesHudTechPriestAdm = job HUD visor
+    .desc = This visor allows Tech-Priests to track roles and access levels.
+
+ent-ClothingBackpackTechpriestDendrite = dendrite backpack
+    .desc = This Tech-Priest backpack is equipped with two additional mecha-dendrites.
+
 ent-MobQueenChrysalis = Queen Chrysalis
-    .desc = A female werewolf, and also a werewolf queen.
+    .desc = A shape-shifting pony who can assume many different forms.
 
-ent-ClothingBeltChaplain = Cleric Belt
-    .desc = Clerical Garb.
+# --- Floor tiles ---
 
-ent-WH40KClothingUniformJumpsuitChaplain = Ecclesiarchal Uniform
-    .desc = Garb for minor clergy.
+ent-NecronFloorWH40k = necron tile
+ent-NecronFloorWH40k1 = brick floor
+ent-BrickFloorWH40k = brick floor
+ent-BrickFloorWH40k1 = brick floor
+ent-BrickFloorWH40k2 = brick floor
+ent-BrickFloorWH40k3 = chaos brick floor
+ent-ChaosBrickAshFloorWH40k = concrete tile
+ent-ConcreteFloorWH40k = concrete tile
+ent-ConcreteFloorWH40k1 = concrete tile
+ent-ConcreteFloorWH40k2 = concrete tile
+ent-ConcreteFloorWH40k3 = concrete tile
 
-ent-ClothingShoesBootsChaplain = Cleric Boots
-    .desc = Clerical Garb.
+# --- Actions ---
 
-ent-ClothingOuterChaplainRobe = Cleric Robe
-    .desc = Clerical Garb.
+ent-ActionWH40KMoraleExecution = Morale Execution
+    .desc = Instantly execute an ally with an execution mark within 2 tiles and activate a morale aura.
 
-ent-ClothingNeckInqusition = Ecclesiarchal Inquisition
-    .desc = Chain with the Ecclesiarchal Insignia.
+ent-ActionWH40KChaosWarpBlast = Warp Blast
+    .desc = Hurl unstable Warp fire at a target.
 
-ent-WH40KBible = Bible
-    .desc = Holy Scripture.
+ent-ActionWH40KChaosWarpKnock = Defiled Breach
+    .desc = Breach nearby doors by desecrating their machine spirits.
 
-ent-ClothingNeckCloakRainImp = Raincoat
-    .desc = Useful in the rain.
+ent-ActionWH40KChaosUndividedBlink = Step of the Undivided
+    .desc = Slide through the Warp in the name of Chaos Undivided.
 
-ent-ClothingHeadHoodRainImp = Raincoat Hood
-    .desc = Useful in rain.
+ent-ActionWH40KChaosKhorneRepulse = Champion's Blade
+    .desc = Summon a warp blade for close-quarters carnage and melee breaching.
 
-ent-ClothingNeckCloakRainChs = Raincoat
-    .desc = Useful in rain.
+ent-ActionWH40KChaosNurgleMiasma = Miasma of Nurgle
+    .desc = Spread a plague fog to obscure vision and suppress the field.
 
-ent-ClothingHeadHoodRainChs = Raincoat Hood
-    .desc = Useful in rain.
+ent-ActionWH40KChaosSlaaneshSwap = Exchange of Ecstasy
+    .desc = Lash the fabric of reality and swap positions with a chosen target.
 
-ent-ClothingUniformJumpsuitGuardsmanVst = Vostroyan Uniform
-    .desc = Normal Uniform.
+ent-ActionWH40KChaosTzeentchBarrier = Barrier of Tzeentch
+    .desc = Form a short-lived wall of mutating Warp strands.
 
-ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan Sergeant's Helmet
-    .desc = Normal Uniform.
+ent-ActionWH40KChaosTzeentchFireball = Inferno of Tzeentch
+    .desc = Unleash a powerful bolt of shifting flame with a long cooldown.
 
-ent-ClothingHeadHelmetFlakAdvVst = Vostroyan Helmet
-    .desc = Normal Uniform.
+ent-ActionWH40KChaosWarpBlastSurge = Warp Blast Surge
+    .desc = Unleash an overcharged warp blast with devastating force.
 
-ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
-    .desc = Standard uniform.
+ent-ActionWH40KChaosWarpRiftStep = Rift Step
+    .desc = Tear open a brief rift and burst through it in a dash.
 
-ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan sergeant's helmet
-    .desc = Normal uniform.
+ent-ActionWH40KChaosUndividedAegis = Aegis of the Undivided
+    .desc = Erect a crude but resilient wall for any warband.
 
-ent-ClothingHeadHelmetFlakAdvVst = Vostroyan helmet
-    .desc = Normal uniform.
+ent-ActionWH40KChaosKhorneExecutionStep = Blood Feast
+    .desc = Burn your blood to rapidly close wounds and continue the slaughter.
 
-ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
-    .desc = Normal uniform.
+ent-ActionWH40KChaosNurgleRepulse = Acid Spit
+    .desc = Spit a concentrated glob of caustic bile that burns through flesh and armour.
 
-ent-ClothingOuterArmorFlakVestLietVst = Vostroyan lieutenant's armor
-    .desc = Normal uniform.
+ent-ActionWH40KChaosSlaaneshMiasma = Ecstatic Chorus
+    .desc = Infuse nearby Slaanesh cultists with stimulants and combat chem.
 
-ent-ClothingMaskGasVst = Vostroyan gas mask
-    .desc = Normal uniform.
+ent-ActionWH40KChaosTzeentchMindTwist = Conspiracy of Change
+    .desc = For 30 seconds, speed up and enlighten nearby Tzeentch cultists; chosen ones also get reduced cooldowns.
 
-ent-ClothingHandsGlovesVst = Vostroyan gloves
-    .desc = Standard uniform.
+ent-ActionWH40KChaosKhorneBloodstorm = Bloody Onslaught
+    .desc = Charge through the ranks, knocking down and stunning everyone in your path.
 
-ent-ClothingShoesBootsVst = Vostroyan boots
-    .desc = Standard uniform.
+ent-ActionWH40KChaosKhorneGroxMorph = Grox Form
+    .desc = Transform into a raging grox for a brief window of blood-mad fury.
 
-ent-ClothingNeckCloakVst = Vostroyan lieutenant's cloak
-    .desc = Standard uniform.
+ent-ActionWH40KChaosNurgleCorpseBloom = Corpse Rise
+    .desc = Raise the selected corpse as an allied Nurgle zombie.
 
-ent-ClothingOuterArmorFlakVestMajor = Officer's greatcoat
-    .desc = An officer's greatcoat—here it is, a symbol of authority on the battlefield.
+ent-ActionWH40KChaosSlaaneshExquisiteTempo = Sacred Self-Flagellation
+    .desc = Tear yourself with the lash of ecstasy, converting pain into potent healing.
 
-ent-MobHormagaunt = Hormagaunt
-    .desc = I think he can already smell your blood...
+ent-ActionWH40KChaosTzeentchWarpRewrite = Weaver's Dash
+    .desc = Instantly displace to a chosen point, escaping danger or changing your angle of attack.
+
+ent-ActionWH40KChaosSlaaneshArena = Arena of Ecstasy
+    .desc = Pull a target to you, stun both combatants, and seal the duel in a brief warp arena.
+
+ent-ActionWH40KChaosLeaderSacrifice = Ashen Sacrifice
+    .desc = Instantly turn your follower of the same pantheon to ash, restore 100 Warp energy, and grant the cult 100 XP.
+
+ent-ActionWH40KOpenSquadConsole = Squad Command
+    .desc = Open the squad command interface and assign your team's fighters.
+
+# --- Space Marine equipment ---
+
+ent-ClothingBackpackAstartesMk2Powerpack = Mk II power pack
+    .desc = An early Astartes power pack.
+
+ent-ClothingBackpackAstartesMk3Powerpack = Mk III power pack
+    .desc = A heavy Astartes power pack.
+
+ent-ClothingBackpackAstartesMk4Powerpack = Mk IV power pack
+    .desc = An improved-pattern Astartes power pack.
+
+ent-ClothingBackpackAstartesMk5Powerpack = Mk V power pack
+    .desc = A field-pattern Astartes power pack.
+
+ent-ClothingBackpackAstartesMk6Powerpack = Mk VI power pack
+    .desc = A lightweight Astartes power pack.
+
+ent-ClothingBackpackAstartesMk7JumpPack = Mk VII jump pack
+    .desc = A jump pack for Astartes power armour.
+
+ent-ClothingBackpackAstartesMk23JumpPack = Mk II/III jump pack
+    .desc = An early jump pack for Astartes power armour.
+
+ent-ClothingHeadHelmetAstartesMk7 = Mk VII "Aquila" helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk2 = Mk II helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk3 = Mk III helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk4 = Mk IV helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk5 = Mk V helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingHeadHelmetAstartesMk6 = Mk VI helmet
+    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk7 = Mk VII "Aquila" power armour
+    .desc = A servo-enhanced suit of Adeptus Astartes power armour. Superior to standard carapace armour and fitted for a Space Marine.
+
+ent-ClothingOuterArmorAstartesMk2 = Mk II power armour
+    .desc = An early Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk3 = Mk III power armour
+    .desc = A heavy Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk4A = Mk IV power armour, variant I
+    .desc = An improved Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk4B = Mk IV power armour, variant II
+    .desc = An improved Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk5 = Mk V power armour
+    .desc = A field-pattern Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesMk6 = Mk VI power armour
+    .desc = A reconnaissance Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
+
+ent-ClothingBackpackAstartesChaosPowerpack = Chaos Space Marine power pack
+    .desc = A defiled power pack for Space Marine armour, adorned with the symbols of Chaos.
+
+ent-ClothingHeadHelmetAstartesChaos = Chaos Space Marine helmet
+    .desc = A sealed helmet of corrupted Space Marine power armour, built for the anatomy of the Adeptus Astartes.
+
+ent-ClothingOuterArmorAstartesChaos = Chaos Space Marine power armour
+    .desc = A corrupted suit of power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+
+ent-MobAstartesWH40KImperiumMk2 = Imperium Space Marine Mk II
+ent-MobAstartesWH40KImperiumMk4 = Imperium Space Marine Mk IV
+ent-MobAstartesWH40KHereticsChaos = Chaos Space Marine
+
+# --- Chaos cultist equipment ---
+
+ent-ClothingBackpackCULT1 = Chaos cultist backpack
+    .desc = A backpack woven from skin of unknown origin; it holds supplies, weapons, and the hidden tomes of servants of Chaos.
+
+ent-ClothingBackpackCULT2 = Chaos cultist skull backpack
+    .desc = A backpack woven from skin of unknown origin and adorned with a skull; it holds supplies, weapons, and the hidden tomes of servants of Chaos.
+
+ent-ClothingBackpackSatchelChaosWheel = Chaos Wheel satchel
+    .desc = A battered cultist satchel decorated with a Chaos Star motif. Warp symbols on its surface flare occasionally, inspiring dread and offering strange protection.
+
+ent-chaosbelt = Chaos ritual webbing
+    .desc = A sinister belt stitched from unknown hide and steeped in the whispers of the Warp.
+
+ent-chaosbelt2 = Chaos Cult belt
+    .desc = A sinister belt stitched from unknown hide and soaked in blood.
+
+ent-ClothingHandsGlovesCombatcult = combat gloves
+    .desc = Cult combat gloves.
+
+ent-ClothingHeadScarfChaos = head sack
+    .desc = A simple head sack, but its fabric is infused with symbols of Chaos. Protects the head and gives the cultist a sinister appearance.
+
+ent-ClothingHeadHelmetFlakCHAOS = Chaos Cult composite helmet
+    .desc = A standard helmet forged from dark metal and defiled with Chaos runes. It protects the cultist's head but inspires terror.
+
+ent-ClothingMaskGasChaosCultist1 = Chaos gas mask
+    .desc = Does it even work? Washed in the blood of children.
+
+ent-ClothingMaskGasChaosCultist2 = Chaos gas mask
+    .desc = Does it even work? Made from human skin.
+
+ent-ClothingMaskGasCultist3 = cultist respirator
+    .desc = A sinister respirator adorned with symbols of Chaos. It protects the airways and occasionally softens blows to the face thanks to its rigid frame.
+
+ent-NecklaceChaosCultistReflectWeak = cultist necklace
+    .desc = A sinister necklace adorned with symbols of Chaos. It flares with warp energy and projects a weak protective shield.
+
+ent-ClothingOuterArmorChaosVest = Chaos flak vest
+    .desc = A full set of defiled Chaos armour for a rank-and-file cultist. Provides solid protection, but its alien metal presses on the body and restricts movement.
+
+ent-ClothingOuterArmorCultistCoat = cultist greatcoat
+    .desc = A dark greatcoat infused with symbols of Chaos. It inspires dread.
+
+ent-ClothingShoesChaosBoots1 = Chaos cultist boots
+    .desc = Sinister boots stitched from unknown hide and steeped in the whispers of the Warp. They serve not only as protection but as a symbol of devotion to Chaos.
+
+ent-ClothingShoesChaosBoots2 = Chaos cultist jackboots
+    .desc = Cultist jackboots made from strangely soft, tender skin whose smoothness horrifies, as if it still holds the warmth of its former owners.
+
+ent-ClothingUniformJumpsuitCultist1 = cultist jumpsuit
+    .desc = A dark jumpsuit covered in symbols of Chaos. It inspires dread but offers no protection.
+
+ent-ClothingUniformJumpsuitCultist2 = cultist vestments
+    .desc = A sinister jumpsuit woven from dark fabrics and covered in Warp runes. Its appearance inspires awe and underscores devotion to the Chaos cult.
+
+# --- Rune tablets ---
+
+ent-WH40KRuneSkrizhalBase = rune tablet
+    .desc = A runic tablet.
+ent-WH40KRuneSkrizhalChaos = Chaos rune tablet
+ent-WH40KRuneSkrizhalKhorn = Khorne rune tablet
+ent-WH40KRuneSkrizhalNurgk = Nurgle rune tablet
+ent-WH40KRuneSkrizhalSlaanesh = Slaanesh rune tablet
+ent-WH40KRuneSkrizhalTzinch = Tzeentch rune tablet
+
+# --- Misc ---
+
+ent-WH40KChaosKhorneStealerBlade = Khorne stealer blade
+    .desc = A living geno-blade woven from the fury and hunger of Khorne.
+
+ent-BarricadeWarhammerChaos = Chaos barricade
+    .desc = This might save your life one day. Or the opposite.
+ent-BarricadeWarhammerChaosgreen = Chaos barricade
+    .desc = This might save your life one day. Or the opposite.
+
+ent-ShuttleComputerModular = modular shuttle console
+    .desc = A terminal used for piloting the ship and maintaining communications.
+ent-AdMechComputerModular = Adeptus Mechanicus modular console
+    .desc = A terminal used for technical operations.
+
+ent-Battlecry = battle cry

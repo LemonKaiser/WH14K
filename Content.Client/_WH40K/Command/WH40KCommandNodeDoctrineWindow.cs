@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Administration.UI.CustomControls;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
@@ -16,8 +17,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
+public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow, ILocalizedControl
 {
+    private static readonly ISawmill Sawmill = Logger.GetSawmill("wh40k.command");
     private static readonly Color ImperiumColor = Color.FromHex("#F3C548");
     private static readonly Color ActiveColor = Color.FromHex("#7E88A6");
     private const string DoctrineTeamMapId = "WH40KCommandDoctrineTeamMap";
@@ -62,18 +64,18 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
     private static readonly DoctrinePreset FallbackPreset = new(
         "doctrine_adaptive_reserve",
-        "wh40k-command-node-doctrine-adaptive-reserve-name-imperium",
-        "wh40k-command-node-doctrine-adaptive-reserve-name-heretics",
-        "wh40k-command-node-doctrine-adaptive-reserve-brief-focus",
-        "wh40k-command-node-doctrine-adaptive-reserve-brief-effect",
-        "wh40k-command-node-doctrine-adaptive-reserve-debuff",
-        "wh40k-command-node-doctrine-adaptive-reserve-summary",
-        "wh40k-command-node-doctrine-adaptive-reserve-positive",
-        "wh40k-command-node-doctrine-adaptive-reserve-negative",
-        "wh40k-command-node-doctrine-adaptive-reserve-lock",
-        "wh40k-command-node-doctrine-adaptive-reserve-full-briefing",
-        "wh40k-command-node-doctrine-adaptive-reserve-theme-imperium",
-        "wh40k-command-node-doctrine-adaptive-reserve-theme-heretics",
+        "w40k-cmd-doctrine-adaptive-reserve-name-imperium",
+        "w40k-cmd-doctrine-adaptive-reserve-name-heretics",
+        "w40k-cmd-doctrine-adaptive-reserve-brief-focus",
+        "w40k-cmd-doctrine-adaptive-reserve-brief-effect",
+        "w40k-cmd-doctrine-adaptive-reserve-debuff",
+        "w40k-cmd-doctrine-adaptive-reserve-summary",
+        "w40k-cmd-doctrine-adaptive-reserve-positive",
+        "w40k-cmd-doctrine-adaptive-reserve-negative",
+        "w40k-cmd-doctrine-adaptive-reserve-lock",
+        "w40k-cmd-doctrine-adaptive-reserve-full-briefing",
+        "w40k-cmd-doctrine-adaptive-reserve-theme-imperium",
+        "w40k-cmd-doctrine-adaptive-reserve-theme-heretics",
         string.Empty,
         true);
 
@@ -89,6 +91,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
     private readonly Label _teamBadgeLabel;
     private readonly PanelContainer _phaseBadge;
     private readonly Label _phaseBadgeLabel;
+    private readonly Label _cardsHeaderLabel;
     private readonly BoxContainer _cardsRow;
     private readonly Dictionary<string, StyleBoxFlat> _rowStyles = new();
     private readonly Dictionary<string, Label> _rowTitleLabels = new();
@@ -108,10 +111,13 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
     private int _doctrineUnlockLevel = 3;
     private string _defaultDoctrineId = FallbackPreset.Id;
     private string _activeProfileId = string.Empty;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
+    private string _latestActiveDoctrineId = string.Empty;
+    private bool _latestDoctrineLocked;
 
     public WH40KCommandNodeDoctrineWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-doctrine-window-title");
+        Title = Loc.GetString("w40k-cmd-doctrine-window-title");
         MinSize = new Vector2(940, 600);
         SetSize = new Vector2(980, 620);
 
@@ -151,7 +157,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-doctrine-window-title"),
+            Text = Loc.GetString("w40k-cmd-doctrine-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
@@ -230,12 +236,13 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
         cardsRoot.AddChild(cardsHeader);
-        cardsHeader.AddChild(new Label
+        _cardsHeaderLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-doctrine-window-list-header"),
+            Text = Loc.GetString("w40k-cmd-doctrine-window-list-header"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
-        });
+        };
+        cardsHeader.AddChild(_cardsHeaderLabel);
 
         var cardsSectionBox = new BoxContainer
         {
@@ -261,6 +268,26 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             HorizontalExpand = true
         };
         cardsScroll.AddChild(_cardsRow);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-doctrine-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-doctrine-window-title");
+        _cardsHeaderLabel.Text = Loc.GetString("w40k-cmd-doctrine-window-list-header");
+
+        if (_presets.Count > 0)
+            RebuildDoctrineCards();
+
+        if (_latestState != null)
+        {
+            UpdateState(_latestState, _latestActiveDoctrineId, _latestDoctrineLocked);
+
+            if (_detailWindow != null)
+                OpenDetailWindowForSelected();
+        }
     }
 
     public static DoctrineDisplay ResolveDoctrineDisplay(string? doctrineId, string teamId)
@@ -298,6 +325,9 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         string activeDoctrineId,
         bool doctrineLocked)
     {
+        _latestState = state;
+        _latestActiveDoctrineId = activeDoctrineId;
+        _latestDoctrineLocked = doctrineLocked;
         _teamId = state.TeamId;
         _baseLevel = Math.Max(1, state.BaseLevel);
         _doctrineLocked = doctrineLocked;
@@ -306,11 +336,12 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _phaseLine.Text = Loc.GetString("wh40k-command-node-phase",
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+        _teamLine.Text = Loc.GetString("w40k-cmd-team", ("team", resolvedTeam));
+        _phaseLine.Text = Loc.GetString("w40k-cmd-phase",
             ("phase", Loc.GetString(GetPhaseKey(state.Phase))));
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : resolvedTeam.ToUpperInvariant();
         _phaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase);
         _phaseBadgeLabel.Text = Loc.GetString(GetPhaseKey(state.Phase));
 
@@ -324,15 +355,15 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             _selectedDoctrineId = _defaultDoctrineId;
 
         _availabilityLine.Text = _doctrineLocked
-            ? Loc.GetString("wh40k-command-node-doctrine-window-state-locked")
+            ? Loc.GetString("w40k-cmd-doctrine-window-state-locked")
             : _baseLevel < _doctrineUnlockLevel
-                ? Loc.GetString("wh40k-command-node-doctrine-window-state-wait-level",
+                ? Loc.GetString("w40k-cmd-doctrine-window-state-wait-level",
                     ("level", _doctrineUnlockLevel))
-                : Loc.GetString("wh40k-command-node-doctrine-window-state-open");
+                : Loc.GetString("w40k-cmd-doctrine-window-state-open");
 
         _activeDoctrineLine.Text = string.IsNullOrWhiteSpace(_activeDoctrineId)
-            ? Loc.GetString("wh40k-command-node-doctrine-window-active-none")
-            : Loc.GetString("wh40k-command-node-doctrine-window-active-set",
+            ? Loc.GetString("w40k-cmd-doctrine-window-active-none")
+            : Loc.GetString("w40k-cmd-doctrine-window-active-set",
                 ("doctrine", ResolveDoctrineDisplay(_activeDoctrineId, _teamId).Name));
 
         RefreshRows();
@@ -424,25 +455,25 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
         var focusLabel = AddCardSection(
             detailStack,
-            Loc.GetString("wh40k-command-node-doctrine-window-card-focus-header"),
+            Loc.GetString("w40k-cmd-doctrine-window-card-focus-header"),
             Color.FromHex("#D0D8EF"));
         var effectLabel = AddCardSection(
             detailStack,
-            Loc.GetString("wh40k-command-node-doctrine-window-card-effect-header"),
+            Loc.GetString("w40k-cmd-doctrine-window-card-effect-header"),
             Color.FromHex("#9BC4FF"));
         var lockLabel = AddCardSection(
             detailStack,
-            Loc.GetString("wh40k-command-node-doctrine-window-card-lock-header"),
+            Loc.GetString("w40k-cmd-doctrine-window-card-lock-header"),
             Color.FromHex("#E7BFAF"));
         var debuffLabel = AddCardSection(
             detailStack,
-            Loc.GetString("wh40k-command-node-doctrine-window-card-debuff-header"),
+            Loc.GetString("w40k-cmd-doctrine-window-card-debuff-header"),
             Color.FromHex("#E19797"));
 
         var selectButton = new Button
         {
             HorizontalExpand = true,
-            Text = Loc.GetString("wh40k-command-node-doctrine-window-select-button")
+            Text = Loc.GetString("w40k-cmd-doctrine-window-select-button")
         };
         selectButton.OnPressed += _ => OpenDoctrineDetail(preset.Id);
         cardBox.AddChild(selectButton);
@@ -486,9 +517,9 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
                         !isActive;
 
         var blockReason = _doctrineLocked
-            ? Loc.GetString("wh40k-command-node-doctrine-window-state-locked")
+            ? Loc.GetString("w40k-cmd-doctrine-window-state-locked")
             : _baseLevel < _doctrineUnlockLevel
-                ? Loc.GetString("wh40k-command-node-doctrine-window-state-wait-level",
+                ? Loc.GetString("w40k-cmd-doctrine-window-state-wait-level",
                     ("level", _doctrineUnlockLevel))
                 : string.Empty;
 
@@ -528,8 +559,8 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             title.ModulateSelfOverride = isSelected ? _accent : Color.White;
 
             button.Text = isActive
-                ? Loc.GetString("wh40k-command-node-doctrine-window-row-active-button")
-                : Loc.GetString("wh40k-command-node-doctrine-window-select-button");
+                ? Loc.GetString("w40k-cmd-doctrine-window-row-active-button")
+                : Loc.GetString("w40k-cmd-doctrine-window-select-button");
             button.Disabled = false;
         }
     }
@@ -587,7 +618,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
         var profileId = ResolveProfileIdForTeam(prototype, teamId);
         if (!prototype.TryIndex(profileId, out WH40KCommandDoctrineProfilePrototype? profile))
         {
-            Logger.ErrorS("wh40k.command", $"Missing command-doctrine profile prototype '{profileId}'.");
+            Sawmill.Error($"Missing command-doctrine profile prototype '{profileId}'.");
             return BuildFallbackConfiguration(DoctrineDefaultProfileId);
         }
 
@@ -631,7 +662,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
         if (presets.Count == 0)
         {
-            Logger.ErrorS("wh40k.command", $"Doctrine profile '{profileId}' has no valid doctrine entries.");
+            Sawmill.Error($"Doctrine profile '{profileId}' has no valid doctrine entries.");
             return BuildFallbackConfiguration(profileId);
         }
 
@@ -681,7 +712,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             bool isActive,
             string blockReason)
         {
-            Title = Loc.GetString("wh40k-command-node-doctrine-detail-window-title", ("doctrine", doctrine.Name));
+            Title = Loc.GetString("w40k-cmd-doctrine-detail-window-title", ("doctrine", doctrine.Name));
             MinSize = SetSize = new Vector2(760, 600);
 
             var root = new BoxContainer
@@ -739,32 +770,32 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
 
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-detail-briefing-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-detail-briefing-header"),
                 doctrine.FullBriefing,
                 Color.White);
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-positive-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-positive-header"),
                 doctrine.Positive,
                 accent);
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-negative-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-negative-header"),
                 doctrine.Negative,
                 Color.FromHex("#E2AF9D"));
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-card-debuff-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-card-debuff-header"),
                 doctrine.DebuffText,
                 Color.FromHex("#E19797"));
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-lock-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-lock-header"),
                 doctrine.LockText,
                 Color.White);
             AddSection(
                 sections,
-                Loc.GetString("wh40k-command-node-doctrine-window-theme-header"),
+                Loc.GetString("w40k-cmd-doctrine-window-theme-header"),
                 doctrine.ThemeText,
                 Color.FromHex("#AAB3CC"));
 
@@ -804,7 +835,7 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
             var backButton = new Button
             {
                 HorizontalExpand = true,
-                Text = Loc.GetString("wh40k-command-node-doctrine-window-detail-close-button")
+                Text = Loc.GetString("w40k-cmd-doctrine-window-detail-close-button")
             };
             backButton.OnPressed += _ => Close();
             actions.AddChild(backButton);
@@ -814,8 +845,8 @@ public sealed class WH40KCommandNodeDoctrineWindow : FancyWindow
                 HorizontalExpand = true,
                 Disabled = !canAssign,
                 Text = isActive
-                    ? Loc.GetString("wh40k-command-node-doctrine-window-row-active-button")
-                    : Loc.GetString("wh40k-command-node-doctrine-window-assign-button")
+                    ? Loc.GetString("w40k-cmd-doctrine-window-row-active-button")
+                    : Loc.GetString("w40k-cmd-doctrine-window-assign-button")
             };
             confirmButton.OnPressed += _ =>
             {

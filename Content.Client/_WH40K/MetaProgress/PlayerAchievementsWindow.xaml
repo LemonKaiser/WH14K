@@ -7,7 +7,7 @@
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
             <lobby:HighlightedContainer>
                 <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
-                    <Label Text="{Loc wh40k-meta-progress-achievements-summary-header}" StyleClasses="LabelHeading" />
+                    <Label Name="SummaryHeaderLabel" Text="{Loc wh40k-meta-progress-achievements-summary-header}" StyleClasses="LabelHeading" />
                     <PanelContainer Name="SummaryProgressHighlight">
                         <Label Name="SummaryProgressLabel"
                                Margin="8 4 8 4"
@@ -26,7 +26,7 @@
             <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalExpand="True">
                 <lobby:HighlightedContainer MinSize="210 0">
                     <BoxContainer Orientation="Vertical" SeparationOverride="4">
-                        <Label Text="{Loc wh40k-meta-progress-achievements-filter-header}" StyleClasses="LabelHeading" />
+                        <Label Name="FilterHeaderLabel" Text="{Loc wh40k-meta-progress-achievements-filter-header}" StyleClasses="LabelHeading" />
                         <Button Name="FilterAllButton" ToggleMode="True" />
                         <Button Name="FilterCombatButton" ToggleMode="True" />
                         <Button Name="FilterSupportButton" ToggleMode="True" />
@@ -39,7 +39,7 @@
                 </lobby:HighlightedContainer>
 
                 <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True">
-                    <ScrollContainer VerticalExpand="True">
+                    <ScrollContainer Name="AchievementsScroll" VerticalExpand="True">
                         <BoxContainer Name="AchievementsList" Orientation="Vertical" SeparationOverride="6" />
                     </ScrollContainer>
                 </lobby:HighlightedContainer>

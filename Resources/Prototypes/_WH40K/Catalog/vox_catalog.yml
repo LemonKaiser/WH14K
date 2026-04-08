@@ -141,12 +141,51 @@
 - type: listing
   id: VoxRocketLauncher
   name: Rocket launcher
-  description: Heavy launcher for late-war pushes.
-  productEntity: WeaponRocketLauncher
+  description: Reusable shielded launcher for anti-armor work.
+  productEntity: WeaponRocketLauncherImperial
   cost:
     intelligence_imp: 16
   categories:
   - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 5
+
+- type: listing
+  id: VoxDisposableRocketLauncher
+  name: Disposable RPG
+  description: Single-use launcher for quick anti-armor shots.
+  productEntity: WeaponRocketLauncherImperialDisposable
+  cost:
+    intelligence_imp: 10
+  categories:
+  - VoxWeaponry
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: VoxRocketAmmoHE
+  name: HE rocket
+  description: High-explosive rocket for reusable launchers.
+  productEntity: CartridgeRocketHE
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
+  id: VoxRocketAmmoAP
+  name: AP rocket
+  description: Armor-piercing rocket for reusable launchers.
+  productEntity: CartridgeRocketAP
+  cost:
+    intelligence_imp: 6
+  categories:
+  - VoxAmmo
   conditions:
   - !type:WH40KMinBaseLevelCondition
     level: 5

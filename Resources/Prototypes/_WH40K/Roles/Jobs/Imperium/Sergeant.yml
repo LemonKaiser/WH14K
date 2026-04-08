@@ -103,8 +103,8 @@
 - type: startingGear
   id: SergeantGear
   equipment:
-    jumpsuit: ClothingUniformJumpsuitOfficer
-    shoes: ClothingShoesGenBoots
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    shoes: ClothingShoesAnkleBoots
     ears: ClothingHeadsetVoxBackpackImperium
     belt: offbelt
     eyes: ClothingEyesHudGuard

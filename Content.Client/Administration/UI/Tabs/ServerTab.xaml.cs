@@ -43,9 +43,12 @@ namespace Content.Client.Administration.UI.Tabs
             SetLoocButton.Pressed = value;
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
 
             if (disposing)
             {

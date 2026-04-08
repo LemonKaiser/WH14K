@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Cargo.Components;
-using Content.Server.Chat.Managers;
 using Content.Server.Destructible;
 using Content.Server.GameTicking;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.OreExtractor.Components;
+using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Command.Pinpointer;
 using Content.Shared._WH40K.GameMode;
@@ -24,8 +24,10 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Storage.Components;
 using Content.Shared.Tools.Components;
+using Content.Shared.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
+using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Log;
 using Robust.Shared.Map;
@@ -243,8 +245,8 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         public TimeSpan LastProgressTick = TimeSpan.Zero;
     }
 
-    [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
@@ -271,6 +273,8 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     private readonly HashSet<string> _pendingFactionMissionOfferRefreshTeams =
         new(StringComparer.OrdinalIgnoreCase);
     private ISawmill _sawmill = default!;
+    private bool _missionDebugTraceEnabled;
+    private bool _missionDebugTraceConfigured;
 
     private ActiveMissionRuntime? _globalMission;
     private TimeSpan _nextGlobalMissionRollAt = TimeSpan.Zero;
@@ -280,6 +284,30 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     {
         base.Initialize();
         _sawmill = Logger.GetSawmill("wh40k.mission-runtime");
+        Subs.CVar(_config, CCVars.WH40KMissionRuntimeDebugTrace, OnMissionDebugTraceChanged, true);
+    }
+
+    private void OnMissionDebugTraceChanged(bool value)
+    {
+        var previous = _missionDebugTraceEnabled;
+        _missionDebugTraceEnabled = value;
+
+        // Stay quiet on startup when mission debug tracing is disabled by default.
+        if (value || (_missionDebugTraceConfigured && previous != value))
+            _sawmill.Info($"WH40K mission runtime debug logging {(value ? "enabled" : "disabled")}.");
+
+        _missionDebugTraceConfigured = true;
+    }
+
+    private void MissionDebug(string message, bool warning = false)
+    {
+        if (!_missionDebugTraceEnabled)
+            return;
+
+        if (warning)
+            _sawmill.Warning(message);
+        else
+            _sawmill.Info(message);
     }
 
     public override void Update(float frameTime)
@@ -1092,7 +1120,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         };
 
         var resolvedObjectiveType = ResolveObjectiveType(mission);
-        _sawmill.Info(
+        MissionDebug(
             $"[MissionDebug] Start mission '{mission.MissionId}' scope={mission.Scope} team='{mission.TeamId}' objectiveConfigured={mission.ObjectiveType} objectiveResolved={resolvedObjectiveType} tags=[{string.Join(", ", mission.Tags)}]");
 
         if ((mission.ObjectiveType == WH40KCommandMissionObjectiveType.BannerHold ||
@@ -1104,12 +1132,13 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         if (!TryInitializeMissionObjective(mission, teamIds, now))
         {
-            _sawmill.Warning(
-                $"[MissionDebug] Mission '{mission.MissionId}' objective initialization failed. scope={mission.Scope} team='{mission.TeamId}' objectiveResolved={resolvedObjectiveType}");
+            MissionDebug(
+                $"[MissionDebug] Mission '{mission.MissionId}' objective initialization failed. scope={mission.Scope} team='{mission.TeamId}' objectiveResolved={resolvedObjectiveType}",
+                warning: true);
         }
         else if (mission.Objective is { } objective)
         {
-            _sawmill.Info(
+            MissionDebug(
                 $"[MissionDebug] Mission '{mission.MissionId}' objective initialized. type={objective.Type} anchorTile={FormatMapCoordinates(objective.Anchor)} anchorWorld={FormatWorldCoordinates(objective.Anchor.Position)} map={objective.Anchor.MapId} radius={objective.Radius:0.##}");
         }
 
@@ -1287,11 +1316,18 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             if (!ApplyTeamDevelopmentPoints(teamId, profile.PeriodicDevelopmentPoints, "team-event-periodic"))
                 continue;
 
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString("wh40k-command-runtime-event-periodic-bonus",
-                    ("team", ResolveTeamName(teamId)),
-                    ("points", profile.PeriodicDevelopmentPoints)));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-event-periodic-bonus",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["team"] = GetTeamNameKey(teamId),
+                        ["points"] = profile.PeriodicDevelopmentPoints.ToString()
+                    },
+                    ResolveArgValues = true
+                });
         }
     }
 
@@ -1330,8 +1366,9 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var objectiveType = ResolveObjectiveType(mission);
         if (!TryPickMissionAnchor(teamIds, mission.TeamId, objectiveType, out var anchor))
         {
-            _sawmill.Warning(
-                $"[MissionDebug] Mission '{mission.MissionId}' failed to pick anchor. type={objectiveType} scope={mission.Scope} team='{mission.TeamId}'");
+            MissionDebug(
+                $"[MissionDebug] Mission '{mission.MissionId}' failed to pick anchor. type={objectiveType} scope={mission.Scope} team='{mission.TeamId}'",
+                warning: true);
             return false;
         }
 
@@ -1409,7 +1446,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 SpawnCargoDeliveryMarkers(mission, objective);
             }
 
-            _sawmill.Info(
+            MissionDebug(
                 $"[MissionDebug] Cargo objective prepared for mission '{mission.MissionId}'. anchorTile={FormatMapCoordinates(anchor)} anchorWorld={FormatWorldCoordinates(anchor.Position)} map={anchor.MapId} parachuteSpawned={objective.ParachuteUid is not null} cargoSpawned={objective.CargoSpawned} cargoUid={(objective.CargoUid?.ToString() ?? "null")}");
         }
 
@@ -1645,7 +1682,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             return false;
         }
 
-        _sawmill.Info(
+        MissionDebug(
             $"[MissionDebug] Cargo objective complete for mission '{mission.MissionId}'. deliveredTeam='{deliveredTeamId}' expectedTeam='{mission.TeamId}' scope={mission.Scope}");
 
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
@@ -1699,7 +1736,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 mission.Scope == WH40KCommandDynamicMissionScope.Faction ? mission.TeamId : string.Empty);
         }
 
-        _sawmill.Info(
+        MissionDebug(
             $"[MissionDebug] Airdrop cargo spawned for mission '{mission.MissionId}'. cargoUid={(objective.CargoUid?.ToString() ?? "null")} cargoTile={FormatMapCoordinates(objective.Anchor)} cargoWorld={FormatWorldCoordinates(objective.Anchor.Position)} map={objective.Anchor.MapId}");
 
         AnnounceAirdropLanded(mission);
@@ -1785,42 +1822,66 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     private void AnnounceAirdropInbound(ActiveMissionRuntime mission)
     {
-        var missionTitle = ResolveLocalizedOrRaw(mission.Title);
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            _chat.DispatchServerAnnouncement(
-                Loc.GetString("wh40k-command-runtime-mission-airdrop-inbound-global",
-                    ("mission", missionTitle),
-                    ("coords", coords)));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-airdrop-inbound-global",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
             return;
         }
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             mission.TeamId,
-            Loc.GetString("wh40k-command-runtime-mission-airdrop-inbound-faction",
-                ("mission", missionTitle),
-                ("coords", coords)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-airdrop-inbound-faction",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
     }
 
     private void AnnounceAirdropLanded(ActiveMissionRuntime mission)
     {
-        var missionTitle = ResolveLocalizedOrRaw(mission.Title);
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            _chat.DispatchServerAnnouncement(
-                Loc.GetString("wh40k-command-runtime-mission-airdrop-landed-global",
-                    ("mission", missionTitle),
-                    ("coords", coords)));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-airdrop-landed-global",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
             return;
         }
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             mission.TeamId,
-            Loc.GetString("wh40k-command-runtime-mission-airdrop-landed-faction",
-                ("mission", missionTitle),
-                ("coords", coords)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-airdrop-landed-faction",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
     }
 
     private string BuildMissionCoordinateText(ActiveMissionRuntime mission)
@@ -2028,7 +2089,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             ? $" cargoMap={info.CargoMapId} cargoTile={FormatMapCoordinates(new MapCoordinates(info.CargoWorld, info.CargoMapId))} cargoWorld={FormatWorldCoordinates(info.CargoWorld)} nodeCount={info.NodeCount} sameMapNodes={info.SameMapNodeCount} closestNodeTeam='{info.ClosestNodeTeamId}' closestNodeDistance={info.ClosestNodeDistance:0.##} insideRadius={info.ClosestInsideRadius}"
             : string.Empty;
 
-        _sawmill.Info(
+        MissionDebug(
             $"[MissionDebug] Cargo objective pending for mission '{mission.MissionId}'. scope={mission.Scope} team='{mission.TeamId}' reason={reason} cargoUid={(objective.CargoUid?.ToString() ?? "null")} anchorTile={anchorText} anchorWorld={anchorWorldText} anchorMap={objective.Anchor.MapId}.{details}");
     }
 
@@ -2284,10 +2345,16 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                     ApplyMissionOutcomeForTeam(teamId, mission, tier);
                 }
 
-                _chat.DispatchServerAnnouncement(
-                    Loc.GetString("wh40k-command-runtime-mission-global-resolved-major",
-                        ("mission", ResolveLocalizedOrRaw(mission.Title)),
-                        ("winner", ResolveTeamName(winnerTeamId))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-global-resolved-major",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["mission"] = mission.Title,
+                        ["winner"] = GetTeamNameKey(winnerTeamId)
+                    },
+                    ResolveArgValues = true
+                });
                 CleanupMissionObjectiveRuntime(
                     mission,
                     keepCargo: mission.Objective?.Type == MissionObjectiveType.CargoDelivery && IsLootCargoMission(mission));
@@ -2304,10 +2371,16 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                     ApplyMissionOutcomeForTeam(teamId, mission, tier);
                 }
 
-                _chat.DispatchServerAnnouncement(
-                    Loc.GetString("wh40k-command-runtime-mission-global-resolved-minor",
-                        ("mission", ResolveLocalizedOrRaw(mission.Title)),
-                        ("winner", ResolveTeamName(winnerTeamId))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-global-resolved-minor",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["mission"] = mission.Title,
+                        ["winner"] = GetTeamNameKey(winnerTeamId)
+                    },
+                    ResolveArgValues = true
+                });
                 CleanupMissionObjectiveRuntime(mission, keepCargo: false);
                 return;
             }
@@ -2317,9 +2390,15 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 foreach (var teamId in teamIds)
                     ApplyMissionOutcomeForTeam(teamId, mission, MissionOutcomeTier.Timeout);
 
-                _chat.DispatchServerAnnouncement(
-                    Loc.GetString("wh40k-command-runtime-mission-global-timeout",
-                        ("mission", ResolveLocalizedOrRaw(mission.Title))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-global-timeout",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["mission"] = mission.Title
+                    },
+                    ResolveArgValues = true
+                });
                 CleanupMissionObjectiveRuntime(mission, keepCargo: false);
                 return;
             }
@@ -2329,9 +2408,15 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 foreach (var teamId in teamIds)
                     ApplyMissionOutcomeForTeam(teamId, mission, MissionOutcomeTier.Failure);
 
-                _chat.DispatchServerAnnouncement(
-                    Loc.GetString("wh40k-command-runtime-mission-global-failed",
-                        ("mission", ResolveLocalizedOrRaw(mission.Title))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-global-failed",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["mission"] = mission.Title
+                    },
+                    ResolveArgValues = true
+                });
                 CleanupMissionObjectiveRuntime(mission, keepCargo: false);
                 return;
             }
@@ -2353,21 +2438,28 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         ApplyMissionOutcomeForTeam(targetTeam, mission, outcomeTier);
 
-        var outcomeText = outcomeTier switch
+        var outcomeKey = outcomeTier switch
         {
-            MissionOutcomeTier.Major => Loc.GetString("wh40k-command-runtime-mission-tier-major"),
-            MissionOutcomeTier.Minor => Loc.GetString("wh40k-command-runtime-mission-tier-minor"),
-            MissionOutcomeTier.Timeout => Loc.GetString("wh40k-command-runtime-mission-tier-timeout"),
-            MissionOutcomeTier.Failure => Loc.GetString("wh40k-command-runtime-mission-tier-failure"),
-            _ => Loc.GetString("wh40k-command-runtime-mission-tier-timeout")
+            MissionOutcomeTier.Major => "wh40k-command-runtime-mission-tier-major",
+            MissionOutcomeTier.Minor => "wh40k-command-runtime-mission-tier-minor",
+            MissionOutcomeTier.Timeout => "wh40k-command-runtime-mission-tier-timeout",
+            MissionOutcomeTier.Failure => "wh40k-command-runtime-mission-tier-failure",
+            _ => "wh40k-command-runtime-mission-tier-timeout"
         };
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             targetTeam,
-            Loc.GetString("wh40k-command-runtime-mission-faction-resolved",
-                ("mission", ResolveLocalizedOrRaw(mission.Title)),
-                ("team", ResolveTeamName(targetTeam)),
-                ("outcome", outcomeText)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-faction-resolved",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["team"] = GetTeamNameKey(targetTeam),
+                    ["outcome"] = outcomeKey
+                },
+                ResolveArgValues = true
+            });
 
         var keepCargo = mission.Objective?.Type == MissionObjectiveType.CargoDelivery &&
                         outcomeTier == MissionOutcomeTier.Major &&
@@ -2458,12 +2550,19 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         ApplyMissionSpecificOutcomeHandlers(teamId, mission, tier);
         ApplyMissionOutcomeBias(teamId, tier);
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             teamId,
-            Loc.GetString("wh40k-command-runtime-mission-outcome-team",
-                ("mission", ResolveLocalizedOrRaw(mission.Title)),
-                ("tier", ResolveMissionOutcomeTierLabel(tier)),
-                ("points", totalPoints)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-outcome-team",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["tier"] = GetMissionOutcomeTierLabelKey(tier),
+                    ["points"] = totalPoints.ToString()
+                },
+                ResolveArgValues = true
+            });
 
         RaiseLocalEvent(new WH40KMissionOutcomeAppliedEvent(
             teamId,
@@ -2490,11 +2589,16 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         {
             TryRefreshFactionMissionOfferSet(teamId);
             ApplyTacticalCallDiscountToken(teamId, TechArchiveTacticalDiscountSeconds);
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString(
-                    "wh40k-command-runtime-mission-tech-discount-applied",
-                    ("duration", TechArchiveTacticalDiscountSeconds)));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-tech-discount-applied",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["duration"] = TechArchiveTacticalDiscountSeconds.ToString()
+                    }
+                });
         }
     }
 
@@ -2545,22 +2649,32 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         if (affectedTeams <= 0)
             return;
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             sourceTeamId,
-            Loc.GetString(
-                "wh40k-command-runtime-mission-intel-jam-applied",
-                ("duration", delaySeconds),
-                ("targets", affectedTeams)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-intel-jam-applied",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["duration"] = delaySeconds.ToString(),
+                    ["targets"] = affectedTeams.ToString()
+                }
+            });
 
         if (affectedActiveEvents <= 0 || activeEventReductionSeconds <= 0)
             return;
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             sourceTeamId,
-            Loc.GetString(
-                "wh40k-command-runtime-mission-intel-jam-active-cut",
-                ("duration", activeEventReductionSeconds),
-                ("targets", affectedActiveEvents)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-intel-jam-active-cut",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["duration"] = activeEventReductionSeconds.ToString(),
+                    ["targets"] = affectedActiveEvents.ToString()
+                }
+            });
     }
 
     private void TryRefreshFactionMissionOfferSet(string teamId)
@@ -2571,18 +2685,24 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         if (_teamMissions.GetValueOrDefault(teamId) is not null)
         {
             _pendingFactionMissionOfferRefreshTeams.Add(teamId);
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString("wh40k-command-runtime-mission-tech-offers-refresh-deferred"));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-tech-offers-refresh-deferred"
+                });
             return;
         }
 
         if (!TryForceRefreshFactionMissionOfferSet(teamId))
             return;
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             teamId,
-            Loc.GetString("wh40k-command-runtime-mission-tech-offers-refreshed"));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-tech-offers-refreshed"
+            });
     }
 
     private void TryApplyPendingFactionMissionOfferRefresh(string teamId)
@@ -2595,9 +2715,12 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             return;
         }
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             teamId,
-            Loc.GetString("wh40k-command-runtime-mission-tech-offers-refreshed-deferred"));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-tech-offers-refreshed-deferred"
+            });
     }
 
     private bool TryForceRefreshFactionMissionOfferSet(string teamId)
@@ -2649,6 +2772,18 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         };
     }
 
+    private static string GetMissionOutcomeTierLabelKey(MissionOutcomeTier tier)
+    {
+        return tier switch
+        {
+            MissionOutcomeTier.Major => "wh40k-command-runtime-mission-tier-major",
+            MissionOutcomeTier.Minor => "wh40k-command-runtime-mission-tier-minor",
+            MissionOutcomeTier.Timeout => "wh40k-command-runtime-mission-tier-timeout",
+            MissionOutcomeTier.Failure => "wh40k-command-runtime-mission-tier-failure",
+            _ => "wh40k-command-runtime-mission-tier-timeout"
+        };
+    }
+
     private static WH40KMissionOutcomeTier ToPublicMissionOutcomeTier(MissionOutcomeTier tier)
     {
         return tier switch
@@ -2692,20 +2827,32 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         if (string.Equals(tokenId, TacticalCallDiscountTokenId, StringComparison.OrdinalIgnoreCase))
         {
             ApplyTacticalCallDiscountToken(teamId, durationSeconds);
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString("wh40k-command-runtime-mission-token-applied",
-                    ("duration", durationSeconds)));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-token-applied",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["duration"] = durationSeconds.ToString()
+                    }
+                });
             return;
         }
 
         if (string.Equals(tokenId, IntelEventRollHasteTokenId, StringComparison.OrdinalIgnoreCase))
         {
             ApplyTeamEventRollHasteToken(teamId, durationSeconds);
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString("wh40k-command-runtime-mission-token-applied-event-roll",
-                    ("duration", durationSeconds)));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-command-runtime-mission-token-applied-event-roll",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["duration"] = durationSeconds.ToString()
+                    }
+                });
         }
     }
 
@@ -2963,21 +3110,34 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     private void AnnounceTeamEventStarted(string teamId, ActiveEventRuntime active)
     {
-        var title = ResolveLocalizedOrRaw(active.Title);
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             teamId,
-            Loc.GetString("wh40k-command-runtime-event-started",
-                ("event", title),
-                ("duration", Math.Max(1, active.DurationSeconds))));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-event-started",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["event"] = active.Title,
+                    ["duration"] = Math.Max(1, active.DurationSeconds).ToString()
+                },
+                ResolveArgValues = true
+            });
     }
 
     private void AnnounceTeamEventEnded(string teamId, string eventId, string eventTitle)
     {
         var title = ResolveEndedEventTitle(teamId, eventId, eventTitle);
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             teamId,
-            Loc.GetString("wh40k-command-runtime-event-ended",
-                ("event", title)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-event-ended",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["event"] = title
+                },
+                ResolveArgValues = true
+            });
     }
 
     private string ResolveEndedEventTitle(string teamId, string eventId, string eventTitle)
@@ -3004,24 +3164,36 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     private void AnnounceMissionStarted(ActiveMissionRuntime mission)
     {
-        var missionTitle = ResolveLocalizedOrRaw(mission.Title);
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            _chat.DispatchServerAnnouncement(
-                Loc.GetString("wh40k-command-runtime-mission-global-started",
-                    ("mission", missionTitle),
-                    ("duration", mission.DurationSeconds),
-                    ("coords", coords)));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-global-started",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["duration"] = mission.DurationSeconds.ToString(),
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
             return;
         }
 
-        DispatchTeamMessage(
+        DispatchTeamLocalizedEvent(
             mission.TeamId,
-            Loc.GetString("wh40k-command-runtime-mission-faction-started",
-                ("mission", missionTitle),
-                ("duration", mission.DurationSeconds),
-                ("coords", coords)));
+            new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-command-runtime-mission-faction-started",
+                LocArgs = new Dictionary<string, string>
+                {
+                    ["mission"] = mission.Title,
+                    ["duration"] = mission.DurationSeconds.ToString(),
+                    ["coords"] = coords
+                },
+                ResolveArgValues = true
+            });
 
         AnnounceEnemyFactionCounterMission(mission);
     }
@@ -3037,20 +3209,24 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var messageKey = (mission.Objective?.Type ?? ResolveObjectiveType(mission)) == MissionObjectiveType.CargoDelivery
             ? "wh40k-command-runtime-mission-enemy-counter-cargo"
             : "wh40k-command-runtime-mission-enemy-counter-control";
-        var missionTitle = ResolveLocalizedOrRaw(mission.Title);
-        var enemyName = ResolveTeamName(mission.TeamId);
 
         foreach (var teamId in _teamRule.GetTeamIds())
         {
             if (string.Equals(teamId, mission.TeamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            DispatchTeamMessage(
+            DispatchTeamLocalizedEvent(
                 teamId,
-                Loc.GetString(
-                    messageKey,
-                    ("enemy", enemyName),
-                    ("mission", missionTitle)));
+                new WH40KLocalizedChatEvent
+                {
+                    LocKey = messageKey,
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["enemy"] = GetTeamNameKey(mission.TeamId),
+                        ["mission"] = mission.Title
+                    },
+                    ResolveArgValues = true
+                });
         }
     }
 
@@ -3062,7 +3238,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     private string ResolveTeamName(string teamId)
     {
         return _teamRule.TryGetTeamDisplayName(teamId, out var teamName)
-            ? teamName
+            ? Loc.GetString(teamName)
             : teamId;
     }
 
@@ -3088,9 +3264,9 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         return $"WX:{worldPosition.X:0.##} WY:{worldPosition.Y:0.##}";
     }
 
-    private void DispatchTeamMessage(string teamId, string message)
+    private void DispatchTeamLocalizedEvent(string teamId, WH40KLocalizedChatEvent ev)
     {
-        if (string.IsNullOrWhiteSpace(teamId) || string.IsNullOrWhiteSpace(message))
+        if (string.IsNullOrWhiteSpace(teamId))
             return;
 
         foreach (var session in _players.Sessions)
@@ -3100,7 +3276,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
             if (HasComp<GhostComponent>(attached))
             {
-                _chat.DispatchServerMessage(session, message);
+                RaiseNetworkEvent(ev, session);
                 continue;
             }
 
@@ -3110,8 +3286,13 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             if (!string.Equals(playerTeam, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            _chat.DispatchServerMessage(session, message);
+            RaiseNetworkEvent(ev, session);
         }
+    }
+
+    private string GetTeamNameKey(string teamId)
+    {
+        return _teamRule.TryGetTeamDisplayName(teamId, out var teamName) ? teamName : teamId;
     }
 
     private string ResolveLocalizedOrRaw(string text)

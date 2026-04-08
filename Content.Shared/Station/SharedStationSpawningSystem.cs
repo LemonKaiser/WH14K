@@ -61,6 +61,28 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         EquipRoleName(entity, loadout, roleProto);
     }
 
+    public HashSet<string> GetLoadoutEquipmentOverrides(RoleLoadout? loadout, RoleLoadoutPrototype? roleProto)
+    {
+        var overriddenSlots = new HashSet<string>();
+
+        if (loadout == null || roleProto == null)
+            return overriddenSlots;
+
+        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
+        {
+            foreach (var items in group.Value)
+            {
+                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
+                    continue;
+
+                CollectEquipmentSlots(overriddenSlots, loadoutProto.StartingGear);
+                CollectEquipmentSlots(overriddenSlots, (IEquipmentLoadout) loadoutProto);
+            }
+        }
+
+        return overriddenSlots;
+    }
+
     /// <summary>
     /// Applies the role's name as applicable to the entity.
     /// </summary>
@@ -99,12 +121,23 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         EquipStartingGear(entity, gearProto, raiseEvent);
     }
 
+    public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, ISet<string>? excludedSlots, bool raiseEvent = true)
+    {
+        PrototypeManager.Resolve(startingGear, out var gearProto);
+        EquipStartingGear(entity, gearProto, excludedSlots, raiseEvent);
+    }
+
     /// <summary>
     /// <see cref="EquipStartingGear(Robust.Shared.GameObjects.EntityUid,System.Nullable{Robust.Shared.Prototypes.ProtoId{Content.Shared.Roles.StartingGearPrototype}},bool)"/>
     /// </summary>
     public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, bool raiseEvent = true)
     {
         EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, raiseEvent);
+    }
+
+    public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, ISet<string>? excludedSlots, bool raiseEvent = true)
+    {
+        EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, excludedSlots, raiseEvent);
     }
 
     /// <summary>
@@ -115,6 +148,11 @@ public abstract class SharedStationSpawningSystem : EntitySystem
     /// <param name="raiseEvent">Should we raise the event for equipped. Set to false if you will call this manually</param>
     public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true)
     {
+        EquipStartingGear(entity, startingGear, null, raiseEvent);
+    }
+
+    public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, ISet<string>? excludedSlots, bool raiseEvent = true)
+    {
         if (startingGear == null)
             return;
 
@@ -124,6 +162,9 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         {
             foreach (var slot in slotDefinitions)
             {
+                if (excludedSlots != null && excludedSlots.Contains(slot.Name))
+                    continue;
+
                 var equipmentStr = startingGear.GetGear(slot.Name);
                 if (!string.IsNullOrEmpty(equipmentStr))
                 {
@@ -186,6 +227,22 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         {
             var ev = new StartingGearEquippedEvent(entity);
             RaiseLocalEvent(entity, ref ev);
+        }
+    }
+
+    private void CollectEquipmentSlots(HashSet<string> slots, ProtoId<StartingGearPrototype>? gearId)
+    {
+        if (!PrototypeManager.Resolve(gearId, out var gearProto))
+            return;
+
+        CollectEquipmentSlots(slots, (IEquipmentLoadout) gearProto);
+    }
+
+    private static void CollectEquipmentSlots(HashSet<string> slots, IEquipmentLoadout gear)
+    {
+        foreach (var slot in gear.Equipment.Keys)
+        {
+            slots.Add(slot);
         }
     }
 

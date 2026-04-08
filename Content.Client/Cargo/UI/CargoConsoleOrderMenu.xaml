@@ -1,47 +1,76 @@
-<DefaultWindow xmlns="https://spacestation14.io"
+<controls:FancyWindow xmlns="https://spacestation14.io"
+               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                Title="{Loc 'cargo-console-order-menu-title'}"
-               MinSize="460 261">
-    <BoxContainer Orientation="Vertical">
-        <GridContainer Columns="2">
-            <Label Text="{Loc 'cargo-console-order-menu-product-label'}"
-                   StyleClasses="LabelKeyText" />
+               MinSize="560 360">
+    <BoxContainer Orientation="Vertical"
+        SeparationOverride="10"
+        Margin="10 10 10 10">
+        <PanelContainer Name="HeaderPanel">
+            <BoxContainer Orientation="Vertical"
+                          SeparationOverride="4"
+                          Margin="12 10 12 10">
+                <Label Name="HeaderTitleLabel"
+                       HorizontalExpand="True"
+                       ClipText="True" />
+                <RichTextLabel Name="HeaderSubtitleLabel"
+                               MaxWidth="500"
+                               HorizontalExpand="True" />
+            </BoxContainer>
+        </PanelContainer>
 
-            <Label Name="ProductName"
-                   Access="Public" />
+        <PanelContainer Name="OrderInfoPanel">
+            <GridContainer Columns="2"
+                Margin="10 10 10 10">
+                <Label Name="ProductLabel"
+                    Text="{Loc 'cargo-console-order-menu-product-label'}"
+                    StyleClasses="LabelKeyText" />
 
-            <Label Text="{Loc 'cargo-console-order-menu-description-label'}"
-                   StyleClasses="LabelKeyText" />
+                <Label Name="ProductName"
+                    Access="Public" />
 
-            <RichTextLabel Name="Description"
-                           Access="Public"
-                           HorizontalExpand="True"
-                           MaxWidth="460" />
+                <Label Name="DescriptionLabel"
+                    Text="{Loc 'cargo-console-order-menu-description-label'}"
+                    StyleClasses="LabelKeyText" />
 
-            <Label Text="{Loc 'cargo-console-order-menu-cost-label'}"
-                   StyleClasses="LabelKeyText" />
+                <RichTextLabel Name="Description"
+                    Access="Public"
+                    HorizontalExpand="True"
+                    MaxWidth="460" />
 
-            <Label Name="PointCost"
-                   Access="Public" />
+                <Label Name="CostLabel"
+                    Text="{Loc 'cargo-console-order-menu-cost-label'}"
+                    StyleClasses="LabelKeyText" />
 
-            <Label Text="{Loc 'cargo-console-order-menu-requester-label'}"
-                   StyleClasses="LabelKeyText" />
+                <Label Name="PointCost"
+                    Access="Public" />
 
-            <LineEdit Name="Requester"
-                      Access="Public" />
+                <Label Name="RequesterLabel"
+                    Text="{Loc 'cargo-console-order-menu-requester-label'}"
+                    StyleClasses="LabelKeyText" />
 
-            <Label Text="{Loc 'cargo-console-order-menu-amount-label'}"
-                   StyleClasses="LabelKeyText" />
+                <LineEdit Name="Requester"
+                    Access="Public" />
 
-            <SpinBox Name="Amount"
-                     Access="Public"
-                     HorizontalExpand="True"
-                     Value="1" />
-        </GridContainer>
-        <Control VerticalExpand="True"/>
-        <PanelContainer StyleClasses="LowDivider" Margin="0 6 0 2"/>
-        <Button Name="SubmitButton"
+                <Label Name="AmountLabel"
+                    Text="{Loc 'cargo-console-order-menu-amount-label'}"
+                    StyleClasses="LabelKeyText" />
+
+                <SpinBox Name="Amount"
+                    Access="Public"
+                    HorizontalExpand="True"
+                    Value="1" />
+            </GridContainer>
+        </PanelContainer>
+
+        <PanelContainer Name="FooterDivider"
+                        MinHeight="1" />
+
+        <PanelContainer Name="SubmitPanel">
+            <Button Name="SubmitButton"
                 Access="Public"
                 Text="{Loc 'cargo-console-order-menu-submit-button'}"
-                VerticalAlignment="Bottom" />
+                HorizontalExpand="True"
+                MinHeight="40" />
+        </PanelContainer>
     </BoxContainer>
-</DefaultWindow>
+</controls:FancyWindow>

@@ -31,7 +31,7 @@ namespace Content.Client.Disposal.Unit
 
             _disposalUnitWindow = this.CreateWindow<DisposalUnitWindow>();
 
-            _disposalUnitWindow.OpenCenteredRight();
+            _disposalUnitWindow.OpenCentered();
 
             _disposalUnitWindow.Eject.OnPressed += _ => ButtonPressed(DisposalUnitComponent.UiButton.Eject);
             _disposalUnitWindow.Engage.OnPressed += _ => ButtonPressed(DisposalUnitComponent.UiButton.Engage);
@@ -49,15 +49,15 @@ namespace Content.Client.Disposal.Unit
                 return;
 
             var disposalSystem = EntMan.System<DisposalUnitSystem>();
-
-            _disposalUnitWindow.Title = EntMan.GetComponent<MetaDataComponent>(entity.Owner).EntityName;
-
             var state = disposalSystem.GetState(entity.Owner, entity.Comp);
+            var powered = EntMan.System<PowerReceiverSystem>().IsPowered(Owner);
+            var engaged = entity.Comp.Engaged;
+            var fullPressure = disposalSystem.EstimatedFullPressure(entity.Owner, entity.Comp);
+            var machineName = EntMan.GetComponent<MetaDataComponent>(entity.Owner).EntityName;
 
-            _disposalUnitWindow.UnitState.Text = Loc.GetString($"disposal-unit-state-{state}");
-            _disposalUnitWindow.Power.Pressed = EntMan.System<PowerReceiverSystem>().IsPowered(Owner);
-            _disposalUnitWindow.Engage.Pressed = entity.Comp.Engaged;
-            _disposalUnitWindow.FullPressure = disposalSystem.EstimatedFullPressure(entity.Owner, entity.Comp);
+            _disposalUnitWindow.Power.Pressed = powered;
+            _disposalUnitWindow.Engage.Pressed = engaged;
+            _disposalUnitWindow.RefreshState(machineName, state, powered, engaged, fullPressure);
         }
     }
 }

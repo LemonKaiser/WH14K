@@ -46,7 +46,7 @@ public sealed class ChangelogUIController : UIController
             return;
 
         var wasOpen = _changeLogWindow.IsOpen;
-        _changeLogWindow.Dispose();
+        _changeLogWindow.Orphan();
         _changeLogWindow = default!;
 
         if (wasOpen)

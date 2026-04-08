@@ -14,6 +14,7 @@ namespace Content.Client.Info
     {
         private Button? _reportButton;
         private Button? _creditsButton;
+        private CreditsWindow? _creditsWindow;
 
         public DevInfoBanner()
         {
@@ -35,7 +36,17 @@ namespace Content.Client.Info
             }
 
             _creditsButton = new Button();
-            _creditsButton.OnPressed += args => new CreditsWindow().Open();
+            _creditsButton.OnPressed += _ =>
+            {
+                if (_creditsWindow?.IsOpen == true)
+                {
+                    _creditsWindow.MoveToFront();
+                    return;
+                }
+
+                _creditsWindow = new CreditsWindow();
+                _creditsWindow.Open();
+            };
             buttons.AddChild(_creditsButton);
             Relocalize();
         }

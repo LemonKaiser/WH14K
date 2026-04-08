@@ -189,6 +189,7 @@ public sealed partial class DamageableSystem
     /// <param name="group">from which group to heal. if null, heal from all groups</param>
     /// <param name="origin">who did the healing</param>
     /// <param name="ignoreGlobalModifiers">if true, skip global heal scaling</param>
+#pragma warning disable CS0618
     public DamageSpecifier HealEvenly(
         Entity<DamageableComponent?> ent,
         FixedPoint2 amount,
@@ -336,6 +337,7 @@ public sealed partial class DamageableSystem
 
         return damage;
     }
+#pragma warning restore CS0618
 
     /// <summary>
     /// Returns a <see cref="DamageSpecifier"/> with all positive damage of the entity

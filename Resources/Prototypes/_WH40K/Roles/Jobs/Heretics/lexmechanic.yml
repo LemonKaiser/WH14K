@@ -3,7 +3,11 @@
   name: job-name-hlexmechanic
   description: job-description-hlexmechanic
   playTimeTracker: JobHLexmechanic
-  startingGear: LexmechanicGear
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: HLexmechanicGear
   special:
   - !type:AddComponentSpecial
     components:
@@ -28,6 +32,18 @@
   - Atmospherics
   - Research
   - ResearchDirector
+
+- type: startingGear
+  id: HLexmechanicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    outerClothing: ClothingOuterHardsuitTechpriestUnremoveadble
+    ears: ClothingHeadsetVoxBackpackHeretics
+    pocket1: WH40KStandardTacticalMapTablet
+    id: HLexmechanicDogTag
 
 - type: chameleonOutfit
   id: HLexmechanicChameleonOutfit

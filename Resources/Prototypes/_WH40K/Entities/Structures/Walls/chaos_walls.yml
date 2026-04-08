@@ -1,0 +1,40 @@
+- type: entity
+  parent: WallSolid
+  id: WallSolidChaosSteel
+  name: chaos steel wall
+  suffix: WH40K, chaos, steel
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Walls/solid.rsi
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: full_chaos_steel
+  - type: IconSmooth
+    key: walls
+    base: solid_chaos_steel
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalChaosBrick
+  name: chaos brick wall
+  suffix: WH40K, chaos, brick
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_chaos_brick
+  - type: IconSmooth
+    key: walls
+    base: reinf_chaos_brick
+
+- type: entity
+  parent: WallMetal
+  id: WallMetalChaosSteel
+  name: chaos reinforced steel wall
+  suffix: WH40K, chaos, reinforced steel
+  components:
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid.rsi
+    state: rgeneric_chaos_steel
+  - type: IconSmooth
+    key: walls
+    base: reinf_chaos_steel

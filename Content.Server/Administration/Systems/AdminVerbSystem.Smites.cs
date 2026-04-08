@@ -253,7 +253,9 @@ public sealed partial class AdminVerbSystem
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Clothing/Hands/Gloves/Color/yellow.rsi"), "icon"),
                 Act = () =>
                 {
+#pragma warning disable CS0618
                     var totalDamage = _damageable.GetTotalDamage((args.Target, damageable));
+#pragma warning restore CS0618
                     int damageToDeal;
                     if (!_mobThresholdSystem.TryGetThresholdForState(args.Target, MobState.Critical, out var criticalThreshold))
                     {
@@ -355,7 +357,9 @@ public sealed partial class AdminVerbSystem
                 Act = () =>
                 {
                     _vomitSystem.Vomit(args.Target, -1000, -1000); // You feel hollow!
+#pragma warning disable CS0618
                     _bodySystem.TryGetOrgansWithComponent<TransformComponent>((args.Target, body), out var organs);
+#pragma warning restore CS0618
                     var baseXform = Transform(args.Target);
                     foreach (var organ in organs)
                     {
@@ -389,7 +393,9 @@ public sealed partial class AdminVerbSystem
                 {
                     var baseXform = Transform(args.Target);
                     var parts = new HashSet<ProtoId<OrganCategoryPrototype>>() { "HandRight", "HandLeft" };
+#pragma warning disable CS0618
                     _bodySystem.TryGetOrgansWithComponent<OrganComponent>((args.Target, body), out var organs);
+#pragma warning restore CS0618
                     foreach (var organ in organs.Where(it => it.Comp.Category is { } category && parts.Contains(category)))
                     {
                         _transformSystem.AttachToGridOrMap(organ);
@@ -418,7 +424,9 @@ public sealed partial class AdminVerbSystem
                 {
                     var baseXform = Transform(args.Target);
                     var parts = new HashSet<ProtoId<OrganCategoryPrototype>>() { "HandRight", "HandLeft" };
+#pragma warning disable CS0618
                     _bodySystem.TryGetOrgansWithComponent<OrganComponent>((args.Target, body), out var organs);
+#pragma warning restore CS0618
                     foreach (var organ in organs.Where(it => it.Comp.Category is { } category && parts.Contains(category)))
                     {
                         _transformSystem.AttachToGridOrMap(organ);
@@ -446,7 +454,9 @@ public sealed partial class AdminVerbSystem
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Mobs/Species/Human/organs.rsi"), "stomach"),
                 Act = () =>
                 {
+#pragma warning disable CS0618
                     _bodySystem.TryGetOrgansWithComponent<StomachComponent>((args.Target, body), out var organs);
+#pragma warning restore CS0618
                     foreach (var entity in organs)
                     {
                         QueueDel(entity.Owner);
@@ -472,7 +482,9 @@ public sealed partial class AdminVerbSystem
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Mobs/Species/Human/organs.rsi"), "lung-r"),
                 Act = () =>
                 {
+#pragma warning disable CS0618
                     _bodySystem.TryGetOrgansWithComponent<LungComponent>((args.Target, body), out var organs);
+#pragma warning restore CS0618
                     foreach (var entity in organs)
                     {
                         QueueDel(entity.Owner);
@@ -1264,7 +1276,9 @@ public sealed partial class AdminVerbSystem
         // I would do it now but theres a massive rod rewrite, and I don't wanna poke it for this.
         // find reasonable spawn location (use gamerule and find rod?) but respect map not on grid etc etc
 
+    #pragma warning disable CS0618
         var offset = new Random(target.Id).NextAngle().RotateVec(new Vector2(distance, 0));
+    #pragma warning restore CS0618
         var spawnCoords = _transformSystem.GetMapCoordinates(target).Offset(offset);
         var rod = Spawn(proto, spawnCoords);
         // Here we abuse the ChasingWalkComp by making it skip targetting logic and dialling its frequency up

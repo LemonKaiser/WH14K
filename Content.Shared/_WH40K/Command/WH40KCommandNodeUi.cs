@@ -6,7 +6,10 @@ namespace Content.Shared._WH40K.Command;
 [Serializable, NetSerializable]
 public enum WH40KCommandNodeUiKey : byte
 {
-    Key
+    Key,
+    Reinforcement,
+    UpgradeTree,
+    MissionBoard
 }
 
 [Serializable, NetSerializable]
@@ -32,6 +35,33 @@ public sealed class WH40KTeamCompositionMemberEntry
     {
         Name = name;
         RoleName = roleName;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class WH40KTeamCompositionStaffingData
+{
+    public int MemberCount { get; }
+    public int RoleCount { get; }
+    public int CommandCurrent { get; }
+    public int CommandMax { get; }
+    public int LineCurrent { get; }
+    public int LineMax { get; }
+
+    public WH40KTeamCompositionStaffingData(
+        int memberCount,
+        int roleCount,
+        int commandCurrent,
+        int commandMax,
+        int lineCurrent,
+        int lineMax)
+    {
+        MemberCount = memberCount;
+        RoleCount = roleCount;
+        CommandCurrent = commandCurrent;
+        CommandMax = commandMax;
+        LineCurrent = lineCurrent;
+        LineMax = lineMax;
     }
 }
 
@@ -192,6 +222,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public WH40KTeamCompositionRoleEntry[] TeamCompositionCoreRoles { get; }
     public WH40KTeamCompositionRoleEntry[] TeamCompositionMechanicusRoles { get; }
     public WH40KTeamCompositionMemberEntry[] TeamCompositionMembers { get; }
+    public WH40KTeamCompositionStaffingData? StaffingData { get; }
     public WH40KCommandNodeBonusIntelState BonusIntel { get; }
     public WH40KCommandTeamEventRuntimeState TeamEventRuntime { get; }
     public WH40KCommandMissionRuntimeState GlobalMissionRuntime { get; }
@@ -226,6 +257,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         WH40KTeamCompositionRoleEntry[] teamCompositionCoreRoles,
         WH40KTeamCompositionRoleEntry[] teamCompositionMechanicusRoles,
         WH40KTeamCompositionMemberEntry[] teamCompositionMembers,
+        WH40KTeamCompositionStaffingData? staffingData,
         WH40KCommandNodeBonusIntelState bonusIntel,
         WH40KCommandTeamEventRuntimeState teamEventRuntime,
         WH40KCommandMissionRuntimeState globalMissionRuntime,
@@ -259,6 +291,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         TeamCompositionCoreRoles = teamCompositionCoreRoles;
         TeamCompositionMechanicusRoles = teamCompositionMechanicusRoles;
         TeamCompositionMembers = teamCompositionMembers;
+        StaffingData = staffingData;
         BonusIntel = bonusIntel;
         TeamEventRuntime = teamEventRuntime;
         GlobalMissionRuntime = globalMissionRuntime;

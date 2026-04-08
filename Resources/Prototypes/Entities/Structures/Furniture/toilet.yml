@@ -89,12 +89,6 @@
         maxVol: 100
       tank:
         maxVol: 500
-  - type: SolutionRegeneration
-    solution: tank
-    generated:
-      reagents:
-      - ReagentId: Water
-        Quantity: 1
   - type: DrainableSolution
     solution: tank
   - type: ReagentTank
@@ -139,12 +133,12 @@
       drainBuffer:
         maxVol: 100
       tank:
-        maxVol: 500
+        maxVol: 5000
         reagents:
         - ReagentId: Water
-          Quantity: 180
+          Quantity: 1800
         - ReagentId: GastroToxin
-          Quantity: 20
+          Quantity: 200
 
 - type: entity
   parent: ToiletEmpty
@@ -218,11 +212,11 @@
       drainBuffer:
         maxVol: 100
       tank:
-        maxVol: 500
+        maxVol: 5000
         reagents:
         - ReagentId: Water
-          Quantity: 160
+          Quantity: 1600
         - ReagentId: Gold
-          Quantity: 20
+          Quantity: 200
         - ReagentId: GastroToxin
-          Quantity: 20
+          Quantity: 200

@@ -3,24 +3,24 @@
   teamId: Imperium
   options:
   - id: line
-    nameKey: wh40k-command-node-reinforcement-option-imperium-line-name
-    descriptionKey: wh40k-command-node-reinforcement-option-imperium-line-description
+    nameKey: w40k-cmd-reinforcement-option-imperium-line-name
+    descriptionKey: w40k-cmd-reinforcement-option-imperium-line-description
     job: Guardsman
     previewPrototype: WH40KReinforcementPreviewImperiumGuardsman
     baseCost: 18
     maxCount: 3
     additionalUnitCostMultiplier: 0.5
   - id: scout
-    nameKey: wh40k-command-node-reinforcement-option-imperium-scout-name
-    descriptionKey: wh40k-command-node-reinforcement-option-imperium-scout-description
+    nameKey: w40k-cmd-reinforcement-option-imperium-scout-name
+    descriptionKey: w40k-cmd-reinforcement-option-imperium-scout-description
     job: VoxScout
     previewPrototype: WH40KReinforcementPreviewImperiumVoxScout
     baseCost: 24
     maxCount: 3
     additionalUnitCostMultiplier: 0.55
   - id: command
-    nameKey: wh40k-command-node-reinforcement-option-imperium-command-name
-    descriptionKey: wh40k-command-node-reinforcement-option-imperium-command-description
+    nameKey: w40k-cmd-reinforcement-option-imperium-command-name
+    descriptionKey: w40k-cmd-reinforcement-option-imperium-command-description
     job: Sergeant
     previewPrototype: WH40KReinforcementPreviewImperiumSergeant
     baseCost: 32
@@ -32,24 +32,24 @@
   teamId: Heretics
   options:
   - id: line
-    nameKey: wh40k-command-node-reinforcement-option-heretics-line-name
-    descriptionKey: wh40k-command-node-reinforcement-option-heretics-line-description
+    nameKey: w40k-cmd-reinforcement-option-heretics-line-name
+    descriptionKey: w40k-cmd-reinforcement-option-heretics-line-description
     job: HGuardsman
     previewPrototype: WH40KReinforcementPreviewHereticsGuardsman
     baseCost: 18
     maxCount: 3
     additionalUnitCostMultiplier: 0.5
   - id: scout
-    nameKey: wh40k-command-node-reinforcement-option-heretics-scout-name
-    descriptionKey: wh40k-command-node-reinforcement-option-heretics-scout-description
+    nameKey: w40k-cmd-reinforcement-option-heretics-scout-name
+    descriptionKey: w40k-cmd-reinforcement-option-heretics-scout-description
     job: HVoxScout
     previewPrototype: WH40KReinforcementPreviewHereticsVoxScout
     baseCost: 24
     maxCount: 3
     additionalUnitCostMultiplier: 0.55
   - id: command
-    nameKey: wh40k-command-node-reinforcement-option-heretics-command-name
-    descriptionKey: wh40k-command-node-reinforcement-option-heretics-command-description
+    nameKey: w40k-cmd-reinforcement-option-heretics-command-name
+    descriptionKey: w40k-cmd-reinforcement-option-heretics-command-description
     job: HSergeant
     previewPrototype: WH40KReinforcementPreviewHereticsSergeant
     baseCost: 32

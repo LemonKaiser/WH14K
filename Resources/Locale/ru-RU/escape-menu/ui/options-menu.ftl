@@ -17,6 +17,7 @@ ui-options-value-percent = { TOSTRING($value, "P0") }
 
 ui-options-discordrich = Включить Discord Rich Presence
 ui-options-general-ui-style = Стиль UI
+ui-options-general-lobby = Фон лобби и прозрачность ui
 ui-options-general-discord = Discord
 ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
@@ -72,6 +73,7 @@ ui-options-scale-150 = 150%
 ui-options-scale-175 = 175%
 ui-options-scale-200 = 200%
 ui-options-hud-theme = Тема HUD:
+ui-options-hud-theme-auto = Авто
 ui-options-hud-theme-default = По умолчанию
 ui-options-hud-theme-plasmafire = Плазма
 ui-options-hud-theme-slimecore = Слаймкор

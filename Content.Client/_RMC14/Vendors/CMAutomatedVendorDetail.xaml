@@ -1,0 +1,230 @@
+<cc:CMAutomatedVendorDetail
+    xmlns="https://spacestation14.io"
+    xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    SetWidth="280"
+    VerticalExpand="True"
+    Visible="False">
+    <PanelContainer VerticalExpand="True" HorizontalExpand="True">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#0C0D10"
+                                   BorderColor="#2A2418"
+                                   BorderThickness="1 0 0 0"
+                                   ContentMarginLeftOverride="12"
+                                   ContentMarginRightOverride="12"
+                                   ContentMarginTopOverride="10"
+                                   ContentMarginBottomOverride="10" />
+        </PanelContainer.PanelOverride>
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+        <BoxContainer Orientation="Vertical" SeparationOverride="0" MaxWidth="256">
+            <!-- ── HEADER ── -->
+            <PanelContainer HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#0F1014"
+                                           BorderColor="#3D3422"
+                                           BorderThickness="0 0 0 1"
+                                           ContentMarginBottomOverride="8" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Label Text="◈" FontColorOverride="#7A6832" />
+                    <Label Name="DetailTitle" Access="Public"
+                           FontColorOverride="#C9A84C"
+                           StyleClasses="LabelHeading"
+                           ClipText="True"
+                           HorizontalExpand="True" />
+                </BoxContainer>
+            </PanelContainer>
+            <!-- ── PREVIEW IMAGE ── -->
+            <BoxContainer Orientation="Vertical" SeparationOverride="0" Margin="0 10 0 0"
+                          HorizontalAlignment="Center">
+                <PanelContainer HorizontalAlignment="Center">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#0A0A0E"
+                                               BorderColor="#2A2418"
+                                               BorderThickness="1"
+                                               ContentMarginLeftOverride="20"
+                                               ContentMarginRightOverride="20"
+                                               ContentMarginTopOverride="20"
+                                               ContentMarginBottomOverride="20" />
+                    </PanelContainer.PanelOverride>
+                    <LayeredTextureRect Name="DetailTexture" Access="Public"
+                                        MinSize="128 128"
+                                        Stretch="KeepAspectCentered"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center" />
+                </PanelContainer>
+            </BoxContainer>
+            <!-- ── THIN SEPARATOR ── -->
+            <PanelContainer MinHeight="1" Margin="0 10 0 0" HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#2A2418" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <!-- ── DESIGNATION ── -->
+            <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="0 8 0 0">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Label Text="▸" FontColorOverride="#7A6832" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-item'}"
+                           FontColorOverride="#8A7D5E" />
+                </BoxContainer>
+                <Label Name="DetailItemName" Access="Public"
+                       FontColorOverride="#D4C8A0"
+                       Margin="14 0 0 0" />
+            </BoxContainer>
+            <!-- ── WEAPON STATS (hidden when not a weapon) ── -->
+            <BoxContainer Name="WeaponStatsSection" Access="Public"
+                          Orientation="Vertical" SeparationOverride="0" Margin="0 4 0 0"
+                          Visible="False">
+                <!-- THIN SEPARATOR -->
+                <PanelContainer MinHeight="1" Margin="0 6 0 6" HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#1E1A12" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+                <!-- HEADER -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="0 0 0 4">
+                    <Label Text="⚔" FontColorOverride="#7A6832" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-combat'}"
+                           FontColorOverride="#8A7D5E" />
+                </BoxContainer>
+                <!-- Damage -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-damage'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailDamage" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <!-- Fire Rate -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-firerate'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailFireRate" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <!-- Fire Modes -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-firemode'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailFireMode" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <!-- DPS (5s) -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-dps'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailDps" Access="Public"
+                           FontColorOverride="#C85050" />
+                </BoxContainer>
+                <!-- Ammo Capacity -->
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-ammo'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailAmmo" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+            </BoxContainer>
+            <!-- ── MELEE STATS (hidden when not melee) ── -->
+            <BoxContainer Name="MeleeStatsSection" Access="Public"
+                          Orientation="Vertical" SeparationOverride="0" Margin="0 4 0 0"
+                          Visible="False">
+                <PanelContainer MinHeight="1" Margin="0 6 0 6" HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#1E1A12" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="0 0 0 4">
+                    <Label Text="⚔" FontColorOverride="#7A6832" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-melee'}"
+                           FontColorOverride="#8A7D5E" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-damage'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailMeleeDamage" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-melee-dps'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailMeleeDps" Access="Public"
+                           FontColorOverride="#C85050" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-melee-speed'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailMeleeSpeed" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-melee-range'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailMeleeRange" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+            </BoxContainer>
+            <!-- ── AMMO STATS (hidden when not ammo) ── -->
+            <BoxContainer Name="AmmoStatsSection" Access="Public"
+                          Orientation="Vertical" SeparationOverride="0" Margin="0 4 0 0"
+                          Visible="False">
+                <PanelContainer MinHeight="1" Margin="0 6 0 6" HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat BackgroundColor="#1E1A12" />
+                    </PanelContainer.PanelOverride>
+                </PanelContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="0 0 0 4">
+                    <Label Text="⚙" FontColorOverride="#7A6832" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-ammo-header'}"
+                           FontColorOverride="#8A7D5E" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-ammo'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailAmmoCap" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="14 2 0 0">
+                    <Label Text="▸" FontColorOverride="#5A4A28" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-damage'}"
+                           FontColorOverride="#706248" MinWidth="90" />
+                    <Label Name="DetailAmmoDamage" Access="Public"
+                           FontColorOverride="#D4C8A0" />
+                </BoxContainer>
+            </BoxContainer>
+            <!-- ── THIN SEPARATOR ── -->
+            <PanelContainer MinHeight="1" Margin="0 8 0 0" HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#1E1A12" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <!-- ── DESCRIPTION ── -->
+            <BoxContainer Orientation="Vertical" SeparationOverride="4" Margin="0 8 0 0"
+                          HorizontalExpand="True">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                    <Label Text="▸" FontColorOverride="#7A6832" />
+                    <Label Text="{Loc 'cm-automated-vendor-ui-detail-desc'}"
+                           FontColorOverride="#8A7D5E" />
+                </BoxContainer>
+                <RichTextLabel Name="DetailDescription" Access="Public"
+                               Margin="14 2 0 0"
+                               HorizontalExpand="True" />
+            </BoxContainer>
+            <!-- ── BOTTOM ACCENT ── -->
+            <PanelContainer MinHeight="1" Margin="0 8 0 0" HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat BackgroundColor="#3D3422" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+        </BoxContainer>
+        </ScrollContainer>
+    </PanelContainer>
+</cc:CMAutomatedVendorDetail>

@@ -724,6 +724,22 @@ namespace Content.Server.Database
                 .ToList();
         }
 
+        public async Task<List<NetUserId>> GetUsersWithAnyWH40KMetaOrPreferences(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var userIds = await db.DbContext.Preference
+                .Select(pref => pref.UserId)
+                .Concat(db.DbContext.WH40KMetaProgress.Select(row => row.PlayerUserId))
+                .Concat(db.DbContext.WH40KMetaAchievementProgress.Select(row => row.PlayerUserId))
+                .Concat(db.DbContext.WH40KMetaDecorationUnlock.Select(row => row.PlayerUserId))
+                .Concat(db.DbContext.WH40KMetaDevelopmentUnlock.Select(row => row.PlayerUserId))
+                .Distinct()
+                .ToListAsync(cancel);
+
+            return userIds.Select(id => new NetUserId(id)).ToList();
+        }
+
         public async Task SetWH40KMetaDevelopmentUnlocks(NetUserId player, IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> data)
         {
             await using var db = await GetDb();
@@ -764,6 +780,147 @@ namespace Content.Server.Database
             }
 
             await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task BatchSetWH40KMetaProgressAll(
+            NetUserId player,
+            WH40KMetaProgressDbData progressData,
+            IReadOnlyCollection<WH40KMetaAchievementDbData> achievementData,
+            IReadOnlyCollection<WH40KMetaDecorationDbData> decorationData,
+            IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> developmentData)
+        {
+            await using var db = await GetDb();
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                // --- Progress ---
+                var lifetimeXp = Math.Max(0, progressData.LifetimeXp);
+                var seasonXp = Math.Max(0, progressData.SeasonXp);
+                var lastProgressAt = progressData.LastProgressAt.UtcDateTime;
+                var ghostSkinId = string.IsNullOrWhiteSpace(progressData.SelectedGhostSkinId) ? null : progressData.SelectedGhostSkinId;
+                var oocTitleId = string.IsNullOrWhiteSpace(progressData.SelectedOocTitleId) ? null : progressData.SelectedOocTitleId;
+                var oocColorId = string.IsNullOrWhiteSpace(progressData.SelectedOocNameColorId) ? null : progressData.SelectedOocNameColorId;
+
+                var metaRow = await db.DbContext.WH40KMetaProgress
+                    .SingleOrDefaultAsync(p => p.PlayerUserId == player.UserId);
+
+                if (metaRow == null)
+                {
+                    var playerRow = await db.DbContext.Player
+                        .SingleOrDefaultAsync(p => p.UserId == player.UserId);
+
+                    if (playerRow == null)
+                    {
+                        var now = DateTime.UtcNow;
+                        db.DbContext.Player.Add(new Player
+                        {
+                            UserId = player.UserId,
+                            FirstSeenTime = now,
+                            LastSeenTime = now,
+                            LastSeenAddress = IPAddress.None,
+                            LastSeenUserName = player.UserId.ToString(),
+                        });
+                    }
+
+                    metaRow = new WH40KMetaProgress { PlayerUserId = player.UserId };
+                    db.DbContext.WH40KMetaProgress.Add(metaRow);
+                }
+
+                metaRow.LifetimeXp = lifetimeXp;
+                metaRow.SeasonXp = seasonXp;
+                metaRow.LastProgressAt = lastProgressAt;
+                metaRow.SelectedGhostSkinId = ghostSkinId;
+                metaRow.SelectedOocTitleId = oocTitleId;
+                metaRow.SelectedOocNameColorId = oocColorId;
+
+                // --- Achievements ---
+                var existingAch = await db.DbContext.WH40KMetaAchievementProgress
+                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                var existingAchById = existingAch.ToDictionary(a => a.AchievementId, StringComparer.Ordinal);
+                var incomingAchIds = new HashSet<string>(StringComparer.Ordinal);
+
+                foreach (var entry in achievementData)
+                {
+                    if (string.IsNullOrWhiteSpace(entry.AchievementId)) continue;
+                    incomingAchIds.Add(entry.AchievementId);
+                    if (!existingAchById.TryGetValue(entry.AchievementId, out var achRow))
+                    {
+                        achRow = new WH40KMetaAchievementProgress { PlayerUserId = player.UserId, AchievementId = entry.AchievementId };
+                        db.DbContext.WH40KMetaAchievementProgress.Add(achRow);
+                    }
+                    achRow.ProgressValue = Math.Max(0, entry.ProgressValue);
+                    achRow.Unlocked = entry.Unlocked;
+                    achRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
+                    achRow.Claimed = entry.Claimed;
+                    achRow.Version = Math.Max(1, entry.Version);
+                    achRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
+                }
+                foreach (var achRow in existingAch)
+                {
+                    if (!incomingAchIds.Contains(achRow.AchievementId))
+                        db.DbContext.WH40KMetaAchievementProgress.Remove(achRow);
+                }
+
+                // --- Decorations ---
+                var existingDecor = await db.DbContext.WH40KMetaDecorationUnlock
+                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                var existingDecorById = existingDecor.ToDictionary(a => a.UnlockId, StringComparer.Ordinal);
+                var incomingDecorIds = new HashSet<string>(StringComparer.Ordinal);
+
+                foreach (var entry in decorationData)
+                {
+                    if (string.IsNullOrWhiteSpace(entry.UnlockId)) continue;
+                    incomingDecorIds.Add(entry.UnlockId);
+                    if (!existingDecorById.TryGetValue(entry.UnlockId, out var decorRow))
+                    {
+                        decorRow = new WH40KMetaDecorationUnlock { PlayerUserId = player.UserId, UnlockId = entry.UnlockId };
+                        db.DbContext.WH40KMetaDecorationUnlock.Add(decorRow);
+                    }
+                    decorRow.Unlocked = entry.Unlocked;
+                    decorRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
+                    decorRow.SourceLevel = Math.Max(0, entry.SourceLevel);
+                    decorRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
+                }
+                foreach (var decorRow in existingDecor)
+                {
+                    if (!incomingDecorIds.Contains(decorRow.UnlockId))
+                        db.DbContext.WH40KMetaDecorationUnlock.Remove(decorRow);
+                }
+
+                // --- Development ---
+                var existingDev = await db.DbContext.WH40KMetaDevelopmentUnlock
+                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                var existingDevById = existingDev.ToDictionary(a => a.NodeId, StringComparer.Ordinal);
+                var incomingDevIds = new HashSet<string>(StringComparer.Ordinal);
+
+                foreach (var entry in developmentData)
+                {
+                    if (string.IsNullOrWhiteSpace(entry.NodeId)) continue;
+                    incomingDevIds.Add(entry.NodeId);
+                    if (!existingDevById.TryGetValue(entry.NodeId, out var devRow))
+                    {
+                        devRow = new WH40KMetaDevelopmentUnlock { PlayerUserId = player.UserId, NodeId = entry.NodeId };
+                        db.DbContext.WH40KMetaDevelopmentUnlock.Add(devRow);
+                    }
+                    devRow.UnlockedAt = entry.UnlockedAt.UtcDateTime;
+                    devRow.SpentCost = Math.Max(0, entry.SpentCost);
+                    devRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
+                }
+                foreach (var devRow in existingDev)
+                {
+                    if (!incomingDevIds.Contains(devRow.NodeId))
+                        db.DbContext.WH40KMetaDevelopmentUnlock.Remove(devRow);
+                }
+
+                await db.DbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel)

@@ -6,6 +6,8 @@ using Content.Shared.Stacks;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Dynamics;
 
 namespace Content.Shared._WH40K.Combat;
 
@@ -15,6 +17,7 @@ namespace Content.Shared._WH40K.Combat;
 /// </summary>
 public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
 {
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -37,14 +40,15 @@ public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
             return;
         }
 
-        if (!IsTileClear(tileRef))
+        var placementDirection = NormalizeDirection(args.Direction);
+        if (!CanPlaceBarricade(tileRef, placementDirection))
         {
             args.Cancel();
             return;
         }
 
         args.Coordinates = snappedCoords;
-        args.Direction = NormalizeDirection(args.Direction);
+        args.Direction = placementDirection;
         args.DeployDelay = ent.Comp.DeployTime;
         args.BreakOnDamage = true;
     }
@@ -57,10 +61,12 @@ public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
         if (!TryComp(ent, out HandheldEntityPlacementComponent? placement))
             return;
 
+        var placementDirection = NormalizeDirection(args.Direction);
+
         if (!TryGetPlacementTile(args.Coordinates, out _, out _, out var tileRef, out var snappedCoords))
             return;
 
-        if (!IsTileClear(tileRef))
+        if (!CanPlaceBarricade(tileRef, placementDirection))
             return;
 
         if (TryComp(ent, out StackComponent? stack))
@@ -74,7 +80,7 @@ public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
         }
 
         var barricade = Spawn(placement.EntityType, snappedCoords);
-        _transform.SetLocalRotation(barricade, NormalizeDirection(args.Direction).ToAngle());
+        _transform.SetLocalRotation(barricade, placementDirection.ToAngle());
 
         args.Handled = true;
     }
@@ -117,9 +123,50 @@ public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
         return true;
     }
 
-    private bool IsTileClear(TileRef tileRef)
+    private bool CanPlaceBarricade(TileRef tileRef, Direction direction)
     {
-        return !tileRef.Tile.IsEmpty && !_turf.IsTileBlocked(tileRef, CollisionGroup.MobMask);
+        if (tileRef.Tile.IsEmpty)
+            return false;
+
+        if (!_turf.IsTileBlocked(tileRef, CollisionGroup.MobMask))
+            return true;
+
+        return IsOccupiedOnlyByCompatibleBarricades(tileRef, direction);
+    }
+
+    private bool IsOccupiedOnlyByCompatibleBarricades(TileRef tileRef, Direction direction)
+    {
+        var foundBarricade = false;
+
+        foreach (var entity in _lookup.GetEntitiesInTile(tileRef, LookupFlags.Dynamic | LookupFlags.Static))
+        {
+            if (!TryComp<FixturesComponent>(entity, out var fixtures) || !BlocksMobPlacement(fixtures))
+                continue;
+
+            if (!HasComp<WH40KDirectionalBarricadeComponent>(entity))
+                return false;
+
+            foundBarricade = true;
+            var existingDirection = _transform.GetWorldRotation(entity).GetCardinalDir();
+            if (existingDirection == direction)
+                return false;
+        }
+
+        return foundBarricade;
+    }
+
+    private static bool BlocksMobPlacement(FixturesComponent fixtures)
+    {
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (!fixture.Hard)
+                continue;
+
+            if ((fixture.CollisionLayer & (int) CollisionGroup.MobMask) != 0)
+                return true;
+        }
+
+        return false;
     }
 
     private static Direction NormalizeDirection(Direction direction)

@@ -73,13 +73,23 @@
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/bloodpact_helmet.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/bloodpact_helmet.rsi
 
 - type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetrHeresy
+  suffix: WH40K, Еретики
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetFlakAdvHeresy
   suffix: WH40K, Еретики
   components:
   - type: Sprite
@@ -232,23 +242,3 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi
-
-- type: entity
-  parent: ClothingHeadHelmetFlakAdv
-  id: ClothingHeadHelmetFlakAdvVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Head/Helmets/vst_helmet.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Head/Helmets/vst_helmet.rsi
-
-- type: entity
-  parent: ClothingHeadHelmetFlakAdv
-  id: ClothingHeadHelmetFlakAdvSergVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi

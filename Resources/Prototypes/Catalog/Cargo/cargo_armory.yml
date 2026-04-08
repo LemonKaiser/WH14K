@@ -5,7 +5,7 @@
     state: icon
   product: CrateArmorySMG
   cost: 9000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -15,7 +15,7 @@
     state: icon
   product: CrateArmoryShotgun
   cost: 7000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -25,7 +25,7 @@
     state: icon
   product: CrateSecurityRiot
   cost: 7500
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -35,7 +35,7 @@
     state: implanter0
   product: CrateTrackingImplants
   cost: 1000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -45,7 +45,7 @@
     state: training-bomb
   product: CrateTrainingBombs
   cost: 3000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -55,7 +55,7 @@
     state: icon
   product: CrateArmoryLaser
   cost: 4800
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -65,7 +65,7 @@
     state: icon
   product: CrateArmoryPistols
   cost: 5200
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market
 
 - type: cargoProduct
@@ -75,5 +75,5 @@
     state: icon
   product: CrateArmoryRifle
   cost: 8000
-  category: cargoproduct-category-name-armory
+  category: cpcat-arm
   group: market

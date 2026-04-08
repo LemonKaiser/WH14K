@@ -10,13 +10,6 @@
                 <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />
                 <CheckBox Name="ColorblindFriendlyCheckBox" Text="{Loc 'ui-options-colorblind-friendly'}" />
                 <ui:OptionSlider Name="ScreenShakeIntensitySlider" Title="{Loc 'ui-options-screen-shake-intensity'}" />
-                <Label Name="LobbyHeaderLabel" Text="{Loc 'ui-options-accessability-header-lobby'}"
-                       StyleClasses="LabelKeyText"/>
-                <ui:OptionDropDown Name="DropDownLobbyBackgroundType" Title="{Loc 'ui-options-lobby-background-type'}" />
-                <ui:OptionDropDown Name="DropDownLobbyStaticBackground" Title="{Loc 'ui-options-lobby-static-background'}" />
-                <ui:OptionDropDown Name="DropDownLobbyAnimatedBackground" Title="{Loc 'ui-options-lobby-animated-background'}" />
-                <ui:OptionSlider Name="LobbyPanelOpacitySlider" Title="{Loc 'ui-options-lobby-panel-opacity'}" />
-                <ui:OptionSlider Name="CustomizationPanelOpacitySlider" Title="{Loc 'ui-options-customization-panel-opacity'}" />
                 <ui:OptionSlider Name="ChatWindowOpacitySlider" Title="{Loc 'ui-options-chat-window-opacity'}" />
                 <ui:OptionSlider Name="SpeechBubbleTextOpacitySlider" Title="{Loc 'ui-options-speech-bubble-text-opacity'}" />
                 <ui:OptionSlider Name="SpeechBubbleSpeakerOpacitySlider" Title="{Loc 'ui-options-speech-bubble-speaker-opacity'}" />

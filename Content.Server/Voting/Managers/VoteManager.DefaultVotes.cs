@@ -142,11 +142,18 @@ namespace Content.Server.Voting.Managers
             var options = new VoteOptions
             {
                 Title = Loc.GetString("ui-vote-restart-title"),
+                TitleLocKey = "ui-vote-restart-title",
                 Options =
                 {
                     (Loc.GetString("ui-vote-restart-yes"), "yes"),
                     (Loc.GetString("ui-vote-restart-no"), "no"),
                     (Loc.GetString("ui-vote-restart-abstain"), "abstain")
+                },
+                OptionLocKeys = new List<string?>
+                {
+                    "ui-vote-restart-yes",
+                    "ui-vote-restart-no",
+                    "ui-vote-restart-abstain"
                 },
                 Duration = alone
                     ? TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerAlone))
@@ -223,6 +230,7 @@ namespace Content.Server.Voting.Managers
             var options = new VoteOptions
             {
                 Title = Loc.GetString("ui-vote-gamemode-title"),
+                TitleLocKey = "ui-vote-gamemode-title",
                 Duration = alone
                     ? TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerAlone))
                     : TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerPreset))
@@ -231,9 +239,11 @@ namespace Content.Server.Voting.Managers
             if (alone)
                 options.InitiatorTimeout = TimeSpan.FromSeconds(10);
 
+            options.OptionLocKeys = new List<string?>();
             foreach (var (k, v) in presets)
             {
                 options.Options.Add((Loc.GetString(v), k));
+                options.OptionLocKeys.Add(v);
             }
 
             WirePresetVoteInitiator(options, initiator);
@@ -269,6 +279,7 @@ namespace Content.Server.Voting.Managers
             var options = new VoteOptions
             {
                 Title = Loc.GetString("ui-vote-map-title"),
+                TitleLocKey = "ui-vote-map-title",
                 Duration = alone
                     ? TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerAlone))
                     : TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VoteTimerMap))
@@ -452,6 +463,12 @@ namespace Content.Server.Voting.Managers
                     (Loc.GetString("ui-vote-votekick-yes"), "yes"),
                     (Loc.GetString("ui-vote-votekick-no"), "no"),
                     (Loc.GetString("ui-vote-votekick-abstain"), "abstain")
+                },
+                OptionLocKeys = new List<string?>
+                {
+                    "ui-vote-votekick-yes",
+                    "ui-vote-votekick-no",
+                    "ui-vote-votekick-abstain"
                 },
                 Duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotekickTimer)),
                 InitiatorTimeout = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotekickTimeout)),

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,9 +10,34 @@ namespace Content.Shared.Localizations
         [Dependency] private readonly ILocalizationManager _loc = default!;
         private readonly HashSet<string> _preparedCultures = new();
 
+        public const string DefaultCultureName = "ru-RU";
+        public const string FallbackCultureName = "en-US";
+
+        public static readonly string[] SupportedCultures = { DefaultCultureName, FallbackCultureName };
+
+        public static string? ValidateCultureName(string? cultureName)
+        {
+            if (string.IsNullOrWhiteSpace(cultureName))
+                return null;
+
+            foreach (var supported in SupportedCultures)
+            {
+                if (string.Equals(cultureName, supported, StringComparison.OrdinalIgnoreCase))
+                    return supported;
+            }
+
+            if (cultureName.StartsWith("ru", StringComparison.OrdinalIgnoreCase))
+                return DefaultCultureName;
+
+            if (cultureName.StartsWith("en", StringComparison.OrdinalIgnoreCase))
+                return FallbackCultureName;
+
+            return null;
+        }
+
         // If you want to change your codebase's language, do it here.
-        private const string Culture = "ru-RU";
-        private const string FallbackCulture = "en-US";
+        private const string Culture = DefaultCultureName;
+        private const string FallbackCulture = FallbackCultureName;
 
         /// <summary>
         /// Custom format strings used for parsing and displaying minutes:seconds timespans.
@@ -123,32 +147,30 @@ namespace Content.Shared.Localizations
             }
         }
 
-        // TODO: allow fluent to take in lists of strings so this can be a format function like it should be.
         /// <summary>
-        /// Formats a list as per english grammar rules.
+        /// Formats a list with a localized conjunction (e.g. "A, B, and C" / "A, B и C").
         /// </summary>
         public static string FormatList(List<string> list)
         {
-            return list.Count switch
-            {
-                <= 0 => string.Empty,
-                1 => list[0],
-                2 => $"{list[0]} and {list[1]}",
-                _ => $"{string.Join(", ", list.GetRange(0, list.Count - 1))}, and {list[^1]}"
-            };
+            return FormatListInternal(list, Loc.GetString("zzzz-fmt-list-and"));
         }
 
         /// <summary>
-        /// Formats a list as per english grammar rules, but uses or instead of and.
+        /// Formats a list with a localized disjunction (e.g. "A, B, or C" / "A, B или C").
         /// </summary>
         public static string FormatListToOr(List<string> list)
+        {
+            return FormatListInternal(list, Loc.GetString("zzzz-fmt-list-or"));
+        }
+
+        private static string FormatListInternal(List<string> list, string conjunction)
         {
             return list.Count switch
             {
                 <= 0 => string.Empty,
                 1 => list[0],
-                2 => $"{list[0]} or {list[1]}",
-                _ => $"{string.Join(", ", list.GetRange(0, list.Count - 1))}, or {list[^1]}"
+                2 => $"{list[0]} {conjunction} {list[1]}",
+                _ => $"{string.Join(", ", list.GetRange(0, list.Count - 1))}, {conjunction} {list[^1]}"
             };
         }
 

@@ -1,0 +1,29 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              Orientation="Horizontal"
+              HorizontalExpand="True"
+              SeparationOverride="10"
+              Margin="10 8 10 8">
+    <PanelContainer Name="AccentBar"
+                    MinWidth="5"
+                    MaxWidth="5"
+                    VerticalExpand="True" />
+
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  SeparationOverride="3"
+                  VerticalAlignment="Center">
+        <RichTextLabel Name="CameraNameLabel"
+                       HorizontalExpand="True" />
+        <RichTextLabel Name="CameraAddressLabel"
+                       HorizontalExpand="True" />
+    </BoxContainer>
+
+    <PanelContainer Name="StateBadge"
+                    MinWidth="92"
+                    VerticalAlignment="Center">
+        <Label Name="StateLabel"
+               Margin="10 7 10 7"
+               HorizontalAlignment="Center"
+               Align="Center" />
+    </PanelContainer>
+</BoxContainer>

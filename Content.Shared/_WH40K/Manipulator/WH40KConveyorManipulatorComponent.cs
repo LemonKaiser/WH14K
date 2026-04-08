@@ -43,7 +43,7 @@ public sealed partial class WH40KConveyorManipulatorComponent : Component
     [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
     public bool Busy;
 
-    [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public EntityUid? ActiveItem;
 
     [ViewVariables(VVAccess.ReadOnly), AutoNetworkedField]

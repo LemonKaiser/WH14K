@@ -49,7 +49,9 @@ public sealed class HealthExaminableSystem : EntitySystem
         var msg = new FormattedMessage();
 
         var first = true;
+#pragma warning disable CS0618
         var damageSpecifier = _damageable.GetAllDamage((uid, damage));
+#pragma warning restore CS0618
         foreach (var type in component.ExaminableTypes)
         {
             if (!damageSpecifier.DamageDict.TryGetValue(type, out var dmg))

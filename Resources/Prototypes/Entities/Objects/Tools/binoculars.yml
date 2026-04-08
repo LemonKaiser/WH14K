@@ -8,7 +8,7 @@
     sprite: Objects/Tools/binoculars.rsi
     state: icon
   - type: Item
-    size: Normal
+    size: Small
   - type: Clothing
     sprite: Objects/Tools/binoculars.rsi
     quickEquip: false

@@ -30,6 +30,22 @@ public sealed class WH40KTacticalMapAnnotationStroke
 }
 
 [Serializable, NetSerializable]
+public enum WH40KTacticalMapStrategicMarkerKind : byte
+{
+    CapturePoint = 0,
+    CommandNode = 1,
+}
+
+[Serializable, NetSerializable]
+public enum WH40KTacticalMapStrategicRelation : byte
+{
+    Neutral = 0,
+    Allied = 1,
+    Hostile = 2,
+    Contested = 3,
+}
+
+[Serializable, NetSerializable]
 public sealed class WH40KTacticalMapAllyMarker
 {
     public NetEntity Entity { get; }
@@ -50,6 +66,8 @@ public sealed class WH40KTacticalMapAllyMarker
 public sealed class WH40KTacticalMapCapturePointMarker
 {
     public NetEntity Entity { get; }
+    public WH40KTacticalMapStrategicMarkerKind Kind { get; }
+    public WH40KTacticalMapStrategicRelation Relation { get; }
     public string Label { get; }
     public string Callsign { get; }
     public Vector2 Position { get; }
@@ -65,6 +83,8 @@ public sealed class WH40KTacticalMapCapturePointMarker
 
     public WH40KTacticalMapCapturePointMarker(
         NetEntity entity,
+        WH40KTacticalMapStrategicMarkerKind kind,
+        WH40KTacticalMapStrategicRelation relation,
         string label,
         string callsign,
         Vector2 position,
@@ -79,6 +99,8 @@ public sealed class WH40KTacticalMapCapturePointMarker
         bool contested)
     {
         Entity = entity;
+        Kind = kind;
+        Relation = relation;
         Label = label;
         Callsign = callsign;
         Position = position;

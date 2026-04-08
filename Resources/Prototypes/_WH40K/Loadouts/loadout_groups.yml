@@ -53,36 +53,40 @@
   name: loadout-group-wh40k-imperial-line-head
   loadouts:
   - FlakHelmet
+  - WH40KCatachanBandana
+  - WH40KCatachanHeadband
+  - WH40KCatachanBeret
   - FlakHelmetCandle
   - WH40KBandanaBlack
   - WH40KBandanaGreen
   - WH40KBandanaMerc
   - WH40KKriegHelmet
   - WH40KCyanFlakHelmet
-  - WH40KCyanArmoredHelmet
   - WH40KImperialVeteranBeret
   - WH40KBandanaGold
-  - WH40KHelmetVst
 
 - type: loadoutGroup
   id: WH40KImperialLineHonours
   name: loadout-group-wh40k-imperial-line-honours
   minLimit: 0
   loadouts:
-  - WH40KBronzeheart
-  - WH40KSecurityMedal
-  - WH40KGoldMedal
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
 
 - type: loadoutGroup
   id: WH40KImperialFieldOuter
   name: loadout-group-wh40k-imperial-field-outer
   loadouts:
   - WH40KLightFlakArmor
+  - WH40KCatachanLightArmor
+  - WH40KCatachanMediumArmor
+  - WH40KCatachanVest
   - WH40KKriegCoat
   - WH40KCyanLightFlakArmor
   - WH40KCyanFlakArmor
   - WH40KFlakArmor
-  - WH40KCoatVst
 
 - type: loadoutGroup
   id: WH40KImperialFieldBelt
@@ -92,12 +96,35 @@
   - WH40KKriegWebbing
 
 - type: loadoutGroup
+  id: WH40KImperialLineUniform
+  name: loadout-group-wh40k-imperial-line-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KKriegUniform
+  - WH40KCatachanUniform1
+  - WH40KCatachanUniform2
+  - WH40KCatachanUniform3
+
+- type: loadoutGroup
+  id: WH40KImperialLineHands
+  name: loadout-group-wh40k-imperial-line-hands
+  minLimit: 0
+  loadouts:
+  - WH40KKriegGloves
+
+- type: loadoutGroup
   id: WH40KImperialLineFeet
   name: loadout-group-wh40k-imperial-line-feet
   loadouts:
   - WH40KCombatBoots
   - WH40KCyanCombatBoots
-  - WH40KBootsVst
+
+- type: loadoutGroup
+  id: WH40KImperialLineEyes
+  name: loadout-group-wh40k-imperial-line-eyes
+  minLimit: 0
+  loadouts:
+  - WH40KGuardsmanGlasses
 
 - type: loadoutGroup
   id: WH40KFieldKit
@@ -119,6 +146,7 @@
   loadouts:
   - WH40KCrowbarKit
   - WH40KCombatKnifeKit
+  - WH40KCatachanKnifeKit
   - WH40KSurvivalKnifeKit
   - WH40KSapperShovelKit
   - WH40KTruncheonKit
@@ -145,7 +173,7 @@
   minLimit: 0
   loadouts:
   - WH40KGuardsmanGasmask
-  - WH40KGasmaskVst
+  - WH40KKriegGasmask
 
 - type: loadoutGroup
   id: WH40KImperialLineMask
@@ -154,7 +182,6 @@
   loadouts:
   - WH40KGuardsmanGasmask
   - WH40KKriegGasmask
-  - WH40KGasmaskVst
 
 - type: loadoutGroup
   id: WH40KImperialMedicHead
@@ -162,6 +189,9 @@
   minLimit: 0
   loadouts:
   - WH40KBandanaRed
+  - WH40KCatachanBandana
+  - WH40KCatachanHeadband
+  - WH40KCatachanBeret
   - WH40KKriegHelmet
   - WH40KMedicBeret
   - WH40KSeniorMedicBeret
@@ -171,9 +201,10 @@
   name: loadout-group-wh40k-imperial-medic-honours
   minLimit: 0
   loadouts:
-  - WH40KBronzeheart
-  - WH40KMedicalMedal
-  - WH40KGoldMedal
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHead
@@ -181,6 +212,9 @@
   minLimit: 0
   loadouts:
   - WH40KBandanaBrown
+  - WH40KCatachanBandana
+  - WH40KCatachanHeadband
+  - WH40KCatachanBeret
   - WH40KKriegHelmet
   - WH40KQuartermasterBeret
   - WH40KCommandBeret
@@ -190,9 +224,21 @@
   name: loadout-group-wh40k-imperial-logistics-honours
   minLimit: 0
   loadouts:
-  - WH40KBronzeheart
-  - WH40KCargoMedal
-  - WH40KGoldMedal
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
+
+- type: loadoutGroup
+  id: WH40KImperialLogisticsOuter
+  name: loadout-group-wh40k-imperial-logistics-outer
+  minLimit: 0
+  loadouts:
+  - WH40KLightFlakArmor
+  - WH40KMunitorumCoat
+  - WH40KMunitorumGreatcoat
+  - WH40KMunitorumRig
+  - WH40KMunitorumVest
 
 - type: loadoutGroup
   id: WH40KImperialSergeantHead
@@ -202,7 +248,6 @@
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
-  - WH40KHelmetSergVst
 
 - type: loadoutGroup
   id: WH40KImperialSergeantOuter
@@ -222,26 +267,26 @@
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
-  - WH40KHelmetSergVst
 
 - type: loadoutGroup
   id: WH40KImperialCommandNeck
   name: loadout-group-wh40k-imperial-command-neck
   minLimit: 0
   loadouts:
-  - WH40KBronzeheart
-  - WH40KSecurityMedal
-  - WH40KGoldMedal
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
 
 - type: loadoutGroup
   id: WH40KImperialCommandNeckGorget
   name: loadout-group-wh40k-imperial-command-neck
   loadouts:
   - WH40KGorgetZero
-  - WH40KBronzeheart
-  - WH40KSecurityMedal
-  - WH40KGoldMedal
-  - WH40KNeckVst
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
 
 - type: loadoutGroup
   id: WH40KImperialCommandOuter
@@ -251,8 +296,6 @@
   - WH40KOfficerCoat
   - WH40KJuniorOfficerJacket
   - WH40KSeniorOfficerJacket
-  - WH40KCoatLietVst
-  - WH40KArmorFlakCoatLiet
 
 - type: loadoutGroup
   id: WH40KImperialCommandHands
@@ -276,17 +319,65 @@
   - WH40KGoldCigarCaseKit
 
 - type: loadoutGroup
+  id: WH40KImperialCommandSidearm
+  name: loadout-group-wh40k-imperial-command-sidearm
+  loadouts:
+  - WH40KCommandLaspistolWillOfTheEmperor
+  - WH40KCommandBoltPistol
+  - WH40KCommandPlasmaPistol
+
+- type: loadoutGroup
+  id: WH40KImperialCommandMelee
+  name: loadout-group-wh40k-imperial-command-melee
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+  - WH40KCommandWarHammer
+
+- type: loadoutGroup
+  id: WH40KSergeantMelee
+  name: loadout-group-wh40k-sergeant-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+
+- type: loadoutGroup
   id: WH40KHereticLineHead
   name: loadout-group-wh40k-heretic-line-head
   minLimit: 0
   loadouts:
-  - WH40KBandanaBlack
   - WH40KBandanaBrown
   - WH40KBandanaSkull
   - WH40KChaosScarf
   - WH40KHeresyHelmet
   - HFlakHelmetCandle
   - WH40KBloodPactHelmet
+
+- type: loadoutGroup
+  id: WH40KHereticLineHonours
+  name: loadout-group-wh40k-heretic-line-honours
+  minLimit: 0
+  loadouts:
+  - WH40KChaosUndividedMedal
+  - WH40KChaosKhorneMedal
+  - WH40KChaosNurgleMedal
+  - WH40KChaosSlaaneshMedal
+  - WH40KChaosTzeentchMedal
+
+- type: loadoutGroup
+  id: WH40KHereticLineUniform
+  name: loadout-group-wh40k-heretic-line-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactUniform
+
+- type: loadoutGroup
+  id: WH40KHereticLineOuter
+  name: loadout-group-wh40k-heretic-line-outer
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactArmor
 
 - type: loadoutGroup
   id: WH40KHereticLineMask
@@ -296,6 +387,7 @@
   - WH40KChaosMask1
   - WH40KChaosMask2
   - WH40KChaosMask3
+  - WH40KBloodPactMask
 
 - type: loadoutGroup
   id: WH40KHereticLineHands
@@ -305,6 +397,13 @@
   - WH40KBlackGloves
   - WH40KChaosCombatGloves
   - WH40KBloodPactGloves
+
+- type: loadoutGroup
+  id: WH40KHereticLineFeet
+  name: loadout-group-wh40k-heretic-line-feet
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactBoots
 
 - type: loadoutGroup
   id: WH40KHereticFieldKit
@@ -318,6 +417,17 @@
   - WH40KCigarCaseKit
   - WH40KPipeKit
   - WH40KGoldCigarKit
+
+- type: loadoutGroup
+  id: WH40KHereticLogisticsHonours
+  name: loadout-group-wh40k-heretic-logistics-honours
+  minLimit: 0
+  loadouts:
+  - WH40KChaosUndividedMedal
+  - WH40KChaosKhorneMedal
+  - WH40KChaosNurgleMedal
+  - WH40KChaosSlaaneshMedal
+  - WH40KChaosTzeentchMedal
 
 - type: loadoutGroup
   id: WH40KHereticMelee
@@ -342,12 +452,22 @@
   - WH40KBloodPactHelmet
 
 - type: loadoutGroup
+  id: WH40KHereticCommandUniform
+  name: loadout-group-wh40k-heretic-command-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactUniform
+
+- type: loadoutGroup
   id: WH40KHereticCommandNecklace
   name: loadout-group-wh40k-heretic-command-neck
   loadouts:
   - WH40KChaosNecklaceZero
-  - WH40KBronzeheart
-  - WH40KGoldMedal
+  - WH40KChaosUndividedMedal
+  - WH40KChaosKhorneMedal
+  - WH40KChaosNurgleMedal
+  - WH40KChaosSlaaneshMedal
+  - WH40KChaosTzeentchMedal
 
 - type: loadoutGroup
   id: WH40KHereticCommandNeck
@@ -355,8 +475,11 @@
   minLimit: 0
   loadouts:
   - WH40KChaosNecklace
-  - WH40KBronzeheart
-  - WH40KGoldMedal
+  - WH40KChaosUndividedMedal
+  - WH40KChaosKhorneMedal
+  - WH40KChaosNurgleMedal
+  - WH40KChaosSlaaneshMedal
+  - WH40KChaosTzeentchMedal
 
 - type: loadoutGroup
   id: WH40KHereticCommandOuter
@@ -365,7 +488,16 @@
   loadouts:
   - WH40KChaosCoat
   - WH40KBloodPactArmor
-  - WH40KCommissarCoat
+
+- type: loadoutGroup
+  id: WH40KHereticCommandMask
+  name: loadout-group-wh40k-heretic-command-mask
+  minLimit: 0
+  loadouts:
+  - WH40KChaosMask1
+  - WH40KChaosMask2
+  - WH40KChaosMask3
+  - WH40KBloodPactMask
 
 - type: loadoutGroup
   id: WH40KHereticCommandHands
@@ -375,6 +507,13 @@
   - WH40KBlackGloves
   - WH40KChaosCombatGloves
   - WH40KBloodPactGloves
+
+- type: loadoutGroup
+  id: WH40KHereticCommandFeet
+  name: loadout-group-wh40k-heretic-command-feet
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactBoots
 
 - type: loadoutGroup
   id: WH40KHereticCommandFieldKit

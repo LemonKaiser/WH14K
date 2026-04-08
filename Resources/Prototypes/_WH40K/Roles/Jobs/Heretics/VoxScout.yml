@@ -3,6 +3,13 @@
   name: job-name-hvox-scout
   description: job-description-hvox-scout
   playTimeTracker: JobHVoxScout
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+      - Vulpkanin
   startingGear: HVoxScoutGear
   icon: "JobIconHVoxScout"
   supervisors: job-supervisors-engineering
@@ -13,7 +20,6 @@
     components:
       - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
-      - type: WH40KMoraleExecutionTarget
   access:
   - Maintenance
   - External

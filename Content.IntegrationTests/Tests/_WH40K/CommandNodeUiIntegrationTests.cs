@@ -7,6 +7,7 @@ using Content.Server.GameTicking;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Shared._WH40K.Command;
+using Content.Shared._WH40K.LateJoin;
 using Content.Shared.GameTicking;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -93,14 +94,30 @@ public sealed class CommandNodeUiIntegrationTests
             Connected = true,
             Dirty = true,
             InLobby = true,
-            DummyTicker = false
+            DummyTicker = false,
+            Fresh = true
         });
 
         await pair.WaitCommand("forcemap Battlefield40k");
         await pair.WaitCommand("setgamepreset WH40KTeamBattle 9999");
-        await pair.WaitClientCommand("toggleready True");
         await pair.WaitCommand("startround");
-        await pair.RunTicksSync(80);
+        await pair.RunTicksSync(60);
+
+        // WH40K requires faction selection before late-join.
+        await pair.Client.WaitPost(() =>
+        {
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", WH40KFactionSelectionPurpose.LateJoin);
+        });
+        await pair.RunTicksSync(10);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+            ticker.MakeJoinGame(playerMan.Sessions.Single(), EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
 
         await pair.Server.WaitAssertion(() =>
         {

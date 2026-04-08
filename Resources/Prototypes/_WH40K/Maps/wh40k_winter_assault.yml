@@ -1,0 +1,35 @@
+- type: gameMap
+  id: WinterAssault
+  mapName: Winter Assault
+  mapPath: /Maps/_WH40K/WinterAssault.yml
+  minPlayers: 0
+  stations:
+    WinterAssault:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Winter Assault"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ 1, 1 ]
+            Commissar: [ 2, 2 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 3, 3 ]
+            Lieutenant: [ 2, 2 ]
+            Medic: [ 3, 3 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 2, 2 ]
+            Sergeant: [ 2, 2 ]
+            Tanker: [ 3, 3 ]
+            TitheSupplier: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
+            # Heretics
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 3, 3 ]
+            HLieutenant: [ 2, 2 ]
+            HSergeant: [ 2, 2 ]
+            HBandSupplier: [ 3, 3 ]
+            HTanker: [ 3, 3 ]
+            #HVoxScout: [ 3, 3 ]

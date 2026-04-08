@@ -6,6 +6,8 @@
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmagun_in-hands.rsi
+    shape:
+    - 0,0,4,1
   - type: GunRequiresWield
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmagun.rsi
@@ -27,3 +29,6 @@
         whitelist:
           tags:
             - PlasmPowerCellGun
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9

@@ -579,7 +579,9 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!action.Comp.RaiseOnUser && action.Comp.Container is { } container && !_mindQuery.HasComp(container))
             target = container;
 
+#pragma warning disable CS0618
         if (action.Comp.RaiseOnAction)
+#pragma warning restore CS0618
             target = action;
 
         RaiseLocalEvent(target, (object)ev, broadcast: true);

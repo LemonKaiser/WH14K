@@ -25,10 +25,10 @@ public sealed partial class WH40KCommandMissionBoardProfilePrototype : IPrototyp
     public int ActiveRewardMinPoints = 12;
 
     [DataField("activeTimerPreparationKey")]
-    public string ActiveTimerPreparationKey = "wh40k-command-node-mission-board-timer-prep";
+    public string ActiveTimerPreparationKey = "w40k-cmd-mission-board-timer-prep";
 
     [DataField("activeTimerAssaultKey")]
-    public string ActiveTimerAssaultKey = "wh40k-command-node-mission-board-timer-active";
+    public string ActiveTimerAssaultKey = "w40k-cmd-mission-board-timer-active";
 
     [DataField("systemTasks", required: true)]
     public List<WH40KCommandMissionBoardSystemTaskConfig> SystemTasks = new();

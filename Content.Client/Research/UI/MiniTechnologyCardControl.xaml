@@ -1,28 +1,33 @@
-﻿<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal">
-        <PanelContainer Name="Background"
-                        Access="Public"
-                        StyleClasses="PdaBackground"
-                        VerticalExpand="False"
-                        HorizontalExpand="False"
-                        MaxWidth="10"
-                        Margin="0 0 -5 0"/>
-        <Button Name="Main"
-                Disabled="True"
-                HorizontalExpand="True"
-                VerticalExpand="False"
-                StyleClasses="ButtonSquare"
-                Margin="0"
-                ToolTip="foobar">
-            <BoxContainer Orientation="Horizontal" Margin="0">
-                <TextureRect Name="Texture"
-                             HorizontalExpand="False"
-                             VerticalExpand="False"
-                             Margin="1"
-                             TextureScale="0.5 0.5"/>
-                <Control MinWidth="5"/>
-                <RichTextLabel Name="NameLabel" StyleClasses="LabelSubText" VerticalAlignment="Center"/>
-            </BoxContainer>
-        </Button>
-    </BoxContainer>
+<Control xmlns="https://spacestation14.io">
+    <PanelContainer Name="CardPanel"
+                    HorizontalExpand="True">
+        <BoxContainer Orientation="Horizontal"
+                      Margin="8 6 8 6"
+                      SeparationOverride="8">
+        <PanelContainer Name="AccentBar"
+                        MinWidth="4" />
+
+        <PanelContainer Name="IconPanel">
+            <TextureRect Name="Texture"
+                         MinSize="24 24"
+                         Margin="2"
+                         TextureScale="1.5 1.5"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center" />
+        </PanelContainer>
+
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      SeparationOverride="2">
+            <Label Name="NameLabel"
+                   VerticalAlignment="Center"
+                   HorizontalExpand="True"
+                   ClipText="True"
+                   StyleClasses="LabelKeyText" />
+            <Label Name="TierLabel"
+                   StyleClasses="LabelSubText"
+                   ClipText="True" />
+        </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
 </Control>

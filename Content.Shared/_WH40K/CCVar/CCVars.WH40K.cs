@@ -1,9 +1,18 @@
+using Content.Shared.Administration;
+using Content.Shared.CCVar.CVarAccess;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    /// <summary>
+    ///     Stores the player's WH40K HUD theme preference.
+    ///     Auto follows faction theme assignment; any concrete theme stays fixed.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KInterfaceThemePreference =
+        CVarDef.Create("wh40k.interface_theme_preference", "WH40KAutoTheme", CVar.CLIENTONLY | CVar.ARCHIVE);
+
     /// <summary>
     ///     Seconds between WH40K team rule victory checks.
     /// </summary>
@@ -17,10 +26,41 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.require_all_teams_present", true, CVar.SERVERONLY);
 
     /// <summary>
-    ///     Round time limit in seconds. 0 disables the limit.
+    ///     Optional global round time limit override in seconds.
+    ///     Values less than or equal to 0 keep the rule prototype's own limit.
     /// </summary>
     public static readonly CVarDef<float> WH40KRoundTimeLimitSeconds =
-        CVarDef.Create("wh40k.round_time_limit_seconds", 3600f, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.round_time_limit_seconds", 0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Automatically starts WH40K lobby votes after the round returns to a clean pre-round lobby state.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KLobbyAutoVoteEnabled =
+        CVarDef.Create("wh40k.lobby_auto_vote.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Automatically starts a preset vote when WH40K lobby auto-vote is active.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KLobbyAutoVotePresetEnabled =
+        CVarDef.Create("wh40k.lobby_auto_vote.preset_enabled", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Automatically starts a map vote after preset voting when WH40K lobby auto-vote is active.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KLobbyAutoVoteMapEnabled =
+        CVarDef.Create("wh40k.lobby_auto_vote.map_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Delay in seconds before the automatic WH40K lobby vote sequence begins.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KLobbyAutoVoteDelaySeconds =
+        CVarDef.Create("wh40k.lobby_auto_vote.delay_seconds", 2f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     If true, extends the lobby countdown when needed so automatic WH40K lobby votes can finish before preload.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KLobbyAutoVoteEnsureLobbyTime =
+        CVarDef.Create("wh40k.lobby_auto_vote.ensure_lobby_time", true, CVar.SERVERONLY);
 
     /// <summary>
     ///     Enables or disables friendly-fire ahelp warnings for WH40K team battle.
@@ -45,6 +85,300 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> WH40KFriendlyFireAhelpMinDamage =
         CVarDef.Create("wh40k.friendly_fire_ahelp_min_damage", 5f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables the WH40K global warp instability runtime.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> WH40KWarpEnabled =
+        CVarDef.Create("wh40k.warp.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum size of the shared global warp instability pool.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 1f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpMaxInstability =
+        CVarDef.Create("wh40k.warp.max_instability", 1000f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Passive shared warp instability recovery per second.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1000f)]
+    public static readonly CVarDef<float> WH40KWarpDecayPerSecond =
+        CVarDef.Create("wh40k.warp.decay_per_second", 1.2f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables personal warp backlash processing for contributors.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> WH40KWarpPersonalBacklashEnabled =
+        CVarDef.Create("wh40k.warp.personal_backlash_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables scheduled global warp pulse announcements and effects.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> WH40KWarpGlobalPulsesEnabled =
+        CVarDef.Create("wh40k.warp.global_pulses_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables the catastrophic max-instability outcome.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> WH40KWarpCatastropheEnabled =
+        CVarDef.Create("wh40k.warp.catastrophe_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Probability that personal backlash chooses the highest unlocked tier instead of a lower unlocked tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1f)]
+    public static readonly CVarDef<float> WH40KWarpHighestTierChance =
+        CVarDef.Create("wh40k.warp.highest_tier_chance", 0.8f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for mild warp burn backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpMildBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.mild_burn", 350f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for stun + drunk backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpStunBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.stun", 400f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for collapse backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpCollapseBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.collapse", 500f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for item-drop backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpDropBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.drop", 550f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for bleed backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpBleedBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.bleed", 600f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for doppelganger backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpDoppelgangerBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.doppelganger", 650f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for flesh-rift backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpFleshRiftBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.flesh_rift", 700f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for possession backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPossessionBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.possession", 800f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum instability needed for irreversible mutation backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpMutationBacklashThreshold =
+        CVarDef.Create("wh40k.warp.threshold.mutation", 900f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the first global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse500Threshold =
+        CVarDef.Create("wh40k.warp.pulse.500.threshold", 500f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the second global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse550Threshold =
+        CVarDef.Create("wh40k.warp.pulse.550.threshold", 550f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the third global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse600Threshold =
+        CVarDef.Create("wh40k.warp.pulse.600.threshold", 600f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the fourth global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse650Threshold =
+        CVarDef.Create("wh40k.warp.pulse.650.threshold", 650f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the fifth global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse700Threshold =
+        CVarDef.Create("wh40k.warp.pulse.700.threshold", 700f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the sixth global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse750Threshold =
+        CVarDef.Create("wh40k.warp.pulse.750.threshold", 750f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the seventh global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse800Threshold =
+        CVarDef.Create("wh40k.warp.pulse.800.threshold", 800f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the eighth global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse850Threshold =
+        CVarDef.Create("wh40k.warp.pulse.850.threshold", 850f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Instability threshold for the ninth global warp pulse tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse900Threshold =
+        CVarDef.Create("wh40k.warp.pulse.900.threshold", 900f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between 500/550-tier global pulses. 0 disables the interval group.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse500IntervalSeconds =
+        CVarDef.Create("wh40k.warp.pulse.500.interval_seconds", 60f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between 600/650-tier global pulses. 0 disables the interval group.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse600IntervalSeconds =
+        CVarDef.Create("wh40k.warp.pulse.600.interval_seconds", 45f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between 700/750-tier global pulses. 0 disables the interval group.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse700IntervalSeconds =
+        CVarDef.Create("wh40k.warp.pulse.700.interval_seconds", 30f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between 800/850-tier global pulses. 0 disables the interval group.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse800IntervalSeconds =
+        CVarDef.Create("wh40k.warp.pulse.800.interval_seconds", 20f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between 900-tier global pulses. 0 disables the tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpPulse900IntervalSeconds =
+        CVarDef.Create("wh40k.warp.pulse.900.interval_seconds", 11f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Heat damage dealt by the mild warp-burn backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpMildBurnDamage =
+        CVarDef.Create("wh40k.warp.mild_burn_damage", 10f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Stun duration in seconds for the stun backlash tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpStunDurationSeconds =
+        CVarDef.Create("wh40k.warp.stun_duration_seconds", 1f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Drunkenness duration in seconds for the stun backlash tier.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpStunDrunkennessSeconds =
+        CVarDef.Create("wh40k.warp.stun_drunkenness_seconds", 10f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Stun duration in seconds for the collapse backlash branch.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpCollapseStunSeconds =
+        CVarDef.Create("wh40k.warp.collapse_stun_seconds", 5f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Drunkenness duration in seconds for the collapse backlash branch.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpCollapseDrunkennessSeconds =
+        CVarDef.Create("wh40k.warp.collapse_drunkenness_seconds", 20f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Target bleed amount for the heavy bleed backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpBleedTarget =
+        CVarDef.Create("wh40k.warp.bleed_target", 5f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum number of items that can be forced out of hands/inventory by the drop backlash.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 1, max: 64)]
+    public static readonly CVarDef<int> WH40KWarpDropMaxCount =
+        CVarDef.Create("wh40k.warp.drop_max_count", 3, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Chance that flesh-rift backlash polymorphs the target into a hellspawn.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1f)]
+    public static readonly CVarDef<float> WH40KWarpFleshRiftDemonChance =
+        CVarDef.Create("wh40k.warp.flesh_rift_demon_chance", 0.15f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Chance that flesh-rift backlash kills the target after the demon roll fails.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1f)]
+    public static readonly CVarDef<float> WH40KWarpFleshRiftDeathChance =
+        CVarDef.Create("wh40k.warp.flesh_rift_death_chance", 0.35f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Heat damage dealt by the lethal flesh-rift backlash branch.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 100000f)]
+    public static readonly CVarDef<float> WH40KWarpFleshRiftDeathDamage =
+        CVarDef.Create("wh40k.warp.flesh_rift_death_damage", 500f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Minimum irreversible mutation severity rolled when mutation backlash occurs.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1f)]
+    public static readonly CVarDef<float> WH40KWarpMutationMinSeverity =
+        CVarDef.Create("wh40k.warp.mutation_min_severity", 0.25f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum irreversible mutation severity rolled when mutation backlash occurs.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit, min: 0f, max: 1f)]
+    public static readonly CVarDef<float> WH40KWarpMutationMaxSeverity =
+        CVarDef.Create("wh40k.warp.mutation_max_severity", 0.75f, CVar.SERVERONLY);
 
     /// <summary>
     ///     Enables the WH40K vignette fullscreen post-process shader.
@@ -144,6 +478,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> WH40KEconomyTelemetryTrace =
         CVarDef.Create("wh40k.economy.telemetry_trace", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables verbose WH40K mission-runtime debug logs (objective anchors, cargo routing, mission flow).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KMissionRuntimeDebugTrace =
+        CVarDef.Create("wh40k.mission_runtime.debug_trace", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     Seconds between periodic WH40K economy telemetry snapshots.
@@ -287,12 +627,135 @@ public sealed partial class CCVars
     ///     Minimum seconds between automatic/manual Discord refresh attempts triggered from server connect-gate flow.
     /// </summary>
     public static readonly CVarDef<int> WH40KDiscordAuthConnectRefreshCooldownSeconds =
-        CVarDef.Create("wh40k.discord_auth_connect_refresh_cooldown_seconds", 15, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.discord_auth_connect_refresh_cooldown_seconds", 30, CVar.SERVERONLY);
 
     /// <summary>
     ///     How long cached guild membership / role data should be considered fresh for display purposes.
     /// </summary>
     public static readonly CVarDef<int> WH40KDiscordAuthCacheTtlMinutes =
         CVarDef.Create("wh40k.discord_auth_cache_ttl_minutes", 720, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Shared secret for authenticating relay callback requests from an external auth proxy.
+    ///     When set, the game server accepts POST /wh40k/discord-auth/relay with code+state
+    ///     forwarded by the external server. Must match the secret configured on the proxy.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KDiscordAuthRelaySecret =
+        CVarDef.Create("wh40k.discord_auth_relay_secret", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
+    ///     Enables periodic WH40K net-buffer diagnostics logs (traffic bursts, blocked channels, dirty hot spots).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNetDiagEnabled =
+        CVarDef.Create("wh40k.netdiag.enabled", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables WH40K-local source attribution markers (who dirtied what) for net diagnostics.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNetDiagAttributionEnabled =
+        CVarDef.Create("wh40k.netdiag.attribution_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Comma-separated WH40K source scopes for attribution.
+    ///     Empty value or "*" enables all scopes.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KNetDiagAttributionScopes =
+        CVarDef.Create("wh40k.netdiag.attribution_scopes", "*", CVar.SERVERONLY);
+
+    /// <summary>
+    ///     If true, auto-captures Dirty callsites for all WH40K systems via stack attribution.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNetDiagAttributionAutoDirtyEnabled =
+        CVarDef.Create("wh40k.netdiag.attribution_auto_dirty_enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum stack depth inspected for automatic WH40K Dirty callsite attribution.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KNetDiagAttributionAutoDirtyStackDepth =
+        CVarDef.Create("wh40k.netdiag.attribution_auto_dirty_stack_depth", 24, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between WH40K net diagnostics snapshots.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KNetDiagSampleIntervalSeconds =
+        CVarDef.Create("wh40k.netdiag.sample_interval_seconds", 1.0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Outgoing throughput threshold (KiB/s) that marks a snapshot as a burst. 0 disables this trigger.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KNetDiagBurstOutgoingKiBPerSecond =
+        CVarDef.Create("wh40k.netdiag.burst_outgoing_kib_per_sec", 512f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Outgoing packet-rate threshold (packets/s) that marks a snapshot as a burst. 0 disables this trigger.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KNetDiagBurstOutgoingPacketsPerSecond =
+        CVarDef.Create("wh40k.netdiag.burst_outgoing_packets_per_sec", 1200, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     If true, emits a diagnostics line every sampling window, not only on burst/blocked-channel cases.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNetDiagTraceEverySample =
+        CVarDef.Create("wh40k.netdiag.trace_every_sample", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Number of top entries to print in diagnostics sections (message types, entities, prototypes, clients).
+    /// </summary>
+    public static readonly CVarDef<int> WH40KNetDiagTopEntries =
+        CVarDef.Create("wh40k.netdiag.top_entries", 8, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Ping (ms) above which a channel is considered high-latency in diagnostics.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KNetDiagHighPingMs =
+        CVarDef.Create("wh40k.netdiag.high_ping_ms", 220, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum number of blocked channel details printed in one diagnostics line.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KNetDiagMaxBlockedClientDetails =
+        CVarDef.Create("wh40k.netdiag.max_blocked_client_details", 6, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Warns if per-message bandwidth buckets are unavailable (for example non-DEBUG networking builds).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNetDiagWarnNoTypeMetrics =
+        CVarDef.Create("wh40k.netdiag.warn_no_type_metrics", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables WH40K database diagnostics (latency/error aggregation for meta/disc auth pipelines).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KDbDiagEnabled =
+        CVarDef.Create("wh40k.dbdiag.enabled", true, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Seconds between WH40K DB diagnostics summaries.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KDbDiagSampleIntervalSeconds =
+        CVarDef.Create("wh40k.dbdiag.sample_interval_seconds", 10.0f, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     DB operation duration (ms) considered slow.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KDbDiagSlowMs =
+        CVarDef.Create("wh40k.dbdiag.slow_ms", 150, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     DB operation duration (ms) considered critical.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KDbDiagCriticalMs =
+        CVarDef.Create("wh40k.dbdiag.critical_ms", 1000, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     If true, emits WH40K DB diagnostics each sampling window even without anomalies.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KDbDiagTraceEverySample =
+        CVarDef.Create("wh40k.dbdiag.trace_every_sample", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Number of top DB operations included in WH40K DB diagnostics output.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KDbDiagTopEntries =
+        CVarDef.Create("wh40k.dbdiag.top_entries", 8, CVar.SERVERONLY);
 
 }

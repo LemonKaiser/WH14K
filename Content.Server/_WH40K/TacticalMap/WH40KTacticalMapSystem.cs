@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Server.Maps;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Server._WH40K.Objectives.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -19,6 +21,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.TacticalMap;
 
@@ -38,7 +41,9 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private static readonly TimeSpan StateSyncNoTeamInterval = TimeSpan.FromSeconds(1.0);
     private static readonly TimeSpan OverlayRefreshInterval = TimeSpan.FromSeconds(0.5);
     private static readonly TimeSpan OverlayRefreshIntervalNoTeam = TimeSpan.FromSeconds(1.0);
-    private static readonly Color NeutralMarkerColor = Color.FromHex("#7F8790".AsSpan());
+    private static readonly Color NeutralMarkerColor = Color.FromHex("#B7C1CF".AsSpan());
+    private static readonly ResPath BattlefieldSnapshotTexturePath = new("/Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png");
+    private static readonly ResPath WinterAssaultSnapshotTexturePath = new("/Textures/_WH40K/Interface/TacticalMap/winterassault_snapshot.png");
 
     private readonly record struct TeamMapKey(EntityUid GridUid, string TeamId);
 
@@ -73,6 +78,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly PowerCellSystem _cell = default!;
     [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
@@ -432,7 +438,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         var gridName = targetGrid is { } gridForName && TryComp(gridForName, out MetaDataComponent? targetMeta)
             ? targetMeta.EntityName
             : string.Empty;
-        var snapshotTexturePath = map.Comp.SnapshotTexture.ToString();
+        var snapshotTexturePath = ResolveSnapshotTexturePath(map).ToString();
         var trackedEntity = map.Comp.ShowLocation ? GetNetEntity(user.Owner) : NetEntity.Invalid;
         var fogChunkSize = Math.Max(1, map.Comp.FogChunkSize);
         var fogRevision = 0;
@@ -576,6 +582,37 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         return LiveRefreshRuntimeEnabled && component.LiveRefreshEnabled;
     }
 
+    private ResPath ResolveSnapshotTexturePath(Entity<WH40KTacticalMapComponent> map)
+    {
+        if (map.Comp.SnapshotTexture != ResPath.Empty &&
+            map.Comp.SnapshotTexture != BattlefieldSnapshotTexturePath)
+        {
+            return map.Comp.SnapshotTexture;
+        }
+
+        var selectedMap = _gameMapManager.GetSelectedMap();
+        if (selectedMap != null)
+        {
+            switch (selectedMap.ID)
+            {
+                case "WinterAssault":
+                    return WinterAssaultSnapshotTexturePath;
+                case "Battlefield40k":
+                    return BattlefieldSnapshotTexturePath;
+            }
+
+            switch (selectedMap.MapPath.ToString().ToLowerInvariant())
+            {
+                case "/maps/_wh40k/winterassault.yml":
+                    return WinterAssaultSnapshotTexturePath;
+                case "/maps/_wh40k/battlefield40k.yml":
+                    return BattlefieldSnapshotTexturePath;
+            }
+        }
+
+        return map.Comp.SnapshotTexture;
+    }
+
     private TeamOverlayState GetOrRefreshOverlayState(EntityUid gridUid, string teamId)
     {
         var key = new TeamMapKey(gridUid, teamId);
@@ -590,7 +627,7 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
             return state;
 
         state.AlliedMarkers = BuildAlliedMarkers(gridUid, teamId);
-        state.CapturePoints = BuildCapturePointMarkers(gridUid);
+        state.CapturePoints = BuildCapturePointMarkers(gridUid, teamId);
         state.OverlayRevision = ComputeOverlayRevision(state.AlliedMarkers, state.CapturePoints);
         state.Initialized = true;
         state.NextRefreshAt = now + ResolveOverlayRefreshInterval(teamId);
@@ -605,18 +642,12 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         var results = new List<WH40KTacticalMapAllyMarker>();
         var gridXform = Transform(gridUid);
         var invGridMatrix = _xform.GetInvWorldMatrix(gridXform);
+        var gridBounds = Comp<MapGridComponent>(gridUid).LocalAABB.Enlarged(0.5f);
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent, TransformComponent, MetaDataComponent>();
 
         while (query.MoveNext(out var uid, out var member, out var xform, out var meta))
         {
-            if (xform.GridUid != gridUid ||
-                !string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            if (!HasComp<ActorComponent>(uid) &&
-                !HasComp<WH40KTacticalMapTrackedComponent>(uid))
+            if (!string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -627,7 +658,9 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
                 continue;
             }
 
-            var localPosition = Vector2.Transform(_xform.GetWorldPosition(xform), invGridMatrix);
+            if (!TryGetLocalPositionOnGrid((uid, xform), gridUid, gridXform.MapID, invGridMatrix, gridBounds, out var localPosition))
+                continue;
+
             results.Add(new WH40KTacticalMapAllyMarker(
                 GetNetEntity(uid),
                 meta.EntityName,
@@ -639,19 +672,19 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         return results.ToArray();
     }
 
-    private WH40KTacticalMapCapturePointMarker[] BuildCapturePointMarkers(EntityUid gridUid)
+    private WH40KTacticalMapCapturePointMarker[] BuildCapturePointMarkers(EntityUid gridUid, string teamId)
     {
         var results = new List<WH40KTacticalMapCapturePointMarker>();
         var gridXform = Transform(gridUid);
         var invGridMatrix = _xform.GetInvWorldMatrix(gridXform);
+        var gridBounds = Comp<MapGridComponent>(gridUid).LocalAABB.Enlarged(0.5f);
         var query = EntityQueryEnumerator<WH40KInfluencePointComponent, TransformComponent>();
 
         while (query.MoveNext(out var uid, out var point, out var xform))
         {
-            if (xform.GridUid != gridUid)
+            if (!TryGetLocalPositionOnGrid((uid, xform), gridUid, gridXform.MapID, invGridMatrix, gridBounds, out var localPosition))
                 continue;
 
-            var localPosition = Vector2.Transform(_xform.GetWorldPosition(xform), invGridMatrix);
             var ownerTeamId = point.OwnerTeamId ?? string.Empty;
             var capturingTeamId = point.CapturingTeamId ?? string.Empty;
             var captureProgress = string.IsNullOrWhiteSpace(capturingTeamId)
@@ -660,9 +693,12 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
             var contested = !string.IsNullOrWhiteSpace(ownerTeamId) &&
                             !string.IsNullOrWhiteSpace(capturingTeamId) &&
                             !string.Equals(ownerTeamId, capturingTeamId, StringComparison.OrdinalIgnoreCase);
+            var relation = ResolveStrategicRelation(teamId, ownerTeamId, capturingTeamId, contested);
 
             results.Add(new WH40KTacticalMapCapturePointMarker(
                 GetNetEntity(uid),
+                WH40KTacticalMapStrategicMarkerKind.CapturePoint,
+                relation,
                 BuildLocalizedCapturePointLabel(uid, point),
                 point.Callsign ?? string.Empty,
                 localPosition,
@@ -677,8 +713,78 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
                 contested));
         }
 
+        var objectiveCandidates = new List<(EntityUid Uid, WH40KObjectiveComponent Objective, Vector2 Position)>();
+        var objectiveQuery = EntityQueryEnumerator<WH40KObjectiveComponent, TransformComponent>();
+        while (objectiveQuery.MoveNext(out var uid, out var objective, out var xform))
+        {
+            if (objective.Destroyed ||
+                !TryGetLocalPositionOnGrid((uid, xform), gridUid, gridXform.MapID, invGridMatrix, gridBounds, out var localPosition))
+            {
+                continue;
+            }
+
+            objectiveCandidates.Add((uid, objective, localPosition));
+        }
+
+        objectiveCandidates.Sort(static (left, right) =>
+        {
+            var teamCompare = string.Compare(left.Objective.TeamId, right.Objective.TeamId, StringComparison.OrdinalIgnoreCase);
+            if (teamCompare != 0)
+                return teamCompare;
+
+            var yCompare = left.Position.Y.CompareTo(right.Position.Y);
+            if (yCompare != 0)
+                return yCompare;
+
+            return left.Position.X.CompareTo(right.Position.X);
+        });
+
+        var nodeOrdinals = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        foreach (var candidate in objectiveCandidates)
+        {
+            var ownerTeamId = candidate.Objective.TeamId ?? string.Empty;
+            var bucket = string.IsNullOrWhiteSpace(ownerTeamId) ? "_neutral" : ownerTeamId;
+            var ordinal = nodeOrdinals.GetValueOrDefault(bucket) + 1;
+            nodeOrdinals[bucket] = ordinal;
+
+            var relation = ResolveStrategicRelation(teamId, ownerTeamId, string.Empty, false);
+            results.Add(new WH40KTacticalMapCapturePointMarker(
+                GetNetEntity(candidate.Uid),
+                WH40KTacticalMapStrategicMarkerKind.CommandNode,
+                relation,
+                ToRomanNumeral(ordinal),
+                string.Empty,
+                candidate.Position,
+                ownerTeamId,
+                ResolveTeamDisplayName(ownerTeamId, string.Empty),
+                ResolveTeamColor(ownerTeamId),
+                string.Empty,
+                string.Empty,
+                NeutralMarkerColor,
+                0f,
+                0,
+                false));
+        }
+
         results.Sort(static (left, right) => string.Compare(left.Label, right.Label, StringComparison.OrdinalIgnoreCase));
         return results.ToArray();
+    }
+
+    private bool TryGetLocalPositionOnGrid(
+        Entity<TransformComponent> entity,
+        EntityUid gridUid,
+        MapId gridMapId,
+        Matrix3x2 invGridMatrix,
+        Box2 gridBounds,
+        out Vector2 localPosition)
+    {
+        localPosition = default;
+
+        if (entity.Comp.MapID != gridMapId)
+            return false;
+
+        localPosition = Vector2.Transform(_xform.GetWorldPosition(entity.Comp), invGridMatrix);
+        return entity.Comp.GridUid == gridUid || gridBounds.Contains(localPosition);
     }
 
     private int ComputeOverlayRevision(
@@ -702,6 +808,8 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         foreach (var point in capturePoints)
         {
             hash.Add(point.Entity);
+            hash.Add((int) point.Kind);
+            hash.Add((int) point.Relation);
             hash.Add(point.Label, StringComparer.OrdinalIgnoreCase);
             hash.Add(point.Callsign, StringComparer.OrdinalIgnoreCase);
             hash.Add((int) MathF.Round(point.Position.X));
@@ -714,6 +822,70 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         }
 
         return hash.ToHashCode();
+    }
+
+    private static string ToRomanNumeral(int value)
+    {
+        if (value <= 0)
+            return "I";
+
+        var numerals = new (int Value, string Symbol)[]
+        {
+            (1000, "M"),
+            (900, "CM"),
+            (500, "D"),
+            (400, "CD"),
+            (100, "C"),
+            (90, "XC"),
+            (50, "L"),
+            (40, "XL"),
+            (10, "X"),
+            (9, "IX"),
+            (5, "V"),
+            (4, "IV"),
+            (1, "I"),
+        };
+
+        var remaining = value;
+        var result = string.Empty;
+        foreach (var (numeralValue, symbol) in numerals)
+        {
+            while (remaining >= numeralValue)
+            {
+                result += symbol;
+                remaining -= numeralValue;
+            }
+        }
+
+        return result;
+    }
+
+    private static WH40KTacticalMapStrategicRelation ResolveStrategicRelation(
+        string viewerTeamId,
+        string ownerTeamId,
+        string capturingTeamId,
+        bool contested)
+    {
+        if (contested)
+            return WH40KTacticalMapStrategicRelation.Contested;
+
+        if (string.IsNullOrWhiteSpace(viewerTeamId))
+            return string.IsNullOrWhiteSpace(ownerTeamId) && string.IsNullOrWhiteSpace(capturingTeamId)
+                ? WH40KTacticalMapStrategicRelation.Neutral
+                : WH40KTacticalMapStrategicRelation.Hostile;
+
+        if ((!string.IsNullOrWhiteSpace(ownerTeamId) &&
+             string.Equals(ownerTeamId, viewerTeamId, StringComparison.OrdinalIgnoreCase)) ||
+            (!string.IsNullOrWhiteSpace(capturingTeamId) &&
+             string.Equals(capturingTeamId, viewerTeamId, StringComparison.OrdinalIgnoreCase)))
+        {
+            return WH40KTacticalMapStrategicRelation.Allied;
+        }
+
+        if (!string.IsNullOrWhiteSpace(ownerTeamId) || !string.IsNullOrWhiteSpace(capturingTeamId))
+            return WH40KTacticalMapStrategicRelation.Hostile;
+
+        return WH40KTacticalMapStrategicRelation.Neutral;
     }
 
     private static TimeSpan ResolveStateSyncInterval(string teamId)
@@ -830,6 +1002,27 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         return fogState.Revision;
     }
 
+    public bool TryGetOverlaySnapshot(
+        EntityUid gridUid,
+        string teamId,
+        out int revision,
+        out WH40KTacticalMapAllyMarker[] alliedMarkers,
+        out WH40KTacticalMapCapturePointMarker[] capturePoints)
+    {
+        revision = 0;
+        alliedMarkers = Array.Empty<WH40KTacticalMapAllyMarker>();
+        capturePoints = Array.Empty<WH40KTacticalMapCapturePointMarker>();
+
+        if (string.IsNullOrWhiteSpace(teamId) || !HasComp<MapGridComponent>(gridUid))
+            return false;
+
+        var overlayState = GetOrRefreshOverlayState(gridUid, teamId);
+        revision = overlayState.OverlayRevision;
+        alliedMarkers = overlayState.AlliedMarkers;
+        capturePoints = overlayState.CapturePoints;
+        return overlayState.Initialized;
+    }
+
     private bool ResolveViewerTeamId(EntityUid viewer, ActorComponent actor, out string teamId)
     {
         if (_teamRule.TryGetTeamIdFromEntity(viewer, out teamId))
@@ -926,13 +1119,51 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
             if (result.Count >= MaxAnnotationStrokes || totalPoints >= MaxAnnotationPointsTotal)
                 break;
 
-            var remainingPointBudget = Math.Min(MaxAnnotationPointsPerStroke, MaxAnnotationPointsTotal - totalPoints);
-            if (remainingPointBudget <= 0)
-                break;
+            var thickness = Math.Clamp(stroke.Thickness, MinAnnotationThickness, MaxAnnotationThickness);
+            var sanitizedPoints = new List<Vector2>(Math.Min(stroke.Points.Length, MaxAnnotationPointsPerStroke));
 
-            var sanitizedPoints = new List<Vector2>(Math.Min(stroke.Points.Length, remainingPointBudget));
-            for (var i = 0; i < stroke.Points.Length && sanitizedPoints.Count < remainingPointBudget; i++)
+            void Flush(bool carryTail)
             {
+                if (sanitizedPoints.Count == 0 ||
+                    result.Count >= MaxAnnotationStrokes ||
+                    totalPoints >= MaxAnnotationPointsTotal)
+                {
+                    return;
+                }
+
+                var remainingBudget = MaxAnnotationPointsTotal - totalPoints;
+                if (remainingBudget <= 0)
+                    return;
+
+                var segmentCount = Math.Min(sanitizedPoints.Count, remainingBudget);
+                if (segmentCount <= 0)
+                    return;
+
+                var segment = new Vector2[segmentCount];
+                sanitizedPoints.CopyTo(0, segment, 0, segmentCount);
+                result.Add(new WH40KTacticalMapAnnotationStroke(segment, stroke.Color, thickness));
+                totalPoints += segmentCount;
+
+                if (!carryTail || segmentCount <= 1 || sanitizedPoints.Count == 1)
+                {
+                    sanitizedPoints.Clear();
+                    return;
+                }
+
+                var lastPoint = sanitizedPoints[^1];
+                sanitizedPoints.Clear();
+                sanitizedPoints.Add(lastPoint);
+            }
+
+            for (var i = 0; i < stroke.Points.Length; i++)
+            {
+                if (result.Count >= MaxAnnotationStrokes || totalPoints >= MaxAnnotationPointsTotal)
+                    break;
+
+                var remainingPointBudget = MaxAnnotationPointsTotal - totalPoints;
+                if (remainingPointBudget <= 0)
+                    break;
+
                 var point = stroke.Points[i];
                 if (!float.IsFinite(point.X) || !float.IsFinite(point.Y))
                     continue;
@@ -945,14 +1176,13 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
                     continue;
 
                 sanitizedPoints.Add(clamped);
+
+                var maxSegmentPoints = Math.Min(MaxAnnotationPointsPerStroke, remainingPointBudget);
+                if (sanitizedPoints.Count >= maxSegmentPoints)
+                    Flush(true);
             }
 
-            if (sanitizedPoints.Count == 0)
-                continue;
-
-            var thickness = Math.Clamp(stroke.Thickness, MinAnnotationThickness, MaxAnnotationThickness);
-            result.Add(new WH40KTacticalMapAnnotationStroke(sanitizedPoints.ToArray(), stroke.Color, thickness));
-            totalPoints += sanitizedPoints.Count;
+            Flush(false);
         }
 
         return result.ToArray();

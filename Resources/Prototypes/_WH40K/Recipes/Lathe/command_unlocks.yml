@@ -16,12 +16,36 @@
     Plastic: 400
 
 - type: latheRecipe
+  parent: BaseWeaponRecipeMelee
+  id: WH40KRecipeChaosMachete
+  result: ChaosMachete
+  materials:
+    Steel: 1200
+    Plastic: 400
+
+- type: latheRecipe
   parent: BaseWeaponRecipeLong
   id: WH40KRecipeWeaponStubRifle
   result: WeaponStubRifle
   materials:
     Steel: 1400
     Plastic: 350
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponChsStubSMG2
+  result: WeaponChsStubSMG2
+  materials:
+    Steel: 1200
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponChsStubSMG3
+  result: WeaponChsStubSMG3
+  materials:
+    Steel: 1400
+    Plastic: 400
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -34,11 +58,40 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponHellgun
+  result: WeaponHellgun
+  materials:
+    Steel: 1800
+    Glass: 700
+    Plastic: 400
+    Gold: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeHellgunPowerPack
+  result: ClothingBackpackHellEnergy
+  materials:
+    Steel: 1000
+    Glass: 300
+    Plastic: 500
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
   id: WH40KRecipeWeaponRifleBolter
   result: WeaponRifleBolter
   materials:
     Steel: 1600
     Plastic: 500
+    Gold: 200
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponPistolBolter
+  result: WeaponPistolBolter
+  materials:
+    Steel: 1400
+    Plastic: 450
     Gold: 200
 
 - type: latheRecipe
@@ -62,6 +115,16 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserPlasmaPistol
+  result: WeaponLaserPlasmaPistol
+  materials:
+    Steel: 1200
+    Glass: 500
+    Gold: 300
+    Plasma: 450
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
   id: WH40KRecipeHeavyBolter
   result: WH40KHeavyBolter
   completetime: 10
@@ -80,9 +143,33 @@
     Plastic: 350
 
 - type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponChsStubShotgun
+  result: WeaponChsStubShotgun
+  materials:
+    Steel: 1600
+    Plastic: 450
+
+- type: latheRecipe
   parent: BaseToolRecipe
   id: WH40KRecipeTacticalWhistle
   result: WH40KTacticalWhistle
+  materials:
+    Steel: 100
+    Plastic: 50
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeTacticalWhistleImperium
+  result: WH40KTacticalWhistleImperium
+  materials:
+    Steel: 100
+    Plastic: 50
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeTacticalWhistleHeretics
+  result: WH40KTacticalWhistleHeretics
   materials:
     Steel: 100
     Plastic: 50
@@ -97,12 +184,76 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeSignalFlareImperium
+  result: WH40KSignalFlareImperium
+  materials:
+    Steel: 100
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeSignalFlareHeretics
+  result: WH40KSignalFlareHeretics
+  materials:
+    Steel: 100
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeIntelDetector
   result: WH40KIntelDetector
   materials:
     Steel: 250
     Glass: 100
     Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeIntelDetectorImperium
+  result: WH40KIntelDetectorImperium
+  materials:
+    Steel: 250
+    Glass: 100
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeIntelDetectorHeretics
+  result: WH40KIntelDetectorHeretics
+  materials:
+    Steel: 250
+    Glass: 100
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeInflatableCoverKitImperium
+  result: WH40KInflatableCoverKitImperium
+  materials:
+    Steel: 250
+    Plastic: 600
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeInflatableCoverKitHeretics
+  result: WH40KInflatableCoverKitHeretics
+  materials:
+    Steel: 250
+    Plastic: 600
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeBars
+  result: WH40KDeployableBarricadeBars
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeBoarded
+  result: WH40KDeployableBarricadeBoarded
+  materials:
+    Steel: 500
 
 - type: latheRecipe
   parent: BaseToolRecipe
@@ -162,6 +313,60 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeChaosBlack
+  result: WH40KDeployableBarricadeChaosBlack
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeBarricadeChaosGreen
+  result: WH40KDeployableBarricadeChaosGreen
+  materials:
+    Steel: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMineExplosive
+  result: WH40KDeployableMineKit
+  materials:
+    Steel: 300
+    Plastic: 150
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeCarapaceArmor
+  result: ClothingOuterArmorAdvancedFlakVest
+  materials:
+    Steel: 1400
+    Plastic: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeCarapaceHelmet
+  result: ClothingHeadHelmetFlakAdv
+  materials:
+    Steel: 700
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeHereticCarapaceArmor
+  result: ClothingOuterArmorAdvancedFlakVestHeretic
+  materials:
+    Steel: 1400
+    Plastic: 500
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeHereticCarapaceHelmet
+  result: ClothingHeadHelmetFlakAdvHeresy
+  materials:
+    Steel: 700
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeServoSkull
   result: WH40KServoSkullMelta
   materials:
@@ -182,6 +387,24 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeSentryLaptopImperium
+  result: WH40KSentryLaptopImperium
+  materials:
+    Steel: 300
+    Glass: 200
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeSentryLaptopHeretics
+  result: WH40KSentryLaptopHeretics
+  materials:
+    Steel: 300
+    Glass: 200
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeTacticalFulton
   result: WH40KTacticalFultonField
   materials:
@@ -190,8 +413,42 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeTacticalFultonImperium
+  result: WH40KTacticalFultonImperium
+  materials:
+    Steel: 250
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeTacticalFultonHeretics
+  result: WH40KTacticalFultonHeretics
+  materials:
+    Steel: 250
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeMissionPinpointerRelay
   result: WH40KMissionPinpointerRelay
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerRelayImperium
+  result: WH40KMissionPinpointerRelayImperium
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerRelayHeretics
+  result: WH40KMissionPinpointerRelayHeretics
   materials:
     Steel: 150
     Glass: 150
@@ -208,8 +465,44 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerCargoImperium
+  result: WH40KMissionPinpointerCargoImperium
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerCargoHeretics
+  result: WH40KMissionPinpointerCargoHeretics
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeMissionPinpointerBanner
   result: WH40KMissionPinpointerBanner
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerBannerImperium
+  result: WH40KMissionPinpointerBannerImperium
+  materials:
+    Steel: 150
+    Glass: 150
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerBannerHeretics
+  result: WH40KMissionPinpointerBannerHeretics
   materials:
     Steel: 150
     Glass: 150
@@ -225,13 +518,35 @@
     Glass: 250
     Plastic: 250
 
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerKitImperium
+  result: WH40KMissionPinpointerKitImperium
+  completetime: 4
+  materials:
+    Steel: 250
+    Glass: 250
+    Plastic: 250
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KRecipeMissionPinpointerKitHeretics
+  result: WH40KMissionPinpointerKitHeretics
+  completetime: 4
+  materials:
+    Steel: 250
+    Glass: 250
+    Plastic: 250
+
 - type: latheRecipePack
-  id: WH40KCommandWeaponryResearch
+  id: WH40KCommandWeaponryResearchImperium
   recipes:
   - WH40KRecipeWeaponLaserLasgun
   - WH40KRecipeChainsword
   - WH40KRecipeWeaponStubRifle
   - WH40KRecipeWeaponLaserLasgunAccatran
+  - WH40KRecipeWeaponHellgun
+  - WH40KRecipeHellgunPowerPack
   - WH40KRecipeWeaponRifleBolter
   - WH40KRecipeMortarKit
   - WH40KRecipeWeaponLaserPlasmagun
@@ -239,19 +554,66 @@
   - WH40KRecipeWeaponLaserLasgunVoss
 
 - type: latheRecipePack
-  id: WH40KCommandEquipmentResearch
+  id: WH40KCommandWeaponryResearchHeretics
   recipes:
-  - WH40KRecipeTacticalWhistle
-  - WH40KRecipeSignalFlare
+  - WH40KRecipeWeaponLaserLasgun
+  - WH40KRecipeChaosMachete
+  - WH40KRecipeWeaponStubRifle
+  - WH40KRecipeWeaponChsStubSMG2
+  - WH40KRecipeWeaponChsStubSMG3
+  - WH40KRecipeWeaponHellgun
+  - WH40KRecipeHellgunPowerPack
+  - WH40KRecipeWeaponPistolBolter
+  - WH40KRecipeMortarKit
+  - WH40KRecipeWeaponLaserPlasmaPistol
+  - WH40KRecipeHeavyBolter
+  - WH40KRecipeWeaponChsStubShotgun
+
+- type: latheRecipePack
+  id: WH40KCommandEquipmentResearchImperium
+  recipes:
+  - WH40KRecipeTacticalWhistleImperium
+  - WH40KRecipeSignalFlareImperium
   - WH40KRecipeServoSkull
+  - WH40KRecipeInflatableCoverKitImperium
+  - WH40KRecipeBarricadeBars
+  - WH40KRecipeBarricadeBoarded
   - WH40KRecipeBarricadeSandbags
   - WH40KRecipeBarbedWire
   - WH40KRecipeBarricadeHedgehog
   - WH40KRecipeBarricadeWarhammer
-  - WH40KRecipeIntelDetector
-  - WH40KRecipeSentryLaptop
-  - WH40KRecipeTacticalFulton
-  - WH40KRecipeMissionPinpointerRelay
-  - WH40KRecipeMissionPinpointerCargo
-  - WH40KRecipeMissionPinpointerBanner
-  - WH40KRecipeMissionPinpointerKit
+  - WH40KRecipeMineExplosive
+  - WH40KRecipeCarapaceArmor
+  - WH40KRecipeCarapaceHelmet
+  - WH40KRecipeIntelDetectorImperium
+  - WH40KRecipeSentryLaptopImperium
+  - WH40KRecipeTacticalFultonImperium
+  - WH40KRecipeMissionPinpointerRelayImperium
+  - WH40KRecipeMissionPinpointerCargoImperium
+  - WH40KRecipeMissionPinpointerBannerImperium
+  - WH40KRecipeMissionPinpointerKitImperium
+
+- type: latheRecipePack
+  id: WH40KCommandEquipmentResearchHeretics
+  recipes:
+  - WH40KRecipeTacticalWhistleHeretics
+  - WH40KRecipeSignalFlareHeretics
+  - WH40KRecipeServoSkull
+  - WH40KRecipeInflatableCoverKitHeretics
+  - WH40KRecipeBarricadeBars
+  - WH40KRecipeBarricadeBoarded
+  - WH40KRecipeBarricadeSandbags
+  - WH40KRecipeBarbedWire
+  - WH40KRecipeBarricadeHedgehog
+  - WH40KRecipeBarricadeChaosBlack
+  - WH40KRecipeBarricadeChaosGreen
+  - WH40KRecipeMineExplosive
+  - WH40KRecipeHereticCarapaceArmor
+  - WH40KRecipeHereticCarapaceHelmet
+  - WH40KRecipeIntelDetectorHeretics
+  - WH40KRecipeSentryLaptopHeretics
+  - WH40KRecipeTacticalFultonHeretics
+  - WH40KRecipeMissionPinpointerRelayHeretics
+  - WH40KRecipeMissionPinpointerCargoHeretics
+  - WH40KRecipeMissionPinpointerBannerHeretics
+  - WH40KRecipeMissionPinpointerKitHeretics

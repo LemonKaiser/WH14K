@@ -88,9 +88,12 @@ public sealed partial class PlayerTabHeader : Control, ILocalizedControl
         HeaderClicked(args, Header.Playtime);
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
 
         if (disposing)
         {

@@ -228,6 +228,7 @@
   - WH40KWeaponryStandardLasguns
   recipeUnlocks:
   - WH40KRecipeChainsword
+  - WH40KRecipeChaosMachete
 
 - type: technology
   id: WH40KWeaponryStubberLines
@@ -244,6 +245,7 @@
   - WH40KWeaponryStandardLasguns
   recipeUnlocks:
   - WH40KRecipeWeaponStubRifle
+  - WH40KRecipeWeaponChsStubSMG2
 
 - type: technology
   id: WH40KWeaponryAccatranPatterns
@@ -260,6 +262,24 @@
   - WH40KWeaponryChainblades
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLasgunAccatran
+  - WH40KRecipeWeaponChsStubSMG3
+
+- type: technology
+  id: WH40KWeaponryHellgunPatterns
+  name: research-technology-wh40k-weaponry-hellgun-patterns
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 12000
+  researchTimeSeconds: 225
+  technologyPrerequisites:
+  - WH40KWeaponryAuthLeft4
+  - WH40KWeaponryAccatranPatterns
+  recipeUnlocks:
+  - WH40KRecipeWeaponHellgun
+  - WH40KRecipeHellgunPowerPack
 
 - type: technology
   id: WH40KWeaponryBolterArming
@@ -276,6 +296,7 @@
   - WH40KWeaponryStubberLines
   recipeUnlocks:
   - WH40KRecipeWeaponRifleBolter
+  - WH40KRecipeWeaponPistolBolter
 
 - type: technology
   id: WH40KWeaponryMortarSupport
@@ -308,6 +329,7 @@
   - WH40KWeaponryBolterArming
   recipeUnlocks:
   - WH40KRecipeWeaponLaserPlasmagun
+  - WH40KRecipeWeaponLaserPlasmaPistol
 
 - type: technology
   id: WH40KWeaponryHeavyEmplacements
@@ -326,6 +348,7 @@
   recipeUnlocks:
   - WH40KRecipeHeavyBolter
   - WH40KRecipeWeaponLaserLasgunVoss
+  - WH40KRecipeWeaponChsStubShotgun
 
 - type: technology
   id: WH40KEquipmentSignalDoctrine
@@ -340,7 +363,8 @@
   technologyPrerequisites:
   - WH40KEquipmentAuthRoot
   recipeUnlocks:
-  - WH40KRecipeTacticalWhistle
+  - WH40KRecipeTacticalWhistleImperium
+  - WH40KRecipeTacticalWhistleHeretics
 
 - type: technology
   id: WH40KEquipmentFieldFlares
@@ -356,7 +380,8 @@
   - WH40KEquipmentAuthLeft2
   - WH40KEquipmentSignalDoctrine
   recipeUnlocks:
-  - WH40KRecipeSignalFlare
+  - WH40KRecipeSignalFlareImperium
+  - WH40KRecipeSignalFlareHeretics
 
 - type: technology
   id: WH40KEquipmentBarricades
@@ -371,9 +396,17 @@
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft2
   recipeUnlocks:
+  - WH40KRecipeInflatableCoverKitImperium
+  - WH40KRecipeInflatableCoverKitHeretics
+  - WH40KRecipeBarricadeBars
+  - WH40KRecipeBarricadeBoarded
   - WH40KRecipeBarricadeSandbags
   - WH40KRecipeBarbedWire
   - WH40KRecipeBarricadeHedgehog
+  - WH40KRecipeBarricadeWarhammer
+  - WH40KRecipeBarricadeChaosBlack
+  - WH40KRecipeBarricadeChaosGreen
+  - WH40KRecipeMineExplosive
 
 - type: technology
   id: WH40KEquipmentServoSkull
@@ -404,7 +437,8 @@
   - WH40KEquipmentAuthRight2
   - WH40KEquipmentSignalDoctrine
   recipeUnlocks:
-  - WH40KRecipeIntelDetector
+  - WH40KRecipeIntelDetectorImperium
+  - WH40KRecipeIntelDetectorHeretics
 
 - type: technology
   id: WH40KEquipmentSentryLinks
@@ -420,7 +454,8 @@
   - WH40KEquipmentAuthLeft3
   - WH40KEquipmentFieldFlares
   recipeUnlocks:
-  - WH40KRecipeSentryLaptop
+  - WH40KRecipeSentryLaptopImperium
+  - WH40KRecipeSentryLaptopHeretics
 
 - type: technology
   id: WH40KEquipmentFultonRecovery
@@ -436,7 +471,8 @@
   - WH40KEquipmentAuthRight3
   - WH40KEquipmentIntelDetectors
   recipeUnlocks:
-  - WH40KRecipeTacticalFulton
+  - WH40KRecipeTacticalFultonImperium
+  - WH40KRecipeTacticalFultonHeretics
 
 - type: technology
   id: WH40KEquipmentRelayTrackers
@@ -452,7 +488,8 @@
   - WH40KEquipmentAuthLeft4
   - WH40KEquipmentSentryLinks
   recipeUnlocks:
-  - WH40KRecipeMissionPinpointerRelay
+  - WH40KRecipeMissionPinpointerRelayImperium
+  - WH40KRecipeMissionPinpointerRelayHeretics
 
 - type: technology
   id: WH40KEquipmentCargoTrackers
@@ -468,7 +505,8 @@
   - WH40KEquipmentAuthRight4
   - WH40KEquipmentFultonRecovery
   recipeUnlocks:
-  - WH40KRecipeMissionPinpointerCargo
+  - WH40KRecipeMissionPinpointerCargoImperium
+  - WH40KRecipeMissionPinpointerCargoHeretics
 
 - type: technology
   id: WH40KEquipmentMissionCommand
@@ -485,5 +523,26 @@
   - WH40KEquipmentRelayTrackers
   - WH40KEquipmentCargoTrackers
   recipeUnlocks:
-  - WH40KRecipeMissionPinpointerBanner
-  - WH40KRecipeMissionPinpointerKit
+  - WH40KRecipeMissionPinpointerBannerImperium
+  - WH40KRecipeMissionPinpointerBannerHeretics
+  - WH40KRecipeMissionPinpointerKitImperium
+  - WH40KRecipeMissionPinpointerKitHeretics
+
+- type: technology
+  id: WH40KEquipmentCarapaceArmor
+  name: research-technology-wh40k-equipment-carapace-armor
+  icon:
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadv.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 18000
+  researchTimeSeconds: 315
+  technologyPrerequisites:
+  - WH40KEquipmentAuthCap
+  - WH40KEquipmentMissionCommand
+  recipeUnlocks:
+  - WH40KRecipeCarapaceArmor
+  - WH40KRecipeCarapaceHelmet
+  - WH40KRecipeHereticCarapaceArmor
+  - WH40KRecipeHereticCarapaceHelmet

@@ -1,0 +1,197 @@
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceAstartes
+  name: astartes appearance
+  components:
+  - type: Inventory
+    speciesId: astartes
+    displacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Astartes/displacement.rsi
+            state: jumpsuit
+      gloves:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Astartes/displacement.rsi
+            state: hand
+      shoes:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Astartes/displacement.rsi
+            state: shoes
+  - type: InitialBody
+    organs:
+      Torso: OrganAstartesTorso
+      Head: OrganAstartesHead
+      ArmLeft: OrganAstartesArmLeft
+      ArmRight: OrganAstartesArmRight
+      HandRight: OrganAstartesHandRight
+      HandLeft: OrganAstartesHandLeft
+      LegLeft: OrganAstartesLegLeft
+      LegRight: OrganAstartesLegRight
+      FootLeft: OrganAstartesFootLeft
+      FootRight: OrganAstartesFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Astartes
+
+- type: entity
+  parent:
+  - AppearanceAstartes
+  - BaseSpeciesMobOrganic
+  id: MobAstartes
+  name: Urist McAstartes
+  components:
+  - type: DamageVisuals
+    thresholds: [ 30, 60, 90, 150, 210, 300 ]
+    targetLayers:
+    - "enum.HumanoidVisualLayers.Chest"
+    - "enum.HumanoidVisualLayers.Head"
+    - "enum.HumanoidVisualLayers.LArm"
+    - "enum.HumanoidVisualLayers.LLeg"
+    - "enum.HumanoidVisualLayers.RArm"
+    - "enum.HumanoidVisualLayers.RLeg"
+    damageOverlayGroups:
+      Brute:
+        sprite: Mobs/Species/Astartes/brute_damage.rsi
+        color: "#FF0000"
+      Burn:
+        sprite: Mobs/Species/Astartes/burn_damage.rsi
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.25
+    baseSprintSpeed: 4.05
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      300: Critical
+      600: Dead
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Blunt
+        damage: 1200
+      behaviors:
+      - !type:GibBehavior { }
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Heat
+        damage: 4500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawnInContainer: true
+        spawn:
+          Ash:
+            min: 1
+            max: 1
+      - !type:BurnBodyBehavior
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MeatLaserImpact
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Radiation
+        damage: 45
+      behaviors:
+      - !type:PopupBehavior
+        popup: mouth-taste-metal
+        popupType: LargeCaution
+        targetOnly: true
+    - trigger:
+        !type:DamageTypeTrigger
+        damageType: Radiation
+        damage: 120
+      behaviors:
+      - !type:VomitBehavior
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      180: 0.7
+      240: 0.5
+  - type: Bloodstream
+    bleedReductionAmount: 1
+    maxBleedAmount: 30
+    bloodRefreshAmount: 3
+    bleedPuddleThreshold: 3
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 900
+  - type: Stamina
+    baseCritThreshold: 300
+    animationThreshold: 150
+    forceStandStamina: 30
+  - type: Speech
+    speechSounds: Bass
+  - type: SpeciesArmorRequirement
+    popup: species-armor-requirement-component-astartes-only
+
+- type: entity
+  parent: OrganHuman
+  id: OrganAstartes
+  abstract: true
+  suffix: astartes
+
+- type: entity
+  parent: OrganAstartes
+  id: OrganAstartesExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Astartes/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: Mobs/Species/Astartes/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: None
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganAstartesExternal ]
+  id: OrganAstartesTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganAstartesExternal ]
+  id: OrganAstartesHead
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganAstartesExternal ]
+  id: OrganAstartesArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganAstartesExternal ]
+  id: OrganAstartesArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganAstartesExternal ]
+  id: OrganAstartesHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganAstartesExternal ]
+  id: OrganAstartesHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganAstartesExternal ]
+  id: OrganAstartesLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganAstartesExternal ]
+  id: OrganAstartesLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganAstartesExternal ]
+  id: OrganAstartesFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganAstartesExternal ]
+  id: OrganAstartesFootRight

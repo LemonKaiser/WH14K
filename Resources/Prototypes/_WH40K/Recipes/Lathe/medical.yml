@@ -1,0 +1,6 @@
+- type: latheRecipe
+  id: WH40KDefibrillator
+  result: WH40KDefibrillator
+  completetime: 2
+  materials:
+    Steel: 300

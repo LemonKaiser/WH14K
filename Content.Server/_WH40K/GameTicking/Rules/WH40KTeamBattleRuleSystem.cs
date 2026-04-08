@@ -8,6 +8,7 @@ using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.GameTicking.Rules.Prototypes;
 using Content.Server._WH40K.LateJoin;
 using Content.Server._WH40K.Store.Components;
+using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.Interface;
 using Content.Server.Explosion.EntitySystems;
@@ -79,6 +80,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly KillTrackingSystem _killTracking = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly PlayTimeTrackingSystem _playTimeTracking = default!;
@@ -97,7 +99,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly SharedWeatherSystem _weather = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly CableSystem _cables = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -105,6 +106,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
@@ -138,7 +140,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         Subs.CVar(_config, CCVars.WH40KRoundTimeLimitSeconds, v =>
         {
-            _roundTimeLimitSeconds = v;
+            _roundTimeLimitSeconds = Math.Max(0f, v);
             ApplyConfigToActiveRules();
         }, true);
 
@@ -173,7 +175,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         BuildDepartmentMap(component);
         component.CheckInterval = _checkInterval;
         component.RequireAllTeamsPresent = _requireAllTeamsPresent;
-        component.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
+        ApplyOptionalRoundTimeLimitOverride(component);
         component.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(component.CheckInterval);
         component.RoundStartTime = Timing.CurTime;
         component.RoundEnding = false;
@@ -247,10 +249,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (component.RoundEnding)
             return;
 
-        UpdatePhase(uid, component);
-        UpdateRoundEvents(component);
-        UpdateWeather(component);
-        UpdateEconomyTelemetrySnapshots(component);
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.phase"))
+            UpdatePhase(uid, component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.events"))
+            UpdateRoundEvents(component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.weather"))
+            UpdateWeather(component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.eco_telemetry"))
+            UpdateEconomyTelemetrySnapshots(component);
 
         if (component.RoundTimeLimitSeconds > 0f)
         {
@@ -384,7 +393,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (!_mind.TryGetMind(ev.Mob, out var mindId, out _))
             return;
 
-        EnsureComp<KillTrackerComponent>(ev.Mob);
+        var killTracker = EnsureComp<KillTrackerComponent>(ev.Mob);
+        _killTracking.SetKillState(ev.Mob, MobState.Dead, killTracker);
 
         if (!TryGetTeamIndex(mindId, rule, out var teamIndex))
         {
@@ -428,16 +438,27 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         if (ev.Player != null)
         {
-            _chat.DispatchServerMessage(ev.Player, Loc.GetString("wh40k-team-service-message", ("team", Loc.GetString(team.Name))));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            {
+                LocKey = "wh40k-team-service-message",
+                LocArgs = new Dictionary<string, string> { ["team"] = team.Name },
+                ResolveArgValues = true,
+            }, ev.Player);
 
             var perTeamKey = $"wh40k-team-service-message-{team.Id}";
             if (Loc.HasString(perTeamKey))
-                _chat.DispatchServerMessage(ev.Player, Loc.GetString(perTeamKey));
+            {
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = perTeamKey,
+                }, ev.Player);
+            }
         }
     }
 
     private void OnFactionIconPolymorphed(Entity<WH40KTeamBattleFactionIconComponent> ent, ref PolymorphedEvent args)
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.polymorph");
         var sourceTeamId = ent.Comp.TeamId;
         if (string.IsNullOrWhiteSpace(sourceTeamId))
             return;
@@ -560,7 +581,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (string.IsNullOrEmpty(team?.Id))
             return false;
 
-        teamName = Loc.GetString(team!.Name);
+        // Return the FTL key so callers (especially BUI state builders)
+        // can forward it to the client for culture-aware resolution.
+        teamName = team!.Name;
         return true;
     }
 
@@ -638,11 +661,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void ApplyWh40KStaminaProfileToAllTeamMembers()
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.stamina_profile");
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        var hits = 0;
         while (query.MoveNext(out var uid, out _))
         {
             ApplyWh40KStaminaProfile(uid);
+            hits++;
         }
+
+        if (hits > 0)
+            _sawmill.Debug($"Applied WH40K stamina profile to {hits} team members.");
     }
 
     public bool TryGetTeamIdForUser(NetUserId userId, out string teamId)
@@ -706,7 +735,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (rule.RoundEnding)
             return;
 
-        var otherTeams = rule.Teams.Where(t => t.Id != destroyedTeamId).ToList();
+        var otherTeams = new List<WH40KTeamDefinition>();
+        foreach (var t in rule.Teams)
+        {
+            if (t.Id != destroyedTeamId)
+                otherTeams.Add(t);
+        }
 
         if (otherTeams.Count == 1)
         {
@@ -717,7 +751,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             rule.TimeLimitReached = false;
 
             if (AnnounceWinner)
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-winner-announce", ("team", Loc.GetString(winner.Name))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-team-winner-announce",
+                    LocArgs = new Dictionary<string, string> { ["team"] = winner.Name },
+                    ResolveArgValues = true,
+                });
 
             _roundEnd.EndRound();
             return;
@@ -729,7 +768,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         rule.TimeLimitReached = false;
 
         if (AnnounceWinner)
-            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-draw-announce"));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-draw-announce" });
 
         _roundEnd.EndRound();
     }
@@ -779,7 +818,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             component.RoundEnding = true;
 
             if (AnnounceWinner)
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-winner-announce", ("team", Loc.GetString(winner.Name))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-team-winner-announce",
+                    LocArgs = new Dictionary<string, string> { ["team"] = winner.Name },
+                    ResolveArgValues = true,
+                });
 
             _roundEnd.EndRound();
             return;
@@ -792,7 +836,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             component.RoundEnding = true;
 
             if (AnnounceWinner)
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-draw-announce"));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-draw-announce" });
 
             _roundEnd.EndRound();
         }
@@ -975,9 +1019,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             rule.CheckInterval = _checkInterval;
             rule.RequireAllTeamsPresent = _requireAllTeamsPresent;
-            rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
+            ApplyOptionalRoundTimeLimitOverride(rule);
             rule.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(rule.CheckInterval);
         }
+    }
+
+    private void ApplyOptionalRoundTimeLimitOverride(Components.WH40KTeamBattleRuleComponent rule)
+    {
+        if (_roundTimeLimitSeconds <= 0f)
+            return;
+
+        rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
     }
 
     private void ResetEconomyTelemetryState(Components.WH40KTeamBattleRuleComponent? component)
@@ -1397,7 +1449,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.TimeLimitReached = true;
 
         if (AnnounceWinner)
-            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-time-limit-announce"));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-time-limit-announce" });
 
         _roundEnd.EndRound();
     }
@@ -1688,15 +1740,29 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             if (TryGetTeamDisplayName(resolvedTeamId, out var teamName))
             {
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-up-announce",
-                    ("team", teamName),
-                    ("level", newLevel)));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-team-level-up-announce",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["team"] = teamName,
+                        ["level"] = newLevel.ToString()
+                    },
+                    ResolveArgValues = true
+                });
 
                 var activeBuff = rule.TeamLevelBuffs.GetValueOrDefault(resolvedTeamId, WH40KLevelBuffType.None);
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-buff-announce",
-                    ("team", teamName),
-                    ("buff", Loc.GetString(GetLevelBuffNameKey(activeBuff))),
-                    ("effect", Loc.GetString(GetLevelBuffEffectKey(activeBuff)))));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                {
+                    LocKey = "wh40k-team-level-buff-announce",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["team"] = teamName,
+                        ["buff"] = GetLevelBuffNameKey(activeBuff),
+                        ["effect"] = GetLevelBuffEffectKey(activeBuff)
+                    },
+                    ResolveArgValues = true
+                });
             }
         }
 
@@ -2035,7 +2101,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         if (!string.IsNullOrEmpty(key) && Loc.HasString(key))
         {
-            _chat.DispatchServerAnnouncement(Loc.GetString(key));
+            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = key });
             return;
         }
 
@@ -2157,11 +2223,18 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.LastWeatherWarningForStart = null;
 
         var weatherKey = weatherId.ToString() ?? "Unknown";
-        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-start-announce",
-            ("weather", GetWeatherDisplayName(weatherKey)),
-            ("danger", Loc.GetString(GetWeatherDangerKey(GetWeatherDanger(component, weatherKey)))),
-            ("summary", GetWeatherSummary(weatherKey)),
-            ("protection", GetWeatherProtectionAdvice(weatherKey))));
+        RaiseNetworkEvent(new WH40KLocalizedChatEvent
+        {
+            LocKey = "wh40k-weather-start-announce",
+            LocArgs = new Dictionary<string, string>
+            {
+                ["weather"] = GetWeatherDisplayNameKey(weatherKey),
+                ["danger"] = GetWeatherDangerKey(GetWeatherDanger(component, weatherKey)),
+                ["summary"] = GetWeatherSummaryKey(weatherKey),
+                ["protection"] = GetWeatherProtectionAdviceKey(weatherKey)
+            },
+            ResolveArgValues = true
+        });
     }
 
     private EntProtoId? PickWeather(Components.WH40KTeamBattleRuleComponent component)
@@ -2194,12 +2267,19 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var danger = GetWeatherDanger(component, weatherId);
         var warningSeconds = Math.Max(1, (int) Math.Ceiling((nextStart - now).TotalSeconds));
 
-        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-weather-warning-announce",
-            ("seconds", warningSeconds),
-            ("weather", GetWeatherDisplayName(weatherId)),
-            ("danger", Loc.GetString(GetWeatherDangerKey(danger))),
-            ("summary", GetWeatherSummary(weatherId)),
-            ("protection", GetWeatherProtectionAdvice(weatherId))));
+        RaiseNetworkEvent(new WH40KLocalizedChatEvent
+        {
+            LocKey = "wh40k-weather-warning-announce",
+            LocArgs = new Dictionary<string, string>
+            {
+                ["seconds"] = warningSeconds.ToString(),
+                ["weather"] = GetWeatherDisplayNameKey(weatherId),
+                ["danger"] = GetWeatherDangerKey(danger),
+                ["summary"] = GetWeatherSummaryKey(weatherId),
+                ["protection"] = GetWeatherProtectionAdviceKey(weatherId)
+            },
+            ResolveArgValues = true
+        });
     }
 
     private void InitializeRoundEventState(Components.WH40KTeamBattleRuleComponent component)
@@ -2322,18 +2402,18 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         {
             case WH40KRoundEventType.LogisticsSurge:
                 ApplyAmmoDiscountToWh40KStores(component, true);
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-logistics-start"));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-logistics-start" });
                 break;
 
             case WH40KRoundEventType.OrbitalBombardment:
                 durationSeconds = Math.Max(10f, component.OrbitalBombardmentDurationSeconds);
                 component.NextOrbitalWaveAt = now;
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-orbital-start"));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-orbital-start" });
                 break;
 
             case WH40KRoundEventType.BlackFront:
                 StartBlackFrontWeather(component, now, TimeSpan.FromSeconds(durationSeconds));
-                _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-blackfront-start"));
+                RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-blackfront-start" });
                 break;
         }
 
@@ -2354,18 +2434,18 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             case WH40KRoundEventType.LogisticsSurge:
                 ApplyAmmoDiscountToWh40KStores(component, false);
                 if (!forceCleanup)
-                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-logistics-end"));
+                    RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-logistics-end" });
                 break;
 
             case WH40KRoundEventType.OrbitalBombardment:
                 if (!forceCleanup)
-                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-orbital-end"));
+                    RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-orbital-end" });
                 break;
 
             case WH40KRoundEventType.BlackFront:
                 StopBlackFrontWeather(component, now);
                 if (!forceCleanup)
-                    _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-blackfront-end"));
+                    RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-round-event-blackfront-end" });
                 break;
         }
 
@@ -2402,9 +2482,16 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (component.PendingRoundEvent is not { } pending)
             return;
 
-        _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-round-event-warning",
-            ("seconds", (int) leadSeconds),
-            ("event", Loc.GetString(GetRoundEventNameKey(pending)))));
+        RaiseNetworkEvent(new WH40KLocalizedChatEvent
+        {
+            LocKey = "wh40k-round-event-warning",
+            LocArgs = new Dictionary<string, string>
+            {
+                ["seconds"] = ((int) leadSeconds).ToString(),
+                ["event"] = GetRoundEventNameKey(pending)
+            },
+            ResolveArgValues = true
+        });
     }
 
     private void SpawnOrbitalWave(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
@@ -2547,14 +2634,20 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         string teamId,
         WH40KLevelBuffType buffType)
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.level_buff");
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        var hits = 0;
         while (query.MoveNext(out var uid, out var member))
         {
             if (!string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             ApplyTeamLevelBuffToEntity(uid, component, buffType);
+            hits++;
         }
+
+        if (hits > 0)
+            _sawmill.Info($"Applied {buffType} to team {teamId} (hits={hits})");
     }
 
     private void ApplyTeamLevelBuffToEntity(
@@ -2621,6 +2714,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void ClearAllTeamLevelBuffComponents()
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.clear_buffs");
         var query = EntityQueryEnumerator<WH40KRoundEventBuffComponent>();
         while (query.MoveNext(out var uid, out _))
         {
@@ -2861,6 +2955,53 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             : null;
     }
 
+    private string GetWeatherLocKey(string prefix, string weatherId, string fallbackKey)
+    {
+        var key = $"{prefix}-{weatherId}";
+        return Loc.HasString(key) ? key : fallbackKey;
+    }
+
+    private string GetWeatherDisplayNameKey(string weatherId)
+    {
+        return GetWeatherLocKey("wh40k-weather-name", weatherId, "wh40k-weather-name-unknown");
+    }
+
+    private string GetWeatherSummaryKey(string weatherId)
+    {
+        return GetWeatherLocKey("wh40k-weather-summary", weatherId, "wh40k-weather-summary-unknown");
+    }
+
+    private string GetWeatherProtectionAdviceKey(string weatherId)
+    {
+        var overrideKey = $"wh40k-weather-protection-{weatherId}";
+        if (Loc.HasString(overrideKey))
+            return overrideKey;
+
+        if (!_weather.TryGetWeatherPrototype(weatherId, out var weather) ||
+            weather.Effects is not { } effects)
+            return "wh40k-weather-protection-generic";
+
+        if (effects.ProtectedByGasMask && effects.ProtectedByHardsuit)
+            return "wh40k-weather-protection-gasmask-or-hardsuit";
+
+        if (effects.ProtectedByHardsuit)
+            return "wh40k-weather-protection-hardsuit";
+
+        if (effects.ProtectedByGasMask)
+            return "wh40k-weather-protection-gasmask";
+
+        if (effects.Emp != null)
+            return "wh40k-weather-protection-emp";
+
+        if (effects.StructureDamage != null)
+            return "wh40k-weather-protection-structures";
+
+        if (effects.Wind != null || effects.Slowdown != null || effects.HazardSpawn != null)
+            return "wh40k-weather-protection-cover";
+
+        return "wh40k-weather-protection-generic";
+    }
+
     private void ApplyMapStabilitySafeguards()
     {
         var mapId = _gameTicker.DefaultMap;
@@ -2904,28 +3045,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private int RebuildGridAtmosphereForMap(MapId mapId)
     {
-        var rebuilt = 0;
-        var skippedNoAtmos = 0;
-        foreach (var grid in _mapManager.GetAllGrids(mapId))
-        {
-            var uid = grid.Owner;
-            if (!TryComp<GridAtmosphereComponent>(uid, out var atmos))
-            {
-                skippedNoAtmos++;
-                continue;
-            }
-
-            _atmosphere.RebuildGridAtmosphere((uid, atmos, grid));
-            rebuilt++;
-        }
-
-        if (skippedNoAtmos > 0)
-        {
-            _sawmill.Debug(
-                $"WH40K map stability safeguards: skipped fixgridatmos for {skippedNoAtmos} grids without GridAtmosphereComponent.");
-        }
-
-        return rebuilt;
+        // DISABLED: Rebuilding atmosphere at round start causes a massive dirty spike
+        // (19,000+ entities) which floods the network send buffer and forces a lag spike
+        // or a socket connection exception ("would block - send buffer full").
+        // Normally, SS14 map loading handles atmos appropriately without needing a full rebuild.
+        return 0;
     }
 
     private int ProtectApcExtensionCablesFromCutting(MapId mapId)

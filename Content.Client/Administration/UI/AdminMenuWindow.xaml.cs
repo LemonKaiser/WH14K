@@ -39,10 +39,13 @@ public sealed partial class AdminMenuWindow : DefaultWindow, ILocalizedControl
             ObjectsTabControl.RefreshObjectList();
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
         OnDisposed?.Invoke();
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
         OnDisposed = null;
     }
 

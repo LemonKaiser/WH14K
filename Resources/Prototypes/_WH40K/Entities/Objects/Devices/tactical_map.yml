@@ -26,8 +26,6 @@
   parent:
     - WH40KBaseTacticalMapDevice
     - BaseHandheldComputer
-  name: tactical map tablet
-  description: Displays a readout of the active battlefield grid.
   abstract: true
   components:
     - type: Sprite
@@ -59,11 +57,90 @@
   id: WH40KBaseTacticalMapConsole
   parent:
     - WH40KBaseTacticalMapDevice
-    - BaseComputer
-  name: tactical map console
-  description: Fixed battlefield tactical console with access to the active tactical feed.
+    - BaseStructure
   abstract: true
   components:
+    - type: Animateable
+    - type: InteractionOutline
+    - type: Rotatable
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.25,-0.35,0.25,0.35"
+          density: 190
+          mask:
+            - MachineMask
+          layer:
+            - MachineLayer
+    - type: Computer
+    - type: ApcPowerReceiver
+      powerLoad: 50
+    - type: PowerState
+      idlePowerDraw: 50
+      workingPowerDraw: 500
+    - type: UIPowerState
+    - type: ExtensionCableReceiver
+    - type: ActivatableUIRequiresPower
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/mapimp.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerScreen"]
+          state: decorative_monitor
+          shader: unshaded
+    - type: Icon
+      sprite: _WH40K/Structures/Specific/mapimp.rsi
+      state: computer
+    - type: Appearance
+    - type: GenericVisualizer
+      visuals:
+        enum.ComputerVisuals.Powered:
+          computerLayerScreen:
+            True: { visible: true, shader: unshaded }
+            False: { visible: false }
+        enum.WiresVisuals.MaintenancePanelState:
+          enum.WiresVisualLayers.MaintenancePanel:
+            True: { visible: false }
+            False: { visible: true }
+    - type: LitOnPowered
+    - type: PointLight
+      radius: 1.5
+      energy: 3.0
+      enabled: false
+      mask: /Textures/Effects/LightMasks/cone.png
+      autoRot: true
+      offset: "0, 0.4"
+      castShadows: false
+    - type: EmitSoundOnUIOpen
+      sound:
+        collection: Keyboard
+        params:
+          volume: -1
+          variation: 0.10
+          pitch: 1.10
+      blacklist:
+        tags:
+          - NoConsoleSound
+    - type: ContainerContainer
+      containers:
+        board: !type:Container
+          ents: []
+    - type: LightningTarget
+      priority: 1
+    - type: RequireProjectileTarget
+    - type: Electrified
+      enabled: false
+      usesApcPower: true
+    - type: WiresPanel
+    - type: WiresVisuals
+    - type: Wires
+      boardName: wires-board-name-computer
+      layoutId: Computer
     - type: ActivatableUI
       singleUser: true
       key: enum.WH40KTacticalMapUiKey.Key
@@ -78,16 +155,12 @@
   id: WH40KCommandTacticalMapTablet
   parent:
     - WH40KBaseTacticalMapTablet
-  name: command tactical map tablet
-  description: Command-issued tactical tablet with annotation and team-feed editing controls.
   suffix: Handheld, Command
 
 - type: entity
   id: WH40KStandardTacticalMapTablet
   parent:
     - WH40KBaseTacticalMapTablet
-  name: field tactical map tablet
-  description: Standard battlefield tactical tablet with read-only command feed access.
   suffix: Handheld, Standard
   components:
     - type: WH40KTacticalMap
@@ -96,16 +169,56 @@
 - type: entity
   id: WH40KCommandTacticalMapConsole
   parent: WH40KBaseTacticalMapConsole
-  name: command tactical map console
-  description: Fixed command tactical console with annotation and team-feed editing controls.
   suffix: Console, Command
 
 - type: entity
   id: WH40KStandardTacticalMapConsole
   parent: WH40KBaseTacticalMapConsole
-  name: field tactical map console
-  description: Fixed battlefield tactical console with read-only command feed access.
   suffix: Console, Standard
   components:
     - type: WH40KTacticalMap
       canAnnotate: false
+
+- type: entity
+  id: WH40KCommandTacticalMapConsoleImperium
+  parent: WH40KCommandTacticalMapConsole
+  suffix: Console, Command, Imperium
+
+- type: entity
+  id: WH40KCommandTacticalMapConsoleHeretics
+  parent: WH40KCommandTacticalMapConsole
+  suffix: Console, Command, Heretics
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/mapchaos.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerScreen"]
+          state: decorative_monitor
+          shader: unshaded
+    - type: Icon
+      sprite: _WH40K/Structures/Specific/mapchaos.rsi
+      state: computer
+
+- type: entity
+  id: WH40KStandardTacticalMapConsoleImperium
+  parent: WH40KStandardTacticalMapConsole
+  suffix: Console, Standard, Imperium
+
+- type: entity
+  id: WH40KStandardTacticalMapConsoleHeretics
+  parent: WH40KStandardTacticalMapConsole
+  suffix: Console, Standard, Heretics
+  components:
+    - type: Sprite
+      sprite: _WH40K/Structures/Specific/mapchaos.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: computer
+        - map: ["computerLayerScreen"]
+          state: decorative_monitor
+          shader: unshaded
+    - type: Icon
+      sprite: _WH40K/Structures/Specific/mapchaos.rsi
+      state: computer

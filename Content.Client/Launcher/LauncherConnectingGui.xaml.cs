@@ -105,6 +105,7 @@ namespace Content.Client.Launcher
             _clyde.OnWindowFocused -= OnWindowFocused;
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -123,7 +124,9 @@ namespace Content.Client.Launcher
                 ExitButton.OnPressed -= ExitButtonPressed;
             }
 
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
         }
 
         // Just button, there's only one at once anyways :)

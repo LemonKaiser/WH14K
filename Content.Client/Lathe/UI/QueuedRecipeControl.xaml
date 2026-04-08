@@ -1,35 +1,47 @@
 <Control xmlns="https://spacestation14.io"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
-    <BoxContainer Orientation="Horizontal">
-        <BoxContainer
-            Name="RecipeDisplayContainer"
-            Margin="0 0 4 0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            MinSize="32 32"
-            />
-        <Label Name="RecipeName" HorizontalExpand="True" />
-        <Button
-            Name="MoveUp"
-            Margin="0"
-            Text="⏶"
-            StyleClasses="OpenRight"
-            ToolTip="{Loc 'lathe-menu-move-up-tooltip'}"/>
-        <Button
-            Name="MoveDown"
-            Margin="0"
-            Text="⏷"
-            StyleClasses="OpenBoth"
-            ToolTip="{Loc 'lathe-menu-move-down-tooltip'}"/>
-        <Button
-            Name="Delete"
-            Margin="0"
-            Text="✖"
-            ToolTip="{Loc 'lathe-menu-delete-item-tooltip'}">
-            <Button.StyleClasses>
-                <system:String>Caution</system:String>
-                <system:String>OpenLeft</system:String>
-            </Button.StyleClasses>
-        </Button>
-    </BoxContainer>
+         HorizontalExpand="True">
+    <PanelContainer Name="CardPanel"
+                    HorizontalExpand="True">
+        <BoxContainer Orientation="Horizontal"
+                      Margin="8 6 8 6"
+                      SeparationOverride="8">
+            <PanelContainer Name="SlotBadge">
+                <BoxContainer Orientation="Horizontal"
+                              Margin="8 5 8 5">
+                    <Label Name="SlotLabel"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="IconPanel">
+                <BoxContainer Name="RecipeDisplayContainer"
+                              Margin="3"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              MinSize="32 32" />
+            </PanelContainer>
+
+            <Label Name="RecipeName"
+                   HorizontalExpand="True"
+                   VerticalAlignment="Center"
+                   ClipText="True" />
+
+            <Button Name="MoveUp"
+                    Text="^"
+                    MinWidth="38"
+                    MinHeight="34"
+                    ToolTip="{Loc 'lathe-menu-move-up-tooltip'}" />
+            <Button Name="MoveDown"
+                    Text="v"
+                    MinWidth="38"
+                    MinHeight="34"
+                    ToolTip="{Loc 'lathe-menu-move-down-tooltip'}" />
+            <Button Name="Delete"
+                    Text="X"
+                    MinWidth="42"
+                    MinHeight="34"
+                    ToolTip="{Loc 'lathe-menu-delete-item-tooltip'}" />
+        </BoxContainer>
+    </PanelContainer>
 </Control>

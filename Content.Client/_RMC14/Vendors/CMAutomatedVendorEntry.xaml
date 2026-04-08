@@ -1,14 +1,57 @@
 <cc:CMAutomatedVendorEntry
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
-    HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal">
-        <LayeredTextureRect Name="Texture" Access="Public"
-                            HorizontalExpand="False" VerticalExpand="False" />
-        <Label Name="Amount" Access="Public" MinWidth="30" Align="Left" Margin="5 0 0 0" />
-        <Control MinWidth="5" />
-        <cc:CMAutomatedVendorPanel Name="Panel" Access="Public" />
-        <Button Text="?" Name="TooltipLabel" Access="Public" ModulateSelfOverride="#00000000" />
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    HorizontalExpand="True"
+    MinHeight="36">
+    <BoxContainer Orientation="Horizontal" SeparationOverride="0" HorizontalExpand="True"
+                  VerticalAlignment="Stretch">
+        <!-- MAIN ROW -->
+        <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat BackgroundColor="#0C0D12"
+                                       BorderColor="#16171E"
+                                       BorderThickness="0 0 0 1"
+                                       ContentMarginLeftOverride="6"
+                                       ContentMarginRightOverride="6"
+                                       ContentMarginTopOverride="2"
+                                       ContentMarginBottomOverride="2" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6"
+                          VerticalAlignment="Center" HorizontalExpand="True">
+                <LayeredTextureRect Name="Texture" Access="Public"
+                                    MinSize="32 32"
+                                    SetSize="32 32"
+                                    VerticalAlignment="Center" />
+                <Label Name="Amount" Access="Public"
+                       MinWidth="36" Align="Right"
+                       FontColorOverride="#9E8A52"
+                       VerticalAlignment="Center" />
+                <cc:CMAutomatedVendorPanel Name="Panel" Access="Public"
+                                           HorizontalExpand="True"
+                                           VerticalAlignment="Center" />
+            </BoxContainer>
+        </PanelContainer>
+        <!-- INFO BUTTON -->
+        <PanelContainer MinWidth="30" VerticalExpand="True">
+            <PanelContainer.PanelOverride>
+                <graphics:StyleBoxFlat BackgroundColor="#0E0F14"
+                                       BorderColor="#16171E"
+                                       BorderThickness="1 0 0 1" />
+            </PanelContainer.PanelOverride>
+            <Button Name="InfoButton" Access="Public"
+                    ModulateSelfOverride="#00000000"
+                    MinWidth="30"
+                    VerticalExpand="True"
+                    HorizontalExpand="True"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch">
+                <Label Name="InfoLabel" Access="Public"
+                       Text="i" FontColorOverride="#5A5030"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </Button>
+        </PanelContainer>
     </BoxContainer>
 </cc:CMAutomatedVendorEntry>
 

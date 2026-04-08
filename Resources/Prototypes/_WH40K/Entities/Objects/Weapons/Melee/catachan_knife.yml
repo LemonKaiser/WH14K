@@ -1,0 +1,15 @@
+- type: entity
+  parent: [BaseSecurityCargoContraband, CombatKnife]
+  id: CatachanKnife
+  suffix: WH40K, Catachan
+  components:
+  - type: Tag
+    tags:
+    - CombatKnife
+    - Knife
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/catachan_knife.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/catachan_knife.rsi
+    storedSprite: null

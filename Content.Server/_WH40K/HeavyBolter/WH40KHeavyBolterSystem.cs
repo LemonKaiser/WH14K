@@ -23,6 +23,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
+using Content.Server._WH40K.Localizations;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics.Components;
@@ -57,6 +58,7 @@ public sealed class WH40KHeavyBolterSystem : EntitySystem
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     private readonly Dictionary<(EntityUid User, string Key), TimeSpan> _popupCooldowns = new();
 
     public override void Initialize()
@@ -198,7 +200,7 @@ public sealed class WH40KHeavyBolterSystem : EntitySystem
         if (!CanOperateBolter(bolter))
         {
             if (TryTakeUserPopupCooldown(user, "wh40k-heavy-bolter-not-deployed"))
-                _popup.PopupEntity(Loc.GetString("wh40k-heavy-bolter-not-deployed", ("bolter", bolter)), bolter, user);
+                _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-heavy-bolter-not-deployed", ("bolter", bolter)), bolter, user);
 
             return;
         }
@@ -221,7 +223,7 @@ public sealed class WH40KHeavyBolterSystem : EntitySystem
         if (!foldRequest.Handled)
             return;
 
-        _popup.PopupClient(Loc.GetString("wh40k-heavy-bolter-fold-start", ("bolter", bolter)), user, user);
+        _popup.PopupClient(_culture.GetPlayerString(user, "wh40k-heavy-bolter-fold-start", ("bolter", bolter)), user, user);
     }
 
     private void OnFoldAttempt(Entity<WH40KHeavyBolterComponent> bolter, ref HandheldEntityFoldAttemptEvent args)

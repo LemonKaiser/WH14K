@@ -26,9 +26,9 @@
         incomingDamageMultiplier: 0.9
       - type: Vocal
         sounds:
-          Male: WH40KCommissarMaleHuman
-          Female: WH40KCommissarFemaleHuman
-          Unsexed: WH40KCommissarMaleHuman
+          Male: W40KComMale
+          Female: W40KComFemale
+          Unsexed: W40KComMale
   access:
   - Maintenance
   - External
@@ -51,6 +51,4 @@
     id: CommissarDogTag
     pocket1: Bugle
     pocket2: WH40KCommandTacticalMapTablet
-  inhand:
-    - WeaponLaserPistol
 

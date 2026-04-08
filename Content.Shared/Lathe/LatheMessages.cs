@@ -12,6 +12,8 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
 
     public LatheRecipeBatch[] Queue;
 
+    public LatheRecipeBatch? ActiveBatch;
+
     public ProtoId<LatheRecipePrototype>? CurrentlyProducing;
 
     public bool IsProducing;
@@ -25,6 +27,7 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
     public LatheUpdateState(
         List<ProtoId<LatheRecipePrototype>> recipes,
         LatheRecipeBatch[] queue,
+        LatheRecipeBatch? activeBatch = null,
         ProtoId<LatheRecipePrototype>? currentlyProducing = null,
         bool isProducing = false,
         TimeSpan? productionStartTime = null,
@@ -33,6 +36,7 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
     {
         Recipes = recipes;
         Queue = queue;
+        ActiveBatch = activeBatch;
         CurrentlyProducing = currentlyProducing;
         IsProducing = isProducing;
         ProductionStartTime = productionStartTime ?? TimeSpan.Zero;

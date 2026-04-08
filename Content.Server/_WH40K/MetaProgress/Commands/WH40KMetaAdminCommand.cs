@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Content.Server.Administration;
+using Content.Server.Database;
+using Content.Server.Preferences.Managers;
 using Content.Shared.Administration;
 using Content.Shared._WH40K.MetaProgress;
 using Robust.Server.Player;
@@ -13,6 +15,7 @@ using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Log;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.MetaProgress.Commands;
@@ -30,6 +33,12 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 	private readonly IPlayerManager _players = default!;
 
 	[Robust.Shared.IoC.Dependency]
+	private readonly IServerPreferencesManager _prefs = default!;
+
+	[Robust.Shared.IoC.Dependency]
+	private readonly IServerDbManager _db = default!;
+
+	[Robust.Shared.IoC.Dependency]
 	private readonly IPrototypeManager _prototypes = default!;
 
 	[Robust.Shared.IoC.Dependency]
@@ -43,7 +52,7 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 
 	public override string Description => "WH40K meta-progression admin control package.";
 
-	public override string Help => "Usage:\nwh40kmeta level set <user> <level>\nwh40kmeta level add <user> <delta>\nwh40kmeta xp set <user> <xp>\nwh40kmeta xp add <user> <delta>\nwh40kmeta dev unlock <user> <nodeId>\nwh40kmeta dev lock <user> <nodeId>\nwh40kmeta dev reset <user>\nwh40kmeta ach unlock <user> <achievementId>\nwh40kmeta ach lock <user> <achievementId>\nwh40kmeta ach progress set <user> <achievementId> <value>\nwh40kmeta ach progress add <user> <achievementId> <delta>\nwh40kmeta decor unlock <user> <unlockId>\nwh40kmeta decor lock <user> <unlockId>\nwh40kmeta title set <user> <titleId|none>\nwh40kmeta ghostskin set <user> <skinId|none>\nwh40kmeta ooccolor set <user> <colorId|none>\nwh40kmeta snapshot <user>\nwh40kmeta reset <user> [progress|development|achievements|decorations|all]\nUser token supports exact username, user GUID, or 'self'/'me' (in-game admin console only).";
+	public override string Help => "Usage:\nwh40kmeta level set <user> <level>\nwh40kmeta level add <user> <delta>\nwh40kmeta xp set <user> <xp>\nwh40kmeta xp add <user> <delta>\nwh40kmeta dev unlock <user> <nodeId>\nwh40kmeta dev lock <user> <nodeId>\nwh40kmeta dev reset <user>\nwh40kmeta ach unlock <user> <achievementId>\nwh40kmeta ach lock <user> <achievementId>\nwh40kmeta ach progress set <user> <achievementId> <value>\nwh40kmeta ach progress add <user> <achievementId> <delta>\nwh40kmeta decor unlock <user> <unlockId>\nwh40kmeta decor lock <user> <unlockId>\nwh40kmeta title set <user> <titleId|none>\nwh40kmeta ghostskin set <user> <skinId|none>\nwh40kmeta ooccolor set <user> <colorId|none>\nwh40kmeta revalidate <user|all>\nwh40kmeta resetselections <user>\nwh40kmeta snapshot <user>\nwh40kmeta reset <user> [progress|development|achievements|decorations|all]\nUser token supports ckey/exact username, user GUID, or 'self'/'me' (in-game admin console only).";
 
 	public override async void Execute(IConsoleShell shell, string argStr, string[] args)
 	{
@@ -84,6 +93,13 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 		case "snapshot":
 			await ExecuteSnapshot(entitySystem, shell, args);
 			break;
+		case "revalidate":
+			await ExecuteRevalidate(entitySystem, shell, args);
+			break;
+		case "resetselections":
+		case "clearselections":
+			await ExecuteResetSelections(entitySystem, shell, args);
+			break;
 		case "reset":
 			await ExecuteReset(entitySystem, shell, args);
 			break;
@@ -98,7 +114,7 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 	{
 		if (args.Length == 1)
 		{
-			return CompletionResult.FromHintOptions(new CompletionOption[10]
+			return CompletionResult.FromHintOptions(new CompletionOption[12]
 			{
 				new CompletionOption("level"),
 				new CompletionOption("xp"),
@@ -108,6 +124,8 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 				new CompletionOption("title"),
 				new CompletionOption("ghostskin"),
 				new CompletionOption("ooccolor"),
+				new CompletionOption("revalidate"),
+				new CompletionOption("resetselections"),
 				new CompletionOption("snapshot"),
 				new CompletionOption("reset")
 			}, "<section>");
@@ -201,6 +219,19 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 		case "ooccolor":
 			return GetSelectionCompletion(args, WH40KMetaDecorationCategory.OocNameColors);
 		case "snapshot":
+			if (args.Length != 2)
+			{
+				return CompletionResult.Empty;
+			}
+			return CompletionResult.FromHintOptions(CompletionHelper.SessionNames(sorted: true, _players), "<user>");
+		case "revalidate":
+			if (args.Length != 2)
+			{
+				return CompletionResult.Empty;
+			}
+			return CompletionResult.FromHintOptions(CompletionHelper.SessionNames(sorted: true, _players).Append(new CompletionOption("all")), "<user|all>");
+		case "resetselections":
+		case "clearselections":
 			if (args.Length != 2)
 			{
 				return CompletionResult.Empty;
@@ -532,6 +563,140 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 		}
 	}
 
+	private async Task ExecuteRevalidate(WH40KMetaProgressSystem system, IConsoleShell shell, string[] args)
+	{
+		if (args.Length != 2)
+		{
+			shell.WriteError("Usage: wh40kmeta revalidate <user|all>");
+			return;
+		}
+
+		if (string.Equals(args[1], "all", StringComparison.OrdinalIgnoreCase))
+		{
+			await ExecuteRevalidateAll(system, shell);
+			return;
+		}
+
+		LocatedPlayerData locatedPlayerData = await ResolvePlayer(shell, args[1]);
+		if (locatedPlayerData == null)
+			return;
+
+		try
+		{
+			var decorationResult = await system.RevalidateUnlocksForAdminAsync(locatedPlayerData.UserId);
+			var loadoutResult = await _prefs.RevalidateWH40KMetaLoadoutsAsync(locatedPlayerData.UserId, decorationResult.Snapshot);
+
+			shell.WriteLine($"[{locatedPlayerData.Username}] strict meta unlock revalidation finished.");
+			shell.WriteLine($"Decorations: granted {decorationResult.GrantedDecorations}, revoked {decorationResult.RevokedDecorations}, selections reset {decorationResult.ResetSelections}.");
+
+			if (loadoutResult.PreferencesFound)
+			{
+				shell.WriteLine($"Loadouts: profiles changed {loadoutResult.ProfilesChanged}, selections removed {loadoutResult.RemovedSelections}, defaults applied {loadoutResult.DefaultSelectionsApplied}.");
+			}
+			else
+			{
+				shell.WriteLine("Loadouts: no character preferences were found in the database.");
+			}
+
+			WriteSnapshot(shell, locatedPlayerData, decorationResult.Snapshot);
+			Audit(shell, $"revalidated current meta unlock state for {locatedPlayerData.UserId}.");
+		}
+		catch (Exception e)
+		{
+			Sawmill.Error($"Failed revalidating WH40K meta unlocks for {locatedPlayerData.UserId}: {e}");
+			shell.WriteError($"Failed to revalidate meta unlock state for '{locatedPlayerData.Username}': {e.Message}");
+		}
+	}
+
+	private async Task ExecuteRevalidateAll(WH40KMetaProgressSystem system, IConsoleShell shell)
+	{
+		List<NetUserId> userIds = await _db.GetUsersWithAnyWH40KMetaOrPreferences();
+		if (userIds.Count == 0)
+		{
+			shell.WriteLine("No WH40K meta or preference records were found in the database.");
+			return;
+		}
+
+		var scanned = 0;
+		var failed = 0;
+		var usersWithDecorationChanges = 0;
+		var usersWithLoadoutChanges = 0;
+		var grantedDecorations = 0;
+		var revokedDecorations = 0;
+		var resetSelections = 0;
+		var removedLoadouts = 0;
+		var defaultedLoadouts = 0;
+
+		foreach (var userId in userIds.OrderBy(id => id.UserId))
+		{
+			try
+			{
+				var decorationResult = await system.RevalidateUnlocksForAdminAsync(userId);
+				var loadoutResult = await _prefs.RevalidateWH40KMetaLoadoutsAsync(userId, decorationResult.Snapshot);
+
+				scanned++;
+				grantedDecorations += decorationResult.GrantedDecorations;
+				revokedDecorations += decorationResult.RevokedDecorations;
+				resetSelections += decorationResult.ResetSelections;
+				removedLoadouts += loadoutResult.RemovedSelections;
+				defaultedLoadouts += loadoutResult.DefaultSelectionsApplied;
+
+				if (decorationResult.Changed)
+					usersWithDecorationChanges++;
+				if (loadoutResult.Changed)
+					usersWithLoadoutChanges++;
+			}
+			catch (Exception e)
+			{
+				failed++;
+				Sawmill.Error($"Failed revalidating WH40K meta unlock state for {userId}: {e}");
+			}
+		}
+
+		shell.WriteLine($"Revalidated WH40K meta state for {scanned}/{userIds.Count} users; failures={failed}.");
+		shell.WriteLine($"Decorations: changed users {usersWithDecorationChanges}, granted {grantedDecorations}, revoked {revokedDecorations}, selections reset {resetSelections}.");
+		shell.WriteLine($"Loadouts: changed users {usersWithLoadoutChanges}, selections removed {removedLoadouts}, defaults applied {defaultedLoadouts}.");
+		Audit(shell, $"revalidated current meta unlock state for all database users (scanned={scanned}, failures={failed}).");
+	}
+
+	private async Task ExecuteResetSelections(WH40KMetaProgressSystem system, IConsoleShell shell, string[] args)
+	{
+		if (args.Length != 2)
+		{
+			shell.WriteError("Usage: wh40kmeta resetselections <user>");
+			return;
+		}
+
+		LocatedPlayerData locatedPlayerData = await ResolvePlayer(shell, args[1]);
+		if (locatedPlayerData == null)
+			return;
+
+		try
+		{
+			var selectionResult = await system.ResetSelectionsForAdminAsync(locatedPlayerData.UserId);
+			var loadoutResult = await _prefs.ResetWH40KMetaSelectionsAsync(locatedPlayerData.UserId, selectionResult.Snapshot);
+
+			shell.WriteLine($"[{locatedPlayerData.Username}] WH40K meta selections reset to current defaults.");
+			shell.WriteLine($"Decorations: selections reset {selectionResult.ResetSelections}.");
+			if (loadoutResult.PreferencesFound)
+			{
+				shell.WriteLine($"Loadouts: profiles changed {loadoutResult.ProfilesChanged}, selections removed {loadoutResult.RemovedSelections}, defaults applied {loadoutResult.DefaultSelectionsApplied}.");
+			}
+			else
+			{
+				shell.WriteLine("Loadouts: no character preferences were found in the database.");
+			}
+
+			WriteSnapshot(shell, locatedPlayerData, selectionResult.Snapshot);
+			Audit(shell, $"reset WH40K meta selections for {locatedPlayerData.UserId}.");
+		}
+		catch (Exception e)
+		{
+			Sawmill.Error($"Failed resetting WH40K meta selections for {locatedPlayerData.UserId}: {e}");
+			shell.WriteError($"Failed to reset meta selections for '{locatedPlayerData.Username}': {e.Message}");
+		}
+	}
+
 	private async Task ExecuteReset(WH40KMetaProgressSystem system, IConsoleShell shell, string[] args)
 	{
 		int num = args.Length;
@@ -607,6 +772,10 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 			return await _playerLocator.LookupIdAsync(shell.Player.UserId);
 		}
 		LocatedPlayerData obj = await _playerLocator.LookupIdByNameOrIdAsync(normalized);
+		if (obj == null && !Guid.TryParse(normalized, out _) && !string.Equals(normalized, normalized.ToLowerInvariant(), StringComparison.Ordinal))
+		{
+			obj = await _playerLocator.LookupIdByNameOrIdAsync(normalized.ToLowerInvariant());
+		}
 		if (obj == null)
 		{
 			if (shell.Player != null && !normalized.Contains('@') && shell.Player.Name.Contains('@'))
@@ -661,7 +830,10 @@ public sealed class WH40KMetaAdminCommand : LocalizedCommands
 
 	private void Audit(IConsoleShell shell, string message)
 	{
-		string text = shell.Player?.Name ?? "SERVER";
-		Sawmill.Info("[" + text + "] " + message);
+		var player = shell.Player;
+		string caller = player != null
+			? $"{player.Name} ({player.UserId})"
+			: "SERVER";
+		Sawmill.Info("[" + caller + "] " + message);
 	}
 }

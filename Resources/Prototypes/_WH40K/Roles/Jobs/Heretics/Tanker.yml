@@ -3,6 +3,13 @@
   name: job-name-htanker
   description: job-description-htanker
   playTimeTracker: JobHTanker
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+      - Vulpkanin
   startingGear: HeresyGuardsmanGear
   icon: "JobIconHTanker"
   supervisors: job-supervisors-engineering

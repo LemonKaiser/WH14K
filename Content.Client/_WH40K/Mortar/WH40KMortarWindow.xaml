@@ -75,7 +75,7 @@
                         ContentMarginRightOverride="8"
                         ContentMarginBottomOverride="6" />
                 </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
                     <Label Text="" Access="Public" Name="LaserModeLabel" />
                     <Label Text="" Access="Public" Name="LaserStatusLabel" />
                     <BoxContainer Orientation="Horizontal" SeparationOverride="6">
@@ -98,12 +98,12 @@
                         ContentMarginBottomOverride="8" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical" SeparationOverride="6">
-                    <Label Text="{Loc 'wh40k-mortar-target-title'}" />
+                    <Label Name="TargetTitleLabel" Text="{Loc 'wh40k-mortar-target-title'}" />
                     <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                        <Label Text="{Loc 'wh40k-mortar-target-short-x'}" VerticalAlignment="Center" />
+                        <Label Name="TargetXTitleLabel" Text="{Loc 'wh40k-mortar-target-short-x'}" VerticalAlignment="Center" />
                         <LineEdit Name="TargetXInput" Access="Public" HorizontalExpand="True" PlaceHolder="0" />
                         <Label Text="/" VerticalAlignment="Center" />
-                        <Label Text="{Loc 'wh40k-mortar-target-short-y'}" VerticalAlignment="Center" />
+                        <Label Name="TargetYTitleLabel" Text="{Loc 'wh40k-mortar-target-short-y'}" VerticalAlignment="Center" />
                         <LineEdit Name="TargetYInput" Access="Public" HorizontalExpand="True" PlaceHolder="0" />
                         <Button Name="SetTargetButton" Access="Public" Text="{Loc 'wh40k-mortar-target-set-button-short'}" MinSize="90 0" StyleClasses="OpenBoth" />
                     </BoxContainer>
@@ -122,12 +122,12 @@
                         ContentMarginBottomOverride="8" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical" SeparationOverride="6">
-                    <Label Text="{Loc 'wh40k-mortar-dial-title'}" />
+                    <Label Name="DialTitleLabel" Text="{Loc 'wh40k-mortar-dial-title'}" />
                     <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                        <Label Text="{Loc 'wh40k-mortar-target-short-x'}" VerticalAlignment="Center" />
+                        <Label Name="DialXTitleLabel" Text="{Loc 'wh40k-mortar-target-short-x'}" VerticalAlignment="Center" />
                         <LineEdit Name="DialXInput" Access="Public" HorizontalExpand="True" PlaceHolder="0" />
                         <Label Text="/" VerticalAlignment="Center" />
-                        <Label Text="{Loc 'wh40k-mortar-target-short-y'}" VerticalAlignment="Center" />
+                        <Label Name="DialYTitleLabel" Text="{Loc 'wh40k-mortar-target-short-y'}" VerticalAlignment="Center" />
                         <LineEdit Name="DialYInput" Access="Public" HorizontalExpand="True" PlaceHolder="0" />
                         <Button Name="SetDialButton" Access="Public" Text="{Loc 'wh40k-mortar-dial-set-button-short'}" MinSize="90 0" StyleClasses="OpenBoth" />
                     </BoxContainer>

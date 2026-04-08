@@ -10,6 +10,7 @@ using Content.Client.Playtime;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.UserInterface.Systems.Localization;
 using Content.Client.Voting;
+using Content.Shared._WH40K.LateJoin;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking.Prototypes;
 using Content.Shared.Roles;
@@ -22,6 +23,9 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Content.Client.Lobby
 {
@@ -44,7 +48,8 @@ namespace Content.Client.Lobby
         private WH40KDiscordAuthSystem _discordAuth = default!;
         private GhostSystem _ghostSystem = default!;
         private WH40KFactionSystem _wh40kFactions = default!;
-        private bool _pendingJoinOpen;
+        private WH40KFactionSelectionPurpose? _pendingFactionPurpose;
+        private bool _ignoreReadyToggle;
         private LateJoinGui? _lateJoinWindow;
         private WH40KFactionJoinGui? _factionJoinWindow;
         private LobbyBackgroundController? _backgroundController;
@@ -71,7 +76,9 @@ namespace Content.Client.Lobby
             _contentAudioSystem.LobbySoundtrackChanged += UpdateLobbySoundtrackInfo;
             _ghostSystem.GhostRoleCountUpdated += OnGhostRoleCountUpdated;
             _wh40kFactions.FactionsUpdated += OnWh40kFactionsUpdated;
-            _pendingJoinOpen = false;
+            _wh40kFactions.FactionSelectionResultReceived += OnWh40kFactionSelectionResult;
+            _pendingFactionPurpose = null;
+            _ignoreReadyToggle = false;
 
             chatController.SetMainChat(true);
 
@@ -120,7 +127,8 @@ namespace Content.Client.Lobby
             _contentAudioSystem.LobbySoundtrackChanged -= UpdateLobbySoundtrackInfo;
             _ghostSystem.GhostRoleCountUpdated -= OnGhostRoleCountUpdated;
             _wh40kFactions.FactionsUpdated -= OnWh40kFactionsUpdated;
-            _pendingJoinOpen = false;
+            _wh40kFactions.FactionSelectionResultReceived -= OnWh40kFactionSelectionResult;
+            _pendingFactionPurpose = null;
             CloseJoinWindows();
             _backgroundController?.Shutdown();
             _backgroundController = null;
@@ -166,17 +174,7 @@ namespace Content.Client.Lobby
                 return;
             }
 
-            if (_pendingJoinOpen)
-                return;
-
-            if (_wh40kFactions.TryGetCachedFactions(out var factions))
-            {
-                OpenJoinWindow(factions);
-                return;
-            }
-
-            _pendingJoinOpen = true;
-            _wh40kFactions.RequestFactions(force: true);
+            RequestFactionWindow(WH40KFactionSelectionPurpose.LateJoin);
         }
 
         private void OnGhostRolesPressed(BaseButton.ButtonEventArgs args)
@@ -194,7 +192,22 @@ namespace Content.Client.Lobby
 
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
         {
-            SetReady(args.Pressed);
+            if (_ignoreReadyToggle)
+                return;
+
+            if (_gameTicker.IsGameStarted)
+                return;
+
+            if (!args.Pressed)
+            {
+                SetReady(false);
+                return;
+            }
+
+            _ignoreReadyToggle = true;
+            Lobby!.ReadyButton.Pressed = false;
+            _ignoreReadyToggle = false;
+            RequestFactionWindow(WH40KFactionSelectionPurpose.LobbyReady);
         }
 
         public override void FrameUpdate(FrameEventArgs e)
@@ -253,11 +266,14 @@ namespace Content.Client.Lobby
 
             if (_gameTicker.IsGameStarted)
             {
-                _wh40kFactions.RequestFactions(force: true);
+                if (_factionJoinWindow?.IsOpen == true && _factionJoinWindow.Purpose == WH40KFactionSelectionPurpose.LobbyReady)
+                    _factionJoinWindow.Close();
+
+                _wh40kFactions.RequestFactions(WH40KFactionSelectionPurpose.Preview, force: true);
             }
             else
             {
-                _pendingJoinOpen = false;
+                _pendingFactionPurpose = null;
             }
         }
 
@@ -384,55 +400,130 @@ namespace Content.Client.Lobby
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
         }
 
-        private void OnWh40kFactionsUpdated(IReadOnlyList<Content.Shared._WH40K.LateJoin.WH40KFactionInfo> factions)
+        private void OnWh40kFactionsUpdated(WH40KFactionsEvent ev)
         {
-            if (!_pendingJoinOpen)
+            if (_factionJoinWindow?.IsOpen == true && _factionJoinWindow.Purpose == ev.Purpose)
+                _factionJoinWindow.UpdateFactions(ev.Factions);
+
+            if (_pendingFactionPurpose != ev.Purpose)
                 return;
 
-            _pendingJoinOpen = false;
-            OpenJoinWindow(factions);
+            _pendingFactionPurpose = null;
+            HandleFactionListResponse(ev.Purpose, ev.Factions);
         }
 
-        private void OpenJoinWindow(IReadOnlyList<Content.Shared._WH40K.LateJoin.WH40KFactionInfo> factions)
+        private void OnWh40kFactionSelectionResult(WH40KFactionSelectionResultEvent ev)
+        {
+            if (!ev.Accepted)
+                return;
+
+            switch (ev.Purpose)
+            {
+                case WH40KFactionSelectionPurpose.LobbyReady:
+                    if (_factionJoinWindow?.IsOpen == true && _factionJoinWindow.Purpose == ev.Purpose)
+                        _factionJoinWindow.Close();
+                    break;
+                case WH40KFactionSelectionPurpose.LateJoin:
+                    if (!_wh40kFactions.TryGetCachedFactions(ev.Purpose, out var factions))
+                        factions = ev.Factions;
+
+                    var selectedFaction = factions.FirstOrDefault(faction =>
+                        string.Equals(faction.Id, ev.FactionId, StringComparison.OrdinalIgnoreCase));
+
+                    if (selectedFaction == null)
+                    {
+                        OpenLateJoinWindow();
+                        return;
+                    }
+
+                    OpenLateJoinWindow(
+                        WH40KFactionJoinGui.BuildDepartmentFilterForFaction(selectedFaction),
+                        WH40KFactionJoinGui.BuildHiddenJobsForFaction(selectedFaction.Id),
+                        Loc.GetString(selectedFaction.Name));
+                    break;
+            }
+        }
+
+        private void HandleFactionListResponse(WH40KFactionSelectionPurpose purpose, IReadOnlyList<WH40KFactionInfo> factions)
         {
             if (factions.Count == 0)
             {
-                OpenLateJoinWindow();
+                if (purpose == WH40KFactionSelectionPurpose.LobbyReady)
+                    SetReady(true);
+                else
+                    OpenLateJoinWindow();
+
                 return;
             }
 
-            OpenFactionJoinWindow(factions);
+            OpenFactionJoinWindow(purpose, factions);
         }
 
-        private void OpenLateJoinWindow(IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null)
+        private void RequestFactionWindow(WH40KFactionSelectionPurpose purpose)
         {
-            if (_factionJoinWindow?.IsOpen == true)
-                _factionJoinWindow.Close();
-
-            if (_lateJoinWindow?.IsOpen == true)
-            {
-                _lateJoinWindow.MoveToFront();
+            if (_pendingFactionPurpose != null)
                 return;
-            }
 
-            _lateJoinWindow = departments == null ? new LateJoinGui() : new LateJoinGui(departments);
-            _lateJoinWindow.OnClose += () => _lateJoinWindow = null;
-            _lateJoinWindow.OpenCentered();
-        }
-
-        private void OpenFactionJoinWindow(IReadOnlyList<Content.Shared._WH40K.LateJoin.WH40KFactionInfo> factions)
-        {
-            if (_lateJoinWindow?.IsOpen == true)
-                _lateJoinWindow.Close();
-
-            if (_factionJoinWindow?.IsOpen == true)
+            if (_factionJoinWindow?.IsOpen == true && _factionJoinWindow.Purpose == purpose)
             {
                 _factionJoinWindow.MoveToFront();
                 return;
             }
 
-            _factionJoinWindow = new WH40KFactionJoinGui(factions);
+            _pendingFactionPurpose = purpose;
+            _wh40kFactions.RequestFactions(purpose, force: true);
+        }
+
+        private void OpenLateJoinWindow(
+            IReadOnlyList<ProtoId<DepartmentPrototype>>? departments = null,
+            IReadOnlyCollection<ProtoId<JobPrototype>>? hiddenJobs = null,
+            string? factionName = null)
+        {
+            if (_factionJoinWindow?.IsOpen == true)
+                _factionJoinWindow.Close();
+
+            if (_lateJoinWindow?.IsOpen == true)
+                _lateJoinWindow.Close();
+
+            var lateJoinWindow = hiddenJobs == null
+                ? (departments == null ? new LateJoinGui() : new LateJoinGui(departments))
+                : new LateJoinGui(departments, hiddenJobs);
+
+            lateJoinWindow.Title = string.IsNullOrEmpty(factionName)
+                ? Loc.GetString("late-join-gui-title")
+                : Loc.GetString("wh40k-faction-late-join-title", ("faction", factionName));
+
+            lateJoinWindow.OnClose += () =>
+            {
+                if (!lateJoinWindow.SelectionCommitted && _gameTicker.IsGameStarted)
+                    _wh40kFactions.CancelSelection(WH40KFactionSelectionPurpose.LateJoin);
+
+                if (_lateJoinWindow == lateJoinWindow)
+                    _lateJoinWindow = null;
+            };
+
+            _lateJoinWindow = lateJoinWindow;
+            lateJoinWindow.OpenCentered();
+        }
+
+        private void OpenFactionJoinWindow(WH40KFactionSelectionPurpose purpose, IReadOnlyList<WH40KFactionInfo> factions)
+        {
+            if (_lateJoinWindow?.IsOpen == true)
+                _lateJoinWindow.Close();
+
+            if (_factionJoinWindow?.IsOpen == true && _factionJoinWindow.Purpose == purpose)
+            {
+                _factionJoinWindow.UpdateFactions(factions);
+                _factionJoinWindow.MoveToFront();
+                return;
+            }
+
+            if (_factionJoinWindow?.IsOpen == true)
+                _factionJoinWindow.Close();
+
+            _factionJoinWindow = new WH40KFactionJoinGui(purpose, factions);
             _factionJoinWindow.OnClose += () => _factionJoinWindow = null;
+            _factionJoinWindow.FactionSelected += factionId => _wh40kFactions.SelectFaction(factionId, purpose);
             _factionJoinWindow.OpenCentered();
         }
 

@@ -309,6 +309,28 @@ namespace Content.Server.Cargo.Systems
                 destinations.Add(new EntityCoordinates(xform.ParentUid, xform.LocalPosition));
             }
 
+            if (destinations.Count > 0)
+                return destinations;
+
+            // Support older maps that still use generic buy pallets for delayed cargo delivery.
+            var fallbackQuery = EntityQueryEnumerator<CargoPalletComponent, TransformComponent>();
+            while (fallbackQuery.MoveNext(out var uid, out var pallet, out var xform))
+            {
+                if ((pallet.PalletType & BuySellType.Buy) == 0)
+                    continue;
+
+                if (HasComp<CargoOrderBatchPalletComponent>(uid))
+                    continue;
+
+                if (!xform.Anchored)
+                    continue;
+
+                if (_station.GetOwningStation(uid, xform) != stationUid)
+                    continue;
+
+                destinations.Add(new EntityCoordinates(xform.ParentUid, xform.LocalPosition));
+            }
+
             return destinations;
         }
 

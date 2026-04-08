@@ -1,0 +1,116 @@
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckImperialAquilaMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/aquila.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/aquila.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckImperialCrossMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/cross.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/cross.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckImperialInquisitionSeal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/inquisition_seal.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/inquisition_seal.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckImperialGoldenPrize
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/golden_prize.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/golden_prize.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaosUndividedMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/undivided.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/undivided.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaosKhorneMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/khorne.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/khorne.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaosNurgleMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/nurgle.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/nurgle.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaosSlaaneshMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/slaanesh.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/slaanesh.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckChaosTzeentchMedal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/tzeentch.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Chaos/tzeentch.rsi
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon

@@ -1,0 +1,33 @@
+- type: entity
+  parent: [BaseItem, BaseMajorContraband]
+  id: CartridgeRocketHE
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - CartridgeRocket
+  - type: Item
+    size: Small
+  - type: CartridgeAmmo
+    proto: WH40KBulletRocketHE
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Rocket/rpg_he.rsi
+    state: icon
+
+- type: entity
+  parent: [BaseItem, BaseMajorContraband]
+  id: CartridgeRocketAP
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - CartridgeRocket
+  - type: Item
+    size: Small
+  - type: CartridgeAmmo
+    proto: WH40KBulletRocketAP
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Rocket/rpg_ap.rsi
+    state: icon
