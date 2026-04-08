@@ -305,6 +305,8 @@ public sealed partial class StationJobsSystem
             {
                 // Pick a random overflow job from that station
                 var overflows = GetOverflowJobs(station).ToList();
+                var overflowEvent = new StationJobsGetOverflowCandidatesEvent(player, station, overflows);
+                RaiseLocalEvent(ref overflowEvent);
                 _random.Shuffle(overflows);
 
                 // Stations with no overflow slots should simply get skipped over.

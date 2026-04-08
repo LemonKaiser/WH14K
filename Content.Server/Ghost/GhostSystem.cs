@@ -603,8 +603,10 @@ namespace Content.Server.Ghost
                         && TryComp<MobThresholdsComponent>(playerEntity, out var thresholds))
                     {
                         var playerDeadThreshold = _mobThresholdSystem.GetThresholdForState(playerEntity.Value, MobState.Dead, thresholds);
+#pragma warning disable CS0618
                         dealtDamage = playerDeadThreshold -
                                       _damageable.GetTotalDamage((playerEntity.Value, damageable));
+#pragma warning restore CS0618
                     }
 
                     DamageSpecifier damage = new(_prototypeManager.Index(AsphyxiationDamageType), dealtDamage);

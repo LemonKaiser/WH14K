@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "size": {
+    "x": 192,
+    "y": 192
+  },
+  "license": "User-Provided",
+  "copyright": "User-provided Leman Russ source sheets assembled for the WH40K fork.",
+  "states": [
+    {
+      "name": "hull",
+      "directions": 4
+    },
+    {
+      "name": "turret",
+      "directions": 4
+    },
+    {
+      "name": "battlecannon",
+      "directions": 4
+    },
+    {
+      "name": "punishercannon",
+      "directions": 4
+    },
+    {
+      "name": "tracks_static",
+      "directions": 4
+    },
+    {
+      "name": "tracks_moving",
+      "directions": 4,
+      "delays": [
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ]
+      ]
+    },
+    {
+      "name": "hull_live",
+      "directions": 1
+    },
+    {
+      "name": "turret_live",
+      "directions": 4
+    },
+    {
+      "name": "battlecannon_live",
+      "directions": 4
+    },
+    {
+      "name": "punishercannon_live",
+      "directions": 4
+    },
+    {
+      "name": "tracks_static_live",
+      "directions": 1
+    },
+    {
+      "name": "tracks_moving_live",
+      "directions": 1,
+      "delays": [
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ]
+      ]
+    }
+  ]
+}

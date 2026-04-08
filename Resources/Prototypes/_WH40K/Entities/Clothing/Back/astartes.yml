@@ -1,0 +1,104 @@
+- type: entity
+  abstract: true
+  parent: ClothingBackpack
+  id: ClothingBackpackAstartesBase
+  suffix: WH40K, Astartes
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+      color: "#2F5DB3"
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#2F5DB3"
+      right:
+      - state: inhand-right
+        color: "#2F5DB3"
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+        color: "#2F5DB3"
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk2Powerpack
+  name: силовой ранец Mk II
+  description: Ранний силовой ранец космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk2_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk2_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk3Powerpack
+  name: силовой ранец Mk III
+  description: Тяжелый силовой ранец космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk3_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk3_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk4Powerpack
+  name: силовой ранец Mk IV
+  description: Силовой ранец космодесантника улучшенного образца.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk4_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk4_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk5Powerpack
+  name: силовой ранец Mk V
+  description: Полевой силовой ранец космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk5_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk5_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk6Powerpack
+  name: силовой ранец Mk VI
+  description: Облегченный силовой ранец космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk7JumpPack
+  name: прыжковый ранец Mk VII
+  description: Прыжковый ранец силовой брони космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk23JumpPack
+  name: прыжковый ранец Mk II/III
+  description: Ранний прыжковый ранец силовой брони космодесантника.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi

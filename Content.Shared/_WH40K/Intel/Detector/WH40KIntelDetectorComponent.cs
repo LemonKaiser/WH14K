@@ -2,6 +2,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.ViewVariables;
 
 namespace Content.Shared._WH40K.Intel.Detector;
 
@@ -50,6 +51,12 @@ public sealed partial class WH40KIntelDetectorComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan ScanDuration { get; set; } = TimeSpan.FromSeconds(1);
 
+    /// <summary>
+    /// Minimum interval between replicated detector state snapshots while scan result is stable.
+    /// </summary>
+    [DataField]
+    public TimeSpan StateSyncInterval = TimeSpan.FromSeconds(1.5);
+
     [DataField, AutoNetworkedField]
     public SoundSpecifier? ScanSound =
         new SoundPathSpecifier("/Audio/_WH40K/Machines/scans.ogg");
@@ -64,6 +71,12 @@ public sealed partial class WH40KIntelDetectorComponent : Component
 
     [DataField]
     public EntityUid? LastUser;
+
+    /// <summary>
+    /// Server-only next allowed network sync timestamp for detector state.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextStateSyncAt;
 }
 
 [Serializable, NetSerializable]

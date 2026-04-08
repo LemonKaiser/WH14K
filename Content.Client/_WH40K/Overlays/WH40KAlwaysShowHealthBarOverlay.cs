@@ -110,7 +110,9 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
 
     private (float ratio, bool inCrit)? CalcProgress(EntityUid uid, WH40KAlwaysShowHealthBarComponent marker, DamageableComponent dmg)
     {
+#pragma warning disable CS0618 // GetTotalDamage: no alternative API for health bar calculation
         var totalDamage = _damageable.GetTotalDamage((uid, dmg));
+#pragma warning restore CS0618
 
         if (marker.UseMobThresholds &&
             _entManager.TryGetComponent(uid, out MobStateComponent? mobState) &&

@@ -43,7 +43,9 @@ public sealed class PopupUIController : UIController, IOnStateEntered<GameplaySt
         if (_popupControl == null)
             return;
 
-        UIManager.RootControl.RemoveChild(_popupControl);
+        if (!_popupControl.Disposed)
+            UIManager.RootControl.RemoveChild(_popupControl);
+
         _popupControl = null;
     }
 

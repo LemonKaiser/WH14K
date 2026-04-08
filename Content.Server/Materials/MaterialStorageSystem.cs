@@ -243,16 +243,10 @@ public sealed class MaterialStorageSystem : SharedMaterialStorageSystem
         if (TryComp<ApcPowerReceiverComponent>(receiver, out var power) && !power.Powered)
             return false;
 
-        var totalVolume = 0;
-        foreach (var (mat, vol) in composition.MaterialComposition)
-        {
-            if (!CanChangeMaterialAmount(receiver, mat, vol * count, storage))
-                return false;
+        var materials = composition.MaterialComposition
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value * count);
 
-            totalVolume += vol * count;
-        }
-
-        return CanTakeVolume(receiver, totalVolume, storage, localOnly: true);
+        return CanChangeMaterialAmount((receiver, storage), materials);
     }
 
     private int GetMaximumInsertableStackCount(

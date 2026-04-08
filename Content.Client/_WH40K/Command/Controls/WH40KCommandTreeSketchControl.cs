@@ -21,6 +21,7 @@ namespace Content.Client._WH40K.Command.Controls;
 /// </summary>
 public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 {
+    private static readonly ISawmill Sawmill = Logger.GetSawmill("wh40k.command");
     private static readonly Color CanvasBackgroundColor = WH40KCommandUiStyles.PanelBackgroundAlt;
     private static readonly Color CanvasBorderColor = WH40KCommandUiStyles.StrongBorder;
     private static readonly Color DomainBackgroundColor = Color.FromHex("#101821");
@@ -311,7 +312,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
         if (!_prototype.TryIndex(profileId, out WH40KCommandTreeProfilePrototype? profile))
         {
-            Logger.ErrorS("wh40k.command", $"Missing command-tree profile prototype '{profileId}'.");
+            Sawmill.Error($"Missing command-tree profile prototype '{profileId}'.");
             return;
         }
 
@@ -330,7 +331,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
         if (!_prototype.TryIndex(profileId, out WH40KCommandTreeCostProfilePrototype? profile))
         {
-            Logger.ErrorS("wh40k.command", $"Missing command-tree cost profile prototype '{profileId}'.");
+            Sawmill.Error($"Missing command-tree cost profile prototype '{profileId}'.");
             _activeCostProfile = null;
             _activeCostProfileId = string.Empty;
             return;
@@ -616,8 +617,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private void EmitDefaultInfo()
     {
         OnNodeInfoChanged?.Invoke(
-            Loc.GetString("wh40k-command-node-upgrade-tree-info-default-title"),
-            Loc.GetString("wh40k-command-node-upgrade-tree-info-default-description"));
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-title"),
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-description"));
     }
 
     private string BuildNodeCaption(TreeNodeVisual node)
@@ -625,11 +626,11 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         var title = Loc.GetString(node.Definition.TitleKey);
         return node.State switch
         {
-            NodeVisualState.Purchased => Loc.GetString("wh40k-command-node-upgrade-tree-node-text-purchased",
+            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-node-text-purchased",
                 ("title", title)),
-            NodeVisualState.LockedByDoctrine => Loc.GetString("wh40k-command-node-upgrade-tree-node-text-doctrine-locked",
+            NodeVisualState.LockedByDoctrine => Loc.GetString("w40k-cmd-upgrade-tree-node-text-doctrine-locked",
                 ("title", title)),
-            NodeVisualState.LockedByParent => Loc.GetString("wh40k-command-node-upgrade-tree-node-text-parent-locked",
+            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-node-text-parent-locked",
                 ("title", title)),
             _ => title
         };
@@ -640,23 +641,23 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         var cost = GetRuntimeCost(node.Definition);
         var statusLine = node.State switch
         {
-            NodeVisualState.Available => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-available-cost",
+            NodeVisualState.Available => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available-cost",
                 ("cost", cost)),
-            NodeVisualState.Purchased => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-purchased"),
-            NodeVisualState.LockedByParent => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-parent-locked"),
+            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-purchased"),
+            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-parent-locked"),
             NodeVisualState.LockedByLevel => Loc.GetString(
-                "wh40k-command-node-upgrade-tree-tooltip-state-level-locked",
+                "w40k-cmd-upgrade-tree-tooltip-state-level-locked",
                 ("level", node.Definition.MinBaseLevel),
                 ("current", _baseLevel)),
             NodeVisualState.LockedByTime => BuildRoundTimeLockText(node.Definition.MinRoundTimeSeconds),
             NodeVisualState.LockedByDoctrine => BuildDoctrineLockStateText(),
-            NodeVisualState.LockedByPoints => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-points-locked",
+            NodeVisualState.LockedByPoints => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-points-locked",
                 ("cost", cost)),
-            NodeVisualState.Inactive => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-inactive"),
-            _ => Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-available")
+            NodeVisualState.Inactive => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-inactive"),
+            _ => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available")
         };
 
-        var detail = Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-template",
+        var detail = Loc.GetString("w40k-cmd-upgrade-tree-tooltip-template",
             ("description", Loc.GetString(node.Definition.DescriptionKey)),
             ("status", statusLine));
         return NormalizeMultiline(detail);
@@ -675,10 +676,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private string BuildDoctrineLockStateText()
     {
         if (string.IsNullOrWhiteSpace(_activeDoctrineId))
-            return Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-doctrine-locked");
+            return Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-doctrine-locked");
 
         var doctrine = WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(_activeDoctrineId, _teamId);
-        return Loc.GetString("wh40k-command-node-upgrade-tree-tooltip-state-doctrine-locked-with-name",
+        return Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-doctrine-locked-with-name",
             ("doctrine", doctrine.Name));
     }
 
@@ -687,7 +688,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         var required = Math.Max(0, requiredRoundSeconds);
         var remaining = Math.Max(0, required - _roundElapsedSeconds);
         return Loc.GetString(
-            "wh40k-command-node-upgrade-tree-tooltip-state-time-locked",
+            "w40k-cmd-upgrade-tree-tooltip-state-time-locked",
             ("time", FormatClock(required)),
             ("left", FormatClock(remaining)));
     }

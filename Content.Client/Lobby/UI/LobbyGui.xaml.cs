@@ -86,6 +86,7 @@ namespace Content.Client.Lobby.UI
             ServerInfoHeading.Text = Loc.GetString("ui-lobby-server-info-block");
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -93,7 +94,9 @@ namespace Content.Client.Lobby.UI
                 _cfg.UnsubValueChanged(CCVars.InfoLinksDiscord, OnDiscordLinkChanged);
             }
 
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
         }
 
         private void OnDiscordButtonPressed(BaseButton.ButtonEventArgs args)

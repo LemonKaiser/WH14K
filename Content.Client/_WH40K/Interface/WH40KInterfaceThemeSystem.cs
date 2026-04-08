@@ -5,6 +5,7 @@ using Content.Client.Lobby;
 using Content.Client._WH40K.LateJoin;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Interface;
+using Content.Shared._WH40K.LateJoin;
 using Robust.Client.Console;
 using Robust.Client.State;
 using Robust.Shared;
@@ -58,7 +59,7 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         _trackManualThemeChanges = true;
 
         if (_ticker.IsGameStarted)
-            _factions.RequestFactions(force: true);
+            _factions.RequestFactions(WH40KFactionSelectionPurpose.Preview, force: true);
     }
 
     public override void Shutdown()
@@ -96,12 +97,12 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
         _lastRoundStarted = started;
 
         if (started)
-            _factions.RequestFactions(force: true);
+            _factions.RequestFactions(WH40KFactionSelectionPurpose.Preview, force: true);
     }
 
-    private void OnFactionsUpdated(IReadOnlyList<Content.Shared._WH40K.LateJoin.WH40KFactionInfo> factions)
+    private void OnFactionsUpdated(WH40KFactionsEvent ev)
     {
-        _wh40kRoundActive = _ticker.IsGameStarted && factions.Count > 0;
+        _wh40kRoundActive = _ticker.IsGameStarted && ev.Factions.Count > 0;
     }
 
     private void OnThemeAssignment(WH40KTeamThemeAssignedEvent ev, EntitySessionEventArgs args)

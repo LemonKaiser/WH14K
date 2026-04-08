@@ -101,4 +101,7 @@ public sealed partial class WH40KOreExtractorComponent : Component
 
     [ViewVariables]
     public TimeSpan NextSpawnAt;
+
+    [ViewVariables]
+    public TimeSpan NextUiRefreshAt;
 }

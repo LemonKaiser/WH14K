@@ -26,4 +26,11 @@ public sealed partial class WH40KChaosSkrizhalComponent : Component
 
     [DataField("attunementInstabilityGain")]
     public float AttunementInstabilityGain = 3f;
+
+    /// <summary>
+    /// Minimal delay between successive UI open attempts by the same user.
+    /// Prevents local spam from thrashing item toggle/UI sync traffic.
+    /// </summary>
+    [DataField("uiInteractionCooldownSeconds")]
+    public float UiInteractionCooldownSeconds = 0.75f;
 }

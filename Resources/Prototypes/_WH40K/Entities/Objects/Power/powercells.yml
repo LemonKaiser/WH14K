@@ -16,6 +16,18 @@
   - type: Riggable
 
 - type: entity
+  id: WH40KPowerCellDefibrillator
+  parent: PowerCellMedium
+  name: sealed defibrillator cell
+  description: A sealed internal cell calibrated for a fixed number of defibrillator shocks.
+  suffix: WH40K
+  components:
+  - type: Battery
+    maxCharge: 500
+    startingCharge: 500
+    pricePerJoule: 0.15
+
+- type: entity
   id: LasgunPowerCell
   parent: WH40KPowerCell
   suffix: WH40K
@@ -153,7 +165,7 @@
   - type: BatterySelfRecharger
     autoRechargeRate: 10
   - type: BatteryAmmoProvider
-    proto: RedLaserHell
+    proto: RedLaserLong
     fireCost: 100
   - type: Battery
     maxCharge: 20000

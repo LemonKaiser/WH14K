@@ -1,0 +1,47 @@
+- type: entity
+  id: LockerWH40KImperium
+  parent: LockerBaseSecure
+  name: imperium locker
+  description: A reinforced locker trimmed in brass and machine-cult iconography.
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: imperium
+    stateDoorOpen: imperium_open
+    stateDoorClosed: imperium_door
+
+- type: entity
+  id: LockerWH40KImperiumArmory
+  parent: LockerBaseSecure
+  name: imperium armory locker
+  description: A grim armory locker marked with purity seals and regiment colors.
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: imperium_armory
+    stateDoorOpen: imperium_armory_open
+    stateDoorClosed: imperium_armory_door
+
+- type: entity
+  id: LockerWH40KChaos
+  parent: LockerBaseSecure
+  name: chaos locker
+  description: A corrupted steel locker scarred with rust, spikes, and heretical marks.
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: chaos
+    stateDoorOpen: chaos_open
+    stateDoorClosed: chaos_door
+
+- type: entity
+  id: LockerWH40KChaosArmory
+  parent: LockerBaseSecure
+  name: chaos armory locker
+  description: A brutal armory locker plated in dark iron and profane crimson panels.
+  components:
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: chaos_armory
+    stateDoorOpen: chaos_armory_open
+    stateDoorClosed: chaos_armory_door

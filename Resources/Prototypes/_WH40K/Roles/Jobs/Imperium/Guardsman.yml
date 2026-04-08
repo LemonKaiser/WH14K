@@ -21,9 +21,9 @@
       - type: WH40KGuardsmanVoice
       - type: Vocal
         sounds:
-          Male: WH40KGuardsmanMaleHuman
-          Female: WH40KGuardsmanFemaleHuman
-          Unsexed: WH40KGuardsmanMaleHuman
+          Male: W40KGdMale
+          Female: W40KGdFemale
+          Unsexed: W40KGdMale
   access:
   - Maintenance
   - External

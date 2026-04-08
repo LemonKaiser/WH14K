@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using Content.Client.Administration.UI.CustomControls;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
@@ -12,9 +13,10 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
+public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow, ILocalizedControl
 {
     private readonly Label _headerTitleLabel;
+    private readonly Label _headerSubtitleLabel;
     private readonly Label _teamLine;
     private readonly Label _phaseLine;
     private readonly PanelContainer _teamBadge;
@@ -31,17 +33,21 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
     private readonly Label _activeMissionRewardLine;
     private readonly Label _activeMissionDescription;
     private readonly Button _pinpointerSyncButton;
+    private readonly Label _activeSectionTitleLabel;
+    private readonly Label _systemSectionTitleLabel;
+    private readonly Label _selectableSectionTitleLabel;
     private readonly BoxContainer _systemRows;
     private readonly BoxContainer _selectableRows;
 
     private Color _accent = WH40KCommandUiStyles.DefaultAccent;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
 
     public event Action<string>? OnTaskSelected;
     public event Action? OnPinpointerSyncRequested;
 
     public WH40KCommandNodeMissionBoardWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-mission-board-window-title");
+        Title = Loc.GetString("w40k-cmd-mission-board-window-title");
         MinSize = SetSize = new Vector2(920, 600);
 
         var root = new BoxContainer
@@ -80,17 +86,18 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-mission-board-window-title"),
+            Text = Loc.GetString("w40k-cmd-mission-board-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
         headerInfo.AddChild(_headerTitleLabel);
-        headerInfo.AddChild(new Label
+        _headerSubtitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-mission-board-active-description"),
+            Text = Loc.GetString("w40k-cmd-mission-board-active-description"),
             StyleClasses = { "LabelSubText" },
             ClipText = true
-        });
+        };
+        headerInfo.AddChild(_headerSubtitleLabel);
 
         _teamLine = new Label
         {
@@ -140,8 +147,9 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         body.AddChild(topRow);
 
         _activeMissionSection = CreateSection(
-            Loc.GetString("wh40k-command-node-mission-board-active-header"),
+            Loc.GetString("w40k-cmd-mission-board-active-header"),
             out var activeMissionBox,
+            out _activeSectionTitleLabel,
             verticalExpand: true);
         _activeMissionSection.HorizontalExpand = true;
         _activeMissionSection.VerticalExpand = true;
@@ -180,7 +188,7 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
 
         _pinpointerSyncButton = new Button
         {
-            Text = Loc.GetString("wh40k-command-node-mission-board-pinpointer-sync-button")
+            Text = Loc.GetString("w40k-cmd-mission-board-pinpointer-sync-button")
         };
         _pinpointerSyncButton.OnPressed += _ => OnPinpointerSyncRequested?.Invoke();
         missionBadgeRow.AddChild(_pinpointerSyncButton);
@@ -220,8 +228,9 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         activeMissionContent.AddChild(missionDescriptionFrame);
 
         var systemSection = CreateSection(
-            Loc.GetString("wh40k-command-node-mission-board-system-header"),
+            Loc.GetString("w40k-cmd-mission-board-system-header"),
             out var systemBox,
+            out _systemSectionTitleLabel,
             verticalExpand: true);
         systemSection.MinWidth = 300;
         systemSection.SizeFlagsStretchRatio = 0.95f;
@@ -245,8 +254,9 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         systemScroll.AddChild(_systemRows);
 
         var selectableSection = CreateSection(
-            Loc.GetString("wh40k-command-node-mission-board-selectable-header"),
+            Loc.GetString("w40k-cmd-mission-board-selectable-header"),
             out var selectableBox,
+            out _selectableSectionTitleLabel,
             verticalExpand: false);
         body.AddChild(selectableSection);
 
@@ -266,22 +276,41 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
             HorizontalExpand = true
         };
         selectableScroll.AddChild(_selectableRows);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-mission-board-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-mission-board-window-title");
+        _headerSubtitleLabel.Text = Loc.GetString("w40k-cmd-mission-board-active-description");
+        _activeSectionTitleLabel.Text = Loc.GetString("w40k-cmd-mission-board-active-header");
+        _systemSectionTitleLabel.Text = Loc.GetString("w40k-cmd-mission-board-system-header");
+        _selectableSectionTitleLabel.Text = Loc.GetString("w40k-cmd-mission-board-selectable-header");
+        _pinpointerSyncButton.Text = Loc.GetString("w40k-cmd-mission-board-pinpointer-sync-button");
+
+        if (_latestState != null)
+            UpdateState(_latestState);
     }
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        _latestState = state;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
 
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
-        _phaseLine.Text = Loc.GetString("wh40k-command-node-phase",
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+
+        _teamLine.Text = Loc.GetString("w40k-cmd-team", ("team", resolvedTeam));
+        _phaseLine.Text = Loc.GetString("w40k-cmd-phase",
             ("phase", Loc.GetString(GetPhaseKey(state.Phase))));
 
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName)
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(resolvedTeam)
             ? "?"
-            : state.TeamName.ToUpperInvariant();
+            : resolvedTeam.ToUpperInvariant();
 
         _phaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase);
         _phaseBadgeLabel.Text = Loc.GetString(GetPhaseKey(state.Phase));
@@ -302,15 +331,15 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
             _missionStatusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
                 Color.FromHex("#223B2F".AsSpan()),
                 WH40KCommandUiStyles.ReadyBadge);
-            _missionStatusBadgeLabel.Text = Loc.GetString("wh40k-command-node-mission-board-status-active");
+            _missionStatusBadgeLabel.Text = Loc.GetString("w40k-cmd-mission-board-status-active");
 
-            _activeStatusLine.Text = Loc.GetString("wh40k-command-node-mission-board-active-status",
-                ("status", $"{scopeLabel} / {Loc.GetString("wh40k-command-node-mission-board-status-active")}"));
+            _activeStatusLine.Text = Loc.GetString("w40k-cmd-mission-board-active-status",
+                ("status", $"{scopeLabel} / {Loc.GetString("w40k-cmd-mission-board-status-active")}"));
             _activeMissionTitleLine.Text = WH40KCommandUiStyles.ResolveLocalizedOrRaw(runtimeMission.MissionTitle);
             _activeMissionTitleLine.ModulateSelfOverride = _accent;
-            _activeMissionTimerLine.Text = Loc.GetString("wh40k-command-node-mission-board-active-timer",
+            _activeMissionTimerLine.Text = Loc.GetString("w40k-cmd-mission-board-active-timer",
                 ("timer", $"{scopeLabel}: {FormatDuration(runtimeMission.RemainingSeconds)}"));
-            _activeMissionRewardLine.Text = Loc.GetString("wh40k-command-node-mission-board-runtime-reward",
+            _activeMissionRewardLine.Text = Loc.GetString("w40k-cmd-mission-board-runtime-reward",
                 ("major", runtimeMission.RewardMajorDevelopmentPoints),
                 ("minor", runtimeMission.RewardMinorDevelopmentPoints),
                 ("tempo", runtimeMission.RewardTempoBonusPercent),
@@ -325,17 +354,17 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
             _missionStatusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
                 Color.FromHex("#22313B".AsSpan()),
                 WH40KCommandUiStyles.InfoBadge);
-            _missionStatusBadgeLabel.Text = Loc.GetString("wh40k-command-node-mission-board-status-pending");
+            _missionStatusBadgeLabel.Text = Loc.GetString("w40k-cmd-mission-board-status-pending");
 
-            _activeStatusLine.Text = Loc.GetString("wh40k-command-node-mission-board-active-status",
-                ("status", Loc.GetString("wh40k-command-node-mission-board-status-pending")));
-            _activeMissionTitleLine.Text = Loc.GetString("wh40k-command-node-mission-board-no-active-title");
+            _activeStatusLine.Text = Loc.GetString("w40k-cmd-mission-board-active-status",
+                ("status", Loc.GetString("w40k-cmd-mission-board-status-pending")));
+            _activeMissionTitleLine.Text = Loc.GetString("w40k-cmd-mission-board-no-active-title");
             _activeMissionTitleLine.ModulateSelfOverride = Color.White;
-            _activeMissionTimerLine.Text = Loc.GetString("wh40k-command-node-mission-board-active-timer",
-                ("timer", Loc.GetString("wh40k-command-node-mission-board-no-active-timer")));
-            _activeMissionRewardLine.Text = Loc.GetString("wh40k-command-node-mission-board-no-active-reward");
+            _activeMissionTimerLine.Text = Loc.GetString("w40k-cmd-mission-board-active-timer",
+                ("timer", Loc.GetString("w40k-cmd-mission-board-no-active-timer")));
+            _activeMissionRewardLine.Text = Loc.GetString("w40k-cmd-mission-board-no-active-reward");
             _activeMissionDescription.Text = CompactText(
-                Loc.GetString("wh40k-command-node-mission-board-no-active-description"),
+                Loc.GetString("w40k-cmd-mission-board-no-active-description"),
                 120);
             _pinpointerSyncButton.Disabled = true;
         }
@@ -344,7 +373,7 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         RebuildSelectableTasks(state.MissionBoard);
     }
 
-    private PanelContainer CreateSection(string title, out BoxContainer content, bool verticalExpand)
+    private PanelContainer CreateSection(string title, out BoxContainer content, out Label titleLabel, bool verticalExpand)
     {
         var section = new PanelContainer
         {
@@ -369,12 +398,13 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
             PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
         sectionRoot.AddChild(titleBar);
-        titleBar.AddChild(new Label
+        titleLabel = new Label
         {
             Text = title,
             StyleClasses = { "LabelHeading" },
             ClipText = true
-        });
+        };
+        titleBar.AddChild(titleLabel);
 
         content = new BoxContainer
         {
@@ -394,7 +424,7 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
 
         if (mission.SystemTasks.Length == 0)
         {
-            _systemRows.AddChild(CreateEmptyCard(Loc.GetString("wh40k-command-node-mission-board-system-empty")));
+            _systemRows.AddChild(CreateEmptyCard(Loc.GetString("w40k-cmd-mission-board-system-empty")));
             return;
         }
 
@@ -467,7 +497,7 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         if (mission.SelectableTasks.Length == 0)
         {
             _selectableRows.AddChild(CreateEmptyCard(
-                Loc.GetString("wh40k-command-node-mission-board-selectable-empty"),
+                Loc.GetString("w40k-cmd-mission-board-selectable-empty"),
                 minWidth: 320));
             return;
         }
@@ -535,10 +565,10 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         stateBadge.AddChild(new Label
         {
             Text = selected
-                ? Loc.GetString("wh40k-command-node-mission-board-selectable-selected-button")
+                ? Loc.GetString("w40k-cmd-mission-board-selectable-selected-button")
                 : locked
-                    ? Loc.GetString("wh40k-command-node-mission-board-selectable-locked-button")
-                    : Loc.GetString("wh40k-command-node-mission-board-selectable-select-button")
+                    ? Loc.GetString("w40k-cmd-mission-board-selectable-locked-button")
+                    : Loc.GetString("w40k-cmd-mission-board-selectable-select-button")
         });
         header.AddChild(stateBadge);
 
@@ -564,10 +594,10 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
         });
 
         var buttonText = selected
-            ? Loc.GetString("wh40k-command-node-mission-board-selectable-selected-button")
+            ? Loc.GetString("w40k-cmd-mission-board-selectable-selected-button")
             : locked
-                ? Loc.GetString("wh40k-command-node-mission-board-selectable-locked-button")
-                : Loc.GetString("wh40k-command-node-mission-board-selectable-select-button");
+                ? Loc.GetString("w40k-cmd-mission-board-selectable-locked-button")
+                : Loc.GetString("w40k-cmd-mission-board-selectable-select-button");
 
         var button = new Button
         {
@@ -655,9 +685,9 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
     {
         return mission.Scope switch
         {
-            WH40KCommandDynamicMissionScope.Global => Loc.GetString("wh40k-command-node-mission-board-scope-global"),
-            WH40KCommandDynamicMissionScope.Faction => Loc.GetString("wh40k-command-node-mission-board-scope-faction"),
-            _ => Loc.GetString("wh40k-command-node-mission-board-scope-global")
+            WH40KCommandDynamicMissionScope.Global => Loc.GetString("w40k-cmd-mission-board-scope-global"),
+            WH40KCommandDynamicMissionScope.Faction => Loc.GetString("w40k-cmd-mission-board-scope-faction"),
+            _ => Loc.GetString("w40k-cmd-mission-board-scope-global")
         };
     }
 
@@ -665,10 +695,10 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow
     {
         return status switch
         {
-            WH40KCommandMissionBoardTaskStatus.Pending => "wh40k-command-node-mission-board-status-pending",
-            WH40KCommandMissionBoardTaskStatus.Active => "wh40k-command-node-mission-board-status-active",
-            WH40KCommandMissionBoardTaskStatus.Queued => "wh40k-command-node-mission-board-status-queued",
-            _ => "wh40k-command-node-mission-board-status-pending"
+            WH40KCommandMissionBoardTaskStatus.Pending => "w40k-cmd-mission-board-status-pending",
+            WH40KCommandMissionBoardTaskStatus.Active => "w40k-cmd-mission-board-status-active",
+            WH40KCommandMissionBoardTaskStatus.Queued => "w40k-cmd-mission-board-status-queued",
+            _ => "w40k-cmd-mission-board-status-pending"
         };
     }
 

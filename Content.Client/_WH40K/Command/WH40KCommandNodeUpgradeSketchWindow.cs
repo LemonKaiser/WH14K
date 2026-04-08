@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Client._WH40K.Command.Controls;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Robust.Client.Graphics;
@@ -11,12 +12,13 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
+public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow, ILocalizedControl
 {
     public event Action<string>? OnTreeNodePurchaseRequested;
 
     private readonly StyleBoxFlat _headerStyle;
     private readonly Label _headerTitleLabel;
+    private readonly Label _headerDraftNoteLabel;
     private readonly Label _teamLine;
     private readonly Label _upgradePointsLine;
     private readonly Label _doctrineLine;
@@ -29,10 +31,12 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
     private readonly Label _hoverDescriptionLine;
 
     private Color _accent = WH40KCommandUiStyles.DefaultAccent;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
+    private string _latestDoctrineId = string.Empty;
 
     public WH40KCommandNodeUpgradeSketchWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title");
+        Title = Loc.GetString("w40k-cmd-upgrade-sketch-window-title");
         MinSize = SetSize = new Vector2(960, 660);
 
         var root = new BoxContainer
@@ -71,7 +75,7 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title"),
+            Text = Loc.GetString("w40k-cmd-upgrade-sketch-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
@@ -91,12 +95,14 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
             ClipText = true
         };
         headerInfo.AddChild(_headerTitleLabel);
-        headerInfo.AddChild(new Label
+
+        _headerDraftNoteLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-upgrade-sketch-window-draft-note"),
+            Text = Loc.GetString("w40k-cmd-upgrade-sketch-window-draft-note"),
             StyleClasses = { "LabelSubText" },
             ClipText = true
-        });
+        };
+        headerInfo.AddChild(_headerDraftNoteLabel);
         headerInfo.AddChild(_teamLine);
         headerInfo.AddChild(_upgradePointsLine);
         headerInfo.AddChild(_doctrineLine);
@@ -189,13 +195,26 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         treeScroll.AddChild(_treeSketch);
         RebuildDomainHeaders(_treeSketch.ActiveDomainIds);
 
-        OnNodeInfoChanged(
-            Loc.GetString("wh40k-command-node-upgrade-tree-info-default-title"),
-            Loc.GetString("wh40k-command-node-upgrade-tree-info-default-description"));
+        ApplyDefaultHoverInfo();
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-upgrade-sketch-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-upgrade-sketch-window-title");
+        _headerDraftNoteLabel.Text = Loc.GetString("w40k-cmd-upgrade-sketch-window-draft-note");
+        ApplyDefaultHoverInfo();
+        RebuildDomainHeaders(_treeSketch.ActiveDomainIds);
+
+        if (_latestState != null)
+            UpdateState(_latestState, _latestDoctrineId);
     }
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state, string activeDoctrineId)
     {
+        _latestState = state;
+        _latestDoctrineId = activeDoctrineId;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
@@ -205,17 +224,18 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 
         _treeSketch.AccentColor = _accent;
 
-        Title = Loc.GetString("wh40k-command-node-upgrade-sketch-window-title-team", ("team", state.TeamName));
-        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
-        _upgradePointsLine.Text = CompactLine(Loc.GetString("wh40k-command-node-upgrade-sketch-window-points",
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+        Title = Loc.GetString("w40k-cmd-upgrade-sketch-window-title-team", ("team", resolvedTeam));
+        _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeam)));
+        _upgradePointsLine.Text = CompactLine(Loc.GetString("w40k-cmd-upgrade-sketch-window-points",
             ("points", state.CommandPoints)));
         _doctrineLine.Text = CompactLine(string.IsNullOrWhiteSpace(activeDoctrineId)
-            ? Loc.GetString("wh40k-command-node-upgrade-sketch-window-doctrine-none")
-            : Loc.GetString("wh40k-command-node-upgrade-sketch-window-doctrine-active",
+            ? Loc.GetString("w40k-cmd-upgrade-sketch-window-doctrine-none")
+            : Loc.GetString("w40k-cmd-upgrade-sketch-window-doctrine-active",
                 ("doctrine", WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(activeDoctrineId, state.TeamId).Name)));
 
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = CompactLine(string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant());
+        _teamBadgeLabel.Text = CompactLine(string.IsNullOrWhiteSpace(state.TeamName) ? "?" : resolvedTeam.ToUpperInvariant());
 
         _treeSketch.UpdateState(state, activeDoctrineId);
         RebuildDomainHeaders(_treeSketch.ActiveDomainIds);
@@ -226,6 +246,13 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
         _hoverTitleLine.Text = title;
         _hoverTitleLine.ModulateSelfOverride = _accent;
         _hoverDescriptionLine.Text = CompactLine(description);
+    }
+
+    private void ApplyDefaultHoverInfo()
+    {
+        OnNodeInfoChanged(
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-title"),
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-description"));
     }
 
     private static string CompactLine(string text)
@@ -267,7 +294,7 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow
 
     private static string ResolveDomainLabel(string domainId)
     {
-        return Loc.GetString($"wh40k-command-node-upgrade-sketch-domain-{domainId}");
+        return Loc.GetString($"w40k-cmd-upgrade-sketch-domain-{domainId}");
     }
 
     private void OnTreeNodePurchaseRequestedInternal(string nodeId)

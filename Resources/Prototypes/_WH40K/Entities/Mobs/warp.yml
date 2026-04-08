@@ -1,0 +1,26 @@
+- type: entity
+  parent: MobHuman
+  id: MobWH40KWarpDoppelganger
+  name: warp doppelganger
+  description: A hostile reflection torn free from the veil.
+  components:
+  - type: NpcFactionMember
+    factions:
+      - SimpleHostile
+  - type: InputMover
+  - type: MobMover
+  - type: HTN
+    rootTask:
+      task: SimpleHumanoidHostileCompound
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 4.5
+  - type: PointLight
+    radius: 2
+    energy: 2
+    color: "#6f2cff"
+    castShadows: false

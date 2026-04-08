@@ -30,3 +30,123 @@
     steps: 1
     zeroVisible: false
   - type: Appearance
+
+- type: entity
+  parent: [ BaseWeaponLauncher, BaseMajorContraband ]
+  id: WeaponRocketLauncherImperial
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_imperial.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_imperial.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,2
+  - type: Gun
+    fireRate: 0.5
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: AmmoCounter
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CartridgeRocket
+    proto: CartridgeRocketHE
+    capacity: 1
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+  - type: GunRequiresWield
+
+- type: entity
+  parent: [ BaseWeaponLauncher, BaseMajorContraband ]
+  id: WeaponRocketLauncherChaos
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_chaos.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_chaos.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,2
+  - type: Gun
+    fireRate: 0.5
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: AmmoCounter
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CartridgeRocket
+    proto: CartridgeRocketHE
+    capacity: 1
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+  - type: GunRequiresWield
+
+- type: entity
+  parent: [ BaseWeaponLauncher, BaseMajorContraband ]
+  id: WeaponRocketLauncherImperialDisposable
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_imperial_disposable.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_imperial_disposable.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,2
+  - type: Gun
+    fireRate: 0.5
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: AmmoCounter
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeRocketHE
+    capacity: 1
+    count: 1
+  - type: GunRequiresWield
+
+- type: entity
+  parent: [ BaseWeaponLauncher, BaseMajorContraband ]
+  id: WeaponRocketLauncherChaosDisposable
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_chaos_disposable.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/rpg_chaos_disposable.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,2
+  - type: Gun
+    fireRate: 0.5
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: AmmoCounter
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeRocketHE
+    capacity: 1
+    count: 1
+  - type: GunRequiresWield

@@ -203,6 +203,11 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier1
   recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
   - Syringe
@@ -224,7 +229,7 @@
   - Ointment
   - Gauze
   - Implanter
-  - Defibrillator
+  - WH40KDefibrillator
   - HandheldHealthAnalyzer
   - DiseaseSwab
   - BodyBag
@@ -248,6 +253,11 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier2
   recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
   - Syringe
@@ -269,7 +279,7 @@
   - Ointment
   - Gauze
   - Implanter
-  - Defibrillator
+  - WH40KDefibrillator
   - HandheldHealthAnalyzer
   - DiseaseSwab
   - BodyBag
@@ -289,29 +299,15 @@
   - PowerCellMedium
   - SignallerAdvanced
   - HandHeldMassScanner
-  - CryostasisBeaker
-  - SyringeCryostasis
-  - BluespaceBeaker
-  - SyringeBluespace
-  - LauncherSyringe
-  - MiniSyringe
-  - AdvancedJetInjector
-  - HolofanProjector
-  - AnomalyScanner
-  - NodeScanner
-  - AnomalyLocator
-  - AnomalyLocatorWide
-  - DeviceQuantumSpinInverter
-  - DeviceDesynchronizer
-  - PowerCellHigh
-  - MiningDrill
-  - MineralScannerEmpty
-  - AdvancedMineralScannerEmpty
-  - OreBagOfHolding
 
 - type: latheRecipePack
   id: WH40KProtolatheTier3
   recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
   - Syringe
@@ -333,7 +329,7 @@
   - Ointment
   - Gauze
   - Implanter
-  - Defibrillator
+  - WH40KDefibrillator
   - HandheldHealthAnalyzer
   - DiseaseSwab
   - BodyBag
@@ -353,35 +349,6 @@
   - PowerCellMedium
   - SignallerAdvanced
   - HandHeldMassScanner
-  - CryostasisBeaker
-  - SyringeCryostasis
-  - BluespaceBeaker
-  - SyringeBluespace
-  - LauncherSyringe
-  - MiniSyringe
-  - AdvancedJetInjector
-  - HolofanProjector
-  - AnomalyScanner
-  - NodeScanner
-  - AnomalyLocator
-  - AnomalyLocatorWide
-  - DeviceQuantumSpinInverter
-  - DeviceDesynchronizer
-  - PowerCellHigh
-  - MiningDrill
-  - MineralScannerEmpty
-  - AdvancedMineralScannerEmpty
-  - OreBagOfHolding
-  - ClothingBackpackHolding
-  - ClothingBackpackSatchelHolding
-  - ClothingBackpackDuffelHolding
-  - ClothingShoesBootsMagSci
-  - ClothingShoesBootsMoon
-  - ClothingShoesBootsSpeed
-  - ClothingShoesBootsJump
-  - PowerCellMicroreactor
-  - PowerCellHyper
-  - MiningDrillDiamond
 
 - type: latheRecipePack
   id: WH40KProtolatheDynamic

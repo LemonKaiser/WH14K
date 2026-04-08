@@ -12,7 +12,7 @@ public sealed partial class WH40KChaosKhorneRuntimeComponent : Component
     public bool BaselineCaptured;
     public float BaseWalkSpeed;
     public float BaseSprintSpeed;
-    public SortedDictionary<FixedPoint2, MobState>? BaselineThresholds;
+    public SortedDictionary<FixedPoint2, MobState> BaselineThresholds = new();
     public TimeSpan JumpSpeedBuffExpiresAt;
     public float JumpSpeedBuffMultiplier = 1f;
     public int DashComboRemaining;

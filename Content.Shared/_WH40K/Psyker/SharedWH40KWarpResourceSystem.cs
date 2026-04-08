@@ -17,11 +17,7 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
 
     public override void Initialize()
     {
-        // ComponentStartup is exclusive per (component,event), so role bootstrap stays centralized here.
-        SubscribeLocalEvent<WH40KPsykerRoleComponent, ComponentStartup>(OnPsykerRoleStartup);
-        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, ComponentStartup>(OnChaosRoleStartup);
         SubscribeLocalEvent<WH40KWarpResourceComponent, ComponentStartup>(OnWarpResourceStartup);
-        SubscribeLocalEvent<WH40KWarpInstabilityComponent, ComponentStartup>(OnWarpInstabilityStartup);
         SubscribeLocalEvent<WH40KWarpActionCostComponent, ActionValidateEvent>(OnValidateWarpAction);
         SubscribeLocalEvent<WH40KWarpActionCostComponent, ActionPerformedEvent>(OnWarpActionPerformed);
     }
@@ -52,29 +48,17 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             warp.NextNetworkSyncAt = now + PassiveNetworkSyncCooldown;
             Dirty(uid, warp);
         }
-
-        var instabilityQuery = EntityQueryEnumerator<WH40KWarpInstabilityComponent>();
-        while (instabilityQuery.MoveNext(out var uid, out var instability))
-        {
-            if (instability.DecayPerSecond <= 0f || instability.CurrentInstability <= 0f)
-                continue;
-
-            var next = MathF.Max(0f, instability.CurrentInstability - instability.DecayPerSecond * frameTime);
-            if (next >= instability.CurrentInstability)
-                continue;
-
-            instability.CurrentInstability = next;
-            if (now < instability.NextNetworkSyncAt)
-                continue;
-
-            instability.NextNetworkSyncAt = now + PassiveNetworkSyncCooldown;
-            Dirty(uid, instability);
-        }
     }
 
     private void OnValidateWarpAction(Entity<WH40KWarpActionCostComponent> ent, ref ActionValidateEvent args)
     {
         if (!HasAllowedRole(args.User, ent.Comp))
+        {
+            args.Invalid = true;
+            return;
+        }
+
+        if (IsWarpSealed(args.User))
         {
             args.Invalid = true;
             return;
@@ -95,6 +79,11 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
         if (!HasAllowedRole(args.Performer, ent.Comp))
             return;
 
+        if (IsWarpSealed(args.Performer))
+            return;
+
+        var actionKey = ResolveActionKey(ent.Owner);
+
         if (ent.Comp.WarpChargeCost > 0f &&
             TryComp<WH40KWarpResourceComponent>(args.Performer, out var warp))
         {
@@ -107,20 +96,11 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             }
         }
 
-        var castEvent = new WH40KWarpActionCastEvent(args.Performer, ent.Owner, ResolveActionKey(ent.Owner));
+        var castEvent = new WH40KWarpActionCastEvent(args.Performer, ent.Owner, actionKey);
         RaiseLocalEvent(args.Performer, castEvent);
 
-        if (ent.Comp.InstabilityGain > 0f &&
-            TryComp<WH40KWarpInstabilityComponent>(args.Performer, out var instability))
-        {
-            var next = Math.Clamp(instability.CurrentInstability + ent.Comp.InstabilityGain, 0f, instability.MaxInstability);
-            if (next > instability.CurrentInstability)
-            {
-                instability.CurrentInstability = next;
-                instability.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
-                Dirty(args.Performer, instability);
-            }
-        }
+        if (ent.Comp.InstabilityGain > 0f)
+            RaiseLocalEvent(new WH40KWarpInstabilityContributionEvent(args.Performer, ent.Comp.InstabilityGain, actionKey));
     }
 
     private bool HasAllowedRole(EntityUid uid, WH40KWarpActionCostComponent cost)
@@ -130,6 +110,13 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
 
         return cost.AllowPsykerRole && HasComp<WH40KPsykerRoleComponent>(uid) ||
                cost.AllowChaosRole && HasComp<WH40KChaosGiftRoleComponent>(uid);
+    }
+
+    private bool IsWarpSealed(EntityUid uid)
+    {
+        return TryComp<WH40KWarpInstabilityComponent>(uid, out var instability) &&
+               instability.DecayPerSecond <= 0f &&
+               instability.CurrentInstability + 0.001f >= instability.MaxInstability;
     }
 
     private string ResolveActionKey(EntityUid actionUid)
@@ -160,26 +147,5 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             return;
 
         component.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
-    }
-
-    private void OnWarpInstabilityStartup(EntityUid uid, WH40KWarpInstabilityComponent component, ref ComponentStartup args)
-    {
-        if (!_netManager.IsServer)
-            return;
-
-        component.NextNetworkSyncAt = _timing.CurTime + PassiveNetworkSyncCooldown;
-    }
-
-    private void OnChaosRoleStartup(EntityUid uid, WH40KChaosGiftRoleComponent component, ref ComponentStartup args)
-    {
-        if (!_netManager.IsServer)
-            return;
-
-        EnsureComp<WH40KWarpResourceComponent>(uid);
-        EnsureComp<WH40KWarpInstabilityComponent>(uid);
-        EnsureComp<WH40KChaosGiftProgressionComponent>(uid);
-        EnsureComp<WH40KChaosGiftStarterActionLoadoutComponent>(uid);
-
-        RaiseLocalEvent(uid, new WH40KChaosRoleStartupEvent(uid));
     }
 }

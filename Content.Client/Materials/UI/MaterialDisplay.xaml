@@ -1,23 +1,29 @@
 <PanelContainer xmlns="https://spacestation14.io"
                 HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal">
-        <TextureRect Name="Icon"
-                     Access="Public"
-                     MinSize="32 32"
-                     RectClipContent="True" />
+    <BoxContainer Orientation="Horizontal"
+                  Margin="8 6 8 6"
+                  SeparationOverride="8">
+        <PanelContainer Name="AccentBar"
+                        MinWidth="4" />
+        <PanelContainer Name="IconPanel">
+            <TextureRect Name="Icon"
+                         Access="Public"
+                         MinSize="28 28"
+                         Margin="3"
+                         RectClipContent="True" />
+        </PanelContainer>
         <BoxContainer Orientation="Vertical"
                       HorizontalExpand="True"
-                      VerticalExpand="False">
+                      VerticalAlignment="Center">
             <Label Name="ProductName"
                    Access="Public"
                    HorizontalExpand="True"
                    ClipText="True"
-                   Margin="4 4 4 4"/>
+                   Margin="0 2 0 2" />
         </BoxContainer>
         <BoxContainer Name="Content"
                       Orientation="Horizontal"
-                      HorizontalAlignment="Right">
-            <!--Here go buttons which added in c#-->
-        </BoxContainer>
+                      HorizontalAlignment="Right"
+                      SeparationOverride="4" />
     </BoxContainer>
 </PanelContainer>

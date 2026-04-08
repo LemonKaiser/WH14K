@@ -9,6 +9,7 @@ using Content.Shared._WH40K.Sentry.Laptop;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
+using Content.Shared.GameTicking;
 using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.Ghost;
 using Content.Shared.Interaction;
@@ -69,6 +70,8 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         SubscribeLocalEvent<WH40KSentryLaptopComponent, ComponentShutdown>(OnLaptopShutdown);
         SubscribeLocalEvent<WH40KSentryLaptopComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<WH40KSentryLaptopComponent, BoundUIClosedEvent>(OnUiClosed);
+
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         SubscribeLocalEvent<DeployableTurretComponent, ComponentShutdown>(OnTurretShutdown);
 
@@ -191,6 +194,13 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         UnlinkAllTurrets(laptop);
         ClearWatchersForLaptop(laptop.Owner);
         ClearLaptopRuntimeState(laptop.Owner);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _alertsByLaptop.Clear();
+        _alertCooldowns.Clear();
+        _lastTurretStates.Clear();
     }
 
     private void OnUiOpened(Entity<WH40KSentryLaptopComponent> laptop, ref BoundUIOpenedEvent args)
@@ -841,7 +851,9 @@ public sealed class WH40KSentryLaptopSystem : EntitySystem
         if (maxHealth <= 0f)
             maxHealth = 100f;
 
+#pragma warning disable CS0618 // GetTotalDamage: no alternative API for health calculation
         var damage = _damageable.GetTotalDamage((turret, damageable)).Float();
+#pragma warning restore CS0618
         health = Math.Max(0f, maxHealth - damage);
         return true;
     }

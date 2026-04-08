@@ -143,20 +143,18 @@ public sealed class LobbyUIController : UIController, IOnStateEntered<LobbyState
         if (_savePanel != null)
         {
             _savePanel.Close();
-            _savePanel.Dispose();
+            _savePanel.Orphan();
             _savePanel = null;
         }
 
         if (_profileEditor != null)
         {
             _profileEditor.Orphan();
-            _profileEditor.Dispose();
         }
 
         if (_characterSetup != null)
         {
             _characterSetup.Orphan();
-            _characterSetup.Dispose();
         }
 
         _characterSetup = null;

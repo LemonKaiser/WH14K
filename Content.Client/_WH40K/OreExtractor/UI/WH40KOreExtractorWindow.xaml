@@ -1,0 +1,176 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc 'wh40k-ore-extractor-ui-window-title'}"
+    MinSize="744 496"
+    SetSize="780 520"
+    Resizable="False">
+    <PanelContainer Name="RootFrame">
+        <BoxContainer Name="RootLayout"
+                      Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <PanelContainer Name="HeaderPanel"
+                            Margin="8 6 8 0">
+                <BoxContainer Orientation="Vertical"
+                              Margin="12 9 12 9"
+                              SeparationOverride="2">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-ore-extractor-ui-window-title'}"
+                           StyleClasses="LabelKeyText" />
+                    <RichTextLabel Name="HeaderSubtitleLabel"
+                                   Text="{Loc 'wh40k-ore-extractor-ui-subtitle'}"
+                                   HorizontalExpand="True"
+                                   StyleClasses="LabelSubText" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          Margin="8 8 8 0"
+                          SeparationOverride="6">
+                <PanelContainer Name="StatusCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="StatusCardLabel"
+                               Text="{Loc 'wh40k-ore-extractor-ui-summary-status-label'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="StatusValueLabel"
+                               Text="{Loc 'wh40k-ore-extractor-ui-status-ready'}"
+                               ClipText="True" />
+                        <RichTextLabel Name="StatusHintLabel"
+                                       Text="{Loc 'wh40k-ore-extractor-ui-status-hint-ready'}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="TierCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="TierCardLabel"
+                               Text="{Loc 'wh40k-ore-extractor-ui-summary-tier-label'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="TierValueLabel"
+                               Text="T0 / L1"
+                               ClipText="True" />
+                        <RichTextLabel Name="TierHintLabel"
+                                       Text="-"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="YieldCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="YieldCardLabel"
+                               Text="{Loc 'wh40k-ore-extractor-ui-summary-yield-label'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="YieldValueLabel"
+                               Text="x1 / 8s"
+                               ClipText="True" />
+                        <RichTextLabel Name="YieldHintLabel"
+                                       Text="-"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <PanelContainer Name="ControlPanel"
+                            Margin="8 8 8 0">
+                <BoxContainer Orientation="Vertical"
+                              Margin="12 10 12 10"
+                              SeparationOverride="8">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="6">
+                        <Button Name="ToggleExtractionButton"
+                                Text="{Loc 'wh40k-ore-extractor-ui-button-stop'}"
+                                HorizontalExpand="True"
+                                MinHeight="34" />
+                        <Button Name="SetRandomModeButton"
+                                Text="{Loc 'wh40k-ore-extractor-ui-button-random'}"
+                                HorizontalExpand="True"
+                                MinHeight="34" />
+                    </BoxContainer>
+
+                    <PanelContainer Name="ModeBadge">
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="9 6 9 6"
+                                      SeparationOverride="2">
+                            <Label Name="ModeKeyLabel"
+                                   Text="{Loc 'wh40k-ore-extractor-ui-selection-label'}"
+                                   StyleClasses="LabelSubText" />
+                            <RichTextLabel Name="ModeValueLabel"
+                                           Text="{Loc 'wh40k-ore-extractor-ui-selected-ore-random'}"
+                                           HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="OrePanel"
+                            Margin="8 8 8 0"
+                            VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              Margin="12 10 12 10"
+                              SeparationOverride="8"
+                              VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  SeparationOverride="2">
+                        <Label Name="OrePanelTitleLabel"
+                               Text="{Loc 'wh40k-ore-extractor-ui-ore-panel-title'}"
+                               StyleClasses="LabelKeyText" />
+                        <RichTextLabel Name="OrePanelSubtitleLabel"
+                                       Text="{Loc 'wh40k-ore-extractor-ui-ore-panel-subtitle'}"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+
+                    <Label Name="OreEmptyLabel"
+                           Text="{Loc 'wh40k-ore-extractor-ui-ore-empty'}"
+                           HorizontalAlignment="Center"
+                           Margin="10 10 10 6"
+                           Visible="False" />
+
+                    <ScrollContainer Name="OreScrollContainer"
+                                     HScrollEnabled="False"
+                                     HorizontalExpand="True"
+                                     VerticalExpand="True">
+                        <GridContainer Name="OreButtonsGrid"
+                                       Columns="2"
+                                       Margin="0 2 0 2"
+                                       HSeparationOverride="6"
+                                       VSeparationOverride="6" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Name="FooterWrapper"
+                          Orientation="Vertical">
+                <PanelContainer Name="FooterDivider"
+                                Margin="8 8 8 0" />
+                <BoxContainer Name="FooterBar"
+                              Orientation="Horizontal"
+                              Margin="12 0 6 8">
+                    <RichTextLabel Name="FooterLabel"
+                                   HorizontalExpand="True"
+                                   StyleClasses="WindowFooterText" />
+                    <Label Name="FooterRightLabel"
+                           ClipText="True"
+                           Text="{Loc 'wh40k-ore-extractor-ui-footer-right'}"
+                           StyleClasses="WindowFooterText"
+                           HorizontalAlignment="Right"
+                           HorizontalExpand="True"
+                           Margin="0 0 4 0" />
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</controls:FancyWindow>

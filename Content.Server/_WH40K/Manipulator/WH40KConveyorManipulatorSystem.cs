@@ -23,6 +23,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Manipulator;
 
@@ -31,6 +32,11 @@ namespace Content.Server._WH40K.Manipulator;
 /// </summary>
 public sealed class WH40KConveyorManipulatorSystem : EntitySystem
 {
+    private static readonly TimeSpan EmptyInputRetryDelay = TimeSpan.FromSeconds(0.5);
+    private static readonly TimeSpan IncompatibleItemRetryDelay = TimeSpan.FromSeconds(0.75);
+    private static readonly TimeSpan ReceiverCapacityRetryDelay = TimeSpan.FromSeconds(0.35);
+    private static readonly TimeSpan NoPowerRetryDelay = TimeSpan.FromSeconds(1);
+
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
@@ -43,6 +49,8 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
     [Dependency] private readonly MaterialReclaimerSystem _materialReclaimer = default!;
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private readonly _WH40K.Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<EntityUid> _tileEntities = new();
     private readonly List<EntityUid> _leftCandidates = new();
@@ -112,6 +120,8 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        using var scope = _culture.CreateScope(args.Examiner);
+
         var statusKey = ent.Comp.Status switch
         {
             WH40KManipulatorStatus.Busy => "wh40k-manipulator-status-busy",
@@ -140,6 +150,7 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        using var scope = _attribution.EnterScope("manipulator.auto_conveyor_manipulator");
         var now = _timing.CurTime;
         CleanupStaleClaims(now);
 
@@ -200,16 +211,17 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
     private void UpdateIdle(Entity<WH40KConveyorManipulatorComponent, TransformComponent> manipulator, TimeSpan now)
     {
         var (uid, component, xform) = manipulator;
-        component.NextTransferAt = now + TimeSpan.FromSeconds(MathF.Max(0.05f, component.TransferCooldown));
 
         if (component.RequirePowered && !IsPowered(uid))
         {
+            ScheduleNextAttempt(component, now, NoPowerRetryDelay);
             SetStatus(manipulator, WH40KManipulatorStatus.NoPower);
             return;
         }
 
         if (!TryGetSides(xform, out var sideData))
         {
+            ScheduleNextAttempt(component, now, EmptyInputRetryDelay);
             SetStatus(manipulator, WH40KManipulatorStatus.WaitingForItem);
             return;
         }
@@ -217,6 +229,7 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         CollectLeftCandidates(uid, sideData.LeftTile);
         if (_leftCandidates.Count == 0)
         {
+            ScheduleNextAttempt(component, now, EmptyInputRetryDelay);
             SetStatus(manipulator, WH40KManipulatorStatus.WaitingForItem);
             return;
         }
@@ -232,18 +245,21 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         {
             if (!TrySelectPassThroughCandidate(uid, component, out selected, out selectedIndex))
             {
+                ScheduleNextAttempt(component, now, EmptyInputRetryDelay);
                 SetStatus(manipulator, WH40KManipulatorStatus.WaitingForItem);
                 return;
             }
 
             if (!HasPassThroughOutputSpace(sideData))
             {
+                ScheduleNextAttempt(component, now, ReceiverCapacityRetryDelay);
                 SetStatus(manipulator, WH40KManipulatorStatus.WaitingForReceiverCapacity);
                 return;
             }
 
             if (!TryBeginTransfer(manipulator, sideData, selected, selectedIndex, mode, now))
             {
+                ScheduleNextAttempt(component, now);
                 SetStatus(manipulator, WH40KManipulatorStatus.WaitingForItem);
                 return;
             }
@@ -253,6 +269,10 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
 
         if (!TrySelectSmartFeedCandidate(uid, component, out selected, out selectedIndex, out var hasPotentialCompatibility))
         {
+            ScheduleNextAttempt(component, now,
+                hasPotentialCompatibility
+                    ? ReceiverCapacityRetryDelay
+                    : IncompatibleItemRetryDelay);
             SetStatus(manipulator,
                 hasPotentialCompatibility
                     ? WH40KManipulatorStatus.WaitingForReceiverCapacity
@@ -262,6 +282,7 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
 
         if (!TryBeginTransfer(manipulator, sideData, selected, selectedIndex, mode, now))
         {
+            ScheduleNextAttempt(component, now);
             SetStatus(manipulator, WH40KManipulatorStatus.WaitingForItem);
             return;
         }
@@ -389,7 +410,7 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
         var (uid, component, _) = manipulator;
 
         ReleaseClaim(component.ActiveItem);
-        component.NextTransferAt = now + TimeSpan.FromSeconds(MathF.Max(0.05f, component.TransferCooldown));
+        ScheduleNextAttempt(component, now);
 
         ApplyOperationalState(uid, component, busy: false, activeItem: null, status);
         _activeTransfers.Remove(uid);
@@ -435,6 +456,19 @@ public sealed class WH40KConveyorManipulatorSystem : EntitySystem
             Dirty(uid, component);
 
         return changed;
+    }
+
+    private static void ScheduleNextAttempt(
+        WH40KConveyorManipulatorComponent component,
+        TimeSpan now,
+        TimeSpan? minimumDelay = null)
+    {
+        var cooldown = TimeSpan.FromSeconds(MathF.Max(0.05f, component.TransferCooldown));
+        var delay = minimumDelay is { } minimum && minimum > cooldown
+            ? minimum
+            : cooldown;
+
+        component.NextTransferAt = now + delay;
     }
 
     private bool TrySelectPassThroughCandidate(

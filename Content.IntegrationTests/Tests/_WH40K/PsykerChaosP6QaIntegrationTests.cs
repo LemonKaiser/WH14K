@@ -35,6 +35,11 @@ public sealed class PsykerChaosP6QaIntegrationTests
     {
         // Forward-only instant leap; current baseline action parents are target-driven and do not match this behavior.
         "ActionWH40KChaosKhorneExecutionStep",
+        // Champion-only custom action shells that no longer map cleanly to a baseline starter parent.
+        "ActionWH40KChaosKhorneRepulse",
+        "ActionWH40KChaosSlaaneshSwap",
+        "ActionWH40KChaosSlaaneshMiasma",
+        "ActionWH40KChaosTzeentchMindTwist",
     };
 
     private static readonly WH40KChaosPatron[] ChaosPatrons =

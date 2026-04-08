@@ -26,9 +26,9 @@
         incomingDamageMultiplier: 0.9
       - type: Vocal
         sounds:
-          Male: WH40KOfficerMaleHuman
-          Female: WH40KOfficerFemaleHuman
-          Unsexed: WH40KOfficerMaleHuman
+          Male: W40KOffMale
+          Female: W40KOffFemale
+          Unsexed: W40KOffMale
   access:
   - Maintenance
   - External
@@ -51,5 +51,3 @@
     outerClothing: ClothingOuterArmorFlakVestGen
     pocket1: WH40KCommandTacticalMapTablet
     id: ColonelDogTag
-  inhand:
-    - WHPowerSaberImperial

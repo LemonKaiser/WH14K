@@ -27,3 +27,6 @@
         whitelist:
           tags:
             - PlasmPowerCellGun
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9

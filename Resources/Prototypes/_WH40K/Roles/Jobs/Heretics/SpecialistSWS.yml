@@ -8,6 +8,7 @@
     - !type:SpeciesRequirement
       species:
       - Human
+      - Vulpkanin
   startingGear: HeresyGuardsmanGear
   icon: "JobIconSpecialistSWS"
   supervisors: job-supervisors-engineering

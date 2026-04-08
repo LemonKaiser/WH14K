@@ -31,12 +31,13 @@ public sealed class TacticalMapRoundIntegrationTests
     private const string LegacyTacticalMapTabletPrototype = "WH40KTacticalMapTablet";
 
     [Test]
-    public async Task TacticalMapAnnotationsSavePersistAndReloadAfterReopen()
+    public async Task TacticalMapAnnotationsAlliedMarkersAndOverlayThrottle()
     {
         await using var pair = await StartWh40KRoundAsync();
 
-        var context = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
-        var initialState = await OpenTabletAndReadStateAsync(pair, context.Tablet, context.ClientTablet, Imperium);
+        // ── Part 1: Annotations save, persist, and reload after reopen ──────────
+        var ctx1 = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
+        var initialState = await OpenTabletAndReadStateAsync(pair, ctx1.Tablet, ctx1.ClientTablet, Imperium);
         var initialCallsigns = initialState.CapturePoints.Select(point => point.Callsign).ToArray();
 
         Assert.That(initialState.TeamId, Is.EqualTo(Imperium), "Tablet did not resolve the expected team before annotation save.");
@@ -49,16 +50,16 @@ public sealed class TacticalMapRoundIntegrationTests
         var expectedStroke = new WH40KTacticalMapAnnotationStroke(
             new[]
             {
-                context.PointA,
-                context.PointA + new Vector2(6f, 3f),
-                context.PointA + new Vector2(10f, 5f),
+                ctx1.PointA,
+                ctx1.PointA + new Vector2(6f, 3f),
+                ctx1.PointA + new Vector2(10f, 5f),
             },
             Color.LimeGreen,
             2.25f);
 
         await pair.Client.WaitPost(() =>
         {
-            var bui = GetOpenBui(pair, context.ClientTablet);
+            var bui = GetOpenBui(pair, ctx1.ClientTablet);
             bui.SendMessage(new WH40KTacticalMapSaveAnnotationsMessage(new[] { expectedStroke }));
         });
 
@@ -66,7 +67,7 @@ public sealed class TacticalMapRoundIntegrationTests
 
         await pair.Client.WaitAssertion(() =>
         {
-            var state = GetCachedState(pair, context.ClientTablet);
+            var state = GetCachedState(pair, ctx1.ClientTablet);
 
             Assert.Multiple(() =>
             {
@@ -76,13 +77,13 @@ public sealed class TacticalMapRoundIntegrationTests
             });
         });
 
-        await CloseTabletAsync(pair, context.Tablet, context.Actor);
-        await OpenTabletAsync(pair, context.Tablet, context.Actor);
+        await CloseTabletAsync(pair, ctx1.Tablet, ctx1.Actor);
+        await OpenTabletAsync(pair, ctx1.Tablet, ctx1.Actor);
 
         await pair.Client.WaitAssertion(() =>
         {
-            var reopenedState = GetCachedState(pair, context.ClientTablet);
-            var bui = GetOpenBui(pair, context.ClientTablet);
+            var reopenedState = GetCachedState(pair, ctx1.ClientTablet);
+            var bui = GetOpenBui(pair, ctx1.ClientTablet);
 
             Assert.Multiple(() =>
             {
@@ -93,33 +94,31 @@ public sealed class TacticalMapRoundIntegrationTests
             });
         });
 
-        await pair.CleanReturnAsync();
-    }
+        await CloseTabletAsync(pair, ctx1.Tablet, ctx1.Actor);
+        await pair.Server.WaitPost(() => pair.Server.ResolveDependency<IEntityManager>().DeleteEntity(ctx1.Tablet));
+        await pair.RunTicksSync(5);
 
-    [Test]
-    public async Task TacticalMapAlliedMarkersTrackSameTeamMembersOnly()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var context = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
+        // ── Part 2: Allied markers track same-team members only ─────────────────
+        var ctx2 = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
 
         await pair.Server.WaitPost(() =>
         {
             var entMan = pair.Server.ResolveDependency<IEntityManager>();
             var metaData = entMan.EntitySysManager.GetEntitySystem<MetaDataSystem>();
 
-            var ally = entMan.SpawnEntity("MobHuman", new EntityCoordinates(context.GridUid, context.PointB));
+            var ally = entMan.SpawnEntity("MobHuman", new EntityCoordinates(ctx2.GridUid, ctx2.PointB));
             entMan.EnsureComponent<WH40KTeamMemberComponent>(ally).TeamId = Imperium;
             metaData.SetEntityName(ally, "Tactical Ally");
 
-            var enemy = entMan.SpawnEntity("MobHuman", new EntityCoordinates(context.GridUid, context.PointB + new Vector2(3f, 0f)));
+            var enemy = entMan.SpawnEntity("MobHuman", new EntityCoordinates(ctx2.GridUid, ctx2.PointB + new Vector2(3f, 0f)));
             entMan.EnsureComponent<WH40KTeamMemberComponent>(enemy).TeamId = Heretics;
             metaData.SetEntityName(enemy, "Tactical Enemy");
         });
 
         await pair.RunTicksSync(20);
 
-        var state = await OpenTabletAndReadStateAsync(pair, context.Tablet, context.ClientTablet, Imperium);
-        var labels = state.AlliedMarkers.Select(marker => marker.Label).ToArray();
+        var allyState = await OpenTabletAndReadStateAsync(pair, ctx2.Tablet, ctx2.ClientTablet, Imperium);
+        var labels = allyState.AlliedMarkers.Select(marker => marker.Label).ToArray();
 
         Assert.Multiple(() =>
         {
@@ -129,51 +128,49 @@ public sealed class TacticalMapRoundIntegrationTests
                 "Tactical-map allied markers leaked an opposing-team mob into the same-team overlay.");
         });
 
-        await pair.CleanReturnAsync();
-    }
+        await CloseTabletAsync(pair, ctx2.Tablet, ctx2.Actor);
+        await pair.Server.WaitPost(() => pair.Server.ResolveDependency<IEntityManager>().DeleteEntity(ctx2.Tablet));
+        await pair.RunTicksSync(5);
 
-    [Test]
-    public async Task TacticalMapOverlayRefreshIsThrottledButStillCatchesUp()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var context = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
+        // ── Part 3: Overlay refresh is throttled but still catches up ────────────
+        var ctx3 = await PrepareTabletAsync(pair, Imperium, "WH40KCommandTacticalMapTablet");
 
-        EntityUid ally = default;
-        const string allyName = "Moving Ally";
-        var movedPosition = Vector2.Lerp(context.PointA, context.PointB, 0.35f);
+        EntityUid movingAlly = default;
+        const string movingAllyName = "Moving Ally";
+        var movedPosition = Vector2.Lerp(ctx3.PointA, ctx3.PointB, 0.35f);
 
         await pair.Server.WaitPost(() =>
         {
             var entMan = pair.Server.ResolveDependency<IEntityManager>();
             var metaData = entMan.EntitySysManager.GetEntitySystem<MetaDataSystem>();
 
-            ally = entMan.SpawnEntity("MobHuman", new EntityCoordinates(context.GridUid, context.PointB));
-            entMan.EnsureComponent<WH40KTeamMemberComponent>(ally).TeamId = Imperium;
-            metaData.SetEntityName(ally, allyName);
+            movingAlly = entMan.SpawnEntity("MobHuman", new EntityCoordinates(ctx3.GridUid, ctx3.PointB));
+            entMan.EnsureComponent<WH40KTeamMemberComponent>(movingAlly).TeamId = Imperium;
+            metaData.SetEntityName(movingAlly, movingAllyName);
         });
 
         await pair.RunTicksSync(20);
 
-        var initialState = await OpenTabletAndReadStateAsync(pair, context.Tablet, context.ClientTablet, Imperium);
-        var initialMarker = initialState.AlliedMarkers.Single(marker => marker.Label == allyName);
+        var throttleInitialState = await OpenTabletAndReadStateAsync(pair, ctx3.Tablet, ctx3.ClientTablet, Imperium);
+        var initialMarker = throttleInitialState.AlliedMarkers.Single(marker => marker.Label == movingAllyName);
 
         await pair.Server.WaitPost(() =>
         {
             var entMan = pair.Server.ResolveDependency<IEntityManager>();
             var xform = entMan.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
-            xform.SetCoordinates(ally, new EntityCoordinates(context.GridUid, movedPosition));
+            xform.SetCoordinates(movingAlly, new EntityCoordinates(ctx3.GridUid, movedPosition));
         });
 
         await RunForServerTimeAsync(pair, TimeSpan.FromMilliseconds(250));
 
         await pair.Client.WaitAssertion(() =>
         {
-            var throttledState = GetCachedState(pair, context.ClientTablet);
-            var throttledMarker = throttledState.AlliedMarkers.Single(marker => marker.Label == allyName);
+            var throttledState = GetCachedState(pair, ctx3.ClientTablet);
+            var throttledMarker = throttledState.AlliedMarkers.Single(marker => marker.Label == movingAllyName);
 
             Assert.Multiple(() =>
             {
-                Assert.That(throttledState.OverlayRevision, Is.EqualTo(initialState.OverlayRevision),
+                Assert.That(throttledState.OverlayRevision, Is.EqualTo(throttleInitialState.OverlayRevision),
                     "Tactical-map overlay refreshed again before the server-side throttle window elapsed.");
                 Assert.That(Vector2.Distance(throttledMarker.Position, initialMarker.Position), Is.LessThan(0.001f),
                     "Allied marker moved on the client before the throttled overlay refresh window elapsed.");
@@ -184,12 +181,12 @@ public sealed class TacticalMapRoundIntegrationTests
 
         await pair.Client.WaitAssertion(() =>
         {
-            var refreshedState = GetCachedState(pair, context.ClientTablet);
-            var refreshedMarker = refreshedState.AlliedMarkers.Single(marker => marker.Label == allyName);
+            var refreshedState = GetCachedState(pair, ctx3.ClientTablet);
+            var refreshedMarker = refreshedState.AlliedMarkers.Single(marker => marker.Label == movingAllyName);
 
             Assert.Multiple(() =>
             {
-                Assert.That(refreshedState.OverlayRevision, Is.Not.EqualTo(initialState.OverlayRevision),
+                Assert.That(refreshedState.OverlayRevision, Is.Not.EqualTo(throttleInitialState.OverlayRevision),
                     "Tactical-map overlay never refreshed after the throttle window elapsed.");
                 Assert.That(Vector2.Distance(refreshedMarker.Position, movedPosition), Is.LessThan(0.15f),
                     "Allied marker did not catch up to the moved server position after the throttle window elapsed.");
@@ -198,6 +195,7 @@ public sealed class TacticalMapRoundIntegrationTests
 
         await pair.CleanReturnAsync();
     }
+
 
     [Test]
     public async Task TacticalMapFogOfWarRemainsSeparatedPerTeam()
@@ -344,14 +342,30 @@ public sealed class TacticalMapRoundIntegrationTests
             Connected = true,
             Dirty = true,
             InLobby = true,
-            DummyTicker = false
+            DummyTicker = false,
+            Fresh = true
         });
 
         await pair.WaitCommand("forcemap Battlefield40k");
         await pair.WaitCommand("setgamepreset WH40KTeamBattle 9999");
-        await pair.WaitClientCommand("toggleready True");
         await pair.WaitCommand("startround");
-        await pair.RunTicksSync(80);
+        await pair.RunTicksSync(60);
+
+        // WH40K requires faction selection before late-join.
+        await pair.Client.WaitPost(() =>
+        {
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", Content.Shared._WH40K.LateJoin.WH40KFactionSelectionPurpose.LateJoin);
+        });
+        await pair.RunTicksSync(10);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+            ticker.MakeJoinGame(playerMan.Sessions.Single(), EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
 
         await pair.Server.WaitAssertion(() =>
         {
@@ -369,9 +383,11 @@ public sealed class TacticalMapRoundIntegrationTests
     }
 
     [Test]
-    public async Task StandardTacticalMapTabletRejectsAnnotationSaveMessages()
+    public async Task StandardTabletRejectsAnnotationsAndConsolePrototypesAreCorrect()
     {
         await using var pair = await StartWh40KRoundAsync();
+
+        // Part 1: Standard tablet rejects annotation save messages.
         var context = await PrepareTabletAsync(pair, Imperium, "WH40KStandardTacticalMapTablet");
 
         var state = await OpenTabletAndReadStateAsync(pair, context.Tablet, context.ClientTablet, Imperium);
@@ -406,14 +422,7 @@ public sealed class TacticalMapRoundIntegrationTests
             });
         });
 
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task TacticalMapConsolePrototypesExistWithCorrectCapabilitiesAndLegacyAliasIsRemoved()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-
+        // Part 2: Console prototypes have correct capabilities and legacy alias is removed.
         await pair.Server.WaitAssertion(() =>
         {
             var entMan = pair.Server.ResolveDependency<IEntityManager>();
@@ -439,6 +448,7 @@ public sealed class TacticalMapRoundIntegrationTests
 
         await pair.CleanReturnAsync();
     }
+
 
     [Test]
     public async Task TacticalMapBlackoutStorageWritesGridMask()

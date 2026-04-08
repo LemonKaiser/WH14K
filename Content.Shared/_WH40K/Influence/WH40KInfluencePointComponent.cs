@@ -88,6 +88,19 @@ public sealed partial class WH40KInfluencePointComponent : Component
     [DataField("captureProgressSyncStep")]
     public float CaptureProgressSyncStep = 0.25f;
 
+    /// <summary>
+    /// Minimum interval between replicated capture-progress updates.
+    /// Helps avoid per-frame network churn on highly contested points.
+    /// </summary>
+    [DataField("captureProgressSyncIntervalSeconds")]
+    public float CaptureProgressSyncIntervalSeconds = 0.5f;
+
     [ViewVariables]
     public TimeSpan NextRewardTick;
+
+    /// <summary>
+    /// Server-only next allowed time to replicate capture progress.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextCaptureProgressSyncAt;
 }

@@ -62,8 +62,8 @@ public partial class ChatBox : UIWidget, ILocalizedControl
             return;
         }
 
-        if (msg is { Read: false, AudioPath: { } })
-            _entManager.System<AudioSystem>().PlayGlobal(msg.AudioPath, Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
+        if (msg is { Read: false, AudioPath: { } audioPath })
+            _entManager.System<AudioSystem>().PlayGlobal(new SoundPathSpecifier(audioPath), Filter.Local(), false, AudioParams.Default.WithVolume(msg.AudioVolume));
 
         msg.Read = true;
 
@@ -210,9 +210,12 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         _controller.NotifyChatFocus(false);
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
 
         if (!disposing) return;
         _controller.UnregisterChat(this);

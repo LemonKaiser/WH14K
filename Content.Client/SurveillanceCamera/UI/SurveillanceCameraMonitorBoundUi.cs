@@ -27,6 +27,7 @@ public sealed class SurveillanceCameraMonitorBoundUserInterface : BoundUserInter
         base.Open();
 
         _window = this.CreateWindow<SurveillanceCameraMonitorWindow>();
+        _window.SetEntity(Owner);
 
         _window.CameraSelected += OnCameraSelected;
         _window.SubnetOpened += OnSubnetRequest;

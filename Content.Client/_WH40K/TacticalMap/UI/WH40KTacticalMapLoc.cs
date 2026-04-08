@@ -1,10 +1,46 @@
 using System;
+using Content.Client._WH40K.Command;
+using Content.Shared._WH40K.TacticalMap;
 using Robust.Shared.Localization;
 
 namespace Content.Client._WH40K.TacticalMap.UI;
 
+/// <summary>
+///     Localization helpers for tactical-map UI labels.
+///     All methods are static and use the global <see cref="Loc"/> accessor,
+///     which respects the current client-side culture set by the engine.
+/// </summary>
 internal static class WH40KTacticalMapLoc
 {
+
+    public static string LocalizeStrategicLabel(WH40KTacticalMapCapturePointMarker marker)
+    {
+        if (marker.Kind == WH40KTacticalMapStrategicMarkerKind.CommandNode)
+        {
+            if (!string.IsNullOrWhiteSpace(marker.Label))
+            {
+                return Loc.GetString(
+                    "wh40k-tactical-map-command-node-ordinal",
+                    ("ordinal", marker.Label));
+            }
+
+            return Loc.GetString("wh40k-tactical-map-command-node-fallback");
+        }
+
+        return LocalizeCaptureLabel(marker.Callsign, marker.Label);
+    }
+
+    public static string ResolveStrategicIcon(WH40KTacticalMapCapturePointMarker marker)
+    {
+        return marker.Kind switch
+        {
+            WH40KTacticalMapStrategicMarkerKind.CommandNode => "\u25A0",
+            _ when marker.Relation == WH40KTacticalMapStrategicRelation.Contested => "x",
+            _ when marker.Relation == WH40KTacticalMapStrategicRelation.Neutral => "o",
+            _ => "\u25CF"
+        };
+    }
+
     public static string LocalizeCaptureLabel(string? callsign, string fallbackLabel)
     {
         if (!string.IsNullOrWhiteSpace(callsign))
@@ -48,7 +84,7 @@ internal static class WH40KTacticalMapLoc
         }
 
         if (!string.IsNullOrWhiteSpace(fallbackDisplayName))
-            return fallbackDisplayName;
+            return WH40KCommandUiStyles.ResolveLocalizedOrRaw(fallbackDisplayName);
 
         return teamId ?? string.Empty;
     }

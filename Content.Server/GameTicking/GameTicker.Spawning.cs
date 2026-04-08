@@ -213,7 +213,7 @@ namespace Content.Server.GameTicking
                     var speciesPrototypes = _prototypeManager.EnumeratePrototypes<SpeciesPrototype>();
                     foreach (var proto in speciesPrototypes)
                     {
-                        if (proto.RoundStart)
+                        if (proto.RoundStart && !proto.IsRestrictedFromRandomization)
                             roundStart.Add(proto.ID);
                     }
 

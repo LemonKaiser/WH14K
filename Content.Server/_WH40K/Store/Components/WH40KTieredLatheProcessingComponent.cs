@@ -43,18 +43,6 @@ public sealed partial class WH40KTieredLatheProcessingComponent : Component
     public float MinProcessSecondsTier3 = 3f;
 
     [DataField]
-    public int? MaterialStorageLimitTier0 = 10;
-
-    [DataField]
-    public int? MaterialStorageLimitTier1 = 15;
-
-    [DataField]
-    public int? MaterialStorageLimitTier2 = 20;
-
-    [DataField]
-    public int? MaterialStorageLimitTier3 = 30;
-
-    [DataField]
     public ProtoId<LatheRecipePackPrototype>? Tier0Pack;
 
     [DataField]

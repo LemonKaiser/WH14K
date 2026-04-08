@@ -1,6 +1,6 @@
 - type: emote
-  id: WH40KCommissarConsiderItDone
-  name: wh40k-chat-emote-name-commissar-consider-it-done
+  id: W40KComDone
+  name: w40k-com-done-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -8,13 +8,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-consider-it-done"]
+  chatMessages: ["w40k-com-done-msg"]
   chatTriggers:
     - commissar consider it done
 
 - type: emote
-  id: WH40KCommissarYouWillBeExecuted
-  name: wh40k-chat-emote-name-commissar-you-will-be-executed
+  id: W40KComExec
+  name: w40k-com-exec-name
   category: RoleVocal
   icon: Interface/Emotes/deathgasp.png
   whitelist:
@@ -22,13 +22,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-you-will-be-executed"]
+  chatMessages: ["w40k-com-exec-msg"]
   chatTriggers:
     - commissar you will be executed
 
 - type: emote
-  id: WH40KCommissarAttack
-  name: wh40k-chat-emote-name-commissar-attack
+  id: W40KComAtk
+  name: w40k-com-atk-name
   category: RoleVocal
   icon: Interface/Emotes/hew.png
   whitelist:
@@ -36,13 +36,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-attack"]
+  chatMessages: ["w40k-com-atk-msg"]
   chatTriggers:
     - commissar attack
 
 - type: emote
-  id: WH40KCommissarForwardToVictory
-  name: wh40k-chat-emote-name-commissar-forward-to-victory
+  id: W40KComFwd
+  name: w40k-com-fwd-name
   category: RoleVocal
   icon: Interface/Emotes/hew.png
   whitelist:
@@ -50,13 +50,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-forward-to-victory"]
+  chatMessages: ["w40k-com-fwd-msg"]
   chatTriggers:
     - commissar forward to victory
 
 - type: emote
-  id: WH40KCommissarWhereAmINeeded
-  name: wh40k-chat-emote-name-commissar-where-am-i-needed
+  id: W40KComNeed
+  name: w40k-com-need-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -64,13 +64,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-where-am-i-needed"]
+  chatMessages: ["w40k-com-need-msg"]
   chatTriggers:
     - commissar where am i needed
 
 - type: emote
-  id: WH40KCommissarTheirDaysAreNumbered
-  name: wh40k-chat-emote-name-commissar-their-days-are-numbered
+  id: W40KComDays
+  name: w40k-com-days-name
   category: RoleVocal
   icon: Interface/Emotes/deathgasp.png
   whitelist:
@@ -78,13 +78,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-their-days-are-numbered"]
+  chatMessages: ["w40k-com-days-msg"]
   chatTriggers:
     - commissar their days are numbered
 
 - type: emote
-  id: WH40KCommissarRetreatIsABadDecision
-  name: wh40k-chat-emote-name-commissar-retreat-is-a-bad-decision
+  id: W40KComRet
+  name: w40k-com-ret-name
   category: RoleVocal
   icon: Interface/Emotes/whistle.png
   whitelist:
@@ -92,13 +92,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-retreat-is-a-bad-decision"]
+  chatMessages: ["w40k-com-ret-msg"]
   chatTriggers:
     - commissar retreat is a bad decision
 
 - type: emote
-  id: WH40KCommissarISentenceYouToDeath
-  name: wh40k-chat-emote-name-commissar-i-sentence-you-to-death
+  id: W40KComSent
+  name: w40k-com-sent-name
   category: RoleVocal
   icon: Interface/Emotes/deathgasp.png
   whitelist:
@@ -106,13 +106,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-i-sentence-you-to-death"]
+  chatMessages: ["w40k-com-sent-msg"]
   chatTriggers:
     - commissar i sentence you to death
 
 - type: emote
-  id: WH40KCommissarOrderReceivedAndUnderstood
-  name: wh40k-chat-emote-name-commissar-order-received-and-understood
+  id: W40KComAck
+  name: w40k-com-ack-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -120,13 +120,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-order-received-and-understood"]
+  chatMessages: ["w40k-com-ack-msg"]
   chatTriggers:
     - commissar order received and understood
 
 - type: emote
-  id: WH40KCommissarSpreadOut
-  name: wh40k-chat-emote-name-commissar-spread-out
+  id: W40KComSpr
+  name: w40k-com-spr-name
   category: RoleVocal
   icon: Interface/Emotes/whistle.png
   whitelist:
@@ -134,13 +134,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-spread-out"]
+  chatMessages: ["w40k-com-spr-msg"]
   chatTriggers:
     - commissar spread out
 
 - type: emote
-  id: WH40KCommissarYouDaredToShootAtMe
-  name: wh40k-chat-emote-name-commissar-you-dared-to-shoot-at-me
+  id: W40KComDare
+  name: w40k-com-dare-name
   category: RoleVocal
   icon: Interface/Emotes/deathgasp.png
   whitelist:
@@ -148,13 +148,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-you-dared-to-shoot-at-me"]
+  chatMessages: ["w40k-com-dare-msg"]
   chatTriggers:
     - commissar you dared to shoot at me
 
 - type: emote
-  id: WH40KCommissarWhatDoYouWant
-  name: wh40k-chat-emote-name-commissar-what-do-you-want
+  id: W40KComWant
+  name: w40k-com-want-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -162,13 +162,13 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-what-do-you-want"]
+  chatMessages: ["w40k-com-want-msg"]
   chatTriggers:
     - commissar what do you want
 
 - type: emote
-  id: WH40KCommissarIAmLeaving
-  name: wh40k-chat-emote-name-commissar-i-am-leaving
+  id: W40KComLeave
+  name: w40k-com-leave-name
   category: RoleVocal
   icon: Interface/Emotes/sigh.png
   whitelist:
@@ -176,74 +176,74 @@
     components:
     - Vocal
     - WH40KCommissarVoice
-  chatMessages: ["wh40k-chat-emote-msg-commissar-i-am-leaving"]
+  chatMessages: ["w40k-com-leave-msg"]
   chatTriggers:
     - commissar i am leaving
 
 - type: emoteSounds
-  id: WH40KCommissarMaleHuman
+  id: W40KComMale
   parent: [MaleHuman]
   params:
     volume: -5
     variation: 0.05
   sounds:
-    WH40KCommissarConsiderItDone:
+    W40KComDone:
       path: /Audio/_WH40K/Voice/Commissar/consider_it_done.ogg
-    WH40KCommissarYouWillBeExecuted:
+    W40KComExec:
       path: /Audio/_WH40K/Voice/Commissar/you_will_be_executed.ogg
-    WH40KCommissarAttack:
+    W40KComAtk:
       path: /Audio/_WH40K/Voice/Commissar/attack.ogg
-    WH40KCommissarForwardToVictory:
+    W40KComFwd:
       path: /Audio/_WH40K/Voice/Commissar/forward_to_victory.ogg
-    WH40KCommissarWhereAmINeeded:
+    W40KComNeed:
       path: /Audio/_WH40K/Voice/Commissar/where_am_i_needed.ogg
-    WH40KCommissarTheirDaysAreNumbered:
+    W40KComDays:
       path: /Audio/_WH40K/Voice/Commissar/their_days_are_numbered.ogg
-    WH40KCommissarRetreatIsABadDecision:
+    W40KComRet:
       path: /Audio/_WH40K/Voice/Commissar/retreat_is_a_bad_decision.ogg
-    WH40KCommissarISentenceYouToDeath:
+    W40KComSent:
       path: /Audio/_WH40K/Voice/Commissar/i_sentence_you_to_death.ogg
-    WH40KCommissarOrderReceivedAndUnderstood:
+    W40KComAck:
       path: /Audio/_WH40K/Voice/Commissar/order_received_and_understood.ogg
-    WH40KCommissarSpreadOut:
+    W40KComSpr:
       path: /Audio/_WH40K/Voice/Commissar/spread_out.ogg
-    WH40KCommissarYouDaredToShootAtMe:
+    W40KComDare:
       path: /Audio/_WH40K/Voice/Commissar/you_dared_to_shoot_at_me.ogg
-    WH40KCommissarWhatDoYouWant:
+    W40KComWant:
       path: /Audio/_WH40K/Voice/Commissar/what_do_you_want.ogg
-    WH40KCommissarIAmLeaving:
+    W40KComLeave:
       path: /Audio/_WH40K/Voice/Commissar/i_am_leaving.ogg
 
 - type: emoteSounds
-  id: WH40KCommissarFemaleHuman
+  id: W40KComFemale
   parent: [FemaleHuman]
   params:
     volume: -5
     variation: 0.05
   sounds:
-    WH40KCommissarConsiderItDone:
+    W40KComDone:
       path: /Audio/_WH40K/Voice/Commissar/consider_it_done.ogg
-    WH40KCommissarYouWillBeExecuted:
+    W40KComExec:
       path: /Audio/_WH40K/Voice/Commissar/you_will_be_executed.ogg
-    WH40KCommissarAttack:
+    W40KComAtk:
       path: /Audio/_WH40K/Voice/Commissar/attack.ogg
-    WH40KCommissarForwardToVictory:
+    W40KComFwd:
       path: /Audio/_WH40K/Voice/Commissar/forward_to_victory.ogg
-    WH40KCommissarWhereAmINeeded:
+    W40KComNeed:
       path: /Audio/_WH40K/Voice/Commissar/where_am_i_needed.ogg
-    WH40KCommissarTheirDaysAreNumbered:
+    W40KComDays:
       path: /Audio/_WH40K/Voice/Commissar/their_days_are_numbered.ogg
-    WH40KCommissarRetreatIsABadDecision:
+    W40KComRet:
       path: /Audio/_WH40K/Voice/Commissar/retreat_is_a_bad_decision.ogg
-    WH40KCommissarISentenceYouToDeath:
+    W40KComSent:
       path: /Audio/_WH40K/Voice/Commissar/i_sentence_you_to_death.ogg
-    WH40KCommissarOrderReceivedAndUnderstood:
+    W40KComAck:
       path: /Audio/_WH40K/Voice/Commissar/order_received_and_understood.ogg
-    WH40KCommissarSpreadOut:
+    W40KComSpr:
       path: /Audio/_WH40K/Voice/Commissar/spread_out.ogg
-    WH40KCommissarYouDaredToShootAtMe:
+    W40KComDare:
       path: /Audio/_WH40K/Voice/Commissar/you_dared_to_shoot_at_me.ogg
-    WH40KCommissarWhatDoYouWant:
+    W40KComWant:
       path: /Audio/_WH40K/Voice/Commissar/what_do_you_want.ogg
-    WH40KCommissarIAmLeaving:
+    W40KComLeave:
       path: /Audio/_WH40K/Voice/Commissar/i_am_leaving.ogg

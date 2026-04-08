@@ -36,12 +36,6 @@
             "name": "Commissar"
         },
         {
-            "name": "HCommissar"
-        },
-        {
-            "name": "Major"
-        },
-        {
             "name": "Lieutenant"
         },
         {
@@ -82,9 +76,6 @@
         },
         {
             "name": "Medic"
-        },
-        {
-            "name": "HMedic"
         },
         {
             "name": "Guardsman"

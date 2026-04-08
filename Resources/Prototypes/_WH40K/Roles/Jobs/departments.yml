@@ -19,7 +19,6 @@
   roles:
   - Colonel
   - Commissar
-  - Major
   - Lieutenant
   - TankComm
   - Tanker
@@ -30,6 +29,7 @@
   - Psyker
   - VoxScout
   - TitheSupplier
+  - MunitorumOfficer
   - Lexmechanic
   - Medic
 
@@ -53,7 +53,6 @@
   color: "#800000"
   roles:
   - HColonel
-  - HCommissar
   - HLieutenant
   - HTankComm
   - HTanker
@@ -64,4 +63,3 @@
   - HVoxScout
   - HBandSupplier
   - HLexmechanic
-  - HMedic

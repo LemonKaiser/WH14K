@@ -1,9 +1,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-fireline-initiation
   category: Combat
-  title: wh40k-meta-progress-achievement-fireline-initiation-title
-  description: wh40k-meta-progress-achievement-fireline-initiation-description
-  task: wh40k-meta-progress-achievement-fireline-initiation-task
+  title: w40k-ach-fireline-initiation-t
+  description: w40k-ach-fireline-initiation-d
+  task: w40k-ach-fireline-initiation-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 200
   rewardDecorations:
@@ -18,9 +18,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-first-contact
   category: Combat
-  title: wh40k-meta-progress-achievement-first-contact-title
-  description: wh40k-meta-progress-achievement-first-contact-description
-  task: wh40k-meta-progress-achievement-first-contact-task
+  title: w40k-ach-first-contact-t
+  description: w40k-ach-first-contact-d
+  task: w40k-ach-first-contact-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 150
   rewardDecorations:
@@ -33,9 +33,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-no-one-left
   category: Support
-  title: wh40k-meta-progress-achievement-no-one-left-title
-  description: wh40k-meta-progress-achievement-no-one-left-description
-  task: wh40k-meta-progress-achievement-no-one-left-task
+  title: w40k-ach-no-one-left-t
+  description: w40k-ach-no-one-left-d
+  task: w40k-ach-no-one-left-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -48,9 +48,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-convoy-master
   category: Logistics
-  title: wh40k-meta-progress-achievement-convoy-master-title
-  description: wh40k-meta-progress-achievement-convoy-master-description
-  task: wh40k-meta-progress-achievement-convoy-master-task
+  title: w40k-ach-convoy-master-t
+  description: w40k-ach-convoy-master-d
+  task: w40k-ach-convoy-master-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 300
   rewardDecorations:
@@ -63,9 +63,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-frontline-anchor
   category: Objective
-  title: wh40k-meta-progress-achievement-frontline-anchor-title
-  description: wh40k-meta-progress-achievement-frontline-anchor-description
-  task: wh40k-meta-progress-achievement-frontline-anchor-task
+  title: w40k-ach-frontline-anchor-t
+  description: w40k-ach-frontline-anchor-d
+  task: w40k-ach-frontline-anchor-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 300
   rewardDecorations:
@@ -78,9 +78,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-veteran-of-wars
   category: Participation
-  title: wh40k-meta-progress-achievement-veteran-of-wars-title
-  description: wh40k-meta-progress-achievement-veteran-of-wars-description
-  task: wh40k-meta-progress-achievement-veteran-of-wars-task
+  title: w40k-ach-veteran-of-wars-t
+  description: w40k-ach-veteran-of-wars-d
+  task: w40k-ach-veteran-of-wars-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 500
   rewardDecorations:
@@ -93,9 +93,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-whispers-in-void
   category: Hidden
-  title: wh40k-meta-progress-achievement-whispers-in-void-title
-  description: wh40k-meta-progress-achievement-whispers-in-void-description
-  task: wh40k-meta-progress-achievement-whispers-in-void-task
+  title: w40k-ach-whispers-in-void-t
+  description: w40k-ach-whispers-in-void-d
+  task: w40k-ach-whispers-in-void-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -109,9 +109,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-blood-rush
   category: Combat
-  title: wh40k-meta-progress-achievement-blood-rush-title
-  description: wh40k-meta-progress-achievement-blood-rush-description
-  task: wh40k-meta-progress-achievement-blood-rush-task
+  title: w40k-ach-blood-rush-t
+  description: w40k-ach-blood-rush-d
+  task: w40k-ach-blood-rush-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 325
   rewardDecorations:
@@ -124,9 +124,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-iron-survivor
   category: Combat
-  title: wh40k-meta-progress-achievement-iron-survivor-title
-  description: wh40k-meta-progress-achievement-iron-survivor-description
-  task: wh40k-meta-progress-achievement-iron-survivor-task
+  title: w40k-ach-iron-survivor-t
+  description: w40k-ach-iron-survivor-d
+  task: w40k-ach-iron-survivor-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 350
   rewardDecorations:
@@ -141,9 +141,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-blade-dancer
   category: Combat
-  title: wh40k-meta-progress-achievement-blade-dancer-title
-  description: wh40k-meta-progress-achievement-blade-dancer-description
-  task: wh40k-meta-progress-achievement-blade-dancer-task
+  title: w40k-ach-blade-dancer-t
+  description: w40k-ach-blade-dancer-d
+  task: w40k-ach-blade-dancer-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 225
   rewardDecorations:
@@ -156,9 +156,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-huntmaster
   category: Combat
-  title: wh40k-meta-progress-achievement-huntmaster-title
-  description: wh40k-meta-progress-achievement-huntmaster-description
-  task: wh40k-meta-progress-achievement-huntmaster-task
+  title: w40k-ach-huntmaster-t
+  description: w40k-ach-huntmaster-d
+  task: w40k-ach-huntmaster-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 650
   rewardDecorations:
@@ -171,9 +171,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-execution-streak
   category: Combat
-  title: wh40k-meta-progress-achievement-execution-streak-title
-  description: wh40k-meta-progress-achievement-execution-streak-description
-  task: wh40k-meta-progress-achievement-execution-streak-task
+  title: w40k-ach-execution-streak-t
+  description: w40k-ach-execution-streak-d
+  task: w40k-ach-execution-streak-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 900
   rewardDecorations:
@@ -186,9 +186,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-battle-medic-round
   category: Support
-  title: wh40k-meta-progress-achievement-battle-medic-round-title
-  description: wh40k-meta-progress-achievement-battle-medic-round-description
-  task: wh40k-meta-progress-achievement-battle-medic-round-task
+  title: w40k-ach-battle-medic-round-t
+  description: w40k-ach-battle-medic-round-d
+  task: w40k-ach-battle-medic-round-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -201,9 +201,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-golden-hands
   category: Support
-  title: wh40k-meta-progress-achievement-golden-hands-title
-  description: wh40k-meta-progress-achievement-golden-hands-description
-  task: wh40k-meta-progress-achievement-golden-hands-task
+  title: w40k-ach-golden-hands-t
+  description: w40k-ach-golden-hands-d
+  task: w40k-ach-golden-hands-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 700
   rewardDecorations:
@@ -216,9 +216,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-stabilizer-line
   category: Support
-  title: wh40k-meta-progress-achievement-stabilizer-line-title
-  description: wh40k-meta-progress-achievement-stabilizer-line-description
-  task: wh40k-meta-progress-achievement-stabilizer-line-task
+  title: w40k-ach-stabilizer-line-t
+  description: w40k-ach-stabilizer-line-d
+  task: w40k-ach-stabilizer-line-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -231,9 +231,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-field-hospital
   category: Support
-  title: wh40k-meta-progress-achievement-field-hospital-title
-  description: wh40k-meta-progress-achievement-field-hospital-description
-  task: wh40k-meta-progress-achievement-field-hospital-task
+  title: w40k-ach-field-hospital-t
+  description: w40k-ach-field-hospital-d
+  task: w40k-ach-field-hospital-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 800
   rewardDecorations:
@@ -246,9 +246,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-no-time-to-die
   category: Support
-  title: wh40k-meta-progress-achievement-no-time-to-die-title
-  description: wh40k-meta-progress-achievement-no-time-to-die-description
-  task: wh40k-meta-progress-achievement-no-time-to-die-task
+  title: w40k-ach-no-time-to-die-t
+  description: w40k-ach-no-time-to-die-d
+  task: w40k-ach-no-time-to-die-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 400
   rewardDecorations:
@@ -263,9 +263,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-freight-runner
   category: Logistics
-  title: wh40k-meta-progress-achievement-freight-runner-title
-  description: wh40k-meta-progress-achievement-freight-runner-description
-  task: wh40k-meta-progress-achievement-freight-runner-task
+  title: w40k-ach-freight-runner-t
+  description: w40k-ach-freight-runner-d
+  task: w40k-ach-freight-runner-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -278,9 +278,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-quartermaster-general
   category: Logistics
-  title: wh40k-meta-progress-achievement-quartermaster-general-title
-  description: wh40k-meta-progress-achievement-quartermaster-general-description
-  task: wh40k-meta-progress-achievement-quartermaster-general-task
+  title: w40k-ach-quartermaster-general-t
+  description: w40k-ach-quartermaster-general-d
+  task: w40k-ach-quartermaster-general-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 800
   rewardDecorations:
@@ -293,9 +293,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-high-value-cargo
   category: Logistics
-  title: wh40k-meta-progress-achievement-high-value-cargo-title
-  description: wh40k-meta-progress-achievement-high-value-cargo-description
-  task: wh40k-meta-progress-achievement-high-value-cargo-task
+  title: w40k-ach-high-value-cargo-t
+  description: w40k-ach-high-value-cargo-d
+  task: w40k-ach-high-value-cargo-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 650
   rewardDecorations:
@@ -308,9 +308,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-supply-line-chief
   category: Logistics
-  title: wh40k-meta-progress-achievement-supply-line-chief-title
-  description: wh40k-meta-progress-achievement-supply-line-chief-description
-  task: wh40k-meta-progress-achievement-supply-line-chief-task
+  title: w40k-ach-supply-line-chief-t
+  description: w40k-ach-supply-line-chief-d
+  task: w40k-ach-supply-line-chief-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 400
   rewardDecorations:
@@ -323,9 +323,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-heavy-hauler
   category: Logistics
-  title: wh40k-meta-progress-achievement-heavy-hauler-title
-  description: wh40k-meta-progress-achievement-heavy-hauler-description
-  task: wh40k-meta-progress-achievement-heavy-hauler-task
+  title: w40k-ach-heavy-hauler-t
+  description: w40k-ach-heavy-hauler-d
+  task: w40k-ach-heavy-hauler-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 900
   rewardDecorations:
@@ -338,9 +338,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-point-breaker
   category: Objective
-  title: wh40k-meta-progress-achievement-point-breaker-title
-  description: wh40k-meta-progress-achievement-point-breaker-description
-  task: wh40k-meta-progress-achievement-point-breaker-task
+  title: w40k-ach-point-breaker-t
+  description: w40k-ach-point-breaker-d
+  task: w40k-ach-point-breaker-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 250
   rewardDecorations:
@@ -353,9 +353,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-flag-keeper
   category: Objective
-  title: wh40k-meta-progress-achievement-flag-keeper-title
-  description: wh40k-meta-progress-achievement-flag-keeper-description
-  task: wh40k-meta-progress-achievement-flag-keeper-task
+  title: w40k-ach-flag-keeper-t
+  description: w40k-ach-flag-keeper-d
+  task: w40k-ach-flag-keeper-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 325
   rewardDecorations:
@@ -368,9 +368,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-sector-dominator
   category: Objective
-  title: wh40k-meta-progress-achievement-sector-dominator-title
-  description: wh40k-meta-progress-achievement-sector-dominator-description
-  task: wh40k-meta-progress-achievement-sector-dominator-task
+  title: w40k-ach-sector-dominator-t
+  description: w40k-ach-sector-dominator-d
+  task: w40k-ach-sector-dominator-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 650
   rewardDecorations:
@@ -383,9 +383,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-wall-of-steel
   category: Objective
-  title: wh40k-meta-progress-achievement-wall-of-steel-title
-  description: wh40k-meta-progress-achievement-wall-of-steel-description
-  task: wh40k-meta-progress-achievement-wall-of-steel-task
+  title: w40k-ach-wall-of-steel-t
+  description: w40k-ach-wall-of-steel-d
+  task: w40k-ach-wall-of-steel-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 700
   rewardDecorations:
@@ -398,9 +398,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-objective-ace
   category: Objective
-  title: wh40k-meta-progress-achievement-objective-ace-title
-  description: wh40k-meta-progress-achievement-objective-ace-description
-  task: wh40k-meta-progress-achievement-objective-ace-task
+  title: w40k-ach-objective-ace-t
+  description: w40k-ach-objective-ace-d
+  task: w40k-ach-objective-ace-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 450
   rewardDecorations:
@@ -415,9 +415,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-never-miss-briefing
   category: Participation
-  title: wh40k-meta-progress-achievement-never-miss-briefing-title
-  description: wh40k-meta-progress-achievement-never-miss-briefing-description
-  task: wh40k-meta-progress-achievement-never-miss-briefing-task
+  title: w40k-ach-never-miss-briefing-t
+  description: w40k-ach-never-miss-briefing-d
+  task: w40k-ach-never-miss-briefing-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 300
   rewardDecorations:
@@ -430,9 +430,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-victory-parade
   category: Participation
-  title: wh40k-meta-progress-achievement-victory-parade-title
-  description: wh40k-meta-progress-achievement-victory-parade-description
-  task: wh40k-meta-progress-achievement-victory-parade-task
+  title: w40k-ach-victory-parade-t
+  description: w40k-ach-victory-parade-d
+  task: w40k-ach-victory-parade-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 650
   rewardDecorations:
@@ -445,9 +445,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-steadfast-tour
   category: Participation
-  title: wh40k-meta-progress-achievement-steadfast-tour-title
-  description: wh40k-meta-progress-achievement-steadfast-tour-description
-  task: wh40k-meta-progress-achievement-steadfast-tour-task
+  title: w40k-ach-steadfast-tour-t
+  description: w40k-ach-steadfast-tour-d
+  task: w40k-ach-steadfast-tour-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 850
   rewardDecorations:
@@ -460,9 +460,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-present-at-war
   category: Participation
-  title: wh40k-meta-progress-achievement-present-at-war-title
-  description: wh40k-meta-progress-achievement-present-at-war-description
-  task: wh40k-meta-progress-achievement-present-at-war-task
+  title: w40k-ach-present-at-war-t
+  description: w40k-ach-present-at-war-d
+  task: w40k-ach-present-at-war-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 1000
   rewardDecorations:
@@ -475,9 +475,9 @@
 - type: wh40kMetaAchievement
   id: wh40k-ach-campaign-planner
   category: Participation
-  title: wh40k-meta-progress-achievement-campaign-planner-title
-  description: wh40k-meta-progress-achievement-campaign-planner-description
-  task: wh40k-meta-progress-achievement-campaign-planner-task
+  title: w40k-ach-campaign-planner-t
+  description: w40k-ach-campaign-planner-d
+  task: w40k-ach-campaign-planner-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 500
   rewardDecorations:
@@ -488,11 +488,63 @@
   sortOrder: 330
 
 - type: wh40kMetaAchievement
+  id: wh40k-ach-khorne-attunement-veteran
+  category: Participation
+  title: w40k-ach-khorne-attunement-veteran-t
+  description: w40k-ach-khorne-attunement-veteran-d
+  task: w40k-ach-khorne-attunement-veteran-k
+  reward: w40k-ach-khorne-attunement-veteran-r
+  rewardXp: 0
+  target: 20
+  progressStatKey: chaos.patron.attunement.khorne
+  progressScope: Lifetime
+  sortOrder: 340
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-nurgle-attunement-veteran
+  category: Participation
+  title: w40k-ach-nurgle-attunement-veteran-t
+  description: w40k-ach-nurgle-attunement-veteran-d
+  task: w40k-ach-nurgle-attunement-veteran-k
+  reward: w40k-ach-nurgle-attunement-veteran-r
+  rewardXp: 0
+  target: 20
+  progressStatKey: chaos.patron.attunement.nurgle
+  progressScope: Lifetime
+  sortOrder: 350
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-slaanesh-attunement-veteran
+  category: Participation
+  title: w40k-ach-slaanesh-attunement-veteran-t
+  description: w40k-ach-slaanesh-attunement-veteran-d
+  task: w40k-ach-slaanesh-attunement-veteran-k
+  reward: w40k-ach-slaanesh-attunement-veteran-r
+  rewardXp: 0
+  target: 20
+  progressStatKey: chaos.patron.attunement.slaanesh
+  progressScope: Lifetime
+  sortOrder: 360
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-tzeentch-attunement-veteran
+  category: Participation
+  title: w40k-ach-tzeentch-attunement-veteran-t
+  description: w40k-ach-tzeentch-attunement-veteran-d
+  task: w40k-ach-tzeentch-attunement-veteran-k
+  reward: w40k-ach-tzeentch-attunement-veteran-r
+  rewardXp: 0
+  target: 20
+  progressStatKey: chaos.patron.attunement.tzeentch
+  progressScope: Lifetime
+  sortOrder: 370
+
+- type: wh40kMetaAchievement
   id: wh40k-ach-all-complete
   category: Special
-  title: wh40k-meta-progress-achievement-all-complete-title
-  description: wh40k-meta-progress-achievement-all-complete-description
-  task: wh40k-meta-progress-achievement-all-complete-task
+  title: w40k-ach-all-complete-t
+  description: w40k-ach-all-complete-d
+  task: w40k-ach-all-complete-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 1500
   rewardDecorations:

@@ -1,27 +1,47 @@
-<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal">
-        <Button
-            Name="Button"
-            HorizontalExpand="True"
-            Margin="0"
-            StyleClasses="ButtonSquare OpenRight">
-            <BoxContainer Orientation="Horizontal">
-                <BoxContainer
-                    Name="RecipeDisplayContainer"
-                    Margin="0 0 4 0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    MinSize="32 32"
-                    />
-                <Label Name="RecipeName" HorizontalExpand="True" />
+<Control xmlns="https://spacestation14.io"
+         HorizontalExpand="True">
+    <PanelContainer Name="CardPanel"
+                    HorizontalExpand="True">
+        <BoxContainer Orientation="Horizontal"
+                      Margin="8 6 8 6"
+                      SeparationOverride="8">
+            <PanelContainer Name="AccentBar"
+                            MinWidth="4" />
+
+            <PanelContainer Name="IconPanel">
+                <BoxContainer Name="RecipeDisplayContainer"
+                              Margin="3"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              MinSize="32 32" />
+            </PanelContainer>
+
+            <BoxContainer Orientation="Vertical"
+                          HorizontalExpand="True"
+                          VerticalAlignment="Center"
+                          SeparationOverride="2">
+                <Label Name="RecipeName"
+                       HorizontalExpand="True"
+                       ClipText="True" />
+                <Label Name="RecipeMetaLabel"
+                       StyleClasses="LabelSubText"
+                       HorizontalExpand="True"
+                       ClipText="True" />
             </BoxContainer>
-        </Button>
-        <Button
-            Name="InfiniteButton"
-            Margin="0"
-            MinSize="34 0"
-            Text="⟳"
-            StyleClasses="ButtonSquare OpenLeft"
-            ToolTip="{Loc 'lathe-menu-infinite-queue-tooltip'}" />
-    </BoxContainer>
+
+            <Button Name="Button"
+                    Text="{Loc 'lathe-menu-recipe-action'}"
+                    MinWidth="108"
+                    MinHeight="34"
+                    VerticalAlignment="Center"
+                    ClipText="True" />
+
+            <Button Name="InfiniteButton"
+                    Text="Inf"
+                    MinWidth="42"
+                    MinHeight="34"
+                    VerticalAlignment="Center"
+                    ToolTip="{Loc 'lathe-menu-infinite-queue-tooltip'}" />
+        </BoxContainer>
+    </PanelContainer>
 </Control>

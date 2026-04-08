@@ -11,3 +11,13 @@
     allowRepeatedMorphs: false
     duration: 60
     cooldown: 300
+
+- type: polymorph
+  id: WH40KWarpHellspawnMorph
+  configuration:
+    entity: MobHellspawn
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false

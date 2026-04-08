@@ -3,6 +3,12 @@
   name: job-name-medic
   description: job-description-medic
   playTimeTracker: JobMedic
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
   startingGear: MedicGear
   icon: "JobIconMedic"
   supervisors: job-supervisors-engineering

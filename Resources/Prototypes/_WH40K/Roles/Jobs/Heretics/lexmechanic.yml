@@ -3,6 +3,10 @@
   name: job-name-hlexmechanic
   description: job-description-hlexmechanic
   playTimeTracker: JobHLexmechanic
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: LexmechanicGear
   special:
   - !type:AddComponentSpecial

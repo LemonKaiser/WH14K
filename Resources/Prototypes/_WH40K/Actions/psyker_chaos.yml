@@ -105,21 +105,21 @@
     allowChaosRole: true
 
 - type: entity
-  parent: ActionRepulse
+  parent: BaseAction
   id: ActionWH40KChaosKhorneRepulse
-  name: Рёв Кхорна
-  description: Отбросьте врагов ударной волной, чтобы захватить темп ближнего боя.
+  name: Клинок Чемпиона
+  description: Призовите варп-клинок для рукопашной бойни и ближнего пролома.
   components:
   - type: Action
-    useDelay: 18
+    useDelay: 14
     icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: repulse
+      sprite: Objects/Weapons/Melee/energykatana.rsi
+      state: icon
   - type: InstantAction
-    event: !type:WH40KChaosKhorneRepulseActionEvent
+    event: !type:WH40KChaosKhorneBladeActionEvent
   - type: WH40KWarpActionCost
-    warpChargeCost: 14
-    instabilityGain: 7
+    warpChargeCost: 16
+    instabilityGain: 8
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
@@ -140,16 +140,27 @@
     allowChaosRole: true
 
 - type: entity
-  parent: ActionVoidApplause
+  parent: BaseAction
   id: ActionWH40KChaosSlaaneshSwap
-  name: Вальс Слаанеш
-  description: Поменяйтесь местами с целью в вихре экстатической скорости.
+  name: Обмен Восторга
+  description: Хлестните ткань реальности и поменяйтесь местами с выбранной целью.
   components:
   - type: Action
     useDelay: 18
+    icon:
+      sprite: Objects/Magic/Eldritch/eldritch_actions.rsi
+      state: voidblink
+  - type: TargetAction
+    accessMask:
+    - Opaque
+    repeat: false
+    range: 12
+  - type: EntityTargetAction
+    event: !type:VoidApplauseSpellEvent
+      effect: EffectVoidBlink
   - type: WH40KWarpActionCost
-    warpChargeCost: 24
-    instabilityGain: 12
+    warpChargeCost: 20
+    instabilityGain: 10
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
@@ -168,6 +179,24 @@
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
+
+- type: entity
+  parent: ActionFireballII
+  id: ActionWH40KChaosTzeentchFireball
+  name: Инферно Тзинча
+  description: Выпустите мощный сгусток переменчивого пламени с долгой перезарядкой.
+  components:
+  - type: Action
+    useDelay: 45
+  - type: WH40KWarpActionCost
+    warpChargeCost: 28
+    instabilityGain: 14
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+  - type: WorldTargetAction
+    event: !type:ProjectileSpellEvent
+      prototype: WH40KProjectileChaosWarpBlast
 
 - type: entity
   parent: ActionForceWall
@@ -265,46 +294,37 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KChaosKhorneExecutionStep
-  name: Шаг Казни
-  description: Рваните вперед по кровавым отголоскам Варпа.
-  components:
-  - type: Action
-    useDelay: 9
-    icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
-  - type: InstantAction
-    event: !type:WH40KChaosKhorneGravityJumpActionEvent
-  - type: WH40KWarpActionCost
-    warpChargeCost: 20
-    instabilityGain: 12
-    requireWarpRole: true
-    allowPsykerRole: false
-    allowChaosRole: true
-
-- type: entity
-  parent: ActionRepulse
-  id: ActionWH40KChaosNurgleRepulse
-  name: Гнилостный Ветер
-  description: Зловонная волна давления отталкивает врагов от вашей линии гниения.
+  name: Кровавое Пиршество
+  description: Сожгите кровь, чтобы резко стянуть раны и продолжить резню.
   components:
   - type: Action
     useDelay: 16
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: shield
+  - type: InstantAction
+    event: !type:WH40KChaosKhorneBloodHealActionEvent
   - type: WH40KWarpActionCost
-    warpChargeCost: 15
-    instabilityGain: 9
+    warpChargeCost: 18
+    instabilityGain: 10
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
 
 - type: entity
-  parent: ActionSmoke
-  id: ActionWH40KChaosSlaaneshMiasma
-  name: Завеса Сирены
-  description: Накройте поле боя опьяняющей чувственной дымкой.
+  parent: ActionFireball
+  id: ActionWH40KChaosNurgleRepulse
+  name: Кислотный Плевок
+  description: Выплюньте усиленный ком едкой желчи, прожигающий плоть и броню.
   components:
   - type: Action
-    useDelay: 12
+    useDelay: 11
+    icon:
+      sprite: Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi
+      state: xeno_toxic
+  - type: WorldTargetAction
+    event: !type:ProjectileSpellEvent
+      prototype: WH40KProjectileChaosNurgleAcidSpit
   - type: WH40KWarpActionCost
     warpChargeCost: 16
     instabilityGain: 10
@@ -313,16 +333,41 @@
     allowChaosRole: true
 
 - type: entity
-  parent: ActionMindSwap
-  id: ActionWH40KChaosTzeentchMindTwist
-  name: Искажение Разума Тзинча
-  description: Перепишите бой, поменявшись разумом с жертвой.
+  parent: BaseAction
+  id: ActionWH40KChaosSlaaneshMiasma
+  name: Экстатический Хор
+  description: Влейте в ближайших культистов Слаанеш стимуляторы и боевую мед-химию.
   components:
   - type: Action
-    useDelay: 130
+    useDelay: 26
+    icon:
+      sprite: Actions/smokeaction.rsi
+      state: smokeaction
+  - type: InstantAction
+    event: !type:WH40KChaosSlaaneshStimAuraActionEvent
   - type: WH40KWarpActionCost
-    warpChargeCost: 34
-    instabilityGain: 20
+    warpChargeCost: 22
+    instabilityGain: 12
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosTzeentchMindTwist
+  name: Заговор Перемен
+  description: На 30 секунд ускорьте и просветите ближайших культистов Тзинча, а избранным дайте ускорение откатов.
+  components:
+  - type: Action
+    useDelay: 30
+    icon:
+      sprite: Interface/Actions/jump.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:WH40KChaosTzeentchSpeedAuraActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 20
+    instabilityGain: 11
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
@@ -331,10 +376,10 @@
   parent: BaseAction
   id: ActionWH40KChaosKhorneBloodstorm
   name: Кровавый Натиск
-  description: Выпустите взрыв кровавой ярости, чтобы проломить укрепленное сопротивление.
+  description: Рванитесь сквозь строй, сбивая и оглушая всех, кого заденете.
   components:
   - type: Action
-    useDelay: 13
+    useDelay: 18
     icon:
       sprite: Objects/Weapons/Melee/energykatana.rsi
       state: icon
@@ -368,49 +413,105 @@
       protoId: WH40KChaosKhorneGroxMorph
 
 - type: entity
-  parent: ActionSmoke
+  parent: BaseAction
   id: ActionWH40KChaosNurgleCorpseBloom
-  name: Цветение Трупа
-  description: Посейте чумное цветение, которое утопит проход в гнили и панике.
+  name: Трупный Подъём
+  description: Поднимите выбранный труп как союзного зомби Нургла.
   components:
   - type: Action
-    useDelay: 15
-  - type: WH40KWarpActionCost
-    warpChargeCost: 18
-    instabilityGain: 11
-    requireWarpRole: true
-    allowPsykerRole: false
-    allowChaosRole: true
-
-- type: entity
-  parent: ActionBlink
-  id: ActionWH40KChaosSlaaneshExquisiteTempo
-  name: Изысканный Темп
-  description: Выполните молниеносный шаг Варпа, чтобы обогнать и изолировать жертву.
-  components:
-  - type: Action
-    useDelay: 8
-  - type: WH40KWarpActionCost
-    warpChargeCost: 22
-    instabilityGain: 13
-    requireWarpRole: true
-    allowPsykerRole: false
-    allowChaosRole: true
-
-- type: entity
-  parent: ActionFireball
-  id: ActionWH40KChaosTzeentchWarpRewrite
-  name: Перезапись Варпа
-  description: Выпустите мутирующий огонь Варпа, вынуждая врага срочно перестраиваться.
-  components:
-  - type: Action
-    useDelay: 60
+    useDelay: 35
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: gib
+  - type: TargetAction
+    range: 8
+    repeat: false
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:WH40KChaosNurgleCorpseRiseActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 26
     instabilityGain: 14
     requireWarpRole: true
     allowPsykerRole: false
     allowChaosRole: true
-  - type: WorldTargetAction
-    event: !type:ProjectileSpellEvent
-      prototype: WH40KProjectileChaosWarpBlast
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosSlaaneshExquisiteTempo
+  name: Священная Самобичевка
+  description: Раздерите себя бичом экстаза, чтобы перевести боль в мощное восстановление.
+  components:
+  - type: Action
+    useDelay: 18
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: shield
+  - type: InstantAction
+    event: !type:WH40KChaosSlaaneshMasochismActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 20
+    instabilityGain: 12
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: ActionBlink
+  id: ActionWH40KChaosTzeentchWarpRewrite
+  name: Рывок Плетельщика
+  description: Мгновенно сместитесь в выбранную точку, вырываясь из угрозы или меняя угол атаки.
+  components:
+  - type: Action
+    useDelay: 18
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: blink
+  - type: WH40KWarpActionCost
+    warpChargeCost: 20
+    instabilityGain: 10
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosSlaaneshArena
+  name: Арена Экстаза
+  description: Притяните цель к себе, оглушите обоих и замкните дуэль в краткой варп-арене.
+  components:
+  - type: Action
+    useDelay: 90
+    icon:
+      sprite: Structures/Magic/forcewall.rsi
+      state: forcewall
+  - type: TargetAction
+    range: 10
+    repeat: false
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:WH40KChaosSlaaneshArenaActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 40
+    instabilityGain: 18
+    requireWarpRole: true
+    allowPsykerRole: false
+    allowChaosRole: true
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaosLeaderSacrifice
+  name: Пепельная Жертва
+  description: Мгновенно обратите своего последователя того же пантеона в пепел, восстановите 100 энергии Варпа и дайте культу 100 XP.
+  components:
+  - type: Action
+    useDelay: 300
+    icon:
+      sprite: Mobs/Species/Human/organs.rsi
+      state: brain
+  - type: TargetAction
+    range: 8
+    repeat: false
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:WH40KChaosLeaderSacrificeActionEvent

@@ -127,7 +127,7 @@
     state: base
   product: CrateVendingMachineRestockMedicalFilled
   cost: 1750
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: market
 
 - type: cargoProduct
@@ -137,7 +137,7 @@
     state: base
   product: CrateVendingMachineRestockChemVendFilled
   cost: 3820
-  category: cargoproduct-category-name-medical
+  category: cpcat-med
   group: market
 
 - type: cargoProduct

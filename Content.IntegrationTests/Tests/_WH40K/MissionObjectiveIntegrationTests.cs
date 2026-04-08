@@ -184,29 +184,30 @@ public sealed class MissionObjectiveIntegrationTests
     }
 
     [Test]
-    public async Task BannerMissionRequiresBannerEntityAndCompletesWhenPlaced()
+    public async Task BannerMissionsRequireBannerEntityAndCompleteWhenPlaced()
     {
         await using var pair = await StartWh40KRoundAsync();
         var server = pair.Server;
 
+        // ── Part 1: Imperium banner mission ─────────────────────────────────────
         await EnsureSinglePlayerTeamAsync(pair, Imperium);
         await ClearMissionOutcomeProbeAsync(pair);
 
-        var mission = await StartFactionMissionAsync(pair, Imperium, BannerMissionId);
-        var anchor = await WaitForObjectiveBeaconAnchorAsync(pair, mission.MissionTitle);
-        await AssertAnchorTileValidAsync(pair, anchor);
+        var impMission = await StartFactionMissionAsync(pair, Imperium, BannerMissionId);
+        var impAnchor = await WaitForObjectiveBeaconAnchorAsync(pair, impMission.MissionTitle);
+        await AssertAnchorTileValidAsync(pair, impAnchor);
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.ResolveDependency<IEntityManager>();
-            DeleteEntitiesByPrototypeInRadius(entMan, anchor, BannerDetectionRadius + 0.2f, ImperiumBannerPrototypes);
+            DeleteEntitiesByPrototypeInRadius(entMan, impAnchor, BannerDetectionRadius + 0.2f, ImperiumBannerPrototypes);
             var xform = entMan.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
             var player = server.ResolveDependency<IPlayerManager>().Sessions.Single().AttachedEntity!.Value;
-            xform.SetWorldPosition(player, anchor.Position);
+            xform.SetWorldPosition(player, impAnchor.Position);
 
             for (var i = 0; i < 3; i++)
             {
-                var mob = entMan.SpawnEntity(ImperiumReinforcementPrototype, anchor);
+                var mob = entMan.SpawnEntity(ImperiumReinforcementPrototype, impAnchor);
                 var member = entMan.EnsureComponent<WH40KTeamMemberComponent>(mob);
                 member.TeamId = Imperium;
             }
@@ -231,43 +232,35 @@ public sealed class MissionObjectiveIntegrationTests
         await server.WaitAssertion(() =>
         {
             var entMan = server.ResolveDependency<IEntityManager>();
-            _ = entMan.SpawnEntity(ImperiumBannerPrototype, anchor);
+            _ = entMan.SpawnEntity(ImperiumBannerPrototype, impAnchor);
         });
 
-        var outcome = await WaitForMissionOutcomeAsync(pair, BannerMissionId, Imperium, maxTicks: 900);
+        var impOutcome = await WaitForMissionOutcomeAsync(pair, BannerMissionId, Imperium, maxTicks: 900);
         Assert.Multiple(() =>
         {
-            Assert.That(outcome.ObjectiveType, Is.EqualTo(WH40KMissionObjectiveType.BannerHold));
-            Assert.That(outcome.Tier, Is.EqualTo(WH40KMissionOutcomeTier.Major));
+            Assert.That(impOutcome.ObjectiveType, Is.EqualTo(WH40KMissionObjectiveType.BannerHold));
+            Assert.That(impOutcome.Tier, Is.EqualTo(WH40KMissionOutcomeTier.Major));
         });
 
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task HereticsBannerMissionRequiresChaosBannerAndCompletesWhenPlaced()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var server = pair.Server;
-
+        // ── Part 2: Heretics banner mission ─────────────────────────────────────
         await EnsureSinglePlayerTeamAsync(pair, Heretics);
         await ClearMissionOutcomeProbeAsync(pair);
 
-        var mission = await StartFactionMissionAsync(pair, Heretics, HereticsBannerMissionId);
-        var anchor = await WaitForObjectiveBeaconAnchorAsync(pair, mission.MissionTitle);
-        await AssertAnchorTileValidAsync(pair, anchor);
+        var herMission = await StartFactionMissionAsync(pair, Heretics, HereticsBannerMissionId);
+        var herAnchor = await WaitForObjectiveBeaconAnchorAsync(pair, herMission.MissionTitle);
+        await AssertAnchorTileValidAsync(pair, herAnchor);
 
         await server.WaitAssertion(() =>
         {
             var entMan = server.ResolveDependency<IEntityManager>();
-            DeleteEntitiesByPrototypeInRadius(entMan, anchor, BannerDetectionRadius + 0.2f, [HereticsBannerPrototype]);
+            DeleteEntitiesByPrototypeInRadius(entMan, herAnchor, BannerDetectionRadius + 0.2f, [HereticsBannerPrototype]);
             var xform = entMan.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
             var player = server.ResolveDependency<IPlayerManager>().Sessions.Single().AttachedEntity!.Value;
-            xform.SetWorldPosition(player, anchor.Position);
+            xform.SetWorldPosition(player, herAnchor.Position);
 
             for (var i = 0; i < 3; i++)
             {
-                var mob = entMan.SpawnEntity(HereticsReinforcementPrototype, anchor);
+                var mob = entMan.SpawnEntity(HereticsReinforcementPrototype, herAnchor);
                 var member = entMan.EnsureComponent<WH40KTeamMemberComponent>(mob);
                 member.TeamId = Heretics;
             }
@@ -292,18 +285,19 @@ public sealed class MissionObjectiveIntegrationTests
         await server.WaitAssertion(() =>
         {
             var entMan = server.ResolveDependency<IEntityManager>();
-            _ = entMan.SpawnEntity(HereticsBannerPrototype, anchor);
+            _ = entMan.SpawnEntity(HereticsBannerPrototype, herAnchor);
         });
 
-        var outcome = await WaitForMissionOutcomeAsync(pair, HereticsBannerMissionId, Heretics, maxTicks: 900);
+        var herOutcome = await WaitForMissionOutcomeAsync(pair, HereticsBannerMissionId, Heretics, maxTicks: 900);
         Assert.Multiple(() =>
         {
-            Assert.That(outcome.ObjectiveType, Is.EqualTo(WH40KMissionObjectiveType.BannerHold));
-            Assert.That(outcome.Tier, Is.EqualTo(WH40KMissionOutcomeTier.Major));
+            Assert.That(herOutcome.ObjectiveType, Is.EqualTo(WH40KMissionObjectiveType.BannerHold));
+            Assert.That(herOutcome.Tier, Is.EqualTo(WH40KMissionOutcomeTier.Major));
         });
 
         await pair.CleanReturnAsync();
     }
+
 
     [Test]
     public async Task CompletedFactionMissionIsTemporarilyExcludedFromOfferRoll()
@@ -352,7 +346,7 @@ public sealed class MissionObjectiveIntegrationTests
     }
 
     [Test]
-    public async Task IntelRelayMissionMajorAcceleratesNextTeamEventRoll()
+    public async Task IntelRelayMissionAcceleratesOwnAndDelaysEnemyEventRolls()
     {
         await using var pair = await StartWh40KRoundAsync();
         var server = pair.Server;
@@ -362,86 +356,26 @@ public sealed class MissionObjectiveIntegrationTests
 
         var mission = await StartFactionMissionAsync(pair, Imperium, IntelRelayMissionId);
 
-        var nextRollBefore = 0;
-        await server.WaitAssertion(() =>
-        {
-            var runtime = server.System<WH40KCommandEventMissionRuntimeSystem>();
-            var eventState = runtime.BuildTeamEventRuntimeState(Imperium);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(eventState.HasProfile, Is.True);
-                Assert.That(eventState.NextRollSeconds, Is.GreaterThan(180));
-            });
-
-            nextRollBefore = eventState.NextRollSeconds;
-        });
-
-        var anchor = await WaitForObjectiveBeaconAnchorAsync(pair, mission.MissionTitle);
-        await AssertAnchorTileValidAsync(pair, anchor);
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.ResolveDependency<IEntityManager>();
-            var xform = entMan.EntitySysManager.GetEntitySystem<SharedTransformSystem>();
-            var player = server.ResolveDependency<IPlayerManager>().Sessions.Single().AttachedEntity!.Value;
-            xform.SetWorldPosition(player, anchor.Position);
-
-            for (var i = 0; i < 3; i++)
-            {
-                var mob = entMan.SpawnEntity(ImperiumReinforcementPrototype, anchor);
-                var member = entMan.EnsureComponent<WH40KTeamMemberComponent>(mob);
-                member.TeamId = Imperium;
-            }
-        });
-
-        var outcome = await WaitForMissionOutcomeAsync(pair, IntelRelayMissionId, Imperium, maxTicks: 900);
-        Assert.That(outcome.Tier, Is.EqualTo(WH40KMissionOutcomeTier.Major));
-
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            var runtime = server.System<WH40KCommandEventMissionRuntimeSystem>();
-            var after = runtime.BuildTeamEventRuntimeState(Imperium);
-            var delta = nextRollBefore - after.NextRollSeconds;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(after.HasProfile, Is.True);
-                Assert.That(
-                    delta,
-                    Is.GreaterThanOrEqualTo(70),
-                    $"Expected mission token to accelerate next roll, but delta was too small (before={nextRollBefore}, after={after.NextRollSeconds}, delta={delta}).");
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task IntelRelayMissionMajorDelaysEnemyNextEventRoll()
-    {
-        await using var pair = await StartWh40KRoundAsync();
-        var server = pair.Server;
-
-        await EnsureSinglePlayerTeamAsync(pair, Imperium);
-        await ClearMissionOutcomeProbeAsync(pair);
-
-        var mission = await StartFactionMissionAsync(pair, Imperium, IntelRelayMissionId);
-
+        var ownNextRollBefore = 0;
         var enemyNextRollBefore = 0;
         await server.WaitAssertion(() =>
         {
             var runtime = server.System<WH40KCommandEventMissionRuntimeSystem>();
-            var enemyState = runtime.BuildTeamEventRuntimeState(Heretics);
 
+            var ownState = runtime.BuildTeamEventRuntimeState(Imperium);
+            Assert.Multiple(() =>
+            {
+                Assert.That(ownState.HasProfile, Is.True);
+                Assert.That(ownState.NextRollSeconds, Is.GreaterThan(180));
+            });
+            ownNextRollBefore = ownState.NextRollSeconds;
+
+            var enemyState = runtime.BuildTeamEventRuntimeState(Heretics);
             Assert.Multiple(() =>
             {
                 Assert.That(enemyState.HasProfile, Is.True);
                 Assert.That(enemyState.NextRollSeconds, Is.GreaterThan(120));
             });
-
             enemyNextRollBefore = enemyState.NextRollSeconds;
         });
 
@@ -471,21 +405,35 @@ public sealed class MissionObjectiveIntegrationTests
         await server.WaitAssertion(() =>
         {
             var runtime = server.System<WH40KCommandEventMissionRuntimeSystem>();
-            var enemyAfter = runtime.BuildTeamEventRuntimeState(Heretics);
-            var delta = enemyAfter.NextRollSeconds - enemyNextRollBefore;
 
+            // Own team timer should be accelerated.
+            var ownAfter = runtime.BuildTeamEventRuntimeState(Imperium);
+            var ownDelta = ownNextRollBefore - ownAfter.NextRollSeconds;
+            Assert.Multiple(() =>
+            {
+                Assert.That(ownAfter.HasProfile, Is.True);
+                Assert.That(
+                    ownDelta,
+                    Is.GreaterThanOrEqualTo(70),
+                    $"Expected mission token to accelerate next roll, but delta was too small (before={ownNextRollBefore}, after={ownAfter.NextRollSeconds}, delta={ownDelta}).");
+            });
+
+            // Enemy team timer should be delayed.
+            var enemyAfter = runtime.BuildTeamEventRuntimeState(Heretics);
+            var enemyDelta = enemyAfter.NextRollSeconds - enemyNextRollBefore;
             Assert.Multiple(() =>
             {
                 Assert.That(enemyAfter.HasProfile, Is.True);
                 Assert.That(
-                    delta,
+                    enemyDelta,
                     Is.GreaterThanOrEqualTo(40),
-                    $"Expected enemy event-roll timer to be delayed by relay effect, but delta was too small (before={enemyNextRollBefore}, after={enemyAfter.NextRollSeconds}, delta={delta}).");
+                    $"Expected enemy event-roll timer to be delayed by relay effect, but delta was too small (before={enemyNextRollBefore}, after={enemyAfter.NextRollSeconds}, delta={enemyDelta}).");
             });
         });
 
         await pair.CleanReturnAsync();
     }
+
 
     [Test]
     public async Task ZoneMissionAnchorIsValidAndPresenceCompletesObjective()
@@ -662,14 +610,30 @@ public sealed class MissionObjectiveIntegrationTests
             Connected = true,
             Dirty = true,
             InLobby = true,
-            DummyTicker = false
+            DummyTicker = false,
+            Fresh = true
         });
 
         await pair.WaitCommand("forcemap Battlefield40k");
         await pair.WaitCommand("setgamepreset WH40KTeamBattle 9999");
-        await pair.WaitClientCommand("toggleready True");
         await pair.WaitCommand("startround");
-        await pair.RunTicksSync(80);
+        await pair.RunTicksSync(60);
+
+        // WH40K requires faction selection before late-join.
+        await pair.Client.WaitPost(() =>
+        {
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", Content.Shared._WH40K.LateJoin.WH40KFactionSelectionPurpose.LateJoin);
+        });
+        await pair.RunTicksSync(10);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            var playerMan = pair.Server.ResolveDependency<IPlayerManager>();
+            ticker.MakeJoinGame(playerMan.Sessions.Single(), EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
 
         await pair.Server.WaitAssertion(() =>
         {

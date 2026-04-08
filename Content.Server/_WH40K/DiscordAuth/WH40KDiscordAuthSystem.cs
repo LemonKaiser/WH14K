@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
@@ -28,6 +30,10 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 {
     private const string DefaultScope = "identify guilds.members.read";
     private const string DefaultCallbackPath = "/wh40k/discord-auth/callback";
+    private const int MaxRelayBodyBytes = 4096;
+    private const int EndpointRateLimitPerSecond = 10;
+    private const int EndpointRateLimitBurst = 20;
+
     private static readonly JsonSerializerOptions RoleCacheJsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -48,10 +54,18 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     private readonly Dictionary<NetUserId, DateTimeOffset> _connectRefreshAttempts = new();
     private readonly Dictionary<string, PendingLinkRequest> _pendingRequests = new(StringComparer.Ordinal);
     private readonly Dictionary<NetUserId, string> _pendingRequestByUser = new();
+    private readonly Dictionary<NetUserId, Task<RefreshResult>> _activeRefreshes = new();
     private readonly object _stateLock = new();
     private readonly object _pendingRequestLock = new();
+    private readonly object _refreshLock = new();
+
+    // Token-bucket rate limiter for callback + relay endpoints.
+    private readonly object _rateLimitLock = new();
+    private double _rateLimitTokens = EndpointRateLimitBurst;
+    private DateTimeOffset _rateLimitLastRefill = DateTimeOffset.UtcNow;
 
     private ISawmill _sawmill = default!;
+    private DateTimeOffset _lastCleanupAt;
 
     private bool _enabled;
     private bool _gateOnConnect;
@@ -62,6 +76,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     private string _guildId = string.Empty;
     private string _redirectUri = string.Empty;
     private HashSet<string> _requiredRoleIds = new(StringComparer.Ordinal);
+    private string _relaySecret = string.Empty;
     private TimeSpan _cacheTtl = TimeSpan.FromHours(2);
     private TimeSpan _connectRefreshCooldown = TimeSpan.FromSeconds(15);
     private TimeSpan _linkRequestTtl = TimeSpan.FromMinutes(10);
@@ -116,17 +131,31 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             _cacheTtl = TimeSpan.FromMinutes(Math.Max(1, value));
             PushSnapshotToAllOnline();
         }, true);
+        Subs.CVar(_config, CCVars.WH40KDiscordAuthRelaySecret, value => _relaySecret = value.Trim(), true);
         _userDb.AddOnLoadPlayer(LoadPlayerDataAsync);
         _userDb.AddOnFinishLoad(FinishPlayerLoad);
         _userDb.AddOnPlayerDisconnect(OnPlayerDisconnected);
 
         _statusHost.AddHandler(HandleCallbackRequestAsync);
+        _statusHost.AddHandler(HandleRelayRequestAsync);
 
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeNetworkEvent<WH40KDiscordAuthRequestStateEvent>(OnRequestState);
         SubscribeNetworkEvent<WH40KDiscordAuthStartLinkEvent>(OnStartLink);
         SubscribeNetworkEvent<WH40KDiscordAuthRefreshProfileEvent>(OnRefreshProfile);
         SubscribeNetworkEvent<WH40KDiscordAuthUnlinkEvent>(OnUnlink);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var now = DateTimeOffset.UtcNow;
+        if (now - _lastCleanupAt < TimeSpan.FromSeconds(30))
+            return;
+
+        _lastCleanupAt = now;
+        CleanupExpiredPendingRequests();
     }
 
     private async Task LoadPlayerDataAsync(ICommonSession session, CancellationToken cancel)
@@ -183,6 +212,18 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
     private async void OnRefreshProfile(WH40KDiscordAuthRefreshProfileEvent ev, EntitySessionEventArgs args)
     {
+        try
+        {
+            await OnRefreshProfileCore(args);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Discord refresh error for {args.SenderSession.UserId}: {e}");
+        }
+    }
+
+    private async Task OnRefreshProfileCore(EntitySessionEventArgs args)
+    {
         if (!_enabled)
         {
             Popup(args.SenderSession, "wh40k-discord-auth-popup-disabled");
@@ -204,12 +245,11 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             return;
         }
 
-        var refreshResult = await RefreshFromDiscordAsync(current);
+        var refreshResult = await DeduplicatedRefreshAsync(args.SenderSession.UserId, current, CancellationToken.None);
         if (!refreshResult.Success || refreshResult.Data == null)
         {
             if (refreshResult.RequiresReauth)
             {
-                _sawmill.Info($"Discord auth refresh requires reauthorization for {args.SenderSession.Name} ({args.SenderSession.UserId}).");
                 if (!TryStartLinkFlow(args.SenderSession, "wh40k-discord-auth-popup-reauth-opening"))
                     Popup(args.SenderSession, refreshResult.UserErrorKey ?? "wh40k-discord-auth-popup-reauth-required");
 
@@ -217,7 +257,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
                 return;
             }
 
-            _sawmill.Warning($"Discord auth refresh failed for {args.SenderSession.Name} ({args.SenderSession.UserId}): {refreshResult.Error}");
+            _sawmill.Warning($"Discord refresh failed for {args.SenderSession.UserId}: {refreshResult.Error}");
             Popup(args.SenderSession, refreshResult.UserErrorKey ?? "wh40k-discord-auth-popup-refresh-failed");
             SendSnapshot(args.SenderSession);
             return;
@@ -232,15 +272,25 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
     private async void OnUnlink(WH40KDiscordAuthUnlinkEvent ev, EntitySessionEventArgs args)
     {
-        if (!TryGetLinkedData(args.SenderSession.UserId, out _))
+        try
         {
-            Popup(args.SenderSession, "wh40k-discord-auth-popup-link-required");
-            SendSnapshot(args.SenderSession);
-            return;
-        }
+            if (!TryGetLinkedData(args.SenderSession.UserId, out var linkToRevoke))
+            {
+                Popup(args.SenderSession, "wh40k-discord-auth-popup-link-required");
+                SendSnapshot(args.SenderSession);
+                return;
+            }
 
-        await ClearLinkAsync(args.SenderSession.UserId);
-        Popup(args.SenderSession, "wh40k-discord-auth-popup-unlink-success");
+            await ClearLinkAsync(args.SenderSession.UserId);
+            Popup(args.SenderSession, "wh40k-discord-auth-popup-unlink-success");
+            _sawmill.Info($"Discord unlinked for {args.SenderSession.UserId}.");
+
+            _ = Task.Run(() => TryRevokeTokenAsync(linkToRevoke.AccessToken));
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Discord unlink error for {args.SenderSession.UserId}: {e}");
+        }
     }
 
     private async Task<bool> HandleCallbackRequestAsync(IStatusHandlerContext context)
@@ -248,67 +298,136 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         if (context.RequestMethod != HttpMethod.Get || context.Url.AbsolutePath != GetCallbackPath())
             return false;
 
-        CleanupExpiredPendingRequests();
+        if (!TryConsumeRateLimitToken())
+        {
+            await RespondHtmlAsync(context, HttpStatusCode.TooManyRequests, false, "Слишком много запросов. Попробуйте позже.");
+            return true;
+        }
 
         var query = ParseQuery(context.Url.Query);
-        var stateId = GetQueryValue(query, "state");
-
-        if (string.IsNullOrWhiteSpace(stateId) || !TryConsumePendingRequest(stateId, out var pending))
-        {
-            await RespondHtmlAsync(context, HttpStatusCode.Gone, false, "Запрос привязки истёк или уже был использован.");
-            return true;
-        }
-
-        if (!_enabled || !IsOAuthConfigured())
-        {
-            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-misconfigured");
-            await RespondHtmlAsync(context, HttpStatusCode.ServiceUnavailable, false, "Discord OAuth2 не настроен на сервере.");
-            return true;
-        }
 
         var error = GetQueryValue(query, "error");
         if (!string.IsNullOrWhiteSpace(error))
         {
-            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-access-denied");
+            var errorStateId = GetQueryValue(query, "state");
+            if (!string.IsNullOrWhiteSpace(errorStateId) && TryConsumePendingRequest(errorStateId, out var errorPending))
+                await NotifyCallbackFailureAsync(errorPending.UserId, "wh40k-discord-auth-popup-access-denied");
+
             await RespondHtmlAsync(context, HttpStatusCode.BadRequest, false, "Авторизация Discord была отклонена.");
             return true;
         }
 
         var code = GetQueryValue(query, "code");
+        var stateId = GetQueryValue(query, "state");
+
+        var result = await ProcessCallbackAsync(code ?? string.Empty, stateId ?? string.Empty, CancellationToken.None);
+        await RespondHtmlAsync(context, result.HttpStatus, result.Ok, result.Message);
+        return true;
+    }
+
+    private async Task<bool> HandleRelayRequestAsync(IStatusHandlerContext context)
+    {
+        if (context.RequestMethod != HttpMethod.Post || context.Url.AbsolutePath != "/wh40k/discord-auth/relay")
+            return false;
+
+        if (!TryConsumeRateLimitToken())
+        {
+            await RespondJsonAsync(context, HttpStatusCode.TooManyRequests, false, "Rate limit exceeded.");
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(_relaySecret))
+        {
+            await RespondJsonAsync(context, HttpStatusCode.ServiceUnavailable, false, "Relay not configured.");
+            return true;
+        }
+
+        string? headerSecret = null;
+            if (context.RequestHeaders.TryGetValue("X-WH40K-Relay-Secret", out var secretValues))
+        {
+            foreach (var v in secretValues)
+            {
+                headerSecret = v;
+                break;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(headerSecret)
+            || !FixedTimeSecretEquals(headerSecret.Trim(), _relaySecret))
+        {
+            await RespondJsonAsync(context, HttpStatusCode.Forbidden, false, "Invalid relay secret.");
+            return true;
+        }
+
+        RelayPayload? payload;
+        try
+        {
+            using var limited = new LimitedReadStream(context.RequestBody, MaxRelayBodyBytes);
+            payload = await JsonSerializer.DeserializeAsync<RelayPayload>(limited, JsonOptions);
+        }
+        catch
+        {
+            payload = null;
+        }
+
+        if (payload == null
+            || string.IsNullOrWhiteSpace(payload.Code)
+            || string.IsNullOrWhiteSpace(payload.State))
+        {
+            await RespondJsonAsync(context, HttpStatusCode.BadRequest, false, "Missing code or state.");
+            return true;
+        }
+
+        var result = await ProcessCallbackAsync(payload.Code!, payload.State!, CancellationToken.None);
+        await RespondJsonAsync(context, result.HttpStatus, result.Ok, result.Message);
+        return true;
+    }
+
+    private async Task<CallbackResult> ProcessCallbackAsync(string code, string stateId, CancellationToken cancel)
+    {
+        if (!_enabled || !IsOAuthConfigured())
+            return new CallbackResult(HttpStatusCode.ServiceUnavailable, false, "Discord OAuth2 не настроен на сервере.");
+
+        if (string.IsNullOrWhiteSpace(stateId) || !TryConsumePendingRequest(stateId, out var pending))
+            return new CallbackResult(HttpStatusCode.Gone, false, "Запрос привязки истёк или уже был использован.");
+
         if (string.IsNullOrWhiteSpace(code))
         {
             await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-callback-invalid");
-            await RespondHtmlAsync(context, HttpStatusCode.BadRequest, false, "Discord не вернул код авторизации.");
-            return true;
+            return new CallbackResult(HttpStatusCode.BadRequest, false, "Discord не вернул код авторизации.");
         }
 
-        var tokenResult = await ExchangeAuthorizationCodeAsync(code);
+        var tokenResult = await ExchangeAuthorizationCodeAsync(code, cancel);
         if (!tokenResult.Success || tokenResult.Token == null)
         {
             await NotifyCallbackFailureAsync(pending.UserId, tokenResult.UserErrorKey ?? "wh40k-discord-auth-popup-token-failed");
-            await RespondHtmlAsync(context, HttpStatusCode.BadGateway, false, "Не удалось обменять код Discord на токен.");
-            return true;
+            return new CallbackResult(HttpStatusCode.BadGateway, false, "Не удалось обменять код Discord на токен.");
         }
 
-        var resolved = await ResolveLinkDataAsync(tokenResult.Token);
+        var resolved = await ResolveLinkDataAsync(tokenResult.Token, cancel);
         if (!resolved.Success || resolved.Data == null)
         {
             await NotifyCallbackFailureAsync(pending.UserId, resolved.UserErrorKey ?? "wh40k-discord-auth-popup-fetch-failed");
-            await RespondHtmlAsync(context, HttpStatusCode.BadGateway, false, "Не удалось получить профиль Discord.");
-            return true;
+            return new CallbackResult(HttpStatusCode.BadGateway, false, "Не удалось получить профиль Discord.");
         }
 
         try
         {
             await _db.SetWH40KDiscordLink(pending.UserId, resolved.Data);
         }
-        catch (InvalidOperationException e)
+        catch (InvalidOperationException)
         {
-            _sawmill.Warning($"Discord link callback rejected for {pending.UserId}: {e.Message}");
             await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-duplicate-link");
-            await RespondHtmlAsync(context, HttpStatusCode.Conflict, false, "Этот Discord уже привязан к другому игровому аккаунту.");
-            return true;
+            return new CallbackResult(HttpStatusCode.Conflict, false, "Этот Discord уже привязан к другому игровому аккаунту.");
         }
+        catch (Exception ex)
+        {
+            _sawmill.Warning($"Database error during Discord link for {pending.UserId}: {ex}");
+            await NotifyCallbackFailureAsync(pending.UserId, "wh40k-discord-auth-popup-link-failed");
+            return new CallbackResult(HttpStatusCode.InternalServerError, false, "Ошибка сохранения привязки.");
+        }
+
+        _sawmill.Info($"Discord linked: {pending.UserId} -> {resolved.Data.DiscordUserId} ({resolved.Data.Username}).");
 
         await RunOnMainThreadAsync(() =>
         {
@@ -322,8 +441,14 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             _metaProgress.RefreshDiscordRequirementsForUser(pending.UserId);
         });
 
-        await RespondHtmlAsync(context, HttpStatusCode.OK, true, "Discord успешно привязан. Можно возвращаться в игру.");
-        return true;
+        return new CallbackResult(HttpStatusCode.OK, true, "Discord успешно привязан.");
+    }
+
+    private static async Task RespondJsonAsync(IStatusHandlerContext context, HttpStatusCode code, bool ok, string message)
+    {
+        context.ResponseHeaders["Cache-Control"] = "no-store";
+        var json = JsonSerializer.Serialize(new { ok, message });
+        await context.RespondAsync(json, code, "application/json; charset=utf-8");
     }
 
     private WH40KDiscordAuthSnapshot BuildSnapshot(NetUserId userId)
@@ -402,7 +527,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             var now = DateTimeOffset.UtcNow;
             if (TryMarkConnectRefreshAttempt(userId, now, out _))
             {
-                var refreshResult = await RefreshFromDiscordAsync(link!);
+                var refreshResult = await DeduplicatedRefreshAsync(userId, link!, cancel);
                 cancel.ThrowIfCancellationRequested();
 
                 if (refreshResult.Success && refreshResult.Data != null)
@@ -419,7 +544,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
                 }
                 else
                 {
-                    _sawmill.Warning($"Discord auth connect refresh failed for {userId}: {refreshResult.Error}");
+                    _sawmill.Warning($"Discord connect refresh failed for {userId}: {refreshResult.Error}");
                 }
             }
         }
@@ -582,7 +707,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
         cancel.ThrowIfCancellationRequested();
 
-        var refreshResult = await RefreshFromDiscordAsync(link!);
+        var refreshResult = await RefreshFromDiscordAsync(link!, cancel);
         cancel.ThrowIfCancellationRequested();
 
         if (!refreshResult.Success || refreshResult.Data == null)
@@ -697,14 +822,18 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         if (_connectRefreshAttempts.Count == 0)
             return;
 
-        var expired = _connectRefreshAttempts
-            .Where(pair => GetCooldownRemaining(pair.Value, now, _connectRefreshCooldown) <= TimeSpan.Zero)
-            .Select(pair => pair.Key)
-            .ToList();
-
-        foreach (var key in expired)
+        // Avoid LINQ allocation inside lock — collect keys directly.
+        List<NetUserId>? expired = null;
+        foreach (var (key, value) in _connectRefreshAttempts)
         {
-            _connectRefreshAttempts.Remove(key);
+            if (GetCooldownRemaining(value, now, _connectRefreshCooldown) <= TimeSpan.Zero)
+                (expired ??= new List<NetUserId>()).Add(key);
+        }
+
+        if (expired != null)
+        {
+            foreach (var key in expired)
+                _connectRefreshAttempts.Remove(key);
         }
     }
 
@@ -756,8 +885,6 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         if (!_enabled || !IsOAuthConfigured())
             return false;
 
-        CleanupExpiredPendingRequests();
-
         var now = DateTimeOffset.UtcNow;
 
         lock (_pendingRequestLock)
@@ -808,9 +935,9 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         return true;
     }
 
-    private async Task<TokenExchangeResult> ExchangeAuthorizationCodeAsync(string code)
+    private async Task<TokenExchangeResult> ExchangeAuthorizationCodeAsync(string code, CancellationToken cancel = default)
     {
-        var result = await _api.ExchangeAuthorizationCodeAsync(_clientId, _clientSecret, _redirectUri, code);
+        var result = await _api.ExchangeAuthorizationCodeAsync(_clientId, _clientSecret, _redirectUri, code, cancel);
         if (!result.Success || result.Value == null)
         {
             if (result.StatusCode != null)
@@ -830,12 +957,12 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         return new TokenExchangeResult(token, true, null, null);
     }
 
-    private async Task<TokenExchangeResult> RefreshAccessTokenAsync(WH40KDiscordAuthDbData link)
+    private async Task<TokenExchangeResult> RefreshAccessTokenAsync(WH40KDiscordAuthDbData link, CancellationToken cancel = default)
     {
         if (string.IsNullOrWhiteSpace(link.RefreshToken))
             return new TokenExchangeResult(null, false, "missing_refresh_token", "wh40k-discord-auth-popup-reauth-required", true);
 
-        var result = await _api.RefreshAccessTokenAsync(_clientId, _clientSecret, link.RefreshToken!);
+        var result = await _api.RefreshAccessTokenAsync(_clientId, _clientSecret, link.RefreshToken!, cancel);
         if (!result.Success || result.Value == null)
         {
             if (result.StatusCode != null)
@@ -861,7 +988,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         return new TokenExchangeResult(token, true, null, null);
     }
 
-    private async Task<RefreshResult> RefreshFromDiscordAsync(WH40KDiscordAuthDbData current)
+    private async Task<RefreshResult> RefreshFromDiscordAsync(WH40KDiscordAuthDbData current, CancellationToken cancel = default)
     {
         var token = new DiscordTokenPayload(
             current.AccessToken,
@@ -873,7 +1000,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
         if (DateTimeOffset.UtcNow >= current.TokenExpiresAt - TimeSpan.FromMinutes(1))
         {
-            var refresh = await RefreshAccessTokenAsync(current);
+            var refresh = await RefreshAccessTokenAsync(current, cancel);
             if (!refresh.Success || refresh.Token == null)
                 return new RefreshResult(null, false, refresh.Error, refresh.UserErrorKey, refresh.RequiresReauth);
 
@@ -881,17 +1008,17 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             tokenWasRefreshed = true;
         }
 
-        var resolved = await ResolveLinkDataAsync(token);
+        var resolved = await ResolveLinkDataAsync(token, cancel);
         if (resolved.Success && resolved.Data != null)
             return new RefreshResult(resolved.Data, true, null, null, false);
 
         if (!tokenWasRefreshed && resolved.RequiresReauth)
         {
-            var refresh = await RefreshAccessTokenAsync(current);
+            var refresh = await RefreshAccessTokenAsync(current, cancel);
             if (!refresh.Success || refresh.Token == null)
                 return new RefreshResult(null, false, refresh.Error, refresh.UserErrorKey, refresh.RequiresReauth);
 
-            resolved = await ResolveLinkDataAsync(refresh.Token);
+            resolved = await ResolveLinkDataAsync(refresh.Token, cancel);
             if (resolved.Success && resolved.Data != null)
                 return new RefreshResult(resolved.Data, true, null, null, false);
         }
@@ -899,11 +1026,11 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         return new RefreshResult(resolved.Data, resolved.Success, resolved.Error, resolved.UserErrorKey, resolved.RequiresReauth);
     }
 
-    private async Task<ResolveResult> ResolveLinkDataAsync(DiscordTokenPayload token)
+    private async Task<ResolveResult> ResolveLinkDataAsync(DiscordTokenPayload token, CancellationToken cancel = default)
     {
         try
         {
-            var userResult = await _api.GetCurrentUserAsync(token.AccessToken);
+            var userResult = await _api.GetCurrentUserAsync(token.AccessToken, cancel);
             if (!userResult.Success || userResult.Value == null)
             {
                 var requiresReauth = WH40KDiscordAuthRefreshFailureClassifier.RequiresReauthAfterResolveFailure(userResult.StatusCode);
@@ -926,7 +1053,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
             if (!string.IsNullOrWhiteSpace(_guildId))
             {
                 guildIdCached = _guildId;
-                var memberResult = await _api.GetGuildMemberAsync(token.AccessToken, _guildId);
+                var memberResult = await _api.GetGuildMemberAsync(token.AccessToken, _guildId, cancel);
                 if (!memberResult.Success)
                 {
                     var requiresReauth = WH40KDiscordAuthRefreshFailureClassifier.RequiresReauthAfterResolveFailure(memberResult.StatusCode);
@@ -1077,11 +1204,9 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(query))
             return result;
 
-        var span = query.AsSpan();
-        if (span.Length > 0 && span[0] == '?')
-            span = span[1..];
+        var raw = query.Length > 0 && query[0] == '?' ? query.Substring(1) : query;
 
-        foreach (var pair in span.ToString().Split('&', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var pair in raw.Split('&', StringSplitOptions.RemoveEmptyEntries))
         {
             var split = pair.Split('=', 2);
             var key = WebUtility.UrlDecode(split[0]);
@@ -1108,10 +1233,15 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
                 return;
 
             var now = DateTimeOffset.UtcNow;
-            var expired = _pendingRequests
-                .Where(pair => pair.Value.ExpiresAt <= now)
-                .Select(pair => pair.Key)
-                .ToList();
+            List<string>? expired = null;
+            foreach (var (key, value) in _pendingRequests)
+            {
+                if (value.ExpiresAt <= now)
+                    (expired ??= new List<string>()).Add(key);
+            }
+
+            if (expired == null)
+                return;
 
             foreach (var key in expired)
             {
@@ -1143,6 +1273,25 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     private static string CreateRequestToken()
     {
         return Convert.ToHexString(RandomNumberGenerator.GetBytes(24));
+    }
+
+    private async Task TryRevokeTokenAsync(string accessToken)
+    {
+        try
+        {
+            await _api.RevokeTokenAsync(_clientId, _clientSecret, accessToken);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Warning($"Discord token revocation failed (non-critical): {e.Message}");
+        }
+    }
+
+    private static bool FixedTimeSecretEquals(string a, string b)
+    {
+        var bytesA = System.Text.Encoding.UTF8.GetBytes(a);
+        var bytesB = System.Text.Encoding.UTF8.GetBytes(b);
+        return CryptographicOperations.FixedTimeEquals(bytesA, bytesB);
     }
 
     private static string GetDisplayName(WH40KDiscordAuthDbData link)
@@ -1271,4 +1420,137 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     private sealed record TokenExchangeResult(DiscordTokenPayload? Token, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
     private sealed record ResolveResult(WH40KDiscordAuthDbData? Data, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
     private sealed record RefreshResult(WH40KDiscordAuthDbData? Data, bool Success, string? Error, string? UserErrorKey, bool RequiresReauth = false);
+    private sealed record CallbackResult(HttpStatusCode HttpStatus, bool Ok, string Message);
+
+    private sealed class RelayPayload
+    {
+        [JsonPropertyName("code")]
+        public string? Code { get; set; }
+
+        [JsonPropertyName("state")]
+        public string? State { get; set; }
+    }
+
+    // ── Rate limiter (token bucket) ──────────────────────────────────────
+
+    private bool TryConsumeRateLimitToken()
+    {
+        lock (_rateLimitLock)
+        {
+            var now = DateTimeOffset.UtcNow;
+            var elapsed = (now - _rateLimitLastRefill).TotalSeconds;
+            if (elapsed > 0)
+            {
+                _rateLimitTokens = Math.Min(
+                    EndpointRateLimitBurst,
+                    _rateLimitTokens + elapsed * EndpointRateLimitPerSecond);
+                _rateLimitLastRefill = now;
+            }
+
+            if (_rateLimitTokens < 1)
+                return false;
+
+            _rateLimitTokens -= 1;
+            return true;
+        }
+    }
+
+    // ── Concurrent refresh deduplication ─────────────────────────────────
+
+    private Task<RefreshResult> DeduplicatedRefreshAsync(
+        NetUserId userId,
+        WH40KDiscordAuthDbData current,
+        CancellationToken cancel = default)
+    {
+        lock (_refreshLock)
+        {
+            if (_activeRefreshes.TryGetValue(userId, out var existing))
+                return existing;
+
+            var task = RunRefreshCoreAsync(userId, current, cancel);
+            _activeRefreshes[userId] = task;
+            return task;
+        }
+    }
+
+    private async Task<RefreshResult> RunRefreshCoreAsync(
+        NetUserId userId,
+        WH40KDiscordAuthDbData current,
+        CancellationToken cancel)
+    {
+        try
+        {
+            return await RefreshFromDiscordAsync(current, cancel);
+        }
+        finally
+        {
+            lock (_refreshLock)
+            {
+                _activeRefreshes.Remove(userId);
+            }
+        }
+    }
+
+    // ── Body size limiter stream ─────────────────────────────────────────
+
+    private sealed class LimitedReadStream : Stream
+    {
+        private readonly Stream _inner;
+        private readonly long _maxBytes;
+        private long _totalRead;
+
+        public LimitedReadStream(Stream inner, long maxBytes)
+        {
+            _inner = inner;
+            _maxBytes = maxBytes;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            var allowed = (int) Math.Min(count, _maxBytes - _totalRead);
+            if (allowed <= 0)
+                throw new InvalidOperationException("Request body exceeded maximum allowed size.");
+
+            var read = _inner.Read(buffer, offset, allowed);
+            _totalRead += read;
+            return read;
+        }
+
+        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            var allowed = (int) Math.Min(count, _maxBytes - _totalRead);
+            if (allowed <= 0)
+                throw new InvalidOperationException("Request body exceeded maximum allowed size.");
+
+            var read = await _inner.ReadAsync(buffer, offset, allowed, cancellationToken);
+            _totalRead += read;
+            return read;
+        }
+
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            var allowed = (int) Math.Min(buffer.Length, _maxBytes - _totalRead);
+            if (allowed <= 0)
+                throw new InvalidOperationException("Request body exceeded maximum allowed size.");
+
+            var read = await _inner.ReadAsync(buffer[..allowed], cancellationToken);
+            _totalRead += read;
+            return read;
+        }
+
+        public override void Flush() { }
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
 }

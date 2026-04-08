@@ -19,6 +19,7 @@ using Content.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Combat.Inflatable;
 
@@ -33,6 +34,7 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -41,6 +43,7 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
         SubscribeLocalEvent<WH40KInflatableDeployComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WH40KInflatableDeployComponent, AfterInteractEvent>(OnAfterInteract);
         SubscribeLocalEvent<WH40KInflatableDeployComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<WH40KInflatableDeployComponent, WH40KInflatableDeployDoAfterEvent>(OnDeployDoAfter);
     }
 
     private void OnMapInit(Entity<WH40KInflatableDeployComponent> ent, ref MapInitEvent args)
@@ -51,7 +54,7 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
             ent.Comp.UseDelayId);
     }
 
-    private async void OnAfterInteract(EntityUid uid, WH40KInflatableDeployComponent component, AfterInteractEvent args)
+    private void OnAfterInteract(EntityUid uid, WH40KInflatableDeployComponent component, AfterInteractEvent args)
     {
         if (!args.CanReach && !component.IgnoreDistance)
             return;
@@ -83,23 +86,41 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
                 EntityManager,
                 args.User,
                 (float) component.DeployDoAfter.TotalSeconds,
-                new AwaitedDoAfterEvent(),
-                null)
+                new WH40KInflatableDeployDoAfterEvent(),
+                uid,
+                used: uid)
             {
                 BreakOnMove = true,
             };
 
-            var result = await _doAfter.WaitDoAfter(doAfterArgs);
-            if (result != DoAfterStatus.Finished)
+            if (!_doAfter.TryStartDoAfter(doAfterArgs))
                 return;
+
+            return;
         }
+
+        PerformDeploy(uid, component, args.User, args.ClickLocation, grid);
+    }
+
+    private void OnDeployDoAfter(EntityUid uid, WH40KInflatableDeployComponent component, WH40KInflatableDeployDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled)
+            return;
+
+        args.Handled = true;
 
         if (TerminatingOrDeleted(uid))
             return;
 
-        if (!TryGetGridAndTile(args.ClickLocation, out gridUid, out grid, out tileRef) || !IsTileClear(tileRef))
+        var coords = Transform(args.User).Coordinates;
+        if (!TryGetGridAndTile(coords, out _, out var grid, out var tileRef) || !IsTileClear(tileRef))
             return;
 
+        PerformDeploy(uid, component, args.User, coords, grid);
+    }
+
+    private void PerformDeploy(EntityUid uid, WH40KInflatableDeployComponent component, EntityUid user, EntityCoordinates clickLocation, MapGridComponent grid)
+    {
         if (component.ConsumeOnDeploy)
         {
             if (TryComp<StackComponent>(uid, out var stackComp))
@@ -113,15 +134,16 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
             }
         }
 
-        var deployed = Spawn(component.DeployPrototype, args.ClickLocation.SnapToGrid(grid));
+        var deployed = Spawn(component.DeployPrototype, clickLocation.SnapToGrid(grid));
         var placed = EnsureComp<WH40KInflatablePlacedComponent>(deployed);
-        placed.PlacedBy = args.User;
+        placed.PlacedBy = user;
         placed.PlacedAt = _timing.CurTime;
         Dirty(deployed, placed);
     }
 
     private void OnExamined(Entity<WH40KInflatableDeployComponent> ent, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KInflatableDeployComponent)))
         {
             args.PushMarkup(Loc.GetString(
@@ -291,6 +313,6 @@ public sealed class WH40KInflatableDeploySystem : EntitySystem
 
     private void PopupCaution(EntityUid user, string locKey, params (string, object)[] args)
     {
-        _popup.PopupEntity(Loc.GetString(locKey, args), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, locKey, args), user, user, PopupType.SmallCaution);
     }
 }

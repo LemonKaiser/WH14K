@@ -41,18 +41,6 @@ public sealed partial class WH40KTierMachineProfilePrototype : IPrototype
 
     [DataField("minProcessSecondsTier3")]
     public float MinProcessSecondsTier3 = 3f;
-
-    [DataField("materialStorageLimitTier0")]
-    public int? MaterialStorageLimitTier0 = 10;
-
-    [DataField("materialStorageLimitTier1")]
-    public int? MaterialStorageLimitTier1 = 15;
-
-    [DataField("materialStorageLimitTier2")]
-    public int? MaterialStorageLimitTier2 = 20;
-
-    [DataField("materialStorageLimitTier3")]
-    public int? MaterialStorageLimitTier3 = 30;
 }
 
 [Prototype("wh40kTierLogisticsProfile")]

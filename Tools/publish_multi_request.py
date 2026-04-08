@@ -15,47 +15,50 @@ RELEASE_DIR = "release"
 # CONFIGURATION PARAMETERS
 # Forks should change these to publish to their own infrastructure.
 #
-ROBUST_CDN_URL = "https://cdn.heretec.online/"
-FORK_ID = "heretec-online-wh14k"
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--fork-id", default=FORK_ID)
+# Primary CDN — game server CDN (simplestation), server gets builds from here.
+PRIMARY_CDN_URL = "https://cdn.simplestation.org/"
+PRIMARY_FORK_ID = "ebengrad"
 
-    args = parser.parse_args()
-    fork_id = args.fork_id
+# Mirror CDN — your own CDN, clients should download from here.
+# Set MIRROR_PUBLISH_TOKEN env var to enable mirror publishing.
+MIRROR_CDN_URL = "https://2612.koara.live/"
+MIRROR_FORK_ID = "main"
 
+def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
+    """Publish the release to a single Robust.Cdn instance."""
     session = requests.Session()
     session.headers = {
-        "Authorization": f"Bearer {PUBLISH_TOKEN}",
+        "Authorization": f"Bearer {token}",
     }
 
-    print(f"Starting publish on Robust.Cdn for version {VERSION}")
+    print(f"\n===== Publishing to {label}: {cdn_url}fork/{fork_id}/ =====")
+    print(f"Version: {VERSION}")
 
     data = {
         "version": VERSION,
-        "engineVersion": get_engine_version(),
+        "engineVersion": engine_version,
     }
     headers = {
         "Content-Type": "application/json"
     }
-    resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/start", json=data, headers=headers)
+    resp = session.post(f"{cdn_url}fork/{fork_id}/publish/start", json=data, headers=headers)
     resp.raise_for_status()
-    print("Publish successfully started, adding files...")
+    print("Publish started, adding files...")
 
     for file in get_files_to_publish():
-        print(f"Publishing {file}")
+        print(f"  Uploading {file}")
         with open(file, "rb") as f:
             headers = {
                 "Content-Type": "application/octet-stream",
                 "Robust-Cdn-Publish-File": os.path.basename(file),
                 "Robust-Cdn-Publish-Version": VERSION
             }
-            resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/file", data=f, headers=headers)
+            resp = session.post(f"{cdn_url}fork/{fork_id}/publish/file", data=f, headers=headers)
 
         resp.raise_for_status()
 
-    print("Successfully pushed files, finishing publish...")
+    print("Files pushed, finishing publish...")
 
     data = {
         "version": VERSION
@@ -63,10 +66,42 @@ def main():
     headers = {
         "Content-Type": "application/json"
     }
-    resp = session.post(f"{ROBUST_CDN_URL}fork/{fork_id}/publish/finish", json=data, headers=headers)
+    resp = session.post(f"{cdn_url}fork/{fork_id}/publish/finish", json=data, headers=headers)
     resp.raise_for_status()
 
-    print("SUCCESS!")
+    print(f"===== {label} publish SUCCESS! =====\n")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--fork-id", default=PRIMARY_FORK_ID)
+    parser.add_argument("--mirror-fork-id", default=MIRROR_FORK_ID)
+
+    args = parser.parse_args()
+
+    engine_version = get_engine_version()
+
+    # 1. Publish to primary CDN (game server CDN)
+    publish_to_cdn(
+        cdn_url=PRIMARY_CDN_URL,
+        fork_id=args.fork_id,
+        token=PUBLISH_TOKEN,
+        engine_version=engine_version,
+        label="Primary (game server CDN)"
+    )
+
+    # 2. Publish to mirror CDN (your own CDN for client downloads)
+    mirror_token = os.environ.get("MIRROR_PUBLISH_TOKEN", "")
+    if mirror_token:
+        publish_to_cdn(
+            cdn_url=MIRROR_CDN_URL,
+            fork_id=args.mirror_fork_id,
+            token=mirror_token,
+            engine_version=engine_version,
+            label="Mirror (client download CDN)"
+        )
+    else:
+        print("MIRROR_PUBLISH_TOKEN not set, skipping mirror CDN publish.")
 
 
 def get_files_to_publish() -> Iterable[str]:

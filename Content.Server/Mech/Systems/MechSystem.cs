@@ -274,7 +274,9 @@ public sealed partial class MechSystem : SharedMechSystem
 
     private void OnDamageChanged(EntityUid uid, MechComponent component, DamageChangedEvent args)
     {
+#pragma warning disable CS0618
         var integrity = component.MaxIntegrity - _damageable.GetTotalDamage((uid, args.Damageable));
+#pragma warning restore CS0618
         SetIntegrity(uid, integrity, component);
 
         if (args.DamageIncreased &&

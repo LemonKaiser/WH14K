@@ -1,9 +1,13 @@
 - type: entity
   id: WH40KResearchAndDevelopmentServer
-  parent: ResearchAndDevelopmentServer
+  parent: BaseStructure
   name: R&D server
   suffix: WH40K
   components:
+  - type: Transform
+    noRot: true
+  - type: Animateable
+  - type: InteractionOutline
   - type: Sprite
     sprite: _WH40K/Structures/Machines/server.rsi
     snapCardinals: true
@@ -19,6 +23,48 @@
       map: ["enum.PowerDeviceVisualLayers.Powered"]
     - state: server_o
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: PointLight
+    enabled: false
+    castShadows: false
+    radius: 1.2
+    energy: 3.0
+    color: "#b211b2"
+  - type: LitOnPowered
+  - type: ResearchServer
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - WH40KWeaponry
+    - WH40KEquipment
+  - type: ApcPowerReceiver
+    powerLoad: 200
+  - type: ExtensionCableReceiver
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: Machine
+    board: ResearchAndDevelopmentServerMachineCircuitboard
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: {visible: true}
+          False: {visible: false}
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 5
+    enabled: false
+    sound:
+      path: /Audio/Ambience/Objects/server_fans.ogg
+  - type: GuideHelp
+    guides:
+    - Science
+  - type: LightningTarget
+    priority: 1
 
 - type: entity
   id: WH40KResearchAndDevelopmentServerImperium
@@ -53,8 +99,92 @@
     teamId: Heretics
 
 - type: entity
+  id: WH40KBaseResearchAndDevelopmentComputer
+  parent: BaseStructure
+  abstract: true
+  components:
+  - type: Transform
+    noRot: true
+  - type: Animateable
+  - type: InteractionOutline
+  - type: Rotatable
+  - type: StationAiWhitelist
+  - type: Computer
+    board: ResearchComputerCircuitboard
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 1000
+  - type: UIPowerState
+  - type: ExtensionCableReceiver
+  - type: ActivatableUIRequiresPower
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+      enum.WiresVisuals.MaintenancePanelState:
+        enum.WiresVisualLayers.MaintenancePanel:
+          True: { visible: false }
+          False: { visible: true }
+  - type: LitOnPowered
+  - type: PointLight
+    radius: 1.5
+    energy: 4.0
+    color: "#b53ca1"
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: Keyboard
+      params:
+        volume: -1
+        variation: 0.10
+        pitch: 1.10
+    blacklist:
+      tags:
+      - NoConsoleSound
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+  - type: LightningTarget
+    priority: 1
+  - type: RequireProjectileTarget
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: Wires
+    boardName: wires-board-name-computer
+    layoutId: ComputerAi
+  - type: ResearchClient
+  - type: ResearchConsole
+  - type: ActiveRadio
+    channels:
+    - Science
+  - type: TechnologyDatabase
+  - type: ActivatableUI
+    key: enum.ResearchConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ResearchConsoleUiKey.Key:
+        type: ResearchConsoleBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Research"]]
+  - type: GuideHelp
+    guides:
+    - Science
+
+- type: entity
   id: WH40KComputerResearchAndDevelopmentImperium
-  parent: ComputerResearchAndDevelopment
+  parent: WH40KBaseResearchAndDevelopmentComputer
   name: imperium R&D computer
   suffix: WH40K, Imperium
   components:
@@ -80,7 +210,7 @@
 
 - type: entity
   id: WH40KComputerResearchAndDevelopmentHeretics
-  parent: ComputerResearchAndDevelopment
+  parent: WH40KBaseResearchAndDevelopmentComputer
   name: heretic R&D computer
   suffix: WH40K, Heretics
   components:

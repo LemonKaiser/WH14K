@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Popups;
 using Content.Server._WH40K.Command;
+using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Intel.Detector;
@@ -17,10 +18,10 @@ using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Intel.Detector;
 
@@ -38,9 +39,11 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly WH40KCommandEventMissionRuntimeSystem _runtime = default!;
+    [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<Entity<WH40KMissionObjectiveVisualComponent>> _trackedMarkers = new();
 
@@ -60,6 +63,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
 
     private void OnMapInit(Entity<WH40KIntelDetectorComponent> ent, ref MapInitEvent args)
     {
+        ent.Comp.NextStateSyncAt = _timing.CurTime;
         UpdateAppearance(ent);
     }
 
@@ -95,7 +99,9 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
 
         ent.Comp.Enabled = false;
         ent.Comp.LastScan = _timing.CurTime;
+        ent.Comp.NextStateSyncAt = _timing.CurTime;
         ent.Comp.Blips.Clear();
+        _attribution.RecordDirty("intel_detector.drop_reset", ent.Owner);
         Dirty(ent);
         UpdateAppearance(ent);
     }
@@ -105,6 +111,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract || !ent.Comp.CanToggleRange)
             return;
 
+        using var scope = _culture.CreateScope(args.User);
         var user = args.User;
         args.Verbs.Add(new AlternativeVerb
         {
@@ -118,6 +125,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
                 if (ent.Comp.Enabled)
                     ent.Comp.NextScanAt = _timing.CurTime + GetRefreshRate(ent.Comp);
 
+                _attribution.RecordDirty("intel_detector.mode_toggle", ent.Owner);
                 Dirty(ent);
                 _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
                 _popup.PopupEntity(
@@ -134,6 +142,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
 
     private void OnExamined(Entity<WH40KIntelDetectorComponent> ent, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KIntelDetectorComponent)))
         {
             var modeKey = ent.Comp.Short
@@ -191,6 +200,7 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
                 continue;
 
             detector.NextScanAt = now + GetRefreshRate(detector);
+            _attribution.RecordActivity("intel_detector.scan_tick", uid);
             var newBlips = new List<WH40KIntelDetectorBlip>();
 
             if (!TryResolveScannerUser(uid, detector, out var scanner, out var scannerTeamId, out var hasTeam))
@@ -222,7 +232,8 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
                     continue;
 
                 var direction = markerCoords.Position - scannerCoords.Position;
-                if (direction.LengthSquared() <= 0.0001f)
+                var distSq = direction.LengthSquared();
+                if (distSq <= 0.0001f || distSq > range * range)
                     continue;
 
                 newBlips.Add(new WH40KIntelDetectorBlip(
@@ -244,11 +255,13 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
         ent.Comp.Enabled = !ent.Comp.Enabled;
         ent.Comp.LastUser = user;
         ent.Comp.LastScan = _timing.CurTime;
+        ent.Comp.NextStateSyncAt = _timing.CurTime;
         ent.Comp.Blips.Clear();
         ent.Comp.NextScanAt = ent.Comp.Enabled
             ? _timing.CurTime + GetRefreshRate(ent.Comp)
             : TimeSpan.Zero;
 
+        _attribution.RecordDirty("intel_detector.power_toggle", ent.Owner);
         Dirty(ent);
         UpdateAppearance(ent);
         _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
@@ -278,14 +291,33 @@ public sealed class WH40KIntelDetectorSystem : EntitySystem
         var hadBlips = currentBlips.Count > 0;
         var hasBlips = newBlips.Count > 0;
 
-        if (!hadBlips && !hasBlips)
-            return;
-
-        detector.Comp.LastScan = now;
-
-        if (!BlipListsEqual(currentBlips, newBlips))
+        var blipsChanged = !BlipListsEqual(currentBlips, newBlips);
+        if (blipsChanged)
             detector.Comp.Blips = newBlips;
 
+        if (!hadBlips && !hasBlips && !blipsChanged)
+            return;
+
+        var syncInterval = detector.Comp.StateSyncInterval;
+        if (syncInterval < TimeSpan.Zero)
+            syncInterval = TimeSpan.Zero;
+
+        var forceSync = hadBlips != hasBlips;
+        if (!forceSync && now < detector.Comp.NextStateSyncAt)
+        {
+            _attribution.RecordActivity("intel_detector.sync_throttled", detector.Owner);
+            return;
+        }
+
+        detector.Comp.LastScan = now;
+        detector.Comp.NextStateSyncAt = now + syncInterval;
+        _attribution.RecordDirty(
+            forceSync
+                ? "intel_detector.presence_flip"
+                : blipsChanged
+                    ? "intel_detector.blips_changed"
+                    : "intel_detector.periodic_snapshot",
+            detector.Owner);
         Dirty(detector);
         UpdateAppearance(detector);
     }

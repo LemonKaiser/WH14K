@@ -71,6 +71,7 @@ namespace Content.Client.ContextMenu.UI
                 return;
 
             _setup = true;
+            Menus.Clear();
 
             RootMenu = new(this, null);
             RootMenu.OnPopupHide += Close;
@@ -85,8 +86,13 @@ namespace Content.Client.ContextMenu.UI
             _setup = false;
 
             Close();
-            RootMenu.OnPopupHide -= Close;
-            RootMenu.Dispose();
+            if (RootMenu != null && !RootMenu.Disposed)
+            {
+                RootMenu.OnPopupHide -= Close;
+                RootMenu.Dispose();
+            }
+
+            Menus.Clear();
             RootMenu = default!;
         }
 
@@ -95,11 +101,30 @@ namespace Content.Client.ContextMenu.UI
         /// </summary>
         public void Close()
         {
-            RootMenu.MenuBody.RemoveAllChildren();
             CancelOpen?.Cancel();
+            CancelOpen = null;
             CancelClose?.Cancel();
+            CancelClose = null;
+
+            if (RootMenu == null || RootMenu.Disposed)
+                return;
+
+            CloseSubMenus(RootMenu);
+
+            RootMenu.OnPopupHide -= Close;
+
+            if (!RootMenu.MenuBody.Disposed)
+                RootMenu.MenuBody.RemoveAllChildren();
+
             OnContextClosed?.Invoke();
-            RootMenu.Close();
+
+            if (!RootMenu.Disposed)
+                RootMenu.Close();
+
+            RootMenu.OnPopupHide += Close;
+
+            Menus.Clear();
+            Menus.Push(RootMenu);
         }
 
         /// <summary>
@@ -116,7 +141,10 @@ namespace Content.Client.ContextMenu.UI
 
             while (Menus.TryPeek(out var subMenu) && subMenu != menu)
             {
-                Menus.Pop().Close();
+                Menus.Pop();
+
+                if (!subMenu.Disposed)
+                    subMenu.Close();
             }
 
             // ensure no accidental double-closing happens.

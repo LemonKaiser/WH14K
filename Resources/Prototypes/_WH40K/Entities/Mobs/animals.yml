@@ -2,7 +2,7 @@
   id: MobQueenChrysalis
   parent: SimpleSpaceMobBase
   suffix: WH40K, Ксенос
-  components:
+  components: 
   - type: TypingIndicator
     proto: alien
   - type: Speech
@@ -81,8 +81,3 @@
     noMovementLayers:
       movement:
         state: QueenChrysalis
-  - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: FluorosulfuricAcid
-        Quantity: 650

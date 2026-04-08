@@ -3,42 +3,75 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
     Title="{Loc 'wh40k-chaos-window-title'}"
-    MinSize="520 460"
+    MinSize="560 560"
     Access="Public">
     <PanelContainer Margin="6">
         <PanelContainer.PanelOverride>
             <graphics:StyleBoxFlat
-                BackgroundColor="#1f1314"
-                BorderColor="#8f5f5f"
-                BorderThickness="2"
+                BackgroundColor="#0B0C10"
+                BorderColor="#2F2417"
+                BorderThickness="1"
                 ContentMarginLeftOverride="10"
-                ContentMarginTopOverride="8"
+                ContentMarginTopOverride="10"
                 ContentMarginRightOverride="10"
-                ContentMarginBottomOverride="8" />
+                ContentMarginBottomOverride="10" />
         </PanelContainer.PanelOverride>
-        <BoxContainer Orientation="Vertical" SeparationOverride="5">
-            <Label Name="RoleLabel" Access="Public" Text="" />
-            <Label Name="PatronLabel" Access="Public" Text="" />
-            <Label Name="SoulsLabel" Access="Public" Text="" />
-            <Label Name="WarpChargeLabel" Access="Public" Text="" />
-            <Label Name="WarpInstabilityLabel" Access="Public" Text="" />
-            <Label Name="LevelLabel" Access="Public" Text="" />
-            <ProgressBar Name="LevelProgressBar" Access="Public" MinSize="0 18" />
-            <Label Name="XpLabel" Access="Public" Text="" />
-            <Label Name="PassiveIncomeLabel" Access="Public" Text="" />
-            <PanelContainer Margin="0 4 0 0">
+        <BoxContainer Orientation="Vertical" SeparationOverride="8">
+            <PanelContainer Name="HeaderPanel" Access="Public">
                 <PanelContainer.PanelOverride>
                     <graphics:StyleBoxFlat
-                        BackgroundColor="#2b1819"
-                        BorderColor="#734545"
-                        BorderThickness="1"
-                        ContentMarginLeftOverride="8"
-                        ContentMarginTopOverride="6"
-                        ContentMarginRightOverride="8"
-                        ContentMarginBottomOverride="6" />
+                        BackgroundColor="#0E0F14"
+                        BorderColor="#2E2718"
+                        BorderThickness="0 0 0 1"
+                        ContentMarginLeftOverride="12"
+                        ContentMarginTopOverride="10"
+                        ContentMarginRightOverride="12"
+                        ContentMarginBottomOverride="10" />
                 </PanelContainer.PanelOverride>
-                <BoxContainer Orientation="Vertical" SeparationOverride="3">
-                    <Label Name="AltarTitleLabel" Access="Public" Text="" />
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Name="RoleLabel" Access="Public" Text="" FontColorOverride="#D7BC72" />
+                    <Label Name="PatronLabel" Access="Public" Text="" FontColorOverride="#E9D8B3" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="TelemetryPanel" Access="Public">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#121821"
+                        BorderColor="#445767"
+                        BorderThickness="1"
+                        ContentMarginLeftOverride="12"
+                        ContentMarginTopOverride="10"
+                        ContentMarginRightOverride="12"
+                        ContentMarginBottomOverride="10" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                    <Label Name="SoulsLabel" Access="Public" Text="" />
+                    <Label Name="WarpChargeLabel" Access="Public" Text="" />
+                    <ProgressBar Name="WarpChargeBar" Access="Public" MinValue="0" MaxValue="1" Value="0" SetHeight="18" />
+                    <Label Name="WarpInstabilityLabel" Access="Public" Text="" />
+                    <ProgressBar Name="WarpInstabilityBar" Access="Public" MinValue="0" MaxValue="1" Value="0" SetHeight="18" />
+                    <Label Name="LevelLabel" Access="Public" Text="" />
+                    <ProgressBar Name="LevelProgressBar" Access="Public" MinValue="0" MaxValue="1" Value="0" SetHeight="18" />
+                    <Label Name="XpLabel" Access="Public" Text="" />
+                    <Label Name="PassiveIncomeLabel" Access="Public" Text="" />
+                    <Label Name="DevelopmentPointsLabel" Access="Public" Text="" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="AltarPanel" Access="Public">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#131A24"
+                        BorderColor="#516577"
+                        BorderThickness="1"
+                        ContentMarginLeftOverride="12"
+                        ContentMarginTopOverride="10"
+                        ContentMarginRightOverride="12"
+                        ContentMarginBottomOverride="10" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                    <Label Name="AltarTitleLabel" Access="Public" Text="" FontColorOverride="#D7BC72" />
                     <Label Name="AttunementLabel" Access="Public" Text="" />
                     <Label Name="RitualBonusLabel" Access="Public" Text="" />
                     <Label Name="SacrificeCooldownLabel" Access="Public" Text="" />
@@ -46,7 +79,7 @@
                     <Label Name="AltarRiskLabel" Access="Public" Text="" />
                 </BoxContainer>
             </PanelContainer>
-            <Label Name="DevelopmentPointsLabel" Access="Public" Text="" />
+
             <Label Name="HintLabel" Access="Public" Text="" />
         </BoxContainer>
     </PanelContainer>

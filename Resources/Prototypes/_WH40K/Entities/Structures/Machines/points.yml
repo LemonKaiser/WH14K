@@ -61,8 +61,54 @@
     frontPointsPerInterval: 2
 
 - type: entity
+  id: WH40KBasePointLathe
+  parent: BaseStructure
+  abstract: true
+  components:
+  - type: Animateable
+  - type: InteractionOutline
+  - type: Appearance
+  - type: WiresVisuals
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+          - MachineLayer
+  - type: Lathe
+  - type: MaterialStorage
+  - type: WiresPanel
+  - type: ActivatableUI
+    key: enum.LatheUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.LatheUiKey.Key:
+        type: LatheBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+  - type: Pullable
+  - type: StaticPrice
+    price: 800
+  - type: ResearchClient
+  - type: TechnologyDatabase
+  - type: ApcPowerReceiver
+    powerLoad: 150
+  - type: ExtensionCableReceiver
+  - type: LightningTarget
+    priority: 1
+  - type: PowerState
+    idlePowerDraw: 150
+    workingPowerDraw: 1000
+
+- type: entity
   id: ImpPointLathe
-  parent: BaseLathe
+  parent: WH40KBasePointLathe
   suffix: WH40K, Imperium
   components:
   - type: Sprite
@@ -118,7 +164,7 @@
 
 - type: entity
   id: ChPointLathe
-  parent: BaseLathe
+  parent: WH40KBasePointLathe
   suffix: WH40K, Heretics
   components:
   - type: Sprite

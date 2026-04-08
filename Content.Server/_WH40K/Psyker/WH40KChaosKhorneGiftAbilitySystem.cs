@@ -24,6 +24,7 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared._WH40K.Psyker;
+using Content.Server.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -54,6 +55,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly StunSystem _stun = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
 
@@ -81,8 +83,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         _bluntDamage = _prototype.Index(BluntDamageType);
 
         SubscribeLocalEvent<WH40KChaosKhorneRuntimeComponent, ComponentShutdown>(OnRuntimeShutdown);
-        SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
-        SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
+        SubscribeLocalEvent<WH40KChaosKhorneRuntimeComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
 
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosKhorneRepulseActionEvent>(OnKhorneRepulse);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosKhorneGravityJumpActionEvent>(OnKhorneJump);
@@ -103,7 +104,6 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         while (query.MoveNext(out var uid, out var progression))
         {
             var runtime = EnsureComp<WH40KChaosKhorneRuntimeComponent>(uid);
-            ApplyPassiveSpeedTierScaling(uid, progression, runtime);
 
             if (runtime.JumpSpeedBuffExpiresAt != TimeSpan.Zero && now >= runtime.JumpSpeedBuffExpiresAt)
             {
@@ -111,46 +111,26 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
                 runtime.JumpSpeedBuffMultiplier = 1f;
                 _movementSpeed.RefreshMovementSpeedModifiers(uid);
             }
-
-            ApplyPassiveHealthThresholdScaling(uid, progression, runtime);
         }
     }
 
     private void OnRuntimeShutdown(Entity<WH40KChaosKhorneRuntimeComponent> ent, ref ComponentShutdown args)
     {
-        RestoreBaselineThresholds(ent.Owner, ent.Comp);
     }
 
-    private void OnRefreshMovementSpeed(Entity<WH40KChaosGiftProgressionComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    private void OnRefreshMovementSpeed(Entity<WH40KChaosKhorneRuntimeComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.AttunedPatron != WH40KChaosPatron.Khorne)
+        if (!TryGetKhorneProgression(ent.Owner, out _))
             return;
 
-        var passive = GetPassiveSpeedMultiplier(ent.Comp.KhornePassiveSpeedTier);
         var jumpBuff = 1f;
-        if (TryComp<WH40KChaosKhorneRuntimeComponent>(ent.Owner, out var runtime) &&
-            runtime.JumpSpeedBuffExpiresAt > _timing.CurTime)
+        if (ent.Comp.JumpSpeedBuffExpiresAt > _timing.CurTime)
         {
-            jumpBuff = MathF.Max(1f, runtime.JumpSpeedBuffMultiplier);
+            jumpBuff = MathF.Max(1f, ent.Comp.JumpSpeedBuffMultiplier);
         }
 
-        var total = MathF.Max(0.1f, passive * jumpBuff);
+        var total = MathF.Max(0.1f, jumpBuff);
         args.ModifySpeed(total, total, MovementSpeedModifierLayer.Status);
-    }
-
-    private void OnGetMeleeDamage(Entity<MeleeWeaponComponent> ent, ref GetMeleeDamageEvent args)
-    {
-        if (!TryComp<WH40KChaosGiftProgressionComponent>(args.User, out var progression))
-            return;
-
-        if (progression.AttunedPatron != WH40KChaosPatron.Khorne)
-            return;
-
-        var multiplier = GetPassiveMeleeMultiplier(progression.KhornePassiveMeleeTier);
-        if (multiplier <= 1f)
-            return;
-
-        args.Damage *= multiplier;
     }
 
     private void OnKhorneRepulse(Entity<WH40KChaosGiftRoleComponent> ent, ref WH40KChaosKhorneRepulseActionEvent args)
@@ -158,9 +138,10 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         if (!TryGetKhorneProgression(args.Performer, out var progression))
             return;
 
-        ApplyTieredCooldown(args.Action, RepulseBaseCooldown, progression.KhorneGiftOneCooldownTier);
+        ApplyTieredCooldown(args.Performer, args.Action, RepulseBaseCooldown, progression.KhorneGiftOneCooldownTier);
 
-        var speed = GetRepulseSpeed(progression.KhorneGiftOnePowerTier, progression.KhorneGiftOneExUnlocked);
+        var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
+        var speed = GetRepulseSpeed(progression.KhorneGiftOnePowerTier, giftOneExUnlocked);
         var range = GetRepulseRange(progression.KhorneGiftOneUtilityTier);
         var map = _transform.GetMapCoordinates(args.Performer);
 
@@ -175,7 +156,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         if (_gravity.IsWeightless(args.Performer) || _standing.IsDown(args.Performer))
             return;
 
-        ApplyTieredCooldown(args.Action, JumpBaseCooldown, progression.KhorneGiftTwoCooldownTier);
+        ApplyTieredCooldown(args.Performer, args.Action, JumpBaseCooldown, progression.KhorneGiftTwoCooldownTier);
 
         var xform = Transform(args.Performer);
         var distance = GetJumpRange(progression.KhorneGiftTwoUtilityTier);
@@ -187,10 +168,11 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
             return;
 
         var speedBuffMultiplier = GetJumpSpeedBuffMultiplier(progression.KhorneGiftTwoPowerTier);
+        var giftTwoExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 2);
         var marker = EnsureComp<WH40KChaosKhorneJumpMarkerComponent>(args.Performer);
         marker.SpeedBuffMultiplier = speedBuffMultiplier;
         marker.SpeedBuffDuration = TimeSpan.FromSeconds(6);
-        marker.ExExplosionEnabled = progression.KhorneGiftTwoExUnlocked;
+        marker.ExExplosionEnabled = giftTwoExUnlocked;
 
         args.Handled = true;
     }
@@ -266,10 +248,11 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         if (!TryGetKhorneProgression(args.Performer, out var progression))
             return;
 
-        ApplyTieredCooldown(args.Action, DashBaseCooldown, progression.KhorneGiftThreeCooldownTier);
+        ApplyTieredCooldown(args.Performer, args.Action, DashBaseCooldown, progression.KhorneGiftThreeCooldownTier);
 
         var runtime = EnsureComp<WH40KChaosKhorneRuntimeComponent>(args.Performer);
-        if (progression.KhorneGiftThreeExUnlocked)
+        var giftThreeExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 3);
+        if (giftThreeExUnlocked)
         {
             if (runtime.DashComboRemaining <= 0)
                 runtime.DashComboRemaining = 3;
@@ -295,7 +278,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         if ((end.Position - start.Position).LengthSquared() < 0.05f)
             return;
 
-        ApplyDashPathDamage(args.Performer, start, end, progression.KhorneGiftThreePowerTier);
+        ApplyDashPathDamage(args.Performer, start, end, progression.KhorneGiftThreePowerTier, giftThreeExUnlocked);
         var dashVector = end.Position - start.Position;
 
         // Dash direction must be deterministic (cursor-driven), not affected by prior movement inertia.
@@ -349,7 +332,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         return best;
     }
 
-    private void ApplyDashPathDamage(EntityUid caster, MapCoordinates start, MapCoordinates end, byte powerTier)
+    private void ApplyDashPathDamage(EntityUid caster, MapCoordinates start, MapCoordinates end, byte powerTier, bool exUnlocked)
     {
         _dashTargets.Clear();
         var max = (end.Position - start.Position).Length() + DashHitRadius + 0.5f;
@@ -383,12 +366,21 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
                 continue;
 
             _damageable.TryChangeDamage((target, damageable), damage, origin: caster);
+            _stun.TryKnockdown(target, TimeSpan.FromSeconds(exUnlocked ? 2.6f : 2f), true, false, false, true);
+            _stun.TryAddStunDuration(target, TimeSpan.FromSeconds(exUnlocked ? 1.2f : 0.8f));
         }
     }
 
-    private void ApplyTieredCooldown(Entity<ActionComponent> action, float baseSeconds, byte tier)
+    private void ApplyTieredCooldown(EntityUid performer, Entity<ActionComponent> action, float baseSeconds, byte tier)
     {
         var duration = MathF.Max(0.1f, baseSeconds * WH40KChaosGiftUpgradeMath.CooldownMultiplier(tier));
+        if (TryComp<WH40KChaosTzeentchAuraBuffComponent>(performer, out var tzeentchBuff) &&
+            tzeentchBuff.CooldownExpiresAt > _timing.CurTime &&
+            tzeentchBuff.CooldownMultiplier < 1f)
+        {
+            duration *= tzeentchBuff.CooldownMultiplier;
+        }
+
         _actions.SetUseDelay((action.Owner, action.Comp), TimeSpan.FromSeconds(duration));
     }
 
@@ -421,7 +413,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
             return;
 
         EnsureRuntimeBaseline(uid, runtime);
-        if (runtime.BaselineThresholds == null || !TryComp<MobThresholdsComponent>(uid, out var thresholds))
+        if (runtime.BaselineThresholds.Count == 0 || !TryComp<MobThresholdsComponent>(uid, out var thresholds))
             return;
 
         var multiplier = GetPassiveHealthMultiplier(desiredTier);
@@ -468,7 +460,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
 
     private void RestoreBaselineThresholds(EntityUid uid, WH40KChaosKhorneRuntimeComponent runtime)
     {
-        if (runtime.BaselineThresholds == null || !TryComp<MobThresholdsComponent>(uid, out var thresholds))
+        if (runtime.BaselineThresholds.Count == 0 || !TryComp<MobThresholdsComponent>(uid, out var thresholds))
             return;
 
         foreach (var (threshold, state) in runtime.BaselineThresholds)

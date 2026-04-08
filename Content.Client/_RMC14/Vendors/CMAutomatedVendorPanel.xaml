@@ -3,10 +3,14 @@
     xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     HorizontalExpand="True">
-    <PanelContainer VerticalExpand="True" HorizontalExpand="True" Margin="0" Name="Panel">
+    <PanelContainer VerticalExpand="True" HorizontalExpand="True" Name="Panel">
         <PanelContainer.PanelOverride>
-            <graphics:StyleBoxFlat BackgroundColor="#162031" BorderColor="#4972A1"
-                                   BorderThickness="2" />
+            <graphics:StyleBoxFlat BackgroundColor="#111218"
+                                   BorderColor="#2A2418"
+                                   BorderThickness="1"
+                                   ContentMarginLeftOverride="10"
+                                   ContentMarginTopOverride="4"
+                                   ContentMarginBottomOverride="4" />
         </PanelContainer.PanelOverride>
         <cc:CMAutomatedVendorButton Name="Button" Access="Public"
                                     ModulateSelfOverride="#00000000" HorizontalExpand="True" />

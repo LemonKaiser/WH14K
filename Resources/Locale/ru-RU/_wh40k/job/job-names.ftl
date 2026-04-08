@@ -11,7 +11,6 @@ job-name-recruit = рекрут
 job-name-voidsman = войдсман
 job-name-colonel = полковник
 job-name-commissar = комиссар
-job-name-major = майор
 job-name-lieutenant = лейтенант
 job-name-sergeant-hws = сержант ОТВ
 job-name-sergeant-sws = сержант ОСВ
@@ -27,7 +26,6 @@ job-name-vox-scout = вокс-оператор
 
 
 job-name-hcolonel = ересиарх
-job-name-hcommissar = комиссар-каратель
 job-name-hlieutenant = чемпион хаоса
 job-name-hsergeant-hws = сержант ОТВ скверны
 job-name-hsergeant-sws = сержант ОСВ скверны
@@ -36,7 +34,6 @@ job-name-htank-comm = мастер бронеколонн
 job-name-hspecialist-hws = специалист ОТВ скверны
 job-name-hspecialist-sws = специалист ОСВ скверны
 job-name-htanker = броневод Культа
-job-name-hmedic = полевой хирург ереси
 job-name-hguardsman = культист
 job-name-hvox-scout = вокс-оператор еретиков
 job-name-hmagos = магос-еретех
@@ -46,5 +43,6 @@ job-name-hgenetor = генетор-еретех
 job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит тёмного механикума
 
-job-name-tithe-supplier = снабженец десятин
-job-name-hband-supplier = логистик Муниторума
+job-name-tithe-supplier = логистик Муниторума
+job-name-munitorum-officer = офицер Муниторума
+job-name-hband-supplier = контрабандист

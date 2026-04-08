@@ -24,6 +24,7 @@ public sealed partial class HighlightedContainer : PanelContainer
         LobbyPanelOpacityHelper.ApplyPanelOpacity(this, opacity);
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -31,6 +32,8 @@ public sealed partial class HighlightedContainer : PanelContainer
             _cfg.UnsubValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged);
         }
 
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
     }
 }

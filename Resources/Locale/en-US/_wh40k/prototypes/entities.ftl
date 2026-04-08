@@ -128,6 +128,9 @@ ent-ClothingHandsGlovesTechpriest = Tech-Priest Gloves
 ent-ClothingHandsGlovesBloodPact = bloodpact gloves
     .desc = combat gloves
 
+ent-ClothingHandsGlovesKrieg = krieg gloves
+    .desc = Thick trench gloves made to keep mud, frost, and brutal fieldwork off a trooper's hands.
+
 ent-ClothingHandsGlovesCombatColonel = Colonel's gloves
     .desc = filler
 
@@ -139,6 +142,9 @@ ent-ClothingHeadHelmetFlakCyan = cyan-pattern flak helmet
 
 ent-ClothingHeadHelmetBloodPact = bloodpact helmet
     .desc = Standard helmet
+
+ent-ClothingMaskGasBloodPact = bloodpact mask
+    .desc = A crude Blood Pact combat mask that conceals the face and offers basic breathing protection.
 
 ent-ClothingHeadHelmetrHeresy = Heretic's Helm
     .desc = Standard Traitor Guard Helm
@@ -206,6 +212,9 @@ ent-ClothingHeadHelmetFlakAdv = armored helmet
 ent-ClothingHeadHelmetFlakAdvCyan = cyan-pattern armored helmet
     .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
+ent-ClothingHeadHelmetFlakAdvHeresy = heretic carapace helmet
+    .desc = A heavier traitor guard helmet built on a carapace pattern, using scavenged seals and reinforced plates for front-line assaults.
+
 ent-ClothingMaskGasTechPriest = respirator
     .desc = A standard respirator that protects only the respiratory tract.
 
@@ -218,21 +227,29 @@ ent-Colonelcloak = colonel's cloak
 ent-Gorjet = gorget
     .desc = An officer's insignia with a built-in force field that repels projectiles. Some kind of hit to the head should not distract an officer from his wise plans!
 
-ent-ClothingNeckRobeTechpriestMars = tech-priest's robe
+ent-WH40KCommandTacticalMapTablet = command tactical map tablet
+    .desc = A command tactical tablet with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestAgripinaa = tech-priest's robe
+ent-WH40KStandardTacticalMapTablet = field tactical map tablet
+    .desc = A standard battlefield tactical tablet with read-only access to the command feed.
 
-ent-ClothingNeckRobeTechpriestGraia = tech-priest's robe
+ent-WH40KCommandTacticalMapConsole = imperium command tactical map console
+    .desc = A command tactical console on an imperium chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestLucius = tech-priest's robe
+ent-WH40KStandardTacticalMapConsole = imperium field tactical map console
+    .desc = A field tactical console on an imperium chassis with read-only access to the command feed.
 
-ent-ClothingNeckRobeTechpriestMetalica = tech-priest's robe
+ent-WH40KCommandTacticalMapConsoleImperium = imperium command tactical map console
+    .desc = A command tactical console on an imperium chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestRiza = tech-priest's robe
+ent-WH40KCommandTacticalMapConsoleHeretics = heretic command tactical map console
+    .desc = A command tactical console on a heretic chassis with access to annotations and team feed editing.
 
-ent-ClothingNeckRobeTechpriestStygiesVIII = tech-priest's robe
+ent-WH40KStandardTacticalMapConsoleImperium = imperium field tactical map console
+    .desc = A field tactical console on an imperium chassis with read-only access to the command feed.
 
-ent-ClothingNeckRobeGenetorTechpriestMars = Genetus robe
+ent-WH40KStandardTacticalMapConsoleHeretics = heretic field tactical map console
+    .desc = A field tactical console on a heretic chassis with read-only access to the command feed.
 
 ent-ClothingOuterArmorAdvancedFlakVest = carapace armor
     .desc = Strong armor that almost completely covers the body and provides good protection from most types of damage.
@@ -339,6 +356,9 @@ ent-ClothingUniformJumpsuitCommissar = commissar uniform
 ent-ClothingUniformJumpsuitGuardsman = guard uniform
     .desc = The uniform issued to members of the regular army of the imperium - the imperial guard.
 
+ent-ClothingUniformJumpsuitKrieg = krieg uniform
+    .desc = A disciplined Krieg-pattern field uniform built for trench warfare and endless marches.
+
 ent-ClothingUniformJumpsuitTechpriest = tech-priest jumpsuit
     .desc = A jumpsuit issued to all tech-priests who still have a humanoid body shape.
 
@@ -351,8 +371,11 @@ ent-ClothingUniformJumpsuitOfficer = officer uniform
 ent-ClothingUniformJumpsuitColonel = colonel uniform
     .desc = Common uniform of an Imperial Guard Colonel
 
-ent-GuardFlag = Regimental Banner (Cadia)
+ent-GuardFlag = Imperial regimental banner
     .desc = The regiment's banner is its pride, its physical embodiment, do not let the enemy take possession of it! Hurray!
+
+ent-ChaosFlag = Chaos banner
+    .desc = A profaned war banner carried by heretics as they advance and spread fear.
 
 ent-PlushieFull = plush Full
     .desc = A plush version of the once great creature. Two snow-white wings protrude from his back, and in his hands is a massive hammer and... a twenty-sided die? Interesting set of items.
@@ -398,6 +421,9 @@ ent-PlushieOliva = Oliva
 
 ent-PlushieFizzo = Plush FizzoGhoster
     .desc = Do you know what true love is?.. Never mind. Chrysalis is the best pony.
+
+ent-PlushieRad = Plush Rad
+    .desc = A tiny masked arsonist plush. When used to bonk someone, it laughs far too happily.
 
 ent-StrangeToster = Strange toaster
     .desc = There's a lazy spirit in it, so you can't get this toaster to work.
@@ -483,6 +509,9 @@ ent-WeaponLaserCarabin = lascarbine
 
 ent-WeaponLaserLasgun = M36 Cantrael
     .desc = The standard weapon of the Cadian Assault Troops and all regiments that derive their military traditions and doctrines from them.
+
+ent-WeaponLaserLasgunKrieg = krieg-pattern lasgun
+    .desc = A Krieg-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
 
 ent-WeaponLaserLasgunAccatran = Accatran VI D
     .desc = Assault version of the legendary Accatran model range, model - Six De.
@@ -773,17 +802,6 @@ ent-GeneratorPlasmaHardDamaged = Damaged Jupiter drive
 ent-CrateNecron = necron box
     .desc = This is a storage facility belonging to the mysterious civilization of machines made of living steel - the Necrons. Do you have the will to open it?
 
-ent-FragGrenade = fragmentation grenade
-    .desc = The standard frag grenade of the Imperium, used by Imperial Guard forces and Space Marines to destroy enemies.
-
-ent-KrakGrenade = crack grenade
-    .desc = An explosive armor-piercing grenade used by Imperial forces to blow up light vehicles and fortifications.
-
-ent-OrkGrenade = cool grenade
-    .desc = Big bangs for big Waagh!
-
-ent-MeltaGrenade = melta charge
-    .desc = A short-range anti-tank grenade that creates a powerful melting explosion capable of destroying heavily armored targets.
 ent-WH40KServoSkull = servo skull
     .desc = A compact servo skull chassis. Deploy it to create a friendly support skull.
 ent-WH40KServoSkullMelta = melta servo skull
@@ -984,77 +1002,62 @@ ent-ColMarTechSGGear = ColMarTech squad smart gun operator gear rack
 ent-ColMarTechUtilities = ColMarTech automated utilities squad vendor
     .desc = An automated supply rack hooked up to a small storage of various utilities and tools. Can be accessed by any Marine Rifleman.
 
-ent-MobQueenChrysalis = Queen Chrysalis
-    .desc = A female werewolf, and also a werewolf queen.
+ent-ClothingHeadHatCatachanBandana = catachan bandana
+    .desc = A bright red bandana worn by jungle fighters.
 
-ent-ClothingBeltChaplain = Cleric Belt
-    .desc = Clerical Garb.
+ent-ClothingHeadHatCatachanBeret = catachan beret
+    .desc = A red beret favored by hardened Catachan veterans.
 
-ent-WH40KClothingUniformJumpsuitChaplain = Ecclesiarchal Uniform
-    .desc = Garb for minor clergy.
+ent-ClothingHeadHatCatachanHeadband = catachan headband
+    .desc = A simple headband that keeps sweat out of your eyes.
 
-ent-ClothingShoesBootsChaplain = Cleric Boots
-    .desc = Clerical Garb.
+ent-ClothingOuterArmorCatachanLight = catachan light armor
+    .desc = Light field armor built for speed and freedom of movement.
 
-ent-ClothingOuterChaplainRobe = Cleric Robe
-    .desc = Clerical Garb.
+ent-ClothingOuterArmorCatachanMedium = catachan armor
+    .desc = Reinforced field armor for frontline jungle assaults.
 
-ent-ClothingNeckInqusition = Ecclesiarchal Inquisition
-    .desc = Chain with the Ecclesiarchal Insignia.
+ent-ClothingOuterArmorCatachanVest = catachan web vest
+    .desc = A practical combat vest covered in pouches for long patrols.
 
-ent-WH40KBible = Bible
-    .desc = Holy Scripture.
+ent-ClothingUniformJumpsuitCatachan1 = catachan fatigues
+    .desc = Sleeveless jungle fatigues made for heat, mud, and close fighting.
 
-ent-ClothingNeckCloakRainImp = Raincoat
-    .desc = Useful in the rain.
+ent-ClothingUniformJumpsuitCatachan2 = catachan patrol fatigues
+    .desc = Rugged field wear cut down for hard patrol work.
 
-ent-ClothingHeadHoodRainImp = Raincoat Hood
-    .desc = Useful in rain.
+ent-ClothingUniformJumpsuitCatachan3 = catachan tank top
+    .desc = A stripped-down jungle fighter shirt for the hottest warzones.
 
-ent-ClothingNeckCloakRainChs = Raincoat
-    .desc = Useful in rain.
+ent-CatachanKnife = catachan knife
+    .desc = A sturdy fighting knife favored by Catachan jungle fighters.
 
-ent-ClothingHeadHoodRainChs = Raincoat Hood
-    .desc = Useful in rain.
+ent-WeaponRocketLauncherImperial = imperial rocket launcher
+    .desc = A reusable rocket launcher with a blast shield, issued to Imperial heavy teams.
 
-ent-ClothingUniformJumpsuitGuardsmanVst = Vostroyan Uniform
-    .desc = Normal Uniform.
+ent-WeaponRocketLauncherChaos = chaos rocket launcher
+    .desc = A reusable rocket launcher with a blast shield, favored by Chaos warbands.
 
-ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan Sergeant's Helmet
-    .desc = Normal Uniform.
+ent-WeaponRocketLauncherImperialDisposable = disposable imperial RPG
+    .desc = A single-use Imperial rocket tube. Once fired, it is done.
 
-ent-ClothingHeadHelmetFlakAdvVst = Vostroyan Helmet
-    .desc = Normal Uniform.
+ent-WeaponRocketLauncherChaosDisposable = disposable chaos RPG
+    .desc = A single-use Chaos rocket tube. Brutal, simple, and not reloadable.
 
-ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
-    .desc = Standard uniform.
+ent-CartridgeRocketHE = HE rocket
+    .desc = A high-explosive rocket round for reusable RPG launchers.
 
-ent-ClothingHeadHelmetFlakAdvSergVst = Vostroyan sergeant's helmet
-    .desc = Normal uniform.
+ent-CartridgeRocketAP = AP rocket
+    .desc = An armor-piercing rocket round for reusable RPG launchers.
 
-ent-ClothingHeadHelmetFlakAdvVst = Vostroyan helmet
-    .desc = Normal uniform.
+ent-ClothingOuterArmorMunitorumCoat = Munitorum coat
+    .desc = A logistics service coat with light armor inserts and plenty of utility attachment points.
 
-ent-ClothingOuterArmorFlakVestVst = Vostroyan armor
-    .desc = Normal uniform.
+ent-ClothingOuterArmorMunitorumGreatcoat = reinforced Munitorum coat
+    .desc = A heavier Munitorum service coat for the personnel who keep the regiment's rear echelon alive.
 
-ent-ClothingOuterArmorFlakVestLietVst = Vostroyan lieutenant's armor
-    .desc = Normal uniform.
+ent-ClothingOuterArmorMunitorumRig = Munitorum rig
+    .desc = A Munitorum working rig with armor plates, utility mounts, and service markings.
 
-ent-ClothingMaskGasVst = Vostroyan gas mask
-    .desc = Normal uniform.
-
-ent-ClothingHandsGlovesVst = Vostroyan gloves
-    .desc = Standard uniform.
-
-ent-ClothingShoesBootsVst = Vostroyan boots
-    .desc = Standard uniform.
-
-ent-ClothingNeckCloakVst = Vostroyan lieutenant's cloak
-    .desc = Standard uniform.
-
-ent-ClothingOuterArmorFlakVestMajor = Officer's greatcoat
-    .desc = An officer's greatcoat—here it is, a symbol of authority on the battlefield.
-
-ent-MobHormagaunt = Hormagaunt
-    .desc = I think he can already smell your blood...
+ent-ClothingOuterArmorMunitorumVest = Munitorum vest
+    .desc = A compact armored vest for Munitorum logisticians and warehouse crews.

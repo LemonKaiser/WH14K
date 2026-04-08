@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.Administration.UI.CustomControls;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
@@ -15,8 +16,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
+public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow, ILocalizedControl
 {
+    private static readonly ISawmill Sawmill = Logger.GetSawmill("wh40k.command");
     private static readonly Color ImperiumColor = Color.FromHex("#F3C548");
     private const string TacticalPresetTeamMapId = "WH40KCommandTacticalPresetTeamMap";
     private const string TacticalPresetDefaultProfileId = "WH40KCommandTacticalPresetProfileDefault";
@@ -53,8 +55,8 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
     private static readonly TacticalPreset FallbackPreset = new(
         "logistics_surge",
-        "wh40k-command-node-tactical-bonuses-random-logistics_surge-title",
-        "wh40k-command-node-tactical-bonuses-random-logistics_surge-description",
+        "w40k-cmd-tactical-bonuses-random-logistics_surge-title",
+        "w40k-cmd-tactical-bonuses-random-logistics_surge-description",
         16,
         16,
         16);
@@ -69,6 +71,9 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     private readonly Label _teamBadgeLabel;
     private readonly PanelContainer _phaseBadge;
     private readonly Label _phaseBadgeLabel;
+    private readonly Label _activeSectionTitleLabel;
+    private readonly Label _tiersSectionTitleLabel;
+    private readonly Label _forecastSectionTitleLabel;
     private readonly BoxContainer _activeRows;
     private readonly BoxContainer _tierRows;
     private readonly BoxContainer _forecastRows;
@@ -77,12 +82,14 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     private Color _accent = ImperiumColor;
     private string _activeDoctrineId = string.Empty;
     private string _activeProfileId = string.Empty;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
+    private string _latestDoctrineId = string.Empty;
     private TacticalPresetConfiguration _presetConfiguration =
         BuildFallbackConfiguration(TacticalPresetDefaultProfileId);
 
     public WH40KCommandNodeTacticalBonusesWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-tactical-bonuses-window-title");
+        Title = Loc.GetString("w40k-cmd-tactical-bonuses-window-title");
         MinSize = SetSize = new Vector2(920, 600);
 
         var root = new BoxContainer
@@ -148,7 +155,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-tactical-bonuses-window-title"),
+            Text = Loc.GetString("w40k-cmd-tactical-bonuses-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
@@ -199,8 +206,9 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         badgeRow.AddChild(_phaseBadge);
 
         var activeSection = CreateSection(
-            Loc.GetString("wh40k-command-node-tactical-bonuses-active-header"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-active-header"),
             out var activeContent,
+            out _activeSectionTitleLabel,
             verticalExpand: true);
         activeSection.HorizontalExpand = true;
         activeSection.SizeFlagsStretchRatio = 1.1f;
@@ -222,8 +230,9 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         activeScroll.AddChild(_activeRows);
 
         var tiersSection = CreateSection(
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tiers-header"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tiers-header"),
             out var tierContent,
+            out _tiersSectionTitleLabel,
             verticalExpand: true);
         tiersSection.MinWidth = 240;
         tiersSection.SizeFlagsStretchRatio = 0.85f;
@@ -246,8 +255,9 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         tiersScroll.AddChild(_tierRows);
 
         var forecastSection = CreateSection(
-            Loc.GetString("wh40k-command-node-tactical-bonuses-forecast-header"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-forecast-header"),
             out var forecastContent,
+            out _forecastSectionTitleLabel,
             verticalExpand: false);
         bodyRoot.AddChild(forecastSection);
 
@@ -275,29 +285,46 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
             HorizontalExpand = true
         };
         forecastScroll.AddChild(_forecastRows);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-tactical-bonuses-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-tactical-bonuses-window-title");
+        _activeSectionTitleLabel.Text = Loc.GetString("w40k-cmd-tactical-bonuses-active-header");
+        _tiersSectionTitleLabel.Text = Loc.GetString("w40k-cmd-tactical-bonuses-tiers-header");
+        _forecastSectionTitleLabel.Text = Loc.GetString("w40k-cmd-tactical-bonuses-forecast-header");
+
+        if (_latestState != null)
+            UpdateState(_latestState, _latestDoctrineId);
     }
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state, string activeDoctrineId)
     {
+        _latestState = state;
+        _latestDoctrineId = activeDoctrineId;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, ImperiumColor);
         _activeDoctrineId = activeDoctrineId;
         EnsurePresetProfileLoaded(state.TeamId);
 
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
-        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
-        _phaseLine.Text = CompactLine(Loc.GetString("wh40k-command-node-phase",
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+        _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeam)));
+        _phaseLine.Text = CompactLine(Loc.GetString("w40k-cmd-phase",
             ("phase", Loc.GetString(GetPhaseKey(state.Phase)))));
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : resolvedTeam.ToUpperInvariant();
         _phaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase);
         _phaseBadgeLabel.Text = CompactLine(Loc.GetString(GetPhaseKey(state.Phase)));
 
         var doctrineName = string.IsNullOrWhiteSpace(_activeDoctrineId)
-            ? Loc.GetString("wh40k-command-node-tactical-bonuses-doctrine-none-short")
+            ? Loc.GetString("w40k-cmd-tactical-bonuses-doctrine-none-short")
             : WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(_activeDoctrineId, state.TeamId).Name;
 
-        _summaryLine.Text = CompactLine(Loc.GetString("wh40k-command-node-tactical-bonuses-summary-line",
+        _summaryLine.Text = CompactLine(Loc.GetString("w40k-cmd-tactical-bonuses-summary-line",
             ("node_tier", Math.Clamp(state.UpgradeLevel + 1, 1, 5)),
             ("development_points", state.CommandPoints),
             ("doctrine", doctrineName)));
@@ -323,7 +350,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         RebuildForecastRows(activeRandomBonus, nextBonuses, nextRollSeconds, useRuntimeSnapshot);
     }
 
-    private PanelContainer CreateSection(string title, out BoxContainer content, bool verticalExpand)
+    private PanelContainer CreateSection(string title, out BoxContainer content, out Label titleLabel, bool verticalExpand)
     {
         var section = new PanelContainer
         {
@@ -346,12 +373,13 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         };
         sectionRoot.AddChild(titleBar);
 
-        titleBar.AddChild(new Label
+        titleLabel = new Label
         {
             Text = title,
             StyleClasses = { "LabelHeading" },
             ClipText = true
-        });
+        };
+        titleBar.AddChild(titleLabel);
 
         content = new BoxContainer
         {
@@ -382,8 +410,8 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         AddInfoCard(
             _activeRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-active-phase-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-active-phase-value", ("multiplier", phaseMultiplier)),
+            Loc.GetString("w40k-cmd-tactical-bonuses-active-phase-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-active-phase-value", ("multiplier", phaseMultiplier)),
             Loc.GetString(GetPhaseInfoKey(state.Phase)),
             emphasized: false);
 
@@ -391,19 +419,19 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-none-value"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-none-detail"));
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-none-value"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-none-detail"));
         }
         else
         {
             var doctrine = WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(_activeDoctrineId, state.TeamId);
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-value",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-value",
                     ("doctrine", doctrine.Name)),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-doctrine-detail",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-doctrine-detail",
                     ("positive", doctrine.Positive),
                     ("negative", doctrine.Negative),
                     ("lock", doctrine.LockText)));
@@ -412,8 +440,8 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         var activeBonusName = Loc.GetString(activeRandomBonus.TitleKey);
         AddInfoCard(
             _activeRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-active-random-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-active-random-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-active-random-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-active-random-value",
                 ("bonus", activeBonusName),
                 ("time_left", FormatDuration(activeRandomBonus.RemainingSeconds)),
                 ("duration", FormatDuration(activeRandomBonus.DurationSeconds))),
@@ -424,11 +452,11 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-engineering-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-engineering-value",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-engineering-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-engineering-value",
                     ("tier", intel.EngineeringTier),
                     ("speed", intel.EngineeringSpeedBonusPercent)),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-engineering-detail",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-engineering-detail",
                     ("min_seconds", FormatDecimal(intel.EngineeringMinProcessSeconds)),
                     ("storage_limit", FormatStorageLimit(intel.EngineeringMaterialStorageLimit)),
                     ("global_multiplier", FormatDecimal(intel.EngineeringGlobalTimeMultiplier)),
@@ -439,42 +467,42 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-engineering-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable-detail"));
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-engineering-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable-detail"));
         }
 
         if (intel.HasOreExtractorProfile)
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-ore-extractor-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-ore-extractor-value",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-ore-extractor-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-ore-extractor-value",
                     ("tier", intel.OreExtractorTier),
                     ("interval", FormatDecimal(intel.OreExtractorSpawnIntervalSeconds)),
                     ("count", intel.OreExtractorSpawnCount)),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-ore-extractor-detail",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-ore-extractor-detail",
                     ("ores", intel.OreExtractorAllowedOreNames)));
         }
         else
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-ore-extractor-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable-detail"));
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-ore-extractor-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable-detail"));
         }
 
         if (intel.HasLogisticsProfile)
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-logistics-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-logistics-value",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-logistics-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-logistics-value",
                     ("tier", intel.LogisticsTier),
                     ("items", intel.LogisticsTierMaxItemsBonus),
                     ("minutes", intel.LogisticsTierDeliveryReductionMinutes)),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-logistics-detail",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-logistics-detail",
                     ("speed", intel.LogisticsExternalDeliverySpeedBonusPercent),
                     ("cap", intel.LogisticsExternalMaxItemsBonusPercent),
                     ("discount", intel.LogisticsExternalPriceDiscountPercent)));
@@ -483,31 +511,31 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-logistics-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable-detail"));
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-logistics-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable-detail"));
         }
 
         if (intel.HasSpecialLatheProfile)
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-special-lathe-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-special-lathe-value",
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-special-lathe-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-special-lathe-value",
                     ("tier", intel.SpecialLatheTier),
                     ("speed", intel.SpecialLatheSpeedBonusPercent),
                     ("seconds", FormatDecimal(intel.SpecialLatheProcessSeconds)),
-                    ("storage", intel.SpecialLatheMaterialStorageLimit)),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-special-lathe-detail",
+                    ("storage", FormatStorageLimit(intel.SpecialLatheMaterialStorageLimit))),
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-special-lathe-detail",
                     ("output", intel.SpecialLatheOutputMultiplier)));
         }
         else
         {
             AddInfoCard(
                 _activeRows,
-                Loc.GetString("wh40k-command-node-tactical-bonuses-active-special-lathe-title"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable"),
-                Loc.GetString("wh40k-command-node-tactical-bonuses-profile-unavailable-detail"));
+                Loc.GetString("w40k-cmd-tactical-bonuses-active-special-lathe-title"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable"),
+                Loc.GetString("w40k-cmd-tactical-bonuses-profile-unavailable-detail"));
         }
     }
 
@@ -518,55 +546,55 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         AddInfoCard(
             _tierRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-engineering-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-engineering-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-engineering-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-engineering-value",
                 ("tier", intel.EngineeringTier),
                 ("speed", intel.EngineeringSpeedBonusPercent)),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-engineering-detail",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-engineering-detail",
                 ("min_seconds", FormatDecimal(intel.EngineeringMinProcessSeconds)),
                 ("storage_limit", FormatStorageLimit(intel.EngineeringMaterialStorageLimit)),
                 ("global_multiplier", FormatDecimal(intel.EngineeringGlobalTimeMultiplier))));
 
         AddInfoCard(
             _tierRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-logistics-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-logistics-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-logistics-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-logistics-value",
                 ("tier", intel.LogisticsTier),
                 ("items", intel.LogisticsTierMaxItemsBonus),
                 ("minutes", intel.LogisticsTierDeliveryReductionMinutes)),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-logistics-detail",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-logistics-detail",
                 ("speed", intel.LogisticsExternalDeliverySpeedBonusPercent),
                 ("cap", intel.LogisticsExternalMaxItemsBonusPercent),
                 ("discount", intel.LogisticsExternalPriceDiscountPercent)));
 
         AddInfoCard(
             _tierRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-ore-extractor-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-ore-extractor-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-ore-extractor-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-ore-extractor-value",
                 ("tier", intel.OreExtractorTier),
                 ("interval", FormatDecimal(intel.OreExtractorSpawnIntervalSeconds)),
                 ("count", intel.OreExtractorSpawnCount)),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-ore-extractor-detail",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-ore-extractor-detail",
                 ("ores", intel.OreExtractorAllowedOreNames)));
 
         AddInfoCard(
             _tierRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-special-lathe-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-special-lathe-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-special-lathe-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-special-lathe-value",
                 ("tier", intel.SpecialLatheTier),
                 ("speed", intel.SpecialLatheSpeedBonusPercent),
                 ("seconds", FormatDecimal(intel.SpecialLatheProcessSeconds)),
-                ("storage", intel.SpecialLatheMaterialStorageLimit)),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-special-lathe-detail",
+                ("storage", FormatStorageLimit(intel.SpecialLatheMaterialStorageLimit))),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-special-lathe-detail",
                 ("output", intel.SpecialLatheOutputMultiplier)));
 
         AddInfoCard(
             _tierRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-node-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-node-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-node-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-node-value",
                 ("level", state.BaseLevel),
                 ("node_tier", Math.Clamp(state.UpgradeLevel + 1, 1, 5))),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-tier-node-detail",
+            Loc.GetString("w40k-cmd-tactical-bonuses-tier-node-detail",
                 ("gain", intel.NodePassiveFrontPointsPerTick),
                 ("interval", FormatDecimal(intel.NodePassiveIntervalSeconds))));
     }
@@ -582,22 +610,22 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         if (useRuntimeSnapshot)
         {
             _forecastSummary.Text = CompactLine(Loc.GetString(
-                "wh40k-command-node-tactical-bonuses-runtime-forecast-summary",
+                "w40k-cmd-tactical-bonuses-runtime-forecast-summary",
                 ("next_roll", FormatDuration(nextRollSeconds)),
                 ("cooldowns", nextBonuses.Count)));
         }
         else
         {
             _forecastSummary.Text = CompactLine(Loc.GetString(
-                "wh40k-command-node-tactical-bonuses-forecast-summary",
+                "w40k-cmd-tactical-bonuses-forecast-summary",
                 ("time_left", FormatDuration(activeRandomBonus.RemainingSeconds)),
                 ("visible", nextBonuses.Count)));
         }
 
         AddInfoCard(
             _forecastRows,
-            Loc.GetString("wh40k-command-node-tactical-bonuses-forecast-current-title"),
-            Loc.GetString("wh40k-command-node-tactical-bonuses-forecast-current-value",
+            Loc.GetString("w40k-cmd-tactical-bonuses-forecast-current-title"),
+            Loc.GetString("w40k-cmd-tactical-bonuses-forecast-current-value",
                 ("bonus", Loc.GetString(activeRandomBonus.TitleKey)),
                 ("time_left", FormatDuration(activeRandomBonus.RemainingSeconds)),
                 ("duration", FormatDuration(activeRandomBonus.DurationSeconds))),
@@ -607,11 +635,11 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         foreach (var bonus in nextBonuses)
         {
             var entryValue = bonus.ChancePercent > 0
-                ? Loc.GetString("wh40k-command-node-tactical-bonuses-forecast-entry-value",
+                ? Loc.GetString("w40k-cmd-tactical-bonuses-forecast-entry-value",
                     ("eta", FormatDuration(bonus.EtaSeconds)),
                     ("duration", FormatDuration(bonus.DurationSeconds)),
                     ("chance", bonus.ChancePercent))
-                : Loc.GetString("wh40k-command-node-tactical-bonuses-forecast-entry-cooldown-value",
+                : Loc.GetString("w40k-cmd-tactical-bonuses-forecast-entry-cooldown-value",
                     ("cooldown", FormatDuration(bonus.EtaSeconds)));
 
             AddInfoCard(
@@ -641,8 +669,8 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         {
             active = new RandomBonusEntry(
                 "no_active_runtime_event",
-                "wh40k-command-node-tactical-bonuses-runtime-no-active-title",
-                "wh40k-command-node-tactical-bonuses-runtime-no-active-detail",
+                "w40k-cmd-tactical-bonuses-runtime-no-active-title",
+                "w40k-cmd-tactical-bonuses-runtime-no-active-detail",
                 0,
                 1,
                 0,
@@ -686,7 +714,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
         var profileId = ResolveProfileIdForTeam(teamId);
         if (!_prototype.TryIndex(profileId, out WH40KCommandTacticalPresetProfilePrototype? profile))
         {
-            Logger.ErrorS("wh40k.command", $"Missing tactical-preset profile prototype '{profileId}'.");
+            Sawmill.Error($"Missing tactical-preset profile prototype '{profileId}'.");
             return BuildFallbackConfiguration(TacticalPresetDefaultProfileId);
         }
 
@@ -711,7 +739,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
 
         if (presets.Count == 0)
         {
-            Logger.ErrorS("wh40k.command", $"Tactical-preset profile '{profileId}' has no valid entries.");
+            Sawmill.Error($"Tactical-preset profile '{profileId}' has no valid entries.");
             return BuildFallbackConfiguration(profileId);
         }
 
@@ -980,7 +1008,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     {
         return limit > 0
             ? limit.ToString()
-            : Loc.GetString("wh40k-command-node-tactical-bonuses-storage-unlimited");
+            : Loc.GetString("w40k-cmd-tactical-bonuses-storage-unlimited");
     }
 
     private static string GetPhaseKey(WH40KBattlePhase phase)
@@ -998,10 +1026,10 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow
     {
         return phase switch
         {
-            WH40KBattlePhase.Preparation => "wh40k-command-node-tactical-bonuses-active-phase-detail-preparation",
-            WH40KBattlePhase.Assault => "wh40k-command-node-tactical-bonuses-active-phase-detail-assault",
-            WH40KBattlePhase.Apocalypse => "wh40k-command-node-tactical-bonuses-active-phase-detail-apocalypse",
-            _ => "wh40k-command-node-tactical-bonuses-active-phase-detail-preparation"
+            WH40KBattlePhase.Preparation => "w40k-cmd-tactical-bonuses-active-phase-detail-preparation",
+            WH40KBattlePhase.Assault => "w40k-cmd-tactical-bonuses-active-phase-detail-assault",
+            WH40KBattlePhase.Apocalypse => "w40k-cmd-tactical-bonuses-active-phase-detail-apocalypse",
+            _ => "w40k-cmd-tactical-bonuses-active-phase-detail-preparation"
         };
     }
 

@@ -6,7 +6,7 @@
     state: icon
   product: CrateDoubleEmergencyTank
   cost: 2400
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward2
 
 - type: cargoProduct
@@ -16,7 +16,7 @@
     state: icon
   product: CrateSeismicCharge
   cost: 1800
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward2
 
 - type: cargoProduct
@@ -26,7 +26,7 @@
     state: icon
   product: CrateCrusher
   cost: 5000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward2
 
 - type: cargoProduct
@@ -36,7 +36,7 @@
     state: icon
   product: CrateSalvageHardsuit
   cost: 7500
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward2
 
 # Rank 3
@@ -47,7 +47,7 @@
     state: extraction_pack
   product: CrateFulton
   cost: 3000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward3
 
 - type: cargoProduct
@@ -60,7 +60,7 @@
     entity: WrappedParcel
     containerId: contents
   cost: 4000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward3
 
 - type: cargoProduct
@@ -73,7 +73,7 @@
     entity: WrappedParcel
     containerId: contents
   cost: 8000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobReward3
 
 # Max Rank
@@ -88,5 +88,5 @@
     entity: WrappedParcel
     containerId: contents
   cost: 25000
-  category: cargoproduct-category-name-cargo
+  category: cpcat-cgo
   group: SalvageJobRewardMAX

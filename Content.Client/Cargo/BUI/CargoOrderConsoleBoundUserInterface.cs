@@ -8,6 +8,7 @@ using Content.Shared.IdentityManagement;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using Robust.Shared.Prototypes;
 using System;
@@ -73,6 +74,12 @@ namespace Content.Client.Cargo.BUI
                 orderRequester = string.Empty;
 
             _orderMenu = new CargoConsoleOrderMenu();
+            if (EntMan.TryGetComponent<CargoOrderConsoleComponent>(Owner, out var orderConsole))
+            {
+                var theme = WH40KCargoConsoleStyles.ResolveTheme(orderConsole.Account);
+                if (theme.Enabled)
+                    _orderMenu.ApplyWh40KTheme(theme);
+            }
 
             _menu.OnClose += Close;
 
@@ -166,7 +173,6 @@ namespace Content.Client.Cargo.BUI
             _currentOrders = cState.Orders.ToList();
             Populate(cState.Orders);
         }
-
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -174,8 +180,8 @@ namespace Content.Client.Cargo.BUI
             if (!disposing)
                 return;
 
-            _menu?.Dispose();
-            _orderMenu?.Dispose();
+            _menu?.Orphan();
+            _orderMenu?.Orphan();
         }
 
         private bool AddOrder()

@@ -62,8 +62,10 @@ public abstract class SharedCursedMaskSystem : EntitySystem
 
     protected void RandomizeCursedMask(Entity<CursedMaskComponent> ent, EntityUid wearer)
     {
+#pragma warning disable CS0618
         var random = SharedRandomExtensions.PredictedRandom(_timing, GetNetEntity(ent));
         ent.Comp.CurrentState = random.Pick(Enum.GetValues<CursedMaskExpression>());
+#pragma warning restore CS0618
         _appearance.SetData(ent, CursedMaskVisuals.State, ent.Comp.CurrentState);
         _movementSpeedModifier.RefreshMovementSpeedModifiers(wearer);
     }

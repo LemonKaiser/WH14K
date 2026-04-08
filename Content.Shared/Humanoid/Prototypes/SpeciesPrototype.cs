@@ -36,6 +36,24 @@ public sealed partial class SpeciesPrototype : IPrototype
     public bool RoundStart { get; private set; } = false;
 
     /// <summary>
+    /// Whether the species can only be selected by admins.
+    /// </summary>
+    [DataField]
+    public bool AdminOnly { get; private set; }
+
+    /// <summary>
+    /// WH40K meta progression level required to select this species.
+    /// </summary>
+    [DataField]
+    public int RequiredMetaLevel { get; private set; }
+
+    /// <summary>
+    /// WH40K achievement ids required to select this species.
+    /// </summary>
+    [DataField]
+    public List<string> RequiredAchievements { get; private set; } = new();
+
+    /// <summary>
     ///     Default skin tone for this species. This applies for non-human skin tones.
     /// </summary>
     [DataField]
@@ -110,6 +128,12 @@ public sealed partial class SpeciesPrototype : IPrototype
     /// </summary>
     [DataField]
     public int MaxAge = 120;
+
+    /// <summary>
+    /// Species with special unlock requirements should never be picked by generic random profile generation.
+    /// </summary>
+    public bool IsRestrictedFromRandomization =>
+        AdminOnly || RequiredMetaLevel > 0 || RequiredAchievements.Count > 0;
 }
 
 public enum SpeciesNaming : byte

@@ -518,9 +518,12 @@ public sealed partial class AdminLogsControl : Control
         );
     }
 
+    [Obsolete]
     protected override void Dispose(bool disposing)
     {
+#pragma warning disable CS0618
         base.Dispose(disposing);
+#pragma warning restore CS0618
 
         TypeSearch.OnTextChanged -= TypeSearchChanged;
         PlayerSearch.OnTextChanged -= PlayerSearchChanged;

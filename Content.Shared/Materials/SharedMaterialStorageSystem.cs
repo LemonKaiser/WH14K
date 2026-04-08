@@ -184,14 +184,10 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(uid, ref component))
             return false;
 
-        if (!CanTakeVolume(uid, volume, component))
-            return false;
-
-        if (!IsMaterialWhitelisted((uid, component), materialId))
-            return false;
-
-        var amount = GetMaterialAmount(uid, materialId, component, localOnly);
-        return amount + volume >= 0;
+        return CanChangeMaterialAmount((uid, component), new Dictionary<ProtoId<MaterialPrototype>, int>
+        {
+            [new ProtoId<MaterialPrototype>(materialId)] = volume,
+        }, localOnly);
     }
 
     /// <summary>
@@ -202,6 +198,19 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
     /// <returns>If the amount can be changed</returns>
     /// <param name="localOnly"></param>
     public bool CanChangeMaterialAmount(Entity<MaterialStorageComponent?> entity, Dictionary<string,int> materials, bool localOnly = false)
+    {
+        return CanChangeMaterialAmount(entity,
+            materials.ToDictionary(p => new ProtoId<MaterialPrototype>(p.Key), p => p.Value),
+            localOnly);
+    }
+
+    /// <summary>
+    /// Checks if the specified materials can be changed by the specified volumes.
+    /// </summary>
+    public bool CanChangeMaterialAmount(
+        Entity<MaterialStorageComponent?> entity,
+        Dictionary<ProtoId<MaterialPrototype>, int> materials,
+        bool localOnly = false)
     {
         if (!Resolve(entity, ref entity.Comp))
             return false;
@@ -291,11 +300,8 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp))
             return false;
 
-        foreach (var (material, amount) in materials)
-        {
-            if (!CanChangeMaterialAmount(entity, material, amount, entity))
-                return false;
-        }
+        if (!CanChangeMaterialAmount(entity, materials, localOnly))
+            return false;
 
         var changeEv = new ConsumeStoredMaterialsEvent((entity, entity.Comp), materials, localOnly);
         RaiseLocalEvent(entity, ref changeEv);
@@ -372,16 +378,10 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
             return false;
 
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
-        var totalVolume = 0;
-        foreach (var (mat, vol) in composition.MaterialComposition)
-        {
-            if (!CanChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
-                return false;
+        var materials = composition.MaterialComposition
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value * multiplier);
 
-            totalVolume += vol * multiplier;
-        }
-
-        return CanTakeVolume(receiver, totalVolume, storage, localOnly: true);
+        return CanChangeMaterialAmount((receiver, storage), materials);
     }
 
     /// <summary>
@@ -400,14 +400,12 @@ public abstract class SharedMaterialStorageSystem : EntitySystem
         if (!Resolve(receiver, ref storage) || !Resolve(toInsert, ref material, ref composition, false))
             return false;
 
-        // Material Whitelist checked implicitly by CanChangeMaterialAmount();
-
         var multiplier = TryComp<StackComponent>(toInsert, out var stackComponent) ? stackComponent.Count : 1;
-        foreach (var (mat, vol) in composition.MaterialComposition)
-        {
-            if (!TryChangeMaterialAmount(receiver, mat, vol * multiplier, storage))
-                return false;
-        }
+        var materials = composition.MaterialComposition
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value * multiplier);
+
+        if (!TryChangeMaterialAmount((receiver, storage), materials))
+            return false;
 
         var insertingComp = EnsureComp<InsertingMaterialStorageComponent>(receiver);
         insertingComp.EndTime = _timing.CurTime + storage.InsertionTime;

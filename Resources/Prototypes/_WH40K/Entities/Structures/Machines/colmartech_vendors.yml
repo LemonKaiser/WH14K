@@ -43,6 +43,8 @@
       entries:
       - id: WeaponLaserLasgun
         amount: 10
+      - id: WeaponLaserLasgunKrieg
+        amount: 4
       - id: WeaponLaserLonglas
         amount: 2
       - id: WeaponLaserLasgunVoss
@@ -203,8 +205,6 @@
         amount: 10
       - id: WeaponPistolBolter
         amount: 2
-      - id: WeaponLaserPlasmaPistol
-        amount: 1
     - name: Officer Melee
       entries:
       - id: Chainsword

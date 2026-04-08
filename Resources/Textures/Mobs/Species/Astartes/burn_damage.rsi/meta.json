@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "copyright": "Derived for WH14K project from base SS14 damage overlays.",
+  "license": "CC-BY-SA-3.0",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "Head_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_30",
+      "directions": 4
+    },
+    {
+      "name": "Head_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_60",
+      "directions": 4
+    },
+    {
+      "name": "Head_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_90",
+      "directions": 4
+    },
+    {
+      "name": "Head_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_150",
+      "directions": 4
+    },
+    {
+      "name": "Head_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_210",
+      "directions": 4
+    },
+    {
+      "name": "Head_Burn_300",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Burn_300",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Burn_300",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Burn_300",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Burn_300",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Burn_300",
+      "directions": 4
+    }
+  ]
+}

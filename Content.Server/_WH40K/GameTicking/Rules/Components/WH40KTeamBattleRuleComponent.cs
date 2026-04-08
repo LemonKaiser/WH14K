@@ -41,7 +41,7 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     /// Round time limit in seconds. 0 disables the limit.
     /// </summary>
     [DataField("roundTimeLimitSeconds")]
-    public float RoundTimeLimitSeconds = 3600f;
+    public float RoundTimeLimitSeconds = 10800f;
 
     /// <summary>
     /// Controls which victory conditions can end the round.
@@ -59,7 +59,7 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     /// Length of assault phase in seconds.
     /// </summary>
     [DataField("assaultDurationSeconds")]
-    public float AssaultDurationSeconds = 900f;
+    public float AssaultDurationSeconds = 3600f;
 
     /// <summary>
     /// Before this time from round start, objective/team victory is locked.

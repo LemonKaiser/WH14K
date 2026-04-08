@@ -9,6 +9,7 @@
       - Human
       - Dwarf
       - Felinid
+      - Vulpkanin
   startingGear: HeresyGuardsmanGear
   icon: "JobIconHGuardsman"
   supervisors: job-supervisors-engineering
@@ -18,7 +19,6 @@
     components:
       - type: WH40KSquadAssignable
       - type: WH40KChaosGiftRole
-      - type: WH40KMoraleExecutionTarget
   access:
   - Maintenance
   - External

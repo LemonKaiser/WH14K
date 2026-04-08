@@ -1,0 +1,19 @@
+ent-ClothingNeckImperialAquilaMedal = медаль Аквилы
+    .desc = Имперская награда с двуглавой Аквилой.
+ent-ClothingNeckImperialCrossMedal = крест заслуг
+    .desc = Имперская награда за безупречную службу.
+ent-ClothingNeckImperialInquisitionSeal = печать чистоты
+    .desc = Знак чистой веры или морали Бойца-Брата в глазах Императора и Ордена.
+ent-ClothingNeckImperialGoldenPrize = золотая награда
+    .desc = Вычурная имперская награда, отлитая в золоте.
+
+ent-ClothingNeckChaosUndividedMedal = знак неделимого Хаоса
+    .desc = Трофей, посвященный всему пантеону Хаоса.
+ent-ClothingNeckChaosKhorneMedal = знак Кхорна
+    .desc = Кровавый трофей в честь бога войны.
+ent-ClothingNeckChaosNurgleMedal = знак Нургла
+    .desc = Гниющий знак благосклонности Нургла.
+ent-ClothingNeckChaosSlaaneshMedal = знак Слаанеш
+    .desc = Изысканный трофей в честь бога удовольствий.
+ent-ClothingNeckChaosTzeentchMedal = знак Тзинча
+    .desc = Хитроумный знак покровительства архитектора Судеб.

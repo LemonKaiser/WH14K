@@ -1,71 +1,453 @@
-<DefaultWindow xmlns="https://spacestation14.io"
-               xmlns:viewport="clr-namespace:Content.Client.Viewport"
-               xmlns:local="clr-namespace:Content.Client.SurveillanceCamera.UI"
-               Title="{Loc 'surveillance-camera-monitor-ui-window'}">
-    <BoxContainer>
-        <!-- Panel with tabs -->
-        <BoxContainer Orientation="Vertical" MinWidth="350">
-            <TabContainer Name="ViewModeTabs" VerticalExpand="True">
-                <!-- Camera list tab -->
-                <BoxContainer Name="{Loc 'surveillance-camera-monitor-ui-tab-list'}" Orientation="Vertical">
-                    <OptionButton Name="SubnetSelector"/>
-                    <Button Name="SubnetRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}"/>
-                    <ScrollContainer VerticalExpand="True">
-                        <ItemList Name="SubnetList"/>
-                    </ScrollContainer>
-                    <Button Name="CameraRefreshButton" Text="{Loc 'surveillance-camera-monitor-ui-refresh-cameras'}"/>
-                </BoxContainer>
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:viewport="clr-namespace:Content.Client.Viewport"
+                      xmlns:local="clr-namespace:Content.Client.SurveillanceCamera.UI"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      xmlns:co="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'surveillance-camera-monitor-ui-window'}"
+                      MinSize="1200 760"
+                      SetSize="1380 860">
+    <PanelContainer Name="RootFrame">
+        <BoxContainer Name="RootLayout"
+                      Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <PanelContainer Name="HeaderPanel"
+                            Margin="10 8 10 0">
+                <BoxContainer Orientation="Vertical"
+                              Margin="14 12 14 12"
+                              SeparationOverride="12">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="12">
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="3">
+                            <Label Name="HeaderTitleLabel"
+                                   Text="{Loc 'surveillance-camera-monitor-ui-window'}"
+                                   StyleClasses="LabelKeyText" />
+                            <RichTextLabel Name="HeaderSubtitleLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-header-subtitle-fallback'}"
+                                           HorizontalExpand="True" />
+                        </BoxContainer>
 
-                <!-- Map view tab -->
-                <BoxContainer Name="{Loc 'surveillance-camera-monitor-ui-tab-map'}" Orientation="Vertical" VerticalExpand="True">
-                    <local:SurveillanceCameraNavMapControl Name="CameraMap"
-                                                           VerticalExpand="True"
-                                                           HorizontalExpand="True"
-                                                           MinSize="350 350"/>
-
-                    <!-- Map legend -->
-                    <BoxContainer Name="LegendContainer" Margin="0 10">
-                        <TextureRect Stretch="KeepAspectCentered"
-                                     TexturePath="/Textures/Interface/NavMap/beveled_triangle.png"
-                                     Modulate="#FF00FF"
-                                     SetSize="20 20"
-                                     Margin="10 0 5 0"/>
-                        <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-active'}"/>
-
-                        <TextureRect Stretch="KeepAspectCentered"
-                                     TexturePath="/Textures/Interface/NavMap/beveled_triangle.png"
-                                     SetSize="20 20"
-                                     Modulate="#fbff19ff"
-                                     Margin="10 0 5 0"/>
-                        <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-selected'}"/>
-
-                        <TextureRect Stretch="KeepAspectCentered"
-                                     TexturePath="/Textures/Interface/NavMap/beveled_circle.png"
-                                     SetSize="20 20"
-                                     Modulate="#a09f9fff"
-                                     Margin="10 0 5 0"/>
-                        <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-inactive'}"/>
-
-                        <TextureRect Stretch="KeepAspectCentered"
-                                     TexturePath="/Textures/Interface/NavMap/beveled_square.png"
-                                     SetSize="20 20"
-                                     Modulate="#fa1f1fff"
-                                     Margin="10 0 5 0"/>
-                        <Label Text="{Loc 'surveillance-camera-monitor-ui-legend-invalid'}"/>
+                        <PanelContainer Name="StatusPanel"
+                                        MinWidth="320">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="6">
+                                <Label Name="StatusPanelTitleLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-status-panel-title'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="StatusValueLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-status-offline-card'}" />
+                                <RichTextLabel Name="StatusHintLabel"
+                                               Text="{Loc 'surveillance-camera-monitor-ui-status-hint-offline'}"
+                                               HorizontalExpand="True" />
+                            </BoxContainer>
+                        </PanelContainer>
                     </BoxContainer>
-                    <Button Name="SubnetRefreshButtonMap" Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}"/>
-                </BoxContainer>
-            </TabContainer>
-            <Button Name="CameraDisconnectButton" Text="{Loc 'surveillance-camera-monitor-ui-disconnect'}"/>
-        </BoxContainer>
 
-        <!-- Right panel with camera view -->
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-            <Label Name="CameraStatus"/>
-            <Control VerticalExpand="True" Margin="5" Name="CameraViewBox">
-                <viewport:ScalingViewport Name="CameraView" MinSize="500 500" MouseFilter="Ignore"/>
-                <TextureRect MinSize="500 500" Name="CameraViewBackground" />
-            </Control>
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8">
+                        <PanelContainer Name="SubnetCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="SubnetCardLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-summary-subnets-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="SubnetValueLabel"
+                                       Text="0" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="CameraCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="CameraCardLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-summary-cameras-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="CameraValueLabel"
+                                       Text="0" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="ActiveSubnetCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="ActiveSubnetCardLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-summary-active-subnet-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="ActiveSubnetValueLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-active-subnet-none'}"
+                                       ClipText="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="FeedCard"
+                                        HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="4">
+                                <Label Name="FeedCardLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-summary-feed-label'}"
+                                       StyleClasses="LabelKeyText" />
+                                <Label Name="FeedValueLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-status-offline-card'}"
+                                       ClipText="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          Margin="10 10 10 0"
+                          SeparationOverride="10"
+                          HorizontalExpand="True"
+                          VerticalExpand="True">
+                <PanelContainer Name="CommandPanel"
+                                MinWidth="400"
+                                MaxWidth="440"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  VerticalExpand="True">
+                        <PanelContainer Name="NetworkPanel"
+                                        Margin="8 8 8 0">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="8">
+                                <Label Name="NetworkPanelTitleLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-network-title'}"
+                                       StyleClasses="LabelKeyText" />
+                                <RichTextLabel Name="NetworkPanelSubtitleLabel"
+                                               Text="{Loc 'surveillance-camera-monitor-ui-network-subtitle'}"
+                                               HorizontalExpand="True" />
+                                <controls:ThemedOptionButton Name="SubnetSelector"
+                                                              MinWidth="250" />
+
+                                <BoxContainer Orientation="Horizontal"
+                                              SeparationOverride="8">
+                                    <PanelContainer Name="SubnetRoutingBadge"
+                                                    HorizontalExpand="True">
+                                        <BoxContainer Orientation="Vertical"
+                                                      Margin="10 7 10 7"
+                                                      SeparationOverride="3">
+                                            <Label Name="RoutingKeyLabel"
+                                                   Text="{Loc 'surveillance-camera-monitor-ui-summary-subnets-label'}"
+                                                   StyleClasses="LabelSubText" />
+                                            <Label Name="RoutingValueLabel"
+                                                   Text="0" />
+                                        </BoxContainer>
+                                    </PanelContainer>
+
+                                    <PanelContainer Name="VisibleBadge"
+                                                    HorizontalExpand="True">
+                                        <BoxContainer Orientation="Vertical"
+                                                      Margin="10 7 10 7"
+                                                      SeparationOverride="3">
+                                            <Label Name="VisibleKeyLabel"
+                                                   Text="{Loc 'surveillance-camera-monitor-ui-badge-visible'}"
+                                                   StyleClasses="LabelSubText" />
+                                            <Label Name="VisibleValueLabel"
+                                                   Text="0/0" />
+                                        </BoxContainer>
+                                    </PanelContainer>
+                                </BoxContainer>
+
+                                <BoxContainer Orientation="Horizontal"
+                                              SeparationOverride="8">
+                                    <Button Name="SubnetRefreshButton"
+                                            Text="{Loc 'surveillance-camera-monitor-ui-refresh-subnets'}"
+                                            HorizontalExpand="True"
+                                            MinHeight="36" />
+                                    <Button Name="CameraRefreshButton"
+                                            Text="{Loc 'surveillance-camera-monitor-ui-refresh-cameras'}"
+                                            HorizontalExpand="True"
+                                            MinHeight="36" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="ModePanel"
+                                        Margin="8 8 8 0">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="8">
+                                <Label Name="ModePanelTitleLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-mode-title'}"
+                                       StyleClasses="LabelKeyText" />
+                                <BoxContainer Orientation="Horizontal"
+                                              SeparationOverride="8">
+                                    <Button Name="RosterTabButton"
+                                            Text="{Loc 'surveillance-camera-monitor-ui-mode-roster'}"
+                                            HorizontalExpand="True"
+                                            MinHeight="34" />
+                                    <Button Name="MapTabButton"
+                                            Text="{Loc 'surveillance-camera-monitor-ui-mode-map'}"
+                                            HorizontalExpand="True"
+                                            MinHeight="34" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <TabContainer Name="ViewModeTabs"
+                                      Margin="8 8 8 0"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True">
+                            <BoxContainer Name="RosterPage"
+                                          Orientation="Vertical"
+                                          SeparationOverride="8"
+                                          VerticalExpand="True">
+                                <PanelContainer Name="SearchPanel">
+                                    <BoxContainer Orientation="Vertical"
+                                                  Margin="10 8 10 8"
+                                                  SeparationOverride="6">
+                                        <LineEdit Name="CameraSearchBar"
+                                                  PlaceHolder="{Loc 'surveillance-camera-monitor-ui-search-placeholder'}"
+                                                  HorizontalExpand="True" />
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="CameraListPanel"
+                                                VerticalExpand="True">
+                                    <BoxContainer Orientation="Vertical"
+                                                  VerticalExpand="True">
+                                        <PanelContainer Name="CameraListHeaderPanel">
+                                            <BoxContainer Orientation="Vertical"
+                                                          Margin="12 10 12 10"
+                                                          SeparationOverride="3">
+                                                <Label Name="CameraListTitleLabel"
+                                                       Text="{Loc 'surveillance-camera-monitor-ui-roster-title'}"
+                                                       StyleClasses="LabelKeyText" />
+                                                <RichTextLabel Name="CameraListSubtitleLabel"
+                                                               Text=""
+                                                               HorizontalExpand="True" />
+                                            </BoxContainer>
+                                        </PanelContainer>
+
+                                        <PanelContainer Name="CameraListBodyPanel"
+                                                        Margin="8 8 8 8"
+                                                        VerticalExpand="True">
+                                            <BoxContainer Orientation="Vertical"
+                                                          VerticalExpand="True"
+                                                          SeparationOverride="6">
+                                                <Label Name="CameraListEmptyLabel"
+                                                       Text="{Loc 'surveillance-camera-monitor-ui-roster-empty'}"
+                                                       HorizontalAlignment="Center"
+                                                       Visible="False" />
+                                                <co:SearchListContainer Name="CameraList"
+                                                                        HorizontalExpand="True"
+                                                                        VerticalExpand="True" />
+                                            </BoxContainer>
+                                        </PanelContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+
+                            <BoxContainer Name="MapPage"
+                                          Orientation="Vertical"
+                                          SeparationOverride="8"
+                                          VerticalExpand="True">
+                                <PanelContainer Name="MapPanel"
+                                                VerticalExpand="True">
+                                    <BoxContainer Orientation="Vertical"
+                                                  VerticalExpand="True">
+                                        <PanelContainer Name="MapHeaderPanel">
+                                            <BoxContainer Orientation="Vertical"
+                                                          Margin="12 10 12 10"
+                                                          SeparationOverride="3">
+                                                <Label Name="MapTitleLabel"
+                                                       Text="{Loc 'surveillance-camera-monitor-ui-map-title'}"
+                                                       StyleClasses="LabelKeyText" />
+                                                <RichTextLabel Name="MapSubtitleLabel"
+                                                               Text="{Loc 'surveillance-camera-monitor-ui-map-subtitle'}"
+                                                               HorizontalExpand="True" />
+                                            </BoxContainer>
+                                        </PanelContainer>
+
+                                        <PanelContainer Name="MapBodyPanel"
+                                                        Margin="8 8 8 8"
+                                                        VerticalExpand="True">
+                                            <local:SurveillanceCameraNavMapControl Name="CameraMap"
+                                                                                   VerticalExpand="True"
+                                                                                   HorizontalExpand="True"
+                                                                                   MinSize="350 350" />
+                                        </PanelContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+
+                                <PanelContainer Name="LegendPanel">
+                                    <BoxContainer Orientation="Vertical"
+                                                  Margin="10 8 10 8"
+                                                  SeparationOverride="8">
+                                        <BoxContainer Orientation="Horizontal"
+                                                      SeparationOverride="8">
+                                            <PanelContainer Name="LegendActivePanel"
+                                                            HorizontalExpand="True">
+                                                <BoxContainer Orientation="Horizontal"
+                                                              Margin="8 6 8 6"
+                                                              SeparationOverride="6">
+                                                    <TextureRect Stretch="KeepAspectCentered"
+                                                                 TexturePath="/Textures/Interface/NavMap/beveled_triangle.png"
+                                                                 Modulate="#FF00FF"
+                                                                 SetSize="16 16" />
+                                                    <Label Name="LegendActiveLabel"
+                                                           Text="{Loc 'surveillance-camera-monitor-ui-legend-active'}"
+                                                           VerticalAlignment="Center" />
+                                                </BoxContainer>
+                                            </PanelContainer>
+
+                                            <PanelContainer Name="LegendSelectedPanel"
+                                                            HorizontalExpand="True">
+                                                <BoxContainer Orientation="Horizontal"
+                                                              Margin="8 6 8 6"
+                                                              SeparationOverride="6">
+                                                    <TextureRect Stretch="KeepAspectCentered"
+                                                                 TexturePath="/Textures/Interface/NavMap/beveled_triangle.png"
+                                                                 Modulate="#fbff19ff"
+                                                                 SetSize="16 16" />
+                                                    <Label Name="LegendSelectedLabel"
+                                                           Text="{Loc 'surveillance-camera-monitor-ui-legend-selected'}"
+                                                           VerticalAlignment="Center" />
+                                                </BoxContainer>
+                                            </PanelContainer>
+                                        </BoxContainer>
+
+                                        <BoxContainer Orientation="Horizontal"
+                                                      SeparationOverride="8">
+                                            <PanelContainer Name="LegendInactivePanel"
+                                                            HorizontalExpand="True">
+                                                <BoxContainer Orientation="Horizontal"
+                                                              Margin="8 6 8 6"
+                                                              SeparationOverride="6">
+                                                    <TextureRect Stretch="KeepAspectCentered"
+                                                                 TexturePath="/Textures/Interface/NavMap/beveled_circle.png"
+                                                                 Modulate="#a09f9fff"
+                                                                 SetSize="16 16" />
+                                                    <Label Name="LegendInactiveLabel"
+                                                           Text="{Loc 'surveillance-camera-monitor-ui-legend-inactive'}"
+                                                           VerticalAlignment="Center" />
+                                                </BoxContainer>
+                                            </PanelContainer>
+
+                                            <PanelContainer Name="LegendInvalidPanel"
+                                                            HorizontalExpand="True">
+                                                <BoxContainer Orientation="Horizontal"
+                                                              Margin="8 6 8 6"
+                                                              SeparationOverride="6">
+                                                    <TextureRect Stretch="KeepAspectCentered"
+                                                                 TexturePath="/Textures/Interface/NavMap/beveled_square.png"
+                                                                 Modulate="#fa1f1fff"
+                                                                 SetSize="16 16" />
+                                                    <Label Name="LegendInvalidLabel"
+                                                           Text="{Loc 'surveillance-camera-monitor-ui-legend-invalid'}"
+                                                           VerticalAlignment="Center" />
+                                                </BoxContainer>
+                                            </PanelContainer>
+                                        </BoxContainer>
+                                    </BoxContainer>
+                                </PanelContainer>
+                            </BoxContainer>
+                        </TabContainer>
+
+                        <Button Name="CameraDisconnectButton"
+                                Text="{Loc 'surveillance-camera-monitor-ui-disconnect'}"
+                                Margin="8 8 8 8"
+                                MinHeight="36" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="FeedPanel"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  VerticalExpand="True">
+                        <PanelContainer Name="FeedHeaderPanel">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="12 10 12 10"
+                                          SeparationOverride="3">
+                                <Label Name="FeedTitleLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-feed-title-offline'}"
+                                       StyleClasses="LabelKeyText" />
+                                <RichTextLabel Name="FeedSubtitleLabel"
+                                               Text="{Loc 'surveillance-camera-monitor-ui-feed-subtitle-offline'}"
+                                               HorizontalExpand="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <BoxContainer Orientation="Horizontal"
+                                      Margin="8 8 8 0"
+                                      SeparationOverride="8">
+                            <PanelContainer Name="LinkBadge"
+                                            HorizontalExpand="True">
+                                <BoxContainer Orientation="Vertical"
+                                              Margin="10 7 10 7"
+                                              SeparationOverride="3">
+                                    <Label Name="LinkKeyLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-badge-link'}"
+                                           StyleClasses="LabelSubText" />
+                                    <Label Name="LinkValueLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-status-offline-card'}"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="AddressBadge"
+                                            HorizontalExpand="True">
+                                <BoxContainer Orientation="Vertical"
+                                              Margin="10 7 10 7"
+                                              SeparationOverride="3">
+                                    <Label Name="AddressKeyLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-badge-address'}"
+                                           StyleClasses="LabelSubText" />
+                                    <Label Name="AddressValueLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-feed-address-none'}"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <PanelContainer Name="FeedSubnetBadge"
+                                            HorizontalExpand="True">
+                                <BoxContainer Orientation="Vertical"
+                                              Margin="10 7 10 7"
+                                              SeparationOverride="3">
+                                    <Label Name="FeedSubnetKeyLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-badge-subnet'}"
+                                           StyleClasses="LabelSubText" />
+                                    <Label Name="FeedSubnetValueLabel"
+                                           Text="{Loc 'surveillance-camera-monitor-ui-active-subnet-none'}"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </PanelContainer>
+                        </BoxContainer>
+
+                        <PanelContainer Name="FeedViewportPanel"
+                                        Margin="8 8 8 0"
+                                        VerticalExpand="True">
+                            <Control VerticalExpand="True"
+                                     HorizontalExpand="True"
+                                     Margin="8"
+                                     Name="CameraViewBox">
+                                <viewport:ScalingViewport Name="CameraView"
+                                                          MinSize="680 560"
+                                                          MouseFilter="Ignore" />
+                                <TextureRect MinSize="680 560"
+                                             Name="CameraViewBackground" />
+                            </Control>
+                        </PanelContainer>
+
+                        <RichTextLabel Name="FooterLabel"
+                                       Text="{Loc 'surveillance-camera-monitor-ui-footer-roster'}"
+                                       Margin="12 8 12 10"
+                                       HorizontalExpand="True" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
         </BoxContainer>
-    </BoxContainer>
-</DefaultWindow>
+    </PanelContainer>
+</controls:FancyWindow>

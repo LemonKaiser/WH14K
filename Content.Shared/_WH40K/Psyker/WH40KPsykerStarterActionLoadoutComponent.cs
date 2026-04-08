@@ -29,4 +29,7 @@ public sealed partial class WH40KPsykerStarterActionLoadoutComponent : Component
 
     [DataField]
     public int AppliedLevel;
+
+    [DataField]
+    public bool AppliedCatastropheLockdown;
 }

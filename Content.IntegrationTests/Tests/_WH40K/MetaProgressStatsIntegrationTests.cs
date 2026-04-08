@@ -2,11 +2,15 @@ using System;
 using System.Linq;
 using System.Net;
 using Content.Server.Database;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server._WH40K.MetaProgress;
+using Content.Server._WH40K.Psyker;
 using Content.Server._WH40K.Stats;
 using Content.Shared.GameTicking;
-using Robust.Shared.Enums;
+using Content.Shared._WH40K.LateJoin;
+using Content.Shared._WH40K.Psyker;
+using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 
@@ -15,182 +19,212 @@ namespace Content.IntegrationTests.Tests._WH40K;
 [TestFixture]
 public sealed class MetaProgressStatsIntegrationTests
 {
+    /// <summary>
+    /// Merged: round counter reset, achievement sync from stats, lifetime stat delta.
+    /// All share a default (server-only) pair.
+    /// </summary>
     [Test]
-    public async Task StatsRoundCountersResetWhileLifetimePersists()
+    public async Task StatsRoundCountersAchievementSyncAndLifetimeDelta()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var userId = new NetUserId(Guid.NewGuid());
+        var db = server.ResolveDependency<IServerDbManager>();
 
+        // --- Round counter reset while lifetime persists ---
+        var uid1 = new NetUserId(Guid.NewGuid());
         await server.WaitPost(() =>
         {
             var entManager = server.ResolveDependency<IEntityManager>();
             var stats = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<WH40KPlayerStatsSystem>();
 
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 30);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(stats.GetRoundCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
-            });
+            stats.Record(uid1, WH40KPlayerStatKeys.CombatEnemyKills, 30);
+            Assert.That(stats.GetRoundCounter(uid1, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
+            Assert.That(stats.GetLifetimeCounter(uid1, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
 
             entManager.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(stats.GetRoundCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(0));
-                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
-            });
+            Assert.That(stats.GetRoundCounter(uid1, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(0));
+            Assert.That(stats.GetLifetimeCounter(uid1, WH40KPlayerStatKeys.CombatEnemyKills), Is.EqualTo(30));
+        });
+
+        // --- Achievement sync from round stats + blocker ---
+        var uid2 = new NetUserId(Guid.NewGuid());
+        await db.UpdatePlayerRecordAsync(uid2, "StatsSync", IPAddress.Loopback, null);
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            _ = meta.GetSnapshot(uid2);
+            stats.Record(uid2, WH40KPlayerStatKeys.CombatEnemyKills, 30);
+
+            var after = meta.GetSnapshot(uid2);
+            var firstContact = after.Achievements.Single(a => a.Id == "wh40k-ach-first-contact");
+            var fireline = after.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
+
+            Assert.That(firstContact.Progress, Is.EqualTo(20));
+            Assert.That(firstContact.Completed, Is.True);
+            Assert.That(fireline.Progress, Is.EqualTo(30));
+            Assert.That(fireline.Completed, Is.False);
+
+            // Death blocker resets fireline
+            stats.Record(uid2, WH40KPlayerStatKeys.CombatDeaths, 1);
+
+            var afterDeath = meta.GetSnapshot(uid2);
+            Assert.That(afterDeath.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation").Progress, Is.EqualTo(0));
+        });
+
+        // --- Lifetime stat-driven achievement keeps manual progress + delta ---
+        var uid3 = new NetUserId(Guid.NewGuid());
+        await db.UpdatePlayerRecordAsync(uid3, "StatsLifetimeDelta", IPAddress.Loopback, null);
+
+        await server.WaitPost(() =>
+        {
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+
+            _ = meta.GetSnapshot(uid3);
+
+            var setResult = meta.TrySetAchievementProgress(uid3, "wh40k-ach-veteran-of-wars", 99,
+                out var resolvedProgress, out _, out var completedBefore, out var setError);
+
+            Assert.That(setResult, Is.True, setError);
+            Assert.That(resolvedProgress, Is.EqualTo(99));
+            Assert.That(completedBefore, Is.False);
+
+            stats.Record(uid3, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
+
+            var afterFirst = meta.GetSnapshot(uid3).Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
+            Assert.That(afterFirst.Progress, Is.EqualTo(100));
+            Assert.That(afterFirst.Completed, Is.True);
+
+            // Second delta must not push past cap
+            stats.Record(uid3, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
+            var afterSecond = meta.GetSnapshot(uid3).Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
+            Assert.That(afterSecond.Progress, Is.EqualTo(100));
         });
 
         await pair.CleanReturnAsync();
     }
 
+    /// <summary>
+    /// Merged: RoundStarting event seeding + patron attunement stat recording.
+    /// Both need Connected=true, DummyTicker=false.
+    /// </summary>
     [Test]
-    public async Task MetaAchievementsSyncFromRoundStatsAndBlockers()
+    public async Task RoundStartingSeedAndPatronAttunementStats()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var userId = new NetUserId(Guid.NewGuid());
-        var db = server.ResolveDependency<IServerDbManager>();
-
-        await db.UpdatePlayerRecordAsync(userId, "MetaStatsSyncTest", IPAddress.Loopback, null);
-
-        await server.WaitPost(() =>
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
-            var systems = server.ResolveDependency<IEntitySystemManager>();
-            var stats = systems.GetEntitySystem<WH40KPlayerStatsSystem>();
-            var meta = systems.GetEntitySystem<WH40KMetaProgressSystem>();
-
-            _ = meta.GetSnapshot(userId);
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 30);
-
-            var afterKills = meta.GetSnapshot(userId);
-            var firstContact = afterKills.Achievements.Single(a => a.Id == "wh40k-ach-first-contact");
-            var fireline = afterKills.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(firstContact.Progress, Is.EqualTo(20));
-                Assert.That(firstContact.Completed, Is.True);
-                Assert.That(fireline.Progress, Is.EqualTo(30));
-                Assert.That(fireline.Completed, Is.False);
-            });
-
-            stats.Record(userId, WH40KPlayerStatKeys.CombatDeaths, 1);
-
-            var afterDeath = meta.GetSnapshot(userId);
-            var firstContactAfterDeath = afterDeath.Achievements.Single(a => a.Id == "wh40k-ach-first-contact");
-            var firelineAfterDeath = afterDeath.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(firstContactAfterDeath.Progress, Is.EqualTo(20));
-                Assert.That(firstContactAfterDeath.Completed, Is.True);
-                Assert.That(firelineAfterDeath.Progress, Is.EqualTo(0));
-                Assert.That(firelineAfterDeath.Completed, Is.False);
-            });
+            Connected = true,
+            Dirty = true,
+            InLobby = true,
+            DummyTicker = false,
+            Fresh = true
         });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task LifetimeStatDrivenAchievementKeepsManualProgressAndAppliesDelta()
-    {
-        await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var userId = new NetUserId(Guid.NewGuid());
         var db = server.ResolveDependency<IServerDbManager>();
+        var playerMan = server.ResolveDependency<IPlayerManager>();
+        var session = playerMan.Sessions.Single();
+        var userId = session.UserId;
 
-        await db.UpdatePlayerRecordAsync(userId, "MetaStatsLifetimeSyncTest", IPAddress.Loopback, null);
+        await db.UpdatePlayerRecordAsync(userId, "StatsRoundSeedPatron", IPAddress.Loopback, null);
 
-        await server.WaitPost(() =>
+        await pair.WaitCommand("forcemap Battlefield40k");
+        await pair.WaitCommand("setgamepreset WH40KTeamBattle 9999");
+        await pair.WaitCommand("startround");
+        await pair.RunTicksSync(60);
+
+        // WH40K requires faction selection before late-join.
+        await pair.Client.WaitPost(() =>
         {
-            var systems = server.ResolveDependency<IEntitySystemManager>();
-            var stats = systems.GetEntitySystem<WH40KPlayerStatsSystem>();
-            var meta = systems.GetEntitySystem<WH40KMetaProgressSystem>();
-
-            _ = meta.GetSnapshot(userId);
-
-            var setResult = meta.TrySetAchievementProgress(
-                userId,
-                "wh40k-ach-veteran-of-wars",
-                99,
-                out var resolvedProgress,
-                out _,
-                out var completedBeforeDelta,
-                out var setError);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(setResult, Is.True, setError);
-                Assert.That(resolvedProgress, Is.EqualTo(99));
-                Assert.That(completedBeforeDelta, Is.False);
-            });
-
-            stats.Record(userId, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
-
-            var afterFirstDelta = meta.GetSnapshot(userId)
-                .Achievements
-                .Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(afterFirstDelta.Progress, Is.EqualTo(100));
-                Assert.That(afterFirstDelta.Completed, Is.True);
-            });
-
-            stats.Record(userId, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
-
-            var afterSecondDelta = meta.GetSnapshot(userId)
-                .Achievements
-                .Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(afterSecondDelta.Progress, Is.EqualTo(100));
-                Assert.That(afterSecondDelta.Completed, Is.True);
-            });
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", WH40KFactionSelectionPurpose.LateJoin);
         });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task RoundStartingSeedsRuntimeStateForConnectedPlayers()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var db = server.ResolveDependency<IServerDbManager>();
-        var playerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
-        NetUserId userId = default;
-
-        await server.WaitPost(() => userId = playerMan.Sessions.Single().UserId);
-        await db.UpdatePlayerRecordAsync(userId, "MetaRoundStartSeedTest", IPAddress.Loopback, null);
+        await pair.RunTicksSync(10);
 
         await server.WaitPost(() =>
         {
-            var systems = server.ResolveDependency<IEntitySystemManager>();
+            var ticker = server.System<GameTicker>();
+            ticker.MakeJoinGame(session, EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
+
+        Assert.That(session.AttachedEntity, Is.Not.Null);
+        var actor = session.AttachedEntity!.Value;
+
+        // --- Patron attunement stat recording (needs entity-session mapping, must run before cleanup) ---
+
+        await server.WaitPost(() =>
+        {
             var entMan = server.ResolveDependency<IEntityManager>();
-            var stats = systems.GetEntitySystem<WH40KPlayerStatsSystem>();
-            var meta = systems.GetEntitySystem<WH40KMetaProgressSystem>();
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
+            var progressionSystem = server.System<WH40KChaosGiftProgressionSystem>();
+
+            _ = meta.GetSnapshot(userId);
+
+            entMan.EnsureComponent<WH40KChaosGiftRoleComponent>(actor);
+            entMan.EnsureComponent<WH40KChaosGiftProgressionComponent>(actor);
+
+            var actorCoords = entMan.GetComponent<TransformComponent>(actor).Coordinates;
+            var skrizhal = entMan.SpawnEntity("WH40KRuneSkrizhalChaos", actorCoords);
+            var skrizhalComp = entMan.GetComponent<WH40KChaosSkrizhalComponent>(skrizhal);
+
+            var progression = entMan.GetComponent<WH40KChaosGiftProgressionComponent>(actor);
+            progressionSystem.ApplyPatronSelection(
+                (skrizhal, skrizhalComp),
+                actor,
+                WH40KChaosPatron.Khorne,
+                progression,
+                updateUi: false);
+
+            var afterFirst = meta.GetSnapshot(userId);
+            var khorne = afterFirst.Achievements.Single(a => a.Id == "wh40k-ach-khorne-attunement-veteran");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(progression.AttunedPatron, Is.EqualTo(WH40KChaosPatron.Khorne));
+                Assert.That(stats.GetRoundCounter(userId, WH40KPlayerStatKeys.ChaosPatronAttunementKhorne), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ChaosPatronAttunementKhorne), Is.EqualTo(1));
+                Assert.That(khorne.Progress, Is.EqualTo(1));
+            });
+
+            // Switch patron
+            progression.AllowPatronSwitch = true;
+            progressionSystem.ApplyPatronSelection(
+                (skrizhal, skrizhalComp),
+                actor,
+                WH40KChaosPatron.Tzeentch,
+                progression,
+                updateUi: false);
+
+            var afterSwitch = meta.GetSnapshot(userId);
+            Assert.Multiple(() =>
+            {
+                Assert.That(progression.AttunedPatron, Is.EqualTo(WH40KChaosPatron.Tzeentch));
+                Assert.That(stats.GetRoundCounter(userId, WH40KPlayerStatKeys.ChaosPatronAttunementKhorne), Is.EqualTo(1));
+                Assert.That(stats.GetRoundCounter(userId, WH40KPlayerStatKeys.ChaosPatronAttunementTzeentch), Is.EqualTo(0));
+                Assert.That(afterSwitch.Achievements.Single(a => a.Id == "wh40k-ach-tzeentch-attunement-veteran").Progress, Is.EqualTo(0));
+            });
+        });
+
+        // --- RoundStarting seeds runtime state (uses userId only, safe after cleanup) ---
+        await server.WaitPost(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var stats = server.System<WH40KPlayerStatsSystem>();
+            var meta = server.System<WH40KMetaProgressSystem>();
 
             entMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             entMan.EventBus.RaiseEvent(EventSource.Local, new RoundStartingEvent(4242));
 
             stats.Record(userId, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
 
-            var veteran = meta.GetSnapshot(userId)
-                .Achievements
-                .Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(veteran.Progress, Is.EqualTo(1));
-                Assert.That(veteran.Completed, Is.False);
-            });
+            var veteran = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
+            Assert.That(veteran.Progress, Is.EqualTo(1));
+            Assert.That(veteran.Completed, Is.False);
         });
 
         await pair.CleanReturnAsync();

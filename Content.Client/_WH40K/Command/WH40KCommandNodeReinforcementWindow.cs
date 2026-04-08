@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
@@ -12,13 +14,12 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
+public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow, ILocalizedControl
 {
     public event Action<string, int>? OnCallRequested;
 
     private readonly StyleBoxFlat _headerStyle;
     private readonly Label _headerTitleLabel;
-    private readonly Label _teamLine;
     private readonly Label _statusLine;
     private readonly PanelContainer _teamBadge;
     private readonly Label _teamBadgeLabel;
@@ -29,10 +30,11 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
     private readonly Dictionary<string, int> _selectedCounts = new();
 
     private Color _accent = WH40KCommandUiStyles.DefaultAccent;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
 
     public WH40KCommandNodeReinforcementWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-reinforcement-window-title");
+        Title = Loc.GetString("w40k-cmd-reinforcement-window-title");
         MinSize = SetSize = new Vector2(960, 580);
 
         var root = new BoxContainer
@@ -71,23 +73,17 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-reinforcement-window-title"),
+            Text = Loc.GetString("w40k-cmd-reinforcement-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
         headerInfo.AddChild(_headerTitleLabel);
 
-        _teamLine = new Label
-        {
-            StyleClasses = { "LabelSubText" },
-            ClipText = true
-        };
         _statusLine = new Label
         {
             StyleClasses = { "LabelSubText" },
             ClipText = true
         };
-        headerInfo.AddChild(_teamLine);
         headerInfo.AddChild(_statusLine);
 
         var badgeRow = new BoxContainer
@@ -118,32 +114,12 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         };
         root.AddChild(body);
 
-        var bodyRoot = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 0,
-            VerticalExpand = true
-        };
-        body.AddChild(bodyRoot);
-
-        var bodyHeader = new PanelContainer
-        {
-            PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
-        };
-        bodyRoot.AddChild(bodyHeader);
-        bodyHeader.AddChild(new Label
-        {
-            Text = Loc.GetString("wh40k-command-node-reinforcement-window-title"),
-            StyleClasses = { "LabelHeading" },
-            ClipText = true
-        });
-
         _cardsScroll = new ScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true
         };
-        bodyRoot.AddChild(_cardsScroll);
+        body.AddChild(_cardsScroll);
 
         _cardsRoot = new BoxContainer
         {
@@ -154,20 +130,32 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             VerticalExpand = true
         };
         _cardsScroll.AddChild(_cardsRoot);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-reinforcement-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-reinforcement-window-title");
+
+        if (_latestState != null)
+            UpdateState(_latestState);
     }
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        _latestState = state;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
 
-        Title = Loc.GetString("wh40k-command-node-reinforcement-window-title-team", ("team", state.TeamName));
-        _teamLine.Text = Loc.GetString("wh40k-command-node-team", ("team", state.TeamName));
+        var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+        Title = Loc.GetString("w40k-cmd-reinforcement-window-title-team", ("team", resolvedTeam));
         _statusLine.Text = BuildStatusLine(state);
 
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : resolvedTeam.ToUpperInvariant();
 
         ApplyStatusBadge(state);
         RebuildCards(state);
@@ -189,7 +177,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             _statusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
                 Color.FromHex("#223B2F".AsSpan()),
                 WH40KCommandUiStyles.ReadyBadge);
-            _statusBadgeLabel.Text = Loc.GetString("wh40k-command-node-status-badge-ready");
+            _statusBadgeLabel.Text = Loc.GetString("w40k-cmd-status-badge-ready");
             return;
         }
 
@@ -210,17 +198,17 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         if (state.ReinforcementCooldownSeconds > 0)
         {
             return Loc.GetString(
-                "wh40k-command-node-reinforcement-readiness-cooldown",
+                "w40k-cmd-reinforcement-readiness-cooldown",
                 ("seconds", state.ReinforcementCooldownSeconds));
         }
 
         if (state.Phase < WH40KBattlePhase.Assault)
-            return Loc.GetString("wh40k-command-node-reinforcement-readiness-phase-lock");
+            return Loc.GetString("w40k-cmd-reinforcement-readiness-phase-lock");
 
         if (state.Phase >= WH40KBattlePhase.Apocalypse)
-            return Loc.GetString("wh40k-command-node-reinforcement-readiness-apocalypse-lock");
+            return Loc.GetString("w40k-cmd-reinforcement-readiness-apocalypse-lock");
 
-        return Loc.GetString("wh40k-command-node-reinforcement-readiness-ready");
+        return Loc.GetString("w40k-cmd-reinforcement-readiness-ready");
     }
 
     private void RebuildCards(WH40KCommandNodeBoundUserInterfaceState state)
@@ -237,7 +225,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             };
             empty.AddChild(new Label
             {
-                Text = Loc.GetString("wh40k-command-node-reinforcement-window-empty"),
+                Text = Loc.GetString("w40k-cmd-reinforcement-window-empty"),
                 StyleClasses = { "LabelSubText" }
             });
             _cardsRoot.AddChild(empty);
@@ -292,7 +280,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
 
         header.AddChild(new Label
         {
-            Text = option.Name,
+            Text = WH40KCommandUiStyles.ResolveLocalizedOrRaw(option.Name),
             StyleClasses = { "LabelBig" },
             HorizontalExpand = true,
             ModulateSelfOverride = _accent,
@@ -329,7 +317,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             ClipText = true,
             StyleClasses = { "LabelSubText" }
         };
-        description.Text = CompactText(option.Description, 96);
+        description.Text = CompactText(WH40KCommandUiStyles.ResolveLocalizedOrRaw(option.Description), 96);
         box.AddChild(description);
 
         var gearCard = new PanelContainer
@@ -346,8 +334,12 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             ClipText = true,
             StyleClasses = { "LabelSubText" }
         };
+        var gearParts = option.GearSummary
+            .Split(", ", StringSplitOptions.RemoveEmptyEntries)
+            .Select(part => WH40KCommandUiStyles.ResolveLocalizedOrRaw(part.Trim()))
+            .Where(s => !string.IsNullOrWhiteSpace(s));
         gearLabel.Text = CompactText(
-            Loc.GetString("wh40k-command-node-reinforcement-window-gear", ("gear", option.GearSummary)),
+            Loc.GetString("w40k-cmd-reinforcement-window-gear", ("gear", string.Join(", ", gearParts))),
             90);
         gearCard.AddChild(gearLabel);
 
@@ -368,7 +360,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
             {
                 HorizontalExpand = true,
                 Text = Loc.GetString(
-                    "wh40k-command-node-reinforcement-window-count-button",
+                    "w40k-cmd-reinforcement-window-count-button",
                     ("count", currentCount),
                     ("cost", cost)),
                 Disabled = !selectable
@@ -388,7 +380,7 @@ public sealed class WH40KCommandNodeReinforcementWindow : FancyWindow
         {
             HorizontalExpand = true,
             Text = Loc.GetString(
-                "wh40k-command-node-reinforcement-window-call-button",
+                "w40k-cmd-reinforcement-window-call-button",
                 ("count", selectedCount),
                 ("cost", selectedCost)),
             Disabled = !canCall

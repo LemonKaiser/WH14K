@@ -40,23 +40,43 @@
 
 - type: entity
   parent: UnsensoredClothingUniformBase
-  id: ClothingUniformJumpsuitGuardsmanVst
-  suffix: WH40K, Востроянцы
+  id: ClothingUniformJumpsuitKrieg
+  suffix: WH40K, Криг
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/krieg.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/krieg.rsi
 
 - type: entity
   parent: UnsensoredClothingUniformBase
-  id: WH40KClothingUniformJumpsuitChaplain
-  suffix: WH40K, Империум
+  id: ClothingUniformJumpsuitCatachan1
+  suffix: WH40K, Катачан
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform1.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform1.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitCatachan2
+  suffix: WH40K, Катачан
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform2.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform2.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitCatachan3
+  suffix: WH40K, Катачан
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform3.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform3.rsi
 
 - type: entity
   parent: ClothingUniformBase
@@ -74,9 +94,9 @@
   suffix: WH40K, Бладпакт
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/heresy.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/bloodpact.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/heresy.rsi
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/bloodpact.rsi
 
 - type: entity
   parent: UnsensoredClothingUniformBase

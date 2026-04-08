@@ -64,6 +64,11 @@
     shoes: ClothingShoesAnkleBootsCyan
 
 - type: loadout
+  id: WH40KGuardsmanGlasses
+  equipment:
+    eyes: ClothingEyesGlasses
+
+- type: loadout
   id: WH40KCyanOfficerCap
   equipment:
     head: ClothingHeadOfficerCyan
@@ -75,11 +80,6 @@
     requiredLevel: 5
   equipment:
     eyes: ClothingEyesHudGuard
-
-- type: loadout
-  id: WH40KKriegWebbing
-  equipment:
-    belt: ClothingBeltKriegWebbing
 
 - type: loadout
   id: WH40KGuardBelt
@@ -95,28 +95,3 @@
   id: WH40KFlakArmorSrg
   equipment:
     outerClothing: ClothingOuterArmorFlakVest
-
-- type: loadout
-  id: WH40KJumpsuitGuardVst
-  equipment:
-    jumpsuit: ClothingUniformJumpsuitGuardsmanVst
-
-- type: loadout
-  id: WH40KHelmetVst
-  equipment:
-    head: ClothingHeadHelmetFlakAdvVst
-
-- type: loadout
-  id: WH40KCoatVst
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestVst
-
-- type: loadout
-  id: WH40KGasmaskVst
-  equipment:
-    mask: ClothingMaskGasVst
-
-- type: loadout
-  id: WH40KBootsVst
-  equipment:
-    shoes: ClothingShoesBootsVst

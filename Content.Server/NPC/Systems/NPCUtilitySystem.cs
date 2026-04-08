@@ -665,7 +665,9 @@ public sealed class NPCUtilitySystem : EntitySystem
             {
                 if (!TryComp(targetUid, out DamageableComponent? damage))
                     return 0f;
+#pragma warning disable CS0618
                 var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
+#pragma warning restore CS0618
                 if (con.TargetState != MobState.Invalid && _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage))
                     return Math.Clamp((float)(1 - percentage), 0f, 1f);
                 if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage))

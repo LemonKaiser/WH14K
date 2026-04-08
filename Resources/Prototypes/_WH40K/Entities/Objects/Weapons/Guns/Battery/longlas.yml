@@ -21,6 +21,9 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
+  - type: AimingCamera
+    maxOffset: 8
+    pvsIncrease: 0.8
   # - type: Telescope
   - type: GunRequiresWield
   - type: ItemSlots

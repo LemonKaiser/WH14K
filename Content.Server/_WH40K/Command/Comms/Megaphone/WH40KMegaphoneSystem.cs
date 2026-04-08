@@ -17,9 +17,11 @@ using Content.Shared.Speech;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Command.Comms.Megaphone;
 
@@ -31,7 +33,9 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Queue<MegaphoneOrderLogEntry> _orderLog = new();
     private static readonly TimeSpan GlobalLogRetention = TimeSpan.FromMinutes(5);
@@ -67,6 +71,7 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
             return;
         }
 
+        using var scope = _culture.CreateScope(user);
         _quickDialog.OpenDialog(
             actor.PlayerSession,
             Loc.GetString("wh40k-megaphone-dialog-title"),
@@ -88,6 +93,8 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
         var user = args.User;
         if (!IsHoldingMegaphone(user, ent.Owner))
             return;
+
+        using var scope = _culture.CreateScope(user);
 
         args.Verbs.Add(new AlternativeVerb
         {
@@ -120,6 +127,7 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
 
     private void OnExamined(Entity<WH40KMegaphoneComponent> ent, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KMegaphoneComponent)))
         {
             args.PushMarkup(Loc.GetString("wh40k-megaphone-examine-use", ("max", ent.Comp.InputMaxLength)));
@@ -251,7 +259,7 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
         TrimLog();
 
         var now = _timing.CurTime;
-        var userMapPos = Transform(user).MapPosition;
+        var userMapPos = _transform.GetMapCoordinates(user);
         var userTeamId = GetTeamId(user);
         var entries = _orderLog.ToArray();
         var matched = new List<MegaphoneOrderLogEntry>();
@@ -302,7 +310,7 @@ public sealed class WH40KMegaphoneSystem : EntitySystem
 
     private void RecordOrder(EntityUid user, string message)
     {
-        var mapPos = Transform(user).MapPosition;
+        var mapPos = _transform.GetMapCoordinates(user);
         if (mapPos.MapId == MapId.Nullspace)
             return;
 

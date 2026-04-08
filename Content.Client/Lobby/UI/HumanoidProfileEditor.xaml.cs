@@ -4,6 +4,7 @@ using Content.Client.Localization;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
+using Content.Shared.Administration.Managers;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -20,6 +21,7 @@ using Robust.Client.Utility;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
+using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
@@ -36,6 +38,7 @@ namespace Content.Client.Lobby.UI
         private readonly IPlayerManager _playerManager;
         private readonly IPrototypeManager _prototypeManager;
         private readonly IResourceManager _resManager;
+        private readonly ISharedAdminManager _adminManager;
         private readonly MarkingManager _markingManager;
         private readonly JobRequirementsManager _requirements;
         private readonly WH40KMetaProgressSystem _metaProgress;
@@ -104,6 +107,7 @@ namespace Content.Client.Lobby.UI
             _markingManager = markings;
             _preferencesManager = preferencesManager;
             _resManager = resManager;
+            _adminManager = IoCManager.Resolve<ISharedAdminManager>();
             _requirements = requirements;
             _controller = UserInterfaceManager.GetUIController<LobbyUIController>();
             _sprite = _entManager.System<SpriteSystem>();
@@ -298,6 +302,7 @@ namespace Content.Client.Lobby.UI
             #region Markings
 
             TabContainer.SetTabTitle(5, Loc.GetString("humanoid-profile-editor-markings-tab"));
+            TabContainer.SetTabVisible(2, false);
 
             _markingsModel.MarkingsChanged += (_, _) => OnMarkingChange();
             _markingsModel.MarkingsReset += OnMarkingChange;
@@ -438,9 +443,12 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
             if (!disposing)
                 return;
 
@@ -481,6 +489,7 @@ namespace Content.Client.Lobby.UI
         {
             MetaProgressPanel.SetFromSnapshot(snapshot);
             CharacterDevelopmentView.SetFromSnapshot(snapshot);
+            RefreshSpecies();
 
             if (_loadoutWindow != null &&
                 _activeLoadout != null &&
@@ -560,6 +569,7 @@ namespace Content.Client.Lobby.UI
             TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-development-tab"));
             TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-traits-tab"));
             TabContainer.SetTabTitle(5, Loc.GetString("humanoid-profile-editor-markings-tab"));
+            TabContainer.SetTabVisible(2, false);
             CharacterDevelopmentView.Relocalize();
 
             if (_flavorText != null)

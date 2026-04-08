@@ -1,0 +1,12 @@
+- type: species
+  id: Astartes
+  name: species-name-astartes
+  roundStart: false
+  prototype: MobAstartes
+  dollPrototype: AppearanceAstartes
+  skinColoration: HumanToned
+  sexes:
+  - Male
+  youngAge: 50
+  oldAge: 200
+  maxAge: 1000

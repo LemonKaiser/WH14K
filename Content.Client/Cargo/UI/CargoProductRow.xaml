@@ -1,34 +1,46 @@
 <BoxContainer xmlns="https://spacestation14.io"
-    HorizontalExpand="True">
-    <PanelContainer HorizontalExpand="True">
-        <!-- Btn position hardcoded (args.Button.Parent?.Parent type) in CargoConsoleBUI 71 line -->
+    HorizontalExpand="True"
+    SeparationOverride="6"
+    MinHeight="44">
+
+    <PanelContainer Name="CardPanel"
+        HorizontalExpand="True">
         <Button Name="MainButton"
-                ToolTip=""
-                Access="Public"
-                VerticalExpand="False"
-                StyleClasses="OpenBoth" />
+            ToolTip=""
+            Access="Public"
+            VerticalExpand="False"
+            HorizontalExpand="True"
+            ClipText="True" />
 
-        <!-- Icon & Name -->
         <BoxContainer Orientation="Horizontal"
-                      HorizontalExpand="True"
-                      Margin="4 0">
+            HorizontalExpand="True"
+            Margin="6 4"
+            SeparationOverride="8">
 
-            <TextureRect Name="Icon"
-                         Access="Public"
-                         MinSize="32 32"
-                         RectClipContent="True" />
+            <PanelContainer Name="IconPanel">
+                <TextureRect Name="Icon"
+                    Access="Public"
+                    MinSize="32 32"
+                    RectClipContent="True"
+                    Stretch="KeepAspectCentered" />
+            </PanelContainer>
 
             <Label Name="ProductName"
-                   Access="Public"
-                   HorizontalExpand="True"
-                   ClipText="True" />
+                Access="Public"
+                HorizontalExpand="True"
+                ClipText="True"
+                VerticalAlignment="Center" />
         </BoxContainer>
     </PanelContainer>
 
-    <Label Name="PointCost"
-           Access="Public"
-           MinSize="56 32"
-           Align="Right"
-           Margin="0 0 5 0"
-           HorizontalAlignment="Right"/>
+    <PanelContainer Name="PointCostPanel"
+        VerticalAlignment="Center">
+        <Label Name="PointCost"
+            Access="Public"
+            MinSize="70 32"
+            Align="Center"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="2 0 2 0" />
+    </PanelContainer>
 </BoxContainer>

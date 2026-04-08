@@ -1,0 +1,400 @@
+- type: entity
+  id: WH40KLemanRussVisualBase
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/leman_russ_parts.rsi
+    drawdepth: Mobs
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+
+- type: entity
+  id: WH40KLemanRussPartBase
+  parent: WH40KLemanRussVisualBase
+  abstract: true
+  name: Leman Russ part prototype
+  description: A visual-only tank part prototype for assembly testing.
+
+- type: entity
+  id: WH40KLemanRussHullPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussPartBase
+  name: Leman Russ hull prototype
+  description: Visual hull block for the future tank assembly pipeline.
+  components:
+  - type: Sprite
+    state: hull
+
+- type: entity
+  id: WH40KLemanRussTurretPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussPartBase
+  name: Leman Russ turret prototype
+  description: Visual turret block for the future tank assembly pipeline.
+  components:
+  - type: Sprite
+    state: turret
+
+- type: entity
+  id: WH40KLemanRussBattleCannonPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussPartBase
+  name: Leman Russ battle cannon prototype
+  description: Visual battle cannon block for the future tank assembly pipeline.
+  components:
+  - type: Sprite
+    state: battlecannon
+
+- type: entity
+  id: WH40KLemanRussPunisherCannonPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussPartBase
+  name: Leman Russ punisher cannon prototype
+  description: Visual punisher cannon block for the future tank assembly pipeline.
+  components:
+  - type: Sprite
+    state: punishercannon
+
+- type: entity
+  id: WH40KLemanRussTracksPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussPartBase
+  name: Leman Russ tracks prototype
+  description: Visual track block for the future tank assembly pipeline.
+  components:
+  - type: Sprite
+    state: tracks_static
+
+- type: entity
+  id: WH40KLemanRussPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussVisualBase
+  name: Leman Russ prototype
+  description: A visual-only layered prototype of the future Leman Russ tank entity.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/leman_russ_parts.rsi
+    drawdepth: Mobs
+    layers:
+    - state: tracks_static
+    - state: hull
+    - state: turret
+    - state: battlecannon
+
+- type: entity
+  id: WH40KLemanRussPunisherPrototype
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussVisualBase
+  name: Leman Russ Punisher prototype
+  description: A visual-only layered prototype of the Punisher turret variant.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/leman_russ_parts.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - state: tracks_static
+    - state: hull
+    - state: turret
+    - state: punishercannon
+
+- type: entity
+  id: WH40KLemanRussTank
+  parent: BaseStructure
+  name: Leman Russ tank
+  description: A multi-crew armored vehicle with a hungry engine and room for a full crew.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/leman_russ_parts.rsi
+    drawdepth: Mobs
+    layers:
+    - map: [ "enum.WH40KTankVisualLayers.Tracks" ]
+      state: tracks_static
+    - state: hull
+  - type: InteractionOutline
+  - type: MobMover
+  - type: InputMover
+  - type: NoRotateOnMove
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
+  - type: Appearance
+  - type: WH40KTankTrackVisualizer
+    idleState: tracks_static
+    movingState: tracks_moving
+  - type: Physics
+    bodyType: KinematicController
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.35,-1.35,1.35,1.35"
+        density: 120
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 200
+        reagents:
+        - ReagentId: WeldingFuel
+          Quantity: 200
+  - type: RefillableSolution
+    solution: tank
+  - type: DrainableSolution
+    solution: tank
+  - type: ExaminableSolution
+    solution: tank
+  - type: ReagentTank
+    tankType: Fuel
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Repairable
+    fuelCost: 12
+    doAfterDelay: 6
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 350
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: WH40KTankEngine
+  - type: WH40KTankFuel
+  - type: WH40KTankDrive
+    forwardSpeed: 9.75
+    reverseSpeed: 5.25
+    turnSpeed: 4.05
+    pivotTurnSpeed: 2.85
+    acceleration: 13.5
+    brakeDeceleration: 18
+    lateralDamping: 30
+    angularAcceleration: 13.5
+    angularDeceleration: 18
+  - type: WH40KTank
+    diagnosticsAction: ActionWH40KTankDiagnostics
+    hullMaxIntegrity: 350
+    engineMaxIntegrity: 65
+    tracksMaxIntegrity: 90
+    turretMaxIntegrity: 75
+    mainGunMaxIntegrity: 70
+    coaxialMaxIntegrity: 50
+    mainAmmoLocKey: wh40k-tank-ui-ammo-rocket-he
+    coaxialAmmoLocKey: wh40k-tank-ui-ammo-heavy-bolter
+    turretPrototype: WH40KLemanRussTankTurret
+    turretOffset: "0.03125,-0.5625"
+    turretDirectionalOffsets:
+      north: "0.03125,-0.5625"
+      south: "-0.03125,0.5625"
+      east: "0.5625,0.03125"
+      west: "-0.5625,-0.03125"
+    mainHardpointPrototype: WH40KLemanRussTankBattleCannon
+    mainHardpointDirectionalOffsets:
+      north: "0,0.375"
+      south: "0,-0.375"
+      east: "0.375,0"
+      west: "-0.375,0"
+    mainGunPrototype: WH40KLemanRussTankBattleCannonGun
+    mainGunOffset: "0,-1.375"
+    coaxialHardpointPrototype: WH40KLemanRussTankCoaxialHardpoint
+    coaxialHardpointOffset: "0.35,-0.45"
+    coaxialGunPrototype: WH40KLemanRussTankCoaxialGun
+    coaxialGunOffset: "0,-1.15"
+    fireCoaxialAction: ActionWH40KTankFireCoaxial
+    driverStationPrototype: WH40KLemanRussTankDriverStation
+    driverStationOffset: "-0.45,0.35"
+    gunnerStationPrototype: WH40KLemanRussTankGunnerStation
+    gunnerStationOffset: "0.0,0.15"
+    commanderStationPrototype: WH40KLemanRussTankCommanderStation
+    commanderStationOffset: "0.45,-0.15"
+    loaderStationPrototype: WH40KLemanRussTankLoaderStation
+    loaderStationOffset: "0.8,0.35"
+  - type: UserInterface
+    interfaces:
+      enum.WH40KTankUiKey.Key:
+        type: WH40KTankBoundUserInterface
+
+- type: entity
+  id: WH40KLemanRussPunisherTank
+  parent: WH40KLemanRussTank
+  name: Leman Russ Punisher tank
+  description: A Punisher-pattern Leman Russ built around a brutal rapid-fire main weapon.
+  components:
+  - type: WH40KTank
+    mainHardpointPrototype: WH40KLemanRussTankPunisherCannon
+    mainGunPrototype: WH40KLemanRussTankPunisherGun
+    mainGunReloadSeconds: 6.25
+    mainWeaponLocKey: wh40k-tank-ui-module-punisher-cannon
+    mainAmmoLocKey: wh40k-tank-ui-ammo-light-rifle
+
+- type: entity
+  id: WH40KLemanRussTankChildVisualBase
+  categories: [ HideSpawnMenu ]
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/leman_russ_parts.rsi
+    drawdepth: OverMobs
+
+- type: entity
+  id: WH40KLemanRussTankTurret
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankChildVisualBase
+  name: Leman Russ turret
+  components:
+  - type: Sprite
+    state: turret_live
+
+- type: entity
+  id: WH40KLemanRussTankBattleCannon
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankChildVisualBase
+  name: Leman Russ battle cannon
+  components:
+  - type: Sprite
+    state: battlecannon_live
+
+- type: entity
+  id: WH40KLemanRussTankPunisherCannon
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankChildVisualBase
+  name: Leman Russ punisher cannon
+  components:
+  - type: Sprite
+    state: punishercannon_live
+
+- type: entity
+  id: WH40KLemanRussTankCoaxialHardpoint
+  categories: [ HideSpawnMenu ]
+  name: Leman Russ coaxial hardpoint
+
+- type: entity
+  id: WH40KLemanRussTankWeaponBase
+  categories: [ HideSpawnMenu ]
+  abstract: true
+
+- type: entity
+  id: WH40KLemanRussTankBattleCannonGun
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankWeaponBase
+  name: Leman Russ battle cannon gun
+  components:
+  - type: Gun
+    projectileSpeed: 25
+    fireRate: 0.2
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Vehicles/LemanRuss/tank_shoot.wav
+  - type: WH40KGunPrediction
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeRocketHE
+    capacity: 1
+    count: 1
+
+- type: entity
+  id: WH40KLemanRussTankPunisherGun
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankWeaponBase
+  name: Leman Russ punisher gun
+  components:
+  - type: Gun
+    fireRate: 8
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Vehicles/LemanRuss/tank_minigun.wav
+  - type: WH40KGunPrediction
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeLightRifle
+    capacity: 90
+    count: 90
+
+- type: entity
+  id: WH40KLemanRussTankCoaxialGun
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankWeaponBase
+  name: Leman Russ coaxial gun
+  components:
+  - type: Gun
+    fireRate: 5
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Vehicles/LemanRuss/tank_minigun.wav
+  - type: WH40KGunPrediction
+  - type: BasicEntityAmmoProvider
+    proto: CartridgeHeavyBolter
+    capacity: 60
+    count: 60
+
+- type: entity
+  id: WH40KLemanRussTankStationBase
+  categories: [ HideSpawnMenu ]
+  abstract: true
+  components:
+  - type: Transform
+    noRot: true
+  - type: Strap
+    position: Stand
+    buckleOnInteractHand: false
+    buckleOffset: "0,0"
+  - type: WH40KTankStation
+
+- type: entity
+  id: WH40KLemanRussTankDriverStation
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankStationBase
+  name: Leman Russ driver station
+  components:
+  - type: WH40KTankStation
+    role: Driver
+    exitOffset: "-1.8,1.6"
+
+- type: entity
+  id: WH40KLemanRussTankGunnerStation
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankStationBase
+  name: Leman Russ gunner station
+  components:
+  - type: WH40KTankStation
+    role: Gunner
+    exitOffset: "-0.6,1.6"
+
+- type: entity
+  id: WH40KLemanRussTankCommanderStation
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankStationBase
+  name: Leman Russ commander station
+  components:
+  - type: WH40KTankStation
+    role: Commander
+    exitOffset: "0.6,1.6"
+
+- type: entity
+  id: WH40KLemanRussTankLoaderStation
+  categories: [ HideSpawnMenu ]
+  parent: WH40KLemanRussTankStationBase
+  name: Leman Russ loader station
+  components:
+  - type: WH40KTankStation
+    role: Loader
+    exitOffset: "1.8,1.6"

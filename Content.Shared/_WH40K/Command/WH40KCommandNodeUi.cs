@@ -6,7 +6,10 @@ namespace Content.Shared._WH40K.Command;
 [Serializable, NetSerializable]
 public enum WH40KCommandNodeUiKey : byte
 {
-    Key
+    Key,
+    Reinforcement,
+    UpgradeTree,
+    MissionBoard
 }
 
 [Serializable, NetSerializable]

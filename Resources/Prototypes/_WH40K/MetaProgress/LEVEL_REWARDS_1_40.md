@@ -17,12 +17,12 @@ This file documents the rebuilt WH40K account reward distribution after the 40-l
 ## Level 2
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-iron, decor-ghost-star, decor-color-steel, decor-color-gold
-- Loadouts: WH40KBandanaMerc, RobeTechpriestMars
+- Loadouts: RobeTechpriestMars
 
 ## Level 3
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-warp, decor-ghost-pack-aghost1, decor-title-vanguard, decor-color-violet
-- Loadouts: WH40KCyanArmoredHelmet
+- Loadouts: none
 
 ## Level 4
 - Reward preview: 3 decorations, 1 skill point.
@@ -82,7 +82,7 @@ This file documents the rebuilt WH40K account reward distribution after the 40-l
 ## Level 15
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-16, decor-title-ember-sigil, decor-color-cyan-solid
-- Loadouts: WH40KHeresyHelmet
+- Loadouts: WH40KHeresyHelmet, WH40KCatachanBandana, WH40KCatachanHeadband, WH40KCatachanBeret, WH40KCatachanLightArmor, WH40KCatachanMediumArmor, WH40KCatachanVest, WH40KCatachanUniform1, WH40KCatachanUniform2, WH40KCatachanUniform3, WH40KCatachanKnifeKit
 
 ## Level 16
 - Reward preview: 3 decorations, 1 skill point.
@@ -92,22 +92,22 @@ This file documents the rebuilt WH40K account reward distribution after the 40-l
 ## Level 17
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-3, decor-ghost-pack-4, decor-color-obsidian-solid
-- Loadouts: WH40KBronzeheart, WH40KSecurityMedal
+- Loadouts: WH40KImperialAquilaMedal, WH40KChaosUndividedMedal
 
 ## Level 18
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-5, decor-ghost-pack-6, decor-title-frost-vow, decor-color-sand-solid
-- Loadouts: WH40KMedicalMedal
+- Loadouts: WH40KImperialCrossMedal
 
 ## Level 19
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-7, decor-title-war-choir, decor-color-sky-solid
-- Loadouts: WH40KCargoMedal
+- Loadouts: WH40KImperialInquisitionSeal
 
 ## Level 20
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-8, decor-ghost-pack-9, decor-title-sunbreaker, decor-title-legend, decor-color-mint-solid
-- Loadouts: WH40KGoldMedal
+- Loadouts: WH40KImperialGoldenPrize
 
 ## Level 21
 - Reward preview: 3 decorations, 1 skill point.
@@ -157,7 +157,7 @@ This file documents the rebuilt WH40K account reward distribution after the 40-l
 ## Level 30
 - Reward preview: 3 decorations, 1 skill point.
 - Decorations: decor-ghost-pack-animated23, decor-ghost-pack-animated24, decor-title-warp-seer, decor-color-amethyst-static, decor-color-storm-static
-- Loadouts: WH40KFlippoKit, WH40KCigarKit
+- Loadouts: WH40KFlippoKit, WH40KCigarKit, WH40KKriegHelmet, WH40KKriegCoat, WH40KKriegUniform, WH40KKriegGloves, WH40KKriegGasmask, WH40KKriegWebbing
 
 ## Level 31
 - Reward preview: 3 decorations, 1 skill point.

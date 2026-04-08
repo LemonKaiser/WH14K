@@ -74,8 +74,8 @@
   description: A banner displaying the colors of the medical department. How sterile.
   components:
   - type: Sprite
-    sprite: Structures/Decoration/banner.rsi
-    state: banner_medical
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: medical_banner
 
 - type: entity
   id: BannerRevolution

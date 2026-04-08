@@ -7,6 +7,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.UserInterface;
 using Robust.Shared.Localization;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Store;
 
@@ -17,6 +18,7 @@ public sealed class WH40KStoreAccessSystem : EntitySystem
 {
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -31,7 +33,7 @@ public sealed class WH40KStoreAccessSystem : EntitySystem
             return;
 
         if (!args.Silent)
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), uid, args.User);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-access-denied-wrong-team"), uid, args.User);
 
         args.Cancel();
     }
@@ -41,7 +43,7 @@ public sealed class WH40KStoreAccessSystem : EntitySystem
         if (IsBuyerAllowedForStore(args.User, component.TeamId))
             return;
 
-        _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), uid, args.User);
+        _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-access-denied-wrong-team"), uid, args.User);
         args.Cancel();
     }
 

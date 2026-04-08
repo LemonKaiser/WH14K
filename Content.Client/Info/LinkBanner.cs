@@ -31,6 +31,7 @@ namespace Content.Client.Info
         private readonly Button _rulesButton;
         private readonly Button _guidebookButton;
         private WH40KDiscordAuthSystem? _discordAuth;
+        private RulesAndInfoWindow? _rulesWindow;
 
         private ValueList<(CVarDef<string> cVar, string locKey, Button button)> _infoLinks;
 
@@ -47,7 +48,17 @@ namespace Content.Client.Info
             _cfg = IoCManager.Resolve<IConfigurationManager>();
 
             _rulesButton = new Button();
-            _rulesButton.OnPressed += _ => new RulesAndInfoWindow().Open();
+            _rulesButton.OnPressed += _ =>
+            {
+                if (_rulesWindow?.IsOpen == true)
+                {
+                    _rulesWindow.MoveToFront();
+                    return;
+                }
+
+                _rulesWindow = new RulesAndInfoWindow();
+                _rulesWindow.Open();
+            };
             _buttonsRow.AddChild(_rulesButton);
 
             var guidebookController = UserInterfaceManager.GetUIController<GuidebookUIController>();

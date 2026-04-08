@@ -9,8 +9,8 @@
   nodes:
   - id: eng_root
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-root-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-root-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-root-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-root-description
     parents: []
     cost: 9
     minBaseLevel: 1
@@ -19,8 +19,8 @@
     machineStorageBonus: 10
   - id: eng_left_2
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-left-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-left-2-description
     parents: [eng_root]
     cost: 11
     minBaseLevel: 2
@@ -28,8 +28,8 @@
     machineSpeedBonusPercent: 5
   - id: eng_right_2
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-right-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-right-2-description
     parents: [eng_root]
     cost: 11
     minBaseLevel: 2
@@ -37,8 +37,8 @@
     machineStorageBonus: 10
   - id: eng_left_3
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-left-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-left-3-description
     parents: [eng_left_2]
     cost: 14
     minBaseLevel: 3
@@ -46,8 +46,8 @@
     machineSpeedBonusPercent: 7
   - id: eng_right_3
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-right-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-right-3-description
     parents: [eng_right_2]
     cost: 14
     minBaseLevel: 3
@@ -55,8 +55,8 @@
     machineStorageBonus: 10
   - id: eng_left_4
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-left-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-left-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-left-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-left-4-description
     parents: [eng_left_3]
     cost: 17
     minBaseLevel: 4
@@ -64,8 +64,8 @@
     machineSpeedBonusPercent: 8
   - id: eng_right_4
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-right-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-right-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-right-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-right-4-description
     parents: [eng_right_3]
     cost: 17
     minBaseLevel: 4
@@ -73,8 +73,8 @@
     machineStorageBonus: 15
   - id: eng_cap
     domain: engineering
-    titleKey: wh40k-command-node-upgrade-tree-node-eng-cap-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eng-cap-description
+    titleKey: w40k-cmd-upgrade-tree-node-eng-cap-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eng-cap-description
     parents: [eng_left_4, eng_right_4]
     cost: 23
     minBaseLevel: 5
@@ -83,8 +83,8 @@
     machineStorageBonus: 20
   - id: log_root
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-root-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-root-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-root-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-root-description
     parents: []
     cost: 9
     minBaseLevel: 1
@@ -93,8 +93,8 @@
     cargoDeliverySpeedBonusPercent: 5
   - id: log_left_2
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-left-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-left-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-left-2-description
     parents: [log_root]
     cost: 11
     minBaseLevel: 2
@@ -102,8 +102,8 @@
     cargoMaxItemsBonusPercent: 15
   - id: log_right_2
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-right-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-right-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-right-2-description
     parents: [log_root]
     cost: 11
     minBaseLevel: 2
@@ -111,8 +111,8 @@
     cargoDeliverySpeedBonusPercent: 10
   - id: log_left_3
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-left-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-left-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-left-3-description
     parents: [log_left_2]
     cost: 14
     minBaseLevel: 3
@@ -120,8 +120,8 @@
     cargoMaxItemsBonusPercent: 20
   - id: log_right_3
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-right-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-right-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-right-3-description
     parents: [log_right_2]
     cost: 14
     minBaseLevel: 3
@@ -129,8 +129,8 @@
     cargoDeliverySpeedBonusPercent: 15
   - id: log_left_4
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-left-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-left-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-left-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-left-4-description
     parents: [log_left_3]
     cost: 17
     minBaseLevel: 4
@@ -138,8 +138,8 @@
     cargoMaxItemsBonusPercent: 25
   - id: log_right_4
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-right-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-right-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-right-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-right-4-description
     parents: [log_right_3]
     cost: 17
     minBaseLevel: 4
@@ -147,8 +147,8 @@
     cargoDeliverySpeedBonusPercent: 20
   - id: log_cap
     domain: logistics
-    titleKey: wh40k-command-node-upgrade-tree-node-log-cap-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-log-cap-description
+    titleKey: w40k-cmd-upgrade-tree-node-log-cap-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-log-cap-description
     parents: [log_left_4, log_right_4]
     cost: 23
     minBaseLevel: 5
@@ -158,8 +158,8 @@
     cargoPriceDiscountPercent: 10
   - id: res_root
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-root-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-root-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-root-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-root-description
     parents: []
     cost: 9
     minBaseLevel: 1
@@ -169,8 +169,8 @@
     researchTimeSpeedBonusPercent: 5
   - id: res_left_2
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-left-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-left-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-left-2-description
     parents: [res_root]
     cost: 11
     minBaseLevel: 2
@@ -179,8 +179,8 @@
     researchPointBonusPercent: 10
   - id: res_right_2
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-right-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-right-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-right-2-description
     parents: [res_root]
     cost: 11
     minBaseLevel: 2
@@ -189,8 +189,8 @@
     researchTimeSpeedBonusPercent: 10
   - id: res_left_3
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-left-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-left-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-left-3-description
     parents: [res_left_2]
     cost: 14
     minBaseLevel: 3
@@ -199,8 +199,8 @@
     researchPointBonusPercent: 15
   - id: res_right_3
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-right-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-right-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-right-3-description
     parents: [res_right_2]
     cost: 14
     minBaseLevel: 3
@@ -209,8 +209,8 @@
     researchTimeSpeedBonusPercent: 15
   - id: res_left_4
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-left-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-left-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-left-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-left-4-description
     parents: [res_left_3]
     cost: 17
     minBaseLevel: 4
@@ -219,8 +219,8 @@
     researchPointBonusPercent: 20
   - id: res_right_4
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-right-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-right-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-right-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-right-4-description
     parents: [res_right_3]
     cost: 17
     minBaseLevel: 4
@@ -229,8 +229,8 @@
     researchTimeSpeedBonusPercent: 20
   - id: res_cap
     domain: research
-    titleKey: wh40k-command-node-upgrade-tree-node-res-cap-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-res-cap-description
+    titleKey: w40k-cmd-upgrade-tree-node-res-cap-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-res-cap-description
     parents: [res_left_4, res_right_4]
     cost: 23
     minBaseLevel: 5
@@ -240,8 +240,8 @@
     researchTimeSpeedBonusPercent: 10
   - id: wep_root
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-root-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-root-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-root-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-root-description
     parents: []
     cost: 9
     minBaseLevel: 1
@@ -252,8 +252,8 @@
       Heretics: [WH40KHereticsMachete]
   - id: wep_left_2
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-left-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-left-2-description
     parents: [wep_root]
     cost: 11
     minBaseLevel: 2
@@ -264,8 +264,8 @@
       Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineRifle]
   - id: wep_right_2
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-right-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-right-2-description
     parents: [wep_root]
     cost: 11
     minBaseLevel: 2
@@ -276,8 +276,8 @@
       Heretics: [WH40KHereticsPlasmaPistol]
   - id: wep_left_3
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-left-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-left-3-description
     parents: [wep_left_2]
     cost: 14
     minBaseLevel: 3
@@ -288,8 +288,8 @@
       Heretics: [WH40KHereticsSentryTurret]
   - id: wep_right_3
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-right-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-right-3-description
     parents: [wep_right_2]
     cost: 14
     minBaseLevel: 3
@@ -300,20 +300,20 @@
       Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter]
   - id: wep_left_4
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-left-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-left-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-left-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-left-4-description
     parents: [wep_left_3]
     cost: 17
     minBaseLevel: 4
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumMortar, WH40KImperiumMortarHE]
-      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsMortar, WH40KHereticsMortarHE]
+      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumMortar, WH40KImperiumMortarHE, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack]
+      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsMortar, WH40KHereticsMortarHE, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack]
   - id: wep_right_4
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-right-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-right-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-right-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-right-4-description
     parents: [wep_right_3]
     cost: 17
     minBaseLevel: 4
@@ -324,8 +324,8 @@
       Heretics: [WH40KHereticsSentryTurretShotgun]
   - id: wep_cap
     domain: weaponry
-    titleKey: wh40k-command-node-upgrade-tree-node-wep-cap-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-wep-cap-description
+    titleKey: w40k-cmd-upgrade-tree-node-wep-cap-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-wep-cap-description
     parents: [wep_left_4, wep_right_4]
     cost: 23
     minBaseLevel: 5
@@ -336,32 +336,32 @@
       Heretics: [WH40KHereticsSentryTurretLaser, WH40KHereticsSentinel]
   - id: eqp_root
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-root-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-root-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-root-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-root-description
     parents: []
     cost: 9
     minBaseLevel: 1
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumCombatMedkit, WH40KImperiumPlastic]
-      Heretics: [WH40KHereticsCombatMedkit, WH40KHereticsPlastic]
+      Imperium: [WH40KImperiumCombatMedkit, WH40KImperiumDefibrillator, WH40KImperiumPlastic]
+      Heretics: [WH40KHereticsCombatMedkit, WH40KHereticsDefibrillator, WH40KHereticsPlastic]
   - id: eqp_left_2
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-left-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-left-2-description
     parents: [eqp_root]
     cost: 11
     minBaseLevel: 2
     minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KEquipmentAuthLeft2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumInflatableCoverKit, WH40KImperiumBarricadeBars, WH40KImperiumBarricadeBoarded, WH40KImperiumBarricadeWarhammer, WH40KImperiumBarricadeSandbags, WH40KImperiumBarricadeHedgehog, WH40KImperiumBarbedWire]
-      Heretics: [WH40KHereticsInflatableCoverKit, WH40KHereticsBarricadeBars, WH40KHereticsBarricadeBoarded, WH40KHereticsBarricadeChaosGreen, WH40KHereticsBarricadeChaosBlack, WH40KHereticsBarricadeSandbags, WH40KHereticsBarricadeHedgehog, WH40KHereticsBarbedWire]
+      Imperium: [WH40KImperiumInflatableCoverKit, WH40KImperiumBarricadeBars, WH40KImperiumBarricadeBoarded, WH40KImperiumBarricadeWarhammer, WH40KImperiumBarricadeSandbags, WH40KImperiumBarricadeHedgehog, WH40KImperiumBarbedWire, WH40KImperiumMineExplosive]
+      Heretics: [WH40KHereticsInflatableCoverKit, WH40KHereticsBarricadeBars, WH40KHereticsBarricadeBoarded, WH40KHereticsBarricadeChaosGreen, WH40KHereticsBarricadeChaosBlack, WH40KHereticsBarricadeSandbags, WH40KHereticsBarricadeHedgehog, WH40KHereticsBarbedWire, WH40KHereticsMineExplosive]
   - id: eqp_right_2
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-2-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-2-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-right-2-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-right-2-description
     parents: [eqp_root]
     cost: 11
     minBaseLevel: 2
@@ -372,8 +372,8 @@
       Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsServoSkull]
   - id: eqp_left_3
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-left-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-left-3-description
     parents: [eqp_left_2]
     cost: 14
     minBaseLevel: 3
@@ -384,8 +384,8 @@
       Heretics: [WH40KHereticsIntelDetector]
   - id: eqp_right_3
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-3-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-3-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-right-3-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-right-3-description
     parents: [eqp_right_2]
     cost: 14
     minBaseLevel: 3
@@ -396,8 +396,8 @@
       Heretics: [WH40KHereticsTacticalWhistle]
   - id: eqp_left_4
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-left-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-left-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-left-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-left-4-description
     parents: [eqp_left_3]
     cost: 17
     minBaseLevel: 4
@@ -408,8 +408,8 @@
       Heretics: [WH40KHereticsSignalFlare]
   - id: eqp_right_4
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-right-4-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-right-4-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-right-4-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-right-4-description
     parents: [eqp_right_3]
     cost: 17
     minBaseLevel: 4
@@ -420,16 +420,16 @@
       Heretics: [WH40KHereticsSentryLaptop]
   - id: eqp_cap
     domain: equipment
-    titleKey: wh40k-command-node-upgrade-tree-node-eqp-cap-title
-    descriptionKey: wh40k-command-node-upgrade-tree-node-eqp-cap-description
+    titleKey: w40k-cmd-upgrade-tree-node-eqp-cap-title
+    descriptionKey: w40k-cmd-upgrade-tree-node-eqp-cap-description
     parents: [eqp_left_4, eqp_right_4]
     cost: 23
     minBaseLevel: 5
     minRoundTimeSeconds: 2700
     technologyUnlocks: [WH40KEquipmentAuthCap]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumTacticalFulton]
-      Heretics: [WH40KHereticsTacticalFulton]
+      Imperium: [WH40KImperiumTacticalFulton, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet]
+      Heretics: [WH40KHereticsTacticalFulton, WH40KHereticsCarapaceArmor, WH40KHereticsCarapaceHelmet]
 
 - type: wh40kCommandTreeTeamMap
   id: WH40KCommandTreeTeamMap

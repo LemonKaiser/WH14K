@@ -1,6 +1,8 @@
 using System;
+using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Shared.Mech;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Shared.NPC.Systems;
 using Content.Shared.Mech.Components;
 using Content.Shared._WH40K.GameTicking.Rules;
 
@@ -13,6 +15,8 @@ namespace Content.Server._WH40K.Overlays;
 public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
 {
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFactions = default!;
 
     public override void Initialize()
     {
@@ -26,7 +30,7 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         if (!ent.Comp.Mech.IsValid() || Deleted(ent.Comp.Mech))
             return;
 
-        SyncMechFactionIcon(ent.Comp.Mech, ent.Owner);
+        SyncMechFactionState(ent.Comp.Mech, ent.Owner);
     }
 
     private void OnPilotShutdown(Entity<MechPilotComponent> ent, ref ComponentShutdown args)
@@ -38,11 +42,11 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
             activePilot != ent.Owner &&
             HasComp<MechPilotComponent>(activePilot))
         {
-            SyncMechFactionIcon(ent.Comp.Mech, activePilot);
+            SyncMechFactionState(ent.Comp.Mech, activePilot);
             return;
         }
 
-        RemComp<WH40KTeamBattleFactionIconComponent>(ent.Comp.Mech);
+        ClearMechFactionState(ent.Comp.Mech);
     }
 
     private void OnPilotAssigned(Entity<MechPilotComponent> ent, ref MechPilotAssignedEvent args)
@@ -50,26 +54,45 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         if (!args.Mech.IsValid() || Deleted(args.Mech))
             return;
 
-        SyncMechFactionIcon(args.Mech, ent.Owner);
+        SyncMechFactionState(args.Mech, ent.Owner);
     }
 
-    private void SyncMechFactionIcon(EntityUid mech, EntityUid pilot)
+    private void SyncMechFactionState(EntityUid mech, EntityUid pilot)
     {
         if (!mech.IsValid() || Deleted(mech))
             return;
 
         if (!TryResolvePilotTeamId(pilot, out var teamId))
         {
-            RemComp<WH40KTeamBattleFactionIconComponent>(mech);
+            ClearMechFactionState(mech);
             return;
         }
 
         var mechIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(mech);
-        if (string.Equals(mechIcon.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
-            return;
+        if (!string.Equals(mechIcon.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+        {
+            mechIcon.TeamId = teamId;
+            Dirty(mech, mechIcon);
+        }
 
-        mechIcon.TeamId = teamId;
-        Dirty(mech, mechIcon);
+        var teamMember = EnsureComp<WH40KTeamMemberComponent>(mech);
+        if (!string.Equals(teamMember.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+        {
+            teamMember.TeamId = teamId;
+            Dirty(mech, teamMember);
+        }
+
+        _teamNpcFactions.ApplyTeamFaction(mech, teamId);
+    }
+
+    private void ClearMechFactionState(EntityUid mech)
+    {
+        RemComp<WH40KTeamBattleFactionIconComponent>(mech);
+
+        if (HasComp<WH40KTeamMemberComponent>(mech))
+            RemComp<WH40KTeamMemberComponent>(mech);
+
+        _npcFactions.ClearFactions(mech);
     }
 
     private bool TryResolvePilotTeamId(EntityUid pilot, out string teamId)

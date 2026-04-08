@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Server._WH40K.Localizations;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Store.Components;
 using Content.Server.Cargo.Systems;
@@ -38,6 +39,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly StationSystem _station = default!;
@@ -120,7 +122,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         var teamId = ResolvePadTeamId(ent);
         if (!IsUserAllowedForTeam(args.Actor, teamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             _ui.CloseUi(ent.Owner, WH40KSupplyDropUiKey.Key, args.Actor);
             return;
         }
@@ -134,7 +136,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         var teamId = ResolvePadTeamId(ent);
         if (!IsUserAllowedForTeam(args.Actor, teamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -142,14 +144,14 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         if (now < ent.Comp.NextLaunchAt)
         {
             var remaining = (int) Math.Ceiling((ent.Comp.NextLaunchAt - now).TotalSeconds);
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-cooldown", ("seconds", remaining)), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-cooldown", ("seconds", remaining)), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
 
         if (!TryGetFactionBank(ent.Owner, ent.Comp.Account, out var bank, out var balance))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -168,14 +170,14 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         var target = _transform.GetMapCoordinates(args.Actor);
         if (target.MapId == MapId.Nullspace)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-invalid-target"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-invalid-target"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
 
         if (!_cargo.TryAdjustBankAccount(bank, ent.Comp.Account, -cost))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -183,7 +185,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         var delaySeconds = Math.Max(0.1f, ent.Comp.DropDelaySeconds);
         if (!TrySchedulePendingDrop(now, args.Actor, target, ent.Comp.CratePrototype, ent.Comp.MarkerPrototype, delaySeconds))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -204,7 +206,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             _ui.CloseUi(ent.Owner, StoreUiKey.Key, args.Actor);
             return;
         }
@@ -225,7 +227,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
 
@@ -233,28 +235,28 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         if (now < ent.Comp.NextLaunchAt)
         {
             var remaining = (int) Math.Ceiling((ent.Comp.NextLaunchAt - now).TotalSeconds);
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-cooldown", ("seconds", remaining)), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-cooldown", ("seconds", remaining)), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
 
         if (!TryResolveVoxListing(ent, args.Listing, out var listing))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
 
         if (!TryGetVoxListingCost(listing, ent.Comp.FundsCurrency, out var cost))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-vox-supplydrop-popup-unsupported-currency"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-vox-supplydrop-popup-unsupported-currency"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
 
         if (!TryGetFactionBank(ent.Owner, ent.Comp.Account, out var bank, out var balance))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
@@ -272,21 +274,21 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
         var target = _transform.GetMapCoordinates(args.Actor);
         if (target.MapId == MapId.Nullspace)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-invalid-target"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-invalid-target"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
 
         if (!IsOpenSkyTile(target))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-vox-supplydrop-popup-open-sky-required"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-vox-supplydrop-popup-open-sky-required"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
 
         if (!_cargo.TryAdjustBankAccount(bank, ent.Comp.Account, -cost))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-supplydrop-popup-bank-missing"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }
@@ -303,7 +305,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
                 ent.Comp.DeliveryCratePrototype,
                 dropAmount))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-vox-supplydrop-popup-listing-unavailable"), ent.Owner, args.Actor);
             UpdateVoxUi(ent);
             return;
         }

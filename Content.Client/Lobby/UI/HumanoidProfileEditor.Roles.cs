@@ -54,7 +54,7 @@ public sealed partial class HumanoidProfileEditor
 
     private void CloseLoadoutWindow()
     {
-        _loadoutWindow?.Dispose();
+        _loadoutWindow?.Orphan();
         _loadoutWindow = null;
         _activeLoadout = null;
         _activeLoadoutSession = null;

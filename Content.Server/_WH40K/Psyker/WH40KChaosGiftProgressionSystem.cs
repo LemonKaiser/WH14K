@@ -13,9 +13,11 @@ using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
 using Content.Shared._WH40K.Psyker;
+using Content.Server._WH40K.Stats;
 using Robust.Server.GameObjects;
+using Robust.Server.Player;
 using Robust.Shared.Localization;
-using Robust.Shared.Log;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
@@ -30,6 +32,8 @@ namespace Content.Server._WH40K.Psyker;
 public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 {
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
+    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
     [Dependency] private readonly FlammableSystem _flammableSystem = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
@@ -37,6 +41,8 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
     [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private readonly WH40KPlayerStatsSystem _stats = default!;
 
     private const string ChaosSkrizhalPrototype = "WH40KRuneSkrizhalChaos";
     private const string KhorneSkrizhalPrototype = "WH40KRuneSkrizhalKhorn";
@@ -49,18 +55,15 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
     private const int ChaosUpgradeTierCost = 1;
     private const int ChaosUpgradeExCost = 3;
     private const float ChaosXpPerLevelStep = 100f;
-    private const float ChaosPassiveXpBasePerTick = 10f;
-    private const float ChaosPassiveXpPerLevelBonus = 5f;
+    private const float ChaosPassiveXpBasePerTick = 1f;
+    private const float ChaosPassiveXpPerLevelBonus = 0.025f;
+    private const float ChaosWarpRegenPerLevel = 0.1f;
     private static readonly TimeSpan ChaosPassiveXpInterval = TimeSpan.FromMinutes(1);
-    private readonly Dictionary<WH40KChaosPatron, int> _patronSoulCounts = new();
     private readonly HashSet<EntityUid> _nearbyEntities = new();
     private readonly List<EntityUid> _soulTargets = new();
-    private ISawmill _sawmill = default!;
 
     public override void Initialize()
     {
-        _sawmill = Logger.GetSawmill("wh40k.psyker.skrizhal");
-
         SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, ComponentStartup>(OnChaosProgressionStartup);
         SubscribeLocalEvent<WH40KChaosSkrizhalComponent, UseInHandEvent>(OnSkrizhalUseInHand);
         SubscribeLocalEvent<WH40KChaosSkrizhalComponent, ActivateInWorldEvent>(OnSkrizhalActivateInWorld);
@@ -83,8 +86,6 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             subs.Event<WH40KChaosSkrizhalUpgradeTierMessage>(OnUpgradeTier);
             subs.Event<WH40KChaosSkrizhalUnlockExMessage>(OnUnlockEx);
         });
-
-        _sawmill.Info("[trace] WH40KChaosGiftProgressionSystem initialized.");
     }
 
     private void OnAnySkrizhalUiOpened(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIOpenedEvent args)
@@ -92,13 +93,13 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (args.UiKey is not WH40KChaosSkrizhalUiKey uiKey)
             return;
 
-        _sawmill.Info(
-            $"[trace] BoundUIOpenedEvent: skrizhal={ent.Owner}, actor={args.Actor}, key={uiKey}, patron={ent.Comp.Patron}, boundOwner={ent.Comp.BoundOwner?.ToString() ?? "null"}");
-
         switch (uiKey)
         {
             case WH40KChaosSkrizhalUiKey.PatronSelection:
                 OnSkrizhalUiOpened(ent, ref args);
+                break;
+            case WH40KChaosSkrizhalUiKey.PatronCultistInfo:
+                OnSkrizhalCultistUiOpened(ent, ref args);
                 break;
             case WH40KChaosSkrizhalUiKey.PatronBranch:
                 OnSkrizhalBranchUiOpened(ent, ref args);
@@ -110,11 +111,8 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void OnAnySkrizhalUiClosed(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIClosedEvent args)
     {
-        if (args.UiKey is not WH40KChaosSkrizhalUiKey uiKey)
+        if (args.UiKey is not WH40KChaosSkrizhalUiKey)
             return;
-
-        _sawmill.Info(
-            $"[trace] BoundUIClosedEvent: skrizhal={ent.Owner}, actor={args.Actor}, key={uiKey}");
 
         if (AnySkrizhalUiOpenForActor(ent.Owner, args.Actor))
             return;
@@ -122,9 +120,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (!TryComp<ItemToggleComponent>(ent.Owner, out var toggle) || !toggle.Activated)
             return;
 
-        var deactivated = _itemToggle.TryDeactivate((ent.Owner, toggle), args.Actor, predicted: false, showPopup: false);
-        _sawmill.Info(
-            $"[trace] BoundUIClosedEvent toggle sync: skrizhal={ent.Owner}, actor={args.Actor}, deactivated={deactivated}");
+        _itemToggle.TryDeactivate((ent.Owner, toggle), args.Actor, predicted: false, showPopup: false);
     }
 
     public override void Update(float frameTime)
@@ -137,6 +133,8 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             var changed = false;
 
+            SyncChaosWarpRegen(uid, progression);
+
             if (progression.RitualBonusExpiresAt != TimeSpan.Zero && now >= progression.RitualBonusExpiresAt)
             {
                 progression.RitualBonusMultiplier = 1f;
@@ -148,7 +146,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             changed |= TryApplyPassiveXpTick(uid, progression, now);
 
             if (changed)
-                TryUpdateBoundBranchUi(uid, progression);
+                TryUpdateBoundProgressionUi(uid, progression);
         }
     }
 
@@ -342,6 +340,9 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         if (changed)
             Dirty(ent, ent.Comp);
+
+        SyncChaosWarpRegen(ent.Owner, ent.Comp);
+        _cult.AttachMemberToCult(ent.Owner, ent.Comp, WH40KChaosPatron.None);
     }
 
     private bool TryApplyPassiveXpTick(EntityUid uid, WH40KChaosGiftProgressionComponent progression, TimeSpan now)
@@ -366,7 +367,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             var xpGain = GetPassiveXpPerTick(progression);
             if (xpGain > 0f)
-                GainProgressionXp(uid, progression, xpGain);
+                GainProjectedProgressionXp(uid, progression, xpGain);
 
             progression.NextPassiveXpAt += progression.PassiveXpInterval;
             tickCount++;
@@ -381,80 +382,66 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private static float GetPassiveXpPerTick(WH40KChaosGiftProgressionComponent progression)
     {
-        var levelBonus = Math.Max(0, progression.Level - 1) * progression.PassiveXpPerLevelBonus;
-        return Math.Max(0f, progression.PassiveXpBasePerTick + levelBonus);
+        var levelBonus = Math.Max(0, progression.Level - 1) * ChaosPassiveXpPerLevelBonus;
+        return Math.Max(0f, ChaosPassiveXpBasePerTick + levelBonus);
     }
 
     private void OnSkrizhalUseInHand(Entity<WH40KChaosSkrizhalComponent> ent, ref UseInHandEvent args)
     {
-        _sawmill.Info(
-            $"[trace] UseInHandEvent: skrizhal={ent.Owner}, user={args.User}, handledIn={args.Handled}, patron={ent.Comp.Patron}");
-
         if (args.Handled)
+            return;
+
+        if (!TryConsumeSkrizhalUiThrottle((ent.Owner, ent.Comp), args.User))
         {
-            _sawmill.Info($"[trace] UseInHandEvent skipped: skrizhal={ent.Owner}, reason=already-handled");
+            args.Handled = true;
             return;
         }
 
         var handled = false;
         TryOpenSkrizhalUi(ent, args.User, ref handled);
         args.Handled |= handled;
-
-        _sawmill.Info(
-            $"[trace] UseInHandEvent result: skrizhal={ent.Owner}, user={args.User}, openedAttempt={handled}, handledOut={args.Handled}");
     }
 
     private void OnSkrizhalActivateInWorld(Entity<WH40KChaosSkrizhalComponent> ent, ref ActivateInWorldEvent args)
     {
-        _sawmill.Info(
-            $"[trace] ActivateInWorldEvent: skrizhal={ent.Owner}, user={args.User}, handledIn={args.Handled}, patron={ent.Comp.Patron}");
-
         if (args.Handled)
+            return;
+
+        if (!TryConsumeSkrizhalUiThrottle((ent.Owner, ent.Comp), args.User))
         {
-            _sawmill.Info($"[trace] ActivateInWorldEvent skipped: skrizhal={ent.Owner}, reason=already-handled");
+            args.Handled = true;
             return;
         }
 
         var handled = false;
         TryOpenSkrizhalUi(ent, args.User, ref handled);
         args.Handled |= handled;
-
-        _sawmill.Info(
-            $"[trace] ActivateInWorldEvent result: skrizhal={ent.Owner}, user={args.User}, openedAttempt={handled}, handledOut={args.Handled}");
     }
 
     private void OnSkrizhalToggled(Entity<WH40KChaosSkrizhalComponent> ent, ref ItemToggledEvent args)
     {
-        _sawmill.Info(
-            $"[trace] ItemToggledEvent: skrizhal={ent.Owner}, user={args.User?.ToString() ?? "null"}, activated={args.Activated}, predicted={args.Predicted}, patron={ent.Comp.Patron}");
-
         if (args.User is not { } user)
-        {
-            _sawmill.Info(
-                $"[trace] ItemToggledEvent skipped: skrizhal={ent.Owner}, reason=user-null");
             return;
-        }
 
         if (!args.Activated)
         {
             _ui.CloseUis(ent.Owner, user);
-            _sawmill.Info(
-                $"[trace] ItemToggledEvent close UIs: skrizhal={ent.Owner}, user={user}, reason=deactivated");
             return;
         }
 
         if (AnySkrizhalUiOpenForActor(ent.Owner, user))
+            return;
+
+        if (!TryConsumeSkrizhalUiThrottle((ent.Owner, ent.Comp), user))
         {
-            _sawmill.Info(
-                $"[trace] ItemToggledEvent skipped open: skrizhal={ent.Owner}, user={user}, reason=ui-already-open");
+            if (TryComp<ItemToggleComponent>(ent.Owner, out var toggle) && toggle.Activated)
+                _itemToggle.TryDeactivate((ent.Owner, toggle), user, predicted: false, showPopup: false);
+
             return;
         }
 
         var handled = false;
         TryOpenSkrizhalUi(ent, user, ref handled);
-
-        _sawmill.Info(
-            $"[trace] ItemToggledEvent result: skrizhal={ent.Owner}, user={user}, openedAttempt={handled}");
     }
 
     private void TryOpenSkrizhalUi(
@@ -464,34 +451,24 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
     {
         var hasChaosRole = HasComp<WH40KChaosGiftRoleComponent>(user);
         if (!hasChaosRole)
-        {
-            _sawmill.Info(
-                $"[trace] TryOpenSkrizhalUi blocked: skrizhal={ent.Owner}, user={user}, reason=no-chaos-role, boundOwner={ent.Comp.BoundOwner?.ToString() ?? "null"}");
             return;
-        }
 
         handled = true;
+
+        if (TryEnforceCatastropheLockdown(ent, user))
+            return;
 
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(user);
         var changed = false;
 
-        _sawmill.Info(
-            $"[trace] TryOpenSkrizhalUi begin: skrizhal={ent.Owner}, user={user}, patron={progression.AttunedPatron}, lock={progression.PatronSelectionLocked}, allowSwitch={progression.AllowPatronSwitch}, boundSkrizhal={progression.BoundSkrizhal?.ToString() ?? "null"}, boundOwner={ent.Comp.BoundOwner?.ToString() ?? "null"}");
-
         if (ent.Comp.BoundOwner == null && ent.Comp.BindOnFirstUse)
-        {
             ent.Comp.BoundOwner = user;
-            _sawmill.Info(
-                $"[trace] TryOpenSkrizhalUi bind-on-first-use: skrizhal={ent.Owner}, user={user}");
-        }
 
         if (ent.Comp.RestrictToBoundOwner &&
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != user)
         {
-            _sawmill.Warning(
-                $"[trace] TryOpenSkrizhalUi blocked: skrizhal={ent.Owner}, user={user}, reason=owner-mismatch, expectedOwner={boundOwner}");
-            PopupCaution(user, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(user, "w40k-cg-owner-mismatch");
             return;
         }
 
@@ -522,8 +499,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             return;
         }
 
-        OpenBranchUiForUser(ent.Owner, user, progression.AttunedPatron);
-        UpdatePatronBranchUi(ent.Owner, progression);
+        OpenProgressionUiForUser(ent.Owner, user, progression);
 
         if (changed)
             Dirty(user, progression);
@@ -532,37 +508,85 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
     private void OpenSelectorUiForUser(EntityUid skrizhal, EntityUid user)
     {
         if (_ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, user))
-        {
-            _sawmill.Info(
-                $"[trace] Open selector skipped: skrizhal={skrizhal}, user={user}, reason=already-open");
             return;
-        }
 
-        var opened = _ui.TryOpenUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, user);
-        var hasUi = _ui.HasUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection);
-        _sawmill.Info(
-            $"[trace] Open selector: skrizhal={skrizhal}, user={user}, opened={opened}, hasUi={hasUi}");
+        _ui.TryOpenUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, user);
     }
 
     private void OpenBranchUiForUser(EntityUid skrizhal, EntityUid user, WH40KChaosPatron patron)
     {
         if (_ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, user))
+            return;
+
+        _ui.TryOpenUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, user);
+    }
+
+    private void OpenCultistUiForUser(EntityUid skrizhal, EntityUid user, WH40KChaosPatron patron)
+    {
+        if (_ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, user))
+            return;
+
+        _ui.TryOpenUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, user);
+    }
+
+    private void OpenProgressionUiForUser(EntityUid skrizhal, EntityUid user, WH40KChaosGiftProgressionComponent progression)
+    {
+        if (ShouldOpenLeaderUi(user, progression))
         {
-            _sawmill.Info(
-                $"[trace] Open branch skipped: skrizhal={skrizhal}, user={user}, reason=already-open, patron={patron}");
+            _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, user);
+            OpenBranchUiForUser(skrizhal, user, progression.AttunedPatron);
+            UpdatePatronBranchUi(skrizhal, progression);
             return;
         }
 
-        var opened = _ui.TryOpenUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, user);
-        var hasUi = _ui.HasUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch);
-        _sawmill.Info(
-            $"[trace] Open branch: skrizhal={skrizhal}, user={user}, opened={opened}, hasUi={hasUi}, patron={patron}");
+        _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, user);
+        OpenCultistUiForUser(skrizhal, user, progression.AttunedPatron);
+        UpdatePatronCultistUi(skrizhal, progression);
     }
 
     private bool AnySkrizhalUiOpenForActor(EntityUid skrizhal, EntityUid actor)
     {
         return _ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, actor) ||
+               _ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, actor) ||
                _ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, actor);
+    }
+
+    private bool TryEnforceCatastropheLockdown(Entity<WH40KChaosSkrizhalComponent> ent, EntityUid actor)
+    {
+        if (!_globalWarp.CatastropheTriggered)
+            return false;
+
+        PopupCaution(actor, "w40k-cg-catastrophe-lockdown");
+        CloseSkrizhalUis(ent.Owner, actor);
+
+        if (TryComp<ItemToggleComponent>(ent.Owner, out var toggle) && toggle.Activated)
+            _itemToggle.TryDeactivate((ent.Owner, toggle), actor, predicted: false, showPopup: false);
+
+        return true;
+    }
+
+    private void CloseSkrizhalUis(EntityUid skrizhal, EntityUid actor)
+    {
+        _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, actor);
+        _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, actor);
+        _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, actor);
+    }
+
+    private bool ShouldOpenLeaderUi(EntityUid actor, WH40KChaosGiftProgressionComponent progression)
+    {
+        return progression.AttunedPatron != WH40KChaosPatron.None && _cult.IsEffectiveLeader(actor, progression);
+    }
+
+    private bool TryConsumeSkrizhalUiThrottle(Entity<WH40KChaosSkrizhalComponent> ent, EntityUid user)
+    {
+        var cooldownSeconds = Math.Max(0.05f, ent.Comp.UiInteractionCooldownSeconds);
+        var now = _timing.CurTime;
+        var throttle = EnsureComp<WH40KSkrizhalUiUserThrottleComponent>(user);
+        if (throttle.NextAllowedUiInteractionAt > now)
+            return false;
+
+        throttle.NextAllowedUiInteractionAt = now + TimeSpan.FromSeconds(cooldownSeconds);
+        return true;
     }
 
     private void SyncToggleWithUiOpen(Entity<WH40KChaosSkrizhalComponent> ent, EntityUid actor)
@@ -573,20 +597,16 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (toggle.Activated)
             return;
 
-        var activated = _itemToggle.TryActivate((ent.Owner, toggle), actor, predicted: false, showPopup: false);
-        _sawmill.Info(
-            $"[trace] BoundUIOpenedEvent toggle sync: skrizhal={ent.Owner}, actor={actor}, activated={activated}");
+        _itemToggle.TryActivate((ent.Owner, toggle), actor, predicted: false, showPopup: false);
     }
 
     private void OnSkrizhalUiOpened(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIOpenedEvent args)
     {
-        _sawmill.Info(
-            $"[trace] OnSkrizhalUiOpened: skrizhal={ent.Owner}, actor={args.Actor}, key=PatronSelection");
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
 
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
-            _sawmill.Warning(
-                $"[trace] OnSkrizhalUiOpened close: skrizhal={ent.Owner}, actor={args.Actor}, reason=no-chaos-role");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
             return;
         }
@@ -595,9 +615,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            _sawmill.Warning(
-                $"[trace] OnSkrizhalUiOpened close: skrizhal={ent.Owner}, actor={args.Actor}, reason=owner-mismatch, expectedOwner={boundOwner}");
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
             return;
         }
@@ -612,11 +630,8 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             progression.AttunedPatron != WH40KChaosPatron.None &&
             !progression.AllowPatronSwitch)
         {
-            _sawmill.Info(
-                $"[trace] OnSkrizhalUiOpened redirect: skrizhal={ent.Owner}, actor={args.Actor}, from=PatronSelection,to=PatronBranch, patron={progression.AttunedPatron}");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
-            OpenBranchUiForUser(ent.Owner, args.Actor, progression.AttunedPatron);
-            UpdatePatronBranchUi(ent.Owner, progression);
+            OpenProgressionUiForUser(ent.Owner, args.Actor, progression);
             return;
         }
 
@@ -638,15 +653,59 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         UpdatePatronSelectorUi(ent.Owner, progression);
     }
 
-    private void OnSkrizhalBranchUiOpened(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIOpenedEvent args)
+    private void OnSkrizhalCultistUiOpened(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIOpenedEvent args)
     {
-        _sawmill.Info(
-            $"[trace] OnSkrizhalBranchUiOpened: skrizhal={ent.Owner}, actor={args.Actor}, key=PatronBranch");
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
 
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
-            _sawmill.Warning(
-                $"[trace] OnSkrizhalBranchUiOpened close: skrizhal={ent.Owner}, actor={args.Actor}, reason=no-chaos-role");
+            _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronCultistInfo, args.Actor);
+            return;
+        }
+
+        if (ent.Comp.RestrictToBoundOwner &&
+            ent.Comp.BoundOwner is { } boundOwner &&
+            boundOwner != args.Actor)
+        {
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
+            _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronCultistInfo, args.Actor);
+            return;
+        }
+
+        var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
+        if (progression.AttunedPatron == WH40KChaosPatron.None)
+        {
+            _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronCultistInfo, args.Actor);
+            OpenSelectorUiForUser(ent.Owner, args.Actor);
+            UpdatePatronSelectorUi(ent.Owner, progression);
+            return;
+        }
+
+        if (ShouldOpenLeaderUi(args.Actor, progression))
+        {
+            _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronCultistInfo, args.Actor);
+            OpenBranchUiForUser(ent.Owner, args.Actor, progression.AttunedPatron);
+            UpdatePatronBranchUi(ent.Owner, progression);
+            return;
+        }
+
+        if (progression.BoundSkrizhal != ent.Owner)
+        {
+            progression.BoundSkrizhal = ent.Owner;
+            Dirty(args.Actor, progression);
+        }
+
+        UpdatePatronCultistUi(ent.Owner, progression);
+    }
+
+    private void OnSkrizhalBranchUiOpened(Entity<WH40KChaosSkrizhalComponent> ent, ref BoundUIOpenedEvent args)
+    {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
+        if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
+        {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
@@ -655,9 +714,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            _sawmill.Warning(
-                $"[trace] OnSkrizhalBranchUiOpened close: skrizhal={ent.Owner}, actor={args.Actor}, reason=owner-mismatch, expectedOwner={boundOwner}");
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
@@ -665,11 +722,17 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
         if (progression.AttunedPatron == WH40KChaosPatron.None)
         {
-            _sawmill.Info(
-                $"[trace] OnSkrizhalBranchUiOpened redirect: skrizhal={ent.Owner}, actor={args.Actor}, from=PatronBranch,to=PatronSelection");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             OpenSelectorUiForUser(ent.Owner, args.Actor);
             UpdatePatronSelectorUi(ent.Owner, progression);
+            return;
+        }
+
+        if (!ShouldOpenLeaderUi(args.Actor, progression))
+        {
+            _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
+            OpenCultistUiForUser(ent.Owner, args.Actor, progression.AttunedPatron);
+            UpdatePatronCultistUi(ent.Owner, progression);
             return;
         }
 
@@ -684,6 +747,9 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void OnSelectPatron(Entity<WH40KChaosSkrizhalComponent> ent, ref WH40KChaosSkrizhalSelectPatronMessage args)
     {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
@@ -700,7 +766,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
             return;
         }
@@ -718,7 +784,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-gifts-popup-already-attuned",
+                "w40k-cg-already-attuned",
                 ("patron", Loc.GetString(GetPatronLocKey(progression.AttunedPatron))));
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronSelection, args.Actor);
             return;
@@ -729,44 +795,72 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             progression.AttunedPatron != args.Patron &&
             !progression.AllowPatronSwitch)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-switch-blocked");
+            PopupCaution(args.Actor, "w40k-cg-switch-blocked");
             UpdatePatronSelectorUi(ent.Owner, progression);
             return;
         }
 
-        progression.AttunedPatron = args.Patron;
-        progression.PatronSoulOfferCount = GetPatronSoulCount(args.Patron);
+        ApplyPatronSelection(ent, args.Actor, args.Patron, progression);
+    }
+
+    internal void ApplyPatronSelection(
+        Entity<WH40KChaosSkrizhalComponent> ent,
+        EntityUid actor,
+        WH40KChaosPatron patron,
+        WH40KChaosGiftProgressionComponent progression,
+        bool updateUi = true)
+    {
+        var previousPatron = progression.AttunedPatron;
+        var firstAttunement = progression.AttunedPatron == WH40KChaosPatron.None;
+
+        progression.AttunedPatron = patron;
+        progression.PatronSoulOfferCount = GetPatronSoulCount(patron);
         progression.PatronSelectionLocked = true;
         progression.StarterSkrizhalIssued = true;
         progression.BoundSkrizhal = ent.Owner;
-        if (firstAttunement || previousPatron != args.Patron)
+        if (firstAttunement &&
+            _players.TryGetSessionByEntity(actor, out ICommonSession? session) &&
+            TryGetPatronAttunementStatKey(patron, out var statKey))
         {
+            _stats.Record(session.UserId, statKey);
+        }
+
+        if (firstAttunement || previousPatron != patron)
+        {
+            _cult.RegisterLeadershipCandidate(actor, progression);
             ResetGiftUnlockState(progression);
             ResetKhorneUpgradeState(progression);
         }
 
-        ApplyPatronProfile(ent.Comp, args.Patron);
+        ApplyPatronProfile(ent.Comp, patron);
         progression.AttunementXpMultiplier = MathF.Max(1f, ent.Comp.AttunementXpMultiplier);
 
         if (ent.Comp.AttunementInstabilityGain > 0f)
-            AddInstability(args.Actor, ent.Comp.AttunementInstabilityGain);
+            AddInstability(actor, ent.Comp.AttunementInstabilityGain);
 
-        _ui.CloseUserUis<WH40KChaosSkrizhalUiKey>(args.Actor);
-        var activeSkrizhal = EnsurePatronSkrizhalVariant((ent.Owner, ent.Comp), args.Actor, progression);
+        _cult.AttachMemberToCult(actor, progression, previousPatron);
+        Dirty(actor, progression);
 
-        Dirty(args.Actor, progression);
+        if (!updateUi)
+            return;
+
+        _ui.CloseUserUis<WH40KChaosSkrizhalUiKey>(actor);
+        var activeSkrizhal = EnsurePatronSkrizhalVariant((ent.Owner, ent.Comp), actor, progression);
+        RefreshAllOpenPatronSelectorUis();
 
         PopupSuccess(
-            args.Actor,
-            "wh40k-chaos-gifts-popup-attuned",
-            ("patron", Loc.GetString(GetPatronLocKey(args.Patron))));
+            actor,
+            "w40k-cg-attuned",
+            ("patron", Loc.GetString(GetPatronLocKey(patron))));
 
-        OpenBranchUiForUser(activeSkrizhal, args.Actor, progression.AttunedPatron);
-        UpdatePatronBranchUi(activeSkrizhal, progression);
+        OpenProgressionUiForUser(activeSkrizhal, actor, progression);
     }
 
     private void OnSelectPrimaryGift(Entity<WH40KChaosSkrizhalComponent> ent, ref WH40KChaosSkrizhalSelectPrimaryGiftMessage args)
     {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
@@ -777,23 +871,29 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
+        if (!_cult.IsEffectiveLeader(args.Actor, progression))
+        {
+            PopupCaution(args.Actor, "w40k-ch-popup-leader-only");
+            UpdatePatronBranchUi(ent.Owner, progression);
+            return;
+        }
 
         if (progression.AttunedPatron == WH40KChaosPatron.None)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-attunement-required");
+            PopupCaution(args.Actor, "w40k-ch-popup-attunement-required");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         if (!IsValidGiftSlot(args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-invalid-slot");
+            PopupCaution(args.Actor, "w40k-ch-popup-invalid-slot");
             return;
         }
 
@@ -801,7 +901,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-branch-popup-primary-already-set",
+                "w40k-ch-popup-primary-already-set",
                 ("slot", progression.PrimaryGiftSlot));
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
@@ -809,11 +909,11 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         progression.PrimaryGiftSlot = args.GiftSlot;
         SetGiftSlotUnlocked(progression, args.GiftSlot, true);
-        Dirty(args.Actor, progression);
+        _cult.CaptureSharedProgression(args.Actor, progression);
 
         PopupSuccess(
             args.Actor,
-            "wh40k-chaos-branch-popup-primary-selected",
+            "w40k-ch-popup-primary-selected",
             ("slot", args.GiftSlot));
 
         UpdatePatronBranchUi(ent.Owner, progression);
@@ -821,6 +921,9 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void OnUnlockGift(Entity<WH40KChaosSkrizhalComponent> ent, ref WH40KChaosSkrizhalUnlockGiftMessage args)
     {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
@@ -831,42 +934,49 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
+        if (!_cult.IsEffectiveLeader(args.Actor, progression))
+        {
+            PopupCaution(args.Actor, "w40k-ch-popup-leader-only");
+            UpdatePatronBranchUi(ent.Owner, progression);
+            return;
+        }
+
         if (progression.AttunedPatron == WH40KChaosPatron.None)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-attunement-required");
+            PopupCaution(args.Actor, "w40k-ch-popup-attunement-required");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         if (!IsValidGiftSlot(args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-invalid-slot");
+            PopupCaution(args.Actor, "w40k-ch-popup-invalid-slot");
             return;
         }
 
         if (progression.PrimaryGiftSlot == 0)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-primary-required");
+            PopupCaution(args.Actor, "w40k-ch-popup-primary-required");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (progression.PrimaryGiftSlot == args.GiftSlot)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-primary-cannot-purchase");
+            PopupCaution(args.Actor, "w40k-ch-popup-primary-cannot-purchase");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (IsGiftSlotUnlocked(progression, args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-already-unlocked");
+            PopupCaution(args.Actor, "w40k-ch-popup-already-unlocked");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
@@ -876,7 +986,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-branch-popup-not-enough-points",
+                "w40k-ch-popup-not-enough-points",
                 ("cost", cost),
                 ("points", progression.DevelopmentPoints));
             UpdatePatronBranchUi(ent.Owner, progression);
@@ -885,11 +995,11 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         progression.DevelopmentPoints -= cost;
         SetGiftSlotUnlocked(progression, args.GiftSlot, true);
-        Dirty(args.Actor, progression);
+        _cult.CaptureSharedProgression(args.Actor, progression);
 
         PopupSuccess(
             args.Actor,
-            "wh40k-chaos-branch-popup-unlocked",
+            "w40k-ch-popup-unlocked",
             ("slot", args.GiftSlot),
             ("cost", cost));
 
@@ -898,6 +1008,9 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void OnUpgradeTier(Entity<WH40KChaosSkrizhalComponent> ent, ref WH40KChaosSkrizhalUpgradeTierMessage args)
     {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
@@ -908,15 +1021,22 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
+        if (!_cult.IsEffectiveLeader(args.Actor, progression))
+        {
+            PopupCaution(args.Actor, "w40k-ch-popup-leader-only");
+            UpdatePatronBranchUi(ent.Owner, progression);
+            return;
+        }
+
         if (!HasTierUpgradeRuntime(progression.AttunedPatron))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-runtime-unavailable");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-runtime-unavailable");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
@@ -924,27 +1044,27 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (args.GiftSlot == (int) WH40KChaosGiftUpgradeSlot.Passive &&
             !HasPassiveUpgradeRuntime(progression.AttunedPatron))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-passive-runtime-unavailable");
+            PopupCaution(args.Actor, "w40k-ch-popup-passive-runtime-unavailable");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (!IsValidUpgradeSlot(args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-invalid-slot");
+            PopupCaution(args.Actor, "w40k-ch-popup-invalid-slot");
             return;
         }
 
         if (!IsUpgradeSlotOpenForProgression(progression, args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-slot-locked");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-slot-locked");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (!IsValidUpgradeTier(args.Tier))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-invalid-tier");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-invalid-tier");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
@@ -954,7 +1074,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-branch-popup-upgrade-order",
+                "w40k-ch-popup-upgrade-order",
                 ("current", currentTier),
                 ("requested", args.Tier));
             UpdatePatronBranchUi(ent.Owner, progression);
@@ -966,7 +1086,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-branch-popup-not-enough-points",
+                "w40k-ch-popup-not-enough-points",
                 ("cost", cost),
                 ("points", progression.DevelopmentPoints));
             UpdatePatronBranchUi(ent.Owner, progression);
@@ -975,11 +1095,11 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         progression.DevelopmentPoints -= cost;
         SetUpgradeTier(progression, args.GiftSlot, args.Path, (byte) args.Tier);
-        Dirty(args.Actor, progression);
+        _cult.CaptureSharedProgression(args.Actor, progression);
 
         PopupSuccess(
             args.Actor,
-            "wh40k-chaos-branch-popup-upgrade-success",
+            "w40k-ch-popup-upgrade-success",
             ("slot", args.GiftSlot),
             ("tier", args.Tier));
 
@@ -988,6 +1108,9 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void OnUnlockEx(Entity<WH40KChaosSkrizhalComponent> ent, ref WH40KChaosSkrizhalUnlockExMessage args)
     {
+        if (TryEnforceCatastropheLockdown(ent, args.Actor))
+            return;
+
         if (!HasComp<WH40KChaosGiftRoleComponent>(args.Actor))
         {
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
@@ -998,15 +1121,22 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             ent.Comp.BoundOwner is { } boundOwner &&
             boundOwner != args.Actor)
         {
-            PopupCaution(args.Actor, "wh40k-chaos-gifts-popup-owner-mismatch");
+            PopupCaution(args.Actor, "w40k-cg-owner-mismatch");
             _ui.CloseUi(ent.Owner, WH40KChaosSkrizhalUiKey.PatronBranch, args.Actor);
             return;
         }
 
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(args.Actor);
+        if (!_cult.IsEffectiveLeader(args.Actor, progression))
+        {
+            PopupCaution(args.Actor, "w40k-ch-popup-leader-only");
+            UpdatePatronBranchUi(ent.Owner, progression);
+            return;
+        }
+
         if (!HasTierUpgradeRuntime(progression.AttunedPatron))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-runtime-unavailable");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-runtime-unavailable");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
@@ -1014,34 +1144,34 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (args.GiftSlot == (int) WH40KChaosGiftUpgradeSlot.Passive &&
             !HasPassiveUpgradeRuntime(progression.AttunedPatron))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-passive-runtime-unavailable");
+            PopupCaution(args.Actor, "w40k-ch-popup-passive-runtime-unavailable");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (!IsValidUpgradeSlot(args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-invalid-slot");
+            PopupCaution(args.Actor, "w40k-ch-popup-invalid-slot");
             return;
         }
 
         if (!IsUpgradeSlotOpenForProgression(progression, args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-slot-locked");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-slot-locked");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (IsUpgradeExUnlocked(progression, args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-ex-already");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-ex-already");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
 
         if (!HasMaxedUpgradePaths(progression, args.GiftSlot))
         {
-            PopupCaution(args.Actor, "wh40k-chaos-branch-popup-upgrade-ex-prereq");
+            PopupCaution(args.Actor, "w40k-ch-popup-upgrade-ex-prereq");
             UpdatePatronBranchUi(ent.Owner, progression);
             return;
         }
@@ -1051,7 +1181,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         {
             PopupCaution(
                 args.Actor,
-                "wh40k-chaos-branch-popup-not-enough-points",
+                "w40k-ch-popup-not-enough-points",
                 ("cost", cost),
                 ("points", progression.DevelopmentPoints));
             UpdatePatronBranchUi(ent.Owner, progression);
@@ -1060,11 +1190,11 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         progression.DevelopmentPoints -= cost;
         SetUpgradeExUnlocked(progression, args.GiftSlot, true);
-        Dirty(args.Actor, progression);
+        _cult.CaptureSharedProgression(args.Actor, progression);
 
         PopupSuccess(
             args.Actor,
-            "wh40k-chaos-branch-popup-upgrade-ex-success",
+            "w40k-ch-popup-upgrade-ex-success",
             ("slot", args.GiftSlot));
 
         UpdatePatronBranchUi(ent.Owner, progression);
@@ -1088,7 +1218,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
                 if (TryPerformSoulRitual(altar, user, progression))
                     return;
 
-                PopupCaution(user, "wh40k-chaos-gifts-popup-soul-ritual-no-corpses");
+                PopupCaution(user, "w40k-cg-soul-ritual-no-corpses");
             }
         });
     }
@@ -1106,7 +1236,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (TryPerformSoulRitual(altar, args.User, progression))
             return;
 
-        PopupCaution(args.User, "wh40k-chaos-gifts-popup-soul-ritual-no-corpses");
+        PopupCaution(args.User, "w40k-cg-soul-ritual-no-corpses");
     }
 
     private void OnAltarInteractUsing(Entity<WH40KChaosAltarComponent> altar, ref InteractUsingEvent args)
@@ -1122,7 +1252,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (TryPerformSoulRitual(altar, args.User, progression))
             return;
 
-        PopupCaution(args.User, "wh40k-chaos-gifts-popup-soul-ritual-no-corpses");
+        PopupCaution(args.User, "w40k-cg-soul-ritual-no-corpses");
     }
 
     private bool TryGetAltarInteractionContext(
@@ -1139,7 +1269,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         if (altar.Comp.RequireAttunement && progression.AttunedPatron == WH40KChaosPatron.None)
         {
-            PopupCaution(user, "wh40k-chaos-gifts-popup-attunement-required");
+            PopupCaution(user, "w40k-cg-attunement-required");
             return false;
         }
 
@@ -1147,7 +1277,7 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (now < progression.NextSacrificeAt)
         {
             var seconds = Math.Max(1, (int) Math.Ceiling((progression.NextSacrificeAt - now).TotalSeconds));
-            PopupCaution(user, "wh40k-chaos-gifts-popup-sacrifice-cooldown", ("seconds", seconds));
+            PopupCaution(user, "w40k-cg-sacrifice-cooldown", ("seconds", seconds));
             return false;
         }
 
@@ -1238,45 +1368,33 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             soulsConsumed,
             Math.Max(0f, altar.SoulXpSamePatron));
         var otherPatronXp = Math.Max(0f, altar.SoulXpOtherPatron) * soulsConsumed;
-        var updatedSoulCount = AddPatronSoulCount(actorPatron, soulsConsumed);
+        _cult.AddCultSoulCount(actorPatron, soulsConsumed);
 
-        var progressionQuery = EntityQueryEnumerator<WH40KChaosGiftProgressionComponent, WH40KChaosGiftRoleComponent>();
-        while (progressionQuery.MoveNext(out var uid, out var progression, out _))
+        if (samePatronXp > 0f)
+            _cult.AddCultXp(actorPatron, samePatronXp);
+
+        if (otherPatronXp > 0f)
         {
-            if (progression.AttunedPatron == WH40KChaosPatron.None)
+            var patrons = new[]
             {
-                if (progression.PatronSoulOfferCount != 0)
-                {
-                    progression.PatronSoulOfferCount = 0;
-                    Dirty(uid, progression);
-                    TryUpdateBoundBranchUi(uid, progression);
-                }
+                WH40KChaosPatron.Khorne,
+                WH40KChaosPatron.Nurgle,
+                WH40KChaosPatron.Slaanesh,
+                WH40KChaosPatron.Tzeentch,
+            };
 
-                continue;
+            foreach (var patron in patrons)
+            {
+                if (patron == actorPatron || !_cult.HasCultMembers(patron))
+                    continue;
+
+                _cult.AddCultXp(patron, otherPatronXp);
             }
-
-            var gainedXp = progression.AttunedPatron == actorPatron
-                ? samePatronXp
-                : otherPatronXp;
-
-            if (gainedXp > 0f)
-                GainProgressionXp(uid, progression, gainedXp);
-
-            var currentSoulCount = progression.AttunedPatron == actorPatron
-                ? updatedSoulCount
-                : GetPatronSoulCount(progression.AttunedPatron);
-
-            if (progression.PatronSoulOfferCount == currentSoulCount)
-                continue;
-
-            progression.PatronSoulOfferCount = currentSoulCount;
-            Dirty(uid, progression);
-            TryUpdateBoundBranchUi(uid, progression);
         }
 
         PopupSuccess(
             actor,
-            "wh40k-chaos-gifts-popup-soul-ritual-success",
+            "w40k-cg-soul-ritual-success",
             ("souls", soulsConsumed),
             ("patron", Loc.GetString(GetPatronLocKey(actorPatron))),
             ("sameXp", MathF.Round(samePatronXp, 1)),
@@ -1331,6 +1449,17 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         Dirty(user, progression);
     }
 
+    private void GainProjectedProgressionXp(EntityUid uid, WH40KChaosGiftProgressionComponent progression, float amount)
+    {
+        if (progression.AttunedPatron == WH40KChaosPatron.None)
+        {
+            GainProgressionXp(uid, progression, amount);
+            return;
+        }
+
+        _cult.AddCultXp(progression.AttunedPatron, amount);
+    }
+
     private void GainProgressionXp(EntityUid uid, WH40KChaosGiftProgressionComponent progression, float amount)
     {
         if (amount <= 0f || progression.MaxLevel <= 0)
@@ -1362,11 +1491,14 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         if (levelUps > 0 && progression.PointsPerLevel > 0)
             progression.DevelopmentPoints += levelUps * progression.PointsPerLevel;
 
+        if (levelUps > 0)
+            SyncChaosWarpRegen(uid, progression);
+
         if (progression.Level >= progression.MaxLevel)
             progression.LevelXp = 0f;
 
         Dirty(uid, progression);
-        TryUpdateBoundBranchUi(uid, progression);
+        TryUpdateBoundProgressionUi(uid, progression);
     }
 
     private static float GetXpRequiredForNextLevel(WH40KChaosGiftProgressionComponent progression)
@@ -1374,6 +1506,19 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         var currentLevel = Math.Clamp(progression.Level, 1, progression.MaxLevel);
         var xp = progression.XpPerLevelStep * currentLevel;
         return MathF.Max(1f, xp);
+    }
+
+    private void SyncChaosWarpRegen(EntityUid uid, WH40KChaosGiftProgressionComponent progression)
+    {
+        if (!TryComp<WH40KWarpResourceComponent>(uid, out var warp))
+            return;
+
+        var expectedRegen = Math.Clamp(progression.Level, 1, ChaosMaxLevel) * ChaosWarpRegenPerLevel;
+        if (Math.Abs(warp.RegenPerSecond - expectedRegen) <= 0.0001f)
+            return;
+
+        warp.RegenPerSecond = expectedRegen;
+        Dirty(uid, warp);
     }
 
     private void RestoreWarpCharge(EntityUid uid, float amount)
@@ -1391,15 +1536,10 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private void AddInstability(EntityUid uid, float amount)
     {
-        if (!TryComp<WH40KWarpInstabilityComponent>(uid, out var instability) || amount <= 0f)
+        if (amount <= 0f)
             return;
 
-        var next = Math.Clamp(instability.CurrentInstability + amount, 0f, instability.MaxInstability);
-        if (next <= instability.CurrentInstability)
-            return;
-
-        instability.CurrentInstability = next;
-        Dirty(uid, instability);
+        RaiseLocalEvent(new WH40KWarpInstabilityContributionEvent(uid, amount, "chaos.progression"));
     }
 
     private void UpdatePatronSelectorUi(EntityUid skrizhal, WH40KChaosGiftProgressionComponent progression)
@@ -1410,20 +1550,87 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
         var state = new WH40KChaosSkrizhalPatronSelectorBuiState(
             locked,
-            progression.AttunedPatron);
+            progression.AttunedPatron,
+            ResolvePatronLeaderName(WH40KChaosPatron.Khorne),
+            ResolvePatronLeaderName(WH40KChaosPatron.Nurgle),
+            ResolvePatronLeaderName(WH40KChaosPatron.Slaanesh),
+            ResolvePatronLeaderName(WH40KChaosPatron.Tzeentch));
 
         _ui.SetUiState(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, state);
     }
 
-    private void TryUpdateBoundBranchUi(EntityUid owner, WH40KChaosGiftProgressionComponent progression)
+    private string ResolvePatronLeaderName(WH40KChaosPatron patron)
+    {
+        var leader = _cult.ResolveActiveLeader(patron);
+
+        return leader is { } leaderUid
+            ? Name(leaderUid)
+            : Loc.GetString("wh40k-chaos-selector-no-leader");
+    }
+
+    private void RefreshAllOpenPatronSelectorUis()
+    {
+        var query = EntityQueryEnumerator<WH40KChaosGiftProgressionComponent>();
+        while (query.MoveNext(out var uid, out var progression))
+        {
+            TryUpdateBoundSelectorUi(uid, progression);
+        }
+    }
+
+    private void TryUpdateBoundSelectorUi(EntityUid owner, WH40KChaosGiftProgressionComponent progression)
     {
         if (progression.BoundSkrizhal is not { } skrizhal || TerminatingOrDeleted(skrizhal))
             return;
 
-        if (!_ui.HasUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch))
+        if (!_ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronSelection, owner))
             return;
 
-        UpdatePatronBranchUi(skrizhal, progression);
+        UpdatePatronSelectorUi(skrizhal, progression);
+    }
+
+    private void TryUpdateBoundProgressionUi(EntityUid owner, WH40KChaosGiftProgressionComponent progression)
+    {
+        if (progression.BoundSkrizhal is not { } skrizhal || TerminatingOrDeleted(skrizhal))
+            return;
+
+        var branchOpen = _ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, owner);
+        var cultistOpen = _ui.IsUiOpen(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, owner);
+
+        if (!branchOpen && !cultistOpen)
+            return;
+
+        if (ShouldOpenLeaderUi(owner, progression))
+        {
+            if (cultistOpen)
+            {
+                _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, owner);
+                OpenBranchUiForUser(skrizhal, owner, progression.AttunedPatron);
+            }
+
+            UpdatePatronBranchUi(skrizhal, progression);
+            return;
+        }
+
+        if (branchOpen)
+        {
+            _ui.CloseUi(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, owner);
+            OpenCultistUiForUser(skrizhal, owner, progression.AttunedPatron);
+        }
+
+        UpdatePatronCultistUi(skrizhal, progression);
+    }
+
+    private (bool HasActiveLeader, string ActiveLeaderName, bool AwaitingLeaderSuccessor) ResolveActiveLeaderMetadata(WH40KChaosPatron patron)
+    {
+        var leaderState = _cult.ResolveLeaderState(patron);
+        var activeLeader = leaderState.ActiveLeader;
+        var hasActiveLeader = activeLeader is not null;
+        var activeLeaderName = Loc.GetString("wh40k-chaos-selector-no-leader");
+
+        if (activeLeader is { } leaderUid)
+            activeLeaderName = Name(leaderUid);
+
+        return (hasActiveLeader, activeLeaderName, leaderState.AwaitingLeaderSuccessor);
     }
 
     private void UpdatePatronBranchUi(EntityUid skrizhal, WH40KChaosGiftProgressionComponent progression)
@@ -1433,6 +1640,11 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             : GetXpRequiredForNextLevel(progression);
         var passiveXpPerTick = GetPassiveXpPerTick(progression);
         var passiveIntervalSeconds = Math.Max(1, (int) Math.Round(progression.PassiveXpInterval.TotalSeconds));
+        var activeLeader = ResolveActiveLeaderMetadata(progression.AttunedPatron);
+        var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
+        var giftTwoExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 2);
+        var giftThreeExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 3);
+        var passiveExUnlocked = WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression);
 
         var state = new WH40KChaosSkrizhalPatronBranchBuiState(
             progression.AttunedPatron,
@@ -1441,6 +1653,10 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             progression.LevelXp,
             nextLevelXp,
             progression.DevelopmentPoints,
+            progression.EffectiveLeader,
+            activeLeader.HasActiveLeader,
+            activeLeader.ActiveLeaderName,
+            activeLeader.AwaitingLeaderSuccessor,
             progression.PrimaryGiftSlot,
             progression.GiftSlotOneUnlocked,
             progression.GiftSlotTwoUnlocked,
@@ -1452,21 +1668,72 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
             progression.KhorneGiftOnePowerTier,
             progression.KhorneGiftOneCooldownTier,
             progression.KhorneGiftOneUtilityTier,
-            progression.KhorneGiftOneExUnlocked,
+            giftOneExUnlocked,
             progression.KhorneGiftTwoPowerTier,
             progression.KhorneGiftTwoCooldownTier,
             progression.KhorneGiftTwoUtilityTier,
-            progression.KhorneGiftTwoExUnlocked,
+            giftTwoExUnlocked,
             progression.KhorneGiftThreePowerTier,
             progression.KhorneGiftThreeCooldownTier,
             progression.KhorneGiftThreeUtilityTier,
-            progression.KhorneGiftThreeExUnlocked,
+            giftThreeExUnlocked,
             progression.KhornePassiveSpeedTier,
             progression.KhornePassiveHealthTier,
             progression.KhornePassiveMeleeTier,
-            progression.KhornePassiveExUnlocked);
+            passiveExUnlocked);
 
         _ui.SetUiState(skrizhal, WH40KChaosSkrizhalUiKey.PatronBranch, state);
+    }
+
+    private void UpdatePatronCultistUi(EntityUid skrizhal, WH40KChaosGiftProgressionComponent progression)
+    {
+        var nextLevelXp = progression.Level >= progression.MaxLevel
+            ? 0f
+            : GetXpRequiredForNextLevel(progression);
+        var passiveXpPerTick = GetPassiveXpPerTick(progression);
+        var passiveIntervalSeconds = Math.Max(1, (int) Math.Round(progression.PassiveXpInterval.TotalSeconds));
+        var activeLeader = ResolveActiveLeaderMetadata(progression.AttunedPatron);
+        var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
+        var giftTwoExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 2);
+        var giftThreeExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 3);
+        var passiveExUnlocked = WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression);
+
+        var state = new WH40KChaosSkrizhalCultistBuiState(
+            progression.AttunedPatron,
+            progression.Level,
+            progression.MaxLevel,
+            progression.LevelXp,
+            nextLevelXp,
+            progression.DevelopmentPoints,
+            activeLeader.HasActiveLeader,
+            activeLeader.ActiveLeaderName,
+            activeLeader.AwaitingLeaderSuccessor,
+            progression.PrimaryGiftSlot,
+            progression.GiftSlotOneUnlocked,
+            progression.GiftSlotTwoUnlocked,
+            progression.GiftSlotThreeUnlocked,
+            Math.Max(1, progression.GiftUnlockCost),
+            Math.Max(0, progression.PatronSoulOfferCount),
+            passiveXpPerTick,
+            passiveIntervalSeconds,
+            progression.KhorneGiftOnePowerTier,
+            progression.KhorneGiftOneCooldownTier,
+            progression.KhorneGiftOneUtilityTier,
+            giftOneExUnlocked,
+            progression.KhorneGiftTwoPowerTier,
+            progression.KhorneGiftTwoCooldownTier,
+            progression.KhorneGiftTwoUtilityTier,
+            giftTwoExUnlocked,
+            progression.KhorneGiftThreePowerTier,
+            progression.KhorneGiftThreeCooldownTier,
+            progression.KhorneGiftThreeUtilityTier,
+            giftThreeExUnlocked,
+            progression.KhornePassiveSpeedTier,
+            progression.KhornePassiveHealthTier,
+            progression.KhornePassiveMeleeTier,
+            passiveExUnlocked);
+
+        _ui.SetUiState(skrizhal, WH40KChaosSkrizhalUiKey.PatronCultistInfo, state);
     }
 
     private static void ResetGiftUnlockState(WH40KChaosGiftProgressionComponent progression)
@@ -1718,22 +1985,12 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
 
     private int GetPatronSoulCount(WH40KChaosPatron patron)
     {
-        if (patron == WH40KChaosPatron.None)
-            return 0;
-
-        return _patronSoulCounts.TryGetValue(patron, out var souls)
-            ? Math.Max(0, souls)
-            : 0;
+        return _cult.GetCultSoulCount(patron);
     }
 
     private int AddPatronSoulCount(WH40KChaosPatron patron, int amount)
     {
-        if (patron == WH40KChaosPatron.None || amount <= 0)
-            return GetPatronSoulCount(patron);
-
-        var next = GetPatronSoulCount(patron) + amount;
-        _patronSoulCounts[patron] = next;
-        return next;
+        return _cult.AddCultSoulCount(patron, amount);
     }
 
     private EntityUid EnsurePatronSkrizhalVariant(
@@ -1762,7 +2019,6 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
         replacementComp.AttunementXpReward = skrizhal.Comp.AttunementXpReward;
         replacementComp.AttunementXpMultiplier = skrizhal.Comp.AttunementXpMultiplier;
         replacementComp.AttunementInstabilityGain = skrizhal.Comp.AttunementInstabilityGain;
-        Dirty(replacement, replacementComp);
 
         _hands.TryDrop(user, skrizhal.Owner, checkActionBlocker: false, doDropInteraction: false);
 
@@ -1809,14 +2065,33 @@ public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
                WH40KChaosPatron.Tzeentch;
     }
 
+    private static bool TryGetPatronAttunementStatKey(WH40KChaosPatron patron, out string statKey)
+    {
+        statKey = patron switch
+        {
+            WH40KChaosPatron.Khorne => WH40KPlayerStatKeys.ChaosPatronAttunementKhorne,
+            WH40KChaosPatron.Nurgle => WH40KPlayerStatKeys.ChaosPatronAttunementNurgle,
+            WH40KChaosPatron.Slaanesh => WH40KPlayerStatKeys.ChaosPatronAttunementSlaanesh,
+            WH40KChaosPatron.Tzeentch => WH40KPlayerStatKeys.ChaosPatronAttunementTzeentch,
+            _ => string.Empty,
+        };
+
+        return !string.IsNullOrWhiteSpace(statKey);
+    }
+
     private static bool HasTierUpgradeRuntime(WH40KChaosPatron patron)
     {
-        return patron is WH40KChaosPatron.Khorne or WH40KChaosPatron.Tzeentch;
+        return patron is WH40KChaosPatron.Khorne or
+               WH40KChaosPatron.Nurgle or
+               WH40KChaosPatron.Slaanesh or
+               WH40KChaosPatron.Tzeentch;
     }
 
     private static bool HasPassiveUpgradeRuntime(WH40KChaosPatron patron)
     {
-        return patron is WH40KChaosPatron.Khorne;
+        return patron is WH40KChaosPatron.Khorne or
+               WH40KChaosPatron.Nurgle or
+               WH40KChaosPatron.Slaanesh;
     }
 
     private static void ApplyPatronProfile(WH40KChaosSkrizhalComponent skrizhal, WH40KChaosPatron patron)

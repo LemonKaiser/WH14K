@@ -3062,7 +3062,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     private string ResolveTeamName(string teamId)
     {
         return _teamRule.TryGetTeamDisplayName(teamId, out var teamName)
-            ? teamName
+            ? Loc.GetString(teamName)
             : teamId;
     }
 

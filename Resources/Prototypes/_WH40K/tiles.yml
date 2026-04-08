@@ -83,6 +83,23 @@
   heatCapacity: 10000
 
 - type: tile
+  name: "хаоситский кирпичный пол"
+  id: ChaosBrickAshFloorWH40k
+  sprite: /Textures/_WH40K/Tiles/chaos_brick_ash_floor.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  deconstructTools: [ ]
+  footstepSounds:
+    collection: FootstepFloor
+  heatCapacity: 10000
+
+- type: tile
   name: "бетонная плитка"
   id: ConcreteFloorWH40k
   sprite: /Textures/_WH40K/Tiles/concrete.png

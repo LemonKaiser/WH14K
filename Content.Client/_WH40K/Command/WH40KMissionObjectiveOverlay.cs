@@ -10,6 +10,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared;
 using Robust.Shared.Enums;
+using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
@@ -162,7 +163,7 @@ public sealed class WH40KMissionObjectiveOverlay : Overlay
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        if (Loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
+        if (IoCManager.Resolve<ILocalizationManager>().TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
             return localized!;
 
         return value;

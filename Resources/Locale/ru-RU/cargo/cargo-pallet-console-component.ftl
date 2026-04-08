@@ -1,7 +1,20 @@
 # Cargo pallet sale console
 cargo-pallet-console-menu-title = Консоль продажи товаров
-cargo-pallet-menu-appraisal-label = Оценочная стоимость:{ " " }
-cargo-pallet-menu-count-label = Кол-во продаваемых товаров:{ " " }
+cargo-pallet-menu-appraisal-label = Оценочная стоимость:{" "}
+cargo-pallet-menu-count-label = Кол-во продаваемых товаров:{" "}
+cargo-pallet-menu-average-label = Среднее за единицу:{" "}
 cargo-pallet-menu-no-goods-text = Нет
+cargo-pallet-menu-subtitle = Отслеживайте содержимое связанных поддонов, обновляйте оценку и проводите продажу из одного терминала.
+cargo-pallet-menu-details-header = Маршрут экспорта
+cargo-pallet-menu-status-label = Маршрут продажи:{" "}
+cargo-pallet-menu-status-offline = неактивен
+cargo-pallet-menu-status-empty = ожидание груза
+cargo-pallet-menu-status-ready = партия готова
+cargo-pallet-menu-routing-label = Зачисление выручки:{" "}
+cargo-pallet-menu-routing-default = Бюджет карго станции
+cargo-pallet-menu-accepted-label = Принимаемый груз:{" "}
+cargo-pallet-menu-accepted-default = Любые продаваемые товары на связанных торговых поддонах
+cargo-pallet-menu-footer-status = Экспортный реестр активен.
+cargo-pallet-menu-footer-right = Экспортная логистика
 cargo-pallet-appraise-button = Оценить
 cargo-pallet-sell-button = Продать

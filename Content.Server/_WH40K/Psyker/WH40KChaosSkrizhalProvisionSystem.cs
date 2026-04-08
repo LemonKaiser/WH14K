@@ -12,6 +12,7 @@ namespace Content.Server._WH40K.Psyker;
 public sealed class WH40KChaosSkrizhalProvisionSystem : EntitySystem
 {
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
 
     private const string DefaultSkrizhalPrototype = "WH40KRuneSkrizhalChaos";
 
@@ -39,11 +40,17 @@ public sealed class WH40KChaosSkrizhalProvisionSystem : EntitySystem
 
     private void OnChaosRoleStartup(WH40KChaosRoleStartupEvent args)
     {
+        if (_globalWarp.CatastropheTriggered)
+            return;
+
         EnsureStarterSkrizhal(args.User);
     }
 
     private void EnsureStarterSkrizhal(EntityUid uid)
     {
+        if (_globalWarp.CatastropheTriggered)
+            return;
+
         var progression = EnsureComp<WH40KChaosGiftProgressionComponent>(uid);
         if (progression.StarterSkrizhalIssued)
             return;

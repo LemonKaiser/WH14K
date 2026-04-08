@@ -166,7 +166,9 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         if (maxHealth <= FixedPoint2.Zero)
             return;
 
+#pragma warning disable CS0618 // GetTotalDamage: no alternative API for health ratio calculation
         var totalDamage = _damageable.GetTotalDamage((uid, damageable));
+#pragma warning restore CS0618
         var remainingRatio = (maxHealth - totalDamage).Float() / maxHealth.Float();
 
         if (!component.LowHealthAnnounced &&
@@ -281,7 +283,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
         var enemyText = Loc.GetString("wh40k-objective-destroyed-remaining-enemies",
             ("target", targetName),
             ("remaining", remaining),
-            ("team", teamName));
+            ("team", Loc.GetString(teamName)));
 
         DispatchObjectiveColoredMessages(teamId, allyText, enemyText);
     }

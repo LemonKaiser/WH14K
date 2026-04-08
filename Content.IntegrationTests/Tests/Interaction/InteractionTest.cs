@@ -55,6 +55,7 @@ public abstract partial class InteractionTest
 
     protected TestPair Pair = default!;
     protected TestMapData MapData = default!;
+    private bool _mapInitialized;
 
     protected RobustIntegrationTest.ServerIntegrationInstance Server => Pair.Server;
     protected RobustIntegrationTest.ClientIntegrationInstance Client => Pair.Client;
@@ -175,6 +176,7 @@ public abstract partial class InteractionTest
     [SetUp]
     public virtual async Task Setup()
     {
+        _mapInitialized = false;
         Pair = await PoolManager.GetServerClient(Settings);
 
         // server dependencies
@@ -217,6 +219,8 @@ public abstract partial class InteractionTest
             MapData = await Pair.CreateTestMap();
         else
             MapData = await Pair.LoadTestMap(TestMapPath.Value);
+
+        _mapInitialized = true;
 
         PlayerCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(0.5f, 0.5f)), MapData.MapUid));
         TargetCoords = SEntMan.GetNetCoordinates(Transform.WithEntityId(MapData.GridCoords.Offset(new Vector2(1.5f, 0.5f)), MapData.MapUid));
@@ -274,9 +278,28 @@ public abstract partial class InteractionTest
     [TearDown]
     public async Task TearDownInternal()
     {
-        await Server.WaitPost(() => MapSystem.DeleteMap(MapId));
-        await Pair.CleanReturnAsync();
-        await TearDown();
+        try
+        {
+            if (Pair != null)
+            {
+                try
+                {
+                    if (_mapInitialized)
+                        await Server.WaitPost(() => MapSystem.DeleteMap(MapId));
+                }
+                finally
+                {
+                    await Pair.CleanReturnAsync();
+                }
+            }
+        }
+        finally
+        {
+            _mapInitialized = false;
+            Pair = default!;
+            MapData = default!;
+            await TearDown();
+        }
     }
 
     protected virtual Task TearDown()

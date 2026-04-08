@@ -14,8 +14,8 @@
     assaultMultiplier: 2
     apocalypseMultiplier: 3
     reinforcementCurveDurationMinSeconds: 3600
-    reinforcementCurveDurationMaxSeconds: 7200
-    reinforcementCurveFallbackApocalypseSeconds: 1800
+    reinforcementCurveDurationMaxSeconds: 10800
+    reinforcementCurveFallbackApocalypseSeconds: 6600
     reinforcementCurveBaseMultiplier: 1
     reinforcementCurveScale: 1.25
     reinforcementCurveExponent: 2

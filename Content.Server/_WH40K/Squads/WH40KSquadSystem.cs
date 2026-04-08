@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Server._WH40K.Localizations;
 using Content.Server.Popups;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
@@ -33,6 +34,7 @@ public sealed class WH40KSquadSystem : EntitySystem
     [Dependency] private readonly SharedRoleSystem _roles = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {
@@ -139,7 +141,7 @@ public sealed class WH40KSquadSystem : EntitySystem
         UpdateLeaderTeamState(leader);
         if (string.IsNullOrWhiteSpace(leader.Comp.TeamId))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-squad-popup-no-team"), leader.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-squad-popup-no-team"), leader.Owner, args.Actor);
             return;
         }
 
@@ -186,7 +188,7 @@ public sealed class WH40KSquadSystem : EntitySystem
 
         if (assignable.AssignedLeader is { } otherLeader && otherLeader != leader.Owner)
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-squad-popup-already-assigned"), leader.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-squad-popup-already-assigned"), leader.Owner, args.Actor);
             RefreshAllOpenUis();
             return;
         }
@@ -201,7 +203,7 @@ public sealed class WH40KSquadSystem : EntitySystem
 
         if (!TryGetFirstFreeSlot(leader, out var slot))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-squad-popup-full"), leader.Owner, args.Actor);
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-squad-popup-full"), leader.Owner, args.Actor);
             RefreshUi(leader);
             return;
         }
@@ -493,10 +495,11 @@ public sealed class WH40KSquadSystem : EntitySystem
             _roles.GetRoleCompByTime(mind) is { Comp.JobPrototype: { } jobId } &&
             _prototype.TryIndex<JobPrototype>(jobId, out var job))
         {
-            return job.LocalizedName;
+            // Return the FTL key so the client can resolve in its own culture.
+            return job.Name;
         }
 
-        return Loc.GetString("wh40k-squad-role-unknown");
+        return "wh40k-squad-role-unknown";
     }
 
     private bool IsDead(EntityUid uid)

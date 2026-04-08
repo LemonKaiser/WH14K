@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Server.Pinpointer;
+using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Shared._WH40K.GameMode;
@@ -55,6 +56,7 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
@@ -109,6 +111,8 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         component.CapturingTeamId = null;
         component.CaptureProgressSeconds = 0f;
         component.LastSyncedCaptureProgressSeconds = 0f;
+        component.NextCaptureProgressSyncAt = _timing.CurTime;
+        _attribution.RecordDirty("influence.map_init", uid);
         Dirty(uid, component);
     }
 
@@ -128,13 +132,26 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         {
             var dirty = UpdateCaptureState(uid, point, xform, frameTime, phase);
             UpdateRewardState(uid, point, now);
-            if (!dirty && ShouldSyncProgress(point))
+            var progressSynced = false;
+            if (!dirty && ShouldSyncProgress(point, now))
+            {
                 dirty = true;
+                progressSynced = true;
+            }
 
             if (!dirty)
                 continue;
 
             point.LastSyncedCaptureProgressSeconds = point.CaptureProgressSeconds;
+            if (progressSynced)
+            {
+                var syncIntervalSeconds = Math.Max(0.05f, point.CaptureProgressSyncIntervalSeconds);
+                point.NextCaptureProgressSyncAt = now + TimeSpan.FromSeconds(syncIntervalSeconds);
+            }
+
+            _attribution.RecordDirty(
+                progressSynced ? "influence.progress_sync" : "influence.state_change",
+                uid);
             Dirty(uid, point);
         }
     }
@@ -285,7 +302,7 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(capturedByTeamId) &&
             _teamRule.TryGetTeamDisplayName(capturedByTeamId, out var teamName))
         {
-            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-influence-captured", ("team", teamName)));
+            _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-influence-captured", ("team", Loc.GetString(teamName))));
         }
 
         if (!string.IsNullOrWhiteSpace(capturedByTeamId))
@@ -372,8 +389,11 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         return true;
     }
 
-    private static bool ShouldSyncProgress(WH40KInfluencePointComponent point)
+    private static bool ShouldSyncProgress(WH40KInfluencePointComponent point, TimeSpan now)
     {
+        if (now < point.NextCaptureProgressSyncAt)
+            return false;
+
         var current = point.CaptureProgressSeconds;
         var synced = point.LastSyncedCaptureProgressSeconds;
 

@@ -3,7 +3,8 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._WH40K.Psyker;
 
 /// <summary>
-/// Warp instability meter that rises from ability use and decays over time.
+/// Networked read-model of the global warp instability pool.
+/// The authoritative value lives in server runtime and is mirrored here for UI.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WH40KWarpInstabilityComponent : Component
@@ -14,7 +15,7 @@ public sealed partial class WH40KWarpInstabilityComponent : Component
     public float CurrentInstability;
 
     [DataField("maxInstability"), AutoNetworkedField]
-    public float MaxInstability = 100f;
+    public float MaxInstability = 1000f;
 
     [DataField("decayPerSecond"), AutoNetworkedField]
     public float DecayPerSecond = 1.2f;

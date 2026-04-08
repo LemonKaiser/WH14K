@@ -131,6 +131,9 @@ ent-ClothingHandsGlovesTechpriest = перчатки техножреца
 ent-ClothingHandsGlovesBloodPact = перчатки Кровавого Договора
     .desc = боевые перчатки.
 
+ent-ClothingHandsGlovesKrieg = перчатки Крига
+    .desc = Плотные окопные перчатки, защищающие руки от грязи, холода и тяжёлой службы.
+
 ent-ClothingHandsGlovesCombatColonel = перчатки полковника
     .desc = Перчатки для старшего офицера Имперской Гвардии.
 
@@ -142,6 +145,9 @@ ent-ClothingHeadHelmetFlakCyan = циановый флак-шлем
 
 ent-ClothingHeadHelmetBloodPact = шлем бладпакта
     .desc = Стандартный шлем
+
+ent-ClothingMaskGasBloodPact = маска бладпакта
+    .desc = Грубая боевая маска Кровавого Договора, скрывающая лицо и защищающая дыхание от пыли и газа.
 
 ent-ClothingHeadHelmetrHeresy = шлем еретика
     .desc = Стандартный шлем гвардейца-предателя
@@ -209,6 +215,9 @@ ent-ClothingHeadHelmetFlakAdv = панцирный шлем
 ent-ClothingHeadHelmetFlakAdvCyan = циановый панцирный шлем
     .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
+ent-ClothingHeadHelmetFlakAdvHeresy = панцирный шлем еретиков
+    .desc = Тяжёлый шлем гвардейца-предателя панцирного образца, собранный из усиленных плит и трофейной герметизации для штурмовых атак.
+
 ent-ClothingMaskGasTechPriest = респиратор
     .desc = Стандартный респиратор, защищающий только дыхательные пути.
 
@@ -220,6 +229,30 @@ ent-Colonelcloak = плащ полковника
 
 ent-Gorjet = горжет
     .desc = Отличительный знак офицера со встроенным силовым полем, отталкивающим снаряды. Какое-то там попадание в голову не должно отвлекать офицера от мудрых планов!
+
+ent-WH40KCommandTacticalMapTablet = командный тактический планшет
+    .desc = Тактический планшет командования с доступом к пометкам и редактированию командной сводки.
+
+ent-WH40KStandardTacticalMapTablet = полевой тактический планшет
+    .desc = Стандартный тактический планшет поля боя с доступом только на чтение к командной сводке.
+
+ent-WH40KCommandTacticalMapConsole = имперская командная консоль тактической карты
+    .desc = Командная тактическая консоль на имперском шасси с доступом к пометкам и редактированию командной сводки.
+
+ent-WH40KStandardTacticalMapConsole = имперская полевая консоль тактической карты
+    .desc = Полевая тактическая консоль на имперском шасси с доступом только на чтение к командной сводке.
+
+ent-WH40KCommandTacticalMapConsoleImperium = имперская командная консоль тактической карты
+    .desc = Командная тактическая консоль на имперском шасси с доступом к пометкам и редактированию командной сводки.
+
+ent-WH40KCommandTacticalMapConsoleHeretics = еретическая командная консоль тактической карты
+    .desc = Командная тактическая консоль на еретическом шасси с доступом к пометкам и редактированию командной сводки.
+
+ent-WH40KStandardTacticalMapConsoleImperium = имперская полевая консоль тактической карты
+    .desc = Полевая тактическая консоль на имперском шасси с доступом только на чтение к командной сводке.
+
+ent-WH40KStandardTacticalMapConsoleHeretics = еретическая полевая консоль тактической карты
+    .desc = Полевая тактическая консоль на еретическом шасси с доступом только на чтение к командной сводке.
 
 ent-ClothingOuterArmorAdvancedFlakVest = панцирная броня
     .desc = Крепкая броня, почти полностью покрывающее тело и дающая хорошую защиту от большинства видов повреждений.
@@ -326,6 +359,9 @@ ent-ClothingUniformJumpsuitCommissar = униформа комиссара
 ent-ClothingUniformJumpsuitGuardsman = униформа гвардейца
     .desc = Униформа, выдающаяся членам регулярной армии империума - имперской гвардии.
 
+ent-ClothingUniformJumpsuitKrieg = униформа Крига
+    .desc = Строгая полевая форма кригского образца, созданная для окопной войны и бесконечных маршей.
+
 ent-ClothingUniformJumpsuitTechpriest = комбинезон техножреца
     .desc = Комбинезон, выдающийся всем техножрецам, что ещё имеют гуманоидную форму тела.
 
@@ -338,8 +374,11 @@ ent-ClothingUniformJumpsuitOfficer = униформа офицера
 ent-ClothingUniformJumpsuitColonel = униформа полковника
     .desc = Обычная униформа полковника Имперской Гвардии.
 
-ent-GuardFlag = Знамя полка (Кадия)
+ent-GuardFlag = Имперское полковое знамя
     .desc = Знамя полка - его гордость, физическое воплощение, не дайте врагу завладеть им! Ураааа!
+
+ent-ChaosFlag = Знамя Хаоса
+    .desc = Оскверненное боевое знамя, под которым еретики идут в атаку и сеют страх.
 
 ent-PlushieFull = плюшевый Фулл
     .desc = Плюшевая версия некогда великого существа. Из его спины торчат два белоснежных крыла, а в руках массивный молот и... двадцатигранная игральная кость? Интересный набор предметов.
@@ -387,6 +426,9 @@ ent-PlushieOliva = Oliva
 
 ent-PlushieFizzo = Плюшевый FizzoGhoster
 .desc = Знаете ли вы, какова истинная любовь?.. Забейте, просто скажу что Кризалис лучшая пони
+
+ent-PlushieRad = Плюшевый Rad
+    .desc = Маленький плюшевый поджигатель в маске. Когда им бьют, он подозрительно довольно хохочет.
 
 ent-StrangeToster = Странный тостер
     .desc = В нём обитает ленивый дух, так что вы не сможете заставить этот тостер работать. Этот ленивый дух точно не сделал себе вторую плюшевую игрушку в виде эндермена.
@@ -477,6 +519,9 @@ ent-WeaponLaserCarabin = лазкарабин
 
 ent-WeaponLaserLasgun = М36 Кантраэль
     .desc = стандартное оружие Кадианских штурмовых войск и всех полков, ведущих свои воинские традиции и доктрины от них.
+
+ent-WeaponLaserLasgunKrieg = кригский лазган
+    .desc = Лазган кригского образца, подготовленный для жёсткой окопной службы и долгих переходов по мёртвым фронтам.
 
 ent-WeaponLaserLasgunAccatran = Аккатран VI D
     .desc = Штурмовая версия легендарного модельного ряда Аккатран, модель - Шесть Дэ.
@@ -990,6 +1035,65 @@ ent-WH40KAmmoBox10mm = ящик автопатрон (10mm)
 
 ent-WH40KAmmoBox10mmLong = ящик автопатрон (10mm удлинённые)
 
+ent-ClothingHeadHatCatachanBandana = катачанская бандана
+    .desc = Ярко-красная бандана, которую носят бойцы джунглей.
+
+ent-ClothingHeadHatCatachanBeret = катачанский берет
+    .desc = Красный берет закалённых ветеранов Катачана.
+
+ent-ClothingHeadHatCatachanHeadband = катачанская повязка
+    .desc = Простая повязка, чтобы пот не лез в глаза в разгар боя.
+
+ent-ClothingOuterArmorCatachanLight = лёгкая броня катачанцев
+    .desc = Лёгкая полевая броня для скорости и свободы движений.
+
+ent-ClothingOuterArmorCatachanMedium = броня катачанцев
+    .desc = Усиленная полевая броня для штурмов и ближнего боя.
+
+ent-ClothingOuterArmorCatachanVest = катачанская разгрузка
+    .desc = Практичная разгрузка с подсумками для долгих рейдов.
+
+ent-ClothingUniformJumpsuitCatachan1 = катачанская униформа
+    .desc = Лёгкая полевая форма для жары, грязи и ближнего боя.
+
+ent-ClothingUniformJumpsuitCatachan2 = катачанская полевая униформа
+    .desc = Грубая полевая форма, облегчённая для рейдов в джунглях.
+
+ent-ClothingUniformJumpsuitCatachan3 = катачанская майка
+    .desc = Упрощённая верхняя часть формы для самых жарких фронтов.
+
+ent-CatachanKnife = катачанский нож
+    .desc = Прочный боевой нож, любимый бойцами джунглей с Катачана.
+
+ent-WeaponRocketLauncherImperial = имперский ракетомёт
+    .desc = Многоразовый ракетомёт со щитком для тяжёлых расчётов Империума.
+
+ent-WeaponRocketLauncherChaos = хаоситский ракетомёт
+    .desc = Многоразовый ракетомёт со щитком, любимый варбандами Хаоса.
+
+ent-WeaponRocketLauncherImperialDisposable = одноразовый имперский РПГ
+    .desc = Одноразовая имперская пусковая труба. После выстрела больше не перезаряжается.
+
+ent-WeaponRocketLauncherChaosDisposable = одноразовый хаоситский РПГ
+    .desc = Одноразовая хаоситская пусковая труба. Грубая, злая и неперезаряжаемая.
+
+ent-CartridgeRocketHE = осколочно-фугасная ракета
+    .desc = Фугасный ракетный выстрел для многоразовых РПГ.
+
+ent-CartridgeRocketAP = бронебойная ракета
+    .desc = Бронебойный ракетный выстрел для многоразовых РПГ.
+
+ent-ClothingOuterArmorMunitorumCoat = муниторумский плащ
+    .desc = Служебный плащ снабженца с лёгкими броневставками и креплениями под утилитарное снаряжение.
+
+ent-ClothingOuterArmorMunitorumGreatcoat = усиленный муниторумский плащ
+    .desc = Более тяжёлый вариант муниторумского плаща для тех, кто держит на себе весь тыл полка.
+
+ent-ClothingOuterArmorMunitorumRig = муниторумская разгрузка
+    .desc = Рабочая разгрузка Муниторума с бронепластинами, инструментальными креплениями и служебной маркировкой.
+
+ent-ClothingOuterArmorMunitorumVest = муниторумский бронежилет
+    .desc = Компактный бронежилет для логистов и складских команд Муниторума.
 ent-ClothingEyesHudTechPriestMed = визор повреждений
     .desc = Этот визор позволяет техножрецам лучше отслеживать урон и статус цели
 
@@ -999,68 +1103,5 @@ ent-ClothingEyesHudTechPriestAdm = визор должностей
 ent-ClothingBackpackTechpriestDendrite = ранец с дендритами
     .desc = Этот ранец техножрецов оснащён двумя дополнительными меха-дендритами
 
-ent-MobQueenChrysalis = королева Кризалис
-    .desc = Я хочу спать блять, спасите пожалуйста.
-
-ent-ClothingBeltChaplain = пояс клерика
-    .desc = Одежна священнослужителя.
-
-ent-WH40KClothingUniformJumpsuitChaplain = униформа Эклезиарии
-    .desc = Одежна священнослужителей малых чинов.
-
-ent-ClothingShoesBootsChaplain = ботинки клерика
-    .desc = Одежна священнослужителя.
-
-ent-ClothingOuterChaplainRobe = роба клерика
-    .desc = Одежна священнослужителя.
-
-ent-ClothingNeckInqusition = цель Экклезиархии
-    .desc = Цепочка с знаком Экклезиархии.
-
-ent-WH40KBible = библия
-    .desc = Священное писание.
-
-ent-ClothingNeckCloakRainImp = плащ-палатка
-    .desc = Полезно при дожде.
-
-ent-ClothingHeadHoodRainImp = капюшон плаща-палатки
-    .desc = Полезно при дожде.
-
-ent-ClothingNeckCloakRainChs = плащ-палатка
-    .desc = Полезно при дожде.
-
-ent-ClothingHeadHoodRainChs = капюшон плаща-палатки
-    .desc = Полезно при дожде.
-
-ent-ClothingUniformJumpsuitGuardsmanVst = униформа востроянцев
-    .desc = Обычная униформа.
-
-ent-ClothingHeadHelmetFlakAdvSergVst = шлем сержанта востроянцев
-    .desc = Обычная униформа.
-
-ent-ClothingHeadHelmetFlakAdvVst = шлем востроянца
-    .desc = Обычная униформа.
-
-ent-ClothingOuterArmorFlakVestVst = броня востроянца
-    .desc = Обычная униформа.
-
-ent-ClothingOuterArmorFlakVestLietVst = броня лейтенанта востроянцев
-    .desc = Обычная униформа.
-
-ent-ClothingMaskGasVst = противогаз вотроянца
-    .desc = Обычная униформа.
-
-ent-ClothingHandsGlovesVst = перчатки востроянца
-    .desc = Обычная униформа.
-
-ent-ClothingShoesBootsVst = ботинки востроянца
-    .desc = Обычная униформа.
-
-ent-ClothingNeckCloakVst = накидка лейтенанта востроянцев
-    .desc = Обычная униформа.
-
-ent-ClothingOuterArmorFlakVestMajor = шинель офицера
-    .desc = Офицерская шинель - вот он, символ власти на поле боя.
-
-ent-MobHormagaunt = Хормагаунт
-    .desc = Кажется, он уже почувствовал запах твоей крови...
+ent-MobQueenChrysalis = королева Крисалис
+    .desc = Пони оборотень, который может принимать самые разные формы.

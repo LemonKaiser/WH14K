@@ -168,7 +168,7 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
         if (metadata.Count == 0)
             return "{}";
 
-        return "{" + string.Join(", ", metadata.Select(pair => $"{pair.Key}={pair.Value}")) + "}";
+        return $"{{{string.Join(", ", metadata.Select(pair => $"{pair.Key}={pair.Value}"))}}}";
     }
 }
 
@@ -222,4 +222,8 @@ public static class WH40KPlayerStatKeys
     public const string MetaAchievementCompleted = "meta.achievement.completed";
     public const string MetaAchievementRevoked = "meta.achievement.revoked";
     public const string MetaDecorationSelection = "meta.decoration.selection";
+    public const string ChaosPatronAttunementKhorne = "chaos.patron.attunement.khorne";
+    public const string ChaosPatronAttunementNurgle = "chaos.patron.attunement.nurgle";
+    public const string ChaosPatronAttunementSlaanesh = "chaos.patron.attunement.slaanesh";
+    public const string ChaosPatronAttunementTzeentch = "chaos.patron.attunement.tzeentch";
 }

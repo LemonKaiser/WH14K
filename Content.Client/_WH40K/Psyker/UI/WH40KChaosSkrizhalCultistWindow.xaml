@@ -1,0 +1,184 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc 'wh40k-chaos-cultist-title'}"
+    MinSize="780 500"
+    SetSize="860 560">
+    <PanelContainer Name="RootFramePanel" Margin="6">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat
+                BackgroundColor="#081018"
+                BorderColor="#2F4355"
+                BorderThickness="1"
+                ContentMarginLeftOverride="8"
+                ContentMarginTopOverride="8"
+                ContentMarginRightOverride="8"
+                ContentMarginBottomOverride="8" />
+        </PanelContainer.PanelOverride>
+        <BoxContainer Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer Name="HeaderPanel">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat
+                        BackgroundColor="#101A24"
+                        BorderColor="#455F74"
+                        BorderThickness="1"
+                        ContentMarginLeftOverride="12"
+                        ContentMarginTopOverride="10"
+                        ContentMarginRightOverride="12"
+                        ContentMarginBottomOverride="10" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="12">
+                    <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True">
+                        <Label Name="HeaderKickerLabel" FontColorOverride="#D5C086" />
+                        <Label Name="PathTitleLabel" FontColorOverride="#E7F1F6" />
+                        <RichTextLabel Name="HeaderStatusLabel" HorizontalExpand="True" />
+                    </BoxContainer>
+
+                    <PanelContainer Name="LeaderSealPanel" MinSize="250 0">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat
+                                BackgroundColor="#131D28"
+                                BorderColor="#5E768D"
+                                BorderThickness="1"
+                                ContentMarginLeftOverride="10"
+                                ContentMarginTopOverride="8"
+                                ContentMarginRightOverride="10"
+                                ContentMarginBottomOverride="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="3">
+                            <Label Name="LeaderTitleLabel" FontColorOverride="#B6CADB" />
+                            <Label Name="LeaderNameLabel" FontColorOverride="#F1F5F8" />
+                            <Label Name="LeaderStatusLabel" FontColorOverride="#B7C5D2" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True">
+                <BoxContainer Orientation="Vertical" SeparationOverride="8" MinSize="272 0" MaxSize="296 9999">
+                    <PanelContainer Name="TelemetryPanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat
+                                BackgroundColor="#0F1822"
+                                BorderColor="#4A6074"
+                                BorderThickness="1"
+                                ContentMarginLeftOverride="12"
+                                ContentMarginTopOverride="10"
+                                ContentMarginRightOverride="12"
+                                ContentMarginBottomOverride="10" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="4">
+                            <Label Name="TelemetryTitleLabel" FontColorOverride="#DCE8F0" />
+                            <Label Name="PatronLabel" />
+                            <Label Name="LevelLabel" />
+                            <Label Name="XpLabel" />
+                            <ProgressBar Name="LevelProgressBar" MinValue="0" MaxValue="1" Value="0" SetHeight="16" />
+                            <Label Name="WarpChargeLabel" />
+                            <ProgressBar Name="WarpChargeBar" MinValue="0" MaxValue="1" Value="0" SetHeight="14" />
+                            <Label Name="WarpInstabilityLabel" />
+                            <ProgressBar Name="WarpInstabilityBar" MinValue="0" MaxValue="1" Value="0" SetHeight="14" />
+                            <Label Name="PassiveIncomeLabel" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="DirectivePanel">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat
+                                BackgroundColor="#121B25"
+                                BorderColor="#435D72"
+                                BorderThickness="1"
+                                ContentMarginLeftOverride="12"
+                                ContentMarginTopOverride="10"
+                                ContentMarginRightOverride="12"
+                                ContentMarginBottomOverride="10" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical" SeparationOverride="5">
+                            <Label Name="DirectiveTitleLabel" FontColorOverride="#D5C086" />
+                            <Label Name="DirectiveLeadLabel" />
+                            <RichTextLabel Name="DirectiveDoctrineLabel" HorizontalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <PanelContainer Name="AbilitiesPanel" HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat
+                            BackgroundColor="#111821"
+                            BorderColor="#425D72"
+                            BorderThickness="1"
+                            ContentMarginLeftOverride="10"
+                            ContentMarginTopOverride="10"
+                            ContentMarginRightOverride="10"
+                            ContentMarginBottomOverride="10" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
+                        <Label Name="AbilitiesTitleLabel" FontColorOverride="#D5C086" />
+
+                        <PanelContainer Name="GiftOnePanel" HorizontalExpand="True">
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                <TextureRect Name="GiftOneIcon" MinSize="36 36" SetSize="36 36" Stretch="KeepAspectCentered" />
+                                <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                    <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                        <Label Name="GiftOneBadgeLabel" FontColorOverride="#D5C086" />
+                                        <Label Name="GiftOneTitleLabel" FontColorOverride="#E7F1F6" HorizontalExpand="True" />
+                                    </BoxContainer>
+                                    <Label Name="GiftOneStatusLabel" />
+                                    <RichTextLabel Name="GiftOneDescriptionLabel" HorizontalExpand="True" MaxHeight="44" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="GiftTwoPanel" HorizontalExpand="True">
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                <TextureRect Name="GiftTwoIcon" MinSize="36 36" SetSize="36 36" Stretch="KeepAspectCentered" />
+                                <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                    <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                        <Label Name="GiftTwoBadgeLabel" FontColorOverride="#D5C086" />
+                                        <Label Name="GiftTwoTitleLabel" FontColorOverride="#E7F1F6" HorizontalExpand="True" />
+                                    </BoxContainer>
+                                    <Label Name="GiftTwoStatusLabel" />
+                                    <RichTextLabel Name="GiftTwoDescriptionLabel" HorizontalExpand="True" MaxHeight="44" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="GiftThreePanel" HorizontalExpand="True">
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                <TextureRect Name="GiftThreeIcon" MinSize="36 36" SetSize="36 36" Stretch="KeepAspectCentered" />
+                                <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                    <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                        <Label Name="GiftThreeBadgeLabel" FontColorOverride="#D5C086" />
+                                        <Label Name="GiftThreeTitleLabel" FontColorOverride="#E7F1F6" HorizontalExpand="True" />
+                                    </BoxContainer>
+                                    <Label Name="GiftThreeStatusLabel" />
+                                    <RichTextLabel Name="GiftThreeDescriptionLabel" HorizontalExpand="True" MaxHeight="44" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="PassivePanel" HorizontalExpand="True">
+                            <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                                <TextureRect Name="PassiveIcon" MinSize="36 36" SetSize="36 36" Stretch="KeepAspectCentered" />
+                                <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                                    <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                        <Label Name="PassiveBadgeLabel" FontColorOverride="#D5C086" />
+                                        <Label Name="PassiveTitleLabel" FontColorOverride="#E7F1F6" HorizontalExpand="True" />
+                                    </BoxContainer>
+                                    <Label Name="PassiveStatusLabel" />
+                                    <RichTextLabel Name="PassiveDescriptionLabel" HorizontalExpand="True" MaxHeight="44" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <PanelContainer Name="BottomAccent" MinHeight="4">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#4A3D20" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+        </BoxContainer>
+    </PanelContainer>
+</controls:FancyWindow>

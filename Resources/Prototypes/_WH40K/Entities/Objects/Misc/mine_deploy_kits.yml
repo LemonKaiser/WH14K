@@ -1,0 +1,30 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KDeployableMineKit
+  name: deployable mine kit
+  description: Packed explosive mine for rapid field placement.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/landmine.rsi
+    state: landmine
+  - type: Icon
+    sprite: Objects/Misc/landmine.rsi
+    state: landmine
+  - type: Item
+    size: Small
+    sprite: Objects/Misc/landmine.rsi
+    inhandVisuals:
+      left:
+      - sprite: Objects/Misc/landmine.rsi
+        state: landmine
+      right:
+      - sprite: Objects/Misc/landmine.rsi
+        state: landmine
+  - type: HandheldEntityPlacement
+    entityType: LandMineExplosive
+    previewEntityType: LandMineExplosive
+    placementMode: SnapgridCenter
+    range: 2
+  - type: WH40KDeployableBarricade
+    deployTime: 1.1

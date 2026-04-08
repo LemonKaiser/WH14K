@@ -1,6 +1,6 @@
 - type: emote
-  id: WH40KGuardsmanReadyForOrders
-  name: wh40k-chat-emote-name-guardsman-ready-for-orders
+  id: W40KGdRdy
+  name: w40k-gd-rdy-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -8,13 +8,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-ready-for-orders"]
+  chatMessages: ["w40k-gd-rdy-msg"]
   chatTriggers:
     - guardsman ready for orders
 
 - type: emote
-  id: WH40KGuardsmanAwaitingOrders
-  name: wh40k-chat-emote-name-guardsman-awaiting-orders
+  id: W40KGdWait
+  name: w40k-gd-wait-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -22,13 +22,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-awaiting-orders"]
+  chatMessages: ["w40k-gd-wait-msg"]
   chatTriggers:
     - guardsman awaiting orders
 
 - type: emote
-  id: WH40KGuardsmanAttackTheEnemy
-  name: wh40k-chat-emote-name-guardsman-attack-the-enemy
+  id: W40KGdAtk
+  name: w40k-gd-atk-name
   category: RoleVocal
   icon: Interface/Emotes/hew.png
   whitelist:
@@ -36,13 +36,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-attack-the-enemy"]
+  chatMessages: ["w40k-gd-atk-msg"]
   chatTriggers:
     - guardsman attack the enemy
 
 - type: emote
-  id: WH40KGuardsmanOpenFire
-  name: wh40k-chat-emote-name-guardsman-open-fire
+  id: W40KGdFire
+  name: w40k-gd-fire-name
   category: RoleVocal
   icon: Interface/Emotes/whistle.png
   whitelist:
@@ -50,13 +50,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-open-fire"]
+  chatMessages: ["w40k-gd-fire-msg"]
   chatTriggers:
     - guardsman open fire
 
 - type: emote
-  id: WH40KGuardsmanCharge
-  name: wh40k-chat-emote-name-guardsman-charge
+  id: W40KGdChg
+  name: w40k-gd-chg-name
   category: RoleVocal
   icon: Interface/Emotes/hew.png
   whitelist:
@@ -64,13 +64,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-charge"]
+  chatMessages: ["w40k-gd-chg-msg"]
   chatTriggers:
     - guardsman charge
 
 - type: emote
-  id: WH40KGuardsmanIntoTheFight
-  name: wh40k-chat-emote-name-guardsman-into-the-fight
+  id: W40KGdFgt
+  name: w40k-gd-fgt-name
   category: RoleVocal
   icon: Interface/Emotes/hew.png
   whitelist:
@@ -78,13 +78,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-into-the-fight"]
+  chatMessages: ["w40k-gd-fgt-msg"]
   chatTriggers:
     - guardsman into the fight
 
 - type: emote
-  id: WH40KGuardsmanCaptureTheStrategicPoint
-  name: wh40k-chat-emote-name-guardsman-capture-the-strategic-point
+  id: W40KGdCap
+  name: w40k-gd-cap-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -92,13 +92,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-capture-the-strategic-point"]
+  chatMessages: ["w40k-gd-cap-msg"]
   chatTriggers:
     - guardsman capture the strategic point
 
 - type: emote
-  id: WH40KGuardsmanSecureTheStrategicPoint
-  name: wh40k-chat-emote-name-guardsman-secure-the-strategic-point
+  id: W40KGdSec
+  name: w40k-gd-sec-name
   category: RoleVocal
   icon: Interface/Emotes/salute.png
   whitelist:
@@ -106,13 +106,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-secure-the-strategic-point"]
+  chatMessages: ["w40k-gd-sec-msg"]
   chatTriggers:
     - guardsman secure the strategic point
 
 - type: emote
-  id: WH40KGuardsmanEnemySpotted
-  name: wh40k-chat-emote-name-guardsman-enemy-spotted
+  id: W40KGdSpot
+  name: w40k-gd-spot-name
   category: RoleVocal
   icon: Interface/Emotes/ping.png
   whitelist:
@@ -120,13 +120,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-enemy-spotted"]
+  chatMessages: ["w40k-gd-spot-msg"]
   chatTriggers:
     - guardsman enemy spotted
 
 - type: emote
-  id: WH40KGuardsmanChaosMarineSpotted
-  name: wh40k-chat-emote-name-guardsman-chaos-marine-spotted
+  id: W40KGdChaos
+  name: w40k-gd-chaos-name
   category: RoleVocal
   icon: Interface/Emotes/ping.png
   whitelist:
@@ -134,13 +134,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-chaos-marine-spotted"]
+  chatMessages: ["w40k-gd-chaos-msg"]
   chatTriggers:
     - guardsman chaos marine spotted
 
 - type: emote
-  id: WH40KGuardsmanHoldTheLine
-  name: wh40k-chat-emote-name-guardsman-hold-the-line
+  id: W40KGdLine
+  name: w40k-gd-line-name
   category: RoleVocal
   icon: Interface/Emotes/whistle.png
   whitelist:
@@ -148,13 +148,13 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-hold-the-line"]
+  chatMessages: ["w40k-gd-line-msg"]
   chatTriggers:
     - guardsman hold the line
 
 - type: emote
-  id: WH40KGuardsmanMoraleRestored
-  name: wh40k-chat-emote-name-guardsman-morale-restored
+  id: W40KGdMor
+  name: w40k-gd-mor-name
   category: RoleVocal
   icon: Interface/Emotes/chime.png
   whitelist:
@@ -162,70 +162,70 @@
     components:
     - Vocal
     - WH40KGuardsmanVoice
-  chatMessages: ["wh40k-chat-emote-msg-guardsman-morale-restored"]
+  chatMessages: ["w40k-gd-mor-msg"]
   chatTriggers:
     - guardsman morale restored
 
 - type: emoteSounds
-  id: WH40KGuardsmanMaleHuman
+  id: W40KGdMale
   parent: [MaleHuman]
   params:
     volume: -5
     variation: 0.05
   sounds:
-    WH40KGuardsmanReadyForOrders:
+    W40KGdRdy:
       path: /Audio/_WH40K/Voice/Guardsman/ready_for_orders.ogg
-    WH40KGuardsmanAwaitingOrders:
+    W40KGdWait:
       path: /Audio/_WH40K/Voice/Guardsman/awaiting_orders.ogg
-    WH40KGuardsmanAttackTheEnemy:
+    W40KGdAtk:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
-    WH40KGuardsmanOpenFire:
+    W40KGdFire:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
-    WH40KGuardsmanCharge:
+    W40KGdChg:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
-    WH40KGuardsmanIntoTheFight:
+    W40KGdFgt:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
-    WH40KGuardsmanCaptureTheStrategicPoint:
+    W40KGdCap:
       path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
-    WH40KGuardsmanSecureTheStrategicPoint:
+    W40KGdSec:
       path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
-    WH40KGuardsmanEnemySpotted:
+    W40KGdSpot:
       path: /Audio/_WH40K/Voice/Guardsman/enemy_spotted.ogg
-    WH40KGuardsmanChaosMarineSpotted:
+    W40KGdChaos:
       path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
-    WH40KGuardsmanHoldTheLine:
+    W40KGdLine:
       path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
-    WH40KGuardsmanMoraleRestored:
+    W40KGdMor:
       path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg
 
 - type: emoteSounds
-  id: WH40KGuardsmanFemaleHuman
+  id: W40KGdFemale
   parent: [FemaleHuman]
   params:
     volume: -5
     variation: 0.05
   sounds:
-    WH40KGuardsmanReadyForOrders:
+    W40KGdRdy:
       path: /Audio/_WH40K/Voice/Guardsman/ready_for_orders.ogg
-    WH40KGuardsmanAwaitingOrders:
+    W40KGdWait:
       path: /Audio/_WH40K/Voice/Guardsman/awaiting_orders.ogg
-    WH40KGuardsmanAttackTheEnemy:
+    W40KGdAtk:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
-    WH40KGuardsmanOpenFire:
+    W40KGdFire:
       path: /Audio/_WH40K/Voice/Guardsman/attack_the_enemy.ogg
-    WH40KGuardsmanCharge:
+    W40KGdChg:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
-    WH40KGuardsmanIntoTheFight:
+    W40KGdFgt:
       path: /Audio/_WH40K/Voice/Guardsman/charge.ogg
-    WH40KGuardsmanCaptureTheStrategicPoint:
+    W40KGdCap:
       path: /Audio/_WH40K/Voice/Guardsman/capture_the_strategic_point.ogg
-    WH40KGuardsmanSecureTheStrategicPoint:
+    W40KGdSec:
       path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
-    WH40KGuardsmanEnemySpotted:
+    W40KGdSpot:
       path: /Audio/_WH40K/Voice/Guardsman/enemy_spotted.ogg
-    WH40KGuardsmanChaosMarineSpotted:
+    W40KGdChaos:
       path: /Audio/_WH40K/Voice/Guardsman/chaos_marine_spotted.ogg
-    WH40KGuardsmanHoldTheLine:
+    W40KGdLine:
       path: /Audio/_WH40K/Voice/Guardsman/secure_the_strategic_point.ogg
-    WH40KGuardsmanMoraleRestored:
+    W40KGdMor:
       path: /Audio/_WH40K/Voice/Guardsman/morale_restored.ogg

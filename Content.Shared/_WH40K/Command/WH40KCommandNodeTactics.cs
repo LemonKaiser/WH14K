@@ -30,25 +30,25 @@ public static class WH40KCommandNodeTactics
     private static readonly WH40KCommandNodeTacticPreset[] TacticPresets =
     {
         new(DefaultTacticId,
-            "wh40k-command-node-battle-tactic-flexible-front-name",
-            "wh40k-command-node-battle-tactic-flexible-front-summary",
-            "wh40k-command-node-battle-tactic-flexible-front-description"),
+            "w40k-cmd-battle-tactic-flexible-front-name",
+            "w40k-cmd-battle-tactic-flexible-front-summary",
+            "w40k-cmd-battle-tactic-flexible-front-description"),
         new(IronDisciplineTacticId,
-            "wh40k-command-node-battle-tactic-iron-discipline-name",
-            "wh40k-command-node-battle-tactic-iron-discipline-summary",
-            "wh40k-command-node-battle-tactic-iron-discipline-description"),
+            "w40k-cmd-battle-tactic-iron-discipline-name",
+            "w40k-cmd-battle-tactic-iron-discipline-summary",
+            "w40k-cmd-battle-tactic-iron-discipline-description"),
         new(ConvoySupremacyTacticId,
-            "wh40k-command-node-battle-tactic-convoy-supremacy-name",
-            "wh40k-command-node-battle-tactic-convoy-supremacy-summary",
-            "wh40k-command-node-battle-tactic-convoy-supremacy-description"),
+            "w40k-cmd-battle-tactic-convoy-supremacy-name",
+            "w40k-cmd-battle-tactic-convoy-supremacy-summary",
+            "w40k-cmd-battle-tactic-convoy-supremacy-description"),
         new(SiegeProtocolTacticId,
-            "wh40k-command-node-battle-tactic-siege-protocol-name",
-            "wh40k-command-node-battle-tactic-siege-protocol-summary",
-            "wh40k-command-node-battle-tactic-siege-protocol-description"),
+            "w40k-cmd-battle-tactic-siege-protocol-name",
+            "w40k-cmd-battle-tactic-siege-protocol-summary",
+            "w40k-cmd-battle-tactic-siege-protocol-description"),
         new(MachineCultTacticId,
-            "wh40k-command-node-battle-tactic-machine-cult-name",
-            "wh40k-command-node-battle-tactic-machine-cult-summary",
-            "wh40k-command-node-battle-tactic-machine-cult-description")
+            "w40k-cmd-battle-tactic-machine-cult-name",
+            "w40k-cmd-battle-tactic-machine-cult-summary",
+            "w40k-cmd-battle-tactic-machine-cult-description")
     };
 
     public static IReadOnlyList<WH40KCommandNodeTacticPreset> Presets => TacticPresets;

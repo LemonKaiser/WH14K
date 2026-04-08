@@ -106,3 +106,57 @@
         enum.ToggleableVisuals.Layer:
           True: {state: mace_on}
           False: {state: mace_off}
+
+- type: entity
+  name: клинок избранного
+  parent: BaseSword
+  id: WH40KChaosKhorneStealerBlade
+  description: Живой геноклинок, сотканный из ярости и голода Кхорна.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/energykatana.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -60
+    attackRate: 1.25
+    range: 1.8
+    damage:
+      types:
+        Slash: 18
+  - type: Item
+    sprite: Objects/Weapons/Melee/energykatana.rsi
+    storedSprite:
+      state: storage
+      sprite: Objects/Weapons/Melee/energykatana_storage_64x.rsi
+    shape:
+    - 0,0,0,3
+  - type: Clothing
+    sprite: Objects/Weapons/Melee/energykatana.rsi
+    slots:
+    - Back
+    - Belt
+  - type: Reflect
+    reflectProb: 0.30
+    spread: 100
+    slotFlags:
+    - NONE
+  - type: DisarmMalus
+
+- type: entity
+  name: клинок экзальтации
+  parent: WH40KChaosKhorneStealerBlade
+  id: WH40KChaosKhorneStealerBladeEx
+  description: Экзальтированный геноклинок, безумно жаждущий плоти и ответного огня.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MeleeWeapon
+    attackRate: 1.35
+    range: 1.9
+    damage:
+      types:
+        Slash: 22
+  - type: Reflect
+    reflectProb: 0.45
+    spread: 120
+    slotFlags:
+    - NONE

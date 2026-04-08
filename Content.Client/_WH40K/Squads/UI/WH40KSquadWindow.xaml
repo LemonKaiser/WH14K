@@ -89,9 +89,11 @@
                                               ContentMarginBottomOverride="10" />
                         </PanelContainer.PanelOverride>
                         <BoxContainer Orientation="Vertical" SeparationOverride="2">
-                            <Label Text="{Loc 'wh40k-squad-command-title'}"
+                            <Label Name="CommandTitleLabel"
+                                Text="{Loc 'wh40k-squad-command-title'}"
                                    StyleClasses="LabelHeading" />
-                            <Label Text="{Loc 'wh40k-squad-command-subtitle'}"
+                            <Label Name="CommandSubtitleLabel"
+                                Text="{Loc 'wh40k-squad-command-subtitle'}"
                                    StyleClasses="LabelSubText" />
                         </BoxContainer>
                     </PanelContainer>
@@ -109,7 +111,7 @@
                                                       ContentMarginBottomOverride="10" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                    <Label Text="{Loc 'wh40k-squad-leader-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="LeaderTitleLabel" Text="{Loc 'wh40k-squad-leader-title'}" StyleClasses="LabelHeading" />
                                     <BoxContainer Orientation="Vertical" SeparationOverride="1">
                                         <Label Name="LeaderNameLabel"
                                                Text="-"
@@ -137,7 +139,7 @@
                                                       ContentMarginBottomOverride="10" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                    <Label Text="{Loc 'wh40k-squad-overview-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="OverviewTitleLabel" Text="{Loc 'wh40k-squad-overview-title'}" StyleClasses="LabelHeading" />
                                     <Label Name="SquadSummaryLabel"
                                            Text="-"
                                            ClipText="True" />
@@ -163,7 +165,7 @@
                                                       ContentMarginBottomOverride="10" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                    <Label Text="{Loc 'wh40k-squad-actions-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="ActionsTitleLabel" Text="{Loc 'wh40k-squad-actions-title'}" StyleClasses="LabelHeading" />
                                     <Button Name="CreateSquadButton"
                                             Text="{Loc 'wh40k-squad-action-create'}"
                                             StyleClasses="ButtonColorGreen" />
@@ -186,7 +188,7 @@
                                                       ContentMarginBottomOverride="10" />
                                 </PanelContainer.PanelOverride>
                                 <BoxContainer Orientation="Vertical" SeparationOverride="8">
-                                    <Label Text="{Loc 'wh40k-squad-slots-title'}" StyleClasses="LabelHeading" />
+                                    <Label Name="SlotsTitleLabel" Text="{Loc 'wh40k-squad-slots-title'}" StyleClasses="LabelHeading" />
                                     <BoxContainer Name="SlotList" Orientation="Vertical" SeparationOverride="8" />
                                 </BoxContainer>
                             </PanelContainer>
@@ -218,8 +220,8 @@
                         </PanelContainer.PanelOverride>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="10" VerticalAlignment="Center">
                             <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="2">
-                                <Label Text="{Loc 'wh40k-squad-roster-title'}" StyleClasses="LabelHeading" />
-                                <Label Text="{Loc 'wh40k-squad-roster-subtitle'}" StyleClasses="LabelSubText" />
+                                <Label Name="RosterTitleLabel" Text="{Loc 'wh40k-squad-roster-title'}" StyleClasses="LabelHeading" />
+                                <Label Name="RosterSubtitleLabel" Text="{Loc 'wh40k-squad-roster-subtitle'}" StyleClasses="LabelSubText" />
                             </BoxContainer>
                             <PanelContainer Name="RosterCountBadge">
                                 <PanelContainer.PanelOverride>

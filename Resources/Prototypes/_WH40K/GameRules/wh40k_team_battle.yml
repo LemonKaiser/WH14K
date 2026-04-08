@@ -5,9 +5,9 @@
   - type: WH40KTeamBattleRule
     objectivesEnabled: true
     victoryCondition: Either # victoryCondition: Teams | Objectives | Either | None
-    roundTimeLimitSeconds: 7200
+    roundTimeLimitSeconds: 10800
     preparationDurationSeconds: 600
-    assaultDurationSeconds: 4800
+    assaultDurationSeconds: 3600
     earlyVictoryLockSeconds: 0
     configProfile: WH40KTeamBattleConfig120m
     teams:

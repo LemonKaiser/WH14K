@@ -1,10 +1,13 @@
 using System.Numerics;
+using Content.Server.Explosion.EntitySystems;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Server.Popups;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.Localizations;
 using Content.Server._WH40K.Weapons.ServoSkulls.Components;
 using Content.Shared.Database;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
@@ -19,6 +22,8 @@ using Content.Shared.Popups;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
 using Content.Shared.Verbs;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics.Components;
@@ -36,7 +41,11 @@ public sealed class WH40KServoSkullSystem : EntitySystem
     private const string VerbFollowLoc = "wh40k-servo-skull-verb-follow-me";
     private const string VerbHoldLoc = "wh40k-servo-skull-verb-hold-position";
     private const string ArmedLoc = "wh40k-servo-skull-popup-armed";
+    private static readonly SoundPathSpecifier BreakSound = new("/Audio/Effects/metal_break5.ogg");
 
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -75,7 +84,7 @@ public sealed class WH40KServoSkullSystem : EntitySystem
 
         if (!_teamRule.TryGetTeamIdFromEntity(args.User, out var teamId) || string.IsNullOrWhiteSpace(teamId))
         {
-            _popup.PopupEntity(Loc.GetString(DeployNeedsTeamLoc), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, DeployNeedsTeamLoc), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -106,13 +115,13 @@ public sealed class WH40KServoSkullSystem : EntitySystem
 
         if (!IsUserAuthorizedForSkull(args.User, ent.Comp))
         {
-            _popup.PopupEntity(Loc.GetString("wh40k-access-denied-wrong-team"), ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, "wh40k-access-denied-wrong-team"), ent.Owner, args.User, PopupType.SmallCaution);
             return;
         }
 
         if (HasComp<ActiveTimerTriggerComponent>(ent))
         {
-            _popup.PopupEntity(Loc.GetString(AlreadyArmedLoc), ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(_culture.GetPlayerString(args.User, AlreadyArmedLoc), ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }
@@ -129,6 +138,7 @@ public sealed class WH40KServoSkullSystem : EntitySystem
         if (!IsUserAuthorizedForSkull(args.User, ent.Comp))
             return;
 
+        using var scope = _culture.CreateScope(args.User);
         var isArmed = HasComp<ActiveTimerTriggerComponent>(ent);
         var user = args.User;
 
@@ -155,6 +165,15 @@ public sealed class WH40KServoSkullSystem : EntitySystem
         ent.Comp.HostileTarget = null;
         ent.Comp.CurrentMovementTarget = null;
         ClearMovement(ent.Owner, ent.Comp, CompOrNull<PhysicsComponent>(ent));
+
+        if (TryComp<ExplosiveComponent>(ent, out var explosive))
+        {
+            _explosion.TriggerExplosive(ent.Owner, explosive, user: ent.Comp.OwnerEntity ?? ent.Comp.FollowTarget);
+            return;
+        }
+
+        _audio.PlayPvs(BreakSound, ent.Owner);
+        QueueDel(ent);
     }
 
     private void UpdateServoSkull(
@@ -368,12 +387,12 @@ public sealed class WH40KServoSkullSystem : EntitySystem
         {
             ent.Comp.FollowTarget = null;
             ent.Comp.CurrentMovementTarget = null;
-            _popup.PopupEntity(Loc.GetString(HoldingLoc), ent.Owner, user, PopupType.Small);
+            _popup.PopupEntity(_culture.GetPlayerString(user, HoldingLoc), ent.Owner, user, PopupType.Small);
             return;
         }
 
         ent.Comp.OwnerEntity ??= user;
         ent.Comp.FollowTarget = user;
-        _popup.PopupEntity(Loc.GetString(FollowingLoc), ent.Owner, user, PopupType.Small);
+        _popup.PopupEntity(_culture.GetPlayerString(user, FollowingLoc), ent.Owner, user, PopupType.Small);
     }
 }

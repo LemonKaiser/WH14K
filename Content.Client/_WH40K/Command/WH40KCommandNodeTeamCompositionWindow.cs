@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Client.Localization;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Command;
 using Robust.Client.Graphics;
@@ -12,7 +13,7 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Command;
 
-public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
+public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocalizedControl
 {
     private readonly StyleBoxFlat _headerStyle;
     private readonly Label _headerTitleLabel;
@@ -20,15 +21,19 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
     private readonly Label _summaryLine;
     private readonly PanelContainer _teamBadge;
     private readonly Label _teamBadgeLabel;
+    private readonly Label _staffingSectionTitleLabel;
+    private readonly Label _rolesSectionTitleLabel;
+    private readonly Label _membersSectionTitleLabel;
     private readonly BoxContainer _staffingRows;
     private readonly BoxContainer _roleRows;
     private readonly BoxContainer _memberRows;
 
     private Color _accent = WH40KCommandUiStyles.DefaultAccent;
+    private WH40KCommandNodeBoundUserInterfaceState? _latestState;
 
     public WH40KCommandNodeTeamCompositionWindow()
     {
-        Title = Loc.GetString("wh40k-command-node-team-composition-window-title");
+        Title = Loc.GetString("w40k-cmd-team-composition-window-title");
         MinSize = SetSize = new Vector2(960, 620);
 
         var root = new BoxContainer
@@ -67,7 +72,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         _headerTitleLabel = new Label
         {
-            Text = Loc.GetString("wh40k-command-node-team-composition-window-title"),
+            Text = Loc.GetString("w40k-cmd-team-composition-window-title"),
             StyleClasses = { "LabelHeading" },
             ClipText = true
         };
@@ -113,8 +118,9 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         body.AddChild(left);
 
         var staffingSection = CreateSection(
-            Loc.GetString("wh40k-command-node-team-composition-section-staffing"),
+            Loc.GetString("w40k-cmd-team-composition-section-staffing"),
             out var staffingContent,
+            out _staffingSectionTitleLabel,
             verticalExpand: false);
         left.AddChild(staffingSection);
 
@@ -126,8 +132,9 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         staffingContent.AddChild(_staffingRows);
 
         var rolesSection = CreateSection(
-            Loc.GetString("wh40k-command-node-team-composition-section-roles"),
+            Loc.GetString("w40k-cmd-team-composition-section-roles"),
             out var rolesContent,
+            out _rolesSectionTitleLabel,
             verticalExpand: true);
         rolesSection.VerticalExpand = true;
         left.AddChild(rolesSection);
@@ -147,8 +154,9 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         rolesScroll.AddChild(_roleRows);
 
         var membersSection = CreateSection(
-            Loc.GetString("wh40k-command-node-team-composition-section-members"),
+            Loc.GetString("w40k-cmd-team-composition-section-members"),
             out var membersContent,
+            out _membersSectionTitleLabel,
             verticalExpand: true);
         membersSection.MinWidth = 300;
         membersSection.VerticalExpand = true;
@@ -168,21 +176,39 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
             VerticalExpand = true
         };
         membersScroll.AddChild(_memberRows);
+
+        Relocalize();
+    }
+
+    public void Relocalize()
+    {
+        Title = Loc.GetString("w40k-cmd-team-composition-window-title");
+        _headerTitleLabel.Text = Loc.GetString("w40k-cmd-team-composition-window-title");
+        _staffingSectionTitleLabel.Text = Loc.GetString("w40k-cmd-team-composition-section-staffing");
+        _rolesSectionTitleLabel.Text = Loc.GetString("w40k-cmd-team-composition-section-roles");
+        _membersSectionTitleLabel.Text = Loc.GetString("w40k-cmd-team-composition-section-members");
+
+        if (_latestState != null)
+            UpdateState(_latestState);
     }
 
     public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        _latestState = state;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
 
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
-        Title = Loc.GetString("wh40k-command-node-team-composition-window-title-team", ("team", state.TeamName));
 
-        _teamLine.Text = CompactLine(Loc.GetString("wh40k-command-node-team", ("team", state.TeamName)));
-        _summaryLine.Text = CompactLine(state.TeamCompositionSummary);
+        var resolvedTeamName = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
+
+        Title = Loc.GetString("w40k-cmd-team-composition-window-title-team", ("team", resolvedTeamName));
+
+        _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeamName)));
+        _summaryLine.Text = CompactLine(WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamCompositionSummary));
 
         _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
-        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(state.TeamName) ? "?" : state.TeamName.ToUpperInvariant();
+        _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(resolvedTeamName) ? "?" : resolvedTeamName.ToUpperInvariant();
 
         var officerRoles = state.TeamCompositionOfficerRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
         var coreRoles = state.TeamCompositionCoreRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
@@ -194,7 +220,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         RebuildMembers(members);
     }
 
-    private PanelContainer CreateSection(string title, out BoxContainer content, bool verticalExpand)
+    private PanelContainer CreateSection(string title, out BoxContainer content, out Label titleLabel, bool verticalExpand)
     {
         var section = new PanelContainer
         {
@@ -218,12 +244,13 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         {
             PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
-        titleBar.AddChild(new Label
+        titleLabel = new Label
         {
             Text = title,
             StyleClasses = { "LabelHeading" },
             ClipText = true
-        });
+        };
+        titleBar.AddChild(titleLabel);
         sectionRoot.AddChild(titleBar);
 
         content = new BoxContainer
@@ -244,7 +271,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         if (staffingLines.Count == 0)
         {
-            _staffingRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
+            _staffingRows.AddChild(CreateSingleLineRow(Loc.GetString("w40k-cmd-team-composition-empty")));
             return;
         }
 
@@ -263,19 +290,19 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         var hasAnyRoles = false;
         hasAnyRoles |= AddRoleGroupRows(
-            Loc.GetString("wh40k-command-node-team-composition-role-group-officers"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-officers"),
             officerRoles);
         hasAnyRoles |= AddRoleGroupRows(
-            Loc.GetString("wh40k-command-node-team-composition-role-group-core"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-core"),
             coreRoles);
         hasAnyRoles |= AddRoleGroupRows(
-            Loc.GetString("wh40k-command-node-team-composition-role-group-mechanicus"),
+            Loc.GetString("w40k-cmd-team-composition-role-group-mechanicus"),
             mechanicusRoles);
 
         if (hasAnyRoles)
             return;
 
-        _roleRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
+        _roleRows.AddChild(CreateSingleLineRow(Loc.GetString("w40k-cmd-team-composition-empty")));
     }
 
     private bool AddRoleGroupRows(string groupName, IReadOnlyCollection<WH40KTeamCompositionRoleEntry> roles)
@@ -311,7 +338,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         {
             cardBox.AddChild(new Label
             {
-                Text = Loc.GetString("wh40k-command-node-team-composition-group-empty"),
+                Text = Loc.GetString("w40k-cmd-team-composition-group-empty"),
                 StyleClasses = { "LabelSubText" },
                 ClipText = true
             });
@@ -321,8 +348,8 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
         foreach (var role in safeRoles)
         {
             var roleName = string.IsNullOrWhiteSpace(role.RoleName)
-                ? Loc.GetString("wh40k-command-node-team-composition-role-unknown")
-                : role.RoleName;
+                ? Loc.GetString("w40k-cmd-team-composition-role-unknown")
+                : WH40KCommandUiStyles.ResolveLocalizedOrRaw(role.RoleName);
             cardBox.AddChild(CreateSingleLineRow($"{roleName}: {role.Count}", inset: true));
         }
 
@@ -335,13 +362,14 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow
 
         if (members.Count == 0)
         {
-            _memberRows.AddChild(CreateSingleLineRow(Loc.GetString("wh40k-command-node-team-composition-empty")));
+            _memberRows.AddChild(CreateSingleLineRow(Loc.GetString("w40k-cmd-team-composition-empty")));
             return;
         }
 
         foreach (var member in members)
         {
-            _memberRows.AddChild(CreateSingleLineRow($"{member.Name} ({member.RoleName})"));
+            var resolvedRole = WH40KCommandUiStyles.ResolveLocalizedOrRaw(member.RoleName);
+            _memberRows.AddChild(CreateSingleLineRow($"{member.Name} ({resolvedRole})"));
         }
     }
 

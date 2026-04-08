@@ -170,6 +170,15 @@ namespace Content.Server.Database
 
         Task SetWH40KMetaDevelopmentUnlocks(NetUserId player, IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> data);
 
+        Task BatchSetWH40KMetaProgressAll(
+            NetUserId player,
+            WH40KMetaProgressDbData progressData,
+            IReadOnlyCollection<WH40KMetaAchievementDbData> achievementData,
+            IReadOnlyCollection<WH40KMetaDecorationDbData> decorationData,
+            IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> developmentData);
+
+        Task<List<NetUserId>> GetUsersWithAnyWH40KMetaOrPreferences(CancellationToken cancel = default);
+
         Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel = default);
 
         Task<NetUserId?> GetWH40KDiscordLinkOwner(string discordUserId, CancellationToken cancel = default);
@@ -640,6 +649,23 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.SetWH40KMetaDevelopmentUnlocks(player, data));
+        }
+
+        public Task BatchSetWH40KMetaProgressAll(
+            NetUserId player,
+            WH40KMetaProgressDbData progressData,
+            IReadOnlyCollection<WH40KMetaAchievementDbData> achievementData,
+            IReadOnlyCollection<WH40KMetaDecorationDbData> decorationData,
+            IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> developmentData)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.BatchSetWH40KMetaProgressAll(player, progressData, achievementData, decorationData, developmentData));
+        }
+
+        public Task<List<NetUserId>> GetUsersWithAnyWH40KMetaOrPreferences(CancellationToken cancel = default)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetUsersWithAnyWH40KMetaOrPreferences(cancel));
         }
 
         public Task<WH40KDiscordAuthDbData?> GetWH40KDiscordLink(NetUserId player, CancellationToken cancel = default)

@@ -5,7 +5,7 @@ namespace Content.Shared._WH40K.Psyker;
 
 /// <summary>
 /// Chaos gifts progression state for skrizhal attunement, altar rituals,
-/// and personal patron-branch progression.
+/// and projected patron-cult progression.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class WH40KChaosGiftProgressionComponent : Component
@@ -43,10 +43,10 @@ public sealed partial class WH40KChaosGiftProgressionComponent : Component
     public float XpPerLevelStep = 100f;
 
     [DataField("passiveXpBasePerTick")]
-    public float PassiveXpBasePerTick = 10f;
+    public float PassiveXpBasePerTick = 1f;
 
     [DataField("passiveXpPerLevelBonus")]
-    public float PassiveXpPerLevelBonus = 5f;
+    public float PassiveXpPerLevelBonus = 0.025f;
 
     [DataField("passiveXpInterval")]
     public TimeSpan PassiveXpInterval = TimeSpan.FromMinutes(1);
@@ -128,6 +128,12 @@ public sealed partial class WH40KChaosGiftProgressionComponent : Component
 
     [DataField("allowPatronSwitch")]
     public bool AllowPatronSwitch;
+
+    [DataField("patronLeadershipOrder")]
+    public int PatronLeadershipOrder;
+
+    [DataField("effectiveLeader"), AutoNetworkedField]
+    public bool EffectiveLeader;
 
     [DataField("ritualBonusMultiplier"), AutoNetworkedField]
     public float RitualBonusMultiplier = 1f;

@@ -9,6 +9,7 @@ using Content.Shared.Examine;
 using Content.Shared.Interaction.Events;
 using Content.Shared.IgnitionSource;
 using Content.Shared.Item;
+using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Throwing;
@@ -17,13 +18,13 @@ using Content.Shared._WH40K.Signals.Flare;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Signals.Flare;
 
@@ -40,6 +41,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<int, EntityUid> _signalMarkers = new();
     private int _nextSignalId = 400;
@@ -54,6 +56,13 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
         SubscribeLocalEvent<WH40KFlareSignalComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<WH40KFlareSignalComponent, ComponentShutdown>(OnFlareShutdown);
         SubscribeLocalEvent<WH40KSignalFlareTargetComponent, ComponentShutdown>(OnMarkerShutdown);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent _)
+    {
+        _signalMarkers.Clear();
+        _nextSignalId = 400;
     }
 
     public override void Update(float frameTime)
@@ -132,6 +141,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
             return;
 
         args.Cancel();
+        using var scope = _culture.CreateScope(args.User);
         _popup.PopupEntity(
             Loc.GetString("wh40k-signal-flare-popup-pickup-blocked"),
             flare,
@@ -159,6 +169,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
 
     private void OnExamined(Entity<WH40KFlareSignalComponent> flare, ref ExaminedEvent args)
     {
+        using var scope = _culture.CreateScope(args.Examiner);
         using (args.PushGroup(nameof(WH40KFlareSignalComponent)))
         {
             args.PushMarkup(Loc.GetString(
@@ -216,6 +227,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
         if (mapCoordinates.MapId != MapId.Nullspace)
             active.LastCoordinates.Enqueue(mapCoordinates);
 
+        using var scope = _culture.CreateScope(user.Value);
         _popup.PopupEntity(
             Loc.GetString("wh40k-signal-flare-popup-armed", ("id", active.SignalId)),
             user.Value,
@@ -409,7 +421,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
             if (!flare.RequireTeam && flare.AllowedTeamIds.Count == 0)
                 return true;
 
-            _popup.PopupEntity(Loc.GetString("wh40k-signal-flare-popup-no-team"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-signal-flare-popup-no-team"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -422,7 +434,7 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
         if (allowed)
             return true;
 
-        _popup.PopupEntity(Loc.GetString("wh40k-signal-flare-popup-wrong-team"), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(_culture.GetPlayerString(user, "wh40k-signal-flare-popup-wrong-team"), user, user, PopupType.SmallCaution);
         return false;
     }
 
@@ -564,6 +576,6 @@ public sealed class WH40KFlareSignalSystem : EntitySystem
         if (user == null || !Exists(user.Value))
             return;
 
-        _popup.PopupEntity(Loc.GetString(messageKey, args), user.Value, user.Value, type);
+        _popup.PopupEntity(_culture.GetPlayerString(user.Value, messageKey, args), user.Value, user.Value, type);
     }
 }

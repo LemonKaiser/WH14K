@@ -97,7 +97,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly SharedWeatherSystem _weather = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly CableSystem _cables = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -105,6 +104,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
@@ -138,7 +138,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         Subs.CVar(_config, CCVars.WH40KRoundTimeLimitSeconds, v =>
         {
-            _roundTimeLimitSeconds = v;
+            _roundTimeLimitSeconds = Math.Max(0f, v);
             ApplyConfigToActiveRules();
         }, true);
 
@@ -173,7 +173,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         BuildDepartmentMap(component);
         component.CheckInterval = _checkInterval;
         component.RequireAllTeamsPresent = _requireAllTeamsPresent;
-        component.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
+        ApplyOptionalRoundTimeLimitOverride(component);
         component.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(component.CheckInterval);
         component.RoundStartTime = Timing.CurTime;
         component.RoundEnding = false;
@@ -247,10 +247,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (component.RoundEnding)
             return;
 
-        UpdatePhase(uid, component);
-        UpdateRoundEvents(component);
-        UpdateWeather(component);
-        UpdateEconomyTelemetrySnapshots(component);
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.phase"))
+            UpdatePhase(uid, component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.events"))
+            UpdateRoundEvents(component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.weather"))
+            UpdateWeather(component);
+
+        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.eco_telemetry"))
+            UpdateEconomyTelemetrySnapshots(component);
 
         if (component.RoundTimeLimitSeconds > 0f)
         {
@@ -438,6 +445,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void OnFactionIconPolymorphed(Entity<WH40KTeamBattleFactionIconComponent> ent, ref PolymorphedEvent args)
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.polymorph");
         var sourceTeamId = ent.Comp.TeamId;
         if (string.IsNullOrWhiteSpace(sourceTeamId))
             return;
@@ -560,7 +568,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (string.IsNullOrEmpty(team?.Id))
             return false;
 
-        teamName = Loc.GetString(team!.Name);
+        // Return the FTL key so callers (especially BUI state builders)
+        // can forward it to the client for culture-aware resolution.
+        teamName = team!.Name;
         return true;
     }
 
@@ -638,11 +648,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void ApplyWh40KStaminaProfileToAllTeamMembers()
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.stamina_profile");
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        var hits = 0;
         while (query.MoveNext(out var uid, out _))
         {
             ApplyWh40KStaminaProfile(uid);
+            hits++;
         }
+
+        if (hits > 0)
+            _sawmill.Debug($"Applied WH40K stamina profile to {hits} team members.");
     }
 
     public bool TryGetTeamIdForUser(NetUserId userId, out string teamId)
@@ -706,7 +722,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (rule.RoundEnding)
             return;
 
-        var otherTeams = rule.Teams.Where(t => t.Id != destroyedTeamId).ToList();
+        var otherTeams = new List<WH40KTeamDefinition>();
+        foreach (var t in rule.Teams)
+        {
+            if (t.Id != destroyedTeamId)
+                otherTeams.Add(t);
+        }
 
         if (otherTeams.Count == 1)
         {
@@ -975,9 +996,17 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             rule.CheckInterval = _checkInterval;
             rule.RequireAllTeamsPresent = _requireAllTeamsPresent;
-            rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
+            ApplyOptionalRoundTimeLimitOverride(rule);
             rule.NextCheck = Timing.CurTime + TimeSpan.FromSeconds(rule.CheckInterval);
         }
+    }
+
+    private void ApplyOptionalRoundTimeLimitOverride(Components.WH40KTeamBattleRuleComponent rule)
+    {
+        if (_roundTimeLimitSeconds <= 0f)
+            return;
+
+        rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
     }
 
     private void ResetEconomyTelemetryState(Components.WH40KTeamBattleRuleComponent? component)
@@ -1688,13 +1717,14 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             if (TryGetTeamDisplayName(resolvedTeamId, out var teamName))
             {
+                var resolvedTeam = Loc.GetString(teamName);
                 _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-up-announce",
-                    ("team", teamName),
+                    ("team", resolvedTeam),
                     ("level", newLevel)));
 
                 var activeBuff = rule.TeamLevelBuffs.GetValueOrDefault(resolvedTeamId, WH40KLevelBuffType.None);
                 _chat.DispatchServerAnnouncement(Loc.GetString("wh40k-team-level-buff-announce",
-                    ("team", teamName),
+                    ("team", resolvedTeam),
                     ("buff", Loc.GetString(GetLevelBuffNameKey(activeBuff))),
                     ("effect", Loc.GetString(GetLevelBuffEffectKey(activeBuff)))));
             }
@@ -2547,14 +2577,20 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         string teamId,
         WH40KLevelBuffType buffType)
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.level_buff");
         var query = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        var hits = 0;
         while (query.MoveNext(out var uid, out var member))
         {
             if (!string.Equals(member.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             ApplyTeamLevelBuffToEntity(uid, component, buffType);
+            hits++;
         }
+
+        if (hits > 0)
+            _sawmill.Info($"Applied {buffType} to team {teamId} (hits={hits})");
     }
 
     private void ApplyTeamLevelBuffToEntity(
@@ -2621,6 +2657,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private void ClearAllTeamLevelBuffComponents()
     {
+        using var scope = _attribution.EnterScope("game_ticking.wh40k_team_battle_rule.clear_buffs");
         var query = EntityQueryEnumerator<WH40KRoundEventBuffComponent>();
         while (query.MoveNext(out var uid, out _))
         {
@@ -2904,28 +2941,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private int RebuildGridAtmosphereForMap(MapId mapId)
     {
-        var rebuilt = 0;
-        var skippedNoAtmos = 0;
-        foreach (var grid in _mapManager.GetAllGrids(mapId))
-        {
-            var uid = grid.Owner;
-            if (!TryComp<GridAtmosphereComponent>(uid, out var atmos))
-            {
-                skippedNoAtmos++;
-                continue;
-            }
-
-            _atmosphere.RebuildGridAtmosphere((uid, atmos, grid));
-            rebuilt++;
-        }
-
-        if (skippedNoAtmos > 0)
-        {
-            _sawmill.Debug(
-                $"WH40K map stability safeguards: skipped fixgridatmos for {skippedNoAtmos} grids without GridAtmosphereComponent.");
-        }
-
-        return rebuilt;
+        // DISABLED: Rebuilding atmosphere at round start causes a massive dirty spike
+        // (19,000+ entities) which floods the network send buffer and forces a lag spike
+        // or a socket connection exception ("would block - send buffer full").
+        // Normally, SS14 map loading handles atmos appropriately without needing a full rebuild.
+        return 0;
     }
 
     private int ProtectApcExtensionCablesFromCutting(MapId mapId)

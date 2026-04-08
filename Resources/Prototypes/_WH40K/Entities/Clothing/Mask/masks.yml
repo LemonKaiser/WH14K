@@ -92,6 +92,22 @@
 
 - type: entity
   parent: ClothingMaskGas
+  id: ClothingMaskGasBloodPact
+  suffix: WH40K, Бладпакт
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/bloodpact_mask.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/bloodpact_mask.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout
+
+- type: entity
+  parent: ClothingMaskGas
   id: ClothingMaskGasCultist3
   name: респиратор культиста
   description: Зловещий респиратор, украшенный символами Хаоса. Он защищает дыхательные пути и лишь изредка смягчает удары по лицу за счет твердого каркаса.
@@ -143,13 +159,3 @@
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Mask/krieg_gasmask.rsi
-
-- type: entity
-  parent: ClothingMaskGasGuardsman
-  id: ClothingMaskGasVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi

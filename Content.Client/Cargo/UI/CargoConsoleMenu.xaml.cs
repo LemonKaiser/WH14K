@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Content.Client.Cargo.Systems;
 using Content.Client.UserInterface.Controls;
+using Content.Client._WH40K.Interface;
 using Content.Shared.Cargo;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Prototypes;
@@ -25,11 +28,15 @@ namespace Content.Client.Cargo.UI
         private readonly IPrototypeManager _protoManager;
         private readonly CargoSystem _cargoSystem;
         private readonly SpriteSystem _spriteSystem;
+        private readonly WH40KCargoConsoleTheme _wh40kTheme;
+        private readonly bool _isWh40kConsole;
         private EntityUid _owner;
         private EntityUid? _station;
 
         private readonly EntityQuery<CargoOrderConsoleComponent> _orderConsoleQuery;
         private readonly EntityQuery<StationBankAccountComponent> _bankQuery;
+        private readonly Dictionary<int, CargoOrderRow> _requestRowsById = new();
+        private readonly Dictionary<int, CargoOrderRow> _orderRowsById = new();
 
         public event Action<CargoProductRow?>? OnItemSelected;
         public event Action? OnApproveAllRequests;
@@ -65,6 +72,8 @@ namespace Content.Client.Cargo.UI
 
             _orderConsoleQuery = _entityManager.GetEntityQuery<CargoOrderConsoleComponent>();
             _bankQuery = _entityManager.GetEntityQuery<StationBankAccountComponent>();
+            _wh40kTheme = WH40KCargoConsoleTheme.Disabled;
+            _isWh40kConsole = false;
 
             Title = entMan.GetComponent<MetaDataComponent>(owner).EntityName;
 
@@ -73,12 +82,18 @@ namespace Content.Client.Cargo.UI
 
             if (entMan.TryGetComponent<CargoOrderConsoleComponent>(owner, out var orderConsole))
             {
+                _wh40kTheme = WH40KCargoConsoleStyles.ResolveTheme(orderConsole.Account);
+                _isWh40kConsole = _wh40kTheme.Enabled;
+
                 var accountProto = _protoManager.Index(orderConsole.Account);
                 AccountNameLabel.Text = Loc.GetString("cargo-console-menu-account-name-format",
                     ("color", accountProto.Color),
                     ("name", Loc.GetString(accountProto.Name)),
                     ("code", Loc.GetString(accountProto.Code)));
             }
+
+            if (_isWh40kConsole)
+                ApplyWh40KTheme();
 
             TabContainer.SetTabTitle(0, Loc.GetString("cargo-console-menu-tab-title-orders"));
             TabContainer.SetTabTitle(1, Loc.GetString("cargo-console-menu-tab-title-funds"));
@@ -111,8 +126,27 @@ namespace Content.Client.Cargo.UI
                 OnToggleUnboundedLimit?.Invoke(a);
             };
 
-            ApproveAllRequests.OnPressed += _ => OnApproveAllRequests?.Invoke();
-            CancelAllRequests.OnPressed += _ => OnCancelAllRequests?.Invoke();
+            ApproveAllRequests.OnPressed += _ =>
+            {
+                if (_isWh40kConsole)
+                {
+                    WH40KUiChrome.PlayHoverFlash(RequestsActionsPanel, "requests-approve-all-flash", _wh40kTheme.Accent.WithAlpha(0.72f), 0.2f);
+                    FlashPendingRequests(_wh40kTheme.Accent);
+                }
+
+                OnApproveAllRequests?.Invoke();
+            };
+
+            CancelAllRequests.OnPressed += _ =>
+            {
+                if (_isWh40kConsole)
+                {
+                    WH40KUiChrome.PlayHoverFlash(RequestsActionsPanel, "requests-cancel-all-flash", _wh40kTheme.DangerAccent.WithAlpha(0.72f), 0.22f);
+                    FlashPendingRequests(_wh40kTheme.DangerAccent);
+                }
+
+                OnCancelAllRequests?.Invoke();
+            };
         }
 
         private void OnCategoryItemSelected(OptionButton.ItemSelectedEventArgs args)
@@ -161,6 +195,7 @@ namespace Content.Client.Cargo.UI
                 string.Compare(x.Name, y.Name, StringComparison.CurrentCultureIgnoreCase));
 
             var search = SearchBar.Text.Trim().ToLowerInvariant();
+            var visualIndex = 0;
             foreach (var prototype in products)
             {
                 // if no search or category
@@ -180,14 +215,23 @@ namespace Content.Client.Cargo.UI
                         Product = prototype,
                         ProductName = { Text = prototype.Name },
                         MainButton = { ToolTip = prototype.Description },
-                        PointCost = { Text = FormatCurrency(prototype.Cost) },
+                        PointCost = { Text = FormatDisplayCurrency(prototype.Cost) },
                         Icon = { Texture = iconTexture },
                     };
+
+                    if (_isWh40kConsole)
+                        button.ApplyWh40KTheme(_wh40kTheme);
+
                     button.MainButton.OnPressed += args =>
                     {
                         OnItemSelected?.Invoke(button);
                     };
                     Products.AddChild(button);
+
+                    if (_isWh40kConsole)
+                        button.AnimateAppear(MathF.Min(visualIndex * 0.02f, 0.22f));
+
+                    visualIndex++;
                 }
             }
         }
@@ -242,45 +286,76 @@ namespace Content.Client.Cargo.UI
             if (!_orderConsoleQuery.TryComp(_owner, out var orderConsole))
                 return;
 
-            Requests.RemoveAllChildren();
-            Orders.RemoveAllChildren();
             _activeTransitOrderRow = null;
             _activeTransitOrderPrefix = null;
             _activeTransitOrderFallbackStatus = null;
             _lastTransitEtaSeconds = int.MinValue;
             var hasPending = false;
             var pendingTotalCost = 0;
+            var approvedCount = 0;
+            var requestIndex = 0;
+            var orderIndex = 0;
+            var incomingPendingIds = new HashSet<int>();
+            var incomingApprovedIds = new HashSet<int>();
+            var transitionedToOrders = new HashSet<int>();
 
             foreach (var order in orders)
             {
                 if (!_protoManager.TryIndex(order.Account, out var account))
                     continue;
 
-                var row = CreateOrderRow(order, account);
                 if (!order.Approved)
                 {
+                    incomingPendingIds.Add(order.OrderId);
                     hasPending = true;
                     pendingTotalCost += Math.Max(0, order.Price * order.OrderQuantity);
+                    var row = EnsureRequestRow(order, account, requestIndex++);
                     row.SetRemoveRequestVisible(true);
-                    row.RemoveRequestButton.OnPressed += _ => OnRemoveRequest?.Invoke(order.OrderId);
                     row.SetActionButtonsVisible(false, false);
-                    Requests.AddChild(row);
                     continue;
                 }
 
-                row.SetRemoveRequestVisible(false);
-                row.SetActionButtonsVisible(false, false);
-                Orders.AddChild(row);
+                incomingApprovedIds.Add(order.OrderId);
+                if (_requestRowsById.ContainsKey(order.OrderId))
+                    transitionedToOrders.Add(order.OrderId);
+
+                var approvedRow = EnsureApprovedRow(order, account, orderIndex++, transitionedToOrders.Contains(order.OrderId));
+                approvedRow.SetRemoveRequestVisible(false);
+                approvedRow.SetActionButtonsVisible(false, false);
+                approvedCount++;
+            }
+
+            foreach (var staleRequestId in _requestRowsById.Keys.Where(id => !incomingPendingIds.Contains(id)).ToList())
+            {
+                var promoteToOrder = incomingApprovedIds.Contains(staleRequestId);
+                RemoveRequestRow(staleRequestId, promoteToOrder);
+            }
+
+            foreach (var staleOrderId in _orderRowsById.Keys.Where(id => !incomingApprovedIds.Contains(id)).ToList())
+            {
+                RemoveApprovedRow(staleOrderId);
             }
 
             var canApprove = hasPending && orderConsole.Mode != CargoOrderConsoleMode.SendToPrimary;
             ApproveAllRequests.Disabled = !canApprove;
             CancelAllRequests.Disabled = !hasPending;
-            RequestsTitleLabel.Text = $"{Loc.GetString("cargo-console-menu-requests-label")} ({FormatCurrency(pendingTotalCost)})";
+            RequestsTitleLabel.Text = WH40KUiChrome.DecorateIfMissing(
+                $"{Loc.GetString("cargo-console-menu-requests-label")} ({FormatDisplayCurrency(pendingTotalCost)})",
+                WH40KUiChrome.Diamond);
+            OrdersTitleLabel.Text = WH40KUiChrome.DecorateIfMissing(
+                $"{Loc.GetString("cargo-console-menu-orders-label")} ({approvedCount})",
+                WH40KUiChrome.Blade);
             UpdateTransitOrderStatusLabel(force: true);
         }
 
         private CargoOrderRow CreateOrderRow(CargoOrderData order, CargoAccountPrototype account)
+        {
+            var row = new CargoOrderRow();
+            ApplyOrderData(row, order, account);
+            return row;
+        }
+
+        private void ApplyOrderData(CargoOrderRow row, CargoOrderData order, CargoAccountPrototype account)
         {
             var productName = order.ProductName;
             CargoProductPrototype? cargoProduct = null;
@@ -325,38 +400,32 @@ namespace Content.Client.Cargo.UI
                 : descriptionText;
             var unitPrice = order.Price > 0 ? order.Price : cargoProduct?.Cost ?? 0;
 
-            var row = new CargoOrderRow
+            row.Order = order;
+            row.Title.Text = NormalizeDisplayCurrencyText(Loc.GetString(
+                "cargo-console-menu-order-row-title",
+                ("productName", productName),
+                ("orderAmount", order.OrderQuantity),
+                ("orderPrice", unitPrice)));
+            row.Stride.PanelOverride = new StyleBoxFlat
             {
-                Order = order,
-
-                Title =
-                {
-                    Text = NormalizeCurrencyText(Loc.GetString(
-                        "cargo-console-menu-order-row-title",
-                        ("productName", productName),
-                        ("orderAmount", order.OrderQuantity),
-                        ("orderPrice", unitPrice))),
-                },
-
-                Stride =
-                {
-                    PanelOverride = new StyleBoxFlat
-                    {
-                        BackgroundColor = account.Color,
-                        ContentMarginBottomOverride = 2,
-                    },
-                },
-
-                ProductName =
-                {
-                    Text = $"{accountCode} | {status}"
-                }
+                BackgroundColor = account.Color,
+                ContentMarginBottomOverride = 2,
             };
+            row.ProductName.Text = $"{accountCode} | {status}";
 
             if (product != null)
                 row.Icon.Texture = _spriteSystem.Frame0(product);
 
-            row.Description.SetMessage(descriptionValue);
+            if (_isWh40kConsole)
+            {
+                row.ApplyWh40KTheme(_wh40kTheme);
+                SetOrderRowStatus(row, accountCode, status);
+                row.Description.SetMessage(descriptionValue, defaultColor: _wh40kTheme.SecondaryText);
+            }
+            else
+            {
+                row.Description.SetMessage(descriptionValue);
+            }
 
             if (isWh40kBatchSummary)
             {
@@ -364,8 +433,121 @@ namespace Content.Client.Cargo.UI
                 _activeTransitOrderPrefix = accountCode;
                 _activeTransitOrderFallbackStatus = status;
             }
+        }
 
+        private CargoOrderRow EnsureRequestRow(CargoOrderData order, CargoAccountPrototype account, int position)
+        {
+            if (!_requestRowsById.TryGetValue(order.OrderId, out var row))
+            {
+                var orderId = order.OrderId;
+                row = CreateOrderRow(order, account);
+                row.SetRemoveRequestVisible(true);
+                row.SetActionButtonsVisible(false, false);
+                row.RemoveRequestButton.OnPressed += _ =>
+                {
+                    row.RemoveRequestButton.Disabled = true;
+                    if (_isWh40kConsole)
+                        row.PlayAttentionFlash(_wh40kTheme.DangerAccent);
+                    OnRemoveRequest?.Invoke(orderId);
+                };
+                Requests.AddChild(row);
+                _requestRowsById[orderId] = row;
+
+                if (_isWh40kConsole)
+                    row.AnimateAppear(MathF.Min(position * 0.02f, 0.24f));
+            }
+            else
+            {
+                ApplyOrderData(row, order, account);
+            }
+
+            row.RemoveRequestButton.Disabled = false;
+            row.SetPositionInParent(position);
             return row;
+        }
+
+        private CargoOrderRow EnsureApprovedRow(CargoOrderData order, CargoAccountPrototype account, int position, bool transitionedFromRequest)
+        {
+            if (!_orderRowsById.TryGetValue(order.OrderId, out var row))
+            {
+                row = CreateOrderRow(order, account);
+                row.SetRemoveRequestVisible(false);
+                row.SetActionButtonsVisible(false, false);
+                Orders.AddChild(row);
+                _orderRowsById[order.OrderId] = row;
+
+                if (_isWh40kConsole)
+                {
+                    var appearDelay = transitionedFromRequest
+                        ? 0.14f + MathF.Min(position * 0.02f, 0.1f)
+                        : MathF.Min(position * 0.02f, 0.24f);
+                    row.AnimateAppear(appearDelay);
+
+                    if (transitionedFromRequest)
+                        WH40KUiChrome.PlayHoverFlash(OrdersHeaderPanel, "orders-transfer-flash", _wh40kTheme.Accent.WithAlpha(0.74f), 0.2f);
+                }
+            }
+            else
+            {
+                ApplyOrderData(row, order, account);
+            }
+
+            row.SetPositionInParent(position);
+            return row;
+        }
+
+        private void RemoveRequestRow(int orderId, bool promoteToOrder)
+        {
+            if (!_requestRowsById.TryGetValue(orderId, out var row))
+                return;
+
+            _requestRowsById.Remove(orderId);
+
+            if (_isWh40kConsole)
+            {
+                var accent = promoteToOrder ? _wh40kTheme.Accent : _wh40kTheme.DangerAccent;
+                row.AnimateRemoval(accent, onComplete: () =>
+                {
+                    if (row.Parent == Requests)
+                        Requests.RemoveChild(row);
+                    else
+                        row.Orphan();
+                });
+                return;
+            }
+
+            if (row.Parent == Requests)
+                Requests.RemoveChild(row);
+            else
+                row.Orphan();
+        }
+
+        private void RemoveApprovedRow(int orderId)
+        {
+            if (!_orderRowsById.TryGetValue(orderId, out var row))
+                return;
+
+            _orderRowsById.Remove(orderId);
+
+            if (ReferenceEquals(_activeTransitOrderRow, row))
+            {
+                _activeTransitOrderRow = null;
+                _activeTransitOrderPrefix = null;
+                _activeTransitOrderFallbackStatus = null;
+            }
+
+            if (row.Parent == Orders)
+                Orders.RemoveChild(row);
+            else
+                row.Orphan();
+        }
+
+        private void FlashPendingRequests(Color accent)
+        {
+            foreach (var row in _requestRowsById.Values)
+            {
+                row.PlayAttentionFlash(accent);
+            }
         }
 
         public void PopulateAccountActions()
@@ -423,8 +605,11 @@ namespace Content.Client.Cargo.UI
             }
 
             var balance = _cargoSystem.GetBalanceFromAccount((_station.Value, bankAccount), orderConsole.Account);
-            PointsLabel.Text = FormatCurrency(balance);
-            TransferLimitLabel.Text = NormalizeCurrencyText(Loc.GetString("cargo-console-menu-account-action-transfer-limit",
+            if (_isWh40kConsole)
+                PointsLabel.SetMessage(FormatDisplayCurrency(balance), defaultColor: _wh40kTheme.PrimaryText);
+            else
+                PointsLabel.Text = FormatDisplayCurrency(balance);
+            TransferLimitLabel.Text = NormalizeDisplayCurrencyText(Loc.GetString("cargo-console-menu-account-action-transfer-limit",
                 ("limit", (int) (balance * orderConsole.TransferLimit))));
 
             UnlimitedNotifier.Visible = orderConsole.TransferUnbounded;
@@ -472,7 +657,7 @@ namespace Content.Client.Cargo.UI
                 var fallback = !string.IsNullOrWhiteSpace(_activeTransitOrderFallbackStatus)
                     ? _activeTransitOrderFallbackStatus
                     : Loc.GetString("wh40k-cargo-batch-delivered-approver");
-                _activeTransitOrderRow.ProductName.Text = $"{_activeTransitOrderPrefix} | {fallback}";
+                SetOrderRowStatus(_activeTransitOrderRow, _activeTransitOrderPrefix, fallback);
                 return;
             }
 
@@ -487,7 +672,118 @@ namespace Content.Client.Cargo.UI
                 ? Loc.GetString("wh40k-cargo-batch-delivered-approver")
                 : Loc.GetString("wh40k-cargo-batch-summary-approver-time",
                     ("time", FormatClockDuration(TimeSpan.FromSeconds(secondsLeft))));
-            _activeTransitOrderRow.ProductName.Text = $"{_activeTransitOrderPrefix} | {status}";
+            SetOrderRowStatus(_activeTransitOrderRow, _activeTransitOrderPrefix, status);
+        }
+
+        private void ApplyWh40KTheme()
+        {
+            MinSize = new Vector2(860f, 560f);
+            SetSize = new Vector2(1160f, 720f);
+            TabContainer.PanelStyleBoxOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.WindowBackground, _wh40kTheme.BorderStrongColor, 0);
+            RequestsTitleLabel.Text = WH40KUiChrome.DecorateIfMissing(RequestsTitleLabel.Text, WH40KUiChrome.Diamond);
+            OrdersTitleLabel.Text = WH40KUiChrome.DecorateIfMissing(OrdersTitleLabel.Text, WH40KUiChrome.Blade);
+            AccountLabel.Text = WH40KUiChrome.DecorateIfMissing(AccountLabel.Text, WH40KUiChrome.DiamondNested);
+            BalanceLabel.Text = WH40KUiChrome.DecorateIfMissing(BalanceLabel.Text, WH40KUiChrome.Diamond);
+            CapacityLabel.Text = WH40KUiChrome.DecorateIfMissing(CapacityLabel.Text, WH40KUiChrome.Cog);
+            DeliveryLabel.Text = WH40KUiChrome.DecorateIfMissing(DeliveryLabel.Text, WH40KUiChrome.Arrow);
+
+            CatalogFrame.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelBackground, _wh40kTheme.BorderStrongColor, 0);
+            InfoPanel.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelAltBackground, _wh40kTheme.BorderColor, 0);
+            SearchPanel.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelAltBackground, _wh40kTheme.BorderColor, 0);
+            ProductsFrame.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelAltBackground, _wh40kTheme.BorderColor, 0);
+
+            RequestsFrame.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelBackground, _wh40kTheme.BorderStrongColor, 0);
+            RequestsHeaderPanel.PanelOverride = WH40KCargoConsoleStyles.CreateEdgePanelStyle(
+                _wh40kTheme.HeaderBackground,
+                _wh40kTheme.BorderStrongColor,
+                new Thickness(0f, 0f, 0f, 1f),
+                0);
+            RequestsBodyPanel.PanelOverride = WH40KCargoConsoleStyles.CreateEdgePanelStyle(
+                _wh40kTheme.PanelBackground,
+                Color.Transparent,
+                new Thickness(0f),
+                0);
+            RequestsActionsPanel.PanelOverride = WH40KCargoConsoleStyles.CreateEdgePanelStyle(
+                _wh40kTheme.PanelAltBackground,
+                _wh40kTheme.BorderColor,
+                new Thickness(0f, 1f, 0f, 0f),
+                0);
+
+            OrdersFrame.PanelOverride = WH40KCargoConsoleStyles.CreatePanelStyle(_wh40kTheme.PanelBackground, _wh40kTheme.BorderStrongColor, 0);
+            OrdersHeaderPanel.PanelOverride = WH40KCargoConsoleStyles.CreateEdgePanelStyle(
+                _wh40kTheme.HeaderBackground,
+                _wh40kTheme.BorderStrongColor,
+                new Thickness(0f, 0f, 0f, 1f),
+                0);
+            OrdersBodyPanel.PanelOverride = WH40KCargoConsoleStyles.CreateEdgePanelStyle(
+                _wh40kTheme.PanelBackground,
+                Color.Transparent,
+                new Thickness(0f),
+                0);
+
+            SearchBar.StyleBoxOverride = WH40KCargoConsoleStyles.CreateInputStyle(_wh40kTheme);
+            Categories.StyleBoxOverride = WH40KCargoConsoleStyles.CreateSecondaryButtonStyle(_wh40kTheme);
+            Categories.PopupButtonStyleOverride = WH40KCargoConsoleStyles.CreatePopupListButtonStyle(_wh40kTheme);
+            Categories.PopupSelectedButtonStyleOverride = WH40KCargoConsoleStyles.CreatePopupListSelectedButtonStyle(_wh40kTheme);
+            Categories.PopupButtonFontColorOverride = _wh40kTheme.PrimaryText;
+            Categories.PopupSelectedButtonFontColorOverride = _wh40kTheme.PrimaryText;
+            Categories.RefreshPopupItemTheme();
+
+            ActionOptions.StyleBoxOverride = WH40KCargoConsoleStyles.CreateSecondaryButtonStyle(_wh40kTheme);
+            ActionOptions.PopupButtonStyleOverride = WH40KCargoConsoleStyles.CreatePopupListButtonStyle(_wh40kTheme);
+            ActionOptions.PopupSelectedButtonStyleOverride = WH40KCargoConsoleStyles.CreatePopupListSelectedButtonStyle(_wh40kTheme);
+            ActionOptions.PopupButtonFontColorOverride = _wh40kTheme.PrimaryText;
+            ActionOptions.PopupSelectedButtonFontColorOverride = _wh40kTheme.PrimaryText;
+            ActionOptions.RefreshPopupItemTheme();
+
+            WH40KCargoConsoleStyles.ApplyButtonTheme(ApproveAllRequests, WH40KCargoConsoleStyles.CreatePrimaryButtonStyle(_wh40kTheme), _wh40kTheme.PrimaryText);
+            WH40KCargoConsoleStyles.ApplyButtonTheme(CancelAllRequests, WH40KCargoConsoleStyles.CreateDangerButtonStyle(_wh40kTheme), _wh40kTheme.PrimaryText);
+
+            AccountLabel.FontColorOverride = _wh40kTheme.LabelText;
+            BalanceLabel.FontColorOverride = _wh40kTheme.LabelText;
+            CapacityLabel.FontColorOverride = _wh40kTheme.LabelText;
+            DeliveryLabel.FontColorOverride = _wh40kTheme.LabelText;
+            ShuttleCapacityLabel.FontColorOverride = _wh40kTheme.PrimaryText;
+            DeliveryEtaLabel.FontColorOverride = _wh40kTheme.PrimaryText;
+            RequestsTitleLabel.FontColorOverride = _wh40kTheme.Accent;
+            OrdersTitleLabel.FontColorOverride = _wh40kTheme.Accent;
+
+            AccountDivider.MinSize = new Vector2(1f, 0f);
+            BalanceDivider.MinSize = new Vector2(1f, 0f);
+            CapacityDivider.MinSize = new Vector2(1f, 0f);
+            DeliveryDivider.MinSize = new Vector2(1f, 0f);
+            AccountDivider.PanelOverride = CreateDividerStyle(_wh40kTheme.BorderColor);
+            BalanceDivider.PanelOverride = CreateDividerStyle(_wh40kTheme.BorderColor);
+            CapacityDivider.PanelOverride = CreateDividerStyle(_wh40kTheme.BorderColor);
+            DeliveryDivider.PanelOverride = CreateDividerStyle(_wh40kTheme.BorderColor);
+
+            FooterDivider.MinSize = new Vector2(0f, 1f);
+            FooterDivider.PanelOverride = CreateDividerStyle(_wh40kTheme.BorderStrongColor);
+            FooterLeftLabel.Text = Loc.GetString(_wh40kTheme.FooterLocKey);
+            FooterRightLabel.Text = Loc.GetString("wh40k-cargo-console-footer-right");
+            FooterLeftLabel.FontColorOverride = _wh40kTheme.SecondaryText;
+            FooterRightLabel.FontColorOverride = _wh40kTheme.LabelText;
+            FooterLogo.Visible = false;
+            WH40KUiChrome.StartLoopingPulse(FooterDivider, "footer-pulse", new Color(0.55f, 0.55f, 0.55f, 1f), Color.White, 4.2f);
+            WH40KUiChrome.StartLoopingPulse(RequestsTitleLabel, "requests-pulse", _wh40kTheme.Accent.WithAlpha(0.78f), Color.White, 4f);
+            WH40KUiChrome.StartLoopingPulse(OrdersTitleLabel, "orders-pulse", _wh40kTheme.Accent.WithAlpha(0.78f), Color.White, 4.2f);
+        }
+
+        private void SetOrderRowStatus(CargoOrderRow row, string accountCode, string status)
+        {
+            var statusText = $"{accountCode} | {status}";
+            if (_isWh40kConsole)
+                row.ProductName.SetMessage(statusText, defaultColor: _wh40kTheme.PrimaryText);
+            else
+                row.ProductName.Text = statusText;
+        }
+
+        private static StyleBoxFlat CreateDividerStyle(Color color)
+        {
+            return new StyleBoxFlat
+            {
+                BackgroundColor = color,
+            };
         }
 
         private static string FormatClockDuration(TimeSpan duration)
@@ -495,6 +791,16 @@ namespace Content.Client.Cargo.UI
             return duration.TotalHours >= 1
                 ? duration.ToString(@"hh\:mm\:ss")
                 : duration.ToString(@"mm\:ss");
+        }
+
+        private static string FormatDisplayCurrency(int amount)
+        {
+            return $"\u20AE{amount}";
+        }
+
+        private static string NormalizeDisplayCurrencyText(string text)
+        {
+            return text.Replace('$', '\u20AE');
         }
 
         private static string FormatCurrency(int amount)

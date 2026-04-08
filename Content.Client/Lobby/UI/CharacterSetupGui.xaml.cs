@@ -10,6 +10,7 @@ using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
@@ -30,6 +31,11 @@ namespace Content.Client.Lobby.UI
         [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
 
         private readonly Button _createNewCharacterButton;
+
+        private BaseWindow? _rulesWindow;
+        private BaseWindow? _statsWindow;
+        private BaseWindow? _achievementsWindow;
+        private BaseWindow? _decorationsWindow;
 
         public event Action<int>? SelectCharacter;
         public event Action<int>? DeleteCharacter;
@@ -62,11 +68,11 @@ namespace Content.Client.Lobby.UI
             };
 
             CharEditor.AddChild(profileEditor);
-            RulesButton.OnPressed += _ => new RulesAndInfoWindow().Open();
+            RulesButton.OnPressed += _ => OpenOrFocus(ref _rulesWindow, () => new RulesAndInfoWindow());
 
-            StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
-            AchievementsButton.OnPressed += _ => new PlayerAchievementsWindow().OpenCentered();
-            DecorationsButton.OnPressed += _ => new PlayerDecorationsWindow().OpenCentered();
+            StatsButton.OnPressed += _ => OpenOrFocus(ref _statsWindow, () => new PlaytimeStatsWindow());
+            AchievementsButton.OnPressed += _ => OpenOrFocus(ref _achievementsWindow, () => new PlayerAchievementsWindow());
+            DecorationsButton.OnPressed += _ => OpenOrFocus(ref _decorationsWindow, () => new PlayerDecorationsWindow());
 
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, UpdateAdminRemarksVisibility, true);
             _cfg.OnValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged, true);
@@ -81,6 +87,18 @@ namespace Content.Client.Lobby.UI
         private void OnCustomizationPanelOpacityChanged(float opacity)
         {
             LobbyPanelOpacityHelper.ApplyPanelOpacity(BackgroundPanel, opacity);
+        }
+
+        private static void OpenOrFocus(ref BaseWindow? window, Func<BaseWindow> factory)
+        {
+            if (window?.IsOpen == true)
+            {
+                window.MoveToFront();
+                return;
+            }
+
+            window = factory();
+            window.OpenCentered();
         }
 
         /// <summary>
@@ -138,7 +156,7 @@ namespace Content.Client.Lobby.UI
             AdminRemarksButton.Text = Loc.GetString("character-setup-gui-character-setup-adminremarks-button");
             RulesButton.Text = Loc.GetString("character-setup-gui-character-setup-rules-button");
             AchievementsButton.Text = Loc.GetString("wh40k-meta-progress-achievements-button");
-            DecorationsButton.Text = Loc.GetString("wh40k-meta-progress-decorations-button");
+            DecorationsButton.Text = Loc.GetString("w40k-decs-button");
             CloseButton.Text = Loc.GetString("character-setup-gui-character-setup-close-button");
             _createNewCharacterButton.Text = Loc.GetString("character-setup-gui-create-new-character-button");
 
@@ -152,6 +170,7 @@ namespace Content.Client.Lobby.UI
             ReloadCharacterPickers();
         }
 
+        [Obsolete]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -160,7 +179,9 @@ namespace Content.Client.Lobby.UI
                 _cfg.UnsubValueChanged(CCVars.LobbyCustomizationPanelOpacity, OnCustomizationPanelOpacityChanged);
             }
 
+#pragma warning disable CS0618
             base.Dispose(disposing);
+#pragma warning restore CS0618
         }
     }
 }

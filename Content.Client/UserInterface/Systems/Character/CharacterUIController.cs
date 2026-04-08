@@ -64,7 +64,9 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
     {
         if (_window != null)
         {
-            _window.Close();
+            if (!_window.Disposed)
+                _window.Close();
+
             _window = null;
         }
 

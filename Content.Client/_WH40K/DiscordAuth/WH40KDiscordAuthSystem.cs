@@ -87,6 +87,40 @@ public sealed class WH40KDiscordAuthSystem : EntitySystem
 
     private void OnOpenUrlEvent(WH40KDiscordAuthOpenUrlEvent ev, EntitySessionEventArgs args)
     {
-        _uri.OpenUri(ev.Url);
+        if (IsAllowedDiscordUrl(ev.Url))
+        {
+            _uri.OpenUri(ev.Url);
+        }
+    }
+
+    private static bool IsAllowedDiscordUrl(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url) || !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var authorityStart = "https://".Length;
+        var authorityEnd = url.Length;
+
+        var slashIndex = url.IndexOf('/', authorityStart);
+        if (slashIndex != -1)
+            authorityEnd = Math.Min(authorityEnd, slashIndex);
+
+        var queryIndex = url.IndexOf('?', authorityStart);
+        if (queryIndex != -1)
+            authorityEnd = Math.Min(authorityEnd, queryIndex);
+
+        var fragmentIndex = url.IndexOf('#', authorityStart);
+        if (fragmentIndex != -1)
+            authorityEnd = Math.Min(authorityEnd, fragmentIndex);
+
+        if (authorityEnd <= authorityStart)
+            return false;
+
+        var authority = url.Substring(authorityStart, authorityEnd - authorityStart);
+        if (authority.Contains('@') || authority.Contains(':'))
+            return false;
+
+        return authority.Equals("discord.com", StringComparison.OrdinalIgnoreCase)
+            || authority.EndsWith(".discord.com", StringComparison.OrdinalIgnoreCase);
     }
 }

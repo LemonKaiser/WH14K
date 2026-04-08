@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.GameTicking;
 using Content.Shared.Localizations;
 using Content.Server.Station.Components;
+using Content.Server.GameTicking.Events;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using System.Text;
@@ -181,13 +182,17 @@ namespace Content.Server.GameTicking
 
         public void ToggleReadyAll(bool ready)
         {
-            var status = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
-            foreach (var playerUserId in _playerGameStatuses.Keys)
+            foreach (var playerUserId in _playerGameStatuses.Keys.ToArray())
             {
-                _playerGameStatuses[playerUserId] = status;
                 if (!_playerManager.TryGetSessionById(playerUserId, out var playerSession))
+                {
+                    if (!ready)
+                        _playerGameStatuses[playerUserId] = PlayerGameStatus.NotReadyToPlay;
+
                     continue;
-                RaiseNetworkEvent(GetStatusMsg(playerSession), playerSession.Channel);
+                }
+
+                ToggleReady(playerSession, ready);
             }
         }
 
@@ -204,10 +209,22 @@ namespace Content.Server.GameTicking
                 return;
             }
 
+            var before = new PlayerBeforeReadyChangedEvent(player, ready);
+            RaiseLocalEvent(ref before);
+            if (before.Cancelled)
+            {
+                if (!string.IsNullOrWhiteSpace(before.ReasonLocKey))
+                    _chatManager.DispatchServerMessage(player, Loc.GetString(before.ReasonLocKey));
+
+                return;
+            }
+
             _playerGameStatuses[player.UserId] = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             RaiseNetworkEvent(GetStatusMsg(player), player.Channel);
             // update server info to reflect new ready count
             UpdateInfoText();
+
+            RaiseLocalEvent(new PlayerReadyChangedEvent(player, ready));
         }
 
         public bool UserHasJoinedGame(ICommonSession session)

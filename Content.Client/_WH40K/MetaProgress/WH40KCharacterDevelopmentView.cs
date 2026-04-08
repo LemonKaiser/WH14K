@@ -301,10 +301,10 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 	public void Relocalize()
 	{
 		_viewport.Relocalize();
-		_sectionLabel.Text = Loc.GetString("wh40k-character-development-section-label");
-		_resetViewButton.Text = Loc.GetString("wh40k-character-development-action-center");
-		_confirmPlanButton.Text = Loc.GetString("wh40k-character-development-action-confirm");
-		_resetViewButton.ToolTip = Loc.GetString("wh40k-character-development-action-center-tooltip");
+		_sectionLabel.Text = Loc.GetString("w40k-cd-section-label");
+		_resetViewButton.Text = Loc.GetString("w40k-cd-action-center");
+		_confirmPlanButton.Text = Loc.GetString("w40k-cd-action-confirm");
+		_resetViewButton.ToolTip = Loc.GetString("w40k-cd-action-center-tooltip");
 
 		RefreshInfoPanel();
 		RefreshSummary();
@@ -337,15 +337,15 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		}
 		int num2 = Math.Max(0, num - _viewport.OpenedCost - _viewport.SubmittedCost);
 		int num3 = Math.Max(0, num2 - _viewport.PlannedCost);
-		_levelLabel.Text = Loc.GetString("wh40k-character-development-summary-level", ("level", _accountLevel));
-		_pointsLabel.Text = Loc.GetString("wh40k-character-development-summary-available-now", ("available", num2));
-		_plannedLabel.Text = Loc.GetString("wh40k-character-development-summary-planned", ("nodes", _viewport.PlannedNodeCount), ("cost", _viewport.PlannedCost));
-		_remainingLabel.Text = Loc.GetString("wh40k-character-development-summary-after-confirm", ("remaining", num3));
-		_zoomLabel.Text = Loc.GetString("wh40k-character-development-summary-zoom", ("value", (int)MathF.Round(_viewport.ZoomPercent * 100f)));
+		_levelLabel.Text = Loc.GetString("w40k-cd-summary-level", ("level", _accountLevel));
+		_pointsLabel.Text = Loc.GetString("w40k-cd-summary-available-now", ("available", num2));
+		_plannedLabel.Text = Loc.GetString("w40k-cd-summary-planned", ("nodes", _viewport.PlannedNodeCount), ("cost", _viewport.PlannedCost));
+		_remainingLabel.Text = Loc.GetString("w40k-cd-summary-after-confirm", ("remaining", num3));
+		_zoomLabel.Text = Loc.GetString("w40k-cd-summary-zoom", ("value", (int)MathF.Round(_viewport.ZoomPercent * 100f)));
 		_confirmPlanButton.Disabled = _viewport.PlannedNodeCount == 0;
 		_confirmPlanButton.ToolTip = Loc.GetString(_viewport.PlannedNodeCount == 0
-			? "wh40k-character-development-action-confirm-tooltip-disabled"
-			: "wh40k-character-development-action-confirm-tooltip");
+			? "w40k-cd-action-confirm-tooltip-disabled"
+			: "w40k-cd-action-confirm-tooltip");
 	}
 
 	private int CalculateTotalSkillPoints(int level)
@@ -361,10 +361,10 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 
 	private void ApplyDefaultInfo()
 	{
-		_branchLabel.Text = Loc.GetString("wh40k-character-development-default-branch");
-		_nodeLabel.Text = Loc.GetString("wh40k-character-development-default-node");
-		_descriptionLabel.SetMessage(Loc.GetString("wh40k-character-development-default-description"), Color.FromHex("#C6D4DD".AsSpan()));
-		_stateChipLabel.Text = Loc.GetString("wh40k-character-development-default-state");
+		_branchLabel.Text = Loc.GetString("w40k-cd-default-branch");
+		_nodeLabel.Text = Loc.GetString("w40k-cd-default-node");
+		_descriptionLabel.SetMessage(Loc.GetString("w40k-cd-default-description"), Color.FromHex("#C6D4DD".AsSpan()));
+		_stateChipLabel.Text = Loc.GetString("w40k-cd-default-state");
 		_costChipLabel.Text = string.Empty;
 		_costChipContainer.Visible = false;
 		_branchLabel.FontColorOverride = Color.FromHex("#E7F2F7".AsSpan());
@@ -384,7 +384,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 
 		_descriptionLabel.SetMessage(description, Color.FromHex("#C6D4DD".AsSpan()));
 		_stateChipLabel.Text = presentation.StateText;
-		_costChipLabel.Text = Loc.GetString("wh40k-character-development-cost-chip", ("cost", presentation.Cost));
+		_costChipLabel.Text = Loc.GetString("w40k-cd-cost-chip", ("cost", presentation.Cost));
 		_costChipContainer.Visible = true;
 		_branchLabel.FontColorOverride = presentation.Accent.WithAlpha(0.96f);
 		_stateChipStyle.BorderColor = presentation.Accent.WithAlpha(0.95f);
@@ -399,18 +399,18 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		var availableNow = Math.Max(0, _viewport.TotalSkillPoints - _viewport.OpenedCost - _viewport.SubmittedCost);
 		var remainingAfterConfirm = Math.Max(0, availableNow - _viewport.PlannedCost);
 
-		_branchLabel.Text = Loc.GetString("wh40k-character-development-confirm-title");
-		_nodeLabel.Text = Loc.GetString("wh40k-character-development-confirm-node");
+		_branchLabel.Text = Loc.GetString("w40k-cd-confirm-title");
+		_nodeLabel.Text = Loc.GetString("w40k-cd-confirm-node");
 		_descriptionLabel.SetMessage(
 			Loc.GetString(
-				"wh40k-character-development-confirm-description",
+				"w40k-cd-confirm-description",
 				("nodes", _viewport.PlannedNodeCount),
 				("cost", _viewport.PlannedCost),
 				("remaining", remainingAfterConfirm)),
 			Color.FromHex("#F0DDD1".AsSpan()));
-		_stateChipLabel.Text = Loc.GetString("wh40k-character-development-confirm-state");
+		_stateChipLabel.Text = Loc.GetString("w40k-cd-confirm-state");
 		_costChipLabel.Text = Loc.GetString(
-			"wh40k-character-development-confirm-cost",
+			"w40k-cd-confirm-cost",
 			("nodes", _viewport.PlannedNodeCount),
 			("cost", _viewport.PlannedCost));
 		_costChipContainer.Visible = true;

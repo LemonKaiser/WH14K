@@ -148,7 +148,11 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
         if (prototype?.StartingGear != null)
         {
             var startingGear = _prototypeManager.Index<StartingGearPrototype>(prototype.StartingGear);
-            EquipStartingGear(entity.Value, startingGear, raiseEvent: false);
+            var loadoutOverrides = loadout != null
+                ? GetLoadoutEquipmentOverrides(loadout, roleProto)
+                : null;
+
+            EquipStartingGear(entity.Value, startingGear, loadoutOverrides, raiseEvent: false);
         }
 
         if (loadout != null)

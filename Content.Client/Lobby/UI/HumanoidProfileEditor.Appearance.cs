@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Content.Shared._WH40K.MetaProgress;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
@@ -176,7 +179,7 @@ public sealed partial class HumanoidProfileEditor
 
         for (var i = 0; i < _species.Count; i++)
         {
-            var name = Loc.GetString(_species[i].Name);
+            var name = GetSpeciesDisplayName(_species[i]);
             SpeciesButton.AddItem(name, i);
 
             if (Profile?.Species.Equals(_species[i].ID) == true)
@@ -197,6 +200,15 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetSpecies(string newSpecies)
     {
+        if (!_prototypeManager.TryIndex<SpeciesPrototype>(newSpecies, out var speciesProto))
+            return;
+
+        if (!CanSelectSpecies(speciesProto))
+        {
+            RefreshSpecies();
+            return;
+        }
+
         Profile = Profile?.WithSpecies(newSpecies);
         if (Profile == null)
             return;
@@ -214,6 +226,55 @@ public sealed partial class HumanoidProfileEditor
         UpdateSexControls(); // update sex for new species
         UpdateSpeciesGuidebookIcon();
         ReloadPreview();
+    }
+
+    private bool CanSelectSpecies(SpeciesPrototype species)
+    {
+        var isAdmin = _playerManager.LocalSession != null && _adminManager.IsAdmin(_playerManager.LocalSession);
+        var metaLevel = 0;
+        HashSet<string>? completedAchievements = null;
+
+        if (_metaProgress.TryGetCachedSnapshot(out WH40KMetaProgressSnapshot snapshot))
+        {
+            metaLevel = snapshot.Level;
+
+            if (species.RequiredAchievements.Count > 0)
+            {
+                completedAchievements = snapshot.Achievements
+                    .Where(entry => entry.Completed)
+                    .Select(entry => entry.Id)
+                    .ToHashSet(StringComparer.Ordinal);
+            }
+        }
+
+        return SpeciesSelectionRequirements.IsUnlocked(species, isAdmin, metaLevel, completedAchievements);
+    }
+
+    private string GetSpeciesDisplayName(SpeciesPrototype species)
+    {
+        var name = Loc.GetString(species.Name);
+
+        if (CanSelectSpecies(species))
+            return name;
+
+        if (species.AdminOnly && species.RequiredMetaLevel > 0)
+        {
+            return Loc.GetString("humanoid-profile-editor-species-entry-admin-level-locked",
+                ("species", name),
+                ("level", species.RequiredMetaLevel));
+        }
+
+        if (species.AdminOnly)
+            return Loc.GetString("humanoid-profile-editor-species-entry-admin-only", ("species", name));
+
+        if (species.RequiredMetaLevel > 0)
+        {
+            return Loc.GetString("humanoid-profile-editor-species-entry-level-locked",
+                ("species", name),
+                ("level", species.RequiredMetaLevel));
+        }
+
+        return Loc.GetString("humanoid-profile-editor-species-entry-locked", ("species", name));
     }
 
     private void SetAge(int newAge)

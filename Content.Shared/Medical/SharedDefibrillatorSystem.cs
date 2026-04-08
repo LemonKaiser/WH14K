@@ -213,7 +213,9 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
 
             if (TryComp<MobThresholdsComponent>(target, out var targetThresholds) &&
                 _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&
+#pragma warning disable CS0618
                 _damageable.GetTotalDamage(target) < threshold)
+#pragma warning restore CS0618
             {
                 _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
                 failedRevive = false;

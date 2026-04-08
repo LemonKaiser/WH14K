@@ -59,5 +59,9 @@ humanoid-profile-editor-trait-count-hint = Доступно очков: [{ $curr
 trait-category-disabilities = Ограничения
 trait-category-speech = Черты речи
 trait-category-quirks = Причуды
+humanoid-profile-editor-species-entry-admin-only = { $species } [Только для админов]
+humanoid-profile-editor-species-entry-level-locked = { $species } [Уровень { $level }]
+humanoid-profile-editor-species-entry-admin-level-locked = { $species } [Только для админов, уровень { $level }]
+humanoid-profile-editor-species-entry-locked = { $species } [Заблокировано]
 
 humanoid-profile-editor-development-tab = Развитие персонажа

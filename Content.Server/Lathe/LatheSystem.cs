@@ -215,18 +215,18 @@ namespace Content.Server.Lathe
             if (component.CurrentRecipe != null || component.Queue.Count <= 0 || !this.IsPowered(uid, EntityManager))
                 return false;
 
-            var batch = component.Queue.First();
-            var recipe = _proto.Index(batch.Recipe);
+            if (!TryGetNextBatchToProduce(uid, component, out var batchNode, out var recipe, out var batchIndex))
+                return false;
+
+            var batch = batchNode.Value;
             component.CurrentRecipe = recipe;
+
+            var lathe = EnsureComp<LatheProducingComponent>(uid);
+            lathe.ActiveBatch = batch;
+            lathe.ActiveBatchIndex = batchIndex;
 
             if (batch.Infinite)
             {
-                if (!CanProduce(uid, recipe, 1, component))
-                {
-                    component.CurrentRecipe = null;
-                    return false;
-                }
-
                 foreach (var (mat, amount) in GetAdjustedAmount(component, recipe))
                     _materialStorage.TryChangeMaterialAmount(uid, mat, -amount);
 
@@ -236,7 +236,7 @@ namespace Content.Server.Lathe
             {
                 batch.ItemsPrinted++;
                 if (batch.ItemsPrinted >= batch.ItemsRequested || batch.ItemsPrinted < 0) // Rollover sanity check
-                    component.Queue.RemoveFirst();
+                    component.Queue.Remove(batchNode);
             }
 
             var time = _reagentSpeed.ApplySpeed(uid, recipe.CompleteTime) * component.TimeMultiplier;
@@ -244,7 +244,6 @@ namespace Content.Server.Lathe
             RaiseLocalEvent(uid, ref getTimeEv);
             time = getTimeEv.Time < TimeSpan.Zero ? TimeSpan.Zero : getTimeEv.Time;
 
-            var lathe = EnsureComp<LatheProducingComponent>(uid);
             lathe.StartTime = _timing.CurTime;
             lathe.ProductionLength = time;
 
@@ -301,6 +300,7 @@ namespace Content.Server.Lathe
             }
 
             comp.CurrentRecipe = null;
+            ClearActiveBatch(prodComp);
             prodComp.StartTime = _timing.CurTime;
 
             if (!TryStartProducing(uid, comp))
@@ -317,8 +317,7 @@ namespace Content.Server.Lathe
                 return;
 
             var producing = component.CurrentRecipe;
-            if (producing == null && component.Queue.First is { } node)
-                producing = node.Value.Recipe;
+            LatheRecipeBatch? activeBatch = null;
 
             var isProducing = false;
             TimeSpan? productionStart = null;
@@ -328,6 +327,13 @@ namespace Content.Server.Lathe
                 isProducing = true;
                 productionStart = prodComp.StartTime;
                 productionLength = prodComp.ProductionLength;
+                activeBatch = prodComp.ActiveBatch;
+            }
+
+            if (producing == null && TryGetNextBatchToProduce(uid, component, out var nextBatchNode, out var nextRecipe, out _))
+            {
+                producing = nextRecipe.ID;
+                activeBatch = nextBatchNode.Value;
             }
 
             int? materialStorageLimit = null;
@@ -337,6 +343,7 @@ namespace Content.Server.Lathe
             var state = new LatheUpdateState(
                 GetAvailableRecipes(uid, component),
                 component.Queue.ToArray(),
+                activeBatch,
                 producing,
                 isProducing,
                 productionStart,
@@ -499,6 +506,92 @@ namespace Content.Server.Lathe
             }
         }
 
+        private bool TryGetNextBatchToProduce(
+            EntityUid uid,
+            LatheComponent component,
+            [NotNullWhen(true)] out LinkedListNode<LatheRecipeBatch>? batchNode,
+            [NotNullWhen(true)] out LatheRecipePrototype? recipe,
+            out int batchIndex)
+        {
+            batchNode = component.Queue.First;
+            batchIndex = 0;
+
+            while (batchNode != null)
+            {
+                if (_proto.TryIndex(batchNode.Value.Recipe, out recipe) &&
+                    (!batchNode.Value.Infinite || CanProduce(uid, recipe, 1, component)))
+                {
+                    return true;
+                }
+
+                batchNode = batchNode.Next;
+                batchIndex++;
+            }
+
+            batchNode = null;
+            recipe = null;
+            batchIndex = -1;
+            return false;
+        }
+
+        private static LinkedListNode<LatheRecipeBatch>? FindBatchNode(LatheComponent component, LatheRecipeBatch? batch)
+        {
+            if (batch == null)
+                return null;
+
+            var node = component.Queue.First;
+            while (node != null)
+            {
+                if (ReferenceEquals(node.Value, batch))
+                    return node;
+
+                node = node.Next;
+            }
+
+            return null;
+        }
+
+        private static void InsertBatchAtIndex(LatheComponent component, LatheRecipeBatch batch, int index)
+        {
+            if (component.Queue.Count == 0)
+            {
+                component.Queue.AddFirst(batch);
+                return;
+            }
+
+            if (index <= 0)
+            {
+                component.Queue.AddFirst(batch);
+                return;
+            }
+
+            if (index >= component.Queue.Count)
+            {
+                component.Queue.AddLast(batch);
+                return;
+            }
+
+            var node = component.Queue.First;
+            for (var i = 0; i < index && node != null; i++)
+            {
+                node = node.Next;
+            }
+
+            if (node == null)
+                component.Queue.AddLast(batch);
+            else
+                component.Queue.AddBefore(node, batch);
+        }
+
+        private static void ClearActiveBatch(LatheProducingComponent? producing)
+        {
+            if (producing == null)
+                return;
+
+            producing.ActiveBatch = null;
+            producing.ActiveBatchIndex = -1;
+        }
+
         /// <summary>
         /// Refunds the material cost of the currently running recipe,
         /// without cancelling production
@@ -528,16 +621,29 @@ namespace Content.Server.Lathe
                 _materialStorage.TryChangeMaterialAmount(uid, mat, amount * delta);
         }
 
-        public void AbortProduction(EntityUid uid, LatheComponent? component = null)
+        public void AbortProduction(EntityUid uid, LatheComponent? component = null, LatheProducingComponent? producing = null)
         {
-            if (!Resolve(uid, ref component))
+            if (!Resolve(uid, ref component, ref producing, false))
                 return;
 
             if (component.CurrentRecipe != null)
             {
-                if (component.Queue.Count > 0)
+                var activeBatch = producing?.ActiveBatch;
+                var activeNode = FindBatchNode(component, activeBatch);
+
+                if (activeBatch != null)
                 {
-                    // Batch abandoned while printing last item, need to create a one-item batch
+                    if (activeBatch.ItemsPrinted > 0)
+                        activeBatch.ItemsPrinted--;
+
+                    if (!activeBatch.Infinite && activeNode == null)
+                    {
+                        InsertBatchAtIndex(component, activeBatch, producing?.ActiveBatchIndex ?? component.Queue.Count);
+                    }
+                }
+                else if (component.Queue.Count > 0)
+                {
+                    // Fallback for legacy states where the active batch was not tracked.
                     var batch = component.Queue.First();
                     if (batch.Recipe != component.CurrentRecipe)
                     {
@@ -549,10 +655,16 @@ namespace Content.Server.Lathe
                         batch.ItemsPrinted--;
                     }
                 }
+                else
+                {
+                    component.Queue.AddFirst(new LatheRecipeBatch(component.CurrentRecipe.Value, 0, 1));
+                }
 
                 RefundCurrentRecipe(uid, component);
                 component.CurrentRecipe = null;
             }
+
+            ClearActiveBatch(producing);
             RemCompDeferred<LatheProducingComponent>(uid);
             UpdateUserInterfaceState(uid, component);
             UpdateRunningAppearance(uid, false);
@@ -667,8 +779,31 @@ namespace Content.Server.Lathe
                 LogImpact.Low,
                 $"{ToPrettyString(args.Actor):player} aborted printing {GetRecipeName(component.CurrentRecipe.Value)} at {ToPrettyString(uid):lathe}");
 
+            TryComp<LatheProducingComponent>(uid, out var producing);
+
+            if (producing?.ActiveBatch?.Infinite == true)
+            {
+                var activeNode = FindBatchNode(component, producing.ActiveBatch);
+                if (activeNode != null)
+                    component.Queue.Remove(activeNode);
+
+                RefundCurrentRecipe(uid, component);
+                component.CurrentRecipe = null;
+                ClearActiveBatch(producing);
+
+                if (!TryStartProducing(uid, component))
+                {
+                    RemCompDeferred<LatheProducingComponent>(uid);
+                    UpdateUserInterfaceState(uid, component);
+                    UpdateRunningAppearance(uid, false);
+                }
+
+                return;
+            }
+
             RefundCurrentRecipe(uid, component);
             component.CurrentRecipe = null;
+            ClearActiveBatch(producing);
             FinishProducing(uid, component);
         }
         #endregion
