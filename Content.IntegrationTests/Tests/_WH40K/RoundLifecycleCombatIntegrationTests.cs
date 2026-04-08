@@ -43,6 +43,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
     private const string Heretics = "Heretics";
     private const string ImperiumReinforcementPrototype = "MobHumanWH40KImperiumReinforcement";
     private const string HereticReinforcementPrototype = "MobHumanWH40KHereticReinforcement";
+    private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
     [Test]
     public async Task TeamBattleUsesThreeHourRoundLimitAndOneHourAssaultProfile()
@@ -652,7 +653,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
                 hands.TryPickupAnyHand(killerEntity, heldItem, checkActionBlocker: false, animateUser: false, animate: false),
                 Is.True);
 
-            var blunt = protoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = protoMan.Index(BluntDamageType);
             var (criticalThreshold, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
 
             Assert.That(
@@ -696,7 +697,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
             var protoMan = server.ResolveDependency<IPrototypeManager>();
             var damageable = entMan.System<DamageableSystem>();
             var victimEntity = GetAttachedEntity(playerMan, victimUserId);
-            var blunt = protoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = protoMan.Index(BluntDamageType);
             var (_, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
             var currentDamage = damageable.GetTotalDamage(victimEntity);
             var finishingDamage = deadThreshold - currentDamage + FixedPoint2.New(5);
@@ -766,7 +767,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
 
             entMan.EnsureComponent<WH40KTeamMemberComponent>(victimEntity).TeamId = ResolveEnemyTeamId(killerTeamId);
 
-            var blunt = protoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = protoMan.Index(BluntDamageType);
             var (_, deadThreshold) = GetCriticalAndDeadThresholds(entMan.GetComponent<MobThresholdsComponent>(victimEntity));
 
             Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, FixedPoint2.New(30)), ignoreResistances: true, origin: assistOneEntity), Is.True);
@@ -828,7 +829,7 @@ public sealed class RoundLifecycleCombatIntegrationTests
 
             entMan.EnsureComponent<WH40KTeamMemberComponent>(victimEntity).TeamId = ResolveEnemyTeamId(killerTeamId);
 
-            var blunt = protoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = protoMan.Index(BluntDamageType);
             Assert.That(damageable.TryChangeDamage(victimEntity, new DamageSpecifier(blunt, FixedPoint2.New(40)), ignoreResistances: true, origin: assistEntity), Is.True);
 
             var healedAmount = damageable.GetTotalDamage(victimEntity);
