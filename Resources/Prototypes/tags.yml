@@ -1615,6 +1615,9 @@
   id: WH40K # WH40K-specific compatibility tag used by modified dome/tool/entity prototypes.
 
 - type: Tag
+  id: WH40KBible
+
+- type: Tag
   id: Wheat # SpecialDigestible: OrganAnimalRuminantStomach. ConstructionGraph: StrawHat
 
 - type: Tag

@@ -11,6 +11,7 @@ job-name-recruit = Recruit
 job-name-voidsman = Voidsman
 job-name-colonel = Colonel
 job-name-commissar = Commissar
+job-name-major = Major
 job-name-lieutenant = Lieutenant
 job-name-sergeant-hws = HWS Sergeant
 job-name-sergeant-sws = SWS Sergeant

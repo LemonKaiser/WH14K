@@ -227,6 +227,18 @@
   - WH40KImperialCmdMelee
 
 - type: roleLoadout
+  id: JobMajor
+  groups:
+  - WH40KImperialCommandHead
+  - WH40KImperialEyes
+  - WH40KImperialCommandNeckGorget
+  - WH40KImperialSpecialistMask
+  - WH40KImperialCommandHands
+  - WH40KCommandFieldKit
+  - WH40KImperialMelee
+
+
+- type: roleLoadout
   id: JobLieutenant
   groups:
   - WH40KImperialCommandHead

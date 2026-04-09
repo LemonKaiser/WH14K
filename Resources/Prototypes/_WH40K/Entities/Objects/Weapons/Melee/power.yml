@@ -15,7 +15,8 @@
     damage:
       types:
         Slash: 15
-        Heat: 15
+        Shock: 20
+    ignoreResistances: true
     angle: 80
   # - type: DamageOtherOnHit
   #   staminaCost: 5
@@ -65,7 +66,8 @@
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Shock: 15
+        Shock: 20
+        Blunt: 15
   # - type: ItemToggleDamageOtherOnHit
   - type: Stunbaton
     energyPerUse: 20
@@ -76,6 +78,7 @@
     damage:
       types:
         Blunt: 18
+        Shock: 20
     animation: WeaponArcThrust
   # - type: DamageOtherOnHit
   #   meleeDamageMultiplier: 1.5

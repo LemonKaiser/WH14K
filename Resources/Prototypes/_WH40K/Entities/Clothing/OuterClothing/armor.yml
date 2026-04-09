@@ -206,3 +206,25 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/munitorum_vest.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/munitorum_vest.rsi
+
+# броня востроянцев
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorFlakVestVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vst_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vst_armor.rsi
+
+# броня лейтенанта востроянцев
+- type: entity
+  parent: ClothingOuterArmorCommissar
+  id: ClothingOuterArmorFlakVestLietVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vst_liet_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vst_liet_armor.rsi

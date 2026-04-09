@@ -96,6 +96,7 @@
       types:
         Blunt: 20
         Structural: 20
+    ignoreResistances: true
   - type: IgniteOnMeleeHit
     fireStacks: -4
   - type: Item

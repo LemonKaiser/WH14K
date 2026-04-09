@@ -14,10 +14,6 @@
   - type: FlashImmunity
   - type: EyeProtection
   - type: Unremoveable
-  - type: ShowHealthBars
-    damageContainers:
-    - Biological
-    - Inorganic
 
 - type: entity
   parent: ClothingEyesHudTechPriest

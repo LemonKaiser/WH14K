@@ -72,6 +72,14 @@
 
 - type: jobIcon
   parent: JobIcon
+  id: JobIconMajor
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Major
+  jobName: job-name-major
+
+- type: jobIcon
+  parent: JobIcon
   id: JobIconLieutenant
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi

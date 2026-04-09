@@ -9,22 +9,65 @@
         Heat: 15
 
 - type: entity
+  parent: RedMediumLaser
+  id: WH40KRedMediumLaserLasgunLucius
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 18
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_laser_yellow
+    travelFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_yellow
+    impactFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_laser_yellow
+
+- type: entity
+  parent: BasicHitscan
+  id: RedLaserHell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 15
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_laser
+    travelFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam
+    impactFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_laser
+
+- type: entity
   parent: BasicHitscan
   id: RedLaserLong
+  categories: [ HideSpawnMenu ]
   components:
+  - type: HitscanBasicRaycast
+    maxDistance: 100
   - type: HitscanBasicDamage
     damage:
       types:
         Heat: 40
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: muzzle_laser
     travelFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: beam
     impactFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_laser
 
 - type: entity
@@ -40,14 +83,14 @@
         Structural: 200
   - type: HitscanBasicVisuals
     muzzleFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: muzzle_beam_heavy2
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_beam_melta
     travelFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: beam_heavy2
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_melta
     impactFlash:
-      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: impact_beam_heavy2
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_beam_melta
 
 - type: entity
   parent: BasicHitscan
@@ -60,13 +103,13 @@
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: muzzle_laser
+      state: muzzle_blue
     travelFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: beam
+      state: beam_blue
     impactFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-      state: impact_laser
+      state: impact_blue
 
 - type: entity
   parent: BasicHitscan
