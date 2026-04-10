@@ -16,7 +16,6 @@
       types:
         Slash: 15
         Shock: 20
-    ignoreResistances: true
     angle: 80
   # - type: DamageOtherOnHit
   #   staminaCost: 5

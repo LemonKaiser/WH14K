@@ -189,6 +189,7 @@
   id: JobSergeant
   groups:
   - WH40KImperialSergeantHead
+  - WH40KImperialSpecialistMask
   - WH40KImperialCommandNeck
   - WH40KImperialSergeantOuter
   - WH40KImperialCommandHands
@@ -243,6 +244,7 @@
   groups:
   - WH40KImperialCommandHead
   - WH40KImperialEyes
+  - WH40KImperialLineMask
   - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands

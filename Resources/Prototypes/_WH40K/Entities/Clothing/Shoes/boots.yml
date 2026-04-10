@@ -99,10 +99,10 @@
     sprite: _WH40K/Clothing/Shoes/Boots/Cultboots.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5
-    
+
 - type: entity
   parent: ClothingShoesMilitaryBase
-  id: ClothingShoesChaosBoots2 
+  id: ClothingShoesChaosBoots2
   name: Сапоги культиста хаоса
   description: Сапоги культиста, сделанные из странно мягкой и нежной кожи, чья гладкость вызывает ужас, словно она ещё хранит тепло своих владельцев.
   suffix: WH40K, Культ Хаоса
@@ -111,5 +111,17 @@
     sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/Cultboots2.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/vst_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/vst_boots.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5

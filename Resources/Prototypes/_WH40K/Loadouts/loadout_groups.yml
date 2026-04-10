@@ -75,7 +75,6 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
-  - WH40KCoatVst
 
 - type: loadoutGroup
   id: WH40KImperialFieldOuter
@@ -89,6 +88,7 @@
   - WH40KCyanLightFlakArmor
   - WH40KCyanFlakArmor
   - WH40KFlakArmor
+  - WH40KCoatVst
 
 - type: loadoutGroup
   id: WH40KImperialFieldBelt
@@ -106,6 +106,7 @@
   - WH40KCatachanUniform1
   - WH40KCatachanUniform2
   - WH40KCatachanUniform3
+  - WH40KJumpsuitGuardVst
 
 - type: loadoutGroup
   id: WH40KImperialLineHands
@@ -173,7 +174,6 @@
 - type: loadoutGroup
   id: WH40KImperialSpecialistMask
   name: loadout-group-wh40k-imperial-specialist-mask
-  minLimit: 0
   loadouts:
   - WH40KGuardsmanGasmask
   - WH40KKriegGasmask

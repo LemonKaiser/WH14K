@@ -23,7 +23,6 @@
         Blunt: 20
         Shock: 20
         Structural: 35
-    ignoreResistances: true
     soundHit:
       collection: MetalThud
   - type: DisarmMalus
