@@ -62,6 +62,7 @@
     damage:
       types:
         Blunt: 20
+        Shock: 20
     angle: 100
     soundHit:
       collection: MetalThud

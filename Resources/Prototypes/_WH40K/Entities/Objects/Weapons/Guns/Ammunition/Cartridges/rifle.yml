@@ -21,3 +21,24 @@
   - type: RadiationSource
     intensity: 0.01
     slope: 1.5
+
+- type: entity
+  id: CartridgePhosphor
+  parent: BaseCartridge
+  suffix: WH40K, АдМехи
+  components:
+  - type: Tag
+    tags:
+      - CartridgePhosphor
+  - type: CartridgeAmmo
+    proto: BulletPhosphor
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+      - state: base
+        map: [ "enum.AmmoVisualLayers.Base" ]
+      - state: tip
+        map: [ "enum.AmmoVisualLayers.Tip" ]
+        color: "#ff4300"
+  - type: Appearance
+  - type: SpentAmmoVisuals

@@ -6,7 +6,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 15
+        Heat: 25
 
 - type: entity
   parent: RedMediumLaser
@@ -16,7 +16,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 18
+        Heat: 30
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi

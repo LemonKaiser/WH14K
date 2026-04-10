@@ -42,6 +42,13 @@
   - WH40KTechPriestGasmask
 
 - type: loadoutGroup
+  id: WH40KTechpriestWeapon
+  name: loadout-group-wh40k-techpriest-weapon
+  minLimit: 0
+  loadouts:
+  - TechpriestPhosphorBlast
+
+- type: loadoutGroup
   id: WH40KImperialEyes
   name: loadout-group-wh40k-imperial-eyes
   minLimit: 0
@@ -343,6 +350,8 @@
   - WH40KCommandChainsword
   - WH40KCommandPowerSaber
   - WH40KCommandWarHammer
+  - WH40KMace
+  - WH40KCommandPowerFist
 
 - type: loadoutGroup
   id: WH40KSergeantMelee
@@ -351,6 +360,8 @@
   loadouts:
   - WH40KCommandChainsword
   - WH40KCommandPowerSaber
+  - WH40KMace
+  - WH40KCommandPowerFist
 
 - type: loadoutGroup
   id: WH40KHereticLineHead

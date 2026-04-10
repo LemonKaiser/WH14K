@@ -90,3 +90,6 @@
 
 - type: Tag
   id: LasgunPowerCellLucius
+
+- type: Tag
+  id: CartridgePhosphor
