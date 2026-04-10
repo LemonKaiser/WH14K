@@ -397,3 +397,28 @@
     intensitySlope: 14
     totalIntensity: 56
     maxTileBreak: 1
+
+- type: entity
+  id: BulletPhosphor
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+      - state: practice
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 10
+        Heat: 35
+  - type: PointLight
+    enabled: true
+    color: "#ff4300"
+    radius: 2.0
+    energy: 7.0
+  - type: ChangeTemperatureOnCollide
+    heat: 50000
+  - type: IgniteOnCollide
+    fireStacks: 3

@@ -87,3 +87,11 @@
     requiredLevel: 10
   equipment:
     back: ClothingBackpackTechpriestDendrite
+
+- type: loadout
+  id: TechpriestPhosphorBlast
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 12
+  inhand:
+  - WeaponRevolverPhosphorBlast

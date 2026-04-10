@@ -1,0 +1,20 @@
+- type: entity
+  parent: BaseWeaponRevolver
+  id: WeaponRevolverPhosphorBlast
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor.rsi
+  - type: Gun
+    fireRate: 2
+  - type: RevolverAmmoProvider
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+    whitelist:
+      tags:
+        - CartridgePhosphor
+    proto: CartridgePhosphor
+  - type: Appearance

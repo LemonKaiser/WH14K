@@ -77,3 +77,23 @@
       - CartridgeHeavyRifle
   - type: StaticPrice
     price: 180
+
+- type: entity
+  id: WH40KAmmoBoxPhosphor
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgePhosphor
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgePhosphor
+  - type: StaticPrice
+    price: 180

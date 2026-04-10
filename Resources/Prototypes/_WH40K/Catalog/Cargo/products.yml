@@ -19,6 +19,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumAmmoPhosphor
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBoxPhosphor
+  cost: 1500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumAmmo10mm
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -597,6 +607,16 @@
     state: icon
   product: WH40KAmmoBox10mmLong
   cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmoPhosphor
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WH40KAmmoBoxPhosphor
+  cost: 1500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 

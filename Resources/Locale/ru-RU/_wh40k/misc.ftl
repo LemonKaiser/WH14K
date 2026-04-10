@@ -95,6 +95,7 @@ loadout-group-wh40k-heretic-command-hands = Хаос, командование, 
 loadout-group-wh40k-heretic-command-feet = Хаос, командование, ботинки
 loadout-group-wh40k-heretic-command-field-kit = Хаос, командный походный набор
 
+loadout-group-wh40k-techpriest-weapon = техножрец, вооружение
 loadout-group-techpriest-mask = техножрец, респираторы
 loadout-group-techpriest-eyes = техножрец, глаза
 loadout-group-techpriest-back = техножрец, ранец
