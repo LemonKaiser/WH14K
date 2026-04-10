@@ -21,8 +21,9 @@
     damage:
       types:
         Blunt: 20
-        Piercing: 10
+        Shock: 20
         Structural: 35
+    ignoreResistances: true
     soundHit:
       collection: MetalThud
   - type: DisarmMalus

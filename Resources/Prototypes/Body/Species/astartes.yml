@@ -71,6 +71,11 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.25
     baseSprintSpeed: 4.05
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 40
+        Structural: 20
   - type: MobThresholds
     thresholds:
       0: Alive

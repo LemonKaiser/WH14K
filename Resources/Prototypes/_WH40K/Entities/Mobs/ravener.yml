@@ -9,7 +9,7 @@
     speechSounds: Genestealer #Заглушка
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Tyranids
   - type: Tool
     speedModifier: 2.5
     qualities:

@@ -64,6 +64,7 @@
   - WH40KCyanFlakHelmet
   - WH40KImperialVeteranBeret
   - WH40KBandanaGold
+  - WH40KHelmetVst
 
 - type: loadoutGroup
   id: WH40KImperialLineHonours
@@ -74,6 +75,7 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KCoatVst
 
 - type: loadoutGroup
   id: WH40KImperialFieldOuter
@@ -118,6 +120,7 @@
   loadouts:
   - WH40KCombatBoots
   - WH40KCyanCombatBoots
+  - WH40KBootsVst
 
 - type: loadoutGroup
   id: WH40KImperialLineEyes
@@ -174,6 +177,7 @@
   loadouts:
   - WH40KGuardsmanGasmask
   - WH40KKriegGasmask
+  - WH40KGasmaskVst
 
 - type: loadoutGroup
   id: WH40KImperialLineMask
@@ -182,6 +186,7 @@
   loadouts:
   - WH40KGuardsmanGasmask
   - WH40KKriegGasmask
+  - WH40KGasmaskVst
 
 - type: loadoutGroup
   id: WH40KImperialMedicHead
@@ -248,6 +253,7 @@
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
+  - WH40KHelmetSergVst
 
 - type: loadoutGroup
   id: WH40KImperialSergeantOuter
@@ -267,6 +273,7 @@
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
+  - WH40KHelmetSergVst
 
 - type: loadoutGroup
   id: WH40KImperialCommandNeck
@@ -283,6 +290,7 @@
   name: loadout-group-wh40k-imperial-command-neck
   loadouts:
   - WH40KGorgetZero
+  - WH40KNeckVst
   - WH40KImperialAquilaMedal
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
@@ -294,6 +302,8 @@
   minLimit: 0
   loadouts:
   - WH40KOfficerCoat
+  - WH40KCoatLietVst
+  - WH40KArmorFlakCoatLiet
   - WH40KJuniorOfficerJacket
   - WH40KSeniorOfficerJacket
 

@@ -12,6 +12,7 @@ job-description-lexmechanic = Лексмеханик: обрабатывайте
 
 job-description-colonel = Командуйте полком Астра Милитарум, распределяйте силы и удерживайте фронт.
 job-description-commissar = Поддерживайте дисциплину полка и пресекайте панику во имя Императора.
+job-description-major = Major
 job-description-lieutenant = Руководите взводом, передавайте приказы и координируйте отделения.
 job-description-sergeant-hws = Командуйте расчётом тяжёлого вооружения и контролируйте огневые точки.
 job-description-sergeant-sws = Координируйте группу специального вооружения для прорыва и контратак.

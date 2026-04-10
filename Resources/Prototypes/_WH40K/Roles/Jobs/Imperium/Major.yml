@@ -1,0 +1,52 @@
+﻿- type: job
+  id: Major
+  name: job-name-major
+  description: job-description-major
+  playTimeTracker: JobMajor
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
+  startingGear: MajorGear
+  icon: "JobIconMajor"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  whitelisted: true
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadLeader
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: WH40KOfficerMaleHuman
+          Female: WH40KOfficerFemaleHuman
+          Unsexed: WH40KOfficerMaleHuman
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Cargo
+  - Engineering
+  - Research
+
+- type: startingGear
+  id: MajorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOfficer
+    shoes: ClothingShoesGenBoots
+    ears: ClothingHeadsetVoxBackpackImperium
+    belt: offbelt
+    head: ClothingHeadOfficer
+    outerClothing: ClothingOuterArmorFlakVestMajor
+    pocket1: WH40KCommandTacticalMapTablet
+    id: LieutenantDogTag

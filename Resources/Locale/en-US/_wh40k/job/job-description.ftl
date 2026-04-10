@@ -12,6 +12,7 @@ job-description-lexmechanic = Lexmechanic: process tactical data and maintain in
 
 job-description-colonel = Command the Astra Militarum regiment, distribute forces, and hold the front.
 job-description-commissar = Enforce regiment discipline and suppress panic in the Emperor's name.
+job-description-major = Major
 job-description-lieutenant = Lead your platoon, relay orders, and coordinate squads.
 job-description-sergeant-hws = Command the heavy weapons team and control key fire positions.
 job-description-sergeant-sws = Coordinate the special weapons team for breakthroughs and counterattacks.

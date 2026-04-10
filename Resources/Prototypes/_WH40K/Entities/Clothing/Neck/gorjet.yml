@@ -88,3 +88,14 @@
     domePrototype: EnergyDomeSmallRed
     bubbleDomePrototype: EnergyDomeSmallRed
     wallDomePrototype: EnergyDomeSmallRedDirected
+
+- type: entity
+  parent: Gorjet
+  id: ClothingNeckCloakVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi

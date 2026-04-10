@@ -20,3 +20,11 @@
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: LasgunPowerCellLucius
+        whitelist:
+          tags:
+            - LasgunPowerCellLucius

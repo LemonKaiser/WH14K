@@ -88,3 +88,13 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/gloves_fingerless_cult.rsi
   - type: Insulated
+
+- type: entity
+  parent: ClothingHandsBase
+  id: ClothingHandsGlovesVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi

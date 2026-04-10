@@ -2,14 +2,14 @@
   id: MobQueenChrysalis
   parent: SimpleSpaceMobBase
   suffix: WH40K, Ксенос
-  components: 
+  components:
   - type: TypingIndicator
     proto: alien
   - type: Speech
     speechSounds: Genestealer #заглушка
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Tyranids
   - type: Reactive
     groups:
       Flammable: [Touch]
@@ -48,8 +48,8 @@
       300: Critical
       400: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 5
-    baseSprintSpeed: 7.5
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 6.5
   - type: CombatMode
   - type: MeleeWeapon
     hidden: true

@@ -9,7 +9,7 @@
     speechSounds: Genestealer
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Tyranids
   - type: Tool
     speedModifier: 1.5
     qualities:

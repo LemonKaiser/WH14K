@@ -242,3 +242,23 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetcandlechaos.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetFlakAdvVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/vst_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/vst_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetFlakAdvSergVst
+  suffix: WH40K, Востроянцы
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi

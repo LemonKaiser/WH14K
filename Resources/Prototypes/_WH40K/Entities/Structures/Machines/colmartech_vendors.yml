@@ -59,8 +59,14 @@
         amount: 8
       - id: AccatranPowerCell
         amount: 4
+      - id: LasgunPowerCellLucius
+        amount: 16
     - name: cm-automated-vendor-section-sidearms
-      entries: []
+      entries:
+      - id: WHSapperShovel
+        amount: 8
+      - id: CombatKnife
+        amount: 8
 
 - type: entity
   parent: ColMarTechBase
@@ -100,6 +106,16 @@
       entries:
       - id: WeaponStubSMG
         amount: 10
+      - id: Chaosclub
+        amount: 3
+      - id: WeaponMeleeChaosNailBoard
+        amount: 3
+      - id: ChaosMachete
+        amount: 3
+      - id: AxeChaos
+        amount: 3
+      - id: TrenchKnifeChaos
+        amount: 3
 
 - type: entity
   parent: ColMarTechBase
@@ -182,7 +198,11 @@
         amount: 9
     - name: cm-automated-vendor-section-special-ammunition
       entries:
-      - id: LasgunPowerCell
+      - id: LonglasPowerCell
+        amount: 9
+      - id: AccatranPowerCell
+        amount: 9
+      - id: LasgunPowerCellLucius
         amount: 9
 
 - type: entity
@@ -210,6 +230,10 @@
       - id: Chainsword
         amount: 4
       - id: WHPowerSaberImperial
+        amount: 1
+      - id: WHPowerMaceImperial
+        amount: 1
+      - id: WHPowerFist
         amount: 1
     - name: Officer Ammunition
       entries:
