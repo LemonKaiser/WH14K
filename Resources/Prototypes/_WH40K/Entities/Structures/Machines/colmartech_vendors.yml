@@ -62,6 +62,7 @@
       - id: LasgunPowerCellLucius
         amount: 16
     - name: cm-automated-vendor-section-sidearms
+      entries:
       - id: WHSapperShovel
         amount: 8
       - id: CombatKnife
