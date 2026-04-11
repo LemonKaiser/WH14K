@@ -116,7 +116,7 @@
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
   id: ClothingOuterChaplainRobe
-  suffix: WH40K, Империум
+  suffix: WH40K, Священник
   components:
   - type: Armor
     modifiers:

@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingNeckBase
+  parent: Gorjet
   id: Colonelcloak
   suffix: WH40K, Гвардия
   components:
@@ -34,3 +34,14 @@
     requiredSlot:
     - neck
     slot: head
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckInqusition
+  suffix: WH40K, Священник
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Misc/inqusition.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Misc/inqusition.rsi

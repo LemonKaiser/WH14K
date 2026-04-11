@@ -23,6 +23,8 @@
         Structural: 12
     soundHit:
       collection: MetalThud
+  - type: StaminaDamageOnHit
+    damage: 10
   - type: DisarmMalus
     malus: 0.275
   - type: Shovel

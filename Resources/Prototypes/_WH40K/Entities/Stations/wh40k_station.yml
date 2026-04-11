@@ -37,6 +37,11 @@
           - WH40KImperiumLasCellBox
           - WH40KImperiumFlakVest
           - WH40KImperiumFlakHelmet
+          - WH40KImperiumJumpsuit
+          - WH40KImperiumEyesHud
+          - WH40KImperiumBackpack
+          - WH40KImperiumFlakVestLight
+          - WH40KImperiumBelt
         WH40KHeretics:
           - WH40KHereticsAmmo10mmLong
           - WH40KHereticsAmmo10mm
@@ -49,6 +54,10 @@
           - WH40KHereticsLasCellBox
           - WH40KHereticsFlakVest
           - WH40KHereticsFlakHelmet
+          - WH40KHereticsJumpsuit
+          - WH40KHereticsArmorChaosVest
+          - WH40KHereticsBackpack
+          - WH40KHereticsBelt
       researchRequirementsByAccount:
         WH40KImperium:
           WH40KImperiumLasgun: [WH40KWeaponryStandardLasguns]

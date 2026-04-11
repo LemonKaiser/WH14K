@@ -9,6 +9,56 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumJumpsuit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingUniformJumpsuitGuardsman
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumEyesHud
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingEyesHudGuard
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBackpack
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingBackpackGuard
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumFlakVestLight
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingOuterArmorFlakVestLight
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBelt
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: guardbelt
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumAmmo10mmLong
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -596,6 +646,46 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FlashlightLantern
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsJumpsuit
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingUniformJumpsuitCultist2
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsArmorChaosVest
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingOuterArmorChaosVest
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBackpack
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: ClothingBackpackCULT1
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBelt
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: chaosbelt
   cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket

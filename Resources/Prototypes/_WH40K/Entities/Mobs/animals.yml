@@ -23,17 +23,6 @@
     layers:
       - map: ["enum.DamageStateVisualLayers.Base", "movement"]
         state: QueenChrysalis
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.75
-        density: 80
-        mask:
-        - MobMask
-        layer:
-        - MobLayer
   - type: DamageStateVisuals
     states:
       Alive:
@@ -47,6 +36,7 @@
       0: Alive
       300: Critical
       400: Dead
+  - type: ProtectedFromStepTriggers
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
     baseSprintSpeed: 6.5
@@ -81,3 +71,12 @@
     noMovementLayers:
       movement:
         state: QueenChrysalis
+
+- type: entity
+  id: MobQueenChrysalisImperium
+  parent: SimpleSpaceMobBase
+  suffix: WH40K, Империум
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Imperium

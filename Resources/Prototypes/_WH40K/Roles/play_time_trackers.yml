@@ -165,3 +165,6 @@
 
 - type: playTimeTracker
   id: JobMajor
+
+- type: playTimeTracker
+  id: JobWH40KChaplain

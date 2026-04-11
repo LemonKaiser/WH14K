@@ -1,0 +1,37 @@
+- type: job
+  id: WH40KChaplain
+  name: job-name-chaplain
+  description: job-description-chaplain
+  playTimeTracker: JobWH40KChaplain
+  startingGear: WH40KChaplainGear
+  icon: "JobIconChaplain"
+  supervisors: job-supervisors-hop
+  access:
+  - Chapel
+  - Maintenance
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: BibleUser #Lets them heal with bibles
+    - type: Reflect
+      reflectProb: 0.4
+      spread: 90
+    - type: Vocal
+      sounds:
+        Male: W40KOffMale
+        Female: W40KOffFemale
+        Unsexed: W40KOffMale
+
+- type: startingGear
+  id: WH40KChaplainGear
+  equipment:
+    jumpsuit: WH40KClothingUniformJumpsuitChaplain
+    shoes: ClothingShoesBootsChaplain
+    belt: ClothingBeltChaplain
+    ears: ClothingHeadsetVoxBackpackImperium
+    outerClothing: ClothingOuterChaplainRobe
+    neck: ClothingNeckInqusition
+    id: CommissarDogTag
+    pocket1: WH40KBible
+  inhand:
+    - Chainsword

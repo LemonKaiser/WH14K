@@ -97,3 +97,23 @@
       - CartridgePhosphor
   - type: StaticPrice
     price: 180
+
+- type: entity
+  id: WH40KAmmoBoxElectricArc
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeElectricArc
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeElectricArc
+  - type: Electrified
+    requirePower: false

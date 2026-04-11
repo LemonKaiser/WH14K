@@ -24,6 +24,8 @@
             Tanker: [ 3, 3 ]
             TitheSupplier: [ 2, 2 ]
             VoxScout: [ 3, 3 ]
+            Major: [ 1, 1 ]
+            WH40KChaplain: [ 2, 2 ]
             # Heretics
             HColonel: [ 1, 1 ]
             HGuardsman: [ -1, -1 ]

@@ -12,7 +12,7 @@
       Extinguish: [Touch]
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Imperium
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
@@ -87,3 +87,4 @@
     decay: 6
     cooldown: 1
     baseCritThreshold: 400
+  - type: ProtectedFromStepTriggers

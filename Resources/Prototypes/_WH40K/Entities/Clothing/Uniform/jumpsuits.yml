@@ -151,3 +151,13 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/vst_uniform.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: WH40KClothingUniformJumpsuitChaplain
+  suffix: WH40K, Священник
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/chaplain.rsi

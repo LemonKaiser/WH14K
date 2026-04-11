@@ -46,6 +46,7 @@
   name: loadout-group-wh40k-techpriest-weapon
   minLimit: 0
   loadouts:
+  - TechpriestElectricArc
   - TechpriestPhosphorBlast
 
 - type: loadoutGroup
@@ -283,6 +284,13 @@
   - WH40KHelmetSergVst
 
 - type: loadoutGroup
+  id: WH40KImperialCommissarHead
+  name: loadout-group-wh40k-imperial-command-head
+  minLimit: 0
+  loadouts:
+  - WH40KCyanOfficerCap
+
+- type: loadoutGroup
   id: WH40KImperialCommandNeck
   name: loadout-group-wh40k-imperial-command-neck
   minLimit: 0
@@ -483,7 +491,6 @@
   id: WH40KHereticCommandNecklace
   name: loadout-group-wh40k-heretic-command-neck
   loadouts:
-  - WH40KChaosNecklaceZero
   - WH40KChaosUndividedMedal
   - WH40KChaosKhorneMedal
   - WH40KChaosNurgleMedal
