@@ -12,10 +12,10 @@
       Extinguish: [Touch]
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Imperium
   - type: HTN
     rootTask:
-      task: Imperium
+      task: SimpleHostile
   - type: Hands
   - type: Sprite
     drawdepth: Mobs
