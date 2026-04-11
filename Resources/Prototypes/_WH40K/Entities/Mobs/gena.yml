@@ -15,7 +15,7 @@
     - Imperium
   - type: HTN
     rootTask:
-      task: SimpleHostile
+      task: SimpleHostileCompound
   - type: Hands
   - type: Sprite
     drawdepth: Mobs
