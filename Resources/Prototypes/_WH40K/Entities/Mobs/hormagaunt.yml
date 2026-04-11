@@ -34,17 +34,7 @@
     layers:
       - map: [ "enum.DamageStateVisualLayers.Base" ]
         state: hormagaunt
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.75
-        density: 80
-        mask:
-        - MobMask
-        layer:
-        - MobLayer
+  - type: ProtectedFromStepTriggers
   - type: DamageStateVisuals
     states:
       Alive:

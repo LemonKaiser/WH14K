@@ -422,3 +422,21 @@
     heat: 50000
   - type: IgniteOnCollide
     fireStacks: 3
+
+- type: entity
+  id: BulletElectricArc
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+      - state: practice
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 10
+        Shock: 40
+  - type: Electrified
+    requirePower: false

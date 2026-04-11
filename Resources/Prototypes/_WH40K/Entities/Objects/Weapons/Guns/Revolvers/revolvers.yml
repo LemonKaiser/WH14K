@@ -18,3 +18,29 @@
         - CartridgePhosphor
     proto: CartridgePhosphor
   - type: Appearance
+
+- type: entity
+  parent: BaseWeaponRevolver
+  id: WeaponRevolverElectricArc
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
+  - type: Gun
+    fireRate: 2
+  - type: RevolverAmmoProvider
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+    whitelist:
+      tags:
+        - CartridgeElectricArc
+    proto: CartridgeElectricArc
+  - type: Appearance
+  - type: MagazineVisuals
+    magState: mag
+    steps: 4
+  - type: Electrified
+    requirePower: false

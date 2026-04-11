@@ -208,7 +208,7 @@
   suffix: WH40K, Империум
   components:
   - type: SpawnPoint
-    job_id: SpecialistHWS
+    job_id: WH40KChaplain
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -223,7 +223,7 @@
   suffix: WH40K, Империум
   components:
   - type: SpawnPoint
-    job_id: SpecialistSWS
+    job_id: Major
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:

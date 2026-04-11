@@ -95,3 +95,11 @@
     requiredLevel: 12
   inhand:
   - WeaponRevolverPhosphorBlast
+
+- type: loadout
+  id: TechpriestElectricArc
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  inhand:
+  - WeaponRevolverElectricArc

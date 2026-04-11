@@ -257,10 +257,9 @@
 - type: roleLoadout
   id: JobCommissar
   groups:
-  - WH40KImperialCommandHead
+  - WH40KImperialCommissarHead
   - WH40KImperialEyes
   - WH40KImperialCommandNeckGorget
-  - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
   - WH40KImperialCmdMelee

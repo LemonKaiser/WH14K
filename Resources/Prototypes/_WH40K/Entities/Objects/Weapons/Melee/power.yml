@@ -62,11 +62,15 @@
       path: /Audio/Machines/button.ogg
       params:
         variation: 0.250
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Slash: 15
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
+        Slash: 15
         Shock: 20
-        Blunt: 15
   # - type: ItemToggleDamageOtherOnHit
   - type: Stunbaton
     energyPerUse: 20
@@ -76,8 +80,7 @@
     range: 1.6
     damage:
       types:
-        Blunt: 18
-        Shock: 20
+        Blunt: 15
     animation: WeaponArcThrust
   # - type: DamageOtherOnHit
   #   meleeDamageMultiplier: 1.5

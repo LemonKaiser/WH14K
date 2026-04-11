@@ -293,6 +293,13 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KRecipeAmmoElectricArc
+  result: WH40KAmmoBoxElectricArc
+  materials:
+    Steel: 1000
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeAmmoLethalshot
   result: BoxLethalshot
   materials:

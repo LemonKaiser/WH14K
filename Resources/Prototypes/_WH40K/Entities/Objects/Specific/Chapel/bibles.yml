@@ -1,6 +1,7 @@
 - type: entity
   parent: BaseStorageItem
   id: WH40KBible
+  suffix: WH40K, Священник
   components:
   - type: UseDelay
     delay: 10.0

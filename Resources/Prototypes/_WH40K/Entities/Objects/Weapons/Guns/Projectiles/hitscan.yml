@@ -36,7 +36,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 15
+        Heat: 20
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -99,7 +99,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 5
+        Heat: 10
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi

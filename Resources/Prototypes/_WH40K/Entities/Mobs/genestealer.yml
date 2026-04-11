@@ -81,6 +81,7 @@
     - Hive
   - type: Puller
     needsHands: false
+  - type: ProtectedFromStepTriggers
   - type: Tag
     tags:
       - FootstepSound

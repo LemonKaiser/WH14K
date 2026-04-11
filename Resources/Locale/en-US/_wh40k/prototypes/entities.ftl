@@ -1398,3 +1398,24 @@ ent-MobHormagaunt = Hormagaunt
 
 ent-LasgunPowerCellLucius = Lucius Power Cell
     .desc = Fits the Lucius pattern lasgun
+
+ent-WeaponRevolverPhosphorBlast = Phosphor Blast Pistol
+    .desc = Fiery pellets fired by phosphorus weapons emit powerful sparks that home in on Skitarii.
+
+ent-WH40KAmmoBoxPhosphor = Phosphor Ammo Box
+    .desc = Fiery pellets fired by phosphorus weapons emit powerful sparks that home in on Skitarii.
+
+ent-WeaponRevolverElectricArc = Electric Arc Pistol
+    .desc = Electric Arc weapons are most easily identified by the bulky permacapacitor in the barrel, which delivers a devastating discharge of electricity to the target.
+
+ent-CartridgeElectricArc = Electric Arc Weapon Cartridge
+    .desc = Delivers a devastating discharge of electricity to the target.
+
+ent-CartridgePhosphor = Phosphor weapon cartridge
+    .desc = Emits a powerful glow.
+
+ent-WH40KAmmoBoxElectricArc = Electric Arc Ammo Box
+    .desc = Delivers a devastating bolt of electricity to the target. And partly into this box...
+
+ent-MobQueenChrysalisImperium = Queen Chrysalis
+    .desc = A shapeshifting pony that can take on a variety of forms.

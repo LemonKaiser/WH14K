@@ -26,6 +26,7 @@
         - MobMask
         layer:
         - MobLayer
+  - type: ProtectedFromStepTriggers
   - type: DamageStateVisuals
     states:
       Alive:

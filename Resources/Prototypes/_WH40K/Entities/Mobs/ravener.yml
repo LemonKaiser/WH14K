@@ -28,6 +28,7 @@
   - type: HTN
     rootTask:
       task: SimpleHostileCompound
+  - type: ProtectedFromStepTriggers
   - type: Sprite
     drawdepth: Mobs
     sprite: _WH40K/Mobs/ravener.rsi

@@ -86,8 +86,6 @@
         amount: 12
       - id: WeaponChsStubSMG2
         amount: 12
-      - id: WeaponStubRifle
-        amount: 2
       - id: WeaponChsStubShotgun
         amount: 1
     - name: cm-automated-vendor-section-primary-ammunition

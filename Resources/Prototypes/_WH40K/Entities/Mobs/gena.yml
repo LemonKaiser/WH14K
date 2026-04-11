@@ -15,7 +15,7 @@
     - SimpleHostile
   - type: HTN
     rootTask:
-      task: SimpleHostileCompound
+      task: Imperium
   - type: Hands
   - type: Sprite
     drawdepth: Mobs
@@ -87,3 +87,4 @@
     decay: 6
     cooldown: 1
     baseCritThreshold: 400
+  - type: ProtectedFromStepTriggers

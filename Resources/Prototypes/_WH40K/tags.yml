@@ -93,3 +93,6 @@
 
 - type: Tag
   id: CartridgePhosphor
+
+- type: Tag
+  id: CartridgeElectricArc

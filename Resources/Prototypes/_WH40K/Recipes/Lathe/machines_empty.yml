@@ -194,6 +194,7 @@
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
@@ -375,6 +376,7 @@
   - WH40KRecipeAmmo10mmLong
   - WH40KRecipeAmmoLethalshot
   - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
