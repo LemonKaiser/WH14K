@@ -18,7 +18,7 @@
     soundHit:
       path: "/Audio/Weapons/smash.ogg"
   - type: StaminaDamageOnHit
-    damage: 20
+    damage: 10
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Melee/chaos_club.rsi
     quickEquip: false

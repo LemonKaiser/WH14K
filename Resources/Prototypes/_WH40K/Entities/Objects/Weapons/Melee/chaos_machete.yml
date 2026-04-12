@@ -18,7 +18,7 @@
     shape:
     - 0,0,2,0
   - type: StaminaDamageOnHit
-    damage: 5
+    damage: 2.5
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Melee/machete_chaos.rsi
     quickEquip: false

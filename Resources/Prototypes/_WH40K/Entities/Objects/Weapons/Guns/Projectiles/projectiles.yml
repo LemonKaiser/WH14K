@@ -412,16 +412,16 @@
     damage:
       types:
         Piercing: 10
-        Heat: 35
+        Heat: 2
   - type: PointLight
     enabled: true
     color: "#ff4300"
     radius: 2.0
     energy: 7.0
   - type: ChangeTemperatureOnCollide
-    heat: 50000
+    heat: 49000
   - type: IgniteOnCollide
-    fireStacks: 3
+    fireStacks: 2.3
 
 - type: entity
   id: BulletElectricArc
@@ -437,6 +437,14 @@
     damage:
       types:
         Piercing: 10
-        Shock: 40
-  - type: Electrified
-    requirePower: false
+        Shock: 20
+    soundHit:
+      path: "/Audio/Weapons/Guns/Hits/taser_hit.ogg"
+    forceSound: true
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0.5 # Enough to subdue and follow up with a stun baton
+    drop: false #Ranged KD and item drop are too strong in one package
+    slowdownAmount: 0.5
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5

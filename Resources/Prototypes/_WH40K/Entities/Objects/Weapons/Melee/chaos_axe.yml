@@ -47,7 +47,7 @@
         restitution: 0.3
         friction: 0.
   - type: StaminaDamageOnHit
-    damage: 10
+    damage: 5
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Melee/Chaos_Axe.rsi
     quickEquip: false
