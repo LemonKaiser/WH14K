@@ -255,7 +255,7 @@ public abstract class SharedWeatherSystem : EntitySystem
 
     public bool TryAddWeather(EntityUid mapUid, EntProtoId weatherProto, [NotNullWhen(true)] out EntityUid? weatherEnt, TimeSpan? duration = null)
     {
-        if (!mapUid.IsValid() || !Exists(mapUid))
+        if (!CanMutateWeatherTarget(mapUid))
         {
             weatherEnt = null;
             return false;
@@ -282,7 +282,7 @@ public abstract class SharedWeatherSystem : EntitySystem
 
     public bool TryRemoveWeather(EntityUid mapUid, EntProtoId weatherProto)
     {
-        if (!mapUid.IsValid() || !Exists(mapUid))
+        if (!CanMutateWeatherTarget(mapUid))
             return false;
 
         if (!_statusEffects.TryGetStatusEffect(mapUid, weatherProto, out var weatherEnt))
@@ -299,6 +299,9 @@ public abstract class SharedWeatherSystem : EntitySystem
         weatherEnt = null;
 
         if (!TryResolveWeatherMap(mapId, out var mapUid))
+            return false;
+
+        if (!CanMutateWeatherTarget(mapUid))
             return false;
 
         if (_statusEffects.TryEffectsWithComp<WeatherStatusEffectComponent>(mapUid, out var effects))
@@ -336,6 +339,15 @@ public abstract class SharedWeatherSystem : EntitySystem
             return false;
 
         mapUid = mapEntity.Value;
-        return mapUid.IsValid() && Exists(mapUid);
+        return CanMutateWeatherTarget(mapUid);
+    }
+
+    private bool CanMutateWeatherTarget(EntityUid mapUid)
+    {
+        if (!mapUid.IsValid() || !Exists(mapUid))
+            return false;
+
+        return TryComp(mapUid, out MetaDataComponent? metaData) &&
+               metaData.EntityLifeStage < EntityLifeStage.Terminating;
     }
 }

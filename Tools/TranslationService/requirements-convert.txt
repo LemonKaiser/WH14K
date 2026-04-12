@@ -1,0 +1,4 @@
+# Dependencies needed only for model conversion (download_models.sh / download_models.ps1)
+# Not required at service runtime.
+-r requirements.txt
+torch>=2.2,<3

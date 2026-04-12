@@ -12,6 +12,7 @@ public readonly struct LocalizationCultureScope : IDisposable
     private readonly ILocalizationManager _localizationManager;
     private readonly CultureInfo? _previousCulture;
     private readonly bool _active;
+    private readonly bool _flushEntityCache;
 
     /// <summary>
     ///     Optional callback to flush engine caches when culture changes.
@@ -21,10 +22,21 @@ public readonly struct LocalizationCultureScope : IDisposable
     public static Action<ILocalizationManager>? FlushCacheAction { get; set; }
 
     public LocalizationCultureScope(ILocalizationManager localizationManager, string? cultureName)
+        : this(localizationManager, cultureName, flushEntityCache: true)
+    {
+    }
+
+    /// <param name="flushEntityCache">
+    ///     When <c>false</c>, skip the expensive entity-name cache flush.
+    ///     Safe to set <c>false</c> when the scope is only used for <see cref="Loc.GetString"/>
+    ///     calls that do not reference entity data (e.g. chat message formatting).
+    /// </param>
+    public LocalizationCultureScope(ILocalizationManager localizationManager, string? cultureName, bool flushEntityCache)
     {
         _localizationManager = localizationManager;
         _previousCulture = localizationManager.DefaultCulture;
         _active = false;
+        _flushEntityCache = flushEntityCache;
 
         var validated = ContentLocalizationManager.ValidateCultureName(cultureName);
         if (validated == null)
@@ -40,7 +52,8 @@ public readonly struct LocalizationCultureScope : IDisposable
                 return;
 
             localizationManager.SetCulture(culture);
-            FlushEntityCache(localizationManager);
+            if (flushEntityCache)
+                FlushEntityCacheImpl(localizationManager);
             _active = true;
         }
         catch (Exception)
@@ -55,7 +68,8 @@ public readonly struct LocalizationCultureScope : IDisposable
             return;
 
         _localizationManager.SetCulture(_previousCulture);
-        FlushEntityCache(_localizationManager);
+        if (_flushEntityCache)
+            FlushEntityCacheImpl(_localizationManager);
     }
 
     /// <summary>
@@ -63,7 +77,7 @@ public readonly struct LocalizationCultureScope : IDisposable
     ///     <see cref="ILocalizationManager.GetEntityData"/> calls re-resolve
     ///     names and descriptions using the currently active culture.
     /// </summary>
-    private static void FlushEntityCache(ILocalizationManager loc)
+    private static void FlushEntityCacheImpl(ILocalizationManager loc)
     {
         FlushCacheAction?.Invoke(loc);
     }

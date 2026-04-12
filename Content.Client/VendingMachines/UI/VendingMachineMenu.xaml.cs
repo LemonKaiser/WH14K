@@ -30,6 +30,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
     private bool _enabled;
     private string _titleText = string.Empty;
     private string _subtitleText = string.Empty;
+    private VendingMachineUiStatus? _lastStatus;
 
     public event Action<GUIBoundKeyEventArgs, ListData>? OnItemSelected;
 
@@ -60,6 +61,7 @@ public sealed partial class VendingMachineMenu : FancyWindow
             ? Loc.GetString("vending-machine-ui-header-subtitle-fallback")
             : metaData.EntityDescription;
         _theme = VendingMachineMenuStyles.ResolveTheme(metaData.EntityPrototype?.ID);
+        _lastStatus = null;
 
         ApplyTheme();
         RefreshStatusPanel();
@@ -181,7 +183,6 @@ public sealed partial class VendingMachineMenu : FancyWindow
         };
         button.OnMouseExited += _ => button.StyleBoxOverride = normalStyle;
 
-        WH40KUiChrome.PlayFadeIn(button, "appear", 0.2f, MathF.Min(entry.ItemIndex * 0.02f, 0.24f));
     }
 
     private void PopulateFilterOptions()
@@ -319,12 +320,15 @@ public sealed partial class VendingMachineMenu : FancyWindow
     {
         var status = GetCurrentStatus();
         var accent = GetStatusColor(status);
+        var changed = _lastStatus != status;
+        _lastStatus = status;
 
         StatusPanel.PanelOverride = VendingMachineMenuStyles.CreatePanelStyle(_theme.PanelAltBackground, accent.WithAlpha(0.82f), 0);
         StatusValueLabel.Text = Loc.GetString(GetStatusLocKey(status));
         StatusValueLabel.FontColorOverride = accent;
         SetWrappedText(StatusHintLabel, Loc.GetString(GetStatusHintLocKey(status)), _theme.SecondaryText);
-        WH40KUiChrome.PlayHoverFlash(StatusPanel, "status-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
+        if (changed)
+            WH40KUiChrome.PlayHoverFlash(StatusPanel, "status-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
     }
 
     private void RefreshSummaryCards()

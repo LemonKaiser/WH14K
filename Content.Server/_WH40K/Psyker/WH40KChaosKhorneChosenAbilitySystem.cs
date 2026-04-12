@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using Content.Server.Body.Systems;
 using Content.Server.KillTracking;
+using Content.Server._WH40K.MetaProgress;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Body.Components;
@@ -78,7 +79,7 @@ public sealed class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<WH40KChaosKhorneChosenRuntimeComponent, ComponentShutdown>(OnRuntimeShutdown);
-        SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
+        SubscribeLocalEvent<WH40KConfirmedEliminationEvent>(OnConfirmedElimination);
     }
 
     public override void Update(float frameTime)
@@ -242,11 +243,12 @@ public sealed class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
         args.Message = Loc.GetString("w40k-ch-khorne-no-guns");
     }
 
-    private void OnKillReported(ref KillReportedEvent ev)
+    private void OnConfirmedElimination(WH40KConfirmedEliminationEvent ev)
     {
-        if (ev.Suicide || ev.Primary is not KillPlayerSource source)
+        if (ev.Suicide)
             return;
 
+        var source = ev.Primary;
         if (!TryGetSessionById(source.PlayerId, out var killer))
             return;
 

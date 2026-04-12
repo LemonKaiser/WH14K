@@ -88,6 +88,7 @@ internal sealed partial class ChatManager : IChatManager
     public void Initialize()
     {
         _netManager.RegisterNetMessage<MsgChatMessage>();
+        _netManager.RegisterNetMessage<MsgUpdateChatMessage>();
         _netManager.RegisterNetMessage<MsgDeleteChatMessagesBy>();
 
         _configurationManager.OnValueChanged(CCVars.OocEnabled, OnOocEnabledChanged, true);
@@ -232,6 +233,9 @@ internal sealed partial class ChatManager : IChatManager
             return;
         }
         var wrappedMessage = Loc.GetString("chat-manager-send-hook-ooc-wrap-message", ("senderName", sender), ("message", FormattedMessage.EscapeText(message)));
+        if (TryDispatchTranslatedHookOoc(sender, message, wrappedMessage))
+            return;
+
         ChatMessageToAll(ChatChannel.OOC, message, wrappedMessage, source: EntityUid.Invalid, hideChat: false, recordReplay: true);
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Hook OOC from {sender}: {message}");
     }
@@ -333,11 +337,6 @@ internal sealed partial class ChatManager : IChatManager
             out titleEntry,
             out colorEntry);
 
-        var wrappedMessage = Loc.GetString(
-            "chat-manager-send-ooc-wrap-message",
-            ("playerName", playerName),
-            ("message", escapedMessage));
-
         if (adminDecorationPriority && _adminManager.HasAdminFlag(player, AdminFlags.NameColor))
         {
             var prefs = _preferencesManager.GetPreferences(player.UserId);
@@ -346,36 +345,34 @@ internal sealed partial class ChatManager : IChatManager
             metaNameMarkup = null;
         }
 
+        string? patronColor = null;
         if (_netConfigManager.GetClientCVar(player.Channel, CCVars.ShowOocPatronColor) &&
             player.Channel.UserData.PatronTier is { } patron &&
-            PatronOocColors.TryGetValue(patron, out var patronColor))
+            PatronOocColors.TryGetValue(patron, out var resolvedPatronColor))
         {
-            wrappedMessage = Loc.GetString(
-                "chat-manager-send-ooc-patron-wrap-message",
-                ("patronColor", patronColor),
-                ("playerName", playerName),
-                ("message", escapedMessage));
+            patronColor = resolvedPatronColor;
         }
-        else if (colorOverride == null &&
-                 ShouldDecorateFullLine(fullLineMode, isAdmin, adminDecorationPriority) &&
-                 TryBuildDecoratedOocLineMarkup(colorEntry, titleEntry, player.Name, titlePrefix, message, out var fullLineMarkup))
+
+        var formatContext = new WH40KOocFormatContext(
+            player.Name,
+            playerName,
+            colorOverride,
+            patronColor,
+            metaNameColorHex,
+            metaNameMarkup,
+            titlePrefix,
+            titleEntry,
+            colorEntry,
+            adminDecorationPriority,
+            isAdmin);
+
+        var wrappedMessage = BuildOocWrappedMessage(formatContext, message, null);
+
+        if (TryDispatchTranslatedOoc(player, message, wrappedMessage, lobbyIsolationMode, formatContext))
         {
-            wrappedMessage = fullLineMarkup;
-        }
-        else if (colorOverride == null && !string.IsNullOrWhiteSpace(metaNameMarkup))
-        {
-            wrappedMessage = Loc.GetString(
-                "chat-manager-send-ooc-decoration-markup-wrap-message",
-                ("playerNameMarkup", metaNameMarkup),
-                ("message", escapedMessage));
-        }
-        else if (colorOverride == null && !string.IsNullOrWhiteSpace(metaNameColorHex))
-        {
-            wrappedMessage = Loc.GetString(
-                "chat-manager-send-ooc-decoration-wrap-message",
-                ("nameColor", metaNameColorHex),
-                ("playerName", playerName),
-                ("message", escapedMessage));
+            _discordLink.SendMessage(message, player.Name, ChatChannel.OOC);
+            _adminLogger.Add(LogType.Chat, LogImpact.Low, $"OOC from {player:Player}: {message}");
+            return;
         }
 
         //TODO: player.Name color, this will need to change the structure of the MsgChatMessage
@@ -987,14 +984,25 @@ internal sealed partial class ChatManager : IChatManager
                string.Equals(iconId, JobIconUnknown, StringComparison.Ordinal);
     }
 
-    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+    private ChatMessage CreateChatMessage(
+        ChatChannel channel,
+        string message,
+        string wrappedMessage,
+        EntityUid source,
+        bool hideChat,
+        Color? colorOverride = null,
+        string? audioPath = null,
+        float audioVolume = 0,
+        NetUserId? author = null,
+        ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct,
+        uint? serverMessageId = null)
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
         var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
 
-        var msg = new ChatMessage(
+        return new ChatMessage(
             channel,
             message,
             wrappedMessage,
@@ -1006,7 +1014,13 @@ internal sealed partial class ChatManager : IChatManager
             audioVolume,
             senderJobIconId,
             senderNameIsProperNoun,
-            speechTransport);
+            speechTransport,
+            serverMessageId);
+    }
+
+    public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null)
+    {
+        var msg = CreateChatMessage(channel, message, wrappedMessage, source, hideChat, colorOverride, audioPath, audioVolume, author, speechTransport, serverMessageId);
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
 
         if (!recordReplay)
@@ -1019,29 +1033,18 @@ internal sealed partial class ChatManager : IChatManager
         }
     }
 
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
-        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author, speechTransport);
-
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+    public void UpdateChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, uint serverMessageId, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
     {
-        var user = author == null ? null : EnsurePlayer(author);
-        var netSource = _entityManager.GetNetEntity(source);
-        user?.AddEntity(netSource);
-        var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
+        var msg = CreateChatMessage(channel, message, wrappedMessage, source, hideChat, colorOverride, audioPath, audioVolume, author, speechTransport, serverMessageId);
+        _netManager.ServerSendMessage(new MsgUpdateChatMessage { Message = msg }, client);
+    }
 
-        var msg = new ChatMessage(
-            channel,
-            message,
-            wrappedMessage,
-            netSource,
-            user?.Key,
-            hideChat,
-            colorOverride,
-            audioPath,
-            audioVolume,
-            senderJobIconId,
-            senderNameIsProperNoun,
-            speechTransport);
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null)
+        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author, speechTransport, serverMessageId);
+
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null)
+    {
+        var msg = CreateChatMessage(channel, message, wrappedMessage, source, hideChat, colorOverride, audioPath, audioVolume, author, speechTransport, serverMessageId);
         _netManager.ServerSendToMany(new MsgChatMessage() { Message = msg }, clients);
 
         if (!recordReplay)
@@ -1055,7 +1058,7 @@ internal sealed partial class ChatManager : IChatManager
     }
 
     public void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source,
-        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null)
     {
         if (!recordReplay && !filter.Recipients.Any())
             return;
@@ -1066,29 +1069,12 @@ internal sealed partial class ChatManager : IChatManager
             clients.Add(recipient.Channel);
         }
 
-        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume, speechTransport: speechTransport);
+        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume, speechTransport: speechTransport, serverMessageId: serverMessageId);
     }
 
-    public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+    public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null)
     {
-        var user = author == null ? null : EnsurePlayer(author);
-        var netSource = _entityManager.GetNetEntity(source);
-        user?.AddEntity(netSource);
-        var (senderJobIconId, senderNameIsProperNoun) = ResolveSenderChatVisuals(source, author);
-
-        var msg = new ChatMessage(
-            channel,
-            message,
-            wrappedMessage,
-            netSource,
-            user?.Key,
-            hideChat,
-            colorOverride,
-            audioPath,
-            audioVolume,
-            senderJobIconId,
-            senderNameIsProperNoun,
-            speechTransport);
+        var msg = CreateChatMessage(channel, message, wrappedMessage, source, hideChat, colorOverride, audioPath, audioVolume, author, speechTransport, serverMessageId);
         _netManager.ServerSendToAll(new MsgChatMessage() { Message = msg });
 
         if (!recordReplay)

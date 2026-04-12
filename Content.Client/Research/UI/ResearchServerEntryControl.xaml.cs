@@ -15,6 +15,7 @@ public sealed partial class ResearchServerEntryControl : BoxContainer
 
     private readonly WH40KResearchConsoleTheme _theme;
     private readonly Color _accentColor;
+    private bool? _selected;
 
     public readonly int ServerId;
 
@@ -50,6 +51,10 @@ public sealed partial class ResearchServerEntryControl : BoxContainer
 
     public void ApplySelection(bool selected)
     {
+        if (_selected == selected)
+            return;
+
+        _selected = selected;
         CardPanel.PanelOverride = WH40KResearchConsoleStyles.CreatePanelStyle(
             selected ? _theme.SurfaceHoverBackground : _theme.SurfaceBackground,
             selected ? _accentColor.WithAlpha(0.92f) : _theme.BorderColor,

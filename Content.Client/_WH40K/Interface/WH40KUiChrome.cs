@@ -25,6 +25,7 @@ public static class WH40KUiChrome
     }
 
     private static readonly Dictionary<Control, LoopState> LoopStates = new();
+    private static readonly object LoopStatesLock = new();
 
     public static string DecorateTitle(string glyph, string text)
     {
@@ -46,32 +47,45 @@ public static class WH40KUiChrome
 
     public static void StartLoopingPulse(Control control, string key, Color dim, Color bright, float seconds = 3f)
     {
-        if (!LoopStates.TryGetValue(control, out var state))
-        {
-            state = new LoopState();
-            LoopStates[control] = state;
-        }
-
-        if (!state.HandlerAttached)
-        {
-            control.AnimationCompleted += completedKey =>
-            {
-                if (!LoopStates.TryGetValue(control, out var loopState))
-                    return;
-
-                if (!loopState.Animations.TryGetValue(completedKey, out var animation))
-                    return;
-
-                if (control.HasRunningAnimation(completedKey))
-                    return;
-
-                control.PlayAnimation(animation, completedKey);
-            };
-            state.HandlerAttached = true;
-        }
-
         var animation = CreatePulseAnimation(dim, bright, seconds);
-        state.Animations[key] = animation;
+        var shouldPlay = false;
+
+        lock (LoopStatesLock)
+        {
+            if (!LoopStates.TryGetValue(control, out var state))
+            {
+                state = new LoopState();
+                LoopStates[control] = state;
+            }
+
+            if (!state.HandlerAttached)
+            {
+                control.AnimationCompleted += completedKey =>
+                {
+                    Animation? completedAnimation = null;
+                    lock (LoopStatesLock)
+                    {
+                        if (LoopStates.TryGetValue(control, out var loopState) &&
+                            loopState.Animations.TryGetValue(completedKey, out var storedAnimation))
+                        {
+                            completedAnimation = storedAnimation;
+                        }
+                    }
+
+                    if (completedAnimation == null || control.HasRunningAnimation(completedKey))
+                        return;
+
+                    control.PlayAnimation(completedAnimation, completedKey);
+                };
+                state.HandlerAttached = true;
+            }
+
+            state.Animations[key] = animation;
+            shouldPlay = true;
+        }
+
+        if (!shouldPlay)
+            return;
 
         if (control.HasRunningAnimation(key))
             control.StopAnimation(key);

@@ -1198,6 +1198,12 @@ ent-ClothingBackpackAstartesMk7JumpPack = Mk VII jump pack
 ent-ClothingBackpackAstartesMk23JumpPack = Mk II/III jump pack
     .desc = An early jump pack for Astartes power armour.
 
+ent-ClothingShoesAstartesImperiumBoots = Imperium Space Marine boots
+    .desc = Reinforced power-armour boots built for the anatomy of the Adeptus Astartes.
+
+ent-ClothingShoesAstartesChaosBoots = Chaos Space Marine boots
+    .desc = Defiled power-armour boots fitted for the anatomy of a traitor Astartes.
+
 ent-ClothingHeadHelmetAstartesMk7 = Mk VII "Aquila" helmet
     .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
 

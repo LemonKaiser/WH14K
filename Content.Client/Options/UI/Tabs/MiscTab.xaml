@@ -9,7 +9,11 @@
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'ui-options-hud-theme'}" />
                 <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'ui-options-hud-layout'}" />
+                <Label Name="LanguageHeaderLabel" Text="{Loc 'ui-options-general-language-translation'}"
+                       StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownLanguage" Title="{Loc 'ui-options-language'}" />
+                <ui:OptionDropDown Name="DropDownChatTranslationLanguage" Title="{Loc 'ui-options-chat-translation-language'}" />
+                <CheckBox Name="ChatTranslationEnabledCheckBox" Text="{Loc 'ui-options-chat-translation-enabled'}" />
                 <Label Name="LobbyHeaderLabel" Text="{Loc 'ui-options-general-lobby'}"
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownLobbyBackgroundType" Title="{Loc 'ui-options-lobby-background-type'}" />

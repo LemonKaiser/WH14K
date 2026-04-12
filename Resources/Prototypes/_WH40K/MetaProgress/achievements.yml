@@ -9,7 +9,7 @@
   rewardDecorations:
     - decor-title-legend
   target: 12
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Round
   roundBlockerStatKeys:
     - combat.death
@@ -26,7 +26,7 @@
   rewardDecorations:
     - decor-ghost-star
   target: 8
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Round
   sortOrder: 20
 
@@ -41,7 +41,7 @@
   rewardDecorations:
     - decor-title-war-choir
   target: 8
-  progressStatKey: support.stabilize
+  progressStatKey: support.stabilize.validated
   progressScope: Round
   sortOrder: 30
 
@@ -71,7 +71,7 @@
   rewardDecorations:
     - decor-title-trench-lord
   target: 15
-  progressStatKey: objective.defense.success
+  progressStatKey: objective.defense.success.validated
   progressScope: Round
   sortOrder: 50
 
@@ -117,7 +117,7 @@
   rewardDecorations:
     - decor-title-storm-herald
   target: 15
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Round
   sortOrder: 90
 
@@ -132,7 +132,7 @@
   rewardDecorations:
     - decor-title-iron-oath
   target: 10
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Round
   roundBlockerStatKeys:
     - combat.death
@@ -149,7 +149,7 @@
   rewardDecorations:
     - decor-color-sunset-static
   target: 8
-  progressStatKey: combat.assist.enemy
+  progressStatKey: combat.assist.enemy.validated
   progressScope: Round
   sortOrder: 110
 
@@ -164,7 +164,7 @@
   rewardDecorations:
     - decor-ghost-pack-shadowkin
   target: 150
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Lifetime
   sortOrder: 120
 
@@ -179,7 +179,7 @@
   rewardDecorations:
     - decor-title-hellforged
   target: 300
-  progressStatKey: combat.kill.enemy
+  progressStatKey: combat.elimination.enemy
   progressScope: Lifetime
   sortOrder: 130
 
@@ -194,7 +194,7 @@
   rewardDecorations:
     - decor-color-mint-solid
   target: 4
-  progressStatKey: support.revive
+  progressStatKey: support.revive.validated
   progressScope: Round
   sortOrder: 140
 
@@ -209,7 +209,7 @@
   rewardDecorations:
     - decor-title-bone-guard
   target: 40
-  progressStatKey: support.revive
+  progressStatKey: support.revive.validated
   progressScope: Lifetime
   sortOrder: 150
 
@@ -224,7 +224,7 @@
   rewardDecorations:
     - decor-color-jade-solid
   target: 12
-  progressStatKey: support.stabilize
+  progressStatKey: support.stabilize.validated
   progressScope: Round
   sortOrder: 160
 
@@ -239,7 +239,7 @@
   rewardDecorations:
     - decor-color-glacier-static
   target: 120
-  progressStatKey: support.heal.bucket100
+  progressStatKey: support.heal.bucket100.validated
   progressScope: Lifetime
   sortOrder: 170
 
@@ -254,7 +254,7 @@
   rewardDecorations:
     - decor-title-night-warden
   target: 6
-  progressStatKey: support.revive
+  progressStatKey: support.revive.validated
   progressScope: Round
   roundBlockerStatKeys:
     - combat.death
@@ -346,7 +346,7 @@
   rewardDecorations:
     - decor-title-blood-banner
   target: 4
-  progressStatKey: objective.capture.success
+  progressStatKey: objective.capture.success.validated
   progressScope: Round
   sortOrder: 240
 
@@ -361,7 +361,7 @@
   rewardDecorations:
     - decor-title-relic-keeper
   target: 10
-  progressStatKey: objective.defense.success
+  progressStatKey: objective.defense.success.validated
   progressScope: Round
   sortOrder: 250
 
@@ -376,7 +376,7 @@
   rewardDecorations:
     - decor-title-astral-sentinel
   target: 40
-  progressStatKey: objective.capture.success
+  progressStatKey: objective.capture.success.validated
   progressScope: Lifetime
   sortOrder: 260
 
@@ -391,7 +391,7 @@
   rewardDecorations:
     - decor-title-gatekeeper
   target: 150
-  progressStatKey: objective.defense.success
+  progressStatKey: objective.defense.success.validated
   progressScope: Lifetime
   sortOrder: 270
 
@@ -406,7 +406,7 @@
   rewardDecorations:
     - decor-title-pyre-marshal
   target: 6
-  progressStatKey: objective.capture.success
+  progressStatKey: objective.capture.success.validated
   progressScope: Round
   roundBlockerStatKeys:
     - combat.death

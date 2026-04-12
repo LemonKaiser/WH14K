@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Reflection;
+using Content.Shared.CCVar;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Localizations;
 using Content.Shared.Verbs;
+using Content.Shared._WH40K.Chat.Translation;
 using Robust.Server.Player;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -19,6 +22,7 @@ namespace Content.Server._WH40K.Localizations;
 public sealed class WH40KPlayerCultureTracker : EntitySystem
 {
     [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private readonly INetConfigurationManager _netConfig = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private readonly Dictionary<NetUserId, string> _cultures = new();
@@ -62,6 +66,11 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
         return new LocalizationCultureScope(_loc, GetCulture(session));
     }
 
+    public LocalizationCultureScope CreateChatScope(ICommonSession session)
+    {
+        return new LocalizationCultureScope(_loc, GetCulture(session), flushEntityCache: false);
+    }
+
     public LocalizationCultureScope CreateScope(EntityUid player)
     {
         return new LocalizationCultureScope(_loc, GetCulture(player));
@@ -89,6 +98,28 @@ public sealed class WH40KPlayerCultureTracker : EntitySystem
         return TryComp<ActorComponent>(player, out var actor)
             ? ResolveLanguageCode(actor.PlayerSession)
             : null;
+    }
+
+    public bool IsChatTranslationEnabled(ICommonSession session)
+    {
+        return _netConfig.GetClientCVar(session.Channel, CCVars.WH40KChatTranslationPreferenceEnabled);
+    }
+
+    public string? ResolveChatLanguageCode(ICommonSession session)
+    {
+        var preferredLanguage = _netConfig.GetClientCVar(session.Channel, CCVars.WH40KChatTranslationPreferenceLanguage);
+        return WH40KChatTranslationMarkup.NormalizeLanguageCode(preferredLanguage) ?? ResolveLanguageCode(session);
+    }
+
+    public bool TryResolveChatLanguageCode(ICommonSession session, out string? languageCode)
+    {
+        languageCode = null;
+
+        if (!IsChatTranslationEnabled(session))
+            return false;
+
+        languageCode = ResolveChatLanguageCode(session);
+        return languageCode != null;
     }
 
     private void OnLobbyInfoRefresh(RequestLobbyInfoRefreshEvent msg, EntitySessionEventArgs args)

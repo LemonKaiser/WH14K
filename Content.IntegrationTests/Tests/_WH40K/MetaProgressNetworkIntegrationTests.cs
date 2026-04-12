@@ -53,7 +53,7 @@ public sealed class MetaProgressNetworkIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
 
             _ = meta.GetSnapshot(userId);
-            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated, 1);
         });
 
         await RunForServerTimeAsync(pair, TimeSpan.FromMilliseconds(700));
@@ -142,9 +142,9 @@ public sealed class MetaProgressNetworkIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
 
             _ = meta.GetSnapshot(userId);
-            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess, 1);
-            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess, 1);
-            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated, 1);
         });
 
         await RunForServerTimeAsync(pair, TimeSpan.FromMilliseconds(250));

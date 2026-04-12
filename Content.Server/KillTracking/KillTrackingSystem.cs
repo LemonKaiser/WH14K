@@ -29,6 +29,14 @@ public sealed class KillTrackingSystem : EntitySystem
         component.KillState = state;
     }
 
+    public void ClearDamageLedger(EntityUid uid, KillTrackerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component, false))
+            return;
+
+        component.DamageLedger.Clear();
+    }
+
     /// <inheritdoc/>
     public override void Initialize()
     {
@@ -120,9 +128,14 @@ public sealed class KillTrackingSystem : EntitySystem
 
         var strongestContributor = recentContributors
             .FirstOrDefault(pair => pair.Key is not KillEnvironmentSource);
+        var strongestExternalPlayerContributor = recentContributors
+            .FirstOrDefault(pair => pair.Key is KillPlayerSource && !IsSourceEntity(pair.Key, uid));
 
         var primary = impulse;
-        if (primary is KillEnvironmentSource && strongestContributor.Key != null)
+        // When a player and an NPC both contributed, always keep the kill on the player side.
+        if (primary is not KillPlayerSource && strongestExternalPlayerContributor.Key != null)
+            primary = strongestExternalPlayerContributor.Key;
+        else if (primary is KillEnvironmentSource && strongestContributor.Key != null)
             primary = strongestContributor.Key;
 
         if (primary is KillEnvironmentSource && recentContributors.Length > 0)

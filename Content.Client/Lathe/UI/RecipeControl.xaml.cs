@@ -19,7 +19,9 @@ public sealed partial class RecipeControl : Control
 
     private readonly WH40KLatheMenuTheme _theme;
     private ProtoId<LatheRecipePrototype> _recipeId;
+    private ProtoId<LatheRecipePrototype>? _displayRecipeId;
     private readonly LatheSystem _latheSystem;
+    private bool? _canProduce;
     private string _metaText = string.Empty;
 
     public RecipeControl(
@@ -47,12 +49,12 @@ public sealed partial class RecipeControl : Control
         };
 
         RecipeName.FontColorOverride = theme.PrimaryText;
-        SetRecipe(recipe, metaText);
-        SetCanProduce(canProduce);
-        SetDisplayControl(displayControl);
-
         WH40KLatheMenuStyles.ApplyButtonTheme(Button, WH40KLatheMenuStyles.CreatePrimaryButtonStyle(theme), theme.PrimaryText);
         WH40KLatheMenuStyles.ApplyButtonTheme(InfiniteButton, WH40KLatheMenuStyles.CreateSecondaryButtonStyle(theme), theme.PrimaryText);
+
+        SetRecipe(recipe, metaText);
+        SetCanProduce(canProduce);
+        SetDisplayControl(displayControl, recipe.ID);
 
         Button.OnPressed += _ =>
         {
@@ -84,6 +86,13 @@ public sealed partial class RecipeControl : Control
 
     public void SetCanProduce(bool canProduce)
     {
+        if (_canProduce == canProduce)
+        {
+            UpdateMetaText(!canProduce);
+            return;
+        }
+
+        _canProduce = canProduce;
         Button.Disabled = !canProduce;
         AccentBar.PanelOverride = new StyleBoxFlat
         {
@@ -104,8 +113,12 @@ public sealed partial class RecipeControl : Control
         UpdateMetaText(!canProduce);
     }
 
-    public void SetDisplayControl(Control displayControl)
+    public void SetDisplayControl(Control displayControl, ProtoId<LatheRecipePrototype> recipeId)
     {
+        if (_displayRecipeId == recipeId && RecipeDisplayContainer.ChildCount == 1)
+            return;
+
+        _displayRecipeId = recipeId;
         RecipeDisplayContainer.Children.Clear();
         RecipeDisplayContainer.AddChild(displayControl);
     }

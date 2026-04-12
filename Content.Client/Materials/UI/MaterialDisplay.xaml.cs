@@ -27,9 +27,11 @@ public sealed partial class MaterialDisplay : PanelContainer
     private readonly MaterialStorageUIController _materialUIController;
 
     private int _volume;
+    private int _maxEjectableSheets = -1;
     private readonly EntityUid _ent;
     public readonly string Material;
     private readonly bool _canEject;
+    private readonly Dictionary<int, Button> _ejectButtons = new();
 
     public MaterialDisplay(EntityUid ent, string material, int volume, bool canEject)
     {
@@ -50,11 +52,11 @@ public sealed partial class MaterialDisplay : PanelContainer
         };
         ProductName.FontColorOverride = Color.FromHex("#D9E3E8".AsSpan());
         WH40KUiChrome.StartLoopingPulse(AccentBar, "accent-pulse", materialProto.Color.WithAlpha(0.72f), Color.White, 4.2f);
-        WH40KUiChrome.PlayFadeIn(this, "material-appear", 0.16f);
 
         _ent = ent;
         Material = material;
         _canEject = canEject;
+        InitializeButtons();
         UpdateVolume(volume);
     }
 
@@ -76,12 +78,11 @@ public sealed partial class MaterialDisplay : PanelContainer
         var mat = Loc.GetString("lathe-menu-material-display", ("material", name), ("amount", amountText));
         ProductName.Text = WH40KUiChrome.DecorateIfMissing(mat, WH40KUiChrome.DiamondOutline);
 
-        PopulateButtons(maxEjectableSheets);
+        UpdateButtons(maxEjectableSheets);
     }
 
-    public void PopulateButtons(int maxEjectableSheets)
+    private void InitializeButtons()
     {
-        Content.Children.Clear();
         if (!_canEject)
             return;
 
@@ -118,14 +119,26 @@ public sealed partial class MaterialDisplay : PanelContainer
                 _materialUIController.SendLatheEjectMessage(_ent, Material, sheetsToEject);
             };
 
-            button.Disabled = maxEjectableSheets < sheetsToEject;
-
             if (_prototypeManager.TryIndex<MaterialPrototype>(Material, out var proto))
             {
                 button.ToolTip = Loc.GetString("lathe-menu-tooltip-display", ("amount", sheetsToEject), ("material", Loc.GetString(proto.Name)));
             }
 
             Content.AddChild(button);
+            _ejectButtons[sheetsToEject] = button;
+        }
+    }
+
+    private void UpdateButtons(int maxEjectableSheets)
+    {
+        if (!_canEject || _maxEjectableSheets == maxEjectableSheets)
+            return;
+
+        _maxEjectableSheets = maxEjectableSheets;
+
+        foreach (var (sheetsToEject, button) in _ejectButtons)
+        {
+            button.Disabled = maxEjectableSheets < sheetsToEject;
         }
     }
 }

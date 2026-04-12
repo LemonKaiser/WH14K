@@ -25,6 +25,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 
     private readonly ISawmill _sawmill;
     private readonly ChatUIController _controller;
+    private readonly Dictionary<uint, int> _messageEntryIndices = new();
 
     public bool Main { get; set; }
 
@@ -70,7 +71,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
         var wrappedMessage = _controller.GetChatDisplayMessage(msg);
 
-        AddLine(wrappedMessage, color);
+        AddLine(wrappedMessage, color, msg.ServerMessageId);
     }
 
     private void OnHighlightsUpdated(string highlights)
@@ -85,12 +86,24 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 
     public void Repopulate()
     {
-        Contents.Clear();
+        var scrollBar = GetContentsScrollBar();
+        var wasAtEnd = scrollBar?.IsAtEnd ?? true;
+        var previousScroll = scrollBar?.Value ?? 0f;
+
+        ClearDisplayedMessages();
 
         foreach (var message in _controller.History)
         {
             OnMessageAdded(message.Item2);
         }
+
+        if (scrollBar == null)
+            return;
+
+        if (wasAtEnd)
+            scrollBar.Value = scrollBar.MaxValue;
+        else
+            scrollBar.Value = previousScroll;
     }
 
     public void Relocalize()
@@ -101,7 +114,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 
     private void OnChannelFilter(ChatChannel channel, bool active)
     {
-        Contents.Clear();
+        ClearDisplayedMessages();
 
         foreach (var message in _controller.History)
         {
@@ -119,13 +132,48 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         _controller.UpdateHighlights(highlighs);
     }
 
-    public void AddLine(string message, Color color)
+    public void AddLine(string message, Color color, uint? serverMessageId = null)
     {
+        if (serverMessageId is { } messageId)
+            _messageEntryIndices[messageId] = Contents.EntryCount;
+
         var formatted = new FormattedMessage(3);
         formatted.PushColor(color);
         formatted.AddMarkupOrThrow(message);
         formatted.Pop();
         Contents.AddMessage(formatted, tagsAllowed: null);
+    }
+
+    public bool TryUpdateMessage(ChatMessage msg)
+    {
+        if (msg.ServerMessageId is not { } messageId)
+            return false;
+
+        if (!_messageEntryIndices.TryGetValue(messageId, out _))
+            return false;
+
+        // OutputPanel.SetMessage replaces the entry data but does not remove inline controls
+        // created by the previous rich-text parse, which leaves orphaned language tags/icons.
+        // Rebuild the visible chat from history so the old controls are cleared deterministically.
+        Repopulate();
+        return true;
+    }
+
+    private void ClearDisplayedMessages()
+    {
+        _messageEntryIndices.Clear();
+        Contents.Clear();
+    }
+
+    private VScrollBar? GetContentsScrollBar()
+    {
+        for (var i = 0; i < Contents.ChildCount; i++)
+        {
+            if (Contents.GetChild(i) is VScrollBar scrollBar)
+                return scrollBar;
+        }
+
+        return null;
     }
 
     public void Focus(ChatSelectChannel? channel = null)

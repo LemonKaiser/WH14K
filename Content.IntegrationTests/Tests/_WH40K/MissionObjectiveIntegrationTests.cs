@@ -597,6 +597,8 @@ public sealed class MissionObjectiveIntegrationTests
                 Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.LogisticsDeliveryValue), Is.GreaterThan(0));
                 Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveCaptureSuccess), Is.EqualTo(1));
                 Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccess), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveCaptureSuccessValidated), Is.EqualTo(1));
+                Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated), Is.EqualTo(1));
             });
         });
 

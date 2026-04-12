@@ -38,7 +38,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
     private int _unlockedVisibleCount;
     private int _currentCardCount;
     private bool _hasAccess = true;
-    private string? _lastPanelStateKey;
 
     public EntityUid Entity;
 
@@ -60,7 +59,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         Entity = entity;
         var prototypeId = _entity.GetComponent<MetaDataComponent>(entity).EntityPrototype?.ID;
         _theme = WH40KResearchConsoleStyles.ResolveTheme(prototypeId);
-        _lastPanelStateKey = null;
         ApplyTheme();
     }
 
@@ -73,17 +71,9 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
 
         if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
         {
-            var emptyKey = $"no-db|access={_hasAccess}";
-            if (_lastPanelStateKey != emptyKey)
-            {
-                AvailableCardsContainer.Children.Clear();
-                UnlockedCardsContainer.Children.Clear();
-                TechnologyCardsContainer.Children.Clear();
-                PopulateMiniTechnologyList(AvailableCardsContainer, Array.Empty<TechnologyPrototype>());
-                PopulateMiniTechnologyList(UnlockedCardsContainer, Array.Empty<TechnologyPrototype>());
-                _lastPanelStateKey = emptyKey;
-            }
-
+            SyncMiniTechnologyList(AvailableCardsContainer, Array.Empty<TechnologyPrototype>());
+            SyncMiniTechnologyList(UnlockedCardsContainer, Array.Empty<TechnologyPrototype>());
+            SyncTechnologyDeckCards(state, Array.Empty<string>());
             UpdateDeckCounters();
             RefreshFooter(state);
             return;
@@ -105,17 +95,9 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         _unlockedVisibleCount = unlockedTech.Count;
         _currentCardCount = database.CurrentTechnologyCards.Count;
 
-        var panelStateKey = BuildPanelStateKey(state, database, availableTech, unlockedTech, _hasAccess);
-        if (_lastPanelStateKey == panelStateKey)
-        {
-            UpdateDeckCounters();
-            RefreshFooter(state);
-            return;
-        }
-
-        RebuildPanels(state, database, availableTech, unlockedTech);
-        _lastPanelStateKey = panelStateKey;
-
+        SyncMiniTechnologyList(AvailableCardsContainer, availableTech);
+        SyncTechnologyDeckCards(state, database.CurrentTechnologyCards);
+        SyncMiniTechnologyList(UnlockedCardsContainer, unlockedTech);
         UpdateDeckCounters();
         RefreshFooter(state);
     }
@@ -242,51 +224,75 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
         WH40KUiChrome.StartLoopingPulse(FooterDivider, "footer-pulse", new Color(0.55f, 0.55f, 0.55f, 1f), Color.White, 4.1f);
     }
 
-    private void RebuildPanels(
-        ResearchConsoleBoundInterfaceState state,
-        TechnologyDatabaseComponent database,
-        IReadOnlyList<TechnologyPrototype> availableTech,
-        IReadOnlyList<TechnologyPrototype> unlockedTech)
+    private void SyncTechnologyDeckCards(ResearchConsoleBoundInterfaceState state, IReadOnlyList<string> technologyIds)
     {
-        AvailableCardsContainer.Children.Clear();
-        UnlockedCardsContainer.Children.Clear();
-        TechnologyCardsContainer.Children.Clear();
-
-        PopulateMiniTechnologyList(AvailableCardsContainer, availableTech);
-
-        var deckIndex = 0;
-        foreach (var techId in database.CurrentTechnologyCards)
+        var oldChildCount = TechnologyCardsContainer.ChildCount;
+        var visualIndex = 0;
+        foreach (var techId in technologyIds)
         {
             var tech = _prototype.Index<TechnologyPrototype>(techId);
-            var cardControl = new TechnologyCardControl(
-                tech,
-                _prototype,
-                _sprite,
-                _research.GetTechnologyDescription(tech, includeTier: false),
-                state.Points,
-                _hasAccess,
-                state.TimedResearchEnabled && state.ActiveTechnologyId != null,
-                state.ActiveTechnologyId == techId,
-                _theme);
-            cardControl.OnPressed += () => OnTechnologyCardPressed?.Invoke(techId);
-            TechnologyCardsContainer.AddChild(cardControl);
-            WH40KUiChrome.PlayFadeIn(cardControl, "appear", 0.22f, MathF.Min(deckIndex * 0.025f, 0.24f));
-            deckIndex++;
+            var description = _research.GetTechnologyDescription(tech, includeTier: false);
+
+            if (visualIndex >= oldChildCount)
+            {
+                var cardControl = new TechnologyCardControl(
+                    tech,
+                    _prototype,
+                    _sprite,
+                    description,
+                    state.Points,
+                    _hasAccess,
+                    state.TimedResearchEnabled && state.ActiveTechnologyId != null,
+                    state.ActiveTechnologyId == techId,
+                    _theme);
+                cardControl.OnPressed += () => OnTechnologyCardPressed?.Invoke(cardControl.TechnologyId);
+                TechnologyCardsContainer.AddChild(cardControl);
+                WH40KUiChrome.PlayFadeIn(cardControl, "appear", 0.22f, MathF.Min(visualIndex * 0.025f, 0.24f));
+            }
+            else if (TechnologyCardsContainer.GetChild(visualIndex) is TechnologyCardControl cardControl)
+            {
+                cardControl.ApplyState(
+                    tech,
+                    description,
+                    state.Points,
+                    _hasAccess,
+                    state.TimedResearchEnabled && state.ActiveTechnologyId != null,
+                    state.ActiveTechnologyId == techId);
+            }
+
+            visualIndex++;
         }
 
-        PopulateMiniTechnologyList(UnlockedCardsContainer, unlockedTech);
+        for (var childIdx = oldChildCount - 1; visualIndex <= childIdx; childIdx--)
+        {
+            TechnologyCardsContainer.RemoveChild(childIdx);
+        }
     }
 
-    private void PopulateMiniTechnologyList(BoxContainer container, IEnumerable<TechnologyPrototype> technologies)
+    private void SyncMiniTechnologyList(BoxContainer container, IReadOnlyList<TechnologyPrototype> technologies)
     {
-        container.Children.Clear();
+        var oldChildCount = container.ChildCount;
         var visualIndex = 0;
         foreach (var tech in technologies)
         {
-            var mini = new MiniTechnologyCardControl(tech, _prototype, _sprite, _research.GetTechnologyDescription(tech), _theme);
-            container.AddChild(mini);
-            WH40KUiChrome.PlayFadeIn(mini, "appear", 0.18f, MathF.Min(visualIndex * 0.02f, 0.2f));
+            var description = _research.GetTechnologyDescription(tech);
+            if (visualIndex >= oldChildCount)
+            {
+                var mini = new MiniTechnologyCardControl(tech, _prototype, _sprite, description, _theme);
+                container.AddChild(mini);
+                WH40KUiChrome.PlayFadeIn(mini, "appear", 0.18f, MathF.Min(visualIndex * 0.02f, 0.2f));
+            }
+            else if (container.GetChild(visualIndex) is MiniTechnologyCardControl mini)
+            {
+                mini.ApplyState(tech, description);
+            }
+
             visualIndex++;
+        }
+
+        for (var childIdx = oldChildCount - 1; visualIndex <= childIdx; childIdx--)
+        {
+            container.RemoveChild(childIdx);
         }
     }
 
@@ -347,26 +353,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             "Heretics" => "wh40k-research-console-footer-right-heretics",
             _ => "research-console-footer-right-panel",
         };
-    }
-
-    private static string BuildPanelStateKey(
-        ResearchConsoleBoundInterfaceState state,
-        TechnologyDatabaseComponent database,
-        IReadOnlyList<TechnologyPrototype> availableTech,
-        IReadOnlyList<TechnologyPrototype> unlockedTech,
-        bool hasAccess)
-    {
-        var available = string.Join(",", availableTech.Select(t => t.ID));
-        var cards = string.Join(",", database.CurrentTechnologyCards);
-        var unlocked = string.Join(",", unlockedTech.Select(t => t.ID));
-
-        return $"points={state.Points}" +
-               $"|access={hasAccess}" +
-               $"|busy={state.TimedResearchEnabled && state.ActiveTechnologyId != null}" +
-               $"|active={state.ActiveTechnologyId ?? string.Empty}" +
-               $"|available={available}" +
-               $"|cards={cards}" +
-               $"|unlocked={unlocked}";
     }
 
     private static void SortTechnologies(List<TechnologyPrototype> technologies)

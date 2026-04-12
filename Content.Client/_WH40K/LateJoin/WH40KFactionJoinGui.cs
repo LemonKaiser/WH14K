@@ -52,6 +52,8 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
     private readonly SpriteSystem _sprites;
     private readonly BoxContainer _root;
     private readonly BoxContainer _row;
+    private readonly PanelContainer _statusPanel;
+    private readonly RichTextLabel _statusLabel;
     private IReadOnlyList<WH40KFactionInfo> _latestFactions;
 
     public event Action<string>? FactionSelected;
@@ -60,7 +62,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
 
     public WH40KFactionJoinGui(WH40KFactionSelectionPurpose purpose, IReadOnlyList<WH40KFactionInfo> initialFactions)
     {
-        MinSize = SetSize = new Vector2(500, 380);
+        MinSize = SetSize = new Vector2(500, 404);
         IoCManager.InjectDependencies(this);
 
         Purpose = purpose;
@@ -76,12 +78,38 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             SeparationOverride = 8,
         };
 
+        _statusLabel = new RichTextLabel
+        {
+            HorizontalExpand = true,
+            MaxWidth = 452,
+        };
+        _statusLabel.SetMessage(string.Empty, defaultColor: Color.FromHex("#8D90AA"));
+
+        _statusPanel = new PanelContainer
+        {
+            HorizontalExpand = true,
+            Visible = false,
+            Margin = new Thickness(8, 0, 8, 8),
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = CardBackground.WithAlpha(0.95f),
+                BorderColor = SeparatorColor,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 10,
+                ContentMarginRightOverride = 10,
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8,
+            }
+        };
+        _statusPanel.AddChild(_statusLabel);
+
         _root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             HorizontalExpand = true,
             VerticalExpand = true,
-            Children = { _row }
+            SeparationOverride = 4,
+            Children = { _row, _statusPanel }
         };
 
         ContentsContainer.AddChild(_root);
@@ -124,6 +152,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
     {
         _latestFactions = factions;
         _row.RemoveAllChildren();
+        UpdateStatusPanel(factions);
 
         if (factions.Count == 0)
         {
@@ -163,7 +192,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         };
 
         if (disabled && !string.IsNullOrWhiteSpace(faction.DisabledReason))
-            button.ToolTip = Loc.GetString(faction.DisabledReason);
+            button.ToolTip = GetDisabledReasonText(faction);
 
         var normalStyle = new StyleBoxFlat
         {
@@ -259,21 +288,6 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         inner.AddChild(bottomSpacer);
         inner.AddChild(nameLabel);
 
-        if (disabled && !string.IsNullOrWhiteSpace(faction.DisabledReason))
-        {
-            var reasonLabel = new Label
-            {
-                HorizontalAlignment = HAlignment.Center,
-                Align = Label.AlignMode.Center,
-                Text = Loc.GetString(faction.DisabledReason),
-                FontColorOverride = Color.FromHex("#8D90AA"),
-                Margin = new Thickness(0, 10, 0, 0),
-                HorizontalExpand = true,
-            };
-            reasonLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSans/NotoSans-Regular.ttf"), 12);
-            inner.AddChild(reasonLabel);
-        }
-
         inner.AddChild(new Control
         {
             VerticalExpand = true,
@@ -340,5 +354,47 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         container.AddChild(vsLabel);
         container.AddChild(bottomLine);
         return container;
+    }
+
+    private void UpdateStatusPanel(IReadOnlyList<WH40KFactionInfo> factions)
+    {
+        var disabledFactions = factions
+            .Where(faction => !faction.CanSelect && !string.IsNullOrWhiteSpace(faction.DisabledReason))
+            .ToArray();
+
+        if (disabledFactions.Length == 0)
+        {
+            _statusLabel.SetMessage(string.Empty, defaultColor: Color.FromHex("#8D90AA"));
+            _statusPanel.Visible = false;
+            return;
+        }
+
+        var showFactionPrefix = disabledFactions.Length > 1;
+        var lines = disabledFactions.Select(faction => GetDisabledReasonText(faction, showFactionPrefix));
+
+        _statusLabel.SetMessage(string.Join("\n", lines), defaultColor: Color.FromHex("#8D90AA"));
+        _statusPanel.Visible = true;
+    }
+
+    private static string GetDisabledReasonText(WH40KFactionInfo faction, bool showFactionPrefix = false)
+    {
+        if (string.IsNullOrWhiteSpace(faction.DisabledReason))
+            return string.Empty;
+
+        if (faction.DisabledReason == "wh40k-faction-balance-blocked")
+        {
+            return faction.Id switch
+            {
+                "Imperium" => Loc.GetString("wh40k-faction-balance-blocked-imperium"),
+                "Heretics" => Loc.GetString("wh40k-faction-balance-blocked-heretics"),
+                _ => Loc.GetString(faction.DisabledReason),
+            };
+        }
+
+        var reason = Loc.GetString(faction.DisabledReason);
+        if (!showFactionPrefix)
+            return reason;
+
+        return $"{Loc.GetString(faction.Name)}: {reason}";
     }
 }

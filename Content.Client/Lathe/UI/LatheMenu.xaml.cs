@@ -64,6 +64,7 @@ public sealed partial class LatheMenu : FancyWindow
 
     public EntityUid Entity;
     private ProtoId<LatheRecipePrototype>? _progressRecipe;
+    private ProtoId<LatheRecipePrototype>? _fabricatingDisplayRecipe;
     private int _progressPrinted;
     private TimeSpan _progressStepStart = TimeSpan.Zero;
     private TimeSpan _progressStepDuration = TimeSpan.Zero;
@@ -218,8 +219,7 @@ public sealed partial class LatheMenu : FancyWindow
                 child.SetRecipe(prototype, metaText);
                 child.SetTooltipSupplier(tooltipFunction);
                 child.SetCanProduce(canProduce);
-                child.SetDisplayControl(GetRecipeDisplayControl(prototype));
-                WH40KUiChrome.PlayFadeIn(child, "appear", 0.14f, MathF.Min(idx * 0.012f, 0.16f));
+                child.SetDisplayControl(GetRecipeDisplayControl(prototype), prototype.ID);
             }
             idx++;
         }
@@ -362,7 +362,7 @@ public sealed partial class LatheMenu : FancyWindow
 
             if (idx >= oldChildCount)
             {
-                var queuedRecipeBox = new QueuedRecipeControl(displayText, idx, GetRecipeDisplayControl(recipe), _theme);
+                var queuedRecipeBox = new QueuedRecipeControl(displayText, idx, GetRecipeDisplayControl(recipe), recipe.ID, _theme);
                 queuedRecipeBox.OnDeletePressed += s => QueueDeleteAction?.Invoke(s);
                 queuedRecipeBox.OnMoveUpPressed += s => QueueMoveUpAction?.Invoke(s);
                 queuedRecipeBox.OnMoveDownPressed += s => QueueMoveDownAction?.Invoke(s);
@@ -381,8 +381,7 @@ public sealed partial class LatheMenu : FancyWindow
 
                 child.SetDisplayText(displayText);
                 child.SetIndex(idx);
-                child.SetDisplayControl(GetRecipeDisplayControl(recipe));
-                WH40KUiChrome.PlayFadeIn(child, "appear", 0.14f, MathF.Min(idx * 0.012f, 0.16f));
+                child.SetDisplayControl(GetRecipeDisplayControl(recipe), recipe.ID);
             }
             idx++;
         }
@@ -410,6 +409,7 @@ public sealed partial class LatheMenu : FancyWindow
             FabricatingProgressBar.Value = 0;
             FabricatingNameLabel.Text = string.Empty;
             _progressRecipe = null;
+            _fabricatingDisplayRecipe = null;
             RefreshMachineReadouts();
             return;
         }
@@ -439,8 +439,12 @@ public sealed partial class LatheMenu : FancyWindow
             _progressStepDuration = isProducing ? productionLength : TimeSpan.Zero;
         }
 
-        FabricatingDisplayContainer.Children.Clear();
-        FabricatingDisplayContainer.AddChild(GetRecipeDisplayControl(recipe));
+        if (_fabricatingDisplayRecipe != recipe.ID || FabricatingDisplayContainer.ChildCount == 0)
+        {
+            _fabricatingDisplayRecipe = recipe.ID;
+            FabricatingDisplayContainer.Children.Clear();
+            FabricatingDisplayContainer.AddChild(GetRecipeDisplayControl(recipe));
+        }
 
         var nameText = _lathe.GetRecipeName(recipe);
         if (isInfiniteBatch)

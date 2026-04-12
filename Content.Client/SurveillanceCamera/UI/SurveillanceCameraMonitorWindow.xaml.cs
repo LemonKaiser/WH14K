@@ -52,6 +52,10 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     private EntityUid? _mapUid;
     private bool _isSwitching;
     private int _visibleCameraCount;
+    private CameraFeedState? _lastStatusFlashState;
+    private CameraFeedState? _lastFeedFlashState;
+    private string? _lastFeedFlashAddress;
+    private string? _lastFeedFlashSubnet;
 
     private MonitorViewMode _viewMode = MonitorViewMode.Roster;
 
@@ -182,7 +186,6 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
             WH40KUiChrome.PlayHoverFlash(control, "hover-flash");
         };
         button.OnMouseExited += _ => button.StyleBoxOverride = normalStyle;
-        WH40KUiChrome.PlayFadeIn(button, "appear", 0.2f, MathF.Min(entry.SortIndex * 0.02f, 0.22f));
     }
 
     private void RebuildSubnetSelector(HashSet<string> subnets, string activeSubnet)
@@ -495,12 +498,15 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
     {
         var state = GetFeedState();
         var color = GetFeedStateColor(state);
+        var changed = _lastStatusFlashState != state;
+        _lastStatusFlashState = state;
 
         StatusPanel.PanelOverride = SurveillanceCameraMonitorStyles.CreatePanelStyle(_theme.PanelAltBackground, color.WithAlpha(0.82f), 0);
         StatusValueLabel.Text = Loc.GetString(GetFeedStateLocKey(state));
         StatusValueLabel.FontColorOverride = color;
         SetWrappedText(StatusHintLabel, Loc.GetString(GetFeedStateHintLocKey(state)), _theme.SecondaryText);
-        WH40KUiChrome.PlayHoverFlash(StatusPanel, "status-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
+        if (changed)
+            WH40KUiChrome.PlayHoverFlash(StatusPanel, "status-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
     }
 
     private void RefreshSummaryCards()
@@ -526,6 +532,13 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
         var stateColor = GetFeedStateColor(state);
         var hasCamera = !string.IsNullOrWhiteSpace(_currentAddress);
         var cameraName = ResolveActiveCameraName();
+        var changed = _lastFeedFlashState != state ||
+                      !string.Equals(_lastFeedFlashAddress, _currentAddress, StringComparison.Ordinal) ||
+                      !string.Equals(_lastFeedFlashSubnet, _currentSubnet, StringComparison.Ordinal);
+
+        _lastFeedFlashState = state;
+        _lastFeedFlashAddress = _currentAddress;
+        _lastFeedFlashSubnet = _currentSubnet;
 
         FeedTitleLabel.Text = hasCamera
             ? WH40KUiChrome.DecorateIfMissing(Loc.GetString("surveillance-camera-monitor-ui-feed-title"), WH40KUiChrome.Blade)
@@ -547,7 +560,8 @@ public sealed partial class SurveillanceCameraMonitorWindow : FancyWindow
         FeedSubnetValueLabel.Text = string.IsNullOrWhiteSpace(_currentSubnet)
             ? Loc.GetString("surveillance-camera-monitor-ui-active-subnet-none")
             : ResolveSubnetDisplayName(_currentSubnet);
-        WH40KUiChrome.PlayHoverFlash(FeedHeaderPanel, "feed-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
+        if (changed)
+            WH40KUiChrome.PlayHoverFlash(FeedHeaderPanel, "feed-flash", new Color(0.86f, 0.86f, 0.9f, 1f), 0.18f);
     }
 
     private void RefreshFooter()

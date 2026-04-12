@@ -183,6 +183,9 @@ public sealed partial class StatusEffectsSystem : EntitySystem
 
     public bool CanAddStatusEffect(EntityUid uid, EntProtoId effectProto)
     {
+        if (!CanAccessStatusEffectTarget(uid))
+            return false;
+
         if (!_proto.Resolve(effectProto, out var effectProtoData))
             return false;
 
@@ -220,6 +223,9 @@ public sealed partial class StatusEffectsSystem : EntitySystem
     {
         statusEffect = null;
 
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (duration <= TimeSpan.Zero)
             return false;
 
@@ -248,6 +254,15 @@ public sealed partial class StatusEffectsSystem : EntitySystem
         TryApplyStatusEffect((statusEffect.Value, effectComp));
 
         return true;
+    }
+
+    private bool CanAccessStatusEffectTarget(EntityUid? target)
+    {
+        if (target is not { } uid || !uid.IsValid() || !Exists(uid))
+            return false;
+
+        return TryComp(uid, out MetaDataComponent? metaData) &&
+               metaData.EntityLifeStage < EntityLifeStage.Terminating;
     }
 
     private void UpdateStatusEffectTime(Entity<StatusEffectComponent?> effect, TimeSpan? duration)
