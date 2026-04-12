@@ -45,18 +45,6 @@
     modifier: 0.3
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
-  id: ClothingShoesBootsVst
-  suffix: WH40K, Востроянцы
-  components:
-  - type: Sprite
-    sprite: _WH40K/Clothing/Shoes/Boots/vst_boots.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/Shoes/Boots/vst_boots.rsi
-  - type: ClothingSlowOnDamageModifier
-    modifier: 0.5
-
-- type: entity
   parent: ClothingShoesBaseButcherable
   id: ClothingShoesBootsworkTechpriest
   suffix: WH40K, АдМехи
