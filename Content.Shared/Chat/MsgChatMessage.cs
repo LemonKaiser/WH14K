@@ -56,6 +56,12 @@ namespace Content.Shared.Chat
         /// </summary>
         public ChatSpeechTransport SpeechTransport;
 
+        /// <summary>
+        /// Optional transient id assigned by the server for late in-place updates.
+        /// Used by delayed translation to replace the original line after fallback send.
+        /// </summary>
+        public uint? ServerMessageId;
+
         [NonSerialized]
         public bool Read;
 
@@ -71,7 +77,8 @@ namespace Content.Shared.Chat
             float audioVolume = 0,
             string? senderJobIconId = null,
             bool? senderNameIsProperNoun = null,
-            ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct)
+            ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct,
+            uint? serverMessageId = null)
         {
             Channel = channel;
             Message = message;
@@ -85,6 +92,7 @@ namespace Content.Shared.Chat
             SenderJobIconId = senderJobIconId;
             SenderNameIsProperNoun = senderNameIsProperNoun;
             SpeechTransport = speechTransport;
+            ServerMessageId = serverMessageId;
         }
     }
 

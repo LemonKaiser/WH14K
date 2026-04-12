@@ -6,12 +6,17 @@ using System.Net;
 using System.Threading.Tasks;
 using Content.IntegrationTests.Pair;
 using Content.Server.Database;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server._WH40K.Stats;
+using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
+using Content.Shared._WH40K.LateJoin;
 using Content.Shared._WH40K.MetaProgress;
+using Robust.Server.Player;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
@@ -52,6 +57,26 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
         });
         await pair.RunTicksSync(30);
         return userId;
+    }
+
+    private static async Task<(TestPair Pair, NetUserId UserId)> SetupPairAndConnectedUser(string name)
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Fresh = true
+        });
+        var server = pair.Server;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var userId = server.ResolveDependency<IPlayerManager>().Sessions.Single().UserId;
+
+        await db.UpdatePlayerRecordAsync(userId, name, IPAddress.Loopback, null);
+        await server.WaitPost(() =>
+        {
+            _ = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId);
+        });
+        await pair.RunTicksSync(30);
+        return (pair, userId);
     }
 
     // ─────────────────────────────────────────────
@@ -113,7 +138,7 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
         {
             var meta = server.System<WH40KMetaProgressSystem>();
             meta.TrySetLevel(userId, 10, out _, out _);
-            meta.TrySetAchievementProgress(userId, "wh40k-ach-veteran-of-wars", 42, out _, out _, out _, out _);
+            meta.TrySetAchievementProgress(userId, "wh40k-ach-veteran-of-wars", 40, out _, out _, out _, out _);
             meta.TrySetDevelopmentNodeUnlocked(userId, "brain-root", true, out _);
         });
 
@@ -143,7 +168,7 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
         Assert.Multiple(() =>
         {
             Assert.That(reloaded!.Level, Is.EqualTo(10));
-            Assert.That(reloaded.Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars").Progress, Is.EqualTo(42));
+            Assert.That(reloaded.Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars").Progress, Is.EqualTo(40));
             Assert.That(reloaded.Development.OpenedNodeIds, Does.Contain("brain-root"));
         });
         await pair.CleanReturnAsync();
@@ -310,7 +335,7 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
     [Test]
     public async Task RoundAchievementBlockerPreventsUnlockUntilFreshRound()
     {
-        var (pair, userId) = await SetupPairAndUser("RoundBlocker", waitDbLoad: false);
+        var (pair, userId) = await SetupPairAndConnectedUser("RoundBlocker");
         var server = pair.Server;
 
         await server.WaitPost(() =>
@@ -318,9 +343,9 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
             var meta = server.System<WH40KMetaProgressSystem>();
 
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 11);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyEliminations, 11);
             stats.Record(userId, WH40KPlayerStatKeys.CombatDeaths, 1);
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 1);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyEliminations, 1);
 
             var achievement = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
             Assert.That(achievement.Target, Is.EqualTo(12));
@@ -340,7 +365,7 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
             var meta = server.System<WH40KMetaProgressSystem>();
 
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 12);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyEliminations, 12);
 
             var achievement = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
             Assert.That(achievement.Progress, Is.EqualTo(12));
@@ -353,7 +378,7 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
     [Test]
     public async Task LifetimeStatAchievementsUseDeltaProgressAcrossMultipleRecords()
     {
-        var (pair, userId) = await SetupPairAndUser("LifetimeStats", waitDbLoad: false);
+        var (pair, userId) = await SetupPairAndConnectedUser("LifetimeStats");
         var server = pair.Server;
 
         await server.WaitPost(() =>
@@ -361,14 +386,14 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
             var meta = server.System<WH40KMetaProgressSystem>();
 
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 100);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyEliminations, 100);
 
             var huntmaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-huntmaster");
             Assert.That(huntmaster.Target, Is.EqualTo(150));
             Assert.That(huntmaster.Progress, Is.EqualTo(100));
             Assert.That(huntmaster.Completed, Is.False);
 
-            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyKills, 50);
+            stats.Record(userId, WH40KPlayerStatKeys.CombatEnemyEliminations, 50);
 
             huntmaster = meta.GetSnapshot(userId).Achievements.Single(a => a.Id == "wh40k-ach-huntmaster");
             Assert.That(huntmaster.Progress, Is.EqualTo(150), "Lifetime achievements must advance by delta, not re-add prior total.");
@@ -675,5 +700,144 @@ public sealed class WH40KMetaProgressSystemIntegrationTests
         Assert.That(result!.Snapshot, Is.Not.Null);
         Assert.That(result.Snapshot.Level, Is.EqualTo(10));
         await pair.CleanReturnAsync();
+    }
+    [Test]
+    public async Task AchievementRewardXpBypassesRepeatableRoundCap()
+    {
+        var pair = await StartWh40KRoundAsync();
+        var server = pair.Server;
+        NetUserId userId = default;
+        var initialLifetimeXp = 0;
+        await server.WaitAssertion(() =>
+        {
+            userId = server.ResolveDependency<IPlayerManager>().Sessions.Single().UserId;
+            initialLifetimeXp = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId).LifetimeXp;
+        });
+        var config = server.ResolveDependency<IConfigurationManager>();
+
+        var originalKillXp = config.GetCVar(CCVars.WH40KMetaXpKill);
+        var originalKillCap = config.GetCVar(CCVars.WH40KMetaXpKillCapPerRound);
+        var originalRepeatableCap = config.GetCVar(CCVars.WH40KMetaXpRepeatableCapPerRound);
+        var originalMultiplier = config.GetCVar(CCVars.WH40KMetaXpMultiplier);
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                config.SetCVar(CCVars.WH40KMetaXpKill, 100);
+                config.SetCVar(CCVars.WH40KMetaXpKillCapPerRound, 400);
+                config.SetCVar(CCVars.WH40KMetaXpRepeatableCapPerRound, 400);
+                config.SetCVar(CCVars.WH40KMetaXpMultiplier, 1f);
+            });
+
+            await server.WaitPost(() =>
+            {
+                var entMan = server.ResolveDependency<IEntityManager>();
+                var meta = server.System<WH40KMetaProgressSystem>();
+
+                _ = meta.GetSnapshot(userId);
+
+                for (var i = 0; i < 4; i++)
+                {
+                    entMan.EventBus.RaiseEvent(
+                        EventSource.Local,
+                        new WH40KValidatedKillRewardEvent(
+                            EntityUid.Invalid,
+                            userId,
+                            null,
+                            "imperium",
+                            "chaos",
+                            $"it-repeatable-cap-{i}"));
+                }
+            });
+            await pair.RunTicksSync(10);
+
+            await server.WaitAssertion(() =>
+            {
+                var stats = server.System<WH40KPlayerStatsSystem>();
+                var meta = server.System<WH40KMetaProgressSystem>();
+                var snapshot = meta.GetSnapshot(userId);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.MetaXpKill), Is.EqualTo(400));
+                    Assert.That(snapshot.LifetimeXp, Is.EqualTo(initialLifetimeXp + 400));
+                });
+            });
+
+            await server.WaitPost(() =>
+            {
+                var meta = server.System<WH40KMetaProgressSystem>();
+                meta.TrySetAchievementUnlocked(userId, "wh40k-ach-fireline-initiation", true, out _, out _, out _, out _);
+            });
+            await pair.RunTicksSync(10);
+
+            await server.WaitAssertion(() =>
+            {
+                var stats = server.System<WH40KPlayerStatsSystem>();
+                var snapshot = server.System<WH40KMetaProgressSystem>().GetSnapshot(userId);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(stats.GetLifetimeCounter(userId, WH40KPlayerStatKeys.MetaXpKill), Is.EqualTo(400),
+                        "Repeatable XP budget must remain capped at the kill budget.");
+                    Assert.That(snapshot.LifetimeXp, Is.EqualTo(initialLifetimeXp + 600),
+                        "Achievement reward XP must be granted on top of the repeatable round cap.");
+                    Assert.That(snapshot.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation").Completed, Is.True);
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitAssertion(() =>
+            {
+                config.SetCVar(CCVars.WH40KMetaXpKill, originalKillXp);
+                config.SetCVar(CCVars.WH40KMetaXpKillCapPerRound, originalKillCap);
+                config.SetCVar(CCVars.WH40KMetaXpRepeatableCapPerRound, originalRepeatableCap);
+                config.SetCVar(CCVars.WH40KMetaXpMultiplier, originalMultiplier);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static async Task<TestPair> StartWh40KRoundAsync()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            InLobby = true,
+            DummyTicker = false,
+            Fresh = true
+        });
+
+        await pair.WaitCommand("forcemap Battlefield40k");
+        await pair.WaitCommand("setgamepreset WH40KTeamBattle 9999");
+        await pair.WaitCommand("startround");
+        await pair.RunTicksSync(60);
+
+        await pair.Client.WaitPost(() =>
+        {
+            var factionSys = pair.Client.System<Content.Client._WH40K.LateJoin.WH40KFactionSystem>();
+            factionSys.SelectFaction("Imperium", WH40KFactionSelectionPurpose.LateJoin);
+        });
+        await pair.RunTicksSync(10);
+
+        await pair.Server.WaitPost(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            var session = pair.Server.ResolveDependency<IPlayerManager>().Sessions.Single();
+            ticker.MakeJoinGame(session, EntityUid.Invalid, "Guardsman");
+        });
+        await pair.RunTicksSync(20);
+
+        await pair.Server.WaitAssertion(() =>
+        {
+            var ticker = pair.Server.System<GameTicker>();
+            Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
+        });
+
+        return pair;
     }
 }

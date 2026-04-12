@@ -16,7 +16,11 @@ namespace Content.Client.Research.UI;
 public sealed partial class MiniTechnologyCardControl : Control
 {
     /// The technology that this control represents
-    public readonly TechnologyPrototype Technology;
+    public TechnologyPrototype Technology { get; private set; } = default!;
+
+    private readonly WH40KResearchConsoleTheme _theme;
+    private readonly IPrototypeManager _prototypeManager;
+    private readonly SpriteSystem _spriteSys;
 
     public MiniTechnologyCardControl(
         TechnologyPrototype technology,
@@ -27,28 +31,36 @@ public sealed partial class MiniTechnologyCardControl : Control
     {
         RobustXamlLoader.Load(this);
 
-        var discipline = prototypeManager.Index(technology.Discipline);
-        CardPanel.PanelOverride = WH40KResearchConsoleStyles.CreatePanelStyle(theme.SurfaceBackground, theme.BorderColor, 0);
+        _theme = theme;
+        _prototypeManager = prototypeManager;
+        _spriteSys = spriteSys;
+
+        OnMouseEntered += _ => WH40KUiChrome.PlayHoverFlash(CardPanel, "hover-flash");
+        WH40KUiChrome.StartLoopingPulse(AccentBar, "accent-pulse", new Color(0.7f, 0.7f, 0.7f, 1f), Color.White, 4.3f);
+        ApplyState(technology, description);
+    }
+
+    public void ApplyState(TechnologyPrototype technology, FormattedMessage description)
+    {
+        var discipline = _prototypeManager.Index(technology.Discipline);
+        CardPanel.PanelOverride = WH40KResearchConsoleStyles.CreatePanelStyle(_theme.SurfaceBackground, _theme.BorderColor, 0);
         AccentBar.PanelOverride = new StyleBoxFlat
         {
             BackgroundColor = discipline.Color.WithAlpha(0.85f),
         };
-        IconPanel.PanelOverride = WH40KResearchConsoleStyles.CreateBadgeStyle(theme.PreviewBackground, theme.BorderColor, 4, 4);
+        IconPanel.PanelOverride = WH40KResearchConsoleStyles.CreateBadgeStyle(_theme.PreviewBackground, _theme.BorderColor, 4, 4);
 
-        Texture.Texture = spriteSys.Frame0(technology.Icon);
+        Texture.Texture = _spriteSys.Frame0(technology.Icon);
         var displayName = WH40KUiChrome.DecorateIfMissing(Loc.GetString(technology.Name), WH40KUiChrome.DiamondOutline);
         NameLabel.Text = displayName;
-        NameLabel.FontColorOverride = theme.PrimaryText;
+        NameLabel.FontColorOverride = _theme.PrimaryText;
         NameLabel.ToolTip = displayName;
         TierLabel.Text = $"{WH40KUiChrome.Arrow} {Loc.GetString(discipline.Name)} | {Loc.GetString("research-console-mini-tier", ("tier", technology.Tier))}";
-        TierLabel.FontColorOverride = theme.SecondaryText;
+        TierLabel.FontColorOverride = _theme.SecondaryText;
 
         var tooltip = new Tooltip();
         tooltip.SetMessage(description);
         TooltipSupplier = _ => tooltip;
         Technology = technology;
-
-        OnMouseEntered += _ => WH40KUiChrome.PlayHoverFlash(CardPanel, "hover-flash");
-        WH40KUiChrome.StartLoopingPulse(AccentBar, "accent-pulse", new Color(0.7f, 0.7f, 0.7f, 1f), Color.White, 4.3f);
     }
 }

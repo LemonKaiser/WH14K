@@ -27,13 +27,17 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
+        statusEffect = null;
+
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration);
         RaiseLocalEvent(target, ref durationEvent);
         duration = durationEvent.Duration;
 
         if (duration <= TimeSpan.Zero)
         {
-            statusEffect = null;
             return false;
         }
 
@@ -72,6 +76,11 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
+        statusEffect = null;
+
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (duration is not null)
         {
             var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration.Value);
@@ -81,7 +90,6 @@ public sealed partial class StatusEffectsSystem
 
         if (duration <= TimeSpan.Zero)
         {
-            statusEffect = null;
             return false;
         }
 
@@ -122,6 +130,11 @@ public sealed partial class StatusEffectsSystem
         TimeSpan? delay = null
     )
     {
+        statusEffect = null;
+
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (duration is not null)
         {
             var durationEvent = new ModifyStatusEffectDurationEvent(effectProto, duration.Value);
@@ -131,7 +144,6 @@ public sealed partial class StatusEffectsSystem
 
         if (duration <= TimeSpan.Zero)
         {
-            statusEffect = null;
             return false;
         }
 
@@ -160,15 +172,17 @@ public sealed partial class StatusEffectsSystem
     /// </summary>
     public bool TryRemoveStatusEffect(EntityUid target, EntProtoId effectProto)
     {
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (!_containerQuery.TryComp(target, out var container))
             return false;
 
         foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(effect);
-
-            if (meta.EntityPrototype is null
-                || meta.EntityPrototype != effectProto)
+            if (!TryComp(effect, out MetaDataComponent? meta) ||
+                meta.EntityPrototype is null ||
+                meta.EntityPrototype != effectProto)
                 continue;
 
             if (!_effectQuery.HasComp(effect))
@@ -186,13 +200,17 @@ public sealed partial class StatusEffectsSystem
     /// </summary>
     public bool HasStatusEffect(EntityUid target, EntProtoId effectProto)
     {
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (!_containerQuery.TryComp(target, out var container))
             return false;
 
         foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
+            if (TryComp(effect, out MetaDataComponent? meta) &&
+                meta.EntityPrototype is not null &&
+                meta.EntityPrototype == effectProto)
                 return true;
         }
 
@@ -205,13 +223,18 @@ public sealed partial class StatusEffectsSystem
     public bool TryGetStatusEffect(EntityUid target, EntProtoId effectProto, [NotNullWhen(true)] out EntityUid? effect)
     {
         effect = null;
+
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (!_containerQuery.TryComp(target, out var container))
             return false;
 
         foreach (var e in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(e);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
+            if (TryComp(e, out MetaDataComponent? meta) &&
+                meta.EntityPrototype is not null &&
+                meta.EntityPrototype == effectProto)
             {
                 effect = e;
                 return true;
@@ -236,13 +259,17 @@ public sealed partial class StatusEffectsSystem
     )
     {
         time = default;
+        if (!CanAccessStatusEffectTarget(uid))
+            return false;
+
         if (!Resolve(uid, ref container))
             return false;
 
         foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
+            if (TryComp(effect, out MetaDataComponent? meta) &&
+                meta.EntityPrototype is not null &&
+                meta.EntityPrototype == effectProto)
             {
                 if (!_effectQuery.TryComp(effect, out var effectComp))
                     return false;
@@ -297,13 +324,17 @@ public sealed partial class StatusEffectsSystem
     /// <returns> True if duration was edited successfully, false otherwise.</returns>
     public bool TryAddTime(EntityUid uid, EntProtoId effectProto, TimeSpan time)
     {
+        if (!CanAccessStatusEffectTarget(uid))
+            return false;
+
         if (!_containerQuery.TryComp(uid, out var container))
             return false;
 
         foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
+            if (TryComp(effect, out MetaDataComponent? meta) &&
+                meta.EntityPrototype is not null &&
+                meta.EntityPrototype == effectProto)
             {
                 AddStatusEffectTime(effect, time);
                 return true;
@@ -336,13 +367,17 @@ public sealed partial class StatusEffectsSystem
     /// <returns> True if duration was set successfully, false otherwise.</returns>
     public bool TrySetTime(EntityUid uid, EntProtoId effectProto, TimeSpan time)
     {
+        if (!CanAccessStatusEffectTarget(uid))
+            return false;
+
         if (!_containerQuery.TryComp(uid, out var container))
             return false;
 
         foreach (var effect in container.ActiveStatusEffects?.ContainedEntities ?? [])
         {
-            var meta = MetaData(effect);
-            if (meta.EntityPrototype is not null && meta.EntityPrototype == effectProto)
+            if (TryComp(effect, out MetaDataComponent? meta) &&
+                meta.EntityPrototype is not null &&
+                meta.EntityPrototype == effectProto)
             {
                 SetStatusEffectEndTime(effect, time);
                 return true;
@@ -356,6 +391,9 @@ public sealed partial class StatusEffectsSystem
     /// </summary>
     public bool HasEffectComp<T>(EntityUid? target) where T : IComponent
     {
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (!_containerQuery.TryComp(target, out var container))
             return false;
 
@@ -375,6 +413,10 @@ public sealed partial class StatusEffectsSystem
     public bool TryEffectsWithComp<T>(EntityUid? target, [NotNullWhen(true)] out HashSet<Entity<T, StatusEffectComponent>>? effects) where T : IComponent
     {
         effects = null;
+
+        if (!CanAccessStatusEffectTarget(target))
+            return false;
+
         if (!_containerQuery.TryComp(target, out var container))
             return false;
 

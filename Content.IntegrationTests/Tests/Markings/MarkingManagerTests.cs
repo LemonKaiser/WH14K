@@ -309,8 +309,7 @@ public sealed class MarkingManagerTests
             Assert.That(validated.Markings[torso][HumanoidVisualLayers.Tail], Has.Count.EqualTo(1));
             Assert.That(validated.Markings[torso][HumanoidVisualLayers.Tail][0].MarkingId, Is.EqualTo("FelinidTail"));
 
-            Assert.That(validated.Markings[torso], Does.ContainKey(HumanoidVisualLayers.Special));
-            Assert.That(validated.Markings[torso][HumanoidVisualLayers.Special], Is.Empty);
+            Assert.That(validated.Markings[torso], Does.Not.ContainKey(HumanoidVisualLayers.Special));
         });
 
         await pair.CleanReturnAsync();

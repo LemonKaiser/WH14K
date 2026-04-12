@@ -575,7 +575,7 @@ public sealed class GhostRoleSystem : EntitySystem
         List<ProtoId<JobPrototype>>? jobIds,
         List<ProtoId<AntagPrototype>>? antagIds)
     {
-        var ev = new IsRoleAllowedEvent(player, jobIds, antagIds);
+        var ev = new IsRoleAllowedEvent(player, jobIds, antagIds, RoleAllowanceContext.GhostRole);
         RaiseLocalEvent(ref ev);
 
         return !ev.Cancelled;

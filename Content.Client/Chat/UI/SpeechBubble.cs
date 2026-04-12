@@ -51,10 +51,16 @@ namespace Content.Client.Chat.UI
 
         protected readonly EntityUid SenderEntity;
 
+        public SpeechType BubbleType { get; }
+
+        public uint? ServerMessageId { get; }
+
         /// <summary>
         /// The time at which this bubble will die.
         /// </summary>
         private TimeSpan _deathTime;
+        private bool _deathQueued;
+        private bool _died;
 
         public float VerticalOffset { get; set; }
         private float _verticalOffsetAchieved;
@@ -89,6 +95,8 @@ namespace Content.Client.Chat.UI
         {
             IoCManager.InjectDependencies(this);
             SenderEntity = senderEntity;
+            BubbleType = type;
+            ServerMessageId = message.ServerMessageId;
             _transformSystem = _entityManager.System<SharedTransformSystem>();
 
             // Use text clipping so new messages don't overlap old ones being pushed up.
@@ -106,6 +114,11 @@ namespace Content.Client.Chat.UI
             _deathTime = _timing.RealTime + TotalTime;
         }
 
+        public void SyncLifetimeFrom(SpeechBubble other)
+        {
+            _deathTime = other._deathTime;
+        }
+
         protected abstract Control BuildBubble(SpeechType type, ChatMessage message, string speechStyleClass, Color? fontColor = null);
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -115,8 +128,12 @@ namespace Content.Client.Chat.UI
             var timeLeft = (float)(_deathTime - _timing.RealTime).TotalSeconds;
             if (_entityManager.Deleted(SenderEntity) || timeLeft <= 0)
             {
-                // Timer spawn to prevent concurrent modification exception.
-                Timer.Spawn(0, Die);
+                if (!_deathQueued)
+                {
+                    _deathQueued = true;
+                    // Timer spawn to prevent concurrent modification exception.
+                    Timer.Spawn(0, Die);
+                }
                 return;
             }
 
@@ -167,11 +184,11 @@ namespace Content.Client.Chat.UI
 
         private void Die()
         {
-            if (Disposed)
-            {
+            if (Disposed || _died)
                 return;
-            }
 
+            _died = true;
+            _deathQueued = true;
             OnDied?.Invoke(SenderEntity, this);
         }
 

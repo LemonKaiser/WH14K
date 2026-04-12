@@ -1,0 +1,19 @@
+- type: entity
+  parent: ClothingShoesGenBoots
+  id: ClothingShoesAstartesImperiumBoots
+  suffix: WH40K, Astartes, Imperium
+  components:
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingShoesChaosBoots2
+  id: ClothingShoesAstartesChaosBoots
+  suffix: WH40K, Astartes, Chaos
+  components:
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

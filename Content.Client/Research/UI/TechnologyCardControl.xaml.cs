@@ -16,6 +16,11 @@ namespace Content.Client.Research.UI;
 public sealed partial class TechnologyCardControl : Control
 {
     public Action? OnPressed;
+    public string TechnologyId { get; private set; } = string.Empty;
+
+    private readonly WH40KResearchConsoleTheme _theme;
+    private readonly IPrototypeManager _prototypeManager;
+    private readonly SpriteSystem _spriteSys;
 
     public TechnologyCardControl(
         TechnologyPrototype technology,
@@ -30,26 +35,44 @@ public sealed partial class TechnologyCardControl : Control
     {
         RobustXamlLoader.Load(this);
 
-        var discipline = prototypeManager.Index<TechDisciplinePrototype>(technology.Discipline);
-        var accent = theme.Enabled ? theme.Accent : discipline.Color;
+        _theme = theme;
+        _prototypeManager = prototypeManager;
+        _spriteSys = spriteSys;
 
-        CardPanel.PanelOverride = WH40KResearchConsoleStyles.CreatePanelStyle(theme.SurfaceBackground, theme.BorderColor, 0);
+        ResearchButton.OnPressed += _ => OnPressed?.Invoke();
+        ResearchButton.OnMouseEntered += _ => WH40KUiChrome.PlayHoverFlash(CardPanel, "hover-flash");
+        ApplyState(technology, description, points, hasAccess, researchBusy, isActiveResearch);
+    }
+
+    public void ApplyState(
+        TechnologyPrototype technology,
+        FormattedMessage description,
+        int points,
+        bool hasAccess,
+        bool researchBusy,
+        bool isActiveResearch)
+    {
+        TechnologyId = technology.ID;
+        var discipline = _prototypeManager.Index<TechDisciplinePrototype>(technology.Discipline);
+        var accent = _theme.Enabled ? _theme.Accent : discipline.Color;
+
+        CardPanel.PanelOverride = WH40KResearchConsoleStyles.CreatePanelStyle(_theme.SurfaceBackground, _theme.BorderColor, 0);
         HeaderPanel.PanelOverride = WH40KResearchConsoleStyles.CreateEdgePanelStyle(
-            theme.HeaderBackground,
+            _theme.HeaderBackground,
             accent.WithAlpha(0.84f),
             new Thickness(0f, 0f, 0f, 1f),
             0);
-        TechnologyIconPanel.PanelOverride = WH40KResearchConsoleStyles.CreateBadgeStyle(theme.PreviewBackground, theme.BorderColor, 4, 4);
+        TechnologyIconPanel.PanelOverride = WH40KResearchConsoleStyles.CreateBadgeStyle(_theme.PreviewBackground, _theme.BorderColor, 4, 4);
 
-        DisciplineTexture.Texture = spriteSys.Frame0(discipline.Icon);
-        TechnologyTexture.Texture = spriteSys.Frame0(technology.Icon);
+        DisciplineTexture.Texture = _spriteSys.Frame0(discipline.Icon);
+        TechnologyTexture.Texture = _spriteSys.Frame0(technology.Icon);
         var displayName = WH40KUiChrome.DecorateIfMissing(Loc.GetString(technology.Name), WH40KUiChrome.Diamond);
         TechnologyNameLabel.Text = displayName;
-        TechnologyNameLabel.FontColorOverride = theme.PrimaryText;
+        TechnologyNameLabel.FontColorOverride = _theme.PrimaryText;
         TechnologyNameLabel.ToolTip = displayName;
         DisciplineLineLabel.Text = $"{WH40KUiChrome.Arrow} {Loc.GetString(discipline.Name)} | {Loc.GetString("research-console-tier-badge", ("tier", technology.Tier))}";
         DisciplineLineLabel.FontColorOverride = accent;
-        UnlocksLabel.SetMessage(description, defaultColor: theme.SecondaryText);
+        UnlocksLabel.SetMessage(description, defaultColor: _theme.SecondaryText);
 
         StyleBoxFlat buttonStyle;
 
@@ -57,19 +80,19 @@ public sealed partial class TechnologyCardControl : Control
         {
             ResearchButton.Text = Loc.GetString("research-console-card-status-restricted");
             ResearchButton.ToolTip = Loc.GetString("research-console-no-access-popup");
-            buttonStyle = WH40KResearchConsoleStyles.CreateDangerButtonStyle(theme);
+            buttonStyle = WH40KResearchConsoleStyles.CreateDangerButtonStyle(_theme);
         }
         else if (isActiveResearch)
         {
             ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button-active");
             ResearchButton.ToolTip = Loc.GetString("research-console-research-active-tooltip");
-            buttonStyle = WH40KResearchConsoleStyles.CreateSecondaryButtonStyle(theme);
+            buttonStyle = WH40KResearchConsoleStyles.CreateSecondaryButtonStyle(_theme);
         }
         else if (researchBusy)
         {
             ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button-busy");
             ResearchButton.ToolTip = Loc.GetString("research-console-research-busy-tooltip");
-            buttonStyle = WH40KResearchConsoleStyles.CreateSecondaryButtonStyle(theme);
+            buttonStyle = WH40KResearchConsoleStyles.CreateSecondaryButtonStyle(_theme);
         }
         else if (points < technology.Cost)
         {
@@ -78,17 +101,16 @@ public sealed partial class TechnologyCardControl : Control
                 "research-console-research-not-enough-points-tooltip",
                 ("cost", technology.Cost),
                 ("points", points));
-            buttonStyle = WH40KResearchConsoleStyles.CreateDangerButtonStyle(theme);
+            buttonStyle = WH40KResearchConsoleStyles.CreateDangerButtonStyle(_theme);
         }
         else
         {
             ResearchButton.Text = Loc.GetString("research-console-menu-server-research-button");
-            buttonStyle = WH40KResearchConsoleStyles.CreatePrimaryButtonStyle(theme);
+            ResearchButton.ToolTip = null;
+            buttonStyle = WH40KResearchConsoleStyles.CreatePrimaryButtonStyle(_theme);
         }
 
-        WH40KResearchConsoleStyles.ApplyButtonTheme(ResearchButton, buttonStyle, theme.PrimaryText);
+        WH40KResearchConsoleStyles.ApplyButtonTheme(ResearchButton, buttonStyle, _theme.PrimaryText);
         ResearchButton.Disabled = points < technology.Cost || !hasAccess || researchBusy;
-        ResearchButton.OnPressed += _ => OnPressed?.Invoke();
-        ResearchButton.OnMouseEntered += _ => WH40KUiChrome.PlayHoverFlash(CardPanel, "hover-flash");
     }
 }

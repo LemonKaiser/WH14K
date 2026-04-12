@@ -24,6 +24,7 @@ public sealed partial class MaterialStorageControl : ScrollContainer
     private EntityUid? _owner;
 
     private Dictionary<ProtoId<MaterialPrototype>, int> _currentMaterials = new();
+    private bool _wasSiloLinked;
 
     public MaterialStorageControl()
     {
@@ -41,6 +42,7 @@ public sealed partial class MaterialStorageControl : ScrollContainer
     public void SetOwner(EntityUid owner)
     {
         _owner = owner;
+        _wasSiloLinked = false;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -58,8 +60,14 @@ public sealed partial class MaterialStorageControl : ScrollContainer
 
         var canEject = materialStorage.CanEjectStoredMaterials;
         var mats = _materialStorage.GetStoredMaterials((_owner.Value, materialStorage));
+        var siloLinked = _entityManager.TryGetComponent<OreSiloClientComponent>(_owner.Value, out var client) && client.Silo != null;
 
-        if (_currentMaterials.Equals(mats))
+        SiloLinkedLabel.Visible = siloLinked;
+        if (siloLinked && !_wasSiloLinked)
+            WH40KUiChrome.PlayHoverFlash(SiloLinkedLabel, "silo-flash", Color.FromHex("#8FB6C7".AsSpan()), 0.18f);
+        _wasSiloLinked = siloLinked;
+
+        if (MaterialsMatch(mats))
             return;
 
         var missing = new List<string>();
@@ -104,8 +112,19 @@ public sealed partial class MaterialStorageControl : ScrollContainer
 
         _currentMaterials = mats;
         NoMatsLabel.Visible = MaterialList.ChildCount == 1;
-        SiloLinkedLabel.Visible = _entityManager.TryGetComponent<OreSiloClientComponent>(_owner.Value, out var client) && client.Silo != null;
-        if (SiloLinkedLabel.Visible)
-            WH40KUiChrome.PlayHoverFlash(SiloLinkedLabel, "silo-flash", Color.FromHex("#8FB6C7".AsSpan()), 0.18f);
+    }
+
+    private bool MaterialsMatch(Dictionary<ProtoId<MaterialPrototype>, int> materials)
+    {
+        if (_currentMaterials.Count != materials.Count)
+            return false;
+
+        foreach (var (material, amount) in materials)
+        {
+            if (!_currentMaterials.TryGetValue(material, out var currentAmount) || currentAmount != amount)
+                return false;
+        }
+
+        return true;
     }
 }

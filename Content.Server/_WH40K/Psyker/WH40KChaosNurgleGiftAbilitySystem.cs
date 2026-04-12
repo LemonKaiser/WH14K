@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.GameTicking.Rules.Components;
+using Content.Server._WH40K.MetaProgress;
+using Content.Server.Ghost;
+using Content.Server.Ghost.Roles.Components;
 using Content.Server.KillTracking;
+using Content.Server.Mind;
 using Content.Server.Zombies;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -11,9 +16,12 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Magic;
 using Content.Shared.Magic.Events;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.Psyker;
 using Robust.Server.Player;
 using Robust.Shared.Physics;
@@ -40,6 +48,8 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private readonly GhostSystem _ghost = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -50,7 +60,7 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosNurgleCorpseRiseActionEvent>(OnNurgleCorpseRise);
-        SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
+        SubscribeLocalEvent<WH40KConfirmedEliminationEvent>(OnConfirmedElimination);
         SubscribeLocalEvent<WH40KChaosNurgleRuntimeComponent, ComponentShutdown>(OnRuntimeShutdown);
     }
 
@@ -150,8 +160,9 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
             return;
 
         ApplyTieredCooldown(args.Performer, args.Action, 35f, progression.KhorneGiftThreeCooldownTier);
+        DetachCorpseRiseMind(args.Target);
         _zombie.ZombifyEntity(args.Target);
-        _teamNpcFactions.ApplyTeamFaction(args.Target, HereticTeamId);
+        ConfigureCorpseRiseZombie(args.Target);
 
         if (TryComp<DamageableComponent>(args.Target, out var damageable))
         {
@@ -166,11 +177,47 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnKillReported(ref KillReportedEvent ev)
+    private void DetachCorpseRiseMind(EntityUid target)
     {
-        if (ev.Suicide || ev.Primary is not KillPlayerSource source)
+        var mindId = _mind.GetMind(target);
+        if (mindId is not { } resolvedMindId || !TryComp<MindComponent>(resolvedMindId, out var mind))
             return;
 
+        if (mind.UserId is { } userId &&
+            _player.TryGetSessionById(userId, out _) &&
+            _ghost.SpawnGhost((resolvedMindId, mind), Transform(target).Coordinates, false) != null)
+        {
+            return;
+        }
+
+        _mind.TransferTo(resolvedMindId, null, createGhost: false, mind: mind);
+    }
+
+    private void ConfigureCorpseRiseZombie(EntityUid target)
+    {
+        RemComp<GhostTakeoverAvailableComponent>(target);
+        RemComp<GhostRoleComponent>(target);
+        RemComp<GhostRoleRaffleComponent>(target);
+
+        var teamMember = EnsureComp<WH40KTeamMemberComponent>(target);
+        teamMember.TeamId = HereticTeamId;
+
+        var factionIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(target);
+        if (!string.Equals(factionIcon.TeamId, HereticTeamId, StringComparison.OrdinalIgnoreCase))
+        {
+            factionIcon.TeamId = HereticTeamId;
+            Dirty(target, factionIcon);
+        }
+
+        _teamNpcFactions.ApplyTeamFaction(target, HereticTeamId);
+    }
+
+    private void OnConfirmedElimination(WH40KConfirmedEliminationEvent ev)
+    {
+        if (ev.Suicide)
+            return;
+
+        var source = ev.Primary;
         if (!_player.TryGetSessionById(source.PlayerId, out var session) || session.AttachedEntity is not { Valid: true } killer)
             return;
 

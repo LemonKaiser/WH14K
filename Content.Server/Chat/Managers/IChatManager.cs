@@ -26,14 +26,17 @@ namespace Content.Server.Chat.Managers
         void SendAdminAnnouncementMessage(ICommonSession player, string message, bool suppressLog = true);
 
         void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat,
-            INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct);
+            INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null);
 
         void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay,
-            IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct);
+            IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null);
 
-        void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride, string? audioPath = null, float audioVolume = 0, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct);
+        void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride, string? audioPath = null, float audioVolume = 0, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null);
 
-        void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct);
+        void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct, uint? serverMessageId = null);
+
+        void UpdateChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat,
+            INetChannel client, uint serverMessageId, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatSpeechTransport speechTransport = ChatSpeechTransport.Direct);
 
         bool MessageCharacterLimit(ICommonSession player, string message);
 

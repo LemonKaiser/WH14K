@@ -114,6 +114,18 @@ namespace Content.Server.EUI
         {
             if (e.NewStatus == SessionStatus.Connected)
             {
+                if (_playerData.TryGetValue(e.Session, out var existing))
+                {
+                    foreach (var ui in existing.OpenUIs.Values)
+                    {
+                        ui.Closed();
+                    }
+
+                    _sawmill?.Warning($"Received duplicate connected status for player {e.Session}; resetting stale EUI state.");
+                    _playerData[e.Session] = new PlayerEuiData();
+                    return;
+                }
+
                 _playerData.Add(e.Session, new PlayerEuiData());
             }
             else if (e.NewStatus == SessionStatus.Disconnected)

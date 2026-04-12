@@ -4,6 +4,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Administration.Notes;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server._WH40K.Administration.ScreenCheck;
+using Content.Server._WH40K.Chat.Translation;
 using Content.Server._WH40K.DiscordAuth;
 using Content.Server.Afk;
 using Content.Server.Chat.Managers;
@@ -67,6 +68,7 @@ internal static class ServerContentIoC
         deps.Register<IAdminNotesManager, AdminNotesManager>();
         deps.Register<GhostKickManager>();
         deps.Register<ScreenCheckManager>();
+        deps.Register<IWH40KChatTranslationService, WH40KChatTranslationService>();
         deps.Register<IWH40KDiscordAuthApi, WH40KDiscordAuthApi>();
         deps.Register<ISharedAdminLogManager, AdminLogManager>();
         deps.Register<IAdminLogManager, AdminLogManager>();

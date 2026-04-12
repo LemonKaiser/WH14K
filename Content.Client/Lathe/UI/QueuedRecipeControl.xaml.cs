@@ -4,6 +4,8 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Content.Client._WH40K.Interface;
+using Content.Shared.Research.Prototypes;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lathe.UI;
 
@@ -15,8 +17,9 @@ public sealed partial class QueuedRecipeControl : Control
     public Action<int>? OnMoveDownPressed;
 
     private int _index;
+    private ProtoId<LatheRecipePrototype>? _displayRecipeId;
 
-    public QueuedRecipeControl(string displayText, int index, Control displayControl, WH40KLatheMenuTheme theme)
+    public QueuedRecipeControl(string displayText, int index, Control displayControl, ProtoId<LatheRecipePrototype> recipeId, WH40KLatheMenuTheme theme)
     {
         RobustXamlLoader.Load(this);
 
@@ -31,7 +34,7 @@ public sealed partial class QueuedRecipeControl : Control
         WH40KLatheMenuStyles.ApplyButtonTheme(Delete, WH40KLatheMenuStyles.CreateDangerButtonStyle(theme), theme.PrimaryText);
 
         SetDisplayText(displayText);
-        SetDisplayControl(displayControl);
+        SetDisplayControl(displayControl, recipeId);
         SetIndex(index);
 
         MoveUp.OnPressed += _ =>
@@ -60,8 +63,12 @@ public sealed partial class QueuedRecipeControl : Control
         RecipeName.Text = WH40KUiChrome.DecorateIfMissing(displayText, WH40KUiChrome.Arrow);
     }
 
-    public void SetDisplayControl(Control displayControl)
+    public void SetDisplayControl(Control displayControl, ProtoId<LatheRecipePrototype> recipeId)
     {
+        if (_displayRecipeId == recipeId && RecipeDisplayContainer.ChildCount == 1)
+            return;
+
+        _displayRecipeId = recipeId;
         RecipeDisplayContainer.Children.Clear();
         RecipeDisplayContainer.AddChild(displayControl);
     }

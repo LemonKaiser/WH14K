@@ -57,22 +57,25 @@ public sealed class MetaProgressStatsIntegrationTests
             var meta = server.System<WH40KMetaProgressSystem>();
 
             _ = meta.GetSnapshot(uid2);
-            stats.Record(uid2, WH40KPlayerStatKeys.CombatEnemyKills, 30);
+            stats.Record(uid2, WH40KPlayerStatKeys.CombatEnemyEliminations, 11);
 
             var after = meta.GetSnapshot(uid2);
             var firstContact = after.Achievements.Single(a => a.Id == "wh40k-ach-first-contact");
             var fireline = after.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
 
-            Assert.That(firstContact.Progress, Is.EqualTo(20));
+            Assert.That(firstContact.Target, Is.EqualTo(8));
+            Assert.That(firstContact.Progress, Is.EqualTo(8));
             Assert.That(firstContact.Completed, Is.True);
-            Assert.That(fireline.Progress, Is.EqualTo(30));
+            Assert.That(fireline.Target, Is.EqualTo(12));
+            Assert.That(fireline.Progress, Is.EqualTo(11));
             Assert.That(fireline.Completed, Is.False);
 
             // Death blocker resets fireline
             stats.Record(uid2, WH40KPlayerStatKeys.CombatDeaths, 1);
 
-            var afterDeath = meta.GetSnapshot(uid2);
-            Assert.That(afterDeath.Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation").Progress, Is.EqualTo(0));
+            var afterDeath = meta.GetSnapshot(uid2).Achievements.Single(a => a.Id == "wh40k-ach-fireline-initiation");
+            Assert.That(afterDeath.Progress, Is.EqualTo(0));
+            Assert.That(afterDeath.Completed, Is.False);
         });
 
         // --- Lifetime stat-driven achievement keeps manual progress + delta ---
@@ -84,25 +87,27 @@ public sealed class MetaProgressStatsIntegrationTests
             var stats = server.System<WH40KPlayerStatsSystem>();
             var meta = server.System<WH40KMetaProgressSystem>();
 
-            _ = meta.GetSnapshot(uid3);
+            var initial = meta.GetSnapshot(uid3);
+            var veteran = initial.Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
+            var target = veteran.Target;
 
-            var setResult = meta.TrySetAchievementProgress(uid3, "wh40k-ach-veteran-of-wars", 99,
+            var setResult = meta.TrySetAchievementProgress(uid3, "wh40k-ach-veteran-of-wars", target - 1,
                 out var resolvedProgress, out _, out var completedBefore, out var setError);
 
             Assert.That(setResult, Is.True, setError);
-            Assert.That(resolvedProgress, Is.EqualTo(99));
+            Assert.That(resolvedProgress, Is.EqualTo(target - 1));
             Assert.That(completedBefore, Is.False);
 
             stats.Record(uid3, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
 
             var afterFirst = meta.GetSnapshot(uid3).Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-            Assert.That(afterFirst.Progress, Is.EqualTo(100));
+            Assert.That(afterFirst.Progress, Is.EqualTo(target));
             Assert.That(afterFirst.Completed, Is.True);
 
             // Second delta must not push past cap
             stats.Record(uid3, WH40KPlayerStatKeys.RoundCompletedFaction, 1);
             var afterSecond = meta.GetSnapshot(uid3).Achievements.Single(a => a.Id == "wh40k-ach-veteran-of-wars");
-            Assert.That(afterSecond.Progress, Is.EqualTo(100));
+            Assert.That(afterSecond.Progress, Is.EqualTo(target));
         });
 
         await pair.CleanReturnAsync();

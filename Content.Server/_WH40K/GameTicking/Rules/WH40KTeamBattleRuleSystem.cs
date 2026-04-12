@@ -22,6 +22,7 @@ using Content.Server.GameTicking.Rules;
 using Content.Server.KillTracking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
+using Content.Server._WH40K.MetaProgress;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.RoundEnd;
@@ -43,6 +44,7 @@ using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
 using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Mobs.Systems;
@@ -107,6 +109,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private readonly WH40KRoundRewardValidationSystem _rewardValidation = default!;
 
     private ISawmill _sawmill = default!;
     private float _checkInterval;
@@ -162,7 +165,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnPlayerBeforeSpawn);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
-        SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
+        SubscribeLocalEvent<WH40KTeamMemberComponent, MindAddedMessage>(OnTeamMemberMindAdded);
+        SubscribeLocalEvent<WH40KValidatedKillRewardEvent>(OnValidatedKillReward);
+        SubscribeLocalEvent<WH40KValidatedKillRewardRevokedEvent>(OnValidatedKillRewardRevoked);
+        SubscribeLocalEvent<WH40KConfirmedEliminationEvent>(OnConfirmedElimination);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<WH40KTeamBattleFactionIconComponent, PolymorphedEvent>(OnFactionIconPolymorphed);
     }
@@ -182,6 +188,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.WinnerTeamId = null;
         component.Draw = false;
         component.TimeLimitReached = false;
+        component.TeamKills = new int[component.Teams.Count];
+        component.TeamDeaths = new int[component.Teams.Count];
         component.PlayerKills.Clear();
         component.NextFriendlyFireAhelpTime.Clear();
         component.CurrentPhase = WH40KBattlePhase.Preparation;
@@ -228,12 +236,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     protected override void Ended(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
         base.Ended(uid, component, gameRule, args);
-        EndRoundEvent(component, Timing.CurTime, forceCleanup: true);
-        component.PendingOrbitalStrikes.Clear();
+        CleanupEndingTransientEffects(component, Timing.CurTime);
         ClearAllTeamLevelBuffComponents();
-
-        if (_gameTicker.DefaultMap != MapId.Nullspace)
-            _weather.TrySetWeather(_gameTicker.DefaultMap, null, out _);
 
         if (_activeRuleUid == uid)
             _activeRuleUid = null;
@@ -282,6 +286,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     protected override void AppendRoundEndText(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule, ref RoundEndTextAppendEvent args)
     {
         base.AppendRoundEndText(uid, component, gameRule, ref args);
+        _rewardValidation.FinalizePendingEliminations();
 
         if (component.Teams.Count == 0)
             return;
@@ -453,6 +458,32 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
                     LocKey = perTeamKey,
                 }, ev.Player);
             }
+        }
+    }
+
+    private void OnTeamMemberMindAdded(Entity<WH40KTeamMemberComponent> ent, ref MindAddedMessage args)
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return;
+
+        if (args.Mind.Comp.UserId is not { } userId)
+            return;
+
+        var resolvedTeamId = ent.Comp.TeamId;
+        if (!TryResolveTeamId(rule, ent.Comp.TeamId, out resolvedTeamId))
+        {
+            if (string.IsNullOrWhiteSpace(ent.Comp.TeamId))
+                return;
+
+            resolvedTeamId = ent.Comp.TeamId;
+        }
+
+        rule.PlayerLastKnownTeam[userId] = resolvedTeamId;
+
+        if (_players.TryGetSessionById(userId, out var session))
+        {
+            RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), session);
+            RaiseNetworkEvent(new WH40KTeamThemeAssignedEvent(resolvedTeamId), session);
         }
     }
 
@@ -758,6 +789,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
                     ResolveArgValues = true,
                 });
 
+            CleanupEndingTransientEffects(rule, Timing.CurTime);
+            _rewardValidation.FinalizePendingEliminations();
             _roundEnd.EndRound();
             return;
         }
@@ -770,6 +803,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (AnnounceWinner)
             RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-draw-announce" });
 
+        CleanupEndingTransientEffects(rule, Timing.CurTime);
+        _rewardValidation.FinalizePendingEliminations();
         _roundEnd.EndRound();
     }
 
@@ -825,6 +860,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
                     ResolveArgValues = true,
                 });
 
+            CleanupEndingTransientEffects(component, Timing.CurTime);
+            _rewardValidation.FinalizePendingEliminations();
             _roundEnd.EndRound();
             return;
         }
@@ -838,55 +875,80 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             if (AnnounceWinner)
                 RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-draw-announce" });
 
+            CleanupEndingTransientEffects(component, Timing.CurTime);
+            _rewardValidation.FinalizePendingEliminations();
             _roundEnd.EndRound();
         }
     }
 
-    private void OnKillReported(ref KillReportedEvent ev)
+    private void OnValidatedKillReward(WH40KValidatedKillRewardEvent ev)
     {
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        var victimTeamIndex = -1;
-        if (TryComp<WH40KTeamMemberComponent>(ev.Entity, out var teamMember) &&
-            TryGetTeamIndexById(teamMember.TeamId, rule, out var victimTeam))
+        if (!TryGetTeamIndex(ev.KillerUserId, rule, out var teamIndex) ||
+            teamIndex < 0 ||
+            teamIndex >= rule.Teams.Count)
         {
-            EnsureTeamArrays(rule);
-            rule.TeamDeaths[victimTeam]++;
-            victimTeamIndex = victimTeam;
-        }
-        else if (_mind.TryGetMind(ev.Entity, out var victimMindId, out _))
-        {
-            if (TryGetTeamIndex(victimMindId, rule, out var resolvedVictimTeamIndex))
-            {
-                EnsureTeamArrays(rule);
-                rule.TeamDeaths[resolvedVictimTeamIndex]++;
-                victimTeamIndex = resolvedVictimTeamIndex;
-            }
+            return;
         }
 
-        if (ev.Suicide)
+        var teamId = rule.Teams[teamIndex].Id;
+        if (string.IsNullOrWhiteSpace(teamId) ||
+            string.Equals(teamId, ev.VictimTeamId, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        var reward = Math.Max(1, rule.FrontPointsPerKill);
+        AddTeamFrontPointsUnscaled(teamId, reward, "kill");
+    }
+
+    private void OnValidatedKillRewardRevoked(WH40KValidatedKillRewardRevokedEvent ev)
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (ev.Primary is KillPlayerSource killer)
+        if (!TryGetTeamIndex(ev.KillerUserId, rule, out var teamIndex) ||
+            teamIndex < 0 ||
+            teamIndex >= rule.Teams.Count)
         {
-            IncrementPlayerStat(rule.PlayerKills, killer.PlayerId);
-            if (TryGetTeamIndex(killer.PlayerId, rule, out var teamIndex))
-            {
-                EnsureTeamArrays(rule);
-                rule.TeamKills[teamIndex]++;
-
-                if (teamIndex != victimTeamIndex &&
-                    teamIndex >= 0 &&
-                    teamIndex < rule.Teams.Count)
-                {
-                    var teamId = rule.Teams[teamIndex].Id;
-                    var reward = Math.Max(1, rule.FrontPointsPerKill);
-                    AddTeamFrontPointsUnscaled(teamId, reward, "kill");
-                }
-            }
+            return;
         }
 
+        var teamId = rule.Teams[teamIndex].Id;
+        if (string.IsNullOrWhiteSpace(teamId) ||
+            string.Equals(teamId, ev.VictimTeamId, StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        var reward = Math.Max(1, rule.FrontPointsPerKill);
+        TryAdjustTeamFrontPoints(teamId, -reward, out _, out _, out _, source: "kill-revoked");
+        TryAdjustTeamCommandPoints(teamId, -reward, out _, out _, source: "kill-revoked");
+    }
+
+    private void OnConfirmedElimination(WH40KConfirmedEliminationEvent ev)
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return;
+
+        if (!TryGetTeamIndexById(ev.VictimTeamId, rule, out var victimTeamIndex))
+            victimTeamIndex = -1;
+
+        if (!TryGetTeamIndexById(ev.KillerTeamId, rule, out var killerTeamIndex))
+            killerTeamIndex = -1;
+
+        EnsureTeamArrays(rule);
+
+        if (victimTeamIndex >= 0)
+            rule.TeamDeaths[victimTeamIndex]++;
+
+        if (ev.Suicide || killerTeamIndex < 0 || killerTeamIndex == victimTeamIndex)
+            return;
+
+        IncrementPlayerStat(rule.PlayerKills, ev.Primary.PlayerId);
+        rule.TeamKills[killerTeamIndex]++;
     }
 
     private void OnDamageChanged(EntityUid uid, DamageableComponent component, DamageChangedEvent args)
@@ -1451,6 +1513,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (AnnounceWinner)
             RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = "wh40k-team-time-limit-announce" });
 
+        CleanupEndingTransientEffects(component, Timing.CurTime);
+        _rewardValidation.FinalizePendingEliminations();
         _roundEnd.EndRound();
     }
 
@@ -2463,6 +2527,21 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         ScheduleNextRoundEvent(component, now);
+    }
+
+    private void CleanupEndingTransientEffects(Components.WH40KTeamBattleRuleComponent component, TimeSpan now)
+    {
+        EndRoundEvent(component, now, forceCleanup: true);
+        component.PendingOrbitalStrikes.Clear();
+        component.ActiveWeather = null;
+        component.ActiveWeatherEnd = null;
+        component.NextWeatherStart = null;
+        component.PendingWeather = null;
+        component.LastWeatherWarningForStart = null;
+        component.WeatherSuppressedForRound = true;
+
+        if (_gameTicker.DefaultMap != MapId.Nullspace)
+            _weather.TrySetWeather(_gameTicker.DefaultMap, null, out _);
     }
 
     private void TryAnnounceRoundEventWarning(

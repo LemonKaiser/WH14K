@@ -1,0 +1,19 @@
+services:
+  wh40k-translation:
+    build: .
+    container_name: wh40k-translation
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./models:/app/models:ro
+      - ./tokenizers:/app/tokenizers:ro
+      - ./config:/app/config:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

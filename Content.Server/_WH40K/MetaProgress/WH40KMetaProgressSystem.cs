@@ -10,6 +10,7 @@ using Content.Server.GameTicking.Events;
 using Content.Server.KillTracking;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server._WH40K.Command;
+using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Influence;
@@ -164,6 +165,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private const int ConfirmDevelopmentRateLimitCount = 4;
 
+	private const int ValidatedHealBucketsPerPairPerRoundCap = 3;
+
 	[Dependency]
 	private readonly IConfigurationManager _config = default!;
 
@@ -189,6 +192,9 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private readonly WH40KPlayerStatsSystem _stats = default!;
 
 	[Dependency]
+	private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
+
+	[Dependency]
 	private readonly WH40KTeamBattleRuleSystem _teamBattleRule = default!;
 
 	[Dependency]
@@ -202,11 +208,21 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private readonly Dictionary<NetUserId, RuntimeProgressState> _states = new Dictionary<NetUserId, RuntimeProgressState>();
 
-	private readonly Dictionary<NetUserId, int> _roundKillXpGrants = new Dictionary<NetUserId, int>();
+	private readonly Dictionary<NetUserId, int> _roundKillXpSpent = new Dictionary<NetUserId, int>();
 
-	private readonly Dictionary<NetUserId, int> _roundObjectiveXpGrants = new Dictionary<NetUserId, int>();
+	private readonly Dictionary<NetUserId, int> _roundObjectiveXpSpent = new Dictionary<NetUserId, int>();
+
+	private readonly Dictionary<NetUserId, int> _roundRepeatableXpSpent = new Dictionary<NetUserId, int>();
+
+	private readonly Dictionary<string, int> _roundKillRewardGrantXp = new Dictionary<string, int>(StringComparer.Ordinal);
 
 	private readonly Dictionary<NetUserId, int> _roundHealRemainders = new Dictionary<NetUserId, int>();
+
+	private readonly HashSet<(NetUserId SourceUserId, NetUserId TargetUserId)> _roundValidatedRevives = new HashSet<(NetUserId SourceUserId, NetUserId TargetUserId)>();
+
+	private readonly HashSet<(NetUserId SourceUserId, NetUserId TargetUserId)> _roundValidatedStabilizations = new HashSet<(NetUserId SourceUserId, NetUserId TargetUserId)>();
+
+	private readonly Dictionary<(NetUserId SourceUserId, NetUserId TargetUserId), int> _roundValidatedHealBuckets = new Dictionary<(NetUserId SourceUserId, NetUserId TargetUserId), int>();
 
 	private readonly Dictionary<NetUserId, RateLimitWindowState> _requestStateRateLimits = new Dictionary<NetUserId, RateLimitWindowState>();
 
@@ -246,6 +262,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private int _xpKillCapPerRound;
 
+	private int _xpRepeatableCapPerRound;
+
 	private bool _unlockRequirementsBypassed;
 
 	private bool _statsTrace;
@@ -277,11 +295,15 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveTimeout, OnXpObjectiveTimeoutChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveFailure, OnXpObjectiveFailureChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveCapPerRound, OnXpObjectiveCapPerRoundChanged, invokeImmediately: true);
+		base.Subs.CVar(_config, CCVars.WH40KMetaXpRepeatableCapPerRound, OnXpRepeatableCapPerRoundChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaStatsTrace, OnStatsTraceChanged, invokeImmediately: true);
 		SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 		SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
 		SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
 		SubscribeLocalEvent<AttributedKilledEvent>(OnAttributedKilled);
+		SubscribeLocalEvent<WH40KValidatedKillRewardEvent>(OnValidatedKillReward);
+		SubscribeLocalEvent<WH40KValidatedKillRewardRevokedEvent>(OnValidatedKillRewardRevoked);
+		SubscribeLocalEvent<WH40KConfirmedEliminationEvent>(OnConfirmedElimination);
 		SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
 		SubscribeLocalEvent<WH40KTeamBattleHealingDoneEvent>(OnTeamBattleHealingDone);
 		SubscribeLocalEvent<WH40KInfluencePointCapturedEvent>(OnInfluencePointCaptured);
@@ -874,7 +896,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
 	{
-		TraceStats($"Round restart cleanup: states={_states.Count}, killCaps={_roundKillXpGrants.Count}, objectiveCaps={_roundObjectiveXpGrants.Count}, healRemainders={_roundHealRemainders.Count}.");
+		TraceStats($"Round restart cleanup: states={_states.Count}, killXpSpent={_roundKillXpSpent.Count}, objectiveXpSpent={_roundObjectiveXpSpent.Count}, repeatableXpSpent={_roundRepeatableXpSpent.Count}, healRemainders={_roundHealRemainders.Count}.");
 		HashSet<NetUserId> connectedUsers = new HashSet<NetUserId>(_players.Sessions.Select((ICommonSession session) => session.UserId));
 		if (_states.Count > 0)
 		{
@@ -892,9 +914,14 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				EnsureState(commonSession.UserId, commonSession);
 			}
 		}
-		_roundKillXpGrants.Clear();
-		_roundObjectiveXpGrants.Clear();
+		_roundKillXpSpent.Clear();
+		_roundObjectiveXpSpent.Clear();
+		_roundRepeatableXpSpent.Clear();
+		_roundKillRewardGrantXp.Clear();
 		_roundHealRemainders.Clear();
+		_roundValidatedRevives.Clear();
+		_roundValidatedStabilizations.Clear();
+		_roundValidatedHealBuckets.Clear();
 		_requestStateRateLimits.Clear();
 		_setDecorationRateLimits.Clear();
 		_confirmDevelopmentRateLimits.Clear();
@@ -987,6 +1014,11 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_xpObjectiveCapPerRound = Math.Max(0, value);
 	}
 
+	private void OnXpRepeatableCapPerRoundChanged(int value)
+	{
+		_xpRepeatableCapPerRound = Math.Max(0, value);
+	}
+
 	private void OnStatsTraceChanged(bool value)
 	{
 		_statsTrace = value;
@@ -1020,6 +1052,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		NetUserId userId = comp.PlayerSession.UserId;
 		if (_states.ContainsKey(userId) && _players.TryGetSessionByEntity(ev.Target, out ICommonSession session) && !(session.UserId == userId) && _teamBattleRule.TryGetTeamIdForUser(userId, out string teamId) && _teamBattleRule.TryGetTeamIdFromEntity(ev.Target, out string teamId2) && string.Equals(teamId, teamId2, StringComparison.Ordinal))
 		{
+			var pair = (userId, session.UserId);
 			Dictionary<string, string> metadata = new Dictionary<string, string>(StringComparer.Ordinal)
 			{
 				["sourceTeamId"] = teamId,
@@ -1031,11 +1064,19 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			if (ev.OldMobState == MobState.Dead && (ev.NewMobState == MobState.Critical || ev.NewMobState == MobState.Alive))
 			{
 				_stats.Record(userId, "support.revive", 1L, metadata);
+				if (_roundValidatedRevives.Add(pair))
+				{
+					_stats.Record(userId, WH40KPlayerStatKeys.SupportRevivesValidated, 1L, metadata);
+				}
 				TraceStats($"Recorded revive stat: source={userId}, target={session.UserId}, state={ev.OldMobState}->{ev.NewMobState}.");
 			}
 			if (ev.OldMobState == MobState.Critical && ev.NewMobState == MobState.Alive)
 			{
 				_stats.Record(userId, "support.stabilize", 1L, metadata);
+				if (_roundValidatedStabilizations.Add(pair))
+				{
+					_stats.Record(userId, WH40KPlayerStatKeys.SupportStabilizationsValidated, 1L, metadata);
+				}
 				TraceStats($"Recorded stabilize stat: source={userId}, target={session.UserId}, state={ev.OldMobState}->{ev.NewMobState}.");
 			}
 		}
@@ -1058,6 +1099,20 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 					["healed"] = ev.HealedAmount.ToString(),
 					["bucketSize"] = "100"
 				});
+				var pair = (ev.SourceUserId, ev.TargetUserId);
+				_roundValidatedHealBuckets.TryGetValue(pair, out var validatedBuckets);
+				int validatedGrant = Math.Min(num2, Math.Max(0, ValidatedHealBucketsPerPairPerRoundCap - validatedBuckets));
+				if (validatedGrant > 0)
+				{
+					_roundValidatedHealBuckets[pair] = validatedBuckets + validatedGrant;
+					_stats.Record(ev.SourceUserId, WH40KPlayerStatKeys.SupportHealBucket100Validated, validatedGrant, new Dictionary<string, string>(StringComparer.Ordinal)
+					{
+						["teamId"] = ev.TeamId,
+						["targetUserId"] = ev.TargetUserId.ToString(),
+						["healed"] = ev.HealedAmount.ToString(),
+						["bucketSize"] = "100"
+					});
+				}
 				TraceStats($"Recorded heal bucket stat: source={ev.SourceUserId}, target={ev.TargetUserId}, healed={ev.HealedAmount}, buckets={num2}, remainder={_roundHealRemainders[ev.SourceUserId]}.");
 			}
 		}
@@ -1089,6 +1144,11 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			if (_teamBattleRule.TryGetTeamIdForUser(userId, out string teamId) && string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
 			{
 				_stats.Record(userId, "objective.capture.success", 1L, new Dictionary<string, string>(StringComparer.Ordinal)
+				{
+					["teamId"] = ev.TeamId,
+					["pointUid"] = ev.PointUid.ToString()
+				});
+				_stats.Record(userId, WH40KPlayerStatKeys.ObjectiveCaptureSuccessValidated, 1L, new Dictionary<string, string>(StringComparer.Ordinal)
 				{
 					["teamId"] = ev.TeamId,
 					["pointUid"] = ev.PointUid.ToString()
@@ -1130,6 +1190,12 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 					["pointUid"] = ev.PointUid.ToString(),
 					["reward"] = ev.FrontPointReward.ToString()
 				});
+				_stats.Record(userId, WH40KPlayerStatKeys.ObjectiveDefenseSuccessValidated, 1L, new Dictionary<string, string>(StringComparer.Ordinal)
+				{
+					["teamId"] = ev.TeamId,
+					["pointUid"] = ev.PointUid.ToString(),
+					["reward"] = ev.FrontPointReward.ToString()
+				});
 				num++;
 			}
 		}
@@ -1143,39 +1209,43 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			TraceStats($"KillReported ignored: runLevel={_gameTicker.RunLevel}.");
 			return;
 		}
-		if (_players.TryGetSessionByEntity(ev.Entity, out ICommonSession session) && _states.ContainsKey(session.UserId))
+
+		var victim = _combatVictims.ResolveForRawCombatStats(ev.Entity);
+		if (!victim.CountsForRawStats)
 		{
-			_stats.Record(session.UserId, "combat.death", 1L);
-			TraceStats($"Recorded death stat for victim user={session.UserId}.");
+			TraceStats($"KillReported raw stats suppressed for victim={ev.Entity}, reason={victim.Reason}.");
+			return;
+		}
+
+		var victimUserId = victim.UserId!.Value;
+		if (_states.ContainsKey(victimUserId))
+		{
+			_stats.Record(victimUserId, "combat.death", 1L);
+			TraceStats($"Recorded death stat for victim user={victimUserId}.");
 		}
 		if (ev.Suicide || !(ev.Primary is KillPlayerSource killPlayerSource))
 		{
-			TraceStats($"KillReported ignored for killer rewards: suicide={ev.Suicide}, primary={ev.Primary?.GetType().Name ?? "null"}.");
+			TraceStats($"KillReported ignored for raw kill stats: suicide={ev.Suicide}, primary={ev.Primary?.GetType().Name ?? "null"}.");
 			return;
 		}
 		if (!_states.ContainsKey(killPlayerSource.PlayerId))
 		{
-			TraceStats($"KillReported ignored: killer user={killPlayerSource.PlayerId} has no tracked runtime state.");
+			TraceStats($"KillReported ignored for raw kill stats: killer user={killPlayerSource.PlayerId} has no tracked runtime state.");
 			return;
-		}
-		int value = 0;
-		if (_xpKillCapPerRound > 0)
-		{
-			_roundKillXpGrants.TryGetValue(killPlayerSource.PlayerId, out value);
 		}
 		if (!_teamBattleRule.TryGetTeamIdForUser(killPlayerSource.PlayerId, out string teamId))
 		{
-			TraceStats($"KillReported ignored: killer team not resolved for user={killPlayerSource.PlayerId}.");
+			TraceStats($"KillReported ignored for raw kill stats: killer team not resolved for user={killPlayerSource.PlayerId}.");
 			return;
 		}
 		if (!_teamBattleRule.TryGetTeamIdFromEntity(ev.Entity, out string teamId2))
 		{
-			TraceStats($"KillReported ignored: victim team not resolved for entity={ev.Entity}.");
+			TraceStats($"KillReported ignored for raw kill stats: victim team not resolved for entity={ev.Entity}.");
 			return;
 		}
 		if (string.Equals(teamId, teamId2, StringComparison.Ordinal))
 		{
-			TraceStats($"KillReported ignored: friendly fire killer={killPlayerSource.PlayerId}, team={teamId}.");
+			TraceStats($"KillReported ignored for raw kill stats: friendly fire killer={killPlayerSource.PlayerId}, team={teamId}.");
 			return;
 		}
 		Dictionary<string, string> dictionary = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -1183,41 +1253,21 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			["killerTeamId"] = teamId,
 			["victimTeamId"] = teamId2
 		};
-		if (ev.Assist is KillPlayerSource killPlayerSource2 && killPlayerSource2.PlayerId != killPlayerSource.PlayerId && _states.ContainsKey(killPlayerSource2.PlayerId) && _teamBattleRule.TryGetTeamIdForUser(killPlayerSource2.PlayerId, out string teamId3) && string.Equals(teamId3, teamId, StringComparison.Ordinal) && !string.Equals(teamId3, teamId2, StringComparison.Ordinal))
-		{
-			_stats.Record(killPlayerSource2.PlayerId, "combat.assist.enemy", 1L, new Dictionary<string, string>(dictionary, StringComparer.Ordinal) { ["assistTeamId"] = teamId3 });
-			TraceStats($"Recorded enemy assist stat for user={killPlayerSource2.PlayerId}, killer={killPlayerSource.PlayerId}, team={teamId3}->{teamId2}.");
-		}
 		_stats.Record(killPlayerSource.PlayerId, "combat.kill.enemy", 1L, dictionary);
-		TraceStats($"Recorded enemy kill stat for user={killPlayerSource.PlayerId}, team={teamId}->{teamId2}, killXpGrants={value}/{((_xpKillCapPerRound <= 0) ? "unlimited" : _xpKillCapPerRound.ToString())}.");
-		if (_xpKill <= 0)
-		{
-			TraceStats($"Kill XP disabled by CVar for user={killPlayerSource.PlayerId}.");
-			return;
-		}
-		if (_xpKillCapPerRound > 0 && value >= _xpKillCapPerRound)
-		{
-			TraceStats($"Kill XP cap reached for user={killPlayerSource.PlayerId}: grants={value}, cap={_xpKillCapPerRound}.");
-			return;
-		}
-		int num = ScaleAwardXp(_xpKill);
-		if (num <= 0)
-		{
-			TraceStats($"Kill XP scaled to <= 0 for user={killPlayerSource.PlayerId}: base={_xpKill}, mult={_xpMultiplier}.");
-			return;
-		}
-		AddLifetimeXpInternal(killPlayerSource.PlayerId, num, "meta.xp.kill", dictionary);
-		TraceStats($"Granted kill XP for user={killPlayerSource.PlayerId}: xp={num}.");
-		if (_xpKillCapPerRound > 0)
-		{
-			_roundKillXpGrants[killPlayerSource.PlayerId] = value + 1;
-		}
+		TraceStats($"Recorded raw enemy kill stat for user={killPlayerSource.PlayerId}, team={teamId}->{teamId2}.");
 	}
 
 	private void OnAttributedKilled(ref AttributedKilledEvent ev)
 	{
 		if (_gameTicker.RunLevel != GameRunLevel.InRound || ev.Suicide)
 			return;
+
+		var victim = _combatVictims.ResolveForRawCombatStats(ev.Entity);
+		if (!victim.CountsForRawStats)
+		{
+			TraceStats($"AttributedKilled raw assist stats suppressed for victim={ev.Entity}, reason={victim.Reason}.");
+			return;
+		}
 
 		if (ev.Primary is not KillPlayerSource primaryPlayer)
 			return;
@@ -1232,8 +1282,6 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			return;
 
 		var recordedAssistIds = new HashSet<NetUserId>();
-		if (ev.Assists.Length > 0 && ev.Assists[0] is KillPlayerSource firstAssist)
-			recordedAssistIds.Add(firstAssist.PlayerId);
 
 		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
 		{
@@ -1267,6 +1315,129 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				1L,
 				new Dictionary<string, string>(metadata, StringComparer.Ordinal) { ["assistTeamId"] = assistTeamId });
 			TraceStats($"Recorded extra enemy assist stat for user={assistPlayer.PlayerId}, killer={primaryPlayer.PlayerId}, team={assistTeamId}->{victimTeamId}.");
+		}
+	}
+
+	private void OnValidatedKillReward(WH40KValidatedKillRewardEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound)
+			return;
+
+		if (!_states.ContainsKey(ev.KillerUserId))
+		{
+			TraceStats($"Validated kill reward ignored: killer user={ev.KillerUserId} has no tracked runtime state.");
+			return;
+		}
+
+		if (_xpKill <= 0)
+		{
+			TraceStats($"Validated kill reward ignored: kill XP disabled for user={ev.KillerUserId}.");
+			return;
+		}
+
+		int scaledXp = ScaleAwardXp(_xpKill);
+		if (scaledXp <= 0)
+		{
+			TraceStats($"Validated kill reward ignored: scaled kill XP <= 0 for user={ev.KillerUserId}, base={_xpKill}, mult={_xpMultiplier}.");
+			return;
+		}
+
+		int grantedXp = ClampRepeatableXpGrant(ev.KillerUserId, scaledXp, _xpKillCapPerRound, _roundKillXpSpent);
+		if (grantedXp <= 0)
+		{
+			TraceStats($"Validated kill reward denied by XP budget for user={ev.KillerUserId}: requested={scaledXp}, killCap={_xpKillCapPerRound}, totalCap={_xpRepeatableCapPerRound}.");
+			return;
+		}
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["killerTeamId"] = ev.KillerTeamId,
+			["victimTeamId"] = ev.VictimTeamId,
+			["pairToken"] = ev.PairToken
+		};
+		if (ev.VictimUserId.HasValue)
+			metadata["victimUserId"] = ev.VictimUserId.Value.ToString();
+
+		AddLifetimeXpInternal(ev.KillerUserId, grantedXp, "meta.xp.kill", metadata);
+		_roundKillRewardGrantXp[ev.PairToken] = grantedXp;
+		TraceStats($"Granted provisional kill XP for user={ev.KillerUserId}: xp={grantedXp}, pair={ev.PairToken}.");
+	}
+
+	private void OnValidatedKillRewardRevoked(WH40KValidatedKillRewardRevokedEvent ev)
+	{
+		if (!_roundKillRewardGrantXp.Remove(ev.PairToken, out var grantedXp) || grantedXp <= 0)
+		{
+			TraceStats($"Validated kill reward revoke ignored: no recorded grant for pair={ev.PairToken}.");
+			return;
+		}
+
+		RefundRepeatableXpGrant(ev.KillerUserId, grantedXp, _roundKillXpSpent);
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["killerTeamId"] = ev.KillerTeamId,
+			["victimTeamId"] = ev.VictimTeamId,
+			["pairToken"] = ev.PairToken
+		};
+		if (ev.VictimUserId.HasValue)
+			metadata["victimUserId"] = ev.VictimUserId.Value.ToString();
+
+		AddLifetimeXpInternal(ev.KillerUserId, -grantedXp, "meta.xp.kill.revoked", metadata);
+		TraceStats($"Revoked provisional kill XP for user={ev.KillerUserId}: xp={grantedXp}, pair={ev.PairToken}.");
+	}
+
+	private void OnConfirmedElimination(WH40KConfirmedEliminationEvent ev)
+	{
+		if (!_states.ContainsKey(ev.Primary.PlayerId))
+		{
+			TraceStats($"Confirmed elimination ignored: killer user={ev.Primary.PlayerId} has no tracked runtime state.");
+			return;
+		}
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["killerTeamId"] = ev.KillerTeamId,
+			["victimTeamId"] = ev.VictimTeamId
+		};
+		if (ev.VictimUserId.HasValue)
+			metadata["victimUserId"] = ev.VictimUserId.Value.ToString();
+
+		_stats.Record(ev.Primary.PlayerId, WH40KPlayerStatKeys.CombatEnemyEliminations, 1L, metadata);
+		TraceStats($"Recorded confirmed enemy elimination for user={ev.Primary.PlayerId}, team={ev.KillerTeamId}->{ev.VictimTeamId}.");
+
+		if (ev.Assists.Length == 0)
+			return;
+
+		var recordedAssistIds = new HashSet<NetUserId>();
+		foreach (var assist in ev.Assists)
+		{
+			if (assist is not KillPlayerSource assistPlayer)
+				continue;
+
+			if (assistPlayer.PlayerId == ev.Primary.PlayerId || !recordedAssistIds.Add(assistPlayer.PlayerId))
+				continue;
+
+			if (!_states.ContainsKey(assistPlayer.PlayerId))
+				continue;
+
+			if (!_teamBattleRule.TryGetTeamIdForUser(assistPlayer.PlayerId, out var assistTeamId))
+				continue;
+
+			if (!string.Equals(assistTeamId, ev.KillerTeamId, StringComparison.Ordinal) ||
+			    string.Equals(assistTeamId, ev.VictimTeamId, StringComparison.Ordinal))
+			{
+				continue;
+			}
+
+			_stats.Record(
+				assistPlayer.PlayerId,
+				WH40KPlayerStatKeys.CombatEnemyAssistsValidated,
+				1L,
+				new Dictionary<string, string>(metadata, StringComparer.Ordinal)
+				{
+					["assistTeamId"] = assistTeamId
+				});
+			TraceStats($"Recorded confirmed enemy assist for user={assistPlayer.PlayerId}, killer={ev.Primary.PlayerId}, team={assistTeamId}->{ev.VictimTeamId}.");
 		}
 	}
 
@@ -1368,9 +1539,6 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			return;
 		}
 		_lastProcessedRoundWinRewardRoundId = ev.RoundId;
-		_roundKillXpGrants.Clear();
-		_roundObjectiveXpGrants.Clear();
-		_processedMissionOutcomeRewardKeys.Clear();
 		string winnerTeamId;
 		bool draw;
 		bool timeLimitReached;
@@ -1458,8 +1626,16 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				TraceStats($"Recorded round win stat for user={valueOrDefault}, winnerTeam={winnerTeamId}, round={ev.RoundId}.");
 				if (num > 0)
 				{
-					AddLifetimeXpInternal(valueOrDefault, num, "meta.xp.round_win", metadata2);
-					TraceStats($"Granted round-win XP for user={valueOrDefault}: xp={num}, round={ev.RoundId}.");
+					int grantedRoundWinXp = ClampRepeatableXpGrant(valueOrDefault, num, num, null);
+					if (grantedRoundWinXp > 0)
+					{
+						AddLifetimeXpInternal(valueOrDefault, grantedRoundWinXp, "meta.xp.round_win", metadata2);
+						TraceStats($"Granted round-win XP for user={valueOrDefault}: xp={grantedRoundWinXp}, round={ev.RoundId}.");
+					}
+					else
+					{
+						TraceStats($"Round-win XP denied by repeatable cap for user={valueOrDefault}, round={ev.RoundId}, requested={num}, totalCap={_xpRepeatableCapPerRound}.");
+					}
 				}
 				else
 				{
@@ -1956,23 +2132,60 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private int ClampObjectiveXpByRoundCap(NetUserId userId, int awardXp)
 	{
+		return ClampRepeatableXpGrant(userId, awardXp, _xpObjectiveCapPerRound, _roundObjectiveXpSpent);
+	}
+
+	private int ClampRepeatableXpGrant(NetUserId userId, int awardXp, int sourceCapPerRound, Dictionary<NetUserId, int>? sourceSpent)
+	{
 		if (awardXp <= 0)
-		{
 			return 0;
-		}
-		if (_xpObjectiveCapPerRound <= 0)
+
+		int sourceRemaining = int.MaxValue;
+		if (sourceCapPerRound > 0)
 		{
-			return awardXp;
+			var alreadySpentForSource = 0;
+			sourceSpent?.TryGetValue(userId, out alreadySpentForSource);
+			sourceRemaining = Math.Max(0, sourceCapPerRound - alreadySpentForSource);
 		}
-		_roundObjectiveXpGrants.TryGetValue(userId, out var value);
-		int num = _xpObjectiveCapPerRound - value;
-		if (num <= 0)
-		{
+
+		_roundRepeatableXpSpent.TryGetValue(userId, out var alreadySpentTotal);
+		int totalRemaining = _xpRepeatableCapPerRound > 0
+			? Math.Max(0, _xpRepeatableCapPerRound - alreadySpentTotal)
+			: int.MaxValue;
+
+		int grantedXp = Math.Min(awardXp, Math.Min(sourceRemaining, totalRemaining));
+		if (grantedXp <= 0)
 			return 0;
+
+		if (sourceSpent != null)
+			sourceSpent[userId] = sourceSpent.GetValueOrDefault(userId) + grantedXp;
+
+		_roundRepeatableXpSpent[userId] = alreadySpentTotal + grantedXp;
+		return grantedXp;
+	}
+
+	private void RefundRepeatableXpGrant(NetUserId userId, int grantedXp, Dictionary<NetUserId, int>? sourceSpent)
+	{
+		if (grantedXp <= 0)
+			return;
+
+		if (sourceSpent != null && sourceSpent.TryGetValue(userId, out var sourceValue))
+		{
+			sourceValue -= grantedXp;
+			if (sourceValue > 0)
+				sourceSpent[userId] = sourceValue;
+			else
+				sourceSpent.Remove(userId);
 		}
-		int num2 = Math.Min(num, awardXp);
-		_roundObjectiveXpGrants[userId] = value + num2;
-		return num2;
+
+		if (_roundRepeatableXpSpent.TryGetValue(userId, out var totalValue))
+		{
+			totalValue -= grantedXp;
+			if (totalValue > 0)
+				_roundRepeatableXpSpent[userId] = totalValue;
+			else
+				_roundRepeatableXpSpent.Remove(userId);
+		}
 	}
 
 	private void TrackPending(Task task)

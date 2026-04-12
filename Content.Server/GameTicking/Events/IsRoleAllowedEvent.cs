@@ -4,6 +4,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.GameTicking.Events;
 
+public enum RoleAllowanceContext
+{
+    Default,
+    GhostRole
+}
+
 /// <summary>
 ///     Event raised to check if a player is allowed/able to assume a role.
 /// </summary>
@@ -15,10 +21,12 @@ public struct IsRoleAllowedEvent(
     ICommonSession player,
     List<ProtoId<JobPrototype>>? jobs,
     List<ProtoId<AntagPrototype>>? antags,
+    RoleAllowanceContext context = RoleAllowanceContext.Default,
     bool cancelled = false)
 {
     public readonly ICommonSession Player = player;
     public readonly List<ProtoId<JobPrototype>>? Jobs = jobs;
     public readonly List<ProtoId<AntagPrototype>>? Antags = antags;
+    public readonly RoleAllowanceContext Context = context;
     public bool Cancelled = cancelled;
 }

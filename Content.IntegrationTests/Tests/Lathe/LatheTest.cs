@@ -138,7 +138,7 @@ public sealed class LatheTest
     }
 
     [Test]
-    public async Task Wh40kLatheStorageLimitUsesRawMaterialVolume()
+    public async Task Wh40kLatheMaterialStorageIsUnlimited()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -148,8 +148,8 @@ public sealed class LatheTest
         {
             var lathe = server.EntMan.SpawnEntity("WH40KAutolatheImperium", map.GridCoords);
             Assert.That(server.EntMan.TryGetComponent(lathe, out MaterialStorageComponent? storage), Is.True);
-            Assert.That(storage!.StorageLimit, Is.EqualTo(1000),
-                "WH40K lathe tier storage should be converted from sheet-sized units to raw material volume.");
+            Assert.That(storage!.StorageLimit, Is.Null,
+                "WH40K lathes no longer assign a storage cap after the unlimited-material rework.");
 
             server.EntMan.DeleteEntity(lathe);
         });

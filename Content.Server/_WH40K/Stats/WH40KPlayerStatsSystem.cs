@@ -196,15 +196,22 @@ public sealed class WH40KPlayerStatRecordedEvent : EntityEventArgs
 public static class WH40KPlayerStatKeys
 {
     public const string CombatEnemyKills = "combat.kill.enemy";
+    public const string CombatEnemyEliminations = "combat.elimination.enemy";
     public const string CombatEnemyAssists = "combat.assist.enemy";
+    public const string CombatEnemyAssistsValidated = "combat.assist.enemy.validated";
     public const string CombatDeaths = "combat.death";
     public const string SupportRevives = "support.revive";
+    public const string SupportRevivesValidated = "support.revive.validated";
     public const string SupportStabilizations = "support.stabilize";
+    public const string SupportStabilizationsValidated = "support.stabilize.validated";
     public const string SupportHealBucket100 = "support.heal.bucket100";
+    public const string SupportHealBucket100Validated = "support.heal.bucket100.validated";
     public const string LogisticsDeliverySuccess = "logistics.delivery.success";
     public const string LogisticsDeliveryValue = "logistics.delivery.value";
     public const string ObjectiveCaptureSuccess = "objective.capture.success";
+    public const string ObjectiveCaptureSuccessValidated = "objective.capture.success.validated";
     public const string ObjectiveDefenseSuccess = "objective.defense.success";
+    public const string ObjectiveDefenseSuccessValidated = "objective.defense.success.validated";
     public const string EconomyCommandTreePurchaseCount = "economy.command.tree.purchase.count";
     public const string EconomyCommandTreePurchaseCost = "economy.command.tree.purchase.cost";
     public const string EconomyCommandUpgradeCount = "economy.command.upgrade.count";

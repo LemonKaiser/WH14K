@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Station.Events;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
-using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
@@ -34,6 +34,7 @@ public sealed class WH40KFactionSystem : EntitySystem
     private static readonly TimeSpan LateJoinReservationLifetime = TimeSpan.FromMinutes(2);
 
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IChatManager _chatManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -85,7 +86,7 @@ public sealed class WH40KFactionSystem : EntitySystem
         RaiseNetworkEvent(new WH40KFactionSelectionResultEvent(msg.Purpose, canonicalFactionId, accepted, messageLocKey, factions), session);
 
         if (!accepted && !string.IsNullOrWhiteSpace(messageLocKey))
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = messageLocKey }, session);
+            SendLocalizedServerMessage(session, messageLocKey);
     }
 
     private void OnCancelFactionSelection(WH40KCancelFactionSelectionEvent msg, EntitySessionEventArgs args)
@@ -152,6 +153,13 @@ public sealed class WH40KFactionSystem : EntitySystem
         if (args.Jobs == null || args.Jobs.Count == 0)
             return;
 
+        // Ghost-role availability and takeover checks also reuse IsRoleAllowedEvent.
+        // Late-join faction reservations should not hide or spam-chat ghost roles.
+        if (args.Context == RoleAllowanceContext.GhostRole)
+        {
+            return;
+        }
+
         if (!TryGetRuleDefinition(WH40KFactionSelectionPurpose.LateJoin, out var rule))
             return;
 
@@ -159,7 +167,7 @@ public sealed class WH40KFactionSystem : EntitySystem
         if (!_lateJoinSelections.TryGetValue(args.Player.UserId, out var pendingSelection))
         {
             args.Cancelled = true;
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = LateJoinSelectionRequiredLocKey }, args.Player);
+            SendLocalizedServerMessage(args.Player, LateJoinSelectionRequiredLocKey);
             return;
         }
 
@@ -169,9 +177,14 @@ public sealed class WH40KFactionSystem : EntitySystem
                 continue;
 
             args.Cancelled = true;
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent { LocKey = InvalidJobSelectionLocKey }, args.Player);
+            SendLocalizedServerMessage(args.Player, InvalidJobSelectionLocKey);
             return;
         }
+    }
+
+    private void SendLocalizedServerMessage(ICommonSession session, string locKey)
+    {
+        _chatManager.DispatchServerMessage(session, Loc.GetString(locKey));
     }
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent args)

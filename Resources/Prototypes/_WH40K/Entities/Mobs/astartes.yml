@@ -2,8 +2,10 @@
   id: WH40KAstartesImperiumMk2Gear
   equipment:
     ears: ClothingHeadsetVoxBackpackImperium
+    back: ClothingBackpackAstartesMk2Powerpack
     head: ClothingHeadHelmetAstartesMk2
     outerClothing: ClothingOuterArmorAstartesMk2
+    shoes: ClothingShoesAstartesImperiumBoots
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: SergeantDogTag
@@ -14,8 +16,10 @@
   id: WH40KAstartesImperiumMk4Gear
   equipment:
     ears: ClothingHeadsetVoxBackpackImperium
+    back: ClothingBackpackAstartesMk4Powerpack
     head: ClothingHeadHelmetAstartesMk4
     outerClothing: ClothingOuterArmorAstartesMk4A
+    shoes: ClothingShoesAstartesImperiumBoots
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: SergeantDogTag
@@ -26,8 +30,10 @@
   id: WH40KAstartesHereticsChaosGear
   equipment:
     ears: ClothingHeadsetVoxBackpackHeretics
+    back: ClothingBackpackAstartesChaosPowerpack
     head: ClothingHeadHelmetAstartesChaos
     outerClothing: ClothingOuterArmorAstartesChaos
+    shoes: ClothingShoesAstartesChaosBoots
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: HSergeantDogTag

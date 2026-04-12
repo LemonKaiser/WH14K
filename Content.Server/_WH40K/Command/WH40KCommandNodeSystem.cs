@@ -1722,6 +1722,10 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             Dirty(entity, icon);
         }
 
+        var rewardState = EnsureComp<WH40KReinforcementRewardStateComponent>(entity);
+        rewardState.WasClaimedByPlayer = false;
+        rewardState.ClaimedUserId = null;
+
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
         var ghostRole = EnsureComp<GhostRoleComponent>(entity);
         ghostRole.JobProto = option.Job;
@@ -1820,7 +1824,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         if (!TryGetReinforcementTeam(args, out var requiredTeamId))
             return;
 
-        if (args.Player.AttachedEntity is { } attachedEntity &&
+        if (args.Player.AttachedEntity is { Valid: true } attachedEntity &&
             TryComp<GhostComponent>(attachedEntity, out var ghost) &&
             ghost.CanGhostInteract)
         {
@@ -1828,7 +1832,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         }
 
         // Latejoin checks also raise IsRoleAllowedEvent.
-        // If player has no assigned/remembered team yet (fresh lobby join),
+        // If player has no assigned/remembered team yet (fresh latejoin flow),
         // do not block regular jobs that are reused by reinforcement options.
         if (!_teamRule.TryGetTeamIdForUser(args.Player.UserId, out var playerTeamId))
             return;
@@ -1908,6 +1912,10 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         WH40KReinforcementGhostRoleOneShotComponent component,
         MindAddedMessage args)
     {
+        var rewardState = EnsureComp<WH40KReinforcementRewardStateComponent>(uid);
+        rewardState.WasClaimedByPlayer = true;
+        rewardState.ClaimedUserId = args.Mind.Comp.UserId;
+
         // Reinforcement takeover is strictly one-time: after first control transfer
         // remove ghost-role hooks so body remains a regular player character.
         RemCompDeferred<GhostTakeoverAvailableComponent>(uid);
