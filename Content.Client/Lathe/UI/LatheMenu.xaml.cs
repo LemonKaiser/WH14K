@@ -14,7 +14,6 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
@@ -111,6 +110,7 @@ public sealed partial class LatheMenu : FancyWindow
     public void SetEntity(EntityUid uid)
     {
         Entity = uid;
+        this.SetInfoFromEntity(_entityManager, Entity);
 
         var metaData = _entityManager.GetComponent<MetaDataComponent>(Entity);
         _titleText = metaData.EntityName;

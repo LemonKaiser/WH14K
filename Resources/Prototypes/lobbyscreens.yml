@@ -21,3 +21,9 @@
 - type: lobbyBackground
   id: AnimatedWp6
   backgroundGif: /Textures/LobbyScreens/Animated/wp6.gif
+
+- type: lobbyBackground
+  id: InvisibleWall
+  background: /Textures/LobbyScreens/invisiblewall.webp
+  title: lobby-state-background-invisiblewall-title
+  artist: lobby-state-background-invisiblewall-artist

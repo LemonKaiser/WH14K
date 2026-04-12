@@ -23,8 +23,8 @@ public abstract class SharedWeatherSystem : EntitySystem
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
 
-    private EntityQuery<BlockWeatherComponent> _blockQuery;
-    private EntityQuery<WeatherStatusEffectComponent> _weatherQuery;
+    private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
+    private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;
     private readonly Dictionary<(MapId MapId, Vector2i Position), bool> _roovedCache = new();
     private List<Entity<MapGridComponent>> _roovedGridBuffer = new();
     private GameTick _roovedCacheTick = GameTick.Zero;

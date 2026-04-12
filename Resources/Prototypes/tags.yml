@@ -340,6 +340,9 @@
   id: ClarkeTreads
 
 - type: Tag
+  id: CleanerGrenade # Storage whitelist: ClothingBeltJanitor. ItemMapper: ClothingBeltJanitor
+
+- type: Tag
   id: ClothMade # SpecialDigestible: OrganMothStomach. Storage whitelist: FoodBoxCloth
 
 - type: Tag
@@ -937,6 +940,9 @@
 
 - type: Tag
   id: LightBulb # Storage whitelist: BoxLightbulb. ConstructionGraph: HelmetJustice
+
+- type: Tag
+  id: LightReplacer # Storage whitelist: ClothingBeltJanitor. ItemMapper: ClothingBeltJanitor
 
 - type: Tag
   id: Lime # CargoBounty: BountyLime
@@ -1539,6 +1545,9 @@
 
 - type: Tag
   id: TrashBag # Storage whitelist: BoxTrashbag, ClothingBeltJanitor, JanitorialTrolley. ItemMapper: JanitorialTrolley
+
+- type: Tag
+  id: TrashBagBlue # Storage whitelist: BoxTrashbag, ClothingBeltJanitor, JanitorialTrolley. ItemMapper: JanitorialTrolley
 
 - type: Tag
   id: Truncheon # Storage whitelist: ClothingBeltSecurity

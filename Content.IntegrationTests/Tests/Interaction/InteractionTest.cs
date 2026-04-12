@@ -177,7 +177,7 @@ public abstract partial class InteractionTest
     public virtual async Task Setup()
     {
         _mapInitialized = false;
-        Pair = await PoolManager.GetServerClient(Settings);
+        Pair = await PoolManager.GetServerClient(Settings, new NUnitTestContextWrap(TestContext.CurrentContext, TestContext.Out));
 
         // server dependencies
         SEntMan = Server.ResolveDependency<IEntityManager>();

@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Lathe;
 using Content.Shared.Materials;
 using Content.Shared.Prototypes;
@@ -13,12 +14,12 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.Lathe;
 
 [TestFixture]
-public sealed class LatheTest
+public sealed class LatheTest : GameTest
 {
     [Test]
     public async Task TestLatheRecipeIngredientsFitLathe()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var mapData = await pair.CreateTestMap();
@@ -113,14 +114,12 @@ public sealed class LatheTest
                 }
             });
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]
     public async Task AllLatheRecipesValidTest()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
 
         var server = pair.Server;
         var proto = server.ProtoMan;
@@ -133,8 +132,6 @@ public sealed class LatheTest
                     Assert.That(recipe.ResultReagents, Is.Not.Null, $"Recipe '{recipe.ID}' has no result or result reagents.");
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 
     [Test]

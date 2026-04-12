@@ -24,9 +24,9 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
     [Dependency] private readonly ISharedAdminLogManager _log = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery;
-    private EntityQuery<WH40KDirectionalBarricadeComponent> _barricadeQuery;
-    private EntityQuery<EnergyDomeVisualsComponent> _domeVisualsQuery;
+    private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery = default!;
+    private EntityQuery<WH40KDirectionalBarricadeComponent> _barricadeQuery = default!;
+    private EntityQuery<EnergyDomeVisualsComponent> _domeVisualsQuery = default!;
 
     public override void Initialize()
     {
@@ -35,7 +35,6 @@ public sealed class HitscanBasicRaycastSystem : EntitySystem
         _visualsQuery = GetEntityQuery<HitscanBasicVisualsComponent>();
         _barricadeQuery = GetEntityQuery<WH40KDirectionalBarricadeComponent>();
         _domeVisualsQuery = GetEntityQuery<EnergyDomeVisualsComponent>();
-
         SubscribeLocalEvent<HitscanBasicRaycastComponent, HitscanTraceEvent>(OnHitscanFired);
     }
 

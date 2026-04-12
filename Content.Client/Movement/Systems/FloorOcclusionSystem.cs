@@ -11,17 +11,14 @@ public sealed class FloorOcclusionSystem : SharedFloorOcclusionSystem
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
 
     [Dependency] private readonly IPrototypeManager _proto = default!;
-
-    private EntityQuery<SpriteComponent> _spriteQuery;
+    [Dependency] private readonly EntityQuery<SpriteComponent> _spriteQuery = default!;
     private ShaderInstance _horizontalCutShader = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        _spriteQuery = GetEntityQuery<SpriteComponent>();
         _horizontalCutShader = _proto.Index(HorizontalCut).Instance();
-
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentStartup>(OnOcclusionStartup);
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentShutdown>(OnOcclusionShutdown);
         SubscribeLocalEvent<FloorOcclusionComponent, AfterAutoHandleStateEvent>(OnOcclusionAuto);

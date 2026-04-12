@@ -1,3 +1,4 @@
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -10,7 +11,7 @@ namespace Content.IntegrationTests.Tests.Damageable
     [TestFixture]
     [TestOf(typeof(DamageableComponent))]
     [TestOf(typeof(DamageableSystem))]
-    public sealed class DamageableTest
+    public sealed class DamageableTest : GameTest
     {
         private const string TestDamageableEntityId = "TestDamageableEntityId";
         private const string TestGroup1 = "TestGroup1";
@@ -93,7 +94,7 @@ namespace Content.IntegrationTests.Tests.Damageable
         [Test]
         public async Task TestDamageableComponents()
         {
-            await using var pair = await PoolManager.GetServerClient();
+            var pair = Pair;
             var server = pair.Server;
 
             var sEntityManager = server.ResolveDependency<IEntityManager>();
@@ -238,7 +239,6 @@ namespace Content.IntegrationTests.Tests.Damageable
                     (TestDamage3c, -100)));
                 Assert.That(GetTotalDamage(sDamageableSystem, uid, sDamageableComponent), Is.EqualTo(FixedPoint2.Zero));
             });
-            await pair.CleanReturnAsync();
         }
 
         private static DamageSpecifier CreateDamage(params (string Type, float Amount)[] entries)

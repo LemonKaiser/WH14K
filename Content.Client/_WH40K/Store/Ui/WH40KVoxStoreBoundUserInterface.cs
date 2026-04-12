@@ -34,7 +34,7 @@ public sealed class WH40KVoxStoreBoundUserInterface : BoundUserInterface
 
         _menu.OnPurchasePressed += (_, listing) =>
         {
-            SendMessage(new StoreBuyListingMessage(listing.ID));
+            SendMessage(new StoreBuyListingMessage(listing.ID, EntMan.GetNetEntity(Owner)));
         };
     }
 

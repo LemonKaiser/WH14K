@@ -47,7 +47,6 @@ public sealed class WeatherSystem : SharedWeatherSystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly PuddleSystem _puddle = default!;
     [Dependency] private readonly PvsOverrideSystem _pvs = default!;
-    [Dependency] private readonly SharedPoweredLightSystem _poweredLight = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -76,7 +75,6 @@ public sealed class WeatherSystem : SharedWeatherSystem
 
         _mobQuery = GetEntityQuery<MobStateComponent>();
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
-
         SubscribeLocalEvent<WeatherStatusEffectComponent, ComponentInit>(OnCompInit);
         SubscribeLocalEvent<WeatherStatusEffectComponent, ComponentShutdown>(OnCompShutdown);
     }
@@ -123,8 +121,7 @@ public sealed class WeatherSystem : SharedWeatherSystem
             if (stopTime > now)
                 continue;
 
-            if (TryComp<PoweredLightComponent>(uid, out var light))
-                _poweredLight.ToggleBlinkingLight(uid, light, false);
+            RemComp<BlinkingPoweredLightComponent>(uid);
 
             _blinkStopBuffer.Add(uid);
         }
@@ -305,11 +302,13 @@ public sealed class WeatherSystem : SharedWeatherSystem
 
                 foreach (var (lightUid, duration) in _blinkApplyBuffer)
                 {
-                    if (!TryComp<PoweredLightComponent>(lightUid, out var light))
+                    if (!TryComp<PoweredLightComponent>(lightUid, out _))
                         continue;
 
-                    _poweredLight.ToggleBlinkingLight(lightUid, light, true);
-                    _pendingBlinkStop[lightUid] = Timing.CurTime + TimeSpan.FromSeconds(duration);
+                    var blinking = EnsureComp<BlinkingPoweredLightComponent>(lightUid);
+                    blinking.StopBlinkingTime = Timing.CurTime + TimeSpan.FromSeconds(duration);
+                    Dirty(lightUid, blinking);
+                    _pendingBlinkStop[lightUid] = blinking.StopBlinkingTime!.Value;
                 }
             }
         }

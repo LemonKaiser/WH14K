@@ -141,3 +141,8 @@
     position: 0, 0
     radius: 64
     feather: 12
+
+- type: shader
+  id: HeatBlur
+  kind: source
+  path: "/Textures/Shaders/heatBlur.swsl"
