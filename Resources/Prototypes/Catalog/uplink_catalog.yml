@@ -1872,6 +1872,22 @@
   - UplinkPointless
 
 - type: listing
+  id: UplinkSyndicateSegwayCrate
+  name: uplink-syndicate-segway-crate-name
+  description: uplink-syndicate-segway-crate-desc
+  icon: { sprite: /Textures/Objects/Vehicles/syndicatesegway.rsi, state: icon }
+  productEntity: CrateFunSyndicateSegway
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
   id: UplinkClothingConductingGloves
   name: uplink-clothing-conducting-gloves-name
   description: uplink-clothing-conducting-gloves-desc

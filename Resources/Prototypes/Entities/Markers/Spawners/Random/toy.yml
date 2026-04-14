@@ -300,6 +300,7 @@
     - id: ClothingShoesSkates
     - id: CrazyGlue
     - id: CrazyLube
+    - id: VehicleUnicycleFolded
     - !type:NestedSelector
       tableId: AllBoardGamesTable
     - !type:GroupSelector # Where there's Chips there's Dips

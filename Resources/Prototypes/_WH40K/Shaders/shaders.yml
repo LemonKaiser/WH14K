@@ -7,3 +7,8 @@
   id: WH40KShockWave
   kind: source
   path: "/Textures/_WH40K/Shaders/shock_wave.swsl"
+
+- type: shader
+  id: WH40KWarpBreach
+  kind: source
+  path: "/Textures/_WH40K/Shaders/warp_breach.swsl"

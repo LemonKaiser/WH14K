@@ -50,6 +50,7 @@ steal-target-groups-freezer-heater = нагреватель или охлади�
 steal-target-groups-altar-nanotrasen = алтарь Nanotrasen (любой)
 steal-target-groups-nuclear-bomb = ядерная боеголовка
 steal-target-groups-fax-machine-captain = факс дальнего действия капитана
+steal-target-groups-vehicle-secway = сегвей
 steal-target-groups-chem-dispenser = химический раздатчик
 steal-target-groups-xeno-artifact = инопланетный артефакт
 steal-target-groups-booze-dispenser = раздатчик алкоголя

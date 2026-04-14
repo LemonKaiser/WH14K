@@ -1,10 +1,10 @@
 using System;
 using Content.Server._WH40K.GameTicking.Rules.Components;
-using Content.Shared.Mech;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Mech.Components;
 using Content.Shared._WH40K.GameTicking.Rules;
+using Content.Shared.Vehicle.Components;
 
 namespace Content.Server._WH40K.Overlays;
 
@@ -20,41 +20,26 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<MechPilotComponent, ComponentStartup>(OnPilotStartup);
-        SubscribeLocalEvent<MechPilotComponent, ComponentShutdown>(OnPilotShutdown);
-        SubscribeLocalEvent<MechPilotComponent, MechPilotAssignedEvent>(OnPilotAssigned);
+        SubscribeLocalEvent<VehicleOperatorComponent, OnVehicleEnteredEvent>(OnVehicleEntered);
+        SubscribeLocalEvent<VehicleOperatorComponent, OnVehicleExitedEvent>(OnVehicleExited);
     }
 
-    private void OnPilotStartup(Entity<MechPilotComponent> ent, ref ComponentStartup args)
+    private void OnVehicleEntered(Entity<VehicleOperatorComponent> ent, ref OnVehicleEnteredEvent args)
     {
-        if (!ent.Comp.Mech.IsValid() || Deleted(ent.Comp.Mech))
+        var mech = args.Vehicle.Owner;
+        if (!HasComp<MechComponent>(mech))
             return;
 
-        SyncMechFactionState(ent.Comp.Mech, ent.Owner);
+        SyncMechFactionState(mech, args.Operator);
     }
 
-    private void OnPilotShutdown(Entity<MechPilotComponent> ent, ref ComponentShutdown args)
+    private void OnVehicleExited(Entity<VehicleOperatorComponent> ent, ref OnVehicleExitedEvent args)
     {
-        if (!TryComp<MechComponent>(ent.Comp.Mech, out var mech))
+        var mech = args.Vehicle.Owner;
+        if (!HasComp<MechComponent>(mech))
             return;
 
-        if (mech.PilotSlot.ContainedEntity is { } activePilot &&
-            activePilot != ent.Owner &&
-            HasComp<MechPilotComponent>(activePilot))
-        {
-            SyncMechFactionState(ent.Comp.Mech, activePilot);
-            return;
-        }
-
-        ClearMechFactionState(ent.Comp.Mech);
-    }
-
-    private void OnPilotAssigned(Entity<MechPilotComponent> ent, ref MechPilotAssignedEvent args)
-    {
-        if (!args.Mech.IsValid() || Deleted(args.Mech))
-            return;
-
-        SyncMechFactionState(args.Mech, ent.Owner);
+        ClearMechFactionState(mech);
     }
 
     private void SyncMechFactionState(EntityUid mech, EntityUid pilot)

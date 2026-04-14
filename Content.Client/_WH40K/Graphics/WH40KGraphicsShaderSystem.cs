@@ -1,4 +1,5 @@
 using Content.Client._WH40K.Explosion;
+using Content.Client._WH40K.WarpBreach;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;
 using Robust.Shared.Configuration;
@@ -15,6 +16,7 @@ public sealed class WH40KGraphicsShaderSystem : EntitySystem
 
     private WH40KGrimdarkOverlay _grimdarkOverlay = default!;
     private WH40KExplosionShockWaveOverlay _shockWaveOverlay = default!;
+    private WH40KWarpBreachOverlay _warpBreachOverlay = default!;
 
     public override void Initialize()
     {
@@ -22,9 +24,13 @@ public sealed class WH40KGraphicsShaderSystem : EntitySystem
 
         _grimdarkOverlay = new WH40KGrimdarkOverlay();
         _shockWaveOverlay = new WH40KExplosionShockWaveOverlay();
+        _warpBreachOverlay = new WH40KWarpBreachOverlay();
 
         if (!_overlayMan.HasOverlay<WH40KExplosionShockWaveOverlay>())
             _overlayMan.AddOverlay(_shockWaveOverlay);
+
+        if (!_overlayMan.HasOverlay<WH40KWarpBreachOverlay>())
+            _overlayMan.AddOverlay(_warpBreachOverlay);
 
         Subs.CVar(_cfg, CCVars.WH40KGrimdarkShaderEnabled, _ => SyncConfig(), true);
     }
@@ -53,5 +59,6 @@ public sealed class WH40KGraphicsShaderSystem : EntitySystem
 
         _overlayMan.RemoveOverlay(_grimdarkOverlay);
         _overlayMan.RemoveOverlay(_shockWaveOverlay);
+        _overlayMan.RemoveOverlay(_warpBreachOverlay);
     }
 }

@@ -1,6 +1,5 @@
 # TODO once tiles can be smoothed and carpets ported over to that, add them to the FloorTile outputs
 - type: entity
-  name: carpet
   parent: FloorTileItemBase
   id: FloorCarpetItemRed
   suffix: Red

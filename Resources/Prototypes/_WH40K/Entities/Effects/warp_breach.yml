@@ -1,0 +1,25 @@
+- type: entity
+  id: WH40KWarpBreachTest
+  name: warp breach
+  description: A tear in reality — the Warp bleeds through.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: Markers/cross.rsi
+    layers:
+    - state: green
+      shader: unshaded
+      visible: false
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 3.0
+    color: "#8800cc"
+  - type: WH40KWarpBreach
+    intensity: 12
+    radius: 2.5
+    falloff: 1.8
+    openDuration: 5

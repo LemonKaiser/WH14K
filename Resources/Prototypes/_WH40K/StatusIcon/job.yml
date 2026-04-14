@@ -112,14 +112,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconTankComm
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: TankComm
-  jobName: job-name-tank-comm
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconSpecialistHWS
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -133,14 +125,6 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: SpecialistSWS
   jobName: job-name-specialist-sws
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconTanker
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Tanker
-  jobName: job-name-tanker
 
 - type: jobIcon
   parent: JobIcon
@@ -229,14 +213,6 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: HVoxScout
   jobName: job-name-hvox-scout
-
-- type: jobIcon
-  parent: JobIcon
-  id: JobIconHTanker
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HTanker
-  jobName: job-name-htanker
 
 - type: jobIcon
   parent: JobIcon

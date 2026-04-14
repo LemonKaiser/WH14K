@@ -21,8 +21,6 @@
   - Commissar
   - Major
   - Lieutenant
-  - TankComm
-  - Tanker
   - Sergeant
   - SpecialistSWS
   - SpecialistHWS
@@ -56,8 +54,6 @@
   roles:
   - HColonel
   - HLieutenant
-  - HTankComm
-  - HTanker
   - HSergeant
   - HSpecialistSWS
   - HSpecialistHWS

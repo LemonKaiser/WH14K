@@ -54855,19 +54855,6 @@ entities:
     - type: Transform
       pos: 168.63882,-203.27695
       parent: 2
-- proto: ClothingHeadHatCatEars
-  entities:
-  - uid: 6602
-    components:
-    - type: MetaData
-      desc: Ээээ... Похоже их не отрезали и вырвали... Ведь хирургии в мед. отсеке нету...
-      name: отрезанные уши феленида
-    - type: Transform
-      parent: 6601
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 6601
 - proto: ClothingHeadHatHardhatArmored
   entities:
   - uid: 6603
@@ -80661,40 +80648,75 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - 6602
+          ents: []
   - uid: 11242
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 78.5,-21.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
   - uid: 11243
     components:
     - type: Transform
       pos: 162.5,-297.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
   - uid: 11244
     components:
     - type: Transform
       pos: 163.5,-297.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
   - uid: 11245
     components:
     - type: Transform
       pos: 164.5,-297.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
   - uid: 11246
     components:
     - type: Transform
       pos: 165.5,-297.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
   - uid: 11247
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 78.5,-20.5
       parent: 2
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          showEnts: False
+          occludes: True
+          ents: []
 - proto: MouseTimedSpawner
   entities:
   - uid: 11248
@@ -81539,7 +81561,7 @@ entities:
 
 
 
-                           Клянусь быть упорным 
+                           Клянусь быть упорным
                            и искренним в своем служении,
                            И да поглотит тьма мою душу,
                           если я окажусь недостойным.
@@ -81624,7 +81646,7 @@ entities:
          [italic]
 
                                        This prison…
-                                                      To hold... [/italic] 
+                                                      To hold... [/italic]
                                                               [bold]        ME?
   - uid: 11330
     components:
@@ -81700,7 +81722,7 @@ entities:
 
 
          [bold]  АВАРИЙНАЯ СТАЛЬ!!! ДАЖЕ НЕ КАСАЙТЕСЬ СВОИМИ РУКАМИ УБЛЮДКИ!!![/bold]
-              [italic]                             
+              [italic]
 
                                                                                   -боб
   - uid: 11337
@@ -81717,7 +81739,7 @@ entities:
 
 
          [bold]  МЕШКИ СУКА НЕ ТРОГАТЬ!!! НА ТРУПНЫЕ БАТОНЧИКИ И СВЕЧКИ ИХ!!![/bold]
-              [italic]                             
+              [italic]
 
                                                                                   -боб
   - uid: 11338
@@ -110716,6 +110738,13 @@ entities:
     - type: Transform
       pos: 66.5,-10.5
       parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 35158
+    components:
+    - type: Transform
+      pos: 70.5,-10.5
+      parent: 2
 - proto: SpawnPointExplorator
   entities:
   - uid: 16498
@@ -110938,30 +110967,6 @@ entities:
     - type: Transform
       pos: 166.5,-290.5
       parent: 2
-- proto: SpawnPointHTankComm
-  entities:
-  - uid: 16536
-    components:
-    - type: Transform
-      pos: 147.5,-286.5
-      parent: 2
-  - uid: 16537
-    components:
-    - type: Transform
-      pos: 154.5,-287.5
-      parent: 2
-- proto: SpawnPointHTanker
-  entities:
-  - uid: 16538
-    components:
-    - type: Transform
-      pos: 147.5,-287.5
-      parent: 2
-  - uid: 16539
-    components:
-    - type: Transform
-      pos: 152.5,-287.5
-      parent: 2
 - proto: SpawnPointHVoxScout
   entities:
   - uid: 16540
@@ -111092,30 +111097,6 @@ entities:
     components:
     - type: Transform
       pos: 58.5,-3.5
-      parent: 2
-- proto: SpawnPointTankComm
-  entities:
-  - uid: 16561
-    components:
-    - type: Transform
-      pos: 65.5,-32.5
-      parent: 2
-  - uid: 16562
-    components:
-    - type: Transform
-      pos: 67.5,-34.5
-      parent: 2
-- proto: SpawnPointTanker
-  entities:
-  - uid: 16563
-    components:
-    - type: Transform
-      pos: 72.5,-33.5
-      parent: 2
-  - uid: 16564
-    components:
-    - type: Transform
-      pos: 75.5,-39.5
       parent: 2
 - proto: SpawnPointTitheSupplier
   entities:

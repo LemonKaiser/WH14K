@@ -446,14 +446,19 @@ ent-MeltPowerCell = контейнер мельта-оружия
 ent-AccatranPowerCell = батарея аккатрана
 
 ent-MechSentinel = Часовой
+    .desc = Лёгкий имперский разведывательный мех с герметичной кабиной и модульным вооружением.
 
-ent-MechSentinelBatteryAutogun = Часовой
+ent-MechSentinelBatteryAutogun = Часовой с автопушкой
+    .desc = Часовой, оснащённый автопушкой, батареей и базовыми системами жизнеобеспечения.
 
-ent-MechSentinelBatteryPlasma = Часовой
+ent-MechSentinelBatteryPlasma = Часовой с плазма-винтовкой
+    .desc = Часовой, оснащённый плазма-винтовкой, батареей и базовыми системами жизнеобеспечения.
 
 ent-WeaponMechCombatSentinelRifle = Автопушка часового
+    .desc = Автоматическое орудие для установки на боевого часового.
 
 ent-WeaponMechCombatSentinelPlasma = Плазма-винтовка часового
+    .desc = Плазменное орудие для установки на боевого часового.
 
 ent-FlameThrowerGun = огнемёт
     .desc = Неважно, кто стоит перед тобой - мерзкий ксенос или падший еретик - огнемёт поможет тебе минимизировать срок его жизни.
@@ -644,6 +649,12 @@ ent-BarricadeWarhammer = баррикада
 
 ent-BarricadeSandbags = мешки с песком
     .desc = Именно это когда-нибудь может спасти тебе жизнь. Или наоборот
+
+ent-MaterialWH40KBarbedWire = { wh40k-barbed-wire-item-name }
+    .desc = { wh40k-barbed-wire-item-desc }
+ent-MaterialWH40KBarbedWire1 = { ent-MaterialWH40KBarbedWire }
+    .suffix = 1
+    .desc = { ent-MaterialWH40KBarbedWire.desc }
 
 ent-FallotBarbedWire = колючая проволока
     .desc = То, что не дает вам умереть в штыковой атаке.

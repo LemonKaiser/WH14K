@@ -51,9 +51,6 @@
             "name": "Sergeant"
         },
         {
-            "name": "TankComm"
-        },
-        {
             "name": "SpecialistHWS"
         },
         {
@@ -66,13 +63,7 @@
             "name": "Team_imp"
         },
         {
-            "name": "Tanker"
-        },
-        {
             "name": "Cargo"
-        },
-        {
-            "name": "HTanker"
         },
         {
             "name": "HCargo"

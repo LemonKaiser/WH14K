@@ -1,12 +1,13 @@
 using Content.Client.UserInterface.Fragments;
 using Content.Shared.Mech;
-using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.Mech.Ui.Equipment;
 
 public sealed partial class MechSoundboardUi : UIFragment
 {
+    [Dependency] private readonly IEntityManager _entMan = default!;
+
     private MechSoundboardUiFragment? _fragment;
 
     public override Control GetUIFragmentRoot()
@@ -22,8 +23,8 @@ public sealed partial class MechSoundboardUi : UIFragment
         _fragment = new MechSoundboardUiFragment();
         _fragment.OnPlayAction += sound =>
         {
-            // TODO: IDK dog
-            userInterface.SendMessage(new MechSoundboardPlayMessage(IoCManager.Resolve<IEntityManager>().GetNetEntity(fragmentOwner.Value), sound));
+            // Fragment owner is the equipment entity that should receive the play request.
+            userInterface.SendMessage(new MechSoundboardPlayMessage(_entMan.GetNetEntity(fragmentOwner.Value), sound));
         };
     }
 

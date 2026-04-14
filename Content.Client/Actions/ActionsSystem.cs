@@ -73,10 +73,12 @@ namespace Content.Client.Actions
             // TODO: Decouple this.
             ent.Comp.IconColor = _sharedCharges.GetCurrentCharges(ent.Owner) == 0 ? ent.Comp.DisabledIconColor : ent.Comp.OriginalIconColor;
             base.UpdateAction(ent);
-            if (_playerManager.LocalEntity != ent.Comp.AttachedEntity)
+
+            if (_playerManager.LocalEntity is not { } local)
                 return;
 
-            ActionsUpdated?.Invoke();
+            if (TryComp<ActionsComponent>(local, out var acts) && acts.Actions.Contains(ent.Owner))
+                ActionsUpdated?.Invoke();
         }
 
         private void OnHandleState(Entity<ActionsComponent> ent, ref ComponentHandleState args)

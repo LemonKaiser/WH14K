@@ -11,7 +11,6 @@ on:
 jobs:
   build:
     if: github.actor != 'PJBot' && github.event.pull_request.draft == false
-    timeout-minutes: 180
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -52,33 +51,165 @@ jobs:
     - name: Run Content.IntegrationTests
       shell: pwsh
       run: |
-        $env:DOTNET_gcServer=1
-        $workDir = Join-Path (Get-Location) 'test_results'
-        $heartbeatArgs = @{
-          Activity = 'Content.IntegrationTests'
-          HeartbeatSeconds = 60
-          FilePath = 'dotnet'
-          ArgumentList = @(
-            'test',
-            '--no-build',
-            '--configuration', 'DebugOpt',
-            'Content.IntegrationTests/Content.IntegrationTests.csproj',
-            '--',
-            'NUnit.ConsoleOut=0',
-            'NUnit.MapWarningTo=Failed',
-            'NUnit.TestOutputXml=logs',
-            "NUnit.WorkDirectory=$workDir"
-          )
+        $ErrorActionPreference = "Stop"
+        $configuration = "DebugOpt"
+        $nonWh40kBatchCount = 8
+        $repoRoot = (Get-Location).Path
+        $testsRoot = Join-Path $repoRoot "Content.IntegrationTests\Tests"
+        $resultsRootPath = Join-Path $repoRoot "test_results\integration-batches"
+
+        function Get-TestNamespace {
+          param([string]$FilePath)
+
+          $content = Get-Content $FilePath -Raw
+          $namespaceMatch = [regex]::Match($content, 'namespace\s+([A-Za-z0-9_.]+)\s*[;{]')
+
+          if (-not $namespaceMatch.Success) {
+            throw "Failed to determine namespace for '$FilePath'."
+          }
+
+          return $namespaceMatch.Groups[1].Value
         }
 
-        & ./.github/scripts/Invoke-WithHeartbeat.ps1 @heartbeatArgs
+        function Test-FileContainsRunnableTests {
+          param([string]$FilePath)
+
+          $content = Get-Content $FilePath -Raw
+          return $content -match '\[(?:Test|TestCase|TestFixture|Theory)\b'
+        }
+
+        function Add-WeightedPrefix {
+          param(
+            [hashtable]$Weights,
+            [string]$Prefix,
+            [int]$Weight = 1
+          )
+
+          if ($Weights.ContainsKey($Prefix)) {
+            $Weights[$Prefix] += $Weight
+            return
+          }
+
+          $Weights[$Prefix] = $Weight
+        }
+
+        function ConvertTo-BatchSlug {
+          param([string]$Value)
+
+          $slug = [regex]::Replace($Value, '([a-z0-9])([A-Z])', '$1-$2')
+          $slug = [regex]::Replace($slug, '[^A-Za-z0-9]+', '-')
+          return $slug.Trim('-').ToLowerInvariant()
+        }
+
+        function Get-NonWh40kDescriptors {
+          $weights = @{}
+
+          Get-ChildItem $testsRoot -Recurse -File -Filter "*.cs" |
+            Where-Object { $_.FullName -notmatch '[\\/]_WH40K[\\/]' } |
+            ForEach-Object {
+              $namespace = Get-TestNamespace -FilePath $_.FullName
+
+              if ($namespace -eq "Content.IntegrationTests.Tests") {
+                Add-WeightedPrefix -Weights $weights -Prefix ("FullyQualifiedName~{0}.{1}" -f $namespace, $_.BaseName)
+              }
+              else {
+                Add-WeightedPrefix -Weights $weights -Prefix ("FullyQualifiedName~{0}" -f $namespace)
+              }
+            }
+
+          return $weights.GetEnumerator() |
+            Sort-Object @{ Expression = "Value"; Descending = $true }, @{ Expression = "Name"; Descending = $false }
+        }
+
+        function New-BalancedCoreBatches {
+          param(
+            [object[]]$Descriptors,
+            [int]$BatchCount
+          )
+
+          $buckets = @()
+          for ($index = 0; $index -lt $BatchCount; $index++) {
+            $buckets += [pscustomobject]@{
+              Name = "core-{0:D2}" -f ($index + 1)
+              Weight = 0
+              Filters = [System.Collections.Generic.List[string]]::new()
+            }
+          }
+
+          foreach ($descriptor in $Descriptors) {
+            $target = $buckets | Sort-Object Weight, Name | Select-Object -First 1
+            $target.Filters.Add([string]$descriptor.Name)
+            $target.Weight += [int]$descriptor.Value
+          }
+
+          return $buckets | Where-Object { $_.Filters.Count -gt 0 }
+        }
+
+        function Get-Wh40kBatches {
+          $wh40kRoot = Join-Path $testsRoot "_WH40K"
+          $batches = @()
+
+          Get-ChildItem $wh40kRoot -Recurse -File -Filter "*.cs" |
+            Sort-Object FullName |
+            ForEach-Object {
+              if (Test-FileContainsRunnableTests -FilePath $_.FullName) {
+                $namespace = Get-TestNamespace -FilePath $_.FullName
+                $baseName = $_.BaseName
+                $batches += [pscustomobject]@{
+                  Name = "wh40k-{0}" -f (ConvertTo-BatchSlug -Value $baseName)
+                  Filters = @("FullyQualifiedName~{0}.{1}" -f $namespace, $baseName)
+                }
+              }
+            }
+
+          return $batches
+        }
+
+        function Invoke-IntegrationBatch {
+          param(
+            [pscustomobject]$Batch,
+            [int]$BatchNumber,
+            [int]$BatchTotal
+          )
+
+          $batchFolderName = "{0:D2}-{1}" -f $BatchNumber, $Batch.Name
+          $batchDir = Join-Path $resultsRootPath $batchFolderName
+          $filter = ($Batch.Filters | Sort-Object -Unique) -join "|"
+
+          New-Item -ItemType Directory -Path $batchDir -Force | Out-Null
+          Write-Host ("[{0}/{1}] {2} ({3} filter prefix(es))" -f $BatchNumber, $BatchTotal, $Batch.Name, @($Batch.Filters).Count)
+
+          dotnet test --no-build --configuration $configuration Content.IntegrationTests/Content.IntegrationTests.csproj --filter $filter -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.TestOutputXml=logs "NUnit.WorkDirectory=$batchDir"
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Integration batch '$($Batch.Name)' failed with exit code $LASTEXITCODE."
+          }
+        }
+
+        $env:DOTNET_gcServer = "1"
+        Remove-Item -Recurse -Force $resultsRootPath -ErrorAction SilentlyContinue
+        New-Item -ItemType Directory -Path $resultsRootPath -Force | Out-Null
+
+        $coreBatches = New-BalancedCoreBatches -Descriptors (Get-NonWh40kDescriptors) -BatchCount $nonWh40kBatchCount
+        $wh40kBatches = Get-Wh40kBatches
+        $allBatches = @($coreBatches) + @($wh40kBatches)
+
+        if ($allBatches.Count -eq 0) {
+          throw "No integration test batches were discovered."
+        }
+
+        Write-Host ("Prepared {0} integration test batches ({1} core + {2} WH40K)." -f $allBatches.Count, @($coreBatches).Count, @($wh40kBatches).Count)
+
+        for ($batchIndex = 0; $batchIndex -lt $allBatches.Count; $batchIndex++) {
+          Invoke-IntegrationBatch -Batch $allBatches[$batchIndex] -BatchNumber ($batchIndex + 1) -BatchTotal $allBatches.Count
+        }
 
     - name: Archive NUnit3 test results.
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: nunit3-results-${{ matrix.os }}
-        path: test_results/*
+        path: test_results/**/*
         retention-days: 7
         compression-level: 9
   ci-success:

@@ -1,4 +1,4 @@
-ent-BoxLasgunPowerCell = lasgun battery box
+﻿ent-BoxLasgunPowerCell = lasgun battery box
     .desc = Box full of lasgun batteries
 
 ent-WH40KObjectiveBase = Command Relay
@@ -440,11 +440,14 @@ ent-MeltPowerCell = melta weapon container
 
 ent-AccatranPowerCell = accatran battery
 
-ent-MechSentinel = Hourly
+ent-MechSentinel = Sentinel
+    .desc = A light Imperial scout walker with a sealed cabin and modular weapon mounts.
 
-ent-WeaponMechCombatSentinelRifle = Sentry Autocannon
+ent-WeaponMechCombatSentinelRifle = Sentinel Autocannon
+    .desc = An automatic cannon fitted for a combat Sentinel.
 
 ent-WeaponMechCombatSentinelPlasma = Sentinel Plasma Rifle
+    .desc = A plasma weapon fitted for a combat Sentinel.
 
 ent-FlameThrowerGun = flamethrower
     .desc = No matter who stands in front of you - a vile xenos or a fallen heretic - the flamethrower will help you minimize his lifespan.
@@ -630,6 +633,12 @@ ent-BarricadeWarhammer = barricade
 ent-BarricadeSandbags = sandbags
     .desc = This is what could save your life someday. Or vice versa
 
+ent-MaterialWH40KBarbedWire = { wh40k-barbed-wire-item-name }
+    .desc = { wh40k-barbed-wire-item-desc }
+ent-MaterialWH40KBarbedWire1 = { ent-MaterialWH40KBarbedWire }
+    .suffix = 1
+    .desc = { ent-MaterialWH40KBarbedWire.desc }
+
 ent-FallotBarbedWire = barbed wire
     .desc = What prevents you from dying in a bayonet attack.
 
@@ -813,9 +822,11 @@ ent-WH40KServoSkullMeltaMob = melta servo skull
 ent-DataChip1 = data chip
     .desc = { ent-DataChip.desc }
 
-ent-MechSentinelBatteryAutogun = Sentinel
+ent-MechSentinelBatteryAutogun = Autocannon Sentinel
+    .desc = A Sentinel fitted with an autocannon, a power cell and basic life-support modules.
 
-ent-MechSentinelBatteryPlasma = Sentinel
+ent-MechSentinelBatteryPlasma = Plasma Sentinel
+    .desc = A Sentinel fitted with a plasma rifle, a power cell and basic life-support modules.
 
 ent-MechanicusBanner = Mechanicus banner
     .desc = A banner showing allegiance to Mars.
