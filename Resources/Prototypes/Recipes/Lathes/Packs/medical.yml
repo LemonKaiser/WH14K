@@ -54,6 +54,7 @@
   id: RollerBedsStatic
   recipes:
   - RollerBedSpawnFolded
+  - VehicleWheelchairFolded
   - CheapRollerBedSpawnFolded
   - EmergencyRollerBedSpawnFolded
 

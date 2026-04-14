@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Server.Cargo.Systems;
 using Content.Server.Interaction;
-using Content.Server.Mech.Equipment.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Stunnable;
 using Content.Shared._WH40K.HeavyBolter;
@@ -153,12 +152,18 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (ent == null)
                         break;
 
+                    var shooterEvent = new GetShootingEntityEvent();
+                    if (user != null)
+                        RaiseLocalEvent(user.Value, ref shooterEvent);
+
+                    var effectiveShooter = shooterEvent.ShootingEntity ?? user;
+
                     var hitscanEv = new HitscanTraceEvent
                     {
                         FromCoordinates = fromCoordinates,
                         ShotDirection = mapDirection.Normalized(),
                         Gun = gun,
-                        Shooter = user,
+                        Shooter = effectiveShooter,
                         Target = gun.Comp.Target,
                     };
                     RaiseLocalEvent(ent.Value, ref hitscanEv);

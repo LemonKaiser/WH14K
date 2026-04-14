@@ -112,21 +112,6 @@
   - WH40KImperialMelee
 
 - type: roleLoadout
-  id: JobTanker
-  groups:
-  - WH40KImperialLineHead
-  - WH40KImperialLineMask
-  - WH40KImperialLineHonours
-  - WH40KImperialFieldOuter
-  - WH40KImperialFieldBelt
-  - WH40KImperialLineUniform
-  - WH40KImperialLineHands
-  - WH40KImperialLineFeet
-  - WH40KImperialLineEyes
-  - WH40KFieldKit
-  - WH40KImperialMelee
-
-- type: roleLoadout
   id: JobPsyker
   groups:
   - WH40KImperialLineHead
@@ -211,17 +196,6 @@
   id: JobSergeantHWS
   groups:
   - WH40KImperialCommandHead
-  - WH40KImperialCommandNeck
-  - WH40KImperialCommandOuter
-  - WH40KImperialCommandHands
-  - WH40KCommandFieldKit
-  - WH40KImperialCmdMelee
-
-- type: roleLoadout
-  id: JobTankComm
-  groups:
-  - WH40KImperialCommandHead
-  - WH40KImperialEyes
   - WH40KImperialCommandNeck
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
@@ -327,19 +301,6 @@
   - WH40KHereticMelee
 
 - type: roleLoadout
-  id: JobHTanker
-  groups:
-  - WH40KHereticLineHead
-  - WH40KHereticLineHonours
-  - WH40KHereticLineUniform
-  - WH40KHereticLineOuter
-  - WH40KHereticLineMask
-  - WH40KHereticLineHands
-  - WH40KHereticLineFeet
-  - WH40KHereticFieldKit
-  - WH40KHereticMelee
-
-- type: roleLoadout
   id: JobHBandSupplier
   groups:
   - WH40KHereticLineHead
@@ -380,19 +341,6 @@
 
 - type: roleLoadout
   id: JobHSergeantHWS
-  groups:
-  - WH40KHereticCommandHead
-  - WH40KHereticCommandUniform
-  - WH40KHereticCommandNeck
-  - WH40KHereticCommandOuter
-  - WH40KHereticCommandMask
-  - WH40KHereticCommandHands
-  - WH40KHereticCommandFeet
-  - WH40KHereticCommandFieldKit
-  - WH40KHereticMelee
-
-- type: roleLoadout
-  id: JobHTankComm
   groups:
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform

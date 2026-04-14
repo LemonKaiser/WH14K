@@ -1,0 +1,447 @@
+- type: entity
+  id: BaseVehicleStrap
+  abstract: true
+  components:
+  - type: Sprite
+    noRot: true
+  - type: InputMover
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Pullable
+  - type: Physics
+    bodyType: KinematicController
+  - type: Vehicle
+  - type: StrapVehicle
+  - type: Strap
+  - type: MovementSpeedModifier
+    weightlessModifier: 0
+    acceleration: 2
+    friction: 2
+    frictionNoInput: 6
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 6
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 360
+        restitution: 0.0
+        mask:
+        - MobMask
+        layer:
+        - TableLayer
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
+
+- type: entity
+  id: BaseVehicleMotorized
+  abstract: true
+  parent: BaseVehicleStrap
+  components:
+  - type: AmbientSound
+    sound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
+    range: 10
+    volume: -10
+    enabled: false
+  - type: Appearance
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Repairable
+    fuelCost: 20
+    doAfterDelay: 20
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+  - type: ContainerContainer
+    containers:
+      key_slot: !type:ContainerSlot
+  - type: StaticPrice
+    price: 750
+
+- type: entity
+  id: VehicleWheelchair
+  parent: [BaseVehicleStrap, BaseFoldable, BaseItem]
+  name: wheelchair
+  description: A chair with big wheels. It looks like you can move in these on your own.
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/wheelchair.rsi
+    layers:
+    - state: wheelchair
+      map: ["unfoldedLayer"]
+    - state: wheelchair_folded
+      map: ["foldedLayer"]
+      visible: false
+  - type: Appearance
+  - type: Item
+    size: Ginormous
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 2
+  - type: Strap
+    buckleOffset: "0,-0.05"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 360
+        restitution: 0.0
+        mask:
+        - MobMask
+        layer:
+        - TableLayer
+  - type: StaticPrice
+    price: 70
+
+- type: entity
+  parent: VehicleWheelchair
+  id: VehicleWheelchairFolded
+  suffix: folded
+  components:
+  - type: Foldable
+    folded: true
+
+- type: entity
+  id: VehicleJanicart
+  parent: BaseVehicleMotorized
+  name: janicart
+  description: The janitor's trusty steed.
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/janicart.rsi
+    drawdepth: Mobs
+    layers:
+    - state: vehicle
+      map: ["movement"]
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: vehicle-moving
+    noMovementLayers:
+      movement:
+        state: vehicle
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - JanicartKeys
+  - type: UnpoweredFlashlight
+  - type: PointLight
+    enabled: false
+    radius: 3.5
+    softness: 2
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:ExplodeBehavior
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          VehicleJanicartDestroyed:
+            min: 1
+            max: 1
+  - type: Strap
+    buckleOffset: "0.01,0.15"
+    modifyBuckleDrawDepth: false
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - JanicartKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+      trashbag_slot:
+        name: janitorial-trolley-slot-component-slot-name-trashbag
+        whitelist:
+          tags:
+          - TrashBag
+  - type: ContainerContainer
+    containers:
+      key_slot: !type:ContainerSlot
+      trashbag_slot: !type:ContainerSlot
+  - type: ItemMapper
+    mapLayers:
+      storage:
+        whitelist:
+          tags:
+          - TrashBag
+    sprite: Objects/Vehicles/janicart.rsi
+
+- type: entity
+  id: VehicleJanicartDestroyed
+  parent: MachineFrameDestroyed
+  name: destroyed janicart
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/janicart.rsi
+    state: destroyed
+
+- type: entity
+  id: VehicleSecway
+  parent: BaseVehicleMotorized
+  name: secway
+  description: The future of transportation. Popularized by St. James, the patron saint of security officers and internet forum moderators.
+  components:
+  - type: Vehicle
+    hornSound:
+      path: /Audio/Effects/Vehicle/policesiren.ogg
+  - type: Sprite
+    sprite: Objects/Vehicles/secway.rsi
+    layers:
+    - state: vehicle
+  - type: Strap
+    buckleOffset: "0.15,-0.05"
+  - type: MovementSpeedModifier
+    acceleration: 1
+    friction: 1
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 6
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.6
+        Piercing: 0.85
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - SecwayKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - SecwayKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+  - type: StealTarget
+    stealGroup: VehicleSecway
+
+- type: entity
+  id: VehicleATV
+  parent: BaseVehicleMotorized
+  name: ATV
+  description: All-Tile Vehicle.
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/atv.rsi
+    layers:
+    - state: vehicle
+  - type: MovementSpeedModifier
+    acceleration: 1
+    friction: 1
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 7
+  - type: Strap
+    buckleOffset: "0.1,-0.05"
+  - type: UnpoweredFlashlight
+  - type: PointLight
+    enabled: false
+    radius: 3.5
+    softness: 2
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - ATVKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - ATVKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+
+- type: entity
+  id: VehicleSyndicateSegway
+  parent: BaseVehicleMotorized
+  name: syndicate segway
+  description: Be an enemy of the corporation, in style.
+  components:
+  - type: Vehicle
+    hornSound:
+      path: /Audio/Effects/Vehicle/policesiren.ogg
+  - type: Sprite
+    sprite: Objects/Vehicles/syndicatesegway.rsi
+    layers:
+    - state: vehicle
+  - type: Strap
+    buckleOffset: "0.15,-0.05"
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.6
+        Piercing: 0.85
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - SyndicateSegwayKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - SyndicateSegwayKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+
+- type: entity
+  id: VehicleSkeletonMotorcycle
+  parent: BaseVehicleMotorized
+  name: skeleton motorcycle
+  description: Bad to the Bone.
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/motorbike.rsi
+    layers:
+    - state: vehicle
+  - type: Strap
+    buckleOffset: "0.1,-0.05"
+  - type: MovementSpeedModifier
+    acceleration: 2
+    friction: 1.5
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 7
+  - type: UnpoweredFlashlight
+  - type: PointLight
+    enabled: false
+    radius: 3.5
+    softness: 2
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - SkeletonMotorcycleKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - SkeletonMotorcycleKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+
+- type: entity
+  id: VehicleUnicycle
+  parent: [BaseVehicleStrap, BaseFoldable, BaseItem]
+  name: unicycle
+  description: It only has one wheel!
+  components:
+  - type: Vehicle
+    hornSound:
+      path: /Audio/Effects/Vehicle/bicyclebell.ogg
+  - type: Sprite
+    sprite: Objects/Vehicles/unicycle.rsi
+    layers:
+    - state: vehicle
+      map: ["unfoldedLayer"]
+    - state: vehicle_folded
+      map: ["foldedLayer"]
+      visible: false
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Strap
+    buckleOffset: "0.1,-0.05"
+  - type: MovementSpeedModifier
+    acceleration: 1
+    friction: 0.8
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 4.3
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 240
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+
+- type: entity
+  parent: VehicleUnicycle
+  id: VehicleUnicycleFolded
+  suffix: folded
+  components:
+  - type: Foldable
+    folded: true

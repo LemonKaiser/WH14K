@@ -18,6 +18,22 @@ public sealed partial class AlertsComponent : Component
     public override bool SendOnlyToOwner => true;
 }
 
+/// <summary>
+/// When present on a controlled entity, indicates that its HUD should display alerts of another source entity,
+/// and clicks may optionally be proxied back to that source.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class AlertsDisplayRelayComponent : Component
+{
+    public override bool SendOnlyToOwner => true;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? Source;
+
+    [DataField, AutoNetworkedField]
+    public bool InteractAsSource = false;
+}
+
 [Serializable, NetSerializable]
 public sealed class AlertComponentState : ComponentState
 {

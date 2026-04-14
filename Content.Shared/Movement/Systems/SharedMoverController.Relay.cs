@@ -1,4 +1,6 @@
+using Content.Shared.DoAfter;
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Events;
 
 namespace Content.Shared.Movement.Systems;
 
@@ -10,6 +12,8 @@ public abstract partial class SharedMoverController
         SubscribeLocalEvent<MovementRelayTargetComponent, ComponentShutdown>(OnTargetRelayShutdown);
         SubscribeLocalEvent<MovementRelayTargetComponent, AfterAutoHandleStateEvent>(OnAfterRelayTargetState);
         SubscribeLocalEvent<RelayInputMoverComponent, AfterAutoHandleStateEvent>(OnAfterRelayState);
+        SubscribeLocalEvent<RelayInputMoverComponent, CanMoveUpdatedEvent>(OnRelayCanMoveUpdated);
+        SubscribeLocalEvent<RelayInputMoverComponent, GetDoAfterUserEvent>(OnGetDoAfterUser);
     }
 
     private void OnAfterRelayTargetState(Entity<MovementRelayTargetComponent> entity, ref AfterAutoHandleStateEvent args)
@@ -20,6 +24,24 @@ public abstract partial class SharedMoverController
     private void OnAfterRelayState(Entity<RelayInputMoverComponent> entity, ref AfterAutoHandleStateEvent args)
     {
         PhysicsSystem.UpdateIsPredicted(entity.Owner);
+    }
+
+    private void OnRelayCanMoveUpdated(Entity<RelayInputMoverComponent> ent, ref CanMoveUpdatedEvent args)
+    {
+        if (args.CanMove)
+            return;
+
+        if (MoverQuery.TryComp(ent.Owner, out var selfMover))
+            SetMoveInput((ent.Owner, selfMover), MoveButtons.None);
+
+        if (MoverQuery.TryComp(ent.Comp.RelayEntity, out var inputMover))
+            SetMoveInput((ent.Comp.RelayEntity, inputMover), MoveButtons.None);
+    }
+
+    private void OnGetDoAfterUser(Entity<RelayInputMoverComponent> entity, ref GetDoAfterUserEvent args)
+    {
+        if (entity.Comp.RelayEntity.IsValid())
+            args.User = entity.Comp.RelayEntity;
     }
 
     /// <summary>
@@ -63,18 +85,29 @@ public abstract partial class SharedMoverController
         UpdateMoverStatus((relayEntity, null, targetComp));
     }
 
+    /// <summary>
+    ///     Returns the entity whose movement should be treated as the effective movement source for this entity.
+    /// </summary>
+    public EntityUid GetEffectiveMover(EntityUid uid)
+    {
+        if (RelayQuery.TryComp(uid, out var relay) && relay.RelayEntity != EntityUid.Invalid)
+            return relay.RelayEntity;
+
+        return uid;
+    }
+
     private void OnRelayShutdown(Entity<RelayInputMoverComponent> entity, ref ComponentShutdown args)
     {
         PhysicsSystem.UpdateIsPredicted(entity.Owner);
         PhysicsSystem.UpdateIsPredicted(entity.Comp.RelayEntity);
 
-        if (TryComp<InputMoverComponent>(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
+        if (MoverQuery.TryComp(entity.Comp.RelayEntity, out var inputMover))
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
 
         if (Timing.ApplyingState)
             return;
 
-        if (TryComp(entity.Comp.RelayEntity, out MovementRelayTargetComponent? target) && target.LifeStage <= ComponentLifeStage.Running)
+        if (RelayTargetQuery.TryComp(entity.Comp.RelayEntity, out var target) && target.LifeStage <= ComponentLifeStage.Running)
             RemComp(entity.Comp.RelayEntity, target);
 
         _blocker.UpdateCanMove(entity.Owner);
@@ -85,10 +118,13 @@ public abstract partial class SharedMoverController
         PhysicsSystem.UpdateIsPredicted(entity.Owner);
         PhysicsSystem.UpdateIsPredicted(entity.Comp.Source);
 
+        if (MoverQuery.TryComp(entity.Owner, out var inputMover))
+            SetMoveInput((entity.Owner, inputMover), MoveButtons.None);
+
         if (Timing.ApplyingState)
             return;
 
-        if (TryComp(entity.Comp.Source, out RelayInputMoverComponent? relay) && relay.LifeStage <= ComponentLifeStage.Running)
+        if (RelayQuery.TryComp(entity.Comp.Source, out var relay) && relay.LifeStage <= ComponentLifeStage.Running)
             RemComp(entity.Comp.Source, relay);
     }
 

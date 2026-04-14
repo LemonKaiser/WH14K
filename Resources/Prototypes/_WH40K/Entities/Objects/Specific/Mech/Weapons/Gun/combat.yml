@@ -1,6 +1,6 @@
 - type: entity
   id: WeaponMechCombatSentinelRifle
-  description: Placeholder.
+  description: An automatic cannon fitted for a combat Sentinel.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
   components:
@@ -16,13 +16,16 @@
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/bolter.ogg
   - type: BatteryAmmoProvider
     proto: BulletSentine
-    fireCost: 15
+    fireCost: 20
+  - type: Battery
+    maxCharge: 400
+    startingCharge: 400
   - type: Appearance
   - type: AmmoCounter
 
 - type: entity
   id: WeaponMechCombatSentinelPlasma
-  description: Placeholder.
+  description: A plasma weapon fitted for a combat Sentinel.
   suffix: Mech Weapon, Gun, Combat, Rifle
   parent: [ BaseMechWeaponRange, CombatMechEquipment ]
   components:
@@ -38,6 +41,9 @@
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmapist.wav
   - type: BatteryAmmoProvider
     proto: WHBulletPlasmaSentine
-    fireCost: 15
+    fireCost: 20
+  - type: Battery
+    maxCharge: 400
+    startingCharge: 400
   - type: Appearance
   - type: AmmoCounter

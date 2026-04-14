@@ -13,8 +13,8 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
-using Content.Shared.Mech.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Mech.Components;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
@@ -26,6 +26,7 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -158,8 +159,8 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
-        if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
-            user = mechPilot.Mech;
+        if (TryComp<VehicleOperatorComponent>(user.Value, out var vehicleOperator) && vehicleOperator.Vehicle != null)
+            user = vehicleOperator.Vehicle;
 
         if (!TryGetGun(user.Value, out var ent, out var gun))
         {
@@ -197,8 +198,8 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
         }
 
-        if (TryComp<MechPilotComponent>(user.Value, out var mechPilot))
-            user = mechPilot.Mech;
+        if (TryComp<VehicleOperatorComponent>(user.Value, out var vehicleOperator) && vehicleOperator.Vehicle != null)
+            user = vehicleOperator.Vehicle;
 
         if (!TryGetGun(user.Value, out var ent, out var gun))
         {
@@ -223,6 +224,17 @@ public abstract partial class SharedGunSystem : EntitySystem
         gun = default;
         EntityUid? gunEntity = null;
         GunComponent? gunComp = null;
+
+        var weaponEvent = new GetActiveWeaponEvent();
+        RaiseLocalEvent(entity, ref weaponEvent);
+
+        if (weaponEvent.Handled
+            && weaponEvent.Weapon.HasValue
+            && TryComp(weaponEvent.Weapon.Value, out GunComponent? gunEventComp))
+        {
+            gun = (weaponEvent.Weapon.Value, gunEventComp);
+            return true;
+        }
 
         if (TryComp<MechComponent>(entity, out var mech) &&
             mech.CurrentSelectedEquipment.HasValue &&
@@ -423,7 +435,11 @@ public abstract partial class SharedGunSystem : EntitySystem
             return false;
         }
 
-        var fromCoordinates = GetShootOriginCoordinates(user, gun);
+        var shootingEvent = new GetShootingEntityEvent();
+        RaiseLocalEvent(user, ref shootingEvent);
+        var shootingEntity = shootingEvent.ShootingEntity ?? user;
+
+        var fromCoordinates = GetShootOriginCoordinates(shootingEntity, gun);
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, [], fromCoordinates, user);
 
@@ -483,18 +499,18 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
-        Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
+        Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, shootingEntity, throwItems: attemptEv.ThrowItems);
         var shotEv = new GunShotEvent(user, ev.Ammo);
         RaiseLocalEvent(gun, ref shotEv);
 
-        if (!userImpulse || !TryComp<PhysicsComponent>(user, out var userPhysics))
+        if (!userImpulse || !TryComp<PhysicsComponent>(shootingEntity, out var userPhysics))
             return true;
 
         var shooterEv = new ShooterImpulseEvent();
-        RaiseLocalEvent(user, ref shooterEv);
+        RaiseLocalEvent(shootingEntity, ref shooterEv);
 
         if (shooterEv.Push)
-            CauseImpulse(fromCoordinates, toCoordinates.Value, (user, userPhysics));
+            CauseImpulse(fromCoordinates, toCoordinates.Value, (shootingEntity, userPhysics));
         return true;
     }
 
@@ -549,7 +565,12 @@ public abstract partial class SharedGunSystem : EntitySystem
         var projectile = EnsureComp<ProjectileComponent>(uid);
         projectile.Weapon = gunUid;
         projectile.ShotOrigin = TransformSystem.GetMapCoordinates(uid).Position;
-        var shooter = user ?? gunUid;
+
+        var shooterEvent = new GetShootingEntityEvent();
+        if (user != null)
+            RaiseLocalEvent(user.Value, ref shooterEvent);
+
+        var shooter = shooterEvent.ShootingEntity ?? user ?? gunUid;
         if (shooter != null)
             Projectiles.SetShooter(uid, projectile, shooter.Value);
 

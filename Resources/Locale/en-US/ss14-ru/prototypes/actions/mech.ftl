@@ -1,8 +1,10 @@
 ent-BaseMechAction = { ent-BaseAction }
     .desc = { ent-BaseAction.desc }
 ent-ActionMechCycleEquipment = Cycle
-    .desc = Cycles currently selected equipment
+    .desc = Cycles the currently selected equipment.
 ent-ActionMechOpenUI = Control Panel
-    .desc = Opens the control panel for the mech
+    .desc = Opens the mech control panel.
 ent-ActionMechEject = Eject
-    .desc = Ejects the pilot from the mech
+    .desc = Ejects the pilot from the mech.
+ent-ActionMechToggleLight = Toggle Lights
+    .desc = Toggles the mech lights.

@@ -109,7 +109,7 @@
       - tag: MechAirTank
         name: exosuit-air-tank
         icon:
-          sprite: Objects/Specific/Mech/mecha_equipment.rsi
+          sprite: Objects/Specific/Mech/mecha_modules.rsi
           state: mecha_air_tank
 
       - tool: Anchoring

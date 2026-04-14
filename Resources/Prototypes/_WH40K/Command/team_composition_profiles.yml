@@ -13,8 +13,6 @@
     target: 1
   - roleId: SergeantHWS
     target: 1
-  - roleId: TankComm
-    target: 1
   officerRoles:
   - Colonel
   - Commissar
@@ -22,7 +20,6 @@
   - Sergeant
   - SergeantSWS
   - SergeantHWS
-  - TankComm
   coreRoles:
   - Guardsman
   - Psyker
@@ -30,7 +27,6 @@
   - Medic
   - SpecialistSWS
   - SpecialistHWS
-  - Tanker
   - TitheSupplier
   - MunitorumOfficer
   mechanicusRoles:
@@ -54,21 +50,17 @@
     target: 1
   - roleId: HSergeantHWS
     target: 1
-  - roleId: HTankComm
-    target: 1
   officerRoles:
   - HColonel
   - HLieutenant
   - HSergeant
   - HSergeantSWS
   - HSergeantHWS
-  - HTankComm
   coreRoles:
   - HGuardsman
   - HVoxScout
   - HSpecialistSWS
   - HSpecialistHWS
-  - HTanker
   - HBandSupplier
   mechanicusRoles:
   - HMagos

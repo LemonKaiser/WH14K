@@ -83608,20 +83608,6 @@ entities:
     - type: Transform
       pos: 131.5,53.5
       parent: 2
-- proto: SpawnPointHTankComm
-  entities:
-  - uid: 8601
-    components:
-    - type: Transform
-      pos: 118.5,76.5
-      parent: 2
-- proto: SpawnPointHTanker
-  entities:
-  - uid: 8602
-    components:
-    - type: Transform
-      pos: 118.5,75.5
-      parent: 2
 - proto: SpawnPointHVoxScout
   entities:
   - uid: 8603
@@ -83719,20 +83705,6 @@ entities:
     components:
     - type: Transform
       pos: -159.5,30.5
-      parent: 2
-- proto: SpawnPointTankComm
-  entities:
-  - uid: 8616
-    components:
-    - type: Transform
-      pos: -158.5,30.5
-      parent: 2
-- proto: SpawnPointTanker
-  entities:
-  - uid: 8617
-    components:
-    - type: Transform
-      pos: -158.5,29.5
       parent: 2
 - proto: SpawnPointTitheSupplier
   entities:

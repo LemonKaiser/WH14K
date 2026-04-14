@@ -1,11 +1,15 @@
 - type: entity
-  id: BaseMechWeaponRange
-  parent: BaseMechEquipment
   abstract: true
+  parent: BaseMechEquipment
+  id: BaseMechWeaponRange
   components:
   - type: Battery
-    maxCharge: 100 # Battery is charged by mech
-    startingCharge: 100
+    maxCharge: 1000 # Battery is charged by mech
+    startingCharge: 1000
+  - type: MechEquipmentAutoRecharge
+    energyMultiplier: 3
+  - type: UIFragment
+    ui: !type:MechWeaponRechargeUi
   - type: Appearance
   - type: StaticPrice
     price: 1

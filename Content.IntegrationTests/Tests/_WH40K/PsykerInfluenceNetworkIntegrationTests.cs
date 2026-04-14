@@ -13,7 +13,7 @@ namespace Content.IntegrationTests.Tests._WH40K;
 [TestFixture]
 public sealed class PsykerInfluenceNetworkIntegrationTests : InteractionTest
 {
-    protected override PoolSettings Settings => new() { Connected = true, Dirty = true, Fresh = true };
+    protected override PoolSettings Settings => new() { Connected = true, Dirty = true };
 
     [Test]
     public async Task WarpResourcesDoNotReplicateEveryPassiveTick()

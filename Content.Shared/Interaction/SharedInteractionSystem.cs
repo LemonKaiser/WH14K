@@ -435,10 +435,16 @@ namespace Content.Shared.Interaction
                 ? !checkAccess || InRangeUnobstructed(user, coordinates)
                 : !checkAccess || InRangeUnobstructed(user, target.Value); // permits interactions with wall mounted entities
 
+            var bypassEv = new UseHeldBypassAttemptEvent(user, target);
+            if (target != null)
+                RaiseLocalEvent(target.Value, ref bypassEv);
+
+            var shouldCheckUse = checkCanUse && !bypassEv.Bypass;
+
             // empty-hand interactions
             // combat mode hand interactions will always be true here -- since
             // they check this earlier before returning in
-            if (!TryGetUsedEntity(user, out var used, checkCanUse))
+            if (!TryGetUsedEntity(user, out var used, shouldCheckUse))
             {
                 if (inRangeUnobstructed && target != null)
                     InteractHand(user, target.Value);
@@ -454,6 +460,12 @@ namespace Content.Shared.Interaction
 
             if (inRangeUnobstructed && target != null)
             {
+                if (bypassEv.Bypass)
+                {
+                    InteractDoAfter(user, used.Value, target.Value, coordinates, canReach: true, checkDeletion: false);
+                    return;
+                }
+
                 InteractUsing(
                     user,
                     used.Value,
@@ -1526,6 +1538,15 @@ namespace Content.Shared.Interaction
 
         public bool Handled => Used != null;
     };
+
+    /// <summary>
+    /// Raised by-ref on the interaction target to allow bypassing held-entity use checks for specific interactions.
+    /// </summary>
+    [ByRefEvent]
+    public record struct UseHeldBypassAttemptEvent(EntityUid User, EntityUid? Target)
+    {
+        public bool Bypass;
+    }
 
     /// <summary>
     ///     Raised directed by-ref on an item to determine if hand interactions should go through.

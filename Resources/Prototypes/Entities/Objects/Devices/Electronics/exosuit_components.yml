@@ -61,6 +61,7 @@
     - type: Item
       storedRotation: 0
     - type: Sprite
+      sprite: Objects/Specific/Mech/mecha_comonets.rsi
       state: ripleyupgrade
     - type: Tag
       tags:
@@ -78,6 +79,7 @@
     - type: Item
       storedRotation: 0
     - type: Sprite
+      sprite: Objects/Specific/Mech/mecha_modules.rsi
       state: mecha_air_tank
     - type: Tag
       tags:
@@ -95,6 +97,7 @@
     - type: Item
       storedRotation: 0
     - type: Sprite
+      sprite: Objects/Specific/Mech/mecha_comonets.rsi
       state: mecha_bin
     - type: Tag
       tags:

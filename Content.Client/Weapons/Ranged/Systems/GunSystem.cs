@@ -10,11 +10,11 @@ using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Weapons.Hitscan.Components;
-using Content.Shared.Mech.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Content.Shared.Vehicle.Components;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -175,9 +175,9 @@ public sealed partial class GunSystem : SharedGunSystem
 
         var entity = entityNull.Value;
 
-        if (TryComp<MechPilotComponent>(entity, out var mechPilot))
+        if (TryComp<VehicleOperatorComponent>(entity, out var vehicleOperator) && vehicleOperator.Vehicle != null)
         {
-            entity = mechPilot.Mech;
+            entity = vehicleOperator.Vehicle.Value;
         }
 
         if (!TryGetGun(entity, out var gunUid, out var gun))

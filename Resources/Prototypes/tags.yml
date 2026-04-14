@@ -37,6 +37,9 @@
   id: AppraisalTool # Storage whitelist: BaseClothingBeltEngineering
 
 - type: Tag
+  id: ATVKeys # Keys for GenericKeyedVehicle of ATV.
+
+- type: Tag
   id: Apron # ConstructionGraph: scraparmor
 
 - type: Tag
@@ -906,6 +909,9 @@
 - type: Tag
   id: JawsOfLife # Storage whitelist: BaseClothingBeltEngineering. ItemMapper: BaseClothingBeltEngineering
 
+- type: Tag
+  id: JanicartKeys # Keys for GenericKeyedVehicle of Janicart
+
 ## K ##
 
 - type: Tag
@@ -1340,6 +1346,9 @@
 - type: Tag
   id: Screwdriver # Storage whitelist: BaseClothingBeltEngineering. ItemMapper: BaseClothingBeltEngineering
 
+- type: Tag
+  id: SecwayKeys # Keys for GenericKeyedVehicle of secway.
+
 - type: Tag # Flags items that scurrets can wear in their back and outerwear slots.
   id: ScurretWearable
 
@@ -1372,6 +1381,9 @@
 
 - type: Tag
   id: Sidearm # Storage whitelist: ClothingBeltSecurity, ClothingShoesMilitaryBase
+
+- type: Tag
+  id: SkeletonMotorcycleKeys # Keys for GenericKeyedVehicle of skeleton motorcycle.
 
 - type: Tag
   id: SignalTrigger # ConstructionGraph: GlassBox
@@ -1418,6 +1430,9 @@
 
 - type: Tag
   id: SpecialMech
+
+- type: Tag
+  id: UniversalMech
 
 - type: Tag
   id: Soup # CargoBounty: BountySoup
@@ -1485,6 +1500,9 @@
 
 - type: Tag
   id: Syndicate # FTLDestination whitelist in nukieplanet.yml. Tag exists on ComputerShuttleSyndie and infiltrator.yml
+
+- type: Tag
+  id: SyndicateSegwayKeys # Keys for GenericKeyedVehicle of syndicate segway.
 
 - type: Tag
   id: Syringe # Storage whitelist: ClothingBeltPlant, ChemBag, SmartFridge. CargoBounty: BountySyringe
@@ -1579,6 +1597,9 @@
 
 - type: Tag
   id: Vegetable # CargoBounty: BountyVegetable
+
+- type: Tag
+  id: VehicleKey # Common key tag for GenericKeyedVehicle-compatible keys.
 
 - type: Tag # Used on DungeonRoom prototypes.
   id: VGRoidInterior # RoomFill spawner whitelist for VGRoidInteriorRoomMarker.

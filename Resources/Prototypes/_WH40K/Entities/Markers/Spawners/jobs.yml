@@ -1,4 +1,4 @@
-# Engineering
+﻿# Engineering
 - type: entity
   id: SpawnPointNovice
   parent: SpawnPointJobBase
@@ -93,7 +93,7 @@
   id: SpawnPointColonel
   parent: SpawnPointJobBase
   name: Colonel
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Colonel
@@ -107,7 +107,7 @@
   id: SpawnPointCommissar
   parent: SpawnPointJobBase
   name: Commissar
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Commissar
@@ -121,7 +121,7 @@
   id: SpawnPointGuardsman
   parent: SpawnPointJobBase
   name: Guardsman
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Guardsman
@@ -163,7 +163,7 @@
   id: SpawnPointLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Lieutenant
@@ -177,7 +177,7 @@
   id: SpawnPointMedic
   parent: SpawnPointJobBase
   name: Medic
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Medic
@@ -191,7 +191,7 @@
   id: SpawnPointSergeant
   parent: SpawnPointJobBase
   name: Sergeant
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Sergeant
@@ -205,7 +205,7 @@
   id: SpawnPointSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: WH40KChaplain
@@ -220,7 +220,7 @@
   id: SpawnPointSpecialistSWS
   parent: SpawnPointJobBase
   name: SpecialistSWS
-  suffix: WH40K, Империум
+  suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
     job_id: Major
@@ -230,34 +230,6 @@
       - state: green
       - state: SWS
       - state: specialist
-
-- type: entity
-  id: SpawnPointTankComm
-  parent: SpawnPointJobBase
-  name: TankComm
-  suffix: WH40K, Империум
-  components:
-  - type: SpawnPoint
-    job_id: TankComm
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: tank
-
-- type: entity
-  id: SpawnPointTanker
-  parent: SpawnPointJobBase
-  name: Tanker
-  suffix: WH40K, Империум
-  components:
-  - type: SpawnPoint
-    job_id: Tanker
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: tank
 
 - type: entity
   id: SpawnPointTitheSupplier
@@ -293,7 +265,7 @@
   id: SpawnPointHColonel
   parent: SpawnPointJobBase
   name: HColonel
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HColonel
@@ -308,7 +280,7 @@
   id: SpawnPointHGuardsman
   parent: SpawnPointJobBase
   name: HGuardsman
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HGuardsman
@@ -323,7 +295,7 @@
   id: SpawnPointHVoxScout
   parent: SpawnPointJobBase
   name: HVoxScout
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HVoxScout
@@ -338,7 +310,7 @@
   id: SpawnPointHLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HLieutenant
@@ -353,7 +325,7 @@
   id: SpawnPointHSergeant
   parent: SpawnPointJobBase
   name: Sergeant
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HSergeant
@@ -368,7 +340,7 @@
   id: SpawnPointHSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HSpecialistHWS
@@ -384,7 +356,7 @@
   id: SpawnPointHSpecialistSWS
   parent: SpawnPointJobBase
   name: SpecialistSWS
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HSpecialistSWS
@@ -395,36 +367,6 @@
       - state: heretic
       - state: SWS
       - state: specialist
-
-- type: entity
-  id: SpawnPointHTankComm
-  parent: SpawnPointJobBase
-  name: TankComm
-  suffix: WH40K, Еретик
-  components:
-  - type: SpawnPoint
-    job_id: HTankComm
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: tank
-
-- type: entity
-  id: SpawnPointHTanker
-  parent: SpawnPointJobBase
-  name: Tanker
-  suffix: WH40K, Еретик
-  components:
-  - type: SpawnPoint
-    job_id: HTanker
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: tank
 
 - type: entity
   id: SpawnPointHBandSupplier
@@ -446,7 +388,7 @@
   id: SpawnPointHNovice
   parent: SpawnPointJobBase
   name: novice
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HNovice
@@ -461,7 +403,7 @@
   id: SpawnPointHMagos
   parent: SpawnPointJobBase
   name: magos
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HMagos
@@ -476,7 +418,7 @@
   id: SpawnPointHLexmechanic
   parent: SpawnPointJobBase
   name: lexmechanic
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HLexmechanic
@@ -491,7 +433,7 @@
   id: SpawnPointHStationEnginseer
   parent: SpawnPointJobBase
   name: enginseer
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HEnginseer
@@ -506,7 +448,7 @@
   id: SpawnPointHGenetor
   parent: SpawnPointJobBase
   name: genetor
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HGenetor
@@ -521,7 +463,7 @@
   id: SpawnPointHExplorator
   parent: SpawnPointJobBase
   name: explorator
-  suffix: WH40K, Еретик
+  suffix: WH40K, Р•СЂРµС‚РёРє
   components:
   - type: SpawnPoint
     job_id: HExplorator
@@ -531,3 +473,4 @@
       - state: green
       - state: heretic
       - state: explorator
+

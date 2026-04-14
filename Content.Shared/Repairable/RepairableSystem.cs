@@ -5,6 +5,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Repairable.Events;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Serialization;
 
@@ -98,6 +99,11 @@ public sealed partial class RepairableSystem : EntitySystem
     private void Repair(Entity<RepairableComponent> ent, ref InteractUsingEvent args)
     {
         if (args.Handled)
+            return;
+
+        var attempt = new RepairAttemptEvent(args.User);
+        RaiseLocalEvent(ent, ref attempt);
+        if (attempt.Cancelled)
             return;
 
         // Only try repair the target if it is damaged

@@ -1,4 +1,3 @@
-using Content.Server.Mech.Systems;
 using Content.Shared.Construction;
 using Content.Shared.Mech.Components;
 using Content.Shared.Power.Components;
@@ -11,8 +10,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototy
 namespace Content.Server.Construction.Completions;
 
 /// <summary>
-/// Creates the mech entity while transferring all relevant parts inside of it,
-/// for right now, the cell that was used in construction.
+/// Creates the mech entity and transfers the inserted construction power cell into its battery slot.
 /// </summary>
 [UsedImplicitly, DataDefinition]
 public sealed partial class BuildMech : IGraphAction
@@ -23,7 +21,6 @@ public sealed partial class BuildMech : IGraphAction
     [DataField("container")]
     public string Container = "battery-container";
 
-    // TODO use or generalize ConstructionSystem.ChangeEntity();
     public void PerformAction(EntityUid uid, EntityUid? userUid, IEntityManager entityManager)
     {
         if (!entityManager.TryGetComponent(uid, out ContainerManagerComponent? containerManager))
@@ -33,7 +30,6 @@ public sealed partial class BuildMech : IGraphAction
         }
 
         var containerSystem = entityManager.EntitySysManager.GetEntitySystem<ContainerSystem>();
-        var mechSys = entityManager.System<MechSystem>();
 
         if (!containerSystem.TryGetContainer(uid, Container, out var container, containerManager))
         {
@@ -44,25 +40,32 @@ public sealed partial class BuildMech : IGraphAction
         if (container.ContainedEntities.Count != 1)
         {
             Logger.Warning($"Mech construct entity {uid} did not have exactly one item in the specified '{Container}' container! Aborting build mech action.");
+            return;
         }
 
         var cell = container.ContainedEntities[0];
 
-        if (!entityManager.TryGetComponent<BatteryComponent>(cell, out var batteryComponent))
+        if (!entityManager.TryGetComponent<BatteryComponent>(cell, out _))
         {
             Logger.Warning($"Mech construct entity {uid} had an invalid entity in container \"{Container}\"! Aborting build mech action.");
             return;
         }
 
-        containerSystem.Remove(cell, container);
-
         var transform = entityManager.GetComponent<TransformComponent>(uid);
         var mech = entityManager.SpawnEntity(MechPrototype, transform.Coordinates);
-
-        if (entityManager.TryGetComponent<MechComponent>(mech, out var mechComp) && mechComp.BatterySlot.ContainedEntity == null)
+        if (!entityManager.TryGetComponent(mech, out MechComponent? mechComponent))
         {
-            mechSys.InsertBattery(mech, cell, mechComp, batteryComponent);
-            containerSystem.Insert(cell, mechComp.BatterySlot);
+            Logger.Warning($"Spawned mech {mech} from prototype '{MechPrototype}' without a mech component! Aborting build mech action.");
+            entityManager.QueueDeleteEntity(mech);
+            return;
+        }
+
+        mechComponent.BatterySlot = containerSystem.EnsureContainer<ContainerSlot>(mech, mechComponent.BatterySlotId);
+
+        containerSystem.Remove(cell, container);
+        if (!containerSystem.Insert(cell, mechComponent.BatterySlot))
+        {
+            Logger.Warning($"Failed to insert power cell {cell} into mech {mech} battery slot during mech construction.");
         }
 
         var entChangeEv = new ConstructionChangeEntityEvent(mech, uid);

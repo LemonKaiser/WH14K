@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseItem
   id: MaterialWH40KBarbedWire
-  name: wh40k-barbed-wire-item-name
-  description: wh40k-barbed-wire-item-desc
   suffix: Full
   components:
   - type: Sprite

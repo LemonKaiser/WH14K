@@ -130,6 +130,8 @@ public sealed partial class GunSystem
             AddChild(new BoxContainer
             {
                 Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                HorizontalExpand = true,
+                HorizontalAlignment = HAlignment.Stretch,
                 Children =
                 {
                     (_bullets = new BatteryBulletRenderer

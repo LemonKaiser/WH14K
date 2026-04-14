@@ -68,20 +68,6 @@
 
 - type: entity
   parent: StandardDogTag
-  id: TankCommDogTag
-  components:
-  - type: PresetIdCard
-    job: TankComm
-
-- type: entity
-  parent: StandardDogTag
-  id: TankerDogTag
-  components:
-  - type: PresetIdCard
-    job: Tanker
-
-- type: entity
-  parent: StandardDogTag
   id: TitheSupplierDogTag
   components:
   - type: PresetIdCard
@@ -179,20 +165,6 @@
   components:
   - type: PresetIdCard
     job: HSpecialistSWS
-
-- type: entity
-  parent: StandardDogTag
-  id: HTankCommDogTag
-  components:
-  - type: PresetIdCard
-    job: HTankComm
-
-- type: entity
-  parent: StandardDogTag
-  id: HTankerDogTag
-  components:
-  - type: PresetIdCard
-    job: HTanker
 
 - type: entity
   parent: StandardDogTag

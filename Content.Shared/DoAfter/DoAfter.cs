@@ -51,6 +51,15 @@ public sealed partial class DoAfter
     public NetCoordinates NetUserPosition;
 
     /// <summary>
+    ///     The entity whose movement is treated as the user's effective movement for break-on-move checks.
+    /// </summary>
+    [NonSerialized]
+    public EntityUid MovementEntity;
+
+    [DataField("movementEntity")]
+    public NetEntity NetMovementEntity;
+
+    /// <summary>
     ///     Distance from the user to the target when the do after was started.
     /// </summary>
     [DataField("targetDistance")]
@@ -99,6 +108,8 @@ public sealed partial class DoAfter
         InitialItem = other.InitialItem;
 
         NetUserPosition = other.NetUserPosition;
+        MovementEntity = other.MovementEntity;
+        NetMovementEntity = other.NetMovementEntity;
         NetInitialItem = other.NetInitialItem;
     }
 }

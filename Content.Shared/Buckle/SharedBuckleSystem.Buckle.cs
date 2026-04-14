@@ -15,6 +15,7 @@ using Content.Shared.Standing;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
@@ -176,6 +177,9 @@ public abstract partial class SharedBuckleSystem
 
     private void OnBuckleUpdateCanMove(EntityUid uid, BuckleComponent component, UpdateCanMoveEvent args)
     {
+        if (HasComp<VehicleOperatorComponent>(uid))
+            return;
+
         if (component.Buckled)
             args.Cancel();
     }

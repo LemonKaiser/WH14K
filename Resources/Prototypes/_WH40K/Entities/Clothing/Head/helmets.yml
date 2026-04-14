@@ -222,6 +222,7 @@
     color: "#e39c40"
     radius: 2.5
     power: 10
+    netsync: false
   - type: Item
     heldPrefix: off
     size: Normal

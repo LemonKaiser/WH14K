@@ -1,0 +1,188 @@
+// Warp Breach: Phase 1 — cross slash. Phase 2 — diamond portal opens.
+// progress 0..0.3: bright cross appears
+// progress 0.3..1.0: cross widens into diamond void with lightning edges
+
+uniform sampler2D SCREEN_TEXTURE;
+uniform sampler2D warpTexture;
+uniform highp vec2 renderScale;
+uniform highp float maxDistance;
+
+uniform lowp int count;
+uniform highp vec2[5] position;
+uniform highp float[5] intensity;
+uniform highp float[5] radius;
+uniform highp float[5] falloff;
+uniform highp float[5] progress;
+
+highp float hash(highp vec2 p)
+{
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+}
+
+highp float valueNoise(highp vec2 p)
+{
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    highp vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+}
+
+highp float fbm(highp vec2 p)
+{
+    highp float val = 0.0;
+    highp float amp = 0.5;
+    for (int j = 0; j < 4; j++)
+    {
+        val += amp * valueNoise(p);
+        p *= 2.0;
+        amp *= 0.5;
+    }
+    return val;
+}
+
+// Diamond SDF: |x|/w + |y|/h = 1
+highp float sdDiamond(highp vec2 p, highp float hw, highp float hh)
+{
+    // normalized distance: 0 at center, 1 at boundary, >1 outside
+    return (abs(p.x) / max(hw, 0.001)) + (abs(p.y) / max(hh, 0.001));
+}
+
+void fragment()
+{
+    highp vec2 fragPos = FRAGCOORD.xy;
+    highp vec2 finalCoords = fragPos;
+    highp float crossSlash = 0.0;
+    highp float portalMask = 0.0;
+    highp float edgeLightning = 0.0;
+    highp float haloGlow = 0.0;
+    highp vec2 portalUV = vec2(0.0);
+
+    for (int i = 0; i < 5 && i < count; i++)
+    {
+        highp float prog = clamp(progress[i], 0.0, 1.0);
+        highp float rad = radius[i];
+
+        highp vec2 delta = fragPos - position[i];
+        highp float dx = abs(delta.x / renderScale.x);
+        highp float dy = abs(delta.y / renderScale.y);
+        highp float dist = length(delta / renderScale);
+
+        // --- Phase blend ---
+        highp float crossPhase = smoothstep(0.0, 0.15, prog) * smoothstep(0.6, 0.25, prog);
+        highp float openPhase = smoothstep(0.25, 0.8, prog);
+
+        // === PHASE 1: CROSS SLASH ===
+        if (crossPhase > 0.01)
+        {
+            // Lengths relative to rad (already in pixels)
+            highp float hLen = rad * 0.8 * smoothstep(0.0, 0.2, prog);  // horiz half-length
+            highp float vLen = rad * 0.35 * smoothstep(0.03, 0.2, prog); // vert half-length
+
+            highp float hNoise = fbm(vec2(delta.x * 0.04 + TIME * 0.3, float(i) + 1.0)) * 2.0 - 1.0;
+            highp float vNoise = fbm(vec2(delta.y * 0.04 + TIME * 0.3, float(i) + 2.0)) * 2.0 - 1.0;
+
+            // Horizontal line: thin with taper
+            highp float hTaper = 1.0 - smoothstep(hLen * 0.7, hLen, dx);
+            highp float hW = 1.5 + hNoise * 0.8;
+            highp float hLine = smoothstep(hW + 0.5, 0.0, dy) * hTaper;
+
+            // Vertical line: thin with taper
+            highp float vTaper = 1.0 - smoothstep(vLen * 0.7, vLen, dy);
+            highp float vW = 1.2 + vNoise * 0.8;
+            highp float vLine = smoothstep(vW + 0.5, 0.0, dx) * vTaper;
+
+            highp float slash = max(hLine, vLine);
+            crossSlash = max(crossSlash, slash * crossPhase);
+        }
+
+        // === PHASE 2: DIAMOND PORTAL ===
+        // Diamond half-widths grow with openPhase
+        highp float dHW = rad * 1.8 * openPhase;  // horizontal half-width (wider)
+        highp float dHH = rad * 1.0 * openPhase;  // vertical half-height (shorter)
+
+        if (openPhase > 0.01 && dHW > 1.0)
+        {
+            highp float dDist = sdDiamond(vec2(dx, dy), dHW, dHH);
+
+            // --- Dark void inside diamond ---
+            if (dDist < 1.0)
+            {
+                highp float voidMask = smoothstep(1.0, 0.7, dDist) * openPhase;
+                portalMask = max(portalMask, voidMask);
+
+                highp vec2 normD = delta / (renderScale * max(rad, 1.0));
+                portalUV = normD * 0.2 + vec2(TIME * 0.01, TIME * 0.005);
+            }
+
+            // --- Lightning edges along diamond boundary ---
+            highp float edgeBand = abs(dDist - 1.0);
+            highp float edgeWidth = 0.15 + 0.05 * openPhase;
+
+            if (edgeBand < edgeWidth)
+            {
+                // Base edge brightness
+                highp float edgeBright = smoothstep(edgeWidth, 0.0, edgeBand) * openPhase;
+
+                // Lightning crackle: layered noise along the edge
+                highp float angle = atan(delta.y, delta.x);
+                highp float ln1 = fbm(vec2(angle * 4.0 - TIME * 1.5, dDist * 8.0 + TIME * 0.5));
+                highp float ln2 = fbm(vec2(angle * 7.0 + TIME * 2.0, dDist * 12.0 - TIME * 0.3));
+                highp float lightning = smoothstep(0.4, 0.7, ln1) + smoothstep(0.5, 0.75, ln2) * 0.6;
+
+                edgeLightning = max(edgeLightning, edgeBright * (0.5 + lightning * 0.8));
+            }
+
+            // --- Outer halo ---
+            if (dDist > 0.8 && dDist < 2.0)
+            {
+                highp float halo = smoothstep(2.0, 1.0, dDist) * smoothstep(0.8, 1.1, dDist);
+                haloGlow = max(haloGlow, halo * openPhase * 0.5);
+            }
+        }
+
+        // --- Distortion: outward push ---
+        highp float pushStr = intensity[i] * smoothstep(0.0, 0.5, prog);
+        if (dist > 1.0 && dist < maxDistance)
+        {
+            // Quadratic falloff: strong near center, smooth to zero at maxDistance
+            highp float t = 1.0 - dist / maxDistance;
+            t = t * t;
+            // Shift in pixels: use normalized direction * fixed amount
+            // so shift doesn't grow with distance
+            highp float shiftPx = pushStr * t * 2.0;
+            shiftPx = min(shiftPx, rad * 0.4);
+            highp vec2 dir = delta / (dist * renderScale.x); // unit direction
+            finalCoords += shiftPx * dir * renderScale;
+        }
+    }
+
+    // Sample distorted screen
+    highp vec4 screenColor = zTextureSpec(SCREEN_TEXTURE, finalCoords * SCREEN_PIXEL_SIZE);
+
+    // Sample warp texture for void interior
+    highp vec4 warpColor = zTextureSpec(warpTexture, fract(portalUV));
+
+    // Compose
+    highp vec3 result = screenColor.rgb;
+
+    // Void inside portal: dark but warp texture visible
+    highp vec3 voidColor = warpColor.rgb * 0.5;
+    result = mix(result, voidColor, portalMask);
+
+    // Cross slash: white-blue
+    highp vec3 coreColor = vec3(0.85, 0.9, 1.0);
+    highp vec3 slashEdge = vec3(0.3, 0.4, 0.9);
+    result += mix(slashEdge, coreColor, clamp(crossSlash, 0.0, 1.0)) * crossSlash * 1.2;
+
+    // Lightning edges: bright white-blue with energy
+    highp vec3 lightningCore = vec3(0.8, 0.85, 1.0);
+    highp vec3 lightningEdge = vec3(0.35, 0.4, 0.85);
+    highp vec3 lColor = mix(lightningEdge, lightningCore, clamp(edgeLightning, 0.0, 1.0));
+    result += lColor * edgeLightning * 1.5;
+
+    // Purple atmospheric halo
+    result += vec3(0.15, 0.06, 0.3) * haloGlow;
+
+    COLOR = vec4(result, screenColor.a);
+}

@@ -1,4 +1,5 @@
 using Robust.Shared.Serialization;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.DoAfter;
 
@@ -91,5 +92,20 @@ public sealed partial class DoAfterAttemptEvent<TEvent> : CancellableEntityEvent
     {
         DoAfter = doAfter;
         Event = @event;
+    }
+}
+
+/// <summary>
+/// Raised by-ref on the user to allow systems to override which entity should be treated as the user
+/// for DoAfter movement cancellation checks.
+/// </summary>
+[ByRefEvent]
+public struct GetDoAfterUserEvent
+{
+    public EntityUid User;
+
+    public GetDoAfterUserEvent(EntityUid user)
+    {
+        User = user;
     }
 }

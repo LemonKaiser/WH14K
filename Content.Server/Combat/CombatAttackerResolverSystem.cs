@@ -4,6 +4,8 @@ using Content.Shared.Mech.Equipment.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 using Content.Shared.Trigger.Components;
+using Content.Shared.Vehicle;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Containers;
 using Robust.Shared.Player;
 
@@ -18,6 +20,7 @@ public sealed class CombatAttackerResolverSystem : EntitySystem
     private const int MaxResolveDepth = 6;
 
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly VehicleSystem _vehicle = default!;
 
     public bool TryResolveResponsibleEntity(EntityUid origin, out EntityUid responsible)
     {
@@ -147,7 +150,7 @@ public sealed class CombatAttackerResolverSystem : EntitySystem
         if (!TryComp(mech, out MechComponent? mechComp))
             return false;
 
-        if (mechComp.PilotSlot.ContainedEntity is not { } pilotEntity)
+        if (_vehicle.GetOperatorOrNull((mech, CompOrNull<VehicleComponent>(mech))) is not { } pilotEntity)
             return false;
 
         if (!TryComp<ActorComponent>(pilotEntity, out _) && !HasComp<HTNComponent>(pilotEntity))

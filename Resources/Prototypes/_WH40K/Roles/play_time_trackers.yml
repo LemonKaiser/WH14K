@@ -80,16 +80,10 @@
   id: JobSergeant
 
 - type: playTimeTracker
-  id: JobTankComm
-
-- type: playTimeTracker
   id: JobSpecialistHWS
 
 - type: playTimeTracker
   id: JobSpecialistSWS
-
-- type: playTimeTracker
-  id: JobTanker
 
 - type: playTimeTracker
   id: JobTitheSupplier
@@ -143,16 +137,10 @@
   id: JobHSergeant
 
 - type: playTimeTracker
-  id: JobHTankComm
-
-- type: playTimeTracker
   id: JobHSpecialistHWS
 
 - type: playTimeTracker
   id: JobHSpecialistSWS
-
-- type: playTimeTracker
-  id: JobHTanker
 
 - type: playTimeTracker
   id: JobHBandSupplier

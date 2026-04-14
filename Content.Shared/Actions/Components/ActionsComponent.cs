@@ -18,6 +18,22 @@ public sealed partial class ActionsComponent : Component
     public HashSet<EntityUid> Actions = new();
 }
 
+/// <summary>
+/// When present on a controlled entity, indicates that its HUD should also display actions of another source entity,
+/// and clicks may optionally be proxied back to that source.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class ActionsDisplayRelayComponent : Component
+{
+    public override bool SendOnlyToOwner => true;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? Source;
+
+    [DataField, AutoNetworkedField]
+    public bool InteractAsSource = false;
+}
+
 [Serializable, NetSerializable]
 public sealed class ActionsComponentState : ComponentState
 {

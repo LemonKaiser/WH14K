@@ -379,6 +379,17 @@
 
 - type: entity
   parent: BaseThiefStealStructureObjective
+  id: VehicleSecwayStealObjective
+  components:
+  - type: NotJobRequirement
+    jobs: [ SecurityOfficer ]
+  - type: StealCondition
+    stealGroup: VehicleSecway
+  - type: Objective
+    difficulty: 1
+
+- type: entity
+  parent: BaseThiefStealStructureObjective
   id: ChemDispenserStealObjective
   components:
   - type: NotJobRequirement

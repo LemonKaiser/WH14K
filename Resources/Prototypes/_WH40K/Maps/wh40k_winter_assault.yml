@@ -21,7 +21,6 @@
             MunitorumOfficer: [ 1, 1 ]
             Psyker: [ 2, 2 ]
             Sergeant: [ 2, 2 ]
-            Tanker: [ 3, 3 ]
             TitheSupplier: [ 2, 2 ]
             VoxScout: [ 3, 3 ]
             # Heretics
@@ -31,5 +30,4 @@
             HLieutenant: [ 2, 2 ]
             HSergeant: [ 2, 2 ]
             HBandSupplier: [ 3, 3 ]
-            HTanker: [ 3, 3 ]
             #HVoxScout: [ 3, 3 ]

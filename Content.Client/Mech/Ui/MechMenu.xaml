@@ -3,78 +3,377 @@
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
                       Title="{Loc 'mech-menu-title'}"
-                      MinSize="600 440"
-                      SetSize="610 440">
+                      MinSize="940 560"
+                      SetSize="1040 600">
     <BoxContainer Orientation="Horizontal"
                   HorizontalExpand="True"
-                  VerticalExpand="True">
-        <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" Margin="15 10 10 15">
-            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 5">
-                <controls:StripeBack HorizontalExpand="True">
-                    <PanelContainer>
-                        <RichTextLabel Name="NameLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 3"/>
+                  VerticalExpand="True"
+                  Margin="8">
+
+        <!-- LEFT COLUMN: main content -->
+        <BoxContainer Orientation="Vertical"
+                      VerticalExpand="True"
+                      HorizontalExpand="False"
+                      Margin="0 0 8 0"
+                      MinWidth="400">
+
+            <!-- Mech sprite and stats -->
+            <PanelContainer Margin="0 0 0 8" StyleClasses="PanelDark">
+                <GridContainer Columns="2"
+                               Margin="8">
+                    <!-- Name and Sprite -->
+                    <BoxContainer Orientation="Vertical"
+                                  VerticalExpand="True">
+                        <BoxContainer HorizontalExpand="True"
+                                      HorizontalAlignment="Center">
+                            <Label Name="MechName"
+                                   StyleClasses="LabelHeading"/>
+                        </BoxContainer>
+                        <BoxContainer HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      VerticalExpand="True">
+                            <SpriteView Name="MechView"
+                                        Scale="4 4"/>
+                        </BoxContainer>
+                    </BoxContainer>
+
+                    <!-- Stats -->
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  Margin="10 0 0 0">
+                        <!-- Integrity -->
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-integrity-display-label'}"/>
+                        <ProgressBar Name="IntegrityDisplayBar"
+                                     HorizontalExpand="True"
+                                     SetHeight="24"
+                                     MaxValue="1"
+                                     Value="0">
+                            <Label Name="IntegrityDisplay"
+                                   Margin="6 0 0 0"
+                                   VerticalAlignment="Center"/>
+                        </ProgressBar>
+
+                        <!-- Energy -->
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-energy-display-label'}"
+                               Margin="0 6 0 0"/>
+                        <ProgressBar Name="EnergyDisplayBar"
+                                     HorizontalExpand="True"
+                                     SetHeight="24"
+                                     MaxValue="1"
+                                     Value="0">
+                            <Label Name="EnergyDisplay"
+                                   Margin="6 0 0 0"
+                                   VerticalAlignment="Center"/>
+                        </ProgressBar>
+
+                        <!-- Metrics -->
+                        <PanelContainer StyleClasses="Inset"
+                                        Margin="0 8 0 0">
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="0">
+                                <GridContainer Columns="2">
+                                    <Label Text="{Loc 'mech-cabin-temperature-label'}"
+                                           StyleClasses="StatusFieldTitle"/>
+                                    <Label Name="CabinTemperatureLabel"
+                                           SetHeight="18"/>
+
+                                    <Label Text="{Loc 'mech-cabin-pressure-label'}"
+                                           StyleClasses="StatusFieldTitle"/>
+                                    <Label Name="CabinPressureLabel"
+                                           SetHeight="18"/>
+
+                                    <Label Text="{Loc 'mech-tank-pressure-label'}"
+                                           StyleClasses="StatusFieldTitle"/>
+                                    <Label Name="TankPressureLabel"
+                                           SetHeight="18"/>
+
+                                    <Label Text="{Loc 'mech-fan-status-label'}"
+                                           StyleClasses="StatusFieldTitle"/>
+                                    <Label Name="FanStatusLabel"
+                                           SetHeight="18"/>
+
+                                    <Label Text="{Loc 'mech-energy-drain-label'}"
+                                           StyleClasses="StatusFieldTitle"/>
+                                    <Label Name="EnergyDrainLabel"
+                                           SetHeight="18"/>
+                                </GridContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </GridContainer>
+            </PanelContainer>
+
+            <!-- Settings -->
+            <!-- Top block -->
+            <BoxContainer Orientation="Vertical"
+                          VerticalExpand="True">
+                <!-- No access overlay -->
+                <PanelContainer Name="NoAccessSettings"
+                                Visible="False"
+                                StyleClasses="Inset"
+                                Margin="0 0 0 6"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <controls:StripeBack VerticalExpand="True"
+                                         HorizontalExpand="True">
+                        <PanelContainer VerticalExpand="True"
+                                        HorizontalExpand="True">
+                            <BoxContainer VerticalExpand="True"
+                                          HorizontalExpand="True"
+                                          Orientation="Vertical">
+                                <Control VerticalExpand="True"/>
+                                <Label Text="{Loc 'mech-settings-no-access-label'}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Margin="5"/>
+                                <Control VerticalExpand="True"/>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </controls:StripeBack>
+                </PanelContainer>
+
+                <GridContainer Name="HaveAccessSettings"
+                               Columns="2"
+                               VSeparationOverride="6"
+                               VerticalExpand="True">
+                    <PanelContainer StyleClasses="Inset"
+                                    Margin="0 0 0 6"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical">
+                            <Label StyleClasses="StatusFieldTitle"
+                                   Text="{Loc 'mech-tank-controls-label'}"
+                                   Margin="0 0 0 3"/>
+                            <BoxContainer Orientation="Horizontal">
+                                <controls:OnOffButton Name="TankToggle"
+                                                      ToolTip="{Loc 'mech-tank-toggle-tooltip'}"/>
+                                <OptionButton Name="TankModeSelector"
+                                              MinWidth="115"
+                                              Margin="6 0 0 0"
+                                              ToolTip="{Loc 'mech-tank-mode-tooltip'}"/>
+                                <Label Name="AirtightUnavailableLabel"
+                                       Visible="False"
+                                       HorizontalAlignment="Right"
+                                       SetHeight="18"/>
+                            </BoxContainer>
+                            <BoxContainer Name="TankPressureBox"
+                                          Orientation="Horizontal"
+                                          Margin="0 4 0 0">
+                                <Label Text="{Loc 'mech-tank-target-pressure-label'}"
+                                       VerticalAlignment="Center"/>
+                                <FloatSpinBox Name="TankPressureSpin"
+                                              MinWidth="130"
+                                              Margin="6 0 0 0"
+                                              ToolTip="{Loc 'mech-tank-target-pressure-tooltip'}"/>
+                            </BoxContainer>
+                        </BoxContainer>
                     </PanelContainer>
-                </controls:StripeBack>
+
+                    <PanelContainer StyleClasses="Inset"
+                                    Margin="0 0 0 6"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical">
+                            <Label StyleClasses="StatusFieldTitle"
+                                   Text="{Loc 'mech-fan-label'}"
+                                   Margin="0 0 0 3"/>
+                            <BoxContainer Orientation="Horizontal">
+                                <controls:OnOffButton Name="FanToggle"/>
+                                <Label Name="FanMissingLabel"
+                                       Visible="False"
+                                       HorizontalAlignment="Right"
+                                       Text="{Loc 'mech-fan-missing-label'}"
+                                       SetHeight="18"/>
+                            </BoxContainer>
+                            <BoxContainer Orientation="Vertical"
+                                          Margin="0 4 0 0">
+                                <CheckBox Name="FilterEnabledCheck"
+                                          Text="{Loc 'mech-filter-enabled-checkbox'}"
+                                          ToolTip="{Loc 'mech-filter-enabled-tooltip'}"
+                                          VerticalAlignment="Bottom"/>
+                                <CheckBox Name="CompressorEnabledCheck"
+                                          Margin="0 2 0 0"
+                                          Text="{Loc 'mech-compressor-enabled-checkbox'}"
+                                          ToolTip="{Loc 'mech-compressor-enabled-tooltip'}"
+                                          VerticalAlignment="Bottom"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </GridContainer>
             </BoxContainer>
-            <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                </PanelContainer.PanelOverride>
-                <BoxContainer HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <SpriteView Name="MechView" Scale="5 5"/>
-                </BoxContainer>
-            </PanelContainer>
-            <customControls:HSeparator Margin="0 10 0 10"/>
-            <GridContainer Columns="2">
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                    <ProgressBar Name="IntegrityDisplayBar"
+
+            <!-- Bottom block -->
+            <GridContainer Columns="2"
+                           VSeparationOverride="6"
+                           VerticalExpand="True">
+                <PanelContainer StyleClasses="Inset"
                                 HorizontalExpand="True"
-                                SetHeight="25"
-                                MaxValue="1"
-                                Value="0">
-                        <Label Name="IntegrityDisplay"
-                            HorizontalAlignment="Left"
-                            Margin="5 0 0 0"
-                            VerticalAlignment="Center" />
-                    </ProgressBar>
-                </BoxContainer>
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                    <ProgressBar Name="EnergyDisplayBar"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical">
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-lock-dna-label'}"
+                               Margin="0 0 0 3"/>
+                        <BoxContainer Orientation="Vertical">
+                            <BoxContainer Margin="0 0 0 3">
+                                <Button Name="DnaLockRegisterButton"
+                                        Text="{Loc 'mech-lock-register-button'}"
+                                        ToggleMode="False"
+                                        HorizontalExpand="False"/>
+                                <Button Name="DnaLockBlockButton"
+                                        Text=""
+                                        StyleClasses="OpenRight"
+                                        ToggleMode="True"
+                                        HorizontalExpand="False"
+                                        Visible="False"/>
+                                <Button StyleClasses="OpenLeft"
+                                        Name="DnaLockResetButton"
+                                        ToolTip="{Loc 'mech-lock-reset-tooltip'}">
+                                    <TextureButton
+                                        HorizontalExpand="False"
+                                        ToggleMode="False"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        MouseFilter="Ignore"
+                                        Scale="0.9 0.9"
+                                        StyleClasses="RefreshButton"/>
+                                </Button>
+                            </BoxContainer>
+                            <BoxContainer>
+                                <Label Name="DnaLockInfoLabel"
+                                       StyleClasses="ItemStatus"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer StyleClasses="Inset"
                                 HorizontalExpand="True"
-                                SetHeight="25"
-                                MaxValue="1"
-                                Value="0">
-                        <Label Name="EnergyDisplay"
-                            Margin="5 0 0 0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"/>
-                    </ProgressBar>
-                </BoxContainer>
-                    <Label StyleClasses="StatusFieldTitle" Text="{Loc 'Cabin air:'}"/>
-                    <Button HorizontalExpand="True" Text="{Loc 'Exposed'}" ToggleMode="False" Margin="0"/>
-                    <Label StyleClasses="StatusFieldTitle" Text="{Loc 'DNA Lock:'}"/>
-                    <Button HorizontalExpand="True" Text="{Loc 'Unset'}" ToggleMode="False" Margin="0"/>
-                    <Label StyleClasses="StatusFieldTitle" Text="{Loc 'ID Lock:'}"/>
-                    <Button HorizontalExpand="True" Text="{Loc 'Disabled'}" ToggleMode="False" Margin="0"/>
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical">
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-lock-card-label'}"
+                               Margin="0 0 0 3"/>
+                        <BoxContainer Orientation="Vertical">
+                            <BoxContainer Margin="0 0 0 3">
+                                <Button Name="CardLockRegisterButton"
+                                        Text="{Loc 'mech-lock-register-button'}"
+                                        ToggleMode="False"
+                                        HorizontalExpand="False"/>
+                                <Button Name="CardLockBlockButton"
+                                        Text=""
+                                        StyleClasses="OpenRight"
+                                        ToggleMode="True"
+                                        HorizontalExpand="False"
+                                        Visible="False"/>
+                                <Button StyleClasses="OpenLeft"
+                                        Name="CardLockResetButton"
+                                        ToolTip="{Loc 'mech-lock-reset-tooltip'}">
+                                    <TextureButton
+                                        HorizontalExpand="False"
+                                        ToggleMode="False"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        MouseFilter="Ignore"
+                                        Scale="0.9 0.9"
+                                        StyleClasses="RefreshButton"/>
+                                </Button>
+                            </BoxContainer>
+                            <BoxContainer>
+                                <Label Name="CardLockInfoLabel"
+                                       StyleClasses="ItemStatus"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </BoxContainer>
+                </PanelContainer>
             </GridContainer>
+
         </BoxContainer>
-        <customControls:VSeparator/>
-        <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True" Margin="10 10 15 15">
-            <PanelContainer VerticalExpand="True">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                </PanelContainer.PanelOverride>
-                <BoxContainer VerticalExpand="True" Orientation="Vertical">
-                    <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Name="EquipmentControlContainer" RectClipContent="True"/>
-                    </ScrollContainer>
-                    <Label Name="SlotDisplay"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom"
-                           StyleClasses="WindowFooterText"
-                           Margin="5"/>
+
+        <!-- RIGHT COLUMN: equipment / modules (see. MechEquipmentControl.xaml) -->
+        <BoxContainer Orientation="Vertical"
+                      VerticalExpand="True"
+                      HorizontalExpand="True"
+                      MinWidth="380">
+
+            <PanelContainer VerticalExpand="True" StyleClasses="PanelDark">
+                <BoxContainer>
+                    <!-- No access overlay -->
+                    <PanelContainer Name="NoAccessEquipment"
+                                    Visible="False"
+                                    HorizontalExpand="True"
+                                    VerticalExpand="True">
+                        <controls:StripeBack VerticalExpand="True"
+                                             HorizontalExpand="True">
+                            <PanelContainer VerticalExpand="True"
+                                            HorizontalExpand="True">
+                                <BoxContainer VerticalExpand="True"
+                                              HorizontalExpand="True"
+                                              Orientation="Vertical">
+                                    <Control VerticalExpand="True"/>
+                                    <TextureRect VerticalAlignment="Center"
+                                                 HorizontalAlignment="Center"
+                                                 SetSize="64 64"
+                                                 Stretch="KeepAspectCentered"
+                                                 TexturePath="/Textures/Interface/VerbIcons/lock.svg.192dpi.png">
+                                    </TextureRect>
+                                    <Control VerticalExpand="True"/>
+                                </BoxContainer>
+                            </PanelContainer>
+                        </controls:StripeBack>
+                    </PanelContainer>
+
+                    <BoxContainer Name="HaveAccessEquipment"
+                                  Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  Margin="5">
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-equipment-label'}"
+                               Margin="4 4 4 2"/>
+                        <ScrollContainer HScrollEnabled="False"
+                                         HorizontalExpand="True"
+                                         VerticalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Name="EquipmentControlContainer"
+                                          RectClipContent="True"
+                                          Margin="2"/>
+                        </ScrollContainer>
+
+                        <Label Name="SlotDisplay"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom"
+                               StyleClasses="WindowFooterText"
+                               Margin="5"/>
+
+                        <customControls:HSeparator Margin="0 8 0 8"/>
+
+                        <Label StyleClasses="StatusFieldTitle"
+                               Text="{Loc 'mech-modules-label'}"
+                               Margin="4 4 4 2"/>
+                        <ScrollContainer HScrollEnabled="False"
+                                         HorizontalExpand="True"
+                                         VerticalExpand="True">
+                            <BoxContainer Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Name="ModuleControlContainer"
+                                          RectClipContent="True"
+                                          Margin="2"/>
+                        </ScrollContainer>
+
+                        <Label Name="ModuleSlotDisplay"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom"
+                               StyleClasses="WindowFooterText"
+                               Margin="5"/>
+                    </BoxContainer>
                 </BoxContainer>
             </PanelContainer>
+
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

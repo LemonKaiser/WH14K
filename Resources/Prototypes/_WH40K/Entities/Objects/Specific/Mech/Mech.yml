@@ -2,7 +2,7 @@
   id: MechSentinel
   parent: [ BaseMech, CombatMech ]
   suffix: WH40K
-  description: placeholder.
+  description: A light Imperial scout walker with a sealed cabin and modular weapon mounts.
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -19,13 +19,11 @@
     baseState: sentinel
     openState: sentinel-open
     brokenState: sentinel-broken
-    mechToPilotDamageMultiplier: 0.15
-    airtight: true
+    canAirtight: true
     maxIntegrity: 300
     maxEquipmentAmount: 1
-    pilotWhitelist:
-      components:
-        - HumanoidProfile
+  - type: Vehicle
+    transferDamageMultiplier: 0.15
   - type: SpriteMovement
     movementLayers:
       movement:
@@ -53,13 +51,20 @@
     - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
       state: sentinel
     - state: sentinel_autogun
-  - type: ContainerFill
-    containers:
-      mech-battery-slot:
-      - PowerCellHigh
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        disableEject: true
+        swap: false
   - type: Mech
     startingEquipment:
       - WeaponMechCombatSentinelRifle
+    startingModules:
+      - MechModuleFan
+      - MechModuleAirTank
+      - MechModuleTeslaRelay
 
 - type: entity
   id: MechSentinelBatteryPlasma
@@ -74,10 +79,17 @@
     - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
       state: sentinel
     - state: sentinel_plasma
-  - type: ContainerFill
-    containers:
-      mech-battery-slot:
-      - PowerCellHigh
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        disableEject: true
+        swap: false
   - type: Mech
     startingEquipment:
       - WeaponMechCombatSentinelPlasma
+    startingModules:
+      - MechModuleFan
+      - MechModuleAirTank
+      - MechModuleTeslaRelay

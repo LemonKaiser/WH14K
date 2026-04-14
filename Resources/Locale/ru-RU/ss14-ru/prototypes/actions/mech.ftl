@@ -1,8 +1,10 @@
 ent-BaseMechAction = { ent-BaseAction }
     .desc = { ent-BaseAction.desc }
 ent-ActionMechCycleEquipment = Переключить снаряжение
-    .desc = Переключает выбранное снаряжение.
+    .desc = Переключает выбранное снаряжение меха.
 ent-ActionMechOpenUI = Панель управления
-    .desc = Открывает панель управления меха.
-ent-ActionMechEject = Покинуть
-    .desc = Высаживает пилота из меха.
+    .desc = Открывает панель управления мехом.
+ent-ActionMechEject = Катапультироваться
+    .desc = Извлекает пилота из меха.
+ent-ActionMechToggleLight = Переключить фары
+    .desc = Переключает освещение меха.
