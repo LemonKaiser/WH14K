@@ -119,6 +119,91 @@
       "name": "paddy_claw"
     },
     {
+      "name": "mecha_air_tank"
+    },
+    {
+      "name": "mecha_analyzer"
+    },
+    {
+      "name": "mecha_abooster_ccw"
+    },
+    {
+      "name": "mecha_abooster_proj"
+    },
+    {
+      "name": "mecha_bin"
+    },
+    {
+      "name": "mecha_camera"
+    },
+    {
+      "name": "mecha_honker"
+    },
+    {
+      "name": "mecha_radio"
+    },
+    {
+      "name": "mecha_sleeper"
+    },
+    {
+      "name": "mecha_teleport"
+    },
+    {
+      "name": "paddyupgrade"
+    },
+    {
+      "name": "repair_droid"
+    },
+    {
+      "name": "repair_droid_a",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "ripleyupgrade"
+    },
+    {
+      "name": "tesla"
+    },
+    {
+      "name": "thrusters"
+    },
+    {
+      "name": "inhand-left-honk",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right-honk",
+      "directions": 4
+    },
+    {
       "name": "mecha_chainsword",
       "delays": [
         [

@@ -114,7 +114,16 @@
     speedModifier: 1.2 # Kept for future adjustments. Currently 1.2x for balance
     useSound: /Audio/Items/drill_use.ogg
   - type: ToolTileCompatible
+  - type: WH40KMultipleToolRadial
+  - type: UserInterface
+    interfaces:
+      enum.WH40KMultipleToolRadialUiKey.Key:
+        type: WH40KMultipleToolRadialBoundUserInterface
+  - type: ActivatableUI
+    inHandsOnly: true
+    key: enum.WH40KMultipleToolRadialUiKey.Key
   - type: MultipleTool
+    cycleOnUse: false
     statusShowBehavior: true
     entries:
       - behavior: Screwing

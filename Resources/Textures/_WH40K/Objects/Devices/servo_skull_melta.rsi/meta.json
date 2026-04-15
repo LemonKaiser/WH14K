@@ -38,6 +38,10 @@
       ]
     },
     {
+      "name": "deactivate",
+      "directions": 4
+    },
+    {
       "name": "primed",
       "directions": 4,
       "delays": [

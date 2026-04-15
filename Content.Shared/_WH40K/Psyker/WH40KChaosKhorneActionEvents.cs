@@ -20,6 +20,8 @@ public sealed partial class WH40KChaosSlaaneshStimAuraActionEvent : InstantActio
 
 public sealed partial class WH40KChaosSlaaneshTempoActionEvent : InstantActionEvent;
 
+public sealed partial class WH40KChaosSlaaneshSwapActionEvent : EntityTargetActionEvent;
+
 public sealed partial class WH40KChaosSlaaneshArenaActionEvent : EntityTargetActionEvent;
 
 public sealed partial class WH40KChaosTzeentchSpeedAuraActionEvent : InstantActionEvent;

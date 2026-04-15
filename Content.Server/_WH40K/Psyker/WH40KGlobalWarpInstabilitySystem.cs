@@ -59,9 +59,24 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private const float WarpMutationNominalThresholdPenalty = 0.5f;
     private const float WarpMutationNominalMovementPenalty = 0.4f;
     private static readonly EntProtoId WarpDoppelgangerPrototype = "MobWH40KWarpDoppelganger";
-    private static readonly ProtoId<PolymorphPrototype> WarpHellspawnMorph = "WH40KWarpHellspawnMorph";
-    private static readonly EntProtoId HellspawnPrototype = "MobHellspawn";
-    private static readonly EntProtoId CatastropheCowPrototype = "MobCow";
+    private static readonly ProtoId<PolymorphPrototype>[] WarpDaemonMorphs =
+    {
+        "WH40KWarpRunnerMorph",
+        "WH40KWarpRunnerAlphaMorph",
+        "WH40KWarpSpitterMorph",
+        "WH40KWarpSpitterAlphaMorph",
+        "WH40KWarpTankMorph",
+        "WH40KWarpTankAlphaMorph",
+    };
+    private static readonly EntProtoId[] WarpDaemonPrototypes =
+    {
+        "MobWH40KWarpRunner",
+        "MobWH40KWarpRunnerAlpha",
+        "MobWH40KWarpSpitter",
+        "MobWH40KWarpSpitterAlpha",
+        "MobWH40KWarpTank",
+        "MobWH40KWarpTankAlpha",
+    };
     private static readonly ProtoId<HTNCompoundPrototype> SimpleHostileCompoundTask = "SimpleHostileCompound";
     private static readonly ProtoId<NpcFactionPrototype> SimpleHostileFaction = "SimpleHostile";
     private static readonly TimeSpan MirrorSyncCooldown = TimeSpan.FromSeconds(0.25);
@@ -577,7 +592,7 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
         var roll = _random.NextFloat();
         if (roll < _fleshRiftDemonChance)
         {
-            _polymorph.PolymorphEntity(performer, WarpHellspawnMorph);
+            _polymorph.PolymorphEntity(performer, PickWarpDaemonMorph());
             return;
         }
 
@@ -798,7 +813,7 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
         _entityBuffer.Clear();
 
         if (haveCoords)
-            Spawn(CatastropheCowPrototype, catastropheCoords);
+            Spawn(PickWarpDaemonPrototype(), catastropheCoords);
 
         _chat.DispatchGlobalAnnouncement(
             Loc.GetString("wh40k-warp-instability-global-catastrophe"),
@@ -988,7 +1003,17 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
         if (!TryPickRandomLivingActor(out var actor))
             return;
 
-        Spawn(HellspawnPrototype, Transform(actor).Coordinates);
+        Spawn(PickWarpDaemonPrototype(), Transform(actor).Coordinates);
+    }
+
+    private ProtoId<PolymorphPrototype> PickWarpDaemonMorph()
+    {
+        return _random.Pick(WarpDaemonMorphs);
+    }
+
+    private EntProtoId PickWarpDaemonPrototype()
+    {
+        return _random.Pick(WarpDaemonPrototypes);
     }
 
     private WarpGlobalPulseTier? GetGlobalPulseTier(float instability)

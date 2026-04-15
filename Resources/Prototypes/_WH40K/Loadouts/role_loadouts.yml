@@ -169,6 +169,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialMelee
 
 - type: roleLoadout
@@ -180,6 +181,7 @@
   - WH40KImperialSergeantOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
 
 - type: roleLoadout
@@ -190,6 +192,7 @@
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
 
 - type: roleLoadout
@@ -200,6 +203,7 @@
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
 
 - type: roleLoadout
@@ -211,6 +215,7 @@
   - WH40KImperialSpecialistMask
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialMelee
 
 
@@ -235,6 +240,7 @@
   - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
 
 - type: roleLoadout
@@ -242,10 +248,10 @@
   groups:
   - WH40KImperialCommandHead
   - WH40KImperialEyes
-  - WH40KImperialCommandNeck
-  - WH40KImperialCommandOuter
+  - WH40KImperialColonelNeck
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
+  - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
 
 - type: roleLoadout

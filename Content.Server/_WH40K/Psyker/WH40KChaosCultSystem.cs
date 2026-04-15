@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared.GameTicking;
 using Content.Shared._WH40K.Psyker;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -24,6 +25,7 @@ public sealed class WH40KChaosCultSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<WH40KChaosRoleStartupEvent>(OnChaosRoleStartup);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
     public override void Update(float frameTime)
@@ -114,6 +116,12 @@ public sealed class WH40KChaosCultSystem : EntitySystem
             RegisterLeadershipCandidate(uid, progression);
 
         SyncCultMembers(progression.AttunedPatron);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _cultStates.Clear();
+        _leadershipSequence = 0;
     }
 
     public void AttachMemberToCult(EntityUid uid, WH40KChaosGiftProgressionComponent progression, WH40KChaosPatron previousPatron)

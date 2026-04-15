@@ -28,7 +28,7 @@ public abstract partial class SharedToolSystem
 
     private void OnMultipleToolActivated(EntityUid uid, MultipleToolComponent multiple, ActivateInWorldEvent args)
     {
-        if (args.Handled || !args.Complex)
+        if (args.Handled || !args.Complex || !multiple.CycleOnUse)
             return;
 
         args.Handled = CycleMultipleTool(uid, multiple, args.User);
@@ -43,6 +43,20 @@ public abstract partial class SharedToolSystem
             return false;
 
         multiple.CurrentEntry = (uint)((multiple.CurrentEntry + 1) % multiple.Entries.Length);
+        SetMultipleTool(uid, multiple, playSound: true, user: user);
+
+        return true;
+    }
+
+    public bool SetMultipleToolEntry(EntityUid uid, uint entry, MultipleToolComponent? multiple = null, EntityUid? user = null)
+    {
+        if (!Resolve(uid, ref multiple))
+            return false;
+
+        if (entry >= (uint) multiple.Entries.Length)
+            return false;
+
+        multiple.CurrentEntry = entry;
         SetMultipleTool(uid, multiple, playSound: true, user: user);
 
         return true;

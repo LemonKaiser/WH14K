@@ -5,13 +5,19 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/skitarii.rsi
+  - type: UseDelay
+    delay: 0.5
+    delays:
+      gasTank:
+        length: 1.0
   - type: GasTank
-    outputPressure: 22.4
+    outputPressure: 101.3
     air:
+      # Roughly 13 minutes of breathable mixed air at normal output pressure.
       volume: 10
       moles:
-        Oxygen: 0.270782035
-        NitrousOxide: 0.014251686
+        Oxygen: 0.902606782
+        Nitrogen: 3.200151318
       temperature: 293.15
     tankLowPressure: 30.0
   - type: InteractionOutline
@@ -59,13 +65,19 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/techpriest.rsi
+  - type: UseDelay
+    delay: 0.5
+    delays:
+      gasTank:
+        length: 1.0
   - type: GasTank
-    outputPressure: 22.4
+    outputPressure: 101.3
     air:
+      # Roughly 13 minutes of breathable mixed air at normal output pressure.
       volume: 10
       moles:
-        Oxygen: 0.270782035
-        NitrousOxide: 0.014251686
+        Oxygen: 0.902606782
+        Nitrogen: 3.200151318
       temperature: 293.15
     tankLowPressure: 30.0
 
@@ -120,6 +132,7 @@
     listingDropAmounts:
       VoxSupplyDropNutribrick: 4
       VoxSupplyDropMagazineStubRifle: 4
+      VoxSupplyDropMortarShellHE: 2
     listings:
     - VoxSupplyDropNutribrick
     - VoxSupplyDropWHSoup
@@ -127,6 +140,7 @@
     - VoxSupplyDropLasgunPowerCell
     - VoxSupplyDropMagazineStubRifle
     - VoxSupplyDropAutogunAmmoBox
+    - VoxSupplyDropMortarShellHE
   - type: Item
     size: Ginormous
 
@@ -159,6 +173,7 @@
     listingDropAmounts:
       VoxSupplyDropNutribrick: 4
       VoxSupplyDropMagazineStubRifle: 4
+      VoxSupplyDropMortarShellHE: 2
     listings:
     - VoxSupplyDropNutribrick
     - VoxSupplyDropWHSoup
@@ -166,6 +181,7 @@
     - VoxSupplyDropLasgunPowerCell
     - VoxSupplyDropMagazineStubRifle
     - VoxSupplyDropAutogunAmmoBox
+    - VoxSupplyDropMortarShellHE
   - type: Item
     size: Ginormous
 

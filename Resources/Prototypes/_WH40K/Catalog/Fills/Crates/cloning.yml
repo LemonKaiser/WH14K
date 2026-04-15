@@ -1,0 +1,24 @@
+- type: entity
+  parent: CrateMedical
+  id: WH40KCrateImperiumCloningSuite
+  name: imperial cloning suite crate
+  description: Contains the boards and construction components needed to assemble a cloning pod, medical scanner, cloning console, and biomass reclaimer.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: CloningPodMachineCircuitboard
+        - id: MedicalScannerMachineCircuitboard
+        - id: CloningConsoleComputerCircuitboard
+        - id: BiomassReclaimerMachineCircuitboard
+        - id: MicroManipulatorStockPart
+          amount: 8
+        - id: SheetGlass1
+          amount: 6
+        - id: CableApcStack1
+          amount: 2
+        - id: SheetSteel1
+          amount: 5
+        - id: KitchenKnife
+          amount: 2

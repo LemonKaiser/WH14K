@@ -9,7 +9,6 @@
     maxCharge: 2000
     startingCharge: 2000
     pricePerJoule: 0.15
-  - type: PowerCell
   - type: Appearance
   - type: BatterySelfRecharger
     autoRechargeRate: 10

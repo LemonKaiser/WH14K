@@ -6,6 +6,19 @@
   - type: Gun
     fireRate: 1.5
   - type: GunRequiresWield
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Piercing: 35
+    angle: 0
+    animation: WeaponArcThrust
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  - type: MeleeRequiresWield
+  - type: AltFireMelee
+    attackType: Heavy
+  - type: Sharp
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_krieg/lasgun_in-hands.rsi
     quickEquip: false

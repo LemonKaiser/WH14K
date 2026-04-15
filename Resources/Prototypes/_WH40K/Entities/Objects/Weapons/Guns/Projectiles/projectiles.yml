@@ -141,10 +141,14 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Plasma
-    maxIntensity: 3 # max 30 per tile
+    maxIntensity: 6
     intensitySlope: 1
-    totalIntensity: 4 # 60 total damage to distribute over tiles
+    totalIntensity: 8
     maxTileBreak: 1
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 14
   - type: TimedDespawn
     lifetime: 0.65 # Примерно 17 тайлов
   - type: PointLight
@@ -165,10 +169,14 @@
   - type: ExplodeOnTrigger
   - type: Explosive
     explosionType: Plasma
-    maxIntensity: 3 # max 30 per tile
+    maxIntensity: 6
     intensitySlope: 1
-    totalIntensity: 4 # 60 total damage to distribute over tiles
+    totalIntensity: 8
     maxTileBreak: 1
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 14
   - type: TimedDespawn
     lifetime: 1.3 # Примерно 34 тайлов
   - type: PointLight

@@ -431,6 +431,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumCloningSuite
+  icon:
+    sprite: Structures/Machines/cloning.rsi
+    state: pod_0
+  product: WH40KCrateImperiumCloningSuite
+  cost: 30000
+  category: cpcat-med
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumSentinel
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi

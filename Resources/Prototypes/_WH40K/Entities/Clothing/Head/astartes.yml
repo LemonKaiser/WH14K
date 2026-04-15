@@ -11,6 +11,7 @@
     - state: icon-eyes
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7.rsi
+    stripDelay: 26
     clothingVisuals:
       head:
       - state: equipped-HELMET
@@ -106,6 +107,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/astartes_chaos.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/astartes_chaos.rsi
+    stripDelay: 26
   - type: Item
     size: Normal
   - type: BreathMask

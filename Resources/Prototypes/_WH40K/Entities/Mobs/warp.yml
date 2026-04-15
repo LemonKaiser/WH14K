@@ -24,3 +24,355 @@
     energy: 2
     color: "#6f2cff"
     castShadows: false
+
+- type: entity
+  id: BaseMobWH40KWarpDaemon
+  parent: SimpleSpaceMobBase
+  name: warp daemon
+  description: A hostile thing pulled out of the immaterium by a failed ritual.
+  suffix: WH40K, Warp
+  abstract: true
+  components:
+  - type: TypingIndicator
+    proto: alien
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Dead:
+        Base: dead
+  - type: TriggerOnMobstateChange
+    mobState:
+    - Dead
+  - type: SpawnOnTrigger
+    proto: FoodMeatMeatball
+    useMapCoords: true
+  - type: DeleteOnTrigger
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Slash: 10
+  - type: ReplacementAccent
+    accent: genericAggressive
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepThud
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - StunImmune
+
+- type: entity
+  id: MobWH40KWarpRunner
+  parent: BaseMobWH40KWarpDaemon
+  name: warp runner
+  description: A quick, half-formed daemon that hunts by speed and numbers.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/runner.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.25, 1.25
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.5
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      90: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.7
+    baseSprintSpeed: 6.7
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1.8
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Slash: 16
+        Piercing: 4
+  - type: PointLight
+    radius: 1.6
+    energy: 1.5
+    color: "#c94cff"
+    castShadows: false
+
+- type: entity
+  id: MobWH40KWarpRunnerAlpha
+  parent: BaseMobWH40KWarpDaemon
+  name: greater warp runner
+  description: A stretched daemon-beast built for pursuit.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/runner2.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.15, 1.15
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.7
+        density: 110
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      130: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5
+    baseSprintSpeed: 7.1
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1.55
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Slash: 22
+        Piercing: 5
+  - type: PointLight
+    radius: 1.9
+    energy: 1.8
+    color: "#d05cff"
+    castShadows: false
+
+- type: entity
+  id: MobWH40KWarpSpitter
+  parent: BaseMobWH40KWarpDaemon
+  name: warp spitter
+  description: A twitching daemon that leaks corrosive warp ichor.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/spitter.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.25, 1.25
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.55
+        density: 90
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      140: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 4.4
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1.2
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Piercing: 6
+        Caustic: 14
+  - type: PointLight
+    radius: 1.8
+    energy: 1.7
+    color: "#8cff6b"
+    castShadows: false
+
+- type: entity
+  id: MobWH40KWarpSpitterAlpha
+  parent: BaseMobWH40KWarpDaemon
+  name: bloated warp spitter
+  description: A swollen daemon whose claws drip with unstable bile.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/spitter2.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.1, 1.1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.75
+        density: 120
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      190: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.9
+    baseSprintSpeed: 3.9
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Piercing: 8
+        Caustic: 22
+  - type: PointLight
+    radius: 2.2
+    energy: 2.1
+    color: "#9cff77"
+    castShadows: false
+
+- type: entity
+  id: MobWH40KWarpTank
+  parent: BaseMobWH40KWarpDaemon
+  name: warp brute
+  description: A dense daemon mass that crushes whatever it can reach.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/tank.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.35, 1.35
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.85
+        density: 220
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      330: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.9
+    baseSprintSpeed: 2.8
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 0.8
+    angle: 0
+    animation: WeaponArcSmash
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Blunt: 36
+        Slash: 14
+        Structural: 12
+  - type: PointLight
+    radius: 2
+    energy: 2.3
+    color: "#ff4a66"
+    castShadows: false
+
+- type: entity
+  id: MobWH40KWarpTankAlpha
+  parent: BaseMobWH40KWarpDaemon
+  name: towering warp brute
+  description: A slow, towering daemon with enough mass to break a line.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Warp/tank2.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.2, 1.2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.95
+        density: 300
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      460: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.6
+    baseSprintSpeed: 2.4
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 0.6
+    angle: 0
+    animation: WeaponArcSmash
+    soundHit:
+      path: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+    damage:
+      types:
+        Blunt: 55
+        Slash: 10
+        Structural: 25
+  - type: PointLight
+    radius: 2.5
+    energy: 2.8
+    color: "#ff4058"
+    castShadows: false
