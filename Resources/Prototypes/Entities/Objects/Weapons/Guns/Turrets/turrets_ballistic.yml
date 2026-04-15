@@ -104,7 +104,10 @@
   - type: Gun
     fireRate: 1
     selectedMode: FullAuto
-    soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Xeno/alien_spitacid.ogg
   - type: HTN
     rootTask:
       task: TurretCompound

@@ -198,6 +198,7 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
         RemComp<GhostTakeoverAvailableComponent>(target);
         RemComp<GhostRoleComponent>(target);
         RemComp<GhostRoleRaffleComponent>(target);
+        EnsureComp<NonSpreaderZombieComponent>(target);
 
         var teamMember = EnsureComp<WH40KTeamMemberComponent>(target);
         teamMember.TeamId = HereticTeamId;

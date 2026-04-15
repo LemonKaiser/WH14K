@@ -38,4 +38,7 @@ public sealed partial class MultipleToolComponent : Component
 
     [DataField]
     public bool StatusShowBehavior = true;
+
+    [DataField]
+    public bool CycleOnUse = true;
 }

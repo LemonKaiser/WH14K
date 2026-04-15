@@ -21,3 +21,63 @@
     transferName: true
     revertOnCrit: false
     revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpRunnerMorph
+  configuration:
+    entity: MobWH40KWarpRunner
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpRunnerAlphaMorph
+  configuration:
+    entity: MobWH40KWarpRunnerAlpha
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpSpitterMorph
+  configuration:
+    entity: MobWH40KWarpSpitter
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpSpitterAlphaMorph
+  configuration:
+    entity: MobWH40KWarpSpitterAlpha
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpTankMorph
+  configuration:
+    entity: MobWH40KWarpTank
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KWarpTankAlphaMorph
+  configuration:
+    entity: MobWH40KWarpTankAlpha
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false

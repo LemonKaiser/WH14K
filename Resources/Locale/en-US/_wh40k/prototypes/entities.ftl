@@ -227,6 +227,9 @@ ent-Colonelcloak = colonel's cloak
 ent-Gorjet = gorget
     .desc = An officer's insignia with a built-in force field that repels projectiles. Some kind of hit to the head should not distract an officer from his wise plans!
 
+ent-Rosarius = rosarius
+    .desc = A consecrated icon of faith with a built-in force field that repels incoming fire. Its blessed glow reminds the wearer that the Emperor is watching.
+
 ent-WH40KCommandTacticalMapTablet = command tactical map tablet
     .desc = A command tactical tablet with access to annotations and team feed editing.
 
@@ -992,8 +995,8 @@ ent-ColMarTechFood = ColMarTech food vendor
 ent-ColMarTechMunitions = ColMarTech automated munition squad vendor
     .desc = Starter munitions rack.
 
-ent-ColMarTechSLGear = ColMarTech officer sidearm rack
-    .desc = An automated sidearm and command-weapon rack for officers.
+ent-ColMarTechSLGear = ColMarTech officer ammunition rack
+    .desc = An automated ammunition rack for officers.
 
 ent-ColMarTechMedicalGear = ColMarTech squad medical gear rack
     .desc = An automated gear rack for hospital corpsmen.

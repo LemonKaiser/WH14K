@@ -407,7 +407,7 @@
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KEquipmentAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSignalFlare]
+      Imperium: [WH40KImperiumSignalFlare, WH40KImperiumCloningSuite]
       Heretics: [WH40KHereticsSignalFlare]
   - id: eqp_right_4
     domain: equipment

@@ -206,8 +206,8 @@
 - type: entity
   parent: ColMarTechBase
   id: ColMarTechSLGear
-  name: ColMarTech officer sidearm rack
-  description: An automated sidearm and command-weapon rack for officers.
+  name: ColMarTech officer ammunition rack
+  description: An automated ammunition rack for officers.
   suffix: WH40K
   components:
   - type: Sprite
@@ -215,24 +215,6 @@
     state: base
   - type: CMAutomatedVendor
     sections:
-    - name: Officer Sidearms
-      entries:
-      - id: WeaponLaserPistolCommissar
-        amount: 4
-      - id: WeaponLaserPistol
-        amount: 10
-      - id: WeaponPistolBolter
-        amount: 2
-    - name: Officer Melee
-      entries:
-      - id: Chainsword
-        amount: 4
-      - id: WHPowerSaberImperial
-        amount: 1
-      - id: WHPowerMaceImperial
-        amount: 1
-      - id: WHPowerFist
-        amount: 1
     - name: Officer Ammunition
       entries:
       - id: LasgunPowerCell

@@ -72,6 +72,17 @@
 
 - type: entity
   parent: Gorjet
+  id: Rosarius
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/rosarius.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Cloaks/rosarius.rsi
+
+- type: entity
+  parent: Gorjet
   id: NecklaceChaosCultistReflectWeak
   name: ожерелье культиста
   description: Зловещее ожерелье, украшенное символами Хаоса. Оно вспыхивает энергией варпа и разворачивает слабый защитный щит.

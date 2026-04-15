@@ -272,6 +272,14 @@
     neck: Gorjet
 
 - type: loadout
+  id: WH40KRosariusZero
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  equipment:
+    neck: Rosarius
+
+- type: loadout
   id: WH40KGorget
   effects:
   - !type:GroupLoadoutEffect
@@ -292,12 +300,22 @@
     neck: Colonelcloak
 
 - type: loadout
+  id: WH40KImperialRainCloak
+  equipment:
+    neck: ClothingNeckCloakRainImp
+
+- type: loadout
   id: WH40KChaosNecklaceZero
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 0
   equipment:
     neck: NecklaceChaosCultistReflectWeak
+
+- type: loadout
+  id: WH40KHereticRainCloak
+  equipment:
+    neck: ClothingNeckCloakRainChs
 
 - type: loadout
   id: WH40KChaosNecklace

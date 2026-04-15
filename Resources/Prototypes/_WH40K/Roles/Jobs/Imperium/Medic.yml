@@ -17,6 +17,7 @@
   - !type:AddComponentSpecial
     components:
       - type: WH40KSquadAssignable
+      - type: WH40KChirurgeonCpr
   access:
   - Maintenance
   - External

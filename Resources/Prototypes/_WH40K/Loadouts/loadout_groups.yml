@@ -83,6 +83,7 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialFieldOuter
@@ -218,6 +219,7 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHead
@@ -241,6 +243,7 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsOuter
@@ -299,17 +302,27 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
+
+- type: loadoutGroup
+  id: WH40KImperialColonelNeck
+  name: loadout-group-wh40k-imperial-command-neck
+  minLimit: 0
+  loadouts:
+  - WH40KColonelCloak
 
 - type: loadoutGroup
   id: WH40KImperialCommandNeckGorget
   name: loadout-group-wh40k-imperial-command-neck
   loadouts:
   - WH40KGorgetZero
+  - WH40KRosariusZero
   - WH40KNeckVst
   - WH40KImperialAquilaMedal
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialCommandOuter
@@ -393,6 +406,7 @@
   - WH40KChaosNurgleMedal
   - WH40KChaosSlaaneshMedal
   - WH40KChaosTzeentchMedal
+  - WH40KHereticRainCloak
 
 - type: loadoutGroup
   id: WH40KHereticLineUniform
@@ -457,6 +471,7 @@
   - WH40KChaosNurgleMedal
   - WH40KChaosSlaaneshMedal
   - WH40KChaosTzeentchMedal
+  - WH40KHereticRainCloak
 
 - type: loadoutGroup
   id: WH40KHereticMelee
@@ -496,6 +511,7 @@
   - WH40KChaosNurgleMedal
   - WH40KChaosSlaaneshMedal
   - WH40KChaosTzeentchMedal
+  - WH40KHereticRainCloak
 
 - type: loadoutGroup
   id: WH40KHereticCommandNeck
@@ -508,6 +524,7 @@
   - WH40KChaosNurgleMedal
   - WH40KChaosSlaaneshMedal
   - WH40KChaosTzeentchMedal
+  - WH40KHereticRainCloak
 
 - type: loadoutGroup
   id: WH40KHereticCommandOuter

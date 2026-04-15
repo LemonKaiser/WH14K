@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server.Body.Systems;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -12,7 +13,10 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
+using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
@@ -21,17 +25,22 @@ using Content.Server.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
 public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
 {
+    private const string SlaaneshSwapAction = "ActionWH40KChaosSlaaneshSwap";
     private const string SlaaneshMasochismAction = "ActionWH40KChaosSlaaneshExquisiteTempo";
     private const string SlaaneshChoirAction = "ActionWH40KChaosSlaaneshMiasma";
     private const string SlaaneshArenaAction = "ActionWH40KChaosSlaaneshArena";
     private const string SlaaneshArenaWallPrototype = "WH40KWallForceSlaaneshArena";
+    private const string TeamHeretics = "Heretics";
+    private const string TeamImperium = "Imperium";
 
+    private static readonly TimeSpan SlaaneshSwapDuration = TimeSpan.FromSeconds(5);
     private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> SlashDamageType = "Slash";
     private static readonly ProtoId<ReagentPrototype> StimulantsReagent = "Stimulants";
@@ -44,12 +53,15 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private readonly PullingSystem _pulling = default!;
     [Dependency] private readonly StunSystem _stun = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
+    private readonly List<SlaaneshPositionSwapState> _activePositionSwaps = new();
 
     private DamageTypePrototype _bluntDamage = default!;
     private DamageTypePrototype _slashDamage = default!;
@@ -59,6 +71,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         _bluntDamage = _prototype.Index(BluntDamageType);
         _slashDamage = _prototype.Index(SlashDamageType);
 
+        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosSlaaneshSwapActionEvent>(OnSwap);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosSlaaneshMasochismActionEvent>(OnMasochism);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosSlaaneshStimAuraActionEvent>(OnStimAura);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosSlaaneshArenaActionEvent>(OnArena);
@@ -67,6 +80,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, ModifySlowOnDamageSpeedEvent>(OnModifySlowOnDamage);
         SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, ModifyStatusEffectDurationEvent>(OnModifyStatusEffectDuration);
         SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, KnockDownAttemptEvent>(OnKnockdownAttempt);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
     public override void Update(float frameTime)
@@ -74,6 +88,8 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        UpdateActivePositionSwaps(now);
+
         var query = EntityQueryEnumerator<WH40KChaosSlaaneshRuntimeComponent>();
         while (query.MoveNext(out var uid, out var runtime))
         {
@@ -84,6 +100,43 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
             runtime.TempoMultiplier = 1f;
             _movementSpeed.RefreshMovementSpeedModifiers(uid);
         }
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _activePositionSwaps.Clear();
+    }
+
+    private void OnSwap(Entity<WH40KChaosGiftRoleComponent> ent, ref WH40KChaosSlaaneshSwapActionEvent args)
+    {
+        if (!TryGetSlaaneshProgression(args.Performer, args.Action.Owner, SlaaneshSwapAction, out var progression))
+            return;
+
+        if (!IsValidSwapTarget(args.Performer, args.Target))
+            return;
+
+        if (IsInActivePositionSwap(args.Performer) || IsInActivePositionSwap(args.Target))
+            return;
+
+        var performerCoordinates = _transform.GetMapCoordinates(args.Performer);
+        var targetCoordinates = _transform.GetMapCoordinates(args.Target);
+        if (performerCoordinates.MapId != targetCoordinates.MapId)
+            return;
+
+        ApplyTieredCooldown(args.Performer, args.Action, 18f, progression.KhorneGiftOneCooldownTier);
+
+        BreakPulls(args.Performer);
+        BreakPulls(args.Target);
+
+        _transform.SwapPositions(args.Performer, args.Target);
+        _activePositionSwaps.Add(new SlaaneshPositionSwapState(
+            args.Performer,
+            args.Target,
+            performerCoordinates,
+            targetCoordinates,
+            _timing.CurTime + SlaaneshSwapDuration));
+
+        args.Handled = true;
     }
 
     private void OnMasochism(Entity<WH40KChaosGiftRoleComponent> ent, ref WH40KChaosSlaaneshMasochismActionEvent args)
@@ -269,6 +322,83 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
                progression.AttunedPatron == WH40KChaosPatron.Slaanesh;
     }
 
+    private bool IsValidSwapTarget(EntityUid performer, EntityUid target)
+    {
+        if (performer == target ||
+            Deleted(performer) ||
+            Deleted(target) ||
+            !_mobState.IsAlive(performer) ||
+            !_mobState.IsAlive(target))
+        {
+            return false;
+        }
+
+        if (!HasComp<ActorComponent>(target))
+            return false;
+
+        if (!_teamRule.TryGetTeamIdFromEntity(performer, out var performerTeam) ||
+            !_teamRule.TryGetTeamIdFromEntity(target, out var targetTeam))
+        {
+            return false;
+        }
+
+        return string.Equals(performerTeam, TeamHeretics, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(targetTeam, TeamImperium, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsInActivePositionSwap(EntityUid uid)
+    {
+        foreach (var swap in _activePositionSwaps)
+        {
+            if (swap.Performer == uid || swap.Target == uid)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void UpdateActivePositionSwaps(TimeSpan now)
+    {
+        for (var i = _activePositionSwaps.Count - 1; i >= 0; i--)
+        {
+            var swap = _activePositionSwaps[i];
+            if (now < swap.ExpiresAt)
+                continue;
+
+            RestorePositionSwap(swap);
+            _activePositionSwaps.RemoveAt(i);
+        }
+    }
+
+    private void RestorePositionSwap(SlaaneshPositionSwapState swap)
+    {
+        RestorePosition(swap.Performer, swap.PerformerReturnCoordinates);
+        RestorePosition(swap.Target, swap.TargetReturnCoordinates);
+    }
+
+    private void BreakPulls(EntityUid uid)
+    {
+        if (TryComp<PullableComponent>(uid, out var pullable) && _pulling.IsPulled(uid, pullable))
+            _pulling.TryStopPull(uid, pullable);
+
+        if (TryComp<PullerComponent>(uid, out var puller) &&
+            TryComp<PullableComponent>(puller.Pulling, out var pulled))
+        {
+            _pulling.TryStopPull(puller.Pulling.Value, pulled);
+        }
+    }
+
+    private void RestorePosition(EntityUid uid, MapCoordinates coordinates)
+    {
+        if (!uid.IsValid() || Deleted(uid))
+            return;
+
+        BreakPulls(uid);
+
+        _transform.SetMapCoordinates(uid, coordinates);
+        _transform.AttachToGridOrMap(uid);
+    }
+
     private static float GetMasochismHealAmount(byte tier, bool exUnlocked)
     {
         var amount = tier switch
@@ -418,4 +548,11 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
             Spawn(SlaaneshArenaWallPrototype, center.Offset(offset));
         }
     }
+
+    private readonly record struct SlaaneshPositionSwapState(
+        EntityUid Performer,
+        EntityUid Target,
+        MapCoordinates PerformerReturnCoordinates,
+        MapCoordinates TargetReturnCoordinates,
+        TimeSpan ExpiresAt);
 }
