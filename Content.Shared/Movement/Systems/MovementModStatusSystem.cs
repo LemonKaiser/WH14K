@@ -173,6 +173,7 @@ public sealed class MovementModStatusSystem : EntitySystem
 
         status.Comp.SprintSpeedModifier = sprintSpeedModifier;
         status.Comp.WalkSpeedModifier = walkSpeedModifier;
+        Dirty(status);
 
         _movementSpeedModifier.RefreshMovementSpeedModifiers(uid);
 

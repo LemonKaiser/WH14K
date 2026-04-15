@@ -5,6 +5,7 @@ using Content.Server.Popups;
 using Content.Server.Store.Systems;
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
+using Content.Shared.Store;
 using Content.Shared.UserInterface;
 using Robust.Shared.Localization;
 using Content.Server._WH40K.Localizations;
