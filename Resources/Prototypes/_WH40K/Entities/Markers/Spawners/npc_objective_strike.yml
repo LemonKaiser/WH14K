@@ -19,7 +19,7 @@
   parent: MarkerBase
   id: SpawnWH40KHereticObjectiveStrikeSquadMarker
   name: heretic objective strike squad marker
-  categories: [ HideSpawnMenu ]
+  categories: [ HideSpawnMenu, Spawner ]
   components:
   - type: WH40KEntityTableSpawnOnStartup
     offset: 1.1

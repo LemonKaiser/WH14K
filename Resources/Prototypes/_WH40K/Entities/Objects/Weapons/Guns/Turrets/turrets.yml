@@ -404,6 +404,8 @@
     detectionRange: 8
     fireRange: 8
     supportedAmmo: ShellShotgun, BoxLethalshot
+  - type: StaticPrice
+    price: 75
 
 - type: entity
   id: WH40KWeaponTurretImperiumMini

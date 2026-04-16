@@ -101,7 +101,6 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
             execution.CooldownShown = false;
             execution.NextUseTime = TimeSpan.Zero;
             _actions.RemoveCooldown(execution.ActionEntity);
-            Dirty(uid, execution);
         }
     }
 
@@ -132,14 +131,12 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         {
             component.CooldownShown = true;
             _actions.SetCooldown(component.ActionEntity, now, component.NextUseTime);
-            Dirty(uid, component);
             return;
         }
 
         component.CooldownShown = false;
         component.NextUseTime = TimeSpan.Zero;
         _actions.RemoveCooldown(component.ActionEntity);
-        Dirty(uid, component);
     }
 
     private void OnShutdown(EntityUid uid, WH40KMoraleExecutionComponent component, ComponentShutdown args)
@@ -372,7 +369,6 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
         execution.NextUseTime = now + cooldown;
         execution.CooldownShown = true;
         _actions.SetUseDelay(execution.ActionEntity, cooldown);
-        Dirty(attacker, execution);
     }
 
     private void ApplyMoraleAura(EntityUid attacker, WH40KMoraleExecutionComponent execution, TimeSpan now)
@@ -453,7 +449,6 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
 
         execution.NextBlockedKillPopupTime =
             now + TimeSpan.FromSeconds(Math.Max(0.1f, execution.BlockedKillPopupCooldownSeconds));
-        Dirty(attacker, execution);
     }
 
     private void TryShowInvalidTargetPopup(EntityUid attacker, WH40KMoraleExecutionComponent execution)
@@ -466,6 +461,5 @@ public sealed class WH40KMoraleExecutionSystem : EntitySystem
 
         execution.NextBlockedKillPopupTime =
             now + TimeSpan.FromSeconds(Math.Max(0.1f, execution.BlockedKillPopupCooldownSeconds));
-        Dirty(attacker, execution);
     }
 }

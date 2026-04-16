@@ -15,7 +15,9 @@ public sealed class ChameleonJobLoadoutTest : InteractionTest
 {
     private static readonly List<ProtoId<JobPrototype>> JobBlacklist =
     [
-
+        "LoadoutTesterStorage",
+        "LoadoutTesterFallback",
+        "LoadoutTesterReplace",
     ];
 
     [Test]

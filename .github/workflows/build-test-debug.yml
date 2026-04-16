@@ -53,7 +53,9 @@ jobs:
       run: |
         $ErrorActionPreference = "Stop"
         $configuration = "DebugOpt"
-        $nonWh40kBatchCount = 8
+        # Keep each integration test process comfortably below PoolManagerTestEventHandler's
+        # per-process watchdog. Some core namespaces expand into thousands of NUnit cases.
+        $nonWh40kBatchCount = 16
         $repoRoot = (Get-Location).Path
         $testsRoot = Join-Path $repoRoot "Content.IntegrationTests\Tests"
         $resultsRootPath = Join-Path $repoRoot "test_results\integration-batches"

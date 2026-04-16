@@ -691,11 +691,14 @@
 #    mask: ClothingMaskBreathMedical # right now this is broken for vox, but maybe some day.
     id: VisitorPDA
     belt: ClothingBeltStorageWaistbag
-    back: NitrousOxideTankFilled
+    back: ClothingBackpackSatchelMedical
     ears: ClothingHeadsetMedical
     eyes: ClothingEyesGlasses
     pocket1: Scalpel
     pocket2: Gauze
+  storage:
+    back:
+    - NitrousOxideTankFilled
   inhand:
   - Cautery
   - Drill
@@ -1568,10 +1571,12 @@
     head: ClothingHeadSafari
     id: VisitorPDA
     belt: ClothingBeltStorageWaistbag
-    back: WeaponShotgunDoubleBarreledRubber
+    back: ClothingBackpackDuffel
     ears: ClothingHeadsetService
     pocket1: WeaponFlareGun
     pocket2: PillCanisterDylovene
+  inhand:
+  - WeaponShotgunDoubleBarreledRubber
 
 # Misc
 

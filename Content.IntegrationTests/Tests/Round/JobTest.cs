@@ -74,7 +74,7 @@ public sealed class JobTest : GameTest
     }
 
     /// <summary>
-    /// Simple test that checks that starting the round spawns the player into the test map as a passenger.
+    /// Simple test that checks that starting the round spawns the player into the test map with the requested job.
     /// </summary>
     [Test]
     public async Task StartRoundTest()
@@ -89,7 +89,8 @@ public sealed class JobTest : GameTest
         Assert.That(pair.Client.AttachedEntity, Is.Null);
         Assert.That(ticker.PlayerGameStatuses[pair.Client.User!.Value], Is.EqualTo(PlayerGameStatus.NotReadyToPlay));
 
-        // Ready up and start the round
+        // Ready up and start the round.
+        await pair.SetJobPriority(Passenger, JobPriority.High);
         ticker.ToggleReadyAll(true);
         Assert.That(ticker.PlayerGameStatuses[pair.Client.User!.Value], Is.EqualTo(PlayerGameStatus.ReadyToPlay));
         await pair.Server.WaitPost(() => ticker.StartRound());

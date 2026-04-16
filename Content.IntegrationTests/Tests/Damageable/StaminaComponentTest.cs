@@ -28,8 +28,8 @@ public sealed class StaminaComponentTest : GameTest
                 var comp = (StaminaComponent)proto.Components["Stamina"].Component;
 
                 Assert.That(comp.AnimationThreshold,
-                    Is.LessThan(comp.CritThreshold),
-                    $"Animation threshold on {proto.ID} must be less than its crit threshold.");
+                    Is.LessThan(comp.BaseCritThreshold),
+                    $"Animation threshold on {proto.ID} must be less than its base crit threshold.");
 
                 // TODO(Kaylie): "value is in range" serializer. Needs some serializationmanager improvements.
                 Assert.That(comp.Decay, Is.Positive.Or.Zero, "Negative decay results in nonsensical behavior.");

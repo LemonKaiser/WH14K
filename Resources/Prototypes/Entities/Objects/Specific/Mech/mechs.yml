@@ -585,7 +585,7 @@
 
 # Gygax
 - type: entity
-  parent: [ BaseMech, CombatMech, BaseRestrictedContraband ]
+  parent: [ BaseMech, CombatMech, BaseSecurityScienceCommandContraband ]
   id: MechGygax
   name: Gygax
   description: While lightly armored, the Gygax has incredible mobility thanks to its ability that lets it smash through walls at high speeds.
@@ -643,7 +643,7 @@
 
 # Durand
 - type: entity
-  parent: [ BaseMech, CombatMech, BaseRestrictedContraband ]
+  parent: [ BaseMech, CombatMech, BaseSecurityScienceCommandContraband ]
   id: MechDurand
   name: Durand
   description: A slow but beefy combat exosuit that is extra scary in confined spaces due to its punches. Xenos hate it!

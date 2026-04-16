@@ -1,0 +1,124 @@
+- type: chameleonOutfit
+  id: WH40KGuardsmanChameleonOutfit
+  job: Guardsman
+  startingGear: GuardsmanGear
+
+- type: chameleonOutfit
+  id: WH40KVoxScoutChameleonOutfit
+  job: VoxScout
+  startingGear: VoxScoutGear
+
+- type: chameleonOutfit
+  id: WH40KTitheSupplierChameleonOutfit
+  job: TitheSupplier
+  startingGear: TitheSupplierGear
+
+- type: chameleonOutfit
+  id: WH40KMunitorumOfficerChameleonOutfit
+  job: MunitorumOfficer
+  startingGear: MunitorumOfficerGear
+
+- type: chameleonOutfit
+  id: WH40KSpecialistSWSChameleonOutfit
+  job: SpecialistSWS
+  startingGear: GuardsmanSpesSpecGear
+
+- type: chameleonOutfit
+  id: WH40KSpecialistHWSChameleonOutfit
+  job: SpecialistHWS
+  startingGear: GuardsmanHevSpecGear
+
+- type: chameleonOutfit
+  id: WH40KSergeantChameleonOutfit
+  job: Sergeant
+  startingGear: SergeantGear
+
+- type: chameleonOutfit
+  id: WH40KSergeantSWSChameleonOutfit
+  job: SergeantSWS
+  startingGear: SergeantGear
+
+- type: chameleonOutfit
+  id: WH40KSergeantHWSChameleonOutfit
+  job: SergeantHWS
+  startingGear: SergeantGear
+
+- type: chameleonOutfit
+  id: WH40KPsykerChameleonOutfit
+  job: Psyker
+  startingGear: PsykerGear
+
+- type: chameleonOutfit
+  id: WH40KMedicChameleonOutfit
+  job: Medic
+  startingGear: MedicGear
+
+- type: chameleonOutfit
+  id: WH40KMajorChameleonOutfit
+  job: Major
+  startingGear: MajorGear
+
+- type: chameleonOutfit
+  id: WH40KLieutenantChameleonOutfit
+  job: Lieutenant
+  startingGear: LieutenantGear
+
+- type: chameleonOutfit
+  id: WH40KColonelChameleonOutfit
+  job: Colonel
+  startingGear: ColonelGear
+
+- type: chameleonOutfit
+  id: WH40KCommissarChameleonOutfit
+  job: Commissar
+  startingGear: CommissarGear
+
+- type: chameleonOutfit
+  id: WH40KHGuardsmanChameleonOutfit
+  job: HGuardsman
+  startingGear: HeresyGuardsmanGear
+
+- type: chameleonOutfit
+  id: WH40KHVoxScoutChameleonOutfit
+  job: HVoxScout
+  startingGear: HVoxScoutGear
+
+- type: chameleonOutfit
+  id: WH40KHBandSupplierChameleonOutfit
+  job: HBandSupplier
+  startingGear: HBandSupplierGear
+
+- type: chameleonOutfit
+  id: WH40KHSpecialistSWSChameleonOutfit
+  job: HSpecialistSWS
+  startingGear: HeresyGuardsmanGear
+
+- type: chameleonOutfit
+  id: WH40KHSpecialistHWSChameleonOutfit
+  job: HSpecialistHWS
+  startingGear: HeresyGuardsmanGear
+
+- type: chameleonOutfit
+  id: WH40KHSergeantChameleonOutfit
+  job: HSergeant
+  startingGear: HeresySergeantGear
+
+- type: chameleonOutfit
+  id: WH40KHSergeantSWSChameleonOutfit
+  job: HSergeantSWS
+  startingGear: HeresySergeantGear
+
+- type: chameleonOutfit
+  id: WH40KHSergeantHWSChameleonOutfit
+  job: HSergeantHWS
+  startingGear: HeresySergeantGear
+
+- type: chameleonOutfit
+  id: WH40KHLieutenantChameleonOutfit
+  job: HLieutenant
+  startingGear: HeresyLieutenantGear
+
+- type: chameleonOutfit
+  id: WH40KHColonelChameleonOutfit
+  job: HColonel
+  startingGear: HeresyColonelGear

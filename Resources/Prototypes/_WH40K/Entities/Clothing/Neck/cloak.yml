@@ -21,6 +21,9 @@
     requiredSlot:
     - neck
     slot: head
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
   parent: ClothingNeckBase
@@ -34,6 +37,9 @@
     requiredSlot:
     - neck
     slot: head
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
   parent: ClothingNeckBase

@@ -28,6 +28,7 @@ public static partial class PoolManager
         (CCVars.GatewayGeneratorEnabled.Name, "false"),
         (CCVars.GameDummyTicker.Name, "true"),
         (CCVars.GameLobbyEnabled.Name, "false"),
+        (CCVars.WH40KLobbyAutoVoteEnabled.Name, "false"),
         (CCVars.ConfigPresetDevelopment.Name, "false"),
         (CCVars.AdminLogsEnabled.Name, "false"),
         (CCVars.AutosaveEnabled.Name, "false"),

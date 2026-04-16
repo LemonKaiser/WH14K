@@ -387,6 +387,8 @@ namespace Content.IntegrationTests.Tests
                 "Actor", // We aren't testing actor components, those need their player session set.
                 "BiomeSelection", // Whaddya know, requires config.
                 "ActivatableUI", // Requires enum key
+                "Mech", // Requires the vehicle/mech container component set.
+                "WH40KHeavyBolter", // Requires fixtures/strap/gun companion components.
             };
 
             var pair = Pair;
