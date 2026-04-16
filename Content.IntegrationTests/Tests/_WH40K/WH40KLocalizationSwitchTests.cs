@@ -72,29 +72,7 @@ public sealed class WH40KLocalizationSwitchTests
     };
 
     [Test]
-    public async Task SimpleKeysExistInBothCultures()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var locMan = pair.Server.ResolveDependency<ILocalizationManager>();
-
-        Assert.Multiple(() =>
-        {
-            foreach (var (key, _, _) in SimpleKeys)
-            {
-                locMan.SetCulture(EnCulture);
-                Assert.That(locMan.HasString(key), Is.True, $"Missing en-US key: {key}");
-
-                locMan.SetCulture(RuCulture);
-                Assert.That(locMan.HasString(key), Is.True, $"Missing ru-RU key: {key}");
-            }
-        });
-
-        locMan.SetCulture(RuCulture);
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task SimpleKeysSwitchCultureReturnsCorrectText()
+    public async Task CriticalLocKeysSwitchCulturesInSingleServerPair()
     {
         await using var pair = await PoolManager.GetServerClient();
         var locMan = pair.Server.ResolveDependency<ILocalizationManager>();
@@ -104,106 +82,45 @@ public sealed class WH40KLocalizationSwitchTests
             foreach (var (key, expectedEn, expectedRu) in SimpleKeys)
             {
                 locMan.SetCulture(EnCulture);
+                Assert.That(locMan.HasString(key), Is.True, $"Missing en-US key: {key}");
                 var actualEn = locMan.GetString(key);
-                Assert.That(actualEn, Is.EqualTo(expectedEn),
-                    $"en-US mismatch for '{key}'");
+                Assert.That(actualEn, Is.EqualTo(expectedEn), $"en-US mismatch for '{key}'");
 
                 locMan.SetCulture(RuCulture);
+                Assert.That(locMan.HasString(key), Is.True, $"Missing ru-RU key: {key}");
                 var actualRu = locMan.GetString(key);
-                Assert.That(actualRu, Is.EqualTo(expectedRu),
-                    $"ru-RU mismatch for '{key}'");
-
-                Assert.That(actualEn, Is.Not.EqualTo(actualRu),
-                    $"Cultures returned identical text for '{key}' — locale switch may not be working");
+                Assert.That(actualRu, Is.EqualTo(expectedRu), $"ru-RU mismatch for '{key}'");
+                Assert.That(actualEn, Is.Not.EqualTo(actualRu), $"Cultures returned identical text for '{key}'");
             }
-        });
 
-        locMan.SetCulture(RuCulture);
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ParameterizedKeysSwitchCultureReturnsCorrectText()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var locMan = pair.Server.ResolveDependency<ILocalizationManager>();
-
-        Assert.Multiple(() =>
-        {
             foreach (var (key, args, expectedEn, expectedRu) in ParamKeys)
             {
                 locMan.SetCulture(EnCulture);
                 var actualEn = locMan.GetString(key, args);
-                Assert.That(actualEn, Is.EqualTo(expectedEn),
-                    $"en-US mismatch for parameterized '{key}'");
+                Assert.That(actualEn, Is.EqualTo(expectedEn), $"en-US mismatch for parameterized '{key}'");
 
                 locMan.SetCulture(RuCulture);
                 var actualRu = locMan.GetString(key, args);
-                Assert.That(actualRu, Is.EqualTo(expectedRu),
-                    $"ru-RU mismatch for parameterized '{key}'");
-
-                Assert.That(actualEn, Is.Not.EqualTo(actualRu),
-                    $"Cultures returned identical text for parameterized '{key}'");
+                Assert.That(actualRu, Is.EqualTo(expectedRu), $"ru-RU mismatch for parameterized '{key}'");
+                Assert.That(actualEn, Is.Not.EqualTo(actualRu), $"Cultures returned identical text for parameterized '{key}'");
             }
-        });
 
-        locMan.SetCulture(RuCulture);
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task EntityLocKeysSwitchCultureReturnsCorrectText()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var locMan = pair.Server.ResolveDependency<ILocalizationManager>();
-
-        Assert.Multiple(() =>
-        {
             foreach (var (locId, enName, ruName) in EntityNameKeys)
             {
                 locMan.SetCulture(EnCulture);
-                Assert.That(locMan.HasString(locId), Is.True,
-                    $"Missing en-US entity key: {locId}");
+                Assert.That(locMan.HasString(locId), Is.True, $"Missing en-US entity key: {locId}");
                 var actualEn = locMan.GetString(locId);
-                Assert.That(actualEn, Is.EqualTo(enName),
-                    $"en-US name mismatch for '{locId}'");
+                Assert.That(actualEn, Is.EqualTo(enName), $"en-US name mismatch for '{locId}'");
 
                 locMan.SetCulture(RuCulture);
-                Assert.That(locMan.HasString(locId), Is.True,
-                    $"Missing ru-RU entity key: {locId}");
+                Assert.That(locMan.HasString(locId), Is.True, $"Missing ru-RU entity key: {locId}");
                 var actualRu = locMan.GetString(locId);
-                Assert.That(actualRu, Is.EqualTo(ruName),
-                    $"ru-RU name mismatch for '{locId}'");
-
-                Assert.That(actualEn, Is.Not.EqualTo(actualRu),
-                    $"Entity '{locId}' name is identical in both cultures");
+                Assert.That(actualRu, Is.EqualTo(ruName), $"ru-RU name mismatch for '{locId}'");
+                Assert.That(actualEn, Is.Not.EqualTo(actualRu), $"Entity '{locId}' name is identical in both cultures");
             }
         });
 
         locMan.SetCulture(RuCulture);
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task CultureSwitchIsReversible()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var locMan = pair.Server.ResolveDependency<ILocalizationManager>();
-
-        const string key = "wh40k-tank-engine-started";
-        const string expectedRu = "Двигатель с рокотом оживает.";
-        const string expectedEn = "The engine rumbles to life.";
-
-        locMan.SetCulture(RuCulture);
-        Assert.That(locMan.GetString(key), Is.EqualTo(expectedRu));
-
-        locMan.SetCulture(EnCulture);
-        Assert.That(locMan.GetString(key), Is.EqualTo(expectedEn));
-
-        locMan.SetCulture(RuCulture);
-        Assert.That(locMan.GetString(key), Is.EqualTo(expectedRu),
-            "Culture did not revert correctly back to ru-RU");
-
         await pair.CleanReturnAsync();
     }
 }

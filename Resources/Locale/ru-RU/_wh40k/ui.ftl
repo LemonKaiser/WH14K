@@ -16,6 +16,11 @@ ent-ActionToggleAiming = Прицельная стрельба
     .desc = Смещает камеру к прицелу для обзора дальше.
 
 ui-options-wh40k-grimdark-shader = WH40K виньетка
+wh40k-tank-engine-started = Двигатель с рокотом оживает.
+wh40k-tank-repair-engine-running = Заглушите двигатель перед ремонтом.
+wh40k-tank-ui-window-title = Диагностика Леман Русса
+wh40k-tank-entry-verb = Занять место: {$role}
+wh40k-tank-weapon-disabled = {$weapon} выведено из строя.
 w40k-cmd-window-title = Командный узел
 w40k-cmd-header-title = СТРАТЕГИЧЕСКИЙ УЗЕЛ / КОМАНДНЫЙ ШТАБ
 w40k-cmd-header-subtitle = Контур управления фракцией, базой и оперативными окнами.

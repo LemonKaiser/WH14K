@@ -5,6 +5,11 @@ ent-ActionToggleAiming = Aiming
     .desc = Offsets the camera toward the cursor for a longer view.
 
 ui-options-wh40k-grimdark-shader = WH40K Vignette
+wh40k-tank-engine-started = The engine rumbles to life.
+wh40k-tank-repair-engine-running = Shut the engine down before attempting repairs.
+wh40k-tank-ui-window-title = Leman Russ Diagnostics
+wh40k-tank-entry-verb = Enter as {$role}
+wh40k-tank-weapon-disabled = The {$weapon} is offline.
 wh40k-faction-join-title = Faction Selection
 wh40k-faction-join-empty = No faction selection is required right now.
 wh40k-faction-late-join-title = Late Join: { $faction }
