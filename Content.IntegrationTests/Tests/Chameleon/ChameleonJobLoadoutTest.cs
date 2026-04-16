@@ -13,7 +13,7 @@ namespace Content.IntegrationTests.Tests.Chameleon;
 /// </summary>
 public sealed class ChameleonJobLoadoutTest : InteractionTest
 {
-    private static readonly List<ProtoId<JobPrototype>> JobBlacklist =
+    private static readonly HashSet<string> JobBlacklist =
     [
         "LoadoutTesterStorage",
         "LoadoutTesterFallback",
