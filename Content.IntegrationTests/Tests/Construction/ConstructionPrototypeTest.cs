@@ -1,3 +1,4 @@
+using System.Text;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Utility;
 using Content.Server.Construction.Components;
@@ -14,17 +15,16 @@ namespace Content.IntegrationTests.Tests.Construction
         // TODO: Create serialization validators for these?
         // Top test definitely can be but writing a serializer takes ages.
 
-        private static string[] _constructablePrototypes = GameDataScrounger.EntitiesWithComponent("Construction");
-        private static string[] _constructions = GameDataScrounger.PrototypesOfKind<ConstructionPrototype>();
+        private static readonly string[] _constructablePrototypes = GameDataScrounger.EntitiesWithComponent("Construction");
+        private static readonly string[] _constructions = GameDataScrounger.PrototypesOfKind<ConstructionPrototype>();
 
         /// <summary>
         /// Checks every entity prototype with a construction component has a valid start node.
         /// </summary>
         [Test]
         [TestOf(typeof(ConstructionComponent))]
-        [TestCaseSource(nameof(_constructablePrototypes))]
         [Description("Tests that a given entity specifies a valid node for construction, and optionally a valid one for deconstruction.")]
-        public async Task ConstructionComponentValid(string protoKey)
+        public async Task ConstructionComponentsValid()
         {
             var pair = Pair;
             var server = pair.Server;
@@ -33,30 +33,38 @@ namespace Content.IntegrationTests.Tests.Construction
 
             await server.WaitAssertion(() =>
             {
-                var proto = protoMan.Index(protoKey);
-                var construction = (ConstructionComponent)proto.Components["Construction"].Component;
+                var errors = new StringBuilder();
 
-                var graph = protoMan.Index<ConstructionGraphPrototype>(construction.Graph);
-
-                using (Assert.EnterMultipleScope())
+                foreach (var protoKey in _constructablePrototypes)
                 {
-                    Assert.That(graph.Nodes.ContainsKey(construction.Node),
-                        $"Found no node \"{construction.Node}\" on graph \"{graph.ID}\" for entity \"{proto.ID}\"!");
+                    var proto = protoMan.Index(protoKey);
+                    var construction = (ConstructionComponent)proto.Components["Construction"].Component;
 
-                    if (construction.DeconstructionNode is not { } target)
-                        return;
+                    if (!protoMan.TryIndex(construction.Graph, out ConstructionGraphPrototype graph))
+                    {
+                        errors.AppendLine($"Found no graph \"{construction.Graph}\" for construction entity \"{proto.ID}\"!");
+                        continue;
+                    }
 
-                    Assert.That(graph.Nodes.ContainsKey(target),
-                        $"Invalid deconstruction node \"{target}\" on graph \"{graph.ID}\" for construction entity \"{proto.ID}\"!");
+                    if (!graph.Nodes.ContainsKey(construction.Node))
+                    {
+                        errors.AppendLine($"Found no node \"{construction.Node}\" on graph \"{graph.ID}\" for entity \"{proto.ID}\"!");
+                    }
+
+                    if (construction.DeconstructionNode is { } target && !graph.Nodes.ContainsKey(target))
+                    {
+                        errors.AppendLine($"Invalid deconstruction node \"{target}\" on graph \"{graph.ID}\" for construction entity \"{proto.ID}\"!");
+                    }
                 }
+
+                FailIfErrors(errors);
             });
         }
 
         [Test]
         [TestOf(typeof(ConstructionPrototype))]
-        [TestCaseSource(nameof(_constructions))]
         [Description("Tests that a given construction prototype has a valid starting and target node, and a valid path between them.")]
-        public async Task ConstructionFormsValidGraph(string protoKey)
+        public async Task ConstructionFormsValidGraphs()
         {
             var pair = Pair;
             var server = pair.Server;
@@ -66,34 +74,78 @@ namespace Content.IntegrationTests.Tests.Construction
 
             await server.WaitAssertion(() =>
             {
-                var proto = protoMan.Index<ConstructionPrototype>(protoKey);
-                var start = proto.StartNode;
-                var target = proto.TargetNode;
-                var graph = protoMan.Index(proto.Graph);
+                var errors = new StringBuilder();
 
-                using (Assert.EnterMultipleScope())
+                foreach (var protoKey in _constructions)
                 {
-                    Assert.That(graph.Nodes.ContainsKey(start),
-                        $"Found no startNode \"{start}\" on graph \"{graph.ID}\"!");
-                    Assert.That(graph.Nodes.ContainsKey(target),
-                        $"Found no targetNode \"{target}\" on graph \"{graph.ID}\"!");
+                    var proto = protoMan.Index<ConstructionPrototype>(protoKey);
+                    var start = proto.StartNode;
+                    var target = proto.TargetNode;
+
+                    if (!protoMan.TryIndex(proto.Graph, out ConstructionGraphPrototype graph))
+                    {
+                        errors.AppendLine($"Found no graph \"{proto.Graph}\" for construction prototype \"{proto.ID}\"!");
+                        continue;
+                    }
+
+                    var hasStart = graph.Nodes.ContainsKey(start);
+                    if (!hasStart)
+                    {
+                        errors.AppendLine($"Found no startNode \"{start}\" on graph \"{graph.ID}\" for construction prototype \"{proto.ID}\"!");
+                    }
+
+                    var hasTarget = graph.Nodes.ContainsKey(target);
+                    if (!hasTarget)
+                    {
+                        errors.AppendLine($"Found no targetNode \"{target}\" on graph \"{graph.ID}\" for construction prototype \"{proto.ID}\"!");
+                    }
+
+                    if (!hasStart || !hasTarget)
+                        continue;
+
+                    if (!graph.TryPath(start, target, out var path))
+                    {
+                        errors.AppendLine($"Unable to find path from \"{start}\" to \"{target}\" on graph \"{graph.ID}\" for construction prototype \"{proto.ID}\".");
+                        continue;
+                    }
+
+                    if (path.Length < 1)
+                    {
+                        errors.AppendLine($"Unable to find path from \"{start}\" to \"{target}\" on graph \"{graph.ID}\" for construction prototype \"{proto.ID}\".");
+                        continue;
+                    }
+
+                    var next = path[0];
+                    var nextId = next.Entity.GetId(null, null, new(entMan));
+
+                    if (nextId == null)
+                    {
+                        errors.AppendLine($"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) must specify an entity! Graph: {graph.ID}");
+                        continue;
+                    }
+
+                    if (!protoMan.TryIndex(nextId, out EntityPrototype entity))
+                    {
+                        errors.AppendLine($"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) specified an invalid entity prototype ({nextId} [{next.Entity}])");
+                        continue;
+                    }
+
+                    if (!entity.Components.ContainsKey("Construction"))
+                    {
+                        errors.AppendLine($"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) specified an entity prototype ({next.Entity}) without a ConstructionComponent.");
+                    }
                 }
 
-#pragma warning disable NUnit2045 // Interdependent assertions.
-                Assert.That(graph.TryPath(start, target, out var path),
-                    $"Unable to find path from \"{start}\" to \"{target}\" on graph \"{graph.ID}\"");
-                Assert.That(path, Has.Length.GreaterThanOrEqualTo(1),
-                    $"Unable to find path from \"{start}\" to \"{target}\" on graph \"{graph.ID}\".");
-                var next = path![0];
-                var nextId = next.Entity.GetId(null, null, new(entMan));
-                Assert.That(nextId, Is.Not.Null,
-                    $"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) must specify an entity! Graph: {graph.ID}");
-                Assert.That(protoMan.TryIndex(nextId, out EntityPrototype entity),
-                    $"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) specified an invalid entity prototype ({nextId} [{next.Entity}])");
-                Assert.That(entity!.Components.ContainsKey("Construction"),
-                    $"The next node ({next.Name}) in the path from the start node ({start}) to the target node ({target}) specified an entity prototype ({next.Entity}) without a ConstructionComponent.");
-#pragma warning restore NUnit2045
+                FailIfErrors(errors);
             });
+        }
+
+        private static void FailIfErrors(StringBuilder errors)
+        {
+            if (errors.Length == 0)
+                return;
+
+            Assert.Fail(errors.ToString());
         }
     }
 }

@@ -166,8 +166,7 @@ namespace Content.IntegrationTests.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(AllMapFiles))]
-        public async Task NoSavedPostMapInitTest(ResPath map)
+        public void NoSavedPostMapInitTest()
         {
             var pair = Pair;
             var server = pair.Server;
@@ -176,6 +175,66 @@ namespace Content.IntegrationTests.Tests
             var protoManager = server.ResolveDependency<IPrototypeManager>();
             var loader = server.System<MapLoaderSystem>();
 
+            var deps = server.ResolveDependency<IEntitySystemManager>().DependencyCollection;
+            var ev = new BeforeEntityReadEvent();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ev);
+
+            var errors = new List<string>();
+
+            foreach (var map in AllMapFiles)
+            {
+                try
+                {
+                    CheckSavedMapIsPreInit(map, resourceManager, protoManager, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes);
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"{map}: {ex}");
+                }
+            }
+
+            Assert.That(errors, Is.Empty, string.Join("\n", errors));
+        }
+
+        [Test]
+        public async Task NoSavedPostMapInitDetectorTest()
+        {
+            var pair = Pair;
+            var server = pair.Server;
+
+            var loader = server.System<MapLoaderSystem>();
+            var mapSys = server.System<SharedMapSystem>();
+
+            var deps = server.ResolveDependency<IEntitySystemManager>().DependencyCollection;
+            var ev = new BeforeEntityReadEvent();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ev);
+
+            // Check that the test actually does manage to catch post-init maps and isn't just blindly passing everything.
+            // To that end, create a new post-init map and try verify it.
+            MapId id = default;
+            await server.WaitPost(() => mapSys.CreateMap(out id, runMapInit: false));
+            await server.WaitPost(() => server.EntMan.Spawn(null, new MapCoordinates(0, 0, id)));
+
+            // First check that a pre-init version passes
+            var path = new ResPath($"{nameof(NoSavedPostMapInitDetectorTest)}.yml");
+            Assert.That(loader.TrySaveMap(id, path));
+            Assert.That(IsPreInit(path, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes));
+
+            // and the post-init version fails.
+            await server.WaitPost(() => mapSys.InitializeMap(id));
+            Assert.That(loader.TrySaveMap(id, path));
+            Assert.That(IsPreInit(path, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes), Is.False);
+        }
+
+        private void CheckSavedMapIsPreInit(
+            ResPath map,
+            IResourceManager resourceManager,
+            IPrototypeManager protoManager,
+            MapLoaderSystem loader,
+            IDependencyCollection deps,
+            Dictionary<string, string> renamedPrototypes,
+            HashSet<string> deletedPrototypes)
+        {
             var rootedPath = map.ToRootedPath();
 
             var isV7Map = false;
@@ -183,7 +242,7 @@ namespace Content.IntegrationTests.Tests
             // ReSharper disable once RedundantLogicalConditionalExpressionOperand
             if (SkipTestMaps && rootedPath.ToString().StartsWith(TestMapsPath, StringComparison.Ordinal))
             {
-                return; // We just pass immediately.
+                return;
             }
 
             if (!resourceManager.TryContentFileRead(rootedPath, out var fileStream))
@@ -214,31 +273,11 @@ namespace Content.IntegrationTests.Tests
                 Assert.That(postMapInit, Is.False, $"Map {map.Filename} was saved postmapinit");
             }
 
-            var deps = server.ResolveDependency<IEntitySystemManager>().DependencyCollection;
-            var ev = new BeforeEntityReadEvent();
-            server.EntMan.EventBus.RaiseEvent(EventSource.Local, ev);
-
             if (isV7Map)
             {
-                Assert.That(IsPreInit(map, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes));
+                Assert.That(IsPreInit(map, loader, deps, renamedPrototypes, deletedPrototypes),
+                    $"Map {map.Filename} was saved postmapinit");
             }
-
-            // Check that the test actually does manage to catch post-init maps and isn't just blindly passing everything.
-            // To that end, create a new post-init map and try verify it.
-            var mapSys = server.System<SharedMapSystem>();
-            MapId id = default;
-            await server.WaitPost(() => mapSys.CreateMap(out id, runMapInit: false));
-            await server.WaitPost(() => server.EntMan.Spawn(null, new MapCoordinates(0, 0, id)));
-
-            // First check that a pre-init version passes
-            var path = new ResPath($"{nameof(NoSavedPostMapInitTest)}.yml");
-            Assert.That(loader.TrySaveMap(id, path));
-            Assert.That(IsPreInit(path, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes));
-
-            // and the post-init version fails.
-            await server.WaitPost(() => mapSys.InitializeMap(id));
-            Assert.That(loader.TrySaveMap(id, path));
-            Assert.That(IsPreInit(path, loader, deps, ev.RenamedPrototypes, ev.DeletedPrototypes), Is.False);
         }
 
         private bool IsWhitelistedForMap(EntProtoId protoId, ResPath map)
