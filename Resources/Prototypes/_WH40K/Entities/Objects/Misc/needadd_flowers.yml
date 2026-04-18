@@ -1,0 +1,13 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KNeedaddFlowerBouquet
+  name: battlefield flower bouquet
+  description: A small bouquet of bright flowers, improbably intact after the fighting.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Misc/needadd_flowers.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _WH40K/Objects/Misc/needadd_flowers.rsi

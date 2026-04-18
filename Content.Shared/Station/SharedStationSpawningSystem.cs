@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -34,19 +33,15 @@ public abstract class SharedStationSpawningSystem : EntitySystem
     /// </summary>
     public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
     {
-        // Order loadout selections by the order they appear on the prototype.
-        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
+        foreach (var items in EnumerateValidSelectedLoadouts(loadout, roleProto))
         {
-            foreach (var items in group.Value)
+            if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
             {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
-                {
-                    Log.Error($"Unable to find loadout prototype for {items.Prototype}");
-                    continue;
-                }
-
-                EquipStartingGear(entity, loadoutProto, raiseEvent: false);
+                Log.Error($"Unable to find loadout prototype for {items.Prototype}");
+                continue;
             }
+
+            EquipStartingGear(entity, loadoutProto, raiseEvent: false);
         }
 
         EquipRoleName(entity, loadout, roleProto);
@@ -59,19 +54,30 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         if (loadout == null || roleProto == null)
             return overriddenSlots;
 
-        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
+        foreach (var items in EnumerateValidSelectedLoadouts(loadout, roleProto))
         {
-            foreach (var items in group.Value)
-            {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
-                    continue;
+            if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
+                continue;
 
-                CollectEquipmentSlots(overriddenSlots, loadoutProto.StartingGear);
-                CollectEquipmentSlots(overriddenSlots, (IEquipmentLoadout) loadoutProto);
-            }
+            CollectEquipmentSlots(overriddenSlots, loadoutProto.StartingGear);
+            CollectEquipmentSlots(overriddenSlots, (IEquipmentLoadout) loadoutProto);
         }
 
         return overriddenSlots;
+    }
+
+    private static IEnumerable<Loadout> EnumerateValidSelectedLoadouts(RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    {
+        foreach (var groupId in roleProto.Groups)
+        {
+            if (!loadout.SelectedLoadouts.TryGetValue(groupId, out var selections))
+                continue;
+
+            foreach (var selection in selections)
+            {
+                yield return selection;
+            }
+        }
     }
 
     /// <summary>

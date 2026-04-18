@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "license": "Custom",
+    "copyright": "User-provided WH40K motorbike assets.",
+    "size": {
+        "x": 64,
+        "y": 64
+    },
+    "states": [
+        {
+            "name": "vehicle",
+            "directions": 4
+        },
+        {
+            "name": "vehiclemoving",
+            "directions": 4,
+            "delays": [
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ]
+            ]
+        },
+        {
+            "name": "overlay",
+            "directions": 4
+        },
+        {
+            "name": "overlaymoving",
+            "directions": 4,
+            "delays": [
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ],
+                [
+                    0.12,
+                    0.12
+                ]
+            ]
+        }
+    ]
+}

@@ -177,6 +177,13 @@ public sealed class TileAtmosphere : IGasMixtureHolder
     public float MaxFireTemperatureSustained;
 
     /// <summary>
+    /// Combined flammability of the puddle currently occupying this tile, if any.
+    /// Reagent fires use this to determine whether the tile can sustain and spread fire without gaseous fuel.
+    /// </summary>
+    [ViewVariables]
+    public int PuddleSolutionFlammability;
+
+    /// <summary>
     /// If true, then this tile is directly exposed to the map's atmosphere, either because the grid has no tile at
     /// this position, or because the tile type is not airtight.
     /// </summary>

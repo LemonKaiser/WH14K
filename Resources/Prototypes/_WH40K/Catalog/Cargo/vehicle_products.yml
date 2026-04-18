@@ -1,0 +1,23 @@
+- type: cargoProduct
+  id: WH40KImperiumVehicleMotorbike
+  name: wh40k-vehicle-product-motorbike-imperium-name
+  description: wh40k-vehicle-product-motorbike-imperium-desc
+  icon:
+    sprite: _WH40K/Objects/Vehicles/Motorbike/imperium_bike.rsi
+    state: vehicle
+  product: WH40KVehicleMotorbikeImperium
+  cost: 10000
+  category: wh40k-vehicle-category-light
+  group: WH40KImperiumVehicleMarket
+
+- type: cargoProduct
+  id: WH40KHereticsVehicleMotorbike
+  name: wh40k-vehicle-product-motorbike-heretics-name
+  description: wh40k-vehicle-product-motorbike-heretics-desc
+  icon:
+    sprite: _WH40K/Objects/Vehicles/Motorbike/chaos_bike.rsi
+    state: vehicle
+  product: WH40KVehicleMotorbikeChaos
+  cost: 10000
+  category: wh40k-vehicle-category-light
+  group: WH40KHereticsVehicleMarket

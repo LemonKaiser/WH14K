@@ -25,7 +25,7 @@
   - type: Appearance
   - type: AnimationPlayer
   - type: HTN
-    enabled: false
+    enabled: true
     rootTask:
       task: WH40KEnergyTurretCompound
     blackboard:
@@ -34,6 +34,7 @@
       SoundTargetInLOS: !type:SoundPathSpecifier
         path: /Audio/Effects/double_beep.ogg
   - type: DeployableTurret
+    enabled: true
     deployedFixture: null
     deploymentLength: 0.4
     retractionLength: 0.4
@@ -149,7 +150,7 @@
   - type: Appearance
   - type: AnimationPlayer
   - type: HTN
-    enabled: false
+    enabled: true
     rootTask:
       task: WH40KEnergyTurretCompound
     blackboard:
@@ -158,6 +159,7 @@
       SoundTargetInLOS: !type:SoundPathSpecifier
         path: /Audio/Effects/double_beep.ogg
   - type: DeployableTurret
+    enabled: true
     deployedFixture: null
     deploymentLength: 0.4
     retractionLength: 0.4

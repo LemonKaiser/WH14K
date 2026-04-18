@@ -101,6 +101,23 @@ public sealed class SharedWH40KPsykerProgressionSystem : EntitySystem
         Dirty(ent.Owner, progression);
     }
 
+    public void GrantProgressionXp(EntityUid uid, float amount, WH40KPsykerProgressionComponent? progression = null)
+    {
+        if (!_netManager.IsServer || amount <= 0f)
+            return;
+
+        if (!HasComp<WH40KPsykerRoleComponent>(uid) ||
+            HasComp<WH40KChaosGiftRoleComponent>(uid))
+        {
+            return;
+        }
+
+        if (progression == null && !TryComp(uid, out progression))
+            return;
+
+        GainProgressionXp(uid, progression, amount);
+    }
+
     private void GainProgressionXp(EntityUid uid, WH40KPsykerProgressionComponent progression, float amount)
     {
         if (amount <= 0f || progression.MaxLevel <= 0)

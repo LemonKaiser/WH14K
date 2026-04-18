@@ -1,0 +1,24 @@
+- type: entity
+  id: WH40KVehicleAssemblyPad
+  parent: BaseStructure
+  name: vehicle assembly pad
+  description: A compact fabrication pad used to deploy finished light vehicles.
+  suffix: WH40K
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: Structures/cargo_telepad.rsi
+    drawdepth: HighFloorObjects
+    layers:
+    - state: offline
+    - state: idle
+      shader: unshaded
+  - type: WH40KVehicleAssemblyPad

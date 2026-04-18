@@ -1,0 +1,23 @@
+- type: entity
+  id: WH40KVehicleATVWreckImperium
+  parent: MachineFrameDestroyed
+  name: wrecked imperium field ATV
+  description: A burnt-out ATV wreck with its machine spirit finally silenced.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/atv.rsi
+    state: vehicle
+    color: "#5b5247"
+
+- type: entity
+  id: WH40KVehicleATVWreckHeretics
+  parent: MachineFrameDestroyed
+  name: wrecked heretic raider ATV
+  description: A twisted ATV carcass, blackened by impact and spent promethium.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: Objects/Vehicles/atv.rsi
+    state: vehicle
+    color: "#563c34"

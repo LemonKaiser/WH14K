@@ -1,0 +1,152 @@
+<controls:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    Title="{Loc 'wh40k-vehicle-fuel-ui-window-title'}"
+    MinSize="620 420"
+    SetSize="660 440"
+    Resizable="False">
+    <PanelContainer Name="RootFrame">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+            <PanelContainer Name="HeaderPanel"
+                            Margin="8 6 8 0">
+                <BoxContainer Orientation="Vertical"
+                              Margin="12 9 12 9"
+                              SeparationOverride="2">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-vehicle-fuel-ui-window-title'}"
+                           StyleClasses="LabelKeyText" />
+                    <RichTextLabel Name="HeaderSubtitleLabel"
+                                   Text="{Loc 'wh40k-vehicle-fuel-ui-subtitle'}"
+                                   HorizontalExpand="True"
+                                   StyleClasses="LabelSubText" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal"
+                          Margin="8 8 8 0"
+                          SeparationOverride="6">
+                <PanelContainer Name="BufferCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="BufferLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-card-buffer'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="BufferValueLabel"
+                               Text="0 / 0"
+                               ClipText="True" />
+                        <RichTextLabel Name="BufferHintLabel"
+                                       Text="-"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="SourceCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="SourceLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-card-source'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="SourceValueLabel"
+                               Text="-"
+                               ClipText="True" />
+                        <RichTextLabel Name="SourceHintLabel"
+                                       Text="-"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="VehicleCard"
+                                HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10 8 10 8"
+                                  SeparationOverride="3">
+                        <Label Name="VehicleLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-card-vehicle'}"
+                               StyleClasses="LabelKeyText" />
+                        <Label Name="VehicleValueLabel"
+                               Text="-"
+                               ClipText="True" />
+                        <RichTextLabel Name="VehicleHintLabel"
+                                       Text="-"
+                                       HorizontalExpand="True"
+                                       StyleClasses="LabelSubText" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <PanelContainer Name="ControlPanel"
+                            Margin="8 8 8 0">
+                <BoxContainer Orientation="Horizontal"
+                              Margin="12 10 12 10"
+                              SeparationOverride="6">
+                    <Button Name="AutoIntakeButton"
+                            HorizontalExpand="True"
+                            MinHeight="34"
+                            Text="{Loc 'wh40k-vehicle-fuel-ui-button-enable-intake'}" />
+                    <Button Name="AutoRefuelButton"
+                            HorizontalExpand="True"
+                            MinHeight="34"
+                            Text="{Loc 'wh40k-vehicle-fuel-ui-button-enable-refuel'}" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="DiagnosticsPanel"
+                            Margin="8 8 8 0"
+                            VerticalExpand="True">
+                <BoxContainer Orientation="Vertical"
+                              Margin="12 10 12 10"
+                              SeparationOverride="8"
+                              VerticalExpand="True">
+                    <Label Name="DiagnosticsTitleLabel"
+                           Text="{Loc 'wh40k-vehicle-fuel-ui-diagnostics-title'}"
+                           StyleClasses="LabelKeyText" />
+
+                    <GridContainer Columns="2"
+                                   HSeparationOverride="12"
+                                   VSeparationOverride="6">
+                        <Label Name="PowerKeyLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-power-label'}"
+                               StyleClasses="LabelSubText" />
+                        <Label Name="PowerValueLabel"
+                               Text="-" />
+                        <Label Name="EngineKeyLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-engine-label'}"
+                               StyleClasses="LabelSubText" />
+                        <Label Name="EngineValueLabel"
+                               Text="-" />
+                        <Label Name="ServiceKeyLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-service-label'}"
+                               StyleClasses="LabelSubText" />
+                        <Label Name="ServiceValueLabel"
+                               Text="-" />
+                        <Label Name="RuntimeKeyLabel"
+                               Text="{Loc 'wh40k-vehicle-fuel-ui-runtime-label'}"
+                               StyleClasses="LabelSubText" />
+                        <Label Name="RuntimeValueLabel"
+                               Text="-" />
+                    </GridContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Vertical">
+                <PanelContainer Name="FooterDivider"
+                                Margin="8 8 8 0" />
+                <BoxContainer Name="FooterBar"
+                              Orientation="Horizontal"
+                              Margin="12 0 6 8">
+                    <RichTextLabel Name="FooterLabel"
+                                   HorizontalExpand="True"
+                                   StyleClasses="WindowFooterText" />
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</controls:FancyWindow>

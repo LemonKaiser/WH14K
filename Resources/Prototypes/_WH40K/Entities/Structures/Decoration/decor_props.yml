@@ -230,3 +230,17 @@
   components:
   - type: Sprite
     state: tumba
+
+- type: entity
+  id: WH40KNeedaddCornerTrim
+  parent: WH40KDecorPropBase
+  name: dark corner trim
+  description: A low-profile dark metal corner trim for battlefield interiors.
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/needadd_corner.rsi
+    state: corner
+    noRot: false

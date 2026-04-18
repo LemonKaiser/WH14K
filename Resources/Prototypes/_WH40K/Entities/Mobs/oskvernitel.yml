@@ -1,0 +1,119 @@
+- type: entity
+  id: MobWH40KOskvernitel
+  parent: MobRobotic
+  name: defiler
+  description: A corrupted chaos war machine built to drown battlefields in suppressive fire.
+  suffix: WH40K, Heretics, Ghost Role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowMovement: true
+    allowSpeech: true
+    name: wh40k-ghost-role-oskvernitel-name
+    description: wh40k-ghost-role-oskvernitel-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Mobs/Oskvernitel/oskvernitel.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: stand
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: stand
+      Critical:
+        Base: fall
+      Dead:
+        Base: dead
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      201: Critical
+      300: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Critical: HumanCrit
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 3.2
+  - type: StandingState
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.60
+        density: 220
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Repairable
+    damageValue: -25
+    doAfterDelay: 1
+    fuelCost: 0.75
+  - type: BatteryAmmoProvider
+    proto: Bullet825mmLong
+    fireCost: 45
+  - type: BatterySelfRecharger
+    autoRechargeRate: 70
+    autoRechargePauseTime: 0.3
+  - type: Battery
+    maxCharge: 2700
+    startingCharge: 2700
+  - type: Gun
+    fireRate: 8
+    shotsPerBurst: 4
+    burstFireRate: 12
+    selectedMode: Burst
+    availableModes:
+    - Burst
+    minAngle: 8
+    maxAngle: 16
+    angleIncrease: 1.4
+    angleDecay: 15
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
+  - type: WH40KGunPrediction
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcSmash
+    damage:
+      types:
+        Blunt: 18
+        Structural: 10
+  - type: AltFireMelee
+    attackType: Heavy
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+  - type: WH40KTeamMember
+    teamId: Heretics
+  - type: WH40KSquadAssignable
+    teamId: Heretics
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepBorg
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - SiliconEmotes

@@ -80,6 +80,15 @@
   id: DataChip
 
 - type: Tag
+  id: WH40KMotorbikeKeys
+
+- type: Tag
+  id: WH40KImperiumMotorbikeKeys
+
+- type: Tag
+  id: WH40KChaosMotorbikeKeys
+
+- type: Tag
   id: barricade
 
 - type: Tag

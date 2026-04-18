@@ -1,0 +1,11 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KToggleVehicleEngine
+  name: Toggle Engine
+  description: Start or stop the vehicle's engine.
+  components:
+  - type: Action
+    icon: Interface/Actions/overloadlight.png
+    checkCanInteract: true
+  - type: InstantAction
+    event: !type:WH40KToggleVehicleEngineActionEvent

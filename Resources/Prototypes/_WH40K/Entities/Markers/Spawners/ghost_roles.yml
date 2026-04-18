@@ -1,0 +1,23 @@
+- type: entity
+  categories: [ HideSpawnMenu, Spawner ]
+  id: SpawnPointGhostWH40KOskvernitel
+  name: ghost role spawn point
+  suffix: WH40K, Oskvernitel
+  parent: MarkerBase
+  components:
+  - type: GhostRole
+    name: wh40k-ghost-role-oskvernitel-name
+    description: wh40k-ghost-role-oskvernitel-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: default
+  - type: GhostRoleMobSpawner
+    prototype: MobWH40KOskvernitel
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: _WH40K/Mobs/Oskvernitel/oskvernitel.rsi
+      state: stand

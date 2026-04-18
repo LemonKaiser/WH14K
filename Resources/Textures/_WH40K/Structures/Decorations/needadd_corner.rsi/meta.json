@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": "Custom",
+    "copyright": "User-provided WH40K needadd corner asset.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "corner"
+        }
+    ]
+}

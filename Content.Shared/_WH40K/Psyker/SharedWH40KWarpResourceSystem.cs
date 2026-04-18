@@ -1,3 +1,4 @@
+using System;
 using Content.Shared.Actions.Events;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -64,11 +65,19 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.WarpChargeCost <= 0f)
+        var actionKey = ResolveActionKey(ent.Owner);
+        if (IsAstralFatiguedForAction(args.User, actionKey))
+        {
+            args.Invalid = true;
+            return;
+        }
+
+        var effectiveWarpCost = GetEffectiveWarpChargeCost(args.User, ent.Comp.WarpChargeCost);
+        if (effectiveWarpCost <= 0f)
             return;
 
         if (!TryComp<WH40KWarpResourceComponent>(args.User, out var warp) ||
-            warp.CurrentCharge + 0.001f < ent.Comp.WarpChargeCost)
+            warp.CurrentCharge + 0.001f < effectiveWarpCost)
         {
             args.Invalid = true;
         }
@@ -83,11 +92,16 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
             return;
 
         var actionKey = ResolveActionKey(ent.Owner);
+        if (IsAstralFatiguedForAction(args.Performer, actionKey))
+            return;
 
-        if (ent.Comp.WarpChargeCost > 0f &&
+        var effectiveWarpCost = GetEffectiveWarpChargeCost(args.Performer, ent.Comp.WarpChargeCost);
+        var effectiveInstability = GetEffectiveInstabilityGain(args.Performer, ent.Comp.InstabilityGain);
+
+        if (effectiveWarpCost > 0f &&
             TryComp<WH40KWarpResourceComponent>(args.Performer, out var warp))
         {
-            var next = Math.Clamp(warp.CurrentCharge - ent.Comp.WarpChargeCost, 0f, warp.MaxCharge);
+            var next = Math.Clamp(warp.CurrentCharge - effectiveWarpCost, 0f, warp.MaxCharge);
             if (next < warp.CurrentCharge)
             {
                 warp.CurrentCharge = next;
@@ -99,8 +113,8 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
         var castEvent = new WH40KWarpActionCastEvent(args.Performer, ent.Owner, actionKey);
         RaiseLocalEvent(args.Performer, castEvent);
 
-        if (ent.Comp.InstabilityGain > 0f)
-            RaiseLocalEvent(new WH40KWarpInstabilityContributionEvent(args.Performer, ent.Comp.InstabilityGain, actionKey));
+        if (effectiveInstability > 0f)
+            RaiseLocalEvent(new WH40KWarpInstabilityContributionEvent(args.Performer, effectiveInstability, actionKey));
     }
 
     private bool HasAllowedRole(EntityUid uid, WH40KWarpActionCostComponent cost)
@@ -117,6 +131,41 @@ public sealed class SharedWH40KWarpResourceSystem : EntitySystem
         return TryComp<WH40KWarpInstabilityComponent>(uid, out var instability) &&
                instability.DecayPerSecond <= 0f &&
                instability.CurrentInstability + 0.001f >= instability.MaxInstability;
+    }
+
+    private bool IsAstralFatiguedForAction(EntityUid uid, string actionKey)
+    {
+        return string.Equals(actionKey, WH40KPsykerAstralMath.AstralProjectionActionId, StringComparison.Ordinal) &&
+               TryComp<WH40KPsykerAstralProgressionComponent>(uid, out var progression) &&
+               _timing.CurTime < progression.AstralFatigueUntil;
+    }
+
+    private float GetEffectiveWarpChargeCost(EntityUid uid, float baseCost)
+    {
+        if (baseCost <= 0f)
+            return 0f;
+
+        if (!TryComp<WH40KPsykerAstralProgressionComponent>(uid, out var progression) ||
+            progression.AstralStrain <= 0f)
+        {
+            return baseCost;
+        }
+
+        return baseCost * WH40KPsykerAstralMath.GetWarpCostMultiplier(progression.AstralStrain);
+    }
+
+    private float GetEffectiveInstabilityGain(EntityUid uid, float baseInstability)
+    {
+        if (baseInstability <= 0f)
+            return 0f;
+
+        if (!TryComp<WH40KPsykerAstralProgressionComponent>(uid, out var progression) ||
+            progression.AstralStrain <= 0f)
+        {
+            return baseInstability;
+        }
+
+        return baseInstability * WH40KPsykerAstralMath.GetWarpInstabilityMultiplier(progression.AstralStrain);
     }
 
     private string ResolveActionKey(EntityUid actionUid)

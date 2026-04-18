@@ -1,0 +1,153 @@
+- type: wh40kPsykerDisciplineNode
+  id: PsykerAstralAnchor
+  name: wh40k-psyker-astral-node-anchor-name
+  description: wh40k-psyker-astral-node-anchor-desc
+  discipline: Sanctioning
+  tier: 0
+  x: 0.50
+  y: 0.50
+  cost: 0
+  requiredLevel: 1
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerLitanyOfControl
+  name: wh40k-psyker-astral-node-litany-name
+  description: wh40k-psyker-astral-node-litany-desc
+  discipline: Sanctioning
+  tier: 1
+  x: 0.50
+  y: 0.34
+  cost: 1
+  requiredLevel: 1
+  requires:
+  - PsykerAstralAnchor
+  plannedAction: ActionWH40KPsykerVeilSmoke
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerSoulTether
+  name: wh40k-psyker-astral-node-tether-name
+  description: wh40k-psyker-astral-node-tether-desc
+  discipline: Sanctioning
+  tier: 2
+  x: 0.50
+  y: 0.20
+  cost: 2
+  requiredLevel: 4
+  requires:
+  - PsykerLitanyOfControl
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerKineticPalm
+  name: wh40k-psyker-astral-node-kinetic-palm-name
+  description: wh40k-psyker-astral-node-kinetic-palm-desc
+  discipline: Telekinesis
+  tier: 1
+  x: 0.25
+  y: 0.44
+  cost: 1
+  requiredLevel: 2
+  instabilityRisk: 1.5
+  requires:
+  - PsykerAstralAnchor
+  plannedAction: ActionWH40KPsykerTelekineticRepulse
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerKineticBastion
+  name: wh40k-psyker-astral-node-kinetic-bastion-name
+  description: wh40k-psyker-astral-node-kinetic-bastion-desc
+  discipline: Telekinesis
+  tier: 2
+  x: 0.15
+  y: 0.28
+  cost: 2
+  requiredLevel: 5
+  instabilityRisk: 4
+  requires:
+  - PsykerKineticPalm
+  plannedAction: ActionWH40KPsykerWarpKnock
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerAegisPattern
+  name: wh40k-psyker-astral-node-aegis-pattern-name
+  description: wh40k-psyker-astral-node-aegis-pattern-desc
+  discipline: Aegis
+  tier: 1
+  x: 0.72
+  y: 0.44
+  cost: 1
+  requiredLevel: 3
+  instabilityRisk: 1
+  requires:
+  - PsykerAstralAnchor
+  plannedAction: ActionWH40KPsykerAegisWall
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerIronHaloTrace
+  name: wh40k-psyker-astral-node-iron-halo-name
+  description: wh40k-psyker-astral-node-iron-halo-desc
+  discipline: Aegis
+  tier: 2
+  x: 0.84
+  y: 0.28
+  cost: 2
+  requiredLevel: 6
+  instabilityRisk: 3
+  requires:
+  - PsykerAegisPattern
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerWarpSense
+  name: wh40k-psyker-astral-node-warp-sense-name
+  description: wh40k-psyker-astral-node-warp-sense-desc
+  discipline: Divination
+  tier: 1
+  x: 0.33
+  y: 0.70
+  cost: 1
+  requiredLevel: 2
+  requires:
+  - PsykerAstralAnchor
+  plannedAction: ActionWH40KPsykerWarpBlink
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerThreadReading
+  name: wh40k-psyker-astral-node-thread-reading-name
+  description: wh40k-psyker-astral-node-thread-reading-desc
+  discipline: Divination
+  tier: 2
+  x: 0.22
+  y: 0.83
+  cost: 2
+  requiredLevel: 6
+  instabilityRisk: 1.5
+  requires:
+  - PsykerWarpSense
+  plannedAction: ActionWH40KPsykerMindShunt
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerHemostasis
+  name: wh40k-psyker-astral-node-hemostasis-name
+  description: wh40k-psyker-astral-node-hemostasis-desc
+  discipline: Biomancy
+  tier: 1
+  x: 0.66
+  y: 0.70
+  cost: 1
+  requiredLevel: 3
+  requires:
+  - PsykerAstralAnchor
+  plannedAction: ActionWH40KPsykerBiomanticSurge
+
+- type: wh40kPsykerDisciplineNode
+  id: PsykerSecondPulse
+  name: wh40k-psyker-astral-node-second-pulse-name
+  description: wh40k-psyker-astral-node-second-pulse-desc
+  discipline: Biomancy
+  tier: 2
+  x: 0.78
+  y: 0.83
+  cost: 2
+  requiredLevel: 7
+  instabilityRisk: 1
+  requires:
+  - PsykerHemostasis

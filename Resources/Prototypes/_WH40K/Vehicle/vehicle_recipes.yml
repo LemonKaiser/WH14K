@@ -1,0 +1,17 @@
+- type: wh40kVehicleRecipe
+  id: WH40KImperiumVehicleMotorbikeRecipe
+  product: WH40KImperiumVehicleMotorbike
+  spawn: WH40KVehicleMotorbikeImperium
+  buildDurationSeconds: 45
+  materials:
+    Steel: 10
+    Glass: 2
+
+- type: wh40kVehicleRecipe
+  id: WH40KHereticsVehicleMotorbikeRecipe
+  product: WH40KHereticsVehicleMotorbike
+  spawn: WH40KVehicleMotorbikeChaos
+  buildDurationSeconds: 45
+  materials:
+    Steel: 10
+    Glass: 2

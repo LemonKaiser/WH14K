@@ -1439,3 +1439,75 @@ ent-WH40KAmmoBoxElectricArc = Electric Arc Ammo Box
 
 ent-MobQueenChrysalisImperium = Queen Chrysalis
     .desc = A shapeshifting pony that can take on a variety of forms.
+
+ent-WH40KPlaceholderConsoleImperium = imperium field console
+    .desc = A placeholder WH40K console shell prepared for future functionality.
+
+ent-WH40KPlaceholderConsoleChaos = chaos field console
+    .desc = A placeholder WH40K console shell prepared for future functionality.
+
+ent-WH40KPlaceholderVehicleConsoleImperium = imperium vehicle console
+    .desc = A placeholder vehicle console prepared for future tank and walker systems.
+
+ent-WH40KPlaceholderVehicleConsoleChaos = chaos vehicle console
+    .desc = A placeholder vehicle console prepared for future tank and walker systems.
+
+ent-WH40KVehicleFabricationConsoleImperium = imperium vehicle fabrication console
+    .desc = An Imperium fabrication terminal for ordering and assembling light vehicles on-site.
+
+ent-WH40KVehicleFabricationConsoleChaos = chaos vehicle fabrication console
+    .desc = A Chaos fabrication terminal for ordering and assembling light raider vehicles.
+
+ent-WH40KVehicleFuelTerminalImperium = imperium vehicle fuel terminal
+    .desc = A front-line terminal for promethium intake, storage and nearby vehicle refueling.
+
+ent-WH40KVehicleFuelTerminalChaos = chaos vehicle fuel terminal
+    .desc = A raider fuel terminal that draws promethium from nearby containers and pushes it into waiting vehicles.
+
+ent-WH40KVehicleAssemblyPad = vehicle assembly pad
+    .desc = A compact fabrication pad used to deploy finished light vehicles.
+
+ent-WH40KVehicleATVFactoryImperium = imperium field ATV
+    .desc = A front-line ATV assembled from a compact faction fabrication line.
+
+ent-WH40KVehicleATVFactoryHeretics = heretic raider ATV
+    .desc = A brutal ATV assembled for fast battlefield redeployment.
+
+ent-WH40KVehicleATVWreckImperium = wrecked imperium field ATV
+    .desc = The smoking remains of an Imperium light vehicle. Useful parts may still be inside.
+
+ent-WH40KVehicleATVWreckHeretics = wrecked heretic raider ATV
+    .desc = The twisted remains of a heretic raider vehicle. It still smells of promethium and burnt metal.
+
+ent-WH40KVehicleKeyMotorbikeImperium = imperium motorbike keys
+    .desc = A stamped key set for an Imperial recon motorbike.
+
+ent-WH40KVehicleKeyMotorbikeChaos = chaos motorbike keys
+    .desc = A brutal key set for a heretic raider motorbike.
+
+ent-WH40KVehicleMotorbikeOverlayImperium = imperium motorbike upper overlay
+    .desc = Visual upper detail layer for an Imperial motorbike.
+
+ent-WH40KVehicleMotorbikeOverlayChaos = chaos motorbike upper overlay
+    .desc = Visual upper detail layer for a Chaos motorbike.
+
+ent-WH40KVehicleMotorbikeImperium = imperium recon motorbike
+    .desc = A two-seat Imperial motorbike assembled for fast frontline redeployment.
+
+ent-WH40KVehicleMotorbikeChaos = chaos raider motorbike
+    .desc = A two-seat heretic raider bike built for brutal battlefield flanking.
+
+ent-WH40KVehicleMotorbikeWreckImperium = wrecked imperium recon motorbike
+    .desc = The burnt remains of an Imperial light recon bike.
+
+ent-WH40KVehicleMotorbikeWreckChaos = wrecked chaos raider motorbike
+    .desc = A twisted raider bike carcass blackened by impact and promethium fire.
+
+ent-WH40KPromethiumJerrycan = promethium jerrycan
+    .desc = A heavy fuel canister filled with refined promethium for light vehicle engines.
+
+ent-WH40KNeedaddFlowerBouquet = battlefield flower bouquet
+    .desc = A small bouquet of bright flowers, improbably intact after the fighting.
+
+ent-WH40KNeedaddCornerTrim = dark corner trim
+    .desc = A low-profile dark metal corner trim for battlefield interiors.

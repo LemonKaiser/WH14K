@@ -1,0 +1,113 @@
+using Content.Shared.Buckle.Components;
+using Content.Shared.Vehicle;
+using Content.Shared.Vehicle.Components;
+
+namespace Content.Shared._WH40K.Vehicle.Visuals;
+
+public sealed class WH40KVehicleRiderSeatSystem : EntitySystem
+{
+    [Dependency] private readonly VehicleSystem _vehicle = default!;
+
+    private EntityQuery<BuckleComponent> _buckleQuery;
+    private EntityQuery<VehicleComponent> _vehicleQuery;
+
+    public override void Initialize()
+    {
+        _buckleQuery = GetEntityQuery<BuckleComponent>();
+        _vehicleQuery = GetEntityQuery<VehicleComponent>();
+
+        SubscribeLocalEvent<WH40KVehicleRiderSeatComponent, StrapAttemptEvent>(OnStrapAttempt);
+        SubscribeLocalEvent<WH40KVehicleRiderSeatComponent, StrappedEvent>(OnStrapped, after: [typeof(VehicleSystem)]);
+        SubscribeLocalEvent<WH40KVehicleRiderSeatComponent, UnstrappedEvent>(OnUnstrapped, after: [typeof(VehicleSystem)]);
+        SubscribeLocalEvent<WH40KVehicleRiderSeatComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnStrapAttempt(Entity<WH40KVehicleRiderSeatComponent> ent, ref StrapAttemptEvent args)
+    {
+        PruneInvalidOccupants(ent);
+
+        if (ent.Comp.SeatOffsets.Count == 0)
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        if (ent.Comp.SeatOccupants.Contains(args.Buckle.Owner))
+            return;
+
+        if (ent.Comp.SeatOccupants.Count >= ent.Comp.SeatOffsets.Count)
+            args.Cancelled = true;
+    }
+
+    private void OnStrapped(Entity<WH40KVehicleRiderSeatComponent> ent, ref StrappedEvent args)
+    {
+        PruneInvalidOccupants(ent);
+
+        if (!ent.Comp.SeatOccupants.Contains(args.Buckle.Owner))
+        {
+            ent.Comp.SeatOccupants.Add(args.Buckle.Owner);
+            Dirty(ent);
+        }
+
+        RefreshOperator(ent);
+    }
+
+    private void OnUnstrapped(Entity<WH40KVehicleRiderSeatComponent> ent, ref UnstrappedEvent args)
+    {
+        if (ent.Comp.SeatOccupants.Remove(args.Buckle.Owner))
+            Dirty(ent);
+
+        RefreshOperator(ent);
+    }
+
+    private void OnShutdown(Entity<WH40KVehicleRiderSeatComponent> ent, ref ComponentShutdown args)
+    {
+        ent.Comp.SeatOccupants.Clear();
+    }
+
+    private void RefreshOperator(Entity<WH40KVehicleRiderSeatComponent> ent)
+    {
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
+        PruneInvalidOccupants(ent);
+
+        if (!_vehicleQuery.TryComp(ent.Owner, out var vehicle))
+            return;
+
+        foreach (var occupant in ent.Comp.SeatOccupants)
+        {
+            if (!IsValidOccupant(ent.Owner, occupant))
+                continue;
+
+            _vehicle.TrySetOperator((ent.Owner, vehicle), occupant);
+            return;
+        }
+
+        _vehicle.TryRemoveOperator((ent.Owner, vehicle));
+    }
+
+    private void PruneInvalidOccupants(Entity<WH40KVehicleRiderSeatComponent> ent)
+    {
+        var removed = false;
+
+        for (var i = ent.Comp.SeatOccupants.Count - 1; i >= 0; i--)
+        {
+            if (IsValidOccupant(ent.Owner, ent.Comp.SeatOccupants[i]))
+                continue;
+
+            ent.Comp.SeatOccupants.RemoveAt(i);
+            removed = true;
+        }
+
+        if (removed)
+            Dirty(ent);
+    }
+
+    private bool IsValidOccupant(EntityUid vehicle, EntityUid occupant)
+    {
+        return !TerminatingOrDeleted(occupant) &&
+               _buckleQuery.TryComp(occupant, out var buckle) &&
+               buckle.BuckledTo == vehicle;
+    }
+}

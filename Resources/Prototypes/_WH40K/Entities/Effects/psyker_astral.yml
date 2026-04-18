@@ -1,0 +1,21 @@
+- type: entity
+  id: WH40KPsykerAstralBarrierVisual
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - sprite: _RMC14/Effects/effects.rsi
+      state: shield2
+      shader: unshaded
+      scale: 1.18, 1.18
+      color: "#8BDAFFC0"
+    - sprite: Structures/Magic/forcewall.rsi
+      state: forcewall
+      shader: unshaded
+      scale: 1.08, 1.08
+      color: "#5AB4FF80"
+  - type: Tag
+    tags:
+    - HideContextMenu

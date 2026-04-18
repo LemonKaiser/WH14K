@@ -15,6 +15,7 @@
   metamorphicMaxFillLevels: 4
   metamorphicFillBaseName: fill-
   metamorphicChangeColor: true
+  flammability: 2
   metabolisms:
     Digestion:
       metabolites:
@@ -141,6 +142,7 @@
   color: "#b05b3c"
   boilingPoint: 78.2
   meltingPoint: -114.1
+  flammability: 3
   metabolisms:
     Metabolites:
       metabolismRate: 0.05
@@ -962,6 +964,7 @@
   metamorphicMaxFillLevels: 5
   metamorphicFillBaseName: fill-
   metamorphicChangeColor: false
+  flammability: 5
   metabolisms:
     Digestion:
       metabolites:
@@ -1064,6 +1067,7 @@
   physicalDesc: reagent-physical-desc-strong-smelling
   flavor: hooch
   color: "#664e00"
+  flammability: 2
 
 - type: reagent
   id: IcedBeer

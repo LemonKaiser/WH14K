@@ -35,6 +35,7 @@ public sealed partial class WH40KWarpHudControl : Control
     private InstabilityTierVisual? _lastTier;
 
     private static readonly ResPath SkrizhalRsi = new("_WH40K/Interface/Abilities/skrizhali_runes.rsi");
+    private static readonly ResPath PsykerHelmetRsi = new("_WH40K/Clothing/Head/Helmets/psyhelmet.rsi");
 
     private enum InstabilityTierVisual
     {
@@ -56,7 +57,7 @@ public sealed partial class WH40KWarpHudControl : Control
 
         LayoutContainer.SetAnchorPreset(ContentRoot, LayoutContainer.LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(CriticalFog, LayoutContainer.LayoutPreset.Center);
-        LayoutContainer.SetPosition(CriticalFog, new Vector2(-110f, -56f));
+        LayoutContainer.SetPosition(CriticalFog, new Vector2(-118f, -86f));
         LayoutContainer.SetAnchorPreset(WarpChargeBar, LayoutContainer.LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(WarpInstabilityBar, LayoutContainer.LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(WarpChargeOverlay, LayoutContainer.LayoutPreset.Wide);
@@ -74,6 +75,8 @@ public sealed partial class WH40KWarpHudControl : Control
 
         ModeTitleLabel.Align = Label.AlignMode.Left;
         TierBadgeLabel.Align = Label.AlignMode.Right;
+        DetailPrimaryLabel.Align = Label.AlignMode.Left;
+        DetailSecondaryLabel.Align = Label.AlignMode.Left;
         WarpChargeTitleLabel.Align = Label.AlignMode.Left;
         WarpChargeValueLabel.Align = Label.AlignMode.Right;
         WarpInstabilityTitleLabel.Align = Label.AlignMode.Left;
@@ -105,6 +108,11 @@ public sealed partial class WH40KWarpHudControl : Control
             ? "wh40k-warp-ui-button-chaos"
             : "wh40k-warp-ui-button-psyker");
         TierBadgeLabel.Text = Loc.GetString(GetTierLocKey(tier));
+        DetailPrimaryLabel.Text = state.DetailPrimaryText;
+        DetailPrimaryLabel.Visible = !string.IsNullOrWhiteSpace(state.DetailPrimaryText);
+        DetailSecondaryLabel.Text = state.DetailSecondaryText;
+        DetailSecondaryLabel.Visible = !string.IsNullOrWhiteSpace(state.DetailSecondaryText);
+        DetailContainer.Visible = DetailPrimaryLabel.Visible || DetailSecondaryLabel.Visible;
 
         WarpChargeTitleLabel.Text = Loc.GetString("wh40k-warp-ui-charge-label");
         WarpChargeValueLabel.Text = state.WarpChargeText;
@@ -119,6 +127,8 @@ public sealed partial class WH40KWarpHudControl : Control
     {
         ModeTitleLabel.FontColorOverride = Color.FromHex("#F3E8D8");
         TierBadgeLabel.FontColorOverride = Color.FromHex("#9FC0E2");
+        DetailPrimaryLabel.FontColorOverride = Color.FromHex("#D7E5F6");
+        DetailSecondaryLabel.FontColorOverride = Color.FromHex("#8FA8C4");
 
         WarpChargeTitleLabel.FontColorOverride = Color.FromHex("#F5F7FB");
         WarpChargeValueLabel.FontColorOverride = Color.FromHex("#F5F7FB");
@@ -195,17 +205,20 @@ public sealed partial class WH40KWarpHudControl : Control
                 WH40KChaosPatron.Tzeentch => "skrizhal_tzinch",
                 _ => "skrizhal_chaos",
             }
-            : "skrizhal_chaos";
+            : "icon";
 
-        ModeIcon.Texture = _sprite.Frame0(new SpriteSpecifier.Rsi(SkrizhalRsi, state));
+        ModeIcon.Texture = _sprite.Frame0(new SpriteSpecifier.Rsi(
+            chaosTheme ? SkrizhalRsi : PsykerHelmetRsi,
+            state));
     }
 
     private void UpdateCriticalFog(bool chaosTheme, WH40KChaosPatron patron, InstabilityTierVisual tier, float instabilityFraction)
     {
-        var visible = tier == InstabilityTierVisual.Critical;
+        var visible = chaosTheme && tier == InstabilityTierVisual.Critical;
         CriticalFog.Visible = visible;
         if (!visible)
         {
+            CriticalFog.Texture = null;
             CriticalFog.Modulate = Color.Transparent;
             return;
         }

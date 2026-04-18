@@ -12,6 +12,27 @@
     event: !type:WH40KPsykerToggleProgressionUiActionEvent
 
 - type: entity
+  parent: BaseAction
+  id: ActionWH40KPsykerAstralProjection
+  name: Astral Projection
+  description: Enter a sanctioned trance and read the shared currents of the Warp.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: blink
+  - type: InstantAction
+    event: !type:WH40KPsykerAstralProjectionActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 12
+    instabilityGain: 0
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
   parent: ActionRepulse
   id: ActionWH40KPsykerTelekineticRepulse
   name: Telekinetic Burst
@@ -241,6 +262,27 @@
   - type: WH40KWarpActionCost
     warpChargeCost: 30
     instabilityGain: 16
+    requireWarpRole: true
+    allowPsykerRole: true
+    allowChaosRole: false
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPsykerBiomanticSurge
+  name: Biomantic Surge
+  description: Re-knit flesh and steady the body with disciplined biomancy.
+  components:
+  - type: Action
+    useDelay: 26
+    itemIconStyle: BigAction
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: shield
+  - type: InstantAction
+    event: !type:WH40KPsykerBiomanticSurgeActionEvent
+  - type: WH40KWarpActionCost
+    warpChargeCost: 16
+    instabilityGain: 6
     requireWarpRole: true
     allowPsykerRole: true
     allowChaosRole: false

@@ -1,3 +1,4 @@
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
 using Content.Shared.Chemistry;
@@ -36,6 +37,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     [Dependency] private readonly SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly AtmosphereSystem _atmos = default!;
 
     private EntityQuery<PuddleComponent> _puddleQuery;
 
@@ -51,8 +53,41 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         _puddleQuery = GetEntityQuery<PuddleComponent>();
 
+        SubscribeLocalEvent<PuddleComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<PuddleComponent, SpreadNeighborsEvent>(OnPuddleSpread);
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
+    }
+
+    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
+    {
+        base.OnSolutionUpdate(entity, ref args);
+
+        if (args.SolutionId != entity.Comp.SolutionName)
+            return;
+
+        UpdateFlammability(entity.Owner, args.Solution.Volume > 0 ? args.Solution : null);
+    }
+
+    protected override void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
+    {
+        base.OnAnchorChanged(entity, ref args);
+
+        if (!args.Anchored)
+            UpdateFlammability(entity.Owner, null);
+    }
+
+    private void OnShutdown(Entity<PuddleComponent> entity, ref ComponentShutdown args)
+    {
+        UpdateFlammability(entity.Owner, null);
+    }
+
+    private void UpdateFlammability(EntityUid uid, Solution? solution, TransformComponent? xform = null)
+    {
+        if (!Resolve(uid, ref xform, false))
+            return;
+
+        var flammability = solution?.GetSolutionFlammability(_prototypeManager) ?? 0;
+        _atmos.SetPuddleFlammabilityAtTile((uid, xform), flammability);
     }
 
     // TODO: This can be predicted once https://github.com/space-wizards/RobustToolbox/pull/5849 is merged
@@ -530,7 +565,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         while (anchored.MoveNext(out var ent))
         {
             // If there's existing sparkles then delete it
-            if (sparklesQuery.TryGetComponent(ent, out var sparkles))
+            if (sparklesQuery.TryGetComponent(ent, out _))
             {
                 QueueDel(ent.Value);
                 continue;

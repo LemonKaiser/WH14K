@@ -708,6 +708,32 @@ public partial class AtmosphereSystem
         return true;
     }
 
+    [PublicAPI]
+    public bool SetPuddleFlammabilityAtTile(Entity<TransformComponent?> ent, int flammability = 0)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return false;
+        var position = XformSystem.GetGridTilePositionOrDefault((ent.Owner, ent.Comp));
+        return SetPuddleFlammabilityAtTile(position, ent.Comp.GridUid, flammability);
+    }
+
+    [PublicAPI]
+    public bool SetPuddleFlammabilityAtTile(
+        Vector2i position,
+        Entity<GridAtmosphereComponent?>? grid,
+        int flammability = 0)
+    {
+        if (grid is not { } gridEnt ||
+            !_atmosQuery.Resolve(gridEnt, ref gridEnt.Comp, false) ||
+            !gridEnt.Comp.Tiles.TryGetValue(position, out var atmosTile))
+        {
+            return false;
+        }
+
+        atmosTile.PuddleSolutionFlammability = flammability;
+        return true;
+    }
+
     /// <summary>
     /// Adds an entity with a DeltaPressureComponent to the DeltaPressure processing list.
     /// Also fills in important information on the component itself.

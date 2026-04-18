@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Derived from local WH14KK console placeholder sprites.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "computer"
+    },
+    {
+      "name": "computer_on"
+    },
+    {
+      "name": "computer-broken"
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+- type: entity
+  id: WH40KVehicleATVFactoryImperium
+  parent: VehicleATV
+  name: imperium field ATV
+  description: A front-line ATV assembled from a compact faction fabrication line.
+  suffix: WH40K, Fabricated
+  components:
+  - type: Sprite
+    noRot: false
+  - type: Vehicle
+    transferDamageMultiplier: 0.25
+  - type: Strap
+    buckleOffset: "0,0"
+    modifyBuckleDrawDepth: false
+  - type: ContainerFill
+    containers:
+      key_slot: [ VehicleKeyATV ]
+  - type: NoRotateOnMove
+  - type: MovementSpeedModifier
+    acceleration: 0
+    friction: 0
+    frictionNoInput: 0
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
+  - type: WH40KVehicleCarMovement
+    maxForwardSpeed: 6.2
+    maxReverseSpeed: 2.2
+    forwardAcceleration: 2.1
+    reverseAcceleration: 1.4
+    brakeDeceleration: 5.8
+    coastDeceleration: 0.85
+    lateralGrip: 7.5
+    steerInputRate: 2.4
+    steerReturnRate: 3.8
+    lowSpeedTurnRateDegrees: 105
+    highSpeedTurnRateDegrees: 42
+    speedForFullSteer: 4.2
+  - type: Gun
+    useKey: true
+    showExamineText: false
+    minAngle: 18
+    maxAngle: 32
+    angleIncrease: 3
+    angleDecay: 12
+    fireRate: 6.5
+    availableModes:
+    - FullAuto
+    selectedMode: FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: BuckleMountedGun
+    shootOriginOffset: "0,-0.42"
+  - type: WH40KVehicleMountedGun
+  - type: WH40KGunPrediction
+  - type: AmmoCounter
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.8
+    rechargeSound:
+      path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
+      params:
+        volume: -5
+        variation: 0.08
+  - type: BasicEntityAmmoProvider
+    proto: Bullet825mmLong
+    capacity: 80
+    count: 80
+  - type: SolutionContainerManager
+    solutions:
+      vehicleFuel:
+        maxVol: 900
+        reagents:
+        - ReagentId: WH40KPromethium
+          Quantity: 900
+  - type: RefillableSolution
+    solution: vehicleFuel
+  - type: WH40KVehicleFuel
+    fuelSolution: vehicleFuel
+    fuelReagent: WH40KPromethium
+    fullTankRuntime: 900
+  - type: WH40KVehicleEngine
+    toggleAction: ActionWH40KToggleVehicleEngine
+  - type: WH40KVehicleHandlingHealth
+    maxDamage: 250
+    wornDamage: 80
+    criticalDamage: 160
+    disabledDamage: 235
+  - type: WH40KVehicleRam
+    impactSound:
+      collection: MetalThud
+    softTargetDamage:
+      types:
+        Blunt: 14
+    hardTargetDamage:
+      types:
+        Blunt: 22
+    selfSoftImpactDamage:
+      types:
+        Blunt: 6
+    selfHardImpactDamage:
+      types:
+        Blunt: 14
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 520
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 260
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          WH40KVehicleATVWreckImperium:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: WH40KVehicleATVFactoryHeretics
+  parent: VehicleATV
+  name: heretic raider ATV
+  description: A brutal ATV assembled for fast battlefield redeployment.
+  suffix: WH40K, Fabricated
+  components:
+  - type: Sprite
+    noRot: false
+  - type: Vehicle
+    transferDamageMultiplier: 0.25
+  - type: Strap
+    buckleOffset: "0,0"
+    modifyBuckleDrawDepth: false
+  - type: ContainerFill
+    containers:
+      key_slot: [ VehicleKeyATV ]
+  - type: NoRotateOnMove
+  - type: MovementSpeedModifier
+    acceleration: 0
+    friction: 0
+    frictionNoInput: 0
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
+  - type: WH40KVehicleCarMovement
+    maxForwardSpeed: 6.2
+    maxReverseSpeed: 2.2
+    forwardAcceleration: 2.1
+    reverseAcceleration: 1.4
+    brakeDeceleration: 5.8
+    coastDeceleration: 0.85
+    lateralGrip: 7.5
+    steerInputRate: 2.4
+    steerReturnRate: 3.8
+    lowSpeedTurnRateDegrees: 105
+    highSpeedTurnRateDegrees: 42
+    speedForFullSteer: 4.2
+  - type: Gun
+    useKey: true
+    showExamineText: false
+    minAngle: 18
+    maxAngle: 32
+    angleIncrease: 3
+    angleDecay: 12
+    fireRate: 6.5
+    availableModes:
+    - FullAuto
+    selectedMode: FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: BuckleMountedGun
+    shootOriginOffset: "0,-0.42"
+  - type: WH40KVehicleMountedGun
+  - type: WH40KGunPrediction
+  - type: AmmoCounter
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 0.8
+    rechargeSound:
+      path: /Audio/Weapons/Guns/Bolt/lmg_bolt_closed.ogg
+      params:
+        volume: -5
+        variation: 0.08
+  - type: BasicEntityAmmoProvider
+    proto: Bullet825mmLong
+    capacity: 80
+    count: 80
+  - type: SolutionContainerManager
+    solutions:
+      vehicleFuel:
+        maxVol: 900
+        reagents:
+        - ReagentId: WH40KPromethium
+          Quantity: 900
+  - type: RefillableSolution
+    solution: vehicleFuel
+  - type: WH40KVehicleFuel
+    fuelSolution: vehicleFuel
+    fuelReagent: WH40KPromethium
+    fullTankRuntime: 900
+  - type: WH40KVehicleEngine
+    toggleAction: ActionWH40KToggleVehicleEngine
+  - type: WH40KVehicleHandlingHealth
+    maxDamage: 250
+    wornDamage: 80
+    criticalDamage: 160
+    disabledDamage: 235
+  - type: WH40KVehicleRam
+    impactSound:
+      collection: MetalThud
+    softTargetDamage:
+      types:
+        Blunt: 14
+    hardTargetDamage:
+      types:
+        Blunt: 22
+    selfSoftImpactDamage:
+      types:
+        Blunt: 6
+    selfHardImpactDamage:
+      types:
+        Blunt: 14
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 520
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 260
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          WH40KVehicleATVWreckHeretics:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]

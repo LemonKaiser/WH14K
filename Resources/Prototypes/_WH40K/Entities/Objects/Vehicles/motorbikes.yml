@@ -1,0 +1,290 @@
+- type: entity
+  parent: VehicleKeyJanicart
+  id: WH40KVehicleKeyMotorbikeImperium
+  name: imperium motorbike keys
+  description: A stamped key set for an Imperial recon motorbike.
+  components:
+  - type: Tag
+    tags:
+    - VehicleKey
+    - WH40KMotorbikeKeys
+    - WH40KImperiumMotorbikeKeys
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/imperium_key.rsi
+    state: keys
+
+- type: entity
+  parent: VehicleKeyJanicart
+  id: WH40KVehicleKeyMotorbikeChaos
+  name: chaos motorbike keys
+  description: A brutal key set for a heretic raider motorbike.
+  components:
+  - type: Tag
+    tags:
+    - VehicleKey
+    - WH40KMotorbikeKeys
+    - WH40KChaosMotorbikeKeys
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/chaos_key.rsi
+    state: keys
+
+- type: entity
+  id: WH40KVehicleMotorbikeOverlayImperium
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/imperium_bike.rsi
+    drawdepth: OverMobs
+    noRot: false
+    layers:
+    - state: overlay
+      map: [ "movement" ]
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: overlaymoving
+    noMovementLayers:
+      movement:
+        state: overlay
+
+- type: entity
+  id: WH40KVehicleMotorbikeOverlayChaos
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/chaos_bike.rsi
+    drawdepth: OverMobs
+    noRot: false
+    layers:
+    - state: overlay
+      map: [ "movement" ]
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: overlaymoving
+    noMovementLayers:
+      movement:
+        state: overlay
+
+- type: entity
+  id: WH40KVehicleMotorbikeImperium
+  parent: BaseVehicleMotorized
+  name: imperium recon motorbike
+  description: A two-seat Imperial motorbike assembled for fast frontline redeployment.
+  suffix: WH40K, Fabricated
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/imperium_bike.rsi
+    drawdepth: Objects
+    noRot: false
+    layers:
+    - state: vehicle
+      map: [ "movement" ]
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: vehiclemoving
+    noMovementLayers:
+      movement:
+        state: vehicle
+  - type: WH40KVehicleVisualOverlay
+    overlay: WH40KVehicleMotorbikeOverlayImperium
+  - type: Vehicle
+    transferDamageMultiplier: 0.18
+  - type: Strap
+    buckleOffset: "0,0"
+    modifyBuckleDrawDepth: false
+    size: 200
+  - type: WH40KVehicleRiderSeat
+    seatOffsets:
+    - "0.18,-0.10"
+    - "-0.35,-0.10"
+  - type: ContainerFill
+    containers:
+      key_slot: [ WH40KVehicleKeyMotorbikeImperium ]
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - WH40KImperiumMotorbikeKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - WH40KImperiumMotorbikeKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+  - type: NoRotateOnMove
+  - type: MovementSpeedModifier
+    acceleration: 0
+    friction: 0
+    frictionNoInput: 0
+    baseWalkSpeed: 0
+    baseSprintSpeed: 0
+  - type: WH40KVehicleCarMovement
+    maxForwardSpeed: 6.8
+    maxReverseSpeed: 1.8
+    forwardAcceleration: 2.35
+    reverseAcceleration: 1.05
+    brakeDeceleration: 6.2
+    coastDeceleration: 0.75
+    lateralGrip: 8.8
+    steerInputRate: 2.0
+    steerReturnRate: 4.2
+    lowSpeedTurnRateDegrees: 110
+    highSpeedTurnRateDegrees: 38
+    speedForFullSteer: 4.1
+  - type: SolutionContainerManager
+    solutions:
+      vehicleFuel:
+        maxVol: 900
+        reagents:
+        - ReagentId: WH40KPromethium
+          Quantity: 900
+  - type: RefillableSolution
+    solution: vehicleFuel
+  - type: WH40KVehicleFuel
+    fuelSolution: vehicleFuel
+    fuelReagent: WH40KPromethium
+    fullTankRuntime: 900
+  - type: WH40KVehicleEngine
+    toggleAction: ActionWH40KToggleVehicleEngine
+  - type: WH40KVehicleHandlingHealth
+    maxDamage: 180
+    wornDamage: 60
+    criticalDamage: 120
+    disabledDamage: 170
+  - type: WH40KVehicleRam
+    impactSound:
+      collection: MetalThud
+    softTargetDamage:
+      types:
+        Blunt: 12
+    hardTargetDamage:
+      types:
+        Blunt: 18
+    selfSoftImpactDamage:
+      types:
+        Blunt: 5
+    selfHardImpactDamage:
+      types:
+        Blunt: 16
+  - type: UnpoweredFlashlight
+  - type: PointLight
+    enabled: false
+    radius: 3.5
+    softness: 2
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 420
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 210
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          WH40KVehicleMotorbikeWreckImperium:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: WH40KVehicleMotorbikeChaos
+  parent: WH40KVehicleMotorbikeImperium
+  name: chaos raider motorbike
+  description: A two-seat heretic raider bike built for brutal battlefield flanking.
+  suffix: WH40K, Fabricated
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/chaos_bike.rsi
+    drawdepth: Objects
+    noRot: false
+    layers:
+    - state: vehicle
+      map: [ "movement" ]
+  - type: WH40KVehicleVisualOverlay
+    overlay: WH40KVehicleMotorbikeOverlayChaos
+  - type: ContainerFill
+    containers:
+      key_slot: [ WH40KVehicleKeyMotorbikeChaos ]
+  - type: GenericKeyedVehicle
+    containerId: key_slot
+    keyWhitelist:
+      tags:
+      - VehicleKey
+      - WH40KChaosMotorbikeKeys
+  - type: ItemSlots
+    slots:
+      key_slot:
+        name: vehicle-slot-component-slot-name-keys
+        whitelist:
+          tags:
+          - VehicleKey
+          - WH40KChaosMotorbikeKeys
+        insertSound:
+          path: /Audio/Effects/Vehicle/vehiclestartup.ogg
+          params:
+            volume: -3
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 420
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 210
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          WH40KVehicleMotorbikeWreckChaos:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: WH40KVehicleMotorbikeWreckImperium
+  parent: MachineFrameDestroyed
+  name: wrecked imperium recon motorbike
+  description: The burnt remains of an Imperial light recon bike.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/imperium_bike.rsi
+    state: vehicle
+    color: "#5b5247"
+
+- type: entity
+  id: WH40KVehicleMotorbikeWreckChaos
+  parent: MachineFrameDestroyed
+  name: wrecked chaos raider motorbike
+  description: A twisted raider bike carcass blackened by impact and promethium fire.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Vehicles/Motorbike/chaos_bike.rsi
+    state: vehicle
+    color: "#563c34"

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Atmos;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -70,6 +71,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         SubscribeLocalEvent<PuddleComponent, GetFootstepSoundEvent>(OnGetFootstepSound);
         SubscribeLocalEvent<PuddleComponent, ExaminedEvent>(HandlePuddleExamined);
         SubscribeLocalEvent<PuddleComponent, EntRemovedFromContainerMessage>(OnEntRemoved);
+        SubscribeLocalEvent<PuddleComponent, TileFireEvent>(OnPuddleBurn);
 
         SubscribeLocalEvent<EvaporationComponent, MapInitEvent>(OnEvaporationMapInit);
 
@@ -110,7 +112,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         _standoutReagents = [.. _prototypeManager.EnumeratePrototypes<ReagentPrototype>().Where(x => x.Standsout).Select(x => x.ID)];
     }
 
-    private void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
+    protected virtual void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
     {
         // The changes are already networked as part of the same game state.
         if (_timing.ApplyingState)
@@ -171,7 +173,7 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         }
     }
 
-    private void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
+    protected virtual void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
     {
         if (!args.Anchored)
             PredictedQueueDel(entity.Owner);
@@ -353,6 +355,17 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
             solution.RemoveReagent(reagent, removed);
         }
+    }
+
+    public void OnPuddleBurn(Entity<PuddleComponent> ent, ref TileFireEvent args)
+    {
+        if (!_solutionContainerSystem.ResolveSolution(ent.Owner,
+                ent.Comp.SolutionName,
+                ref ent.Comp.Solution,
+                out var solution))
+            return;
+        _solutionContainerSystem.BurnFlammableReagents(ent.Comp.Solution.Value, 0.05f);
+
     }
 
     #region Spill

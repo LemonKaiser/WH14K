@@ -1,7 +1,6 @@
 using Content.Client.Atmos.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
-using Content.Shared.Species;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -29,7 +28,6 @@ public sealed class GasTileFireOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
 
     private readonly SharedTransformSystem _xformSys;
-    private readonly SharedMapSystem _mapSystem = default!;
     private readonly ShaderInstance _shader;
 
     private readonly float[] _timer;
@@ -39,7 +37,9 @@ public sealed class GasTileFireOverlay : Overlay
     // TODO combine textures into a single texture atlas.
     private readonly Texture[][] _frames;
 
-    private const int FireStates = 3;
+    private const int FireStatesPerType = 3;
+    private const int FireTypes = 2;
+    private const int FireStates = FireStatesPerType * FireTypes;
     private const string FireRsiPath = "/Textures/Effects/fire.rsi";
 
     public const int GasOverlayZIndex = (int)Shared.DrawDepth.DrawDepth.Effects; // Under ghosts, above mostly everything else
@@ -48,7 +48,6 @@ public sealed class GasTileFireOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _xformSys = _entManager.System<SharedTransformSystem>();
-        _mapSystem = _entManager.System<SharedMapSystem>();
         _shader = _protoMan.Index(UnshadedShader).Instance();
         ZIndex = GasOverlayZIndex;
 
@@ -107,8 +106,6 @@ public sealed class GasTileFireOverlay : Overlay
             xformQuery,
             _xformSys);
 
-        var mapUid = _mapSystem.GetMapOrInvalid(args.MapId);
-
         if (args.Space != OverlaySpace.WorldSpaceEntities)
             return;
 
@@ -157,7 +154,10 @@ public sealed class GasTileFireOverlay : Overlay
                         if (!localBounds.Contains(index))
                             continue;
 
-                        var fireState = gas.FireState - 1;
+                        var fireState = gas.FireState - 1 + gas.FireType * FireStatesPerType;
+                        if (fireState >= state.frames.Length)
+                            continue;
+
                         var texture = state.frames[fireState][state.frameCounter[fireState]];
                         state.drawHandle.DrawTexture(texture, index);
                     }

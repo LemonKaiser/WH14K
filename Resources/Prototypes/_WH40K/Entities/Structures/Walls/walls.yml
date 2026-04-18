@@ -250,6 +250,24 @@
 
 - type: entity
   parent: WallForce
+  id: WH40KWallForceImperialAegisTier1
+  name: aegis force wall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 18
+
+- type: entity
+  parent: WallForce
+  id: WH40KWallForceImperialAegisTier2
+  name: iron halo barrier
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 30
+
+- type: entity
+  parent: WallForce
   id: WH40KWallForceTzeentchTier2
   name: tzeentch force wall
   categories: [ HideSpawnMenu ]

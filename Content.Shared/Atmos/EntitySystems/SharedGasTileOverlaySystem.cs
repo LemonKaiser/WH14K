@@ -34,6 +34,7 @@ public abstract class SharedGasTileOverlaySystem : EntitySystem
             if (gasPrototype.GasOverlaySprite != null)
                 visibleGases.Add(i);
         }
+
         VisibleGasId = visibleGases.ToArray();
     }
 
@@ -69,26 +70,27 @@ public abstract class SharedGasTileOverlaySystem : EntitySystem
     {
         [ViewVariables] public readonly byte FireState;
         [ViewVariables] public readonly byte[] Opacity;
+        [ViewVariables] public readonly byte FireType;
         // TODO change fire color based on ByteTemp
 
         /// <summary>
         /// Network-synced air temperature, compressed to a single byte per tile for bandwidth optimization.
-        /// Note: Values are approximate and may deviate even ~10°C from the precise server side only temperature.
+        /// Note: Values are approximate and may deviate even ~10C from the precise server side only temperature.
         /// </summary>
         [ViewVariables]
         public readonly ThermalByte ByteGasTemperature;
 
-
-        public GasOverlayData(byte fireState, byte[] opacity, ThermalByte byteTemp)
+        public GasOverlayData(byte fireState, byte fireType, byte[] opacity, ThermalByte byteTemp)
         {
             FireState = fireState;
+            FireType = fireType;
             Opacity = opacity;
             ByteGasTemperature = byteTemp;
         }
 
         public bool Equals(GasOverlayData other)
         {
-            if (FireState != other.FireState)
+            if (FireState != other.FireState || FireType != other.FireType)
                 return false;
 
             if (Opacity?.Length != other.Opacity?.Length)

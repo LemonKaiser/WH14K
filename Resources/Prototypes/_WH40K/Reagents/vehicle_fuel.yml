@@ -1,0 +1,9 @@
+- type: reagent
+  id: WH40KPromethium
+  name: reagent-name-wh40k-promethium
+  desc: reagent-desc-wh40k-promethium
+  physicalDesc: reagent-physical-desc-oily
+  color: "#b36a1f"
+  flammability: 5
+  boilingPoint: 125.0
+  meltingPoint: -45.0

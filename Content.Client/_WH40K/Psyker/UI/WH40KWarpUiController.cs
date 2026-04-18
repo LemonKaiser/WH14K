@@ -103,23 +103,47 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         var chaosTheme = hasChaosHudRole && !hasPsykerRole;
         var patron = WH40KChaosPatron.None;
 
-        string detailText;
+        string detailPrimaryText;
+        string detailSecondaryText;
         if (chaosTheme && chaosProgression != null)
         {
             patron = chaosProgression.AttunedPatron;
-            detailText = patron == WH40KChaosPatron.None
-                ? Loc.GetString("wh40k-chaos-window-patron-none")
-                : Loc.GetString(GetPatronLocKey(patron));
+            var nextLevelXp = GetXpForNextChaosLevel(chaosProgression);
+            var xpText = FormatLevelXp(chaosProgression.LevelXp, nextLevelXp);
+            detailPrimaryText = Loc.GetString(
+                "wh40k-warp-ui-chaos-summary-primary",
+                ("level", chaosProgression.Level),
+                ("max", chaosProgression.MaxLevel),
+                ("xp", xpText));
+            detailSecondaryText = Loc.GetString(
+                "wh40k-warp-ui-chaos-summary-secondary",
+                ("patron", patron == WH40KChaosPatron.None
+                    ? Loc.GetString("wh40k-chaos-window-patron-none")
+                    : Loc.GetString(GetPatronLocKey(patron))),
+                ("points", chaosProgression.DevelopmentPoints));
         }
         else if (!chaosTheme && EntityManager.TryGetComponent<WH40KPsykerProgressionComponent>(uid, out var psykerProgression) && psykerProgression != null)
         {
-            detailText = Loc.GetString("wh40k-warp-ui-psyker-detail", ("level", psykerProgression.Level));
+            var astralProgression = EntityManager.GetComponentOrNull<WH40KPsykerAstralProgressionComponent>(uid);
+            var nextLevelXp = GetXpForNextPsykerLevel(psykerProgression);
+            var xpText = FormatLevelXp(psykerProgression.LevelXp, nextLevelXp);
+            detailPrimaryText = Loc.GetString(
+                "wh40k-warp-ui-psyker-summary-primary",
+                ("level", psykerProgression.Level),
+                ("max", psykerProgression.MaxLevel),
+                ("xp", xpText));
+            detailSecondaryText = Loc.GetString(
+                "wh40k-warp-ui-psyker-summary-secondary",
+                ("points", astralProgression?.DisciplinePoints ?? 0),
+                ("depth", Math.Max(1, astralProgression?.AstralDepth ?? 1)),
+                ("strain", MathF.Round(astralProgression?.AstralStrain ?? 0f, 1)));
         }
         else
         {
-            detailText = Loc.GetString(chaosTheme
+            detailPrimaryText = Loc.GetString(chaosTheme
                 ? "wh40k-chaos-window-role"
                 : "wh40k-psyker-window-role");
+            detailSecondaryText = string.Empty;
         }
 
         _hud.ApplyState(new WH40KWarpHudViewState(
@@ -130,7 +154,8 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
             instabilityFraction,
             chaosTheme,
             patron,
-            detailText));
+            detailPrimaryText,
+            detailSecondaryText));
 
         if (_psykerWindow != null && _psykerWindow.IsOpen && hasPsykerRole)
             RefreshPsykerWindow(uid);
@@ -393,6 +418,14 @@ public sealed class WH40KWarpUiController : UIController, IOnStateEntered<Gamepl
         return Math.Max(0f, progression.PassiveXpBasePerTick + bonus);
     }
 
+    private static string FormatLevelXp(float currentXp, float nextLevelXp)
+    {
+        if (nextLevelXp <= 0f)
+            return Loc.GetString("wh40k-warp-ui-xp-max");
+
+        return $"{MathF.Round(currentXp, 1)}/{MathF.Round(nextLevelXp, 1)}";
+    }
+
     private static string GetPatronLocKey(WH40KChaosPatron patron)
     {
         return patron switch
@@ -415,7 +448,8 @@ public readonly record struct WH40KWarpHudViewState(
     float WarpInstabilityFraction,
     bool ChaosTheme,
     WH40KChaosPatron Patron,
-    string DetailText)
+    string DetailPrimaryText,
+    string DetailSecondaryText)
 {
     public static readonly WH40KWarpHudViewState Hidden = new(
         false,
@@ -425,6 +459,7 @@ public readonly record struct WH40KWarpHudViewState(
         0f,
         false,
         WH40KChaosPatron.None,
+        string.Empty,
         string.Empty);
 }
 

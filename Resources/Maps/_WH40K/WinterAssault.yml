@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/18/2026 10:18:14
-  entityCount: 35242
+  time: 04/18/2026 14:46:43
+  entityCount: 35250
 maps:
 - 1
 grids:
@@ -205524,6 +205524,54 @@ entities:
     - type: Transform
       pos: 197.55768,-308.19287
       parent: 2
+- proto: WH40KVehicleMotorbikeChaos
+  entities:
+  - uid: 35247
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 145.65422,-285.81528
+      parent: 2
+  - uid: 35248
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 145.49797,-289.59915
+      parent: 2
+  - uid: 35249
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 153.38376,-290.10992
+      parent: 2
+  - uid: 35250
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 153.29001,-285.63974
+      parent: 2
+- proto: WH40KVehicleMotorbikeImperium
+  entities:
+  - uid: 35243
+    components:
+    - type: Transform
+      pos: 66.981926,-34.168133
+      parent: 2
+  - uid: 35244
+    components:
+    - type: Transform
+      pos: 67.013176,-37.983284
+      parent: 2
+  - uid: 35245
+    components:
+    - type: Transform
+      pos: 73.252754,-38.12922
+      parent: 2
+  - uid: 35246
+    components:
+    - type: Transform
+      pos: 73.159004,-33.98479
+      parent: 2
 - proto: WH40KWallInvisiblePersistent
   entities:
   - uid: 34677
@@ -207242,91 +207290,51 @@ entities:
     - type: Transform
       pos: 185.5,-269.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35019
     components:
     - type: Transform
       pos: 156.5,-269.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35020
     components:
     - type: Transform
       pos: 172.5,-268.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35021
     components:
     - type: Transform
       pos: 163.5,-270.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35022
     components:
     - type: Transform
       pos: 155.5,-112.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35023
     components:
     - type: Transform
       pos: 74.5,-111.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35024
     components:
     - type: Transform
       pos: 154.5,-119.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35025
     components:
     - type: Transform
       pos: 17.5,-178.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35026
     components:
     - type: Transform
       pos: 215.5,-184.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35027
     components:
     - type: Transform
       pos: 223.5,-182.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
 - proto: WH40KWeaponTurretImperium
   entities:
   - uid: 35028
@@ -207335,197 +207343,113 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 40.5,-51.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35029
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 40.5,-46.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35030
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 34.5,-46.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35031
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 34.5,-51.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35032
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 40.5,-56.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35033
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 40.5,-59.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35034
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 34.5,-56.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35035
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 34.5,-59.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35036
     components:
     - type: Transform
       pos: 56.5,-107.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35037
     components:
     - type: Transform
       pos: 34.5,-64.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35038
     components:
     - type: Transform
       pos: 41.5,-65.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35039
     components:
     - type: Transform
       pos: 51.5,-64.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35040
     components:
     - type: Transform
       pos: 57.5,-64.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35041
     components:
     - type: Transform
       pos: 26.5,-64.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35042
     components:
     - type: Transform
       pos: 34.5,-209.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35043
     components:
     - type: Transform
       pos: 29.5,-144.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35044
     components:
     - type: Transform
       pos: 64.5,-130.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35045
     components:
     - type: Transform
       pos: 41.5,-208.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35046
     components:
     - type: Transform
       pos: 125.5,-4.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35047
     components:
     - type: Transform
       pos: 111.5,-21.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
   - uid: 35048
     components:
     - type: Transform
       pos: 106.5,-23.5
       parent: 2
-    - type: HTN
-      enabled: True
-    - type: DeployableTurret
-      enabled: True
 - proto: WHChaosBanner
   entities:
   - uid: 35049
@@ -207945,7 +207869,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -56203.74
+      secondsUntilStateChange: -56280.81
       state: Opening
     - type: Airlock
       autoClose: False
@@ -207959,7 +207883,7 @@ entities:
       lastSignals:
         DoorStatus: True
     - type: Door
-      secondsUntilStateChange: -56204.535
+      secondsUntilStateChange: -56281.605
       state: Opening
     - type: Airlock
       autoClose: False

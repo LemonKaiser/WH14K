@@ -114,14 +114,9 @@
 - type: roleLoadout
   id: JobPsyker
   groups:
-  - WH40KImperialLineHead
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
-  - WH40KImperialFieldOuter
-  - WH40KImperialFieldBelt
-  - WH40KImperialLineUniform
   - WH40KImperialLineHands
-  - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee

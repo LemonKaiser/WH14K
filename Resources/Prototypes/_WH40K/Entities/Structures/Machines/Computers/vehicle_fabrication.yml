@@ -1,0 +1,57 @@
+- type: entity
+  id: WH40KVehicleFabricationConsoleImperium
+  parent: WH40KPlaceholderVehicleConsoleImperium
+  name: imperium vehicle fabrication console
+  description: An imperium fabrication terminal for ordering and assembling light vehicles on-site.
+  suffix: WH40K, Vehicles
+  components:
+  - type: ActivatableUI
+    key: enum.WH40KVehicleFabricationUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+      enum.WH40KVehicleFabricationUiKey.Key:
+        type: WH40KVehicleFabricationBoundUserInterface
+  - type: CargoOrderConsole
+    account: WH40KImperium
+    mode: SendToPrimary
+    allowedGroups:
+    - WH40KImperiumVehicleMarket
+  - type: MaterialStorage
+    storageLimit: 2000
+  - type: WH40KVehicleFabricationConsole
+    queueCapacity: 4
+    assemblyPadRange: 8
+    recipes:
+    - WH40KImperiumVehicleMotorbikeRecipe
+
+- type: entity
+  id: WH40KVehicleFabricationConsoleChaos
+  parent: WH40KPlaceholderVehicleConsoleChaos
+  name: chaos vehicle fabrication console
+  description: A chaos fabrication terminal for ordering and assembling light raider vehicles.
+  suffix: WH40K, Vehicles
+  components:
+  - type: ActivatableUI
+    key: enum.WH40KVehicleFabricationUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+      enum.WH40KVehicleFabricationUiKey.Key:
+        type: WH40KVehicleFabricationBoundUserInterface
+  - type: CargoOrderConsole
+    account: WH40KHeretics
+    mode: SendToPrimary
+    allowedGroups:
+    - WH40KHereticsVehicleMarket
+  - type: MaterialStorage
+    storageLimit: 2000
+  - type: WH40KVehicleFabricationConsole
+    queueCapacity: 4
+    assemblyPadRange: 8
+    recipes:
+    - WH40KHereticsVehicleMotorbikeRecipe

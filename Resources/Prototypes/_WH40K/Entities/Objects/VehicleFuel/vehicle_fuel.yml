@@ -1,0 +1,16 @@
+- type: entity
+  parent: Jug
+  id: WH40KPromethiumJerrycan
+  name: promethium jerrycan
+  description: A heavy fuel canister filled with refined promethium for light vehicle engines.
+  suffix: WH40K
+  components:
+  - type: Label
+    currentLabel: reagent-name-wh40k-promethium
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 900
+        reagents:
+        - ReagentId: WH40KPromethium
+          Quantity: 900

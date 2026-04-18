@@ -1,0 +1,53 @@
+- type: entity
+  id: WH40KVehicleFuelTerminalImperium
+  parent: WH40KPlaceholderVehicleConsoleImperium
+  name: imperium vehicle fuel terminal
+  description: A front-line terminal for promethium intake, storage and nearby vehicle refueling.
+  suffix: WH40K, Vehicle Fuel
+  components:
+  - type: ActivatableUI
+    key: enum.WH40KVehicleFuelTerminalUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+      enum.WH40KVehicleFuelTerminalUiKey.Key:
+        type: WH40KVehicleFuelTerminalBoundUserInterface
+  - type: SolutionContainerManager
+    solutions:
+      buffer:
+        maxVol: 1800
+  - type: RefillableSolution
+    solution: buffer
+  - type: DrainableSolution
+    solution: buffer
+  - type: WH40KVehicleFuelTerminal
+    account: WH40KImperium
+
+- type: entity
+  id: WH40KVehicleFuelTerminalChaos
+  parent: WH40KPlaceholderVehicleConsoleChaos
+  name: chaos vehicle fuel terminal
+  description: A raider fuel terminal that draws promethium from nearby containers and pushes it into waiting vehicles.
+  suffix: WH40K, Vehicle Fuel
+  components:
+  - type: ActivatableUI
+    key: enum.WH40KVehicleFuelTerminalUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+      enum.WH40KVehicleFuelTerminalUiKey.Key:
+        type: WH40KVehicleFuelTerminalBoundUserInterface
+  - type: SolutionContainerManager
+    solutions:
+      buffer:
+        maxVol: 1800
+  - type: RefillableSolution
+    solution: buffer
+  - type: DrainableSolution
+    solution: buffer
+  - type: WH40KVehicleFuelTerminal
+    account: WH40KHeretics

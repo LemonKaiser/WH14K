@@ -1,12 +1,12 @@
 <psykerUi:WH40KWarpHudControl
     xmlns="https://spacestation14.io"
     xmlns:psykerUi="clr-namespace:Content.Client._WH40K.Psyker.UI"
-    MinSize="304 116"
-    MaxSize="304 116"
+    MinSize="320 182"
+    MaxSize="320 182"
     Access="Public">
     <PanelContainer Name="RootFrame" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
         <LayoutContainer Name="HudCanvas" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
-            <TextureRect Name="CriticalFog" MinSize="220 112" SetSize="220 112" Stretch="KeepAspectCentered" MouseFilter="Ignore" />
+            <TextureRect Name="CriticalFog" MinSize="236 170" SetSize="236 170" Stretch="KeepAspectCentered" MouseFilter="Ignore" />
 
             <BoxContainer Name="ContentRoot" Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
                 <PanelContainer Name="TopAccent" MinHeight="2" />
@@ -20,7 +20,12 @@
                     <Label Name="TierBadgeLabel" VerticalAlignment="Center" HorizontalAlignment="Right" />
                 </BoxContainer>
 
-                <PanelContainer Name="TelemetryPanel" MinHeight="60" HorizontalExpand="True">
+                <BoxContainer Name="DetailContainer" Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+                    <Label Name="DetailPrimaryLabel" HorizontalExpand="True" ClipText="True" />
+                    <Label Name="DetailSecondaryLabel" HorizontalExpand="True" ClipText="True" />
+                </BoxContainer>
+
+                <PanelContainer Name="TelemetryPanel" MinHeight="68" HorizontalExpand="True">
                     <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
                         <LayoutContainer Name="WarpChargeRow" Access="Public" MinSize="0 22" HorizontalExpand="True">
                             <ProgressBar Name="WarpChargeBar" Access="Public" MinValue="0" MaxValue="1" Value="0" MinSize="0 22" HorizontalExpand="True" />

@@ -1,0 +1,141 @@
+- type: entity
+  id: WH40KBasePlaceholderConsole
+  parent: BaseStructureComputer
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Animateable
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmash
+  - type: Construction
+    graph: Computer
+    node: computer
+    containers:
+    - board
+  - type: Computer
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: PowerState
+    idlePowerDraw: 50
+    workingPowerDraw: 500
+  - type: UIPowerState
+  - type: ExtensionCableReceiver
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ComputerVisuals.Powered:
+        computerLayerScreen:
+          True: { visible: true, shader: unshaded }
+          False: { visible: false }
+  - type: LitOnPowered
+  - type: PointLight
+    radius: 1.5
+    energy: 3.0
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    offset: "0, 0.4"
+    castShadows: false
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+  - type: LightningTarget
+    priority: 1
+  - type: RequireProjectileTarget
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: Wires
+    boardName: wires-board-name-computer
+    layoutId: Computer
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: SpriteFade
+
+- type: entity
+  id: WH40KPlaceholderConsoleImperium
+  parent: WH40KBasePlaceholderConsole
+  name: imperium field console
+  description: A placeholder WH40K console shell prepared for future functionality.
+  suffix: WH40K, Placeholder
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
+    state: computer
+
+- type: entity
+  id: WH40KPlaceholderConsoleChaos
+  parent: WH40KBasePlaceholderConsole
+  name: chaos field console
+  description: A placeholder WH40K console shell prepared for future functionality.
+  suffix: WH40K, Placeholder
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/Computers/srtchaos.rsi
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/srtchaos.rsi
+    state: computer
+
+- type: entity
+  id: WH40KPlaceholderVehicleConsoleImperium
+  parent: WH40KBasePlaceholderConsole
+  name: imperium vehicle console
+  description: A placeholder vehicle console prepared for future tank and walker systems.
+  suffix: WH40K, Placeholder, Vehicle
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/Computers/vehicleimperium.rsi
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/vehicleimperium.rsi
+    state: computer
+
+- type: entity
+  id: WH40KPlaceholderVehicleConsoleChaos
+  parent: WH40KBasePlaceholderConsole
+  name: chaos vehicle console
+  description: A placeholder vehicle console prepared for future tank and walker systems.
+  suffix: WH40K, Placeholder, Vehicle
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/Computers/vehiclechaos.rsi
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/vehiclechaos.rsi
+    state: computer
