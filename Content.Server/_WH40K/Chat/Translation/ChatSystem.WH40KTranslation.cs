@@ -39,7 +39,16 @@ public sealed partial class ChatSystem
             return false;
         }
 
-        _ = DispatchTranslatedEntitySpeakAsync(source, message, wrappedMessage, speech, speechVerbLocKey, escapedName, range, fallbackLanguage, sourceLanguage!);
+        ObserveTranslationTask(DispatchTranslatedEntitySpeakAsync(
+            source,
+            message,
+            wrappedMessage,
+            speech,
+            speechVerbLocKey,
+            escapedName,
+            range,
+            fallbackLanguage,
+            sourceLanguage!));
         return true;
     }
 
@@ -57,6 +66,9 @@ public sealed partial class ChatSystem
         var translationDispatch = await _wh40kChatTranslation.TranslateWithSoftHoldAsync(message, fallbackLanguage, ChatChannel.Local);
         await RunOnMainThreadAsync(() =>
         {
+            if (!CanDispatchFromSource(source))
+                return;
+
             if (translationDispatch.ImmediateTranslation == null)
             {
                 var serverMessageId = translationDispatch.PendingTranslation != null
@@ -123,7 +135,7 @@ public sealed partial class ChatSystem
 
                     if (serverMessageId is { } pendingUpdateMessageId)
                     {
-                        _ = DispatchDelayedEntitySpeakUpdateAsync(
+                        ObserveTranslationTask(DispatchDelayedEntitySpeakUpdateAsync(
                             pendingUpdateMessageId,
                             source,
                             message,
@@ -131,7 +143,7 @@ public sealed partial class ChatSystem
                             speechVerbLocKey,
                             escapedName,
                             range,
-                            translationDispatch.PendingTranslation);
+                            translationDispatch.PendingTranslation));
                     }
 
                     return;
@@ -141,7 +153,7 @@ public sealed partial class ChatSystem
 
                 if (translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
                 {
-                    _ = DispatchDelayedEntitySpeakUpdateAsync(
+                    ObserveTranslationTask(DispatchDelayedEntitySpeakUpdateAsync(
                         delayedMessageId,
                         source,
                         message,
@@ -149,7 +161,7 @@ public sealed partial class ChatSystem
                         speechVerbLocKey,
                         escapedName,
                         range,
-                        translationDispatch.PendingTranslation);
+                        translationDispatch.PendingTranslation));
                 }
 
                 return;
@@ -225,6 +237,9 @@ public sealed partial class ChatSystem
 
         await RunOnMainThreadAsync(() =>
         {
+            if (!CanDispatchFromSource(source))
+                return;
+
             var wrappedCache = new Dictionary<(string?, string?), (string? VisibleText, string? Wrapped)>();
             foreach (var (session, data) in GetRecipients(source, VoiceRange))
             {
@@ -295,7 +310,7 @@ public sealed partial class ChatSystem
             return false;
         }
 
-        _ = DispatchTranslatedEntityWhisperAsync(
+        ObserveTranslationTask(DispatchTranslatedEntityWhisperAsync(
             source,
             message,
             obfuscatedMessage,
@@ -307,7 +322,7 @@ public sealed partial class ChatSystem
             escapedName,
             escapedIdentityName,
             fallbackLanguage,
-            sourceLanguage!);
+            sourceLanguage!));
         return true;
     }
 
@@ -328,6 +343,9 @@ public sealed partial class ChatSystem
         var translationDispatch = await _wh40kChatTranslation.TranslateWithSoftHoldAsync(message, fallbackLanguage, ChatChannel.Whisper);
         await RunOnMainThreadAsync(() =>
         {
+            if (!CanDispatchFromSource(source))
+                return;
+
             uint? serverMessageId = null;
             if (translationDispatch.ImmediateTranslation == null && translationDispatch.PendingTranslation != null)
                 serverMessageId = _wh40kChatTranslation.AllocateMessageId();
@@ -352,7 +370,7 @@ public sealed partial class ChatSystem
 
             if (translationDispatch.ImmediateTranslation == null && translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
             {
-                _ = DispatchDelayedEntityWhisperUpdateAsync(
+                ObserveTranslationTask(DispatchDelayedEntityWhisperUpdateAsync(
                     delayedMessageId,
                     source,
                     message,
@@ -360,7 +378,7 @@ public sealed partial class ChatSystem
                     channel,
                     escapedName,
                     escapedIdentityName,
-                    translationDispatch.PendingTranslation);
+                    translationDispatch.PendingTranslation));
             }
 
             _replay.RecordServerMessage(new ChatMessage(
@@ -423,6 +441,9 @@ public sealed partial class ChatSystem
         uint? serverMessageId = null,
         bool update = false)
     {
+        if (!CanDispatchFromSource(source))
+            return;
+
         Dictionary<(string?, string?), (string? VisibleText, string? Wrapped)>? whisperCache = translation != null
             ? new()
             : null;
@@ -553,7 +574,15 @@ public sealed partial class ChatSystem
             return false;
         }
 
-        _ = DispatchTranslatedLoocAsync(source, message, wrappedMessage, range, author, escapedName, fallbackLanguage, sourceLanguage!);
+        ObserveTranslationTask(DispatchTranslatedLoocAsync(
+            source,
+            message,
+            wrappedMessage,
+            range,
+            author,
+            escapedName,
+            fallbackLanguage,
+            sourceLanguage!));
         return true;
     }
 
@@ -570,6 +599,9 @@ public sealed partial class ChatSystem
         var translationDispatch = await _wh40kChatTranslation.TranslateWithSoftHoldAsync(message, fallbackLanguage, ChatChannel.LOOC);
         await RunOnMainThreadAsync(() =>
         {
+            if (!CanDispatchFromSource(source))
+                return;
+
             if (translationDispatch.ImmediateTranslation == null)
             {
                 var serverMessageId = translationDispatch.PendingTranslation != null
@@ -636,14 +668,14 @@ public sealed partial class ChatSystem
 
                     if (serverMessageId is { } pendingUpdateMessageId)
                     {
-                        _ = DispatchDelayedLoocUpdateAsync(
+                        ObserveTranslationTask(DispatchDelayedLoocUpdateAsync(
                             pendingUpdateMessageId,
                             source,
                             message,
                             range,
                             author,
                             escapedName,
-                            translationDispatch.PendingTranslation);
+                            translationDispatch.PendingTranslation));
                     }
 
                     return;
@@ -653,14 +685,14 @@ public sealed partial class ChatSystem
 
                 if (translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
                 {
-                    _ = DispatchDelayedLoocUpdateAsync(
+                    ObserveTranslationTask(DispatchDelayedLoocUpdateAsync(
                         delayedMessageId,
                         source,
                         message,
                         range,
                         author,
                         escapedName,
-                        translationDispatch.PendingTranslation);
+                        translationDispatch.PendingTranslation));
                 }
 
                 return;
@@ -735,6 +767,9 @@ public sealed partial class ChatSystem
 
         await RunOnMainThreadAsync(() =>
         {
+            if (!CanDispatchFromSource(source))
+                return;
+
             var wrappedCache = new Dictionary<(string?, string?), (string? VisibleText, string? Wrapped)>();
             foreach (var (session, data) in GetRecipients(source, VoiceRange))
             {
@@ -801,7 +836,16 @@ public sealed partial class ChatSystem
             return false;
         }
 
-        _ = DispatchTranslatedDeadChatAsync(source, player, message, wrappedMessage, hideChat, fromAdmin, playerName, fallbackLanguage, sourceLanguage!);
+        ObserveTranslationTask(DispatchTranslatedDeadChatAsync(
+            source,
+            player,
+            message,
+            wrappedMessage,
+            hideChat,
+            fromAdmin,
+            playerName,
+            fallbackLanguage,
+            sourceLanguage!));
         return true;
     }
 
@@ -884,7 +928,7 @@ public sealed partial class ChatSystem
 
                     if (serverMessageId is { } pendingUpdateMessageId)
                     {
-                        _ = DispatchDelayedDeadChatUpdateAsync(
+                        ObserveTranslationTask(DispatchDelayedDeadChatUpdateAsync(
                             pendingUpdateMessageId,
                             source,
                             player,
@@ -892,7 +936,7 @@ public sealed partial class ChatSystem
                             hideChat,
                             fromAdmin,
                             playerName,
-                            translationDispatch.PendingTranslation);
+                            translationDispatch.PendingTranslation));
                     }
 
                     return;
@@ -902,7 +946,7 @@ public sealed partial class ChatSystem
 
                 if (translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
                 {
-                    _ = DispatchDelayedDeadChatUpdateAsync(
+                    ObserveTranslationTask(DispatchDelayedDeadChatUpdateAsync(
                         delayedMessageId,
                         source,
                         player,
@@ -910,7 +954,7 @@ public sealed partial class ChatSystem
                         hideChat,
                         fromAdmin,
                         playerName,
-                        translationDispatch.PendingTranslation);
+                        translationDispatch.PendingTranslation));
                 }
 
                 return;
@@ -1046,6 +1090,28 @@ public sealed partial class ChatSystem
     private static bool ShouldSendLateTranslationUpdate(string originalMessage, string translatedMessage)
     {
         return !string.Equals(originalMessage, translatedMessage, StringComparison.Ordinal);
+    }
+
+    private bool CanDispatchFromSource(EntityUid source)
+    {
+        return source.Valid && TryComp<TransformComponent>(source, out _);
+    }
+
+    private void ObserveTranslationTask(Task task)
+    {
+        _ = ObserveTranslationTaskAsync(task);
+    }
+
+    private async Task ObserveTranslationTaskAsync(Task task)
+    {
+        try
+        {
+            await task;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"WH40K chat translation task failed: {e}");
+        }
     }
 
     private Task RunOnMainThreadAsync(Action action)

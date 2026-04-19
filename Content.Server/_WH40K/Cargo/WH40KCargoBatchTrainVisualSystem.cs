@@ -30,6 +30,7 @@ public sealed class WH40KCargoBatchTrainVisualSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<WH40KCargoBatchTrainVisualComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<WH40KCargoBatchTrainVisualComponent, ComponentShutdown>(OnComponentShutdown);
     }
 
     private void OnMapInit(Entity<WH40KCargoBatchTrainVisualComponent> ent, ref MapInitEvent args)
@@ -42,6 +43,26 @@ public sealed class WH40KCargoBatchTrainVisualSystem : EntitySystem
 
         // Decorative train should stay networked to avoid PVS pop-in while traveling.
         _pvsOverride.AddGlobalOverride(ent.Owner);
+    }
+
+    private void OnComponentShutdown(Entity<WH40KCargoBatchTrainVisualComponent> ent, ref ComponentShutdown args)
+    {
+        _pvsOverride.RemoveGlobalOverride(ent.Owner);
+
+        if (_transitStates.Count == 0)
+            return;
+
+        var keysToRemove = new List<(EntityUid Station, ProtoId<CargoAccountPrototype> Account)>();
+        foreach (var (key, state) in _transitStates)
+        {
+            if (state.TrainEntity == ent.Owner)
+                keysToRemove.Add(key);
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            _transitStates.Remove(key);
+        }
     }
 
     public override void Update(float frameTime)

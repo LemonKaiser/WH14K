@@ -828,16 +828,23 @@ public sealed class NetworkConfiguratorSystem : SharedNetworkConfiguratorSystem
     public void OnDeviceShutdown(Entity<NetworkConfiguratorComponent?> conf, Entity<DeviceNetworkComponent> device)
     {
         device.Comp.Configurators.Remove(conf.Owner);
-        if (!Resolve(conf.Owner, ref conf.Comp))
+        if (!TryComp(conf.Owner, out NetworkConfiguratorComponent? confComp))
             return;
 
-        foreach (var (addr, dev) in conf.Comp.Devices)
+        string? removeAddress = null;
+        foreach (var (addr, dev) in confComp.Devices)
         {
             if (device.Owner == dev)
-                conf.Comp.Devices.Remove(addr);
+            {
+                removeAddress = addr;
+                break;
+            }
         }
 
-        UpdateListUiState(conf, conf.Comp);
+        if (removeAddress != null)
+            confComp.Devices.Remove(removeAddress);
+
+        UpdateListUiState(conf.Owner, confComp);
     }
     #endregion
 }
