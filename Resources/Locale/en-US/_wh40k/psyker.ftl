@@ -264,7 +264,8 @@ wh40k-warp-ui-instability-tier-critical = Critical
 wh40k-warp-ui-charge-percent = Reserve {$percent}%
 wh40k-warp-ui-instability-percent = Peril {$percent}%
 wh40k-warp-ui-psyker-detail = Lv. {$level}
-wh40k-warp-ui-chaos-detail = {$patron} • Lv. {$level}
+wh40k-warp-ui-chaos-detail = {$patron} • Lv. {$level}
+
 wh40k-warp-ui-xp-max = MAX
 wh40k-warp-ui-psyker-summary-primary = Level {$level}/{$max} | XP {$xp}
 wh40k-warp-ui-psyker-summary-secondary = Points {$points} | Depth {$depth} | Strain {$strain}
