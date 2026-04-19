@@ -452,7 +452,7 @@ public sealed class MechAtmosphereSystem : EntitySystem
             ? fanModule.CompressorTargetPressure
             : external.Pressure;
 
-        return MathF.Min(target, tankComp.MaxOutputPressure);
+        return MathF.Min(target, Atmospherics.MaxOutputPressure);
     }
 
     private bool HasRefillableGas(GasMixture external, MechFanModuleComponent fanModule)

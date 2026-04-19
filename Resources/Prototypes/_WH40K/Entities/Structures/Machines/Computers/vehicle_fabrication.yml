@@ -14,6 +14,12 @@
         type: WiresBoundUserInterface
       enum.WH40KVehicleFabricationUiKey.Key:
         type: WH40KVehicleFabricationBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+      vehicle_parts: !type:Container
+        ents: []
   - type: CargoOrderConsole
     account: WH40KImperium
     mode: SendToPrimary
@@ -43,6 +49,12 @@
         type: WiresBoundUserInterface
       enum.WH40KVehicleFabricationUiKey.Key:
         type: WH40KVehicleFabricationBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+      vehicle_parts: !type:Container
+        ents: []
   - type: CargoOrderConsole
     account: WH40KHeretics
     mode: SendToPrimary

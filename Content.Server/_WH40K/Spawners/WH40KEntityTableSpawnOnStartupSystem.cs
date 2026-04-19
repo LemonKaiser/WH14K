@@ -18,10 +18,10 @@ public sealed class WH40KEntityTableSpawnOnStartupSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<WH40KEntityTableSpawnOnStartupComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<WH40KEntityTableSpawnOnStartupComponent, MapInitEvent>(OnMapInit);
     }
 
-    private void OnStartup(Entity<WH40KEntityTableSpawnOnStartupComponent> ent, ref ComponentStartup args)
+    private void OnMapInit(Entity<WH40KEntityTableSpawnOnStartupComponent> ent, ref MapInitEvent args)
     {
         if (TerminatingOrDeleted(ent) || !Exists(ent))
             return;
@@ -34,7 +34,7 @@ public sealed class WH40KEntityTableSpawnOnStartupSystem : EntitySystem
             var yOffset = _random.NextFloat(-ent.Comp.Offset, ent.Comp.Offset);
             var spawnCoords = coords.Offset(new Vector2(xOffset, yOffset));
 
-            SpawnAtPosition(proto, spawnCoords);
+            SpawnAttachedTo(proto, spawnCoords);
         }
 
         if (ent.Comp.DeleteSpawnerAfterSpawn && !TerminatingOrDeleted(ent) && Exists(ent))
