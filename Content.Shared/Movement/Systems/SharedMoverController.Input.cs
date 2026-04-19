@@ -309,8 +309,10 @@ namespace Content.Shared.Movement.Systems
             // Relayed movement just uses the same keybinds given we're moving the relayed entity
             // the same as us.
 
-            if (!MoverQuery.Resolve(entity, ref entity.Comp))
+            if (!MoverQuery.TryComp(entity.Owner, out var moverComp))
                 return;
+
+            entity.Comp = moverComp;
 
             // TODO: Should move this into HandleMobMovement itself.
             if (entity.Comp.CanMove && RelayQuery.TryComp(entity, out var relayMover))
