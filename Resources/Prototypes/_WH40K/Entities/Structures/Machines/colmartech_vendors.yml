@@ -39,18 +39,18 @@
     state: base
   - type: CMAutomatedVendor
     sections:
-    - name: cm-automated-vendor-section-primary-firearms
-      entries:
-      - id: WeaponLaserLasgun
-        amount: 10
-      - id: WeaponLaserLasgunKrieg
-        amount: 4
-      - id: WeaponLaserLonglas
-        amount: 2
-      - id: WeaponLaserLasgunVoss
-        amount: 4
-      - id: WeaponLaserLasgunAccatran
-        amount: 1
+    #- name: cm-automated-vendor-section-primary-firearms #no firearms
+    #  entries:
+    #  - id: WeaponLaserLasgun
+    #    amount: 10
+    #  - id: WeaponLaserLasgunKrieg
+    #    amount: 4
+    #  - id: WeaponLaserLonglas
+    #    amount: 2
+    #  - id: WeaponLaserLasgunVoss
+    #    amount: 4
+    #  - id: WeaponLaserLasgunAccatran
+    #    amount: 1
     - name: cm-automated-vendor-section-primary-ammunition
       entries:
       - id: LasgunPowerCell
@@ -61,12 +61,12 @@
         amount: 4
       - id: LasgunPowerCellLucius
         amount: 16
-    - name: cm-automated-vendor-section-sidearms
-      entries:
-      - id: WHSapperShovel
-        amount: 8
-      - id: CombatKnife
-        amount: 8
+    #- name: cm-automated-vendor-section-sidearms #no firearms
+    #  entries:
+    #  - id: WHSapperShovel
+    #    amount: 8
+    #  - id: CombatKnife
+    #    amount: 8
 
 - type: entity
   parent: ColMarTechBase
@@ -80,14 +80,14 @@
     state: base
   - type: CMAutomatedVendor
     sections:
-    - name: cm-automated-vendor-section-primary-firearms
-      entries:
-      - id: WeaponChsStubSMG3
-        amount: 12
-      - id: WeaponChsStubSMG2
-        amount: 12
-      - id: WeaponChsStubShotgun
-        amount: 1
+    #- name: cm-automated-vendor-section-primary-firearms
+    #  entries:
+    #  - id: WeaponChsStubSMG3
+    #    amount: 12
+    #  - id: WeaponChsStubSMG2
+    #    amount: 12
+    #  - id: WeaponChsStubShotgun
+    #    amount: 1
     - name: cm-automated-vendor-section-primary-ammunition
       entries:
       - id: MagazineStubSMG
@@ -100,20 +100,20 @@
         amount: 2
       - id: BoxLethalshot
         amount: 1
-    - name: cm-automated-vendor-section-sidearms
-      entries:
-      - id: WeaponStubSMG
-        amount: 10
-      - id: Chaosclub
-        amount: 3
-      - id: WeaponMeleeChaosNailBoard
-        amount: 3
-      - id: ChaosMachete
-        amount: 3
-      - id: AxeChaos
-        amount: 3
-      - id: TrenchKnifeChaos
-        amount: 3
+    #- name: cm-automated-vendor-section-sidearms
+    #  entries:
+    #  - id: WeaponStubSMG
+    #    amount: 10
+    #  - id: Chaosclub
+    #    amount: 3
+    #  - id: WeaponMeleeChaosNailBoard
+    #    amount: 3
+    #  - id: ChaosMachete
+    #    amount: 3
+    #  - id: AxeChaos
+    #    amount: 3
+    #  - id: TrenchKnifeChaos
+    #    amount: 3
 
 - type: entity
   parent: ColMarTechBase

@@ -748,27 +748,6 @@
   groupBy: "melee"
 
 - type: loadout
-  id: WH40KCommandLaspistolWillOfTheEmperor
-  inhand:
-  - WeaponLaserPistolCommissar
-
-- type: loadout
-  id: WH40KCommandBoltPistol
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 25
-  inhand:
-  - WeaponPistolBolter
-
-- type: loadout
-  id: WH40KCommandPlasmaPistol
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 40
-  inhand:
-  - WeaponLaserPlasmaPistol
-
-- type: loadout
   id: WH40KCommandChainsword
   inhand:
   - Chainsword
@@ -815,7 +794,7 @@
   id: WH40KChaosTrenchKnifeKit
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 37
+    requiredLevel: 3
   storage:
     belt:
     - TrenchKnifeChaos
@@ -849,7 +828,7 @@
   - !type:GroupLoadoutEffect
     proto: WH40KBattleHardened
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 40
+    requiredLevel: 5
   storage:
     belt:
     - ChaosMachete
