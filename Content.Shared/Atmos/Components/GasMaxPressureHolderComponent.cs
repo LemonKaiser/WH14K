@@ -9,7 +9,7 @@ namespace Content.Shared.Atmos.Components;
 public abstract partial class GasMaxPressureHolderComponent : Component, IGasMaxPressureHolder
 {
     private const int DefaultIntegrity = 5;
-    private const float DefaultOutputPressure = Atmospherics.OneAtmosphere;
+    protected const float DefaultOutputPressure = Atmospherics.OneAtmosphere;
 
     /// <summary>
     ///     Minimum release pressure possible for the release valve.

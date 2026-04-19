@@ -33,6 +33,18 @@ public sealed partial class GasTankComponent : GasMaxPressureHolderComponent
     public float TankLowPressure = DefaultLowPressure;
 
     /// <summary>
+    ///     Distributed pressure.
+    /// </summary>
+    [DataField("outputPressure"), AutoNetworkedField]
+    public float OutputPressure = DefaultOutputPressure;
+
+    /// <summary>
+    ///     The maximum allowed output pressure.
+    /// </summary>
+    [DataField("maxOutputPressure")]
+    public float MaxOutputPressure = 3 * DefaultOutputPressure;
+
+    /// <summary>
     ///     Tank is connected to internals.
     /// </summary>
     [ViewVariables]

@@ -343,7 +343,8 @@ wh40k-warp-ui-instability-tier-critical = Критично
 wh40k-warp-ui-charge-percent = Резерв {$percent}%
 wh40k-warp-ui-instability-percent = Угроза {$percent}%
 wh40k-warp-ui-psyker-detail = ур. {$level}
-wh40k-warp-ui-chaos-detail = {$patron} • ур. {$level}
+wh40k-warp-ui-chaos-detail = {$patron} • ур. {$level}
+
 wh40k-warp-ui-xp-max = MAX
 wh40k-warp-ui-psyker-summary-primary = Уровень {$level}/{$max} | Опыт {$xp}
 wh40k-warp-ui-psyker-summary-secondary = Очки {$points} | Глубина {$depth} | Нагрузка {$strain}
