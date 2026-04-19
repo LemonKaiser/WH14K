@@ -153,6 +153,16 @@
   - WH40KGoldCigarKit
 
 - type: loadoutGroup
+  id: WH40KImperialMainWeapon
+  name: loadout-group-wh40k-imperial-main
+  loadouts:
+  - WH40KWeaponLaserLasgunLoadout
+  - WH40KWeaponLaserLasgunVossLoadout
+  - WH40KWeaponLaserLonglasLoadout
+  - WH40KWeaponLaserLasgunAccatranLoadout
+  - WH40KWeaponLaserLasgunKriegLoadout
+
+- type: loadoutGroup
   id: WH40KImperialMelee
   name: loadout-group-wh40k-imperial-melee
   minLimit: 0
@@ -472,6 +482,14 @@
   - WH40KChaosSlaaneshMedal
   - WH40KChaosTzeentchMedal
   - WH40KHereticRainCloak
+
+- type: loadoutGroup
+  id: WH40KHereticMainWeapon
+  name: loadout-group-wh40k-heretic-main
+  loadouts:
+  - WH40KWeaponChsStubSMG3Loadout
+  - WH40KWeaponChsStubSMG2Loadout
+  - WH40KWeaponChsStubShotgunLoadout
 
 - type: loadoutGroup
   id: WH40KHereticMelee

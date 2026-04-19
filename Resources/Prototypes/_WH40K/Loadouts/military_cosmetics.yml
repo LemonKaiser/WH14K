@@ -748,27 +748,6 @@
   groupBy: "melee"
 
 - type: loadout
-  id: WH40KCommandLaspistolWillOfTheEmperor
-  inhand:
-  - WeaponLaserPistolCommissar
-
-- type: loadout
-  id: WH40KCommandBoltPistol
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 25
-  inhand:
-  - WeaponPistolBolter
-
-- type: loadout
-  id: WH40KCommandPlasmaPistol
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 40
-  inhand:
-  - WeaponLaserPlasmaPistol
-
-- type: loadout
   id: WH40KCommandChainsword
   inhand:
   - Chainsword

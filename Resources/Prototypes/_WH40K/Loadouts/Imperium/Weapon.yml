@@ -1,0 +1,110 @@
+- type: loadout
+  id: WH40KWeaponLaserLasgunLoadout
+  dummyEntity: WeaponLaserLasgun
+  equipment:
+    suitstorage: WeaponLaserLasgun
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KWeaponLaserLasgunVossLoadout
+  dummyEntity: WeaponLaserLasgunVoss
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    suitstorage: WeaponLaserLasgunVoss
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KWeaponLaserLonglasLoadout
+  dummyEntity: WeaponLaserLonglas
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    suitstorage: WeaponLaserLonglas
+  storage:
+    belt:
+    - LonglasPowerCell
+    - LonglasPowerCell
+    - LonglasPowerCell
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KWeaponLaserLasgunAccatranLoadout
+  dummyEntity: WeaponLaserLasgunAccatran
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    suitstorage: WeaponLaserLasgunAccatran
+  storage:
+    belt:
+    - LonglasPowerCell
+    - LonglasPowerCell
+    - LonglasPowerCell
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KWeaponLaserLasgunKriegLoadout
+  dummyEntity: WeaponLaserLasgunKrieg
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    suitstorage: WeaponLaserLasgunKrieg
+  storage:
+    belt:
+    - LasgunPowerCellLucius
+    - LasgunPowerCellLucius
+    - LasgunPowerCellLucius
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KCommandLaspistolWillOfTheEmperor
+  dummyEntity: WeaponLaserPistolCommissar
+  inhand:
+  - WeaponLaserPistolCommissar
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "second"
+
+- type: loadout
+  id: WH40KCommandBoltPistol
+  dummyEntity: WeaponPistolBolter
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WeaponPistolBolter
+  storage:
+    belt:
+    - MagazineBolterPistol
+    - MagazineBolterPistol
+  groupBy: "second"
+
+- type: loadout
+  id: WH40KCommandPlasmaPistol
+  dummyEntity: WeaponLaserPlasmaPistol
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - WeaponLaserPlasmaPistol
+  storage:
+    belt:
+    - PlasmPistolPowerCell
+    - PlasmPistolPowerCell
+  groupBy: "second"

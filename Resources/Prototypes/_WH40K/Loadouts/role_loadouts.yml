@@ -65,6 +65,7 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobSpecialistSWS
@@ -80,6 +81,7 @@
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobSpecialistHWS
@@ -95,6 +97,7 @@
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobVoxScout
@@ -110,6 +113,7 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobPsyker
@@ -120,6 +124,7 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialCommandSidearm
 
 - type: roleLoadout
   id: JobMedic
@@ -135,6 +140,7 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee
+  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobTitheSupplier
@@ -260,6 +266,7 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -273,6 +280,7 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -286,6 +294,7 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -299,6 +308,7 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -312,6 +322,7 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -325,6 +336,7 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -338,6 +350,7 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -351,6 +364,7 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -364,6 +378,7 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -377,4 +392,5 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticMainWeapon
   - WH40KHereticMelee
