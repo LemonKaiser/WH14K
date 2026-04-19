@@ -1094,7 +1094,7 @@ public sealed partial class ChatSystem
 
     private bool CanDispatchFromSource(EntityUid source)
     {
-        return source.Valid && TryComp<TransformComponent>(source, out _);
+        return source.Valid && TryComp(source, out TransformComponent? _);
     }
 
     private void ObserveTranslationTask(Task task)
