@@ -16,8 +16,12 @@
                           HorizontalExpand="True"
                           SeparationOverride="1"
                           Margin="2 1 2 1">
-                <Label Name="TitleLabel" />
+                <Label Name="TitleLabel"
+                       HorizontalExpand="True"
+                       ClipText="True" />
                 <Label Name="StatusLabel"
+                       HorizontalExpand="True"
+                       ClipText="True"
                        StyleClasses="LabelSubText" />
             </BoxContainer>
         </Button>

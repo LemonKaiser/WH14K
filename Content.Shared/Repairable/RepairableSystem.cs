@@ -98,7 +98,9 @@ public sealed partial class RepairableSystem : EntitySystem
 
     private void Repair(Entity<RepairableComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled)
+        var validRepairTool = _toolSystem.HasQuality(args.Used, ent.Comp.QualityNeeded);
+
+        if (args.Handled && !validRepairTool)
             return;
 
         var attempt = new RepairAttemptEvent(args.User);

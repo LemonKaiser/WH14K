@@ -106,3 +106,7 @@ wh40k-tactical-map-callsign-whiskey = Виски
 wh40k-tactical-map-callsign-xray = Икс-рей
 wh40k-tactical-map-callsign-yankee = Янки
 wh40k-tactical-map-callsign-zulu = Зулу
+
+wh40k-tactical-map-toggle-coordinates-on = КООРД. ВКЛ
+wh40k-tactical-map-toggle-coordinates-off = КООРД. ВЫКЛ
+wh40k-tactical-map-cursor-coordinates = X:{ $x } Y:{ $y }

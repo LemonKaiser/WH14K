@@ -437,11 +437,6 @@ public abstract partial class SharedMechSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
-
-        if (!ent.Comp.Broken)
-            return;
-
-        args.Cancelled = true;
     }
 
     private void OnMechEntry(Entity<MechComponent> ent, ref MechEntryEvent args)

@@ -128,18 +128,18 @@
     baseWalkSpeed: 0
     baseSprintSpeed: 0
   - type: WH40KVehicleCarMovement
-    maxForwardSpeed: 6.8
-    maxReverseSpeed: 1.8
-    forwardAcceleration: 2.35
-    reverseAcceleration: 1.05
+    maxForwardSpeed: 10.2
+    maxReverseSpeed: 2.7
+    forwardAcceleration: 4.7
+    reverseAcceleration: 2.1
     brakeDeceleration: 6.2
     coastDeceleration: 0.75
     lateralGrip: 8.8
-    steerInputRate: 2.0
+    steerInputRate: 4.0
     steerReturnRate: 4.2
-    lowSpeedTurnRateDegrees: 110
-    highSpeedTurnRateDegrees: 38
-    speedForFullSteer: 4.1
+    lowSpeedTurnRateDegrees: 220
+    highSpeedTurnRateDegrees: 76
+    speedForFullSteer: 2.05
   - type: SolutionContainerManager
     solutions:
       vehicleFuel:

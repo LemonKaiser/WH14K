@@ -72,6 +72,11 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
             TacticalMapScreen.ShowChunkGrid = !TacticalMapScreen.ShowChunkGrid;
             RefreshOverlayUi();
         };
+        ToggleCoordinatesButton.OnPressed += _ =>
+        {
+            TacticalMapScreen.ShowCursorCoordinates = !TacticalMapScreen.ShowCursorCoordinates;
+            RefreshOverlayUi();
+        };
         PanToolButton.OnPressed += _ => SetActiveTool(WH40KTacticalMapAnnotationTool.Pan);
         BrushToolButton.OnPressed += _ => SetActiveTool(WH40KTacticalMapAnnotationTool.Brush);
         EraserToolButton.OnPressed += _ => SetActiveTool(WH40KTacticalMapAnnotationTool.Eraser);
@@ -465,6 +470,9 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
         ToggleGridButton.Text = TacticalMapScreen.ShowChunkGrid
             ? Loc.GetString("wh40k-tactical-map-toggle-grid-on", ("size", chunkSize))
             : Loc.GetString("wh40k-tactical-map-toggle-grid-off", ("size", chunkSize));
+        ToggleCoordinatesButton.Text = TacticalMapScreen.ShowCursorCoordinates
+            ? Loc.GetString("wh40k-tactical-map-toggle-coordinates-on")
+            : Loc.GetString("wh40k-tactical-map-toggle-coordinates-off");
     }
 
     private void RefreshViewUi()

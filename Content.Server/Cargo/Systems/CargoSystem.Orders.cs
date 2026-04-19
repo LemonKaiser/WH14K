@@ -1003,18 +1003,20 @@ namespace Content.Server.Cargo.Systems
             ProtoId<CargoAccountPrototype> account,
             CargoBatchOrderConsoleComponent batchConsole)
         {
-            var baseDelay = Math.Max(1, batchConsole.BatchDelaySeconds);
+            const int MinimumBatchDelaySeconds = 60;
+
+            var baseDelay = Math.Max(MinimumBatchDelaySeconds, batchConsole.BatchDelaySeconds);
             if (!TryComp<CargoLogisticsTierComponent>(stationUid, out var logistics))
                 return baseDelay;
 
             var tier = logistics.GetTier(account);
             var tierReduction = logistics.GetTierDeliveryReductionSeconds(tier);
-            var tierAdjusted = Math.Max(1, baseDelay - tierReduction);
+            var tierAdjusted = Math.Max(MinimumBatchDelaySeconds, baseDelay - tierReduction);
             var speedBonusPercent = logistics.GetExternalDeliverySpeedBonusPercent(account);
             var speedMultiplier = Math.Clamp(1f - speedBonusPercent / 100f, 0.05f, 10f);
             var adjusted = RoundToInt(tierAdjusted * speedMultiplier);
 
-            return Math.Max(1, adjusted);
+            return Math.Max(MinimumBatchDelaySeconds, adjusted);
         }
 
         private int GetEffectiveOrderUnitPrice(

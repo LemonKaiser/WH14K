@@ -401,6 +401,9 @@
                         <Button Name="ToggleGridButton"
                                 Text=""
                                 HorizontalExpand="True" />
+                        <Button Name="ToggleCoordinatesButton"
+                                Text=""
+                                HorizontalExpand="True" />
 
                         <PanelContainer>
                             <PanelContainer.PanelOverride>

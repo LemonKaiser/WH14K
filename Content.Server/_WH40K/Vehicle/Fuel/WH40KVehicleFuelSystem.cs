@@ -1,5 +1,6 @@
 using System;
 using Content.Server.Popups;
+using Content.Server.Power.Components;
 using Content.Shared._WH40K.Vehicle.Fuel;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
@@ -8,7 +9,6 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Power;
-using Content.Shared.Power.Components;
 using Content.Shared.Popups;
 using Content.Shared.Repairable;
 using Content.Shared.UserInterface;
@@ -575,6 +575,6 @@ public sealed class WH40KVehicleFuelSystem : EntitySystem
 
     private bool IsTerminalPowered(EntityUid uid)
     {
-        return !TryComp(uid, out SharedApcPowerReceiverComponent? power) || power.Powered;
+        return !TryComp(uid, out ApcPowerReceiverComponent? power) || power.Powered;
     }
 }

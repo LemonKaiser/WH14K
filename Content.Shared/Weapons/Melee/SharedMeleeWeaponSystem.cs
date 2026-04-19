@@ -12,6 +12,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.EnergyDome;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
@@ -72,6 +73,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
     private EntityQuery<WH40KDirectionalBarricadeComponent> _directionalBarricadeQuery;
+    private EntityQuery<EnergyDomeVisualsComponent> _domeVisualsQuery;
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -87,6 +89,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     {
         base.Initialize();
         _directionalBarricadeQuery = GetEntityQuery<WH40KDirectionalBarricadeComponent>();
+        _domeVisualsQuery = GetEntityQuery<EnergyDomeVisualsComponent>();
 
         SubscribeLocalEvent<MeleeWeaponComponent, HandSelectedEvent>(OnMeleeSelected);
         SubscribeLocalEvent<MeleeWeaponComponent, ShotAttemptedEvent>(OnMeleeShotAttempted);
@@ -131,25 +134,33 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     private bool ShouldAllowMeleeDirectionalPass(EntityUid obstacle, Vector2 attackerPos, Vector2 attackDirection)
     {
-        if (!_directionalBarricadeQuery.TryGetComponent(obstacle, out var barricadeComp))
+        if (_directionalBarricadeQuery.TryGetComponent(obstacle, out var barricadeComp))
+        {
+            var passDirection = TransformSystem.GetWorldRotation(obstacle).ToWorldVec();
+            if (barricadeComp.FlipPassSide)
+                passDirection = -passDirection;
+
+            var barricadePos = TransformSystem.GetWorldPosition(obstacle);
+            var originDirection = attackerPos - barricadePos;
+
+            // Melee pass is deterministic; we don't apply blocked-side random pass chance here.
+            return WH40KDirectionalBarricadeHelpers.ShouldPassFromOrigin(
+                passDirection,
+                attackDirection,
+                originDirection,
+                barricadeComp.PassSideMaxDistance,
+                0f,
+                0f,
+                _random);
+        }
+
+        if (!_domeVisualsQuery.TryGetComponent(obstacle, out var domeVisuals))
             return false;
 
-        var passDirection = TransformSystem.GetWorldRotation(obstacle).ToWorldVec();
-        if (barricadeComp.FlipPassSide)
-            passDirection = -passDirection;
-
-        var barricadePos = TransformSystem.GetWorldPosition(obstacle);
-        var originDirection = attackerPos - barricadePos;
-
-        // Melee pass is deterministic; we don't apply blocked-side random pass chance here.
-        return WH40KDirectionalBarricadeHelpers.ShouldPassFromOrigin(
-            passDirection,
-            attackDirection,
-            originDirection,
-            barricadeComp.PassSideMaxDistance,
-            0f,
-            0f,
-            _random);
+        const float minInteriorRadius = 0.15f;
+        var radius = MathF.Max(domeVisuals.InsideTransparencyRadius, minInteriorRadius);
+        var originOffset = attackerPos - TransformSystem.GetWorldPosition(obstacle);
+        return originOffset.LengthSquared() <= radius * radius;
     }
 
 #if DEBUG

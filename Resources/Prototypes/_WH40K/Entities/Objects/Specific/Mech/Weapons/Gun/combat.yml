@@ -16,7 +16,7 @@
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/bolter.ogg
   - type: BatteryAmmoProvider
     proto: BulletSentine
-    fireCost: 20
+    fireCost: 10
   - type: Battery
     maxCharge: 400
     startingCharge: 400
@@ -41,7 +41,7 @@
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmapist.wav
   - type: BatteryAmmoProvider
     proto: WHBulletPlasmaSentine
-    fireCost: 20
+    fireCost: 10
   - type: Battery
     maxCharge: 400
     startingCharge: 400

@@ -287,8 +287,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KWeaponryAuthLeft3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurret]
-      Heretics: [WH40KHereticsSentryTurret]
+      Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel]
+      Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel]
   - id: wep_right_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-3-title
@@ -335,8 +335,8 @@
     minRoundTimeSeconds: 2700
     technologyUnlocks: [WH40KWeaponryAuthCap]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretLaser, WH40KImperiumSentinel]
-      Heretics: [WH40KHereticsSentryTurretLaser, WH40KHereticsSentinel]
+      Imperium: [WH40KImperiumSentryTurretLaser]
+      Heretics: [WH40KHereticsSentryTurretLaser]
   - id: eqp_root
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-root-title

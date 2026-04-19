@@ -219,7 +219,7 @@ w40k-cmd-upgrade-tree-node-wep-root-description = Cargo unlock: first close-assa
 w40k-cmd-upgrade-tree-node-wep-left-2-title = Chainblade Release
 w40k-cmd-upgrade-tree-node-wep-left-2-description = Cargo unlock: bolter/SMG requisition package. R&D authorization: chainblade fabrication.
 w40k-cmd-upgrade-tree-node-wep-left-3-title = Accatran Pattern
-w40k-cmd-upgrade-tree-node-wep-left-3-description = Cargo unlock: standard sentry turret package. R&D authorization: Accatran-pattern lasgun fabrication.
+w40k-cmd-upgrade-tree-node-wep-left-3-description = Cargo unlock: standard sentry turret package and Sentinel walker. R&D authorization: Accatran-pattern lasgun fabrication.
 w40k-cmd-upgrade-tree-node-wep-left-4-title = Mortar Support
 w40k-cmd-upgrade-tree-node-wep-left-4-description = Cargo unlock: marksman sentry package and hellgun field kit. R&D authorization: mortar deployment kit and hellgun fabrication.
 w40k-cmd-upgrade-tree-node-wep-right-2-title = Stubber Line
@@ -229,7 +229,7 @@ w40k-cmd-upgrade-tree-node-wep-right-3-description = Cargo unlock: compact sentr
 w40k-cmd-upgrade-tree-node-wep-right-4-title = Plasma Arming
 w40k-cmd-upgrade-tree-node-wep-right-4-description = Cargo unlock: shotgun sentry package. R&D authorization: plasma gun fabrication.
 w40k-cmd-upgrade-tree-node-wep-cap-title = Heavy Emplacements
-w40k-cmd-upgrade-tree-node-wep-cap-description = Cargo unlock: laser sentry and sentinel. R&D authorization: heavy bolter emplacement and Voss-pattern lasgun fabrication.
+w40k-cmd-upgrade-tree-node-wep-cap-description = Cargo unlock: laser sentry. R&D authorization: heavy bolter emplacement and Voss-pattern lasgun fabrication.
 
 w40k-cmd-upgrade-tree-node-eqp-root-title = Signal Doctrine
 w40k-cmd-upgrade-tree-node-eqp-root-description = Cargo unlock: combat medkit and field defibrillator stock. R&D authorization: tactical whistle fabrication.

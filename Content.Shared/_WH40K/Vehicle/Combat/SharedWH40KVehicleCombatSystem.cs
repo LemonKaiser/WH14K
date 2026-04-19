@@ -1,4 +1,6 @@
+using System;
 using Content.Shared._WH40K.Vehicle.Fuel;
+using Content.Shared._WH40K.Vehicle.Movement;
 using Content.Shared.Examine;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -90,11 +92,16 @@ public sealed class SharedWH40KVehicleCombatSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
+        TryComp(ent.Owner, out WH40KVehicleCarMovementComponent? movement);
+        var minimumImpactSpeed = ent.Comp.GetMinimumImpactSpeed(movement);
+        var percent = (int) MathF.Round(Math.Clamp(ent.Comp.MinimumImpactSpeedRatio, 0f, 1f) * 100f);
+
         using (args.PushGroup(nameof(WH40KVehicleRamComponent)))
         {
             args.PushMarkup(Loc.GetString(
                 "wh40k-vehicle-ram-examine",
-                ("speed", ent.Comp.MinimumImpactSpeed)));
+                ("percent", percent),
+                ("speed", minimumImpactSpeed)));
         }
     }
 }

@@ -22,6 +22,8 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        RectClipContent = true;
+        MainButton.RectClipContent = true;
 
         var title = WH40KTacticalMapLoc.LocalizeStrategicLabel(marker);
         var ownerName = WH40KTacticalMapLoc.LocalizeTeamName(marker.OwnerTeamId, marker.OwnerDisplayName);
@@ -37,6 +39,7 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
 
         TitleLabel.Text = title.ToUpperInvariant();
         StatusLabel.Text = BuildStatusText(marker, ownerName, capturingName);
+        MainButton.ToolTip = $"{TitleLabel.Text}\n{StatusLabel.Text}";
         MainButton.OnPressed += _ => OnPressed?.Invoke(TargetCoordinates);
     }
 

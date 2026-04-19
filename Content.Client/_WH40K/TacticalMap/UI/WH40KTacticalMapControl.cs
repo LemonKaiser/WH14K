@@ -44,6 +44,8 @@ public sealed class WH40KTacticalMapControl : Control
     private const int MaxAnnotationCacheDimension = 2048;
     private const float AnnotationRasterThicknessScale = 0.28f;
     private const float AnnotationRasterSampleSpacingFactor = 0.55f;
+    private const float CursorCoordinatesMargin = 10f;
+    private const float CursorCoordinatesPadding = 6f;
     private static readonly Color TacticalBlackoutColor = Color.Black;
 
     [Dependency] private readonly IEntityManager _entMan = default!;
@@ -113,7 +115,9 @@ public sealed class WH40KTacticalMapControl : Control
     private float _lastFitScale = 1f;
     private bool _showAllies = true;
     private bool _showAllyNames;
+    private bool _showCursorCoordinates;
     private bool _annotationsEnabled = true;
+    private bool _hasPointerPixel;
     private NetEntity _trackedEntity = NetEntity.Invalid;
     private NetEntity? _hoveredAllyEntity;
 
@@ -198,6 +202,18 @@ public sealed class WH40KTacticalMapControl : Control
                 return;
 
             _showAllyNames = value;
+            InvalidateArrange();
+        }
+    }
+    public bool ShowCursorCoordinates
+    {
+        get => _showCursorCoordinates;
+        set
+        {
+            if (_showCursorCoordinates == value)
+                return;
+
+            _showCursorCoordinates = value;
             InvalidateArrange();
         }
     }
@@ -557,6 +573,7 @@ public sealed class WH40KTacticalMapControl : Control
                 CommitActiveAnnotation();
 
             SetHoveredAlly(null);
+            _hasPointerPixel = true;
             _activePointerFunction = args.Function;
             _isPanning = true;
             _lastPointerPixel = args.RelativePixelPosition;
@@ -574,6 +591,7 @@ public sealed class WH40KTacticalMapControl : Control
                 return;
 
             SetHoveredAlly(null);
+            _hasPointerPixel = true;
             _activePointerFunction = args.Function;
             _isPanning = true;
             _lastPointerPixel = args.RelativePixelPosition;
@@ -588,6 +606,7 @@ public sealed class WH40KTacticalMapControl : Control
                 return;
 
             SetHoveredAlly(null);
+            _hasPointerPixel = true;
             _activePointerFunction = args.Function;
             _isPanning = true;
             _lastPointerPixel = args.RelativePixelPosition;
@@ -601,6 +620,7 @@ public sealed class WH40KTacticalMapControl : Control
 
         _activePointerFunction = args.Function;
         _isAnnotating = true;
+        _hasPointerPixel = true;
         _lastPointerPixel = args.RelativePixelPosition;
         _lastAnnotationPixel = args.RelativePixelPosition;
         _viewInitialized = true;
@@ -639,6 +659,7 @@ public sealed class WH40KTacticalMapControl : Control
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         base.MouseMove(args);
+        _hasPointerPixel = true;
 
         if (_isPanning)
         {
@@ -675,13 +696,16 @@ public sealed class WH40KTacticalMapControl : Control
             return;
         }
 
+        _lastPointerPixel = args.RelativePixelPosition;
         UpdateHoveredAlly(args.RelativePixelPosition);
     }
 
     protected override void MouseExited()
     {
         base.MouseExited();
+        _hasPointerPixel = false;
         SetHoveredAlly(null);
+        InvalidateArrange();
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
@@ -738,6 +762,7 @@ public sealed class WH40KTacticalMapControl : Control
         DrawTrackedEntities(handle, view);
         DrawTacticalBlackoutMasks(handle, view, _grid.LocalAABB);
         DrawMapFrame(handle, mapRect);
+        DrawCursorCoordinates(handle, mapRect);
     }
 
     private bool TryGetViewState(out ViewState view)
@@ -857,6 +882,42 @@ public sealed class WH40KTacticalMapControl : Control
         handle.DrawRect(mapRect, Color.FromHex("#4B5F78".AsSpan()), filled: false);
         handle.DrawRect(new UIBox2(mapRect.Left + 1f, mapRect.Top + 1f, mapRect.Right - 1f, mapRect.Bottom - 1f),
             Color.FromHex("#182330".AsSpan()), filled: false);
+    }
+
+    private void DrawCursorCoordinates(DrawingHandleScreen handle, UIBox2 mapRect)
+    {
+        if (!_showCursorCoordinates ||
+            !_hasPointerPixel ||
+            !TryGetHoveredTileCoordinates(_lastPointerPixel, out var tileCoordinates))
+        {
+            return;
+        }
+
+        var text = Loc.GetString(
+            "wh40k-tactical-map-cursor-coordinates",
+            ("x", tileCoordinates.X),
+            ("y", tileCoordinates.Y));
+        var textSize = handle.GetDimensions(_detailFont, text.AsSpan(), 1f);
+        var boxSize = new Vector2(
+            textSize.X + CursorCoordinatesPadding * 2f,
+            textSize.Y + CursorCoordinatesPadding * 2f);
+        var topLeft = new Vector2(
+            mapRect.Right - boxSize.X - CursorCoordinatesMargin,
+            mapRect.Bottom - boxSize.Y - CursorCoordinatesMargin);
+        var box = UIBox2.FromDimensions(topLeft, boxSize);
+
+        handle.DrawRect(box, Color.FromHex("#0B121A".AsSpan()).WithAlpha(0.86f), true);
+        handle.DrawRect(box, Color.FromHex("#324459".AsSpan()).WithAlpha(0.95f), false);
+        handle.DrawString(
+            _detailFont,
+            topLeft + new Vector2(CursorCoordinatesPadding + 1f, CursorCoordinatesPadding + 1f),
+            text,
+            Color.Black.WithAlpha(0.88f));
+        handle.DrawString(
+            _detailFont,
+            topLeft + new Vector2(CursorCoordinatesPadding, CursorCoordinatesPadding),
+            text,
+            Color.FromHex("#D7E2EE".AsSpan()));
     }
 
     private void DrawFog(DrawingHandleScreen handle, ViewState view, Box2 bounds)
@@ -1630,6 +1691,23 @@ public sealed class WH40KTacticalMapControl : Control
 
         _hoveredAllyEntity = allyEntity;
         InvalidateArrange();
+    }
+
+    private bool TryGetHoveredTileCoordinates(Vector2 relativePixelPosition, out Vector2i tileCoordinates)
+    {
+        tileCoordinates = default;
+
+        if (_grid == null ||
+            !TryGetDrawableLocalPosition(relativePixelPosition, out var localPosition))
+        {
+            return false;
+        }
+
+        var tileSize = MathF.Max(0.001f, _grid.TileSize);
+        tileCoordinates = new Vector2i(
+            (int) MathF.Floor(localPosition.X / tileSize),
+            (int) MathF.Floor(localPosition.Y / tileSize));
+        return true;
     }
 
     private bool TryGetDrawableLocalPosition(Vector2 relativePixelPosition, out Vector2 localPosition, bool clampToBounds = false)

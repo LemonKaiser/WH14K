@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared._WH40K.Vehicle.Combat;
 using Content.Shared._WH40K.Vehicle.Fuel;
+using Content.Shared._WH40K.Vehicle.Movement;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Item;
@@ -64,7 +65,9 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
         }
 
         var speed = args.OurBody.LinearVelocity.Length();
-        if (speed < ent.Comp.MinimumImpactSpeed)
+        TryComp(ent.Owner, out WH40KVehicleCarMovementComponent? movement);
+        var minimumImpactSpeed = ent.Comp.GetMinimumImpactSpeed(movement);
+        if (speed < minimumImpactSpeed)
             return;
 
         CleanupImpactCooldowns(ent.Comp);
@@ -77,7 +80,7 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
         ent.Comp.RecentImpacts[args.OtherEntity] = _timing.CurTime + ent.Comp.ImpactCooldown;
 
         var scale = Math.Clamp(
-            speed / Math.Max(ent.Comp.MinimumImpactSpeed, 0.01f),
+            speed / Math.Max(minimumImpactSpeed, 0.01f),
             1f,
             Math.Max(1f, ent.Comp.MaxImpactScale));
 

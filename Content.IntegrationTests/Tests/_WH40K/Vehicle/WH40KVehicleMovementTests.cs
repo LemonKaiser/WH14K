@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._WH40K.Vehicle.Combat;
 using Content.Shared._WH40K.Vehicle.Fuel;
 using Content.Shared._WH40K.Vehicle.Movement;
 using Content.Shared._WH40K.Vehicle.Visuals;
@@ -45,6 +46,8 @@ public sealed class WH40KVehicleMovementTests : GameTest
             {
                 var vehicle = SEntMan.SpawnEntity(prototype, map.GridCoords);
                 var fuel = SComp<WH40KVehicleFuelComponent>(vehicle);
+                var movement = SComp<WH40KVehicleCarMovementComponent>(vehicle);
+                var ram = SComp<WH40KVehicleRamComponent>(vehicle);
 
                 Assert.Multiple(() =>
                 {
@@ -54,6 +57,12 @@ public sealed class WH40KVehicleMovementTests : GameTest
                     Assert.That(fuel.FuelLevel, Is.EqualTo(fuel.FuelCapacity).Within(0.001f), $"{prototype} should spawn with a full fabricated tank.");
                     Assert.That(fuel.FullTankRuntime, Is.EqualTo(15 * 60).Within(0.001f), $"{prototype} should burn a full tank over 15 minutes.");
                     Assert.That(fuelSystem.GetFuelBurnPerSecond(fuel), Is.EqualTo(1f).Within(0.001f), $"{prototype} should burn 1u/s from a full 900u tank.");
+                    Assert.That(movement.MaxForwardSpeed, Is.EqualTo(10.2f).Within(0.001f), $"{prototype} should have the faster 50% boosted motorbike top speed.");
+                    Assert.That(movement.ForwardAcceleration, Is.EqualTo(4.7f).Within(0.001f), $"{prototype} should accelerate twice as fast as the previous motorbike tuning.");
+                    Assert.That(movement.LowSpeedTurnRateDegrees, Is.EqualTo(220f).Within(0.001f), $"{prototype} should use the doubled low-speed turn rate.");
+                    Assert.That(movement.HighSpeedTurnRateDegrees, Is.EqualTo(76f).Within(0.001f), $"{prototype} should use the doubled high-speed turn rate.");
+                    Assert.That(ram.MinimumImpactSpeedRatio, Is.EqualTo(0.25f).Within(0.001f), $"{prototype} should require 25% of top speed before ramming.");
+                    Assert.That(ram.GetMinimumImpactSpeed(movement), Is.EqualTo(movement.MaxForwardSpeed * 0.25f).Within(0.001f), $"{prototype} should derive ram speed from configured top speed.");
                 });
             }
         });
@@ -177,10 +186,10 @@ public sealed class WH40KVehicleMovementTests : GameTest
         Assert.Multiple(() =>
         {
             Assert.That(averageSpeed, Is.GreaterThan(1.0f), "Steering test never reached a useful driving speed.");
-            Assert.That(totalTurnDegrees, Is.GreaterThan(18.0), "Motorbike did not meaningfully turn while steering right.");
-            Assert.That(totalTurnDegrees, Is.LessThan(150.0), "Motorbike turned unrealistically far for this short steering window.");
-            Assert.That(firstTickTurn, Is.LessThan(2.0), "Steering snaps too hard on the first tick instead of ramping in.");
-            Assert.That(maxTickTurn, Is.LessThan(6.0), "Steering has a per-tick rotation spike instead of smooth turning.");
+            Assert.That(totalTurnDegrees, Is.GreaterThan(35.0), "Motorbike did not meaningfully turn while steering right.");
+            Assert.That(totalTurnDegrees, Is.LessThan(280.0), "Motorbike turned unrealistically far for this short steering window.");
+            Assert.That(firstTickTurn, Is.LessThan(4.0), "Steering snaps too hard on the first tick instead of ramping in.");
+            Assert.That(maxTickTurn, Is.LessThan(12.0), "Steering has a per-tick rotation spike instead of smooth turning.");
             Assert.That(perTickTurns.Count(turn => turn > 0.05), Is.GreaterThan(25), "Steering should be distributed over many ticks, not one big snap.");
         });
     }

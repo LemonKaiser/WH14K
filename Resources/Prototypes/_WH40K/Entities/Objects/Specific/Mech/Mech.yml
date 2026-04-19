@@ -22,6 +22,8 @@
     canAirtight: true
     maxIntegrity: 300
     maxEquipmentAmount: 1
+    pilotPassiveEnergyPerSecond: 0.5
+    movementEnergyPerSecond: 2.5
   - type: Vehicle
     transferDamageMultiplier: 0.15
   - type: SpriteMovement
@@ -32,11 +34,22 @@
       movement:
         state: sentinel
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.25
-    baseSprintSpeed: 3.6
+    baseWalkSpeed: 3.375
+    baseSprintSpeed: 5.4
+  - type: HandheldLight
+    wattage: 0.25
   - type: MeleeWeapon
     animation: WeaponArcSmash
     wideAnimation: WeaponArcSmash
+
+- type: entity
+  id: WH40KMechModuleFanSentinel
+  parent: MechModuleFan
+  suffix: Sentinel
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MechFanModule
+    energyConsumption: 0.5
 
 - type: entity
   id: MechSentinelBatteryAutogun
@@ -62,7 +75,7 @@
     startingEquipment:
       - WeaponMechCombatSentinelRifle
     startingModules:
-      - MechModuleFan
+      - WH40KMechModuleFanSentinel
       - MechModuleAirTank
       - MechModuleTeslaRelay
 
@@ -90,6 +103,6 @@
     startingEquipment:
       - WeaponMechCombatSentinelPlasma
     startingModules:
-      - MechModuleFan
+      - WH40KMechModuleFanSentinel
       - MechModuleAirTank
       - MechModuleTeslaRelay

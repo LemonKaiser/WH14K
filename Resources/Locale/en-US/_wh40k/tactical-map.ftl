@@ -106,3 +106,6 @@ wh40k-tactical-map-callsign-whiskey = Whiskey
 wh40k-tactical-map-callsign-xray = X-Ray
 wh40k-tactical-map-callsign-yankee = Yankee
 wh40k-tactical-map-callsign-zulu = Zulu
+wh40k-tactical-map-toggle-coordinates-on = COORDS ON
+wh40k-tactical-map-toggle-coordinates-off = COORDS OFF
+wh40k-tactical-map-cursor-coordinates = X:{ $x } Y:{ $y }

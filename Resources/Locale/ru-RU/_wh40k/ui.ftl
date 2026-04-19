@@ -199,7 +199,7 @@ w40k-cmd-upgrade-tree-node-wep-root-description = Открывает перву�
 w40k-cmd-upgrade-tree-node-wep-left-2-title = Разблокировка чейн-клинков
 w40k-cmd-upgrade-tree-node-wep-left-2-description = Карго: пакет болтерного/SMG вооружения. R&D: производство чейн-клинков.
 w40k-cmd-upgrade-tree-node-wep-left-3-title = Шаблон Аккатран
-w40k-cmd-upgrade-tree-node-wep-left-3-description = Карго: стандартная турель. R&D: производство аккатранских лазганов.
+w40k-cmd-upgrade-tree-node-wep-left-3-description = Карго: стандартная турель и «Сентинел». R&D: производство аккатранских лазганов.
 w40k-cmd-upgrade-tree-node-wep-left-4-title = Миномётная поддержка
 w40k-cmd-upgrade-tree-node-wep-left-4-description = Карго: марксманская турель и полевой комплект хеллгана. R&D: комплект развёртывания миномёта и производство хеллганов.
 w40k-cmd-upgrade-tree-node-wep-right-2-title = Линия стабберов
@@ -209,7 +209,7 @@ w40k-cmd-upgrade-tree-node-wep-right-3-description = Карго: компакт�
 w40k-cmd-upgrade-tree-node-wep-right-4-title = Вооружение плазмой
 w40k-cmd-upgrade-tree-node-wep-right-4-description = Карго: дробовая турель. R&D: производство плазмаганов.
 w40k-cmd-upgrade-tree-node-wep-cap-title = Тяжёлые огневые точки
-w40k-cmd-upgrade-tree-node-wep-cap-description = Карго: лазерная турель и «Сентинел». R&D: тяжёлый болтер и лазган шаблона Voss.
+w40k-cmd-upgrade-tree-node-wep-cap-description = Карго: лазерная турель. R&D: тяжёлый болтер и лазган шаблона Voss.
 
 w40k-cmd-upgrade-tree-node-eqp-root-title = Сигнальная доктрина
 w40k-cmd-upgrade-tree-node-eqp-root-description = Карго: боевой медпак и полевой дефибриллятор. R&D: производство тактического свистка.

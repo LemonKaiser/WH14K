@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared._WH40K.Vehicle.Movement;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
@@ -22,8 +23,14 @@ public sealed partial class WH40KVehicleMountedGunComponent : Component
 [RegisterComponent, NetworkedComponent]
 public sealed partial class WH40KVehicleRamComponent : Component
 {
+    /// <summary>
+    /// Fallback speed for non-car vehicles. WH40K car movement vehicles use <see cref="MinimumImpactSpeedRatio"/>.
+    /// </summary>
     [DataField]
     public float MinimumImpactSpeed = 2.75f;
+
+    [DataField]
+    public float MinimumImpactSpeedRatio = 0.25f;
 
     [DataField]
     public float MaxImpactScale = 2.2f;
@@ -63,4 +70,12 @@ public sealed partial class WH40KVehicleRamComponent : Component
 
     [ViewVariables]
     public Dictionary<EntityUid, TimeSpan> RecentImpacts = new();
+
+    public float GetMinimumImpactSpeed(WH40KVehicleCarMovementComponent? movement)
+    {
+        if (movement != null && movement.MaxForwardSpeed > 0f)
+            return movement.MaxForwardSpeed * Math.Clamp(MinimumImpactSpeedRatio, 0f, 1f);
+
+        return MinimumImpactSpeed;
+    }
 }
