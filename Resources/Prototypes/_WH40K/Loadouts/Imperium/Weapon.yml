@@ -30,7 +30,7 @@
   dummyEntity: WeaponLaserLonglas
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 25
   equipment:
     suitstorage: WeaponLaserLonglas
   storage:
@@ -45,7 +45,7 @@
   dummyEntity: WeaponLaserLasgunAccatran
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 5
   equipment:
     suitstorage: WeaponLaserLasgunAccatran
   storage:
@@ -60,7 +60,7 @@
   dummyEntity: WeaponLaserLasgunKrieg
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 30
+    requiredLevel: 20
   equipment:
     suitstorage: WeaponLaserLasgunKrieg
   storage:

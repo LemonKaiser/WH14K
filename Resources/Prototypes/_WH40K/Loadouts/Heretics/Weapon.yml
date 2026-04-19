@@ -21,6 +21,20 @@
     - MagazineStubSMG
 
 - type: loadout
+  id: WH40KWeaponStubRifleLoadout
+  dummyEntity: WeaponStubRifle
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    suitstorage: WeaponStubRifle
+  storage:
+    belt:
+    - MagazineStubRifle
+    - MagazineStubRifle
+    - MagazineStubRifle
+
+- type: loadout
   id: WH40KWeaponChsStubShotgunLoadout
   dummyEntity: WeaponChsStubShotgun
   effects:
@@ -31,3 +45,26 @@
   storage:
     belt:
     - BoxLethalshot
+
+- type: loadout
+  id: WH40KWeaponStubSMGLoadout
+  dummyEntity: WeaponStubSMG
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    pocket1: WeaponStubSMG
+  storage:
+    belt:
+    - MagazineStubSMG
+    - MagazineStubSMG
+
+- type: loadout
+  id: WH40KWeaponStubPistolLoadout
+  dummyEntity: WeaponStubPistol
+  equipment:
+    pocket1: WeaponStubPistol
+  storage:
+    belt:
+    - MagazineStubPistol
+    - MagazineStubPistol

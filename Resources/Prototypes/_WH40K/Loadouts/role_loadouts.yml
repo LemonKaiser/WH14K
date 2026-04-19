@@ -113,7 +113,7 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialMelee
-  - WH40KImperialMainWeapon
+  - WH40KImperialOperatorMainWeapon
 
 - type: roleLoadout
   id: JobPsyker
@@ -267,6 +267,7 @@
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -281,6 +282,7 @@
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -295,6 +297,7 @@
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -309,6 +312,7 @@
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -323,6 +327,7 @@
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -337,6 +342,7 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -351,6 +357,7 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -365,6 +372,7 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -379,6 +387,7 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
 
 - type: roleLoadout
@@ -393,4 +402,5 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
