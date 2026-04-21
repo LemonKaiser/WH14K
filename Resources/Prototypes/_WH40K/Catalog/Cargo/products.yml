@@ -139,6 +139,36 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumFrag
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FragGrenade
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumKrak
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: KrakGrenade
+  cost: 1000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMeltaGrenade
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MeltaGrenade
+  cost: 4000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumStubRifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -237,6 +267,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumMagazineBolterPistol
+  name: cargoproduct-name-wh40k-magazine-bolter
+  description: cargoproduct-description-wh40k-magazine-bolter
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolterPistol
+  cost: 400
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumHeavyBolter
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -252,6 +294,26 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMagazineHeavyBolter
+  cost: 5000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumFlameThrower
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlameThrowerGun
+  cost: 17000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumFlameTank
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlameThrowerTank
   cost: 5000
   category: cpcat-arm
   group: WH40KImperiumMarket
@@ -283,6 +345,46 @@
     state: icon
   product: WeaponLaserPlasmagun
   cost: 19000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumPlasmGunCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: PlasmGunPowerCell
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumPlasmPistolCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: PlasmPistolPowerCell
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMeltagun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserMeltagun
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMeltCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MeltPowerCell
+  cost: 2000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -781,6 +883,36 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsFrag
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FragGrenade
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsKrak
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: KrakGrenade
+  cost: 1000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMeltaGrenade
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MeltaGrenade
+  cost: 4000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsStubRifle
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -932,6 +1064,18 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineBolter
+  name: cargoproduct-name-wh40k-magazine-bolter-pistol
+  description: cargoproduct-description-wh40k-magazine-bolter-pistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineBolter
+  cost: 800
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMagazineBolterPistol
   name: cargoproduct-name-wh40k-magazine-bolter-pistol
   description: cargoproduct-description-wh40k-magazine-bolter-pistol
@@ -964,6 +1108,26 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsFlameThrower
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlameThrowerGun
+  cost: 17000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsFlameTank
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: FlameThrowerTank
+  cost: 5000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMortar
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -990,6 +1154,46 @@
     state: icon
   product: WeaponLaserPlasmaPistol
   cost: 19000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsPlasmGunCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: PlasmGunPowerCell
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsPlasmPistolCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: PlasmPistolPowerCell
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMeltagun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserMeltagun
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMeltCell
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MeltPowerCell
+  cost: 2000
   category: cpcat-arm
   group: WH40KHereticsMarket
 

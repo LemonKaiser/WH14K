@@ -51,6 +51,10 @@
       path: /Audio/Weapons/Guns/MagIn/revolver_magin.ogg
   - type: StaticPrice
     price: 500
+  - type: AimingCamera
+    maxOffset: 2
+    pvsIncrease: 0.2
+    requireWield: false
 
 - type: entity
   name: Deckard
@@ -189,4 +193,3 @@
     capacity: 5
     chambers: [ null, null, null, null, null ]
     ammoSlots: [ null, null, null, null, null ]
-

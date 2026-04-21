@@ -20,6 +20,7 @@
   - type: Sprite
     drawdepth: Mobs
     noRot: true
+    scale: 2, 2
     sprite: _WH40K/Mobs/Oskvernitel/oskvernitel.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -40,8 +41,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      201: Critical
-      300: Dead
+      2000: Critical
+      2100: Dead
     stateAlertDict:
       Alive: BorgHealth
       Critical: HumanCrit
