@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Server.Players.JobWhitelist;
 using Content.Shared.Administration;
@@ -12,6 +13,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Ban)]
 public sealed class JobWhitelistAddCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private readonly IPlayerLocator _playerLocator = default!;
@@ -44,6 +46,16 @@ public sealed class JobWhitelistAddCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-job-whitelist-add"),
+                    player,
+                    shell.WriteError))
+            {
+                return;
+            }
+
             var isWhitelisted = await _db.IsJobWhitelisted(guid, job);
             if (isWhitelisted)
             {
@@ -140,6 +152,7 @@ public sealed class GetJobWhitelistCommand : LocalizedCommands
 [AdminCommand(AdminFlags.Ban)]
 public sealed class RemoveJobWhitelistCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private readonly IPlayerLocator _playerLocator = default!;
@@ -172,6 +185,16 @@ public sealed class RemoveJobWhitelistCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-job-whitelist-remove"),
+                    player,
+                    shell.WriteError))
+            {
+                return;
+            }
+
             var isWhitelisted = await _db.IsJobWhitelisted(guid, job);
             if (!isWhitelisted)
             {

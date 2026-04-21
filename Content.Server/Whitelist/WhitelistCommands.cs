@@ -1,4 +1,5 @@
 using Content.Server.Administration;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -12,6 +13,7 @@ namespace Content.Server.Whitelist;
 [AdminCommand(AdminFlags.Ban)]
 public sealed class AddWhitelistCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly IServerDbManager _dbManager = default!;
     public override string Command => "whitelistadd";
@@ -31,6 +33,16 @@ public sealed class AddWhitelistCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-whitelist-add"),
+                    data.Username,
+                    shell.WriteError))
+            {
+                return;
+            }
+
             var isWhitelisted = await _dbManager.GetWhitelistStatusAsync(guid);
             if (isWhitelisted)
             {
@@ -60,6 +72,7 @@ public sealed class AddWhitelistCommand : LocalizedCommands
 [AdminCommand(AdminFlags.Ban)]
 public sealed class RemoveWhitelistCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly IServerDbManager _dbManager = default!;
 
@@ -80,6 +93,16 @@ public sealed class RemoveWhitelistCommand : LocalizedCommands
         if (data != null)
         {
             var guid = data.UserId;
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-whitelist-remove"),
+                    data.Username,
+                    shell.WriteError))
+            {
+                return;
+            }
+
             var isWhitelisted = await _dbManager.GetWhitelistStatusAsync(guid);
             if (!isWhitelisted)
             {

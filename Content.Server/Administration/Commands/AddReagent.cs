@@ -3,6 +3,7 @@ using Content.Shared.Administration;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
+using Content.Server.Administration.Managers;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace Content.Server.Administration.Commands
     [AdminCommand(AdminFlags.Admin)]
     public sealed class AddReagent : IConsoleCommand
     {
+        [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
         [Dependency] private readonly IEntityManager _entManager = default!;
         [Dependency] private readonly IPrototypeManager _protomanager = default!;
 
@@ -22,7 +24,7 @@ namespace Content.Server.Administration.Commands
         public string Description => "Add (or remove) some amount of reagent from some solution.";
         public string Help => $"Usage: {Command} <target> <solution> <reagent> <quantity>";
 
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        public async void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length < 4)
             {
@@ -33,6 +35,15 @@ namespace Content.Server.Administration.Commands
             if (!NetEntity.TryParse(args[0], out var uidNet) || !_entManager.TryGetEntity(uidNet, out var uid))
             {
                 shell.WriteLine($"Invalid entity id.");
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedEntityTargetAsync(
+                    shell.Player,
+                    uid.Value,
+                    Loc.GetString("admin-hierarchy-action-add-reagent"),
+                    notify: shell.WriteLine))
+            {
                 return;
             }
 

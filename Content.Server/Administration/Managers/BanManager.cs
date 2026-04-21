@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Chat.Managers;
+using Content.Server.Connection;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Shared.CCVar;
@@ -28,6 +29,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly IAdminManager _adminManager = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IGameTiming _gameTiming = default!;
     [Dependency] private readonly ILocalizationManager _localizationManager = default!;
@@ -168,7 +170,7 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
         _sawmill.Info(logMessage);
         _chat.SendAdminAlert(logMessage);
 
-        KickMatchingConnectedPlayers(banDef, "newly placed ban");
+        await KickMatchingConnectedPlayersAsync(banDef, "newly placed ban");
     }
 
     private NoteSeverity GetSeverityForServerBan(CreateBanInfo banInfo, CVarDef<string> defaultCVar)
@@ -183,15 +185,21 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
         return NoteSeverity.None;
     }
 
-    private void KickMatchingConnectedPlayers(BanDef def, string source)
+    private async Task KickMatchingConnectedPlayersAsync(BanDef def, string source)
     {
         foreach (var player in _playerManager.Sessions)
         {
-            if (BanMatchesPlayer(player, def))
+            if (!BanMatchesPlayer(player, def))
+                continue;
+
+            if (await HasHostBanBypassAsync(player))
             {
-                KickForBanDef(player, def);
-                _sawmill.Info($"Kicked player {player.Name} ({player.UserId}) through {source}");
+                NotifyHostBanBypass(player, def, source);
+                continue;
             }
+
+            KickForBanDef(player, def);
+            _sawmill.Info($"Kicked player {player.Name} ({player.UserId}) through {source}");
         }
     }
 
@@ -216,6 +224,30 @@ public sealed partial class BanManager : IBanManager, IPostInjectInit
     {
         var message = def.FormatBanMessage(_cfg, _localizationManager);
         player.Channel.Disconnect(message);
+    }
+
+    private async ValueTask<bool> HasHostBanBypassAsync(ICommonSession player)
+    {
+        if (_adminManager.GetAdminData(player, includeDeAdmin: true)?.IsHost == true)
+            return true;
+
+        if (_adminManager.IsPromotedHost(player.UserId))
+            return true;
+
+        var dbAdmin = await _db.GetAdminDataForAsync(player.UserId);
+        return ConnectionManagerStaffBypass.HasHostBanBypass(dbAdmin);
+    }
+
+    private void NotifyHostBanBypass(ICommonSession player, BanDef ban, string source)
+    {
+        var message = Loc.GetString(
+            "admin-hierarchy-host-bypass",
+            ("player", $"{player.Name} ({player.UserId})"),
+            ("banIds", ban.Id?.ToString() ?? "<pending>"),
+            ("source", source));
+
+        _sawmill.Warning(message);
+        _chat.SendAdminAlert(message);
     }
 
     #endregion

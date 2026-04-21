@@ -7,12 +7,29 @@ namespace Content.Server.Connection;
 public static class ConnectionManagerStaffBypass
 {
     private const AdminFlags DiscordAuthBypassFlags = AdminFlags.Moderator | AdminFlags.Admin | AdminFlags.Host;
+    private const AdminFlags HostBypassFlags = AdminFlags.Host;
 
     public static bool HasDiscordAuthBypass(Admin? adminData)
     {
-        if (adminData == null || adminData.Suspended)
+        return HasAnyFlag(adminData, DiscordAuthBypassFlags, requireUnsuspended: true);
+    }
+
+    public static bool HasHostBanBypass(Admin? adminData)
+    {
+        // This bypass is account-level on purpose so a HOST cannot be locked out by deadmin/suspend state.
+        return HasAnyFlag(adminData, HostBypassFlags, requireUnsuspended: false);
+    }
+
+    private static bool HasAnyFlag(Admin? adminData, AdminFlags requiredFlags, bool requireUnsuspended)
+    {
+        if (adminData == null || requireUnsuspended && adminData.Suspended)
             return false;
 
+        return (ResolveFlags(adminData) & requiredFlags) != 0;
+    }
+
+    private static AdminFlags ResolveFlags(Admin adminData)
+    {
         var flags = AdminFlags.None;
 
         if (adminData.AdminRank != null)
@@ -27,7 +44,6 @@ public static class ConnectionManagerStaffBypass
                 flags |= flag;
         }
 
-        // This bypass is account-level on purpose so staff can still recover access even if they are currently deadminned.
-        return (flags & DiscordAuthBypassFlags) != 0;
+        return flags;
     }
 }

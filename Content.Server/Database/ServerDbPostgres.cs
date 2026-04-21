@@ -343,7 +343,7 @@ namespace Content.Server.Database
             return connectionLog.Id;
         }
 
-        public override async Task<((Admin, string? lastUserName)[] admins, AdminRank[])>
+        public override async Task<((Admin admin, string? lastUserName, DateTime? lastSeenTime)[] admins, AdminRank[] ranks)>
             GetAllAdminAndRanksAsync(CancellationToken cancel)
         {
             await using var db = await GetDbImpl();
@@ -355,13 +355,15 @@ namespace Content.Server.Database
             // Join with the player table to find their last seen username, if they have one.
             var admins = await db.PgDbContext.Admin
                 .Include(a => a.Flags)
+                .Include(a => a.AdminRank)
+                .ThenInclude(r => r!.Flags)
                 .GroupJoin(db.PgDbContext.Player, a => a.UserId, p => p.UserId, (a, grouping) => new {a, grouping})
-                .SelectMany(t => t.grouping.DefaultIfEmpty(), (t, p) => new {t.a, p!.LastSeenUserName})
+                .SelectMany(t => t.grouping.DefaultIfEmpty(), (t, p) => new {t.a, p!.LastSeenUserName, LastSeenTime = (DateTime?) p.LastSeenTime})
                 .ToArrayAsync(cancel);
 
             var adminRanks = await db.DbContext.AdminRank.Include(a => a.Flags).ToArrayAsync(cancel);
 
-            return (admins.Select(p => (p.a, p.LastSeenUserName)).ToArray(), adminRanks)!;
+            return (admins.Select(p => (p.a, p.LastSeenUserName, p.LastSeenTime)).ToArray(), adminRanks)!;
         }
 
         protected override IQueryable<AdminLog> StartAdminLogsQuery(ServerDbContext db, LogFilter? filter = null)

@@ -25,6 +25,8 @@ namespace Content.Shared.Administration
             if (buffer.ReadBoolean())
             {
                 var active = buffer.ReadBoolean();
+                var isHost = buffer.ReadBoolean();
+                var effectiveHierarchyLevel = buffer.ReadByte();
                 buffer.ReadPadBits();
                 var flags = (AdminFlags) buffer.ReadUInt32();
                 var title = buffer.ReadString();
@@ -32,6 +34,8 @@ namespace Content.Shared.Administration
                 Admin = new AdminData
                 {
                     Active = active,
+                    IsHost = isHost,
+                    EffectiveHierarchyLevel = effectiveHierarchyLevel,
                     Title = title,
                     Flags = flags,
                 };
@@ -53,6 +57,8 @@ namespace Content.Shared.Administration
             if (Admin == null) return;
 
             buffer.Write(Admin.Active);
+            buffer.Write(Admin.IsHost);
+            buffer.Write(Admin.EffectiveHierarchyLevel);
             buffer.WritePadBits();
             buffer.Write((uint) Admin.Flags);
             buffer.Write(Admin.Title);

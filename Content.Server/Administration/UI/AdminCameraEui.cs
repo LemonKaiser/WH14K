@@ -5,6 +5,7 @@ using Content.Shared.Eui;
 using Content.Shared.Follower;
 using Content.Shared.Coordinates;
 using Robust.Server.GameStates;
+using Robust.Server.Player;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -20,6 +21,7 @@ namespace Content.Server.Administration.UI;
 public sealed partial class AdminCameraEui : BaseEui
 {
     [Dependency] private readonly IAdminManager _admin = default!;
+    [Dependency] private readonly IAdminHierarchyManager _adminHierarchy = default!;
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -67,6 +69,13 @@ public sealed partial class AdminCameraEui : BaseEui
             case AdminCameraFollowMessage:
                 if (!_admin.HasAdminFlag(Player, AdminFlags.Admin) || Player.AttachedEntity == null)
                     return;
+
+                if (_entityManager.TryGetComponent(_target, out ActorComponent? actor)
+                    && !_adminHierarchy.CanManageAdmin(Player, actor.PlayerSession).Allowed)
+                {
+                    return;
+                }
+
                 _follower.StartFollowingEntity(Player.AttachedEntity.Value, _target);
                 break;
             default:

@@ -1,4 +1,5 @@
 ﻿using Content.Server.Administration.BanList;
+using Content.Server.Administration.Managers;
 using Content.Server.EUI;
 using Content.Server.Database;
 using Content.Shared.Administration;
@@ -10,6 +11,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Ban)]
 public sealed class RoleBanListCommand : IConsoleCommand
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IServerDbManager _dbManager = default!;
 
     [Dependency] private readonly EuiManager _eui = default!;
@@ -59,6 +61,16 @@ public sealed class RoleBanListCommand : IConsoleCommand
                 var msg = $"ID: {ban.Id}: Role(s): {string.Join(",", ban.Roles ?? [])} Reason: {ban.Reason}";
                 shell.WriteLine(msg);
             }
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                player,
+                data.UserId,
+                Loc.GetString("admin-hierarchy-action-view-role-ban-list"),
+                data.Username,
+                shell.WriteError))
+        {
             return;
         }
 

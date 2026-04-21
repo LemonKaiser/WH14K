@@ -315,6 +315,11 @@ namespace Content.Server.Administration.Managers
             ReloadAdmin(player);
         }
 
+        public bool IsPromotedHost(NetUserId userId)
+        {
+            return _promotedPlayers.Contains(userId);
+        }
+
         void IPostInjectInit.PostInject()
         {
             _playerManager.PlayerStatusChanged += PlayerStatusChanged;
@@ -441,6 +446,8 @@ namespace Content.Server.Administration.Managers
                     Title = Loc.GetString("admin-manager-admin-data-host-title"),
                     Flags = AdminFlagsHelper.Everything,
                     Active = true,
+                    IsHost = true,
+                    EffectiveHierarchyLevel = AdminHierarchy.HostHierarchyLevel,
                 };
 
                 return (data, null, true);
@@ -485,6 +492,10 @@ namespace Content.Server.Administration.Managers
                 {
                     Flags = flags,
                     Active = !dbData.Deadminned,
+                    IsHost = (flags & AdminFlags.Host) != 0,
+                    EffectiveHierarchyLevel = (flags & AdminFlags.Host) != 0
+                        ? AdminHierarchy.HostHierarchyLevel
+                        : dbData.AdminRank?.HierarchyLevel ?? AdminHierarchy.DefaultHierarchyLevel,
                 };
 
                 if (dbData.Title != null  && _cfg.GetCVar(CCVars.AdminUseCustomNamesAdminRank))

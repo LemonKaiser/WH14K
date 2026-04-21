@@ -2,6 +2,7 @@ using Content.Shared.Administration;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Server.Administration.Managers;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
@@ -9,12 +10,13 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Debug)]
 public sealed class StripAllCommand : LocalizedEntityCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
     [Dependency] private readonly InventorySystem _inventorySystem = default!;
 
     public override string Command => "stripall";
 
-    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 1)
         {
@@ -25,6 +27,15 @@ public sealed class StripAllCommand : LocalizedEntityCommands
         if (!NetEntity.TryParse(args[0], out var targetUidNet) || !EntityManager.TryGetEntity(targetUidNet, out var targetEntity))
         {
             shell.WriteLine(Loc.GetString("shell-entity-uid-must-be-number"));
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedEntityTargetAsync(
+                shell.Player,
+                targetEntity.Value,
+                Loc.GetString("admin-hierarchy-action-strip-all"),
+                notify: shell.WriteLine))
+        {
             return;
         }
 
