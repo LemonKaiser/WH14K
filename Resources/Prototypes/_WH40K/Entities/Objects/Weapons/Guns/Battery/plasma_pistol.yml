@@ -3,6 +3,10 @@
   id: WeaponLaserPlasmaPistol
   suffix: WH40K
   components:
+  - type: AimingCamera
+    maxOffset: 2
+    pvsIncrease: 0.2
+    requireWield: false
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Battery/plasmapistol.rsi
   - type: Gun

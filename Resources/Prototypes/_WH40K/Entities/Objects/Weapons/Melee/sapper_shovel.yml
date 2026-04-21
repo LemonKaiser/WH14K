@@ -12,19 +12,19 @@
     size: Normal
     sprite: _WH40K/Objects/Weapons/Melee/sapper_shovel.rsi
   - type: MeleeWeapon
-    attackRate: 1.2
+    attackRate: 1.5
     range: 1.2
     angle: 40
     wideAnimationRotation: -135
     damage:
       types:
         Slash: 11
-        Blunt: 7
+        Blunt: 9
         Structural: 12
     soundHit:
       collection: MetalThud
   - type: StaminaDamageOnHit
-    damage: 10
+    damage: 6
   - type: DisarmMalus
     malus: 0.275
   - type: Shovel

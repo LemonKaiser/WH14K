@@ -251,8 +251,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun]
-      Heretics: [WH40KHereticsMachete]
+      Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun, WH40KImperiumMortar, WH40KImperiumMortarHE]
+      Heretics: [WH40KHereticsMachete, WH40KHereticsMortar, WH40KHereticsMortarHE]
   - id: wep_left_2
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-2-title
@@ -263,8 +263,8 @@
     minRoundTimeSeconds: 3
     technologyUnlocks: [WH40KWeaponryAuthLeft2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumBolter, WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumStubShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineLMG, WH40KImperiumMagazineRifle, WH40KImperiumMagazineBolter]
-      Heretics: [WH40KHereticsBolterPistol, WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineLMG, WH40KHereticsMagazineRifle, WH40KHereticsMagazineBolterPistol]
+      Imperium: [WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumStubShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineLMG, WH40KImperiumMagazineRifle]
+      Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineLMG, WH40KHereticsMagazineRifle]
   - id: wep_right_2
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-2-title
@@ -275,8 +275,8 @@
     minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KWeaponryAuthRight2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumPlasmaGun]
-      Heretics: [WH40KHereticsPlasmaPistol]
+      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
+      Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell]
   - id: wep_left_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-3-title
@@ -287,8 +287,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KWeaponryAuthLeft3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel]
-      Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel]
+      Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel, WH40KImperiumBolter, WH40KImperiumMagazineBolter, WH40KImperiumMagazineBolterPistol]
+      Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel, WH40KHereticsBolterPistol, WH40KHereticsMagazineBolter, WH40KHereticsMagazineBolterPistol]
   - id: wep_right_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-3-title
@@ -299,8 +299,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KWeaponryAuthRight3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter]
-      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter]
+      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank]
+      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank]
   - id: wep_left_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-4-title
@@ -311,8 +311,8 @@
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumMortar, WH40KImperiumMortarHE, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack]
-      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsMortar, WH40KHereticsMortarHE, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack]
+      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack]
+      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack]
   - id: wep_right_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-4-title
@@ -371,8 +371,8 @@
     minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KEquipmentAuthRight2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumServoSkull]
-      Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsServoSkull]
+      Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumFrag]
+      Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsFrag]
   - id: eqp_left_3
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-left-3-title
@@ -395,8 +395,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KEquipmentAuthRight3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumTacticalWhistle]
-      Heretics: [WH40KHereticsTacticalWhistle]
+      Imperium: [WH40KImperiumTacticalWhistle, WH40KImperiumServoSkull, WH40KImperiumKrak]
+      Heretics: [WH40KHereticsTacticalWhistle, WH40KHereticsServoSkull, WH40KHereticsKrak]
   - id: eqp_left_4
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-left-4-title
@@ -419,8 +419,8 @@
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KEquipmentAuthRight4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryLaptop]
-      Heretics: [WH40KHereticsSentryLaptop]
+      Imperium: [WH40KImperiumSentryLaptop, WH40KImperiumMeltaGrenade]
+      Heretics: [WH40KHereticsSentryLaptop, WH40KHereticsMeltaGrenade]
   - id: eqp_cap
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-cap-title

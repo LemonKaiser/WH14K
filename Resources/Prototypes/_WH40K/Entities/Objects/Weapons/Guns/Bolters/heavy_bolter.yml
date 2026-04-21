@@ -77,10 +77,10 @@
     flipPassSide: true
     blockedSidePassChance: 0.05
   - type: Gun
-    minAngle: 12
-    maxAngle: 24
-    angleIncrease: 2
-    angleDecay: 8
+    minAngle: 1
+    maxAngle: 3
+    angleIncrease: 0.5
+    angleDecay: 4
     fireRate: 8
     selectedMode: FullAuto
     availableModes:

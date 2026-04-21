@@ -11,14 +11,14 @@
     sprite: _WH40K/Objects/Weapons/Melee/chaos_club.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -135
-    attackRate: 1.5
+    attackRate: 1.2
     damage:
       types:
-        Blunt: 35
+        Blunt: 25
     soundHit:
       path: "/Audio/Weapons/smash.ogg"
   - type: StaminaDamageOnHit
-    damage: 10
+    damage: 6.5
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Melee/chaos_club.rsi
     quickEquip: false

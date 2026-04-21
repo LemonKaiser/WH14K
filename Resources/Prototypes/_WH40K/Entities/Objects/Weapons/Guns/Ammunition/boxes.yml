@@ -86,7 +86,7 @@
   - type: Item
     size: Small
   - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
     state: icon
   - type: BallisticAmmoProvider
     mayTransfer: true
@@ -106,7 +106,7 @@
   - type: Item
     size: Small
   - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
     state: icon
   - type: BallisticAmmoProvider
     mayTransfer: true
