@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Administration.BanList;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Shared.Administration;
@@ -14,6 +15,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Ban)]
 public sealed class BanListCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IServerDbManager _dbManager = default!;
@@ -53,6 +55,16 @@ public sealed class BanListCommand : LocalizedCommands
                 shell.WriteLine(msg);
             }
 
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                player,
+                data.UserId,
+                Loc.GetString("admin-hierarchy-action-view-ban-list"),
+                data.Username,
+                shell.WriteError))
+        {
             return;
         }
 

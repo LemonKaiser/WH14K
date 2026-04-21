@@ -55,6 +55,8 @@ internal static class ServerContentIoC
         deps.Register<IConnectionManager, ConnectionManager>();
         deps.Register<ServerUpdateManager>();
         deps.Register<IAdminManager, AdminManager>();
+        deps.Register<IAdminHierarchyManager, AdminHierarchyManager>();
+        deps.Register<IAdminActionGuard, AdminActionGuard>();
         deps.Register<ISharedAdminManager, AdminManager>();
         deps.Register<EuiManager, EuiManager>();
         deps.Register<IVoteManager, VoteManager>();

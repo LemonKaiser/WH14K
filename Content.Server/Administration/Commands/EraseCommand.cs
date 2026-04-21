@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Shared.Administration;
 using Robust.Server.Player;
@@ -9,6 +10,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Admin)]
 public sealed class EraseCommand : LocalizedEntityCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly AdminSystem _admin = default!;
@@ -29,6 +31,16 @@ public sealed class EraseCommand : LocalizedEntityCommands
         if (located == null)
         {
             shell.WriteError(Loc.GetString("cmd-erase-player-not-found"));
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                located.UserId,
+                Loc.GetString("admin-hierarchy-action-erase"),
+                located.Username,
+                shell.WriteError))
+        {
             return;
         }
 

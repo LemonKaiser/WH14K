@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Managers;
@@ -222,6 +223,7 @@ namespace Content.Server.Connection
             }
 
             var modernHwid = e.UserData.ModernHWIds;
+            Admin? adminData = null;
 
             if (modernHwid.Length == 0 && e.AuthType == LoginType.LoggedIn && _cfg.GetCVar(CCVars.RequireModernHardwareId))
             {
@@ -231,9 +233,17 @@ namespace Content.Server.Connection
             var bans = await _db.GetBansAsync(addr, userId, hwId, modernHwid, includeUnbanned: false);
             if (bans.Count > 0)
             {
-                var firstBan = bans[0];
-                var message = firstBan.FormatBanMessage(_cfg, _loc);
-                return (ConnectionDenyReason.Ban, new NetDenyReason(message), bans);
+                adminData = await _db.GetAdminDataForAsync(userId);
+                if (HasHostBanBypass(e, adminData))
+                {
+                    NotifyHostBanBypass($"{e.UserName} ({userId})", bans, "connection");
+                }
+                else
+                {
+                    var firstBan = bans[0];
+                    var message = firstBan.FormatBanMessage(_cfg, _loc);
+                    return (ConnectionDenyReason.Ban, new NetDenyReason(message), bans);
+                }
             }
 
             if (HasTemporaryBypass(userId))
@@ -242,7 +252,7 @@ namespace Content.Server.Connection
                 return null;
             }
 
-            var adminData = await _db.GetAdminDataForAsync(e.UserId);
+            adminData ??= await _db.GetAdminDataForAsync(e.UserId);
             var discordAuthStaffBypass = ConnectionManagerStaffBypass.HasDiscordAuthBypass(adminData);
 
             if (_cfg.GetCVar(CCVars.PanicBunkerEnabled) && adminData == null)
@@ -361,6 +371,35 @@ namespace Content.Server.Connection
         private bool HasTemporaryBypass(NetUserId user)
         {
             return _temporaryBypasses.TryGetValue(user, out var time) && time > _gameTiming.RealTime;
+        }
+
+        private bool HasHostBanBypass(NetConnectingArgs args, Admin? adminData)
+        {
+            return ConnectionManagerStaffBypass.HasHostBanBypass(adminData)
+                   || _adminManager.IsPromotedHost(args.UserId)
+                   || args.UserName == _cfg.GetCVar(CCVars.ConsoleLoginHostUser)
+                   || _cfg.GetCVar(CCVars.ConsoleLoginLocal) && IsLoopback(args.IP.Address);
+        }
+
+        private void NotifyHostBanBypass(string playerName, IReadOnlyCollection<BanDef> bans, string source)
+        {
+            var banIds = string.Join(", ", bans.Select(ban => ban.Id?.ToString() ?? "<pending>"));
+            var message = Loc.GetString(
+                "admin-hierarchy-host-bypass",
+                ("player", playerName),
+                ("banIds", banIds),
+                ("source", source));
+
+            _sawmill.Warning(message);
+            _chatManager.SendAdminAlert(message);
+        }
+
+        private static bool IsLoopback(IPAddress address)
+        {
+            if (address.IsIPv4MappedToIPv6)
+                address = address.MapToIPv4();
+
+            return Equals(address, IPAddress.Loopback) || Equals(address, IPAddress.IPv6Loopback);
         }
 
         private async Task<NetUserId?> AssignUserIdCallback(string name)

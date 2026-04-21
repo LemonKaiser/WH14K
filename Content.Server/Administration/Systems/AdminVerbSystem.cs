@@ -47,6 +47,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private readonly IConGroupController _groupController = default!;
         [Dependency] private readonly IConsoleHost _console = default!;
         [Dependency] private readonly IAdminManager _adminManager = default!;
+        [Dependency] private readonly IAdminHierarchyManager _adminHierarchyManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly SharedMapSystem _map = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -78,6 +79,14 @@ namespace Content.Server.Administration.Systems
 
         private void GetVerbs(GetVerbsEvent<Verb> ev)
         {
+            if (TryComp(ev.User, out ActorComponent? actor)
+                && TryComp(ev.Target, out ActorComponent? targetActor)
+                && _adminManager.IsAdmin(actor.PlayerSession)
+                && !_adminHierarchyManager.CanManageAdmin(actor.PlayerSession, targetActor.PlayerSession).Allowed)
+            {
+                return;
+            }
+
             AddAdminVerbs(ev);
             AddDebugVerbs(ev);
             AddSmiteVerbs(ev);
@@ -106,6 +115,9 @@ namespace Content.Server.Administration.Systems
 
                 if (TryComp(args.Target, out ActorComponent? targetActor))
                 {
+                    if (!_adminHierarchyManager.CanManageAdmin(player, targetActor.PlayerSession).Allowed)
+                        return;
+
                     // AdminHelp
                     Verb verb = new();
                     verb.TextLocId = "ahelp-verb-get-data-text";

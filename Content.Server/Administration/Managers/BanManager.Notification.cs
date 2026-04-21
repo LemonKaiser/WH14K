@@ -49,7 +49,7 @@ public sealed partial class BanManager
             return;
         }
 
-        KickMatchingConnectedPlayers(ban, "ban notification");
+        await KickMatchingConnectedPlayersAsync(ban, "ban notification");
     }
 
     private bool CheckBanRateLimit()

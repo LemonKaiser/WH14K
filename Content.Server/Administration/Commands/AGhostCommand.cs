@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Server.Mind;
@@ -15,6 +16,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Admin)]
 public sealed class AGhostCommand : LocalizedCommands
 {
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
 
@@ -32,7 +34,7 @@ public sealed class AGhostCommand : LocalizedCommands
         return CompletionResult.Empty;
     }
 
-    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length > 1)
         {
@@ -68,6 +70,17 @@ public sealed class AGhostCommand : LocalizedCommands
                 shell.WriteError(LocalizationManager.GetString("shell-target-player-does-not-exist"));
                 return;
             }
+        }
+
+        if (!self && player != null
+            && await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                player.UserId,
+                Loc.GetString("admin-hierarchy-action-aghost"),
+                player.Name,
+                shell.WriteError))
+        {
+            return;
         }
 
         var mindSystem = _entities.System<SharedMindSystem>();

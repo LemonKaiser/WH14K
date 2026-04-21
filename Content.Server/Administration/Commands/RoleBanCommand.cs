@@ -13,6 +13,7 @@ namespace Content.Server.Administration.Commands;
 public sealed class RoleBanCommand : IConsoleCommand
 {
     [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IBanManager _bans = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ILogManager _log = default!;
@@ -96,6 +97,16 @@ public sealed class RoleBanCommand : IConsoleCommand
 
         var targetUid = located.UserId;
         var targetHWid = located.LastHWId;
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                targetUid,
+                Loc.GetString("admin-hierarchy-action-role-ban"),
+                located.Username,
+                shell.WriteLine))
+        {
+            return;
+        }
 
         var banInfo = new CreateRoleBanInfo(reason);
         if (minutes > 0)

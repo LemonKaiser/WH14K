@@ -1,5 +1,6 @@
 using Content.Shared.Administration;
 using Content.Shared.Administration.Managers;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Toolshed;
 
@@ -67,6 +68,8 @@ namespace Content.Server.Administration.Managers
         void Initialize();
 
         void PromoteHost(ICommonSession player);
+
+        bool IsPromotedHost(NetUserId userId);
 
         bool TryGetCommandFlags(CommandSpec command, out AdminFlags[]? flags);
     }

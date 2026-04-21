@@ -15,6 +15,7 @@ public sealed class BanCommand : LocalizedCommands
 {
 
     [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private readonly IBanManager _bans = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
@@ -89,6 +90,16 @@ public sealed class BanCommand : LocalizedCommands
 
         var targetUid = located.UserId;
         var targetHWid = located.LastHWId;
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                player,
+                targetUid,
+                Loc.GetString("admin-hierarchy-action-ban"),
+                located.Username,
+                shell.WriteLine))
+        {
+            return;
+        }
 
         var banInfo = new CreateServerBanInfo(reason);
         banInfo.WithBanningAdmin(player?.UserId);

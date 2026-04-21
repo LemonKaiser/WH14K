@@ -1,5 +1,6 @@
 ﻿using Content.Server.Database;
 using Content.Shared.Administration;
+using Content.Server.Administration.Managers;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands
@@ -7,6 +8,7 @@ namespace Content.Server.Administration.Commands
     [AdminCommand(AdminFlags.Ban)]
     public sealed class PardonCommand : LocalizedCommands
     {
+        [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
         [Dependency] private readonly IServerDbManager _dbManager = default!;
 
         public override string Command => "pardon";
@@ -47,6 +49,15 @@ namespace Content.Server.Administration.Commands
                 else
                     shell.WriteLine(Loc.GetString($"cmd-pardon-already-pardoned"));
 
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedBanAsync(
+                    player,
+                    ban,
+                    Loc.GetString("admin-hierarchy-action-pardon"),
+                    shell.WriteLine))
+            {
                 return;
             }
 
