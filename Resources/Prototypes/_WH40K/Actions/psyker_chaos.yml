@@ -152,7 +152,10 @@
   description: Распространите чумной туман, чтобы затруднить обзор и задавить поле.
   components:
   - type: Action
-    useDelay: 14
+    useDelay: 180
+  - type: InstantAction
+    event: !type:InstantSpawnSpellEvent
+      prototype: WH40KChaosNurgleMiasmaSmoke
   - type: WH40KWarpActionCost
     warpChargeCost: 14
     instabilityGain: 8

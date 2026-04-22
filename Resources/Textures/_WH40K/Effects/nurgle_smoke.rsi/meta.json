@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "size": {
+    "x": 96,
+    "y": 96
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Based on fog_of_Nurgle.png by suslik, adapted for WH40K nurgle smoke.",
+  "states": [
+    {
+      "name": "chemsmoke"
+    }
+  ]
+}

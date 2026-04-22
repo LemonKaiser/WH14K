@@ -25,6 +25,8 @@ public sealed class WH40KChaosCultSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<WH40KChaosRoleStartupEvent>(OnChaosRoleStartup);
+        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, ComponentShutdown>(OnChaosRoleShutdown);
+        SubscribeLocalEvent<WH40KChaosGiftProgressionComponent, ComponentShutdown>(OnChaosProgressionShutdown);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
@@ -118,6 +120,16 @@ public sealed class WH40KChaosCultSystem : EntitySystem
         SyncCultMembers(progression.AttunedPatron);
     }
 
+    private void OnChaosRoleShutdown(EntityUid uid, WH40KChaosGiftRoleComponent component, ref ComponentShutdown args)
+    {
+        RemComp<WH40KChaosPatronStatusIconComponent>(uid);
+    }
+
+    private void OnChaosProgressionShutdown(EntityUid uid, WH40KChaosGiftProgressionComponent component, ref ComponentShutdown args)
+    {
+        RemComp<WH40KChaosPatronStatusIconComponent>(uid);
+    }
+
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _cultStates.Clear();
@@ -132,6 +144,7 @@ public sealed class WH40KChaosCultSystem : EntitySystem
         if (progression.AttunedPatron == WH40KChaosPatron.None)
         {
             progression.EffectiveLeader = false;
+            SyncPatronStatusIcon(uid, WH40KChaosPatron.None, false);
             Dirty(uid, progression);
             return;
         }
@@ -359,6 +372,7 @@ public sealed class WH40KChaosCultSystem : EntitySystem
 
         var effectiveLeader = state.ActiveLeader == uid;
         changed |= Apply(ref progression.EffectiveLeader, effectiveLeader);
+        SyncPatronStatusIcon(uid, patron, effectiveLeader);
 
         if (changed)
             Dirty(uid, progression);
@@ -401,6 +415,31 @@ public sealed class WH40KChaosCultSystem : EntitySystem
         state.PassiveXpBasePerTick = SharedPassiveXpBasePerTick;
         state.PassiveXpPerLevelBonus = SharedPassiveXpPerLevelBonus;
         state.PassiveXpInterval = SharedPassiveXpInterval;
+    }
+
+    private void SyncPatronStatusIcon(EntityUid uid, WH40KChaosPatron patron, bool isLeader)
+    {
+        if (!ShouldDisplayPatronStatusIcon(patron))
+        {
+            RemComp<WH40KChaosPatronStatusIconComponent>(uid);
+            return;
+        }
+
+        var icon = EnsureComp<WH40KChaosPatronStatusIconComponent>(uid);
+        var changed = false;
+        changed |= Apply(ref icon.Patron, patron);
+        changed |= Apply(ref icon.IsLeader, isLeader);
+
+        if (changed)
+            Dirty(uid, icon);
+    }
+
+    private static bool ShouldDisplayPatronStatusIcon(WH40KChaosPatron patron)
+    {
+        return patron is WH40KChaosPatron.Khorne or
+            WH40KChaosPatron.Nurgle or
+            WH40KChaosPatron.Slaanesh or
+            WH40KChaosPatron.Tzeentch;
     }
 
     private static bool Apply<T>(ref T field, T value)

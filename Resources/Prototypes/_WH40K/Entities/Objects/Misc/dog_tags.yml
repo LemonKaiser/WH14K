@@ -54,6 +54,13 @@
 
 - type: entity
   parent: StandardDogTag
+  id: PsykerDogTag
+  components:
+  - type: PresetIdCard
+    job: Psyker
+
+- type: entity
+  parent: StandardDogTag
   id: SpecialistHWSDogTag
   components:
   - type: PresetIdCard

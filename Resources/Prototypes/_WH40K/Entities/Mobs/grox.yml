@@ -55,7 +55,14 @@
     - Passive
   - type: NPCRetaliation
     attackMemoryLength: 8
+  - type: WH40KCollectiveRetaliation
+    herdId: Grox
+    radius: 7
   - type: FactionException
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 25
   - type: HTN
     rootTask:
       task: RuminantHostileCompound

@@ -3,6 +3,10 @@
   name: job-name-chaplain
   description: job-description-chaplain
   playTimeTracker: JobWH40KChaplain
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Human
   startingGear: WH40KChaplainGear
   icon: "JobIconChaplain"
   supervisors: job-supervisors-hop

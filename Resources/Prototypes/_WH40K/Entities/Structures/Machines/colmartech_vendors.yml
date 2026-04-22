@@ -170,9 +170,37 @@
   - type: CMAutomatedVendor
     sections:
     - name: cm-automated-vendor-section-prepared-meals
-      entries: []
+      entries:
+      - id: FoodMealCornedbeef
+        amount: 12
+      - id: FoodMealRibs
+        amount: 8
+      - id: FoodDonkpocket
+        amount: 12
+      - id: FoodDonkpocketSpicy
+        amount: 8
+      - id: FoodDonkpocketTeriyaki
+        amount: 8
     - name: cm-automated-vendor-section-flasks
-      entries: []
+      entries:
+      - id: DrinkMREFlask
+        amount: 18
+      - id: DrinkVacuumFlask
+        amount: 8
+    - name: cm-automated-vendor-section-miscellaneous
+      entries:
+      - id: BoxMRE
+        amount: 4
+      - id: FoodSnackNutribrick
+        amount: 20
+      - id: FoodSnackMREBrownie
+        amount: 20
+      - id: FoodTinMRE
+        amount: 10
+      - id: FoodTinBeans
+        amount: 10
+      - id: FoodTinPeaches
+        amount: 10
 
 - type: entity
   parent: ColMarTechBase

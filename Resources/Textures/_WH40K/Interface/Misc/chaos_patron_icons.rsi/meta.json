@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Chaos god icons provided by project maintainer; leader outlines by OpenAI",
+
+    "size": {
+        "x": 8,
+        "y": 8
+    },
+    "states": [
+        {
+            "name": "khorne"
+        },
+        {
+            "name": "khorne_outline"
+        },
+        {
+            "name": "nurgle"
+        },
+        {
+            "name": "nurgle_outline"
+        },
+        {
+            "name": "slaanesh"
+        },
+        {
+            "name": "slaanesh_outline"
+        },
+        {
+            "name": "tzeentch"
+        },
+        {
+            "name": "tzeentch_outline"
+        }
+    ]
+}

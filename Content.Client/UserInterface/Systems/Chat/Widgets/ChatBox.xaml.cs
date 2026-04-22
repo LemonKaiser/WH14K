@@ -26,6 +26,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
     private readonly ISawmill _sawmill;
     private readonly ChatUIController _controller;
     private readonly Dictionary<uint, int> _messageEntryIndices = new();
+    private bool _warnedMessageUpdateFallback;
 
     public bool Main { get; set; }
 
@@ -137,11 +138,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         if (serverMessageId is { } messageId)
             _messageEntryIndices[messageId] = Contents.EntryCount;
 
-        var formatted = new FormattedMessage(3);
-        formatted.PushColor(color);
-        formatted.AddMarkupOrThrow(message);
-        formatted.Pop();
-        Contents.AddMessage(formatted, tagsAllowed: null);
+        Contents.AddMessage(BuildFormattedMessage(message, color), tagsAllowed: null);
     }
 
     public bool TryUpdateMessage(ChatMessage msg)
@@ -149,14 +146,93 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         if (msg.ServerMessageId is not { } messageId)
             return false;
 
-        if (!_messageEntryIndices.TryGetValue(messageId, out _))
+        if (!_messageEntryIndices.TryGetValue(messageId, out var entryIndex))
             return false;
 
-        // OutputPanel.SetMessage replaces the entry data but does not remove inline controls
-        // created by the previous rich-text parse, which leaves orphaned language tags/icons.
-        // Rebuild the visible chat from history so the old controls are cleared deterministically.
-        Repopulate();
+        var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
+        var wrappedMessage = _controller.GetChatDisplayMessage(msg);
+        var formatted = BuildFormattedMessage(wrappedMessage, color);
+
+        if (!TryRebuildTailFromHistory(entryIndex, messageId))
+        {
+            if (!_warnedMessageUpdateFallback)
+            {
+                _warnedMessageUpdateFallback = true;
+                _sawmill.Warning("Falling back to full chat repopulation for message updates because tail rebuild failed.");
+            }
+
+            Repopulate();
+        }
+
         return true;
+    }
+
+    private bool TryRebuildTailFromHistory(int entryIndex, uint messageId)
+    {
+        var historyIndex = FindHistoryIndex(messageId);
+        if (historyIndex == null)
+            return false;
+
+        var scrollBar = GetContentsScrollBar();
+        var wasAtEnd = scrollBar?.IsAtEnd ?? true;
+        var previousScroll = scrollBar?.Value ?? 0f;
+
+        RemoveDisplayedTail(entryIndex);
+
+        for (var i = historyIndex.Value; i < _controller.History.Count; i++)
+        {
+            OnMessageAdded(_controller.History[i].Item2);
+        }
+
+        if (scrollBar == null)
+            return true;
+
+        if (wasAtEnd)
+            scrollBar.Value = scrollBar.MaxValue;
+        else
+            scrollBar.Value = previousScroll;
+
+        return true;
+    }
+
+    private int? FindHistoryIndex(uint messageId)
+    {
+        for (var i = 0; i < _controller.History.Count; i++)
+        {
+            if (_controller.History[i].Item2.ServerMessageId == messageId)
+                return i;
+        }
+
+        return null;
+    }
+
+    private void RemoveDisplayedTail(int entryIndex)
+    {
+        for (var i = Contents.EntryCount - 1; i >= entryIndex; i--)
+        {
+            Contents.RemoveEntry(new Index(i));
+        }
+
+        var staleIds = new List<uint>();
+        foreach (var (messageId, index) in _messageEntryIndices)
+        {
+            if (index >= entryIndex)
+                staleIds.Add(messageId);
+        }
+
+        foreach (var staleId in staleIds)
+        {
+            _messageEntryIndices.Remove(staleId);
+        }
+    }
+
+    private static FormattedMessage BuildFormattedMessage(string message, Color color)
+    {
+        var formatted = new FormattedMessage(3);
+        formatted.PushColor(color);
+        formatted.AddMarkupOrThrow(message);
+        formatted.Pop();
+        return formatted;
     }
 
     private void ClearDisplayedMessages()

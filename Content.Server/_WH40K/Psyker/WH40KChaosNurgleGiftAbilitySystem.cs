@@ -35,6 +35,7 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     private const string NurgleMiasmaAction = "ActionWH40KChaosNurgleMiasma";
     private const string NurgleAcidSpitAction = "ActionWH40KChaosNurgleRepulse";
     private const string NurgleCorpseRiseAction = "ActionWH40KChaosNurgleCorpseBloom";
+    private const float NurgleMiasmaBaseCooldownSeconds = 180f;
     private const string HereticTeamId = "Heretics";
 
     private static readonly EntProtoId AcidSpitTierZeroProjectile = "WH40KProjectileChaosNurgleAcidSpit";
@@ -117,7 +118,12 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
         if (!string.Equals(actionPrototype, NurgleMiasmaAction, StringComparison.Ordinal))
             return false;
 
-        ApplyTieredCooldown(args.Performer, args.Action, 10f, progression.KhorneGiftOneCooldownTier);
+        ApplyTieredCooldown(
+            args.Performer,
+            args.Action,
+            NurgleMiasmaBaseCooldownSeconds,
+            progression.KhorneGiftOneCooldownTier,
+            NurgleMiasmaBaseCooldownSeconds);
         var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
         ApplyMiasmaBlessing(
             args.Performer,
@@ -339,7 +345,12 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
         _mobThresholds.VerifyThresholds(uid, thresholds);
     }
 
-    private void ApplyTieredCooldown(EntityUid performer, Entity<ActionComponent> action, float baseSeconds, byte tier)
+    private void ApplyTieredCooldown(
+        EntityUid performer,
+        Entity<ActionComponent> action,
+        float baseSeconds,
+        byte tier,
+        float minimumSeconds = 0.1f)
     {
         var duration = MathF.Max(0.1f, baseSeconds * WH40KChaosGiftUpgradeMath.CooldownMultiplier(tier));
         if (TryComp<WH40KChaosTzeentchAuraBuffComponent>(performer, out var tzeentchBuff) &&
@@ -349,6 +360,7 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
             duration *= tzeentchBuff.CooldownMultiplier;
         }
 
+        duration = MathF.Max(minimumSeconds, duration);
         _actions.SetUseDelay((action.Owner, action.Comp), TimeSpan.FromSeconds(duration));
     }
 
