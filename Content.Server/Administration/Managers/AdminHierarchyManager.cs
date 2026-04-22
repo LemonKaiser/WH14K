@@ -78,11 +78,18 @@ public sealed class AdminHierarchyManager : IAdminHierarchyManager
         NetUserId targetUserId,
         CancellationToken cancel = default)
     {
+        var actorHierarchy = GetAdminHierarchy(actor, includeDeAdmin: true);
+        if (!actorHierarchy.Exists)
+            return AdminHierarchyDecision.Deny(AdminHierarchyDenyReason.ActorNotAdmin);
+
+        if (actor.UserId == targetUserId)
+            return AdminHierarchyDecision.Allow;
+
         if (_playerManager.TryGetSessionById(targetUserId, out var targetSession))
         {
             var targetHierarchy = GetAdminHierarchy(targetSession, includeDeAdmin: true);
             if (targetHierarchy.Exists)
-                return CanManageTarget(GetAdminHierarchy(actor, includeDeAdmin: true), targetHierarchy);
+                return CanManageTarget(actorHierarchy, targetHierarchy);
         }
 
         var targetAdmin = await _db.GetAdminDataForAsync(targetUserId, cancel);
@@ -113,6 +120,9 @@ public sealed class AdminHierarchyManager : IAdminHierarchyManager
         if (!actorHierarchy.Exists)
             return AdminHierarchyDecision.Deny(AdminHierarchyDenyReason.ActorNotAdmin);
 
+        if (actor.UserId == target.UserId)
+            return AdminHierarchyDecision.Allow;
+
         var targetHierarchy = GetAdminHierarchy(target, includeDeAdmin);
         if (!targetHierarchy.Exists)
             return AdminHierarchyDecision.Allow;
@@ -125,6 +135,9 @@ public sealed class AdminHierarchyManager : IAdminHierarchyManager
         var actorHierarchy = GetAdminHierarchy(actor, includeDeAdmin: true);
         if (!actorHierarchy.Exists)
             return AdminHierarchyDecision.Deny(AdminHierarchyDenyReason.ActorNotAdmin);
+
+        if (actor.UserId.UserId == target.UserId)
+            return AdminHierarchyDecision.Allow;
 
         var targetHierarchy = GetAdminHierarchy(target);
         return CanManageTarget(actorHierarchy, targetHierarchy);

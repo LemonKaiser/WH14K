@@ -40,20 +40,27 @@ public sealed class CargoTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            Assert.Multiple(() =>
+            var failures = new List<string>();
+
+            foreach (var proto in protoManager.EnumeratePrototypes<CargoProductPrototype>())
             {
-                foreach (var proto in protoManager.EnumeratePrototypes<CargoProductPrototype>())
+                if (Ignored.Contains(proto.ID))
+                    continue;
+
+                var ent = entManager.SpawnEntity(proto.Product, testMap.MapCoords);
+                try
                 {
-                    if (Ignored.Contains(proto.ID))
-                        continue;
-
-                    var ent = entManager.SpawnEntity(proto.Product, testMap.MapCoords);
                     var price = pricing.GetPrice(ent);
-
-                    Assert.That(price, Is.AtMost(proto.Cost), $"Found arbitrage on {proto.ID} cargo product! Cost is {proto.Cost} but sell is {price}!");
+                    if (price > proto.Cost)
+                        failures.Add($"{proto.ID} ({proto.Product}) costs {proto.Cost} but sells for {price}");
+                }
+                finally
+                {
                     entManager.DeleteEntity(ent);
                 }
-            });
+            }
+
+            Assert.That(failures, Is.Empty, "Found cargo arbitrage:\n" + string.Join('\n', failures));
         });
     }
     [Test]

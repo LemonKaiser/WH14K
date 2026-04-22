@@ -4,7 +4,7 @@
     sprite:  /Textures/Structures/Storage/orebox.rsi
     state: orebox
   product: OreBox
-  cost: 500
+  cost: 550
   category: cpcat-cgo
   group: market
 
