@@ -74,7 +74,7 @@
     sprite: Structures/Storage/canister.rsi
     state: yellow
   product: StorageCanister
-  cost: 210 # No gases in it so it's cheaper
+  cost: 250 # No gases in it so it's cheaper, but keep a small sell-price buffer.
   category: cargoproduct-category-name-atmospherics
   group: market
 

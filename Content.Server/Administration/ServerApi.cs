@@ -822,6 +822,9 @@ public sealed partial class ServerApi : IPostInjectInit
         string action)
     {
         var actorData = await GetActiveActorAdminDataAsync(actor);
+        if (actorData != null && actor.Guid == targetUserId.UserId)
+            return true;
+
         var actorHierarchy = actorData == null
             ? AdminHierarchyInfo.Missing
             : new AdminHierarchyInfo(

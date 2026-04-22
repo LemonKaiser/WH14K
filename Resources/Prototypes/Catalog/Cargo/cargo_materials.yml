@@ -119,7 +119,7 @@
     sprite: Objects/Materials/Sheets/other.rsi
     state: paper_3
   product: CrateMaterialPaper
-  cost: 185
+  cost: 220
   category: cargoproduct-category-name-materials
   group: market
 
