@@ -22,8 +22,8 @@ PRIMARY_FORK_ID = "ebengrad"
 
 # Mirror CDN — your own CDN, clients should download from here.
 # Set MIRROR_PUBLISH_TOKEN env var to enable mirror publishing.
-MIRROR_CDN_URL = "https://2612.koara.live/"
-MIRROR_FORK_ID = "ebengrad-koara-live-prod"
+MIRROR_CDN_URL = "https://cdn.heretec.online/"
+MIRROR_FORK_ID = "heretec-online"
 
 def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     """Publish the release to a single Robust.Cdn instance."""
