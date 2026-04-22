@@ -11,10 +11,13 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Physics;
 using Content.Shared.Stunnable;
 using Content.Shared.Vehicle.Components;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
+using Content.Server._WH40K.GameTicking.Rules;
 
 namespace Content.Server._WH40K.Vehicle.Combat;
 
@@ -26,10 +29,12 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
                                                  CollisionGroup.LowImpassable);
 
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
     [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -87,17 +92,21 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
         var direction = GetImpactDirection(ref args);
         var isSoftTarget = IsSoftTarget(args.OtherEntity);
         var isHardTarget = !isSoftTarget && IsHardImpactTarget(args.OtherEntity, ref args);
+        var operatorUid = vehicle.Operator.Value;
 
         if (!isSoftTarget && !isHardTarget)
+            return;
+
+        if (ShouldBlockFriendlyImpact(operatorUid, args.OtherEntity))
             return;
 
         if (isSoftTarget)
         {
             if (!ent.Comp.SoftTargetDamage.Empty)
-                _damageable.TryChangeDamage(args.OtherEntity, ent.Comp.SoftTargetDamage * scale, origin: ent.Owner);
+                _damageable.TryChangeDamage(args.OtherEntity, ent.Comp.SoftTargetDamage * scale, origin: operatorUid);
 
             if (ent.Comp.StaminaDamage > 0f)
-                _stamina.TakeStaminaDamage(args.OtherEntity, ent.Comp.StaminaDamage * scale, source: vehicle.Operator.Value, with: ent.Owner);
+                _stamina.TakeStaminaDamage(args.OtherEntity, ent.Comp.StaminaDamage * scale, source: operatorUid, with: ent.Owner);
 
             if (ent.Comp.KnockdownTime > TimeSpan.Zero)
                 _stun.TryKnockdown(args.OtherEntity, TimeSpan.FromSeconds(ent.Comp.KnockdownTime.TotalSeconds * MathF.Min(scale, 1.5f)), force: true);
@@ -115,7 +124,7 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
             if (HasComp<DamageableComponent>(args.OtherEntity) &&
                 !ent.Comp.HardTargetDamage.Empty)
             {
-                _damageable.TryChangeDamage(args.OtherEntity, ent.Comp.HardTargetDamage * scale, origin: ent.Owner);
+                _damageable.TryChangeDamage(args.OtherEntity, ent.Comp.HardTargetDamage * scale, origin: operatorUid);
             }
 
             if (!ent.Comp.SelfHardImpactDamage.Empty)
@@ -173,6 +182,20 @@ public sealed class WH40KVehicleCombatSystem : EntitySystem
             return false;
 
         return (args.OtherFixture.CollisionLayer & SolidImpactLayers) != 0;
+    }
+
+    private bool ShouldBlockFriendlyImpact(EntityUid attacker, EntityUid target)
+    {
+        if (!_config.GetCVar(CCVars.WH40KFriendlyFireDisabled))
+            return false;
+
+        if (!_teamRule.TryGetTeamIdFromEntity(attacker, out var attackerTeam) ||
+            !_teamRule.TryGetTeamIdFromEntity(target, out var targetTeam))
+        {
+            return false;
+        }
+
+        return attackerTeam == targetTeam;
     }
 
     private void DampenVelocity(EntityUid uid, Robust.Shared.Physics.Components.PhysicsComponent body, float multiplier)

@@ -39,14 +39,6 @@
     baseCost: 18
     maxCount: 3
     additionalUnitCostMultiplier: 0.5
-  - id: scout
-    nameKey: w40k-cmd-reinforcement-option-heretics-scout-name
-    descriptionKey: w40k-cmd-reinforcement-option-heretics-scout-description
-    job: HVoxScout
-    previewPrototype: WH40KReinforcementPreviewHereticsVoxScout
-    baseCost: 24
-    maxCount: 3
-    additionalUnitCostMultiplier: 0.55
   - id: command
     nameKey: w40k-cmd-reinforcement-option-heretics-command-name
     descriptionKey: w40k-cmd-reinforcement-option-heretics-command-description

@@ -37,13 +37,14 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
     private readonly WH40KPsykerAstralConstellationControl _constellation;
     private readonly BoxContainer _footerLane;
     private readonly PanelContainer _footerPanel;
+    private readonly ScrollContainer _footerTextScroll;
     private readonly StyleBoxFlat _footerPanelStyle = BuildPanelStyle(PanelBackgroundColor, PanelBorderColor, 1f);
     private readonly StyleBoxFlat _purchaseButtonStyle = BuildPanelStyle(ButtonBackgroundColor, ButtonBorderColor, 1f);
     private readonly StyleBoxFlat _exitButtonStyle = BuildPanelStyle(Color.FromHex("#0C1825").WithAlpha(0.68f), Color.FromHex("#5F86A7").WithAlpha(0.62f), 1f);
     private readonly Label _nodeName;
     private readonly Label _nodeMeta;
     private readonly RichTextLabel _nodeDescription;
-    private readonly Label _nodeStatus;
+    private readonly RichTextLabel _nodeStatus;
     private readonly Button _purchaseButton;
     private readonly Button _exitButton;
     private readonly List<WH40KPsykerDisciplineNodePrototype> _nodes = new();
@@ -148,18 +149,36 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
         {
             HorizontalExpand = true,
             MaxWidth = 470f,
-            MinHeight = 46f,
+            MinHeight = 0f,
             LineHeightScale = 0.96f
         };
-        footer.AddChild(_nodeDescription);
 
-        _nodeStatus = new Label
+        _nodeStatus = new RichTextLabel
         {
-            FontColorOverride = PurchaseLockedColor,
             HorizontalExpand = true,
-            ClipText = false
+            MaxWidth = 470f,
+            MinHeight = 0f,
+            LineHeightScale = 0.94f
         };
-        footer.AddChild(_nodeStatus);
+
+        _footerTextScroll = new ScrollContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            HScrollEnabled = false,
+            MinHeight = 64f
+        };
+        footer.AddChild(_footerTextScroll);
+
+        var footerText = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 4,
+            HorizontalExpand = true
+        };
+        _footerTextScroll.AddChild(footerText);
+        footerText.AddChild(_nodeDescription);
+        footerText.AddChild(_nodeStatus);
 
         var footerActions = new BoxContainer
         {
@@ -382,8 +401,9 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
         {
             _nodeName.Text = Loc.GetString("wh40k-psyker-astral-title");
             _nodeMeta.Text = string.Empty;
-            _nodeDescription.SetMessage(Loc.GetString("wh40k-psyker-astral-subtitle"), DescriptionColor);
-            _nodeStatus.Text = string.Empty;
+            SetWrappedText(_nodeDescription, Loc.GetString("wh40k-psyker-astral-subtitle"), DescriptionColor);
+            SetWrappedText(_nodeStatus, string.Empty, PurchaseLockedColor);
+            _footerTextScroll.SetScrollValue(Vector2.Zero);
             _purchaseButton.Text = Loc.GetString("wh40k-psyker-astral-node-button-locked");
             _purchaseButton.Disabled = true;
             return;
@@ -421,9 +441,9 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
             ("level", node.RequiredLevel),
             ("cost", node.Cost));
         _nodeMeta.FontColorOverride = accent;
-        _nodeDescription.SetMessage(Loc.GetString(node.Description), DescriptionColor);
-        _nodeStatus.Text = snapshot.StatusText;
-        _nodeStatus.FontColorOverride = ResolveStatusColor(snapshot.Availability);
+        SetWrappedText(_nodeDescription, Loc.GetString(node.Description), DescriptionColor);
+        SetWrappedText(_nodeStatus, snapshot.StatusText, ResolveStatusColor(snapshot.Availability));
+        _footerTextScroll.SetScrollValue(Vector2.Zero);
         _purchaseButton.Text = snapshot.Availability switch
         {
             WH40KPsykerAstralNodeAvailability.Available => Loc.GetString("wh40k-psyker-astral-node-button-purchase"),
@@ -455,7 +475,9 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
         var preferredWidth = Math.Clamp(Size.X * 0.44f, 560f, 760f);
         var maxWidth = Math.Max(360f, Size.X - 96f);
         _footerPanel.SetWidth = Math.Clamp(preferredWidth, 360f, maxWidth);
-        _nodeDescription.MaxWidth = Math.Max(300f, _footerPanel.SetWidth - 28f);
+        var textWidth = Math.Max(292f, _footerPanel.SetWidth - 40f);
+        _nodeDescription.MaxWidth = textWidth;
+        _nodeStatus.MaxWidth = textWidth;
 
         var laneHeight = 196f;
         const float bottomInset = 108f;
@@ -465,6 +487,11 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
         SetMarginRight(_footerLane, -18f);
         SetMarginTop(_footerLane, -(bottomInset + laneHeight));
         SetMarginBottom(_footerLane, -bottomInset);
+    }
+
+    private static void SetWrappedText(RichTextLabel label, string text, Color color)
+    {
+        label.SetMessage(text.Replace("\\n", "\n", StringComparison.Ordinal), color);
     }
 
     private void OnCollectibleStarRequested(int starId)

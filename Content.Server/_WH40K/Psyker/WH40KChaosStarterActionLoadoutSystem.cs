@@ -15,7 +15,6 @@ public sealed class WH40KChaosStarterActionLoadoutSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<WH40KChaosGiftStarterActionLoadoutComponent, ComponentStartup>(OnChaosLoadoutStartup);
-        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, ComponentShutdown>(OnChaosRoleShutdown);
     }
 
     public override void Update(float frameTime)
@@ -51,6 +50,28 @@ public sealed class WH40KChaosStarterActionLoadoutSystem : EntitySystem
 
             ComposeChaosActions(uid, loadout, progression);
         }
+
+        var cleanupQuery = EntityQueryEnumerator<WH40KChaosGiftStarterActionLoadoutComponent>();
+        while (cleanupQuery.MoveNext(out var uid, out var loadout))
+        {
+            if (HasComp<WH40KChaosGiftRoleComponent>(uid) && HasComp<WH40KChaosGiftProgressionComponent>(uid))
+                continue;
+
+            if (loadout.GrantedActions.Count == 0 &&
+                loadout.AppliedPatron == WH40KChaosPatron.None &&
+                loadout.AppliedLevel == 0 &&
+                loadout.AppliedPrimaryGiftSlot == 0 &&
+                loadout.AppliedUnlockMask == 0 &&
+                !loadout.AppliedKhornePassiveEx &&
+                !loadout.AppliedLeaderState &&
+                !loadout.AppliedCatastropheLockdown)
+            {
+                continue;
+            }
+
+            ClearGrantedActions(uid, loadout.GrantedActions);
+            ResetAppliedState(loadout);
+        }
     }
 
     private void OnChaosLoadoutStartup(Entity<WH40KChaosGiftStarterActionLoadoutComponent> ent, ref ComponentStartup args)
@@ -69,21 +90,6 @@ public sealed class WH40KChaosStarterActionLoadoutSystem : EntitySystem
         }
 
         ComposeChaosActions(ent.Owner, ent.Comp, progression);
-    }
-
-    private void OnChaosRoleShutdown(Entity<WH40KChaosGiftRoleComponent> ent, ref ComponentShutdown args)
-    {
-        if (!TryComp<WH40KChaosGiftStarterActionLoadoutComponent>(ent, out var loadout))
-            return;
-
-        ClearGrantedActions(ent, loadout.GrantedActions);
-        loadout.AppliedPatron = WH40KChaosPatron.None;
-        loadout.AppliedLevel = 0;
-        loadout.AppliedPrimaryGiftSlot = 0;
-        loadout.AppliedUnlockMask = 0;
-        loadout.AppliedKhornePassiveEx = false;
-        loadout.AppliedLeaderState = false;
-        loadout.AppliedCatastropheLockdown = false;
     }
 
     private void ComposeChaosActions(
@@ -203,6 +209,17 @@ public sealed class WH40KChaosStarterActionLoadoutSystem : EntitySystem
         if (progression.GiftSlotThreeUnlocked)
             mask |= 1 << 2;
         return mask;
+    }
+
+    private static void ResetAppliedState(WH40KChaosGiftStarterActionLoadoutComponent loadout)
+    {
+        loadout.AppliedPatron = WH40KChaosPatron.None;
+        loadout.AppliedLevel = 0;
+        loadout.AppliedPrimaryGiftSlot = 0;
+        loadout.AppliedUnlockMask = 0;
+        loadout.AppliedKhornePassiveEx = false;
+        loadout.AppliedLeaderState = false;
+        loadout.AppliedCatastropheLockdown = false;
     }
 
     private void GrantActions(EntityUid user, List<EntityUid> granted, List<string> prototypes)

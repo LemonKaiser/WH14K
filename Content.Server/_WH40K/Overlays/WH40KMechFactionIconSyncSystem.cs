@@ -24,6 +24,17 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         SubscribeLocalEvent<VehicleOperatorComponent, OnVehicleExitedEvent>(OnVehicleExited);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<MechComponent, VehicleComponent>();
+        while (query.MoveNext(out var mechUid, out _, out var vehicle))
+        {
+            RefreshMechFactionState(mechUid, vehicle);
+        }
+    }
+
     private void OnVehicleEntered(Entity<VehicleOperatorComponent> ent, ref OnVehicleEnteredEvent args)
     {
         var mech = args.Vehicle.Owner;
@@ -42,6 +53,20 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         ClearMechFactionState(mech);
     }
 
+    private void RefreshMechFactionState(EntityUid mech, VehicleComponent vehicle)
+    {
+        if (vehicle.Operator is { } pilot &&
+            pilot.IsValid() &&
+            !Deleted(pilot))
+        {
+            SyncMechFactionState(mech, pilot);
+            return;
+        }
+
+        if (HasWh40KMechFactionState(mech))
+            ClearMechFactionState(mech);
+    }
+
     private void SyncMechFactionState(EntityUid mech, EntityUid pilot)
     {
         if (!mech.IsValid() || Deleted(mech))
@@ -50,6 +75,15 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
         if (!TryResolvePilotTeamId(pilot, out var teamId))
         {
             ClearMechFactionState(mech);
+            return;
+        }
+
+        if (TryComp<WH40KTeamBattleFactionIconComponent>(mech, out var existingIcon) &&
+            TryComp<WH40KTeamMemberComponent>(mech, out var existingMember) &&
+            string.Equals(existingIcon.TeamId, teamId, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(existingMember.TeamId, teamId, StringComparison.OrdinalIgnoreCase) &&
+            _npcFactions.IsMember(mech, teamId))
+        {
             return;
         }
 
@@ -78,6 +112,12 @@ public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
             RemComp<WH40KTeamMemberComponent>(mech);
 
         _npcFactions.ClearFactions(mech);
+    }
+
+    private bool HasWh40KMechFactionState(EntityUid mech)
+    {
+        return HasComp<WH40KTeamBattleFactionIconComponent>(mech) ||
+               HasComp<WH40KTeamMemberComponent>(mech);
     }
 
     private bool TryResolvePilotTeamId(EntityUid pilot, out string teamId)

@@ -335,7 +335,7 @@
   groups:
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
-  - WH40KHereticCommandNeck
+  - WH40KHereticCommandNecklace
   - WH40KHereticCommandOuter
   - WH40KHereticCommandMask
   - WH40KHereticCommandHands
@@ -350,7 +350,7 @@
   groups:
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
-  - WH40KHereticCommandNeck
+  - WH40KHereticCommandNecklace
   - WH40KHereticCommandOuter
   - WH40KHereticCommandMask
   - WH40KHereticCommandHands
@@ -365,7 +365,7 @@
   groups:
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
-  - WH40KHereticCommandNeck
+  - WH40KHereticCommandNecklace
   - WH40KHereticCommandOuter
   - WH40KHereticCommandMask
   - WH40KHereticCommandHands

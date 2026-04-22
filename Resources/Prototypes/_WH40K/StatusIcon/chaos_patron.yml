@@ -1,0 +1,67 @@
+- type: factionIcon
+  id: WH40KChaosPatronIconKhorne
+  priority: -9
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: khorne
+
+- type: factionIcon
+  id: WH40KChaosPatronLeaderOutlineKhorne
+  priority: -8
+  locationPreference: Left
+  layer: Mod
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: khorne_outline
+
+- type: factionIcon
+  id: WH40KChaosPatronIconNurgle
+  priority: -9
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: nurgle
+
+- type: factionIcon
+  id: WH40KChaosPatronLeaderOutlineNurgle
+  priority: -8
+  locationPreference: Left
+  layer: Mod
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: nurgle_outline
+
+- type: factionIcon
+  id: WH40KChaosPatronIconSlaanesh
+  priority: -9
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: slaanesh
+
+- type: factionIcon
+  id: WH40KChaosPatronLeaderOutlineSlaanesh
+  priority: -8
+  locationPreference: Left
+  layer: Mod
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: slaanesh_outline
+
+- type: factionIcon
+  id: WH40KChaosPatronIconTzeentch
+  priority: -9
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: tzeentch
+
+- type: factionIcon
+  id: WH40KChaosPatronLeaderOutlineTzeentch
+  priority: -8
+  locationPreference: Left
+  layer: Mod
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/chaos_patron_icons.rsi
+    state: tzeentch_outline
