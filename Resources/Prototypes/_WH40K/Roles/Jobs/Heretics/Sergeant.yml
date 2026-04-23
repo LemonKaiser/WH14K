@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: HSergeant
   name: job-name-hsergeant
   description: job-description-hsergeant
+  displayWeight: 40
   playTimeTracker: JobHSergeant
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human
@@ -35,6 +40,10 @@
   requirements:
     - !type:SpeciesRequirement
       species:
+      - Tau
+      inverted: true
+    - !type:SpeciesRequirement
+      species:
       - Human
       - Vulpkanin
   startingGear: HeresySergeantGear
@@ -61,6 +70,10 @@
   description: job-description-hsergeant-hws
   playTimeTracker: JobHSergeantHWS
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

@@ -291,8 +291,6 @@
   loadouts:
   - WH40KFlakArmorSrg
   - WH40KCyanFlakArmorSrg
-  - WH40KJuniorOfficerJacket
-  - WH40KSeniorOfficerJacket
 
 - type: loadoutGroup
   id: WH40KImperialCommandHead
@@ -351,8 +349,6 @@
   - WH40KOfficerCoat
   - WH40KCoatLietVst
   - WH40KArmorFlakCoatLiet
-  - WH40KJuniorOfficerJacket
-  - WH40KSeniorOfficerJacket
 
 - type: loadoutGroup
   id: WH40KImperialCommandHands
@@ -608,3 +604,61 @@
   - WH40KPipeKit
   - WH40KGoldCigarKit
   - WH40KGoldCigarCaseKit
+
+- type: loadoutGroup
+  id: WH40KTauLineHead
+  name: loadout-group-wh40k-tau-head
+  loadouts:
+  - WH40KTauHelmetStandard
+
+- type: loadoutGroup
+  id: WH40KTauLineOuter
+  name: loadout-group-wh40k-tau-outer
+  loadouts:
+  - WH40KTauArmorPathfinder
+  - WH40KTauArmorStandard
+
+- type: loadoutGroup
+  id: WH40KTauMainWeapon
+  name: loadout-group-wh40k-tau-main
+  loadouts:
+  - WH40KTauPulseRifleLoadout
+
+- type: loadoutGroup
+  id: WH40KTauSidearm
+  name: loadout-group-wh40k-tau-sidearm
+  minLimit: 0
+  loadouts:
+  - WH40KTauPulsePistolLoadout
+
+- type: loadoutGroup
+  id: WH40KTauAdditionalSupplies
+  name: loadout-group-wh40k-tau-supplies
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KTauSupplyFlask
+  - WH40KTauSupplyNutriLiquid
+  - WH40KTauSupplyMeatRation
+  - WH40KTauSupplyVegetableRation
+
+- type: loadoutGroup
+  id: WH40KTauCommandHead
+  name: loadout-group-wh40k-tau-head
+  loadouts:
+  - WH40KTauHelmetBreach
+  - WH40KTauHelmetStandard
+
+- type: loadoutGroup
+  id: WH40KTauCommandOuter
+  name: loadout-group-wh40k-tau-command-outer
+  loadouts:
+  - WH40KTauArmorOfficer
+  - WH40KTauArmorCommander
+
+- type: loadoutGroup
+  id: WH40KTauCommandNeck
+  name: loadout-group-wh40k-tau-command-neck
+  minLimit: 0
+  loadouts:
+  - WH40KTauCommanderCloakLoadout

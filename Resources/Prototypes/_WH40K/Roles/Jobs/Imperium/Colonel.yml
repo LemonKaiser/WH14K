@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Colonel
   name: job-name-colonel
   description: job-description-colonel
+  displayWeight: 130
   playTimeTracker: JobColonel
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

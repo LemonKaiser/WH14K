@@ -61,3 +61,13 @@
   - HVoxScout
   - HBandSupplier
   - HLexmechanic
+
+- type: department
+  id: Tau
+  name: department-Tau
+  description: department-Tau-description
+  color: "#2f6f87"
+  roles:
+  - TauEthereal
+  - TauOfficer
+  - TauFireWarrior

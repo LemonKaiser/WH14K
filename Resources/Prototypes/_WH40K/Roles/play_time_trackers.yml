@@ -156,3 +156,12 @@
 
 - type: playTimeTracker
   id: JobWH40KChaplain
+
+- type: playTimeTracker
+  id: JobTauFireWarrior
+
+- type: playTimeTracker
+  id: JobTauOfficer
+
+- type: playTimeTracker
+  id: JobTauEthereal

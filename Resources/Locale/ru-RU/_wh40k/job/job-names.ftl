@@ -41,3 +41,6 @@ job-name-hlexmechanic = лексмеханик-еретех
 job-name-hgenetor = генетор-еретех
 job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит Тёмного Механикума
+job-name-tau-fire-warrior = шас'ла
+job-name-tau-officer = шас'уи
+job-name-tau-ethereal = эфириал

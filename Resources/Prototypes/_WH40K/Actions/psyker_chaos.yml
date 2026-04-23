@@ -473,6 +473,10 @@
   name: Трупный Подъём
   description: Поднимите выбранный труп как союзного зомби Нургла.
   components:
+  - type: DoAfterArgs
+    delay: 12
+    breakOnMove: true
+    breakOnDamage: true
   - type: Action
     useDelay: 35
     icon:

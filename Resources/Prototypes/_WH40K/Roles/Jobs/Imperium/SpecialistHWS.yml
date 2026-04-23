@@ -1,10 +1,14 @@
-﻿- type: job
+- type: job
   id: SpecialistHWS
   name: job-name-specialist-hws
   description: job-description-specialist-hws
   playTimeTracker: JobSpecialistHWS
   setPreference: false
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

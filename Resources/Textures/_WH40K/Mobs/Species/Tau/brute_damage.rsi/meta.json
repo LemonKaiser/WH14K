@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "copyright": "Derived for WH14K project from base SS14 damage overlays.",
+  "license": "CC-BY-SA-3.0",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "Head_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_8",
+      "directions": 4
+    },
+    {
+      "name": "Head_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_16",
+      "directions": 4
+    },
+    {
+      "name": "Head_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_24",
+      "directions": 4
+    },
+    {
+      "name": "Head_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_40",
+      "directions": 4
+    },
+    {
+      "name": "Head_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_56",
+      "directions": 4
+    },
+    {
+      "name": "Head_Brute_80",
+      "directions": 4
+    },
+    {
+      "name": "LArm_Brute_80",
+      "directions": 4
+    },
+    {
+      "name": "LLeg_Brute_80",
+      "directions": 4
+    },
+    {
+      "name": "RArm_Brute_80",
+      "directions": 4
+    },
+    {
+      "name": "RLeg_Brute_80",
+      "directions": 4
+    },
+    {
+      "name": "Chest_Brute_80",
+      "directions": 4
+    }
+  ]
+}

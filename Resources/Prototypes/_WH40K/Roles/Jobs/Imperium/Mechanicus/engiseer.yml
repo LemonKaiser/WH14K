@@ -6,6 +6,10 @@
   requirements:
     - !type:SpeciesRequirement
       species:
+      - Tau
+      inverted: true
+    - !type:SpeciesRequirement
+      species:
       - Human
     - !type:DepartmentTimeRequirement
       department: Imperium

@@ -2,8 +2,13 @@
   id: TitheSupplier
   name: job-name-tithe-supplier
   description: job-description-tithe-supplier
+  displayWeight: 40
   playTimeTracker: JobTitheSupplier
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human
@@ -22,8 +27,13 @@
   id: MunitorumOfficer
   name: job-name-munitorum-officer
   description: job-description-munitorum-officer
+  displayWeight: 90
   playTimeTracker: JobMunitorumOfficer
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

@@ -67,29 +67,22 @@
     damageValue: -25
     doAfterDelay: 1
     fuelCost: 0.75
-  - type: BatteryAmmoProvider
-    proto: Bullet825mmLong
-    fireCost: 45
-  - type: BatterySelfRecharger
-    autoRechargeRate: 70
-    autoRechargePauseTime: 0.3
-  - type: Battery
-    maxCharge: 2700
-    startingCharge: 2700
-  - type: Gun
-    fireRate: 8
-    shotsPerBurst: 4
-    burstFireRate: 12
-    selectedMode: Burst
-    availableModes:
-    - Burst
-    minAngle: 8
-    maxAngle: 16
-    angleIncrease: 1.4
-    angleDecay: 15
-    soundGunshot:
-      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
-  - type: WH40KGunPrediction
+  - type: ContainerContainer
+    containers:
+      wh40k-oskvernitel-weapon-container: !type:Container
+  - type: WH40KOskvernitelWeapon
+    minigunPrototype: WH40KOskvernitelWeaponMinigun
+    autogunPrototype: WH40KOskvernitelWeaponAutogun
+  - type: UserInterface
+    interfaces:
+      enum.WH40KOskvernitelWeaponUiKey.Key:
+        type: WH40KOskvernitelWeaponBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KOskvernitelWeaponUiKey.Key
+  - type: ComplexInteraction
+  - type: ActionGrant
+    actions:
+    - ActionWH40KOskvernitelOpenWeaponMenu
   - type: CombatMode
   - type: MeleeWeapon
     hidden: true
@@ -111,7 +104,7 @@
     teamId: Heretics
   - type: FootstepModifier
     footstepSoundCollection:
-      collection: FootstepBorg
+      path: /Audio/Mecha/sound_mecha_powerloader_step.ogg
   - type: Tag
     tags:
     - CannotSuicide

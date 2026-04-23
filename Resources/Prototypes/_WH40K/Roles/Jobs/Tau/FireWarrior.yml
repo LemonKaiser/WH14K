@@ -1,0 +1,34 @@
+- type: job
+  id: TauFireWarrior
+  name: job-name-tau-fire-warrior
+  description: job-description-tau-fire-warrior
+  displayWeight: 10
+  playTimeTracker: JobTauFireWarrior
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauFireWarriorGear
+  icon: "JobIconTauFireWarrior"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: TauFireWarriorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTau
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTau
+    id: TauFireWarriorDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables

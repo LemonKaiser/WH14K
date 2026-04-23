@@ -1,0 +1,19 @@
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltTau
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/tau_belt.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/tau_belt.rsi
+
+- type: entity
+  parent: ClothingBeltStorageBase
+  id: ClothingBeltTauEthereal
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/tau_belt_ethereal.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/tau_belt_ethereal.rsi

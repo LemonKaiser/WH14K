@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: HGuardsman
   name: job-name-hguardsman
   description: job-description-hguardsman
+  displayWeight: 10
   playTimeTracker: JobHGuardsman
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

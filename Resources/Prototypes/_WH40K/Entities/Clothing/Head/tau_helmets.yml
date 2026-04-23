@@ -1,0 +1,24 @@
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetTau
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetTauBreach
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
+    state: icon-break
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET-break

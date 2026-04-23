@@ -2,8 +2,13 @@
   id: WH40KChaplain
   name: job-name-chaplain
   description: job-description-chaplain
+  displayWeight: 60
   playTimeTracker: JobWH40KChaplain
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

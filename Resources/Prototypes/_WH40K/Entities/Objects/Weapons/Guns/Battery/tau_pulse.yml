@@ -1,0 +1,90 @@
+- type: entity
+  parent: BaseWeaponBatterySmall
+  id: WeaponTauPulsePistol
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_pistol_inhands.rsi
+    storedOffset: -2,-5
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_pistol_inhands.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
+  - type: BatteryAmmoProvider
+    proto: Pulse
+    fireCost: 200
+  - type: Battery
+    maxCharge: 2000
+    startingCharge: 2000
+  - type: Tag
+    tags:
+    - Sidearm
+    - LaserWeapon
+
+- type: entity
+  parent: [BaseWeaponBattery, BaseGunWieldable]
+  id: WeaponTauPulseRifle
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_rifle.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_rifle_inhands.rsi
+    size: Huge
+    shape:
+    - 0,0,4,1
+  - type: MagazineVisuals
+    magState: mag
+    steps: 1
+    zeroVisible: true
+  - type: Appearance
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/tau_pulse_rifle_inhands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 1.5
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
+  - type: BatteryAmmoProvider
+    proto: Pulse
+    fireCost: 100
+  - type: Battery
+    maxCharge: 40000
+    startingCharge: 40000
+  - type: Tag
+    tags:
+    - LaserWeapon

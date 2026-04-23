@@ -13,3 +13,11 @@
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: Team_ch
+
+- type: factionIcon
+  id: WH40KFactionIconTau
+  priority: -10
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Team_tau

@@ -6,12 +6,16 @@
   requirements:
     - !type:SpeciesRequirement
       species:
+      - Tau
+      inverted: true
+    - !type:SpeciesRequirement
+      species:
       - Human
-    # - !type:CharacterTraitRequirement
-    #   inverted: true
-    #   traits:
-    #     - Foreigner
-    #     - ForeignerLight
+      # - !type:CharacterTraitRequirement
+      #   inverted: true
+      #   traits:
+      #     - Foreigner
+      #     - ForeignerLight
     - !type:DepartmentTimeRequirement
       department: Imperium
       time: 15h

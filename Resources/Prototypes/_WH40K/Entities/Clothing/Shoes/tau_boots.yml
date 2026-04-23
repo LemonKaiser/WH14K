@@ -1,0 +1,11 @@
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsTau
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/tau_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/tau_boots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

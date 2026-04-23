@@ -221,3 +221,27 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: HCargo
   jobName: job-name-hband-supplier
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauFireWarrior
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauWarrior
+  jobName: job-name-tau-fire-warrior
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauOfficer
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauOfficer
+  jobName: job-name-tau-officer
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauEthereal
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauPsyker
+  jobName: job-name-tau-ethereal

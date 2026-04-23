@@ -2,8 +2,13 @@
   id: HLexmechanic
   name: job-name-hlexmechanic
   description: job-description-hlexmechanic
+  displayWeight: 30
   playTimeTracker: JobHLexmechanic
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

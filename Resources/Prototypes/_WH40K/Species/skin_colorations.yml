@@ -1,0 +1,6 @@
+- type: skinColoration
+  id: TauToned
+  strategy: !type:ClampedHslColoration
+    hue: [0.56, 0.63]
+    saturation: [0.22, 0.42]
+    lightness: [0.45, 0.72]

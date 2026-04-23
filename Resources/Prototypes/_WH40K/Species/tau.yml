@@ -1,0 +1,8 @@
+- type: species
+  id: Tau
+  name: species-name-tau
+  roundStart: true
+  prototype: MobTau
+  dollPrototype: AppearanceTau
+  defaultSkinTone: "#6e9ac8"
+  skinColoration: TauToned

@@ -4,6 +4,8 @@ using Content.Server.NPC.Systems;
 using Content.Shared._WH40K.Animals;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Mobs.Components;
+using Content.Shared.NPC.Systems;
 
 namespace Content.Server._WH40K.Animals;
 
@@ -13,7 +15,7 @@ namespace Content.Server._WH40K.Animals;
 public sealed class WH40KCollectiveRetaliationSystem : EntitySystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly NPCRetaliationSystem _retaliation = default!;
+    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
 
     public override void Initialize()
     {
@@ -36,19 +38,25 @@ public sealed class WH40KCollectiveRetaliationSystem : EntitySystem
 
     private void AlertNearbyHerd(Entity<WH40KCollectiveRetaliationComponent> ent, EntityUid attacker)
     {
-        if (string.IsNullOrWhiteSpace(ent.Comp.HerdId))
+        if (string.IsNullOrWhiteSpace(ent.Comp.HerdId) || !HasComp<MobStateComponent>(attacker))
             return;
+
+        AggroAttacker(ent.Owner, attacker);
 
         foreach (var (uid, herd) in _lookup.GetEntitiesInRange<WH40KCollectiveRetaliationComponent>(Transform(ent.Owner).Coordinates, ent.Comp.Radius))
         {
             if (uid == ent.Owner ||
-                !string.Equals(herd.HerdId, ent.Comp.HerdId, StringComparison.OrdinalIgnoreCase) ||
-                !TryComp<NPCRetaliationComponent>(uid, out var retaliation))
+                !string.Equals(herd.HerdId, ent.Comp.HerdId, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            _retaliation.TryRetaliate((uid, retaliation), attacker);
+            AggroAttacker(uid, attacker);
         }
+    }
+
+    private void AggroAttacker(EntityUid uid, EntityUid attacker)
+    {
+        _npcFaction.AggroEntity(uid, attacker);
     }
 }

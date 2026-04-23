@@ -1,0 +1,17 @@
+- type: loadout
+  id: WH40KTauArmorOfficer
+  dummyEntity: ClothingOuterArmorTauOfficer
+  equipment:
+    outerClothing: ClothingOuterArmorTauOfficer
+
+- type: loadout
+  id: WH40KTauArmorCommander
+  dummyEntity: ClothingOuterArmorTauCommander
+  equipment:
+    outerClothing: ClothingOuterArmorTauCommander
+
+- type: loadout
+  id: WH40KTauCommanderCloakLoadout
+  dummyEntity: ClothingNeckCloakTauCommander
+  equipment:
+    neck: ClothingNeckCloakTauCommander

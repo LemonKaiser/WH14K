@@ -1,9 +1,13 @@
-﻿- type: job
+- type: job
   id: HVoxScout
   name: job-name-hvox-scout
   description: job-description-hvox-scout
   playTimeTracker: JobHVoxScout
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

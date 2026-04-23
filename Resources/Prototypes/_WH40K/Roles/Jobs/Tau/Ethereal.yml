@@ -1,0 +1,42 @@
+- type: job
+  id: TauEthereal
+  name: job-name-tau-ethereal
+  description: job-description-tau-ethereal
+  displayWeight: 200
+  playTimeTracker: JobTauEthereal
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauEtherealGear
+  icon: "JobIconTauEthereal"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
+      - type: WH40KMoraleExecutionTarget
+      - type: WH40KPsykerRole
+  access:
+  - Maintenance
+  - External
+  - Command
+
+- type: startingGear
+  id: TauEtherealGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTauEthereal
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTauEthereal
+    outerClothing: ClothingOuterArmorTauEthereal
+    id: TauEtherealDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables

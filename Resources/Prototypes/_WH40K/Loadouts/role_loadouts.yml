@@ -404,3 +404,29 @@
   - WH40KHereticMainWeapon
   - WH40KHereticSecondaryWeapon
   - WH40KHereticMelee
+
+- type: roleLoadout
+  id: JobTauFireWarrior
+  groups:
+  - WH40KTauLineHead
+  - WH40KTauLineOuter
+  - WH40KTauMainWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobTauOfficer
+  groups:
+  - WH40KTauCommandHead
+  - WH40KTauCommandOuter
+  - WH40KTauCommandNeck
+  - WH40KTauMainWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobTauEthereal
+  groups:
+  - WH40KTauMainWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
