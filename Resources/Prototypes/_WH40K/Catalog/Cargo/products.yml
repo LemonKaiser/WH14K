@@ -384,7 +384,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 2000
+  cost: 3000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -1193,7 +1193,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 2000
+  cost: 3000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
