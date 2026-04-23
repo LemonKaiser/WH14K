@@ -113,3 +113,4 @@ wh40k-manipulator-direction-unknown = Unknown
 wh40k-barbed-wire-item-name = barbed wire coil
 wh40k-barbed-wire-item-desc = Lengths of coiled wire used to reinforce barricades.
 wh40k-turret-supported-ammo = Supported ammo: {$ammo}
+loadout-group-wh40k-tau-combat-kit = Cadre equipment

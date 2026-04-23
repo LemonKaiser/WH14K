@@ -221,3 +221,24 @@
   components:
   - type: PresetIdCard
     job: HNovice
+
+- type: entity
+  parent: StandardDogTag
+  id: TauFireWarriorDogTag
+  components:
+  - type: PresetIdCard
+    job: TauFireWarrior
+
+- type: entity
+  parent: StandardDogTag
+  id: TauOfficerDogTag
+  components:
+  - type: PresetIdCard
+    job: TauOfficer
+
+- type: entity
+  parent: StandardDogTag
+  id: TauEtherealDogTag
+  components:
+  - type: PresetIdCard
+    job: TauEthereal

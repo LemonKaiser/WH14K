@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Psyker
   name: job-name-psyker
   description: job-description-psyker
+  displayWeight: 50
   playTimeTracker: JobPsyker
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

@@ -1,0 +1,64 @@
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorTauPathfinder
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_firewarrior_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_firewarrior_armor.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorTauStandard
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_firewarrior_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_firewarrior_armor.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-plates
+
+- type: entity
+  parent: ClothingOuterArmorAdvancedFlakVest
+  id: ClothingOuterArmorTauOfficer
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_officer_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_officer_armor.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-plates
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorTauCommander
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_commander_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_commander_armor.rsi
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+      - state: equipped-OUTERCLOTHING-plates
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorTauEthereal
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_ethereal_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/tau_ethereal_armor.rsi

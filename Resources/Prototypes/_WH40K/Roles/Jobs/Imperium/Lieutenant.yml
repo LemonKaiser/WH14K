@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Lieutenant
   name: job-name-lieutenant
   description: job-description-lieutenant
+  displayWeight: 100
   playTimeTracker: JobLieutenant
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

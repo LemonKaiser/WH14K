@@ -6,6 +6,8 @@ using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Random;
+using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
 using Content.Shared.Speech;
 using Content.Shared.Traits;
@@ -31,6 +33,9 @@ namespace Content.Shared.Preferences
     [Serializable, NetSerializable]
     public sealed partial class HumanoidCharacterProfile
     {
+        private const string RandomSpeciesWeightsId = "SpeciesWeights";
+        private const string TauSpeciesId = "Tau";
+
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
         private static readonly Regex RestrictedNameRegex = new("[^A-Za-zА-Яа-яёЁ0-9' -]"); // Corvax-Localization
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
@@ -226,12 +231,36 @@ namespace Content.Shared.Preferences
             var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
             var random = IoCManager.Resolve<IRobustRandom>();
 
-            var species = random.Pick(prototypeManager
-                .EnumeratePrototypes<SpeciesPrototype>()
-                .Where(x => (ignoredSpecies == null ? x.RoundStart : x.RoundStart && !ignoredSpecies.Contains(x.ID))
-                    && !x.IsRestrictedFromRandomization)
-                .ToArray()
-            ).ID;
+            var weightedSpecies = new Dictionary<string, float>();
+            if (prototypeManager.TryIndex<WeightedRandomSpeciesPrototype>(RandomSpeciesWeightsId, out var speciesWeights))
+            {
+                foreach (var (speciesId, weight) in speciesWeights.Weights)
+                {
+                    if (weight <= 0f ||
+                        string.Equals(speciesId, TauSpeciesId, StringComparison.Ordinal) ||
+                        ignoredSpecies?.Contains(speciesId) == true ||
+                        !prototypeManager.TryIndex<SpeciesPrototype>(speciesId, out var speciesProto) ||
+                        !speciesProto.RoundStart ||
+                        speciesProto.IsRestrictedFromRandomization)
+                    {
+                        continue;
+                    }
+
+                    weightedSpecies[speciesId] = weight;
+                }
+            }
+
+            var species = weightedSpecies.Count > 0
+                ? random.Pick(weightedSpecies)
+                : random.Pick(prototypeManager
+                    .EnumeratePrototypes<SpeciesPrototype>()
+                    .Where(x =>
+                        x.RoundStart &&
+                        !x.IsRestrictedFromRandomization &&
+                        !string.Equals(x.ID, TauSpeciesId, StringComparison.Ordinal) &&
+                        (ignoredSpecies == null || !ignoredSpecies.Contains(x.ID)))
+                    .ToArray()
+                ).ID;
 
             return RandomWithSpecies(species);
         }

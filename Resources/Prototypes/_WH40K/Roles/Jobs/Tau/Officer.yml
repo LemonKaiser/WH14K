@@ -1,0 +1,35 @@
+- type: job
+  id: TauOfficer
+  name: job-name-tau-officer
+  description: job-description-tau-officer
+  displayWeight: 100
+  playTimeTracker: JobTauOfficer
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauOfficerGear
+  icon: "JobIconTauOfficer"
+  supervisors: job-supervisors-engineering
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+  - Command
+
+- type: startingGear
+  id: TauOfficerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTau
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTau
+    id: TauOfficerDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables

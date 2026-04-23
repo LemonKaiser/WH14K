@@ -1,0 +1,9 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackTau
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/tau_backpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/tau_backpack.rsi

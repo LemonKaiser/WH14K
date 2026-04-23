@@ -37,7 +37,13 @@
     proto: alien
   - type: NpcFactionMember
     factions:
-    - SimpleHostile
+    - Heretics
+  - type: NPCRetaliation
+    attackMemoryLength: 15
+  - type: WH40KCollectiveRetaliation
+    herdId: WarpDaemons
+    radius: 10
+  - type: FactionException
   - type: HTN
     rootTask:
       task: SimpleHostileCompound

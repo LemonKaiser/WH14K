@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Robust.Server.Console;
 using Robust.Server.Player;
@@ -23,9 +24,13 @@ namespace Content.IntegrationTests.Tests.Commands
             var sPlayerManager = server.ResolveDependency<IPlayerManager>();
             var sConsole = server.ResolveDependency<IServerConsoleHost>();
             var sDatabase = server.ResolveDependency<IServerDbManager>();
+            var sAdminManager = server.ResolveDependency<IAdminManager>();
             var netMan = client.ResolveDependency<IClientNetManager>();
             var clientSession = sPlayerManager.Sessions.Single();
             var clientId = clientSession.UserId;
+            var hasHostBanBypass =
+                sAdminManager.GetAdminData(clientSession, includeDeAdmin: true)?.IsHost == true ||
+                sAdminManager.IsPromotedHost(clientId);
 
             Assert.That(netMan.IsConnected);
 
@@ -64,8 +69,16 @@ namespace Content.IntegrationTests.Tests.Commands
             });
 
             await pair.RunTicksSync(5);
-            Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(0));
-            Assert.That(!netMan.IsConnected);
+            if (hasHostBanBypass)
+            {
+                Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(1));
+                Assert.That(netMan.IsConnected);
+            }
+            else
+            {
+                Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(0));
+                Assert.That(!netMan.IsConnected);
+            }
 
             // Try to pardon a ban that does not exist
             await server.WaitPost(() => sConsole.ExecuteCommand("pardon 2"));
@@ -143,12 +156,20 @@ namespace Content.IntegrationTests.Tests.Commands
                 Assert.That(await sDatabase.GetBansAsync(null, clientId, null, null), Has.Count.EqualTo(1));
             });
 
-            // Reconnect client. Slightly faster than dirtying the pair.
-            Assert.That(sPlayerManager.Sessions, Is.Empty);
-            client.SetConnectTarget(server);
-            await client.WaitPost(() => netMan.ClientConnect(null!, 0, null!));
-            await pair.RunTicksSync(5);
-            Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(1));
+            if (hasHostBanBypass)
+            {
+                Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(1));
+                Assert.That(netMan.IsConnected);
+            }
+            else
+            {
+                // Reconnect client. Slightly faster than dirtying the pair.
+                Assert.That(sPlayerManager.Sessions, Is.Empty);
+                client.SetConnectTarget(server);
+                await client.WaitPost(() => netMan.ClientConnect(null!, 0, null!));
+                await pair.RunTicksSync(5);
+                Assert.That(sPlayerManager.Sessions, Has.Length.EqualTo(1));
+            }
         }
     }
 }

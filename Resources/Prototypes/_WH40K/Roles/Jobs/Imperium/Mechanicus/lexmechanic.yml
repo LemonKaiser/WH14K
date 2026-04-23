@@ -2,8 +2,13 @@
   id: Lexmechanic
   name: job-name-lexmechanic
   description: job-description-lexmechanic
+  displayWeight: 80
   playTimeTracker: JobLexmechanic
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

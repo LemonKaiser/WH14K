@@ -5,3 +5,4 @@ department-Voidsmen = Voidsmen
 department-Imperium = Imperium
 department-Dark-Mechanicum = Dark Mechanicum
 department-Heretics = Heretics
+department-Tau = T'au Empire

@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Medic
   name: job-name-medic
   description: job-description-medic
+  displayWeight: 20
   playTimeTracker: JobMedic
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

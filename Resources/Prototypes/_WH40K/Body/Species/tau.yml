@@ -1,0 +1,160 @@
+- type: markingsGroup
+  parent: Undergarments
+  id: Tau
+  onlyGroupWhitelisted: true
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.SnoutCover:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Tail:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.TailOverlay:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceTau
+  categories: [ HideSpawnMenu ]
+  name: tau appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganTauTorso
+      Head: OrganTauHead
+      ArmLeft: OrganTauArmLeft
+      ArmRight: OrganTauArmRight
+      HandRight: OrganTauHandRight
+      HandLeft: OrganTauHandLeft
+      LegLeft: OrganTauLegLeft
+      LegRight: OrganTauLegRight
+      FootLeft: OrganTauFootLeft
+      FootRight: OrganTauFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Tau
+
+- type: entity
+  parent:
+  - AppearanceTau
+  - MobHuman
+  id: MobTau
+  name: Urist T'au
+  components:
+  - type: DamageVisuals
+    thresholds: [ 8, 16, 24, 40, 56, 80 ]
+    targetLayers:
+    - "enum.HumanoidVisualLayers.Chest"
+    - "enum.HumanoidVisualLayers.Head"
+    - "enum.HumanoidVisualLayers.LArm"
+    - "enum.HumanoidVisualLayers.LLeg"
+    - "enum.HumanoidVisualLayers.RArm"
+    - "enum.HumanoidVisualLayers.RLeg"
+    damageOverlayGroups:
+      Brute:
+        sprite: _WH40K/Mobs/Species/Tau/brute_damage.rsi
+        color: "#FF0000"
+      Burn:
+        sprite: _WH40K/Mobs/Species/Tau/burn_damage.rsi
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      48: 0.7
+      64: 0.5
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      80: Critical
+      160: Dead
+  - type: Stamina
+    baseCritThreshold: 80
+    animationThreshold: 40
+  - type: ScaleVisuals
+    scale: 1, 0.95
+
+- type: entity
+  parent: OrganHuman
+  id: OrganTau
+  abstract: true
+  suffix: tau
+
+- type: entity
+  parent: OrganTau
+  id: OrganTauExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _WH40K/Mobs/Species/Tau/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: _WH40K/Mobs/Species/Tau/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Tau
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganTauExternal ]
+  id: OrganTauTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganTauExternal ]
+  id: OrganTauHead
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganTauExternal ]
+  id: OrganTauArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganTauExternal ]
+  id: OrganTauArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganTauExternal ]
+  id: OrganTauHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganTauExternal ]
+  id: OrganTauHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganTauExternal ]
+  id: OrganTauLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganTauExternal ]
+  id: OrganTauLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganTauExternal ]
+  id: OrganTauFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganTauExternal ]
+  id: OrganTauFootRight

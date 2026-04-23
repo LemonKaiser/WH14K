@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Major
   name: job-name-major
   description: job-description-major
+  displayWeight: 110
   playTimeTracker: JobMajor
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

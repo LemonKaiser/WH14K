@@ -44,3 +44,20 @@
   - Wizard
   - Xenoborg
   - Heretics
+
+- type: npcFaction
+  id: Tau
+  hostile:
+  - Imperium
+  - Heretics
+  - Tyranids
+  - SimpleHostile
+  - NanoTrasen
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg

@@ -2,8 +2,13 @@
   id: HColonel
   name: job-name-hcolonel
   description: job-description-hcolonel
+  displayWeight: 60
   playTimeTracker: JobHColonel
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

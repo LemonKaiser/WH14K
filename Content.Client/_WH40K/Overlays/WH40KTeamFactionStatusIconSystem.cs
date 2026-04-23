@@ -16,6 +16,7 @@ public sealed class WH40KTeamFactionStatusIconSystem : EntitySystem
 {
     private static readonly ProtoId<FactionIconPrototype> ImperiumIcon = "WH40KFactionIconImperium";
     private static readonly ProtoId<FactionIconPrototype> HereticsIcon = "WH40KFactionIconHeretics";
+    private static readonly ProtoId<FactionIconPrototype> TauIcon = "WH40KFactionIconTau";
 
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -46,9 +47,12 @@ public sealed class WH40KTeamFactionStatusIconSystem : EntitySystem
         if (!string.Equals(viewerTeam, targetTeam, StringComparison.OrdinalIgnoreCase))
             return;
 
-        var iconId = string.Equals(targetTeam, "Imperium", StringComparison.OrdinalIgnoreCase)
-            ? ImperiumIcon
-            : HereticsIcon;
+        var iconId = targetTeam switch
+        {
+            "Imperium" => ImperiumIcon,
+            "Tau" => TauIcon,
+            _ => HereticsIcon
+        };
 
         if (_prototype.Resolve(iconId, out var icon))
             args.StatusIcons.Add(icon);
@@ -70,6 +74,12 @@ public sealed class WH40KTeamFactionStatusIconSystem : EntitySystem
             string.Equals(teamId, "Chaos", StringComparison.OrdinalIgnoreCase))
         {
             canonical = "Heretics";
+            return true;
+        }
+
+        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
+        {
+            canonical = "Tau";
             return true;
         }
 

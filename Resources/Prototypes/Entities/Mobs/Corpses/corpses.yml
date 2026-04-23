@@ -6,7 +6,7 @@
   - type: Loadout
     prototypes:
       - HoPGear
-      - ClownGear
+      - ClownCorpseGear
       - MimeGear
       - JanitorGear
       - ServiceWorkerGear
@@ -15,6 +15,18 @@
       - ChefGear
       - ChaplainGear
       - PassengerGear
+
+- type: startingGear
+  id: ClownCorpseGear
+  equipment:
+    mask: ClothingMaskClown
+    pocket1: BikeHorn
+    pocket2: ClownRecorder
+    id: ClownPDA
+    ears: ClothingHeadsetService
+  storage:
+    back:
+    - RubberStampClown
 
 - type: entity
   parent: SalvageHumanCorpse

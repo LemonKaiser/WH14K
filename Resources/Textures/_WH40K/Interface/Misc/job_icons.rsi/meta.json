@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "By endr_animet",
+    "copyright": "By endr_animet. Tau additions from WH14K project assets.",
 
     "size": {
         "x": 8,
@@ -97,6 +97,18 @@
         },
         {
             "name": "HVoxScout"
+        },
+        {
+            "name": "TauWarrior"
+        },
+        {
+            "name": "TauOfficer"
+        },
+        {
+            "name": "TauPsyker"
+        },
+        {
+            "name": "Team_tau"
         }
     ]
 }

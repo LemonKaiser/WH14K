@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: Commissar
   name: job-name-commissar
   description: job-description-commissar
+  displayWeight: 120
   playTimeTracker: JobCommissar
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

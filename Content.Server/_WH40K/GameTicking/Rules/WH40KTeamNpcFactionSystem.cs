@@ -8,6 +8,7 @@ public sealed class WH40KTeamNpcFactionSystem : EntitySystem
 {
     private const string TeamImperium = "Imperium";
     private const string TeamHeretics = "Heretics";
+    private const string TeamTau = "Tau";
 
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
 
@@ -52,6 +53,12 @@ public sealed class WH40KTeamNpcFactionSystem : EntitySystem
         if (string.Equals(teamId, TeamHeretics, StringComparison.OrdinalIgnoreCase))
         {
             factionId = TeamHeretics;
+            return true;
+        }
+
+        if (string.Equals(teamId, TeamTau, StringComparison.OrdinalIgnoreCase))
+        {
+            factionId = TeamTau;
             return true;
         }
 

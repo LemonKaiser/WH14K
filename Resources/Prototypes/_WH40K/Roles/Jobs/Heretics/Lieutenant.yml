@@ -2,8 +2,13 @@
   id: HLieutenant
   name: job-name-hlieutenant
   description: job-description-hlieutenant
+  displayWeight: 50
   playTimeTracker: JobHLieutenant
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

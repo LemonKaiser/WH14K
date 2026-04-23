@@ -1,0 +1,65 @@
+- type: loadout
+  id: WH40KTauHelmetStandard
+  dummyEntity: ClothingHeadHelmetTau
+  equipment:
+    head: ClothingHeadHelmetTau
+
+- type: loadout
+  id: WH40KTauHelmetBreach
+  dummyEntity: ClothingHeadHelmetTauBreach
+  equipment:
+    head: ClothingHeadHelmetTauBreach
+
+- type: loadout
+  id: WH40KTauArmorPathfinder
+  dummyEntity: ClothingOuterArmorTauPathfinder
+  equipment:
+    outerClothing: ClothingOuterArmorTauPathfinder
+
+- type: loadout
+  id: WH40KTauArmorStandard
+  dummyEntity: ClothingOuterArmorTauStandard
+  equipment:
+    outerClothing: ClothingOuterArmorTauStandard
+
+- type: loadout
+  id: WH40KTauPulseRifleLoadout
+  dummyEntity: WeaponTauPulseRifle
+  equipment:
+    suitstorage: WeaponTauPulseRifle
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulsePistolLoadout
+  dummyEntity: WeaponTauPulsePistol
+  equipment:
+    pocket1: WeaponTauPulsePistol
+  groupBy: "sidearm"
+
+- type: loadout
+  id: WH40KTauSupplyFlask
+  dummyEntity: DrinkTauFlask
+  storage:
+    back:
+    - DrinkTauFlask
+
+- type: loadout
+  id: WH40KTauSupplyNutriLiquid
+  dummyEntity: DrinkTauNutriLiquid
+  storage:
+    back:
+    - DrinkTauNutriLiquid
+
+- type: loadout
+  id: WH40KTauSupplyMeatRation
+  dummyEntity: FoodTauSublimatedMeat
+  storage:
+    back:
+    - FoodTauSublimatedMeat
+
+- type: loadout
+  id: WH40KTauSupplyVegetableRation
+  dummyEntity: FoodTauSublimatedVegetables
+  storage:
+    back:
+    - FoodTauSublimatedVegetables

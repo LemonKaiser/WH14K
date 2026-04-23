@@ -1,9 +1,14 @@
-﻿- type: job
+- type: job
   id: VoxScout
   name: job-name-vox-scout
   description: job-description-vox-scout
+  displayWeight: 30
   playTimeTracker: JobVoxScout
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human

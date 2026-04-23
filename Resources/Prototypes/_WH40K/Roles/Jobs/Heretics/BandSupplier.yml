@@ -2,8 +2,13 @@
   id: HBandSupplier
   name: job-name-hband-supplier
   description: job-description-hband-supplier
+  displayWeight: 20
   playTimeTracker: JobHBandSupplier
   requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
     - !type:SpeciesRequirement
       species:
       - Human
