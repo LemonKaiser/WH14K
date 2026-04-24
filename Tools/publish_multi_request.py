@@ -36,10 +36,63 @@ RETRYABLE_EXCEPTIONS = (
 )
 
 
-def post_json(session: requests.Session, url: str, *, payload: dict, headers: dict | None = None) -> requests.Response:
-    resp = session.post(url, json=payload, headers=headers, timeout=(15, 120))
-    resp.raise_for_status()
-    return resp
+def post_with_retry(
+    url: str,
+    *,
+    token: str,
+    json_payload: dict | None = None,
+    headers: dict | None = None,
+    timeout=(15, 120),
+    label: str = "request",
+) -> requests.Response:
+    request_headers = {
+        "Authorization": f"Bearer {token}",
+        "Connection": "close",
+    }
+    if headers is not None:
+        request_headers.update(headers)
+
+    last_error = None
+    last_response = None
+
+    for attempt in range(1, UPLOAD_RETRIES + 1):
+        try:
+            with requests.Session() as session:
+                resp = session.post(
+                    url,
+                    json=json_payload,
+                    headers=request_headers,
+                    timeout=timeout,
+                )
+
+            if resp.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
+                last_response = resp
+                wait_seconds = attempt * 2
+                print(
+                    f"    Transient HTTP {resp.status_code} during {label} "
+                    f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
+                )
+                time.sleep(wait_seconds)
+                continue
+
+            resp.raise_for_status()
+            return resp
+        except RETRYABLE_EXCEPTIONS as exc:
+            last_error = exc
+            if attempt >= UPLOAD_RETRIES:
+                break
+
+            wait_seconds = attempt * 2
+            print(
+                f"    Transient network error during {label}: {exc} "
+                f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
+            )
+            time.sleep(wait_seconds)
+
+    if last_response is not None:
+        last_response.raise_for_status()
+
+    raise RuntimeError(f"Failed during {label} after {UPLOAD_RETRIES} attempts.") from last_error
 
 
 def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
@@ -94,11 +147,6 @@ def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
 
 def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     """Publish the release to a single Robust.Cdn instance."""
-    session = requests.Session()
-    session.headers = {
-        "Authorization": f"Bearer {token}",
-    }
-
     print(f"\n===== Publishing to {label}: {cdn_url}fork/{fork_id}/ =====")
     print(f"Version: {VERSION}")
 
@@ -109,7 +157,13 @@ def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     headers = {
         "Content-Type": "application/json"
     }
-    post_json(session, f"{cdn_url}fork/{fork_id}/publish/start", payload=data, headers=headers)
+    post_with_retry(
+        f"{cdn_url}fork/{fork_id}/publish/start",
+        token=token,
+        json_payload=data,
+        headers=headers,
+        label=f"starting publish on {label}",
+    )
     print("Publish started, adding files...")
 
     for file in get_files_to_publish():
@@ -124,7 +178,13 @@ def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     headers = {
         "Content-Type": "application/json"
     }
-    post_json(session, f"{cdn_url}fork/{fork_id}/publish/finish", payload=data, headers=headers)
+    post_with_retry(
+        f"{cdn_url}fork/{fork_id}/publish/finish",
+        token=token,
+        json_payload=data,
+        headers=headers,
+        label=f"finishing publish on {label}",
+    )
 
     print(f"===== {label} publish SUCCESS! =====\n")
 

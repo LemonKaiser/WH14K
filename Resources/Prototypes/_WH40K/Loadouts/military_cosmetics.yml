@@ -169,6 +169,7 @@
 
 - type: loadout
   id: WH40KHeresiarchKhorneRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchKhorne
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
@@ -180,6 +181,7 @@
 
 - type: loadout
   id: WH40KHeresiarchNurgleRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchNurgle
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
@@ -191,6 +193,7 @@
 
 - type: loadout
   id: WH40KHeresiarchSlaaneshRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchSlaanesh
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
@@ -202,6 +205,7 @@
 
 - type: loadout
   id: WH40KHeresiarchTzeentchRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchTzeentch
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
