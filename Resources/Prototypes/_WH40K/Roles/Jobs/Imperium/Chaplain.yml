@@ -42,5 +42,3 @@
     neck: ClothingNeckInqusition
     id: CommissarDogTag
     pocket1: WH40KBible
-  inhand:
-    - Chainsword

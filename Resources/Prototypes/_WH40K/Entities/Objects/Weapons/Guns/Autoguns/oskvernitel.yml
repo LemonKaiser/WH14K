@@ -21,13 +21,13 @@
     containers:
       ballistic-ammo: !type:Container
   - type: BallisticAmmoProvider
-    capacity: 50
+    capacity: 100
     proto: Bullet825mmLong
     cycleable: false
   - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 2s
+    autoRefillRate: 1s
     firingPausesAutoRefill: true
-    autoRefillPauseDuration: 2s
+    autoRefillPauseDuration: 1s
 
 - type: entity
   id: WH40KOskvernitelWeaponAutogun

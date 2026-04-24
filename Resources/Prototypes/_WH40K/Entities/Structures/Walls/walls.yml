@@ -240,7 +240,54 @@
     popupCooldownSeconds: 1.5
 
 - type: entity
-  parent: WallForce
+  id: WH40KWallForceShieldBase
+  parent: WH40KShieldBarricade
+  name: psyker shield barrier
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 10
+
+- type: entity
+  id: WH40KWallForceShieldImperialBase
+  parent: WH40KWallForceShieldBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/shield_barricade.rsi
+    drawdepth: BlastDoors
+    noRot: false
+    layers:
+    - state: shield-barricade
+      shader: unshaded
+      color: "#64b9de"
+  - type: PointLight
+    enabled: true
+    radius: 4
+    power: 6
+    color: "#64b9de"
+
+- type: entity
+  id: WH40KWallForceShieldChaosBase
+  parent: WH40KWallForceShieldBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/shield_barricade.rsi
+    drawdepth: BlastDoors
+    noRot: false
+    layers:
+    - state: shield-barricade
+      shader: unshaded
+      color: "#b00000"
+  - type: PointLight
+    enabled: true
+    radius: 4
+    power: 6
+    color: "#b00000"
+
+- type: entity
+  parent: WH40KWallForceShieldChaosBase
   id: WH40KWallForceTzeentchTier1
   name: tzeentch force wall
   categories: [ HideSpawnMenu ]
@@ -249,7 +296,7 @@
     lifetime: 18
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldImperialBase
   id: WH40KWallForceImperialAegisTier1
   name: aegis force wall
   categories: [ HideSpawnMenu ]
@@ -258,7 +305,7 @@
     lifetime: 18
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldImperialBase
   id: WH40KWallForceImperialAegisTier2
   name: iron halo barrier
   categories: [ HideSpawnMenu ]
@@ -267,7 +314,7 @@
     lifetime: 30
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldChaosBase
   id: WH40KWallForceTzeentchTier2
   name: tzeentch force wall
   categories: [ HideSpawnMenu ]
@@ -276,7 +323,7 @@
     lifetime: 28
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldChaosBase
   id: WH40KWallForceTzeentchTier3
   name: tzeentch force wall
   categories: [ HideSpawnMenu ]
@@ -285,7 +332,7 @@
     lifetime: 42
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldChaosBase
   id: WH40KWallForceTzeentchEx
   name: tzeentch force wall
   categories: [ HideSpawnMenu ]
@@ -294,7 +341,7 @@
     lifetime: 70
 
 - type: entity
-  parent: WallForce
+  parent: WH40KWallForceShieldChaosBase
   id: WH40KWallForceSlaaneshArena
   name: slaanesh arena wall
   categories: [ HideSpawnMenu ]

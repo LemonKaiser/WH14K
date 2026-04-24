@@ -166,7 +166,7 @@
   - WH40KImperialLogisticsOuter
   - WH40KImperialFieldBelt
   - WH40KImperialLineUniform
-  - WH40KImperialLineHands
+  - WH40KImperialCommandHands
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
@@ -174,13 +174,20 @@
   - WH40KImperialMelee
 
 - type: roleLoadout
+  id: JobWH40KChaplain
+  groups:
+  - WH40KChaplainMelee
+
+- type: roleLoadout
   id: JobSergeant
   groups:
   - WH40KImperialSergeantHead
   - WH40KImperialSpecialistMask
   - WH40KImperialCommandNeck
+  - WH40KImperialSergeantUniform
   - WH40KImperialSergeantOuter
   - WH40KImperialCommandHands
+  - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
@@ -190,8 +197,10 @@
   groups:
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
+  - WH40KImperialSergeantUniform
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
+  - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
@@ -201,8 +210,10 @@
   groups:
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
+  - WH40KImperialSergeantUniform
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
+  - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
@@ -214,7 +225,10 @@
   - WH40KImperialEyes
   - WH40KImperialCommandNeckGorget
   - WH40KImperialSpecialistMask
+  - WH40KImperialCommandUniform
+  - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
+  - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialMelee
@@ -227,8 +241,10 @@
   - WH40KImperialEyes
   - WH40KImperialLineMask
   - WH40KImperialCommandNeckGorget
+  - WH40KImperialCommandUniform
   - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
+  - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialCommandMelee
@@ -250,7 +266,10 @@
   - WH40KImperialCommandHead
   - WH40KImperialEyes
   - WH40KImperialColonelNeck
+  - WH40KImperialCommandUniform
+  - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
+  - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
   - WH40KImperialCmdMelee
@@ -393,10 +412,9 @@
 - type: roleLoadout
   id: JobHColonel
   groups:
-  - WH40KHereticCommandHead
+  - WH40KHeresiarchCultRaiment
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNeck
-  - WH40KHereticCommandOuter
   - WH40KHereticCommandMask
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet

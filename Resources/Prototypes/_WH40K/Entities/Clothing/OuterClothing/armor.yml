@@ -228,3 +228,63 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/vst_liet_armor.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/vst_liet_armor.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorValhallanHeavy
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_heavy_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_heavy_armor.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchChaos
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_chaos.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchKhorne
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_khorne.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_khorne.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchNurgle
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_nurgle.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_nurgle.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchSlaanesh
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_slaanesh.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_slaanesh.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchTzeentch
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi

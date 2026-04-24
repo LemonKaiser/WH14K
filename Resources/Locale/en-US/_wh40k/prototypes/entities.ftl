@@ -215,6 +215,18 @@ ent-ClothingHeadHelmetFlakAdvCyan = cyan-pattern armored helmet
 ent-ClothingHeadHelmetFlakAdvHeresy = heretic carapace helmet
     .desc = A heavier traitor guard helmet built on a carapace pattern, using scavenged seals and reinforced plates for front-line assaults.
 
+ent-ClothingHeadHelmetHeresiarchKhorne = Khorne heresiarch carapace helmet
+    .desc = A brass-red carapace helm with a predatory silhouette, built for a cult leader who walks the path of rage and close slaughter.
+
+ent-ClothingHeadHelmetHeresiarchNurgle = Nurgle heresiarch carapace helmet
+    .desc = A heavy helm covered in sores, dull bronze and marks of decay, yet still disturbingly durable.
+
+ent-ClothingHeadHelmetHeresiarchSlaanesh = Slaanesh heresiarch carapace helmet
+    .desc = An ornate carapace helm with lacquered plates and a graceful profile, made to inspire awe and dread in equal measure.
+
+ent-ClothingHeadHelmetHeresiarchTzeentch = Tzeentch heresiarch carapace helmet
+    .desc = A fractured carapace helm whose blue plates and flowing sigils seem to shift whenever you look away.
+
 ent-ClothingMaskGasTechPriest = respirator
     .desc = A standard respirator that protects only the respiratory tract.
 
@@ -262,6 +274,21 @@ ent-ClothingOuterArmorFlakVestGen = armored breastplate
 
 ent-ClothingOuterArmorAdvancedFlakVestHeretic = Heretic Carapace Armor
     .desc = The carapace armor of a traitor guardsman, differing only in coloring and symbols.
+
+ent-ClothingOuterArmorHeresiarchChaos = heresiarch armor
+    .desc = Black carapace armor for the leader of a chaos cult. Its protection matches an officer-grade breastplate, but its finish looks tempered in the Warp.
+
+ent-ClothingOuterArmorHeresiarchKhorne = Khorne heresiarch armor
+    .desc = Heavy cult armor drowned in crimson and brass, meant to lead Khorne's faithful straight into face-to-face slaughter.
+
+ent-ClothingOuterArmorHeresiarchNurgle = Nurgle heresiarch armor
+    .desc = Bloated darkened armor marked by rot and filth. It looks diseased, yet it endures with disgusting inevitability.
+
+ent-ClothingOuterArmorHeresiarchSlaanesh = Slaanesh heresiarch armor
+    .desc = A vivid almost theatrical carapace suit with precise lines and audacious colors, made for those who turn battle into pain and ecstasy.
+
+ent-ClothingOuterArmorHeresiarchTzeentch = Tzeentch heresiarch armor
+    .desc = Blue-and-gold cult armor covered in shifting sigils and hidden patterns, as if one more layer of design waits beneath the surface.
 
 ent-ClothingOuterArmorCommissar = commissar's overcoat
     .desc = The commissar's overcoat is the symbol of REAL power on the battlefield.
@@ -1413,6 +1440,45 @@ ent-ClothingNeckCloakVst = Vostroyan lieutenant's cloak
 ent-ClothingOuterArmorFlakVestMajor = Officer's greatcoat
     .desc = An officer's greatcoat—here it is, a symbol of authority on the battlefield.
 
+ent-ClothingUniformJumpsuitValhallan = Valhallan uniform
+    .desc = A field uniform cut for the killing cold of Valhalla and the trench discipline of its Ice Warriors.
+
+ent-ClothingUniformJumpsuitValhallanSergeant = Valhallan sergeant's uniform
+    .desc = A Valhallan field uniform marked for a sergeant who keeps the firing line steady through blizzards and shellfire.
+
+ent-ClothingUniformJumpsuitValhallanCaptain = Valhallan captain's uniform
+    .desc = An officer's winter uniform tailored for the frozen battlefields and rigid drill of Valhalla.
+
+ent-ClothingHeadHatValhallanUshanka = Valhallan ushanka
+    .desc = A fur ushanka without which a trooper would not last long in the ice-choked trenches of Valhalla.
+
+ent-ClothingHeadHatValhallanCap = Valhallan field cap
+    .desc = A practical field cap favored by disciplined Valhallan troops away from the worst of the wind.
+
+ent-ClothingHeadHatValhallanPapakhaSergeant = Valhallan sergeant's papakha
+    .desc = A tall fur papakha worn by a veteran NCO who has earned the right to command in the snow.
+
+ent-ClothingHeadHatValhallanPapakhaCaptain = Valhallan captain's papakha
+    .desc = A richly appointed Valhallan papakha that marks an officer used to directing winter campaigns.
+
+ent-ClothingHeadHelmetValhallan = Valhallan helmet
+    .desc = An insulated steel helmet made to weather both shrapnel and the frozen winds of Valhalla.
+
+ent-ClothingOuterArmorValhallanCoat = Valhallan greatcoat
+    .desc = A heavy greatcoat worn over field kit, built to keep a Valhallan marching through snow, mud, and attrition.
+
+ent-ClothingOuterArmorValhallanSergeantCoat = Valhallan sergeant's greatcoat
+    .desc = A command-marked greatcoat for a sergeant expected to hold discipline when the cold and casualties bite hardest.
+
+ent-ClothingOuterArmorValhallanCaptainCoat = Valhallan captain's greatcoat
+    .desc = An officer's greatcoat lined for winter warfare and cut to stand out on the frozen front.
+
+ent-ClothingOuterArmorValhallanHeavy = Valhallan winter armor
+    .desc = Layered winter armor with flak protection over thick cold-weather kit, favored when Valhallans expect the line to become a slaughter.
+
+ent-ClothingShoesBootsValhallan = Valhallan boots
+    .desc = Heavy military boots made for frozen mud, trench boards, and long marches across ice.
+
 ent-MobHormagaunt = Hormagaunt
     .desc = I think he can already smell your blood...
 
@@ -1511,3 +1577,15 @@ ent-WH40KNeedaddFlowerBouquet = battlefield flower bouquet
 
 ent-WH40KNeedaddCornerTrim = dark corner trim
     .desc = A low-profile dark metal corner trim for battlefield interiors.
+
+ent-MobWH40KSlaaneshDemonette = daemonette of Slaanesh
+    .desc = A lithe lesser daemon whose unsettling grace ends in razor claws and ecstatic violence.
+
+ent-MobWH40KSlaaneshClawDancer = claw-dancer daemonette
+    .desc = A shrieking daemonette that carves theatrical arcs through flesh with perfect, murderous timing.
+
+ent-MobWH40KSlaaneshRapturousDemonette = rapturous daemonette
+    .desc = An ecstatic huntress of Slaanesh that moves with impossible speed and slices with whiplike precision.
+
+ent-MobWH40KSlaaneshAlluress = alluress of Slaanesh
+    .desc = A champion among daemonettes, every motion equal parts invitation and execution.

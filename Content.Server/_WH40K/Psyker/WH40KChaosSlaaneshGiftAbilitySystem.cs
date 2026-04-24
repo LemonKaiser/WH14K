@@ -23,6 +23,7 @@ using Content.Shared.Stunnable;
 using Content.Shared._WH40K.Psyker;
 using Content.Server.Stunnable;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Player;
@@ -531,22 +532,39 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
 
     private void SpawnArenaWalls(EntityCoordinates center)
     {
-        var offsets = new[]
+        var sideWalls = new[]
         {
-            new Vector2(1f, 0f),
-            new Vector2(-1f, 0f),
-            new Vector2(0f, 1f),
-            new Vector2(0f, -1f),
-            new Vector2(1f, 1f),
-            new Vector2(1f, -1f),
-            new Vector2(-1f, 1f),
-            new Vector2(-1f, -1f),
+            (Offset: new Vector2(0f, 1f), Direction: Direction.South),
+            (Offset: new Vector2(0f, -1f), Direction: Direction.North),
+            (Offset: new Vector2(1f, 0f), Direction: Direction.West),
+            (Offset: new Vector2(-1f, 0f), Direction: Direction.East),
         };
 
-        foreach (var offset in offsets)
+        foreach (var wall in sideWalls)
         {
-            Spawn(SlaaneshArenaWallPrototype, center.Offset(offset));
+            SpawnArenaWall(center.Offset(wall.Offset), wall.Direction);
         }
+
+        var cornerWalls = new[]
+        {
+            (Offset: new Vector2(1f, 1f), First: Direction.South, Second: Direction.West),
+            (Offset: new Vector2(1f, -1f), First: Direction.North, Second: Direction.West),
+            (Offset: new Vector2(-1f, 1f), First: Direction.South, Second: Direction.East),
+            (Offset: new Vector2(-1f, -1f), First: Direction.North, Second: Direction.East),
+        };
+
+        foreach (var corner in cornerWalls)
+        {
+            var cornerCoords = center.Offset(corner.Offset);
+            SpawnArenaWall(cornerCoords, corner.First);
+            SpawnArenaWall(cornerCoords, corner.Second);
+        }
+    }
+
+    private void SpawnArenaWall(EntityCoordinates coordinates, Direction direction)
+    {
+        var wall = Spawn(SlaaneshArenaWallPrototype, coordinates);
+        _transform.SetLocalRotation(wall, direction.ToAngle());
     }
 
     private readonly record struct SlaaneshPositionSwapState(

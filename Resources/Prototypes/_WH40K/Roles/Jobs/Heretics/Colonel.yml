@@ -38,10 +38,10 @@
     gloves: ClothingHandsGlovesCombatcult
     shoes: ClothingShoesChaosBoots2
     ears: ClothingHeadsetVoxBackpackHeretics
-    outerClothing: ClothingOuterArmorCultistCoat
+    outerClothing: ClothingOuterArmorHeresiarchChaos
     belt: chaosbelt
     neck: NecklaceChaosCultistReflectWeak
-    head: ClothingHeadScarfChaos
+    head: ClothingHeadHelmetFlakAdvHeresy
     pocket1: WH40KCommandTacticalMapTablet
     id: HColonelDogTag
   inhand:

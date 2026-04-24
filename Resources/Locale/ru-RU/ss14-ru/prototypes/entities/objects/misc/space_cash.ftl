@@ -1,5 +1,5 @@
-ent-SpaceCash = кредиты
-    .desc = Нужно иметь деньги.
+ent-SpaceCash = троны
+    .desc = Имперская валюта для повседневной торговли.
 ent-SpaceCash10 = { ent-SpaceCash }
     .suffix = 10
     .desc = { ent-SpaceCash.desc }

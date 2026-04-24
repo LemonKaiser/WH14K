@@ -48,6 +48,55 @@
         - BulletImpassable
 
 - type: entity
+  id: WH40KShieldBarricade
+  parent: BaseStructure
+  name: shield barricade
+  description: A portable shield wall segment that blocks movement and gunfire without blocking sight.
+  suffix: WH40K
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/shield_barricade.rsi
+    drawdepth: BlastDoors
+    noRot: false
+    layers:
+    - state: shield-barricade
+      shader: unshaded
+  - type: Icon
+    sprite: _WH40K/Structures/Decorations/shield_barricade.rsi
+    state: shield-barricade
+  - type: Damageable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.45,0.49,-0.25"
+        mask:
+        - FullTileMask
+        layer:
+        - Opaque
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+
+- type: entity
   id: BarricadeSandbags
   parent: BarricadeWarhammer
   placement:

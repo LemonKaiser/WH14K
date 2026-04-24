@@ -99,7 +99,7 @@ stack-rolling-paper = rolling {$amount ->
 }
 
 stack-fulton = fulton
-stack-credit = speso
+stack-credit = thrones
 stack-plasma = plasma
 stack-biomass = biomass
 stack-pyrotton = pyrotton

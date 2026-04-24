@@ -26,6 +26,7 @@ public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
     private static readonly EntProtoId BarrierWallTierTwoPrototype = "WH40KWallForceTzeentchTier2";
     private static readonly EntProtoId BarrierWallTierThreePrototype = "WH40KWallForceTzeentchTier3";
     private static readonly EntProtoId BarrierWallExPrototype = "WH40KWallForceTzeentchEx";
+    private static readonly EntProtoId BarrierWallBasePrototype = "WH40KWallForceShieldChaosBase";
     private static readonly EntProtoId FireballTierOneProjectile = "WH40KProjectileChaosWarpBlastTzeentchTier1";
     private static readonly EntProtoId FireballTierTwoProjectile = "WH40KProjectileChaosWarpBlastTzeentchTier2";
     private static readonly EntProtoId FireballTierThreeProjectile = "WH40KProjectileChaosWarpBlastTzeentchTier3";
@@ -249,7 +250,7 @@ public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
         if (score >= 1)
             return BarrierWallTierOnePrototype;
 
-        return "WallForce";
+        return BarrierWallBasePrototype;
     }
 
     private static EntProtoId ResolveFireballProjectile(byte powerTier, byte utilityTier, bool exUnlocked)

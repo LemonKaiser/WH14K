@@ -135,7 +135,7 @@ public sealed class WH40KPsykerDisciplineModifierSystem : EntitySystem
 
     private const string AegisPatternWallPrototype = "WH40KWallForceImperialAegisTier1";
     private const string IronHaloWallPrototype = "WH40KWallForceImperialAegisTier2";
-    private const string BaseAegisWallPrototype = "WallForce";
+    private const string BaseAegisWallPrototype = "WH40KWallForceShieldImperialBase";
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly IGameTiming _timing = default!;

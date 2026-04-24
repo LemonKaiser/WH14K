@@ -241,7 +241,7 @@ stack-rolling-paper =
        *[other] сигаретных бумаг
     }
 stack-fulton = фултон
-stack-credit = кредиты
+stack-credit = троны
 stack-plasma =
     { $amount ->
         [1] лист

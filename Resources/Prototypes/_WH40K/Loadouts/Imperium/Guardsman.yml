@@ -120,3 +120,38 @@
   id: WH40KBootsVst
   equipment:
     shoes: ClothingShoesBootsVst
+
+- type: loadout
+  id: WH40KValhallanUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallan
+
+- type: loadout
+  id: WH40KValhallanHelmet
+  equipment:
+    head: ClothingHeadHelmetValhallan
+
+- type: loadout
+  id: WH40KValhallanUshanka
+  equipment:
+    head: ClothingHeadHatValhallanUshanka
+
+- type: loadout
+  id: WH40KValhallanCap
+  equipment:
+    head: ClothingHeadHatValhallanCap
+
+- type: loadout
+  id: WH40KValhallanCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanCoat
+
+- type: loadout
+  id: WH40KValhallanHeavyArmor
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanHeavy
+
+- type: loadout
+  id: WH40KValhallanBoots
+  equipment:
+    shoes: ClothingShoesBootsValhallan

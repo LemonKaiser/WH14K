@@ -73,6 +73,8 @@
   - WH40KImperialVeteranBeret
   - WH40KBandanaGold
   - WH40KHelmetVst
+  - WH40KValhallanUshanka
+  - WH40KValhallanHelmet
 
 - type: loadoutGroup
   id: WH40KImperialLineHonours
@@ -98,6 +100,8 @@
   - WH40KCyanFlakArmor
   - WH40KFlakArmor
   - WH40KCoatVst
+  - WH40KValhallanCoat
+  - WH40KValhallanHeavyArmor
 
 - type: loadoutGroup
   id: WH40KImperialFieldBelt
@@ -116,6 +120,7 @@
   - WH40KCatachanUniform2
   - WH40KCatachanUniform3
   - WH40KJumpsuitGuardVst
+  - WH40KValhallanUniform
 
 - type: loadoutGroup
   id: WH40KImperialLineHands
@@ -131,6 +136,7 @@
   - WH40KCombatBoots
   - WH40KCyanCombatBoots
   - WH40KBootsVst
+  - WH40KValhallanBoots
 
 - type: loadoutGroup
   id: WH40KImperialLineEyes
@@ -228,6 +234,8 @@
   - WH40KKriegHelmet
   - WH40KMedicBeret
   - WH40KSeniorMedicBeret
+  - WH40KValhallanUshanka
+  - WH40KValhallanHelmet
 
 - type: loadoutGroup
   id: WH40KImperialMedicHonours
@@ -252,6 +260,8 @@
   - WH40KKriegHelmet
   - WH40KQuartermasterBeret
   - WH40KCommandBeret
+  - WH40KValhallanUshanka
+  - WH40KValhallanCap
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHonours
@@ -274,6 +284,7 @@
   - WH40KMunitorumGreatcoat
   - WH40KMunitorumRig
   - WH40KMunitorumVest
+  - WH40KValhallanCoat
 
 - type: loadoutGroup
   id: WH40KImperialSergeantHead
@@ -284,6 +295,15 @@
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
   - WH40KHelmetSergVst
+  - WH40KValhallanCap
+  - WH40KValhallanPapakhaSergeant
+
+- type: loadoutGroup
+  id: WH40KImperialSergeantUniform
+  name: loadout-group-wh40k-imperial-command-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KValhallanSergeantUniform
 
 - type: loadoutGroup
   id: WH40KImperialSergeantOuter
@@ -291,6 +311,14 @@
   loadouts:
   - WH40KFlakArmorSrg
   - WH40KCyanFlakArmorSrg
+  - WH40KValhallanSergeantCoat
+
+- type: loadoutGroup
+  id: WH40KImperialSergeantFeet
+  name: loadout-group-wh40k-imperial-command-feet
+  minLimit: 0
+  loadouts:
+  - WH40KValhallanBoots
 
 - type: loadoutGroup
   id: WH40KImperialCommandHead
@@ -302,6 +330,8 @@
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
   - WH40KHelmetSergVst
+  - WH40KValhallanCap
+  - WH40KValhallanPapakhaCaptain
 
 - type: loadoutGroup
   id: WH40KImperialCommissarHead
@@ -349,6 +379,21 @@
   - WH40KOfficerCoat
   - WH40KCoatLietVst
   - WH40KArmorFlakCoatLiet
+  - WH40KValhallanCaptainCoat
+
+- type: loadoutGroup
+  id: WH40KImperialCommandUniform
+  name: loadout-group-wh40k-imperial-command-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KValhallanCaptainUniform
+
+- type: loadoutGroup
+  id: WH40KImperialCommandFeet
+  name: loadout-group-wh40k-imperial-command-feet
+  minLimit: 0
+  loadouts:
+  - WH40KValhallanBoots
 
 - type: loadoutGroup
   id: WH40KImperialCommandHands
@@ -356,6 +401,7 @@
   minLimit: 0
   loadouts:
   - WH40KBlackGloves
+  - WH40KCombatGloves
 
 - type: loadoutGroup
   id: WH40KCommandFieldKit
@@ -378,6 +424,13 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+
+- type: loadoutGroup
+  id: WH40KChaplainMelee
+  name: loadout-group-wh40k-chaplain-melee
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KChaplainWarHammer
 
 - type: loadoutGroup
   id: WH40KImperialCommandMelee
@@ -564,6 +617,16 @@
   loadouts:
   - WH40KChaosCoat
   - WH40KBloodPactArmor
+
+- type: loadoutGroup
+  id: WH40KHeresiarchCultRaiment
+  name: loadout-group-wh40k-heresiarch-cult-raiment
+  minLimit: 0
+  loadouts:
+  - WH40KHeresiarchKhorneRaiment
+  - WH40KHeresiarchNurgleRaiment
+  - WH40KHeresiarchSlaaneshRaiment
+  - WH40KHeresiarchTzeentchRaiment
 
 - type: loadoutGroup
   id: WH40KHereticCommandMask

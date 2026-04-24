@@ -7,5 +7,5 @@
 - type: stack
   id: Credit
   name: stack-credit
-  icon: { sprite: /Textures/Objects/Economy/cash.rsi, state: cash }
+  icon: { sprite: /Textures/_WH40K/Objects/Economy/trons.rsi, state: cash }
   spawn: SpaceCash
