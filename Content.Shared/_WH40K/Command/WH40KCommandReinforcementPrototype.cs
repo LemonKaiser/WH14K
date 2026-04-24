@@ -9,10 +9,10 @@ public sealed partial class WH40KCommandReinforcementOptionPrototype
     [DataField("id", required: true)]
     public string Id = string.Empty;
 
-    [DataField("nameKey", required: true)]
+    [DataField("nameKey")]
     public string NameKey = string.Empty;
 
-    [DataField("descriptionKey", required: true)]
+    [DataField("descriptionKey")]
     public string DescriptionKey = string.Empty;
 
     [DataField("job", required: true)]
@@ -25,10 +25,19 @@ public sealed partial class WH40KCommandReinforcementOptionPrototype
     public int BaseCost = 20;
 
     [DataField("maxCount")]
-    public int MaxCount = 3;
+    public int MaxCount = 1;
+
+    [DataField("groupKey")]
+    public string GroupKey = string.Empty;
+
+    [DataField("sortOrder")]
+    public int SortOrder;
+
+    [DataField("allowAuto")]
+    public bool AllowAuto = true;
 
     [DataField("additionalUnitCostMultiplier")]
-    public float AdditionalUnitCostMultiplier = 0.55f;
+    public float AdditionalUnitCostMultiplier = 0f;
 }
 
 [Prototype("wh40kCommandReinforcementProfile")]

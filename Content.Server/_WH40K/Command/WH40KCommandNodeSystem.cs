@@ -22,11 +22,13 @@ using Content.Server.Popups;
 using Content.Server.Research.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared.Chat;
+using Content.Shared.Clothing;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Preferences;
+using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Ghost;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Mind;
@@ -55,7 +57,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.Command;
 
-public sealed class WH40KCommandNodeSystem : EntitySystem
+public sealed partial class WH40KCommandNodeSystem : EntitySystem
 {
     private const string TeamIdentityMapId = "WH40KTeamIdentityMap";
     private const string TeamIdentityDefaultProfileId = "WH40KTeamIdentityProfileImperium";
@@ -111,6 +113,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly WH40KPlayerStatsSystem _stats = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {
@@ -131,10 +134,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             subs.Event<WH40KCommandNodeAssignBattleTacticMessage>(OnBattleTacticAssigned);
         });
 
-        Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.Reinforcement, subs =>
-        {
-            subs.Event<WH40KCommandNodeCallReinforcementMessage>(OnReinforcementCalled);
-        });
+        InitializeReinforcementUi();
 
         Subs.BuiEvents<WH40KCommandNodeComponent>(WH40KCommandNodeUiKey.UpgradeTree, subs =>
         {
@@ -160,6 +160,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         base.Update(frameTime);
 
         var now = _timing.CurTime;
+        UpdateReinforcementRuntime();
         var query = EntityQueryEnumerator<WH40KCommandNodeComponent>();
         while (query.MoveNext(out var uid, out var node))
         {
@@ -256,7 +257,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         var activeBattleTacticId = WH40KCommandNodeTactics.FindOrDefault(ent.Comp.ActiveBattleTacticId).Id;
         var currentPhase = _teamRule.GetCurrentPhase();
         var missionBoard = BuildMissionBoardState(ent.Comp, globalMissionRuntime, teamMissionRuntime);
-        var reinforcementOptions = BuildReinforcementOptionStates(ent.Comp.TeamId);
+        var reinforcementUiState = BuildReinforcementUiState(ent.Comp.TeamId, teamName);
         ent.Comp.ActiveBattleTacticId = activeBattleTacticId;
 
         var state = new WH40KCommandNodeBoundUserInterfaceState(
@@ -272,12 +273,12 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             commandPoints,
             ent.Comp.UpgradeLevel,
             GetUpgradeCost(ent.Comp),
-            GetCurrentReinforcementCost(ent.Comp, reinforcementOptions),
-            GetRemainingReinforcementCooldown(ent.Comp),
+            GetMinimumReinforcementCost(ent.Comp.TeamId, ent.Comp.ReinforcementCost),
+            GetRemainingReinforcementCooldown(ent.Comp.TeamId),
             _teamRule.GetRoundElapsedSeconds(),
             toNext,
             thresholds,
-            reinforcementOptions,
+            Array.Empty<WH40KCommandNodeReinforcementOptionState>(),
             unlockLines,
             ent.Comp.PurchasedTreeNodeIds.ToArray(),
             composition.Summary,
@@ -295,7 +296,7 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             missionBoard);
 
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.Key, state);
-        _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.Reinforcement, state);
+        _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.Reinforcement, reinforcementUiState);
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.UpgradeTree, state);
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.MissionBoard, state);
     }
@@ -1750,16 +1751,42 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
         }
 
         var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var proto in gear.Equipment.Values)
-            AddGearName(proto, names);
-
-        foreach (var proto in gear.Inhand)
-            AddGearName(proto, names);
-
-        foreach (var storage in gear.Storage.Values)
+        var roleLoadoutId = LoadoutSystem.GetJobPrototype(job.ID);
+        RoleLoadout? defaultRoleLoadout = null;
+        RoleLoadoutPrototype? defaultRoleLoadoutProto = null;
+        if (_proto.TryIndex(roleLoadoutId, out defaultRoleLoadoutProto))
         {
-            foreach (var proto in storage)
-                AddGearName(proto, names);
+            defaultRoleLoadout = new RoleLoadout(roleLoadoutId);
+            defaultRoleLoadout.SetDefault(HumanoidCharacterProfile.DefaultWithSpecies(), null, _proto, force: true);
+        }
+
+        var excludedSlots = defaultRoleLoadout != null && defaultRoleLoadoutProto != null
+            ? _stationSpawning.GetLoadoutEquipmentOverrides(defaultRoleLoadout, defaultRoleLoadoutProto)
+            : null;
+
+        AddGearNames(gear, names, excludedSlots);
+
+        if (defaultRoleLoadout != null && defaultRoleLoadoutProto != null)
+        {
+            foreach (var groupId in defaultRoleLoadoutProto.Groups)
+            {
+                if (!defaultRoleLoadout.SelectedLoadouts.TryGetValue(groupId, out var selections))
+                    continue;
+
+                foreach (var selection in selections)
+                {
+                    if (!_proto.TryIndex(selection.Prototype, out LoadoutPrototype? loadout))
+                        continue;
+
+                    if (loadout.StartingGear is { } startingGearId &&
+                        _proto.TryIndex(startingGearId, out StartingGearPrototype? startingGear))
+                    {
+                        AddGearNames(startingGear, names);
+                    }
+
+                    AddGearNames(loadout, names);
+                }
+            }
         }
 
         if (names.Count == 0)
@@ -1771,6 +1798,26 @@ public sealed class WH40KCommandNodeSystem : EntitySystem
             return string.Join(", ", ordered);
 
         return $"{string.Join(", ", ordered.Take(maxShown))}, +{ordered.Length - maxShown}";
+    }
+
+    private void AddGearNames(IEquipmentLoadout gear, HashSet<string> names, ISet<string>? excludedSlots = null)
+    {
+        foreach (var (slot, proto) in gear.Equipment)
+        {
+            if (excludedSlots?.Contains(slot) == true)
+                continue;
+
+            AddGearName(proto, names);
+        }
+
+        foreach (var proto in gear.Inhand)
+            AddGearName(proto, names);
+
+        foreach (var storage in gear.Storage.Values)
+        {
+            foreach (var proto in storage)
+                AddGearName(proto, names);
+        }
     }
 
     private void AddGearName(EntProtoId entityId, HashSet<string> names)

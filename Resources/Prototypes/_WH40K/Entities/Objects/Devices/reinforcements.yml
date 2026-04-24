@@ -9,6 +9,8 @@
   - type: Loadout
     prototypes:
     - GuardsmanGear
+    roleLoadout:
+    - JobGuardsman
 
 - type: entity
   parent: WH40KReinforcementPreviewImperiumGuardsman
@@ -27,6 +29,64 @@
   - type: Loadout
     prototypes:
     - VoxScoutGear
+    roleLoadout:
+    - JobVoxScout
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumMedic
+  name: reinforcement preview imperium medic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - MedicGear
+    roleLoadout:
+    - JobMedic
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumTitheSupplier
+  name: reinforcement preview imperium tithe supplier
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TitheSupplierGear
+    roleLoadout:
+    - JobTitheSupplier
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumMunitorumOfficer
+  name: reinforcement preview imperium munitorum officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - MunitorumOfficerGear
+    roleLoadout:
+    - JobMunitorumOfficer
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumLexmechanic
+  name: reinforcement preview imperium lexmechanic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - LexmechanicGear
+    roleLoadout:
+    - JobLexmechanic
 
 - type: entity
   parent: MobHuman
@@ -39,6 +99,64 @@
   - type: Loadout
     prototypes:
     - SergeantGear
+    roleLoadout:
+    - JobSergeant
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumChaplain
+  name: reinforcement preview imperium chaplain
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - WH40KChaplainGear
+    roleLoadout:
+    - JobWH40KChaplain
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumPsyker
+  name: reinforcement preview imperium psyker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - PsykerGear
+    roleLoadout:
+    - JobPsyker
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumLieutenant
+  name: reinforcement preview imperium lieutenant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - LieutenantGear
+    roleLoadout:
+    - JobLieutenant
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumCommissar
+  name: reinforcement preview imperium commissar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - CommissarGear
+    roleLoadout:
+    - JobCommissar
 
 - type: entity
   parent: MobHuman
@@ -51,6 +169,8 @@
   - type: Loadout
     prototypes:
     - HeresyGuardsmanGear
+    roleLoadout:
+    - JobHGuardsman
 
 - type: entity
   parent: WH40KReinforcementPreviewHereticsGuardsman
@@ -69,6 +189,36 @@
   - type: Loadout
     prototypes:
     - HVoxScoutGear
+    roleLoadout:
+    - JobHVoxScout
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsBandSupplier
+  name: reinforcement preview heretics band supplier
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HBandSupplierGear
+    roleLoadout:
+    - JobHBandSupplier
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsLexmechanic
+  name: reinforcement preview heretics lexmechanic
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HLexmechanicGear
+    roleLoadout:
+    - JobHLexmechanic
 
 - type: entity
   parent: MobHuman
@@ -81,6 +231,22 @@
   - type: Loadout
     prototypes:
     - HeresySergeantGear
+    roleLoadout:
+    - JobHSergeant
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsLieutenant
+  name: reinforcement preview heretics lieutenant
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HeresyLieutenantGear
+    roleLoadout:
+    - JobHLieutenant
 
 - type: entity
   id: SpawnPointWH40KReinforcementImperium

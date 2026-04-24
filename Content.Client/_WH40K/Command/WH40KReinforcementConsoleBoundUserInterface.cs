@@ -17,20 +17,25 @@ public sealed class WH40KReinforcementConsoleBoundUserInterface : BoundUserInter
     {
         base.Open();
         _window = this.CreateWindow<WH40KCommandNodeReinforcementWindow>();
-        _window.OnCallRequested += OnCallRequested;
+        _window.OnManualSubmitRequested += OnManualSubmitRequested;
+        _window.OnAutoSaveRequested += OnAutoSaveRequested;
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
 
-        if (_window != null && state is WH40KCommandNodeBoundUserInterfaceState cast)
+        if (_window != null && state is WH40KCommandReinforcementBoundUserInterfaceState cast)
             _window.UpdateState(cast);
     }
 
-    private void OnCallRequested(string optionId, int count)
+    private void OnManualSubmitRequested(WH40KCommandReinforcementDraftEntry[] roles)
     {
-        if (!string.IsNullOrWhiteSpace(optionId))
-            SendMessage(new WH40KCommandNodeCallReinforcementMessage(optionId, count));
+        SendMessage(new WH40KCommandNodeSubmitReinforcementRequestMessage(roles));
+    }
+
+    private void OnAutoSaveRequested(bool enabled, int thresholdPercent, WH40KCommandReinforcementDraftEntry[] roles)
+    {
+        SendMessage(new WH40KCommandNodeSaveAutoReinforcementMessage(enabled, thresholdPercent, roles));
     }
 }

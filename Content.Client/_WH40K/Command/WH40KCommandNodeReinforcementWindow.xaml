@@ -1,0 +1,142 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="{Loc 'w40k-cmd-reinforcement-rework-window-title'}"
+                      Resizable="True"
+                      SetSize="1380 760"
+                      MinSize="1180 660">
+    <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="6 6 6 6">
+        <PanelContainer Name="HeaderPanel">
+            <BoxContainer Orientation="Vertical" SeparationOverride="8">
+                <BoxContainer Orientation="Horizontal" SeparationOverride="10" VerticalAlignment="Center">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'w40k-cmd-reinforcement-rework-window-header'}"
+                           HorizontalExpand="True"
+                           StyleClasses="LabelHeading" />
+                    <PanelContainer Name="TeamBadge">
+                        <Label Name="TeamBadgeLabel" Align="Center" />
+                    </PanelContainer>
+                    <PanelContainer Name="PhaseBadge">
+                        <Label Name="PhaseBadgeLabel" Align="Center" />
+                    </PanelContainer>
+                    <PanelContainer Name="StatusBadge">
+                        <Label Name="StatusBadgeLabel" Align="Center" />
+                    </PanelContainer>
+                </BoxContainer>
+                <Label Name="HeaderStatusLabel" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="6">
+            <PanelContainer Name="RequestPanel" HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  SeparationOverride="8"
+                                  HorizontalExpand="True">
+                        <PanelContainer Name="PendingCard" HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                <Label Name="PendingCardTitleLabel"
+                                       Text="{Loc 'w40k-cmd-reinforcement-rework-pending-title'}"
+                                       StyleClasses="LabelHeading" />
+                                <Label Name="PendingStatusLabel" />
+                                <BoxContainer Name="PendingRoles"
+                                              Orientation="Vertical"
+                                              SeparationOverride="4"
+                                              HorizontalExpand="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="ManualCard" HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                <Label Name="ManualCardTitleLabel"
+                                       Text="{Loc 'w40k-cmd-reinforcement-rework-manual-title'}"
+                                       StyleClasses="LabelHeading" />
+                                <Label Name="ManualSummaryLabel" />
+                                <BoxContainer Name="ManualRoles"
+                                              Orientation="Vertical"
+                                              SeparationOverride="4"
+                                              HorizontalExpand="True" />
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                    <Button Name="SubmitManualButton"
+                                            Text="{Loc 'w40k-cmd-reinforcement-rework-submit-manual'}"
+                                            HorizontalExpand="True" />
+                                    <Button Name="ClearManualButton"
+                                            Text="{Loc 'w40k-cmd-reinforcement-rework-clear-manual'}"
+                                            HorizontalExpand="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="AutoCard" HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical" SeparationOverride="6">
+                                <Label Name="AutoCardTitleLabel"
+                                       Text="{Loc 'w40k-cmd-reinforcement-rework-auto-title'}"
+                                       StyleClasses="LabelHeading" />
+                                <CheckBox Name="AutoEnabledCheckBox"
+                                          Text="{Loc 'w40k-cmd-reinforcement-rework-auto-enabled'}" />
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalAlignment="Center">
+                                    <Slider Name="ThresholdSlider"
+                                            HorizontalExpand="True"
+                                            MinHeight="24"
+                                            MinValue="20"
+                                            MaxValue="50" />
+                                    <Label Name="ThresholdValueLabel" MinWidth="72" />
+                                </BoxContainer>
+                                <Label Name="AutoMetaLabel" />
+                                <Label Name="AutoSummaryLabel" />
+                                <BoxContainer Name="AutoRoles"
+                                              Orientation="Vertical"
+                                              SeparationOverride="4"
+                                              HorizontalExpand="True" />
+                                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                                    <Button Name="SaveAutoButton"
+                                            Text="{Loc 'w40k-cmd-reinforcement-rework-auto-save'}"
+                                            HorizontalExpand="True" />
+                                    <Button Name="ResetAutoButton"
+                                            Text="{Loc 'w40k-cmd-reinforcement-rework-auto-reset'}"
+                                            HorizontalExpand="True" />
+                                    <Button Name="ClearAutoButton"
+                                            Text="{Loc 'w40k-cmd-reinforcement-rework-auto-clear'}"
+                                            HorizontalExpand="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <PanelContainer Name="BottomAccent" MinHeight="2" HorizontalExpand="True" />
+                    </BoxContainer>
+                </ScrollContainer>
+            </PanelContainer>
+
+            <PanelContainer Name="CatalogPanel"
+                            SetWidth="560"
+                            HorizontalExpand="False"
+                            VerticalExpand="True">
+                <BoxContainer Orientation="Vertical" SeparationOverride="8" VerticalExpand="True">
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="8" VerticalAlignment="Center">
+                        <Label Name="CatalogTitleLabel"
+                               Text="{Loc 'w40k-cmd-reinforcement-rework-catalog-title'}"
+                               HorizontalExpand="True"
+                               StyleClasses="LabelHeading" />
+                        <Button Name="CatalogModeButton"
+                                MinWidth="148"
+                                Text="{Loc 'w40k-cmd-reinforcement-rework-catalog-mode-manual'}" />
+                    </BoxContainer>
+                    <PanelContainer Name="SearchPanel">
+                        <LineEdit Name="SearchBar"
+                                  HorizontalExpand="True"
+                                  PlaceHolder="{Loc 'w40k-cmd-reinforcement-rework-search-placeholder'}" />
+                    </PanelContainer>
+                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Name="RoleSections"
+                                      Orientation="Vertical"
+                                      SeparationOverride="4"
+                                      HorizontalExpand="True" />
+                    </ScrollContainer>
+                    <PanelContainer Name="CatalogAccent" MinHeight="2" />
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>
