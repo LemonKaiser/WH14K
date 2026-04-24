@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-import requests
 import os
 import subprocess
+import time
 from typing import Iterable
+
+import requests
 
 PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
 VERSION = os.environ["GITHUB_SHA"]
@@ -25,6 +27,71 @@ PRIMARY_FORK_ID = "ebengrad"
 MIRROR_CDN_URL = "https://cdn.heretec.online/"
 MIRROR_FORK_ID = "heretec-online"
 
+UPLOAD_RETRIES = 4
+TRANSIENT_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504}
+RETRYABLE_EXCEPTIONS = (
+    requests.exceptions.ConnectionError,
+    requests.exceptions.SSLError,
+    requests.exceptions.Timeout,
+)
+
+
+def post_json(session: requests.Session, url: str, *, payload: dict, headers: dict | None = None) -> requests.Response:
+    resp = session.post(url, json=payload, headers=headers, timeout=(15, 120))
+    resp.raise_for_status()
+    return resp
+
+
+def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
+    upload_url = f"{cdn_url}fork/{fork_id}/publish/file"
+    file_name = os.path.basename(file_path)
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Connection": "close",
+        "Content-Type": "application/octet-stream",
+        "Robust-Cdn-Publish-File": file_name,
+        "Robust-Cdn-Publish-Version": VERSION,
+    }
+
+    last_error = None
+
+    for attempt in range(1, UPLOAD_RETRIES + 1):
+        try:
+            with requests.Session() as upload_session:
+                with open(file_path, "rb") as file_handle:
+                    resp = upload_session.post(
+                        upload_url,
+                        data=file_handle,
+                        headers=headers,
+                        timeout=(30, 600),
+                    )
+
+            if resp.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
+                wait_seconds = attempt * 2
+                print(
+                    f"    Transient HTTP {resp.status_code} while uploading {file_name} "
+                    f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
+                )
+                time.sleep(wait_seconds)
+                continue
+
+            resp.raise_for_status()
+            return
+        except RETRYABLE_EXCEPTIONS as exc:
+            last_error = exc
+            if attempt >= UPLOAD_RETRIES:
+                break
+
+            wait_seconds = attempt * 2
+            print(
+                f"    Transient upload error for {file_name}: {exc} "
+                f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
+            )
+            time.sleep(wait_seconds)
+
+    raise RuntimeError(f"Failed to upload {file_name} after {UPLOAD_RETRIES} attempts.") from last_error
+
+
 def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     """Publish the release to a single Robust.Cdn instance."""
     session = requests.Session()
@@ -42,21 +109,12 @@ def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     headers = {
         "Content-Type": "application/json"
     }
-    resp = session.post(f"{cdn_url}fork/{fork_id}/publish/start", json=data, headers=headers)
-    resp.raise_for_status()
+    post_json(session, f"{cdn_url}fork/{fork_id}/publish/start", payload=data, headers=headers)
     print("Publish started, adding files...")
 
     for file in get_files_to_publish():
         print(f"  Uploading {file}")
-        with open(file, "rb") as f:
-            headers = {
-                "Content-Type": "application/octet-stream",
-                "Robust-Cdn-Publish-File": os.path.basename(file),
-                "Robust-Cdn-Publish-Version": VERSION
-            }
-            resp = session.post(f"{cdn_url}fork/{fork_id}/publish/file", data=f, headers=headers)
-
-        resp.raise_for_status()
+        upload_file(cdn_url, fork_id, token, file)
 
     print("Files pushed, finishing publish...")
 
@@ -66,8 +124,7 @@ def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
     headers = {
         "Content-Type": "application/json"
     }
-    resp = session.post(f"{cdn_url}fork/{fork_id}/publish/finish", json=data, headers=headers)
-    resp.raise_for_status()
+    post_json(session, f"{cdn_url}fork/{fork_id}/publish/finish", payload=data, headers=headers)
 
     print(f"===== {label} publish SUCCESS! =====\n")
 
@@ -105,7 +162,7 @@ def main():
 
 
 def get_files_to_publish() -> Iterable[str]:
-    for file in os.listdir(RELEASE_DIR):
+    for file in sorted(os.listdir(RELEASE_DIR)):
         yield os.path.join(RELEASE_DIR, file)
 
 
