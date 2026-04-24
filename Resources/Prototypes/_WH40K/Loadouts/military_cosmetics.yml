@@ -168,6 +168,50 @@
     head: ClothingHeadHelmetBloodPact
 
 - type: loadout
+  id: WH40KHeresiarchKhorneRaiment
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-khorne-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchKhorne
+    outerClothing: ClothingOuterArmorHeresiarchKhorne
+
+- type: loadout
+  id: WH40KHeresiarchNurgleRaiment
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-nurgle-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchNurgle
+    outerClothing: ClothingOuterArmorHeresiarchNurgle
+
+- type: loadout
+  id: WH40KHeresiarchSlaaneshRaiment
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-slaanesh-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchSlaanesh
+    outerClothing: ClothingOuterArmorHeresiarchSlaanesh
+
+- type: loadout
+  id: WH40KHeresiarchTzeentchRaiment
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-tzeentch-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchTzeentch
+    outerClothing: ClothingOuterArmorHeresiarchTzeentch
+
+- type: loadout
   id: WH40KKriegHelmet
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -468,6 +512,11 @@
   id: WH40KBlackGloves
   equipment:
     gloves: ClothingHandsGlovesColorBlack
+
+- type: loadout
+  id: WH40KCombatGloves
+  equipment:
+    gloves: ClothingHandsGlovesCombat
 
 - type: loadout
   id: WH40KKriegGloves
@@ -777,6 +826,14 @@
   - WHHammerImperial
 
 - type: loadout
+  id: WH40KChaplainWarHammer
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  - WHHammerImperial
+
+- type: loadout
   id: WH40KChaosCrowbarKit
   storage:
     belt:
@@ -861,3 +918,33 @@
   id: WH40KArmorMajor
   equipment:
     outerClothing: ClothingOuterArmorFlakVestMajor
+
+- type: loadout
+  id: WH40KValhallanPapakhaSergeant
+  equipment:
+    head: ClothingHeadHatValhallanPapakhaSergeant
+
+- type: loadout
+  id: WH40KValhallanPapakhaCaptain
+  equipment:
+    head: ClothingHeadHatValhallanPapakhaCaptain
+
+- type: loadout
+  id: WH40KValhallanSergeantCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanSergeantCoat
+
+- type: loadout
+  id: WH40KValhallanCaptainCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanCaptainCoat
+
+- type: loadout
+  id: WH40KValhallanSergeantUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallanSergeant
+
+- type: loadout
+  id: WH40KValhallanCaptainUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallanCaptain

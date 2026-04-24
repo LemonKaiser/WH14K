@@ -149,3 +149,33 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorValhallanCoat
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Coats/valhallan_coat.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Coats/valhallan_coat.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorValhallanSergeantCoat
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Coats/valhallan_sergeant_coat.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Coats/valhallan_sergeant_coat.rsi
+
+- type: entity
+  parent: ClothingOuterArmorOfficer
+  id: ClothingOuterArmorValhallanCaptainCoat
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_captain_coat.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_captain_coat.rsi

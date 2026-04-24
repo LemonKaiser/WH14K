@@ -81,3 +81,43 @@
     transferName: true
     revertOnCrit: false
     revertOnDeath: false
+
+- type: polymorph
+  id: WH40KSlaaneshDemonetteMorph
+  configuration:
+    entity: MobWH40KSlaaneshDemonette
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KSlaaneshClawDancerMorph
+  configuration:
+    entity: MobWH40KSlaaneshClawDancer
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KSlaaneshRapturousDemonetteMorph
+  configuration:
+    entity: MobWH40KSlaaneshRapturousDemonette
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false
+
+- type: polymorph
+  id: WH40KSlaaneshAlluressMorph
+  configuration:
+    entity: MobWH40KSlaaneshAlluress
+    forced: true
+    inventory: Drop
+    transferName: true
+    revertOnCrit: false
+    revertOnDeath: false

@@ -11,6 +11,18 @@
     modifier: 0.5
 
 - type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsValhallan
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/valhallan_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/valhallan_boots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5
+
+- type: entity
   parent: ClothingShoesAnkleBoots
   id: ClothingShoesAnkleBootsCyan
   suffix: WH40K, Guard Cyan

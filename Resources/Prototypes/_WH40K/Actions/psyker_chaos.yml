@@ -199,6 +199,10 @@
   components:
   - type: Action
     useDelay: 16
+  - type: InstantAction
+    event: !type:InstantSpawnSpellEvent
+      prototype: WH40KWallForceShieldChaosBase
+      posData: !type:TargetInFront
   - type: WH40KWarpActionCost
     warpChargeCost: 16
     instabilityGain: 9
@@ -232,6 +236,10 @@
   components:
   - type: Action
     useDelay: 16
+  - type: InstantAction
+    event: !type:InstantSpawnSpellEvent
+      prototype: WH40KWallForceShieldImperialBase
+      posData: !type:TargetInFront
   - type: WH40KWarpActionCost
     warpChargeCost: 16
     instabilityGain: 6
@@ -331,6 +339,10 @@
   components:
   - type: Action
     useDelay: 14
+  - type: InstantAction
+    event: !type:InstantSpawnSpellEvent
+      prototype: WH40KWallForceShieldChaosBase
+      posData: !type:TargetInFront
   - type: WH40KWarpActionCost
     warpChargeCost: 18
     instabilityGain: 10

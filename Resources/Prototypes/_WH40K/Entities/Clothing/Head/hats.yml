@@ -62,6 +62,55 @@
 
 - type: entity
   parent: ClothingHeadBase
+  id: ClothingHeadHatValhallanUshanka
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_ushanka.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_ushanka.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatValhallanCap
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_cap.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_cap.rsi
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatValhallanPapakhaSergeant
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_sergeant_papakha.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_sergeant_papakha.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatValhallanPapakhaCaptain
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_captain_papakha.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/valhallan_captain_papakha.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+
+- type: entity
+  parent: ClothingHeadBase
   id: ClothingHeadHatCatachanBandana
   suffix: WH40K, Катачан
   components:

@@ -67,6 +67,10 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
         "WH40KWarpSpitterAlphaMorph",
         "WH40KWarpTankMorph",
         "WH40KWarpTankAlphaMorph",
+        "WH40KSlaaneshDemonetteMorph",
+        "WH40KSlaaneshClawDancerMorph",
+        "WH40KSlaaneshRapturousDemonetteMorph",
+        "WH40KSlaaneshAlluressMorph",
     };
     private static readonly EntProtoId[] WarpDaemonPrototypes =
     {
@@ -76,6 +80,10 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
         "MobWH40KWarpSpitterAlpha",
         "MobWH40KWarpTank",
         "MobWH40KWarpTankAlpha",
+        "MobWH40KSlaaneshDemonette",
+        "MobWH40KSlaaneshClawDancer",
+        "MobWH40KSlaaneshRapturousDemonette",
+        "MobWH40KSlaaneshAlluress",
     };
     private static readonly ProtoId<HTNCompoundPrototype> SimpleHostileCompoundTask = "SimpleHostileCompound";
     private static readonly ProtoId<NpcFactionPrototype> SimpleHostileFaction = "SimpleHostile";

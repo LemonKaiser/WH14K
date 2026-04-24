@@ -122,3 +122,23 @@
   id: WH40KHColonelChameleonOutfit
   job: HColonel
   startingGear: HeresyColonelGear
+
+- type: chameleonOutfit
+  id: WH40KTauFireWarriorChameleonOutfit
+  job: TauFireWarrior
+  startingGear: TauFireWarriorGear
+
+- type: chameleonOutfit
+  id: WH40KTauOfficerChameleonOutfit
+  job: TauOfficer
+  startingGear: TauOfficerGear
+
+- type: chameleonOutfit
+  id: WH40KTauEtherealChameleonOutfit
+  job: TauEthereal
+  startingGear: TauEtherealGear
+
+- type: chameleonOutfit
+  id: WH40KChaplainChameleonOutfit
+  job: WH40KChaplain
+  startingGear: WH40KChaplainGear

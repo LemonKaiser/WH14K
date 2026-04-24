@@ -98,6 +98,46 @@
     sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
 
 - type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadHelmetHeresiarchKhorne
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_khorne_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_khorne_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadHelmetHeresiarchNurgle
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_nurgle_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_nurgle_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadHelmetHeresiarchSlaanesh
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_slaanesh_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_slaanesh_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadHelmetHeresiarchTzeentch
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_tzeentch_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/heresiarch_tzeentch_helmet.rsi
+
+- type: entity
   parent: ClothingHeadHelmetFlakCandle
   id: ClothingHeadHelmetFlakResp
   suffix: WH40K, Гвардия
@@ -263,3 +303,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/vst_serg_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetValhallan
+  suffix: WH40K, Valhallan
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/valhallan_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/valhallan_helmet.rsi
