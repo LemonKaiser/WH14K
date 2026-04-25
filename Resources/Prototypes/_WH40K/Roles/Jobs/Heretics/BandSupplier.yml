@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HBandSupplier
   name: job-name-hband-supplier
   description: job-description-hband-supplier
@@ -17,7 +17,7 @@
       - Vulpkanin
   startingGear: HBandSupplierGear
   icon: "JobIconHCargo"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-cultist
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -40,3 +40,4 @@
     outerClothing: ClothingOuterArmorChaosVest
     pocket1: WH40KStandardTacticalMapTablet
     id: HBandSupplierDogTag
+

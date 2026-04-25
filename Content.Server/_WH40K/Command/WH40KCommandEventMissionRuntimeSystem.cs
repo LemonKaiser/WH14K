@@ -9,11 +9,11 @@ using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.OreExtractor.Components;
-using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Command.Pinpointer;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
+using Content.Shared._WH40K.Notifications;
 using Content.Shared.Damage.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Light.Components;
@@ -1318,7 +1318,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-event-periodic-bonus",
                     LocArgs = new Dictionary<string, string>
@@ -1825,7 +1825,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-airdrop-inbound-global",
                 LocArgs = new Dictionary<string, string>
@@ -1840,7 +1840,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             mission.TeamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-airdrop-inbound-faction",
                 LocArgs = new Dictionary<string, string>
@@ -1857,7 +1857,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-airdrop-landed-global",
                 LocArgs = new Dictionary<string, string>
@@ -1872,7 +1872,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             mission.TeamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-airdrop-landed-faction",
                 LocArgs = new Dictionary<string, string>
@@ -2345,7 +2345,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                     ApplyMissionOutcomeForTeam(teamId, mission, tier);
                 }
 
-                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-global-resolved-major",
                     LocArgs = new Dictionary<string, string>
@@ -2371,7 +2371,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                     ApplyMissionOutcomeForTeam(teamId, mission, tier);
                 }
 
-                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-global-resolved-minor",
                     LocArgs = new Dictionary<string, string>
@@ -2390,7 +2390,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 foreach (var teamId in teamIds)
                     ApplyMissionOutcomeForTeam(teamId, mission, MissionOutcomeTier.Timeout);
 
-                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-global-timeout",
                     LocArgs = new Dictionary<string, string>
@@ -2408,7 +2408,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 foreach (var teamId in teamIds)
                     ApplyMissionOutcomeForTeam(teamId, mission, MissionOutcomeTier.Failure);
 
-                RaiseNetworkEvent(new WH40KLocalizedChatEvent
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-global-failed",
                     LocArgs = new Dictionary<string, string>
@@ -2449,7 +2449,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             targetTeam,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-faction-resolved",
                 LocArgs = new Dictionary<string, string>
@@ -2552,7 +2552,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             teamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-outcome-team",
                 LocArgs = new Dictionary<string, string>
@@ -2591,7 +2591,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             ApplyTacticalCallDiscountToken(teamId, TechArchiveTacticalDiscountSeconds);
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-tech-discount-applied",
                     LocArgs = new Dictionary<string, string>
@@ -2651,7 +2651,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             sourceTeamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-intel-jam-applied",
                 LocArgs = new Dictionary<string, string>
@@ -2666,7 +2666,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             sourceTeamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-intel-jam-active-cut",
                 LocArgs = new Dictionary<string, string>
@@ -2687,7 +2687,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             _pendingFactionMissionOfferRefreshTeams.Add(teamId);
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-tech-offers-refresh-deferred"
                 });
@@ -2699,7 +2699,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             teamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-tech-offers-refreshed"
             });
@@ -2717,7 +2717,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             teamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-tech-offers-refreshed-deferred"
             });
@@ -2829,7 +2829,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             ApplyTacticalCallDiscountToken(teamId, durationSeconds);
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-token-applied",
                     LocArgs = new Dictionary<string, string>
@@ -2845,7 +2845,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             ApplyTeamEventRollHasteToken(teamId, durationSeconds);
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = "wh40k-command-runtime-mission-token-applied-event-roll",
                     LocArgs = new Dictionary<string, string>
@@ -3112,7 +3112,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     {
         DispatchTeamLocalizedEvent(
             teamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-event-started",
                 LocArgs = new Dictionary<string, string>
@@ -3129,7 +3129,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var title = ResolveEndedEventTitle(teamId, eventId, eventTitle);
         DispatchTeamLocalizedEvent(
             teamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-event-ended",
                 LocArgs = new Dictionary<string, string>
@@ -3167,7 +3167,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var coords = BuildMissionCoordinateText(mission);
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-global-started",
                 LocArgs = new Dictionary<string, string>
@@ -3183,7 +3183,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
         DispatchTeamLocalizedEvent(
             mission.TeamId,
-            new WH40KLocalizedChatEvent
+            new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-command-runtime-mission-faction-started",
                 LocArgs = new Dictionary<string, string>
@@ -3217,7 +3217,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
             DispatchTeamLocalizedEvent(
                 teamId,
-                new WH40KLocalizedChatEvent
+                new WH40KLocalizedNotificationEvent
                 {
                     LocKey = messageKey,
                     LocArgs = new Dictionary<string, string>
@@ -3264,7 +3264,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         return $"WX:{worldPosition.X:0.##} WY:{worldPosition.Y:0.##}";
     }
 
-    private void DispatchTeamLocalizedEvent(string teamId, WH40KLocalizedChatEvent ev)
+    private void DispatchTeamLocalizedEvent(string teamId, WH40KLocalizedNotificationEvent ev)
     {
         if (string.IsNullOrWhiteSpace(teamId))
             return;

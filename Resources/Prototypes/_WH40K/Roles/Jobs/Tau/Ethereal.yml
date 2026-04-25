@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: TauEthereal
   name: job-name-tau-ethereal
   description: job-description-tau-ethereal
@@ -10,7 +10,7 @@
       - Tau
   startingGear: TauEtherealGear
   icon: "JobIconTauEthereal"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-tau-ethereal
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -40,3 +40,4 @@
     - DrinkTauNutriLiquid
     - FoodTauSublimatedMeat
     - FoodTauSublimatedVegetables
+

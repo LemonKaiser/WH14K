@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Provided in the WH14K necrons source asset folder",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "alive",
+      "directions": 4
+    },
+    {
+      "name": "dead"
+    }
+  ]
+}

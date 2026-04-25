@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: VoxScout
   name: job-name-vox-scout
   description: job-description-vox-scout
@@ -16,7 +16,7 @@
       - Felinid
   startingGear: VoxScoutGear
   icon: "JobIconVoxScout"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-line
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -46,3 +46,4 @@
     pocket1: Binoculars
     pocket2: WH40KStandardTacticalMapTablet
     id: GuardsmanDogTag
+

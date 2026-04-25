@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Enginseer
   name: job-name-enginseer
   description: job-description-enginseer
@@ -19,7 +19,7 @@
       time: 2.5h
   startingGear: EnginseerGear
   icon: "JobIconEnginseer"
-  supervisors: job-supervisors-ce
+  supervisors: job-supervisors-wh40k-mechanicus-priest
   canBeAntag: false
   access:
   - Maintenance
@@ -50,3 +50,4 @@
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
+

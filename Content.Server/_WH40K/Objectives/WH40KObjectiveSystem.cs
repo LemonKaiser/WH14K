@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.Notifications;
 using Content.Server._WH40K.Objectives.Components;
-using Content.Server.Chat.Managers;
-using Content.Shared.Chat;
 using Content.Shared._WH40K.GameMode;
+using Content.Shared._WH40K.Notifications;
 using Content.Shared._WH40K.Objectives;
 using Content.Shared._WH40K.Overlays;
 using Content.Shared.Damage.Components;
@@ -20,13 +20,14 @@ using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.Objectives;
 
 public sealed class WH40KObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly IChatManager _chat = default!;
+    private const float ObjectiveNotificationDuration = 9f;
+
+    [Dependency] private readonly WH40KNotificationSystem _notifications = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -178,7 +179,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
             component.LowHealthAnnounced = true;
             var message = Loc.GetString("wh40k-objective-low-health",
                 ("target", Loc.GetString(component.Name)));
-            DispatchObjectiveAllyMessage(component.TeamId, message, Color.Red);
+            DispatchObjectiveAllyMessage(component.TeamId, message);
         }
 
         if (component.Destroying || totalDamage < maxHealth)
@@ -297,18 +298,18 @@ public sealed class WH40KObjectiveSystem : EntitySystem
 
             if (!_teamRule.TryGetTeamIdFromEntity(attached, out var playerTeam))
             {
-                _chat.DispatchServerMessage(player, enemyMessage);
+                DispatchNotificationToOne(player, enemyMessage, WH40KNotificationColors.Objective);
                 continue;
             }
 
             if (playerTeam == teamId)
-                DispatchColoredServerMessage(player, allyMessage, Color.Red);
+                DispatchNotificationToOne(player, allyMessage, GetNotificationTeamColor(teamId));
             else
-                DispatchColoredServerMessage(player, enemyMessage, Color.LimeGreen);
+                DispatchNotificationToOne(player, enemyMessage, GetNotificationTeamColor(playerTeam));
         }
     }
 
-    private void DispatchObjectiveAllyMessage(string teamId, string message, Color color)
+    private void DispatchObjectiveAllyMessage(string teamId, string message)
     {
         foreach (var player in _players.Sessions)
         {
@@ -319,15 +320,27 @@ public sealed class WH40KObjectiveSystem : EntitySystem
                 continue;
 
             if (playerTeam == teamId)
-                DispatchColoredServerMessage(player, message, color);
+                DispatchNotificationToOne(player, message, GetNotificationTeamColor(teamId));
         }
     }
 
-    private void DispatchColoredServerMessage(ICommonSession player, string message, Color color)
+    private void DispatchNotificationToOne(ICommonSession player, string message, Color color)
     {
-        var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message",
-            ("message", FormattedMessage.EscapeText(message)));
-        _chat.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, player.Channel, colorOverride: color);
+        _notifications.SendToSession(
+            player,
+            Loc.GetString("wh40k-notification-title-objective"),
+            message,
+            color,
+            ObjectiveNotificationDuration,
+            false,
+            WH40KNotificationSize.Wide);
+    }
+
+    private Color GetNotificationTeamColor(string teamId)
+    {
+        return _teamRule.TryGetTeamColor(teamId, out var teamColor)
+            ? teamColor
+            : WH40KNotificationColors.ForTeam(teamId);
     }
 
 

@@ -2,6 +2,7 @@ w40k-cmd-reinforcement-pending-exists = A reinforcement request is already in tr
 w40k-cmd-reinforcement-selection-empty = Select at least one role before sending the request.
 w40k-cmd-reinforcement-role-cap-hit = One of the selected roles exceeds its per-role cap.
 w40k-cmd-reinforcement-auto-role-blocked = One of the selected roles cannot be used in auto-reinforcement.
+w40k-cmd-reinforcement-option-locked = This reinforcement role is not unlocked by the base tier yet.
 w40k-cmd-reinforcement-total-cap-hit = A single reinforcement request cannot exceed 10 troops.
 w40k-cmd-reinforcement-request-created = Request accepted: { $count } troopers, { $cost } CP. ETA { $delay } min.
 w40k-cmd-reinforcement-auto-disabled = Auto-reinforcement has been disabled.

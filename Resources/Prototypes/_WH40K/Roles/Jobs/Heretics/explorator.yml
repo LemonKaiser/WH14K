@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HExplorator
   name: job-name-hexplorator
   description: job-description-hexplorator
@@ -20,7 +20,7 @@
       time: 2.5h
   icon: "JobIconExplorator"
   startingGear: ExploratorGear
-  supervisors: job-supervisors-qm
+  supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -44,3 +44,4 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
     mask: ClothingMaskGasTechPriest
+

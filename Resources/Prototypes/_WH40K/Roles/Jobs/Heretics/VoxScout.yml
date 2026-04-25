@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HVoxScout
   name: job-name-hvox-scout
   description: job-description-hvox-scout
@@ -16,7 +16,7 @@
       - Vulpkanin
   startingGear: HVoxScoutGear
   icon: "JobIconHVoxScout"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-cultist
   setPreference: false
   canBeAntag: false
   special:
@@ -40,3 +40,4 @@
     outerClothing: ClothingOuterArmorChaosVest
     pocket2: WH40KStandardTacticalMapTablet
     id: HGuardsmanDogTag
+

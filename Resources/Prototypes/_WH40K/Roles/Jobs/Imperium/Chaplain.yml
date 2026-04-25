@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: WH40KChaplain
   name: job-name-chaplain
   description: job-description-chaplain
@@ -14,7 +14,7 @@
       - Human
   startingGear: WH40KChaplainGear
   icon: "JobIconChaplain"
-  supervisors: job-supervisors-hop
+  supervisors: job-supervisors-wh40k-imperium-chaplain
   access:
   - Chapel
   - Maintenance
@@ -42,3 +42,4 @@
     neck: ClothingNeckInqusition
     id: CommissarDogTag
     pocket1: WH40KBible
+

@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HSergeant
   name: job-name-hsergeant
   description: job-description-hsergeant
@@ -15,7 +15,7 @@
       - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-champion
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -48,7 +48,7 @@
       - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-champion
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -80,7 +80,7 @@
       - Vulpkanin
   startingGear: HeresySergeantGear
   icon: "JobIconHSergeant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-champion
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -108,3 +108,4 @@
     outerClothing: ClothingOuterArmorCultistCoat
     pocket1: WH40KStandardTacticalMapTablet
     id: HSergeantDogTag
+

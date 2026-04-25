@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Colonel
   name: job-name-colonel
   description: job-description-colonel
@@ -14,7 +14,7 @@
       - Human
   startingGear: ColonelGear
   icon: "JobIconColonel"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-colonel
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -56,3 +56,4 @@
     outerClothing: ClothingOuterArmorFlakVestGen
     pocket1: WH40KCommandTacticalMapTablet
     id: ColonelDogTag
+

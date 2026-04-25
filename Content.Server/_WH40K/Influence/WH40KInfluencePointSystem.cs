@@ -4,9 +4,9 @@ using Content.Server.Pinpointer;
 using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
-using Content.Shared._WH40K.Chat;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
+using Content.Shared._WH40K.Notifications;
 using Content.Shared.GameTicking;
 using Content.Shared.Pinpointer;
 using Content.Shared.Mobs.Systems;
@@ -301,11 +301,14 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(capturedByTeamId) &&
             _teamRule.TryGetTeamDisplayName(capturedByTeamId, out var teamName))
         {
-            RaiseNetworkEvent(new WH40KLocalizedChatEvent
+            RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
             {
                 LocKey = "wh40k-influence-captured",
                 LocArgs = new Dictionary<string, string> { ["team"] = teamName },
                 ResolveArgValues = true,
+                AccentColor = _teamRule.TryGetTeamColor(capturedByTeamId, out var teamColor)
+                    ? teamColor
+                    : WH40KNotificationColors.ForTeam(capturedByTeamId),
             });
         }
 

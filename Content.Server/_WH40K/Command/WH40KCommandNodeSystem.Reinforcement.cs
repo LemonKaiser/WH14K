@@ -308,6 +308,12 @@ public sealed partial class WH40KCommandNodeSystem
             if (!countsByRole.TryGetValue(option.Id, out var requestedCount) || requestedCount <= 0)
                 continue;
 
+            if (!IsReinforcementOptionUnlocked(teamId, option))
+            {
+                errorKey = "w40k-cmd-reinforcement-option-locked";
+                return false;
+            }
+
             var cap = Math.Clamp(option.MaxCount, 1, ReinforcementMaxTotalCount);
             if (requestedCount > cap)
             {
@@ -463,6 +469,7 @@ public sealed partial class WH40KCommandNodeSystem
                     role.JobId,
                     role.Name,
                     role.Description);
+                TryReadyReinforcementWeapon(spawned);
                 spawnedCount++;
             }
         }
@@ -638,6 +645,7 @@ public sealed partial class WH40KCommandNodeSystem
         var catalog = new List<WH40KCommandReinforcementCatalogEntryState>(profile.Options.Count);
         foreach (var option in profile.Options
                      .Where(option => !string.IsNullOrWhiteSpace(option.Id))
+                     .Where(option => IsReinforcementOptionUnlocked(teamId, option))
                      .OrderBy(option => option.SortOrder)
                      .ThenBy(option => ResolveReinforcementOptionName(option), StringComparer.OrdinalIgnoreCase))
         {
@@ -750,6 +758,9 @@ public sealed partial class WH40KCommandNodeSystem
         var min = int.MaxValue;
         foreach (var option in profile.Options)
         {
+            if (!IsReinforcementOptionUnlocked(teamId, option))
+                continue;
+
             min = Math.Min(min, GetReinforcementUnitCost(option));
         }
 

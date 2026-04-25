@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: TauOfficer
   name: job-name-tau-officer
   description: job-description-tau-officer
@@ -10,7 +10,7 @@
       - Tau
   startingGear: TauOfficerGear
   icon: "JobIconTauOfficer"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-tau-officer
   canBeAntag: false
   access:
   - Maintenance
@@ -33,3 +33,4 @@
     - DrinkTauNutriLiquid
     - FoodTauSublimatedMeat
     - FoodTauSublimatedVegetables
+

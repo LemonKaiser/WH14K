@@ -191,6 +191,14 @@
   - WH40KKukriKnifeKit
 
 - type: loadoutGroup
+  id: WH40KImperialLineShield
+  name: loadout-group-wh40k-imperial-line-shield
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WH40KImperialCombatShieldLoadout
+
+- type: loadoutGroup
   id: WH40KImperialCmdMelee
   name: loadout-group-wh40k-imperial-melee
   minLimit: 0

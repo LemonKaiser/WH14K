@@ -2,6 +2,7 @@ w40k-cmd-reinforcement-pending-exists = Заявка на подкреплени
 w40k-cmd-reinforcement-selection-empty = Выберите хотя бы одну роль перед отправкой заявки.
 w40k-cmd-reinforcement-role-cap-hit = Одна из выбранных ролей превышает свой лимит.
 w40k-cmd-reinforcement-auto-role-blocked = Одна из выбранных ролей недоступна для авто-подкрепления.
+w40k-cmd-reinforcement-option-locked = Эта роль подкрепления ещё не разблокирована тиром базы.
 w40k-cmd-reinforcement-total-cap-hit = Одна заявка на подкрепление не может превышать 10 бойцов.
 w40k-cmd-reinforcement-request-created = Заявка принята: { $count } бойцов, { $cost } ОР. Прибытие через { $delay } мин.
 w40k-cmd-reinforcement-auto-disabled = Авто-подкрепление отключено.

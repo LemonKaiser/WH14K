@@ -29,10 +29,16 @@
   id: CartridgeBolter75
 
 - type: Tag
+  id: WH40KCartridgeAstartesBoltPistol
+
+- type: Tag
   id: CartridgeHeavyBolter
 
 - type: Tag
   id: MagazineBolterPistol75
+
+- type: Tag
+  id: WH40KMagazineAstartesBoltPistol
 
 - type: Tag
   id: MagazineBolter75

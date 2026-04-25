@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Commissar
   name: job-name-commissar
   description: job-description-commissar
@@ -14,7 +14,7 @@
       - Human
   startingGear: CommissarGear
   icon: "JobIconCommissar"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-commissar
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -56,4 +56,5 @@
     id: CommissarDogTag
     pocket1: Bugle
     pocket2: WH40KCommandTacticalMapTablet
+
 

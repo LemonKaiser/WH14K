@@ -20,6 +20,7 @@ job-name-specialist-hws = специалист ОТВ
 job-name-specialist-sws = специалист ОСВ
 job-name-medic = хирургеон
 job-name-guardsman = гвардеец
+job-name-kasrkin = касркин
 job-name-psyker = псайкер
 job-name-vox-scout = вокс-оператор
 job-name-tithe-supplier = логист Муниторума

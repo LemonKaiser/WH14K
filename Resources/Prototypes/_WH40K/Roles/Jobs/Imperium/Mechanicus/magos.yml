@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Magos
   name: job-name-magos
   description: job-description-magos
@@ -26,7 +26,7 @@
   startingGear: MagosGear
   icon: "JobIconMagos"
   requireAdminNotify: true
-  supervisors: job-supervisors-captain
+  supervisors: job-supervisors-wh40k-mechanicus-magos
   canBeAntag: false
   access:
   - Maintenance
@@ -68,3 +68,4 @@
     id: MagosDogTag
   inhand:
     - WHOmnissianAxe
+

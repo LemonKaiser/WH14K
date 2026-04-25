@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: TauFireWarrior
   name: job-name-tau-fire-warrior
   description: job-description-tau-fire-warrior
@@ -10,7 +10,7 @@
       - Tau
   startingGear: TauFireWarriorGear
   icon: "JobIconTauFireWarrior"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-tau-fire-warrior
   canBeAntag: false
   access:
   - Maintenance
@@ -32,3 +32,4 @@
     - DrinkTauNutriLiquid
     - FoodTauSublimatedMeat
     - FoodTauSublimatedVegetables
+

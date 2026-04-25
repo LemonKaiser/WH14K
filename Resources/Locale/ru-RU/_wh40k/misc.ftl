@@ -107,3 +107,6 @@ loadout-group-techpriest-mask = техножрец, респираторы
 loadout-group-techpriest-eyes = техножрец, глаза
 loadout-group-techpriest-back = техножрец, ранец
 loadout-group-wh40k-imperial-line-mask = Имперская пехота, респираторы
+loadout-group-wh40k-imperial-line-shield = Имперская пехота, щит
+
+wh40k-astartes-only-power-sword = Машинный дух оружия отвергает неусиленную руку.

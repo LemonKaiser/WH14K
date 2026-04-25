@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: SpecialistSWS
   name: job-name-specialist-sws
   description: job-description-specialist-sws
@@ -14,7 +14,7 @@
       - Human
   startingGear: GuardsmanSpesSpecGear
   icon: "JobIconSpecialistSWS"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-line
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -43,4 +43,5 @@
     outerClothing: ClothingOuterArmorFlakVestLight
     pocket1: WH40KStandardTacticalMapTablet
     id: GuardsmanDogTag
+
 

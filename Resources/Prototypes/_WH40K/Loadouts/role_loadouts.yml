@@ -64,6 +64,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -80,6 +81,7 @@
   - WH40KImperialLineEyes
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -96,6 +98,7 @@
   - WH40KImperialLineEyes
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -112,6 +115,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialOperatorMainWeapon
 
@@ -123,6 +127,7 @@
   - WH40KImperialLineHands
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialCommandSidearm
 
@@ -139,6 +144,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -155,6 +161,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialLineShield
   - WH40KImperialMelee
 
 - type: roleLoadout

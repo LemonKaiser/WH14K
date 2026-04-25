@@ -132,6 +132,18 @@
 
 - type: entity
   parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumKasrkin
+  name: reinforcement preview imperium kasrkin
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - KasrkinGear
+
+- type: entity
+  parent: MobHuman
   id: WH40KReinforcementPreviewImperiumLieutenant
   name: reinforcement preview imperium lieutenant
   categories: [ HideSpawnMenu ]

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -272,6 +273,8 @@ namespace Content.Server.GameTicking
                 return;
             }
 
+            character = EnsureProfileSpeciesCompatibleWithJob(player, character, jobId);
+
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
 
             if (lateJoin && !silent && !IsWh40KTeamBattleLateJoinAnnouncementSuppressed())
@@ -357,6 +360,81 @@ namespace Content.Server.GameTicking
             }
 
             return false;
+        }
+
+        private HumanoidCharacterProfile EnsureProfileSpeciesCompatibleWithJob(
+            ICommonSession player,
+            HumanoidCharacterProfile character,
+            string jobId)
+        {
+            if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) ||
+                IsSpeciesAllowedForJob(character.Species, job))
+            {
+                return character;
+            }
+
+            if (!TryPickRandomSpeciesForJob(job, out var fallbackSpecies))
+            {
+                _sawmill.Warning(
+                    "No compatible fallback species found for {Player} ({UserId}) on job '{JobId}' with selected species '{Species}'.",
+                    player.Name,
+                    player.UserId,
+                    jobId,
+                    character.Species);
+                return character;
+            }
+
+            var fallback = HumanoidCharacterProfile.RandomWithSpecies(fallbackSpecies);
+            _sawmill.Info(
+                "Using one-round fallback profile for {Player} ({UserId}): selected species '{OldSpecies}' is not compatible with job '{JobId}', generated '{NewSpecies}'.",
+                player.Name,
+                player.UserId,
+                character.Species,
+                jobId,
+                fallback.Species);
+
+            return fallback;
+        }
+
+        private bool TryPickRandomSpeciesForJob(JobPrototype job, [NotNullWhen(true)] out string? speciesId)
+        {
+            var candidates = new List<string>();
+            foreach (var species in _prototypeManager.EnumeratePrototypes<SpeciesPrototype>())
+            {
+                if (!species.RoundStart)
+                    continue;
+
+                if (IsSpeciesAllowedForJob(species.ID, job))
+                    candidates.Add(species.ID);
+            }
+
+            if (candidates.Count == 0)
+            {
+                speciesId = null;
+                return false;
+            }
+
+            speciesId = _robustRandom.Pick(candidates);
+            return true;
+        }
+
+        private bool IsSpeciesAllowedForJob(ProtoId<SpeciesPrototype> speciesId, JobPrototype job)
+        {
+            var requirements = _roles.GetRoleRequirements(job);
+            if (requirements == null)
+                return true;
+
+            foreach (var requirement in requirements)
+            {
+                if (requirement is not SpeciesRequirement speciesRequirement)
+                    continue;
+
+                var listed = speciesRequirement.Species.Contains(speciesId);
+                if (speciesRequirement.Inverted ? listed : !listed)
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>

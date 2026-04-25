@@ -118,3 +118,6 @@ wh40k-barbed-wire-item-name = barbed wire coil
 wh40k-barbed-wire-item-desc = Lengths of coiled wire used to reinforce barricades.
 wh40k-turret-supported-ammo = Supported ammo: {$ammo}
 loadout-group-wh40k-tau-combat-kit = Cadre equipment
+loadout-group-wh40k-imperial-line-shield = imperial frontline shield
+
+wh40k-astartes-only-power-sword = The weapon's machine spirit refuses your unaugmented grip.

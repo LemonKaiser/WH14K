@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HNovice
   name: job-name-hnovice
   description: job-description-hnovice
@@ -14,7 +14,7 @@
   startingGear: NoviceGear
   setPreference: false
   icon: "JobIconNovice"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-dark-mechanicum-acolyte
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -32,3 +32,4 @@
     jumpsuit: ClothingUniformJumpsuitTechpriest
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
+

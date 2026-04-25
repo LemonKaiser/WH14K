@@ -25,6 +25,12 @@ ent-MobRavener = Ravener
 ent-MobZoanthrope = zoanthrope
     .desc = An extremely dangerous creature that uses its psionic powers to destroy enemies.
 
+ent-MobWH40KNecronSpirit = necron spirit
+    .desc = A spectral Necron construct lit by cold emerald energy.
+
+ent-MobWH40KNecronDeathmark = necron deathmark
+    .desc = A deathless Necron hunter closing in with phase-forged claws.
+
 ent-MobGrox = grox
     .desc = A heavy reptilian livestock beast. Neutral, unless someone hurts it.
 
@@ -1147,6 +1153,33 @@ ent-ConcreteFloorWH40k3 = concrete tile
 ent-ActionWH40KMoraleExecution = Morale Execution
     .desc = Instantly execute an ally with an execution mark within 2 tiles and activate a morale aura.
 
+ent-ActionWH40KPsykerToggleProgressionUi = Psyker Disciplines
+    .desc = Open the psyker progression and astral discipline panel.
+
+ent-ActionWH40KPsykerAstralProjection = Astral Projection
+    .desc = Enter a sanctioned trance and read the astral discipline map.
+
+ent-ActionWH40KPsykerTelekineticRepulse = Telekinetic Burst
+    .desc = Push nearby entities away with a controlled Warp impulse.
+
+ent-ActionWH40KPsykerWarpBlink = Warp Step
+    .desc = Instantly move to the selected point as a combat blink through the Warp.
+
+ent-ActionWH40KPsykerWarpKnock = Psychic Breach
+    .desc = Force nearby doors and latches open with Warp pressure.
+
+ent-ActionWH40KPsykerAegisWall = Aegis Wall
+    .desc = Create a short-lived Imperial force barrier in front of you.
+
+ent-ActionWH40KPsykerVeilSmoke = Veil of Silence
+    .desc = Release a smoke veil to break enemy line of sight.
+
+ent-ActionWH40KPsykerMindShunt = Mind Shunt
+    .desc = Force your will into the selected target through a mind-swap effect.
+
+ent-ActionWH40KPsykerBiomanticSurge = Biomantic Surge
+    .desc = Heal your own wounds with controlled biomancy.
+
 ent-ActionWH40KChaosWarpBlast = Warp Blast
     .desc = Hurl unstable Warp fire at a target.
 
@@ -1154,13 +1187,13 @@ ent-ActionWH40KChaosWarpKnock = Defiled Breach
     .desc = Breach nearby doors by desecrating their machine spirits.
 
 ent-ActionWH40KChaosUndividedBlink = Step of the Undivided
-    .desc = Slide through the Warp in the name of Chaos Undivided.
+    .desc = Instantly move to the selected point through the Warp.
 
 ent-ActionWH40KChaosKhorneRepulse = Champion's Blade
     .desc = Summon a warp blade for close-quarters carnage and melee breaching.
 
 ent-ActionWH40KChaosNurgleMiasma = Miasma of Nurgle
-    .desc = Spread a plague fog to obscure vision and suppress the field.
+    .desc = Spread a plague cloud; Nurgle followers inside it are healed.
 
 ent-ActionWH40KChaosSlaaneshSwap = Exchange of Ecstasy
     .desc = Lash the fabric of reality and swap positions with a chosen target.
@@ -1175,7 +1208,7 @@ ent-ActionWH40KChaosWarpBlastSurge = Warp Blast Surge
     .desc = Unleash an overcharged warp blast with devastating force.
 
 ent-ActionWH40KChaosWarpRiftStep = Rift Step
-    .desc = Tear open a brief rift and burst through it in a dash.
+    .desc = Instantly move to the selected point through a short Warp rift.
 
 ent-ActionWH40KChaosUndividedAegis = Aegis of the Undivided
     .desc = Erect a crude but resilient wall for any warband.
@@ -1190,7 +1223,7 @@ ent-ActionWH40KChaosSlaaneshMiasma = Ecstatic Chorus
     .desc = Infuse nearby Slaanesh cultists with stimulants and combat chem.
 
 ent-ActionWH40KChaosTzeentchMindTwist = Conspiracy of Change
-    .desc = For 30 seconds, speed up and enlighten nearby Tzeentch cultists; chosen ones also get reduced cooldowns.
+    .desc = Speed up nearby Tzeentch followers for a short time; chosen ones also get reduced cooldowns.
 
 ent-ActionWH40KChaosKhorneBloodstorm = Bloody Onslaught
     .desc = Charge through the ranks, knocking down and stunning everyone in your path.
@@ -1205,7 +1238,7 @@ ent-ActionWH40KChaosSlaaneshExquisiteTempo = Sacred Self-Flagellation
     .desc = Tear yourself with the lash of ecstasy, converting pain into potent healing.
 
 ent-ActionWH40KChaosTzeentchWarpRewrite = Weaver's Dash
-    .desc = Instantly displace to a chosen point, escaping danger or changing your angle of attack.
+    .desc = Instantly move to the selected point, escaping danger or changing your angle of attack.
 
 ent-ActionWH40KChaosSlaaneshArena = Arena of Ecstasy
     .desc = Pull a target to you, stun both combatants, and seal the duel in a brief warp arena.
@@ -1589,3 +1622,14 @@ ent-MobWH40KSlaaneshRapturousDemonette = rapturous daemonette
 
 ent-MobWH40KSlaaneshAlluress = alluress of Slaanesh
     .desc = A champion among daemonettes, every motion equal parts invitation and execution.
+
+ent-WH40KAstartesPowerSword = Astartes power sword
+    .desc = A transhuman-scaled power blade. Its field bites like a caged storm when awakened by an Astartes.
+ent-WH40KImperialCombatShield = imperial combat shield
+    .desc = A reinforced ballistic tower shield for Imperial line troops, heavy enough to make the bearer feel like part of the wall.
+ent-WeaponPistolAstartesBolt = Astartes bolt pistol
+    .desc = A massive bolt sidearm scaled for the grip and recoil discipline of a Space Marine.
+ent-WH40KMagazineAstartesBoltPistol = Astartes bolt pistol magazine
+    .desc = A compact magazine loaded with heavy bolt rounds.
+ent-WH40KCartridgeAstartesBoltPistol = Astartes bolt pistol cartridge
+    .desc = A brutal self-propelled bolt round for an Astartes sidearm.

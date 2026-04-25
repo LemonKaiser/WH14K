@@ -71,6 +71,8 @@ namespace Content.Client.Launcher
             ExitButton.Text = Loc.GetString(state.UsesManualConnectTarget ? "connecting-back" : "connecting-exit");
             RetryButton.OnPressed += ReconnectButtonPressed;
             ReconnectButton.OnPressed += ReconnectButtonPressed;
+            AlternativeConnectButton.OnPressed += AlternativeConnectButtonPressed;
+            AlternativeReconnectButton.OnPressed += AlternativeConnectButtonPressed;
 
             CopyButton.OnPressed += CopyButtonPressed;
             CopyButtonDisconnected.OnPressed += CopyButtonDisconnectedPressed;
@@ -85,8 +87,11 @@ namespace Content.Client.Launcher
             state.ConnectFailReasonChanged += ConnectFailReasonChanged;
             state.ConnectionStateChanged += ConnectionStateChanged;
             state.ConnectFailed += HandleDisconnectReason;
+            state.AddressChanged += AddressChanged;
+            state.AlternativeConnectAvailabilityChanged += AlternativeConnectAvailabilityChanged;
 
             ConnectionStateChanged(state.ConnectionState);
+            UpdateAlternativeConnectControls();
 
             // Redial flag setup
             _extendedDisconnectInformationManager.LastNetDisconnectedArgsChanged += LastNetDisconnectedArgsChanged;
@@ -114,10 +119,14 @@ namespace Content.Client.Launcher
                 _state.ConnectFailReasonChanged -= ConnectFailReasonChanged;
                 _state.ConnectionStateChanged -= ConnectionStateChanged;
                 _state.ConnectFailed -= HandleDisconnectReason;
+                _state.AddressChanged -= AddressChanged;
+                _state.AlternativeConnectAvailabilityChanged -= AlternativeConnectAvailabilityChanged;
                 _extendedDisconnectInformationManager.LastNetDisconnectedArgsChanged -= LastNetDisconnectedArgsChanged;
 
                 RetryButton.OnPressed -= ReconnectButtonPressed;
                 ReconnectButton.OnPressed -= ReconnectButtonPressed;
+                AlternativeConnectButton.OnPressed -= AlternativeConnectButtonPressed;
+                AlternativeReconnectButton.OnPressed -= AlternativeConnectButtonPressed;
                 CopyButton.OnPressed -= CopyButtonPressed;
                 CopyButtonDisconnected.OnPressed -= CopyButtonDisconnectedPressed;
                 DiscordAuthChangeButton.OnPressed -= DiscordAuthChangeButtonPressed;
@@ -150,6 +159,11 @@ namespace Content.Client.Launcher
             }
 
             _state.RetryConnect();
+        }
+
+        private void AlternativeConnectButtonPressed(BaseButton.ButtonEventArgs args)
+        {
+            _state.TryConnectAlternative(automatic: false);
         }
 
         private void CopyButtonPressed(BaseButton.ButtonEventArgs args)
@@ -189,6 +203,16 @@ namespace Content.Client.Launcher
             ConnectFailReason.SetMessage(reason == null
                 ? ""
                 : Loc.GetString("connecting-fail-reason", ("reason", reason)));
+        }
+
+        private void AddressChanged(string? address)
+        {
+            ConnectingAddress.Text = address ?? string.Empty;
+        }
+
+        private void AlternativeConnectAvailabilityChanged()
+        {
+            UpdateAlternativeConnectControls();
         }
 
         private void LastNetDisconnectedArgsChanged(NetDisconnectedArgs? args)
@@ -277,6 +301,8 @@ namespace Content.Client.Launcher
         {
             base.FrameUpdate(args);
 
+            _state.TryRunPendingAutomaticFallback();
+
             var button = _state.CurrentPage == LauncherConnecting.Page.ConnectFailed
                 ? RetryButton
                 : ReconnectButton;
@@ -301,6 +327,7 @@ namespace Content.Client.Launcher
             }
 
             UpdateDiscordAuthControls();
+            UpdateAlternativeConnectControls();
             UpdateDiscordAutoRetry();
         }
 
@@ -319,6 +346,7 @@ namespace Content.Client.Launcher
             }
 
             UpdateDiscordAuthControls();
+            UpdateAlternativeConnectControls();
 
             if (page == LauncherConnecting.Page.Disconnected)
                 DisconnectReason.Text = _state.LastDisconnectReason;
@@ -351,6 +379,24 @@ namespace Content.Client.Launcher
 
             DiscordAuthChangeButton.Disabled = false;
             DiscordAuthChangeButton.Text = GetDiscordChangeButtonText();
+        }
+
+        private void UpdateAlternativeConnectControls()
+        {
+            var show = _state.CanUseAlternativeConnection;
+
+            AlternativeConnectButton.Visible = show &&
+                                               _state.CurrentPage == LauncherConnecting.Page.ConnectFailed;
+            AlternativeReconnectButton.Visible = show &&
+                                                 _state.CurrentPage == LauncherConnecting.Page.Disconnected;
+
+            if (!show)
+                return;
+
+            AlternativeConnectButton.Disabled = false;
+            AlternativeReconnectButton.Disabled = false;
+            AlternativeConnectButton.Text = Loc.GetString("connecting-alt-address");
+            AlternativeReconnectButton.Text = Loc.GetString("connecting-alt-address");
         }
 
         private void UpdateRetryButtonState()

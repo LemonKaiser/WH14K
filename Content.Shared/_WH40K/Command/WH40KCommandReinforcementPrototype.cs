@@ -27,6 +27,9 @@ public sealed partial class WH40KCommandReinforcementOptionPrototype
     [DataField("maxCount")]
     public int MaxCount = 1;
 
+    [DataField("minBaseLevel")]
+    public int MinBaseLevel = 1;
+
     [DataField("groupKey")]
     public string GroupKey = string.Empty;
 

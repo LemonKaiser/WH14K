@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Sergeant
   name: job-name-sergeant
   description: job-description-sergeant
@@ -14,7 +14,7 @@
       - Human
   startingGear: SergeantGear
   icon: "JobIconSergeant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-sergeant
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -52,7 +52,7 @@
       - Human
   startingGear: SergeantGear
   icon: "JobIconSergeantSWS"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-sergeant
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -90,7 +90,7 @@
       - Human
   startingGear: SergeantGear
   icon: "JobIconSergeantHWS"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-sergeant
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -123,3 +123,4 @@
     eyes: ClothingEyesHudGuard
     pocket1: WH40KStandardTacticalMapTablet
     id: SergeantDogTag
+

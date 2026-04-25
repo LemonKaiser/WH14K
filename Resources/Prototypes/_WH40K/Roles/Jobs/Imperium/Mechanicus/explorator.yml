@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Explorator
   name: job-name-explorator
   description: job-description-explorator
@@ -19,7 +19,7 @@
       time: 2.5h
   icon: "JobIconExplorator"
   startingGear: ExploratorGear
-  supervisors: job-supervisors-qm
+  supervisors: job-supervisors-wh40k-mechanicus-priest
   canBeAntag: false
   access:
   - Cargo
@@ -53,3 +53,4 @@
     eyes: ClothingEyesHudTechPriest
     outerClothing: ClothingOuterHardsuitTechpriest
     mask: ClothingMaskGasTechPriest
+

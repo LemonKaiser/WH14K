@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HGuardsman
   name: job-name-hguardsman
   description: job-description-hguardsman
@@ -17,7 +17,7 @@
       - Vulpkanin
   startingGear: HeresyGuardsmanGear
   icon: "JobIconHGuardsman"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-cultist
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -38,3 +38,4 @@
     head: ClothingHeadHelmetFlakCHAOS
     outerClothing: ClothingOuterArmorChaosVest
     id: HGuardsmanDogTag
+

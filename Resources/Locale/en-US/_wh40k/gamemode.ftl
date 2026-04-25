@@ -2,6 +2,8 @@
 wh40k-team-battle-description = Two factions fight for total victory. Teams are assigned by department.
 wh40k-team-imperium = Imperium
 wh40k-team-heretics = Heretics
+wh40k-notification-title-vox = Vox report
+wh40k-notification-title-objective = Command node
 
 wh40k-team-service-message = You have been called to serve the { $team }. Hold the line.
 wh40k-team-service-message-Imperium = By the Emperor's will, scour this world of heresy. No mercy. No retreat.

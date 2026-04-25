@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HLieutenant
   name: job-name-hlieutenant
   description: job-description-hlieutenant
@@ -14,7 +14,7 @@
       - Human
   startingGear: HeresyLieutenantGear
   icon: "JobIconHLieutenant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-champion
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -44,4 +44,5 @@
     outerClothing: ClothingOuterArmorCultistCoat
     pocket1: WH40KCommandTacticalMapTablet
     id: HLieutenantDogTag
+
 

@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: TitheSupplier
   name: job-name-tithe-supplier
   description: job-description-tithe-supplier
@@ -16,7 +16,7 @@
       - Felinid
   startingGear: TitheSupplierGear
   icon: "JobIconCargo"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-munitorum
   canBeAntag: false
   access:
   - Maintenance
@@ -41,7 +41,7 @@
       - Felinid
   startingGear: MunitorumOfficerGear
   icon: "JobIconCargoOfficer"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-munitorum
   canBeAntag: false
   access:
   - Maintenance
@@ -73,3 +73,4 @@
     outerClothing: ClothingOuterArmorMunitorumCoat
     pocket1: WH40KStandardTacticalMapTablet
     id: MunitorumOfficerDogTag
+

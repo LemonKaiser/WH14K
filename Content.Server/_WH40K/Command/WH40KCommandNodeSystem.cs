@@ -13,7 +13,7 @@ using Content.Server._WH40K.OreExtractor.Components;
 using Content.Server._WH40K.Research.Components;
 using Content.Server._WH40K.Stats;
 using Content.Server._WH40K.Store.Components;
-using Content.Server.Chat.Managers;
+using Content.Server._WH40K.Notifications;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Raffles;
@@ -21,12 +21,14 @@ using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Research.Systems;
 using Content.Server.Station.Systems;
-using Content.Shared.Chat;
 using Content.Shared.Clothing;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.GameMode;
+using Content.Shared._WH40K.Notifications;
 using Content.Shared.Ghost.Roles.Raffles;
+using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Ghost;
@@ -53,7 +55,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.Command;
 
@@ -99,7 +100,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly WH40KNotificationSystem _notifications = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -114,6 +115,8 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
 
     public override void Initialize()
     {
@@ -500,6 +503,12 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             !TryResolveReinforcementOption(reinforcementProfile, args.OptionId, out var option))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-option-invalid"), ent.Owner, args.Actor);
+            return;
+        }
+
+        if (!IsReinforcementOptionUnlocked(ent.Comp.TeamId, option))
+        {
+            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-option-locked"), ent.Owner, args.Actor);
             return;
         }
 
@@ -1549,7 +1558,10 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             if (!string.Equals(playerTeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            DispatchRedServerMessage(player, message);
+            var accentColor = _teamRule.TryGetTeamColor(teamId, out var teamColor)
+                ? teamColor
+                : WH40KNotificationColors.ForTeam(teamId);
+            DispatchServerNotification(player, message, accentColor);
         }
     }
 
@@ -1582,11 +1594,16 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         _stats.Record(session.UserId, costStatKey, Math.Max(0, cost), metadata);
     }
 
-    private void DispatchRedServerMessage(ICommonSession player, string message)
+    private void DispatchServerNotification(ICommonSession player, string message, Color accentColor)
     {
-        var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message",
-            ("message", FormattedMessage.EscapeText(message)));
-        _chat.ChatMessageToOne(ChatChannel.Server, message, wrappedMessage, default, false, player.Channel, colorOverride: Color.Red);
+        _notifications.SendToSession(
+            player,
+            Loc.GetString("wh40k-notification-title-vox"),
+            message,
+            accentColor,
+            8f,
+            false,
+            WH40KNotificationSize.Wide);
     }
 
     private static string FormatClock(int totalSeconds)
@@ -1606,6 +1623,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         foreach (var option in profile.Options)
         {
             if (string.IsNullOrWhiteSpace(option.Id))
+                continue;
+
+            if (!IsReinforcementOptionUnlocked(teamId, option))
                 continue;
 
             var maxCount = Math.Clamp(option.MaxCount, 1, 3);
@@ -1667,6 +1687,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             var profile = HumanoidCharacterProfile.RandomWithSpecies(HumanoidCharacterProfile.DefaultSpecies);
             var spawned = _stationSpawning.SpawnPlayerMob(coordinates, option.Job, profile, station);
             ApplySpawnedReinforcementTeamData(spawned, ent.Comp.TeamId, option);
+            TryReadyReinforcementWeapon(spawned);
             spawnedCount++;
         }
 
@@ -1739,6 +1760,27 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             MaxDuration = ReinforcementRaffleDurationSeconds
         });
         EnsureComp<WH40KReinforcementGhostRoleOneShotComponent>(entity);
+    }
+
+    private bool IsReinforcementOptionUnlocked(string teamId, WH40KCommandReinforcementOptionPrototype option)
+    {
+        var minLevel = Math.Max(1, option.MinBaseLevel);
+        if (minLevel <= 1)
+            return true;
+
+        var currentLevel = 1;
+        if (_teamRule.TryGetTeamProgress(teamId, out var level, out _, out _))
+            currentLevel = Math.Max(1, level);
+
+        return currentLevel >= minLevel;
+    }
+
+    private void TryReadyReinforcementWeapon(EntityUid entity)
+    {
+        if (!_inventory.TryGetSlotEntity(entity, "suitstorage", out var weapon) || weapon == null)
+            return;
+
+        _hands.TryPickupAnyHand(entity, weapon.Value, checkActionBlocker: false, animateUser: false, animate: false);
     }
 
     private string BuildReinforcementEquipmentSummary(ProtoId<JobPrototype> jobId)

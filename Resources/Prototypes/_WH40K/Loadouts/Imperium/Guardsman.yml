@@ -87,6 +87,16 @@
     belt: guardbelt
 
 - type: loadout
+  id: WH40KImperialCombatShieldLoadout
+  dummyEntity: WH40KImperialCombatShield
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  inhand:
+  - WH40KImperialCombatShield
+  groupBy: "shield"
+
+- type: loadout
   id: WH40KCyanFlakArmorSrg
   equipment:
     outerClothing: ClothingOuterArmorFlakVestCyan

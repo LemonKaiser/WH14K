@@ -18,6 +18,25 @@
   - type: SpentAmmoVisuals
 
 - type: entity
+  id: WH40KCartridgeAstartesBoltPistol
+  parent: BaseCartridge
+  suffix: WH40K, Astartes
+  components:
+  - type: Tag
+    tags:
+    - WH40KCartridgeAstartesBoltPistol
+    - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletBolter
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Cartridges/Bolter/astartes_pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals
+
+- type: entity
   id: CartridgeHeavyBolter
   parent: BaseCartridge
   suffix: WH40K
