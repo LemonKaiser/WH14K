@@ -55,6 +55,12 @@
   components:
   - type: Action
     useDelay: 14
+  - type: TargetAction
+    range: 16
+    repeat: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:WH40KWarpStepActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 20
     instabilityGain: 8
@@ -118,6 +124,12 @@
   components:
   - type: Action
     useDelay: 12
+  - type: TargetAction
+    range: 16
+    repeat: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:WH40KWarpStepActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 18
     instabilityGain: 9
@@ -324,6 +336,12 @@
   components:
   - type: Action
     useDelay: 10
+  - type: TargetAction
+    range: 16
+    repeat: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:WH40KWarpStepActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 24
     instabilityGain: 14
@@ -538,6 +556,12 @@
     icon:
       sprite: Objects/Magic/magicactions.rsi
       state: blink
+  - type: TargetAction
+    range: 16
+    repeat: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:WH40KWarpStepActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 20
     instabilityGain: 10

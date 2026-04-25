@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HSpecialistSWS
   name: job-name-hspecialist-sws
   description: job-description-hspecialist-sws
@@ -15,7 +15,7 @@
       - Vulpkanin
   startingGear: HeresyGuardsmanGear
   icon: "JobIconSpecialistSWS"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-cultist
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -25,4 +25,5 @@
   access:
   - Maintenance
   - External
+
 

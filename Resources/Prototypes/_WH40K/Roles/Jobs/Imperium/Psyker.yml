@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Psyker
   name: job-name-psyker
   description: job-description-psyker
@@ -14,7 +14,7 @@
       - Human
   startingGear: PsykerGear
   icon: "JobIconPsyker"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-psyker
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -36,3 +36,4 @@
     head: ClothingHeadHelmetPsyker
     outerClothing: ClothingOuterPsykerWardCoat
     id: PsykerDogTag
+

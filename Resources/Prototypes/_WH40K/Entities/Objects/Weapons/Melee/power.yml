@@ -167,3 +167,99 @@
     spread: 120
     slotFlags:
     - NONE
+
+- type: entity
+  parent: BaseItem
+  id: WH40KAstartesPowerSword
+  suffix: WH40K, Astartes
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/astartes_power_sword.rsi
+    layers:
+    - state: icon
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: ItemToggle
+    predictable: false
+    soundActivate:
+      path: /Audio/Weapons/ebladeon.ogg
+    soundDeactivate:
+      path: /Audio/Weapons/ebladeoff.ogg
+    soundFailToActivate:
+      path: /Audio/Machines/button.ogg
+      params:
+        variation: 0.250
+  - type: ItemToggleActiveSound
+    activeSound:
+      path: /Audio/Weapons/ebladehum.ogg
+      params:
+        volume: -8
+  - type: WH40KAstartesOnlyItemToggle
+    species:
+    - Astartes
+  - type: ItemToggleMeleeWeapon
+    activatedDamage:
+      types:
+        Slash: 28
+        Shock: 12
+    activatedSoundOnHit:
+      path: /Audio/Weapons/eblade1.ogg
+  - type: ComponentToggler
+    components:
+    - type: Reflect
+      reflectProb: 0.25
+      spread: 80
+      reflects:
+      - Energy
+      - NonEnergy
+      slotFlags:
+      - NONE
+  - type: Stunbaton
+    energyPerUse: 35
+  - type: StaminaDamageOnHit
+    damage: 12
+    sound: /Audio/Weapons/egloves.ogg
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.15
+    range: 1.75
+    damage:
+      types:
+        Slash: 16
+        Blunt: 4
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+    angle: 80
+  - type: Battery
+    maxCharge: 700
+    startingCharge: 700
+  - type: UseDelay
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/astartes_power_sword.rsi
+    heldPrefix: off
+    size: Normal
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Melee/astartes_power_sword.rsi
+    quickEquip: false
+    slots:
+    - belt
+  - type: PointLight
+    netsync: false
+    enabled: false
+    radius: 1.6
+    energy: 1.8
+    color: "#58c7ff"
+  - type: ItemTogglePointLight
+  - type: Appearance
+  - type: ItemTogglePrefix
+    prefixOn: on
+    prefixOff: off
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: icon-on}
+          False: {state: icon}
+  - type: DisarmMalus
+    malus: 0.35
+  - type: StaticPrice
+    price: 1200

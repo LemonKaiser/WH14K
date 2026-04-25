@@ -1,0 +1,56 @@
+- type: entity
+  parent: BaseRepairableShield
+  id: WH40KImperialCombatShield
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/imperial_combat_shield.rsi
+    state: combat-icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/imperial_combat_shield.rsi
+    heldPrefix: combat
+    size: Ginormous
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Melee/imperial_combat_shield.rsi
+    quickEquip: false
+    slots:
+    - Back
+  - type: Blocking
+    passiveBlockModifier:
+      coefficients:
+        Blunt: 0.55
+        Slash: 0.55
+        Piercing: 0.45
+        Heat: 0.65
+    activeBlockModifier:
+      coefficients:
+        Blunt: 0.30
+        Slash: 0.30
+        Piercing: 0.25
+        Heat: 0.40
+      flatReductions:
+        Blunt: 4
+        Slash: 4
+        Piercing: 6
+        Heat: 3
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 320
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel:
+            min: 4
+            max: 6
+          SheetGlass:
+            min: 2
+            max: 4
+  - type: StaticPrice
+    price: 350

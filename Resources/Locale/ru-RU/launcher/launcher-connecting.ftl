@@ -5,6 +5,7 @@ connecting-exit = Выйти
 connecting-back = Назад
 connecting-retry = Повторить
 connecting-reconnect = Переподключиться
+connecting-alt-address = Запасной адрес
 connecting-copy = Скопировать сообщение
 connecting-discord-auth-link = Привязать Discord
 connecting-discord-auth-change = Сменить привязанный Discord

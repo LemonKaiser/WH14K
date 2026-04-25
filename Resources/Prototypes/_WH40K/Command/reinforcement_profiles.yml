@@ -2,51 +2,131 @@
   id: WH40KCommandReinforcementProfileImperium
   teamId: Imperium
   options:
-  - id: line
-    nameKey: w40k-cmd-reinforcement-option-imperium-line-name
-    descriptionKey: w40k-cmd-reinforcement-option-imperium-line-description
+  - id: guardsman
     job: Guardsman
     previewPrototype: WH40KReinforcementPreviewImperiumGuardsman
     baseCost: 18
-    maxCount: 3
-    additionalUnitCostMultiplier: 0.5
-  - id: scout
-    nameKey: w40k-cmd-reinforcement-option-imperium-scout-name
-    descriptionKey: w40k-cmd-reinforcement-option-imperium-scout-description
+    maxCount: 10
+    groupKey: w40k-cmd-reinforcement-group-line
+    sortOrder: 10
+  - id: voxscout
     job: VoxScout
     previewPrototype: WH40KReinforcementPreviewImperiumVoxScout
     baseCost: 24
     maxCount: 3
-    additionalUnitCostMultiplier: 0.55
-  - id: command
-    nameKey: w40k-cmd-reinforcement-option-imperium-command-name
-    descriptionKey: w40k-cmd-reinforcement-option-imperium-command-description
+    groupKey: w40k-cmd-reinforcement-group-line
+    sortOrder: 20
+  - id: medic
+    job: Medic
+    previewPrototype: WH40KReinforcementPreviewImperiumMedic
+    baseCost: 26
+    maxCount: 3
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 30
+  - id: tithesupplier
+    job: TitheSupplier
+    previewPrototype: WH40KReinforcementPreviewImperiumTitheSupplier
+    baseCost: 20
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 40
+  - id: munitorum-officer
+    job: MunitorumOfficer
+    previewPrototype: WH40KReinforcementPreviewImperiumMunitorumOfficer
+    baseCost: 28
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 50
+  - id: lexmechanic
+    job: Lexmechanic
+    previewPrototype: WH40KReinforcementPreviewImperiumLexmechanic
+    baseCost: 28
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 60
+  - id: sergeant
     job: Sergeant
     previewPrototype: WH40KReinforcementPreviewImperiumSergeant
     baseCost: 32
     maxCount: 3
-    additionalUnitCostMultiplier: 0.6
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 70
+  - id: chaplain
+    job: WH40KChaplain
+    previewPrototype: WH40KReinforcementPreviewImperiumChaplain
+    baseCost: 36
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-special
+    sortOrder: 80
+  - id: psyker
+    job: Psyker
+    previewPrototype: WH40KReinforcementPreviewImperiumPsyker
+    baseCost: 40
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-special
+    sortOrder: 90
+  - id: kasrkin
+    job: Kasrkin
+    previewPrototype: WH40KReinforcementPreviewImperiumKasrkin
+    baseCost: 40
+    maxCount: 5
+    minBaseLevel: 4
+    groupKey: w40k-cmd-reinforcement-group-special
+    sortOrder: 95
+  - id: lieutenant
+    job: Lieutenant
+    previewPrototype: WH40KReinforcementPreviewImperiumLieutenant
+    baseCost: 42
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 100
+  - id: commissar
+    job: Commissar
+    previewPrototype: WH40KReinforcementPreviewImperiumCommissar
+    baseCost: 46
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 110
 
 - type: wh40kCommandReinforcementProfile
   id: WH40KCommandReinforcementProfileHeretics
   teamId: Heretics
   options:
-  - id: line
-    nameKey: w40k-cmd-reinforcement-option-heretics-line-name
-    descriptionKey: w40k-cmd-reinforcement-option-heretics-line-description
+  - id: hguardsman
     job: HGuardsman
     previewPrototype: WH40KReinforcementPreviewHereticsGuardsman
     baseCost: 18
-    maxCount: 3
-    additionalUnitCostMultiplier: 0.5
-  - id: command
-    nameKey: w40k-cmd-reinforcement-option-heretics-command-name
-    descriptionKey: w40k-cmd-reinforcement-option-heretics-command-description
+    maxCount: 10
+    groupKey: w40k-cmd-reinforcement-group-line
+    sortOrder: 10
+  - id: hbandsupplier
+    job: HBandSupplier
+    previewPrototype: WH40KReinforcementPreviewHereticsBandSupplier
+    baseCost: 20
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 20
+  - id: hlexmechanic
+    job: HLexmechanic
+    previewPrototype: WH40KReinforcementPreviewHereticsLexmechanic
+    baseCost: 28
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 30
+  - id: hsergeant
     job: HSergeant
     previewPrototype: WH40KReinforcementPreviewHereticsSergeant
     baseCost: 32
     maxCount: 3
-    additionalUnitCostMultiplier: 0.6
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 40
+  - id: hlieutenant
+    job: HLieutenant
+    previewPrototype: WH40KReinforcementPreviewHereticsLieutenant
+    baseCost: 40
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 50
 
 - type: wh40kCommandReinforcementTeamMap
   id: WH40KCommandReinforcementTeamMap

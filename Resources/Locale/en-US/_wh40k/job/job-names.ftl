@@ -20,6 +20,7 @@ job-name-specialist-hws = HWS Specialist
 job-name-specialist-sws = SWS Specialist
 job-name-medic = Chirurgeon
 job-name-guardsman = Guardsman
+job-name-kasrkin = Kasrkin
 job-name-psyker = Psyker
 job-name-vox-scout = Vox Operator
 job-name-tithe-supplier = Munitorum Logistician

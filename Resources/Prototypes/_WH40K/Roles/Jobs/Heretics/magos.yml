@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HMagos
   name: job-name-hmagos
   description: job-description-hmagos
@@ -27,7 +27,7 @@
   startingGear: MagosGear
   icon: "JobIconMagos"
   requireAdminNotify: true
-  supervisors: job-supervisors-captain
+  supervisors: job-supervisors-wh40k-dark-mechanicum-magos
   canBeAntag: false
   access:
   - Maintenance
@@ -54,3 +54,4 @@
   #   charges: 8
   # - !type:ModifyEnvirohelmSpecial
   #   powerCell: PowerCellPotato
+

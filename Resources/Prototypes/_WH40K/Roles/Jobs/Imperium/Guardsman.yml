@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Guardsman
   name: job-name-guardsman
   description: job-description-guardsman
@@ -16,7 +16,7 @@
       - Felinid
   startingGear: GuardsmanGear
   icon: "JobIconGuardsman"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-line
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -39,3 +39,55 @@
     jumpsuit: ClothingUniformJumpsuitGuardsman
     back: ClothingBackpackGuard
     id: GuardsmanDogTag
+
+- type: job
+  id: Kasrkin
+  name: job-name-kasrkin
+  description: job-description-kasrkin
+  displayWeight: 10
+  playTimeTracker: JobKasrkin
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+  startingGear: KasrkinGear
+  icon: "JobIconGuardsman"
+  supervisors: job-supervisors-wh40k-imperium-line
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
+      - type: WH40KMoraleExecutionTarget
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: W40KGdMale
+          Female: W40KGdFemale
+          Unsexed: W40KGdMale
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: KasrkinGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsman
+    back: ClothingBackpackHellEnergy
+    head: ClothingHeadHelmetFlakAdvCyan
+    mask: ClothingMaskGasGuardsman
+    eyes: ClothingEyesHudGuard
+    outerClothing: ClothingOuterArmorAdvancedFlakVest
+    gloves: ClothingHandsGlovesCombat
+    shoes: ClothingShoesAnkleBootsCyan
+    belt: guardbelt
+    id: GuardsmanDogTag
+  inhand:
+  - WeaponHellgun
+

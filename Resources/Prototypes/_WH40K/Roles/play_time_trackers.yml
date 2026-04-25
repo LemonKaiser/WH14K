@@ -95,6 +95,9 @@
   id: JobGuardsman
 
 - type: playTimeTracker
+  id: JobKasrkin
+
+- type: playTimeTracker
   id: JobPsyker
 
 - type: playTimeTracker

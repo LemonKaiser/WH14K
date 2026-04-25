@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Lexmechanic
   name: job-name-lexmechanic
   description: job-description-lexmechanic
@@ -24,7 +24,7 @@
         - Binary
       - type: IntrinsicRadioReceiver
   icon: "JobIconLexmechanic"
-  supervisors: job-supervisors-ce
+  supervisors: job-supervisors-wh40k-mechanicus-priest
   canBeAntag: false
   access:
   - Maintenance
@@ -55,3 +55,4 @@
     belt: ClothingBeltUtilityEngineering
     gloves: ClothingHandsGlovesTechpriest
     eyes: ClothingEyesHudTechPriest
+

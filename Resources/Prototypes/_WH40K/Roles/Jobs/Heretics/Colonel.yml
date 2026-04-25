@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HColonel
   name: job-name-hcolonel
   description: job-description-hcolonel
@@ -14,7 +14,7 @@
       - Human
   startingGear: HeresyColonelGear
   icon: "JobIconHColonel"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-chaos-leader
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -46,4 +46,5 @@
     id: HColonelDogTag
   inhand:
     - ChaosMachete
+
 

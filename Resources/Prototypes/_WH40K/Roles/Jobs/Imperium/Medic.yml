@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Medic
   name: job-name-medic
   description: job-description-medic
@@ -16,7 +16,7 @@
       - Felinid
   startingGear: MedicGear
   icon: "JobIconMedic"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-line
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -38,3 +38,4 @@
     head: ClothingHeadHelmetFlakMed
     outerClothing: ClothingOuterArmorFlakVestMed
     id: MedicDogTag
+

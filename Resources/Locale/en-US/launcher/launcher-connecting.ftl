@@ -5,6 +5,7 @@ connecting-exit = Exit
 connecting-back = Back
 connecting-retry = Retry
 connecting-reconnect = Reconnect
+connecting-alt-address = Alt address
 connecting-copy = Copy Message
 connecting-discord-auth-link = Link Discord
 connecting-discord-auth-change = Change Linked Discord

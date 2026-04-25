@@ -21,6 +21,7 @@ job-description-specialist-hws = Deploy heavy weapons and suppress fortified ene
 job-description-specialist-sws = Use special weapons effectively at close and medium range.
 job-description-medic = Treat the wounded and return soldiers to combat readiness.
 job-description-guardsman = Backbone of the Astra Militarum: hold the line and obey command orders.
+job-description-kasrkin = Elite storm trooper reinforcement in carapace armor, deployed with a hellgun and shoulder power pack.
 job-description-psyker = Sanctioned Imperium psyker: wield the warp under control and avoid perils.
 job-description-vox-scout = Serve as vox operator: recon, communications, and target designation for the squad.
 job-description-tithe-supplier = Keep Munitorum frontline logistics moving: process requisitions, deliver supplies, and maintain the regiment cargo loop.

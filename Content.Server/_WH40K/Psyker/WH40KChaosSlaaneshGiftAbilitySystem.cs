@@ -149,13 +149,13 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
             return;
 
         ApplyTieredCooldown(args.Performer, args.Action, 18f, progression.KhorneGiftThreeCooldownTier);
-        var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
+        var giftThreeExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 3);
 
-        var healAmount = FixedPoint2.New(GetMasochismHealAmount(progression.KhorneGiftOnePowerTier, giftOneExUnlocked));
+        var healAmount = FixedPoint2.New(GetMasochismHealAmount(progression.KhorneGiftThreePowerTier, giftThreeExUnlocked));
         _damageable.HealEvenly((args.Performer, damageable), -healAmount, origin: args.Performer, ignoreGlobalModifiers: true);
 
         var selfDamage = new DamageSpecifier();
-        var selfValue = FixedPoint2.New(GetMasochismSelfDamage(progression.KhorneGiftOneUtilityTier, giftOneExUnlocked));
+        var selfValue = FixedPoint2.New(GetMasochismSelfDamage(progression.KhorneGiftThreeUtilityTier, giftThreeExUnlocked));
         selfDamage.DamageDict[_bluntDamage.ID] = selfValue;
         selfDamage.DamageDict[_slashDamage.ID] = selfValue;
         _damageable.TryChangeDamage((args.Performer, damageable), selfDamage, ignoreResistances: true, interruptsDoAfters: false, origin: args.Performer);
@@ -164,7 +164,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         {
             _bloodstream.TryModifyBloodLevel(
                 (args.Performer, bloodstream),
-                FixedPoint2.New(-GetMasochismBloodCost(progression.KhorneGiftOneUtilityTier, giftOneExUnlocked)));
+                FixedPoint2.New(-GetMasochismBloodCost(progression.KhorneGiftThreeUtilityTier, giftThreeExUnlocked)));
         }
 
         args.Handled = true;

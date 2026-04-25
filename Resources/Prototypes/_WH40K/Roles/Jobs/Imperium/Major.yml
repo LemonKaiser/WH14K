@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Major
   name: job-name-major
   description: job-description-major
@@ -14,7 +14,7 @@
       - Human
   startingGear: MajorGear
   icon: "JobIconMajor"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-major
   canBeAntag: false
   whitelisted: true
   special:
@@ -55,3 +55,4 @@
     outerClothing: ClothingOuterArmorFlakVestMajor
     pocket1: WH40KCommandTacticalMapTablet
     id: LieutenantDogTag
+

@@ -1,26 +1,26 @@
-{
-  "version": 1,
-  "copyright": "Made for WH14K project",
-  "license": "CC-BY-SA-3.0",
-  "size": {
-    "x": 32,
-    "y": 32
-  },
-  "states": [
-    {
-      "name": "icon"
-    },
-    {
-      "name": "equipped-MASK",
-      "directions": 4
-    },
-    {
-      "name": "inhand-left",
-      "directions": 4
-    },
-    {
-      "name": "inhand-right",
-      "directions": 4
-    }
-  ]
+﻿{
+    "version":  1,
+    "copyright":  "the_walking_rad",
+    "license":  "CC-BY-SA-3.0",
+    "size":  {
+                 "x":  32,
+                 "y":  32
+             },
+    "states":  [
+                   {
+                       "name":  "icon"
+                   },
+                   {
+                       "name":  "equipped-MASK",
+                       "directions":  4
+                   },
+                   {
+                       "name":  "inhand-left",
+                       "directions":  4
+                   },
+                   {
+                       "name":  "inhand-right",
+                       "directions":  4
+                   }
+               ]
 }

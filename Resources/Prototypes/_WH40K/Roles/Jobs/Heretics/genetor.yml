@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HGenetor
   name: job-name-hgenetor
   description: job-description-hgenetor
@@ -20,7 +20,7 @@
       time: 2.5h
   startingGear: GenetorGear
   icon: "JobIconGenetor"
-  supervisors: job-supervisors-ce
+  supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -33,3 +33,4 @@
   - Atmospherics
   - Medical
   - Chemistry
+

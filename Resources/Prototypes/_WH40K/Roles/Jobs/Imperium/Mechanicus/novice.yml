@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Novice
   name: job-name-novice
   description: job-description-novice
@@ -13,7 +13,7 @@
       - Human
   startingGear: NoviceGear
   icon: "JobIconNovice"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-mechanicus-acolyte
   canBeAntag: false
   access:
   - Maintenance
@@ -37,3 +37,4 @@
     jumpsuit: ClothingUniformJumpsuitTechpriest
     shoes: ClothingShoesBootsworkTechpriest
     belt: ClothingBeltUtilityEngineering
+

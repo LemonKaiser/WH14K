@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: HLexmechanic
   name: job-name-hlexmechanic
   description: job-description-hlexmechanic
@@ -24,7 +24,7 @@
         - Binary1
       - type: IntrinsicRadioReceiver
   icon: "JobIconHLexmechanic"
-  supervisors: job-supervisors-ce
+  supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
 #  special:
 #  - !type:AddComponentSpecial
@@ -60,3 +60,4 @@
     gloves: ClothingHandsGlovesTechpriest
     ears: ClothingHeadsetVoxBackpackHeretics
     eyes: ClothingEyesHudTechPriest
+

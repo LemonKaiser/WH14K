@@ -1,0 +1,159 @@
+- type: entity
+  id: BaseMobWH40KNecron
+  parent: [ MobRobotic, MobCombat ]
+  suffix: WH40K, Necrons
+  abstract: true
+  components:
+  - type: NpcFactionMember
+    factions:
+    - Necrons
+  - type: NPCRetaliation
+    attackMemoryLength: 20
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Dead:
+        Base: dead
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepThud
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - SiliconEmotes
+    - StunImmune
+    - Unimplantable
+
+- type: entity
+  id: MobWH40KNecronSpirit
+  parent: [ BaseMobWH40KNecron, FlyingMobBase ]
+  name: necron spirit
+  description: A spectral Necron construct lit by cold emerald energy.
+  components:
+  - type: HTN
+    rootTask:
+      task: SimpleRangedHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Necrons/spirit.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.2, 1.2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 70
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      260: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 4.8
+    baseWeightlessModifier: 1.5
+  - type: BatteryAmmoProvider
+    proto: WH40KGaussSpiritLaser
+    fireCost: 90
+  - type: Battery
+    maxCharge: 1000
+    startingCharge: 1000
+  - type: BatterySelfRecharger
+    autoRechargeRate: 45
+  - type: Gun
+    fireRate: 0.8
+    useKey: false
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/laser3.ogg
+  - type: PointLight
+    radius: 2.2
+    energy: 1.8
+    color: "#39ff9b"
+    castShadows: false
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1.2
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Slash: 8
+        Shock: 6
+
+- type: entity
+  id: MobWH40KNecronDeathmark
+  parent: BaseMobWH40KNecron
+  name: necron deathmark
+  description: A deathless Necron hunter closing in with phase-forged claws.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/Necrons/deathmark.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+    scale: 1.2, 1.2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.5
+        density: 120
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      420: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 4.4
+  - type: MeleeWeapon
+    hidden: true
+    altDisarm: false
+    attackRate: 1.1
+    angle: 0
+    animation: WeaponArcClaw
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Slash: 32
+        Piercing: 18
+        Structural: 20
+  - type: PointLight
+    radius: 1.5
+    energy: 1.2
+    color: "#39ff9b"
+    castShadows: false

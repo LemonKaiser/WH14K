@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   id: Lieutenant
   name: job-name-lieutenant
   description: job-description-lieutenant
@@ -14,7 +14,7 @@
       - Human
   startingGear: LieutenantGear
   icon: "JobIconLieutenant"
-  supervisors: job-supervisors-engineering
+  supervisors: job-supervisors-wh40k-imperium-officer
   canBeAntag: false
   special:
   - !type:AddComponentSpecial
@@ -54,4 +54,5 @@
     outerClothing: ClothingOuterArmorOfficer
     pocket1: WH40KCommandTacticalMapTablet
     id: LieutenantDogTag
+
 

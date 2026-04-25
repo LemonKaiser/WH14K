@@ -6,6 +6,7 @@
     head: ClothingHeadHelmetAstartesMk2
     outerClothing: ClothingOuterArmorAstartesMk2
     shoes: ClothingShoesAstartesImperiumBoots
+    belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: SergeantDogTag
@@ -20,6 +21,7 @@
     head: ClothingHeadHelmetAstartesMk4
     outerClothing: ClothingOuterArmorAstartesMk4A
     shoes: ClothingShoesAstartesImperiumBoots
+    belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: SergeantDogTag
@@ -34,6 +36,7 @@
     head: ClothingHeadHelmetAstartesChaos
     outerClothing: ClothingOuterArmorAstartesChaos
     shoes: ClothingShoesAstartesChaosBoots
+    belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet
     pocket2: MagazineBolter
     id: HSergeantDogTag
