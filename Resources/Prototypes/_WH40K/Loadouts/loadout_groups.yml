@@ -50,6 +50,20 @@
   - TechpriestPhosphorBlast
 
 - type: loadoutGroup
+  id: WH40KTechpriestMelee
+  name: loadout-group-wh40k-techpriest-weapon
+  minLimit: 0
+  loadouts:
+  - TechpriestAxe
+
+- type: loadoutGroup
+  id: WH40KHTechpriestMelee
+  name: loadout-group-wh40k-techpriest-weapon
+  minLimit: 0
+  loadouts:
+  - HTechpriestAxe
+
+- type: loadoutGroup
   id: WH40KImperialEyes
   name: loadout-group-wh40k-imperial-eyes
   minLimit: 0
@@ -354,9 +368,16 @@
 - type: loadoutGroup
   id: WH40KImperialColonelNeck
   name: loadout-group-wh40k-imperial-command-neck
-  minLimit: 0
   loadouts:
   - WH40KColonelCloak
+  - WH40KGorgetZero
+  - WH40KRosariusZero
+  - WH40KNeckVst
+  - WH40KImperialAquilaMedal
+  - WH40KImperialCrossMedal
+  - WH40KImperialInquisitionSeal
+  - WH40KImperialGoldenPrize
+  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialCommandNeckGorget

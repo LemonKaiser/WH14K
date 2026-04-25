@@ -46,28 +46,13 @@
   # Shitmed Change
 
 - type: entity
-  parent: BaseItem
+  parent: WHOmnissianAxe
   id: WHOmnissianAxeBattle
   suffix: WH40K
   components:
-  - type: Execution
-    doAfterDuration: 4.0
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Melee/omnissia_axe/omnisiahaxe_battle.rsi
     state: icon
-  - type: MeleeWeapon
-    wideAnimationRotation: 135
-    swingLeft: true
-    attackRate: 1.3333
-    damage:
-      types:
-        Blunt: 20
-        Shock: 20
-    angle: 100
-    soundHit:
-      collection: MetalThud
-  # - type: DamageOtherOnHit
-  #   meleeDamageMultiplier: 1.5
   - type: Item
     size: Ginormous
     sprite: _WH40K/Objects/Weapons/Melee/omnissia_axe/omnissiahaxe_inhand.rsi

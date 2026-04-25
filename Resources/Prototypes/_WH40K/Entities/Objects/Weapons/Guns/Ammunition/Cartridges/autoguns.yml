@@ -6,6 +6,7 @@
   components:
   - type: CartridgeAmmo
     deleteOnSpawn: true
+    proto: Bullet12mm
   - type: Tag
     tags:
     - Cartridge
@@ -18,6 +19,7 @@
   components:
   - type: CartridgeAmmo
     deleteOnSpawn: true
+    proto: Bullet10mm
   - type: Tag
     tags:
     - Cartridge
@@ -42,6 +44,7 @@
   components:
   - type: CartridgeAmmo
     deleteOnSpawn: true
+    proto: Bullet10mm
   - type: Tag
     tags:
     - Cartridge

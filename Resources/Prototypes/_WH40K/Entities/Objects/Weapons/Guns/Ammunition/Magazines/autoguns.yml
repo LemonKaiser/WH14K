@@ -5,11 +5,16 @@
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_box.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
   - type: Tag
     tags:
       - MagazineStubLMG
   - type: BallisticAmmoProvider
-    capacity: 60
+    capacity: 50
     proto: Cartridge825mmLong
     mayTransfer: true
     whitelist:
@@ -21,12 +26,17 @@
   parent: BaseMagazineRifle
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/Magazine/LightRifle/light_rifle_box.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/stub_mg.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
   - type: Tag
     tags:
       - MagazineStubMG
   - type: BallisticAmmoProvider
-    capacity: 120
+    capacity: 200
     proto: Cartridge825mmLong
     mayTransfer: true
     whitelist:
@@ -41,7 +51,33 @@
     tags:
       - MagazineStubPistol
   - type: BallisticAmmoProvider
-    capacity: 10
+    capacity: 17
+    proto: Cartridge10mm
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Cartridge10mm
+
+- type: entity
+  id: MagazineHevStubPistol
+  parent: BaseMagazinePistol
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Tag
+    tags:
+      - MagazineHevStubPistol
+  - type: BallisticAmmoProvider
+    capacity: 25
     proto: Cartridge10mm
     mayTransfer: true
     whitelist:
@@ -67,6 +103,17 @@
   id: MagazineStubSMG
   parent: BaseMagazinePistol
   components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/SMG2.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
   - type: Tag
     tags:
       - MagazineStubSMG
@@ -78,3 +125,28 @@
       tags:
         - Cartridge10mmLong
 
+- type: entity
+  id: MagazineStub3SMG
+  parent: BaseMagazinePistol
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/SMG3.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Tag
+    tags:
+      - MagazineStub3SMG
+  - type: BallisticAmmoProvider
+    proto: Cartridge10mmLong
+    capacity: 40
+    mayTransfer: true
+    whitelist:
+      tags:
+        - Cartridge10mmLong

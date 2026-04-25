@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseWeaponPistol
+  parent: [BaseWeaponPistol, BaseGunWieldable]
   id: WeaponChsStubSMG3
   suffix: WH40K, Хаос
   components:
@@ -19,13 +19,13 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: MagazineStubSMG
+        startingItem: MagazineStub3SMG
         insertSound: /Audio/Weapons/Guns/MagIn/pistol_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
         priority: 2
         whitelist:
           tags:
-            - MagazineStubSMG
+            - MagazineStub3SMG
       gun_chamber:
         name: Chamber
         startingItem: Cartridge10mmLong
@@ -34,9 +34,11 @@
           tags:
             - Cartridge10mmLong
   - type: Gun
-    minAngle: 2
-    maxAngle: 20
-    fireRate: 5.5
+    fireRate: 7.5
+    minAngle: 25
+    maxAngle: 90
+    angleIncrease: 3
+    angleDecay: 25
     availableModes:
     - FullAuto
     selectedMode: FullAuto

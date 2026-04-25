@@ -65,11 +65,11 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Slash: 15
+        Blunt: 15
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Slash: 15
+        Blunt: 15
         Shock: 20
   # - type: ItemToggleDamageOtherOnHit
   - type: Stunbaton
@@ -93,6 +93,8 @@
   - type: Battery
     maxCharge: 800
     startingCharge: 800
+  - type: BatterySelfRecharger
+    autoRechargeRate: 80
   - type: UseDelay
   - type: Item
     heldPrefix: off

@@ -105,3 +105,9 @@
 
 - type: Tag
   id: CartridgeElectricArc
+
+- type: Tag
+  id: MagazineHevStubPistol
+
+- type: Tag
+  id: MagazineStub3SMG

@@ -506,6 +506,9 @@ ent-WHHammerImperial = War Hammer
 ent-WHOmnissianAxe = Battleaxe of the Omnissiah
     .desc = Heavy and strong.
 
+ent-WHOmnissianAxeBattle = Battleaxe of the Omnissiah
+    .desc = Heavy and strong.
+
 ent-WHPowerSaberImperial = Power Saber
     .desc = High-quality, noble officer's power saber, made of expensive materials. Her energy field allows the blade to cut through flesh, bone, and most protective armor.
 
@@ -529,14 +532,14 @@ ent-WeaponStubPistol = Stub pistol
 ent-WeaponStubRifle = Agripinaa Mk.III assault rifle
     .desc = The Agripinaa model heavy assault rifle is a redesigned version of the Mk. II, is virtually no different from the Mk. II, except for more consistent recoil in exchange for weight. Uses 8.25 "Long".
 
-ent-WeaponStubSMG = heavy autopistol
-    .desc = A submachine gun, the model of which cannot be determined; it appears to be homemade.
+ent-WeaponStubSMG = M49 "Spatula"
+    .desc = A high-quality submachine gun for "filling" holes in defenses.
 
-ent-WeaponStubSMG2 = Stubb pistol submachine gun
-    .desc = A submachine gun, the model of which cannot be determined; it appears to be homemade.
+ent-WeaponStubSMG3 = "Sprinkler"
+    .desc = A homemade stub-machine gun, assembled by some underground manufactorum. Popular with cultists and underhive scum.
 
-ent-WeaponStubSMG3 = Stubb pistol submachine gun
-    .desc = A submachine gun, the model of which cannot be determined; it appears to be homemade.
+ent-WeaponStubSMG2 = Stub-machine gun
+    .desc = A submachine gun of an undetermined model; it appears to be homemade.
 
 ent-WeaponLaserCarabin = lascarbine
 
@@ -599,14 +602,14 @@ ent-WeaponRifleRadCarabin = radium carbine
 ent-WeaponChsCombatShotgun = Accatran Mk combat shotgun. XI
     .desc = A pump-action shotgun with an angular design, manufactured on Ackatran for the use of the Imperial Guard. Uses 12mm.
 
-ent-WeaponChsStubShotgun = stub shotgun
-    .desc = Shotgun of unknown model. Uses 12mm
+ent-WeaponChsStubShotgun = Desecrated M18 "Fizzo"
+    .desc = A pump-action combat shotgun manufactured for mercenaries and private security.
 
 ent-WeaponCombatShotgun = Accatran Mk combat shotgun. XI
     .desc = A pump-action shotgun with an angular design, manufactured on Ackatran for the use of the Imperial Guard. Uses 12mm.
 
-ent-WeaponStubShotgun = stub shotgun
-    .desc = Shotgun of unknown model. Uses 12mm
+ent-WeaponStubShotgun = M18 "Fizzo"
+    .desc = A pump-action combat shotgun manufactured for mercenaries and private security.
 
 ent-Cartridge12mm = cartridge (12 mm)
 
@@ -631,6 +634,10 @@ ent-MagazineStubPistol = magazine (10 mm)
 ent-MagazineStubRifle = magazine (8.25 mm extended)
 
 ent-MagazineStubSMG = magazine (10 mm extended)
+
+ent-MagazineStub3SMG = magazine "Sprinkler"
+
+ent-MagazineHevStubPistol = magazine "Spatula"
 
 ent-MagazineBolter = bolter magazine (.75 ​​bolt)
 
