@@ -24,6 +24,7 @@
   - TechpriestBack
   - TechpriestMask
   - WH40KTechpriestWeapon
+  - WH40KTechpriestMelee
 
 - type: roleLoadout
   id: JobHEnginseer
@@ -50,6 +51,7 @@
   - TechpriestEyes
   - TechpriestBack
   - TechpriestMask
+  - WH40KHTechpriestMelee
 
 - type: roleLoadout
   id: JobGuardsman

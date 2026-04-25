@@ -21,7 +21,7 @@
     whitelist:
       tags:
       - ShellShotgun
-    capacity: 10
+    capacity: 5
     proto: ShellShotgun
   - type: Appearance
   - type: ClothingSpeedModifier

@@ -155,6 +155,13 @@
     radius: 3.5
     color: Blue
     energy: 0.5
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: WHBulletPlasmaRifle
@@ -183,6 +190,13 @@
     radius: 3.5
     color: Blue
     energy: 0.5
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: BulletBolter
@@ -206,6 +220,13 @@
     intensitySlope: 0.5
     totalIntensity: 0.5
     maxTileBreak: 0
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: BulletHeavyBolter
@@ -222,6 +243,13 @@
     damage:
       types:
         Piercing: 19
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.85
+    sprintSpeedModifier: 0.85
 
 - type: entity
   id: FlamethrowerFlashEffect
@@ -333,6 +361,13 @@
   - type: RadiationSource
     intensity: 6
     slope: 0.3
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: Bullet825mmLong
@@ -343,6 +378,13 @@
     damage:
       types:
         Piercing: 18
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.85
+    sprintSpeedModifier: 0.85
 
 - type: entity
   id: WHBulletPlasmaSentine
@@ -367,6 +409,13 @@
     radius: 3.5
     color: Blue
     energy: 0.5
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: BulletSentine
@@ -388,6 +437,13 @@
     intensitySlope: 1
     totalIntensity: 4
     maxTileBreak: 0
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: WH40KBulletRocketHE
@@ -430,6 +486,13 @@
     heat: 49000
   - type: IgniteOnCollide
     fireStacks: 2.3
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
 
 - type: entity
   id: BulletElectricArc
@@ -456,3 +519,39 @@
     slowdownAmount: 0.5
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
+
+- type: entity
+  parent: BaseBullet
+  id: Bullet10mm
+  categories: [ HideSpawnMenu ]
+  name: bullet (10mm)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 16
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.95
+    sprintSpeedModifier: 0.95
+
+- type: entity
+  parent: BaseBullet
+  id: Bullet12mm
+  categories: [ HideSpawnMenu ]
+  name: bullet (12mm)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 19
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9

@@ -36,6 +36,9 @@
     tags:
       - Medal
       - WhitelistChameleon
+  - type: Reflect
+    reflectProb: 0.01
+    spread: 90
 
 - type: entity
   parent: ClothingNeckBase

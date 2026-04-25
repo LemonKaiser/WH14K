@@ -335,11 +335,6 @@
 
 - type: loadout
   id: WH40KColonelCloak
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: WH40KBattleHardened
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 21
   equipment:
     neck: Colonelcloak
 

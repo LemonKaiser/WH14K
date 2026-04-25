@@ -81,6 +81,10 @@
       types:
         Heat: 100
         Structural: 200
+  - type: ChangeTemperatureOnCollide
+    heat: 100000
+  - type: IgniteOnCollide
+    fireStacks: 5
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi

@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseWeaponPistol
+  parent: [BaseWeaponPistol, BaseGunWieldable]
   id: WeaponChsStubSMG2
   suffix: WH40K, Хаос
   components:
@@ -34,7 +34,6 @@
           tags:
             - Cartridge10mmLong
   - type: Gun
-    maxAngle: 7
     fireRate: 4.5
     availableModes:
     - FullAuto

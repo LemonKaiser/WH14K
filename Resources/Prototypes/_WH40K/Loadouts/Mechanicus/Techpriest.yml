@@ -103,3 +103,19 @@
     requiredLevel: 5
   inhand:
   - WeaponRevolverElectricArc
+
+- type: loadout
+  id: TechpriestAxe
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  -  WHOmnissianAxe
+
+- type: loadout
+  id: HTechpriestAxe
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  - WHOmnissianAxeBattle
