@@ -102,6 +102,7 @@ namespace Content.Client.Launcher
             _userInterfaceManager.StateRoot.AddChild(_control);
 
             _clientNetManager.ConnectFailed += OnConnectFailed;
+            _clientNetManager.Disconnect += OnDisconnected;
             _clientNetManager.ClientConnectStateChanged += OnConnectStateChanged;
 
             _activeConnectAddress = null;
@@ -112,6 +113,7 @@ namespace Content.Client.Launcher
             _automaticFallbackTriedTargets.Clear();
 
             CurrentPage = Page.Connecting;
+            UseCachedConnectionEndIfAlreadyFailed();
         }
 
         protected override void Shutdown()
@@ -120,27 +122,56 @@ namespace Content.Client.Launcher
             _control = null;
 
             _clientNetManager.ConnectFailed -= OnConnectFailed;
+            _clientNetManager.Disconnect -= OnDisconnected;
             _clientNetManager.ClientConnectStateChanged -= OnConnectStateChanged;
             _connectingTarget.Clear();
         }
 
         private void OnConnectFailed(object? _, NetConnectFailArgs args)
         {
+            HandleConnectFailed(args, allowRedial: true);
+        }
+
+        private void HandleConnectFailed(NetConnectFailArgs args, bool allowRedial)
+        {
             if (args.RedialFlag)
             {
                 // We've just *attempted* to connect and we've been told we need to redial, so do it.
                 // Result deliberately discarded.
-                Redial();
+                if (allowRedial)
+                    Redial();
             }
+
             ConnectFailReason = args.Reason;
             CurrentPage = Page.ConnectFailed;
             ConnectFailed?.Invoke(args);
             RememberFallbackReason(args);
         }
 
+        private void OnDisconnected(object? _, NetDisconnectedArgs args)
+        {
+            if (CurrentPage != Page.Connecting)
+                return;
+
+            HandleDisconnected(args);
+        }
+
+        private void HandleDisconnected(NetDisconnectedArgs args)
+        {
+            ConnectFailReason = null;
+            CurrentPage = Page.Disconnected;
+            RememberFallbackReason(args);
+        }
+
         private void OnConnectStateChanged(ClientConnectionState state)
         {
             ConnectionStateChanged?.Invoke(state);
+
+            if (state == ClientConnectionState.NotConnecting &&
+                CurrentPage == Page.Connecting)
+            {
+                UseCachedConnectionEndIfAlreadyFailed();
+            }
         }
 
         public void RetryConnect()
@@ -274,6 +305,29 @@ namespace Content.Client.Launcher
 
             host = string.Empty;
             port = 0;
+            return false;
+        }
+
+        private bool UseCachedConnectionEndIfAlreadyFailed()
+        {
+            if (_clientNetManager.ClientConnectState != ClientConnectionState.NotConnecting ||
+                _baseClient.RunLevel >= ClientRunLevel.Connecting)
+            {
+                return false;
+            }
+
+            if (_extendedDisconnectInformation.LastNetConnectFailedArgs is { } connectFailed)
+            {
+                HandleConnectFailed(connectFailed, allowRedial: false);
+                return true;
+            }
+
+            if (_extendedDisconnectInformation.LastNetDisconnectedArgs is { } disconnected)
+            {
+                HandleDisconnected(disconnected);
+                return true;
+            }
+
             return false;
         }
 

@@ -17,6 +17,7 @@ public sealed class ExtendedDisconnectInformationManager
     [Dependency] private readonly IClientNetManager _clientNetManager = default!;
 
     private NetDisconnectedArgs? _lastNetDisconnectedArgs = null;
+    private NetConnectFailArgs? _lastNetConnectFailedArgs = null;
 
     public NetDisconnectedArgs? LastNetDisconnectedArgs
     {
@@ -28,18 +29,45 @@ public sealed class ExtendedDisconnectInformationManager
         }
     }
 
+    public NetConnectFailArgs? LastNetConnectFailedArgs
+    {
+        get => _lastNetConnectFailedArgs;
+        private set
+        {
+            _lastNetConnectFailedArgs = value;
+            LastNetConnectFailedArgsChanged?.Invoke(value);
+        }
+    }
+
     // BE CAREFUL!
     // This may fire at an arbitrary time before or after whatever code that needs it.
     public event Action<NetDisconnectedArgs?>? LastNetDisconnectedArgsChanged;
+    public event Action<NetConnectFailArgs?>? LastNetConnectFailedArgsChanged;
 
     public void Initialize()
     {
         _clientNetManager.Disconnect += OnNetDisconnect;
+        _clientNetManager.ConnectFailed += OnNetConnectFailed;
+        _clientNetManager.ClientConnectStateChanged += OnClientConnectStateChanged;
+    }
+
+    private void OnClientConnectStateChanged(ClientConnectionState state)
+    {
+        if (state == ClientConnectionState.NotConnecting)
+            return;
+
+        LastNetDisconnectedArgs = null;
+        LastNetConnectFailedArgs = null;
     }
 
     private void OnNetDisconnect(object? sender, NetDisconnectedArgs args)
     {
         LastNetDisconnectedArgs = args;
+    }
+
+    private void OnNetConnectFailed(object? sender, NetConnectFailArgs args)
+    {
+        LastNetConnectFailedArgs = args;
     }
 }
 
