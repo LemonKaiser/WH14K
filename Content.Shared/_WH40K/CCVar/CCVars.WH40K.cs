@@ -29,7 +29,7 @@ public sealed partial class CCVars
     ///     Comma-separated alternate addresses tried when the primary address fails at the transport layer.
     /// </summary>
     public static readonly CVarDef<string> WH40KConnectionFallbackAlternateAddresses =
-        CVarDef.Create("wh40k.connection_fallback.alternate_addresses", "ss14://heretec.online:25910", CVar.CLIENTONLY);
+        CVarDef.Create("wh40k.connection_fallback.alternate_addresses", "ss14://2612.koara.live:25910", CVar.CLIENTONLY);
 
     /// <summary>
     ///     Automatically switches to the first alternate address after a network-level connection failure.
@@ -54,7 +54,7 @@ public sealed partial class CCVars
     ///     This gives the server time to release the old authenticated session before the same account reconnects.
     /// </summary>
     public static readonly CVarDef<float> WH40KConnectionFallbackDisconnectDelaySeconds =
-        CVarDef.Create("wh40k.connection_fallback.disconnect_delay_seconds", 30.0f, CVar.CLIENTONLY);
+        CVarDef.Create("wh40k.connection_fallback.disconnect_delay_seconds", 10.0f, CVar.CLIENTONLY);
 
     /// <summary>
     ///     Enables translated chat for this client when the server-side WH40K translation pipeline is active.
