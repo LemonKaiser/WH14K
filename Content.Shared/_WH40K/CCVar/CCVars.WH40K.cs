@@ -50,6 +50,13 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.connection_fallback.auto_delay_seconds", 1.0f, CVar.CLIENTONLY);
 
     /// <summary>
+    ///     Extra delay after an established connection times out before trying an alternate address.
+    ///     This gives the server time to release the old authenticated session before the same account reconnects.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KConnectionFallbackDisconnectDelaySeconds =
+        CVarDef.Create("wh40k.connection_fallback.disconnect_delay_seconds", 30.0f, CVar.CLIENTONLY);
+
+    /// <summary>
     ///     Enables translated chat for this client when the server-side WH40K translation pipeline is active.
     /// </summary>
     public static readonly CVarDef<bool> WH40KChatTranslationPreferenceEnabled =

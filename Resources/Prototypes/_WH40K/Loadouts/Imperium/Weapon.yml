@@ -50,9 +50,9 @@
     suitstorage: WeaponLaserLasgunAccatran
   storage:
     belt:
-    - LonglasPowerCell
-    - LonglasPowerCell
-    - LonglasPowerCell
+    - AccatranPowerCell
+    - AccatranPowerCell
+    - AccatranPowerCell
   groupBy: "main"
 
 - type: loadout

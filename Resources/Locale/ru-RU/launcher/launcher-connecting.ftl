@@ -6,6 +6,7 @@ connecting-back = Назад
 connecting-retry = Повторить
 connecting-reconnect = Переподключиться
 connecting-alt-address = Запасной адрес
+connecting-alt-address-wait = Запасной адрес ({ $time }с)
 connecting-copy = Скопировать сообщение
 connecting-discord-auth-link = Привязать Discord
 connecting-discord-auth-change = Сменить привязанный Discord

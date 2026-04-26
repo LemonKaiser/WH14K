@@ -237,6 +237,45 @@
     level: 2
 
 - type: listing
+  id: AltarMagazineCombatShotgun
+  name: Combat shotgun magazine
+  description: Drum magazine for heretic combat shotguns.
+  productEntity: MagazineCombatShotgun
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarMagazineStubMg
+  name: Stub machine gun magazine
+  description: Reserve magazine for stub machine guns.
+  productEntity: MagazineStubMG
+  cost:
+    intelligence_ch: 2
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: AltarPlasmaPistolPowerCell
+  name: Plasma pistol cell
+  description: Reserve power cell for plasma pistols.
+  productEntity: PlasmPistolPowerCell
+  cost:
+    intelligence_ch: 4
+  categories:
+  - AltarAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
   id: AltarFlameTank
   name: Promethium tank
   description: Fuel reserve for inferno operations.

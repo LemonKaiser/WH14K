@@ -43,6 +43,7 @@ namespace Content.Client.Launcher
         private INetStructuredReason? _lastFallbackReason;
         private bool _pendingAutomaticFallback;
         private TimeSpan _automaticFallbackAt;
+        private TimeSpan _alternativeFallbackAvailableAt;
         private readonly HashSet<string> _automaticFallbackTriedTargets = new(StringComparer.OrdinalIgnoreCase);
 
         public string? Address => _activeConnectAddress
@@ -88,6 +89,15 @@ namespace Content.Client.Launcher
             IsFallbackEligible(_lastFallbackReason) &&
             TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: false, out _);
 
+        public TimeSpan AlternativeConnectCooldownRemaining
+        {
+            get
+            {
+                var remaining = _alternativeFallbackAvailableAt - _timing.RealTime;
+                return remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
+            }
+        }
+
         protected override void Startup()
         {
             foreach (var staleControl in _userInterfaceManager.StateRoot.Children.OfType<LauncherConnectingGui>().ToArray())
@@ -110,6 +120,7 @@ namespace Content.Client.Launcher
             _activeConnectPort = null;
             _lastFallbackReason = null;
             _pendingAutomaticFallback = false;
+            _alternativeFallbackAvailableAt = TimeSpan.Zero;
             _automaticFallbackTriedTargets.Clear();
 
             CurrentPage = Page.Connecting;
@@ -360,6 +371,9 @@ namespace Content.Client.Launcher
             if (!IsFallbackEligible(_lastFallbackReason))
                 return false;
 
+            if (AlternativeConnectCooldownRemaining > TimeSpan.Zero)
+                return false;
+
             if (!TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: automatic, out var target))
                 return false;
 
@@ -383,14 +397,24 @@ namespace Content.Client.Launcher
         {
             _lastFallbackReason = reason;
             _pendingAutomaticFallback = false;
+            _alternativeFallbackAvailableAt = TimeSpan.Zero;
 
-            if (IsFallbackEligible(reason) &&
-                _cfg.GetCVar(CCVars.WH40KConnectionFallbackAutomatic) &&
+            if (reason != null &&
+                IsFallbackEligible(reason) &&
                 TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: true, out _))
             {
-                var delay = MathF.Max(0f, _cfg.GetCVar(CCVars.WH40KConnectionFallbackAutoDelaySeconds));
-                _automaticFallbackAt = _timing.RealTime + TimeSpan.FromSeconds(delay);
-                _pendingAutomaticFallback = true;
+                var reconnectDelay = GetReconnectCleanupDelay(reason);
+                _alternativeFallbackAvailableAt = _timing.RealTime + TimeSpan.FromSeconds(reconnectDelay);
+                if (reconnectDelay > 0f)
+                    _sawmill.Info($"Delaying alternate connection for {reconnectDelay:0.#} seconds after disconnect to let the server release the old session.");
+
+                if (_cfg.GetCVar(CCVars.WH40KConnectionFallbackAutomatic))
+                {
+                    var autoDelay = MathF.Max(0f, _cfg.GetCVar(CCVars.WH40KConnectionFallbackAutoDelaySeconds));
+                    var delay = MathF.Max(autoDelay, reconnectDelay);
+                    _automaticFallbackAt = _timing.RealTime + TimeSpan.FromSeconds(delay);
+                    _pendingAutomaticFallback = true;
+                }
             }
 
             AlternativeConnectAvailabilityChanged?.Invoke();
@@ -400,7 +424,16 @@ namespace Content.Client.Launcher
         {
             _lastFallbackReason = null;
             _pendingAutomaticFallback = false;
+            _alternativeFallbackAvailableAt = TimeSpan.Zero;
             AlternativeConnectAvailabilityChanged?.Invoke();
+        }
+
+        private float GetReconnectCleanupDelay(INetStructuredReason reason)
+        {
+            if (reason is not NetDisconnectedArgs)
+                return 0f;
+
+            return MathF.Max(0f, _cfg.GetCVar(CCVars.WH40KConnectionFallbackDisconnectDelaySeconds));
         }
 
         private bool IsFallbackEligible(INetStructuredReason? reason)

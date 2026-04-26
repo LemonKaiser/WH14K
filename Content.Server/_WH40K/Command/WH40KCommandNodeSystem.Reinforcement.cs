@@ -102,8 +102,12 @@ public sealed partial class WH40KCommandNodeSystem
         var now = _timing.CurTime;
         var teamIds = _teamRule.GetTeamIds();
         if (teamIds.Count == 0)
+        {
+            ResetReinforcementRuntime();
             return;
+        }
 
+        PruneReinforcementRuntime(teamIds);
         foreach (var teamId in teamIds)
         {
             if (string.IsNullOrWhiteSpace(teamId))
@@ -112,6 +116,21 @@ public sealed partial class WH40KCommandNodeSystem
             var runtime = GetOrCreateTeamReinforcementRuntime(teamId);
             TryProcessPendingRequest(teamId, runtime, now);
             TryProcessAutoRequest(teamId, runtime, now);
+        }
+    }
+
+    private void ResetReinforcementRuntime()
+    {
+        _teamReinforcementRuntime.Clear();
+    }
+
+    private void PruneReinforcementRuntime(IReadOnlyCollection<string> activeTeamIds)
+    {
+        var active = new HashSet<string>(activeTeamIds, StringComparer.OrdinalIgnoreCase);
+        foreach (var teamId in _teamReinforcementRuntime.Keys.ToArray())
+        {
+            if (!active.Contains(teamId))
+                _teamReinforcementRuntime.Remove(teamId);
         }
     }
 

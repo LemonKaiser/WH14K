@@ -263,8 +263,8 @@
     minRoundTimeSeconds: 3
     technologyUnlocks: [WH40KWeaponryAuthLeft2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumStubShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineLMG, WH40KImperiumMagazineRifle]
-      Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineLMG, WH40KHereticsMagazineRifle]
+      Imperium: [WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumStubShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazineSMG3, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineLMG, WH40KImperiumMagazineCombatShotgun, WH40KImperiumMagazineRifle, WH40KImperiumShotgunShells]
+      Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazineSMG3, WH40KHereticsMagazineHevStubPistol, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineLMG, WH40KHereticsMagazineCombatShotgun, WH40KHereticsMagazineRifle, WH40KHereticsShotgunShells]
   - id: wep_right_2
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-2-title

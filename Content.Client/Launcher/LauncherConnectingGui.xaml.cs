@@ -393,10 +393,16 @@ namespace Content.Client.Launcher
             if (!show)
                 return;
 
-            AlternativeConnectButton.Disabled = false;
-            AlternativeReconnectButton.Disabled = false;
-            AlternativeConnectButton.Text = Loc.GetString("connecting-alt-address");
-            AlternativeReconnectButton.Text = Loc.GetString("connecting-alt-address");
+            var cooldown = _state.AlternativeConnectCooldownRemaining;
+            var disabled = cooldown > TimeSpan.Zero;
+            var text = disabled
+                ? Loc.GetString("connecting-alt-address-wait", ("time", Math.Max(1, (int) Math.Ceiling(cooldown.TotalSeconds))))
+                : Loc.GetString("connecting-alt-address");
+
+            AlternativeConnectButton.Disabled = disabled;
+            AlternativeReconnectButton.Disabled = disabled;
+            AlternativeConnectButton.Text = text;
+            AlternativeReconnectButton.Text = text;
         }
 
         private void UpdateRetryButtonState()
