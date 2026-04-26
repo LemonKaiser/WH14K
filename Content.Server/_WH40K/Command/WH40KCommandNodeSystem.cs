@@ -32,6 +32,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Ghost;
+using Content.Shared.GameTicking;
 using Content.Shared.Lathe.Prototypes;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -126,6 +127,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         SubscribeLocalEvent<WH40KCommandNodeComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
         SubscribeLocalEvent<WH40KReinforcementGhostRoleOneShotComponent, MindAddedMessage>(OnReinforcementMindAdded);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
         SubscribeLocalEvent<WH40KCommandNodeComponent, BoundUIOpenedEvent>(OnAnyUiOpened);
 
@@ -153,9 +155,38 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
 
     private void OnMapInit(EntityUid uid, WH40KCommandNodeComponent component, MapInitEvent args)
     {
+        ResetCommandNodeRoundState(component);
         var interval = TimeSpan.FromSeconds(GetPassiveIntervalSeconds(component));
         component.NextPassivePointTick = _timing.CurTime + interval;
         RefreshTeamCargoLogisticsBonuses(component.TeamId);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
+    {
+        ResetReinforcementRuntime();
+
+        var query = EntityQueryEnumerator<WH40KCommandNodeComponent>();
+        while (query.MoveNext(out var uid, out var node))
+        {
+            ResetCommandNodeRoundState(node);
+            _ui.CloseUis(uid);
+        }
+    }
+
+    private static void ResetCommandNodeRoundState(WH40KCommandNodeComponent component)
+    {
+        component.UpgradeLevel = 0;
+        component.PurchasedTreeNodeIds.Clear();
+        component.ActiveBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
+        component.ActiveDoctrineId = string.Empty;
+        component.DoctrineLocked = false;
+        component.ActiveMissionTaskId = string.Empty;
+        component.MissionBoardOfferedTaskIds.Clear();
+        component.MissionBoardHadActiveFactionMission = false;
+        component.NextReinforcementAvailable = TimeSpan.Zero;
+        component.NextBattleTacticChangeAvailable = TimeSpan.Zero;
+        component.NextPassivePointTick = TimeSpan.Zero;
+        component.NextUiRefresh = TimeSpan.Zero;
     }
 
     public override void Update(float frameTime)

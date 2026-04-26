@@ -92,10 +92,18 @@
       entries:
       - id: MagazineStubSMG
         amount: 48
+      - id: MagazineStub3SMG
+        amount: 36
+      - id: MagazineHevStubPistol
+        amount: 24
+      - id: MagazineStubPistol
+        amount: 24
       - id: MagazineStubRifle
         amount: 4
       - id: WH40KAmmoBox10mmLong
         amount: 12
+      - id: WH40KAmmoBox10mm
+        amount: 6
       - id: WH40KAmmoBoxAutogun
         amount: 2
       - id: BoxLethalshot

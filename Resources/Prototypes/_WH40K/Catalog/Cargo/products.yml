@@ -189,6 +189,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumMagazineSMG3
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStub3SMG
+  cost: 125
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMagazinePistol
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -223,6 +233,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumMagazineCombatShotgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineCombatShotgun
+  cost: 175
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMagazineRifle
   name: cargoproduct-name-wh40k-magazine-stub-rifle
   description: cargoproduct-description-wh40k-magazine-stub-rifle
@@ -232,6 +252,16 @@
   product: MagazineStubRifle
   cost: 75
   category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumShotgunShells
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: BoxLethalshot
+  cost: 1500
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -943,6 +973,26 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineSMG3
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineStub3SMG
+  cost: 125
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineHevStubPistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineHevStubPistol
+  cost: 100
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMagazinePistol
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -977,6 +1027,16 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineCombatShotgun
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MagazineCombatShotgun
+  cost: 175
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMagazineRifle
   name: cargoproduct-name-wh40k-magazine-stub-rifle
   description: cargoproduct-description-wh40k-magazine-stub-rifle
@@ -986,6 +1046,16 @@
   product: MagazineStubRifle
   cost: 75
   category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsShotgunShells
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: BoxLethalshot
+  cost: 1500
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct

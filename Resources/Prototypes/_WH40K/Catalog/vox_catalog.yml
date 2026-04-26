@@ -237,6 +237,58 @@
     level: 2
 
 - type: listing
+  id: VoxAccatranPowerCell
+  name: Accatran power cell
+  description: Reserve cell for Accatran lasguns.
+  productEntity: AccatranPowerCell
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxMagazineCombatShotgun
+  name: Combat shotgun magazine
+  description: Drum magazine for combat shotguns.
+  productEntity: MagazineCombatShotgun
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxMagazineStubLmg
+  name: Stub LMG magazine
+  description: Reserve LMG magazine.
+  productEntity: MagazineStabLMG
+  cost:
+    intelligence_imp: 2
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 2
+
+- type: listing
+  id: VoxPlasmagunPowerCell
+  name: Plasma gun cell
+  description: Reserve power cell for plasma guns.
+  productEntity: PlasmGunPowerCell
+  cost:
+    intelligence_imp: 4
+  categories:
+  - VoxAmmo
+  conditions:
+  - !type:WH40KMinBaseLevelCondition
+    level: 4
+
+- type: listing
   id: VoxFlameTank
   name: Promethium tank
   description: Flamethrower fuel reserve.

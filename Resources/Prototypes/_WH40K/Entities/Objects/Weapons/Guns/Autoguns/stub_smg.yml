@@ -28,11 +28,11 @@
             - MagazineHevStubPistol
       gun_chamber:
         name: Chamber
-        startingItem: Cartridge10mmLong
+        startingItem: Cartridge10mm
         priority: 1
         whitelist:
           tags:
-            - Cartridge10mmLong
+            - Cartridge10mm
   - type: Gun
     fireRate: 5
     availableModes:

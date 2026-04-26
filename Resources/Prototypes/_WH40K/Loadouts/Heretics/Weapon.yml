@@ -5,9 +5,9 @@
     suitstorage: WeaponChsStubSMG3
   storage:
     belt:
-    - MagazineStubSMG
-    - MagazineStubSMG
-    - MagazineStubSMG
+    - MagazineStub3SMG
+    - MagazineStub3SMG
+    - MagazineStub3SMG
 
 - type: loadout
   id: WH40KWeaponChsStubSMG2Loadout
@@ -56,8 +56,8 @@
     pocket1: WeaponStubSMG
   storage:
     belt:
-    - MagazineStubSMG
-    - MagazineStubSMG
+    - MagazineHevStubPistol
+    - MagazineHevStubPistol
 
 - type: loadout
   id: WH40KWeaponStubPistolLoadout
