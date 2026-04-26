@@ -592,7 +592,10 @@
   minLimit: 0
   loadouts:
   - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
   - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
   - WH40KChaosTrenchKnifeKit
   - WH40KChaosSapperShovelKit
   - WH40KChaosTruncheonKit

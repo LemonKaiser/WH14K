@@ -46,6 +46,7 @@
   access:
   - Maintenance
   - External
+  - Command
   - Cargo
 
 - type: startingGear
@@ -73,4 +74,3 @@
     outerClothing: ClothingOuterArmorMunitorumCoat
     pocket1: WH40KStandardTacticalMapTablet
     id: MunitorumOfficerDogTag
-
