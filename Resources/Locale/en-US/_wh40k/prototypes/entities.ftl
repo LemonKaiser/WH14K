@@ -1543,6 +1543,9 @@ ent-CartridgePhosphor = Phosphor weapon cartridge
 ent-WH40KAmmoBoxElectricArc = Electric Arc Ammo Box
     .desc = Delivers a devastating bolt of electricity to the target. And partly into this box...
 
+ent-WH40KAmmoBoxRadCarabin = Rad Carabin Ammo Box
+    .desc = Delivers a rad ammo to the right people.
+
 ent-MobQueenChrysalisImperium = Queen Chrysalis
     .desc = A shapeshifting pony that can take on a variety of forms.
 
