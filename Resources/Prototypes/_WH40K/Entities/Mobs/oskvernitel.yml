@@ -104,7 +104,7 @@
     teamId: Heretics
   - type: FootstepModifier
     footstepSoundCollection:
-      path: _WH40K/Audio/Mecha/oskvernitel.ogg
+      path: /Audio/_WH40K/Mecha/oskvernitel.ogg
   - type: Tag
     tags:
     - CannotSuicide
