@@ -1447,6 +1447,12 @@
   id: SpeedLoaderMagnum # Ammo: BaseWeaponRevolver, XenoArtifactGun
 
 - type: Tag
+  id: CustomSpeedLoaderPhosphor
+
+- type: Tag
+  id: CustomSpeedLoaderElectricArc
+
+- type: Tag
   id: SpiderCraft # Used on various ConstructionPrototypes to create exclusive recipes for tagged entity.
 
 - type: Tag
