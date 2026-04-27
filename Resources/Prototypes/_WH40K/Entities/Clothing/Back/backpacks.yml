@@ -97,6 +97,14 @@
         location: Middle
 
 - type: entity
+  parent: ClothingBackpackTechpriestDendrite
+  id: ClothingBackpackTechpriestDendriteSlaanesh
+  suffix: WH40K, ТёмнМехи, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/techpriest_dendrite_slaanesh.rsi
+
+- type: entity
   parent: ClothingBackpack
   id: ClothingBackpackGuard
   components:

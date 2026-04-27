@@ -116,3 +116,24 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Robes/DM/genetor_mars.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckRobeGenetorTechpriestSlaanesh
+  description: desc-gen-darkmech-sla
+  suffix: WH40K, ТёмнМех, Слаанеш
+  components:
+  - type: Appearance
+  - type: Foldable
+    canFoldInsideContainer: true
+  - type: FoldableClothing
+    foldedEquippedPrefix: open
+    foldedHeldPrefix: open
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_slaanesh.rsi
+    layers:
+    - state: icon
+      map: [ "unfoldedLayer" ]
+    - state: open-icon
+      map: ["foldedLayer"]
+      visible: false

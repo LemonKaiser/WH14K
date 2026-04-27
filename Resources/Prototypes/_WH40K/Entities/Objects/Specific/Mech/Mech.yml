@@ -14,7 +14,7 @@
   - type: StatusIcon
   - type: FootstepModifier
     footstepSoundCollection:
-      path: /Audio/Mecha/sound_mecha_powerloader_step.ogg
+      path: _WH40K/Audio/Mecha/sentinel.ogg
   - type: Mech
     baseState: sentinel
     openState: sentinel-open
