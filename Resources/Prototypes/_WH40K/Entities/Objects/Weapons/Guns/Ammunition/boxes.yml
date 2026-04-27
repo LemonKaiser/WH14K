@@ -117,7 +117,7 @@
       - CartridgeElectricArc
   - type: Electrified
     requirePower: false
-  
+
 - type: entity
   id: WH40KAmmoBoxRadCarabin
   parent: BaseAmmoProvider
@@ -130,7 +130,7 @@
     state: icon
   - type: BallisticAmmoProvider
     mayTransfer: true
-    proto: Cartridge308
+    proto: CartridgeRadCarabin
     capacity: 40
     whitelist:
       tags:
