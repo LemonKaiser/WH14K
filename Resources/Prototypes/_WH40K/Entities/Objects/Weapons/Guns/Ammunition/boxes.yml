@@ -117,3 +117,23 @@
       - CartridgeElectricArc
   - type: Electrified
     requirePower: false
+  
+- type: entity
+  id: WH40KAmmoBoxRadCarabin
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeRadCarabin
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeRadCarabin
+  - type: StaticPrice
+    price: 180
