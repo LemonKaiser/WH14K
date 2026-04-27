@@ -1364,7 +1364,7 @@ ent-WeaponRevolverElectricArc = электродуговой пистолет
 ent-SpeedLoaderElectricArc = магазин для электродугового пистолета
     .desc = Магазин для электродугового пистолета.
 
-ent-SpeedLoaderPhosphorEmpty = Empty Electric Arc Speedloader
+ent-SpeedLoaderElectricArcEmpty = пустой магазин для электродугового пистолета
     .desc = Пустой магазин для электродугового пистолета.
 
 ent-CartridgeElectricArc = патрон электродугового оружия
@@ -1376,8 +1376,8 @@ ent-CartridgePhosphor = патрон фосфорного оружия
 ent-WH40KAmmoBoxElectricArc = ящик патрон электродугового оружия
     .desc = Передают цели сокрушительный разряд электричества. Ну и отчасти в этот ящик...
 
-ent-WH40KAmmoBoxRadCarabin = ящик патрон Рад-карабина
-    .desc = Передают радиоактивные патроны правильным людям.
+ent-WH40KAmmoBoxRadCarabin = ящик патрон радиевого карабина
+    .desc = Передают радиевые патроны правильным людям.
 
 ent-MobQueenChrysalisImperium = королева Крисалис
     .desc = Пони оборотень, который может принимать самые разные формы.

@@ -15,7 +15,7 @@
     ammoSlots: [ null, null, null, null, null, null ]
     whitelist:
       tags:
-        - SpeedLoaderMagnum
+        - CustomSpeedLoaderPhosphor
         - CartridgePhosphor
     proto: CartridgePhosphor
   - type: Appearance
@@ -37,7 +37,7 @@
     ammoSlots: [ null, null, null, null, null, null ]
     whitelist:
       tags:
-        - SpeedLoaderMagnum
+        - CustomSpeedLoaderElectricArc
         - CartridgeElectricArc
     proto: CartridgeElectricArc
   - type: Appearance

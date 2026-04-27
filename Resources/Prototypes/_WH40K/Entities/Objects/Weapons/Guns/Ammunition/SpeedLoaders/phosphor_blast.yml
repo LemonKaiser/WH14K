@@ -6,7 +6,7 @@
   components:
   - type: Tag
     tags:
-      - SpeedLoaderMagnum
+      - CustomSpeedLoaderPhosphor
   - type: SpeedLoader
   - type: BallisticAmmoProvider
     whitelist:

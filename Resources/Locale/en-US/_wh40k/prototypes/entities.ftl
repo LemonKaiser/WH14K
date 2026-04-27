@@ -1543,7 +1543,7 @@ ent-WeaponRevolverElectricArc = Electric Arc Pistol
 ent-SpeedLoaderElectricArc = Electric Arc Speedloader
     .desc = Speedloader for the Electric Arc Pistol.
 
-ent-SpeedLoaderPhosphorEmpty = Empty Electric Arc Speedloader
+ent-SpeedLoaderElectricArcEmpty = Empty Electric Arc Speedloader
     .desc = Empty Speedloader for the Electric Arc Pistol.
 
 ent-CartridgeElectricArc = Electric Arc Weapon Cartridge
