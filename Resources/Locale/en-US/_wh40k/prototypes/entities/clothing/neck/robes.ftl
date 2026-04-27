@@ -67,6 +67,11 @@ ent-ClothingNeckRobeTechpriestXanaChaos = Techpriest Robe
             "...We create innovation, while you copy.
               We discover, while you cower in your corner.
               We learn all, while you refuse to venture beyond your pitiful constraints..."
+ent-ClothingNeckRobeGenetorTechpriestSlaanesh = Slaaneshi Tech-Priest Robe
+    .desc = Judging by the colors, this Slaaneshi Tech-Priest...
+            "...We innovate while you copy.
+              We discover while you retreat into a corner.
+              We explore everything while you refuse to transcend your wretched limitations..."
 ent-ClothingNeckRobeGenetorTechpriestMarsChaos = Genetor Robe
     .desc = Judging by the colors, this genetor serves chaos...
             "The spirit of the Machine God surrounds thee.

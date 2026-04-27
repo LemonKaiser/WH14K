@@ -62,7 +62,7 @@
       collection: GenestealerAttack #Заглушка
     damage:
       types:
-        Slash: 10
+        Slash: 7
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
     channels:

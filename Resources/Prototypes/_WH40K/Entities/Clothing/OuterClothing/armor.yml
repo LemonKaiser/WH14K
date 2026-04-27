@@ -288,3 +288,23 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorSlaanech
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/slaanesh_vest.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/slaanesh_vest.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorKini
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/armorkini.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/armorkini.rsi

@@ -1,0 +1,34 @@
+- type: gameMap
+  id: TinyBattle
+  mapName: TinyBattle
+  mapPath: /Maps/_WH40K/TinyBattle.yml
+  minPlayers: 0
+  maxPlayers: 12
+  stations:
+    TinyBattle:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Tiny Battle"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ 1, 1 ]
+            Commissar: [ 1, 1 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 2, 2 ]
+            Lieutenant: [ 1, 1 ]
+            Medic: [ 1, 1 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 1, 1 ]
+            Sergeant: [ 2, 2 ]
+            TitheSupplier: [ 1, 1 ]
+            VoxScout: [ 1, 1 ]
+            # Heretics
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 2, 2 ]
+            HLieutenant: [ 1, 1 ]
+            HSergeant: [ 2, 2 ]
+            HBandSupplier: [ 2, 2 ]
+            #HVoxScout: [ 3, 3 ]
