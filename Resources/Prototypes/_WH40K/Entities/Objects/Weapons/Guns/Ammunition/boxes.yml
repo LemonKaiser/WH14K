@@ -130,10 +130,10 @@
     state: icon
   - type: BallisticAmmoProvider
     mayTransfer: true
-    proto: CartridgeRadCarabin
+    proto: Cartridge308
     capacity: 40
     whitelist:
       tags:
-      - CartridgeRadCarabin
+      - Cartridge308
   - type: StaticPrice
     price: 180
