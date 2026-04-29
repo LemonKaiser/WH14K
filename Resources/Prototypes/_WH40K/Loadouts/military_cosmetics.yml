@@ -328,12 +328,20 @@
     neck: Rosarius
 
 - type: loadout
+  id: WH40KRosarius
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    neck: Rosarius
+
+- type: loadout
   id: WH40KGorget
   effects:
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 21
+    requiredLevel: 15
   equipment:
     neck: Gorjet
 
@@ -929,6 +937,9 @@
 
 - type: loadout
   id: WH40KNeckVst
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
   equipment:
     neck: ClothingNeckCloakVst
 

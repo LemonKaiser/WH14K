@@ -20,9 +20,9 @@
     suitstorage: WeaponLaserLasgunVoss
   storage:
     belt:
-    - LasgunPowerCell
-    - LasgunPowerCell
-    - LasgunPowerCell
+    - PowerCellVoss
+    - PowerCellVoss
+    - PowerCellVoss
   groupBy: "main"
 
 - type: loadout
