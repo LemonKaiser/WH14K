@@ -34,9 +34,6 @@
       gunShootFailDamage:
         types:
           Blunt: 1
-      catchingFailDamage:
-        types:
-          Blunt: 1
 - type: startingGear
   id: WH40KChaplainGear
   equipment:
