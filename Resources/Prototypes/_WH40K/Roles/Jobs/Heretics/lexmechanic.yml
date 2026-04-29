@@ -23,6 +23,8 @@
         channels:
         - Binary1
       - type: IntrinsicRadioReceiver
+      - type: Puller
+        needsHands: false
   icon: "JobIconHLexmechanic"
   supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
@@ -60,4 +62,3 @@
     gloves: ClothingHandsGlovesTechpriest
     ears: ClothingHeadsetVoxBackpackHeretics
     eyes: ClothingEyesHudTechPriest
-

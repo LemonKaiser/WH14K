@@ -186,4 +186,21 @@
       - LasgunPowerCellLucius
   - type: BatteryAmmoProvider
     proto: WH40KRedMediumLaserLasgunLucius
-    fireCost: 60
+    fireCost: 80
+
+- type: entity
+  id: PowerCellVoss
+  parent: WH40KPowerCell
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    layers:
+    - state: lasgun
+    scale: 0.8, 0.8
+  - type: Tag
+    tags:
+      - LasgunPowerCellVoss
+  - type: BatteryAmmoProvider
+    proto: WH40KRedMediumLaserVoss
+    fireCost: 50

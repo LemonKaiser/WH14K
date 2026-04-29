@@ -399,9 +399,10 @@
 - type: loadoutGroup
   id: WH40KImperialCommandNeckGorget
   name: loadout-group-wh40k-imperial-command-neck
+  minLimit: 0
   loadouts:
-  - WH40KGorgetZero
-  - WH40KRosariusZero
+  - WH40KGorget
+  - WH40KRosarius
   - WH40KNeckVst
   - WH40KImperialAquilaMedal
   - WH40KImperialCrossMedal

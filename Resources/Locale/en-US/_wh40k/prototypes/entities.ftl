@@ -1662,8 +1662,6 @@ ent-ActionWH40KChaosLeaderSacrifice = Ash Sacrifice
 ent-ClothingBackpackTechpriestDendriteSlaanesh = Slaanesh Dendrite Backpack
     .desc = This Techpriest backpack is equipped with two additional Mecha-Dendrites.
 
-ent-ClothingNeckRobeGenetorTechpriestSlaanesh = Slaaneshi Techpriest Robe
-
 ent-ClothingOuterArmorSlaanech = Slaanesh Armor
     .desc = A full suit of armor that provides moderate protection but slightly restricts movement due to its weight.
 

@@ -4,7 +4,7 @@
   suffix: WH40K
   components:
   - type: Gun
-    fireRate: 3
+    fireRate: 4
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_voss/lasgun_in-hands.rsi
     quickEquip: false
@@ -19,3 +19,11 @@
         map: ["enum.GunVisualLayers.Base"]
       - state: mag-0
         map: ["enum.GunVisualLayers.Mag"]
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: PowerCellVoss
+        whitelist:
+          tags:
+            - LasgunPowerCellVoss
