@@ -877,7 +877,7 @@
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
-  product: MedkitFilled
+  product: ChaosMedkitFilled
   cost: 1250
   category: cpcat-med
   group: WH40KHereticsMarket
@@ -1342,7 +1342,7 @@
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
-  product: MedkitCombatFilled
+  product: ChaosMedkitCombatFilled
   cost: 6000
   category: cpcat-med
   group: WH40KHereticsMarket

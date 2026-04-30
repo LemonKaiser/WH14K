@@ -240,7 +240,7 @@
         amount: 9
       - id: LasgunPowerCellLucius
         amount: 9
-      - id: WH40KPowerCellVoss
+      - id: PowerCellVoss
         amount: 9
 
 - type: entity

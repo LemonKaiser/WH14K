@@ -1,0 +1,99 @@
+{
+	"version": 1,
+	"license": "CC-BY-SA-3.0",
+    "copyright": "Taken from Leman Russ Battle Tank",
+	"size": {
+		"x": 32,
+		"y": 32
+	},
+	"states": [
+		{
+			"name": "chaos-firstaid"
+		},
+		{
+      "name": "chaos-firstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-firstaid-inhand-left",
+      "directions": 4
+    },
+		{
+			"name": "chaos-brutekit"
+		},
+		{
+      "name": "chaos-brutekit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-brutekit-inhand-left",
+      "directions": 4
+    },
+		{
+			"name": "chaos-burnkit"
+		},
+		{
+      "name": "chaos-burnkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-burnkit-inhand-left",
+      "directions": 4
+    },
+		{
+			"name": "chaos-o2kit"
+		},
+		{
+      "name": "chaos-o2kit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-o2kit-inhand-left",
+      "directions": 4
+    },
+		{
+			"name": "chaos-radkit"
+		},
+		{
+      "name": "chaos-radkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-radkit-inhand-left",
+      "directions": 4
+    },
+		{
+			"name": "chaos-toxinkit"
+		},
+		{
+      "name": "chaos-toxinkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-toxinkit-inhand-left",
+      "directions": 4
+    },
+    {
+			"name": "chaos-blackkit"
+		},
+		{
+      "name": "chaos-blackkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-blackkit-inhand-left",
+      "directions": 4
+    },
+    {
+			"name": "chaos-advkit"
+		},
+		{
+      "name": "chaos-advkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chaos-advkit-inhand-left",
+      "directions": 4
+    }
+	]
+}
