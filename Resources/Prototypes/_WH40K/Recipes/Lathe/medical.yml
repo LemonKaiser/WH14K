@@ -4,3 +4,50 @@
   completetime: 2
   materials:
     Steel: 300
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkit
+  result: ChaosMedkit
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitBurn
+  result: ChaosMedkitBurn
+  name: lathe-recipe-MedkitBurn-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitToxin
+  result: ChaosMedkitToxin
+  name: lathe-recipe-MedkitToxin-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitO2
+  result: ChaosMedkitO2
+  name: lathe-recipe-MedkitO2-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitBrute
+  result: ChaosMedkitBrute
+  name: lathe-recipe-MedkitBrute-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitAdvanced
+  result: ChaosMedkitAdvanced
+  name: lathe-recipe-MedkitAdvanced-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitRadiation
+  result: ChaosMedkitRadiation
+  name: lathe-recipe-MedkitRadiation-name
+
+- type: latheRecipe
+  parent: Medkit
+  id: ChaosMedkitCombat
+  result: ChaosMedkitCombat
+  name: lathe-recipe-MedkitCombat-name
