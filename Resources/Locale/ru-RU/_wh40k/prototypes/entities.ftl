@@ -1574,3 +1574,18 @@ ent-ActionWH40KChaosSlaaneshArena = Арена экстаза
 
 ent-ActionWH40KChaosLeaderSacrifice = Пепельная жертва
     .desc = Обратить последователя того же покровителя в пепел, восстановить 100 энергии Варпа и дать культу 100 опыта.
+
+ent-ClothingBackpackTechpriestDendriteSlaanesh = ранец с дендритами Слаанеш
+    .desc = Этот ранец техножрецов оснащён двумя дополнительными меха-дендритами
+
+ent-ClothingOuterArmorSlaanech = броня Слаанеш
+    .desc = Полный комплект брони, обеспечивает усреднённую защиту, но слегка стесняет движения из-за своего веса.
+
+ent-ClothingOuterArmorKini = бронебикини
+    .desc = Лёгкая полевая броня для скорости и свободы движений.
+
+ent-WeaponMeleeSerpChaos = серп Слаанеш
+    .desc = Серп, созданный из куска металла. Используется слаанешитами для борьбы с броней.
+
+ent-ClothingUniformJumpskirtSlaanesh = форма Слаанеш
+    .desc = Хорошая вентиляция!

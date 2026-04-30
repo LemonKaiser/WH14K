@@ -30,7 +30,10 @@
         Male: W40KOffMale
         Female: W40KOffFemale
         Unsexed: W40KOffMale
-
+    - type: Clumsy
+      gunShootFailDamage:
+        types:
+          Blunt: 1
 - type: startingGear
   id: WH40KChaplainGear
   equipment:
@@ -42,4 +45,3 @@
     neck: ClothingNeckInqusition
     id: CommissarDogTag
     pocket1: WH40KBible
-

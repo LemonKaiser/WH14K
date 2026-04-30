@@ -224,6 +224,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
@@ -274,6 +276,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
@@ -324,6 +328,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
@@ -405,6 +411,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
@@ -455,6 +463,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
@@ -505,6 +515,8 @@
   - WH40KRecipeAmmoAutogun
   - WH40KRecipeAmmo10mm
   - WH40KRecipeAmmo10mmLong
+  - WH40KAmmoBoxPhosphor
+  - WH40KRecipeAmmoElectricArc
   - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker

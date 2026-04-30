@@ -55,10 +55,12 @@
       entries:
       - id: LasgunPowerCell
         amount: 42
+      - id: PowerCellVoss
+        amount: 24
       - id: LonglasPowerCell
         amount: 8
       - id: AccatranPowerCell
-        amount: 4
+        amount: 8
       - id: LasgunPowerCellLucius
         amount: 16
     #- name: cm-automated-vendor-section-sidearms #no firearms
@@ -237,6 +239,8 @@
       - id: AccatranPowerCell
         amount: 9
       - id: LasgunPowerCellLucius
+        amount: 9
+      - id: WH40KPowerCellVoss
         amount: 9
 
 - type: entity

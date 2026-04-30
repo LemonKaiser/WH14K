@@ -7,3 +7,37 @@
   id: HFlakHelmetCandle
   equipment:
     head: ClothingHeadHelmetFlakCandleChaos
+
+- type: loadout
+  id: WH40KSlaaneshUniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtSlaanesh
+
+- type: loadout
+  id: WH40KSlaaneshArmorKini
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    outerClothing: ClothingOuterArmorKini
+
+- type: loadout
+  id: WH40KSlaaneshArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    outerClothing: ClothingOuterArmorSlaanech
+
+- type: loadout
+  id: WH40KChaosSerpKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  storage:
+    belt:
+    - WeaponMeleeSerpChaos
+  groupBy: "melee"

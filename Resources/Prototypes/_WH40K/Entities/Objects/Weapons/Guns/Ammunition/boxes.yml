@@ -117,7 +117,7 @@
       - CartridgeElectricArc
   - type: Electrified
     requirePower: false
-  
+
 - type: entity
   id: WH40KAmmoBoxRadCarabin
   parent: BaseAmmoProvider
@@ -134,6 +134,6 @@
     capacity: 40
     whitelist:
       tags:
-      - CartridgeRadCarabin
+      - Cartridge308
   - type: StaticPrice
     price: 180

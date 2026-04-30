@@ -29,3 +29,19 @@
     requiredLevel: 5
   equipment:
     neck: ClothingNeckRobeTechpriestXanaChaos
+
+- type: loadout
+  id: RobeTechpriestSlaanesh
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    neck: ClothingNeckRobeGenetorTechpriestSlaanesh
+
+- type: loadout
+  id: BackpackTechpriestDendriteSlaanesh
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    back: ClothingBackpackTechpriestDendriteSlaanesh

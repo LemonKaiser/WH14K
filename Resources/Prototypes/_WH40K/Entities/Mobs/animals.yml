@@ -74,7 +74,7 @@
 
 - type: entity
   id: MobQueenChrysalisImperium
-  parent: SimpleSpaceMobBase
+  parent:  MobQueenChrysalis
   suffix: WH40K, Империум
   components:
   - type: NpcFactionMember

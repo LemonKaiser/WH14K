@@ -40,11 +40,8 @@
     ears: ClothingHeadsetVoxBackpackHeretics
     outerClothing: ClothingOuterArmorHeresiarchChaos
     belt: chaosbelt
-    neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetFlakAdvHeresy
     pocket1: WH40KCommandTacticalMapTablet
     id: HColonelDogTag
   inhand:
     - ChaosMachete
-
-

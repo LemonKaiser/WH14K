@@ -95,6 +95,11 @@
     requiredLevel: 12
   inhand:
   - WeaponRevolverPhosphorBlast
+  storage:
+    back:
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
 
 - type: loadout
   id: TechpriestElectricArc
@@ -103,6 +108,11 @@
     requiredLevel: 5
   inhand:
   - WeaponRevolverElectricArc
+  storage:
+    back:
+    - SpeedLoaderElectricArc
+    - SpeedLoaderElectricArc
+    - SpeedLoaderElectricArc
 
 - type: loadout
   id: TechpriestAxe

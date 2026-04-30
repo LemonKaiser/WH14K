@@ -8,6 +8,14 @@
     - Wall
   components:
   - type: Chasm
+  - type: Drain
+    range: 0
+  - type: DumpableSolution
+    solution: drainBuffer
+  - type: SolutionContainerManager
+    solutions:
+      drainBuffer:
+        maxVol: 1000
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.4
@@ -57,7 +65,7 @@
     sprite: Tiles/Planet/Chasms/chromite_chasm.rsi
   - type: Icon
     sprite: Tiles/Planet/Chasms/chromite_chasm.rsi
-    
+
 - type: entity
   parent: FloorChasmEntity
   id: FloorDesertChasm
@@ -67,7 +75,7 @@
     sprite: Tiles/Planet/Chasms/desert_chasm.rsi
   - type: Icon
     sprite: Tiles/Planet/Chasms/desert_chasm.rsi
-    
+
 - type: entity
   parent: FloorChasmEntity
   id: FloorSnowChasm

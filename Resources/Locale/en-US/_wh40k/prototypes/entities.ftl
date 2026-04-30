@@ -1655,3 +1655,21 @@ ent-WH40KMagazineAstartesBoltPistol = Astartes bolt pistol magazine
     .desc = A compact magazine loaded with heavy bolt rounds.
 ent-WH40KCartridgeAstartesBoltPistol = Astartes bolt pistol cartridge
     .desc = A brutal self-propelled bolt round for an Astartes sidearm.
+
+ent-ActionWH40KChaosLeaderSacrifice = Ash Sacrifice
+    .desc = Turn a follower of the same patron to ash, restore 100 Warp Energy, and grant 100 experience to the cult.
+
+ent-ClothingBackpackTechpriestDendriteSlaanesh = Slaanesh Dendrite Backpack
+    .desc = This Techpriest backpack is equipped with two additional Mecha-Dendrites.
+
+ent-ClothingOuterArmorSlaanech = Slaanesh Armor
+    .desc = A full suit of armor that provides moderate protection but slightly restricts movement due to its weight.
+
+ent-ClothingOuterArmorKini = Armored Bikini
+    .desc = Lightweight field armor for speed and freedom of movement.
+
+ent-WeaponMeleeSerpChaos = Slaanesh Sickle
+    .desc = A sickle crafted from a piece of metal. Used by Slaanesh warriors to combat armor.
+
+ent-ClothingUniformJumpskirtSlaanesh = Slaanesh Uniform
+    .desc = Good ventilation!
