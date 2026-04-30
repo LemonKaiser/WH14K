@@ -126,3 +126,132 @@
       storagebase:
         id: StimpackMini
         amount: 6
+
+#Entities found at entities/objects/specific/medical
+- type: entity
+  id: ChaosMedkitFilled
+  suffix: Filled
+  parent: ChaosMedkit
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: Brutepack
+        - id: Ointment
+        - id: Gauze
+        - id: PillCanisterTricordrazine
+      # see https://github.com/tgstation/blob/master/code/game/objects/items/storage/firstaid.dm for example contents
+
+- type: entity
+  id: ChaosMedkitBurnFilled
+  suffix: Filled
+  parent: ChaosMedkitBurn
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: Ointment
+          amount: 2
+        - id: PillCanisterKelotane
+        - id: PillCanisterDermaline
+
+- type: entity
+  id: ChaosMedkitBruteFilled
+  suffix: Filled
+  parent: ChaosMedkitBrute
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: Brutepack
+        - id: Gauze
+        - id: PillCanisterIron
+        - id: PillCanisterCopper
+
+- type: entity
+  id: ChaosMedkitToxinFilled
+  suffix: Filled
+  parent: ChaosMedkitToxin
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: SyringeIpecac
+        - id: SyringeEthylredoxrazine
+        - id: AntiPoisonMedipen
+        - id: PillCanisterDylovene
+        - id: PillCanisterCharcoal
+
+- type: entity
+  id: ChaosMedkitOxygenFilled
+  suffix: Filled
+  parent: ChaosMedkitO2
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ClothingMaskBreathMedical
+        - id: EmergencyOxygenTankFilled
+        - id: EmergencyMedipen
+        - id: SyringeInaprovaline
+        - id: PillCanisterDexalin
+
+- type: entity
+  id: ChaosMedkitRadiationFilled
+  suffix: Filled
+  parent: ChaosMedkitRadiation
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: SyringePhalanximine
+        - id: RadAutoInjector
+        - id: PillCanisterPotassiumIodide
+        - id: PillCanisterHyronalin
+
+- type: entity
+  id: ChaosMedkitAdvancedFilled
+  suffix: Filled
+  parent: ChaosMedkitAdvanced
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: MedicatedSuture
+        - id: RegenerativeMesh
+        - id: Bloodpack
+          amount: 2
+
+- type: entity
+  id: ChaosMedkitCombatFilled
+  suffix: Filled
+  parent: ChaosMedkitCombat
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: MedicatedSuture
+        - id: RegenerativeMesh
+        - id: SyringeEphedrine
+        - id: SyringeSaline
+        - id: BruteAutoInjector
+        - id: BurnAutoInjector
+
+- type: entity
+  id: ChaosStimkitFilled
+  suffix: Stimkit, Filled
+  parent: ChaosMedkit
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: StimpackMini
+        amount: 6

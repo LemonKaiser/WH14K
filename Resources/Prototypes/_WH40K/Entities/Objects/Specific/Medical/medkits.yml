@@ -1,0 +1,86 @@
+- type: entity
+  parent: BaseStorageItem
+  id: ChaosMedkit
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Specific/Medical/firstaidkits.rsi
+    state: chaos-firstaid
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1
+  - type: Item
+    size: Large
+    sprite: _WH40K/Objects/Specific/Medical/firstaidkits.rsi
+    heldPrefix: chaos-firstaid
+  - type: PhysicalComposition
+    materialComposition:
+      Plastic: 150
+  - type: Tag
+    tags:
+    - Medkit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitBurn
+  components:
+  - type: Sprite
+    state: chaos-burnkit
+  - type: Item
+    heldPrefix: chaos-burnkit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitToxin
+  components:
+  - type: Sprite
+    state: chaos-toxinkit
+  - type: Item
+    heldPrefix: chaos-toxinkit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitO2
+  components:
+  - type: Sprite
+    state: chaos-o2kit
+  - type: Item
+    heldPrefix: chaos-o2kit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitBrute
+  components:
+  - type: Sprite
+    state: chaos-brutekit
+  - type: Item
+    heldPrefix: chaos-brutekit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitAdvanced
+  components:
+  - type: Sprite
+    state: chaos-advkit
+  - type: Item
+    heldPrefix: chaos-advkit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitRadiation
+  components:
+  - type: Sprite
+    state: chaos-radkit
+  - type: Item
+    heldPrefix: chaos-radkit
+
+- type: entity
+  parent: ChaosMedkit
+  id: ChaosMedkitCombat
+  components:
+  - type: Sprite
+    state: chaos-blackkit
+  - type: Item
+    heldPrefix: chaos-blackkit
+    size: Normal
+

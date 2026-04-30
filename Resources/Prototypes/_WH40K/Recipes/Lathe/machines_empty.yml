@@ -444,14 +444,14 @@
   - RollerBedSpawnFolded
   - CheapRollerBedSpawnFolded
   - EmergencyRollerBedSpawnFolded
-  - Medkit
-  - MedkitBurn
-  - MedkitToxin
-  - MedkitO2
-  - MedkitBrute
-  - MedkitAdvanced
-  - MedkitRadiation
-  - MedkitCombat
+  - ChaosMedkit
+  - ChaosMedkitBurn
+  - ChaosMedkitToxin
+  - ChaosMedkitO2
+  - ChaosMedkitBrute
+  - ChaosMedkitAdvanced
+  - ChaosMedkitRadiation
+  - ChaosMedkitCombat
   - PowerCellSmall
   - PowerCellMedium
   - SignallerAdvanced
@@ -496,14 +496,14 @@
   - RollerBedSpawnFolded
   - CheapRollerBedSpawnFolded
   - EmergencyRollerBedSpawnFolded
-  - Medkit
-  - MedkitBurn
-  - MedkitToxin
-  - MedkitO2
-  - MedkitBrute
-  - MedkitAdvanced
-  - MedkitRadiation
-  - MedkitCombat
+  - ChaosMedkit
+  - ChaosMedkitBurn
+  - ChaosMedkitToxin
+  - ChaosMedkitO2
+  - ChaosMedkitBrute
+  - ChaosMedkitAdvanced
+  - ChaosMedkitRadiation
+  - ChaosMedkitCombat
   - PowerCellSmall
   - PowerCellMedium
   - SignallerAdvanced
@@ -548,14 +548,14 @@
   - RollerBedSpawnFolded
   - CheapRollerBedSpawnFolded
   - EmergencyRollerBedSpawnFolded
-  - Medkit
-  - MedkitBurn
-  - MedkitToxin
-  - MedkitO2
-  - MedkitBrute
-  - MedkitAdvanced
-  - MedkitRadiation
-  - MedkitCombat
+  - ChaosMedkit
+  - ChaosMedkitBurn
+  - ChaosMedkitToxin
+  - ChaosMedkitO2
+  - ChaosMedkitBrute
+  - ChaosMedkitAdvanced
+  - ChaosMedkitRadiation
+  - ChaosMedkitCombat
   - PowerCellSmall
   - PowerCellMedium
   - SignallerAdvanced

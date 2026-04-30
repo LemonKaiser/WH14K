@@ -631,6 +631,30 @@ ent-CartridgeFlameThrower = methane
 
 ent-CartridgeRadCarabin = radioactive cartridge (.308)
 
+ent-ChaosMedkit = treatment kit
+    .desc = A medical kit.
+
+ent-ChaosMedkitBurn = burn treatment kit
+    .desc = A specialized medical kit for when the toxins lab spontaneously burns down.
+
+ent-ChaosMedkitToxin = toxin treatment kit
+    .desc = Used to treat toxic blood content.
+
+ent-ChaosMedkitO2 = oxygen deprivation treatment kit
+    .desc = A box full of oxygen goodies.
+
+ent-ChaosMedkitBrute = brute trauma treatment kit
+    .desc = A first aid kit for when you get toolboxed.
+
+ent-ChaosMedkitAdvanced = advanced first aid kit
+    .desc = An advanced kit to help deal with advanced wounds.
+
+ent-ChaosMedkitRadiation = radiation treatment kit
+    .desc = If you took your Rad-X you wouldn't need this.
+
+ent-ChaosMedkitCombat = combat medical kit
+    .desc = For the big weapons among us.
+
 ent-MagazineStabLMG = magazine (8.25 mm extended)
 
 ent-MagazineStubMG = magazine (8.25 mm extended)
@@ -1655,9 +1679,6 @@ ent-WH40KMagazineAstartesBoltPistol = Astartes bolt pistol magazine
     .desc = A compact magazine loaded with heavy bolt rounds.
 ent-WH40KCartridgeAstartesBoltPistol = Astartes bolt pistol cartridge
     .desc = A brutal self-propelled bolt round for an Astartes sidearm.
-
-ent-ActionWH40KChaosLeaderSacrifice = Ash Sacrifice
-    .desc = Turn a follower of the same patron to ash, restore 100 Warp Energy, and grant 100 experience to the cult.
 
 ent-ClothingBackpackTechpriestDendriteSlaanesh = Slaanesh Dendrite Backpack
     .desc = This Techpriest backpack is equipped with two additional Mecha-Dendrites.
