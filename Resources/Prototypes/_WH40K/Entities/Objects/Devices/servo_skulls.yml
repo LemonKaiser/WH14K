@@ -105,6 +105,70 @@
     state: icon
 
 - type: entity
+  id: WH40KServoSkullSlaanesh
+  parent: WH40KServoSkull
+  name: servo skull
+  description: A friendly servo skull awaiting a command.
+  suffix: WH40K, Слаанеш, non-activated
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Devices/servo_skull_slaanesh.rsi
+    state: deactivate
+  - type: Item
+    size: Normal
+  - type: WH40KCombineWithPrototype
+    requiredPrototype: MeltaGrenade
+    resultPrototype: WH40KServoSkullMelta
+  - type: WH40KDeployServoSkull
+    mobPrototype: WH40KServoSkullMobSlaanesh
+
+- type: entity
+  id: WH40KServoSkullMobSlaanesh
+  parent: WH40KServoSkullMobBase
+  name: servo skull
+  description: A friendly servo skull awaiting a command.
+  suffix: WH40K, Слаанеш
+  components:
+  - type: HandheldLight
+    addPrefix: true
+    blinkingBehaviourId: blinking
+    radiatingBehaviourId: radiating
+  - type: LightBehaviour
+    behaviours:
+      - !type:FadeBehaviour
+        id: radiating
+        maxDuration: 2.0
+        startValue: 3.0
+        endValue: 2.0
+        isLooped: true
+        reverseWhenFinished: true
+      - !type:PulseBehaviour
+        id: blinking
+        interpolate: Nearest
+        maxDuration: 1.0
+        startValue: 0.1
+        endValue: 2.0
+        isLooped: true
+  - type: ItemTogglePointLight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 7
+    color: "#d32dff"
+  - type: Battery
+    maxCharge: 2000
+    startingCharge: 2000
+    pricePerJoule: 0.15
+  - type: BatterySelfRecharger
+    autoRechargeRate: 10
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: false
+    sprite: _WH40K/Objects/Devices/servo_skull_slaanesh.rsi
+    state: icon
+
+- type: entity
   id: WH40KServoSkullMeltaMob
   parent: WH40KServoSkullMobBase
   name: melta servo skull

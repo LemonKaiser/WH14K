@@ -31,7 +31,6 @@
     sprite: _WH40K/Clothing/Hands/Gloves/techpriest.rsi
   # - type: GloveHeatResistance
   #   heatResistance: 1400
-  - type: Insulated
   - type: Fiber
     fiberMaterial: fibers-durathread
     fiberColor: fibers-regal-black
