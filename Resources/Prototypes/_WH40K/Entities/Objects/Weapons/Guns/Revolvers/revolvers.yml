@@ -8,7 +8,7 @@
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor.rsi
   - type: Gun
-    fireRate: 1
+    fireRate: 2
   - type: RevolverAmmoProvider
     capacity: 6
     chambers: [ True, True, True, True, True, True ]
@@ -30,7 +30,7 @@
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
   - type: Gun
-    fireRate: 0.3
+    fireRate: 1
   - type: RevolverAmmoProvider
     capacity: 6
     chambers: [ True, True, True, True, True, True ]

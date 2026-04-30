@@ -1694,3 +1694,12 @@ ent-WeaponMeleeSerpChaos = Slaanesh Sickle
 
 ent-ClothingUniformJumpskirtSlaanesh = Slaanesh Uniform
     .desc = Good ventilation!
+
+ent-WH40KServoSkullMobSlaanesh = Servo-Skull of Slaanesh
+    .desc = You seriously wasted a man and an anti-gravity engine on an "aesthetic" flashlight? Are you an idiot?
+
+ent-WH40KServoSkullSlaanesh = Servo-Skull of Slaanesh
+    .desc = You seriously wasted a man and an anti-gravity engine on an "aesthetic" flashlight? Are you an idiot?
+
+ent-ClothingNeckCloakFlesh = Cloak of Flesh
+    .desc = Among the many faces woven into a single fabric, you recognize one... It's your face!

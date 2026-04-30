@@ -51,3 +51,11 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Misc/inqusition.rsi
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckCloakFlesh
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/flesh.rsi

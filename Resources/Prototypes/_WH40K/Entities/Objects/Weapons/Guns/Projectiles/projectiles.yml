@@ -508,10 +508,16 @@
     damage:
       types:
         Piercing: 10
-        Shock: 20
     soundHit:
       path: "/Audio/Weapons/Guns/Hits/taser_hit.ogg"
     forceSound: true
+  - type: LightningArcShooter
+    arcDepth: 0
+    maxLightningArc: 2
+    shootMinInterval: 0.01
+    shootMaxInterval: 0.01
+    shootRange: 2
+    lightningPrototype: WH40KLightning
   - type: StunOnCollide
     stunAmount: 0
     knockdownAmount: 0.5 # Enough to subdue and follow up with a stun baton
@@ -519,6 +525,17 @@
     slowdownAmount: 0.5
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
+
+- type: entity
+  name: lightning
+  id: WH40KLightning
+  parent: BaseLightning
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Lightning
+      canArc: true
+    - type: Electrified
+      shockTime: 0.01
 
 - type: entity
   parent: BaseBullet
