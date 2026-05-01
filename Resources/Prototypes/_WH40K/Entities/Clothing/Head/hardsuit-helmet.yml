@@ -121,6 +121,17 @@
   - type: ExplosionResistance
     damageCoefficient: 0.7
 
+- type: entity
+  parent: ClothingHeadHelmetHardsuitTechpriest
+  id: ClothingHeadHelmetHardsuitUnremoableTechpriest
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hardsuits/techpriest_unremoveable.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hardsuits/techpriest_unremoveable.rsi
+
 #СИ
 - type: entity
   parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ]

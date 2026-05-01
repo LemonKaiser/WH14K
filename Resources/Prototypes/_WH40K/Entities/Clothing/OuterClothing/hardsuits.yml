@@ -180,6 +180,8 @@
   - type: ClothingSpeedModifier
     walkModifier: 1
     sprintModifier: 1
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitUnremoableTechpriest
 
 #СИ
 - type: entity
@@ -248,6 +250,8 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: HeldSpeedModifier
+  - type: Unremoveable
+  - type: Insulated
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetTechpriestMarsSkitarii
 
@@ -284,5 +288,7 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: HeldSpeedModifier
+  - type: Unremoveable
+  - type: Insulated
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetTechpriestMarsSkitarii

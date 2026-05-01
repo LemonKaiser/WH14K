@@ -1,0 +1,110 @@
+- type: entity
+  id: MobWH40KDreadnought
+  parent: MobRobotic
+  name: dreadnought
+  description: a large combat vehicle piloted by a respected Space Marine hero whose body sustained life-threatening wounds in battle.
+  suffix: WH40K, Imperium, Ghost Role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowMovement: true
+    allowSpeech: true
+    name: wh40k-ghost-role-dreadnought-name
+    description: wh40k-ghost-role-dreadnought-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Mobs/dreadnought.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: base
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: base
+      Dead:
+        Base: dead
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      2000: Critical
+      2100: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Critical: HumanCrit
+      Dead: BorgDead
+    showOverlays: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 3.2
+  - type: StandingState
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.60
+        density: 220
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: Repairable
+    damageValue: -25
+    doAfterDelay: 1
+    fuelCost: 0.75
+  - type: ContainerContainer
+    containers:
+      wh40k-oskvernitel-weapon-container: !type:Container
+  - type: WH40KOskvernitelWeapon
+    minigunPrototype: WH40KOskvernitelWeaponMinigun
+    autogunPrototype: WH40KOskvernitelWeaponAutogun
+  - type: UserInterface
+    interfaces:
+      enum.WH40KOskvernitelWeaponUiKey.Key:
+        type: WH40KOskvernitelWeaponBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KOskvernitelWeaponUiKey.Key
+  - type: ComplexInteraction
+  - type: ActionGrant
+    actions:
+    - ActionWH40KOskvernitelOpenWeaponMenu
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcSmash
+    damage:
+      types:
+        Blunt: 28
+        Structural: 40
+  - type: AltFireMelee
+    attackType: Heavy
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+  - type: FootstepModifier
+    footstepSoundCollection:
+      path: /Audio/_WH40K/Mecha/dreadnought.ogg
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - SiliconEmotes

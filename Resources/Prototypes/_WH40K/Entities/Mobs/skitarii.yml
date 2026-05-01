@@ -1,0 +1,63 @@
+- type: startingGear
+  id: WH40KSkitariiRangerMarsGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackImperium
+    back: ClothingBackpackSkitarii
+    head: ClothingHeadHelmetTechpriestMarsSkitarii
+    mask: ClothingGasTechPriest
+    eyes: ClothingEyesHudTechPriestMed
+    outerClothing: ClothingOuterHardsuitTechpriestMarsSkitarii
+    gloves: ClothingHandsGlovesTechpriest
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsMagTechpriest
+    pocket1: WH40KStandardTacticalMapTablet
+    id: EnginseerDogTag
+
+- type: startingGear
+  id: WH40KSkitariiVanguardMarsGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackImperium
+    back: ClothingBackpackSkitarii
+    head: ClothingHeadHelmetTechpriestMarsSkitariiAvangard
+    mask: ClothingGasTechPriest
+    eyes: ClothingEyesHudTechPriestMed
+    outerClothing: ClothingOuterHardsuitTechpriestMarsSkitariiAvangard
+    suitstorage: WeaponRifleRadCarabin
+    gloves: ClothingHandsGlovesTechpriest
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    shoes: ClothingShoesBootsMagTechpriest
+    belt: WHPowerMaceImperial
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineRadCarabin
+    id: EnginseerDogTag
+  storage:
+    back:
+    - MagazineRadCarabin
+    - MagazineRadCarabin
+    - MagazineRadCarabin
+    - MagazineRadCarabin
+    - WH40KAmmoBoxRadCarabin
+    - RadAutoInjector
+    - RegenerativeMesh
+    - MedicatedSuture
+
+- type: entity
+  parent: MobHuman
+  id: MobSkitariiVanguardMars
+  name: vanguard skitarii
+  suffix: WH40K, Imperium, АдМехи, Авангард
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KSkitariiVanguardMarsGear
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+  - type: ActiveRadio
+    channels:
+    - Binary
+  - type: IntrinsicRadioReceiver
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
