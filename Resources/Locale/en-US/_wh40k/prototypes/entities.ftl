@@ -1703,3 +1703,6 @@ ent-WH40KServoSkullSlaanesh = Servo-Skull of Slaanesh
 
 ent-ClothingNeckCloakFlesh = Cloak of Flesh
     .desc = Among the many faces woven into a single fabric, you recognize one... It's your face!
+
+ent-MobWH40KDreadnought = Dreadnought
+    .desc = A massive war machine piloted by a venerable Space Marine hero whose body suffered fatal wounds in battle.

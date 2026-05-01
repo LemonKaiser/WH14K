@@ -3,6 +3,7 @@
   id: ClothingBackpackSkitarii
   suffix: WH40K, АдМехи
   components:
+  - type: Unremoveable
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/skitarii.rsi
   - type: UseDelay
