@@ -1738,3 +1738,8 @@ ent-WH40KPlasticFlapsAirtightClear = airtight clear plastic flaps
 construction-wh40k-generator-jr-pacman-board = J.R.P.A.C.M.A.N. machine board
 construction-wh40k-smes-board = SMES machine board
 construction-wh40k-substation-board = substation machine board
+
+ent-ClothingMaskGasHellishForeman = Hell Brigade Respirator
+    .desc = Standard respirator that protects the respiratory tract only.
+
+ent-PowerCellVoss = Voss battery

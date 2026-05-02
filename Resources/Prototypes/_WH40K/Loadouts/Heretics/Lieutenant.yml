@@ -1,0 +1,23 @@
+- type: loadout
+  id: WH40KHeadMauler
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 35
+  equipment:
+    head: ClothingHeadMauler
+
+- type: loadout
+  id: WH40KArmorMauler
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 35
+  equipment:
+    outerClothing: ClothingOuterArmorMauler
+
+- type: loadout
+  id: WH40KBootsMauler
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 35
+  equipment:
+    shoes: ClothingShoesBootsMauler

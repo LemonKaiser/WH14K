@@ -148,3 +148,15 @@
     sprite: _WH40K/Clothing/Shoes/Boots/vst_boots.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.5
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsMauler
+  suffix: WH40K, Культ Хаоса, Маулер
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/mauler.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/mauler.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

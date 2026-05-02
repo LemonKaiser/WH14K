@@ -39,3 +39,47 @@
     outerClothing: ClothingOuterArmorChaosVest
     id: HGuardsmanDogTag
 
+- type: job
+  id: HellishForeman
+  name: job-name-hellish-foreman
+  description: job-description-hellish-foreman
+  displayWeight: 10
+  playTimeTracker: JobHellishForeman
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+      inverted: true
+    - !type:SpeciesRequirement
+      species:
+      - Human
+      - Dwarf
+      - Felinid
+  startingGear: HellishForemanGear
+  icon: "JobIconHGuardsman"
+  supervisors: job-supervisors-wh40k-chaos-cultist
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
+      - type: WH40KChaosGiftRole
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: HellishForemanGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackHellEnergy
+    head: ClothingHeadHelmetFlakAdvHeresy
+    mask: ClothingMaskGasHellishForeman
+    eyes: ClothingEyesHudGuard
+    outerClothing: ClothingOuterArmorAdvancedFlakVestHeretic
+    gloves: ClothingHandsGlovesCombat
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    id: HGuardsmanDogTag
+  inhand:
+  - WeaponHellgun

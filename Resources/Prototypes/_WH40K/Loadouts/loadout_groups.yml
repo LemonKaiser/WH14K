@@ -223,21 +223,6 @@
   - WH40KImperialCombatShieldLoadout
 
 - type: loadoutGroup
-  id: WH40KImperialCmdMelee
-  name: loadout-group-wh40k-imperial-melee
-  minLimit: 0
-  loadouts:
-  - WH40KChainsword
-  - WH40KSaber
-  - WH40KMace
-  - WH40KCrowbarKit
-  - WH40KCombatKnifeKit
-  - WH40KSurvivalKnifeKit
-  - WH40KSapperShovelKit
-  - WH40KTruncheonKit
-  - WH40KKukriKnifeKit
-
-- type: loadoutGroup
   id: WH40KImperialSpecialistMask
   name: loadout-group-wh40k-imperial-specialist-mask
   loadouts:
@@ -478,10 +463,10 @@
 - type: loadoutGroup
   id: WH40KImperialCommandMelee
   name: loadout-group-wh40k-imperial-command-melee
+  minLimit: 0
   loadouts:
   - WH40KCommandChainsword
   - WH40KCommandPowerSaber
-  - WH40KCommandWarHammer
   - WH40KMace
   - WH40KCommandPowerFist
 
@@ -491,9 +476,14 @@
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword
-  - WH40KCommandPowerSaber
-  - WH40KMace
-  - WH40KCommandPowerFist
+  - WH40KSaber
+  - WH40KPowerFist
+  - WH40KCrowbarKit
+  - WH40KCombatKnifeKit
+  - WH40KSurvivalKnifeKit
+  - WH40KSapperShovelKit
+  - WH40KTruncheonKit
+  - WH40KKukriKnifeKit
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
@@ -666,6 +656,34 @@
   loadouts:
   - WH40KChaosCoat
   - WH40KBloodPactArmor
+
+- type: loadoutGroup
+  id: WH40KHereticChampionHead
+  name: loadout-group-wh40k-heretic-command-head
+  minLimit: 0
+  loadouts:
+  - WH40KBandanaSkull
+  - WH40KChaosScarf
+  - WH40KHeresyHelmet
+  - WH40KBloodPactHelmet
+  - WH40KHeadMauler
+
+- type: loadoutGroup
+  id: WH40KHereticChampionOuter
+  name: loadout-group-wh40k-heretic-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KChaosCoat
+  - WH40KBloodPactArmor
+  - WH40KArmorMauler
+
+- type: loadoutGroup
+  id: WH40KHereticChampionFeet
+  name: loadout-group-wh40k-heretic-command-feet
+  minLimit: 0
+  loadouts:
+  - WH40KBloodPactBoots
+  - WH40KBootsMauler
 
 - type: loadoutGroup
   id: WH40KHeresiarchCultRaiment

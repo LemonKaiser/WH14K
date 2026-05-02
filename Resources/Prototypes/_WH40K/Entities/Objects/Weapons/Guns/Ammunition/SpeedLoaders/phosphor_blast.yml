@@ -3,6 +3,7 @@
   parent: [ BaseItem, BaseSecurityContraband ]
   id: BaseSpeedLoaderPhosphor
   name: "speed loader (Phosphor)"
+  suffix: WH40K
   components:
   - type: Tag
     tags:
@@ -22,6 +23,7 @@
 - type: entity
   parent: BaseSpeedLoaderPhosphor
   id: SpeedLoaderPhosphor
+  suffix: WH40K
   components:
   - type: BallisticAmmoProvider
     proto: CartridgePhosphor
@@ -49,7 +51,7 @@
 - type: entity
   parent: SpeedLoaderPhosphor
   id: SpeedLoaderPhosphorEmpty
-  suffix: empty
+  suffix: WH40K, empty
   components:
   - type: BallisticAmmoProvider
     proto: null

@@ -10,6 +10,8 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Melee/serp_slaanesh.rsi
     state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/serp_slaanesh.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 2.5
