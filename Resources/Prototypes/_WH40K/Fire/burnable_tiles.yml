@@ -1,0 +1,83 @@
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorGrass
+  tile: FloorGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorGrassJungle
+  tile: FloorGrassJungle
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorGrassDark
+  tile: FloorGrassDark
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorGrassLight
+  tile: FloorGrassLight
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorAstroGrass
+  tile: FloorAstroGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorMowedAstroGrass
+  tile: FloorMowedAstroGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorJungleAstroGrass
+  tile: FloorJungleAstroGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorDarkAstroGrass
+  tile: FloorDarkAstroGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorLightAstroGrass
+  tile: FloorLightAstroGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorPlanetGrass
+  tile: FloorPlanetGrass
+  burnTime: 3
+  resultTile: WH40KFloorBurnedPlanetGrassAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorWood
+  tile: FloorWood
+  burnTime: 5
+  resultTile: WH40KFloorBurnedWoodAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorWoodTile
+  tile: FloorWoodTile
+  burnTime: 5
+  resultTile: WH40KFloorBurnedWoodAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorWoodLarge
+  tile: FloorWoodLarge
+  burnTime: 5
+  resultTile: WH40KFloorBurnedWoodAsh
+
+- type: wh40kBurnableTile
+  id: WH40KBurnableFloorBrokenWood
+  tile: FloorBrokenWood
+  burnTime: 5
+  resultTile: WH40KFloorBurnedWoodAsh

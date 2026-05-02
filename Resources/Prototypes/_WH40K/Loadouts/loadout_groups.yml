@@ -151,6 +151,7 @@
   minLimit: 0
   loadouts:
   - WH40KKriegGloves
+  - WH40KGlovesVst
 
 - type: loadoutGroup
   id: WH40KImperialLineFeet
@@ -349,6 +350,7 @@
   name: loadout-group-wh40k-imperial-command-feet
   minLimit: 0
   loadouts:
+  - WH40KBootsVst
   - WH40KValhallanBoots
 
 - type: loadoutGroup
@@ -432,6 +434,7 @@
   name: loadout-group-wh40k-imperial-command-feet
   minLimit: 0
   loadouts:
+  - WH40KBootsVst
   - WH40KValhallanBoots
 
 - type: loadoutGroup
@@ -441,6 +444,7 @@
   loadouts:
   - WH40KBlackGloves
   - WH40KCombatGloves
+  - WH40KGlovesVst
 
 - type: loadoutGroup
   id: WH40KCommandFieldKit

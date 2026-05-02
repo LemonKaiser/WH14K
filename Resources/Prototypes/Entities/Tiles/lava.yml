@@ -7,11 +7,17 @@
     snap:
     - Wall
   components:
+  - type: FloorOccluder
+    requireSameTile: true
+    ignoreWhenIntersectingWhitelist:
+      tags:
+        - Catwalk
   - type: TileEmission
     color: "#FF4500"
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1
+    requireTripperOnSameTile: true
     blacklist:
       tags:
         - Catwalk
@@ -25,14 +31,41 @@
     anchored: true
   - type: SyncSprite
   - type: Clickable
+  - type: WH40KAmbientFieldSource
+    sound:
+      collection: WH40KLavaFlow
+    range: 8
+    volume: 5
+    emitterSpacing: 6
+    loop: true
+  - type: WH40KLavaHeatSource
+    sourceTileMinTemperature: 600
+    onlyOutdoorAtmosphericHeat: true
+    heatIntervalSeconds: 0.5
+    exposeSourceHotspot: true
+    hotspotTemperature: 1400
+    hotspotVolume: 35
+    igniteRadius: 0
+    igniteIntervalSeconds: 0.35
+    igniteFireStacks: 2.5
+    burnableTileIgniteRadius: 1
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+    aggregationMode: Strongest
+    rampUpDuration: 0.12
+    requireSameTile: true
+    ignoreWhenIntersectingWhitelist:
+      tags:
+        - Catwalk
   - type: Sprite
-    sprite: Tiles/Planet/lava.rsi
+    sprite: _WH40K/Tiles/Planet/lava_overlay.rsi
     drawdepth: BelowFloor
     layers:
       - state: lava
         shader: unshaded
   - type: Icon
-    sprite: Tiles/Planet/lava.rsi
+    sprite: _WH40K/Tiles/Planet/lava_overlay.rsi
     state: full
   - type: IconSmooth
     key: floor

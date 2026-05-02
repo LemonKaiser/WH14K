@@ -1673,8 +1673,8 @@ ent-WH40KAstartesPowerSword = Astartes power sword
     .desc = A transhuman-scaled power blade. Its field bites like a caged storm when awakened by an Astartes.
 ent-WH40KImperialCombatShield = imperial combat shield
     .desc = A reinforced ballistic tower shield for Imperial line troops, heavy enough to make the bearer feel like part of the wall.
-ent-WeaponPistolAstartesBolt = Astartes bolt pistol
-    .desc = A massive bolt sidearm scaled for the grip and recoil discipline of a Space Marine.
+ent-WeaponPistolAstartesBolt = Astartes laser pistol
+    .desc = A transhuman sidearm rebuilt around a high-output laser cell, delivering punishing heat bursts from an Astartes grip.
 ent-WH40KMagazineAstartesBoltPistol = Astartes bolt pistol magazine
     .desc = A compact magazine loaded with heavy bolt rounds.
 ent-WH40KCartridgeAstartesBoltPistol = Astartes bolt pistol cartridge
@@ -1706,3 +1706,35 @@ ent-ClothingNeckCloakFlesh = Cloak of Flesh
 
 ent-MobWH40KDreadnought = Dreadnought
     .desc = A massive war machine piloted by a venerable Space Marine hero whose body suffered fatal wounds in battle.
+
+ent-WH40KAstartesLaserPistolPowerCell = Astartes laser pistol power cell
+    .desc = A reinforced charge cell tuned for the high-output discharge profile of an Astartes laser pistol.
+
+ent-WHMedicalBanner = medical banner
+ent-WH40KAirlockImperium = Imperium airlock
+ent-WH40KAirlockChaos = Chaos airlock
+ent-WallMetalChaosBrick = chaos brick wall
+ent-DirtReinforcedWindow = dirt reinforced window
+ent-WH40KStairsSteel = steel stairs
+ent-WH40KStairsSteelStage = steel stage stairs
+ent-WH40KStairsWhite = white stairs
+ent-WH40KStairsWhiteStage = white stage stairs
+ent-WH40KStairsDark = dark stairs
+ent-WH40KStairsDarkStage = dark stage stairs
+ent-WH40KStairsWood = wooden stairs
+ent-WH40KStairsWoodStage = wooden stage stairs
+ent-WH40KTargetHuman = human target
+ent-WH40KTargetSyndicate = syndicate target
+ent-WH40KTargetClown = clown target
+ent-WH40KTargetStrange = strange target
+ent-WH40KWoodenSupport = wooden support
+ent-WH40KWoodenSupportBeam = wooden support beam
+ent-WH40KWoodenSupportWall = wooden support wall
+ent-WH40KGenericTank = generic tank
+ent-WH40KFloodlight = floodlight
+ent-WH40KFloorDrain = drain
+ent-WH40KPlasticFlapsAirtightClear = airtight clear plastic flaps
+
+construction-wh40k-generator-jr-pacman-board = J.R.P.A.C.M.A.N. machine board
+construction-wh40k-smes-board = SMES machine board
+construction-wh40k-substation-board = substation machine board

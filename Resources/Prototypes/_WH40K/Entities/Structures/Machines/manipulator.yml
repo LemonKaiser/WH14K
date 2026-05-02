@@ -42,3 +42,6 @@
     workingPowerDraw: 120
   - type: StaticPrice
     price: 500
+  - type: Construction
+    graph: WH40KConveyorManipulator
+    node: manipulator

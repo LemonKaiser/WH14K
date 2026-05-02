@@ -1,0 +1,165 @@
+- type: entity
+  id: WH40KCinematicCameraPoint
+  parent: MarkerBase
+  name: cinematic camera point
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicCameraPoint
+    pointId: shot_01
+    zoom: 1
+    rotation: 0
+  - type: Eye
+    drawFov: false
+    pvsScale: 1.75
+  - type: Sprite
+    layers:
+    - state: green
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicActionAnchor
+  parent: MarkerBase
+  name: cinematic action anchor
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicActionAnchor
+    anchorId: action_01
+  - type: Sprite
+    layers:
+    - state: blue
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicSpawnAnchor
+  parent: MarkerBase
+  name: cinematic spawn anchor
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicSpawnAnchor
+    anchorId: spawn_01
+  - type: Sprite
+    layers:
+    - state: red
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicSoundAnchor
+  parent: MarkerBase
+  name: cinematic sound anchor
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicSoundAnchor
+    anchorId: sound_01
+  - type: Sprite
+    layers:
+    - state: blue
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicNpcAnchor
+  parent: MarkerBase
+  name: cinematic npc anchor
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicNpcAnchor
+    anchorId: npc_01
+    rotation: 0
+  - type: Sprite
+    layers:
+    - state: pink
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicLavaStartMarker
+  parent: MarkerBase
+  name: cinematic lava start marker
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicLavaMarker
+    flowId: "1"
+    role: Start
+    nodeIndex: 0
+    width: 1
+    widthShape: Diamond
+    obstacleMode: StopOnWallOrEmpty
+    preserveExistingFloor: true
+    floorTile: FloorBasalt
+    lavaPrototype: FloorLavaEntity
+    advanceInterval: 0.05
+    tilesPerAdvance: 1
+  - type: Sprite
+    layers:
+    - state: red
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicLavaGuideMarker
+  parent: MarkerBase
+  name: cinematic lava guide marker
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicLavaMarker
+    flowId: "1"
+    role: Guide
+    nodeIndex: 1
+  - type: Sprite
+    layers:
+    - state: pink
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicLavaEndMarker
+  parent: MarkerBase
+  name: cinematic lava end marker
+  suffix: WH40K
+  components:
+  - type: WH40KCinematicLavaMarker
+    flowId: "1"
+    role: End
+    nodeIndex: 999
+  - type: Sprite
+    layers:
+    - state: green
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicLavaPreviewMarker
+  parent: MarkerBase
+  name: cinematic lava preview marker
+  suffix: WH40K
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Sprite
+    layers:
+    - state: timed
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicShotPreviewMarker
+  parent: MarkerBase
+  name: cinematic shot preview marker
+  suffix: WH40K
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Sprite
+    layers:
+    - state: pink
+      shader: unshaded
+
+- type: entity
+  id: WH40KCinematicAnchorPreviewMarker
+  parent: MarkerBase
+  name: cinematic anchor preview marker
+  suffix: WH40K
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 8
+  - type: Sprite
+    layers:
+    - state: blue
+      shader: unshaded

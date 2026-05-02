@@ -232,6 +232,8 @@
   - type: Battery
     maxCharge: 700
     startingCharge: 700
+  - type: BatterySelfRecharger
+    autoRechargeRate: 80
   - type: UseDelay
   - type: Item
     sprite: _WH40K/Objects/Weapons/Melee/astartes_power_sword.rsi

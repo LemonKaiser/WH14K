@@ -1,3 +1,5 @@
+using Content.Shared.Interaction;
+
 namespace Content.Shared._WH40K.Psyker;
 
 /// <summary>
@@ -6,6 +8,7 @@ namespace Content.Shared._WH40K.Psyker;
 /// </summary>
 public sealed class WH40KWarpStepSystem : EntitySystem
 {
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -20,6 +23,9 @@ public sealed class WH40KWarpStepSystem : EntitySystem
 
         var xform = Transform(args.Performer);
         if (xform.MapID != _transform.GetMapId(args.Target))
+            return;
+
+        if (!_interaction.InRangeUnobstructed(args.Performer, args.Target, range: 0f, popup: true))
             return;
 
         _transform.SetCoordinates(args.Performer, args.Target);

@@ -1494,12 +1494,14 @@ ent-WH40KAstartesPowerSword = силовой меч Астартес
     .desc = Силовой клинок под трансчеловеческую руку. Включенное поле вгрызается в цель, будто запертая буря.
 ent-WH40KImperialCombatShield = имперский боевой щит
     .desc = Усиленный баллистический щит для имперской пехоты, достаточно тяжелый, чтобы носитель чувствовал себя частью стены.
-ent-WeaponPistolAstartesBolt = болт-пистолет Астартес
-    .desc = Массивное болт-оружие под хват и отдачу космодесантника.
+ent-WeaponPistolAstartesBolt = лазерный пистолет Астартес
+    .desc = Трансчеловеческий пистолет, переведённый на мощный лазерный энергоблок и бьющий тяжёлыми тепловыми импульсами из руки космодесантника.
 ent-WH40KMagazineAstartesBoltPistol = магазин болт-пистолета Астартес
     .desc = Компактный магазин с тяжелыми болт-патронами.
 ent-WH40KCartridgeAstartesBoltPistol = патрон болт-пистолета Астартес
     .desc = Жестокий самодвижущийся болт-патрон для оружия Астартес.
+ent-WH40KAstartesLaserPistolPowerCell = энергоблок лазерного пистолета Астартес
+    .desc = Усиленный зарядный блок, настроенный под мощный профиль разряда лазерного пистолета Астартес.
 
 # --- Способности ---
 
@@ -1625,3 +1627,32 @@ ent-ClothingNeckCloakFlesh = Плащ из плоти
 
 ent-MobWH40KDreadnought = Дредноут
     .desc = Крупная боевая машина, управляемая уважаемым героем-космодесантником, тело которого в бою получило несовместимые с жизнью раны.
+
+ent-WHMedicalBanner = медицинское знамя
+ent-WH40KAirlockImperium = имперский шлюз
+ent-WH40KAirlockChaos = шлюз Хаоса
+ent-WallMetalChaosBrick = кирпичная стена Хаоса
+ent-DirtReinforcedWindow = загрязнённое укреплённое окно
+ent-WH40KStairsSteel = стальная лестница
+ent-WH40KStairsSteelStage = стальная сценическая лестница
+ent-WH40KStairsWhite = белая лестница
+ent-WH40KStairsWhiteStage = белая сценическая лестница
+ent-WH40KStairsDark = тёмная лестница
+ent-WH40KStairsDarkStage = тёмная сценическая лестница
+ent-WH40KStairsWood = деревянная лестница
+ent-WH40KStairsWoodStage = деревянная сценическая лестница
+ent-WH40KTargetHuman = мишень-человек
+ent-WH40KTargetSyndicate = мишень-синдикат
+ent-WH40KTargetClown = мишень-клоун
+ent-WH40KTargetStrange = странная мишень
+ent-WH40KWoodenSupport = деревянная подпорка
+ent-WH40KWoodenSupportBeam = деревянная подпорная балка
+ent-WH40KWoodenSupportWall = деревянная подпорная стена
+ent-WH40KGenericTank = универсальный бак
+ent-WH40KFloodlight = прожектор
+ent-WH40KFloorDrain = слив
+ent-WH40KPlasticFlapsAirtightClear = герметичные прозрачные пластиковые шторки
+
+construction-wh40k-generator-jr-pacman-board = плата J.R.P.A.C.M.A.N.
+construction-wh40k-smes-board = плата SMES
+construction-wh40k-substation-board = плата подстанции

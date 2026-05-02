@@ -618,6 +618,9 @@
     - type: Sprite
       sprite: Objects/Misc/module.rsi
       state: power_mod
+    - type: Tag
+      tags:
+        - SMESMachineBoard
     - type: MachineBoard
       prototype: SMESBasicEmpty
       stackRequirements:
@@ -757,6 +760,9 @@
   name: substation machine board
   description: A machine printed circuit board for a substation.
   components:
+    - type: Tag
+      tags:
+        - SubstationMachineBoard
     - type: MachineBoard
       prototype: SubstationBasicEmpty
       stackRequirements:
@@ -883,6 +889,9 @@
   components:
     - type: Sprite
       state: engineering
+    - type: Tag
+      tags:
+        - PortableGeneratorJrPacmanMachineBoard
     - type: MachineBoard
       prototype: PortableGeneratorJrPacman
       stackRequirements:

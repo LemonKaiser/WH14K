@@ -1,0 +1,211 @@
+- type: entity
+  id: WH40KAirlockAssemblyImperium
+  parent: AirlockAssembly
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Doors/Airlocks/imperium.rsi
+    state: assembly
+  - type: Construction
+    graph: WH40KAirlockImperium
+    node: assembly
+
+- type: entity
+  id: WH40KAirlockAssemblyChaos
+  parent: AirlockAssembly
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Doors/Airlocks/chaos.rsi
+    state: assembly
+  - type: Construction
+    graph: WH40KAirlockChaos
+    node: assembly
+
+- type: entity
+  id: WH40KChaosWallGirder
+  parent: Girder
+  suffix: WH40K, Chaos brick
+  components:
+  - type: Construction
+    graph: WH40KChaosBrickWall
+    node: girder
+    defaultTarget: chaosWall
+
+- type: entity
+  id: WH40KStairsSteel
+  parent: Stairs
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsSteel
+
+- type: entity
+  id: WH40KStairsSteelStage
+  parent: StairStage
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsSteelStage
+
+- type: entity
+  id: WH40KStairsWhite
+  parent: StairWhite
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsWhite
+
+- type: entity
+  id: WH40KStairsWhiteStage
+  parent: StairStageWhite
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsWhiteStage
+
+- type: entity
+  id: WH40KStairsDark
+  parent: StairDark
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsDark
+
+- type: entity
+  id: WH40KStairsDarkStage
+  parent: StairStageDark
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsDarkStage
+
+- type: entity
+  id: WH40KStairsWood
+  parent: StairWood
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsWood
+
+- type: entity
+  id: WH40KStairsWoodStage
+  parent: StairStageWood
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KStairs
+    node: stairsWoodStage
+
+- type: entity
+  id: WH40KTargetHuman
+  parent: TargetHuman
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KTargets
+    node: targetHuman
+
+- type: entity
+  id: WH40KTargetSyndicate
+  parent: TargetSyndicate
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KTargets
+    node: targetSyndicate
+
+- type: entity
+  id: WH40KTargetClown
+  parent: TargetClown
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KTargets
+    node: targetClown
+
+- type: entity
+  id: WH40KTargetStrange
+  parent: TargetStrange
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KTargets
+    node: targetStrange
+
+- type: entity
+  id: WH40KWoodenSupport
+  parent: WoodenSupport
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KWoodenSupports
+    node: support
+
+- type: entity
+  id: WH40KWoodenSupportBeam
+  parent: WoodenSupportBeam
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KWoodenSupports
+    node: supportBeam
+
+- type: entity
+  id: WH40KWoodenSupportWall
+  parent: WoodenSupportWall
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KWoodenSupports
+    node: supportWall
+
+- type: entity
+  id: WH40KGenericTank
+  parent: GenericTank
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KGenericTank
+    node: tank
+
+- type: entity
+  id: WH40KFloodlight
+  parent: Floodlight
+  suffix: WH40K
+  components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: null
+  - type: Construction
+    graph: WH40KFloodlight
+    node: floodlight
+
+- type: entity
+  id: WH40KFloorDrain
+  parent: FloorDrain
+  suffix: WH40K
+  components:
+  - type: Construction
+    graph: WH40KFloorDrain
+    node: drain
+
+- type: entity
+  id: WH40KPlasticFlapsAirtightClear
+  parent: PlasticFlapsAirtightClear
+  suffix: WH40K
+  components:
+  - type: StaticPrice
+    price: 200
+  - type: Construction
+    graph: WH40KPlasticFlapsAirtight
+    node: airtightClear

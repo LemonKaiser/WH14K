@@ -36,6 +36,8 @@ public sealed class WH40KInterfaceThemeSystem : EntitySystem
     private bool _settingPreferenceInternally;
     private string? _currentTeamId;
 
+    public string? CurrentTeamId => _currentTeamId;
+
     public override void Initialize()
     {
         base.Initialize();

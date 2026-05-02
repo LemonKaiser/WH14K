@@ -135,6 +135,23 @@
   components:
   - type: Sprite
     state: mattress
+  - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.08"
+    scale: "1.05, 1.05"
+  - type: WH40KFireConsumable
+    burnTime: 6
   - type: Damageable
     damageModifierSet: Inflatable
 
@@ -149,6 +166,23 @@
   - type: Sprite
     sprite: Structures/Web/bed.rsi
     state: icon
+  - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.08"
+    scale: "1.05, 1.05"
+  - type: WH40KFireConsumable
+    burnTime: 5
   - type: Destructible
     thresholds:
     - trigger: # Excess damage, don't spawn entities

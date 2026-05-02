@@ -1,0 +1,69 @@
+- type: construction
+  id: WH40KAPC
+  graph: APC
+  startNode: start
+  targetNode: apc
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+
+- type: construction
+  id: WH40KPortableGeneratorJrPacman
+  graph: WH40KPortableGeneratorJrPacman
+  startNode: start
+  targetNode: machine
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KSMES
+  graph: WH40KSMES
+  startNode: start
+  targetNode: machine
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KSubstation
+  graph: WH40KSubstation
+  startNode: start
+  targetNode: machine
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFloodlight
+  graph: WH40KFloodlight
+  startNode: start
+  targetNode: floodlight
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFloorDrain
+  graph: WH40KFloorDrain
+  startNode: start
+  targetNode: drain
+  category: construction-category-utilities
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked

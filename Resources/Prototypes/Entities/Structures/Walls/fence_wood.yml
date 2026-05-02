@@ -55,6 +55,22 @@
   - type: Climbable
     delay: 5.0
   - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.2"
+    scale: "1.1, 1.1"
+  - type: WH40KFireConsumable
+    burnTime: 10
 
 - type: entity
   parent: BaseFenceWood

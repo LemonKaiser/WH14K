@@ -21,6 +21,18 @@
                 <ui:OptionDropDown Name="DropDownLobbyAnimatedBackground" Title="{Loc 'ui-options-lobby-animated-background'}" />
                 <ui:OptionSlider Name="LobbyPanelOpacitySlider" Title="{Loc 'ui-options-lobby-panel-opacity'}" />
                 <ui:OptionSlider Name="CustomizationPanelOpacitySlider" Title="{Loc 'ui-options-customization-panel-opacity'}" />
+                <Label Name="NotificationsHeaderLabel" Text="{Loc 'ui-options-general-wh40k-notifications'}"
+                       StyleClasses="LabelKeyText"/>
+                <ui:OptionDropDown Name="DropDownNotificationMode" Title="{Loc 'ui-options-wh40k-notifications-mode'}" />
+                <ui:OptionDropDown Name="DropDownNotificationChat" Title="{Loc 'ui-options-wh40k-notifications-chat'}" />
+                <BoxContainer Orientation="Horizontal" Margin="0 2 0 2">
+                    <Label Name="NotificationCategoryFilterLabel"
+                           Text="{Loc 'ui-options-wh40k-notifications-categories'}"
+                           MinWidth="400"
+                           VerticalAlignment="Center" />
+                    <BoxContainer Name="NotificationCategoryDropdownHost" />
+                </BoxContainer>
+                <ui:OptionSlider Name="NotificationSoundVolumeSlider" Title="{Loc 'ui-options-wh40k-notifications-sound-volume'}" />
                 <Label Name="DiscordHeaderLabel" Text="{Loc 'ui-options-general-discord'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="DiscordRich" Text="{Loc 'ui-options-discordrich'}" />

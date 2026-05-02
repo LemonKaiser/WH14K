@@ -204,7 +204,7 @@
         acts: [ "Destruction" ]
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree01
   suffix: RMCFloraTree01
   name: tree
@@ -213,7 +213,7 @@
     state: tree01
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree02
   suffix: RMCFloraTree02
   name: tree
@@ -222,7 +222,7 @@
     state: tree02
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree03
   suffix: RMCFloraTree03
   name: tree
@@ -231,7 +231,7 @@
     state: tree03
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree04
   suffix: RMCFloraTree04
   name: tree
@@ -240,7 +240,7 @@
     state: tree04
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree05
   suffix: RMCFloraTree05
   name: tree
@@ -249,7 +249,7 @@
     state: tree05
 
 - type: entity
-  parent: RMCBaseTree
+  parent: WH40KRMCBurnableTree
   id: RMCFloraTree06
   suffix: RMCFloraTree06
   name: tree
@@ -258,7 +258,7 @@
     state: tree06
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow01
   suffix: RMCFloraTreeSnow01
   name: snowy tree
@@ -267,7 +267,7 @@
     state: treesnow01
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow02
   suffix: RMCFloraTreeSnow02
   name: snowy tree
@@ -276,7 +276,7 @@
     state: treesnow02
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow03
   suffix: RMCFloraTreeSnow03
   name: snowy tree
@@ -285,7 +285,7 @@
     state: treesnow03
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow04
   suffix: RMCFloraTreeSnow04
   name: snowy tree
@@ -294,7 +294,7 @@
     state: treesnow04
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow05
   suffix: RMCFloraTreeSnow05
   name: snowy tree
@@ -303,7 +303,7 @@
     state: treesnow05
 
 - type: entity
-  parent: RMCBaseTreeSnow
+  parent: WH40KRMCBurnableTreeSnow
   id: RMCFloraTreeSnow06
   suffix: RMCFloraTreeSnow06
   name: snowy tree
@@ -326,7 +326,7 @@
   suffix: RMC
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge01
   suffix: RMCFloraTreeLarge01
   name: large tree
@@ -335,7 +335,7 @@
     state: treelarge01
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge02
   suffix: RMCFloraTreeLarge02
   name: large tree
@@ -344,7 +344,7 @@
     state: treelarge02
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge03
   suffix: RMCFloraTreeLarge03
   name: large tree
@@ -353,7 +353,7 @@
     state: treelarge03
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge04
   suffix: RMCFloraTreeLarge04
   name: large tree
@@ -362,7 +362,7 @@
     state: treelarge04
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge05
   suffix: RMCFloraTreeLarge05
   name: large tree
@@ -371,7 +371,7 @@
     state: treelarge05
 
 - type: entity
-  parent: RMCBaseTreeLarge
+  parent: WH40KRMCBurnableTreeLarge
   id: RMCFloraTreeLarge06
   suffix: RMCFloraTreeLarge06
   name: large tree
@@ -380,7 +380,7 @@
     state: treelarge06
 
 - type: entity
-  parent: RMCBaseTreeConifer
+  parent: WH40KRMCBurnableTreeConifer
   id: RMCFloraTreeConifer01
   suffix: RMCFloraTreeConifer01
   name: snowy conifer
@@ -389,7 +389,7 @@
     state: treeconifer01
 
 - type: entity
-  parent: RMCBaseTreeConifer
+  parent: WH40KRMCBurnableTreeConifer
   id: RMCFloraTreeConifer02
   suffix: RMCFloraTreeConifer02
   name: snowy conifer
@@ -398,7 +398,7 @@
     state: treeconifer02
 
 - type: entity
-  parent: RMCBaseTreeConifer
+  parent: WH40KRMCBurnableTreeConifer
   id: RMCFloraTreeConifer03
   suffix: RMCFloraTreeConifer03
   name: snowy conifer
@@ -421,7 +421,7 @@
   suffix: RMC
 
 - type: entity
-  parent: RMCBaseTreeAlien
+  parent: WH40KRMCBurnableTreeAlien
   id: RMCAlienTree01
   suffix: RMCAlienTree01
   components:

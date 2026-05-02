@@ -19,12 +19,34 @@ ui-options-value-percent = { TOSTRING($value, "P0") }
 
 ui-options-discordrich = Enable Discord Rich Presence
 ui-options-general-ui-style = UI Style
+ui-options-general-wh40k-notifications = WH40K Notifications
 ui-options-general-lobby = Lobby & character selection
 ui-options-general-discord = Discord
 ui-options-general-cursor = Cursor
 ui-options-general-speech = Speech
 ui-options-general-storage = Storage
 ui-options-general-accessibility = Accessibility
+ui-options-wh40k-notifications-mode = Notification style:
+ui-options-wh40k-notifications-mode-full = Full
+ui-options-wh40k-notifications-mode-compact = Compact
+ui-options-wh40k-notifications-mode-off = Off
+ui-options-wh40k-notifications-chat = Mirror to chat:
+ui-options-wh40k-notifications-chat-enabled = Enabled
+ui-options-wh40k-notifications-chat-disabled = Disabled
+ui-options-wh40k-notifications-categories = Categories:
+ui-options-wh40k-notifications-categories-none = None
+ui-options-wh40k-notifications-categories-all = All combat
+ui-options-wh40k-notifications-categories-count = Selected: { $count }
+ui-options-wh40k-notifications-sound-volume = Notification volume:
+ui-options-wh40k-notifications-category-critical = Critical
+ui-options-wh40k-notifications-category-point = Front points
+ui-options-wh40k-notifications-category-weather = Weather
+ui-options-wh40k-notifications-category-event = Events
+ui-options-wh40k-notifications-category-objective = Objectives
+ui-options-wh40k-notifications-category-mission = Missions
+ui-options-wh40k-notifications-category-economy = Economy
+ui-options-wh40k-notifications-category-reinforcement = Reinforcements
+ui-options-wh40k-notifications-category-info = Info
 
 ## Audio menu
 

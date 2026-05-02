@@ -18,10 +18,10 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
     public string Description => "Show a WH40K top-center HUD notification to everyone or one team.";
     public string Help =>
         "Usage:\n" +
-        "wh40knotify <all|teamId> <title> <text> [#RRGGBB] [durationSeconds] [compact|standard|wide] [marquee]\n" +
+        "wh40knotify <all|teamId> <title> <text> [#RRGGBB] [durationSeconds] [compact|standard|wide] [marquee] [icon]\n" +
         "Examples:\n" +
-        "wh40knotify all \"Vox report\" \"Orbital storm is approaching\" #D64A4A 9 wide true\n" +
-        "wh40knotify Imperium \"Order\" \"Hold the line\" #F3C548 0 standard true";
+        "wh40knotify all \"Priority vox\" \"Orbital storm is approaching\" #D64A4A 9 wide true warning\n" +
+        "wh40knotify Imperium \"Command order\" \"Hold the line\" #F3C548 0 standard true aquila";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -38,6 +38,7 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
         var duration = 8f;
         var size = WH40KNotificationSize.Standard;
         var marquee = true;
+        var icon = WH40KNotificationIcon.Admin;
 
         if (args.Length >= 4)
         {
@@ -69,13 +70,30 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
             return;
         }
 
+        if (args.Length >= 8 && !TryParseIcon(args[7], out icon))
+        {
+            shell.WriteError($"Icon must be one of: {string.Join(", ", GetIconNames())}.");
+            return;
+        }
+
         var notifications = _entityManager.EntitySysManager.GetEntitySystem<WH40KNotificationSystem>();
         int delivered;
 
         if (string.Equals(target, "all", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(target, "*", StringComparison.Ordinal))
         {
-            delivered = notifications.SendGlobal(title, text, color, duration, marquee, size);
+            delivered = notifications.SendGlobal(
+                title,
+                text,
+                color,
+                duration,
+                marquee,
+                size,
+                WH40KNotificationCategory.Admin,
+                WH40KNotificationPriority.Admin,
+                icon,
+                ignoreUserPreferences: true,
+                spamCooldownSeconds: 0f);
             shell.WriteLine($"WH40K notification sent to all sessions ({delivered}).");
             return;
         }
@@ -90,7 +108,19 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
             return;
         }
 
-        delivered = notifications.SendTeam(teamId, title, text, color, duration, marquee, size);
+        delivered = notifications.SendTeam(
+            teamId,
+            title,
+            text,
+            color,
+            duration,
+            marquee,
+            size,
+            WH40KNotificationCategory.Admin,
+            WH40KNotificationPriority.Admin,
+            icon,
+            ignoreUserPreferences: true,
+            spamCooldownSeconds: 0f);
         shell.WriteLine($"WH40K notification sent to team '{teamId}' ({delivered}).");
     }
 
@@ -112,6 +142,7 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
             5 => CompletionResult.FromHint("[durationSeconds]"),
             6 => CompletionResult.FromHintOptions(new[] { "compact", "standard", "wide" }, "[size]"),
             7 => CompletionResult.FromHintOptions(new[] { "true", "false" }, "[marquee]"),
+            8 => CompletionResult.FromHintOptions(GetIconNames(), "[icon]"),
             _ => CompletionResult.Empty,
         };
     }
@@ -140,6 +171,38 @@ public sealed class WH40KNotificationAdminCommand : IConsoleCommand
                 size = WH40KNotificationSize.Standard;
                 return false;
         }
+    }
+
+    private static bool TryParseIcon(string value, out WH40KNotificationIcon icon)
+    {
+        foreach (WH40KNotificationIcon candidate in Enum.GetValues(typeof(WH40KNotificationIcon)))
+        {
+            if (candidate == WH40KNotificationIcon.Auto)
+                continue;
+
+            if (string.Equals(candidate.ToString(), value, StringComparison.OrdinalIgnoreCase))
+            {
+                icon = candidate;
+                return true;
+            }
+        }
+
+        icon = WH40KNotificationIcon.Admin;
+        return false;
+    }
+
+    private static string[] GetIconNames()
+    {
+        var names = new List<string>();
+        foreach (WH40KNotificationIcon icon in Enum.GetValues(typeof(WH40KNotificationIcon)))
+        {
+            if (icon == WH40KNotificationIcon.Auto)
+                continue;
+
+            names.Add(icon.ToString().ToLowerInvariant());
+        }
+
+        return names.ToArray();
     }
 
     private static bool TryResolveCanonicalTeamId(

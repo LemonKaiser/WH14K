@@ -23,6 +23,7 @@ using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.FixedPoint;
 using Content.Shared.Temperature.Components;
+using Content.Shared._WH40K.Fire;
 using Robust.Server.Audio;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
@@ -440,9 +441,10 @@ namespace Content.Server.Atmos.EntitySystems
                 if (flammable.FireStacks > 0)
                 {
                     var air = _atmosphereSystem.GetContainingMixture(uid);
+                    var burnWithoutAtmosphere = TryComp<WH40KFireConsumableComponent>(uid, out var consumable) &&
+                        consumable.BurnWithoutAtmosphere;
 
-                    // If we're in an oxygenless environment, put the fire out.
-                    if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                    if (!burnWithoutAtmosphere && (air == null || air.GetMoles(Gas.Oxygen) < 1f))
                     {
                         Extinguish(uid, flammable);
                         continue;

@@ -165,3 +165,23 @@
     impactFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_xray
+
+- type: entity
+  parent: BasicHitscan
+  id: WH40KRedHeavyLaserAstartesPistol
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 35
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_laser
+    travelFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam
+    impactFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_laser

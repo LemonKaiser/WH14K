@@ -42,6 +42,23 @@
         type: StorageBoundUserInterface
   - type: InteractionOutline
   - type: Clickable
+  - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.16"
+    scale: "1.1, 1.1"
+  - type: WH40KFireConsumable
+    burnTime: 10
   - type: Tag
     tags:
     - Wooden

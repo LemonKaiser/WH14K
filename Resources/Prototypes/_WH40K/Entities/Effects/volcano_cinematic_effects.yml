@@ -1,0 +1,20 @@
+- type: entity
+  id: WH40KVolcanoEruptionPuff
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: TimedDespawn
+    lifetime: 0.30
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    scale: 10,-10
+    layers:
+    - shader: unshaded
+      sprite: _WH40K/Effects/lava_chempuff.rsi
+      state: chempuff
+  - type: EffectVisuals
+  - type: Tag
+    tags:
+    - HideContextMenu

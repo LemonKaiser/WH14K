@@ -17,12 +17,34 @@ ui-options-value-percent = { TOSTRING($value, "P0") }
 
 ui-options-discordrich = Включить Discord Rich Presence
 ui-options-general-ui-style = Стиль UI
+ui-options-general-wh40k-notifications = Оповещения WH40K
 ui-options-general-lobby = Фон лобби и прозрачность ui
 ui-options-general-discord = Discord
 ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
 ui-options-general-accessibility = Доступность
+ui-options-wh40k-notifications-mode = Вид оповещений:
+ui-options-wh40k-notifications-mode-full = Полный
+ui-options-wh40k-notifications-mode-compact = Компактный
+ui-options-wh40k-notifications-mode-off = Выключить
+ui-options-wh40k-notifications-chat = Дублировать в чат:
+ui-options-wh40k-notifications-chat-enabled = Включить
+ui-options-wh40k-notifications-chat-disabled = Выключить
+ui-options-wh40k-notifications-categories = Категории:
+ui-options-wh40k-notifications-categories-none = Ничего
+ui-options-wh40k-notifications-categories-all = Все боевые
+ui-options-wh40k-notifications-categories-count = Выбрано: { $count }
+ui-options-wh40k-notifications-sound-volume = Громкость оповещений:
+ui-options-wh40k-notifications-category-critical = Критическое
+ui-options-wh40k-notifications-category-point = Точки фронта
+ui-options-wh40k-notifications-category-weather = Погода
+ui-options-wh40k-notifications-category-event = События
+ui-options-wh40k-notifications-category-objective = Цели
+ui-options-wh40k-notifications-category-mission = Миссии
+ui-options-wh40k-notifications-category-economy = Экономика
+ui-options-wh40k-notifications-category-reinforcement = Подкрепления
+ui-options-wh40k-notifications-category-info = Информация
 
 ## Audio menu
 

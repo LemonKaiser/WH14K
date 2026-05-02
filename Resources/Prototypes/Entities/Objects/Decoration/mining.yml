@@ -93,6 +93,23 @@
         path: /Audio/Effects/chop.ogg
         params:
           variation: 0.05
+  - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.16"
+    scale: "1.1, 1.1"
+  - type: WH40KFireConsumable
+    burnTime: 8
   - type: Destructible
     thresholds:
     - trigger: # Excess damage, don't spawn entities
@@ -152,6 +169,23 @@
     noRot: true
     sprite: Objects/Decoration/mines.rsi
     state: support_wall
+  - type: Appearance
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.2"
+    scale: "1.1, 1.1"
+  - type: WH40KFireConsumable
+    burnTime: 10
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Wood

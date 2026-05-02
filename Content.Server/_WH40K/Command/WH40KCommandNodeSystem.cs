@@ -1629,12 +1629,16 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     {
         _notifications.SendToSession(
             player,
-            Loc.GetString("wh40k-notification-title-vox"),
+            "wh40k-notification-title-vox",
             message,
             accentColor,
             8f,
             false,
-            WH40KNotificationSize.Wide);
+            WH40KNotificationSize.Wide,
+            WH40KNotificationCategory.Info,
+            WH40KNotificationPriority.Info,
+            WH40KNotificationIcon.Auto,
+            "command:info");
     }
 
     private static string FormatClock(int totalSeconds)

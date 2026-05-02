@@ -43,11 +43,14 @@ public sealed class FireVisualizerSystem : VisualizerSystem<FireVisualsComponent
         if (!TryComp<SpriteComponent>(uid, out var sprite) || !TryComp(uid, out AppearanceComponent? appearance))
             return;
 
-        SpriteSystem.LayerMapReserve((uid, sprite), FireVisualLayers.Fire);
-        SpriteSystem.LayerSetVisible((uid, sprite), FireVisualLayers.Fire, false);
-        sprite.LayerSetShader(FireVisualLayers.Fire, "unshaded");
+        var index = SpriteSystem.LayerMapReserve((uid, sprite), FireVisualLayers.Fire);
+        SpriteSystem.LayerSetVisible((uid, sprite), index, false);
+        sprite.LayerSetShader(index, "unshaded");
         if (component.Sprite != null)
-            SpriteSystem.LayerSetRsi((uid, sprite), FireVisualLayers.Fire, new ResPath(component.Sprite));
+            SpriteSystem.LayerSetRsi((uid, sprite), index, new ResPath(component.Sprite));
+
+        SpriteSystem.LayerSetOffset((uid, sprite), index, component.Offset);
+        SpriteSystem.LayerSetScale((uid, sprite), index, component.Scale);
 
         UpdateAppearance(uid, component, sprite, appearance);
     }
@@ -65,6 +68,8 @@ public sealed class FireVisualizerSystem : VisualizerSystem<FireVisualsComponent
 
         AppearanceSystem.TryGetData<bool>(uid, FireVisuals.OnFire, out var onFire, appearance);
         AppearanceSystem.TryGetData<float>(uid, FireVisuals.FireStacks, out var fireStacks, appearance);
+        SpriteSystem.LayerSetOffset((uid, sprite), index, component.Offset);
+        SpriteSystem.LayerSetScale((uid, sprite), index, component.Scale);
         SpriteSystem.LayerSetVisible((uid, sprite), index, onFire);
 
         if (!onFire)

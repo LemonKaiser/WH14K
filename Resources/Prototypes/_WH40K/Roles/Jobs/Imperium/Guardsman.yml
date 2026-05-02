@@ -80,7 +80,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitGuardsman
     back: ClothingBackpackHellEnergy
-    head: ClothingHeadHelmetFlakAdvCyan
+    head: ClothingHeadHelmetFlakAdv
     mask: ClothingMaskGasGuardsman
     eyes: ClothingEyesHudGuard
     outerClothing: ClothingOuterArmorAdvancedFlakVest

@@ -1,0 +1,110 @@
+- type: wh40kCinematic
+  id: WH40KCinematicBattlefield40kVolcanoEruption
+  debugLabel: Battlefield40k Volcano Eruption
+  worldFreezeMode: LockPlayersOnly
+  lockAudienceOnStart: false
+  godmodeWhileAudienceLocked: true
+  restoreInputDelay: 0
+  steps:
+  - id: volcano_warning
+    waitMode: Duration
+    duration: 5.0
+    actions:
+    - type: Notify
+      title: Volcano Eruption
+      text: Volcanic eruption detected.
+      category: Critical
+      priority: Critical
+      icon: Warning
+      duration: 5
+      sound:
+        collection: WH40KVolcanoWarning
+
+  - id: volcano_rumble_prelude
+    waitMode: Duration
+    duration: 5.0
+    actions:
+    - type: PlayGlobalSound
+      id: volcano-shake-loop
+      sound:
+        collection: WH40KVolcanoShake
+      audio:
+        loop: true
+    - type: StartAudienceShake
+      id: volcano-prelude-shake
+      shakeIntensity: 0.85
+      shakeRampDuration: 5.0
+      shakePulseInterval: 0.08
+
+  - id: shot_01_lock
+    type: Shot
+    waitMode: Duration
+    duration: 3.0
+    audienceLock: Lock
+    cameraPoint: shot_01
+    optionalCameraPoint: false
+    cameraTransition: Cut
+
+  - id: eruption_burst
+    waitMode: Duration
+    duration: 4.0
+    actions:
+    - type: PlayAnchorSound
+      anchorId: sound_01
+      optionalAnchor: false
+      sound:
+        collection: WH40KVolcanoBlast
+    - type: SpawnAtAnchor
+      anchorId: spawn_01
+      optionalAnchor: false
+      prototype: FloorLavaEntity
+    - type: SpawnAtAnchor
+      anchorId: spawn_02
+      optionalAnchor: false
+      prototype: WH40KVolcanoEruptionPuff
+    - type: StopActions
+      targetActionIds:
+      - volcano-shake-loop
+      - volcano-prelude-shake
+
+  - id: shot_02_flows
+    type: Shot
+    waitMode: Duration
+    duration: 5.0
+    cameraPoint: shot_02
+    optionalCameraPoint: false
+    cameraTransition: Cut
+    actions:
+    - type: RunLavaFlow
+      flowId: "1"
+      width: 3
+      obstacleMode: Ignore
+      advanceInterval: 0.5
+      tilesPerAdvance: 1
+      persistAfterCinematic: true
+    - type: RunLavaFlow
+      flowId: "2"
+      width: 3
+      obstacleMode: Ignore
+      advanceInterval: 0.5
+      tilesPerAdvance: 1
+      persistAfterCinematic: true
+    - type: RunLavaFlow
+      flowId: "3"
+      width: 3
+      obstacleMode: Ignore
+      advanceInterval: 0.5
+      tilesPerAdvance: 1
+      persistAfterCinematic: true
+
+  - id: shot_03_follow
+    type: Shot
+    waitMode: Duration
+    duration: 5.0
+    cameraPoint: shot_03
+    optionalCameraPoint: false
+    cameraTransition: Cut
+
+  - id: end
+    type: EndCinematic
+    waitMode: Terminal

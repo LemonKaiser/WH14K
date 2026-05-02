@@ -7,6 +7,9 @@
     sprite: _WH40K/Structures/Doors/Airlocks/imperium.rsi
   - type: Wires
     layoutId: AirlockService
+  - type: Construction
+    graph: WH40KAirlockImperium
+    node: airlock
 
 - type: entity
   parent: WH40KAirlockImperium
@@ -72,6 +75,9 @@
     sprite: _WH40K/Structures/Doors/Airlocks/chaos.rsi
   - type: Wires
     layoutId: AirlockService
+  - type: Construction
+    graph: WH40KAirlockChaos
+    node: airlock
 
 - type: entity
   parent: WH40KAirlockChaos

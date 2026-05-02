@@ -1,0 +1,242 @@
+- type: entity
+  id: WH40KBurnableTree
+  abstract: true
+  parent: BaseTree
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KFloraTreeCharredStump
+
+- type: entity
+  id: WH40KBurnableTreeSnow
+  abstract: true
+  parent: BaseTreeSnow
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KFloraTreeCharredStump
+
+- type: entity
+  id: WH40KBurnableTreeLarge
+  abstract: true
+  parent: BaseTreeLarge
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KFloraTreeCharredStump
+
+- type: entity
+  id: WH40KBurnableTreeConifer
+  abstract: true
+  parent: BaseTreeConifer
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KFloraTreeCharredStumpConifer
+
+- type: entity
+  id: WH40KFloraTreeCharredStump
+  parent: FloraTreeStump
+  name: charred tree
+  description: Burnt remains of a tree.
+  components:
+  - type: Sprite
+    color: "#2D2A28"
+
+- type: entity
+  id: WH40KFloraTreeCharredStumpConifer
+  parent: FloraTreeStumpConifer
+  name: charred tree
+  description: Burnt remains of a tree.
+  components:
+  - type: Sprite
+    color: "#2D2A28"
+
+- type: entity
+  id: WH40KRMCBurnableTree
+  abstract: true
+  parent: RMCBaseTree
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KRMCFloraTreeCharredStump
+
+- type: entity
+  id: WH40KRMCBurnableTreeSnow
+  abstract: true
+  parent: RMCBaseTreeSnow
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KRMCFloraTreeCharredStump
+
+- type: entity
+  id: WH40KRMCBurnableTreeLarge
+  abstract: true
+  parent: RMCBaseTreeLarge
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KRMCFloraTreeCharredStump
+
+- type: entity
+  id: WH40KRMCBurnableTreeConifer
+  abstract: true
+  parent: RMCBaseTreeConifer
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KRMCFloraTreeCharredStumpConifer
+
+- type: entity
+  id: WH40KRMCBurnableTreeAlien
+  abstract: true
+  parent: RMCBaseTreeAlien
+  components:
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 0
+  - type: Appearance
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 4
+    alternateState: 6
+    fireStackAlternateState: 2
+  - type: WH40KFireConsumable
+    burnTime: 5
+    resultPrototype: WH40KRMCAlienTreeCharredStump
+
+- type: entity
+  id: WH40KRMCFloraTreeCharredStump
+  parent: RMCFloraTreeStump
+  name: charred tree
+  description: Burnt remains of a tree.
+  components:
+  - type: Sprite
+    color: "#2D2A28"
+
+- type: entity
+  id: WH40KRMCFloraTreeCharredStumpConifer
+  parent: RMCFloraTreeStumpConifer
+  name: charred tree
+  description: Burnt remains of a tree.
+  components:
+  - type: Sprite
+    color: "#2D2A28"
+
+- type: entity
+  id: WH40KRMCAlienTreeCharredStump
+  parent: RMCStump3
+  name: charred tree
+  description: Burnt remains of a tree.
+  components:
+  - type: Sprite
+    color: "#2D2A28"

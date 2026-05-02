@@ -40,6 +40,23 @@
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Wood
+  - type: Flammable
+    alwaysCombustible: true
+    firestacksOnIgnite: 1
+    firestackFade: 0
+    damage:
+      types:
+        Heat: 30
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: 5
+    alternateState: 6
+    fireStackAlternateState: 1
+    offset: "0, 0.18"
+    scale: "1.1, 1.1"
+  - type: WH40KFireConsumable
+    burnTime: 8
+    deleteOnBurn: false
   - type: Destructible
     thresholds:
     - trigger:

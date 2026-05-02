@@ -25,6 +25,9 @@
   - type: IconSmooth
     key: walls
     base: reinf_chaos_brick
+  - type: Construction
+    graph: WH40KChaosBrickWall
+    node: chaosWall
 
 - type: entity
   parent: WallMetal

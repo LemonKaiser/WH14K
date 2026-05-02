@@ -2202,7 +2202,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             WH40KNotificationColors.Event,
             8f,
             false,
-            WH40KNotificationSize.Wide));
+            WH40KNotificationSize.Wide,
+            WH40KNotificationCategory.Event,
+            WH40KNotificationPriority.Event,
+            WH40KNotificationIcon.Event));
     }
 
     private void InitializeWeatherState(Components.WH40KTeamBattleRuleComponent component)

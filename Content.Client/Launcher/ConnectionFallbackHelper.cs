@@ -59,13 +59,15 @@ public static class ConnectionFallbackHelper
             return false;
 
         var primaryList = SplitAddressList(primaryAddresses);
+        var alternateList = SplitAddressList(alternateAddresses);
         if (primaryList.Count > 0 &&
-            !primaryList.Any(primary => IsSameEndpoint(primary, current, defaultPort)))
+            !primaryList.Any(primary => IsSameEndpoint(primary, current, defaultPort)) &&
+            !alternateList.Any(alternate => IsSameEndpoint(alternate, current, defaultPort)))
         {
             return false;
         }
 
-        foreach (var address in SplitAddressList(alternateAddresses))
+        foreach (var address in alternateList)
         {
             if (!TryParseTarget(address, defaultPort, out var candidate))
                 continue;

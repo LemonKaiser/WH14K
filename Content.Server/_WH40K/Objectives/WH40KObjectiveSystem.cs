@@ -333,7 +333,11 @@ public sealed class WH40KObjectiveSystem : EntitySystem
             color,
             ObjectiveNotificationDuration,
             false,
-            WH40KNotificationSize.Wide);
+            WH40KNotificationSize.Wide,
+            WH40KNotificationCategory.Point,
+            WH40KNotificationPriority.Point,
+            WH40KNotificationIcon.Point,
+            "objective:destroyed");
     }
 
     private Color GetNotificationTeamColor(string teamId)

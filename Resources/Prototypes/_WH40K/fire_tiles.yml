@@ -1,0 +1,52 @@
+- type: tile
+  id: WH40KFloorBurnedWoodAsh
+  name: burned wooden floor
+  parent: BaseStationTile
+  sprite: /Textures/_WH40K/Tiles/burned_wood_ash.png
+  variants: 7
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: Plating
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepFloor
+  heatCapacity: 10000
+
+- type: tile
+  id: WH40KFloorBurnedGrassAsh
+  name: burned grass ash
+  parent: BaseStationTile
+  sprite: /Textures/_WH40K/Tiles/burned_grass_ash.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: FloorDirt
+  isSubfloor: false
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
+
+- type: tile
+  id: WH40KFloorBurnedPlanetGrassAsh
+  name: burned grass ash
+  parent: BaseFloorPlanet
+  sprite: /Textures/_WH40K/Tiles/burned_grass_ash.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  baseTurf: FloorPlanetDirt
+  footstepSounds:
+    collection: FootstepAsteroid
+  heatCapacity: 10000
