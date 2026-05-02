@@ -7,6 +7,8 @@ deployable-turret-component-access-denied = Доступ запрещён
 deployable-turret-component-no-ammo = Оружейные системы исчерпаны
 deployable-turret-component-is-broken = Турель серьёзно повреждена и требует ремонта
 deployable-turret-component-cannot-access-wires = Вы не можете получить доступ к технической панели, пока турель активна
+deployable-turret-component-reactivation-cooldown = Турель перенастраивается после перемещения. Повторная активация через {$seconds} с.
+
 # Turret notification for station AI
-station-ai-turret-component-name = { $name } ({ $address })
-station-ai-turret-component-is-attacking-warning = { CAPITALIZE($source) } вступила в бой с враждебной целью.
+station-ai-turret-component-name = {$name} ({$address})
+station-ai-turret-component-is-attacking-warning = {CAPITALIZE($source)} вступила в бой с враждебной целью.

@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Construction.Components;
+using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
@@ -31,6 +32,7 @@ namespace Content.Server.Construction
         [Dependency] private readonly EntityLookupSystem _lookupSystem = default!;
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+        [Dependency] private readonly WH40KTeamBattleRuleSystem _wh40kTeamBattle = default!;
 
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
@@ -338,7 +340,7 @@ namespace Content.Server.Construction
                 return false;
             }
 
-            if (_whitelistSystem.IsWhitelistFail(constructionPrototype.EntityWhitelist, user))
+            if (!CanUserStartRecipe(constructionPrototype, user))
             {
                 _popup.PopupEntity(Loc.GetString("construction-system-cannot-start"), user, user);
                 return false;
@@ -423,7 +425,7 @@ namespace Content.Server.Construction
                 return;
             }
 
-            if (_whitelistSystem.IsWhitelistFail(constructionPrototype.EntityWhitelist, user))
+            if (!CanUserStartRecipe(constructionPrototype, user))
             {
                 _popup.PopupEntity(Loc.GetString("construction-system-cannot-start"), user, user);
                 return;
@@ -541,6 +543,18 @@ namespace Content.Server.Construction
             RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack, GetNetEntity(structure)));
             _adminLogger.Add(LogType.Construction, LogImpact.Low, $"{ToPrettyString(user):player} has turned a {ev.PrototypeName} construction ghost into {ToPrettyString(structure)} at {Transform(structure).Coordinates}");
             Cleanup();
+        }
+
+        private bool CanUserStartRecipe(ConstructionPrototype constructionPrototype, EntityUid user)
+        {
+            if (_whitelistSystem.IsWhitelistFail(constructionPrototype.EntityWhitelist, user))
+                return false;
+
+            if (constructionPrototype.WH40KAllowedTeams.Count == 0)
+                return true;
+
+            return _wh40kTeamBattle.TryGetTeamIdFromEntity(user, out var teamId)
+                   && constructionPrototype.IsWh40KTeamAllowed(teamId);
         }
     }
 }

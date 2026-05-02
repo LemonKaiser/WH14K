@@ -1,0 +1,19 @@
+- type: soundCollection
+  id: WH40KLavaFlow
+  files:
+    - /Audio/_WH40K/Ambience/lava-flow.ogg
+
+- type: soundCollection
+  id: WH40KVolcanoShake
+  files:
+    - /Audio/_WH40K/Ambience/volcano-shake.ogg
+
+- type: soundCollection
+  id: WH40KVolcanoBlast
+  files:
+    - /Audio/_WH40K/Effects/volcano-blast.ogg
+
+- type: soundCollection
+  id: WH40KVolcanoWarning
+  files:
+    - /Audio/_WH40K/Announcements/volcano-warning.ogg

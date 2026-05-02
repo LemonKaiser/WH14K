@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/27/2026 11:53:12
-  entityCount: 5397
+  entityCount: 5400
 maps:
 - 1
 grids:
@@ -13938,6 +13938,13 @@ entities:
     - type: Transform
       pos: -61.5,-1.5
       parent: 2
+- proto: SpawnPointColonel
+  entities:
+  - uid: 5399
+    components:
+    - type: Transform
+      pos: -60.5,-1.5
+      parent: 2
 - proto: SpawnPointGenetor
   entities:
   - uid: 2118
@@ -14089,6 +14096,13 @@ entities:
     - type: Transform
       pos: 8.5,-52.5
       parent: 2
+- proto: SpawnPointHLexmechanic
+  entities:
+  - uid: 5400
+    components:
+    - type: Transform
+      pos: 7.5,-52.5
+      parent: 2
 - proto: SpawnPointHVoxScout
   entities:
   - uid: 2143
@@ -14186,6 +14200,13 @@ entities:
     components:
     - type: Transform
       pos: -59.5,-3.5
+      parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 5398
+    components:
+    - type: Transform
+      pos: -58.5,-1.5
       parent: 2
 - proto: SpawnPointWH40KReinforcementHeretics
   entities:

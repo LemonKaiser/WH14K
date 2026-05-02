@@ -1,3 +1,6 @@
+using System.Numerics;
+using Robust.Shared.Maths;
+
 namespace Content.Client.Atmos.Components;
 
 /// <summary>
@@ -18,6 +21,12 @@ public sealed partial class FireVisualsComponent : Component
 
     [DataField("sprite")]
     public string? Sprite;
+
+    [DataField("offset")]
+    public Vector2 Offset = Vector2.Zero;
+
+    [DataField("scale")]
+    public Vector2 Scale = Vector2.One;
 
     [DataField("lightEnergyPerStack")]
     public float LightEnergyPerStack = 0.5f;

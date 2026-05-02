@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Content.Shared.Construction.Conditions;
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
@@ -62,6 +64,9 @@ public sealed partial class ConstructionPrototype : IPrototype
     [DataField]
     public EntityWhitelist? EntityWhitelist { get; private set; }
 
+    [DataField("wh40kAllowedTeams")]
+    public List<string> WH40KAllowedTeams { get; private set; } = new();
+
     [DataField] public string Category { get; private set; } = string.Empty;
 
     [DataField("objectType")] public ConstructionType Type { get; private set; } = ConstructionType.Structure;
@@ -92,6 +97,18 @@ public sealed partial class ConstructionPrototype : IPrototype
     public ProtoId<ConstructionPrototype>[] AlternativePrototypes = [];
 
     public IReadOnlyList<IConstructionCondition> Conditions => _conditions;
+
+    public bool IsWh40KTeamAllowed(string? teamId)
+    {
+        if (WH40KAllowedTeams.Count == 0)
+            return true;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        return WH40KAllowedTeams.Any(allowedTeam =>
+            string.Equals(allowedTeam, teamId, StringComparison.OrdinalIgnoreCase));
+    }
 }
 
 public enum ConstructionType

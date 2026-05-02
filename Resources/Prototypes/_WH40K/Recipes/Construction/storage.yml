@@ -1,0 +1,35 @@
+- type: construction
+  id: WH40KCrateMaterial
+  graph: CrateGenericSteel
+  startNode: start
+  targetNode: crategenericsteel
+  category: construction-category-storage
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KClosetSteel
+  graph: ClosetSteel
+  startNode: start
+  targetNode: done
+  category: construction-category-storage
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KGenericTank
+  graph: WH40KGenericTank
+  startNode: start
+  targetNode: tank
+  category: construction-category-storage
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked

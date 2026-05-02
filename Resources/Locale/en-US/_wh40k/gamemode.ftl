@@ -2,8 +2,18 @@
 wh40k-team-battle-description = Two factions fight for total victory. Teams are assigned by department.
 wh40k-team-imperium = Imperium
 wh40k-team-heretics = Heretics
-wh40k-notification-title-vox = Vox report
+wh40k-notification-title-vox = Vox Transmission
+wh40k-notification-title-chaos = Warp Proclamation
+wh40k-notification-title-tau = Fire Caste Signal
+wh40k-notification-title-admin = Administratum Dispatch
+wh40k-notification-title-critical = Emergency Vox Channel
+wh40k-notification-title-point = Frontline Dispatch
+wh40k-notification-title-weather = Auspex Weather Report
+wh40k-notification-title-event = Battle Protocol
 wh40k-notification-title-objective = Command node
+wh40k-notification-title-mission = Operational Directive
+wh40k-notification-title-economy = Munitorum Ledger
+wh40k-notification-title-reinforcement = Reinforcement Signal
 
 wh40k-team-service-message = You have been called to serve the { $team }. Hold the line.
 wh40k-team-service-message-Imperium = By the Emperor's will, scour this world of heresy. No mercy. No retreat.

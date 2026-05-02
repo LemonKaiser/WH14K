@@ -245,6 +245,19 @@
   name: psyker shield barrier
   categories: [ HideSpawnMenu ]
   components:
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
   - type: TimedDespawn
     lifetime: 10
 

@@ -526,6 +526,11 @@
     gloves: ClothingHandsGlovesCombat
 
 - type: loadout
+  id: WH40KGlovesVst
+  equipment:
+    gloves: ClothingHandsGlovesVst
+
+- type: loadout
   id: WH40KKriegGloves
   effects:
   - !type:WH40KMetaLevelLoadoutEffect

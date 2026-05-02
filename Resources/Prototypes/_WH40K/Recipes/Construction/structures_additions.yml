@@ -1,0 +1,677 @@
+- type: construction
+  id: WH40KWallSolid
+  graph: Girder
+  startNode: start
+  targetNode: wall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChaosBrickWall
+  graph: WH40KChaosBrickWall
+  startNode: start
+  targetNode: chaosWall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KCatwalk
+  graph: Catwalk
+  startNode: start
+  targetNode: Catwalk
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+  - !type:TileType
+    targets:
+    - Lattice
+    - Plating
+
+- type: construction
+  id: WH40KChaosFlag
+  graph: WH40KFlags
+  startNode: start
+  targetNode: chaosFlag
+  category: construction-category-structures
+  objectType: Item
+  wh40kAllowedTeams:
+  - Heretics
+
+- type: construction
+  id: WH40KGuardFlag
+  graph: WH40KFlags
+  startNode: start
+  targetNode: guardFlag
+  category: construction-category-structures
+  objectType: Item
+  wh40kAllowedTeams:
+  - Imperium
+
+- type: construction
+  id: WH40KChaosBanner
+  graph: WH40KBanners
+  startNode: start
+  targetNode: chaosBanner
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Heretics
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KGvardiaBanner
+  graph: WH40KBanners
+  startNode: start
+  targetNode: gvardiaBanner
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Imperium
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KGvardiaBanner2
+  graph: WH40KBanners
+  startNode: start
+  targetNode: gvardiaBanner2
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Imperium
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KMechanicusBanner
+  graph: WH40KBanners
+  startNode: start
+  targetNode: mechanicusBanner
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Imperium
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KMedicalBanner
+  graph: WH40KBanners
+  startNode: start
+  targetNode: medicalBanner
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Imperium
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KAirlockImperium
+  graph: WH40KAirlockImperium
+  startNode: start
+  targetNode: airlock
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Imperium
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KAirlockChaos
+  graph: WH40KAirlockChaos
+  startNode: start
+  targetNode: airlock
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  wh40kAllowedTeams:
+  - Heretics
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KAirlock
+  graph: Airlock
+  startNode: start
+  targetNode: airlock
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KAirlockGlass
+  graph: Airlock
+  startNode: start
+  targetNode: glassAirlock
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWindow
+  graph: Window
+  startNode: start
+  targetNode: window
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KDirtReinforcedWindow
+  graph: WH40KDirtReinforcedWindow
+  startNode: start
+  targetNode: dirtReinforcedWindow
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KReinforcedWindow
+  graph: Window
+  startNode: start
+  targetNode: reinforcedWindow
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KWindowDirectional
+  graph: WindowDirectional
+  startNode: start
+  targetNode: windowDirectional
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KReinforcedWindowDirectional
+  graph: WindowDirectional
+  startNode: start
+  targetNode: windowReinforcedDirectional
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KWindowDiagonal
+  graph: WindowDiagonal
+  startNode: start
+  targetNode: windowDiagonal
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KReinforcedWindowDiagonal
+  graph: WindowDiagonal
+  startNode: start
+  targetNode: reinforcedWindowDiagonal
+  category: construction-category-structures
+  canBuildInImpassable: true
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  id: WH40KPoweredLight
+  graph: LightFixture
+  startNode: start
+  targetNode: tubeLight
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KPoweredSmallLight
+  graph: LightFixture
+  startNode: start
+  targetNode: bulbLight
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFalloutBarricades
+  graph: WH40KFalloutBarricades
+  startNode: start
+  targetNode: barricadeIron
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFalloutBarricades4
+  graph: WH40KFalloutBarricades
+  startNode: start
+  targetNode: barricadeIronWide
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFalloutBarricades6
+  graph: WH40KFalloutBarricades
+  startNode: start
+  targetNode: barricadeBoarded
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFalloutBarricades7
+  graph: WH40KFalloutBarricades
+  startNode: start
+  targetNode: barricadeBars
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KConveyorBelt
+  graph: ConveyorGraph
+  startNode: start
+  targetNode: entity
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KRailing
+  graph: Railing
+  startNode: start
+  targetNode: railing
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KRailingCornerSmall
+  graph: Railing
+  startNode: start
+  targetNode: railingCornerSmall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWindoor
+  graph: Windoor
+  startNode: start
+  targetNode: windoor
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWindoorSecure
+  graph: Windoor
+  startNode: start
+  targetNode: windoorSecure
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KGrille
+  graph: Grille
+  startNode: start
+  targetNode: grille
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+
+- type: construction
+  id: WH40KMetalDoor
+  graph: DoorGraph
+  startNode: start
+  targetNode: metalDoor
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWoodDoor
+  graph: DoorGraph
+  startNode: start
+  targetNode: woodDoor
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFenceMetalStraight
+  graph: FenceMetal
+  startNode: start
+  targetNode: straight
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFenceMetalCorner
+  graph: FenceMetal
+  startNode: start
+  targetNode: corner
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KFenceMetalGate
+  graph: FenceMetal
+  startNode: start
+  targetNode: gate
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KPlasticFlapsAirtightClear
+  graph: WH40KPlasticFlapsAirtight
+  startNode: start
+  targetNode: airtightClear
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTargetHuman
+  graph: WH40KTargets
+  startNode: start
+  targetNode: targetHuman
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTargetSyndicate
+  graph: WH40KTargets
+  startNode: start
+  targetNode: targetSyndicate
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTargetClown
+  graph: WH40KTargets
+  startNode: start
+  targetNode: targetClown
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTargetStrange
+  graph: WH40KTargets
+  startNode: start
+  targetNode: targetStrange
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsSteel
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsSteel
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsSteelStage
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsSteelStage
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsWhite
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsWhite
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsWhiteStage
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsWhiteStage
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsDark
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsDark
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsDarkStage
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsDarkStage
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsWood
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsWood
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStairsWoodStage
+  graph: WH40KStairs
+  startNode: start
+  targetNode: stairsWoodStage
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWoodenSupport
+  graph: WH40KWoodenSupports
+  startNode: start
+  targetNode: support
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWoodenSupportBeam
+  graph: WH40KWoodenSupports
+  startNode: start
+  targetNode: supportBeam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KWoodenSupportWall
+  graph: WH40KWoodenSupports
+  startNode: start
+  targetNode: supportWall
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked

@@ -7,6 +7,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Timing;
+using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Wires;
@@ -38,6 +39,8 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
         SubscribeLocalEvent<DeployableTurretComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<DeployableTurretComponent, AttemptChangePanelEvent>(OnAttemptChangeWirePanelWire);
         SubscribeLocalEvent<DeployableTurretComponent, GetVerbsEvent<Verb>>(OnGetVerb);
+        SubscribeLocalEvent<DeployableTurretComponent, PullStartedMessage>(OnPullStarted);
+        SubscribeLocalEvent<DeployableTurretComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
     }
 
     private void OnGetVerb(Entity<DeployableTurretComponent> ent, ref GetVerbsEvent<Verb> args)
@@ -122,9 +125,60 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
             return false;
         }
 
+        if (enabled &&
+            ent.Comp.ReactivationCooldown > TimeSpan.Zero &&
+            !_useDelay.TryResetDelay(ent.Owner, checkDelayed: true, component: CompOrNull<UseDelayComponent>(ent.Owner), id: ent.Comp.ReactivationDelayId))
+        {
+            if (user != null &&
+                TryComp<UseDelayComponent>(ent, out var useDelay) &&
+                _useDelay.TryGetDelayInfo((ent.Owner, useDelay), out var delayInfo, ent.Comp.ReactivationDelayId))
+            {
+                var seconds = Math.Max(1, (int) Math.Ceiling((delayInfo.EndTime - _timing.CurTime).TotalSeconds));
+                _popup.PopupClient(
+                    Loc.GetString("deployable-turret-component-reactivation-cooldown", ("seconds", seconds)),
+                    ent,
+                    user.Value);
+            }
+
+            return false;
+        }
+
         SetState(ent, enabled, user);
 
         return true;
+    }
+
+    private void OnPullStarted(Entity<DeployableTurretComponent> ent, ref PullStartedMessage args)
+    {
+        if (args.PulledUid != ent.Owner || !ent.Comp.DisableWhenPulled)
+            return;
+
+        TriggerMobilityShutdown(ent, args.PullerUid);
+    }
+
+    private void OnAnchorStateChanged(Entity<DeployableTurretComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (args.Anchored || args.Detaching || !ent.Comp.DisableWhenUnanchored)
+            return;
+
+        TriggerMobilityShutdown(ent);
+    }
+
+    private void TriggerMobilityShutdown(Entity<DeployableTurretComponent> ent, EntityUid? user = null)
+    {
+        ApplyReactivationCooldown(ent);
+
+        if (ent.Comp.Enabled)
+            SetState(ent, false, user);
+    }
+
+    private void ApplyReactivationCooldown(Entity<DeployableTurretComponent> ent)
+    {
+        if (ent.Comp.ReactivationCooldown <= TimeSpan.Zero)
+            return;
+
+        _useDelay.SetLength((ent.Owner, CompOrNull<UseDelayComponent>(ent.Owner)), ent.Comp.ReactivationCooldown, ent.Comp.ReactivationDelayId);
+        _useDelay.TryResetDelay(ent.Owner, component: CompOrNull<UseDelayComponent>(ent.Owner), id: ent.Comp.ReactivationDelayId);
     }
 
     protected virtual void SetState(Entity<DeployableTurretComponent> ent, bool enabled, EntityUid? user = null)

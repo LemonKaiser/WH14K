@@ -107,6 +107,9 @@
   id: LasgunPowerCellLucius
 
 - type: Tag
+  id: WH40KAstartesLaserPistolPowerCell
+
+- type: Tag
   id: CartridgePhosphor
 
 - type: Tag
@@ -120,3 +123,12 @@
 
 - type: Tag
   id: LasgunPowerCellVoss
+
+- type: Tag
+  id: PortableGeneratorJrPacmanMachineBoard
+
+- type: Tag
+  id: SMESMachineBoard
+
+- type: Tag
+  id: SubstationMachineBoard

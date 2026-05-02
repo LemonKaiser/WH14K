@@ -50,7 +50,7 @@
     burstStepMultiplier: 0.15
     burstMaxMultiplier: 1.95
     stressEnabled: true
-    stressPerDamage: 0.0038
+    stressPerDamage: 0.0152
     stressDecayPerSecond: 0.09
     stressDecayInactiveMultiplier: 1.45
     stressImpactEnergyMultiplier: 0.75
@@ -75,6 +75,15 @@
   id: Rosarius
   suffix: WH40K, Imperium
   components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        whitelist:
+          tags:
+          - PowerCell
+          - PowerCellSmall
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/rosarius.rsi
     state: icon
@@ -88,6 +97,15 @@
   description: Зловещее ожерелье, украшенное символами Хаоса. Оно вспыхивает энергией варпа и разворачивает слабый защитный щит.
   suffix: WH40K, Культ Хаоса
   components:
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        whitelist:
+          tags:
+          - PowerCell
+          - PowerCellSmall
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/necklace_chaos.rsi
     state: icon

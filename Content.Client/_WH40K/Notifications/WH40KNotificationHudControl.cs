@@ -61,6 +61,7 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
     private string _title = string.Empty;
     private string _text = string.Empty;
     private readonly List<string> _wrappedLines = new();
+    private WH40KNotificationIcon _icon = WH40KNotificationIcon.Vox;
     private bool _marquee;
     private float _durationSeconds;
     private float _visibleSeconds;
@@ -84,7 +85,7 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
         _textFont = cache.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 13);
 
         Visible = false;
-        MouseFilter = MouseFilterMode.Stop;
+        MouseFilter = MouseFilterMode.Ignore;
         RectClipContent = false;
         MinSize = new Vector2(CanvasWidth, DefaultCanvasHeight);
         SetSize = new Vector2(CanvasWidth, DefaultCanvasHeight);
@@ -123,8 +124,12 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
     {
         _accentColor = ev.AccentColor;
         _text = NormalizeBodyText(ev.Text);
+        _icon = ev.Icon == WH40KNotificationIcon.Auto
+            ? WH40KNotificationMetadata.DefaultIcon(ev.Category, ev.AccentColor)
+            : ev.Icon;
         _marquee = ev.Marquee && !_text.Contains('\n');
         _durationSeconds = Math.Max(0f, ev.DurationSeconds);
+        MouseFilter = MouseFilterMode.Stop;
         _visibleSeconds = 0f;
         _marqueeTime = 0f;
         _stripeTime = 0f;
@@ -170,6 +175,7 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
                 {
                     _state = NotificationVisualState.Hidden;
                     Visible = false;
+                    MouseFilter = MouseFilterMode.Ignore;
                     NotificationClosed?.Invoke();
                     return;
                 }
@@ -225,7 +231,7 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
         var inner = new UIBox2(rect.Left + 5f, rect.Top + 5f, rect.Right - 5f, rect.Bottom - 5f);
         handle.DrawRect(inner, Color.Black.WithAlpha(0.18f * alpha), filled: false);
         DrawCornerBrackets(handle, rect, accent, faintAccent, open);
-        DrawVoxIcon(handle, rect.TopLeft + new Vector2(34f, (rect.Bottom - rect.Top) * 0.5f), accent, alpha);
+        DrawNotificationIcon(handle, rect.TopLeft + new Vector2(34f, (rect.Bottom - rect.Top) * 0.5f), accent, alpha, _icon);
         DrawContent(handle, rect, alpha);
 
         base.Draw(handle);
@@ -368,7 +374,12 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
         handle.DrawLine(origin + vertical * 4f, origin + vertical * (length + 8f), faintAccent);
     }
 
-    private static void DrawVoxIcon(DrawingHandleScreen handle, Vector2 center, Color accent, float alpha)
+    private static void DrawNotificationIcon(
+        DrawingHandleScreen handle,
+        Vector2 center,
+        Color accent,
+        float alpha,
+        WH40KNotificationIcon icon)
     {
         var white = Color.White.WithAlpha(0.92f * alpha);
         var muted = Color.FromHex("#2D3038").WithAlpha(0.82f * alpha);
@@ -376,6 +387,57 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
         handle.DrawRect(glyphBox, muted);
         handle.DrawRect(glyphBox, accent.WithAlpha(0.76f * alpha), filled: false);
 
+        switch (icon)
+        {
+            case WH40KNotificationIcon.Aquila:
+                DrawAquilaIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Chaos:
+                DrawChaosIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Weather:
+                DrawWeatherIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Event:
+                DrawEventIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Objective:
+                DrawObjectiveIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Mission:
+                DrawMissionIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Point:
+                DrawPointIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Warning:
+                DrawWarningIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Supply:
+                DrawSupplyIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Cog:
+                DrawCogIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Skull:
+                DrawSkullIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Admin:
+                DrawAdminIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Tau:
+                DrawTauIcon(handle, center, white, accent);
+                return;
+            case WH40KNotificationIcon.Warp:
+                DrawWarpIcon(handle, center, white, accent);
+                return;
+        }
+
+        DrawVoxIcon(handle, center, white, accent);
+    }
+
+    private static void DrawVoxIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
         var top = center + new Vector2(0f, -12f);
         var left = center + new Vector2(-9f, -1f);
         var right = center + new Vector2(9f, -1f);
@@ -388,6 +450,158 @@ public sealed class WH40KNotificationHudControl : LayoutContainer
         handle.DrawLine(center + new Vector2(-6f, -3f), center + new Vector2(0f, 8f), white);
         handle.DrawLine(center + new Vector2(6f, -3f), center + new Vector2(0f, 8f), white);
         handle.DrawLine(center + new Vector2(-5f, -8f), center + new Vector2(5f, -8f), accent);
+    }
+
+    private static void DrawAquilaIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center + new Vector2(0f, -6f), 3.5f, accent);
+        handle.DrawLine(center + new Vector2(0f, -2f), center + new Vector2(0f, 10f), white);
+        for (var i = 0; i < 4; i++)
+        {
+            var y = -5f + i * 4f;
+            handle.DrawLine(center + new Vector2(-2f, y), center + new Vector2(-16f, y + 5f), white);
+            handle.DrawLine(center + new Vector2(2f, y), center + new Vector2(16f, y + 5f), white);
+        }
+        handle.DrawLine(center + new Vector2(-4f, 11f), center + new Vector2(4f, 11f), accent);
+    }
+
+    private static void DrawChaosIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center, 7f, white, filled: false);
+        for (var i = 0; i < 8; i++)
+        {
+            var angle = MathF.PI * 2f * i / 8f;
+            var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+            handle.DrawLine(center + dir * 4f, center + dir * 15f, i % 2 == 0 ? accent : white);
+            var side = new Vector2(-dir.Y, dir.X);
+            var tip = center + dir * 15f;
+            handle.DrawLine(tip, tip - dir * 4f + side * 3f, accent);
+            handle.DrawLine(tip, tip - dir * 4f - side * 3f, accent);
+        }
+    }
+
+    private static void DrawWeatherIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center + new Vector2(-7f, -2f), 6f, white.WithAlpha(0.38f), filled: false);
+        handle.DrawCircle(center + new Vector2(1f, -5f), 8f, white.WithAlpha(0.5f), filled: false);
+        handle.DrawLine(center + new Vector2(-14f, 3f), center + new Vector2(10f, 3f), white);
+        handle.DrawLine(center + new Vector2(3f, 4f), center + new Vector2(-3f, 13f), accent);
+        handle.DrawLine(center + new Vector2(-3f, 13f), center + new Vector2(5f, 10f), accent);
+        handle.DrawLine(center + new Vector2(5f, 10f), center + new Vector2(0f, 18f), accent);
+    }
+
+    private static void DrawEventIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        for (var i = 0; i < 8; i++)
+        {
+            var angle = MathF.PI * 2f * i / 8f;
+            var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+            handle.DrawLine(center + dir * 5f, center + dir * 15f, i % 2 == 0 ? accent : white);
+        }
+        handle.DrawCircle(center, 4f, white);
+    }
+
+    private static void DrawObjectiveIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center, 13f, accent, filled: false);
+        handle.DrawCircle(center, 6f, white, filled: false);
+        handle.DrawLine(center + new Vector2(-16f, 0f), center + new Vector2(16f, 0f), white);
+        handle.DrawLine(center + new Vector2(0f, -16f), center + new Vector2(0f, 16f), white);
+    }
+
+    private static void DrawMissionIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawLine(center + new Vector2(-9f, 15f), center + new Vector2(-9f, -14f), white);
+        handle.DrawLine(center + new Vector2(-8f, -13f), center + new Vector2(12f, -8f), accent);
+        handle.DrawLine(center + new Vector2(12f, -8f), center + new Vector2(-8f, -2f), accent);
+        handle.DrawLine(center + new Vector2(-8f, -2f), center + new Vector2(-8f, -13f), accent);
+        handle.DrawLine(center + new Vector2(-14f, 15f), center + new Vector2(4f, 15f), white);
+    }
+
+    private static void DrawPointIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawRect(UIBox2.FromDimensions(center - new Vector2(10f, 10f), new Vector2(20f, 20f)), accent, filled: false);
+        handle.DrawLine(center + new Vector2(-16f, 0f), center + new Vector2(-5f, 0f), white);
+        handle.DrawLine(center + new Vector2(5f, 0f), center + new Vector2(16f, 0f), white);
+        handle.DrawLine(center + new Vector2(0f, -16f), center + new Vector2(0f, -5f), white);
+        handle.DrawLine(center + new Vector2(0f, 5f), center + new Vector2(0f, 16f), white);
+    }
+
+    private static void DrawWarningIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        var top = center + new Vector2(0f, -15f);
+        var left = center + new Vector2(-14f, 12f);
+        var right = center + new Vector2(14f, 12f);
+        handle.DrawLine(top, left, accent);
+        handle.DrawLine(left, right, accent);
+        handle.DrawLine(right, top, accent);
+        handle.DrawLine(center + new Vector2(0f, -6f), center + new Vector2(0f, 5f), white);
+        handle.DrawCircle(center + new Vector2(0f, 10f), 1.8f, white);
+    }
+
+    private static void DrawSupplyIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        var box = UIBox2.FromDimensions(center - new Vector2(13f, 9f), new Vector2(26f, 18f));
+        handle.DrawRect(box, accent, filled: false);
+        handle.DrawLine(center + new Vector2(-13f, -3f), center + new Vector2(13f, -3f), white);
+        handle.DrawLine(center + new Vector2(0f, -9f), center + new Vector2(0f, 9f), white);
+        handle.DrawLine(center + new Vector2(-7f, 12f), center + new Vector2(7f, 12f), accent);
+    }
+
+    private static void DrawCogIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center, 9f, white, filled: false);
+        handle.DrawCircle(center, 3.5f, accent, filled: false);
+        for (var i = 0; i < 8; i++)
+        {
+            var angle = MathF.PI * 2f * i / 8f;
+            var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+            handle.DrawLine(center + dir * 10f, center + dir * 15f, accent);
+        }
+    }
+
+    private static void DrawSkullIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center + new Vector2(0f, -3f), 10f, white.WithAlpha(0.25f), filled: false);
+        handle.DrawCircle(center + new Vector2(-4f, -4f), 2.5f, accent);
+        handle.DrawCircle(center + new Vector2(4f, -4f), 2.5f, accent);
+        handle.DrawLine(center + new Vector2(-6f, 7f), center + new Vector2(6f, 7f), white);
+        handle.DrawLine(center + new Vector2(-3f, 7f), center + new Vector2(-3f, 12f), white);
+        handle.DrawLine(center + new Vector2(3f, 7f), center + new Vector2(3f, 12f), white);
+    }
+
+    private static void DrawAdminIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        var top = center + new Vector2(0f, -15f);
+        var left = center + new Vector2(-12f, -7f);
+        var right = center + new Vector2(12f, -7f);
+        var bottom = center + new Vector2(0f, 15f);
+        handle.DrawLine(top, left, accent);
+        handle.DrawLine(top, right, accent);
+        handle.DrawLine(left, center + new Vector2(-9f, 6f), white);
+        handle.DrawLine(right, center + new Vector2(9f, 6f), white);
+        handle.DrawLine(center + new Vector2(-9f, 6f), bottom, accent);
+        handle.DrawLine(center + new Vector2(9f, 6f), bottom, accent);
+        handle.DrawLine(center + new Vector2(-5f, 1f), center + new Vector2(5f, 1f), white);
+    }
+
+    private static void DrawTauIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center, 12f, accent, filled: false);
+        handle.DrawCircle(center, 4f, white);
+        handle.DrawLine(center + new Vector2(0f, -16f), center + new Vector2(0f, -7f), white);
+        handle.DrawLine(center + new Vector2(-13f, 9f), center + new Vector2(-6f, 4f), white);
+        handle.DrawLine(center + new Vector2(13f, 9f), center + new Vector2(6f, 4f), white);
+    }
+
+    private static void DrawWarpIcon(DrawingHandleScreen handle, Vector2 center, Color white, Color accent)
+    {
+        handle.DrawCircle(center, 13f, accent.WithAlpha(0.75f), filled: false);
+        handle.DrawLine(center + new Vector2(-12f, -8f), center + new Vector2(8f, -12f), white);
+        handle.DrawLine(center + new Vector2(8f, -12f), center + new Vector2(13f, 2f), accent);
+        handle.DrawLine(center + new Vector2(13f, 2f), center + new Vector2(-4f, 13f), white);
+        handle.DrawLine(center + new Vector2(-4f, 13f), center + new Vector2(-12f, -8f), accent);
+        handle.DrawCircle(center, 3f, white);
     }
 
     private void DrawContent(DrawingHandleScreen handle, UIBox2 rect, float alpha)

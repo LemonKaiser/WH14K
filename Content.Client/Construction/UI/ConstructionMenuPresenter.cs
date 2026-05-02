@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Client.Lobby;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
+using Content.Client._WH40K.Interface;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Whitelist;
 using Robust.Client.GameObjects;
@@ -284,6 +285,9 @@ namespace Content.Client.Construction.UI
                     || _whitelistSystem.IsWhitelistFail(recipe.EntityWhitelist, _playerManager.LocalEntity.Value))
                     continue;
 
+                if (!IsRecipeAvailableForCurrentTeam(recipe))
+                    continue;
+
                 if (!_constructionSystem!.TryGetRecipePrototype(recipe.ID, out var targetProtoId))
                 {
                     _sawmill.Error("Cannot find the target prototype in the recipe cache with the id \"{0}\" of {1}.",
@@ -341,6 +345,9 @@ namespace Content.Client.Construction.UI
                 if (!IsWh40KRecipe(prototype))
                     continue;
 
+                if (!IsRecipeAvailableForCurrentTeam(prototype))
+                    continue;
+
                 var category = prototype.Category;
 
                 if (!string.IsNullOrEmpty(category))
@@ -390,6 +397,17 @@ namespace Content.Client.Construction.UI
         {
             return IsWh40KRecipe(recipe)
                    || targetProtoId.ToString().StartsWith(Wh40KRecipePrefix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool IsRecipeAvailableForCurrentTeam(ConstructionPrototype recipe)
+        {
+            if (recipe.WH40KAllowedTeams.Count == 0)
+                return true;
+
+            if (!_systemManager.TryGetEntitySystem<WH40KInterfaceThemeSystem>(out var themeSystem))
+                return false;
+
+            return recipe.IsWh40KTeamAllowed(themeSystem.CurrentTeamId);
         }
 
         private void PopulateInfo(ConstructionPrototype? prototype)

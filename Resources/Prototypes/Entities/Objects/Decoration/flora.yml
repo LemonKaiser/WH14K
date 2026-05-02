@@ -214,7 +214,7 @@
         grey_stalagmite6: ""
 
 - type: entity
-  parent: BaseTree
+  parent: WH40KBurnableTree
   id: FloraTree
   name: tree
   components:
@@ -233,7 +233,7 @@
         tree06: ""
 
 - type: entity
-  parent: BaseTreeSnow
+  parent: WH40KBurnableTreeSnow
   id: FloraTreeSnow
   name: snowy tree
   components:
@@ -260,7 +260,7 @@
     state: treestump
 
 - type: entity
-  parent: BaseTreeLarge
+  parent: WH40KBurnableTreeLarge
   id: FloraTreeLarge
   name: large tree
   components:
@@ -279,7 +279,7 @@
         treelarge06: ""
 
 - type: entity
-  parent: BaseTreeConifer
+  parent: WH40KBurnableTreeConifer
   id: FloraTreeConifer
   name: snowy conifer
   components:
@@ -295,7 +295,7 @@
         treeconifer03: ""
 
 - type: entity
-  parent: BaseTreeConifer
+  parent: WH40KBurnableTreeConifer
   id: FloraTreeChristmas01
   name: christmas tree
   components:
@@ -303,7 +303,7 @@
     state: treechristmas01
 
 - type: entity
-  parent: BaseTreeConifer
+  parent: WH40KBurnableTreeConifer
   id: FloraTreeChristmas02
   suffix: Safe Presents
   name: christmas tree
@@ -368,7 +368,7 @@
     sprite: Objects/Decoration/Flora/flora_shadow_trees.rsi
 
 - type: entity
-  parent: BaseTree
+  parent: WH40KBurnableTree
   id: LightTree
   name: glowing tree
   description: A marvelous tree filled with strange energy.

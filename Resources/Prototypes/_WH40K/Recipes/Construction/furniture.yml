@@ -1,0 +1,299 @@
+- type: construction
+  id: WH40KChair
+  graph: Seat
+  startNode: start
+  targetNode: chair
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStool
+  graph: Seat
+  startNode: start
+  targetNode: stool
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStoolBar
+  graph: Seat
+  startNode: start
+  targetNode: stoolBar
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairBrass
+  graph: Seat
+  startNode: start
+  targetNode: chairBrass
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairOfficeLight
+  graph: Seat
+  startNode: start
+  targetNode: chairOffice
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairOfficeDark
+  graph: Seat
+  startNode: start
+  targetNode: chairOfficeDark
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairComfy
+  graph: Seat
+  startNode: start
+  targetNode: chairComfy
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairPilotSeat
+  graph: Seat
+  startNode: start
+  targetNode: chairPilotSeat
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairWood
+  graph: Seat
+  startNode: start
+  targetNode: chairWood
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairMeat
+  graph: Seat
+  startNode: start
+  targetNode: chairMeat
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairRitual
+  graph: RitualSeat
+  startNode: start
+  targetNode: chairRitual
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairFolding
+  graph: Seat
+  startNode: start
+  targetNode: chairFolding
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairSteelBench
+  graph: Seat
+  startNode: start
+  targetNode: chairSteelBench
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KStoolCard
+  graph: Seat
+  startNode: start
+  targetNode: stoolCard
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KChairWoodBench
+  graph: Seat
+  startNode: start
+  targetNode: chairWoodBench
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KRedComfBench
+  name: construction-recipe-red-comf-bench
+  graph: Seat
+  startNode: start
+  targetNode: redComfBench
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KBlueComfBench
+  name: construction-recipe-blue-comf-bench
+  graph: Seat
+  startNode: start
+  targetNode: blueComfBench
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTable
+  graph: Table
+  startNode: start
+  targetNode: Table
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTableReinforced
+  graph: Table
+  startNode: start
+  targetNode: TableReinforced
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTableGlass
+  graph: Table
+  startNode: start
+  targetNode: TableGlass
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KTableWood
+  graph: Table
+  startNode: start
+  targetNode: TableWood
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KBed
+  graph: bed
+  startNode: start
+  targetNode: bed
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KRack
+  graph: Rack
+  startNode: start
+  targetNode: Rack
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  id: WH40KCurtains
+  graph: Curtains
+  startNode: start
+  targetNode: Curtains
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+
+- type: construction
+  id: WH40KBookshelf
+  graph: Bookshelf
+  startNode: start
+  targetNode: bookshelf
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked

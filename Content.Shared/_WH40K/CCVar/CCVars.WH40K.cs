@@ -1,5 +1,6 @@
 using Content.Shared.Administration;
 using Content.Shared.CCVar.CVarAccess;
+using Content.Shared._WH40K.Notifications;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
@@ -55,6 +56,33 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float> WH40KConnectionFallbackDisconnectDelaySeconds =
         CVarDef.Create("wh40k.connection_fallback.disconnect_delay_seconds", 10.0f, CVar.CLIENTONLY);
+
+    /// <summary>
+    ///     Controls how WH40K HUD notifications are displayed on this client.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KNotificationDisplayMode =
+        CVarDef.Create("wh40k.notification.display_mode", WH40KNotificationMetadata.DisplayModeFull, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     If true, WH40K notifications are also mirrored into the local chat feed.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KNotificationChatEnabled =
+        CVarDef.Create("wh40k.notification.chat_enabled", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Comma-separated WH40K notification category ids enabled for this client. Admin notifications ignore this.
+    /// </summary>
+    public static readonly CVarDef<string> WH40KNotificationEnabledCategories =
+        CVarDef.Create(
+            "wh40k.notification.enabled_categories",
+            "critical,point,weather,event,objective,mission,economy,reinforcement,info",
+            CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Volume scale for WH40K notification sounds. Zero mutes non-admin notification sounds.
+    /// </summary>
+    public static readonly CVarDef<float> WH40KNotificationSoundVolume =
+        CVarDef.Create("wh40k.notification.sound_volume", 1.0f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Enables translated chat for this client when the server-side WH40K translation pipeline is active.
@@ -696,6 +724,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> WH40KMissionRuntimeDebugTrace =
         CVarDef.Create("wh40k.mission_runtime.debug_trace", false, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enables verbose WH40K cinematic timeline trace logs (start, step transitions, stop).
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KCinematicTrace =
+        CVarDef.Create("wh40k.cinematic.trace", false, CVar.SERVERONLY);
 
     /// <summary>
     ///     Seconds between periodic WH40K economy telemetry snapshots.

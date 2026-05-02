@@ -51,8 +51,6 @@
         !type:DamageTrigger
         damage: 10
       behaviors:
-      - !type:SpillBehavior
-        solution: tank
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak

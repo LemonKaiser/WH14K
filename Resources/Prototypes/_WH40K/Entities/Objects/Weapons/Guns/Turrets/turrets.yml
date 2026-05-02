@@ -24,6 +24,8 @@
     state: normal_uac_sentry_handheld
   - type: Appearance
   - type: AnimationPlayer
+  - type: UseDelay
+    delay: 0.4
   - type: HTN
     enabled: true
     rootTask:
@@ -38,6 +40,8 @@
     deployedFixture: null
     deploymentLength: 0.4
     retractionLength: 0.4
+    disableWhenPulled: true
+    reactivationCooldown: 60
     deployedState: normal_uac_sentry
     retractedState: normal_uac_sentry_handheld
     deployingState: normal_uac_sentry
@@ -149,6 +153,8 @@
     state: normal_uac_sentry_handheld
   - type: Appearance
   - type: AnimationPlayer
+  - type: UseDelay
+    delay: 0.4
   - type: HTN
     enabled: true
     rootTask:
@@ -163,6 +169,8 @@
     deployedFixture: null
     deploymentLength: 0.4
     retractionLength: 0.4
+    disableWhenPulled: true
+    reactivationCooldown: 60
     deployedState: normal_uac_sentry
     retractedState: normal_uac_sentry_handheld
     deployingState: normal_uac_sentry

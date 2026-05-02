@@ -224,6 +224,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: iron_barricade
+  - type: Construction
+    graph: WH40KFalloutBarricades
+    node: barricadeIron
 
 - type: entity
   id: FalloutBarricades3
@@ -284,6 +287,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: iron_barricade2
+  - type: Construction
+    graph: WH40KFalloutBarricades
+    node: barricadeIronWide
 
 - type: entity
   id: FalloutBarricades5
@@ -344,6 +350,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: boarded
+  - type: Construction
+    graph: WH40KFalloutBarricades
+    node: barricadeBoarded
 
 - type: entity
   id: FalloutBarricades7
@@ -374,6 +383,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
     state: bars
+  - type: Construction
+    graph: WH40KFalloutBarricades
+    node: barricadeBars
 
 - type: entity
   id: BarricadeWarhammerChaos

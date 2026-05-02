@@ -8,3 +8,6 @@
     sprite: _WH40K/Structures/Windows/dirt_reinforced_window.rsi
   - type: Icon
     sprite: _WH40K/Structures/Windows/dirt_reinforced_window.rsi
+  - type: Construction
+    graph: WH40KDirtReinforcedWindow
+    node: dirtReinforcedWindow

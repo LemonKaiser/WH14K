@@ -1,0 +1,25 @@
+- type: entity
+  id: WH40KTileFireEffect
+  name: fire
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: Effects/fire.rsi
+    layers:
+    - state: "5"
+      shader: unshaded
+    - state: "6"
+      shader: unshaded
+      offset: "0, 0.05"
+  - type: PointLight
+    enabled: true
+    color: "#ff7a21"
+    radius: 2.6
+    energy: 2.2
+    castShadows: false
+  - type: Tag
+    tags:
+    - HideContextMenu

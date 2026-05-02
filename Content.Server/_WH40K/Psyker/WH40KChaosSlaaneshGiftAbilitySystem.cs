@@ -14,6 +14,7 @@ using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
@@ -52,6 +53,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
     [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly PullingSystem _pulling = default!;
@@ -122,6 +124,9 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         var performerCoordinates = _transform.GetMapCoordinates(args.Performer);
         var targetCoordinates = _transform.GetMapCoordinates(args.Target);
         if (performerCoordinates.MapId != targetCoordinates.MapId)
+            return;
+
+        if (!_interaction.InRangeUnobstructed(args.Performer, args.Target, range: 0f, popup: true))
             return;
 
         ApplyTieredCooldown(args.Performer, args.Action, 18f, progression.KhorneGiftOneCooldownTier);
@@ -212,6 +217,9 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
             return;
 
         if (args.Target == args.Performer || _mobState.IsDead(args.Target))
+            return;
+
+        if (!_interaction.InRangeUnobstructed(args.Performer, args.Target, range: 0f, popup: true))
             return;
 
         ApplyTieredCooldown(args.Performer, args.Action, 95f, progression.KhorneGiftOneCooldownTier);

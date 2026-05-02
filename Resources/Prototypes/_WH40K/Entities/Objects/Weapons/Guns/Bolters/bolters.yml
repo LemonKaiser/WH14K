@@ -98,10 +98,14 @@
   - type: Appearance
 
 - type: entity
-  parent: BaseWeaponPistol
+  parent: WeaponLaserWH40KEnergy
   id: WeaponPistolAstartesBolt
   suffix: WH40K, Astartes
   components:
+  - type: AimingCamera
+    maxOffset: 2
+    pvsIncrease: 0.2
+    requireWield: false
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Bolters/astartes_pistol.rsi
     scale: 0.9,0.9
@@ -113,46 +117,37 @@
   - type: Item
     sprite: _WH40K/Objects/Weapons/Guns/Bolters/astartes_pistol.rsi
     size: Normal
+    shape:
+    - 0,0,1,1
+  - type: Tag
+    tags:
+    - Sidearm
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Bolters/astartes_pistol.rsi
-  - type: ChamberMagazineAmmoProvider
-    soundRack:
-      path: /Audio/Weapons/Guns/Cock/sf_rifle_cock.ogg
+    slots:
+    - Belt
   - type: Gun
-    fireRate: 0.95
+    fireRate: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    minAngle: 2
-    maxAngle: 12
-    angleIncrease: 5
-    angleDecay: 8
+    minAngle: 1
+    maxAngle: 8
+    angleIncrease: 3
+    angleDecay: 10
     soundGunshot:
-      path: /Audio/_WH40K/Weapons/Guns/Gunshots/bolterpistol.ogg
-  - type: WH40KGunPrediction
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
   - type: ItemSlots
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: WH40KMagazineAstartesBoltPistol
+        startingItem: WH40KAstartesLaserPistolPowerCell
         insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
         priority: 2
         whitelist:
           tags:
-          - WH40KMagazineAstartesBoltPistol
-      gun_chamber:
-        name: Chamber
-        startingItem: WH40KCartridgeAstartesBoltPistol
-        priority: 1
-        whitelist:
-          tags:
-          - WH40KCartridgeAstartesBoltPistol
-  - type: MagazineVisuals
-    magState: mag
-    steps: 1
-    zeroVisible: true
-  - type: Appearance
+          - WH40KAstartesLaserPistolPowerCell
 
 # - type: entity
 #   parent: BaseWeaponPistol

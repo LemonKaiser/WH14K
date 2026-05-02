@@ -23,6 +23,7 @@
             Sergeant: [ 2, 2 ]
             TitheSupplier: [ 2, 2 ]
             VoxScout: [ 3, 3 ]
+            WH40KChaplain: [ 1, 1 ]
             # Heretics
             HColonel: [ 1, 1 ]
             HGuardsman: [ -1, -1 ]

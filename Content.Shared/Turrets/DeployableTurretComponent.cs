@@ -1,4 +1,5 @@
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Timing;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -136,6 +137,34 @@ public sealed partial class DeployableTurretComponent : Component
     /// </summary>
     [DataField]
     public string RetractingState = "cover_closing";
+
+    #endregion
+
+    #region: Mobility safety data
+
+    /// <summary>
+    /// Whether the turret should automatically shut down when someone starts pulling it.
+    /// </summary>
+    [DataField]
+    public bool DisableWhenPulled = false;
+
+    /// <summary>
+    /// Whether the turret should automatically shut down when it becomes unanchored.
+    /// </summary>
+    [DataField]
+    public bool DisableWhenUnanchored = false;
+
+    /// <summary>
+    /// Extra cooldown applied before the turret may be re-activated after mobility shutdown.
+    /// </summary>
+    [DataField]
+    public TimeSpan ReactivationCooldown = TimeSpan.Zero;
+
+    /// <summary>
+    /// Use-delay slot used for mobility shutdown cooldowns.
+    /// </summary>
+    [DataField]
+    public string ReactivationDelayId = "deployable-turret-reactivation";
 
     #endregion
 }

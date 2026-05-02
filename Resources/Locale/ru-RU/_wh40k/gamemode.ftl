@@ -2,8 +2,18 @@
 wh40k-team-battle-description = Две фракции сражаются до полного уничтожения.
 wh40k-team-imperium = Империум
 wh40k-team-heretics = Еретики
-wh40k-notification-title-vox = Vox report
+wh40k-notification-title-vox = Вокс-передача
+wh40k-notification-title-chaos = Воззвание Варпа
+wh40k-notification-title-tau = Сигнал Касты Огня
+wh40k-notification-title-admin = Администратум
+wh40k-notification-title-critical = Экстренный вокс-канал
+wh40k-notification-title-point = Сводка фронта
+wh40k-notification-title-weather = Метеосводка ауспекса
+wh40k-notification-title-event = Боевой протокол
 wh40k-notification-title-objective = Командный узел
+wh40k-notification-title-mission = Оперативная директива
+wh40k-notification-title-economy = Сводка Муниторума
+wh40k-notification-title-reinforcement = Сигнал подкреплений
 
 wh40k-team-service-message = Вы призваны на службу в { $team }. Исполните свой долг.
 wh40k-team-service-message-Imperium = По воле Императора очистите этот мир от ереси. Ни шагу назад, ни пощады.
