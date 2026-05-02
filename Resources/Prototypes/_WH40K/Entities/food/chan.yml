@@ -9,19 +9,19 @@
     sprite: _WH40K/Objects/Food/Chan.rsi
     size: Huge
   - type: Edible
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-          - ReagentId: Nutriment
-            Quantity: 15
-          - ReagentId: Vitamin
-            Quantity: 15
-          - ReagentId: Allicin
-            Quantity: 3
-          - ReagentId: Water
-            Quantity: 7
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 40
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: Vitamin
+        Quantity: 15
+      - ReagentId: Allicin
+        Quantity: 3
+      - ReagentId: Water
+        Quantity: 7
   - type: Tag
     tags:
     - Meat

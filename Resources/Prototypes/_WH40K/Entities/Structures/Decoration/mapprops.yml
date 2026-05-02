@@ -32,6 +32,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/mapprops.rsi
@@ -192,6 +194,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/chaos.rsi
@@ -299,6 +303,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
     state: trashbags_1
@@ -372,6 +378,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
     state: mine_sign

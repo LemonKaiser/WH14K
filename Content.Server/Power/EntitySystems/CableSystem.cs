@@ -88,6 +88,7 @@ public sealed partial class CableSystem : EntitySystem
             return;
 
         cable.CuttingQuality = newQuality;
-        Dirty(uid, cable);
+        // Cable cuttability is server-authoritative interaction state. CableComponent is not networked,
+        // so mutating it must not enqueue component state replication.
     }
 }

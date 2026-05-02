@@ -39,6 +39,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/banners.rsi
     state: chaos_banner

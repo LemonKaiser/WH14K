@@ -36,10 +36,6 @@
   conditions:
   - !type:TileNotBlocked
     failIfSpace: false
-  - !type:TileType
-    targets:
-    - Lattice
-    - Plating
 
 - type: construction
   id: WH40KChaosFlag
