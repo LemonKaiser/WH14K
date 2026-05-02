@@ -261,6 +261,18 @@
     - JobHLieutenant
 
 - type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsHellishForeman
+  name: reinforcement preview heretics hellish foreman
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - HellishForemanGear
+
+- type: entity
   id: SpawnPointWH40KReinforcementImperium
   parent: MarkerBase
   name: imperium reinforcement spawn

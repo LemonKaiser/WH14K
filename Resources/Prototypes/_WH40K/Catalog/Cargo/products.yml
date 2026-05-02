@@ -783,6 +783,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumGorjet
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  product: Gorjet
+  cost: 20000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KHereticsLantern
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1564,5 +1574,15 @@
     state: extraction_pack
   product: WH40KTacticalFultonHeretics
   cost: 12000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsNecklaceChaosCultistReflectWeak
+  icon:
+    sprite: Objects/Tools/fulton.rsi
+    state: extraction_pack
+  product: NecklaceChaosCultistReflectWeak
+  cost: 20000
   category: cpcat-cgo
   group: WH40KHereticsMarket

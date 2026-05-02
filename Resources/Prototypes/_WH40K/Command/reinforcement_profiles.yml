@@ -127,6 +127,13 @@
     maxCount: 1
     groupKey: w40k-cmd-reinforcement-group-command
     sortOrder: 50
+  - id: HellishForeman
+    job: HellishForeman
+    previewPrototype: WH40KReinforcementPreviewHereticsHellishForeman
+    baseCost: 40
+    maxCount: 5
+    minBaseLevel: 4
+    groupKey: w40k-cmd-reinforcement-group-special
 
 - type: wh40kCommandReinforcementTeamMap
   id: WH40KCommandReinforcementTeamMap

@@ -176,11 +176,11 @@
   - type: ExplosionResistance
     damageCoefficient: 0.6
 
-# панцирная броня еретиков
+# броня адской бригады
 - type: entity
   parent: ClothingOuterArmorAdvancedFlakVest
   id: ClothingOuterArmorAdvancedFlakVestHeretic
-  suffix: WH40K, Еретики
+  suffix: WH40K, Еретики, Адская Бригада
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
@@ -308,3 +308,25 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/armorkini.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/armorkini.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorMauler
+  suffix: WH40K, Еретики, Маулер
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/mauler.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/mauler.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.4
+        Heat: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.4
+  - type: ClothingSpeedModifier
+    walkModifier: 0.75
+    sprintModifier: 0.75

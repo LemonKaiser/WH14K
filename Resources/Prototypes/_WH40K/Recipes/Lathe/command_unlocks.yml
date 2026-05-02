@@ -553,6 +553,22 @@
     Glass: 250
     Plastic: 250
 
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KSpeedLoaderPhosphorEmpty
+  result: SpeedLoaderPhosphorEmpty
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KSpeedLoaderElectricArcEmpty
+  result: SpeedLoaderElectricArcEmpty
+  completetime: 4
+  materials:
+    Steel: 100
+
 - type: latheRecipePack
   id: WH40KCommandWeaponryResearchImperium
   recipes:

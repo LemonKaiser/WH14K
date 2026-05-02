@@ -217,6 +217,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
 
 - type: latheRecipePack
   id: WH40KProtolatheTier1
@@ -248,6 +250,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -300,6 +304,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -352,6 +358,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -404,6 +412,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
 
 - type: latheRecipePack
   id: WH40KProtolatheTier1Heretics
@@ -435,6 +445,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -487,6 +499,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -539,6 +553,8 @@
   - Brutepack
   - Ointment
   - Gauze
+  - WH40KSpeedLoaderPhosphorEmpty
+  - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer

@@ -192,7 +192,7 @@
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
-  - WH40KImperialCmdMelee
+  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobSergeantSWS
@@ -205,7 +205,7 @@
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
-  - WH40KImperialCmdMelee
+  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobSergeantHWS
@@ -218,7 +218,7 @@
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
-  - WH40KImperialCmdMelee
+  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobMajor
@@ -260,7 +260,7 @@
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
-  - WH40KImperialCmdMelee
+  - WH40KImperialCommandMelee
 
 - type: roleLoadout
   id: JobColonel
@@ -274,7 +274,7 @@
   - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
   - WH40KImperialCommandSidearm
-  - WH40KImperialCmdMelee
+  - WH40KImperialCommandMelee
 
 - type: roleLoadout
   id: JobHGuardsman
@@ -399,13 +399,13 @@
 - type: roleLoadout
   id: JobHLieutenant
   groups:
-  - WH40KHereticCommandHead
+  - WH40KHereticChampionHead
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNecklace
-  - WH40KHereticCommandOuter
+  - WH40KHereticChampionOuter
   - WH40KHereticCommandMask
   - WH40KHereticCommandHands
-  - WH40KHereticCommandFeet
+  - WH40KHereticChampionFeet
   - WH40KHereticCommandFieldKit
   - WH40KHereticMainWeapon
   - WH40KHereticSecondaryWeapon

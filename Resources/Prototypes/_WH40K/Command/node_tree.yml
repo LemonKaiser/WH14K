@@ -407,8 +407,8 @@
     minRoundTimeSeconds: 1050
     technologyUnlocks: [WH40KEquipmentAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSignalFlare, WH40KImperiumCloningSuite]
-      Heretics: [WH40KHereticsSignalFlare]
+      Imperium: [WH40KImperiumSignalFlare, WH40KImperiumCloningSuite, WH40KImperiumGorjet]
+      Heretics: [WH40KHereticsSignalFlare, WH40KHereticsNecklaceChaosCultistReflectWeak]
   - id: eqp_right_4
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-right-4-title

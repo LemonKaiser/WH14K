@@ -171,3 +171,13 @@
     sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
+
+- type: entity
+  parent: ClothingMaskGasGuardsman
+  id: ClothingMaskGasHellishForeman
+  suffix: WH40K, Культ Хаоса, Адская Бригада
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/hellbrigandmask.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/hellbrigandmask.rsi

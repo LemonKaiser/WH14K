@@ -728,7 +728,7 @@
   id: WH40KSaber
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 15
   inhand:
     - WHPowerSaberImperial
 
@@ -736,7 +736,7 @@
   id: WH40KMace
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 20
   inhand:
     - WHPowerMaceImperial
 
@@ -853,6 +853,14 @@
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 25
+  inhand:
+  - WHPowerFist
+
+- type: loadout
+  id: WH40KPowerFist
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
   inhand:
   - WHPowerFist
 

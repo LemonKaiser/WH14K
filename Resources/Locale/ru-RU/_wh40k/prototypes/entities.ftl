@@ -221,7 +221,7 @@ ent-ClothingHeadHelmetFlakAdv = панцирный шлем
 ent-ClothingHeadHelmetFlakAdvCyan = циановый панцирный шлем
     .desc = { ent-ClothingHeadHelmetFlakAdv.desc }
 
-ent-ClothingHeadHelmetFlakAdvHeresy = панцирный шлем еретиков
+ent-ClothingHeadHelmetFlakAdvHeresy = шлем адской бригады
     .desc = Тяжёлый шлем гвардейца-предателя панцирного образца, собранный из усиленных плит и трофейной герметизации для штурмовых атак.
 
 ent-ClothingHeadHelmetHeresiarchKhorne = панцирный шлем ересиарха Кхорна
@@ -281,7 +281,7 @@ ent-ClothingOuterArmorAdvancedFlakVest = панцирная броня
 ent-ClothingOuterArmorFlakVestGen = панцирный нагрудник
     .desc = Высококачественный позолоченый панцирный нагрудник офицера, покажет вашим подчинённым статус и власть, а врагу - в кого стрелять.
 
-ent-ClothingOuterArmorAdvancedFlakVestHeretic = панцирная броня еретиков
+ent-ClothingOuterArmorAdvancedFlakVestHeretic = броня адской бригады
     .desc = Панцирная броня гвардейца-предателя, отличающаяся только раскраской и символами.
 
 ent-ClothingOuterArmorHeresiarchChaos = броня ересиарха
@@ -1656,3 +1656,8 @@ ent-WH40KPlasticFlapsAirtightClear = герметичные прозрачные
 construction-wh40k-generator-jr-pacman-board = плата J.R.P.A.C.M.A.N.
 construction-wh40k-smes-board = плата SMES
 construction-wh40k-substation-board = плата подстанции
+
+ent-ClothingMaskGasHellishForeman = респиратор адской бригады
+    .desc = Стандартный респиратор, защищающий только дыхательные пути.
+
+ent-PowerCellVoss = батарея Восса

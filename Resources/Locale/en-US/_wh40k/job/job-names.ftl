@@ -42,6 +42,8 @@ job-name-hlexmechanic = Heretek Lexmechanic
 job-name-hgenetor = Heretek Genetor
 job-name-henginseer = Renegade Tech-Priest
 job-name-hnovice = Dark Mechanicum Acolyte
+job-name-job-name-hellish-foreman = hellish foreman
+
 job-name-tau-fire-warrior = Shas'la
 job-name-tau-officer = Shas'ui
 job-name-tau-ethereal = Ethereal

@@ -90,12 +90,12 @@
 - type: entity
   parent: ClothingHeadHelmetFlakAdv
   id: ClothingHeadHelmetFlakAdvHeresy
-  suffix: WH40K, Еретики
+  suffix: WH40K, Еретики, Адская Бригада
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/hellbrigadhelmet.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
+    sprite: _WH40K/Clothing/Head/Helmets/hellbrigadhelmet.rsi
 
 - type: entity
   parent: ClothingHeadHelmetFlakAdvHeresy
@@ -313,3 +313,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/valhallan_helmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/valhallan_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadMauler
+  suffix: WH40K, Еретики, Маулер
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/mauler.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/mauler.rsi
