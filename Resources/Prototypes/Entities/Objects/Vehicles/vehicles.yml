@@ -49,8 +49,9 @@
     enabled: false
   - type: Appearance
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Repairable
     fuelCost: 20
     doAfterDelay: 20
@@ -94,8 +95,9 @@
   - type: Item
     size: Ginormous
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 2
@@ -413,8 +415,9 @@
       map: ["foldedLayer"]
       visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Strap
     buckleOffset: "0.1,-0.05"
   - type: MovementSpeedModifier

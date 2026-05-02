@@ -68,6 +68,7 @@
     sprite: _WH40K/Structures/Decorations/shield_barricade.rsi
     state: shield-barricade
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
@@ -135,6 +136,7 @@
     - barricade
   - type: Damageable
     damageModifierSet: Metallic
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -220,6 +222,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
@@ -253,6 +257,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
@@ -283,6 +289,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
@@ -316,6 +324,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
@@ -346,6 +356,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi
@@ -379,6 +391,8 @@
           params:
             volume: 1
   - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Climbable
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_barricades.rsi

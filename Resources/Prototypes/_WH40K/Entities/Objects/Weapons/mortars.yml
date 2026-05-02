@@ -48,6 +48,7 @@
     maximumRange: 65
     fireDelay: 10
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

@@ -134,6 +134,10 @@ public sealed partial class AntagSelectionSystem
         if (!_jobs.MindTryGetJob(mind, out var job))
             return true;
 
+        // Preserve fork-level job restrictions until those jobs are migrated to upstream antag selectors.
+        if (!job.CanBeAntag)
+            return false;
+
         // "Sorry buddy, but you can't be a traitor and the head of security" - Urist 1984
         // This checks nullability for our mind for free as well!
         if (def.JobBlacklist?.Contains(job) ?? false)

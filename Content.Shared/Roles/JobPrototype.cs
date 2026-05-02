@@ -82,6 +82,12 @@ namespace Content.Shared.Roles
         public bool? OverrideConsoleVisibility { get; private set; } = null;
 
         /// <summary>
+        ///     Compatibility flag retained for fork content that should never be selected as random antag.
+        /// </summary>
+        [DataField]
+        public bool CanBeAntag { get; private set; } = true;
+
+        /// <summary>
         ///     The "weight" or importance of this job. If this number is large, the job system will assign this job
         ///     before assigning other jobs.
         /// </summary>

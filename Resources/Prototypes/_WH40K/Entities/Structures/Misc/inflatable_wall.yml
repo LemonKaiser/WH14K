@@ -8,8 +8,9 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: wall
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Inflatable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -34,8 +35,9 @@
     sprite: _WH40K/Objects/Misc/inflatable_door.rsi
     state: closed
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Inflatable
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

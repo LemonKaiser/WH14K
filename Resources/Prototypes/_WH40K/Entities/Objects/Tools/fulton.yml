@@ -29,6 +29,7 @@
     stackType: WH40KTacticalFulton
     count: 1
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

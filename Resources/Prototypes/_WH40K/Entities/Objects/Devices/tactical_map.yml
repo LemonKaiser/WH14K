@@ -39,6 +39,7 @@
       singleUser: true
       key: enum.WH40KTacticalMapUiKey.Key
     - type: Damageable
+    - type: Injurable
       damageContainer: Inorganic
     - type: Destructible
       thresholds:

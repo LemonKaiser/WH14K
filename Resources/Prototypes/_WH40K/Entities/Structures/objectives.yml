@@ -59,8 +59,8 @@
           False: { visible: false }
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
-    healthBarThreshold: 0
   - type: WaypointerTrackable
   - type: MobState
   - type: MobThresholds

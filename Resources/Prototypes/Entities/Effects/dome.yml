@@ -21,8 +21,9 @@
         - BulletImpassable
         - Opaque
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: HardLightBarrier
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Appearance
   - type: EnergyDomeVisuals
     effectStartCharge: 0.80

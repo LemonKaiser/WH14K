@@ -53,6 +53,7 @@
     bodyType: KinematicController
     bodyStatus: InAir
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Fixtures
     fixtures:
