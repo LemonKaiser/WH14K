@@ -5,13 +5,11 @@
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Consumable/Drinks/tau_flask.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 60
-        reagents:
-        - ReagentId: Water
-          Quantity: 60
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 60
   - type: Item
     size: Small
 
@@ -25,17 +23,16 @@
     state: nutriliquid
   - type: Item
     size: Tiny
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 20
-        reagents:
-        - ReagentId: Water
-          Quantity: 10
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: Vitamin
-          Quantity: 4
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Water
+        Quantity: 10
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: Vitamin
+        Quantity: 4
 
 - type: entity
   parent: FoodBase
@@ -50,15 +47,14 @@
   - type: Tag
     tags:
     - Meat
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
-        - ReagentId: Protein
-          Quantity: 5
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 5
 
 - type: entity
   parent: FoodBase
@@ -73,12 +69,11 @@
   - type: Tag
     tags:
     - Fruit
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 8
-        - ReagentId: Vitamin
-          Quantity: 7
+  - type: Solution
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8
+      - ReagentId: Vitamin
+        Quantity: 7

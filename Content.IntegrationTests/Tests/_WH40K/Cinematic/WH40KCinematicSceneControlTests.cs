@@ -91,14 +91,14 @@ public sealed class WH40KCinematicSceneControlTests : WH40KCinematicGameTest
     waitMode: Instant
     actions:
     - type: LoadSceneMap
-      sceneMapPath: /Maps/Test/wh40kcinematic_phase7_scene.yml
+      sceneMapPath: /Maps/Test/empty.yml
       sceneTransferMode: TeleportParticipants
   - id: invalid_scene_return
     waitMode: Instant
     actions:
     - type: LoadSceneMap
       contextId: invalid_scene
-      sceneMapPath: /Maps/Test/wh40kcinematic_phase7_scene.yml
+      sceneMapPath: /Maps/Test/empty.yml
       sceneTransferMode: TeleportParticipants
       entryAnchorId: scene_entry
       sceneCleanupPolicy: DestroyOnFinish

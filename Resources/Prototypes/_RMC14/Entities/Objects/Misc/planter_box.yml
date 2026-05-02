@@ -19,6 +19,8 @@
   - type: Appearance
   - type: Damageable
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
