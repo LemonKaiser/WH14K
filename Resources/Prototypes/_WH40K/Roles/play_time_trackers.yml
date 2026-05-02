@@ -161,7 +161,7 @@
   id: JobWH40KChaplain
 
 - type: playTimeTracker
-  id: HellishForeman
+  id: JobHellishForeman
 
 - type: playTimeTracker
   id: JobTauFireWarrior
