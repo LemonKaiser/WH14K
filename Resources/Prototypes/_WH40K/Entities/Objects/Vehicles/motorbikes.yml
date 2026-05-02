@@ -140,13 +140,13 @@
     lowSpeedTurnRateDegrees: 220
     highSpeedTurnRateDegrees: 76
     speedForFullSteer: 2.05
-  - type: SolutionContainerManager
-    solutions:
-      vehicleFuel:
-        maxVol: 900
-        reagents:
-        - ReagentId: WH40KPromethium
-          Quantity: 900
+  - type: Solution
+    id: vehicleFuel
+    solution:
+      maxVol: 900
+      reagents:
+      - ReagentId: WH40KPromethium
+        Quantity: 900
   - type: RefillableSolution
     solution: vehicleFuel
   - type: WH40KVehicleFuel

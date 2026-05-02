@@ -110,7 +110,12 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
             TryAddRandomHairLayerMarking(markings, random, markingManager, organ, organData, HumanoidVisualLayers.FacialHair, sex, newSkinColor, newEyeColor, hairColor, sex == Sex.Male ? 0.6f : 0.2f);
         }
 
-        return new HumanoidCharacterAppearance(newEyeColor, newSkinColor, markings);
+        // Keep the fork's richer random hair/facial hair generation, but validate it against
+        // the current upstream species/marking rules before returning.
+        return EnsureValid(
+            new HumanoidCharacterAppearance(newEyeColor, newSkinColor, markings),
+            species,
+            sex);
     }
 
     private static void TryAddRandomHairLayerMarking(

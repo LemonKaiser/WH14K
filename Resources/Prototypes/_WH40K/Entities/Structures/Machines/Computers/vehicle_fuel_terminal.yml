@@ -14,10 +14,10 @@
         type: WiresBoundUserInterface
       enum.WH40KVehicleFuelTerminalUiKey.Key:
         type: WH40KVehicleFuelTerminalBoundUserInterface
-  - type: SolutionContainerManager
-    solutions:
-      buffer:
-        maxVol: 1800
+  - type: Solution
+    id: buffer
+    solution:
+      maxVol: 1800
   - type: RefillableSolution
     solution: buffer
   - type: DrainableSolution
@@ -41,10 +41,10 @@
         type: WiresBoundUserInterface
       enum.WH40KVehicleFuelTerminalUiKey.Key:
         type: WH40KVehicleFuelTerminalBoundUserInterface
-  - type: SolutionContainerManager
-    solutions:
-      buffer:
-        maxVol: 1800
+  - type: Solution
+    id: buffer
+    solution:
+      maxVol: 1800
   - type: RefillableSolution
     solution: buffer
   - type: DrainableSolution

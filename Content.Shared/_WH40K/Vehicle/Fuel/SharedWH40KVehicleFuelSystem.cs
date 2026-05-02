@@ -242,7 +242,7 @@ public sealed class SharedWH40KVehicleFuelSystem : EntitySystem
             _vehicle.RefreshCanRun((uid, vehicle));
     }
 
-    public void SyncFuelSnapshot(EntityUid uid, WH40KVehicleFuelComponent? fuel = null, SolutionContainerManagerComponent? manager = null)
+    public void SyncFuelSnapshot(EntityUid uid, WH40KVehicleFuelComponent? fuel = null, SolutionManagerComponent? manager = null)
     {
         if (!Resolve(uid, ref fuel, false))
             return;

@@ -19,3 +19,4 @@ cargo-pallet-menu-footer-status = Export registry active.
 cargo-pallet-menu-footer-right = Export logistics
 cargo-pallet-appraise-button = Appraise
 cargo-pallet-sell-button = Sell
+cargo-pallet-menu-no-goods-text = Appraising...

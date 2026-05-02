@@ -120,9 +120,6 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
         {
             if (_mobStateSystem.IsAlive(uid, mobState))
             {
-                if (dmg.HealthBarThreshold != null && totalDamage < dmg.HealthBarThreshold)
-                    return null;
-
                 if (!_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Critical, out var threshold, thresholds) &&
                     !_mobThresholdSystem.TryGetThresholdForState(uid, MobState.Dead, out threshold, thresholds))
                     return (1, false);
@@ -147,9 +144,6 @@ public sealed class WH40KAlwaysShowHealthBarOverlay : Overlay
         }
 
         if (marker.MaxHealth == null || marker.MaxHealth <= FixedPoint2.Zero)
-            return null;
-
-        if (dmg.HealthBarThreshold != null && totalDamage < dmg.HealthBarThreshold)
             return null;
 
         var max = marker.MaxHealth.Value;

@@ -2,7 +2,6 @@ using System;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Shared._WH40K.Vehicle.Fuel;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -39,7 +38,7 @@ public sealed class WH40KVehicleFuelSystem : EntitySystem
 
         SubscribeLocalEvent<WH40KVehicleEngineComponent, WH40KToggleVehicleEngineActionEvent>(OnToggleEngineAction);
 
-        SubscribeLocalEvent<WH40KVehicleFuelComponent, SolutionContainerChangedEvent>(OnVehicleFuelSolutionChanged);
+        SubscribeLocalEvent<WH40KVehicleFuelComponent, SolutionChangedEvent>(OnVehicleFuelSolutionChanged);
 
         SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, ComponentStartup>(OnHandlingStartup);
         SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, DamageChangedEvent>(OnDamageChanged);
@@ -57,9 +56,9 @@ public sealed class WH40KVehicleFuelSystem : EntitySystem
         });
     }
 
-    private void OnVehicleFuelSolutionChanged(Entity<WH40KVehicleFuelComponent> ent, ref SolutionContainerChangedEvent args)
+    private void OnVehicleFuelSolutionChanged(Entity<WH40KVehicleFuelComponent> ent, ref SolutionChangedEvent args)
     {
-        if (args.SolutionId != ent.Comp.FuelSolution)
+        if (args.Solution.Comp.Id != ent.Comp.FuelSolution)
             return;
 
         _sharedFuel.SyncFuelSnapshot(ent.Owner, ent.Comp);

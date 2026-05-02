@@ -58,14 +58,14 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
     }
 
-    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionContainerChangedEvent args)
+    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionChangedEvent args)
     {
         base.OnSolutionUpdate(entity, ref args);
 
-        if (args.SolutionId != entity.Comp.SolutionName)
+        if (args.Solution.Comp.Id != entity.Comp.SolutionName)
             return;
 
-        UpdateFlammability(entity.Owner, args.Solution.Volume > 0 ? args.Solution : null);
+        UpdateFlammability(entity.Owner, args.Solution.Comp.Solution.Volume > 0 ? args.Solution.Comp.Solution : null);
     }
 
     protected override void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
@@ -329,20 +329,13 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         Solution addedSolution,
         bool sound = true,
         bool checkForOverflow = true,
-        PuddleComponent? puddleComponent = null,
-        SolutionContainerManagerComponent? sol = null)
+        PuddleComponent? puddleComponent = null)
     {
-        if (!Resolve(puddleUid, ref puddleComponent, ref sol))
+        if (!Resolve(puddleUid, ref puddleComponent))
             return false;
 
-        _solutionContainerSystem.EnsureAllSolutions((puddleUid, sol));
-
-        if (addedSolution.Volume == 0 ||
-            !_solutionContainerSystem.ResolveSolution(puddleUid, puddleComponent.SolutionName,
-                ref puddleComponent.Solution))
-        {
+        if (addedSolution.Volume == 0 || !_solutionContainerSystem.ResolveSolution(puddleUid, puddleComponent.SolutionName, ref puddleComponent.Solution))
             return false;
-        }
 
         _solutionContainerSystem.AddSolution(puddleComponent.Solution.Value, addedSolution);
 

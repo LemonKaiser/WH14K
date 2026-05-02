@@ -163,8 +163,9 @@
       cell_slot: !type:ContainerSlot
       mech-passive-module-container: !type:Container
   - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
     damageContainer: Inorganic
-    damageModifierSet: LightArmor
   - type: Construction
     graph: MechDisassemble
     node: start

@@ -1,4 +1,5 @@
 - type: entity
+  parent: SolutionTile
   id: FloorWaterEntity
   name: water
   description: A real thirst quencher.
@@ -8,10 +9,6 @@
     - Wall
   components:
   - type: FloorOccluder
-    requireSameTile: true
-    ignoreWhenIntersectingWhitelist:
-      tags:
-        - Catwalk
   - type: Transform
     anchored: true
   - type: SyncSprite
@@ -21,14 +18,22 @@
     drawdepth: BelowFloor
     layers:
       - state: shoreline_water
+  - type: Solution
+    id: pool
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 7680
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: Water
+        Quantity: 100
+  - type: DrainableSolution
+    solution: pool
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
-    aggregationMode: Strongest
-    rampUpDuration: 0.12
-    ignoreWhenIntersectingWhitelist:
-      tags:
-        - Catwalk
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -51,7 +56,6 @@
   - type: StepTrigger
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1
-    requireTripperOnSameTile: true
     blacklist:
       tags:
         - Catwalk

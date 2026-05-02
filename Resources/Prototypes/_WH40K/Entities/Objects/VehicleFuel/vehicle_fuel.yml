@@ -7,10 +7,9 @@
   components:
   - type: Label
     currentLabel: reagent-name-wh40k-promethium
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 900
-        reagents:
-        - ReagentId: WH40KPromethium
-          Quantity: 900
+  - type: Solution
+    solution:
+      maxVol: 900
+      reagents:
+      - ReagentId: WH40KPromethium
+        Quantity: 900
