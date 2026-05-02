@@ -159,7 +159,10 @@ public sealed class DrainSystem : EntitySystem
             if (drain.AutoDrain)
             {
                 _puddles.Clear();
-                _lookup.GetEntitiesInRange(Transform(uid).Coordinates, drain.Range, _puddles);
+                // Some drains, such as chasms, intentionally use a zero range so they
+                // only process their internal buffer without pulling nearby puddles.
+                if (drain.Range > 0f)
+                    _lookup.GetEntitiesInRange(Transform(uid).Coordinates, drain.Range, _puddles);
 
                 if (_puddles.Count == 0 && drainSolution.Volume <= 0)
                 {
@@ -168,6 +171,9 @@ public sealed class DrainSystem : EntitySystem
                 }
 
                 _ambientSound.SetAmbience(uid, true);
+
+                if (_puddles.Count == 0)
+                    continue;
 
                 amount /= _puddles.Count;
 

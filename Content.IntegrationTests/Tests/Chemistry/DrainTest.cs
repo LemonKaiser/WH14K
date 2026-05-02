@@ -12,6 +12,7 @@ public sealed class DrainTest : InteractionTest
 {
     private static readonly EntProtoId PizzaPrototype = "FoodPizzaMargherita";
     private static readonly EntProtoId DrainPrototype = "FloorDrain";
+    private static readonly EntProtoId ChasmPrototype = "FloorChasmEntity";
     private static readonly EntProtoId BucketPrototype = "Bucket";
     private static readonly ProtoId<ReagentPrototype> BloodReagent = "Blood";
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
@@ -120,5 +121,40 @@ public sealed class DrainTest : InteractionTest
 
         // Make sure the puddle was deleted by the drain.
         AssertDeleted(puddle);
+    }
+
+    /// <summary>
+    /// Tests that zero-range drains (such as chasms) keep draining their internal buffer
+    /// without querying for nearby puddles with an invalid range.
+    /// </summary>
+    [Test]
+    public async Task ZeroRangeDrainBufferTest()
+    {
+        var solutionContainerSys = SEntMan.System<SharedSolutionContainerSystem>();
+
+        var chasm = await Spawn(ChasmPrototype);
+
+        Assert.That(
+            solutionContainerSys.TryGetSolution(ToServer(chasm), DrainComponent.SolutionName, out var solutionEnt, out var solution),
+            "Chasm had no drain buffer solution.");
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(
+                solutionContainerSys.TryAddReagent(solutionEnt.Value, WaterReagent, WaterVolume),
+                "Could not add water to the chasm drain buffer.");
+        });
+
+        Assert.That(
+            solutionContainerSys.TryGetSolution(ToServer(chasm), DrainComponent.SolutionName, out _, out solution),
+            "Chasm drain buffer could not be read after filling.");
+        Assert.That(solution.Volume, Is.EqualTo(WaterVolume), "Chasm drain buffer had the wrong initial volume.");
+
+        await RunSeconds(2);
+
+        Assert.That(
+            solutionContainerSys.TryGetSolution(ToServer(chasm), DrainComponent.SolutionName, out _, out solution),
+            "Chasm drain buffer disappeared after ticking.");
+        Assert.That(solution.Volume, Is.LessThan(WaterVolume), "Chasm drain buffer did not drain over time.");
     }
 }
