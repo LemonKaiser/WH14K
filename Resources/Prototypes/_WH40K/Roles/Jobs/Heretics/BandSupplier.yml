@@ -38,6 +38,5 @@
     head: ClothingHeadHelmetFlakCHAOS
     ears: ClothingHeadsetVoxBackpackHeretics
     outerClothing: ClothingOuterArmorChaosVest
-    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: WH40KStandardTacticalMapTablet
     id: HBandSupplierDogTag
-

@@ -1762,3 +1762,13 @@ ent-ClothingOuterPsykerWardCoat = psyker ward robe
 
 ent-ClothingShoesPsykerBoots = psyker boots
     .desc = Heavy boots lined with internal wards to keep your footing even under astral pressure.
+
+ent-ClothingHeadMauler = Mauler helmet
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+
+ent-ClothingOuterArmorMauler = Mauler armor
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+
+ent-ClothingShoesBootsMauler = Mauler boots
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+

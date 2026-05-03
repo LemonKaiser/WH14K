@@ -46,6 +46,7 @@
   description: job-description-kasrkin
   displayWeight: 10
   playTimeTracker: JobKasrkin
+  setPreference: false
   requirements:
     - !type:SpeciesRequirement
       species:
@@ -90,4 +91,3 @@
     id: GuardsmanDogTag
   inhand:
   - WeaponHellgun
-

@@ -5,6 +5,8 @@
   displayWeight: 100
   playTimeTracker: JobLieutenant
   requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 60
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -54,5 +56,3 @@
     outerClothing: ClothingOuterArmorOfficer
     pocket1: WH40KCommandTacticalMapTablet
     id: LieutenantDogTag
-
-

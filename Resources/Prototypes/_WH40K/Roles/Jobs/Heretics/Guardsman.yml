@@ -45,6 +45,7 @@
   description: job-description-hellish-foreman
   displayWeight: 10
   playTimeTracker: JobHellishForeman
+  setPreference: false
   requirements:
     - !type:SpeciesRequirement
       species:

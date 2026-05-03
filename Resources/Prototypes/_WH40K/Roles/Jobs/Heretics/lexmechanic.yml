@@ -49,7 +49,7 @@
     gloves: ClothingHandsGlovesTechpriest
     outerClothing: ClothingOuterHardsuitTechpriestUnremoveadble
     ears: ClothingHeadsetVoxBackpackHeretics
-    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: WH40KStandardTacticalMapTablet
     id: HLexmechanicDogTag
 
 - type: chameleonOutfit

@@ -62,8 +62,7 @@
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     layers:
     - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
-      state: sentinel
-    - state: sentinel_autogun
+      state: sentinel_autogun
   - type: ItemSlots
     slots:
       cell_slot:
@@ -78,6 +77,13 @@
       - WH40KMechModuleFanSentinel
       - MechModuleAirTank
       - MechModuleTeslaRelay
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: sentinel-moving_autogun
+    noMovementLayers:
+      movement:
+        state: sentinel_autogun
 
 - type: entity
   id: MechSentinelBatteryPlasma
@@ -90,8 +96,7 @@
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     layers:
     - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
-      state: sentinel
-    - state: sentinel_plasma
+      state: sentinel_plasma
   - type: ItemSlots
     slots:
       cell_slot:
@@ -106,3 +111,10 @@
       - WH40KMechModuleFanSentinel
       - MechModuleAirTank
       - MechModuleTeslaRelay
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: sentinel-moving_plasma
+    noMovementLayers:
+      movement:
+        state: sentinel_plasma

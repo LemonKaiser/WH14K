@@ -5,6 +5,8 @@
   displayWeight: 60
   playTimeTracker: JobHColonel
   requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 60
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -41,7 +43,7 @@
     outerClothing: ClothingOuterArmorHeresiarchChaos
     belt: chaosbelt
     head: ClothingHeadHelmetFlakAdvHeresy
-    pocket1: WH40KCommandTacticalMapTablet
+    pocket2: WH40KCommandTacticalMapTablet
     id: HColonelDogTag
   inhand:
     - ChaosMachete

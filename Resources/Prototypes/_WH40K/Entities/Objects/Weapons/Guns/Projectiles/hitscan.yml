@@ -85,11 +85,11 @@
   id: RedMeltaLaser
   components:
   - type: HitscanBasicRaycast
-    maxDistance: 5
+    maxDistance: 6.5
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 100
+        Heat: 175
         Structural: 200
   - type: ChangeTemperatureOnCollide
     heat: 100000
