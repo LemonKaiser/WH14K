@@ -5,6 +5,8 @@
   displayWeight: 130
   playTimeTracker: JobColonel
   requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 60
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -55,4 +57,3 @@
     outerClothing: ClothingOuterArmorFlakVestGen
     pocket1: WH40KCommandTacticalMapTablet
     id: ColonelDogTag
-

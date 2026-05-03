@@ -5,6 +5,8 @@
   displayWeight: 50
   playTimeTracker: JobHLieutenant
   requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 60
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -42,7 +44,5 @@
     neck: NecklaceChaosCultistReflectWeak
     head: ClothingHeadHelmetrHeresy
     outerClothing: ClothingOuterArmorCultistCoat
-    pocket1: WH40KCommandTacticalMapTablet
+    pocket2: WH40KCommandTacticalMapTablet
     id: HLieutenantDogTag
-
-

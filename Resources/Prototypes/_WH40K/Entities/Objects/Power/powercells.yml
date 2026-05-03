@@ -117,8 +117,8 @@
     tags:
       - MeltPowerCell
   - type: Battery
-    maxCharge: 15000
-    startingCharge: 15000
+    maxCharge: 22500
+    startingCharge: 22500
   - type: BatteryAmmoProvider
     proto: RedMeltaLaser
     fireCost: 1500

@@ -483,7 +483,7 @@
     radius: 2.0
     energy: 7.0
   - type: ChangeTemperatureOnCollide
-    heat: 49000
+    heat: 50000
   - type: IgniteOnCollide
     fireStacks: 2.3
   - type: StunOnCollide
@@ -525,6 +525,8 @@
     slowdownAmount: 0.5
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
+  - type: TimedDespawn
+    lifetime: 0.35
 
 - type: entity
   name: lightning

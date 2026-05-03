@@ -383,8 +383,8 @@
     minRoundTimeSeconds: 360
     technologyUnlocks: [WH40KEquipmentAuthLeft3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumIntelDetector]
-      Heretics: [WH40KHereticsIntelDetector]
+      Imperium: [WH40KImperiumIntelDetector, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet]
+      Heretics: [WH40KHereticsIntelDetector, WH40KHereticsCarapaceArmor, WH40KHereticsCarapaceHelmet]
   - id: eqp_right_3
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-right-3-title
@@ -431,8 +431,8 @@
     minRoundTimeSeconds: 1950
     technologyUnlocks: [WH40KEquipmentAuthCap]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumTacticalFulton, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet]
-      Heretics: [WH40KHereticsTacticalFulton, WH40KHereticsCarapaceArmor, WH40KHereticsCarapaceHelmet]
+      Imperium: [WH40KImperiumTacticalFulton]
+      Heretics: [WH40KHereticsTacticalFulton]
 
 - type: wh40kCommandTreeTeamMap
   id: WH40KCommandTreeTeamMap

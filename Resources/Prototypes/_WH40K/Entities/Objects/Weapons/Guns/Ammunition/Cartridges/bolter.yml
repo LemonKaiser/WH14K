@@ -9,6 +9,7 @@
       - Cartridge
   - type: CartridgeAmmo
     proto: BulletBolter
+    deleteOnSpawn: true
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
     layers:
@@ -28,6 +29,7 @@
     - Cartridge
   - type: CartridgeAmmo
     proto: BulletBolter
+    deleteOnSpawn: true
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Cartridges/Bolter/astartes_pistol.rsi
     layers:
@@ -47,6 +49,7 @@
       - Cartridge
   - type: CartridgeAmmo
     proto: BulletHeavyBolter
+    deleteOnSpawn: true
   - type: Sprite
     sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
     layers:

@@ -320,6 +320,7 @@
   name: loadout-group-wh40k-imperial-command-uniform
   minLimit: 0
   loadouts:
+  - WH40KJumpsuitGuardVst
   - WH40KValhallanSergeantUniform
 
 - type: loadoutGroup
@@ -328,6 +329,7 @@
   loadouts:
   - WH40KFlakArmorSrg
   - WH40KCyanFlakArmorSrg
+  - WH40KCoatVst
   - WH40KValhallanSergeantCoat
 
 - type: loadoutGroup
@@ -515,6 +517,7 @@
   minLimit: 0
   loadouts:
   - WH40KBloodPactUniform
+  - WH40KSlaaneshUniform
 
 - type: loadoutGroup
   id: WH40KHereticLineOuter
@@ -656,6 +659,8 @@
   loadouts:
   - WH40KChaosCoat
   - WH40KBloodPactArmor
+  - WH40KSlaaneshArmorKini
+  - WH40KSlaaneshArmor
 
 - type: loadoutGroup
   id: WH40KHereticChampionHead
@@ -676,6 +681,8 @@
   - WH40KChaosCoat
   - WH40KBloodPactArmor
   - WH40KArmorMauler
+  - WH40KSlaaneshArmorKini
+  - WH40KSlaaneshArmor
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
