@@ -1,0 +1,171 @@
+- type: entity
+  parent: [BaseItem, BaseGunWieldable]
+  id: WeaponSonicBlaster
+  name: sonic blaster
+  description: A brutal sound-weapon automatic that turns pressure into lacerating force.
+  suffix: WH40K, Noize Marine
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/sonic_blaster.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/sonic_blaster_inhands.rsi
+    size: Huge
+    shape:
+    - 0,0,3,1
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/sonic_blaster_inhands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: AmmoCounter
+  - type: Gun
+    fireRate: 6
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/NoizeMarine/sonic_blaster.ogg
+  - type: ChamberMagazineAmmoProvider
+    soundRack:
+      path: /Audio/Weapons/Guns/Cock/ltrifle_cock.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineSonicBlaster
+        insertSound: /Audio/Weapons/Guns/MagIn/ltrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/ltrifle_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazineSonicBlaster
+      gun_chamber:
+        name: Chamber
+        startingItem: NoizeMarineCartridgeSonicBlaster
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgeSonicBlaster
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: HeldSpeedModifier
+    walkModifier: 0.98
+    sprintModifier: 0.98
+  - type: Wieldable
+    wieldedInhandPrefix: null
+  - type: StaticPrice
+    price: 900
+
+- type: entity
+  parent: BaseItem
+  id: WeaponScreamerPistol
+  name: screamer pistol
+  description: A compact sonic sidearm that tears with concentrated pressure.
+  suffix: WH40K, Noize Marine
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/screamer_pistol.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/screamer_pistol_inhands.rsi
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+    storedOffset: 0,-4
+  - type: Tag
+    tags:
+    - Sidearm
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/screamer_pistol_inhands.rsi
+    quickEquip: false
+    slots:
+    - suitStorage
+    - Belt
+  - type: AmmoCounter
+  - type: Gun
+    fireRate: 3.5
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/NoizeMarine/screamer_pistol.ogg
+  - type: WH40KGunPrediction
+  - type: AimingCamera
+    maxOffset: 2
+    pvsIncrease: 0.2
+    requireWield: false
+  - type: ChamberMagazineAmmoProvider
+    soundRack:
+      path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: MagazineScreamerPistol
+        insertSound: /Audio/Weapons/Guns/MagIn/pistol_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/pistol_magout.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - MagazineScreamerPistol
+      gun_chamber:
+        name: Chamber
+        startingItem: NoizeMarineCartridgeScreamerPistol
+        priority: 1
+        whitelist:
+          tags:
+          - CartridgeScreamerPistol
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: StaticPrice
+    price: 450
+
+- type: entity
+  parent: [BaseWeaponLauncher, BaseMajorContraband]
+  id: WeaponBlastmaster
+  name: blastmaster
+  description: A sonic grenade launcher that mauls and throws targets back with concussive force.
+  suffix: WH40K, Noize Marine
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/blastmaster.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/blastmaster_inhands.rsi
+    slots:
+    - Back
+    - suitStorage
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/NoizeMarine/blastmaster_inhands.rsi
+    size: Huge
+    shape:
+    - 0,0,3,1
+  - type: Gun
+    fireRate: 0.8
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/NoizeMarine/blastmaster.ogg
+  - type: AmmoCounter
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - BlastmasterGrenadeAmmo
+    proto: NoizeMarineBlastmasterGrenade
+    capacity: 5
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+  - type: GunRequiresWield
+  - type: Wieldable
+    wieldedInhandPrefix: null
+  - type: HeldSpeedModifier
+    walkModifier: 0.96
+    sprintModifier: 0.96
+  - type: StaticPrice
+    price: 1400

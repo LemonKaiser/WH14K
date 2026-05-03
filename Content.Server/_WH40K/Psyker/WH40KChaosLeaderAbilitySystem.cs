@@ -2,6 +2,8 @@ using System;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared._WH40K.Psyker;
+using Content.Server._WH40K.GameTicking.Rules;
+using Content.Shared._WH40K.GameMode;
 
 namespace Content.Server._WH40K.Psyker;
 
@@ -14,6 +16,7 @@ public sealed class WH40KChaosLeaderAbilitySystem : EntitySystem
 
     [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
+    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
 
     public override void Initialize()
     {
@@ -32,6 +35,9 @@ public sealed class WH40KChaosLeaderAbilitySystem : EntitySystem
         {
             return;
         }
+
+        if (_teamRule.GetCurrentPhase() < WH40KBattlePhase.Assault)
+            return;
 
         _actions.SetUseDelay((args.Action.Owner, args.Action.Comp), SacrificeCooldown);
         RestoreWarpCharge(args.Performer, SacrificeWarpRestore);

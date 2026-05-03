@@ -122,6 +122,21 @@
   id: MagazineStub3SMG
 
 - type: Tag
+  id: MagazineSonicBlaster
+
+- type: Tag
+  id: MagazineScreamerPistol
+
+- type: Tag
+  id: CartridgeSonicBlaster
+
+- type: Tag
+  id: CartridgeScreamerPistol
+
+- type: Tag
+  id: BlastmasterGrenadeAmmo
+
+- type: Tag
   id: LasgunPowerCellVoss
 
 - type: Tag

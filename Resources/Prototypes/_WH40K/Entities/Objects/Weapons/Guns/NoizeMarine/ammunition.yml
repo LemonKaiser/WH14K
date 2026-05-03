@@ -1,0 +1,89 @@
+- type: entity
+  id: NoizeMarineCartridgeSonicBlaster
+  parent: BaseCartridgePistol
+  suffix: WH40K, Noize Marine
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: NoizeMarineBulletSonicBlaster
+  - type: Tag
+    tags:
+    - CartridgeSonicBlaster
+
+- type: entity
+  id: NoizeMarineCartridgeScreamerPistol
+  parent: BaseCartridgePistol
+  suffix: WH40K, Noize Marine
+  components:
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: NoizeMarineBulletScreamerPistol
+  - type: Tag
+    tags:
+    - CartridgeScreamerPistol
+
+- type: entity
+  parent: [BaseItem, BaseMajorContraband]
+  id: NoizeMarineBlastmasterGrenade
+  name: blastmaster shell
+  description: A compact sonic charge for the Blastmaster.
+  components:
+  - type: Tag
+    tags:
+    - BlastmasterGrenadeAmmo
+  - type: Item
+    size: Small
+  - type: CartridgeAmmo
+    proto: NoizeMarineBlastmasterProjectile
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/NoizeMarine/blastmaster_ammo.rsi
+    state: icon
+
+- type: entity
+  id: MagazineSonicBlaster
+  parent: BaseItem
+  suffix: WH40K, Noize Marine
+  components:
+  - type: Tag
+    tags:
+    - MagazineSonicBlaster
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CartridgeSonicBlaster
+    capacity: 30
+    proto: NoizeMarineCartridgeSonicBlaster
+  - type: Item
+    size: Small
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/NoizeMarine/sonic_blaster_mag.rsi
+    state: icon
+
+- type: entity
+  id: MagazineScreamerPistol
+  parent: BaseItem
+  suffix: WH40K, Noize Marine
+  components:
+  - type: Tag
+    tags:
+    - MagazineScreamerPistol
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CartridgeScreamerPistol
+    capacity: 15
+    proto: NoizeMarineCartridgeScreamerPistol
+  - type: Item
+    size: Small
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/NoizeMarine/screamer_pistol_mag.rsi
+    state: icon

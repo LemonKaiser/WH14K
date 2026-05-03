@@ -523,6 +523,7 @@
   name: loadout-group-wh40k-heretic-line-outer
   minLimit: 0
   loadouts:
+  - WH40KVraksLightArmor
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
@@ -656,6 +657,7 @@
   name: loadout-group-wh40k-heretic-command-outer
   minLimit: 0
   loadouts:
+  - WH40KVraksCarapaceArmor
   - WH40KChaosCoat
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
