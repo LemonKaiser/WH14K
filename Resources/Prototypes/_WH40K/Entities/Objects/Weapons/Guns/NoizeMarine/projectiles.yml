@@ -1,0 +1,73 @@
+- type: entity
+  id: NoizeMarineBulletSonicBlaster
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Projectiles/NoizeMarine/sonic_blaster_projectile.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Slash: 10
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 2
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
+
+- type: entity
+  id: NoizeMarineBulletScreamerPistol
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Projectiles/NoizeMarine/screamer_pistol_projectile.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Slash: 13
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 1
+    walkSpeedModifier: 0.95
+    sprintSpeedModifier: 0.95
+
+- type: entity
+  id: NoizeMarineBlastmasterProjectile
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: false
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Projectiles/NoizeMarine/blastmaster_projectile.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Slash: 12
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: SonicBlast
+    totalIntensity: 24
+    intensitySlope: 2
+    maxIntensity: 8
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: PointLight
+    radius: 2.5
+    color: "#73d8ff"
+    energy: 0.5

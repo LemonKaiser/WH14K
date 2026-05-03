@@ -1,0 +1,12 @@
+- type: explosion
+  id: SonicBlast
+  damagePerIntensity:
+    types:
+      Slash: 6
+  tileBreakChance: [0]
+  tileBreakIntensity: [0]
+  tileBreakRerollReduction: 100
+  lightColor: "#73d8ff"
+  fireColor: "#73d8ff"
+  texturePath: /Textures/Effects/fire_greyscale.rsi
+  fireStates: 3
