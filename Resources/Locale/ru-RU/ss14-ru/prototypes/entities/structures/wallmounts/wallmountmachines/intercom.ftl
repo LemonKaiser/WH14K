@@ -1,41 +1,56 @@
 ent-BaseIntercom = интерком
     .desc = Интерком. На случай, когда необходимо что-то сообщить станции.
+
 ent-IntercomAssembly = каркас интеркома
     .desc = Интерком. На данный момент он бесполезен.
+
 ent-IntercomConstructed = { ent-BaseIntercom }
-    .suffix = Пустой, Панель открыта
     .desc = { ent-BaseIntercom.desc }
+    .suffix = Пустой, Панель открыта
+
 ent-Intercom = { ent-IntercomConstructed }
     .desc = { ent-IntercomConstructed.desc }
+
 ent-BaseIntercomSecure = { ent-Intercom }
     .desc = { ent-Intercom.desc }
+    .suffix = { ent-Intercom.suffix }
+
 ent-IntercomCommon = { ent-Intercom }
-    .suffix = Общий
     .desc = { ent-Intercom.desc }
+    .suffix = Общий
+
 ent-IntercomCommand = { ent-BaseIntercomSecure }
     .desc = Интерком. Он был укреплён металлом.
     .suffix = Командный
+
 ent-IntercomEngineering = { ent-Intercom }
+    .desc = { ent-Intercom.desc }
     .suffix = Инженерный
-    .desc = { ent-Intercom.desc }
+
 ent-IntercomMedical = { ent-Intercom }
+    .desc = { ent-Intercom.desc }
     .suffix = Медицинский
-    .desc = { ent-Intercom.desc }
+
 ent-IntercomScience = { ent-Intercom }
-    .suffix = Научный
     .desc = { ent-Intercom.desc }
+    .suffix = Научный
+
 ent-IntercomSecurity = { ent-BaseIntercomSecure }
     .desc = Интерком. Он был укреплён металлом из шлемов охраны, поэтому открыть его не так-то просто.
     .suffix = Служба безопасности
+
 ent-IntercomService = { ent-Intercom }
+    .desc = { ent-Intercom.desc }
     .suffix = Сервисный
-    .desc = { ent-Intercom.desc }
+
 ent-IntercomSupply = { ent-Intercom }
+    .desc = { ent-Intercom.desc }
     .suffix = Снабжение
-    .desc = { ent-Intercom.desc }
+
 ent-IntercomAll = { ent-Intercom }
+    .desc = { ent-Intercom.desc }
     .suffix = Все
-    .desc = { ent-Intercom.desc }
+
 ent-IntercomFreelance = { ent-Intercom }
-    .suffix = Фриланс
     .desc = { ent-Intercom.desc }
+    .suffix = Фриланс

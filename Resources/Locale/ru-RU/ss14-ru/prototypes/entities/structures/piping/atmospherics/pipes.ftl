@@ -1,23 +1,31 @@
 ent-GasPipeSansLayers = газовая труба
     .desc = Удерживает газ.
+
 ent-GasPipeBase = { ent-GasPipeSansLayers }
     .desc = { ent-GasPipeSansLayers.desc }
+
 ent-GasPipeHalf = { ent-GasPipeBase }
+    .desc = { ent-GasPipeBase.desc }
     .suffix = Половинная
-    .desc = { ent-GasPipeBase.desc }
+
 ent-GasPipeStraight = { ent-GasPipeBase }
+    .desc = { ent-GasPipeBase.desc }
     .suffix = Прямая
-    .desc = { ent-GasPipeBase.desc }
+
 ent-GasPipeBend = { ent-GasPipeBase }
+    .desc = { ent-GasPipeBase.desc }
     .suffix = Угловая
-    .desc = { ent-GasPipeBase.desc }
+
 ent-GasPipeTJunction = { ent-GasPipeBase }
+    .desc = { ent-GasPipeBase.desc }
     .suffix = Т-образная
-    .desc = { ent-GasPipeBase.desc }
+
 ent-GasPipeFourway = { ent-GasPipeBase }
-    .suffix = Четверная
     .desc = { ent-GasPipeBase.desc }
+    .suffix = Четверная
+
 ent-GasPipeBroken = сломанная труба
     .desc = Раньше она удерживала газ.
+
 ent-GasPipeManifold = газовый коллектор
     .desc = Позволяет газовым трубам разных конфигураций соединяться вместе.

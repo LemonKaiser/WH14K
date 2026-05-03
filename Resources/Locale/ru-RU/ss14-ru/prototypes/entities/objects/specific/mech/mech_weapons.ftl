@@ -1,38 +1,56 @@
 ent-WeaponMechCombatPulseRifle = тяжёлая импульсная винтовка eZ-14 mk2
     .desc = Стреляет тяжёлым импульсным лазером.
+
 ent-WeaponMechCombatImmolationGun = лучевая пушка ZFI «Иммоляция»
     .desc = Орудие для боевых мехов, выпускающее высокотемпературные лучи.
+
 ent-WeaponMechCombatSolarisLaser = лазерная пушка CH-LC «Solaris»
     .desc = Экспериментальная установленная лазерная пушка, наносящая больше урона, но перезаряжающаяся дольше, чем «Firedart».
+
 ent-WeaponMechCombatFiredartLaser = лазер CH-PS «Firedart»
     .desc = Стандартное лазерное вооружение боевых мехов.
+
 ent-WeaponMechCombatTeslaCannon = тесла-пушка P-X
     .desc = Оружие для боевых мехов, стреляющее энергетическими шарами на основе принципов экспериментального тесла-двигателя.
+
 ent-WeaponMechCombatDisabler = дизейблер CH-PD
     .desc = Нелетальный установленный дизейблер, позволяющий обездвиживать нарушителей.
+
 ent-WeaponMechCombatTaser = установленный тазер PBT «Pacifier»
     .desc = Установленный нелетальный тазер, позволяющий оглушать нарушителей.
+
 ent-WeaponMechCombatShotgun = LBX AC 10 «Scattershot»
     .desc = Установленный дробовик, заряженный картечью.
+
 ent-WeaponMechCombatShotgunIncendiary = карабин FNX-99 «Hades»
     .desc = Установленный карабин, стреляющий зажигательными патронами.
+
 ent-WeaponMechCombatUltraRifle = Ultra AC-2
     .desc = Установленная автопушка для плотного подавляющего огня.
+
 ent-WeaponMechCombatMissileRack6 = ракетная установка BRM-6
     .desc = Пусковые трубы нужно перезаряжать снаружи.
+
 ent-WeaponMechCombatMissileRack8 = лёгкая ракетная установка SRM-8
     .desc = Запускает пробивные ракеты, которые взрываются только при попадании в прочную цель.
+
 ent-WeaponMechCombatFlashbangLauncher = пусковая установка светошумовых SGL-6
     .desc = Запускает светошумовые гранаты, дезориентирующие цели.
+
 ent-WeaponMechIndustrialKineticAccelerator = протокинетический акселератор экзокостюма
     .desc = Стреляет кинетическими зарядами на короткой дистанции.
+
 ent-WeaponMechSpecialMousetrapMortar = мортирка с мышеловками
     .desc = Установленная пусковая установка мышеловок.
+
 ent-WeaponMechSpecialBananaMortar = банановая мортирка
     .desc = Установленная пусковая установка банановой кожуры.
+
 ent-WeaponMechChainSword = экзокостюмный цепной меч
     .desc = Оружие для боевых экзокостюмов. Этот механический цепной меч пронзит даже небеса!
+
 ent-WeaponMechMelleDrill = бур экзокостюма
     .desc = Снаряжение для шахтёрских экзокостюмов. Этот бур создан, чтобы прогрызать породу.
+
 ent-WeaponMechMelleDrillDiamond = алмазный бур экзокостюма
     .desc = Улучшенный шахтёрский бур, созданный, чтобы прогрызать породу ещё быстрее.
