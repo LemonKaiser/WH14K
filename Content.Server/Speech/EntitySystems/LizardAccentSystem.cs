@@ -21,7 +21,7 @@ public sealed class LizardAccentSystem : EntitySystem
     private static readonly Regex RegexLowerChe = new(@"\u0447+");
     private static readonly Regex RegexUpperChe = new(@"\u0427+");
 
-    [Dependency] private readonly IRobustRandom _random = default!; // Corvax-Localization
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -44,7 +44,6 @@ public sealed class LizardAccentSystem : EntitySystem
         // eckS
         message = RegexUpperEndX.Replace(message, "ECKS$1");
 
-        // Corvax-Localization-Start
         // \u0441 => \u0441\u0441\u0441
         message = RegexLowerEs.Replace(
             message,
@@ -85,7 +84,6 @@ public sealed class LizardAccentSystem : EntitySystem
             message,
             _random.Pick(new List<string>() { "\u0429\u0429", "\u0429\u0429\u0429" })
         );
-        // Corvax-Localization-End
         args.Message = message;
     }
 }

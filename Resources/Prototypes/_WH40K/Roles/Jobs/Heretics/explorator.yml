@@ -19,7 +19,7 @@
       role: JobNovice
       time: 2.5h
   icon: "JobIconExplorator"
-  startingGear: ExploratorGear
+  startingGear: HExploratorGear
   supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
   special:
@@ -32,6 +32,20 @@
   - Maintenance
   - External
   - Engineering
+
+- type: startingGear
+  id: HExploratorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriest
+    mask: ClothingMaskGasTechPriest
+    pocket1: WH40KStandardTacticalMapTablet
+    id: HExploratorDogTag
 
 - type: chameleonOutfit
   id: HExploratorChameleonOutfit

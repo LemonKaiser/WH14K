@@ -19,6 +19,13 @@
 
 - type: entity
   parent: StandardDogTag
+  id: VoxScoutDogTag
+  components:
+  - type: PresetIdCard
+    job: VoxScout
+
+- type: entity
+  parent: StandardDogTag
   id: ColonelDogTag
   components:
   - type: PresetIdCard
@@ -33,10 +40,24 @@
 
 - type: entity
   parent: StandardDogTag
+  id: ChaplainDogTag
+  components:
+  - type: PresetIdCard
+    job: WH40KChaplain
+
+- type: entity
+  parent: StandardDogTag
   id: LieutenantDogTag
   components:
   - type: PresetIdCard
     job: Lieutenant
+
+- type: entity
+  parent: StandardDogTag
+  id: MajorDogTag
+  components:
+  - type: PresetIdCard
+    job: Major
 
 - type: entity
   parent: StandardDogTag
@@ -140,6 +161,13 @@
 
 - type: entity
   parent: StandardDogTag
+  id: HVoxScoutDogTag
+  components:
+  - type: PresetIdCard
+    job: HVoxScout
+
+- type: entity
+  parent: StandardDogTag
   id: HColonelDogTag
   components:
   - type: PresetIdCard
@@ -213,7 +241,7 @@
   id: HMagosDogTag
   components:
   - type: PresetIdCard
-    job: Magos
+    job: HMagos
 
 - type: entity
   parent: StandardDogTag

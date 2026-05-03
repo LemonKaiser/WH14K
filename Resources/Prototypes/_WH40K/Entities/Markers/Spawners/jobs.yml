@@ -202,13 +202,41 @@
       - state: sergeant
 
 - type: entity
+  id: SpawnPointMajor
+  parent: SpawnPointJobBase
+  name: Major
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: Major
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: head_officer
+
+- type: entity
+  id: SpawnPointWH40KChaplain
+  parent: SpawnPointJobBase
+  name: WH40KChaplain
+  suffix: WH40K, Imperium
+  components:
+  - type: SpawnPoint
+    job_id: WH40KChaplain
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: commissar
+
+- type: entity
   id: SpawnPointSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
   suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
-    job_id: WH40KChaplain
+    job_id: SpecialistHWS
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:
@@ -223,7 +251,7 @@
   suffix: WH40K, РРјРїРµСЂРёСѓРј
   components:
   - type: SpawnPoint
-    job_id: Major
+    job_id: SpecialistSWS
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:

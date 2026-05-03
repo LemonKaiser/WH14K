@@ -24,7 +24,7 @@
       role: JobNovice
       time: 2.5h
   weight: 10
-  startingGear: MagosGear
+  startingGear: HMagosGear
   icon: "JobIconMagos"
   requireAdminNotify: true
   supervisors: job-supervisors-wh40k-dark-mechanicum-magos
@@ -54,4 +54,20 @@
   #   charges: 8
   # - !type:ModifyEnvirohelmSpecial
   #   powerCell: PowerCellPotato
+
+- type: startingGear
+  id: HMagosGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    mask: ClothingGasTechPriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriestMarsMagos
+    pocket1: WH40KCommandTacticalMapTablet
+    id: HMagosDogTag
+  inhand:
+    - WHOmnissianAxe
 

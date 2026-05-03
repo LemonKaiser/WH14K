@@ -1168,16 +1168,17 @@ ent-MobQueenChrysalis = Queen Chrysalis
 # --- Floor tiles ---
 
 ent-NecronFloorWH40k = necron tile
-ent-NecronFloorWH40k1 = brick floor
+ent-NecronFloorWH40k1 = necron tile
 ent-BrickFloorWH40k = brick floor
 ent-BrickFloorWH40k1 = brick floor
 ent-BrickFloorWH40k2 = brick floor
-ent-BrickFloorWH40k3 = chaos brick floor
-ent-ChaosBrickAshFloorWH40k = concrete tile
+ent-BrickFloorWH40k3 = brick floor
+ent-ChaosBrickAshFloorWH40k = chaos brick floor
 ent-ConcreteFloorWH40k = concrete tile
 ent-ConcreteFloorWH40k1 = concrete tile
 ent-ConcreteFloorWH40k2 = concrete tile
 ent-ConcreteFloorWH40k3 = concrete tile
+ent-ConcreteFloorWH40k4 = concrete tile
 
 # --- Actions ---
 
@@ -1744,6 +1745,24 @@ ent-ClothingMaskGasHellishForeman = Hell Brigade Respirator
 
 ent-PowerCellVoss = Voss battery
 
+ent-ActionWH40KCharacterDevelopmentKidneyPurge = Kidney Purge
+    .desc = Flush up to 5 units of toxin reagents from your bloodstream.
+
+ent-ActionWH40KCharacterDevelopmentWarFurnace = War Furnace
+    .desc = For 5 seconds, recover 2.5 damage every second.
+
+ent-ClothingUniformJumpsuitPsykerSanctioned = sanctioned psyker vestments
+    .desc = Formal vestments issued to an Imperial psyker for service under supervision and in the line.
+
+ent-ClothingBackpackPsykerSatchel = psykana satchel
+    .desc = A field satchel for notes, focusing seals, and supplies carried by a sanctioned psyker.
+
+ent-ClothingOuterPsykerWardCoat = psyker ward robe
+    .desc = A consecrated robe with protective seams and layers that help maintain discipline under warp pressure.
+
+ent-ClothingShoesPsykerBoots = psyker boots
+    .desc = Heavy boots lined with internal wards to keep your footing even under astral pressure.
+
 ent-ClothingHeadMauler = Mauler helmet
     .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
 
@@ -1752,3 +1771,4 @@ ent-ClothingOuterArmorMauler = Mauler armor
 
 ent-ClothingShoesBootsMauler = Mauler boots
     .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+

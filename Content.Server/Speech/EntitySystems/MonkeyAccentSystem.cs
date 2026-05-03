@@ -29,23 +29,23 @@ public sealed class MonkeyAccentSystem : EntitySystem
                 {
                     foreach (var _ in word)
                     {
-                        accentedMessage.Append('У');  // Corvax-Localization
+                        accentedMessage.Append('У');
                     }
 
                     if (_random.NextDouble() >= 0.3)
-                        accentedMessage.Append('К');  // Corvax-Localization
+                        accentedMessage.Append('К');
                 }
                 else
-                    accentedMessage.Append('У');  // Corvax-Localization
+                    accentedMessage.Append('У');
             }
             else
             {
                 foreach (var _ in word)
                 {
                     if (_random.NextDouble() >= 0.8)
-                        accentedMessage.Append('Г');  // Corvax-Localization
+                        accentedMessage.Append('Г');
                     else
-                        accentedMessage.Append('А');  // Corvax-Localization
+                        accentedMessage.Append('А');
                 }
 
             }

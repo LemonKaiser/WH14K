@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using Content.Server.Speech.Components;
 using Content.Shared.Speech;
-using Robust.Shared.Random; // Corvax-Localization
+using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
@@ -24,7 +24,7 @@ public sealed class FrontalLispSystem : EntitySystem
     private static readonly Regex RegexUpperZe = new(@"\u0417");
     // @formatter:on
 
-    [Dependency] private readonly IRobustRandom _random = default!; // Corvax-Localization
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -43,7 +43,6 @@ public sealed class FrontalLispSystem : EntitySystem
         message = RegexUpperEcks.Replace(message, "EKTH");
         message = RegexLowerEcks.Replace(message, "ekth");
 
-        // Corvax-Localization Start
         // \u0441 - \u0448
         message = RegexLowerEs.Replace(message, _random.Prob(0.90f) ? "\u0448" : "\u0441");
         message = RegexUpperEs.Replace(message, _random.Prob(0.90f) ? "\u0428" : "\u0421");
@@ -59,7 +58,6 @@ public sealed class FrontalLispSystem : EntitySystem
         // \u0437 - \u0436
         message = RegexLowerZe.Replace(message, _random.Prob(0.90f) ? "\u0436" : "\u0437");
         message = RegexUpperZe.Replace(message, _random.Prob(0.90f) ? "\u0416" : "\u0417");
-        // Corvax-Localization End
 
         args.Message = message;
     }
