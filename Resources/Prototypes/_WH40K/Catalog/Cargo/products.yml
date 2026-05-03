@@ -331,7 +331,7 @@
 - type: cargoProduct
   id: WH40KImperiumFlameThrower
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    sprite: _WH40K/Objects/Weapons/Flamethrower/flamethrower.rsi
     state: icon
   product: FlameThrowerGun
   cost: 17000
@@ -1190,9 +1190,9 @@
 - type: cargoProduct
   id: WH40KHereticsFlameThrower
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    sprite: _WH40K/Objects/Weapons/Flamethrower/chaos_flamethrower.rsi
     state: icon
-  product: FlameThrowerGun
+  product: ChaosFlameThrowerGun
   cost: 17000
   category: cpcat-arm
   group: WH40KHereticsMarket

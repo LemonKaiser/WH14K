@@ -278,8 +278,8 @@ ent-ClothingOuterArmorAdvancedFlakVest = carapace armor
 ent-ClothingOuterArmorFlakVestGen = armored breastplate
     .desc = A high-quality gold-plated officer's armored breastplate will show your subordinates your status and power, and the enemy - who to shoot at.
 
-ent-ClothingOuterArmorAdvancedFlakVestHeretic = Heretic Carapace Armor
-    .desc = The carapace armor of a traitor guardsman, differing only in coloring and symbols.
+ent-ClothingOuterArmorAdvancedFlakVestHeretic = Vraksian renegade carapace armor
+    .desc = A fuller carapace rig for the better-equipped, fanatical fighters who formed the core of the Vraksian rebels during the Siege of Vraks. Built to endure a long siege, shrapnel and a storm of bullets.
 
 ent-ClothingOuterArmorHeresiarchChaos = heresiarch armor
     .desc = Black carapace armor for the leader of a chaos cult. Its protection matches an officer-grade breastplate, but its finish looks tempered in the Warp.
@@ -486,7 +486,10 @@ ent-WeaponMechCombatSentinelPlasma = Sentinel Plasma Rifle
     .desc = A plasma weapon fitted for a combat Sentinel.
 
 ent-FlameThrowerGun = flamethrower
-    .desc = No matter who stands in front of you - a vile xenos or a fallen heretic - the flamethrower will help you minimize his lifespan.
+    .desc = A stream of burning promethium can scour cover, trenches and massed infantry in one sweep. Imperial flamers are prized in urban fighting, bunker clearing and any assault where the enemy must be smoked out with fire.
+
+ent-ChaosFlameThrowerGun = chaos flamethrower
+    .desc = A defiled flamer that vomits a sticky stream of ignited promethium. Heretics prize it for flooding trenches and bunkers with what they see as cleansing fire.
 
 ent-Chainsword = saw blade
     .desc = Vrrrrruuum
@@ -1400,8 +1403,8 @@ ent-ClothingMaskGasCultist3 = cultist respirator
 ent-NecklaceChaosCultistReflectWeak = cultist necklace
     .desc = A sinister necklace adorned with symbols of Chaos. It flares with warp energy and projects a weak protective shield.
 
-ent-ClothingOuterArmorChaosVest = Chaos flak vest
-    .desc = A full set of defiled Chaos armour for a rank-and-file cultist. Provides solid protection, but its alien metal presses on the body and restricts movement.
+ent-ClothingOuterArmorChaosVest = Vraksian renegade light armor
+    .desc = A rough set of looted plates and depot gear like that worn by the Traitor Militia of Vraks during the Siege of Vraks. Ugly, heavy and dependable in trench warfare.
 
 ent-ClothingOuterArmorCultistCoat = cultist greatcoat
     .desc = A dark greatcoat infused with symbols of Chaos. It inspires dread.

@@ -417,6 +417,16 @@
     outerClothing: ClothingOuterArmorCultistCoat
 
 - type: loadout
+  id: WH40KVraksLightArmor
+  equipment:
+    outerClothing: ClothingOuterArmorChaosVest
+
+- type: loadout
+  id: WH40KVraksCarapaceArmor
+  equipment:
+    outerClothing: ClothingOuterArmorAdvancedFlakVestHeretic
+
+- type: loadout
   id: WH40KBloodPactArmor
   effects:
   - !type:GroupLoadoutEffect

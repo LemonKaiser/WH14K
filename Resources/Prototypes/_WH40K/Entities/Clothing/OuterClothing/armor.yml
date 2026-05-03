@@ -132,9 +132,9 @@
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flak_armour.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_light_armor.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flak_armour.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_light_armor.rsi
 
 # панцирная броня
 - type: entity
@@ -183,9 +183,9 @@
   suffix: WH40K, Еретики, Адская Бригада
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
