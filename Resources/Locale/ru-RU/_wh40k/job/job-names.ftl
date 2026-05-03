@@ -42,7 +42,7 @@ job-name-hlexmechanic = лексмеханик-еретех
 job-name-hgenetor = генетор-еретех
 job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит Тёмного Механикума
-job-name-job-name-hellish-foreman = адский бригадир
+job-name-hellish-foreman = адский бригадир
 
 job-name-tau-fire-warrior = шас'ла
 job-name-tau-officer = шас'уи

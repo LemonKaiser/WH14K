@@ -728,7 +728,7 @@
   id: WH40KSaber
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 25
   inhand:
     - WHPowerSaberImperial
 
@@ -844,7 +844,7 @@
   id: WH40KCommandPowerSaber
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 15
   inhand:
   - WHPowerSaberImperial
 

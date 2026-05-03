@@ -30,7 +30,7 @@
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
   - type: Gun
-    fireRate: 1
+    fireRate: 0.6
   - type: RevolverAmmoProvider
     capacity: 6
     chambers: [ True, True, True, True, True, True ]

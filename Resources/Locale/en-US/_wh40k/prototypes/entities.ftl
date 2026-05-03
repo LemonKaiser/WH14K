@@ -1743,3 +1743,12 @@ ent-ClothingMaskGasHellishForeman = Hell Brigade Respirator
     .desc = Standard respirator that protects the respiratory tract only.
 
 ent-PowerCellVoss = Voss battery
+
+ent-ClothingHeadMauler = Mauler helmet
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+
+ent-ClothingOuterArmorMauler = Mauler armor
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+
+ent-ClothingShoesBootsMauler = Mauler boots
+    .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.

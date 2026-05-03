@@ -129,7 +129,9 @@
     range: 1.8
     damage:
       types:
-        Slash: 18
+        Slash: 30
+  - type: StaminaDamageOnHit
+    damage: 10
   - type: Item
     sprite: Objects/Weapons/Melee/energykatana.rsi
     storedSprite:
@@ -143,7 +145,7 @@
     - Back
     - Belt
   - type: Reflect
-    reflectProb: 0.30
+    reflectProb: 0.3
     spread: 100
     slotFlags:
     - NONE
@@ -157,13 +159,13 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: MeleeWeapon
-    attackRate: 1.6
+    attackRate: 2
     range: 1.9
     damage:
       types:
-        Slash: 22
+        Slash: 30
   - type: Reflect
-    reflectProb: 0.45
+    reflectProb: 0.5
     spread: 120
     slotFlags:
     - NONE

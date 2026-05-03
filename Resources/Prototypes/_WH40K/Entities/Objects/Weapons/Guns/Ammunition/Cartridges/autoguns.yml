@@ -36,6 +36,7 @@
     - Cartridge825mmLong
   - type: CartridgeAmmo
     proto: Bullet825mmLong
+    deleteOnSpawn: true
 
 - type: entity
   id: Cartridge10mmLong
