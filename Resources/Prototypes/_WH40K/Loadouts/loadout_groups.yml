@@ -406,7 +406,6 @@
   loadouts:
   - WH40KOfficerCoat
   - WH40KCoatLietVst
-  - WH40KArmorFlakCoatLiet
   - WH40KValhallanCaptainCoat
 
 - type: loadoutGroup

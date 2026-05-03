@@ -172,7 +172,7 @@
         Blunt: 0.35
         Slash: 0.35
         Piercing: 0.35
-        Heat: 0.55
+        Heat: 0.35
   - type: ExplosionResistance
     damageCoefficient: 0.6
 

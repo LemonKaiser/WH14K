@@ -2,7 +2,7 @@
   id: WH40KHeadMauler
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 30
   equipment:
     head: ClothingHeadMauler
 
@@ -10,7 +10,7 @@
   id: WH40KArmorMauler
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 30
   equipment:
     outerClothing: ClothingOuterArmorMauler
 
@@ -18,6 +18,6 @@
   id: WH40KBootsMauler
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 30
   equipment:
     shoes: ClothingShoesBootsMauler
