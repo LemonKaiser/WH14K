@@ -1,3 +1,7 @@
+ent-MobWatcherBase = наблюдатель
+    .desc = Кажется, он смотрит прямо сквозь вас.
+    .suffix = Лаваленд
+
 ent-MobWatcherLavaland = { ent-MobWatcherBase }
     .desc = { ent-MobWatcherBase.desc }
     .suffix = { ent-MobWatcherBase.suffix }

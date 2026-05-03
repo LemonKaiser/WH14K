@@ -7,6 +7,9 @@ ent-MiningDrill = шахтёрский бур
 ent-MiningDrillDiamond = шахтёрский бур с алмазным покрытием
     .desc = Значительно более эффективный шахтёрский бур с алмазным покрытием.
 
+ent-BaseWeaponCrusher = крушитель
+    .desc = Ранняя версия протокинетического ускорителя.
+
 ent-WeaponCrusher = { ent-BaseWeaponCrusher }
     .desc = { ent-BaseWeaponCrusher.desc }
 

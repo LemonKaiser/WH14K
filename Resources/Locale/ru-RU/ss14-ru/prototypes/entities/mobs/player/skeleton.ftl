@@ -7,5 +7,8 @@ ent-MobSkeletonBiker = скелет-байкер
 ent-MobSkeletonCloset = скелет из шкафа
     .desc = { ent-MobSkeletonPerson.desc }
 
+ent-BaseMobSkeletonPerson = Urist McSkelly
+    .desc = { ent-MobFlammable.desc }
+
 ent-MobSkeletonPerson = { ent-BaseMobSkeletonPerson }
     .desc = { ent-BaseMobSkeletonPerson.desc }

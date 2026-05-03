@@ -1,3 +1,6 @@
+ent-BlastDoor = гермозатвор
+    .desc = Тяжёлая защитная дверь, рассчитанная на серьёзные неприятности.
+
 ent-BlastDoorOpen = { ent-BlastDoor }
     .desc = { ent-BlastDoor.desc }
     .suffix = Открытый

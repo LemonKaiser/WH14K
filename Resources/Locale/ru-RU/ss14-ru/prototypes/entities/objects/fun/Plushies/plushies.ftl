@@ -31,6 +31,9 @@ ent-PlushieLamp = плюшевая лампа
 ent-PlushieArachind = плюшевый арахнид
     .desc = Очаровательная мягкая игрушка, напоминающая арахнида. На ощупь она шелковистая.
 
+ent-PlushieLizard = плюшевая ящерица
+    .desc = Очаровательная мягкая игрушка, напоминающая человека-ящера. Выпущена ЦентКомом как жест против видовой дискриминации на рабочих местах.
+
 ent-PlushieLizardMirrored = { ent-PlushieLizard }
     .desc = { ent-PlushieLizard.desc }
     .suffix = Отзеркален

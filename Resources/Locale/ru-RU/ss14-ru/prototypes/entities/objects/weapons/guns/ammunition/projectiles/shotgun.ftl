@@ -40,6 +40,9 @@ ent-PelletShotgunUranium = дробина (.50 урановая)
 ent-PelletShotgunUraniumSpread = { ent-PelletShotgunUranium }
     .desc = { ent-PelletShotgunUranium.desc }
 
+ent-PelletGrapeshot = картечина
+    .desc = { ent-BaseBullet.desc }
+
 ent-PelletGrapeshotSpread = { ent-PelletGrapeshot }
     .desc = { ent-PelletGrapeshot.desc }
 

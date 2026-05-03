@@ -22,6 +22,10 @@ ent-MobAbomination = мерзость
     .desc = Бракованный клон, испытывающий постоянную боль и жаждущий мести.
     .suffix = { ent-BaseMobFlesh.suffix }
 
+ent-BaseMobFleshSalvage = искажённая плоть
+    .desc = Колышущаяся масса плоти, оживлённая под действием аномальной энергии.
+    .suffix = Утилизация
+
 ent-MobFleshJaredSalvage = { ent-BaseMobFleshSalvage }
     .desc = { ent-BaseMobFleshSalvage.desc }
     .suffix = { ent-BaseMobFleshSalvage.suffix }

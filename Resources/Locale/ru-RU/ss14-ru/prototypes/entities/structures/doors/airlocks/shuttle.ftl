@@ -1,3 +1,7 @@
+ent-AirlockShuttle = внешний шлюз
+    .desc = Нужен для соединения двух космических кораблей.
+    .suffix = Стыковочный
+
 ent-AirlockGlassShuttle = { ent-AirlockShuttle }
     .desc = { ent-AirlockShuttle.desc }
     .suffix = Стыковочный, Стеклянный
