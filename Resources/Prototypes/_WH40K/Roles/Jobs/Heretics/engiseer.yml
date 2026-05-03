@@ -18,7 +18,7 @@
     - !type:RoleTimeRequirement
       role: JobNovice
       time: 2.5h
-  startingGear: EnginseerGear
+  startingGear: HEnginseerGear
   icon: "JobIconEnginseer"
   supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
@@ -31,6 +31,19 @@
   - Engineering
   - External
   - Atmospherics
+
+- type: startingGear
+  id: HEnginseerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    outerClothing: ClothingOuterHardsuitTechpriest
+    pocket1: WH40KStandardTacticalMapTablet
+    id: HEnginseerDogTag
 
 - type: chameleonOutfit
   id: HEnginseerChameleonOutfit

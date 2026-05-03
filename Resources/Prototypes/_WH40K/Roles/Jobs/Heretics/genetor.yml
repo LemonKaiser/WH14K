@@ -18,7 +18,7 @@
     - !type:RoleTimeRequirement
       role: JobNovice
       time: 2.5h
-  startingGear: GenetorGear
+  startingGear: HGenetorGear
   icon: "JobIconGenetor"
   supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false
@@ -33,4 +33,18 @@
   - Atmospherics
   - Medical
   - Chemistry
+
+- type: startingGear
+  id: HGenetorGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    neck: ClothingNeckRobeGenetorTechpriestMars
+    gloves: ClothingHandsGlovesTechpriest
+    eyes: ClothingEyesHudTechPriest
+    mask: ClothingMaskGasTechPriest
+    pocket1: WH40KStandardTacticalMapTablet
+    id: HGenetorDogTag
 

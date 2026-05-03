@@ -42,9 +42,6 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private static readonly TimeSpan OverlayRefreshInterval = TimeSpan.FromSeconds(0.5);
     private static readonly TimeSpan OverlayRefreshIntervalNoTeam = TimeSpan.FromSeconds(1.0);
     private static readonly Color NeutralMarkerColor = Color.FromHex("#B7C1CF".AsSpan());
-    private static readonly ResPath BattlefieldSnapshotTexturePath = new("/Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png");
-    private static readonly ResPath WinterAssaultSnapshotTexturePath = new("/Textures/_WH40K/Interface/TacticalMap/winterassault_snapshot.png");
-
     private readonly record struct TeamMapKey(EntityUid GridUid, string TeamId);
 
     private sealed class FogGridConfig
@@ -585,32 +582,17 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
     private ResPath ResolveSnapshotTexturePath(Entity<WH40KTacticalMapComponent> map)
     {
         if (map.Comp.SnapshotTexture != ResPath.Empty &&
-            map.Comp.SnapshotTexture != BattlefieldSnapshotTexturePath)
+            map.Comp.SnapshotTexture != WH40KTacticalMapSnapshotCatalog.BattlefieldSnapshotTexturePath)
         {
             return map.Comp.SnapshotTexture;
         }
 
         var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap != null)
-        {
-            switch (selectedMap.ID)
-            {
-                case "WinterAssault":
-                    return WinterAssaultSnapshotTexturePath;
-                case "Battlefield40k":
-                    return BattlefieldSnapshotTexturePath;
-            }
 
-            switch (selectedMap.MapPath.ToString().ToLowerInvariant())
-            {
-                case "/maps/_wh40k/winterassault.yml":
-                    return WinterAssaultSnapshotTexturePath;
-                case "/maps/_wh40k/battlefield40k.yml":
-                    return BattlefieldSnapshotTexturePath;
-            }
-        }
-
-        return map.Comp.SnapshotTexture;
+        return WH40KTacticalMapSnapshotCatalog.ResolveSnapshotTexture(
+            selectedMap?.ID,
+            selectedMap?.MapPath,
+            map.Comp.SnapshotTexture);
     }
 
     private TeamOverlayState GetOrRefreshOverlayState(EntityUid gridUid, string teamId)

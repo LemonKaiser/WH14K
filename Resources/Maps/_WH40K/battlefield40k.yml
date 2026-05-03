@@ -84080,14 +84080,14 @@ entities:
     - type: Transform
       pos: -153.5,31.5
       parent: 2
-- proto: SpawnPointSpecialistHWS
+- proto: SpawnPointWH40KChaplain
   entities:
   - uid: 8642
     components:
     - type: Transform
       pos: -148.5,39.5
       parent: 2
-- proto: SpawnPointSpecialistSWS
+- proto: SpawnPointMajor
   entities:
   - uid: 8643
     components:

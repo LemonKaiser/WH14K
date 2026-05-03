@@ -13978,11 +13978,6 @@ entities:
       parent: 2
 - proto: SpawnPointHColonel
   entities:
-  - uid: 2123
-    components:
-    - type: Transform
-      pos: -55.5,6.5
-      parent: 2
   - uid: 2124
     components:
     - type: Transform

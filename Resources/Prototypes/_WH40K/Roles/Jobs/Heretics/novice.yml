@@ -11,7 +11,7 @@
     - !type:SpeciesRequirement
       species:
       - Human
-  startingGear: NoviceGear
+  startingGear: HNoviceGear
   setPreference: false
   icon: "JobIconNovice"
   supervisors: job-supervisors-wh40k-dark-mechanicum-acolyte
@@ -24,6 +24,16 @@
   - Maintenance
   - Engineering
   - External
+
+- type: startingGear
+  id: HNoviceGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTechpriest
+    back: ClothingBackpackTechpriest
+    shoes: ClothingShoesBootsworkTechpriest
+    belt: ClothingBeltUtilityEngineering
+    pocket1: WH40KStandardTacticalMapTablet
+    id: HNoviceDogTag
 
 - type: chameleonOutfit
   id: HNoviceChameleonOutfit

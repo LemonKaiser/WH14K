@@ -28,3 +28,5 @@ wh40k-fulton-status-failed = Фултон #{$id}: эвакуация прова�
 wh40k-fulton-target-label-objective = объект задачи
 wh40k-fulton-target-label-cargo = груз миссии
 wh40k-fulton-target-label-corpse = труп
+
+wh40k-tactical-fulton-stack-name = тактический свисток

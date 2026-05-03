@@ -111873,7 +111873,7 @@ entities:
     - type: Transform
       pos: 82.5,-53.5
       parent: 2
-- proto: SpawnPointSpecialistHWS
+- proto: SpawnPointWH40KChaplain
   entities:
   - uid: 16669
     components:
