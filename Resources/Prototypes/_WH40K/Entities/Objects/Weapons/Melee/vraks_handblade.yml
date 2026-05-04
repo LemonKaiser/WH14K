@@ -1,0 +1,35 @@
+- type: entity
+  parent: BaseKnife
+  id: WeaponVraksHandBlade
+  suffix: WH40K, Vraks, Chaos
+  components:
+  - type: Tag
+    tags:
+    - CombatKnife
+    - Knife
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/vraks_handblade.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.35
+    damage:
+      types:
+        Piercing: 30
+  - type: EmbeddableProjectile
+    sound: /Audio/Weapons/star_hit.ogg
+    offset: -0.15,0.0
+  - type: LandAtCursor
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/vraks_handblade.rsi
+    storedSprite: null
+    size: Small
+  - type: DisarmMalus
+    malus: 0.2
+  - type: ThrowingAngle
+    angle: 225
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Melee/vraks_handblade.rsi
+    quickEquip: false
+    slots:
+    - Belt

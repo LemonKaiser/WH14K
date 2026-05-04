@@ -122,6 +122,15 @@
   id: MagazineStub3SMG
 
 - type: Tag
+  id: MagazineOgrynRipper
+
+- type: Tag
+  id: MagazineOgrynHeavyStubber
+
+- type: Tag
+  id: MagazineOgrynTwinHeavyStubber
+
+- type: Tag
   id: MagazineSonicBlaster
 
 - type: Tag

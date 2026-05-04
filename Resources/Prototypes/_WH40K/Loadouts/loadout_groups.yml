@@ -455,6 +455,15 @@
   - WH40KCommandPlasmaPistol
 
 - type: loadoutGroup
+  id: WH40KPsykerForceStaff
+  name: loadout-group-wh40k-psyker-force-staff
+  loadouts:
+  - WH40KPsykerStaffBiomantic
+  - WH40KPsykerStaffPyromantic
+  - WH40KPsykerStaffPsychic
+  - WH40KPsykerStaffTelekinetic
+
+- type: loadoutGroup
   id: WH40KChaplainMelee
   name: loadout-group-wh40k-chaplain-melee
   loadouts:
@@ -606,6 +615,7 @@
   - WH40KChaosKnifeKit
   - WH40KChaosclubKit
   - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
   - WH40KChaosSapperShovelKit
   - WH40KChaosTruncheonKit
   - WH40KChaosMacheteKit

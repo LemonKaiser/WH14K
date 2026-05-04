@@ -1,0 +1,59 @@
+- type: entity
+  parent: CMBaseStructure
+  id: CMBaseStructureCorrodible
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+
+- type: entity
+  id: RMCBaseWallInvincibleNoIcon
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    drawdepth: Walls
+  - type: PlacementReplacement
+    key: walls
+  - type: Occluder
+  - type: Airtight
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: IsRoof
+  - type: SunShadowCast
+  - type: Tag
+    tags:
+    - Wall
+  - type: Clickable
+
+- type: entity
+  parent: RMCBaseWallInvincibleNoIcon
+  id: CMBaseWallInvincible
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Icon
+    state: full
+
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMBaseWall
+  abstract: true

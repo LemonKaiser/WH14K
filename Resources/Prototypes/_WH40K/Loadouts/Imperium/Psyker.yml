@@ -1,0 +1,27 @@
+- type: loadout
+  id: WH40KPsykerStaffBiomantic
+  dummyEntity: WeaponPsykerForceStaffBiomantic
+  inhand:
+  - WeaponPsykerForceStaffBiomantic
+  groupBy: "psyker-staff"
+
+- type: loadout
+  id: WH40KPsykerStaffPyromantic
+  dummyEntity: WeaponPsykerForceStaffPyromantic
+  inhand:
+  - WeaponPsykerForceStaffPyromantic
+  groupBy: "psyker-staff"
+
+- type: loadout
+  id: WH40KPsykerStaffPsychic
+  dummyEntity: WeaponPsykerForceStaffPsychic
+  inhand:
+  - WeaponPsykerForceStaffPsychic
+  groupBy: "psyker-staff"
+
+- type: loadout
+  id: WH40KPsykerStaffTelekinetic
+  dummyEntity: WeaponPsykerForceStaffTelekinetic
+  inhand:
+  - WeaponPsykerForceStaffTelekinetic
+  groupBy: "psyker-staff"

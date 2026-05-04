@@ -334,26 +334,12 @@
   - type: Lung
   - type: Metabolizer
     stages: [ Respiration ]
-  - type: SolutionManager
-    solutions:
-    - SolutionLungGas
   - type: Sprite
     layers:
     - state: lung-l
     - state: lung-r
   - type: Item
     heldPrefix: lungs
-
-- type: entity
-  parent: Solution
-  id: SolutionLungGas # TODO: Metabolize directly from gasses :(
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Solution
-    id: Lung
-    solution:
-      maxVol: 100.0
-      canReact: false
 
 - type: entity
   parent: OrganBase

@@ -949,6 +949,16 @@
   groupBy: "melee"
 
 - type: loadout
+  id: WH40KVraksHandBladeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  storage:
+    belt:
+    - WeaponVraksHandBlade
+  groupBy: "melee"
+
+- type: loadout
   id: WH40KHelmetSergVst
   equipment:
     head: ClothingHeadHelmetFlakAdvSergVst
