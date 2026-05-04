@@ -44,9 +44,7 @@
   - type: HeldSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98
-  - type: ItemTogglePointLight
-  - type: HandheldLight
-    addPrefix: false
+  - type: WH40KWeaponLight
   - type: PointLight
     enabled: false
     mask: /Textures/Effects/LightMasks/cone.png
@@ -54,8 +52,3 @@
     radius: 6
     energy: 2.2
     netsync: false
-  - type: Battery
-    maxCharge: 300
-    startingCharge: 300
-  - type: BatterySelfRecharger
-    autoRechargeRate: 1
