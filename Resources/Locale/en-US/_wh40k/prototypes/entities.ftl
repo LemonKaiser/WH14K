@@ -1775,3 +1775,11 @@ ent-ClothingOuterArmorMauler = Mauler armor
 ent-ClothingShoesBootsMauler = Mauler boots
     .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
 
+ent-WeaponRevolverPhosphorBlastDarkMech = Corrupted Phosphor Blast Pistol
+    .desc = The flaming pellets fired by the Phosphor weapon emit a powerful glow, targeting nearby Skitarii.
+
+ent-WeaponRevolverElectricArcDarkMech = Corrupted Electric Arc Pistol
+    .desc = Electric Arc weapons are most easily identified by the bulky permacapacitor on the barrel, which delivers a devastating discharge of electricity to the target.
+
+ent-AutoSyringe = autosyringe
+    .desc = A medical device designed for the rapid introduction of liquids into living (or not so living) bodies.

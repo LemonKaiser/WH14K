@@ -92,26 +92,22 @@
   id: TechpriestPhosphorBlast
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 12
+    requiredLevel: 5
   inhand:
   - WeaponRevolverPhosphorBlast
 #  storage:
-#    back:
-#    - SpeedLoaderPhosphor
-#    - SpeedLoaderPhosphor
+#    belt:
 #    - SpeedLoaderPhosphor
 
 - type: loadout
   id: TechpriestElectricArc
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 5
+    requiredLevel: 15
   inhand:
   - WeaponRevolverElectricArc
 #  storage:
-#    back:
-#    - SpeedLoaderElectricArc
-#    - SpeedLoaderElectricArc
+#    belt:
 #    - SpeedLoaderElectricArc
 
 - type: loadout
@@ -121,11 +117,3 @@
     requiredLevel: 15
   inhand:
   -  WHOmnissianAxe
-
-- type: loadout
-  id: HTechpriestAxe
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
-  inhand:
-  - WHOmnissianAxeBattle

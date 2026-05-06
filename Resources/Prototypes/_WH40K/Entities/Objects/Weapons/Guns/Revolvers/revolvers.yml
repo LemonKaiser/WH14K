@@ -46,3 +46,23 @@
     steps: 4
   - type: Electrified
     requirePower: false
+
+- type: entity
+  parent: WeaponRevolverPhosphorBlast
+  id: WeaponRevolverPhosphorBlastDarkMech
+  suffix: WH40K, ТёмнМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor_chs.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor_chs.rsi
+
+- type: entity
+  parent: WeaponRevolverElectricArc
+  id: WeaponRevolverElectricArcDarkMech
+  suffix: WH40K, ТёмнМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc_chs.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc_chs.rsi

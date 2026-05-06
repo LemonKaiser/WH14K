@@ -469,9 +469,9 @@
   suffix: WH40K, АдМехи
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles2.rsi
     layers:
-      - state: practice
+      - state: shrapnelshot
   - type: Projectile
     damage:
       types:
@@ -493,6 +493,19 @@
     slowdownAmount: 3
     walkSpeedModifier: 0.9
     sprintSpeedModifier: 0.9
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        hard: false
+        layer:
+        - LargeMobLayer
+        mask:
+        - Impassable
+        - BulletImpassable
 
 - type: entity
   id: BulletElectricArc
@@ -516,11 +529,11 @@
     maxLightningArc: 2
     shootMinInterval: 0.01
     shootMaxInterval: 0.01
-    shootRange: 2
+    shootRange: 1.5
     lightningPrototype: WH40KLightning
   - type: StunOnCollide
     stunAmount: 0
-    knockdownAmount: 0.5 # Enough to subdue and follow up with a stun baton
+    knockdownAmount: 5 # Enough to subdue and follow up with a stun baton
     drop: false #Ranged KD and item drop are too strong in one package
     slowdownAmount: 0.5
     walkSpeedModifier: 0.5
@@ -538,6 +551,7 @@
       canArc: true
     - type: Electrified
       shockTime: 0.01
+      probability: 0.8
 
 - type: entity
   parent: BaseBullet

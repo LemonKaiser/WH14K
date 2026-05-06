@@ -156,6 +156,8 @@
   parent: ClosetSteelBase
   description: It's a storage unit.
   components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/closet.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateDoorOpen: generic_open

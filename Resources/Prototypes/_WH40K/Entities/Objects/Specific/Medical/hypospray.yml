@@ -1,0 +1,17 @@
+- type: entity
+  parent: [SolutionToolSmall, BaseHypospray]
+  id: AutoSyringe
+  name: hypospray
+  description: A sterile injector for rapid administration of drugs to patients.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Specific/Medical/syringegun.rsi
+    layers:
+    - state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Specific/Medical/syringegun.rsi
+  - type: RefillableSolution
+    solution: hypospray
+  - type: UseDelay
+    delay: 1
