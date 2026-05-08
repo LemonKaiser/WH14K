@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Author londorondondon, adapted for WH14K project",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    { "name": "icon" },
+    { "name": "telekinesis-inhand-left", "directions": 4 },
+    { "name": "telekinesis-inhand-right", "directions": 4 }
+  ]
+}

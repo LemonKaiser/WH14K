@@ -221,13 +221,6 @@ public sealed class AdminSystem : EntitySystem
         var identityName = string.Empty;
         var sortWeight = 0;
 
-        // Visible (identity) name can be different from real name
-        if (session?.AttachedEntity != null)
-        {
-            entityName = Comp<MetaDataComponent>(session.AttachedEntity.Value).EntityName;
-            identityName = Identity.Name(session.AttachedEntity.Value, EntityManager);
-        }
-
         var antag = false;
 
         // Starting role, antagonist status and role type
@@ -236,6 +229,7 @@ public sealed class AdminSystem : EntitySystem
         LocId? subtype = null;
         if (_minds.TryGetMind(session, out var mindId, out var mindComp) && mindComp is not null)
         {
+            entityName = mindComp.CharacterName ?? string.Empty;
             sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0;
 
             if (_proto.TryIndex(mindComp.RoleType, out var role))
@@ -248,6 +242,16 @@ public sealed class AdminSystem : EntitySystem
 
             antag = _role.MindIsAntagonist(mindId);
             startingRole = _jobs.MindTryGetJobName(mindId);
+        }
+
+        // Visible (identity) name can be different from real name.
+        // Fall back to the attached entity name if the character name is unavailable.
+        if (session?.AttachedEntity != null)
+        {
+            if (string.IsNullOrWhiteSpace(entityName))
+                entityName = Comp<MetaDataComponent>(session.AttachedEntity.Value).EntityName;
+
+            identityName = Identity.Name(session.AttachedEntity.Value, EntityManager);
         }
 
         // Connection status and playtime

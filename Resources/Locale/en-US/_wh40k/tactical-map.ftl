@@ -69,6 +69,7 @@ wh40k-tactical-map-no-signal-title = MAP LINK OFFLINE
 wh40k-tactical-map-no-signal-detail = Tactical map is waiting for a valid battlefield grid.
 wh40k-tactical-map-capture-label = Point { $callsign }
 wh40k-tactical-map-capture-fallback = Capture point
+wh40k-tactical-map-strategic-point-label = Point { $callsign } ({ $type }) T{ $tier }
 wh40k-tactical-map-command-node-label = { $team } command node
 wh40k-tactical-map-command-node-ordinal = Command node { $ordinal }
 wh40k-tactical-map-command-node-fallback = Command node

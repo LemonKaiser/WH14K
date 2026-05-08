@@ -25,6 +25,7 @@
       - type: IntrinsicRadioReceiver
       - type: Puller
         needsHands: false
+      - type: WH40KStrategicPointUpgradeSkill
   icon: "JobIconHLexmechanic"
   supervisors: job-supervisors-wh40k-dark-mechanicum-priest
   canBeAntag: false

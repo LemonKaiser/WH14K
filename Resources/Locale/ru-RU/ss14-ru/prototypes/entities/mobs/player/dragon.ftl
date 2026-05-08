@@ -1,4 +1,5 @@
 ent-BaseMobDragon = космический дракон
+    .suffix = ""
     .desc = Летающий левиафан, имеющий мало общего с космическими карпами.
 
 ent-MobDragon = { ent-BaseMobDragon }

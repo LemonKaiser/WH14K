@@ -1,0 +1,50 @@
+- type: construction
+  id: WH40KStrategicResourcePointT1
+  name: wh40k-strategic-point-resource-t1-name
+  description: wh40k-strategic-point-resource-recipe-desc
+  graph: WH40KStrategicResourcePoint
+  startNode: start
+  targetNode: point
+  category: construction-category-points
+  objectType: Structure
+  placementMode: WH40KStrategicPointPlacement
+  canRotate: false
+  canBuildInImpassable: true
+  conditions:
+  - !type:WH40KStrategicPointAnchorCondition
+    pointType: Resource
+    maxDistance: 0.9
+
+- type: construction
+  id: WH40KStrategicResearchPointT1
+  name: wh40k-strategic-point-research-t1-name
+  description: wh40k-strategic-point-research-recipe-desc
+  graph: WH40KStrategicResearchPoint
+  startNode: start
+  targetNode: point
+  category: construction-category-points
+  objectType: Structure
+  placementMode: WH40KStrategicPointPlacement
+  canRotate: false
+  canBuildInImpassable: true
+  conditions:
+  - !type:WH40KStrategicPointAnchorCondition
+    pointType: Research
+    maxDistance: 0.9
+
+- type: construction
+  id: WH40KStrategicInfluencePointT1
+  name: wh40k-strategic-point-influence-t1-name
+  description: wh40k-strategic-point-influence-recipe-desc
+  graph: WH40KStrategicInfluencePoint
+  startNode: start
+  targetNode: point
+  category: construction-category-points
+  objectType: Structure
+  placementMode: WH40KStrategicPointPlacement
+  canRotate: false
+  canBuildInImpassable: true
+  conditions:
+  - !type:WH40KStrategicPointAnchorCondition
+    pointType: Influence
+    maxDistance: 0.9

@@ -205,9 +205,16 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public int BaseLevel { get; }
     public int FrontPoints { get; }
     public int CommandPoints { get; }
+    public int InfluencePoints { get; }
+    public int Funds { get; }
+    public int ResearchPoints { get; }
     public int UpgradeLevel { get; }
     public int UpgradeCost { get; }
+    public int UpgradeFundsCost { get; }
+    public int UpgradeResearchCost { get; }
     public int ReinforcementCost { get; }
+    public int ReinforcementFundsCost { get; }
+    public int ReinforcementInfluenceCost { get; }
     public int ReinforcementCooldownSeconds { get; }
     public int RoundElapsedSeconds { get; }
     public int? PointsToNextLevel { get; }
@@ -240,9 +247,16 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         int baseLevel,
         int frontPoints,
         int commandPoints,
+        int influencePoints,
+        int funds,
+        int researchPoints,
         int upgradeLevel,
         int upgradeCost,
+        int upgradeFundsCost,
+        int upgradeResearchCost,
         int reinforcementCost,
+        int reinforcementFundsCost,
+        int reinforcementInfluenceCost,
         int reinforcementCooldownSeconds,
         int roundElapsedSeconds,
         int? pointsToNextLevel,
@@ -274,9 +288,16 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         BaseLevel = baseLevel;
         FrontPoints = frontPoints;
         CommandPoints = commandPoints;
+        InfluencePoints = influencePoints;
+        Funds = funds;
+        ResearchPoints = researchPoints;
         UpgradeLevel = upgradeLevel;
         UpgradeCost = upgradeCost;
+        UpgradeFundsCost = upgradeFundsCost;
+        UpgradeResearchCost = upgradeResearchCost;
         ReinforcementCost = reinforcementCost;
+        ReinforcementFundsCost = reinforcementFundsCost;
+        ReinforcementInfluenceCost = reinforcementInfluenceCost;
         ReinforcementCooldownSeconds = reinforcementCooldownSeconds;
         RoundElapsedSeconds = roundElapsedSeconds;
         PointsToNextLevel = pointsToNextLevel;

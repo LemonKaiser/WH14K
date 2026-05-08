@@ -60,7 +60,7 @@ public sealed partial class WH40KCommandNodeComponent : Component
     public float BattleTacticChangeCooldownSeconds = 300f;
 
     /// <summary>
-    /// Interval in seconds for passive frontline income from this command node.
+    /// Interval in seconds for passive fallback income from this command node.
     /// </summary>
     [DataField]
     public float PassivePointIntervalSeconds = 75f;
@@ -78,8 +78,8 @@ public sealed partial class WH40KCommandNodeComponent : Component
     public float PassivePointMinIntervalSeconds = 36f;
 
     /// <summary>
-    /// Base frontline points granted per passive income tick.
-    /// Real gain is scaled by current phase economy multiplier.
+    /// Base TeamXP / influence-equivalent granted per passive fallback tick.
+    /// Funds are derived from the same amount via WH40KCommandEconomyCalculator.
     /// </summary>
     [DataField]
     public int PassiveFrontPointsPerInterval = 1;

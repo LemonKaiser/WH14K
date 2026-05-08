@@ -415,17 +415,8 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
 
     private void UpdateRewardState(EntityUid uid, WH40KInfluencePointComponent point, TimeSpan now)
     {
-        if (string.IsNullOrWhiteSpace(point.OwnerTeamId))
-            return;
-
-        if (now < point.NextRewardTick)
-            return;
-
-        var interval = Math.Max(1f, point.RewardIntervalSeconds);
-        point.NextRewardTick = now + TimeSpan.FromSeconds(interval);
-        var reward = Math.Max(1, point.FrontPointsPerInterval) * Math.Max(1, _teamRule.GetInfluenceRewardMultiplier());
-        _teamRule.AddTeamFrontPoints(point.OwnerTeamId!, reward, "influence-point");
-        RaiseLocalEvent(new WH40KInfluencePointRewardTickEvent(point.OwnerTeamId!, uid, reward));
+        // Legacy capture points are visual/capture-only during the strategic point rework.
+        // Economy is now produced by WH40KStrategicPointComponent nodes.
     }
 
     private void AssignCallsign(EntityUid uid, WH40KInfluencePointComponent point)

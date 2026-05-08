@@ -3,7 +3,7 @@
   config:
     teamStartingPoints: 20
     frontPointsPerKill: 1
-    baseLevelThresholds: [60, 120, 180, 340, 1300, 1800, 2400, 3200]
+    baseLevelThresholds: [120, 300, 600, 1000, 1500, 2200, 3100, 4200]
     levelBuffConstructionDoAfterMultiplier: 0.75
     levelBuffMedicalDoAfterMultiplier: 0.8
 

@@ -12,3 +12,11 @@
     slots:
     - Back
     - suitStorage
+  - type: WH40KWeaponLight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6.5
+    energy: 2.3
+    netsync: false

@@ -509,6 +509,9 @@ ent-WeaponMeleeChaosNailBoard = chaos board with nails
 ent-TrenchKnifeChaos = chaos trench knife
     .desc = An old and rusty knife that the servants of chaos use in battle. It's dumb and rusty, but you should be wary of it and its owner.
 
+ent-WeaponVraksHandBlade = Vraksian renegade hand blade
+    .desc = A short thrusting blade of trench-made manufacture, like those carried by Vraksian renegades as reserve weapons in the meat grinder of the Siege of Vraks. Cheap, crude and dangerous at arm's reach.
+
 ent-WHHammerImperial = War Hammer
     .desc = Heavy, strong, surprisingly NOT a power hammer. Many consider it a symbol of righteous anger and justice.
 
@@ -534,6 +537,48 @@ ent-WeaponStubLMG = heavy stubber
 
 ent-WeaponStubMG = Heavy stubber
     .desc = A heavy, unprepossessing homemade machine gun, powered by a cartridge belt.
+
+ent-WeaponOgrynLoyalRipperGun = Ogryn ripper gun
+    .desc = A monstrously heavy firearm built for an Ogryn's strength and grip. In practice it is an enormous assault shotgun, prized for brutal recoil and devastating close-range firepower.
+
+ent-WeaponOgrynChaosRipperGun = traitor Ogryn ripper gun
+    .desc = A defiled ripper gun carried by traitor Ogryns and warband brutes. Crude, loud and viciously effective at short range.
+
+ent-WeaponOgrynLoyalHeavyStubber = Ogryn heavy stubber
+    .desc = A heavy stubber adapted to the size and hands of an Ogryn. Simple, reliable and brutally efficient at pouring large-calibre fire into a target area.
+
+ent-WeaponOgrynChaosHeavyStubber = traitor Ogryn heavy stubber
+    .desc = A rough heavy stubber in the hands of a traitor Ogryn. Unwieldy, brutal and perfectly suited to ugly suppressive fire.
+
+ent-WeaponOgrynLoyalTwinHeavyStubber = Ogryn twin heavy stubber
+    .desc = A pair of heavy stubbers yoked into one monstrous block. Even by Ogryn standards it is deafening, heavy and built for one thing only: drowning a sector in lead.
+
+ent-WeaponOgrynChaosTwinHeavyStubber = traitor Ogryn twin heavy stubber
+    .desc = A defiled paired heavy stubber rig for a traitor Ogryn. Savage recoil and an absurd volume of fire make it ideal for chaotic slaughter.
+
+ent-MagazineOgrynLoyalRipper = ripper gun magazine
+    .desc = A large box magazine for an Ogryn ripper gun.
+
+ent-MagazineOgrynChaosRipper = traitor ripper gun magazine
+    .desc = A crude magazine for the ripper guns used by traitor Ogryns.
+
+ent-MagazineOgrynLoyalHeavyStubber = Ogryn heavy stubber box
+    .desc = A box magazine loaded for an Ogryn heavy stubber.
+
+ent-MagazineOgrynChaosHeavyStubber = traitor heavy stubber box
+    .desc = A box magazine for a traitor Ogryn heavy stubber.
+
+ent-MagazineOgrynLoyalTwinHeavyStubber = twin heavy stubber box
+    .desc = An enlarged ammunition box for an Ogryn twin heavy stubber.
+
+ent-MagazineOgrynChaosTwinHeavyStubber = traitor twin heavy stubber box
+    .desc = An enlarged ammunition box for a defiled twin heavy stubber rig.
+
+ent-WeaponOgrynCombatKnife = Ogryn combat knife
+    .desc = A huge combat knife sized for an Abhuman so large that to a normal human it is nearly a short sword.
+
+ent-WeaponOgrynCleaver = Ogryn cleaver
+    .desc = A butcher-heavy blade that serves as an ordinary knife in an Ogryn's grip. Crude, massive and alarmingly practical.
 
 ent-WeaponStubPistol = Stub pistol
     .desc = Pistol of unknown model. Uses 10mm.
@@ -1774,4 +1819,35 @@ ent-ClothingOuterArmorMauler = Mauler armor
 
 ent-ClothingShoesBootsMauler = Mauler boots
     .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
+
+ent-WH40KStrategicPointAnchorResource = drill site
+    .desc = An empty drill site. Build a resource point here to claim the deposit.
+
+ent-WH40KStrategicPointAnchorResearch = noktolit
+    .desc = A decorative noktolit that marks the research site. Build the research point on the neighboring tile.
+
+ent-WH40KStrategicPointAnchorInfluence = influence site
+    .desc = An empty influence site. Build an influence point here to secure the sector.
+
+ent-WH40KStrategicPointResourceT1 = resource point
+    .desc = A claimed resource point that generates funds and base XP for its team.
+
+ent-WH40KStrategicPointResearchT1 = research point
+    .desc = A claimed research point that generates research and base XP for its team.
+
+ent-WH40KStrategicPointInfluenceT1 = influence point
+    .desc = A claimed influence point that generates influence and base XP for its team.
+
+ent-SpawnPointNovice = novice
+ent-SpawnPointMagos = magos
+ent-SpawnPointLexmechanic = lexmechanic
+ent-SpawnPointStationEnginseer = enginseer
+ent-SpawnPointGenetor = genetor
+ent-SpawnPointExplorator = explorator
+ent-SpawnPointHNovice = novice
+ent-SpawnPointHMagos = magos
+ent-SpawnPointHLexmechanic = lexmechanic
+ent-SpawnPointHStationEnginseer = enginseer
+ent-SpawnPointHGenetor = genetor
+ent-SpawnPointHExplorator = explorator
 

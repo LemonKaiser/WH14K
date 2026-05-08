@@ -1,0 +1,130 @@
+# TODO RMC14 cutting
+
+- type: entity
+  parent: BaseFenceMetal
+  id: CMFence
+  name: fence
+  description: A large metal mesh strewn between two poles. Intended as a cheap way to separate areas, while allowing one to see through it.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/fences.rsi
+    state: fence0
+  - type: InteractionOutline
+  - type: Clickable
+  - type: IconSmooth
+    key: fences
+    base: fence
+    mode: CardinalFlags
+  - type: Damageable
+    damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+        - !type:PlaySoundBehavior
+          sound:
+            path: /Audio/Items/wirecutter.ogg
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBaseStructureCorrodible
+  id: RMCFenceBroken
+  name: broken fence
+  description: A mess of broken wire strewn between two poles, it's not blocking anyone's way through.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/fences.rsi
+    state: brokenfence0
+  - type: Clickable
+  - type: InteractionOutline
+  - type: PlacementReplacement
+    key: walls
+  - type: IconSmooth
+    key: fences
+    base: brokenfence
+    mode: CardinalFlags
+  - type: Physics
+    canCollide: false
+  - type: Damageable
+    damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Tag
+    tags: []
+
+- type: entity
+  parent: CMFence
+  id: RMCFenceHybrisa
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_fences.rsi
+    state: fence0
+
+- type: entity
+  parent: RMCFenceBroken
+  id: RMCFenceHybrisaBroken
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_fences.rsi
+    state: brokenfence0
+
+- type: entity
+  parent: CMFence
+  id: RMCFenceHybrisaElectric
+  suffix: electric
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_fences_electric.rsi
+    state: fence0
+
+- type: entity
+  parent: RMCFenceBroken
+  id: RMCFenceHybrisaElectricBroken
+  suffix: electric
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_fences_electric.rsi
+    state: brokenfence0
+
+- type: entity
+  parent: CMFence
+  id: RMCFenceOvergrown
+  name: overgrown fence
+  description: A large metal mesh strewn between two poles, tangled with vines and creeping growth. Still separates areas, but nature is reclaiming it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/fences_overgrown.rsi
+    state: fence0
+
+- type: entity
+  parent: RMCFenceBroken
+  id: RMCFenceOvergrownBroken
+  name: broken overgrown fence
+  description: A mess of broken wire and creeping weeds strung between two posts, swallowed by years of unchecked growth.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/fences_overgrown.rsi
+    state: brokenfence0

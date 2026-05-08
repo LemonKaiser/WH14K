@@ -25,6 +25,11 @@ public sealed class TryStartStructureConstructionMessage : EntityEventArgs
     public readonly Angle Angle;
 
     /// <summary>
+    ///     Optional placement target selected by a custom placement mode.
+    /// </summary>
+    public readonly NetEntity? PlacementTarget;
+
+    /// <summary>
     ///     Identifier to be sent back in the acknowledgement so that the client can clean up its ghost.
     /// </summary>
     /// <remarks>
@@ -33,12 +38,13 @@ public sealed class TryStartStructureConstructionMessage : EntityEventArgs
     /// </remarks>
     public readonly int Ack;
 
-    public TryStartStructureConstructionMessage(NetCoordinates loc, string prototypeName, Angle angle, int ack)
+    public TryStartStructureConstructionMessage(NetCoordinates loc, string prototypeName, Angle angle, int ack, NetEntity? placementTarget = null)
     {
         Location = loc;
         PrototypeName = prototypeName;
         Angle = angle;
         Ack = ack;
+        PlacementTarget = placementTarget;
     }
 }
 

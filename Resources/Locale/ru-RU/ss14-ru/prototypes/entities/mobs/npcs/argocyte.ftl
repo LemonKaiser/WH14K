@@ -1,3 +1,7 @@
+ent-BaseMobArgocyte = { ent-BaseSimpleMob }
+    .desc = Опасный пришелец с тёмной стороны планет, известный своей склонностью обгладывать руины.
+    .suffix = { ent-BaseSimpleMob.suffix }
+
 ent-MobArgocyteSlurva = ленивчик
     .desc = Жалкое создание, ни на что не способное.
     .suffix = { ent-BaseMobArgocyte.suffix }

@@ -1,0 +1,228 @@
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointAnchorResource
+  suffix: WH40K, Strategic Point, Resource, T0
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/resource/t0_pit.rsi
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/resource/t0_pit.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: InteractionOutline
+  - type: NavMapBeacon
+    color: "#d7a648"
+    text: Point (resource)
+  - type: WH40KStrategicPointAnchor
+    pointType: Resource
+    buildRadius: 0.9
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointAnchorResearch
+  suffix: WH40K, Strategic Point, Research, T0
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/research/noktolit_chaos.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/research/noktolit_chaos.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: InteractionOutline
+  - type: NavMapBeacon
+    color: "#5bc7d9"
+    text: Point (research)
+  - type: WH40KStrategicPointAnchor
+    pointType: Research
+    buildRadius: 1.9
+    builtOffset: 1.5,0
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointAnchorInfluence
+  suffix: WH40K, Strategic Point, Influence, T0
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/flag/t0.rsi
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/flag/t0.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: InteractionOutline
+  - type: NavMapBeacon
+    color: "#ca76d8"
+    text: Point (influence)
+  - type: WH40KStrategicPointAnchor
+    pointType: Influence
+    buildRadius: 0.9
+    hideSpriteWhenBuilt: true
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointResourceT1
+  suffix: WH40K, Strategic Point, Resource, T1
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/resource/imperium/t1.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/resource/imperium/t1.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: WH40KAlwaysShowHealthBar
+    maxHealth: 250
+    useMobThresholds: false
+    barWidthPixels: 34
+    barHeightPixels: 4
+    yOffsetSpritePercent: 0.2
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.WH40KStrategicPointUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.WH40KStrategicPointUiKey.Key:
+        type: WH40KStrategicPointBoundUserInterface
+  - type: Damageable
+    damageModifierSet: StructuralMetallicStrong
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Repairable
+    damageValue: -10
+    doAfterDelay: 2
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Construction
+    graph: WH40KStrategicResourcePoint
+    node: point
+  - type: WH40KStrategicPoint
+    pointType: Resource
+    tier: T1
+    profile: WH40KStrategicPointResource
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointResearchT1
+  suffix: WH40K, Strategic Point, Research, T1
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/research/t1/imperium.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/research/t1/imperium.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: WH40KAlwaysShowHealthBar
+    maxHealth: 250
+    useMobThresholds: false
+    barWidthPixels: 34
+    barHeightPixels: 4
+    yOffsetSpritePercent: 0.12
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.WH40KStrategicPointUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.WH40KStrategicPointUiKey.Key:
+        type: WH40KStrategicPointBoundUserInterface
+  - type: Damageable
+    damageModifierSet: StructuralMetallicStrong
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Repairable
+    damageValue: -10
+    doAfterDelay: 2
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Construction
+    graph: WH40KStrategicResearchPoint
+    node: point
+  - type: WH40KStrategicPoint
+    pointType: Research
+    tier: T1
+    profile: WH40KStrategicPointResearch
+  - type: SpriteFade
+
+- type: entity
+  parent: BaseStructure
+  id: WH40KStrategicPointInfluenceT1
+  suffix: WH40K, Strategic Point, Influence, T1
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/flag/imperium/t1.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/flag/imperium/t1.rsi
+    state: base
+  - type: Appearance
+  - type: WH40KStrategicPointVisuals
+  - type: WH40KAlwaysShowHealthBar
+    maxHealth: 250
+    useMobThresholds: false
+    barWidthPixels: 34
+    barHeightPixels: 4
+    yOffsetSpritePercent: 0.12
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.WH40KStrategicPointUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.WH40KStrategicPointUiKey.Key:
+        type: WH40KStrategicPointBoundUserInterface
+  - type: Damageable
+    damageModifierSet: StructuralMetallicStrong
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Repairable
+    damageValue: -10
+    doAfterDelay: 2
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Construction
+    graph: WH40KStrategicInfluencePoint
+    node: point
+  - type: WH40KStrategicPoint
+    pointType: Influence
+    tier: T1
+    profile: WH40KStrategicPointInfluence
+  - type: SpriteFade

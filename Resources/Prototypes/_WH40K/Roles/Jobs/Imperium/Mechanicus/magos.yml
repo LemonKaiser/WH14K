@@ -47,6 +47,7 @@
   - !type:AddComponentSpecial
     components:
       - type: CommandStaff
+      - type: WH40KStrategicPointUpgradeSkill
   # afterLoadoutSpecial:
   # - !type:ModifyEnvirosuitSpecial
   #   charges: 8

@@ -1,3 +1,7 @@
+ent-BaseMobAdultSlimes = базовый слайм
+    .desc = Он так похож на желе. Интересно, каков он на вкус?
+    .suffix = { ent-SimpleMobBase.suffix }
+
 ent-MobAdultSlimes = базовый слайм
     .desc = Он так похож на желе. Интересно, каков он на вкус?
     .suffix = { ent-BaseMobAdultSlimes.suffix }

@@ -78,7 +78,7 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     /// Frontline points needed to reach each next level. Level starts at 1.
     /// </summary>
     [DataField("baseLevelThresholds")]
-    public List<int> BaseLevelThresholds = new() { 10, 24, 42, 64, 90 };
+    public List<int> BaseLevelThresholds = new() { 120, 300, 600, 1000, 1500, 2200, 3100, 4200 };
 
     /// <summary>
     /// Initial economy points granted to each team at round start.
@@ -87,8 +87,8 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     public int TeamStartingPoints = 50;
 
     /// <summary>
-    /// Frontline points granted to the killer's team for a valid enemy kill.
-    /// The same amount is mirrored to command points via AddTeamFrontPoints.
+    /// TeamXP granted to the killer's team for a valid enemy kill.
+    /// The same amount is mirrored to the legacy command-point store as influence.
     /// </summary>
     [DataField("frontPointsPerKill")]
     public int FrontPointsPerKill = 1;
@@ -340,6 +340,9 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
 
     [ViewVariables]
     public Dictionary<string, int> TeamCommandPoints = new();
+
+    [ViewVariables]
+    public Dictionary<string, int> TeamResearchPoints = new();
 
     [ViewVariables]
     public Dictionary<string, int> TeamBaseLevels = new();

@@ -227,8 +227,10 @@ public sealed class WH40KCommandNodeUpgradeSketchWindow : FancyWindow, ILocalize
         var resolvedTeam = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
         Title = Loc.GetString("w40k-cmd-upgrade-sketch-window-title-team", ("team", resolvedTeam));
         _teamLine.Text = CompactLine(Loc.GetString("w40k-cmd-team", ("team", resolvedTeam)));
-        _upgradePointsLine.Text = CompactLine(Loc.GetString("w40k-cmd-upgrade-sketch-window-points",
-            ("points", state.CommandPoints)));
+        _upgradePointsLine.Text = CompactLine(Loc.GetString(
+            "w40k-cmd-upgrade-sketch-window-points",
+            ("funds", state.Funds),
+            ("research", state.ResearchPoints)));
         _doctrineLine.Text = CompactLine(string.IsNullOrWhiteSpace(activeDoctrineId)
             ? Loc.GetString("w40k-cmd-upgrade-sketch-window-doctrine-none")
             : Loc.GetString("w40k-cmd-upgrade-sketch-window-doctrine-active",

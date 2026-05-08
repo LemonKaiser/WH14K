@@ -44,3 +44,11 @@
   - type: HeldSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98
+  - type: WH40KWeaponLight
+  - type: PointLight
+    enabled: false
+    mask: /Textures/Effects/LightMasks/cone.png
+    autoRot: true
+    radius: 6
+    energy: 2.2
+    netsync: false

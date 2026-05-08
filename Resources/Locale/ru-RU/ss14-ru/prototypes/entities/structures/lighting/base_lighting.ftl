@@ -8,6 +8,7 @@ ent-PoweredlightEmpty = светильник
 
 ent-Poweredlight = { ent-PoweredlightEmpty }
     .desc = Осветительный прибор. Потребляет энергию и излучает свет, если оснащён лампой-трубкой.
+    .suffix = ""
 
 ent-PoweredlightLED = { ent-Poweredlight }
     .desc = Осветительный прибор. Потребляет энергию и излучает свет, если оснащён лампой-трубкой.

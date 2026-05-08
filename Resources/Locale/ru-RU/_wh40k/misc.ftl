@@ -77,6 +77,7 @@ loadout-group-wh40k-imperial-command-hands = Командование, перч�
 loadout-group-wh40k-imperial-command-feet = Командование, ботинки
 loadout-group-wh40k-command-field-kit = Командный походный набор
 loadout-group-wh40k-imperial-command-sidearm = Командование, личное оружие
+loadout-group-wh40k-psyker-force-staff = Санкционный силовой посох
 loadout-group-wh40k-chaplain-melee = Священник, оружие ближнего боя
 loadout-group-wh40k-imperial-command-melee = Командование, оружие ближнего боя
 loadout-group-wh40k-sergeant-melee = Сержант, оружие ближнего боя

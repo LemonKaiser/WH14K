@@ -45,6 +45,7 @@ using Content.Shared.Research.Prototypes;
 using Content.Shared.Stacks;
 using Content.Shared.Store;
 using Content.Shared.Cargo.Prototypes;
+using Content.Shared.Cargo.Components;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -207,7 +208,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
                 while (node.NextPassivePointTick <= now)
                 {
                     if (!string.IsNullOrWhiteSpace(node.TeamId))
-                        _teamRule.AddTeamFrontPoints(node.TeamId, GetPassiveFrontPointGain(node), "command-node-passive");
+                        GrantPassiveFallbackIncome(uid, node);
 
                     passiveInterval = TimeSpan.FromSeconds(GetPassiveIntervalSeconds(node));
                     node.NextPassivePointTick += passiveInterval;
@@ -268,12 +269,11 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
 
     private void UpdateUi(Entity<WH40KCommandNodeComponent> ent)
     {
-        if (!_teamRule.TryGetTeamProgress(ent.Comp.TeamId, out var level, out var points, out var toNext))
+        if (!_teamRule.TryGetTeamEconomySnapshot(ent.Owner, ent.Comp.TeamId, out var economy))
             return;
 
         EnsureDoctrineStateConsistency(ent.Comp);
 
-        _teamRule.TryGetTeamCommandPoints(ent.Comp.TeamId, out var commandPoints);
         var teamName = ent.Comp.TeamId;
         if (_teamRule.TryGetTeamDisplayName(ent.Comp.TeamId, out var localizedTeamName))
             teamName = localizedTeamName;
@@ -291,8 +291,10 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         var activeBattleTacticId = WH40KCommandNodeTactics.FindOrDefault(ent.Comp.ActiveBattleTacticId).Id;
         var currentPhase = _teamRule.GetCurrentPhase();
         var missionBoard = BuildMissionBoardState(ent.Comp, globalMissionRuntime, teamMissionRuntime);
-        var reinforcementUiState = BuildReinforcementUiState(ent.Comp.TeamId, teamName);
+        var reinforcementUiState = BuildReinforcementUiState(ent.Owner, ent.Comp.TeamId, teamName);
         ent.Comp.ActiveBattleTacticId = activeBattleTacticId;
+        var upgradeBaseCost = GetUpgradeCost(ent.Comp);
+        var minimumReinforcementInfluenceCost = GetMinimumReinforcementCost(ent.Comp.TeamId, ent.Comp.ReinforcementCost);
 
         var state = new WH40KCommandNodeBoundUserInterfaceState(
             ent.Comp.TeamId,
@@ -302,15 +304,22 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             activeBattleTacticId,
             GetRemainingBattleTacticCooldown(ent.Comp),
             currentPhase,
-            level,
-            points,
-            commandPoints,
+            economy.BaseLevel,
+            economy.TeamXp,
+            economy.Influence,
+            economy.Influence,
+            economy.Funds,
+            economy.ResearchPoints,
             ent.Comp.UpgradeLevel,
-            GetUpgradeCost(ent.Comp),
-            GetMinimumReinforcementCost(ent.Comp.TeamId, ent.Comp.ReinforcementCost),
+            upgradeBaseCost,
+            WH40KCommandEconomyCalculator.GetCommandNodeUpgradeFundsCost(upgradeBaseCost),
+            WH40KCommandEconomyCalculator.GetCommandNodeUpgradeResearchCost(upgradeBaseCost),
+            minimumReinforcementInfluenceCost,
+            WH40KCommandEconomyCalculator.GetReinforcementFundsCost(minimumReinforcementInfluenceCost),
+            minimumReinforcementInfluenceCost,
             GetRemainingReinforcementCooldown(ent.Comp.TeamId),
             _teamRule.GetRoundElapsedSeconds(),
-            toNext,
+            economy.PointsToNextLevel,
             thresholds,
             Array.Empty<WH40KCommandNodeReinforcementOptionState>(),
             unlockLines,
@@ -405,38 +414,16 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             return;
         }
 
-        var requiredRoundTime = Math.Max(0, nodeConfig.MinRoundTimeSeconds);
-        if (requiredRoundTime > 0)
-        {
-            var elapsedSeconds = Math.Max(0, _teamRule.GetRoundElapsedSeconds());
-            if (elapsedSeconds < requiredRoundTime)
-            {
-                var remainingSeconds = requiredRoundTime - elapsedSeconds;
-                _popup.PopupEntity(
-                    Loc.GetString(
-                        "w40k-cmd-tree-node-time-locked",
-                        ("time", FormatClock(requiredRoundTime)),
-                        ("left", FormatClock(remainingSeconds))),
-                    ent.Owner,
-                    args.Actor);
-                UpdateUi(ent);
-                return;
-            }
-        }
-
-        _teamRule.TryGetTeamCommandPoints(ent.Comp.TeamId, out var currentCommandPoints);
-        var currentPhaseForCost = _teamRule.GetCurrentPhase();
-        var hasCostProfile = TryResolveTreeCostProfileForTeam(ent.Comp.TeamId, out var costProfile);
-        var cost = WH40KCommandTreeCostCalculator.GetEffectiveNodeCost(
-            nodeConfig.Cost,
-            currentCommandPoints,
-            currentLevel,
-            currentPhaseForCost,
-            hasCostProfile ? costProfile : null);
-        if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, cost, out _, source: "tree-node"))
+        var baseCost = Math.Max(1, nodeConfig.Cost);
+        var fundsCost = WH40KCommandEconomyCalculator.GetCommandTreeFundsCost(baseCost);
+        var researchCost = WH40KCommandEconomyCalculator.GetCommandTreeResearchCost(baseCost);
+        if (!TrySpendTeamFundsAndResearch(ent.Owner, ent.Comp.TeamId, fundsCost, researchCost, "tree-node"))
         {
             _popup.PopupEntity(
-                Loc.GetString("w40k-cmd-tree-node-denied", ("cost", cost)),
+                Loc.GetString(
+                    "w40k-cmd-tree-node-denied",
+                    ("funds", fundsCost),
+                    ("research", researchCost)),
                 ent.Owner,
                 args.Actor);
             UpdateUi(ent);
@@ -450,7 +437,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             ent.Comp.TeamId,
             WH40KPlayerStatKeys.EconomyCommandTreePurchaseCount,
             WH40KPlayerStatKeys.EconomyCommandTreePurchaseCost,
-            cost,
+            fundsCost + researchCost,
             "tree-node",
             nodeConfig.Id);
 
@@ -458,7 +445,8 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             Loc.GetString(
                 "w40k-cmd-tree-node-purchased",
                 ("node", Loc.GetString(nodeConfig.TitleKey)),
-                ("cost", cost)),
+                ("funds", fundsCost),
+                ("research", researchCost)),
             ent.Owner,
             args.Actor);
         UpdateUi(ent);
@@ -479,7 +467,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         }
 
         var cost = GetUpgradeCost(ent.Comp);
-        if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, cost, out _, source: "command-upgrade"))
+        var fundsCost = WH40KCommandEconomyCalculator.GetCommandNodeUpgradeFundsCost(cost);
+        var researchCost = WH40KCommandEconomyCalculator.GetCommandNodeUpgradeResearchCost(cost);
+        if (!TrySpendTeamFundsAndResearch(ent.Owner, ent.Comp.TeamId, fundsCost, researchCost, "command-upgrade"))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-upgrade-denied"), ent.Owner, args.Actor);
             return;
@@ -495,7 +485,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             ent.Comp.TeamId,
             WH40KPlayerStatKeys.EconomyCommandUpgradeCount,
             WH40KPlayerStatKeys.EconomyCommandUpgradeCost,
-            cost,
+            fundsCost + researchCost,
             "command-upgrade",
             null);
 
@@ -550,8 +540,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             return;
         }
 
-        var callCost = GetCurrentReinforcementCost(ent.Comp, option, args.Count);
-        if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, callCost, out _, source: "reinforcement"))
+        var influenceCost = GetCurrentReinforcementCost(ent.Comp, option, args.Count);
+        var fundsCost = WH40KCommandEconomyCalculator.GetReinforcementFundsCost(influenceCost);
+        if (!TrySpendTeamFundsAndInfluence(ent.Owner, ent.Comp.TeamId, fundsCost, influenceCost, "reinforcement"))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-denied"), ent.Owner, args.Actor);
             return;
@@ -559,7 +550,8 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
 
         if (!TrySpawnReinforcementSquad(ent, option, args.Count, out var spawnedCount))
         {
-            _teamRule.TryAdjustTeamCommandPoints(ent.Comp.TeamId, callCost, out _, out _, source: "reinforcement-refund");
+            TryAdjustTeamFunds(ent.Owner, ent.Comp.TeamId, fundsCost, "reinforcement-refund");
+            _teamRule.TryAdjustTeamInfluence(ent.Comp.TeamId, influenceCost, out _, out _, source: "reinforcement-refund");
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-spawnpoints-missing"), ent.Owner, args.Actor);
             return;
         }
@@ -572,7 +564,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             ent.Comp.TeamId,
             WH40KPlayerStatKeys.EconomyCommandReinforcementCallCount,
             WH40KPlayerStatKeys.EconomyCommandReinforcementCost,
-            callCost,
+            fundsCost + influenceCost,
             "reinforcement",
             option.Id);
 
@@ -817,7 +809,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         IReadOnlyCollection<WH40KCommandNodeReinforcementOptionState> optionStates)
     {
         if (optionStates.Count == 0)
-            return _teamRule.GetDynamicReinforcementCost(Math.Max(1, component.ReinforcementCost));
+            return Math.Max(1, component.ReinforcementCost);
 
         var minCost = int.MaxValue;
         foreach (var option in optionStates)
@@ -843,7 +835,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (baseCost <= 0)
             baseCost = Math.Max(1, component.ReinforcementCost);
 
-        return Math.Max(1, _teamRule.GetDynamicReinforcementCost(baseCost));
+        return Math.Max(1, baseCost);
     }
 
     private static int CalculateReinforcementBaseCost(WH40KCommandReinforcementOptionPrototype option, int count)
@@ -1549,6 +1541,126 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         }
     }
 
+    private bool TrySpendTeamFundsAndResearch(
+        EntityUid? sourceUid,
+        string teamId,
+        int fundsCost,
+        int researchCost,
+        string source)
+    {
+        fundsCost = Math.Max(0, fundsCost);
+        researchCost = Math.Max(0, researchCost);
+
+        if (fundsCost <= 0 && researchCost <= 0)
+            return true;
+
+        if (!TryGetTeamFunds(sourceUid, teamId, out var funds) || funds < fundsCost)
+            return false;
+
+        if (!_teamRule.TryGetTeamResearchPoints(teamId, out var research) || research < researchCost)
+            return false;
+
+        if (fundsCost > 0 && !TryAdjustTeamFunds(sourceUid, teamId, -fundsCost, source))
+            return false;
+
+        if (researchCost <= 0)
+            return true;
+
+        if (_teamRule.TrySpendTeamResearchPoints(teamId, researchCost, out _, source))
+            return true;
+
+        if (fundsCost > 0)
+            TryAdjustTeamFunds(sourceUid, teamId, fundsCost, $"{source}-refund");
+
+        return false;
+    }
+
+    private bool TrySpendTeamFundsAndInfluence(
+        EntityUid? sourceUid,
+        string teamId,
+        int fundsCost,
+        int influenceCost,
+        string source)
+    {
+        fundsCost = Math.Max(0, fundsCost);
+        influenceCost = Math.Max(0, influenceCost);
+
+        if (fundsCost <= 0 && influenceCost <= 0)
+            return true;
+
+        if (!TryGetTeamFunds(sourceUid, teamId, out var funds) || funds < fundsCost)
+            return false;
+
+        if (!_teamRule.TryGetTeamInfluencePoints(teamId, out var influence) || influence < influenceCost)
+            return false;
+
+        if (fundsCost > 0 && !TryAdjustTeamFunds(sourceUid, teamId, -fundsCost, source))
+            return false;
+
+        if (influenceCost <= 0)
+            return true;
+
+        if (_teamRule.TrySpendTeamInfluence(teamId, influenceCost, out _, source))
+            return true;
+
+        if (fundsCost > 0)
+            TryAdjustTeamFunds(sourceUid, teamId, fundsCost, $"{source}-refund");
+
+        return false;
+    }
+
+    private bool TryGetTeamFunds(EntityUid? sourceUid, string teamId, out int funds)
+    {
+        funds = 0;
+
+        if (!TryResolveCargoAccountForTeam(teamId, out var account) ||
+            !TryGetTeamBank(sourceUid, out var bank))
+        {
+            return false;
+        }
+
+        funds = Math.Max(0, _cargo.GetBalanceFromAccount(bank, account));
+        return true;
+    }
+
+    private bool TryAdjustTeamFunds(EntityUid? sourceUid, string teamId, int delta, string? source = null)
+    {
+        if (delta == 0)
+            return true;
+
+        if (!TryResolveCargoAccountForTeam(teamId, out var account) ||
+            !TryGetTeamBank(sourceUid, out var bank))
+        {
+            return false;
+        }
+
+        var current = Math.Max(0, _cargo.GetBalanceFromAccount(bank, account));
+        var next = Math.Max(0, current + delta);
+        return _cargo.TrySetBankAccount(bank, account, next, createAccount: true);
+    }
+
+    private bool TryGetTeamBank(EntityUid? sourceUid, out Entity<StationBankAccountComponent?> bank)
+    {
+        bank = default;
+
+        if (sourceUid is { } source &&
+            _stations.GetOwningStation(source) is { } stationUid &&
+            TryComp<StationBankAccountComponent>(stationUid, out var sourceBank))
+        {
+            bank = (stationUid, sourceBank);
+            return true;
+        }
+
+        var query = EntityQueryEnumerator<StationBankAccountComponent>();
+        while (query.MoveNext(out var uid, out var fallbackBank))
+        {
+            bank = (uid, fallbackBank);
+            return true;
+        }
+
+        return false;
+    }
+
     private static bool TryResolveCargoAccountForTeam(string teamId, out ProtoId<CargoAccountPrototype> account)
     {
         account = default;
@@ -1664,9 +1776,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
                 continue;
 
             var maxCount = Math.Clamp(option.MaxCount, 1, 3);
-            var costX1 = _teamRule.GetDynamicReinforcementCost(CalculateReinforcementBaseCost(option, 1));
-            var costX2 = _teamRule.GetDynamicReinforcementCost(CalculateReinforcementBaseCost(option, 2));
-            var costX3 = _teamRule.GetDynamicReinforcementCost(CalculateReinforcementBaseCost(option, 3));
+            var costX1 = CalculateReinforcementBaseCost(option, 1);
+            var costX2 = CalculateReinforcementBaseCost(option, 2);
+            var costX3 = CalculateReinforcementBaseCost(option, 3);
 
             options.Add(new WH40KCommandNodeReinforcementOptionState(
                 option.Id,
@@ -2524,6 +2636,23 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         var baseAmount = Math.Max(1, component.PassiveFrontPointsPerInterval);
         var upgradeBonus = Math.Max(0, component.UpgradeLevel) / 2;
         return Math.Max(1, baseAmount + upgradeBonus);
+    }
+
+    private void GrantPassiveFallbackIncome(EntityUid sourceUid, WH40KCommandNodeComponent component)
+    {
+        if (string.IsNullOrWhiteSpace(component.TeamId))
+            return;
+
+        var teamXpAndInfluence = GetPassiveFrontPointGain(component);
+        if (teamXpAndInfluence <= 0)
+            return;
+
+        _teamRule.TryAdjustTeamXp(component.TeamId, teamXpAndInfluence, out _, out _, out _, "command-node-passive");
+        _teamRule.TryAdjustTeamInfluence(component.TeamId, teamXpAndInfluence, out _, out _, "command-node-passive");
+
+        var funds = WH40KCommandEconomyCalculator.GetPassiveFallbackFundsReward(teamXpAndInfluence);
+        if (funds > 0)
+            TryAdjustTeamFunds(sourceUid, component.TeamId, funds, "command-node-passive");
     }
 
     private string GetDefaultLineRoleId(string teamId)

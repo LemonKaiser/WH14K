@@ -8,6 +8,7 @@ construction-category-machines = Machines
 construction-category-weapons = Weapons
 construction-category-tiles = Tiles
 construction-category-utilities = Utilities
+construction-category-points = Points
 construction-category-misc = Misc
 construction-category-clothing = Clothing
 construction-category-favorites = Favorites

@@ -1,0 +1,141 @@
+- type: entity
+  id: BaseMagazineOgrynRipper
+  name: ripper gun magazine
+  parent: BaseItem
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+    - MagazineOgrynRipper
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - ShellShotgun
+    capacity: 6
+    soundRack:
+      path: /Audio/Weapons/Guns/Cock/smg_cock.ogg
+  - type: Item
+    size: Small
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: Sprite
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+
+- type: entity
+  id: BaseMagazineOgrynHeavyStubber
+  name: ogryn heavy stubber box
+  parent: BaseMagazineRifle
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+    - MagazineOgrynHeavyStubber
+  - type: BallisticAmmoProvider
+    capacity: 50
+    proto: Cartridge825mmLong
+    mayTransfer: true
+    whitelist:
+      tags:
+      - Cartridge825mmLong
+  - type: Sprite
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+
+- type: entity
+  id: BaseMagazineOgrynTwinHeavyStubber
+  name: twin heavy stubber box
+  parent: BaseMagazineRifle
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+    - MagazineOgrynTwinHeavyStubber
+  - type: BallisticAmmoProvider
+    capacity: 100
+    proto: Cartridge825mmLong
+    mayTransfer: true
+    whitelist:
+      tags:
+      - Cartridge825mmLong
+  - type: Sprite
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+
+- type: entity
+  id: MagazineOgrynLoyalRipper
+  parent: BaseMagazineOgrynRipper
+  suffix: WH40K, Ogryn, Loyal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_loyal_ripper_mag.rsi
+  - type: BallisticAmmoProvider
+    proto: ShellShotgun
+
+- type: entity
+  id: MagazineOgrynChaosRipper
+  parent: BaseMagazineOgrynRipper
+  suffix: WH40K, Ogryn, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_chaos_ripper_mag.rsi
+  - type: BallisticAmmoProvider
+    proto: ShellShotgun
+
+- type: entity
+  id: MagazineOgrynLoyalHeavyStubber
+  parent: BaseMagazineOgrynHeavyStubber
+  suffix: WH40K, Ogryn, Loyal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_loyal_heavy_stubber_mag.rsi
+
+- type: entity
+  id: MagazineOgrynChaosHeavyStubber
+  parent: BaseMagazineOgrynHeavyStubber
+  suffix: WH40K, Ogryn, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_chaos_heavy_stubber_mag.rsi
+
+- type: entity
+  id: MagazineOgrynLoyalTwinHeavyStubber
+  parent: BaseMagazineOgrynTwinHeavyStubber
+  suffix: WH40K, Ogryn, Loyal
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_loyal_twin_heavy_stubber_mag.rsi
+
+- type: entity
+  id: MagazineOgrynChaosTwinHeavyStubber
+  parent: BaseMagazineOgrynTwinHeavyStubber
+  suffix: WH40K, Ogryn, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Ogryn/ogryn_chaos_twin_heavy_stubber_mag.rsi

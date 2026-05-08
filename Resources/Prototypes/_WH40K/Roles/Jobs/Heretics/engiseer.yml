@@ -26,6 +26,7 @@
   - !type:AddComponentSpecial
     components:
       - type: WH40KChaosGiftRole
+      - type: WH40KStrategicPointUpgradeSkill
   access:
   - Maintenance
   - Engineering

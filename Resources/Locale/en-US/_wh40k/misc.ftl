@@ -61,6 +61,7 @@ loadout-group-wh40k-imperial-command-hands = command gloves
 loadout-group-wh40k-imperial-command-feet = command boots
 loadout-group-wh40k-command-field-kit = command field kit
 loadout-group-wh40k-imperial-command-sidearm = command sidearm
+loadout-group-wh40k-psyker-force-staff = sanctioned force staff
 loadout-group-wh40k-chaplain-melee = chaplain melee weapon
 loadout-group-wh40k-imperial-command-melee = command melee weapon
 loadout-group-wh40k-sergeant-melee = sergeant melee weapon

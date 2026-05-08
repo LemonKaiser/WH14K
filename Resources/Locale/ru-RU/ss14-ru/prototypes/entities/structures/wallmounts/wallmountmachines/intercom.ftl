@@ -10,6 +10,7 @@ ent-IntercomConstructed = { ent-BaseIntercom }
 
 ent-Intercom = { ent-IntercomConstructed }
     .desc = { ent-IntercomConstructed.desc }
+    .suffix = ""
 
 ent-BaseIntercomSecure = { ent-Intercom }
     .desc = { ent-Intercom.desc }

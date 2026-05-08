@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Shared.Construction.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Client.Placement;
-using Robust.Client.ResourceManagement;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -57,7 +56,50 @@ namespace Content.Client.Construction
             if (!IoCManager.Resolve<IPrototypeManager>().TryIndex(targetProtoId, out EntityPrototype? proto))
                 return;
 
-            manager.CurrentTextures = SpriteComponent.GetPrototypeTextures(proto, IoCManager.Resolve<IResourceCache>()).ToList();
+            var entMan = IoCManager.Resolve<IEntityManager>();
+            var spriteSystem = entMan.System<SpriteSystem>();
+
+            if (TryPreparePlacementSprite(manager, targetProtoId, entMan, spriteSystem))
+                return;
+
+            var textures = spriteSystem.GetPrototypeTextures(proto, out var noRot).ToList();
+            manager.PreparePlacementTexList(textures, noRot || !CanRotate, proto);
+        }
+
+        private static bool TryPreparePlacementSprite(
+            PlacementManager manager,
+            EntProtoId targetProtoId,
+            IEntityManager entMan,
+            SpriteSystem spriteSystem)
+        {
+            var dummy = entMan.SpawnEntity(targetProtoId, MapCoordinates.Nullspace);
+
+            try
+            {
+                if (!entMan.TryGetComponent(dummy, out SpriteComponent? targetSprite))
+                    return false;
+
+                entMan.System<AppearanceSystem>().OnChangeData(dummy, targetSprite);
+                manager.PreparePlacementSprite((dummy, targetSprite));
+
+                if (manager.CurrentPlacementOverlayEntity is not { Valid: true } overlayUid ||
+                    !entMan.TryGetComponent(overlayUid, out SpriteComponent? overlaySprite))
+                {
+                    return false;
+                }
+
+                for (var i = 0; i < overlaySprite.AllLayers.Count(); i++)
+                {
+                    overlaySprite.LayerSetShader(i, "unshaded");
+                }
+
+                return true;
+            }
+            finally
+            {
+                if (!entMan.Deleted(dummy))
+                    entMan.DeleteEntity(dummy);
+            }
         }
     }
 }

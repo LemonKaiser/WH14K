@@ -1,0 +1,91 @@
+- type: entity
+  id: WH40KProjectilePsykerWarpfireBolt
+  name: warpfire bolt
+  description: A lance of mind-shaped flame.
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#ff7b29"
+    radius: 2.4
+    energy: 3
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: fireball
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Heat: 9
+  - type: IgnitionSource
+    temperature: 900
+    ignited: true
+  - type: IgniteOnCollide
+    fireStacks: 1.5
+
+- type: entity
+  id: WH40KProjectilePsykerMindBolt
+  name: mind bolt
+  description: A focused shard of warp force.
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#6ea8ff"
+    radius: 2
+    energy: 2
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_cyan
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 4
+        Shock: 10
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/taser_hit.ogg
+    forceSound: true
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 2
+    walkSpeedModifier: 0.85
+    sprintSpeedModifier: 0.85
+
+- type: entity
+  id: WH40KProjectilePsykerTelekineticBolt
+  name: telekinetic bolt
+  description: A compressed impact wave.
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#ffd65c"
+    radius: 1.8
+    energy: 1.6
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: magicm_yellow
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 7
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 1
+    drop: false
+    slowdownAmount: 1.5
+    walkSpeedModifier: 0.8
+    sprintSpeedModifier: 0.8
+  - type: RepulseAttractOnTrigger
+    speed: 7
+    range: 1.4
+    whitelist:
+      components:
+      - MobMover

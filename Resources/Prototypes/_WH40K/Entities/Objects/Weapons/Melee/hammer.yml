@@ -91,6 +91,7 @@
   - type: Tag
     tags:
     - Multitool
+    - DoorElectronicsConfigurator
   - type: Prying
     enabled: false
   - type: Tool
@@ -100,10 +101,17 @@
     useSound: /Audio/Items/drill_use.ogg
   - type: ToolTileCompatible
   - type: WH40KMultipleToolRadial
+  - type: NetworkConfigurator
   - type: UserInterface
     interfaces:
       enum.WH40KMultipleToolRadialUiKey.Key:
         type: WH40KMultipleToolRadialBoundUserInterface
+      enum.NetworkConfiguratorUiKey.List:
+        type: NetworkConfiguratorBoundUserInterface
+      enum.NetworkConfiguratorUiKey.Configure:
+        type: NetworkConfiguratorBoundUserInterface
+      enum.NetworkConfiguratorUiKey.Link:
+        type: NetworkConfiguratorBoundUserInterface
   - type: ActivatableUI
     inHandsOnly: true
     key: enum.WH40KMultipleToolRadialUiKey.Key
