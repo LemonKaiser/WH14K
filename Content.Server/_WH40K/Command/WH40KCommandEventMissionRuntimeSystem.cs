@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Cargo.Components;
+using Content.Server.Cargo.Systems;
 using Content.Server.Destructible;
 using Content.Server.GameTicking;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.OreExtractor.Components;
+using Content.Shared.Cargo.Components;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.Command.Pinpointer;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
 using Content.Shared._WH40K.Notifications;
+using Content.Shared._WH40K.StrategicPoints;
 using Content.Shared.Damage.Components;
 using Content.Shared.Ghost;
 using Content.Shared.Light.Components;
@@ -257,6 +261,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
@@ -2156,6 +2161,26 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             candidates.Add(coordinates);
         }
 
+        var anchorQuery = EntityQueryEnumerator<WH40KStrategicPointAnchorComponent, TransformComponent>();
+        while (anchorQuery.MoveNext(out _, out _, out var anchorXform))
+        {
+            if (anchorXform.MapID != mapId)
+                continue;
+
+            var worldPos = _transform.GetWorldPosition(anchorXform, xformQuery);
+            TryAddCandidate(new MapCoordinates(worldPos, anchorXform.MapID));
+        }
+
+        var strategicPointQuery = EntityQueryEnumerator<WH40KStrategicPointComponent, TransformComponent>();
+        while (strategicPointQuery.MoveNext(out _, out _, out var pointXform))
+        {
+            if (pointXform.MapID != mapId)
+                continue;
+
+            var worldPos = _transform.GetWorldPosition(pointXform, xformQuery);
+            TryAddCandidate(new MapCoordinates(worldPos, pointXform.MapID));
+        }
+
         var points = EntityQueryEnumerator<WH40KInfluencePointComponent, TransformComponent>();
         while (points.MoveNext(out _, out _, out var pointXform))
         {
@@ -2812,11 +2837,68 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(teamId) || points <= 0)
             return false;
 
-        if (!_teamRule.TryAdjustTeamFrontPoints(teamId, points, out var resolvedTeamId, out _, out _, source: source))
+        if (!_teamRule.TryAdjustTeamXp(teamId, points, out var resolvedTeamId, out _, out _, source: source))
             return false;
 
-        _teamRule.TryAdjustTeamCommandPoints(resolvedTeamId, points, out _, out _, source: source);
+        _teamRule.TryAdjustTeamInfluence(resolvedTeamId, points, out _, out _, source: source);
+        _teamRule.TryAdjustTeamResearchPoints(
+            resolvedTeamId,
+            WH40KCommandEconomyCalculator.GetMissionResearchReward(points),
+            out _,
+            out _,
+            source: source);
+        TryAdjustTeamFunds(
+            resolvedTeamId,
+            WH40KCommandEconomyCalculator.GetMissionFundsReward(points));
         return true;
+    }
+
+    private bool TryAdjustTeamFunds(string teamId, int amount)
+    {
+        if (amount <= 0 ||
+            !TryResolveCargoAccountForTeam(teamId, out var account) ||
+            !TryGetTeamBank(out var bank))
+        {
+            return false;
+        }
+
+        if (_cargo.TryGetAccount(bank, account, out _))
+            return _cargo.TryAdjustBankAccount(bank, account, amount);
+
+        return _cargo.TrySetBankAccount(bank, account, amount, createAccount: true);
+    }
+
+    private bool TryGetTeamBank(out Entity<StationBankAccountComponent?> bank)
+    {
+        bank = default;
+
+        var query = EntityQueryEnumerator<StationBankAccountComponent>();
+        while (query.MoveNext(out var uid, out var bankComponent))
+        {
+            bank = (uid, bankComponent);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool TryResolveCargoAccountForTeam(string teamId, out ProtoId<CargoAccountPrototype> account)
+    {
+        account = default;
+
+        if (string.Equals(teamId, "Imperium", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KImperium";
+            return true;
+        }
+
+        if (string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KHeretics";
+            return true;
+        }
+
+        return false;
     }
 
     private void ApplyMissionTokenReward(string teamId, string tokenId, int durationSeconds)

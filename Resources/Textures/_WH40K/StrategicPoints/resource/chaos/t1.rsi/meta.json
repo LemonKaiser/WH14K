@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "license": "CC-BY-SA-3.0",
+    "copyright": "WH40K fork strategic point asset",
+    "states": [
+        {
+            "name": "base",
+            "delays": [
+                [
+                    0.6,
+                    0.6
+                ]
+            ]
+        }
+    ]
+}

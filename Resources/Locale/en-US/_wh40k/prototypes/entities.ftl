@@ -1820,3 +1820,34 @@ ent-ClothingOuterArmorMauler = Mauler armor
 ent-ClothingShoesBootsMauler = Mauler boots
     .desc = Strong armor that covers almost the entire body and provides good protection against most types of damage.
 
+ent-WH40KStrategicPointAnchorResource = drill site
+    .desc = An empty drill site. Build a resource point here to claim the deposit.
+
+ent-WH40KStrategicPointAnchorResearch = noktolit
+    .desc = A decorative noktolit that marks the research site. Build the research point on the neighboring tile.
+
+ent-WH40KStrategicPointAnchorInfluence = influence site
+    .desc = An empty influence site. Build an influence point here to secure the sector.
+
+ent-WH40KStrategicPointResourceT1 = resource point
+    .desc = A claimed resource point that generates funds and base XP for its team.
+
+ent-WH40KStrategicPointResearchT1 = research point
+    .desc = A claimed research point that generates research and base XP for its team.
+
+ent-WH40KStrategicPointInfluenceT1 = influence point
+    .desc = A claimed influence point that generates influence and base XP for its team.
+
+ent-SpawnPointNovice = novice
+ent-SpawnPointMagos = magos
+ent-SpawnPointLexmechanic = lexmechanic
+ent-SpawnPointStationEnginseer = enginseer
+ent-SpawnPointGenetor = genetor
+ent-SpawnPointExplorator = explorator
+ent-SpawnPointHNovice = novice
+ent-SpawnPointHMagos = magos
+ent-SpawnPointHLexmechanic = lexmechanic
+ent-SpawnPointHStationEnginseer = enginseer
+ent-SpawnPointHGenetor = genetor
+ent-SpawnPointHExplorator = explorator
+

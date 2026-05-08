@@ -21,6 +21,10 @@
   startingGear: ExploratorGear
   supervisors: job-supervisors-wh40k-mechanicus-priest
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KStrategicPointUpgradeSkill
   access:
   - Cargo
   - Salvage

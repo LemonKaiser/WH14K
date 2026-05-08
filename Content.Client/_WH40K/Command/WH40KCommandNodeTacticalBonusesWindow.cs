@@ -326,7 +326,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow, ILocali
 
         _summaryLine.Text = CompactLine(Loc.GetString("w40k-cmd-tactical-bonuses-summary-line",
             ("node_tier", Math.Clamp(state.UpgradeLevel + 1, 1, 5)),
-            ("development_points", state.CommandPoints),
+            ("development_points", state.InfluencePoints),
             ("doctrine", doctrineName)));
 
         RandomBonusEntry activeRandomBonus;
@@ -461,6 +461,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow, ILocali
                     ("storage_limit", FormatStorageLimit(intel.EngineeringMaterialStorageLimit)),
                     ("global_multiplier", FormatDecimal(intel.EngineeringGlobalTimeMultiplier)),
                     ("gain", intel.NodePassiveFrontPointsPerTick),
+                    ("funds", WH40KCommandEconomyCalculator.GetPassiveFallbackFundsReward(intel.NodePassiveFrontPointsPerTick)),
                     ("interval", FormatDecimal(intel.NodePassiveIntervalSeconds))));
         }
         else
@@ -596,6 +597,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow, ILocali
                 ("node_tier", Math.Clamp(state.UpgradeLevel + 1, 1, 5))),
             Loc.GetString("w40k-cmd-tactical-bonuses-tier-node-detail",
                 ("gain", intel.NodePassiveFrontPointsPerTick),
+                ("funds", WH40KCommandEconomyCalculator.GetPassiveFallbackFundsReward(intel.NodePassiveFrontPointsPerTick)),
                 ("interval", FormatDecimal(intel.NodePassiveIntervalSeconds))));
     }
 
@@ -803,7 +805,7 @@ public sealed class WH40KCommandNodeTacticalBonusesWindow : FancyWindow, ILocali
             state.TeamId,
             state.Phase,
             state.BaseLevel,
-            state.CommandPoints,
+            state.InfluencePoints,
             state.UpgradeLevel,
             _activeDoctrineId));
 

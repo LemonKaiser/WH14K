@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.PowerCell;
 using Content.Shared.Station;
 using Content.Shared._WH40K.Influence;
+using Content.Shared._WH40K.StrategicPoints;
 using Content.Shared._WH40K.TacticalMap;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
@@ -660,6 +661,10 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         var gridXform = Transform(gridUid);
         var invGridMatrix = _xform.GetInvWorldMatrix(gridXform);
         var gridBounds = Comp<MapGridComponent>(gridUid).LocalAABB.Enlarged(0.5f);
+        var seenStrategicPoints = new HashSet<EntityUid>();
+
+        AddStrategicPointMarkers(results, seenStrategicPoints, gridUid, gridXform.MapID, invGridMatrix, gridBounds, teamId);
+
         var query = EntityQueryEnumerator<WH40KInfluencePointComponent, TransformComponent>();
 
         while (query.MoveNext(out var uid, out var point, out var xform))
@@ -750,6 +755,99 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 
         results.Sort(static (left, right) => string.Compare(left.Label, right.Label, StringComparison.OrdinalIgnoreCase));
         return results.ToArray();
+    }
+
+    private void AddStrategicPointMarkers(
+        List<WH40KTacticalMapCapturePointMarker> results,
+        HashSet<EntityUid> seenStrategicPoints,
+        EntityUid gridUid,
+        MapId gridMapId,
+        Matrix3x2 invGridMatrix,
+        Box2 gridBounds,
+        string viewerTeamId)
+    {
+        var anchorQuery = EntityQueryEnumerator<WH40KStrategicPointAnchorComponent, TransformComponent>();
+        while (anchorQuery.MoveNext(out var uid, out var anchor, out var xform))
+        {
+            if (!TryGetLocalPositionOnGrid((uid, xform), gridUid, gridMapId, invGridMatrix, gridBounds, out var localPosition))
+                continue;
+
+            EntityUid markerUid = uid;
+            WH40KStrategicPointType pointType = anchor.PointType;
+            WH40KStrategicPointTier tier = WH40KStrategicPointTier.T0;
+            var ownerTeamId = string.Empty;
+
+            if (anchor.BuiltPoint is { } builtPointUid &&
+                !Deleted(builtPointUid) &&
+                TryComp<WH40KStrategicPointComponent>(builtPointUid, out var builtPoint))
+            {
+                markerUid = builtPointUid;
+                pointType = builtPoint.PointType;
+                tier = builtPoint.Tier;
+                ownerTeamId = builtPoint.OwnerTeamId ?? string.Empty;
+                seenStrategicPoints.Add(builtPointUid);
+            }
+
+            AddStrategicPointMarker(
+                results,
+                markerUid,
+                localPosition,
+                viewerTeamId,
+                ownerTeamId,
+                anchor.Callsign,
+                pointType,
+                tier);
+        }
+
+        var pointQuery = EntityQueryEnumerator<WH40KStrategicPointComponent, TransformComponent>();
+        while (pointQuery.MoveNext(out var uid, out var point, out var xform))
+        {
+            if (seenStrategicPoints.Contains(uid) ||
+                point.Anchor is { } anchorUid && !Deleted(anchorUid) && HasComp<WH40KStrategicPointAnchorComponent>(anchorUid) ||
+                !TryGetLocalPositionOnGrid((uid, xform), gridUid, gridMapId, invGridMatrix, gridBounds, out var localPosition))
+            {
+                continue;
+            }
+
+            AddStrategicPointMarker(
+                results,
+                uid,
+                localPosition,
+                viewerTeamId,
+                point.OwnerTeamId ?? string.Empty,
+                null,
+                point.PointType,
+                point.Tier);
+        }
+    }
+
+    private void AddStrategicPointMarker(
+        List<WH40KTacticalMapCapturePointMarker> results,
+        EntityUid markerUid,
+        Vector2 localPosition,
+        string viewerTeamId,
+        string ownerTeamId,
+        string? callsign,
+        WH40KStrategicPointType pointType,
+        WH40KStrategicPointTier tier)
+    {
+        var relation = ResolveStrategicRelation(viewerTeamId, ownerTeamId, string.Empty, false);
+        results.Add(new WH40KTacticalMapCapturePointMarker(
+            GetNetEntity(markerUid),
+            WH40KTacticalMapStrategicMarkerKind.CapturePoint,
+            relation,
+            BuildStrategicPointMapLabel(callsign, pointType, tier),
+            string.Empty,
+            localPosition,
+            ownerTeamId,
+            ResolveTeamDisplayName(ownerTeamId, "Neutral"),
+            ResolveTeamColor(ownerTeamId),
+            string.Empty,
+            string.Empty,
+            NeutralMarkerColor,
+            0f,
+            0,
+            false));
     }
 
     private bool TryGetLocalPositionOnGrid(
@@ -927,6 +1025,33 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         return TryComp(uid, out MetaDataComponent? meta)
             ? meta.EntityName
             : Loc.GetString("wh40k-tactical-map-capture-fallback");
+    }
+
+    private string BuildStrategicPointMapLabel(
+        string? callsign,
+        WH40KStrategicPointType pointType,
+        WH40KStrategicPointTier tier)
+    {
+        var displayCallsign = string.IsNullOrWhiteSpace(callsign)
+            ? Loc.GetString("wh40k-strategic-point-callsign-unknown")
+            : LocalizeCallsign(callsign);
+
+        return Loc.GetString(
+            "wh40k-tactical-map-strategic-point-label",
+            ("callsign", displayCallsign),
+            ("type", Loc.GetString(GetStrategicPointTypeLocKey(pointType))),
+            ("tier", ((int) tier).ToString()));
+    }
+
+    private static string GetStrategicPointTypeLocKey(WH40KStrategicPointType pointType)
+    {
+        return pointType switch
+        {
+            WH40KStrategicPointType.Resource => "wh40k-strategic-point-type-resource",
+            WH40KStrategicPointType.Research => "wh40k-strategic-point-type-research",
+            WH40KStrategicPointType.Influence => "wh40k-strategic-point-type-influence",
+            _ => "wh40k-strategic-point-type-unknown"
+        };
     }
 
     private string LocalizeCallsign(string? callsign)

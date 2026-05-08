@@ -42,7 +42,9 @@ public sealed partial class WH40KCommandNodeSystem
         string Name,
         string Description,
         int Count,
-        int UnitCost);
+        int UnitCost,
+        int UnitFundsCost,
+        int UnitInfluenceCost);
 
     private readonly record struct ReinforcementSpawnPointCandidate(
         EntityCoordinates Coordinates,
@@ -67,6 +69,8 @@ public sealed partial class WH40KCommandNodeSystem
         public TimeSpan ArrivalTime;
         public int TotalCount;
         public int TotalCost;
+        public int TotalFundsCost;
+        public int TotalInfluenceCost;
         public List<ReinforcementPendingEntry> Roles = new();
     }
 
@@ -171,25 +175,42 @@ public sealed partial class WH40KCommandNodeSystem
             return;
         }
 
-        if (!TryBuildPendingEntries(ent.Comp.TeamId, args.Roles, false, out var entries, out var totalCount, out var totalCost, out var errorKey))
+        if (!TryBuildPendingEntries(
+                ent.Comp.TeamId,
+                args.Roles,
+                false,
+                out var entries,
+                out var totalCount,
+                out var totalCost,
+                out var totalFundsCost,
+                out var totalInfluenceCost,
+                out var errorKey))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, errorKey), ent.Owner, args.Actor);
             return;
         }
 
-        if (!_teamRule.TrySpendTeamCommandPoints(ent.Comp.TeamId, totalCost, out _, source: "reinforcement-manual"))
+        if (!TrySpendTeamFundsAndInfluence(ent.Owner, ent.Comp.TeamId, totalFundsCost, totalInfluenceCost, "reinforcement-manual"))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-denied"), ent.Owner, args.Actor);
             return;
         }
 
-        CreatePendingRequest(runtime, WH40KCommandReinforcementRequestKind.Manual, entries, totalCount, totalCost, ReinforcementManualDelaySeconds);
+        CreatePendingRequest(
+            runtime,
+            WH40KCommandReinforcementRequestKind.Manual,
+            entries,
+            totalCount,
+            totalCost,
+            totalFundsCost,
+            totalInfluenceCost,
+            ReinforcementManualDelaySeconds);
         RecordEconomySpendStats(
             args.Actor,
             ent.Comp.TeamId,
             WH40KPlayerStatKeys.EconomyCommandReinforcementCallCount,
             WH40KPlayerStatKeys.EconomyCommandReinforcementCost,
-            totalCost,
+            totalFundsCost + totalInfluenceCost,
             "reinforcement-manual",
             null);
 
@@ -197,7 +218,8 @@ public sealed partial class WH40KCommandNodeSystem
             Loc.GetString(
                 "w40k-cmd-reinforcement-request-created",
                 ("count", totalCount),
-                ("cost", totalCost),
+                ("funds", totalFundsCost),
+                ("influence", totalInfluenceCost),
                 ("delay", ReinforcementManualDelaySeconds / 60)),
             ent.Owner,
             args.Actor);
@@ -227,7 +249,16 @@ public sealed partial class WH40KCommandNodeSystem
             runtime.AutoConfig.ThresholdPercent = threshold;
             if (args.Roles.Any(entry => !string.IsNullOrWhiteSpace(entry.RoleId) && entry.Count > 0))
             {
-                if (!TryBuildPendingEntries(ent.Comp.TeamId, args.Roles, true, out var disabledEntries, out _, out _, out var disabledErrorKey))
+                if (!TryBuildPendingEntries(
+                        ent.Comp.TeamId,
+                        args.Roles,
+                        true,
+                        out var disabledEntries,
+                        out _,
+                        out _,
+                        out _,
+                        out _,
+                        out var disabledErrorKey))
                 {
                     _popup.PopupEntity(_culture.GetPlayerString(args.Actor, disabledErrorKey), ent.Owner, args.Actor);
                     return;
@@ -247,7 +278,16 @@ public sealed partial class WH40KCommandNodeSystem
             return;
         }
 
-        if (!TryBuildPendingEntries(ent.Comp.TeamId, args.Roles, true, out var entries, out _, out _, out var errorKey))
+        if (!TryBuildPendingEntries(
+                ent.Comp.TeamId,
+                args.Roles,
+                true,
+                out var entries,
+                out _,
+                out _,
+                out _,
+                out _,
+                out var errorKey))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, errorKey), ent.Owner, args.Actor);
             return;
@@ -294,11 +334,15 @@ public sealed partial class WH40KCommandNodeSystem
         out List<ReinforcementPendingEntry> entries,
         out int totalCount,
         out int totalCost,
+        out int totalFundsCost,
+        out int totalInfluenceCost,
         out string errorKey)
     {
         entries = new List<ReinforcementPendingEntry>();
         totalCount = 0;
         totalCost = 0;
+        totalFundsCost = 0;
+        totalInfluenceCost = 0;
         errorKey = "w40k-cmd-reinforcement-option-invalid";
 
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile))
@@ -346,10 +390,14 @@ public sealed partial class WH40KCommandNodeSystem
                 return false;
             }
 
-            var unitCost = GetReinforcementUnitCost(option);
-            var optionTotalCost = unitCost * requestedCount;
+            var unitInfluenceCost = GetReinforcementUnitCost(option);
+            var unitFundsCost = WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost);
+            var optionTotalCost = unitInfluenceCost * requestedCount;
+            var optionTotalFundsCost = unitFundsCost * requestedCount;
             totalCount += requestedCount;
             totalCost += optionTotalCost;
+            totalInfluenceCost += optionTotalCost;
+            totalFundsCost += optionTotalFundsCost;
 
             entries.Add(new ReinforcementPendingEntry(
                 option.Id,
@@ -357,7 +405,9 @@ public sealed partial class WH40KCommandNodeSystem
                 ResolveReinforcementOptionName(option),
                 ResolveReinforcementOptionDescription(option),
                 requestedCount,
-                unitCost));
+                unitInfluenceCost,
+                unitFundsCost,
+                unitInfluenceCost));
         }
 
         if (entries.Count == 0)
@@ -381,6 +431,8 @@ public sealed partial class WH40KCommandNodeSystem
         IReadOnlyCollection<ReinforcementPendingEntry> entries,
         int totalCount,
         int totalCost,
+        int totalFundsCost,
+        int totalInfluenceCost,
         int delaySeconds)
     {
         runtime.PendingRequest = new TeamReinforcementPendingRequest
@@ -389,6 +441,8 @@ public sealed partial class WH40KCommandNodeSystem
             ArrivalTime = _timing.CurTime + TimeSpan.FromSeconds(delaySeconds),
             TotalCount = totalCount,
             TotalCost = totalCost,
+            TotalFundsCost = totalFundsCost,
+            TotalInfluenceCost = totalInfluenceCost,
             Roles = entries.ToList()
         };
         runtime.NextAvailable = _timing.CurTime + TimeSpan.FromSeconds(ReinforcementSharedCooldownSeconds);
@@ -407,7 +461,8 @@ public sealed partial class WH40KCommandNodeSystem
             return;
         }
 
-        _teamRule.TryAdjustTeamCommandPoints(teamId, pending.TotalCost, out _, out _, source: "reinforcement-refund");
+        TryAdjustTeamFunds(null, teamId, pending.TotalFundsCost, "reinforcement-refund");
+        _teamRule.TryAdjustTeamInfluence(teamId, pending.TotalInfluenceCost, out _, out _, source: "reinforcement-refund");
         runtime.PendingRequest = null;
     }
 
@@ -435,16 +490,36 @@ public sealed partial class WH40KCommandNodeSystem
         if (snapshot.TotalCount <= 0 || snapshot.AlivePercent > runtime.AutoConfig.ThresholdPercent)
             return;
 
-        if (!TryBuildPendingEntries(teamId, runtime.AutoConfig.Roles, true, out var entries, out var totalCount, out var totalCost, out _))
+        if (!TryBuildPendingEntries(
+                teamId,
+                runtime.AutoConfig.Roles,
+                true,
+                out var entries,
+                out var totalCount,
+                out var totalCost,
+                out var totalFundsCost,
+                out var totalInfluenceCost,
+                out _))
             return;
 
-        if (!_teamRule.TryGetTeamCommandPoints(teamId, out var commandPoints) || commandPoints < totalCost)
+        if (!TryGetTeamFunds(null, teamId, out var funds) || funds < totalFundsCost)
             return;
 
-        if (!_teamRule.TrySpendTeamCommandPoints(teamId, totalCost, out _, source: "reinforcement-auto"))
+        if (!_teamRule.TryGetTeamInfluencePoints(teamId, out var influence) || influence < totalInfluenceCost)
             return;
 
-        CreatePendingRequest(runtime, WH40KCommandReinforcementRequestKind.Auto, entries, totalCount, totalCost, ReinforcementAutoDelaySeconds);
+        if (!TrySpendTeamFundsAndInfluence(null, teamId, totalFundsCost, totalInfluenceCost, "reinforcement-auto"))
+            return;
+
+        CreatePendingRequest(
+            runtime,
+            WH40KCommandReinforcementRequestKind.Auto,
+            entries,
+            totalCount,
+            totalCost,
+            totalFundsCost,
+            totalInfluenceCost,
+            ReinforcementAutoDelaySeconds);
     }
 
     private bool TrySpawnPendingRequest(string teamId, TeamReinforcementPendingRequest pending, out int spawnedCount)
@@ -628,9 +703,11 @@ public sealed partial class WH40KCommandNodeSystem
         EnsureComp<WH40KReinforcementGhostRoleOneShotComponent>(entity);
     }
 
-    private WH40KCommandReinforcementBoundUserInterfaceState BuildReinforcementUiState(string teamId, string teamName)
+    private WH40KCommandReinforcementBoundUserInterfaceState BuildReinforcementUiState(EntityUid? sourceUid, string teamId, string teamName)
     {
         _teamRule.TryGetTeamCommandPoints(teamId, out var commandPoints);
+        _teamRule.TryGetTeamInfluencePoints(teamId, out var influencePoints);
+        TryGetTeamFunds(sourceUid, teamId, out var funds);
         var runtime = GetOrCreateTeamReinforcementRuntime(teamId);
         var currentPhase = _teamRule.GetCurrentPhase();
         var snapshot = BuildTeamAliveSnapshot(teamId);
@@ -643,6 +720,8 @@ public sealed partial class WH40KCommandNodeSystem
             teamName,
             currentPhase,
             commandPoints,
+            influencePoints,
+            funds,
             GetRemainingReinforcementCooldown(teamId),
             ReinforcementManualDelaySeconds,
             ReinforcementAutoDelaySeconds,
@@ -668,6 +747,7 @@ public sealed partial class WH40KCommandNodeSystem
                      .OrderBy(option => option.SortOrder)
                      .ThenBy(option => ResolveReinforcementOptionName(option), StringComparer.OrdinalIgnoreCase))
         {
+            var unitInfluenceCost = GetReinforcementUnitCost(option);
             catalog.Add(new WH40KCommandReinforcementCatalogEntryState(
                 option.Id,
                 ResolveReinforcementOptionName(option),
@@ -675,7 +755,9 @@ public sealed partial class WH40KCommandNodeSystem
                 string.IsNullOrWhiteSpace(option.GroupKey) ? ReinforcementDefaultGroupKey : option.GroupKey,
                 BuildReinforcementEquipmentSummary(option.Job),
                 option.PreviewPrototype.ToString(),
-                GetReinforcementUnitCost(option),
+                unitInfluenceCost,
+                WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost),
+                unitInfluenceCost,
                 Math.Clamp(option.MaxCount, 1, ReinforcementMaxTotalCount),
                 option.AllowAuto));
         }
@@ -690,6 +772,8 @@ public sealed partial class WH40KCommandNodeSystem
         var validRoles = new List<WH40KCommandReinforcementDraftEntry>(config.Roles.Count);
         var totalCount = 0;
         var totalCost = 0;
+        var totalFundsCost = 0;
+        var totalInfluenceCost = 0;
         foreach (var role in config.Roles)
         {
             if (string.IsNullOrWhiteSpace(role.RoleId) || role.Count <= 0)
@@ -703,6 +787,8 @@ public sealed partial class WH40KCommandNodeSystem
             validRoles.Add(new WH40KCommandReinforcementDraftEntry(role.RoleId, clampedCount));
             totalCount += clampedCount;
             totalCost += clampedCount * catalogEntry.UnitCost;
+            totalFundsCost += clampedCount * catalogEntry.UnitFundsCost;
+            totalInfluenceCost += clampedCount * catalogEntry.UnitInfluenceCost;
         }
 
         return new WH40KCommandReinforcementAutoConfigState(
@@ -710,6 +796,8 @@ public sealed partial class WH40KCommandNodeSystem
             Math.Clamp(config.ThresholdPercent, ReinforcementMinAutoThresholdPercent, ReinforcementMaxAutoThresholdPercent),
             totalCount,
             totalCost,
+            totalFundsCost,
+            totalInfluenceCost,
             validRoles.ToArray());
     }
 
@@ -724,7 +812,11 @@ public sealed partial class WH40KCommandNodeSystem
                 role.Name,
                 role.Count,
                 role.UnitCost,
-                role.UnitCost * role.Count))
+                role.UnitCost * role.Count,
+                role.UnitFundsCost,
+                role.UnitInfluenceCost,
+                role.UnitFundsCost * role.Count,
+                role.UnitInfluenceCost * role.Count))
             .ToArray();
 
         return new WH40KCommandReinforcementPendingRequestState(
@@ -732,6 +824,8 @@ public sealed partial class WH40KCommandNodeSystem
             Math.Max(0, (int) Math.Ceiling((pending.ArrivalTime - _timing.CurTime).TotalSeconds)),
             pending.TotalCount,
             pending.TotalCost,
+            pending.TotalFundsCost,
+            pending.TotalInfluenceCost,
             roles);
     }
 
@@ -772,7 +866,7 @@ public sealed partial class WH40KCommandNodeSystem
     private int GetMinimumReinforcementCost(string teamId, int fallback)
     {
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile) || profile.Options.Count == 0)
-            return _teamRule.GetDynamicReinforcementCost(Math.Max(1, fallback));
+            return Math.Max(1, fallback);
 
         var min = int.MaxValue;
         foreach (var option in profile.Options)
@@ -784,13 +878,13 @@ public sealed partial class WH40KCommandNodeSystem
         }
 
         return min == int.MaxValue
-            ? _teamRule.GetDynamicReinforcementCost(Math.Max(1, fallback))
+            ? Math.Max(1, fallback)
             : min;
     }
 
     private int GetReinforcementUnitCost(WH40KCommandReinforcementOptionPrototype option)
     {
-        return Math.Max(1, _teamRule.GetDynamicReinforcementCost(Math.Max(1, option.BaseCost)));
+        return Math.Max(1, option.BaseCost);
     }
 
     private string ResolveReinforcementOptionName(WH40KCommandReinforcementOptionPrototype option)

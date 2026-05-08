@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Administration.Systems;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.Cargo.Systems;
 using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.GameTicking.Rules.Prototypes;
@@ -15,6 +16,8 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Shared._WH40K.GameMode;
 using Content.Shared._WH40K.Influence;
 using Content.Shared._WH40K.RoundEvents;
+using Content.Shared._WH40K.Squads;
+using Content.Shared._WH40K.StrategicPoints;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Rules;
@@ -24,6 +27,7 @@ using Content.Server.Players.PlayTimeTracking;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Server.Revolutionary.Components;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Components;
@@ -32,6 +36,8 @@ using Content.Server.Station.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Atmos.Components;
 using Content.Shared.CCVar;
+using Content.Shared.Cargo.Components;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
@@ -56,6 +62,7 @@ using Content.Shared.Store.Components;
 using Content.Shared.Weather;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -99,8 +106,10 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly SharedWeatherSystem _weather = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly CableSystem _cables = default!;
+    [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly StoreSystem _store = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private readonly StationSystem _station = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
@@ -120,6 +129,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private TimeSpan _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
     private readonly Dictionary<string, int> _economySnapshotFrontPoints = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, int> _economySnapshotCommandPoints = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _economySnapshotResearchPoints = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, int> _economySnapshotFunds = new(StringComparer.OrdinalIgnoreCase);
     private EntityUid? _activeRuleUid;
 
     public override void Initialize()
@@ -194,6 +205,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.NextPhaseChange = Timing.CurTime + TimeSpan.FromSeconds(component.PreparationDurationSeconds);
         component.TeamFrontPoints.Clear();
         component.TeamCommandPoints.Clear();
+        component.TeamResearchPoints.Clear();
         component.TeamBaseLevels.Clear();
         component.TeamLevelBuffs.Clear();
         component.PlayerLastKnownTeam.Clear();
@@ -917,8 +929,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
         }
 
-        var reward = Math.Max(1, rule.FrontPointsPerKill);
-        AddTeamFrontPointsUnscaled(teamId, reward, "kill");
+        var reward = Math.Max(1, rule.FrontPointsPerKill) * GetKillRewardMultiplier(ev.Victim);
+        TryAdjustTeamXp(teamId, reward, out _, out _, out _, "kill");
+        TryAdjustTeamInfluence(teamId, reward, out _, out _, "kill");
     }
 
     private void OnValidatedKillRewardRevoked(WH40KValidatedKillRewardRevokedEvent ev)
@@ -940,9 +953,26 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return;
         }
 
-        var reward = Math.Max(1, rule.FrontPointsPerKill);
-        TryAdjustTeamFrontPoints(teamId, -reward, out _, out _, out _, source: "kill-revoked");
-        TryAdjustTeamCommandPoints(teamId, -reward, out _, out _, source: "kill-revoked");
+        var reward = Math.Max(1, rule.FrontPointsPerKill) * GetKillRewardMultiplier(ev.Victim);
+        TryAdjustTeamXp(teamId, -reward, out _, out _, out _, source: "kill-revoked", allowDecrease: true);
+        TryAdjustTeamInfluence(teamId, -reward, out _, out _, source: "kill-revoked");
+    }
+
+    private int GetKillRewardMultiplier(EntityUid victim)
+    {
+        if (!Exists(victim))
+            return 1;
+
+        if (HasComp<CommandStaffComponent>(victim) ||
+            HasComp<WH40KSquadLeaderComponent>(victim))
+        {
+            return 3;
+        }
+
+        if (HasComp<WH40KStrategicPointUpgradeSkillComponent>(victim))
+            return 2;
+
+        return 1;
     }
 
     private void OnConfirmedElimination(WH40KConfirmedEliminationEvent ev)
@@ -1117,6 +1147,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
         _economySnapshotFrontPoints.Clear();
         _economySnapshotCommandPoints.Clear();
+        _economySnapshotResearchPoints.Clear();
+        _economySnapshotFunds.Clear();
 
         if (component == null)
             return;
@@ -1128,8 +1160,12 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             var front = component.TeamFrontPoints.GetValueOrDefault(team.Id, 0);
             var command = component.TeamCommandPoints.GetValueOrDefault(team.Id, 0);
+            var research = component.TeamResearchPoints.GetValueOrDefault(team.Id, 0);
+            TryGetTeamFunds(null, team.Id, out var funds);
             _economySnapshotFrontPoints[team.Id] = front;
             _economySnapshotCommandPoints[team.Id] = command;
+            _economySnapshotResearchPoints[team.Id] = research;
+            _economySnapshotFunds[team.Id] = funds;
         }
 
         _lastEconomyTelemetrySnapshotAt = Timing.CurTime;
@@ -1159,21 +1195,33 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             var teamId = team.Id;
             var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
             var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
+            var research = component.TeamResearchPoints.GetValueOrDefault(teamId, 0);
+            TryGetTeamFunds(null, teamId, out var funds);
             var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
             var previousFront = _economySnapshotFrontPoints.GetValueOrDefault(teamId, front);
             var previousCommand = _economySnapshotCommandPoints.GetValueOrDefault(teamId, command);
+            var previousResearch = _economySnapshotResearchPoints.GetValueOrDefault(teamId, research);
+            var previousFunds = _economySnapshotFunds.GetValueOrDefault(teamId, funds);
             var deltaFront = front - previousFront;
             var deltaCommand = command - previousCommand;
+            var deltaResearch = research - previousResearch;
+            var deltaFunds = funds - previousFunds;
             var frontPerMinute = deltaFront * 60f / windowSeconds;
             var commandPerMinute = deltaCommand * 60f / windowSeconds;
+            var researchPerMinute = deltaResearch * 60f / windowSeconds;
+            var fundsPerMinute = deltaFunds * 60f / windowSeconds;
 
             _sawmill.Info(
                 $"[eco][snapshot] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
-                $"lvl={level} fp={front} cp={command} dFp={deltaFront} dCp={deltaCommand} " +
-                $"fpPerMin={frontPerMinute:F1} cpPerMin={commandPerMinute:F1}");
+                $"lvl={level} fp={front} cp={command} rp={research} funds={funds} " +
+                $"dFp={deltaFront} dCp={deltaCommand} dRp={deltaResearch} dFunds={deltaFunds} " +
+                $"fpPerMin={frontPerMinute:F1} cpPerMin={commandPerMinute:F1} " +
+                $"rpPerMin={researchPerMinute:F1} fundsPerMin={fundsPerMinute:F1}");
 
             _economySnapshotFrontPoints[teamId] = front;
             _economySnapshotCommandPoints[teamId] = command;
+            _economySnapshotResearchPoints[teamId] = research;
+            _economySnapshotFunds[teamId] = funds;
         }
 
         _lastEconomyTelemetrySnapshotAt = now;
@@ -1186,13 +1234,16 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         string teamId,
         string source,
         int frontDelta,
-        int commandDelta)
+        int commandDelta,
+        int researchDelta = 0)
     {
         if (!_economyTelemetryTrace)
             return;
 
         var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
         var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
+        var research = component.TeamResearchPoints.GetValueOrDefault(teamId, 0);
+        TryGetTeamFunds(null, teamId, out var funds);
         var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
         var elapsedSeconds = Math.Max(0, (int) (Timing.CurTime - component.RoundStartTime).TotalSeconds);
         var burst = Math.Abs(commandDelta) >= Math.Max(1, _economyTelemetryBurstCommandDelta);
@@ -1200,7 +1251,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         _sawmill.Info(
             $"[eco] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
-            $"source={source} dFp={frontDelta} dCp={commandDelta} fp={front} cp={command} lvl={level}{burstMarker}");
+            $"source={source} dFp={frontDelta} dCp={commandDelta} dRp={researchDelta} " +
+            $"fp={front} cp={command} rp={research} funds={funds} lvl={level}{burstMarker}");
     }
 
     private static string FormatClockShort(int totalSeconds)
@@ -1769,6 +1821,195 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         return TryGetTeamProgress(teamId, out level, out frontPoints, out pointsToNextLevel);
     }
 
+    public bool TryResolveTeamId(string teamId, out string resolvedTeamId)
+    {
+        resolvedTeamId = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        return TryResolveTeamId(rule, teamId, out resolvedTeamId);
+    }
+
+    public bool TryAdjustTeamXp(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int teamXp,
+        out int level,
+        string? source = null,
+        bool allowDecrease = false)
+    {
+        resolvedTeamId = string.Empty;
+        teamXp = 0;
+        level = 1;
+
+        if (string.IsNullOrWhiteSpace(teamId) || delta == 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var oldLevel = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
+        var currentPoints = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var adjustment = WH40KTeamProgressionMath.AdjustTeamXp(
+            currentPoints,
+            oldLevel,
+            rule.BaseLevelThresholds,
+            delta,
+            allowDecrease);
+
+        teamXp = adjustment.TeamXp;
+        rule.TeamFrontPoints[resolvedTeamId] = teamXp;
+        TraceEconomyDelta(
+            rule,
+            resolvedTeamId,
+            source ?? "team-xp-adjust",
+            adjustment.AppliedDelta,
+            0);
+
+        level = adjustment.Level;
+        rule.TeamBaseLevels[resolvedTeamId] = level;
+        level = rule.TeamBaseLevels[resolvedTeamId];
+
+        if (level > oldLevel)
+        {
+            RollTeamLevelBuff(rule, resolvedTeamId);
+
+            if (TryGetTeamDisplayName(resolvedTeamId, out var teamName))
+            {
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
+                {
+                    LocKey = "wh40k-team-level-up-announce",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["team"] = teamName,
+                        ["level"] = level.ToString()
+                    },
+                    ResolveArgValues = true,
+                    AccentColor = GetNotificationTeamColor(resolvedTeamId)
+                });
+
+                var activeBuff = rule.TeamLevelBuffs.GetValueOrDefault(resolvedTeamId, WH40KLevelBuffType.None);
+                RaiseNetworkEvent(new WH40KLocalizedNotificationEvent
+                {
+                    LocKey = "wh40k-team-level-buff-announce",
+                    LocArgs = new Dictionary<string, string>
+                    {
+                        ["team"] = teamName,
+                        ["buff"] = GetLevelBuffNameKey(activeBuff),
+                        ["effect"] = GetLevelBuffEffectKey(activeBuff)
+                    },
+                    ResolveArgValues = true,
+                    AccentColor = GetNotificationTeamColor(resolvedTeamId)
+                });
+            }
+        }
+        else if (allowDecrease && level <= 1)
+        {
+            rule.TeamLevelBuffs[resolvedTeamId] = WH40KLevelBuffType.None;
+            ApplyTeamLevelBuffToTeam(rule, resolvedTeamId, WH40KLevelBuffType.None);
+        }
+
+        return true;
+    }
+
+    public bool TryGetTeamInfluencePoints(string teamId, out int points)
+    {
+        return TryGetTeamCommandPoints(teamId, out points);
+    }
+
+    public bool TrySpendTeamInfluence(string teamId, int amount, out int remaining, string? source = null)
+    {
+        return TrySpendTeamCommandPoints(teamId, amount, out remaining, source ?? "influence-spend");
+    }
+
+    public bool TryAdjustTeamInfluence(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int influence,
+        string? source = null)
+    {
+        return TryAdjustTeamCommandPoints(teamId, delta, out resolvedTeamId, out influence, source ?? "influence-adjust");
+    }
+
+    public bool TryGetTeamResearchPoints(string teamId, out int points)
+    {
+        points = 0;
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        return rule.TeamResearchPoints.TryGetValue(resolvedTeamId, out points);
+    }
+
+    public bool TrySpendTeamResearchPoints(string teamId, int amount, out int remaining, string? source = null)
+    {
+        remaining = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || amount <= 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
+            !rule.TeamResearchPoints.TryGetValue(resolvedTeamId, out var current) ||
+            current < amount)
+        {
+            return false;
+        }
+
+        current -= amount;
+        rule.TeamResearchPoints[resolvedTeamId] = current;
+        remaining = current;
+        TraceEconomyDelta(rule, resolvedTeamId, source ?? "research-spend", 0, 0, -amount);
+        return true;
+    }
+
+    public bool TryAdjustTeamResearchPoints(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int researchPoints,
+        string? source = null)
+    {
+        resolvedTeamId = string.Empty;
+        researchPoints = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || delta == 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var current = rule.TeamResearchPoints.GetValueOrDefault(resolvedTeamId, 0);
+        researchPoints = Math.Max(0, current + delta);
+        rule.TeamResearchPoints[resolvedTeamId] = researchPoints;
+        TraceEconomyDelta(rule, resolvedTeamId, source ?? "research-adjust", 0, 0, researchPoints - current);
+        return true;
+    }
+
     public bool AddTeamFrontPoints(string teamId, int baseAmount, string? source = null)
     {
         return AddTeamFrontPointsInternal(teamId, baseAmount, applyEconomyMultiplier: true, source: source);
@@ -2027,6 +2268,55 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         return true;
     }
 
+    public bool TryGetTeamEconomySnapshot(EntityUid? sourceUid, string teamId, out WH40KTeamEconomySnapshot snapshot)
+    {
+        snapshot = default;
+
+        if (string.IsNullOrWhiteSpace(teamId) ||
+            !TryGetActiveRule(out _, out var rule, out _))
+        {
+            return false;
+        }
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        var teamXp = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var influence = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var research = rule.TeamResearchPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var level = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
+        var pointsToNextLevel = GetPointsToNextLevel(teamXp, rule.BaseLevelThresholds);
+        TryGetTeamFunds(sourceUid, resolvedTeamId, out var funds);
+
+        snapshot = new WH40KTeamEconomySnapshot(
+            resolvedTeamId,
+            teamXp,
+            influence,
+            research,
+            funds,
+            level,
+            pointsToNextLevel);
+        return true;
+    }
+
+    public void SetEconomyTelemetryTrace(bool enabled)
+    {
+        _economyTelemetryTrace = enabled;
+        _sawmill.Info($"WH40K economy telemetry trace logging {(enabled ? "enabled" : "disabled")}.");
+    }
+
+    public void SetEconomyTelemetrySnapshotIntervalSeconds(float seconds)
+    {
+        _economyTelemetrySnapshotIntervalSeconds = Math.Max(30f, seconds);
+    }
+
+    public void GetEconomyTelemetrySettings(out bool enabled, out float snapshotIntervalSeconds)
+    {
+        enabled = _economyTelemetryTrace;
+        snapshotIntervalSeconds = _economyTelemetrySnapshotIntervalSeconds;
+    }
+
     private static bool TryResolveTeamId(
         Components.WH40KTeamBattleRuleComponent component,
         string teamId,
@@ -2052,6 +2342,60 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         return false;
     }
 
+    private bool TryGetTeamFunds(EntityUid? sourceUid, string teamId, out int funds)
+    {
+        funds = 0;
+
+        if (!TryResolveCargoAccountForTeam(teamId, out var account) ||
+            !TryGetTeamBank(sourceUid, out var bank))
+        {
+            return false;
+        }
+
+        funds = Math.Max(0, _cargo.GetBalanceFromAccount(bank, account));
+        return true;
+    }
+
+    private bool TryGetTeamBank(EntityUid? sourceUid, out Entity<StationBankAccountComponent?> bank)
+    {
+        bank = default;
+
+        if (sourceUid is { } source &&
+            _station.GetOwningStation(source) is { } stationUid &&
+            TryComp<StationBankAccountComponent>(stationUid, out var sourceBank))
+        {
+            bank = (stationUid, sourceBank);
+            return true;
+        }
+
+        var query = EntityQueryEnumerator<StationBankAccountComponent>();
+        while (query.MoveNext(out var uid, out var fallbackBank))
+        {
+            bank = (uid, fallbackBank);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool TryResolveCargoAccountForTeam(string teamId, out ProtoId<CargoAccountPrototype> account)
+    {
+        if (string.Equals(teamId, "Imperium", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KImperium";
+            return true;
+        }
+
+        if (string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KHeretics";
+            return true;
+        }
+
+        account = default;
+        return false;
+    }
+
     private void EnsureTeamProgress(Components.WH40KTeamBattleRuleComponent component)
     {
         var startingPoints = Math.Max(0, component.TeamStartingPoints);
@@ -2063,6 +2407,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
             component.TeamFrontPoints.TryAdd(team.Id, startingPoints);
             component.TeamCommandPoints.TryAdd(team.Id, startingPoints);
+            component.TeamResearchPoints.TryAdd(team.Id, 0);
             component.TeamBaseLevels.TryAdd(team.Id, 1);
             component.TeamLevelBuffs.TryAdd(team.Id, WH40KLevelBuffType.None);
         }
@@ -2663,43 +3008,29 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         if (mapId == MapId.Nullspace)
             return false;
 
-        var candidates = new List<MapCoordinates>();
-        var xformQuery = GetEntityQuery<TransformComponent>();
-
-        var points = EntityQueryEnumerator<WH40KInfluencePointComponent, TransformComponent>();
-        while (points.MoveNext(out _, out _, out var pointXform))
-        {
-            if (pointXform.MapID != mapId)
-                continue;
-
-            var worldPos = _transform.GetWorldPosition(pointXform, xformQuery);
-            candidates.Add(new MapCoordinates(worldPos, pointXform.MapID));
-        }
-
-        if (candidates.Count == 0)
-        {
-            var members = EntityQueryEnumerator<WH40KTeamMemberComponent, TransformComponent>();
-            while (members.MoveNext(out var memberUid, out _, out var memberXform))
-            {
-                if (memberXform.MapID != mapId || !_mobState.IsAlive(memberUid))
-                    continue;
-
-                var worldPos = _transform.GetWorldPosition(memberXform, xformQuery);
-                candidates.Add(new MapCoordinates(worldPos, memberXform.MapID));
-            }
-        }
-
-        if (candidates.Count == 0)
+        if (!TryResolveOrbitalTargetGrid(mapId, out var gridUid, out var grid))
             return false;
 
         var scatter = Math.Max(0f, component.OrbitalTargetScatterRadius);
-        const int maxAttempts = 32;
+        var bounds = grid.LocalAABB;
+        var minX = (int) MathF.Floor(bounds.Left);
+        var minY = (int) MathF.Floor(bounds.Bottom);
+        var maxX = (int) MathF.Ceiling(bounds.Right);
+        var maxY = (int) MathF.Ceiling(bounds.Top);
+
+        if (maxX <= minX || maxY <= minY)
+            return false;
+
+        const int maxAttempts = 128;
 
         for (var attempt = 0; attempt < maxAttempts; attempt++)
         {
-            var center = candidates[_random.Next(candidates.Count)];
-            var offset = scatter > 0f ? _random.NextVector2(0f, scatter) : System.Numerics.Vector2.Zero;
-            var candidate = new MapCoordinates(center.Position + offset, center.MapId);
+            var tile = new Vector2i(_random.Next(minX, maxX), _random.Next(minY, maxY));
+            var candidate = _transform.ToMapCoordinates(_map.GridTileToLocal(gridUid, grid, tile));
+
+            if (scatter > 0f)
+                candidate = new MapCoordinates(candidate.Position + _random.NextVector2(0f, scatter), candidate.MapId);
+
             if (!IsOrbitalTargetAllowed(candidate))
                 continue;
 
@@ -2708,6 +3039,41 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         return false;
+    }
+
+    private bool TryResolveOrbitalTargetGrid(MapId mapId, out EntityUid gridUid, out MapGridComponent grid)
+    {
+        gridUid = default;
+        grid = default!;
+
+        if (_station.GetStationInMap(mapId) is { } stationUid &&
+            _station.GetLargestGrid(stationUid) is { } stationGridUid &&
+            TryComp<MapGridComponent>(stationGridUid, out var stationGrid))
+        {
+            gridUid = stationGridUid;
+            grid = stationGrid;
+            return true;
+        }
+
+        var bestArea = float.MinValue;
+        MapGridComponent? bestGrid = null;
+
+        foreach (var candidate in _mapManager.GetAllGrids(mapId))
+        {
+            var area = candidate.Comp.LocalAABB.Width * candidate.Comp.LocalAABB.Height;
+            if (area <= bestArea)
+                continue;
+
+            bestArea = area;
+            gridUid = candidate.Owner;
+            bestGrid = candidate.Comp;
+        }
+
+        if (bestGrid == null)
+            return false;
+
+        grid = bestGrid;
+        return true;
     }
 
     private bool IsOrbitalTargetAllowed(MapCoordinates candidate)

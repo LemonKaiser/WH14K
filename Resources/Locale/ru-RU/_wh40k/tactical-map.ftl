@@ -69,6 +69,7 @@ wh40k-tactical-map-no-signal-title = НЕТ КАНАЛА КАРТЫ
 wh40k-tactical-map-no-signal-detail = Тактическая карта ожидает корректную боевую сетку.
 wh40k-tactical-map-capture-label = Точка { $callsign }
 wh40k-tactical-map-capture-fallback = Точка захвата
+wh40k-tactical-map-strategic-point-label = Точка { $callsign } ({ $type }) T{ $tier }
 wh40k-tactical-map-command-node-label = Узел командования: { $team }
 wh40k-tactical-map-command-node-ordinal = Командный узел { $ordinal }
 wh40k-tactical-map-command-node-fallback = Узел командования

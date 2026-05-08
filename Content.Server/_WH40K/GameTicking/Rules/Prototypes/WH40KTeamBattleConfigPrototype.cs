@@ -73,7 +73,7 @@ public sealed partial class WH40KTeamBattlePointsConfig
     public int FrontPointsPerKill = 1;
 
     [DataField("baseLevelThresholds")]
-    public List<int> BaseLevelThresholds = new() { 10, 24, 42, 64, 90 };
+    public List<int> BaseLevelThresholds = new() { 120, 300, 600, 1000, 1500, 2200, 3100, 4200 };
 
     [DataField("levelBuffConstructionDoAfterMultiplier")]
     public float LevelBuffConstructionDoAfterMultiplier = 0.75f;

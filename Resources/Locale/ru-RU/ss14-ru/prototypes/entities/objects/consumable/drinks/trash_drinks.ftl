@@ -1,3 +1,19 @@
+ent-DrinkBottleBaseEmpty = пустая бутылка
+    .desc = Пустая бутылка.
+    .suffix = Пустая
+
+ent-DrinkBottleBaseSmallEmpty = пустая бутылка
+    .desc = { ent-DrinkBottleBaseEmpty.desc }
+    .suffix = { ent-DrinkBottleBaseEmpty.suffix }
+
+ent-DrinkCartonBaseEmpty = пустой пакет для напитков
+    .desc = Пустой пакет для напитков.
+    .suffix = Пустой
+
+ent-DrinkCartonBaseLargeEmpty = пустой пакет для напитков
+    .desc = { ent-DrinkCartonBaseEmpty.desc }
+    .suffix = { ent-DrinkCartonBaseEmpty.suffix }
+
 ent-DrinkBottleAle = { ent-DrinkAleBottleFull }
     .desc = { ent-DrinkAleBottleFull.desc }
     .suffix = { ent-DrinkBottleBaseSmallEmpty.suffix }

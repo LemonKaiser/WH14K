@@ -1831,3 +1831,34 @@ ent-ClothingOuterArmorMauler = броня Маулера
 
 ent-ClothingShoesBootsMauler = ботинки Маулера
     .desc = Крепкая броня, почти полностью покрывающее тело и дающая хорошую защиту от большинства видов повреждений.
+
+ent-WH40KStrategicPointAnchorResource = буровая площадка
+    .desc = Пустая буровая площадка. Постройте здесь ресурсную точку, чтобы занять месторождение.
+
+ent-WH40KStrategicPointAnchorResearch = ноктолит
+    .desc = Декоративный ноктолит отмечает место для исследовательской точки. Исследовательский узел строится на соседней плитке.
+
+ent-WH40KStrategicPointAnchorInfluence = площадка влияния
+    .desc = Пустая площадка точки влияния. Постройте здесь точку влияния, чтобы занять сектор.
+
+ent-WH40KStrategicPointResourceT1 = ресурсная точка
+    .desc = Захваченная ресурсная точка. Приносит команде деньги и опыт базы.
+
+ent-WH40KStrategicPointResearchT1 = исследовательская точка
+    .desc = Захваченная исследовательская точка. Приносит команде очки исследований и опыт базы.
+
+ent-WH40KStrategicPointInfluenceT1 = точка влияния
+    .desc = Захваченная точка влияния. Приносит команде влияние и опыт базы.
+
+ent-SpawnPointNovice = новиций
+ent-SpawnPointMagos = магос
+ent-SpawnPointLexmechanic = лексмеханик
+ent-SpawnPointStationEnginseer = инженир
+ent-SpawnPointGenetor = генетор
+ent-SpawnPointExplorator = эксплоратор
+ent-SpawnPointHNovice = новиций
+ent-SpawnPointHMagos = магос
+ent-SpawnPointHLexmechanic = лексмеханик
+ent-SpawnPointHStationEnginseer = инженир
+ent-SpawnPointHGenetor = генетор
+ent-SpawnPointHExplorator = эксплоратор

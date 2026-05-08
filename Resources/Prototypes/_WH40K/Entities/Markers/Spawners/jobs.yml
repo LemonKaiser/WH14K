@@ -2,7 +2,6 @@
 - type: entity
   id: SpawnPointNovice
   parent: SpawnPointJobBase
-  name: novice
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -16,7 +15,6 @@
 - type: entity
   id: SpawnPointMagos
   parent: SpawnPointJobBase
-  name: magos
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -30,7 +28,6 @@
 - type: entity
   id: SpawnPointLexmechanic
   parent: SpawnPointJobBase
-  name: lexmechanic
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -44,7 +41,6 @@
 - type: entity
   id: SpawnPointStationEnginseer
   parent: SpawnPointJobBase
-  name: enginseer
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -58,7 +54,6 @@
 - type: entity
   id: SpawnPointGenetor
   parent: SpawnPointJobBase
-  name: genetor
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -72,7 +67,6 @@
 - type: entity
   id: SpawnPointExplorator
   parent: SpawnPointJobBase
-  name: explorator
   suffix: WH40K
   components:
   - type: SpawnPoint
@@ -93,7 +87,7 @@
   id: SpawnPointColonel
   parent: SpawnPointJobBase
   name: Colonel
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Colonel
@@ -107,7 +101,7 @@
   id: SpawnPointCommissar
   parent: SpawnPointJobBase
   name: Commissar
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Commissar
@@ -121,7 +115,7 @@
   id: SpawnPointGuardsman
   parent: SpawnPointJobBase
   name: Guardsman
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Guardsman
@@ -163,7 +157,7 @@
   id: SpawnPointLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Lieutenant
@@ -177,7 +171,7 @@
   id: SpawnPointMedic
   parent: SpawnPointJobBase
   name: Medic
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Medic
@@ -191,7 +185,7 @@
   id: SpawnPointSergeant
   parent: SpawnPointJobBase
   name: Sergeant
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: Sergeant
@@ -233,7 +227,7 @@
   id: SpawnPointSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: SpecialistHWS
@@ -248,7 +242,7 @@
   id: SpawnPointSpecialistSWS
   parent: SpawnPointJobBase
   name: SpecialistSWS
-  suffix: WH40K, РРјРїРµСЂРёСѓРј
+  suffix: WH40K, Imperium
   components:
   - type: SpawnPoint
     job_id: SpecialistSWS
@@ -293,7 +287,7 @@
   id: SpawnPointHColonel
   parent: SpawnPointJobBase
   name: HColonel
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HColonel
@@ -308,7 +302,7 @@
   id: SpawnPointHGuardsman
   parent: SpawnPointJobBase
   name: HGuardsman
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HGuardsman
@@ -323,7 +317,7 @@
   id: SpawnPointHVoxScout
   parent: SpawnPointJobBase
   name: HVoxScout
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HVoxScout
@@ -338,7 +332,7 @@
   id: SpawnPointHLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HLieutenant
@@ -353,7 +347,7 @@
   id: SpawnPointHSergeant
   parent: SpawnPointJobBase
   name: Sergeant
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HSergeant
@@ -368,7 +362,7 @@
   id: SpawnPointHSpecialistHWS
   parent: SpawnPointJobBase
   name: SpecialistHWS
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HSpecialistHWS
@@ -384,7 +378,7 @@
   id: SpawnPointHSpecialistSWS
   parent: SpawnPointJobBase
   name: SpecialistSWS
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HSpecialistSWS
@@ -415,8 +409,7 @@
 - type: entity
   id: SpawnPointHNovice
   parent: SpawnPointJobBase
-  name: novice
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HNovice
@@ -430,8 +423,7 @@
 - type: entity
   id: SpawnPointHMagos
   parent: SpawnPointJobBase
-  name: magos
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HMagos
@@ -445,8 +437,7 @@
 - type: entity
   id: SpawnPointHLexmechanic
   parent: SpawnPointJobBase
-  name: lexmechanic
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HLexmechanic
@@ -460,8 +451,7 @@
 - type: entity
   id: SpawnPointHStationEnginseer
   parent: SpawnPointJobBase
-  name: enginseer
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HEnginseer
@@ -475,8 +465,7 @@
 - type: entity
   id: SpawnPointHGenetor
   parent: SpawnPointJobBase
-  name: genetor
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HGenetor
@@ -490,8 +479,7 @@
 - type: entity
   id: SpawnPointHExplorator
   parent: SpawnPointJobBase
-  name: explorator
-  suffix: WH40K, Р•СЂРµС‚РёРє
+  suffix: WH40K, Heretics
   components:
   - type: SpawnPoint
     job_id: HExplorator

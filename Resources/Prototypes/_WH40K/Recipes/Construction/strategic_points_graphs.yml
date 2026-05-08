@@ -1,0 +1,65 @@
+- type: constructionGraph
+  id: WH40KStrategicResourcePoint
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: point
+      completed:
+      - !type:WH40KBindStrategicPoint
+        pointType: Resource
+        profile: WH40KStrategicPointResource
+        maxDistance: 0.9
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 2
+      - material: MetalRod
+        amount: 5
+        doAfter: 2
+  - node: point
+    entity: WH40KStrategicPointResourceT1
+
+- type: constructionGraph
+  id: WH40KStrategicResearchPoint
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: point
+      completed:
+      - !type:WH40KBindStrategicPoint
+        pointType: Research
+        profile: WH40KStrategicPointResearch
+        maxDistance: 0.9
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 2
+      - material: MetalRod
+        amount: 5
+        doAfter: 2
+  - node: point
+    entity: WH40KStrategicPointResearchT1
+
+- type: constructionGraph
+  id: WH40KStrategicInfluencePoint
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: point
+      completed:
+      - !type:WH40KBindStrategicPoint
+        pointType: Influence
+        profile: WH40KStrategicPointInfluence
+        maxDistance: 0.9
+      steps:
+      - material: Steel
+        amount: 5
+        doAfter: 2
+      - material: MetalRod
+        amount: 5
+        doAfter: 2
+  - node: point
+    entity: WH40KStrategicPointInfluenceT1

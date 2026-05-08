@@ -4,6 +4,14 @@ ent-BoxFolderNuclearCodes = папка с кодами ядерной аутен
 ent-BoxFolderBaseEmpty = папка
     .desc = Папка, заполненная совершенно секретными документами.
 
+ent-BoxFolderFill = { ent-BoxFolderBaseEmpty }
+    .desc = { ent-BoxFolderBaseEmpty.desc }
+    .suffix = Заполненный
+
+ent-BoxFolderFillThreePapers = { ent-BoxFolderBaseEmpty }
+    .desc = { ent-BoxFolderBaseEmpty.desc }
+    .suffix = 3 листа бумаги
+
 ent-BoxFolderBase = { ent-BoxFolderBaseEmpty }
     .desc = { ent-BoxFolderBaseEmpty.desc }
     .suffix = { ent-BoxFolderFill.suffix }

@@ -9,5 +9,6 @@ namespace Content.Client.Construction
     {
         public int GhostId { get; set; }
         [ViewVariables] public ConstructionPrototype? Prototype { get; set; }
+        [ViewVariables] public EntityUid? PlacementTarget { get; set; }
     }
 }

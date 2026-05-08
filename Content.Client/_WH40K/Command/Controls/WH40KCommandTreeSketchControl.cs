@@ -116,7 +116,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private readonly HashSet<string> _purchasedNodes = new();
     private readonly IPrototypeManager _prototype = IoCManager.Resolve<IPrototypeManager>();
     private int _maxComputedTier;
-    private int _commandPoints;
+    private int _funds;
+    private int _researchPoints;
     private int _baseLevel = 1;
     private int _roundElapsedSeconds;
     private WH40KBattlePhase _phase = WH40KBattlePhase.Preparation;
@@ -163,7 +164,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         }
 
         _teamId = state.TeamId;
-        _commandPoints = Math.Max(0, state.CommandPoints);
+        _funds = Math.Max(0, state.Funds);
+        _researchPoints = Math.Max(0, state.ResearchPoints);
         _baseLevel = Math.Max(1, state.BaseLevel);
         _roundElapsedSeconds = Math.Max(0, state.RoundElapsedSeconds);
         _phase = state.Phase;
@@ -533,11 +535,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         if (_baseLevel < definition.MinBaseLevel)
             return NodeVisualState.LockedByLevel;
 
-        if (_roundElapsedSeconds < definition.MinRoundTimeSeconds)
-            return NodeVisualState.LockedByTime;
-
-        var cost = GetRuntimeCost(definition);
-        if (_commandPoints < cost)
+        if (!CanAffordNode(definition))
             return NodeVisualState.LockedByPoints;
 
         return NodeVisualState.Available;
@@ -638,7 +636,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
     private string BuildNodeDetail(TreeNodeVisual node)
     {
-        var cost = GetRuntimeCost(node.Definition);
+        var cost = BuildCostText(node.Definition);
         var statusLine = node.State switch
         {
             NodeVisualState.Available => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available-cost",
@@ -663,14 +661,28 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         return NormalizeMultiline(detail);
     }
 
-    private int GetRuntimeCost(TreeNodeDefinition definition)
+    private bool CanAffordNode(TreeNodeDefinition definition)
     {
-        return WH40KCommandTreeCostCalculator.GetEffectiveNodeCost(
-            definition.Cost,
-            _commandPoints,
-            _baseLevel,
-            _phase,
-            _activeCostProfile);
+        return _funds >= GetRuntimeFundsCost(definition) &&
+               _researchPoints >= GetRuntimeResearchCost(definition);
+    }
+
+    private string BuildCostText(TreeNodeDefinition definition)
+    {
+        return Loc.GetString(
+            "w40k-cmd-cost-funds-research",
+            ("funds", GetRuntimeFundsCost(definition)),
+            ("research", GetRuntimeResearchCost(definition)));
+    }
+
+    private static int GetRuntimeFundsCost(TreeNodeDefinition definition)
+    {
+        return WH40KCommandEconomyCalculator.GetCommandTreeFundsCost(Math.Max(0, definition.Cost));
+    }
+
+    private static int GetRuntimeResearchCost(TreeNodeDefinition definition)
+    {
+        return WH40KCommandEconomyCalculator.GetCommandTreeResearchCost(Math.Max(0, definition.Cost));
     }
 
     private string BuildDoctrineLockStateText()

@@ -1,13 +1,18 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Popups;
+using Content.Client._WH40K.StrategicPoints;
+using Content.Shared._WH40K.StrategicPoints;
+using Content.Shared._WH40K.StrategicPoints.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Examine;
 using Content.Shared.Input;
+using Content.Shared.Interaction;
 using Content.Shared.Wall;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
+using Robust.Client.Placement;
 using Robust.Client.Player;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
@@ -29,12 +34,14 @@ namespace Content.Client.Construction
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly SpriteSystem _sprite = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
+        [Dependency] private readonly IPlacementManager _placementManager = default!;
+        [Dependency] private readonly EntityLookupSystem _lookup = default!;
 
         private readonly Dictionary<int, EntityUid> _ghosts = new();
         private readonly Dictionary<string, ConstructionGuide> _guideCache = new();
 
         private readonly Dictionary<string, string> _recipesMetadataCache = [];
-
+        private const float GhostClickCaptureRange = 1.25f;
         public bool CraftingEnabled { get; private set; }
 
         /// <inheritdoc />
@@ -52,8 +59,9 @@ namespace Content.Client.Construction
             CommandBinds.Builder
                 .Bind(ContentKeyFunctions.OpenCraftingMenu,
                     new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
-                .Bind(EngineKeyFunctions.Use,
-                    new PointerInputCmdHandler(HandleUse, outsidePrediction: true))
+                .BindBefore(EngineKeyFunctions.Use,
+                    new PointerInputCmdHandler(HandleUse, outsidePrediction: true),
+                    new[] { typeof(SharedInteractionSystem) })
                 .Bind(ContentKeyFunctions.EditorFlipObject,
                     new PointerInputCmdHandler(HandleFlip, outsidePrediction: true))
                 .Register<ConstructionSystem>();
@@ -238,13 +246,18 @@ namespace Content.Client.Construction
 
         private bool HandleUse(in PointerInputCmdHandler.PointerInputCmdArgs args)
         {
-            if (!args.EntityUid.IsValid() || !IsClientSide(args.EntityUid))
+            if (args.EntityUid.IsValid() &&
+                IsClientSide(args.EntityUid) &&
+                HasComp<ConstructionGhostComponent>(args.EntityUid))
+            {
+                TryStartConstruction(args.EntityUid);
+                return true;
+            }
+
+            if (!TryFindGhostForUse(args.EntityUid, args.Coordinates, out var ghostUid))
                 return false;
 
-            if (!HasComp<ConstructionGhostComponent>(args.EntityUid))
-                return false;
-
-            TryStartConstruction(args.EntityUid);
+            TryStartConstruction(ghostUid.Value);
             return true;
         }
 
@@ -280,26 +293,26 @@ namespace Content.Client.Construction
             if (!_examineSystem.InRangeUnOccluded(user, loc, 20f, predicate: predicate))
                 return false;
 
-            if (!CheckConstructionConditions(prototype, loc, dir, user, showPopup: true))
+            if (!UsesPlacementDrivenValidation(prototype) &&
+                !CheckConstructionConditions(prototype, loc, dir, user, showPopup: true))
+            {
                 return false;
+            }
 
             ghost = Spawn("constructionghost", loc);
             var comp = Comp<ConstructionGhostComponent>(ghost.Value);
             comp.Prototype = prototype;
             comp.GhostId = ghost.GetHashCode();
+            if (TryResolveStrategicPlacementTarget(prototype, loc, out var placementTarget))
+            {
+                comp.PlacementTarget = placementTarget;
+            }
             Comp<TransformComponent>(ghost.Value).LocalRotation = dir.ToAngle();
             _ghosts.Add(comp.GhostId, ghost.Value);
 
             var sprite = Comp<SpriteComponent>(ghost.Value);
 
-            if (targetProto.TryGetComponent(out IconComponent? icon, EntityManager.ComponentFactory))
-            {
-                _sprite.AddBlankLayer((ghost.Value, sprite), 0);
-                _sprite.LayerSetSprite((ghost.Value, sprite), 0, icon.Icon);
-                sprite.LayerSetShader(0, "unshaded");
-                _sprite.LayerSetVisible((ghost.Value, sprite), 0, true);
-            }
-            else if (targetProto.Components.TryGetValue("Sprite", out _))
+            if (targetProto.Components.TryGetValue("Sprite", out _))
             {
                 var dummy = EntityManager.SpawnEntity(targetProtoId, MapCoordinates.Nullspace);
                 var targetSprite = EnsureComp<SpriteComponent>(dummy);
@@ -313,6 +326,13 @@ namespace Content.Client.Construction
                 }
 
                 Del(dummy);
+            }
+            else if (targetProto.TryGetComponent(out IconComponent? icon, EntityManager.ComponentFactory))
+            {
+                _sprite.AddBlankLayer((ghost.Value, sprite), 0);
+                _sprite.LayerSetSprite((ghost.Value, sprite), 0, icon.Icon);
+                sprite.LayerSetShader(0, "unshaded");
+                _sprite.LayerSetVisible((ghost.Value, sprite), 0, true);
             }
             else
                 return false;
@@ -363,6 +383,266 @@ namespace Content.Client.Construction
             return false;
         }
 
+        private bool TryFindGhostNearCoordinates(
+            EntityCoordinates coordinates,
+            [NotNullWhen(true)] out EntityUid? ghostUid)
+        {
+            ghostUid = null;
+
+            var clickMapCoordinates = _transformSystem.ToMapCoordinates(coordinates);
+            var maxDistanceSquared = GhostClickCaptureRange * GhostClickCaptureRange;
+            var bestDistanceSquared = float.MaxValue;
+
+            foreach (var ghost in _ghosts.Values)
+            {
+                if (!Exists(ghost))
+                    continue;
+
+                var ghostMapCoordinates = _transformSystem.GetMapCoordinates(ghost);
+                if (ghostMapCoordinates.MapId != clickMapCoordinates.MapId)
+                    continue;
+
+                var distanceSquared = (ghostMapCoordinates.Position - clickMapCoordinates.Position).LengthSquared();
+                if (distanceSquared > maxDistanceSquared || distanceSquared >= bestDistanceSquared)
+                    continue;
+
+                bestDistanceSquared = distanceSquared;
+                ghostUid = ghost;
+            }
+
+            return ghostUid != null;
+        }
+
+        private bool TryFindGhostForUse(
+            EntityUid clickedEntity,
+            EntityCoordinates coordinates,
+            [NotNullWhen(true)] out EntityUid? ghostUid)
+        {
+            ghostUid = null;
+
+            if (clickedEntity.IsValid() &&
+                HasComp<WH40KStrategicPointAnchorComponent>(clickedEntity) &&
+                TryFindGhostForPlacementTarget(clickedEntity, coordinates, out ghostUid))
+            {
+                return true;
+            }
+
+            if (clickedEntity.IsValid())
+                return false;
+
+            if (HasNonConstructionEntityAtCoordinates(coordinates))
+                return false;
+
+            if (TryFindStrategicGhostForCoordinates(coordinates, out ghostUid))
+                return true;
+
+            return TryFindGhostNearCoordinates(coordinates, out ghostUid);
+        }
+
+        private bool HasNonConstructionEntityAtCoordinates(EntityCoordinates coordinates)
+        {
+            foreach (var uid in _lookup.GetEntitiesIntersecting(coordinates))
+            {
+                if (!Exists(uid) ||
+                    uid == coordinates.EntityId ||
+                    uid == _playerManager.LocalEntity)
+                {
+                    continue;
+                }
+
+                if (IsClientSide(uid) && HasComp<ConstructionGhostComponent>(uid))
+                    continue;
+
+                if (HasComp<WH40KStrategicPointAnchorComponent>(uid))
+                    continue;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryFindStrategicGhostForCoordinates(
+            EntityCoordinates clickCoordinates,
+            [NotNullWhen(true)] out EntityUid? ghostUid)
+        {
+            ghostUid = null;
+
+            var clickMapCoordinates = _transformSystem.ToMapCoordinates(clickCoordinates);
+            var bestDistanceSquared = float.MaxValue;
+
+            foreach (var ghost in _ghosts.Values)
+            {
+                if (!Exists(ghost) ||
+                    !TryComp<ConstructionGhostComponent>(ghost, out var ghostComp) ||
+                    !TryResolveGhostStrategicAnchor(ghost, ghostComp, out var placementTarget) ||
+                    !TryComp<WH40KStrategicPointAnchorComponent>(placementTarget.Value, out var anchor))
+                {
+                    continue;
+                }
+
+                var anchorMapCoordinates = _transformSystem.GetMapCoordinates(placementTarget.Value);
+                if (anchorMapCoordinates.MapId != clickMapCoordinates.MapId)
+                    continue;
+
+                var distanceSquared = (anchorMapCoordinates.Position - clickMapCoordinates.Position).LengthSquared();
+                if (distanceSquared > anchor.BuildRadius * anchor.BuildRadius ||
+                    distanceSquared >= bestDistanceSquared)
+                {
+                    continue;
+                }
+
+                bestDistanceSquared = distanceSquared;
+                ghostUid = ghost;
+            }
+
+            return ghostUid != null;
+        }
+
+        private bool TryFindGhostForPlacementTarget(
+            EntityUid placementTarget,
+            EntityCoordinates clickCoordinates,
+            [NotNullWhen(true)] out EntityUid? ghostUid)
+        {
+            ghostUid = null;
+
+            var clickMapCoordinates = _transformSystem.ToMapCoordinates(clickCoordinates);
+            var bestDistanceSquared = float.MaxValue;
+
+            foreach (var ghost in _ghosts.Values)
+            {
+                if (!Exists(ghost) ||
+                    !TryComp<ConstructionGhostComponent>(ghost, out var ghostComp) ||
+                    !TryResolveGhostStrategicAnchor(ghost, ghostComp, out var resolvedTarget) ||
+                    resolvedTarget != placementTarget)
+                {
+                    continue;
+                }
+
+                var ghostMapCoordinates = _transformSystem.GetMapCoordinates(ghost);
+                if (ghostMapCoordinates.MapId != clickMapCoordinates.MapId)
+                    continue;
+
+                var distanceSquared = (ghostMapCoordinates.Position - clickMapCoordinates.Position).LengthSquared();
+                if (distanceSquared >= bestDistanceSquared)
+                    continue;
+
+                bestDistanceSquared = distanceSquared;
+                ghostUid = ghost;
+            }
+
+            return ghostUid != null;
+        }
+
+        private bool TryResolveGhostStrategicAnchor(
+            EntityUid ghostUid,
+            ConstructionGhostComponent ghostComp,
+            [NotNullWhen(true)] out EntityUid? anchorUid)
+        {
+            anchorUid = null;
+
+            if (ghostComp.PlacementTarget is { Valid: true } placementTarget &&
+                Exists(placementTarget))
+            {
+                anchorUid = placementTarget;
+                return true;
+            }
+
+            if (ghostComp.Prototype == null)
+                return false;
+
+            return TryResolveStrategicPlacementTarget(
+                ghostComp.Prototype,
+                Comp<TransformComponent>(ghostUid).Coordinates,
+                out anchorUid);
+        }
+
+        private bool TryResolveStrategicPlacementTarget(
+            ConstructionPrototype prototype,
+            EntityCoordinates location,
+            [NotNullWhen(true)] out EntityUid? anchorUid)
+        {
+            anchorUid = null;
+
+            if (!UsesPlacementDrivenValidation(prototype) ||
+                prototype.Conditions.OfType<WH40KStrategicPointAnchorCondition>().FirstOrDefault() is not { } anchorCondition)
+            {
+                return false;
+            }
+
+            if (_placementManager.CurrentMode is WH40KStrategicPointPlacement strategicPlacement &&
+                strategicPlacement.PreviewAnchorUid is { Valid: true } previewAnchorUid &&
+                TryComp<WH40KStrategicPointAnchorComponent>(previewAnchorUid, out var previewAnchor) &&
+                IsMatchingStrategicAnchor(previewAnchorUid, previewAnchor, anchorCondition, location))
+            {
+                anchorUid = previewAnchorUid;
+                return true;
+            }
+
+            var targetMapCoordinates = _transformSystem.ToMapCoordinates(location);
+            var maxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
+            var bestDistanceSquared = float.MaxValue;
+
+            var anchors = EntityQueryEnumerator<WH40KStrategicPointAnchorComponent, TransformComponent>();
+            while (anchors.MoveNext(out var uid, out var anchor, out var xform))
+            {
+                if (anchor.PointType != anchorCondition.PointType)
+                    continue;
+
+                if (anchorCondition.RequireFree &&
+                    anchor.BuiltPoint is { Valid: true } builtPoint &&
+                    Exists(builtPoint))
+                {
+                    continue;
+                }
+
+                var anchorMapCoordinates = _transformSystem.GetMapCoordinates(uid, xform: xform);
+                if (anchorMapCoordinates.MapId != targetMapCoordinates.MapId)
+                    continue;
+
+                var effectiveAnchorPosition = anchorMapCoordinates.Position + anchor.BuiltOffset;
+                var distanceSquared = (effectiveAnchorPosition - targetMapCoordinates.Position).LengthSquared();
+                if (distanceSquared > maxDistanceSquared || distanceSquared >= bestDistanceSquared)
+                    continue;
+
+                bestDistanceSquared = distanceSquared;
+                anchorUid = uid;
+            }
+
+            return anchorUid != null;
+        }
+
+        private bool IsMatchingStrategicAnchor(
+            EntityUid anchorUid,
+            WH40KStrategicPointAnchorComponent anchor,
+            WH40KStrategicPointAnchorCondition anchorCondition,
+            EntityCoordinates location)
+        {
+            if (anchor.PointType != anchorCondition.PointType)
+                return false;
+
+            if (anchorCondition.RequireFree &&
+                anchor.BuiltPoint is { Valid: true } builtPoint &&
+                Exists(builtPoint))
+            {
+                return false;
+            }
+
+            var targetMapCoordinates = _transformSystem.ToMapCoordinates(location);
+            var anchorMapCoordinates = _transformSystem.GetMapCoordinates(anchorUid);
+            if (anchorMapCoordinates.MapId != targetMapCoordinates.MapId)
+                return false;
+
+            var effectiveAnchorPosition = anchorMapCoordinates.Position + anchor.BuiltOffset;
+            var maxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
+            return (effectiveAnchorPosition - targetMapCoordinates.Position).LengthSquared() <= maxDistanceSquared;
+        }
+
+        private static bool UsesPlacementDrivenValidation(ConstructionPrototype prototype)
+        {
+            return prototype.PlacementMode == "WH40KStrategicPointPlacement";
+        }
+
         public void TryStartConstruction(EntityUid ghostId, ConstructionGhostComponent? ghostComp = null)
         {
             if (!Resolve(ghostId, ref ghostComp))
@@ -374,7 +654,15 @@ namespace Content.Client.Construction
             }
 
             var transform = Comp<TransformComponent>(ghostId);
-            var msg = new TryStartStructureConstructionMessage(GetNetCoordinates(transform.Coordinates), ghostComp.Prototype.ID, transform.LocalRotation, ghostId.GetHashCode());
+            NetEntity? placementTarget = ghostComp.PlacementTarget is { Valid: true } target
+                ? GetNetEntity(target)
+                : null;
+            var msg = new TryStartStructureConstructionMessage(
+                GetNetCoordinates(transform.Coordinates),
+                ghostComp.Prototype.ID,
+                transform.LocalRotation,
+                ghostId.GetHashCode(),
+                placementTarget);
             RaiseNetworkEvent(msg);
         }
 

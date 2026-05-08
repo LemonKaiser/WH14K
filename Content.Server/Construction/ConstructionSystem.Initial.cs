@@ -2,8 +2,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Construction.Components;
+using Content.Server._WH40K.StrategicPoints;
+using Content.Server._WH40K.StrategicPoints.Construction;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared.ActionBlocker;
+using Content.Shared._WH40K.StrategicPoints;
+using Content.Shared._WH40K.StrategicPoints.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Construction.Steps;
@@ -102,7 +106,8 @@ namespace Content.Server.Construction
             ConstructionGraphEdge edge,
             ConstructionGraphNode targetNode,
             EntityCoordinates coords,
-            Angle angle = default)
+            Angle angle = default,
+            EntityUid? placementTarget = null)
         {
             // We need a place to hold our construction items!
             var container = _container.EnsureContainer<Container>(user, materialContainer, out var existed);
@@ -274,6 +279,12 @@ namespace Content.Server.Construction
             var newEntityProto = graph.Nodes[edge.Target].Entity.GetId(null, user, new(EntityManager));
             var newEntity = SpawnAttachedTo(newEntityProto, coords, rotation: angle);
 
+            if (placementTarget is { Valid: true } &&
+                graph.ID.StartsWith("WH40KStrategic", StringComparison.Ordinal))
+            {
+                EnsureComp<WH40KPendingStrategicAnchorComponent>(newEntity).Anchor = placementTarget.Value;
+            }
+
             if (!TryComp(newEntity, out ConstructionComponent? construction))
             {
                 Log.Error($"Initial construction does not have a valid target entity! It is missing a ConstructionComponent.\nGraph: {graph.ID}, Initial Target: {edge.Target}, Ent. Prototype: {newEntityProto}\nCreated Entity {ToPrettyString(newEntity)} will be deleted.");
@@ -312,6 +323,13 @@ namespace Content.Server.Construction
             foreach (var completed in edge.Completed)
             {
                 completed.PerformAction(newEntity, user, EntityManager);
+            }
+
+            if (TerminatingOrDeleted(newEntity) || EntityManager.IsQueuedForDeletion(newEntity))
+            {
+                Log.Warning(
+                    $"Construction result {ToPrettyString(newEntity)} from graph {graph.ID} was deleted during completed actions at {coords}.");
+                return null;
             }
 
             return newEntity;
@@ -457,14 +475,11 @@ namespace Content.Server.Construction
             }
 
             var location = GetCoordinates(ev.Location);
-
-            foreach (var condition in constructionPrototype.Conditions)
+            var placementTarget = TryResolveStrategicPlacementTarget(ev, constructionPrototype);
+            if (!ValidatePlacement(constructionPrototype, user, location, ev.Angle.GetCardinalDir(), placementTarget))
             {
-                if (!condition.Condition(user, location, ev.Angle.GetCardinalDir()))
-                {
-                    Cleanup();
-                    return;
-                }
+                Cleanup();
+                return;
             }
 
             void Cleanup()
@@ -480,9 +495,23 @@ namespace Content.Server.Construction
             }
 
             var mapPos = _transformSystem.ToMapCoordinates(location);
-            var predicate = GetPredicate(constructionPrototype.CanBuildInImpassable, mapPos);
+            var canReachConstruction = _interactionSystem.InRangeUnobstructed(
+                user,
+                mapPos,
+                predicate: GetPredicate(constructionPrototype.CanBuildInImpassable, mapPos));
 
-            if (!_interactionSystem.InRangeUnobstructed(user, mapPos, predicate: predicate))
+            if (!canReachConstruction &&
+                constructionPrototype.PlacementMode == "WH40KStrategicPointPlacement" &&
+                placementTarget is { Valid: true } strategicAnchor)
+            {
+                var anchorPos = _transformSystem.GetMapCoordinates(strategicAnchor);
+                canReachConstruction = _interactionSystem.InRangeUnobstructed(
+                    user,
+                    anchorPos,
+                    predicate: GetPredicate(constructionPrototype.CanBuildInImpassable, anchorPos));
+            }
+
+            if (!canReachConstruction)
             {
                 Cleanup();
                 return;
@@ -534,7 +563,8 @@ namespace Content.Server.Construction
                     edge,
                     targetNode,
                     GetCoordinates(ev.Location),
-                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero) is not {Valid: true} structure)
+                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero,
+                    placementTarget) is not {Valid: true} structure)
             {
                 Cleanup();
                 return;
@@ -555,6 +585,113 @@ namespace Content.Server.Construction
 
             return _wh40kTeamBattle.TryGetTeamIdFromEntity(user, out var teamId)
                    && constructionPrototype.IsWh40KTeamAllowed(teamId);
+        }
+
+        private EntityUid? TryResolveStrategicPlacementTarget(
+            TryStartStructureConstructionMessage ev,
+            ConstructionPrototype constructionPrototype)
+        {
+            if (constructionPrototype.PlacementMode != "WH40KStrategicPointPlacement")
+                return null;
+
+            if (ev.PlacementTarget is { } target &&
+                TryGetEntity(target, out var targetUid) &&
+                TryComp<WH40KStrategicPointAnchorComponent>(targetUid, out _))
+            {
+                return targetUid;
+            }
+
+            if (constructionPrototype.Conditions
+                    .OfType<WH40KStrategicPointAnchorCondition>()
+                    .FirstOrDefault() is not { } anchorCondition)
+            {
+                return null;
+            }
+
+            return TryResolveStrategicPlacementTarget(
+                GetCoordinates(ev.Location),
+                anchorCondition);
+        }
+
+        private EntityUid? TryResolveStrategicPlacementTarget(
+            EntityCoordinates location,
+            WH40KStrategicPointAnchorCondition anchorCondition)
+        {
+            var mapPos = _transformSystem.ToMapCoordinates(location);
+            var maxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
+            var bestDistanceSquared = float.MaxValue;
+            EntityUid? bestAnchor = null;
+
+            var anchors = EntityQueryEnumerator<WH40KStrategicPointAnchorComponent, TransformComponent>();
+            while (anchors.MoveNext(out var uid, out var anchor, out var xform))
+            {
+                if (anchor.PointType != anchorCondition.PointType)
+                    continue;
+
+                if (anchorCondition.RequireFree &&
+                    anchor.BuiltPoint is { } builtPoint &&
+                    Exists(builtPoint))
+                {
+                    continue;
+                }
+
+                var anchorPos = _transformSystem.GetMapCoordinates(uid, xform: xform);
+                if (anchorPos.MapId != mapPos.MapId)
+                    continue;
+
+                var effectivePosition = anchorPos.Position + anchor.BuiltOffset;
+                var distanceSquared = (effectivePosition - mapPos.Position).LengthSquared();
+                if (distanceSquared > maxDistanceSquared || distanceSquared >= bestDistanceSquared)
+                    continue;
+
+                bestDistanceSquared = distanceSquared;
+                bestAnchor = uid;
+            }
+
+            return bestAnchor;
+        }
+
+        private bool ValidatePlacement(
+            ConstructionPrototype constructionPrototype,
+            EntityUid user,
+            EntityCoordinates location,
+            Direction direction,
+            EntityUid? placementTarget)
+        {
+            if (constructionPrototype.PlacementMode == "WH40KStrategicPointPlacement" &&
+                placementTarget is { Valid: true } anchorUid &&
+                TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
+            {
+                var anchorCondition = constructionPrototype.Conditions
+                    .OfType<WH40KStrategicPointAnchorCondition>()
+                    .FirstOrDefault();
+
+                if (anchorCondition == null)
+                    return false;
+
+                if (anchor.PointType != anchorCondition.PointType)
+                    return false;
+
+                if (anchor.BuiltPoint is { } built && Exists(built))
+                    return false;
+
+                var mapPos = _transformSystem.ToMapCoordinates(location);
+                var anchorPos = _transformSystem.GetMapCoordinates(anchorUid);
+                if (mapPos.MapId != anchorPos.MapId)
+                    return false;
+
+                var effectivePosition = anchorPos.Position + anchor.BuiltOffset;
+                var maxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
+                return (effectivePosition - mapPos.Position).LengthSquared() <= maxDistanceSquared;
+            }
+
+            foreach (var condition in constructionPrototype.Conditions)
+            {
+                if (!condition.Condition(user, location, direction))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

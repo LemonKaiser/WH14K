@@ -49,6 +49,7 @@
     components:
       - type: WH40KChaosGiftRole
       - type: CommandStaff
+      - type: WH40KStrategicPointUpgradeSkill
   # afterLoadoutSpecial:
   # - !type:ModifyEnvirosuitSpecial
   #   charges: 8

@@ -48,6 +48,7 @@ ent-WallPlastitaniumIndestructible = пластитановая стена
 
 ent-WallPlastitanium = пластитановая стена
     .desc = { ent-WallPlastitaniumIndestructible.desc }
+    .suffix = ""
 
 ent-WallPlastitaniumDiagonalIndestructible = пластитановая стена
     .desc = { ent-WallDiagonalBase.desc }

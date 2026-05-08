@@ -20,16 +20,6 @@
     radius: 3
     energy: 0.3
     color: "#b3f02e"
-  - type: TimedSpawner
-    prototypes:
-      - DataChip1
-    chance: 1
-    intervalSeconds: 60
-    minimumEntitiesSpawned: 1
-    maximumEntitiesSpawned: 1
-  - type: WH40KPhaseTimedSpawner
-    enabledFromPhase: Assault
-    resetTimerOnEnable: true
   - type: NavMapBeacon
     color: "#ff0000"
     text: Capture point
@@ -46,13 +36,6 @@
   id: MachineChipProduserCenter
   suffix: WH40K, Center
   components:
-  - type: TimedSpawner
-    prototypes:
-      - DataChip4
-    chance: 1
-    intervalSeconds: 120
-    minimumEntitiesSpawned: 1
-    maximumEntitiesSpawned: 1
   - type: WH40KInfluencePoint
     captureRadius: 3
     captureTimeSeconds: 30

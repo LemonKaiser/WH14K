@@ -195,8 +195,11 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
     {
         BaseLevelLineLabel.Text = Loc.GetString("w40k-cmd-level", ("level", state.BaseLevel));
         FrontPointsLineLabel.Text = Loc.GetString("w40k-cmd-points", ("points", state.FrontPoints));
-        CommandPointsLineLabel.Text = Loc.GetString("w40k-cmd-command-points", ("points", state.CommandPoints));
-        DevelopmentPointsLineLabel.Text = Loc.GetString("w40k-cmd-development-points", ("points", state.CommandPoints));
+        CommandPointsLineLabel.Text = Loc.GetString("w40k-cmd-influence-points", ("points", state.InfluencePoints));
+        DevelopmentPointsLineLabel.Text = Loc.GetString(
+            "w40k-cmd-team-bank-line",
+            ("funds", state.Funds),
+            ("research", state.ResearchPoints));
 
         var (progress, segmentCurrent, segmentTotal) = CalculateBaseProgress(state);
         BaseProgressBar.Value = progress;
@@ -224,9 +227,9 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         UpgradeLineLabel.Text = Loc.GetString(
             "w40k-cmd-upgrade-line",
             ("level", state.UpgradeLevel),
-            ("cost", state.UpgradeCost));
+            ("cost", FormatFundsResearchCost(state.UpgradeFundsCost, state.UpgradeResearchCost)));
 
-        UpgradeButton.Disabled = state.UpgradeCost <= 0 || state.CommandPoints < state.UpgradeCost;
+        UpgradeButton.Disabled = !CanUpgradeNode(state);
     }
 
     private void ApplyDoctrineCard(WH40KCommandNodeBoundUserInterfaceState state)
@@ -330,22 +333,25 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
     private void ApplyFooter(WH40KCommandNodeBoundUserInterfaceState state)
     {
         FooterLabel.Text = CanUpgradeNode(state)
-            ? Loc.GetString("w40k-cmd-footer-upgrade-ready", ("cost", state.UpgradeCost))
+            ? Loc.GetString("w40k-cmd-footer-upgrade-ready", ("cost", FormatFundsResearchCost(state.UpgradeFundsCost, state.UpgradeResearchCost)))
             : CanCallReinforcement(state)
-                ? Loc.GetString("w40k-cmd-footer-reinforcement-ready", ("cost", state.ReinforcementCost))
+                ? Loc.GetString("w40k-cmd-footer-reinforcement-ready", ("cost", FormatFundsInfluenceCost(state.ReinforcementFundsCost, state.ReinforcementInfluenceCost)))
                 : BuildCompactText(BuildFocusText(state), 176);
     }
 
     private static bool CanUpgradeNode(WH40KCommandNodeBoundUserInterfaceState state)
     {
-        return state.UpgradeCost > 0 && state.CommandPoints >= state.UpgradeCost;
+        return (state.UpgradeFundsCost > 0 || state.UpgradeResearchCost > 0) &&
+               state.Funds >= state.UpgradeFundsCost &&
+               state.ResearchPoints >= state.UpgradeResearchCost;
     }
 
     private static bool CanCallReinforcement(WH40KCommandNodeBoundUserInterfaceState state)
     {
         return state.Phase == WH40KBattlePhase.Assault &&
-               state.ReinforcementCost > 0 &&
-               state.CommandPoints >= state.ReinforcementCost &&
+               (state.ReinforcementFundsCost > 0 || state.ReinforcementInfluenceCost > 0) &&
+               state.Funds >= state.ReinforcementFundsCost &&
+               state.InfluencePoints >= state.ReinforcementInfluenceCost &&
                state.ReinforcementCooldownSeconds <= 0;
     }
 
@@ -446,9 +452,10 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
 
     private static string BuildFocusText(WH40KCommandNodeBoundUserInterfaceState state)
     {
-        var upgradeHint = state.CommandPoints >= state.UpgradeCost
-            ? Loc.GetString("w40k-cmd-focus-upgrade-ready", ("cost", state.UpgradeCost))
-            : Loc.GetString("w40k-cmd-focus-upgrade-wait", ("cost", state.UpgradeCost));
+        var upgradeCost = FormatFundsResearchCost(state.UpgradeFundsCost, state.UpgradeResearchCost);
+        var upgradeHint = CanUpgradeNode(state)
+            ? Loc.GetString("w40k-cmd-focus-upgrade-ready", ("cost", upgradeCost))
+            : Loc.GetString("w40k-cmd-focus-upgrade-wait", ("cost", upgradeCost));
 
         return state.PointsToNextLevel is { } pointsLeft
             ? Loc.GetString("w40k-cmd-focus-next-level", ("points", pointsLeft), ("upgrade", upgradeHint))
@@ -480,15 +487,34 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
 
     private static string BuildIntelDetailText(WH40KCommandNodeBonusIntelState intel)
     {
+        var passiveFunds = WH40KCommandEconomyCalculator.GetPassiveFallbackFundsReward(intel.NodePassiveFrontPointsPerTick);
         return BuildCompactText(
             Loc.GetString(
                 "w40k-cmd-intel-detail",
+                ("gain", intel.NodePassiveFrontPointsPerTick),
+                ("funds", passiveFunds),
                 ("interval", FormatDuration((int) MathF.Ceiling(intel.NodePassiveIntervalSeconds))),
                 ("eng_speed", intel.EngineeringSpeedBonusPercent),
                 ("log_eta", intel.LogisticsTierDeliveryReductionMinutes),
                 ("log_discount", intel.LogisticsExternalPriceDiscountPercent),
                 ("ore_tier", intel.OreExtractorTier)),
             124);
+    }
+
+    private static string FormatFundsResearchCost(int funds, int research)
+    {
+        return Loc.GetString(
+            "w40k-cmd-cost-funds-research",
+            ("funds", Math.Max(0, funds)),
+            ("research", Math.Max(0, research)));
+    }
+
+    private static string FormatFundsInfluenceCost(int funds, int influence)
+    {
+        return Loc.GetString(
+            "w40k-cmd-cost-funds-influence",
+            ("funds", Math.Max(0, funds)),
+            ("influence", Math.Max(0, influence)));
     }
 
     private static string BuildPreviewBlock(string[] lines, int maxLines, string emptyLoc)
