@@ -59,6 +59,14 @@
   - TechpriestPhosphorBlast
 
 - type: loadoutGroup
+  id: WH40KDarkTechpriestWeapon
+  name: loadout-group-wh40k-techpriest-weapon
+  minLimit: 0
+  loadouts:
+  - HTechpriestElectricArc
+  - HTechpriestPhosphorBlast
+
+- type: loadoutGroup
   id: WH40KTechpriestMelee
   name: loadout-group-wh40k-techpriest-weapon
   minLimit: 0
@@ -405,6 +413,15 @@
   minLimit: 0
   loadouts:
   - WH40KOfficerCoat
+  - WH40KCoatLietVst
+  - WH40KValhallanCaptainCoat
+
+- type: loadoutGroup
+  id: WH40KImperialCommandOuterMajor
+  name: loadout-group-wh40k-imperial-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KArmorMajor
   - WH40KCoatLietVst
   - WH40KValhallanCaptainCoat
 

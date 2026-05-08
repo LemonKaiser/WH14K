@@ -1421,10 +1421,10 @@ ent-LasgunPowerCellLucius = батарея Люция
 ent-WeaponRevolverPhosphorBlast = фосфорный бласт-пистолет
     .desc = Горящие шарики, которыми стреляет фосфорное оружие, испускают мощное свечение, наводя на цель ближайших скитариев.
 
-ent-SpeedLoaderPhosphor = магазин для фосфорного бласт-пистолета
+ent-SpeedLoaderPhosphor = cпидлоадер фосфорного бласт-пистолета
     .desc = Магазин для фосфорног бласт-пистолета.
 
-ent-SpeedLoaderPhosphorEmpty = пустой магазин для фосфорного бласт-пистолета
+ent-SpeedLoaderPhosphorEmpty = cпидлоадер фосфорного бласт-пистолета
     .desc = Пустой магазин для фосфорног бласт-пистолета.
 
 ent-WH40KAmmoBoxPhosphor = ящик фосфорных патрон
@@ -1433,10 +1433,10 @@ ent-WH40KAmmoBoxPhosphor = ящик фосфорных патрон
 ent-WeaponRevolverElectricArc = электродуговой пистолет
     .desc = Электродуговое оружие проще всего узнать по громоздкому пермаконденсатору на стволе, что передаёт цели сокрушительный разряд электричества.
 
-ent-SpeedLoaderElectricArc = магазин для электродугового пистолета
+ent-SpeedLoaderElectricArc = cпидлоадер электродугового пистолета
     .desc = Магазин для электродугового пистолета.
 
-ent-SpeedLoaderElectricArcEmpty = пустой магазин для электродугового пистолета
+ent-SpeedLoaderElectricArcEmpty = cпидлоадер электродугового пистолета
     .desc = Пустой магазин для электродугового пистолета.
 
 ent-CartridgeElectricArc = патрон электродугового оружия
@@ -1862,3 +1862,12 @@ ent-SpawnPointHLexmechanic = лексмеханик
 ent-SpawnPointHStationEnginseer = инженир
 ent-SpawnPointHGenetor = генетор
 ent-SpawnPointHExplorator = эксплоратор
+
+ent-WeaponRevolverPhosphorBlastDarkMech = осквернённый фосфорный бласт-пистолет
+    .desc = Горящие шарики, которыми стреляет фосфорное оружие, испускают мощное свечение, наводя на цель ближайших скитариев.
+
+ent-WeaponRevolverElectricArcDarkMech = осквернённый электродуговой пистолет
+    .desc = Электродуговое оружие проще всего узнать по громоздкому пермаконденсатору на стволе, что передаёт цели сокрушительный разряд электричества.
+
+ent-AutoSyringe = автошприц
+    .desc = Медицинское приспособление, предназначенное для ускоренного введения жидкостей в живые (или не очень) тела.

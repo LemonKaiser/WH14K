@@ -4,6 +4,8 @@
   name: imperium locker
   description: A reinforced locker trimmed in brass and machine-cult iconography.
   components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/closet.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: imperium
@@ -16,6 +18,8 @@
   name: imperium armory locker
   description: A grim armory locker marked with purity seals and regiment colors.
   components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/closet.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: imperium_armory
@@ -28,6 +32,8 @@
   name: chaos locker
   description: A corrupted steel locker scarred with rust, spikes, and heretical marks.
   components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/closet.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: chaos
@@ -40,6 +46,8 @@
   name: chaos armory locker
   description: A brutal armory locker plated in dark iron and profane crimson panels.
   components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Storage/closet.rsi
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: chaos_armory

@@ -643,7 +643,7 @@
 
 #Cybersun Juggernaut Hardsuit
 - type: entity
-  parent: ClothingHeadHardsuitBase
+  parent: [ ClothingHeadHardsuitBase, ClothingHeadSuitWithLightBase ] # Corvax-Resprite
   id: ClothingHeadHelmetHardsuitCybersun
   name: cybersun juggernaut helmet
   description: Made of compressed red matter, this helmet was designed in the Tau chromosphere facility.
@@ -652,6 +652,8 @@
     sprite: Clothing/Head/Hardsuits/cybersun.rsi
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/cybersun.rsi
+  - type: PointLight # Corvax-Resprite
+    color: red
   - type: PressureProtection
     highPressureMultiplier: 0.3
     lowPressureMultiplier: 1000
@@ -787,8 +789,8 @@
     sprite: Clothing/Head/Hardsuits/ERThelmets/ertleader.rsi
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/ERThelmets/ertleader.rsi
-  - type: PointLight
-    color: "#addbff"
+  - type: PointLight # Corvax-Resprite
+    color: cyan
   - type: Armor
     modifiers:
       coefficients:
@@ -823,7 +825,7 @@
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/ERThelmets/ertengineer.rsi
   - type: PointLight
-    color: "#f4ffad"
+    color: cyan # Corvax-Resprite
   - type: FireProtection
     reduction: 0.2
   - type: Armor
@@ -860,7 +862,7 @@
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/ERThelmets/ertsecurity.rsi
   - type: PointLight
-    color: "#ffadc6"
+    color: cyan # Corvax-Resprite
   - type: Armor
     modifiers:
       coefficients:
@@ -910,12 +912,12 @@
       - state: equipped-head-vox
       - state: equipped-head-unshaded-vox
         shader: unshaded
-      head-reptilian:
-      - state: equipped-head-reptilian
-      - state: equipped-head-unshaded-reptilian
-        shader: unshaded
+      #head-reptilian: # Corvax resprite
+      #- state: equipped-head-reptilian
+      #- state: equipped-head-unshaded-reptilian
+      #  shader: unshaded
   - type: PointLight
-    color: orange
+    color: orange # Corvax-Resprite
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -934,7 +936,7 @@
 
 #Deathsquad Hardsuit
 - type: entity
-  parent: [ BaseCentcommContraband, ClothingHeadHardsuitBase ]
+  parent: [ BaseCentcommContraband, ClothingHeadHelmetHardsuitSyndie ] # Corvax-Resprite
   id: ClothingHeadHelmetHardsuitDeathsquad
   name: deathsquad hardsuit helmet
   description: A robust helmet for special operations.
@@ -944,6 +946,8 @@
     sprite: Clothing/Head/Hardsuits/deathsquad.rsi
   - type: Clothing
     sprite: Clothing/Head/Hardsuits/deathsquad.rsi
+  - type: PointLight # Corvax-Resprite
+    color: cyan
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -974,6 +978,8 @@
     sprite: Clothing/Head/Hardsuits/clown.rsi
     equipSound: /Audio/Mecha/mechmove03.ogg
     unequipSound: /Audio/Effects/Emotes/parp1.ogg
+  - type: PointLight # Corvax-Resprite
+    color: "#ff3399"
 
 #Mime Hardsuit
 - type: entity
