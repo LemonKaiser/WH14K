@@ -498,7 +498,7 @@
       projectile:
         shape:
           !type:PhysShapeCircle
-          radius: 0.2
+          radius: 0.25
         density: 100
         hard: false
         layer:

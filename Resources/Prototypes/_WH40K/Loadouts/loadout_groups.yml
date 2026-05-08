@@ -417,6 +417,15 @@
   - WH40KValhallanCaptainCoat
 
 - type: loadoutGroup
+  id: WH40KImperialCommandOuterMajor
+  name: loadout-group-wh40k-imperial-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KArmorMajor
+  - WH40KCoatLietVst
+  - WH40KValhallanCaptainCoat
+
+- type: loadoutGroup
   id: WH40KImperialCommandUniform
   name: loadout-group-wh40k-imperial-command-uniform
   minLimit: 0
