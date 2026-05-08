@@ -8,6 +8,15 @@
     Plastic: 200
 
 - type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponHereticLaserLasgun
+  result: WeaponHereticLaserLasgun
+  materials:
+    Steel: 1000
+    Glass: 400
+    Plastic: 200
+
+- type: latheRecipe
   parent: BaseWeaponRecipeMelee
   id: WH40KRecipeChainsword
   result: Chainsword
@@ -593,7 +602,7 @@
 - type: latheRecipePack
   id: WH40KCommandWeaponryResearchHeretics
   recipes:
-  - WH40KRecipeWeaponLaserLasgun
+  - WH40KRecipeWeaponHereticLaserLasgun
   - WH40KRecipeChaosMachete
   - WH40KRecipeWeaponStubRifle
   - WH40KRecipeWeaponChsStubSMG2

@@ -600,6 +600,9 @@ ent-WeaponLaserCarabin = lascarbine
 ent-WeaponLaserLasgun = M36 Cantrael
     .desc = The standard weapon of the Cadian Assault Troops and all regiments that derive their military traditions and doctrines from them.
 
+ent-WeaponHereticLaserLasgun = Heretic M36 Cantrael
+    .desc = The cursed weapon of the heretics Troops.
+
 ent-WeaponLaserLasgunKrieg = lucius-pattern lasgun
     .desc = A Lucius-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
 

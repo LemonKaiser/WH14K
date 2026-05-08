@@ -1,0 +1,25 @@
+- type: entity
+  parent: [WeaponLaserWH40KEnergy, BaseGunWieldable]
+  id: WeaponHereticLaserLasgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun/lasgun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun/lasgun_in-hands.rsi
+    size: Huge
+  - type: Appearance
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun/lasgun_in-hands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+  - type: Gun
+    fireRate: 1.5
+  

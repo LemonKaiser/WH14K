@@ -212,6 +212,7 @@
   - WH40KWeaponryAuthRoot
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLasgun
+  - WH40KRecipeWeaponHereticLaserLasgun
 
 - type: technology
   id: WH40KWeaponryChainblades

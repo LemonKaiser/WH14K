@@ -917,7 +917,7 @@
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
-  product: WeaponLaserLasgun
+  product: WeaponHereticLaserLasgun
   cost: 2500
   category: cpcat-arm
   group: WH40KHereticsMarket
