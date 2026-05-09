@@ -364,9 +364,9 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticCommandMelee
   - WH40KHereticMainWeapon
   - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHSergeantSWS
@@ -409,9 +409,9 @@
   - WH40KHereticCommandHands
   - WH40KHereticChampionFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHereticCommandMelee
   - WH40KHereticMainWeapon
   - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHColonel
@@ -423,9 +423,9 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
+  - WH40KHeresiarchMelee
   - WH40KHereticMainWeapon
   - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobTauFireWarrior

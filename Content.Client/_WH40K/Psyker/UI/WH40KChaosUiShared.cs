@@ -25,7 +25,7 @@ internal static class WH40KChaosUiShared
     private static readonly ResPath EldritchActionsRsi = new("Objects/Magic/Eldritch/eldritch_actions.rsi");
     private static readonly ResPath OrgansRsi = new("Mobs/Species/Human/organs.rsi");
     private static readonly ResPath JumpActionRsi = new("Interface/Actions/jump.rsi");
-    private static readonly ResPath EnergyKatanaRsi = new("Objects/Weapons/Melee/energykatana.rsi");
+    private static readonly ResPath EnergyKatanaRsi = new("_WH40K/Objects/Weapons/Melee/khornkatana.rsi");
 
     public static SpriteSpecifier.Rsi GetGiftIconSpecifier(WH40KChaosPatron patron, int slot)
     {

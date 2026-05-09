@@ -486,6 +486,7 @@
   loadouts:
   - WH40KCommandChainsword
   - WH40KChaplainWarHammer
+  - WH40KChaplainWarEvestiator
 
 - type: loadoutGroup
   id: WH40KImperialCommandMelee
@@ -639,6 +640,50 @@
   - WH40KChaosMacheteKit
   - WH40KChaosSerpKit
 
+
+- type: loadoutGroup
+  id: WH40KHereticCommandMelee
+  name: loadout-group-wh40k-heretic-command-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+  - WH40KMace
+  - WH40KCommandHereticPowerFist
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
+
+
+- type: loadoutGroup
+  id: WH40KHeresiarchMelee
+  name: loadout-group-wh40k-heresiarch-melee
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+  - WH40KMace
+  - WH40KCommandHereticPowerFist
+  - WH40KHeresiarchCardinalWarHammer
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
+
 - type: loadoutGroup
   id: WH40KHereticCommandHead
   name: loadout-group-wh40k-heretic-command-head
@@ -730,6 +775,7 @@
   - WH40KHeresiarchNurgleRaiment
   - WH40KHeresiarchSlaaneshRaiment
   - WH40KHeresiarchTzeentchRaiment
+  - WH40KHeresiarchСardinalRaiment
 
 - type: loadoutGroup
   id: WH40KHereticCommandMask

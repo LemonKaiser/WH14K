@@ -290,6 +290,25 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
 
 - type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchCardinal
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_cardinal.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_cardinal.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.30
+        Slash: 0.30
+        Piercing: 0.30
+        Heat: 0.30
+  - type: ExplosionResistance
+    damageCoefficient: 0.55
+
+- type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorSlaanech
   suffix: WH40K, Еретики, Слаанеш

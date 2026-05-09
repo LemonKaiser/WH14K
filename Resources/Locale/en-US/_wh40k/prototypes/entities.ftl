@@ -233,6 +233,9 @@ ent-ClothingHeadHelmetHeresiarchSlaanesh = Slaanesh heresiarch carapace helmet
 ent-ClothingHeadHelmetHeresiarchTzeentch = Tzeentch heresiarch carapace helmet
     .desc = A fractured carapace helm whose blue plates and flowing sigils seem to shift whenever you look away.
 
+ent-ClothingHeadHelmetHeresiarchCardinal = Cardinal heresiarch helmet
+    .desc = Cardinal heresiarch helmet.
+
 ent-ClothingMaskGasTechPriest = respirator
     .desc = A standard respirator that protects only the respiratory tract.
 
@@ -295,6 +298,9 @@ ent-ClothingOuterArmorHeresiarchSlaanesh = Slaanesh heresiarch armor
 
 ent-ClothingOuterArmorHeresiarchTzeentch = Tzeentch heresiarch armor
     .desc = Blue-and-gold cult armor covered in shifting sigils and hidden patterns, as if one more layer of design waits beneath the surface.
+
+ent-ClothingOuterArmorHeresiarchCardinal = Cardinal heresiarch armor
+    .desc = Cardinal heresiarch armor.
 
 ent-ClothingOuterArmorCommissar = commissar's overcoat
     .desc = The commissar's overcoat is the symbol of REAL power on the battlefield.
@@ -494,6 +500,9 @@ ent-ChaosFlameThrowerGun = chaos flamethrower
 ent-Chainsword = saw blade
     .desc = Vrrrrruuum
 
+ent-ChainswordEvestiator = Evestiator
+    .desc = Big Vrrrrruuum
+
 ent-AxeChaos = chaos ax
     .desc = A one-handed Chaos ax, a little rusty and battered by life, but its blow is still painful.
 
@@ -514,6 +523,9 @@ ent-WeaponVraksHandBlade = Vraksian renegade hand blade
 
 ent-WHHammerImperial = War Hammer
     .desc = Heavy, strong, surprisingly NOT a power hammer. Many consider it a symbol of righteous anger and justice.
+
+ent-WHHammerHeretic = Cursed Rod
+    .desc = Heavy, sturdy, damned power rod.
 
 ent-WHOmnissianAxe = Battleaxe of the Omnissiah
     .desc = Heavy and strong.

@@ -216,6 +216,18 @@
     outerClothing: ClothingOuterArmorHeresiarchTzeentch
 
 - type: loadout
+  id: WH40KHeresiarchСardinalRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchCardinal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 50h
+  equipment:
+    head: ClothingHeadHelmetHeresiarchCardinal
+    outerClothing: ClothingOuterArmorHeresiarchCardinal
+
+- type: loadout
   id: WH40KKriegHelmet
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -867,6 +879,14 @@
   - WHPowerFist
 
 - type: loadout
+  id: WH40KCommandHereticPowerFist
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WHHereticPowerFist
+
+- type: loadout
   id: WH40KPowerFist
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -883,12 +903,30 @@
   - WHHammerImperial
 
 - type: loadout
+  id: WH40KHeresiarchCardinalWarHammer
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 50h
+  inhand:
+  - WHHammerHeretic
+
+- type: loadout
   id: WH40KChaplainWarHammer
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 15
   inhand:
   - WHHammerImperial
+
+- type: loadout
+  id: WH40KChaplainWarEvestiator
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  inhand:
+  - ChainswordEvestiator
 
 - type: loadout
   id: WH40KChaosCrowbarKit
