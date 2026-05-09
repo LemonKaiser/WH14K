@@ -236,6 +236,9 @@ ent-ClothingHeadHelmetHeresiarchSlaanesh = панцирный шлем ерес�
 ent-ClothingHeadHelmetHeresiarchTzeentch = панцирный шлем ересиарха Тзинча
     .desc = Изломанный панцирный шлем, чьи синие пластины и текучие узоры будто меняются под разным углом зрения.
 
+ent-ClothingHeadHelmetHeresiarchCardinal =  шлем кардинала ересиарха
+    .desc = Шлем кардинала ересиарха.
+
 ent-ClothingMaskGasTechPriest = респиратор
     .desc = Стандартный респиратор, защищающий только дыхательные пути.
 
@@ -298,6 +301,9 @@ ent-ClothingOuterArmorHeresiarchSlaanesh = броня ересиарха Сла�
 
 ent-ClothingOuterArmorHeresiarchTzeentch = броня ересиарха Тзинча
     .desc = Сине-золотой культовый доспех, покрытый изменчивыми узорами и тайными знаками, будто скрывающими очередной слой замысла.
+
+ent-ClothingOuterArmorHeresiarchCardinal = броня ересиарха Кардинала
+    .desc = броня ересиарха Кардинала.
 
 ent-ClothingOuterArmorCommissar = шинель комиссара
     .desc = Комиссарская шинель - вот он, символ НАСТОЯЩЕЙ власти на поле боя.
@@ -505,6 +511,9 @@ ent-ChaosFlameThrowerGun = хаос-огнемёт
 ent-Chainsword = пиломеч
     .desc = Врррррууум!
 
+ent-ChainswordEvestiator = Эвисцератор
+    .desc = Большой Врррррууум!
+
 ent-AxeChaos = хаоситский топор
     .desc = Одноручный топорик хаоситов, чуток ржавый и побитый жизнью, но удар его все так же болезнен.
 
@@ -520,11 +529,14 @@ ent-WeaponMeleeChaosNailBoard = хаоситская доска с гвоздя�
 ent-TrenchKnifeChaos = хаоситский окопный нож
     .desc = Старый и ржавый нож, который слуги хаоса используют в бою. Он туп и ржав, но вам стоит опосатся его и его владельца.
 
-ent-WeaponVraksHandBlade = hand blade ренегата Вракса
+ent-WeaponVraksHandBlade = Клинок ренегата Вракса
     .desc = Короткий колющий клинок окопной работы, подобный тем, что носили враксианские ренегаты как резервное оружие в траншейной мясорубке Осады Вракса. Дёшев, груб и опасен на расстоянии вытянутой руки.
 
 ent-WHHammerImperial = Боевой Молот
     .desc = Тяжёлый, крепкий, на удивление НЕ силовой молот. Многие считают его символом праведного гнева и правосудия.
+
+ent-WHHammerHeretic = Проклятый Жезл
+    .desc = Тяжёлый, крепкий, проклятый, силовой жезл.
 
 ent-WHOmnissianAxe = Боевой топор Омниссии
     .desc = Тяжёлый и крепкий.

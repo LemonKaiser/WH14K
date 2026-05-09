@@ -100,7 +100,7 @@ public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow
     private static readonly ResPath SmokeActionRsi = new("Actions/smokeaction.rsi");
     private static readonly ResPath JumpActionRsi = new("Interface/Actions/jump.rsi");
     private static readonly ResPath EldritchActionsRsi = new("Objects/Magic/Eldritch/eldritch_actions.rsi");
-    private static readonly ResPath EnergyKatanaRsi = new("Objects/Weapons/Melee/energykatana.rsi");
+    private static readonly ResPath EnergyKatanaRsi = new("_WH40K/Objects/Weapons/Melee/khornkatana.rsi");
     private static readonly ResPath OrgansRsi = new("Mobs/Species/Human/organs.rsi");
 
     public event Action<WH40KChaosPatron>? PatronSelected;

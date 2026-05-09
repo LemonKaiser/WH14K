@@ -146,7 +146,7 @@
   - type: Action
     useDelay: 14
     icon:
-      sprite: Objects/Weapons/Melee/energykatana.rsi
+      sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
       state: icon
   - type: InstantAction
     event: !type:WH40KChaosKhorneBladeActionEvent
@@ -466,7 +466,7 @@
   - type: Action
     useDelay: 18
     icon:
-      sprite: Objects/Weapons/Melee/energykatana.rsi
+      sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
       state: icon
   - type: TargetAction
     checkCanAccess: false
