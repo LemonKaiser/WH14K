@@ -47,7 +47,6 @@
   - type: UseDelay
   - type: Item
     sprite: _WH40K/Objects/Weapons/Melee/chainsword_evestiator/long.rsi
-    requiredHands: 2
     heldPrefix: off
     size: Ginormous
   - type: Appearance
