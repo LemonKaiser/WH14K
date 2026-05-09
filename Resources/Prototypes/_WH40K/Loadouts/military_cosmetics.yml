@@ -224,7 +224,7 @@
       !type:OverallPlaytimeRequirement
       time: 50h
   equipment:
-    head: ClothingHeadHelmetHeresiarchСardinal
+    head: ClothingHeadHelmetHeresiarchCardinal
     outerClothing: ClothingOuterArmorHeresiarchCardinal
 
 - type: loadout
