@@ -59,6 +59,14 @@
   - TechpriestPhosphorBlast
 
 - type: loadoutGroup
+  id: WH40KDarkTechpriestWeapon
+  name: loadout-group-wh40k-techpriest-weapon
+  minLimit: 0
+  loadouts:
+  - HTechpriestElectricArc
+  - HTechpriestPhosphorBlast
+
+- type: loadoutGroup
   id: WH40KTechpriestMelee
   name: loadout-group-wh40k-techpriest-weapon
   minLimit: 0
@@ -409,6 +417,15 @@
   - WH40KValhallanCaptainCoat
 
 - type: loadoutGroup
+  id: WH40KImperialCommandOuterMajor
+  name: loadout-group-wh40k-imperial-command-outer
+  minLimit: 0
+  loadouts:
+  - WH40KArmorMajor
+  - WH40KCoatLietVst
+  - WH40KValhallanCaptainCoat
+
+- type: loadoutGroup
   id: WH40KImperialCommandUniform
   name: loadout-group-wh40k-imperial-command-uniform
   minLimit: 0
@@ -469,6 +486,7 @@
   loadouts:
   - WH40KCommandChainsword
   - WH40KChaplainWarHammer
+  - WH40KChaplainWarEvestiator
 
 - type: loadoutGroup
   id: WH40KImperialCommandMelee
@@ -532,6 +550,7 @@
   name: loadout-group-wh40k-heretic-line-outer
   minLimit: 0
   loadouts:
+  - WH40Ktraitguard
   - WH40KVraksLightArmor
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
@@ -594,6 +613,7 @@
   loadouts:
   - WH40KWeaponChsStubSMG3Loadout
   - WH40KWeaponChsStubSMG2Loadout
+  - WH40KWeaponHereticLaserLasgunLoadout
   - WH40KWeaponStubRifleLoadout
   - WH40KWeaponChsStubShotgunLoadout
 
@@ -621,6 +641,50 @@
   - WH40KChaosMacheteKit
   - WH40KChaosSerpKit
 
+
+- type: loadoutGroup
+  id: WH40KHereticCommandMelee
+  name: loadout-group-wh40k-heretic-command-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+  - WH40KMace
+  - WH40KCommandHereticPowerFist
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
+
+
+- type: loadoutGroup
+  id: WH40KHeresiarchMelee
+  name: loadout-group-wh40k-heresiarch-melee
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KCommandPowerSaber
+  - WH40KMace
+  - WH40KCommandHereticPowerFist
+  - WH40KHeresiarchCardinalWarHammer
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
+
 - type: loadoutGroup
   id: WH40KHereticCommandHead
   name: loadout-group-wh40k-heretic-command-head
@@ -630,6 +694,7 @@
   - WH40KChaosScarf
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
+  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticCommandUniform
@@ -667,7 +732,7 @@
   name: loadout-group-wh40k-heretic-command-outer
   minLimit: 0
   loadouts:
-  - WH40KVraksCarapaceArmor
+  - WH40Ktraitguard
   - WH40KChaosCoat
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
@@ -683,6 +748,7 @@
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
   - WH40KHeadMauler
+  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticChampionOuter
@@ -694,6 +760,7 @@
   - WH40KArmorMauler
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
+  - WH40KArmorKhorne
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
@@ -702,6 +769,7 @@
   loadouts:
   - WH40KBloodPactBoots
   - WH40KBootsMauler
+  - WH40KBootsKhorne
 
 - type: loadoutGroup
   id: WH40KHeresiarchCultRaiment
@@ -712,6 +780,7 @@
   - WH40KHeresiarchNurgleRaiment
   - WH40KHeresiarchSlaaneshRaiment
   - WH40KHeresiarchTzeentchRaiment
+  - WH40KHeresiarchСardinalRaiment
 
 - type: loadoutGroup
   id: WH40KHereticCommandMask

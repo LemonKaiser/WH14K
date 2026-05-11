@@ -59,9 +59,9 @@
   suffix: WH40K, Еретики
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
 
 # Флак-броня (Облегчённая)
 - type: entity
@@ -183,9 +183,9 @@
   suffix: WH40K, Еретики, Адская Бригада
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
@@ -290,6 +290,25 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
 
 - type: entity
+  parent: ClothingOuterArmorFlakVestGen
+  id: ClothingOuterArmorHeresiarchCardinal
+  suffix: WH40K, Heresiarch
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_cardinal.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_cardinal.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.30
+        Slash: 0.30
+        Piercing: 0.30
+        Heat: 0.30
+  - type: ExplosionResistance
+    damageCoefficient: 0.55
+
+- type: entity
   parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorSlaanech
   suffix: WH40K, Еретики, Слаанеш
@@ -330,3 +349,14 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.75
     sprintModifier: 0.75
+
+  #чемпион кхорна
+- type: entity
+  parent: ClothingOuterArmorCommissar
+  id: ClothingOuterArmorKhornechampion
+  suffix: WH40K, Еретики, Кхорн
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi

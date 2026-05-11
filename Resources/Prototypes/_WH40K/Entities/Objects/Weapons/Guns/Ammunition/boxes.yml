@@ -117,6 +117,7 @@
       - CartridgeElectricArc
   - type: Electrified
     requirePower: false
+    probability: 0.5
 
 - type: entity
   id: WH40KAmmoBoxRadCarabin

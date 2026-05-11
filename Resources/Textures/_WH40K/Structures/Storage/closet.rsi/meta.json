@@ -1,0 +1,79 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "copyright": "by endr_animet",
+    "license": "CC-BY-SA-3.0",
+    "states": [
+        {
+            "name": "generic"
+        },
+        {
+            "name": "generic_door"
+        },
+        {
+            "name": "generic_open"
+        },
+        {
+            "name": "generic_icon"
+        },
+        {
+            "name": "imperium"
+        },
+        {
+            "name": "imperium_door"
+        },
+        {
+            "name": "imperium_open"
+        },
+        {
+            "name": "imperium_armory"
+        },
+        {
+            "name": "imperium_armory_door"
+        },
+        {
+            "name": "imperium_armory_open"
+        },
+        {
+            "name": "chaos"
+        },
+        {
+            "name": "chaos_door"
+        },
+        {
+            "name": "chaos_open"
+        },
+        {
+            "name": "chaos_armory"
+        },
+        {
+            "name": "chaos_armory_door"
+        },
+        {
+            "name": "chaos_armory_open"
+        },
+        {
+            "name": "sparking",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "unlocked"
+        },
+        {
+            "name": "locked"
+        },
+        {
+            "name": "welded"
+        }
+    ]
+}

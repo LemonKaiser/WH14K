@@ -17,7 +17,7 @@
     attackRate: 0.65
     damage:
       types:
-        Blunt: 20
+        Blunt: 35
         Structural: 50
     angle: 100
     soundHit:
@@ -28,8 +28,8 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 20
-        Structural: 40
+        Blunt: 40
+        Structural: 50
   - type: Item
     size: Ginormous
   - type: Clothing
@@ -142,3 +142,23 @@
       - behavior: Pulsing
         changeSound:
           path: /Audio/Items/change_drill.ogg
+
+- type: entity
+  parent: WHHammerImperial
+  id: WHHammerHeretic
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/hammer_gaechnik.rsi
+    state: icon
+  - type: MeleeWeapon
+    wideAnimationRotation: 135
+    swingLeft: true
+    attackRate: 0.65
+    damage:
+      types:
+        Blunt: 20
+        Shock: 20
+    angle: 100
+    soundHit:
+      collection: MetalThud

@@ -122,7 +122,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Melee/energykatana.rsi
+    sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -60
     attackRate: 1.5
@@ -133,14 +133,14 @@
   - type: StaminaDamageOnHit
     damage: 10
   - type: Item
-    sprite: Objects/Weapons/Melee/energykatana.rsi
+    sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
     storedSprite:
       state: storage
       sprite: Objects/Weapons/Melee/energykatana_storage_64x.rsi
     shape:
     - 0,0,0,3
   - type: Clothing
-    sprite: Objects/Weapons/Melee/energykatana.rsi
+    sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
     slots:
     - Back
     - Belt

@@ -35,6 +35,20 @@
     - MagazineStubRifle
 
 - type: loadout
+  id: WH40KWeaponHereticLaserLasgunLoadout
+  dummyEntity: WeaponHereticLaserLasgun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    suitstorage: WeaponHereticLaserLasgun
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+
+- type: loadout
   id: WH40KWeaponChsStubShotgunLoadout
   dummyEntity: WeaponChsStubShotgun
   effects:

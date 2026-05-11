@@ -4,7 +4,7 @@
   suffix: WH40K
   components:
   - type: Gun
-    fireRate: 4
+    fireRate: 3
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_voss/lasgun_in-hands.rsi
     quickEquip: false

@@ -8,20 +8,12 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/gorjet.rsi
-  - type: ContainerContainer
-    containers:
-      cell_slot: !type:ContainerSlot
-  - type: PowerCellSlot
-    cellSlotId: cell_slot
-  - type: ItemSlots
-    slots:
-      cell_slot:
-        name: power-cell-slot-component-slot-name-default
-        startingItem: PowerCellMicroreactor
-        whitelist:
-          tags:
-          - PowerCell
-          - PowerCellSmall
+  - type: Battery
+    maxCharge: 720
+    startingCharge: 720
+    pricePerJoule: 0.15
+  - type: BatterySelfRecharger
+    autoRechargeRate: 5
   - type: EnergyDomeGenerator
     enabledOnSpawn: false
     globalEnabled: false

@@ -37,5 +37,18 @@
     belt: guardbelt
     head: ClothingHeadHelmetFlakMed
     outerClothing: ClothingOuterArmorFlakVestMed
+    pocket2: AutoSyringe
     id: MedicDogTag
-
+  storage:
+    back:
+    - Brutepack
+    - Ointment
+    - Gauze
+    - ChemistryBottleSaline
+    - ChemistryBottleBicaridine
+    - ChemistryBottleDexalin
+    - ChemistryBottleDylovene
+    - ChemistryBottleHyronalin
+    - ChemistryBottleKelotane
+    - ChemistryBottleEpinephrine # A power item for medical players that feels thematic and worth stealing
+    - PillCanisterTricordrazine
