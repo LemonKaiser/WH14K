@@ -693,6 +693,7 @@
   - WH40KChaosScarf
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
+  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticCommandUniform
@@ -746,6 +747,7 @@
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
   - WH40KHeadMauler
+  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticChampionOuter
@@ -757,6 +759,7 @@
   - WH40KArmorMauler
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
+  - WH40KArmorKhorne
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
@@ -765,6 +768,7 @@
   loadouts:
   - WH40KBloodPactBoots
   - WH40KBootsMauler
+  - WH40KBootsKhorne
 
 - type: loadoutGroup
   id: WH40KHeresiarchCultRaiment

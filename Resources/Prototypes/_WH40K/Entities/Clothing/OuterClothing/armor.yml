@@ -349,3 +349,14 @@
   - type: ClothingSpeedModifier
     walkModifier: 0.75
     sprintModifier: 0.75
+
+  #чемпион кхорна
+- type: entity
+  parent: ClothingOuterArmorCommissar
+  id: ClothingOuterArmorKhornechampion
+  suffix: WH40K, Еретики, Кхорн
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi

@@ -345,3 +345,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/mauler.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/mauler.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadKhorne
+  suffix: WH40K, Еретики, Кхорн
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/champion_khorne_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/champion_khorne_helmet.rsi

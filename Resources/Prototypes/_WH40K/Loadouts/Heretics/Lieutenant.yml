@@ -7,6 +7,14 @@
     head: ClothingHeadMauler
 
 - type: loadout
+  id: WH40KHeadKhorne
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadKhorne
+
+- type: loadout
   id: WH40KArmorMauler
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -15,9 +23,25 @@
     outerClothing: ClothingOuterArmorMauler
 
 - type: loadout
+  id: WH40KArmorKhorne
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorKhornechampion
+
+- type: loadout
   id: WH40KBootsMauler
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 30
   equipment:
     shoes: ClothingShoesBootsMauler
+
+- type: loadout
+  id: WH40KBootsKhorne
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    shoes: ClothingShoesBootsKhorne

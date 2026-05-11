@@ -1,4 +1,4 @@
-﻿ent-BoxLasgunPowerCell = lasgun battery box
+ent-BoxLasgunPowerCell = lasgun battery box
     .desc = Box full of lasgun batteries
 
 ent-WH40KObjectiveBase = Command Relay
@@ -1749,6 +1749,15 @@ ent-ClothingBackpackTechpriestDendriteSlaanesh = Slaanesh Dendrite Backpack
 
 ent-ClothingOuterArmorSlaanech = Slaanesh Armor
     .desc = A full suit of armor that provides moderate protection but slightly restricts movement due to its weight.
+
+ent-ClothingOuterArmorKhornechampion = Khorne champion armor
+    .desc = Blood for the blood god!
+
+ent-ClothingShoesBootsKhorne = Sabatons
+    .desc = Do you hear it?
+
+ent-ClothingHeadKhorne = Khorne champion helmet
+    .desc = Skulls to the skulls throne!
 
 ent-ClothingOuterArmorKini = Armored Bikini
     .desc = Lightweight field armor for speed and freedom of movement.
