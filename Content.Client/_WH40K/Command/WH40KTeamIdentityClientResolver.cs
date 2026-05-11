@@ -25,11 +25,7 @@ public static class WH40KTeamIdentityClientResolver
 
     public static bool UsesHereticsDoctrinePresentation(string teamId)
     {
-        var proto = IoCManager.Resolve<IPrototypeManager>();
-        if (!TryResolveTeamIdentityProfile(proto, teamId, out var profile))
-            return teamId.Equals("Heretics", StringComparison.OrdinalIgnoreCase);
-
-        return profile.DoctrinePresentation == WH40KDoctrinePresentationVariant.Heretics;
+        return teamId.Equals("Heretics", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool TryResolveTeamIdentityProfile(

@@ -25,6 +25,7 @@
   - LightBulb
   - AppraisalTool
   - Pickaxe
+  - MicroManipulatorStockPart
 
 - type: latheRecipePack
   id: WH40KAutolatheTier1
@@ -49,6 +50,7 @@
   - Signaller
   - PowerCellSmall
   - PowerCellMedium
+  - MicroManipulatorStockPart
   - ConveyorBeltAssembly
   - IntercomElectronics
   - DoorElectronics
@@ -80,6 +82,7 @@
   - Signaller
   - PowerCellSmall
   - PowerCellMedium
+  - MicroManipulatorStockPart
   - ConveyorBeltAssembly
   - IntercomElectronics
   - DoorElectronics
@@ -127,6 +130,7 @@
   - Signaller
   - PowerCellSmall
   - PowerCellMedium
+  - MicroManipulatorStockPart
   - ConveyorBeltAssembly
   - IntercomElectronics
   - DoorElectronics
@@ -217,6 +221,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
 
@@ -250,6 +255,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
@@ -304,6 +310,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
@@ -358,6 +365,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
@@ -412,6 +420,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
 
@@ -445,6 +454,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
@@ -499,6 +509,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter
@@ -553,6 +564,7 @@
   - Brutepack
   - Ointment
   - Gauze
+  - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
   - Implanter

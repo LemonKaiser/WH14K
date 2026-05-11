@@ -115,7 +115,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         if (!TryGetSlaaneshProgression(args.Performer, args.Action.Owner, SlaaneshSwapAction, out var progression))
             return;
 
-        if (!IsValidSwapTarget(args.Performer, args.Target))
+        if (!IsValidEnemyPlayerTarget(args.Performer, args.Target))
             return;
 
         if (IsInActivePositionSwap(args.Performer) || IsInActivePositionSwap(args.Target))
@@ -216,7 +216,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
         if (!TryGetSlaaneshProgression(args.Performer, args.Action.Owner, SlaaneshArenaAction, out var progression))
             return;
 
-        if (args.Target == args.Performer || _mobState.IsDead(args.Target))
+        if (!IsValidEnemyPlayerTarget(args.Performer, args.Target))
             return;
 
         if (!_interaction.InRangeUnobstructed(args.Performer, args.Target, range: 0f, popup: true))
@@ -331,7 +331,7 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
                progression.AttunedPatron == WH40KChaosPatron.Slaanesh;
     }
 
-    private bool IsValidSwapTarget(EntityUid performer, EntityUid target)
+    private bool IsValidEnemyPlayerTarget(EntityUid performer, EntityUid target)
     {
         if (performer == target ||
             Deleted(performer) ||

@@ -56,9 +56,6 @@ public sealed partial class WH40KCommandTeamRandomEventConfig
     [DataField("requiredSubsystems")]
     public List<WH40KCommandRuntimeSubsystem> RequiredSubsystems = new();
 
-    [DataField("doctrineWeightBias")]
-    public Dictionary<string, float> DoctrineWeightBias = new();
-
     [DataField("trailingWeightBonusPerLevelGap")]
     public float TrailingWeightBonusPerLevelGap = 0.08f;
 

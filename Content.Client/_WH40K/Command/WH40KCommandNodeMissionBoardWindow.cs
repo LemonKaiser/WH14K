@@ -48,7 +48,7 @@ public sealed class WH40KCommandNodeMissionBoardWindow : FancyWindow, ILocalized
     public WH40KCommandNodeMissionBoardWindow()
     {
         Title = Loc.GetString("w40k-cmd-mission-board-window-title");
-        MinSize = SetSize = new Vector2(920, 600);
+        MinSize = SetSize = new Vector2(1012, 660);
 
         var root = new BoxContainer
         {

@@ -2,47 +2,59 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     Title="{Loc 'wh40k-strategic-point-ui-window-title'}"
-    MinSize="520 420"
-    SetSize="560 460"
+    MinSize="500 300"
     Resizable="False">
     <BoxContainer Orientation="Vertical"
                   Margin="8 6 8 8"
                   SeparationOverride="8">
-        <BoxContainer Orientation="Vertical"
-                      SeparationOverride="2">
-            <Label Name="HeaderTitleLabel"
-                   Text="{Loc 'wh40k-strategic-point-ui-window-title'}"
-                   StyleClasses="LabelKeyText" />
-            <RichTextLabel Name="HeaderSubtitleLabel"
-                           Text="-"
-                           HorizontalExpand="True"
-                           StyleClasses="LabelSubText" />
-        </BoxContainer>
-
-        <GridContainer Columns="2"
-                       HSeparationOverride="12"
-                       VSeparationOverride="5">
-            <Label Text="{Loc 'wh40k-strategic-point-ui-owner-label'}"
-                   StyleClasses="LabelSubText" />
-            <Label Name="OwnerValueLabel"
-                   Text="-" />
-
-            <Label Text="{Loc 'wh40k-strategic-point-ui-health-label'}"
-                   StyleClasses="LabelSubText" />
-            <Label Name="HealthValueLabel"
-                   Text="-" />
-
-            <Label Text="{Loc 'wh40k-strategic-point-ui-status-label'}"
-                   StyleClasses="LabelSubText" />
-            <Label Name="StatusValueLabel"
-                   Text="-" />
-        </GridContainer>
-
-        <PanelContainer>
+        <PanelContainer Name="HeaderPanel">
             <BoxContainer Orientation="Vertical"
-                          Margin="8 6 8 6"
-                          SeparationOverride="4">
-                <Label Text="{Loc 'wh40k-strategic-point-ui-income-title'}"
+                          Margin="12 10 12 10"
+                          SeparationOverride="8">
+                <BoxContainer Orientation="Vertical"
+                              SeparationOverride="2">
+                    <Label Name="HeaderTitleLabel"
+                           Text="{Loc 'wh40k-strategic-point-ui-window-title'}"
+                           StyleClasses="LabelKeyText" />
+                    <RichTextLabel Name="HeaderSubtitleLabel"
+                                   Text="-"
+                                   HorizontalExpand="True"
+                                   StyleClasses="LabelSubText" />
+                    <RichTextLabel Name="HeaderHealthLabel"
+                                   Text="-"
+                                   HorizontalExpand="True" />
+                </BoxContainer>
+
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="6">
+                    <PanelContainer Name="TeamBadge">
+                        <Label Name="TeamBadgeLabel"
+                               Margin="8 3 8 3"
+                               Text="-"
+                               StyleClasses="LabelHeadingText" />
+                    </PanelContainer>
+                    <PanelContainer Name="TierBadge">
+                        <Label Name="TierBadgeLabel"
+                               Margin="8 3 8 3"
+                               Text="-"
+                               StyleClasses="LabelHeadingText" />
+                    </PanelContainer>
+                    <PanelContainer Name="StatusBadge">
+                        <Label Name="StatusBadgeLabel"
+                               Margin="8 3 8 3"
+                               Text="-"
+                               StyleClasses="LabelHeadingText" />
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <PanelContainer Name="IncomeCard">
+            <BoxContainer Orientation="Vertical"
+                          Margin="10 8 10 8"
+                          SeparationOverride="5">
+                <Label Name="IncomeTitleLabel"
+                       Text="{Loc 'wh40k-strategic-point-ui-income-title'}"
                        StyleClasses="LabelKeyText" />
                 <RichTextLabel Name="IncomeValueLabel"
                                Text="-"
@@ -50,30 +62,24 @@
             </BoxContainer>
         </PanelContainer>
 
-        <PanelContainer VerticalExpand="True">
+        <PanelContainer Name="UpgradeCard">
             <BoxContainer Orientation="Vertical"
-                          Margin="8 6 8 6"
-                          SeparationOverride="4"
-                          VerticalExpand="True">
-                <Label Text="{Loc 'wh40k-strategic-point-ui-materials-title'}"
+                          Margin="10 8 10 8"
+                          SeparationOverride="6">
+                <Label Name="UpgradeTitleLabel"
+                       Text="{Loc 'wh40k-strategic-point-ui-upgrade-title'}"
                        StyleClasses="LabelKeyText" />
-                <RichTextLabel Name="MaterialsValueLabel"
+                <RichTextLabel Name="UpgradeMetaLabel"
                                Text="-"
-                               HorizontalExpand="True"
-                               VerticalExpand="True" />
+                               HorizontalExpand="True" />
+                <RichTextLabel Name="UpgradeMaterialsLabel"
+                               Text="-"
+                               HorizontalExpand="True" />
+                <Button Name="UpgradeButton"
+                        HorizontalExpand="True"
+                        MinHeight="34"
+                        Text="{Loc 'wh40k-strategic-point-ui-upgrade-button'}" />
             </BoxContainer>
         </PanelContainer>
-
-        <BoxContainer Orientation="Horizontal"
-                      SeparationOverride="6">
-            <Button Name="UpgradeButton"
-                    HorizontalExpand="True"
-                    MinHeight="34"
-                    Text="{Loc 'wh40k-strategic-point-ui-upgrade-button'}" />
-            <Button Name="RefreshButton"
-                    MinWidth="110"
-                    MinHeight="34"
-                    Text="{Loc 'wh40k-strategic-point-ui-refresh-button'}" />
-        </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

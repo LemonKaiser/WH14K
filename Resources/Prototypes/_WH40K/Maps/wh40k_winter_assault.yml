@@ -3,6 +3,9 @@
   mapName: Winter Assault
   mapPath: /Maps/_WH40K/WinterAssault.yml
   minPlayers: 0
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/winterassault_snapshot.png
+  wh40kWeatherProfile: WH40KMapWeatherWinterAssault
+  wh40kEventsProfile: WH40KMapEventsAll
   stations:
     WinterAssault:
       stationProto: WH40KStation

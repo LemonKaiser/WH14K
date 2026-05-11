@@ -2,12 +2,6 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._WH40K.Command;
 
-public enum WH40KDoctrinePresentationVariant : byte
-{
-    Imperium,
-    Heretics
-}
-
 [Prototype("wh40kTeamIdentityProfile")]
 public sealed partial class WH40KTeamIdentityProfilePrototype : IPrototype
 {
@@ -25,12 +19,6 @@ public sealed partial class WH40KTeamIdentityProfilePrototype : IPrototype
 
     [DataField("reinforcementProfile")]
     public ProtoId<WH40KCommandReinforcementProfilePrototype>? ReinforcementProfile;
-
-    [DataField("doctrineProfile")]
-    public ProtoId<WH40KCommandDoctrineProfilePrototype>? DoctrineProfile;
-
-    [DataField("doctrinePresentation")]
-    public WH40KDoctrinePresentationVariant DoctrinePresentation = WH40KDoctrinePresentationVariant.Imperium;
 
     [DataField("commandTreeProfile")]
     public ProtoId<WH40KCommandTreeProfilePrototype>? CommandTreeProfile;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Cargo.Systems;
 using Content.Server.Commands;
@@ -28,26 +29,17 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public string Command => "wh40kbattle";
-    public string Description => "WH40K admin control for TeamXP, influence, team research, funds, strategic points, and unlocks.";
+    public string Description => "WH40K admin control for phase, team economy, strategic points, and unlocks.";
     public string Help =>
         "Usage:\n" +
-        "wh40kbattle phase-set <preparation|assault|apocalypse>\n" +
+        "wh40kbattle phase <preparation|assault|apocalypse>\n" +
         "wh40kbattle status [teamId]\n" +
-        "wh40kbattle setlevel <teamId> <level>\n" +
-        "wh40kbattle teamxp <teamId> <delta>\n" +
-        "wh40kbattle frontpoint <teamId> <delta>\n" +
-        "wh40kbattle influencepoint <teamId> <delta>\n" +
-        "wh40kbattle researchpoint <teamId> <delta>\n" +
-        "wh40kbattle fund <teamId> <delta>\n" +
-        "wh40kbattle point-list\n" +
-        "wh40kbattle point-reset <pointUid>\n" +
-        "wh40kbattle point-set-owner <pointUid> <teamId>\n" +
-        "wh40kbattle point-set-tier <pointUid> <0|1|2|3>\n" +
-        "wh40kbattle eco-telemetry <on|off> [intervalSeconds]\n" +
-        "wh40kbattle tech-unlock <teamId> <technologyId>\n" +
-        "wh40kbattle tech-lock <teamId> <technologyId>\n" +
-        "wh40kbattle cargo-unlock <teamId> <cargoProductId>\n" +
-        "wh40kbattle cargo-lock <teamId> <cargoProductId>";
+        "wh40kbattle level <teamId> <level>\n" +
+        "wh40kbattle adjust <teamId> <xp|influence|research|gelt> <delta>\n" +
+        "wh40kbattle point <list|reset|owner|tier> ...\n" +
+        "wh40kbattle telemetry <on|off> [intervalSeconds]\n" +
+        "wh40kbattle unlock <tech|cargo> <teamId> <prototypeId>\n" +
+        "wh40kbattle lock <tech|cargo> <teamId> <prototypeId>";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -63,91 +55,35 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         switch (action)
         {
             case "status":
-            case "state":
                 ExecuteStatus(shell, rule, args);
                 return;
 
-            case "phase-set":
             case "phase":
-                WH40KBattleAdminCommandShared.ExecutePhase(shell, rule, args, "Usage: wh40kbattle phase-set <phase>", 1);
+                WH40KBattleAdminCommandShared.ExecutePhase(shell, rule, args, "Usage: wh40kbattle phase <phase>", 1);
                 return;
 
-            case "setlevel":
-                WH40KBattleAdminCommandShared.ExecuteSetLevel(shell, rule, args, "Usage: wh40kbattle setlevel <teamId> <level>", 1);
+            case "level":
+                WH40KBattleAdminCommandShared.ExecuteSetLevel(shell, rule, args, "Usage: wh40kbattle level <teamId> <level>", 1);
                 return;
 
-            case "teamxp":
-            case "xp":
-            case "fronpoint":
-            case "frontpoint":
-            case "front":
-                WH40KBattleAdminCommandShared.ExecuteFrontPoint(shell, rule, args, "Usage: wh40kbattle frontpoint <teamId> <delta>", 1);
+            case "adjust":
+                ExecuteAdjust(shell, rule, args);
                 return;
 
-            case "influencepoint":
-            case "influence":
-            case "ip":
-            case "commandpoint":
-            case "command":
-            case "cmd":
-            case "cp":
-                WH40KBattleAdminCommandShared.ExecuteCommandPoint(shell, rule, args, "Usage: wh40kbattle commandpoint <teamId> <delta>", 1);
+            case "point":
+                ExecutePoint(shell, rule, args);
                 return;
 
-            case "researchpoint":
-            case "rppoint":
-            case "rp":
-                ExecuteResearchPoint(shell, rule, args);
-                return;
-
-            case "fund":
-            case "funds":
-            case "money":
-                ExecuteFund(shell, rule, args);
-                return;
-
-            case "point-list":
-            case "points":
-                ExecutePointList(shell);
-                return;
-
-            case "point-reset":
-                ExecutePointReset(shell, args);
-                return;
-
-            case "point-set-owner":
-                ExecutePointSetOwner(shell, rule, args);
-                return;
-
-            case "point-set-tier":
-                ExecutePointSetTier(shell, args);
-                return;
-
-            case "eco-telemetry":
             case "telemetry":
                 ExecuteEconomyTelemetry(shell, rule, args);
                 return;
 
-            case "research-unlock":
-            case "tech-unlock":
-            case "tech-add":
-                ExecuteTechnologyUnlock(shell, rule, args);
+            case "unlock":
+                ExecuteUnlock(shell, rule, args, unlock: true);
                 return;
 
-            case "research-lock":
-            case "tech-lock":
-            case "tech-remove":
-                ExecuteTechnologyLock(shell, rule, args);
-                return;
-
-            case "cargo-unlock":
-            case "cargo-add":
-                ExecuteCargoUnlock(shell, rule, args);
-                return;
-
-            case "cargo-lock":
-            case "cargo-remove":
-                ExecuteCargoLock(shell, rule, args);
+            case "lock":
+                ExecuteUnlock(shell, rule, args, unlock: false);
                 return;
 
             default:
@@ -161,24 +97,14 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
     {
         var subcommands = new[]
         {
-            "phase-set",
+            "phase",
             "status",
-            "setlevel",
-            "teamxp",
-            "fronpoint",
-            "frontpoint",
-            "influencepoint",
-            "researchpoint",
-            "fund",
-            "point-list",
-            "point-reset",
-            "point-set-owner",
-            "point-set-tier",
-            "eco-telemetry",
-            "tech-unlock",
-            "tech-lock",
-            "cargo-unlock",
-            "cargo-lock"
+            "level",
+            "adjust",
+            "point",
+            "telemetry",
+            "unlock",
+            "lock"
         };
 
         if (args.Length == 1)
@@ -188,57 +114,43 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         var action = args[0].ToLowerInvariant();
         switch (action)
         {
-            case "phase-set":
             case "phase":
                 return WH40KBattleAdminCommandShared.GetPhaseCompletion(args, 1);
 
             case "status":
-            case "state":
                 if (args.Length == 2)
                     return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
                 return CompletionResult.Empty;
 
-            case "setlevel":
-            case "teamxp":
-            case "xp":
-            case "fronpoint":
-            case "frontpoint":
-            case "front":
-            case "influencepoint":
-            case "influence":
-            case "ip":
-            case "commandpoint":
-            case "command":
-            case "cmd":
-            case "cp":
-            case "researchpoint":
-            case "rppoint":
-            case "rp":
-            case "fund":
-            case "funds":
-            case "money":
-                return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 1);
-
-            case "point-reset":
+            case "level":
                 if (args.Length == 2)
-                    return CompletionResult.FromHint("<pointUid>");
+                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
+                if (args.Length == 3)
+                    return CompletionResult.FromHint("<level>");
                 return CompletionResult.Empty;
 
-            case "point-set-tier":
+            case "adjust":
                 if (args.Length == 2)
-                    return CompletionResult.FromHint("<pointUid>");
+                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
                 if (args.Length == 3)
+                    return CompletionResult.FromHintOptions(new[] { "xp", "influence", "research", "gelt" }, "<resource>");
+                if (args.Length == 4)
+                    return CompletionResult.FromHint("<delta>");
+                return CompletionResult.Empty;
+
+            case "point":
+                if (args.Length == 2)
+                    return CompletionResult.FromHintOptions(new[] { "list", "reset", "owner", "tier" }, "<action>");
+                if (args.Length == 3 && args[1].Equals("reset", StringComparison.OrdinalIgnoreCase))
+                    return CompletionResult.FromHint("<pointUid>");
+                if (args.Length == 3 && (args[1].Equals("owner", StringComparison.OrdinalIgnoreCase) || args[1].Equals("tier", StringComparison.OrdinalIgnoreCase)))
+                    return CompletionResult.FromHint("<pointUid>");
+                if (args.Length == 4 && args[1].Equals("owner", StringComparison.OrdinalIgnoreCase))
+                    return CompletionResult.FromHintOptions(rule.GetTeamIds().Concat(new[] { "neutral" }), "<teamId|neutral>");
+                if (args.Length == 4 && args[1].Equals("tier", StringComparison.OrdinalIgnoreCase))
                     return CompletionResult.FromHintOptions(new[] { "0", "1", "2", "3" }, "<tier>");
                 return CompletionResult.Empty;
 
-            case "point-set-owner":
-                if (args.Length == 2)
-                    return CompletionResult.FromHint("<pointUid>");
-                if (args.Length == 3)
-                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
-                return CompletionResult.Empty;
-
-            case "eco-telemetry":
             case "telemetry":
                 if (args.Length == 2)
                     return CompletionResult.FromHintOptions(new[] { "on", "off" }, "<on|off>");
@@ -246,25 +158,15 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
                     return CompletionResult.FromHint("<intervalSeconds>");
                 return CompletionResult.Empty;
 
-            case "research-unlock":
-            case "tech-unlock":
-            case "tech-add":
-            case "research-lock":
-            case "tech-lock":
-            case "tech-remove":
+            case "unlock":
+            case "lock":
                 if (args.Length == 2)
-                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
+                    return CompletionResult.FromHintOptions(new[] { "tech", "cargo" }, "<target>");
                 if (args.Length == 3)
+                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
+                if (args.Length == 4 && args[1].Equals("tech", StringComparison.OrdinalIgnoreCase))
                     return CompletionResult.FromHintOptions(CompletionHelper.PrototypeIDs<TechnologyPrototype>(proto: _proto), "<technologyId>");
-                return CompletionResult.Empty;
-
-            case "cargo-unlock":
-            case "cargo-add":
-            case "cargo-lock":
-            case "cargo-remove":
-                if (args.Length == 2)
-                    return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
-                if (args.Length == 3)
+                if (args.Length == 4 && args[1].Equals("cargo", StringComparison.OrdinalIgnoreCase))
                     return CompletionResult.FromHintOptions(CompletionHelper.PrototypeIDs<CargoProductPrototype>(proto: _proto), "<cargoProductId>");
                 return CompletionResult.Empty;
         }
@@ -307,6 +209,158 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         }
     }
 
+    private void ExecuteAdjust(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
+    {
+        if (args.Length != 4)
+        {
+            shell.WriteError("Usage: wh40kbattle adjust <teamId> <xp|influence|research|gelt> <delta>");
+            return;
+        }
+
+        if (!int.TryParse(args[3], out var delta))
+        {
+            shell.WriteError("Delta must be an integer (use negative to subtract).");
+            return;
+        }
+
+        if (!TryResolveCanonicalTeamId(rule, args[1], out var teamId))
+        {
+            WriteUnknownTeam(shell, rule, args[1]);
+            return;
+        }
+
+        switch (args[2].ToLowerInvariant())
+        {
+            case "xp":
+                if (!rule.TryAdjustTeamFrontPoints(teamId, delta, out var xpTeamId, out var frontPoints, out var level, source: "admin"))
+                {
+                    WriteUnknownTeam(shell, rule, args[1]);
+                    return;
+                }
+
+                shell.WriteLine($"Team '{xpTeamId}': XP adjusted by {delta}, total now {frontPoints}, base level {level}.");
+                return;
+
+            case "influence":
+                if (!rule.TryAdjustTeamCommandPoints(teamId, delta, out var influenceTeamId, out var commandPoints, source: "admin"))
+                {
+                    WriteUnknownTeam(shell, rule, args[1]);
+                    return;
+                }
+
+                shell.WriteLine($"Team '{influenceTeamId}': influence adjusted by {delta}, total now {commandPoints}.");
+                return;
+
+            case "research":
+                if (!rule.TryAdjustTeamResearchPoints(teamId, delta, out var researchTeamId, out var researchPoints, source: "admin"))
+                {
+                    WriteUnknownTeam(shell, rule, args[1]);
+                    return;
+                }
+
+                shell.WriteLine($"Team '{researchTeamId}': research adjusted by {delta}, total now {researchPoints}.");
+                return;
+
+            case "gelt":
+            case "funds":
+            case "money":
+                if (!TryAdjustTeamFunds(teamId, delta, out var funds))
+                {
+                    shell.WriteError($"Failed to resolve throne-gelt account for team '{teamId}'.");
+                    return;
+                }
+
+                shell.WriteLine($"Team '{teamId}': gelt adjusted by {delta}, total now {funds}.");
+                return;
+
+            default:
+                shell.WriteError("Resource must be one of: xp, influence, research, gelt.");
+                return;
+        }
+    }
+
+    private void ExecutePoint(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
+    {
+        if (args.Length < 2)
+        {
+            shell.WriteError("Usage: wh40kbattle point <list|reset|owner|tier> ...");
+            return;
+        }
+
+        switch (args[1].ToLowerInvariant())
+        {
+            case "list":
+                if (args.Length != 2)
+                {
+                    shell.WriteError("Usage: wh40kbattle point list");
+                    return;
+                }
+
+                ExecutePointList(shell);
+                return;
+
+            case "reset":
+                if (args.Length != 3)
+                {
+                    shell.WriteError("Usage: wh40kbattle point reset <pointUid>");
+                    return;
+                }
+
+                ExecutePointReset(shell, args[2]);
+                return;
+
+            case "owner":
+                if (args.Length != 4)
+                {
+                    shell.WriteError("Usage: wh40kbattle point owner <pointUid> <teamId|neutral>");
+                    return;
+                }
+
+                ExecutePointSetOwner(shell, rule, args[2], args[3]);
+                return;
+
+            case "tier":
+                if (args.Length != 4)
+                {
+                    shell.WriteError("Usage: wh40kbattle point tier <pointUid> <0|1|2|3>");
+                    return;
+                }
+
+                ExecutePointSetTier(shell, args[2], args[3]);
+                return;
+
+            default:
+                shell.WriteError($"Unknown point action '{args[1]}'.");
+                shell.WriteLine("Available point actions: list, reset, owner, tier");
+                return;
+        }
+    }
+
+    private void ExecuteUnlock(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args, bool unlock)
+    {
+        var verb = unlock ? "unlock" : "lock";
+        if (args.Length != 4)
+        {
+            shell.WriteError($"Usage: wh40kbattle {verb} <tech|cargo> <teamId> <prototypeId>");
+            return;
+        }
+
+        switch (args[1].ToLowerInvariant())
+        {
+            case "tech":
+                ExecuteTechnologyToggle(shell, rule, args[2], args[3], unlock);
+                return;
+
+            case "cargo":
+                ExecuteCargoToggle(shell, rule, args[2], args[3], unlock);
+                return;
+
+            default:
+                shell.WriteError($"Unknown unlock target '{args[1]}'. Use tech or cargo.");
+                return;
+        }
+    }
+
     private void WriteTeamStatus(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string teamId)
     {
         if (!rule.TryGetTeamEconomySnapshot(null, teamId, out var snapshot))
@@ -342,67 +396,9 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         var toNextText = snapshot.PointsToNextLevel is { } pointsToNext ? pointsToNext.ToString() : "-";
         var activeText = activeResearch ?? "none";
         shell.WriteLine(
-            $"Team '{snapshot.TeamId}': level={snapshot.BaseLevel}, teamXP={snapshot.TeamXp}, toNext={toNextText}, influence={snapshot.Influence}, " +
-            $"funds={snapshot.Funds}, teamResearch={snapshot.ResearchPoints}, serverResearch={serverResearchPoints}, " +
+            $"Team '{snapshot.TeamId}': level={snapshot.BaseLevel}, xp={snapshot.TeamXp}, toNext={toNextText}, influence={snapshot.Influence}, " +
+            $"gelt={snapshot.Funds}, research={snapshot.ResearchPoints}, serverResearch={serverResearchPoints}, " +
             $"unlockedTechs={unlockedTechs.Count}, researchServers={researchServers}, activeResearch={activeText}");
-    }
-
-    private void ExecuteResearchPoint(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
-    {
-        if (args.Length != 3)
-        {
-            shell.WriteError("Usage: wh40kbattle researchpoint <teamId> <delta>");
-            return;
-        }
-
-        if (!int.TryParse(args[2], out var delta))
-        {
-            shell.WriteError("Delta must be an integer (use negative to subtract).");
-            return;
-        }
-
-        if (!TryResolveCanonicalTeamId(rule, args[1], out var teamId))
-        {
-            WriteUnknownTeam(shell, rule, args[1]);
-            return;
-        }
-
-        if (!rule.TryAdjustTeamResearchPoints(teamId, delta, out var resolvedTeamId, out var points, source: "admin"))
-        {
-            WriteUnknownTeam(shell, rule, args[1]);
-            return;
-        }
-
-        shell.WriteLine($"Team '{resolvedTeamId}': team research adjusted by {delta}, total now {points}.");
-    }
-
-    private void ExecuteFund(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
-    {
-        if (args.Length != 3)
-        {
-            shell.WriteError("Usage: wh40kbattle fund <teamId> <delta>");
-            return;
-        }
-
-        if (!int.TryParse(args[2], out var delta))
-        {
-            shell.WriteError("Delta must be an integer (use negative to subtract).");
-            return;
-        }
-
-        if (!TryResolveCanonicalTeamId(rule, args[1], out var teamId))
-        {
-            WriteUnknownTeam(shell, rule, args[1]);
-            return;
-        }
-
-        if (!TryAdjustTeamFunds(teamId, delta, out var funds))
-        {
-            shell.WriteError($"Failed to resolve cargo funds for team '{teamId}'.");
-            return;
-        }
-
-        shell.WriteLine($"Team '{teamId}': funds adjusted by {delta}, total now {funds}.");
     }
 
     private void ExecutePointList(IConsoleShell shell)
@@ -429,17 +425,11 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         }
     }
 
-    private void ExecutePointReset(IConsoleShell shell, string[] args)
+    private void ExecutePointReset(IConsoleShell shell, string pointUid)
     {
-        if (args.Length != 2)
+        if (!TryResolvePointEntity(pointUid, out var targetUid))
         {
-            shell.WriteError("Usage: wh40kbattle point-reset <pointUid>");
-            return;
-        }
-
-        if (!TryResolvePointEntity(args[1], out var targetUid))
-        {
-            shell.WriteError($"Could not resolve point entity '{args[1]}'.");
+            shell.WriteError($"Could not resolve point entity '{pointUid}'.");
             return;
         }
 
@@ -450,24 +440,16 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             return;
         }
 
-        shell.WriteLine($"Strategic point '{args[1]}' reset to T0.");
+        shell.WriteLine($"Strategic point '{pointUid}' reset to T0.");
     }
 
-    private void ExecutePointSetOwner(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
+    private void ExecutePointSetOwner(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string pointUid, string requestedOwner)
     {
-        if (args.Length != 3)
+        if (!TryResolvePointEntity(pointUid, out var targetUid))
         {
-            shell.WriteError("Usage: wh40kbattle point-set-owner <pointUid> <teamId>");
+            shell.WriteError($"Could not resolve point entity '{pointUid}'.");
             return;
         }
-
-        if (!TryResolvePointEntity(args[1], out var targetUid))
-        {
-            shell.WriteError($"Could not resolve point entity '{args[1]}'.");
-            return;
-        }
-
-        var requestedOwner = args[2];
         var strategicPoints = _entityManager.EntitySysManager.GetEntitySystem<WH40KStrategicPointSystem>();
         if (string.Equals(requestedOwner, "neutral", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(requestedOwner, "none", StringComparison.OrdinalIgnoreCase))
@@ -478,7 +460,7 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
                 return;
             }
 
-            shell.WriteLine($"Strategic point '{args[1]}' reset to T0 (neutral owner requested).");
+            shell.WriteLine($"Strategic point '{pointUid}' reset to T0 (neutral owner requested).");
             return;
         }
 
@@ -494,24 +476,18 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             return;
         }
 
-        shell.WriteLine($"Strategic point '{args[1]}' owner set to '{resolvedTeamId}'.");
+        shell.WriteLine($"Strategic point '{pointUid}' owner set to '{resolvedTeamId}'.");
     }
 
-    private void ExecutePointSetTier(IConsoleShell shell, string[] args)
+    private void ExecutePointSetTier(IConsoleShell shell, string pointUid, string tierText)
     {
-        if (args.Length != 3)
+        if (!TryResolvePointEntity(pointUid, out var targetUid))
         {
-            shell.WriteError("Usage: wh40kbattle point-set-tier <pointUid> <0|1|2|3>");
+            shell.WriteError($"Could not resolve point entity '{pointUid}'.");
             return;
         }
 
-        if (!TryResolvePointEntity(args[1], out var targetUid))
-        {
-            shell.WriteError($"Could not resolve point entity '{args[1]}'.");
-            return;
-        }
-
-        if (!int.TryParse(args[2], out var tierValue) || tierValue < 0 || tierValue > 3)
+        if (!int.TryParse(tierText, out var tierValue) || tierValue < 0 || tierValue > 3)
         {
             shell.WriteError("Tier must be 0, 1, 2, or 3.");
             return;
@@ -524,14 +500,14 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             return;
         }
 
-        shell.WriteLine($"Strategic point '{args[1]}' forced to T{tierValue}.");
+        shell.WriteLine($"Strategic point '{pointUid}' forced to T{tierValue}.");
     }
 
     private void ExecuteEconomyTelemetry(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
     {
         if (args.Length != 2 && args.Length != 3)
         {
-            shell.WriteError("Usage: wh40kbattle eco-telemetry <on|off> [intervalSeconds]");
+            shell.WriteError("Usage: wh40kbattle telemetry <on|off> [intervalSeconds]");
             return;
         }
 
@@ -624,34 +600,17 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         return false;
     }
 
-    private void ExecuteTechnologyUnlock(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
+    private void ExecuteTechnologyToggle(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string requestedTeamId, string technologyId, bool unlock)
     {
-        ExecuteTechnologyToggle(shell, rule, args, unlock: true);
-    }
-
-    private void ExecuteTechnologyLock(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
-    {
-        ExecuteTechnologyToggle(shell, rule, args, unlock: false);
-    }
-
-    private void ExecuteTechnologyToggle(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args, bool unlock)
-    {
-        var actionName = unlock ? "tech-unlock" : "tech-lock";
-        if (args.Length != 3)
+        if (!TryResolveCanonicalTeamId(rule, requestedTeamId, out var teamId))
         {
-            shell.WriteError($"Usage: wh40kbattle {actionName} <teamId> <technologyId>");
+            WriteUnknownTeam(shell, rule, requestedTeamId);
             return;
         }
 
-        if (!TryResolveCanonicalTeamId(rule, args[1], out var teamId))
+        if (!_proto.TryIndex<TechnologyPrototype>(technologyId, out var technology))
         {
-            WriteUnknownTeam(shell, rule, args[1]);
-            return;
-        }
-
-        if (!_proto.TryIndex<TechnologyPrototype>(args[2], out var technology))
-        {
-            shell.WriteError($"Unknown technology '{args[2]}'.");
+            shell.WriteError($"Unknown technology '{technologyId}'.");
             return;
         }
 
@@ -700,34 +659,17 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             $"Team '{teamId}': technology '{technology.ID}' {verb} on {changedServers}/{processedServers} research server(s).");
     }
 
-    private void ExecuteCargoUnlock(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
+    private void ExecuteCargoToggle(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string requestedTeamId, string cargoProductId, bool unlock)
     {
-        ExecuteCargoToggle(shell, rule, args, unlock: true);
-    }
-
-    private void ExecuteCargoLock(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
-    {
-        ExecuteCargoToggle(shell, rule, args, unlock: false);
-    }
-
-    private void ExecuteCargoToggle(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args, bool unlock)
-    {
-        var actionName = unlock ? "cargo-unlock" : "cargo-lock";
-        if (args.Length != 3)
+        if (!TryResolveCanonicalTeamId(rule, requestedTeamId, out var teamId))
         {
-            shell.WriteError($"Usage: wh40kbattle {actionName} <teamId> <cargoProductId>");
+            WriteUnknownTeam(shell, rule, requestedTeamId);
             return;
         }
 
-        if (!TryResolveCanonicalTeamId(rule, args[1], out var teamId))
+        if (!_proto.TryIndex<CargoProductPrototype>(cargoProductId, out var product))
         {
-            WriteUnknownTeam(shell, rule, args[1]);
-            return;
-        }
-
-        if (!_proto.TryIndex<CargoProductPrototype>(args[2], out var product))
-        {
-            shell.WriteError($"Unknown cargo product '{args[2]}'.");
+            shell.WriteError($"Unknown cargo product '{cargoProductId}'.");
             return;
         }
 
@@ -841,132 +783,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
     }
 }
 
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KPhaseSetAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "phase-set";
-    public string Description => "Set WH40K battle phase.";
-    public string Help => "Usage: phase-set <preparation|assault|apocalypse>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecutePhase(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetPhaseCompletion(args, 0);
-    }
-}
-
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KSetLevelAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "setlevel";
-    public string Description => "Set WH40K team base level.";
-    public string Help => "Usage: setlevel <teamId> <level>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecuteSetLevel(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 0);
-    }
-}
-
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KFrontPointAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "frontpoint";
-    public string Description => "Legacy alias: add/subtract WH40K team TeamXP.";
-    public string Help => "Usage: frontpoint <teamId> <delta>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecuteFrontPoint(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 0);
-    }
-}
-
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KFronPointAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "fronpoint";
-    public string Description => "Alias for frontpoint.";
-    public string Help => "Usage: fronpoint <teamId> <delta>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecuteFrontPoint(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 0);
-    }
-}
-
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KCommandPointAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "commandpoint";
-    public string Description => "Legacy alias: add/subtract WH40K team influence points.";
-    public string Help => "Usage: commandpoint <teamId> <delta>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecuteCommandPoint(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 0);
-    }
-}
-
-[AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KInfluencePointAdminCommand : IConsoleCommand
-{
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-
-    public string Command => "influencepoint";
-    public string Description => "Add/subtract WH40K team influence points.";
-    public string Help => "Usage: influencepoint <teamId> <delta>";
-
-    public void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-        WH40KBattleAdminCommandShared.ExecuteCommandPoint(shell, rule, args, Help, 0);
-    }
-
-    public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
-    {
-        return WH40KBattleAdminCommandShared.GetTeamAndValueCompletion(_entityManager, args, 0);
-    }
-}
-
 internal static class WH40KBattleAdminCommandShared
 {
     public static void ExecutePhase(
@@ -1022,83 +838,13 @@ internal static class WH40KBattleAdminCommandShared
             return;
         }
 
-        shell.WriteLine($"Team '{teamId}': base level set to {level}, TeamXP now {frontPoints}.");
-    }
-
-    public static void ExecuteFrontPoint(
-        IConsoleShell shell,
-        WH40KTeamBattleRuleSystem rule,
-        string[] args,
-        string usage,
-        int argOffset)
-    {
-        if (args.Length != argOffset + 2)
-        {
-            shell.WriteError(usage);
-            return;
-        }
-
-        if (!int.TryParse(args[argOffset + 1], out var delta))
-        {
-            shell.WriteError("Delta must be an integer (use negative to subtract).");
-            return;
-        }
-
-        if (!rule.TryAdjustTeamFrontPoints(args[argOffset], delta, out var teamId, out var frontPoints, out var level, source: "admin"))
-        {
-            WriteTeamNotFound(shell, rule, args[argOffset]);
-            return;
-        }
-
-        shell.WriteLine($"Team '{teamId}': TeamXP {frontPoints}, base level {level}.");
-    }
-
-    public static void ExecuteCommandPoint(
-        IConsoleShell shell,
-        WH40KTeamBattleRuleSystem rule,
-        string[] args,
-        string usage,
-        int argOffset)
-    {
-        if (args.Length != argOffset + 2)
-        {
-            shell.WriteError(usage);
-            return;
-        }
-
-        if (!int.TryParse(args[argOffset + 1], out var delta))
-        {
-            shell.WriteError("Delta must be an integer (use negative to subtract).");
-            return;
-        }
-
-        if (!rule.TryAdjustTeamCommandPoints(args[argOffset], delta, out var teamId, out var commandPoints, source: "admin"))
-        {
-            WriteTeamNotFound(shell, rule, args[argOffset]);
-            return;
-        }
-
-        shell.WriteLine($"Team '{teamId}': influence points {commandPoints}.");
+        shell.WriteLine($"Team '{teamId}': base level set to {level}, XP now {frontPoints}.");
     }
 
     public static CompletionResult GetPhaseCompletion(string[] args, int argOffset)
     {
         if (args.Length == argOffset + 1)
             return CompletionResult.FromHintOptions(GetPhaseOptions(), "<phase>");
-
-        return CompletionResult.Empty;
-    }
-
-    public static CompletionResult GetTeamAndValueCompletion(IEntityManager entityManager, string[] args, int argOffset)
-    {
-        if (args.Length == argOffset + 1)
-        {
-            var rule = entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
-            return CompletionResult.FromHintOptions(rule.GetTeamIds(), "<teamId>");
-        }
-
-        if (args.Length == argOffset + 2)
-            return CompletionResult.FromHint("<value>");
 
         return CompletionResult.Empty;
     }

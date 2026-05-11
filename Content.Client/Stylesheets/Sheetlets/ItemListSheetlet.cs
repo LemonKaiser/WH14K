@@ -26,6 +26,8 @@ public sealed class ItemListSheetlet : Sheetlet<PalettedStylesheet>
         var boxItemBackground = Box(sheet.PrimaryPalette.Background);
         var boxSelected = Box(sheet.PrimaryPalette.Element);
         var boxDisabled = Box(sheet.PrimaryPalette.BackgroundDark);
+        var boxTransparentBackground = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+        var boxTransparent = Box(Color.Transparent);
 
         return
         [
@@ -35,18 +37,17 @@ public sealed class ItemListSheetlet : Sheetlet<PalettedStylesheet>
                 .Prop(ItemList.StylePropertyDisabledItemBackground, boxDisabled)
                 .Prop(ItemList.StylePropertySelectedItemBackground, boxSelected),
 
-            // these styles seem to be unused now
-            // E<ItemList>().Class("transparentItemList")
-            //     .Prop(ItemList.StylePropertyBackground, boxTransparent)
-            //     .Prop(ItemList.StylePropertyItemBackground, boxTransparent)
-            //     .Prop(ItemList.StylePropertyDisabledItemBackground, boxDisabled)
-            //     .Prop(ItemList.StylePropertySelectedItemBackground, boxItemBackground),
-            //
-            // E<ItemList>().Class("transparentBackgroundItemList")
-            //     .Prop(ItemList.StylePropertyBackground, boxTransparent)
-            //     .Prop(ItemList.StylePropertyItemBackground, boxBackground)
-            //     .Prop(ItemList.StylePropertyDisabledItemBackground, boxItemBackground)
-            //     .Prop(ItemList.StylePropertySelectedItemBackground, boxSelected),
+            E<ItemList>().Class("transparentItemList")
+                .Prop(ItemList.StylePropertyBackground, boxTransparentBackground)
+                .Prop(ItemList.StylePropertyItemBackground, boxTransparent)
+                .Prop(ItemList.StylePropertyDisabledItemBackground, boxTransparent)
+                .Prop(ItemList.StylePropertySelectedItemBackground, boxTransparent),
+
+            E<ItemList>().Class("transparentBackgroundItemList")
+                .Prop(ItemList.StylePropertyBackground, boxTransparentBackground)
+                .Prop(ItemList.StylePropertyItemBackground, boxBackground)
+                .Prop(ItemList.StylePropertyDisabledItemBackground, boxItemBackground)
+                .Prop(ItemList.StylePropertySelectedItemBackground, boxSelected),
         ];
     }
 }

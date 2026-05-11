@@ -1,9 +1,32 @@
 ## ConstructionMenu.xaml.cs
 
 construction-menu-title = Construction
+construction-menu-header-subtitle = Catalog of structures, furniture, and field-ready layouts.
+construction-menu-header-badge = { $count } schematics
+construction-menu-catalog-title = Schematic Catalog
+construction-menu-results-title = Construction List
+construction-menu-results-summary = { $count } | { $category }
 construction-menu-place-ghost = Place construction ghost
-construction-menu-clear-all = Clear All
-construction-menu-eraser-mode = Eraser Mode
+construction-menu-clear-all = Clear all
+construction-menu-eraser-mode = Eraser mode
 construction-menu-craft = Craft
 construction-menu-search = Search
-construction-menu-grid-view = Grid View
+construction-menu-grid-view = Grid view
+construction-menu-layout-grid = Grid
+construction-menu-layout-list = List
+construction-menu-layout-grid-short = grid
+construction-menu-layout-list-short = list
+construction-menu-list-meta = { $category } | Steps: { $count }
+construction-menu-type-structure = Structure
+construction-menu-type-item = Item
+construction-menu-favorite-add = Add to favorites
+construction-menu-favorite-remove = Remove favorite
+construction-menu-requirements-title = Build Sequence
+construction-menu-requirements-summary = Steps: { $count }
+construction-menu-requirements-summary-empty = No direct steps
+construction-menu-requirements-summary-idle = Select a schematic on the left
+construction-menu-action-hint-structure = Place the ghost, then mark the build location.
+construction-menu-action-hint-item = Items are crafted immediately after confirmation.
+construction-menu-action-hint-idle = Select a schematic to view requirements and actions.
+construction-menu-details-placeholder-title = Select a schematic
+construction-menu-details-placeholder-description = The right panel will show the description, requirements, and quick actions for the selected construction.

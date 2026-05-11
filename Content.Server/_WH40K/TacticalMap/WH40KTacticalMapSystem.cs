@@ -582,18 +582,16 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 
     private ResPath ResolveSnapshotTexturePath(Entity<WH40KTacticalMapComponent> map)
     {
-        if (map.Comp.SnapshotTexture != ResPath.Empty &&
-            map.Comp.SnapshotTexture != WH40KTacticalMapSnapshotCatalog.BattlefieldSnapshotTexturePath)
+        if (map.Comp.SnapshotTexture is { } deviceSnapshot && deviceSnapshot != ResPath.Empty)
+            return deviceSnapshot;
+
+        if (_gameMapManager.GetSelectedMap()?.WH40KTacticalMapSnapshot is { } snapshot &&
+            snapshot != ResPath.Empty)
         {
-            return map.Comp.SnapshotTexture;
+            return snapshot;
         }
 
-        var selectedMap = _gameMapManager.GetSelectedMap();
-
-        return WH40KTacticalMapSnapshotCatalog.ResolveSnapshotTexture(
-            selectedMap?.ID,
-            selectedMap?.MapPath,
-            map.Comp.SnapshotTexture);
+        return ResPath.Empty;
     }
 
     private TeamOverlayState GetOrRefreshOverlayState(EntityUid gridUid, string teamId)

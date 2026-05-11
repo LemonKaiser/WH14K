@@ -1,5 +1,5 @@
 - type: entity
-  parent: [BaseWeaponPistol, BaseGunWieldable]
+  parent: [BaseWeaponSubMachineGun, BaseGunWieldable]
   id: WeaponStubSMG2
   suffix: WH40K, Общий
   components:

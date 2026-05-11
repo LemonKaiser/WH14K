@@ -66,6 +66,7 @@
                                         <Label Name="BaseLevelLineLabel" ClipText="True" />
                                         <Label Name="FrontPointsLineLabel" ClipText="True" />
                                         <Label Name="CommandPointsLineLabel" ClipText="True" />
+                                        <Label Name="ResearchPointsLineLabel" ClipText="True" />
                                         <Label Name="DevelopmentPointsLineLabel" ClipText="True" />
                                     </BoxContainer>
                                     <cc:HSeparator />
@@ -134,45 +135,6 @@
                                       SeparationOverride="6"
                                       HorizontalExpand="True">
 
-                            <!-- Doctrine + Tactic row -->
-                            <BoxContainer Orientation="Horizontal" SeparationOverride="6" HorizontalExpand="True">
-                                <PanelContainer Name="DoctrineCard"
-                                                HorizontalExpand="True">
-                                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
-                                         <Label Name="DoctrineCardTitleLabel"
-                                             Text="{Loc 'w40k-cmd-doctrine-card-title'}"
-                                               StyleClasses="LabelHeading" />
-                                        <Label Name="DoctrineCardStateLabel"
-                                               StyleClasses="LabelBig"
-                                               ClipText="True" />
-                                        <Label Name="DoctrineCardThemeLabel"
-                                               StyleClasses="LabelSubText"
-                                               ClipText="True" />
-                                        <Button Name="DoctrineButton"
-                                                Text="{Loc 'w40k-cmd-doctrine-open-button'}"
-                                                HorizontalExpand="True" />
-                                    </BoxContainer>
-                                </PanelContainer>
-
-                                <PanelContainer Name="BattleTacticCard"
-                                                HorizontalExpand="True">
-                                    <BoxContainer Orientation="Vertical" SeparationOverride="4">
-                                         <Label Name="BattleTacticCardTitleLabel"
-                                             Text="{Loc 'w40k-cmd-battle-tactic-card-title'}"
-                                               StyleClasses="LabelHeading" />
-                                        <Label Name="BattleTacticNameLabel"
-                                               StyleClasses="LabelBig"
-                                               ClipText="True" />
-                                        <Label Name="BattleTacticCooldownLabel"
-                                               StyleClasses="LabelSubText"
-                                               ClipText="True" />
-                                        <Button Name="BattleTacticButton"
-                                                Text="{Loc 'w40k-cmd-battle-tactic-open-button'}"
-                                                HorizontalExpand="True" />
-                                    </BoxContainer>
-                                </PanelContainer>
-                            </BoxContainer>
-
                             <!-- Mission card (full width) -->
                             <PanelContainer Name="MissionCard" HorizontalExpand="True">
                                 <BoxContainer Orientation="Vertical" SeparationOverride="4">
@@ -237,7 +199,7 @@
         </BoxContainer>
 
         <!-- Footer -->
-        <PanelContainer Name="FooterPanel">
+        <PanelContainer Name="FooterPanel" Visible="False">
             <Label Name="FooterLabel"
                    Text="{Loc 'w40k-cmd-footer-idle'}"
                    ClipText="True"

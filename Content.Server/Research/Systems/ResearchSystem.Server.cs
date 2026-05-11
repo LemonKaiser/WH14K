@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Research.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.Research.Components;
@@ -10,6 +11,8 @@ namespace Content.Server.Research.Systems;
 
 public sealed partial class ResearchSystem
 {
+    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+
     private void InitializeServer()
     {
         SubscribeLocalEvent<ResearchServerComponent, ComponentStartup>(OnServerStartup);
@@ -216,6 +219,28 @@ public sealed partial class ResearchSystem
     }
 
     /// <summary>
+    /// Sets the exact point total on a server.
+    /// </summary>
+    public void SetServerPoints(EntityUid uid, int points, ResearchServerComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        points = Math.Max(0, points);
+        var delta = points - component.Points;
+        if (delta == 0)
+            return;
+
+        component.Points = points;
+        var ev = new ResearchServerPointsChangedEvent(uid, component.Points, delta);
+        foreach (var client in component.Clients)
+        {
+            RaiseLocalEvent(client, ref ev);
+        }
+        Dirty(uid, component);
+    }
+
+    /// <summary>
     /// Adds a specified number of points to a server.
     /// </summary>
     /// <param name="uid">The server</param>
@@ -228,12 +253,15 @@ public sealed partial class ResearchSystem
 
         if (!Resolve(uid, ref component))
             return;
-        component.Points += points;
-        var ev = new ResearchServerPointsChangedEvent(uid, component.Points, points);
-        foreach (var client in component.Clients)
+
+        if (TryComp<WH40KResearchTeamComponent>(uid, out var team) &&
+            !string.IsNullOrWhiteSpace(team.TeamId) &&
+            _teamRule.TryAdjustTeamResearchPoints(team.TeamId, points, out _, out var totalPoints, "research-server"))
         {
-            RaiseLocalEvent(client, ref ev);
+            SetServerPoints(uid, totalPoints, component);
+            return;
         }
-        Dirty(uid, component);
+
+        SetServerPoints(uid, component.Points + points, component);
     }
 }

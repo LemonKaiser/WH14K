@@ -35,7 +35,7 @@ public sealed partial class WH40KTacticalMapComponent : Component
     /// Rendered texture used as the tactical-map background.
     /// </summary>
     [DataField]
-    public ResPath SnapshotTexture = WH40KTacticalMapSnapshotCatalog.BattlefieldSnapshotTexturePath;
+    public ResPath? SnapshotTexture;
 
     /// <summary>
     /// Enables chunk-based fog of war on the tactical map.

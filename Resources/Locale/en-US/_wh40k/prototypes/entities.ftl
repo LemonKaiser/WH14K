@@ -272,14 +272,14 @@ ent-WH40KStandardTacticalMapConsoleImperium = imperium field tactical map consol
 ent-WH40KStandardTacticalMapConsoleHeretics = heretic field tactical map console
     .desc = A field tactical console on a heretic chassis with read-only access to the command feed.
 
-ent-ClothingOuterArmorAdvancedFlakVest = carapace armor
-    .desc = Strong armor that almost completely covers the body and provides good protection from most types of damage.
+ent-ClothingOuterArmorAdvancedFlakVest = full-body armor
+    .desc = Strong full-body armor that nearly covers the wearer head to toe and provides solid protection against most forms of damage.
 
 ent-ClothingOuterArmorFlakVestGen = armored breastplate
     .desc = A high-quality gold-plated officer's armored breastplate will show your subordinates your status and power, and the enemy - who to shoot at.
 
-ent-ClothingOuterArmorAdvancedFlakVestHeretic = Vraksian renegade carapace armor
-    .desc = A fuller carapace rig for the better-equipped, fanatical fighters who formed the core of the Vraksian rebels during the Siege of Vraks. Built to endure a long siege, shrapnel and a storm of bullets.
+ent-ClothingOuterArmorAdvancedFlakVestHeretic = Vraksian renegade full-body armor
+    .desc = A fuller armor rig for the better-equipped, fanatical fighters who formed the core of the Vraksian rebels during the Siege of Vraks. Built to endure a long siege, shrapnel and a storm of bullets.
 
 ent-ClothingOuterArmorHeresiarchChaos = heresiarch armor
     .desc = Black carapace armor for the leader of a chaos cult. Its protection matches an officer-grade breastplate, but its finish looks tempered in the Warp.
@@ -875,12 +875,6 @@ ent-StatueWH = statue
 
 ent-StatueWH3 = statue
     .desc = One of the great many statues that stand silently for centuries, delighting the eyes of everyone who contemplates them.
-
-ent-MachineChipProduser = analysis station
-    .desc = An ancient machine that receives important data from a source unknown to us.
-
-ent-MachineChipProduserCenter = analysis station
-    .desc = An ancient machine that receives important data from a source unknown to us. For some reason this one has the best signal.
 
 ent-ImpPointLathe = data cleaner
     .desc = Removes errors and unnecessary data in chips.
@@ -1539,7 +1533,7 @@ ent-ClothingOuterArmorFlakVestLietVst = Vostroyan lieutenant's armor
     .desc = Normal uniform.
 
 ent-ClothingMaskGasVst = Vostroyan gas mask
-    .desc = Normal uniform.
+    .desc = A sealed gas mask with fur-lined fittings, built to protect its wearer from poison air and biting cold.
 
 ent-ClothingHandsGlovesVst = Vostroyan gloves
     .desc = Standard uniform.
@@ -1830,13 +1824,13 @@ ent-WH40KStrategicPointAnchorInfluence = influence site
     .desc = An empty influence site. Build an influence point here to secure the sector.
 
 ent-WH40KStrategicPointResourceT1 = resource point
-    .desc = A claimed resource point that generates funds and base XP for its team.
+    .desc = A secured resource point that yields throne gelt and XP for its team.
 
 ent-WH40KStrategicPointResearchT1 = research point
-    .desc = A claimed research point that generates research and base XP for its team.
+    .desc = A secured research point that yields research and XP for its team.
 
 ent-WH40KStrategicPointInfluenceT1 = influence point
-    .desc = A claimed influence point that generates influence and base XP for its team.
+    .desc = A secured influence point that yields influence and XP for its team.
 
 ent-SpawnPointNovice = novice
 ent-SpawnPointMagos = magos

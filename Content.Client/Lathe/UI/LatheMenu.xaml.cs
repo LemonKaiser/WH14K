@@ -204,7 +204,6 @@ public sealed partial class LatheMenu : FancyWindow
                     RecipeQueueInfiniteAction?.Invoke(s);
                 };
                 RecipeList.AddChild(control);
-                WH40KUiChrome.PlayFadeIn(control, "appear", 0.18f, MathF.Min(idx * 0.018f, 0.22f));
             }
             else
             {
@@ -367,7 +366,6 @@ public sealed partial class LatheMenu : FancyWindow
                 queuedRecipeBox.OnMoveUpPressed += s => QueueMoveUpAction?.Invoke(s);
                 queuedRecipeBox.OnMoveDownPressed += s => QueueMoveDownAction?.Invoke(s);
                 QueueList.AddChild(queuedRecipeBox);
-                WH40KUiChrome.PlayFadeIn(queuedRecipeBox, "appear", 0.18f, MathF.Min(idx * 0.018f, 0.22f));
             }
             else
             {

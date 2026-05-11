@@ -124,6 +124,7 @@ public sealed class ThemedOptionButton : OptionButton
         button.StyleBoxOverride = selected
             ? _popupSelectedButtonStyleOverride ?? _popupButtonStyleOverride
             : _popupButtonStyleOverride;
+        button.ModulateSelfOverride = Color.White;
 
         button.Label.FontColorOverride = selected
             ? _popupSelectedButtonFontColorOverride ?? _popupButtonFontColorOverride

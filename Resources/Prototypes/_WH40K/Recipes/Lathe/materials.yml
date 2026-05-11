@@ -1,0 +1,8 @@
+- type: latheRecipe
+  id: PartRodMetal1
+  result: PartRodMetal10
+  categories:
+  - Materials
+  completetime: 0
+  materials:
+    Steel: 100

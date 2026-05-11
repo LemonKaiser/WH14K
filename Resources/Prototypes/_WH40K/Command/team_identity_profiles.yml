@@ -4,8 +4,6 @@
   interfaceThemeId: WH40KImperiumTheme
   accentColorHex: "#F3C548"
   reinforcementProfile: WH40KCommandReinforcementProfileImperium
-  doctrineProfile: WH40KCommandDoctrineProfileDefault
-  doctrinePresentation: Imperium
   commandTreeProfile: WH40KCommandTreeProfileDefault
 
 - type: wh40kTeamIdentityProfile
@@ -14,8 +12,6 @@
   interfaceThemeId: WH40KChaosTheme
   accentColorHex: "#C7483F"
   reinforcementProfile: WH40KCommandReinforcementProfileHeretics
-  doctrineProfile: WH40KCommandDoctrineProfileDefault
-  doctrinePresentation: Heretics
   commandTreeProfile: WH40KCommandTreeProfileDefault
 
 - type: wh40kTeamIdentityMap

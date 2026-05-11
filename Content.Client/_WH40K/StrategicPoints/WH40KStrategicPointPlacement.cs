@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Content.Client.Construction;
 using Content.Shared._WH40K.StrategicPoints;
@@ -23,6 +24,7 @@ public sealed class WH40KStrategicPointPlacement : SnapgridCenter
 
     private const float PreviewAlpha = 0.5f;
     private const float OccupiedAnchorTolerance = 0.2f;
+    private const float AnchorHoverRadius = 1.35f;
 
     private bool _showPreview;
     private EntityUid _previewAnchorUid = EntityUid.Invalid;
@@ -51,7 +53,7 @@ public sealed class WH40KStrategicPointPlacement : SnapgridCenter
             return;
 
         var cursorCoordinates = ScreenToCursorGrid(mouseScreen);
-        if (!TryFindClosestAnchor(cursorCoordinates, anchorCondition.PointType, out var anchorUid, out var anchor))
+        if (!TryFindClosestAnchor(cursorCoordinates, anchorCondition, out var anchorUid, out var anchor))
             return;
 
         MouseCoords = _entityManager.GetComponent<TransformComponent>(anchorUid).Coordinates.Offset(anchor.BuiltOffset);
@@ -96,7 +98,7 @@ public sealed class WH40KStrategicPointPlacement : SnapgridCenter
 
     private bool TryFindClosestAnchor(
         EntityCoordinates cursorCoordinates,
-        WH40KStrategicPointType pointType,
+        WH40KStrategicPointAnchorCondition anchorCondition,
         out EntityUid anchorUid,
         out WH40KStrategicPointAnchorComponent anchor)
     {
@@ -105,26 +107,33 @@ public sealed class WH40KStrategicPointPlacement : SnapgridCenter
 
         var cursorMapCoordinates = _transform.ToMapCoordinates(cursorCoordinates);
         var bestDistanceSquared = float.MaxValue;
+        var buildTileMaxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
+        var anchorHoverRadiusSquared = AnchorHoverRadius * AnchorHoverRadius;
 
         var anchors = _entityManager.EntityQueryEnumerator<WH40KStrategicPointAnchorComponent, TransformComponent>();
         while (anchors.MoveNext(out var uid, out var candidate, out var xform))
         {
-            if (candidate.PointType != pointType)
+            if (candidate.PointType != anchorCondition.PointType)
                 continue;
 
             var anchorMapCoordinates = _transform.GetMapCoordinates(uid, xform: xform);
             if (anchorMapCoordinates.MapId != cursorMapCoordinates.MapId)
                 continue;
 
-            // Strategic points are selected by hovering near the anchor itself,
-            // while the preview snaps onto the actual build tile via BuiltOffset.
-            var distanceSquared = (anchorMapCoordinates.Position - cursorMapCoordinates.Position).LengthSquared();
-            if (distanceSquared > candidate.BuildRadius * candidate.BuildRadius)
+            // Let players catch the point either by hovering near the anchor itself
+            // or near the actual build tile derived from the generic BuiltOffset.
+            var anchorDistanceSquared = (anchorMapCoordinates.Position - cursorMapCoordinates.Position).LengthSquared();
+            var effectiveAnchorPosition = anchorMapCoordinates.Position + candidate.BuiltOffset;
+            var buildTileDistanceSquared = (effectiveAnchorPosition - cursorMapCoordinates.Position).LengthSquared();
+
+            if (anchorDistanceSquared > anchorHoverRadiusSquared &&
+                buildTileDistanceSquared > buildTileMaxDistanceSquared)
                 continue;
 
             if (IsAnchorOccupied(uid, candidate))
                 continue;
 
+            var distanceSquared = Math.Min(anchorDistanceSquared, buildTileDistanceSquared);
             if (distanceSquared >= bestDistanceSquared)
                 continue;
 

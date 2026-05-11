@@ -17,7 +17,7 @@ public sealed class WH40KStrategicPointBoundUserInterface(EntityUid owner, Enum 
 
         _window = this.CreateWindow<WH40KStrategicPointWindow>();
         _window.OnUpgradePressed += () => SendMessage(new WH40KStrategicPointStartUpgradeMessage());
-        _window.OnRefreshPressed += () => SendMessage(new WH40KStrategicPointRefreshMessage());
+        _window.OnRefreshRequested += () => SendMessage(new WH40KStrategicPointRefreshMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

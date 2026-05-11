@@ -197,10 +197,6 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
 {
     public string TeamId { get; }
     public string TeamName { get; }
-    public string ActiveDoctrineId { get; }
-    public bool DoctrineLocked { get; }
-    public string ActiveBattleTacticId { get; }
-    public int BattleTacticCooldownSeconds { get; }
     public WH40KBattlePhase Phase { get; }
     public int BaseLevel { get; }
     public int FrontPoints { get; }
@@ -208,6 +204,10 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public int InfluencePoints { get; }
     public int Funds { get; }
     public int ResearchPoints { get; }
+    public float TeamXpIncomePerSecond { get; }
+    public float InfluenceIncomePerSecond { get; }
+    public float FundsIncomePerSecond { get; }
+    public float ResearchIncomePerSecond { get; }
     public int UpgradeLevel { get; }
     public int UpgradeCost { get; }
     public int UpgradeFundsCost { get; }
@@ -239,10 +239,6 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public WH40KCommandNodeBoundUserInterfaceState(
         string teamId,
         string teamName,
-        string activeDoctrineId,
-        bool doctrineLocked,
-        string activeBattleTacticId,
-        int battleTacticCooldownSeconds,
         WH40KBattlePhase phase,
         int baseLevel,
         int frontPoints,
@@ -250,6 +246,10 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         int influencePoints,
         int funds,
         int researchPoints,
+        float teamXpIncomePerSecond,
+        float influenceIncomePerSecond,
+        float fundsIncomePerSecond,
+        float researchIncomePerSecond,
         int upgradeLevel,
         int upgradeCost,
         int upgradeFundsCost,
@@ -280,10 +280,6 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     {
         TeamId = teamId;
         TeamName = teamName;
-        ActiveDoctrineId = activeDoctrineId;
-        DoctrineLocked = doctrineLocked;
-        ActiveBattleTacticId = activeBattleTacticId;
-        BattleTacticCooldownSeconds = battleTacticCooldownSeconds;
         Phase = phase;
         BaseLevel = baseLevel;
         FrontPoints = frontPoints;
@@ -291,6 +287,10 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         InfluencePoints = influencePoints;
         Funds = funds;
         ResearchPoints = researchPoints;
+        TeamXpIncomePerSecond = teamXpIncomePerSecond;
+        InfluenceIncomePerSecond = influenceIncomePerSecond;
+        FundsIncomePerSecond = fundsIncomePerSecond;
+        ResearchIncomePerSecond = researchIncomePerSecond;
         UpgradeLevel = upgradeLevel;
         UpgradeCost = upgradeCost;
         UpgradeFundsCost = upgradeFundsCost;
@@ -353,28 +353,6 @@ public sealed class WH40KCommandNodePurchaseTreeNodeMessage : BoundUserInterface
 [Serializable, NetSerializable]
 public sealed class WH40KCommandNodeTeamCompositionPressedMessage : BoundUserInterfaceMessage
 {
-}
-
-[Serializable, NetSerializable]
-public sealed class WH40KCommandNodeAssignBattleTacticMessage : BoundUserInterfaceMessage
-{
-    public string TacticId { get; }
-
-    public WH40KCommandNodeAssignBattleTacticMessage(string tacticId)
-    {
-        TacticId = tacticId;
-    }
-}
-
-[Serializable, NetSerializable]
-public sealed class WH40KCommandNodeAssignDoctrineMessage : BoundUserInterfaceMessage
-{
-    public string DoctrineId { get; }
-
-    public WH40KCommandNodeAssignDoctrineMessage(string doctrineId)
-    {
-        DoctrineId = doctrineId;
-    }
 }
 
 [Serializable, NetSerializable]

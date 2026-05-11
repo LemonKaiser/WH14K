@@ -287,22 +287,16 @@ public sealed partial class BatteryMenu : FancyWindow
 
         WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
         WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-        CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
         HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         DevicePanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        ChargePanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        DischargePanel.Modulate = new Color(1f, 1f, 1f, 0f);
         StoragePanel.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
         WH40KUiChrome.PlayFadeIn(WindowHeader, "battery-window-header-appear", 0.12f);
         WH40KUiChrome.PlayFadeIn(WindowTitle, "battery-window-title-appear", 0.12f, 0.02f);
-        WH40KUiChrome.PlayFadeIn(CloseButton, "battery-window-close-appear", 0.12f, 0.03f);
         WH40KUiChrome.PlayFadeIn(HeaderPanel, "battery-header-appear", 0.16f, 0.04f);
         WH40KUiChrome.PlayFadeIn(DevicePanel, "battery-device-appear", 0.18f, 0.08f);
-        WH40KUiChrome.PlayFadeIn(ChargePanel, "battery-charge-appear", 0.18f, 0.12f);
-        WH40KUiChrome.PlayFadeIn(DischargePanel, "battery-discharge-appear", 0.18f, 0.16f);
         WH40KUiChrome.PlayFadeIn(StoragePanel, "battery-storage-appear", 0.18f, 0.20f);
         WH40KUiChrome.PlayFadeIn(FooterDivider, "battery-footer-appear", 0.18f, 0.24f);
         WH40KUiChrome.PlayFadeIn(FooterBar, "battery-footer-bar-appear", 0.18f, 0.26f);
@@ -751,9 +745,7 @@ public sealed partial class BatteryMenu : FancyWindow
 
         button.StyleBoxOverride = style;
         button.Label.FontColorOverride = disabled ? LabelText : PrimaryText;
-        button.ModulateSelfOverride = disabled
-            ? new Color(0.84f, 0.84f, 0.88f, 0.84f)
-            : Color.White;
+        button.ModulateSelfOverride = Color.White;
     }
 
     private static Color Blend(Color baseColor, Color accent, float amount)

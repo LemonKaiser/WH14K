@@ -22,6 +22,7 @@ using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
+using Content.Shared.GameTicking;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -43,6 +44,35 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         ["Steel"] = 5,
         ["MetalRod"] = 5
     };
+    private static readonly string[] TacticalCallsignTokens =
+    {
+        "Alpha",
+        "Bravo",
+        "Charlie",
+        "Delta",
+        "Echo",
+        "Foxtrot",
+        "Golf",
+        "Hotel",
+        "India",
+        "Juliett",
+        "Kilo",
+        "Lima",
+        "Mike",
+        "November",
+        "Oscar",
+        "Papa",
+        "Quebec",
+        "Romeo",
+        "Sierra",
+        "Tango",
+        "Uniform",
+        "Victor",
+        "Whiskey",
+        "Xray",
+        "Yankee",
+        "Zulu",
+    };
 
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
@@ -61,6 +91,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
     private TimeSpan _nextFallbackIncomeTick = TimeSpan.Zero;
+    private int _nextAutoCallsignIndex;
 
     public override void Initialize()
     {
@@ -69,6 +100,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         SubscribeLocalEvent<WH40KStrategicPointAnchorComponent, MapInitEvent>(OnAnchorMapInit);
         SubscribeLocalEvent<WH40KStrategicPointComponent, MapInitEvent>(OnPointMapInit);
         SubscribeLocalEvent<WH40KStrategicPointComponent, ComponentShutdown>(OnPointShutdown);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<WH40KStrategicPointComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<WH40KStrategicPointComponent, DamageChangedEvent>(OnPointDamageChanged);
         SubscribeLocalEvent<WH40KStrategicPointComponent, RepairAttemptEvent>(OnRepairAttempt);
@@ -113,26 +145,30 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
             return false;
         }
 
-        WH40KStrategicPointAnchorComponent? preferredAnchor = null;
-        var foundAnchor = preferredAnchorUid is { Valid: true } candidateUid &&
-                          TryComp<WH40KStrategicPointAnchorComponent>(candidateUid, out preferredAnchor) &&
-                          IsAnchorValidForPoint(pointUid, pointType, maxDistance, candidateUid, preferredAnchor);
+        EntityUid anchorUid;
+        WH40KStrategicPointAnchorComponent anchor;
 
-        var anchorUid = foundAnchor
-            ? preferredAnchorUid!.Value
-            : EntityUid.Invalid;
-        var anchor = foundAnchor
-            ? preferredAnchor!
-            : default!;
+        // If construction started from a specific anchor, that anchor is the source of truth.
+        if (preferredAnchorUid is { Valid: true } candidateUid)
+        {
+            if (!TryComp<WH40KStrategicPointAnchorComponent>(candidateUid, out var preferredAnchor) ||
+                !IsAnchorCompatibleForPoint(pointUid, pointType, candidateUid, preferredAnchor))
+            {
+                QueueDel(pointUid);
+                return false;
+            }
 
-        if (!foundAnchor &&
-            !TryFindFreeAnchor(pointUid, pointType, maxDistance, out anchorUid, out anchor))
+            anchorUid = candidateUid;
+            anchor = preferredAnchor;
+        }
+        else if (!TryFindFreeAnchor(pointUid, pointType, maxDistance, out anchorUid, out anchor))
         {
             QueueDel(pointUid);
             return false;
         }
 
         var point = EnsureComp<WH40KStrategicPointComponent>(pointUid);
+        EnsureAnchorCallsign(anchorUid, anchor);
         point.PointType = pointType;
         point.Tier = tier;
         point.Profile = profileId;
@@ -158,10 +194,9 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         return true;
     }
 
-    private bool IsAnchorValidForPoint(
+    private bool IsAnchorCompatibleForPoint(
         EntityUid pointUid,
         WH40KStrategicPointType pointType,
-        float maxDistance,
         EntityUid anchorUid,
         WH40KStrategicPointAnchorComponent anchor)
     {
@@ -176,6 +211,21 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         if (anchorCoords.MapId != target.MapId)
             return false;
 
+        return true;
+    }
+
+    private bool IsAnchorValidForPoint(
+        EntityUid pointUid,
+        WH40KStrategicPointType pointType,
+        float maxDistance,
+        EntityUid anchorUid,
+        WH40KStrategicPointAnchorComponent anchor)
+    {
+        if (!IsAnchorCompatibleForPoint(pointUid, pointType, anchorUid, anchor))
+            return false;
+
+        var target = _transform.GetMapCoordinates(pointUid);
+        var anchorCoords = _transform.GetMapCoordinates(anchorUid);
         var effectiveAnchorPosition = anchorCoords.Position + anchor.BuiltOffset;
         var maxDistanceSquared = maxDistance * maxDistance;
         return (effectiveAnchorPosition - target.Position).LengthSquared() <= maxDistanceSquared;
@@ -192,6 +242,8 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
     private void OnAnchorMapInit(Entity<WH40KStrategicPointAnchorComponent> ent, ref MapInitEvent args)
     {
+        EnsureAnchorCallsign(ent.Owner, ent.Comp);
+
         if (ent.Comp.BuiltPoint is { } built && !Exists(built))
             ent.Comp.BuiltPoint = null;
 
@@ -205,6 +257,11 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         ent.Comp.NextIncomeTick = _timing.CurTime + GetIncomeInterval(ent.Comp);
         HealPointToFull(ent.Owner);
         UpdatePointAppearance(ent.Owner, ent.Comp);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
+    {
+        _nextAutoCallsignIndex = 0;
     }
 
     private void OnPointShutdown(Entity<WH40KStrategicPointComponent> ent, ref ComponentShutdown args)
@@ -425,6 +482,56 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
             _teamRule.TryAdjustTeamInfluence(teamId, 1, out _, out _, "base-fallback");
             TryAdjustTeamFunds(null, teamId, 20);
         }
+    }
+
+    public bool TryGetTeamIncomeRates(
+        string teamId,
+        out float teamXpPerSecond,
+        out float influencePerSecond,
+        out float researchPerSecond,
+        out float fundsPerSecond)
+    {
+        teamXpPerSecond = 0f;
+        influencePerSecond = 0f;
+        researchPerSecond = 0f;
+        fundsPerSecond = 0f;
+
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!_teamRule.TryResolveTeamId(teamId, out var resolvedTeamId))
+            resolvedTeamId = teamId;
+
+        var fallbackIntervalSeconds = (float) IncomeInterval.TotalSeconds;
+        if (fallbackIntervalSeconds > 0f)
+        {
+            teamXpPerSecond += 1f / fallbackIntervalSeconds;
+            influencePerSecond += 1f / fallbackIntervalSeconds;
+            fundsPerSecond += 20f / fallbackIntervalSeconds;
+        }
+
+        var phase = _teamRule.GetCurrentPhase();
+        var (numerator, denominator) = WH40KStrategicPointIncomeCalculator.GetPhaseMultiplier(phase);
+
+        var query = EntityQueryEnumerator<WH40KStrategicPointComponent>();
+        while (query.MoveNext(out _, out var point))
+        {
+            if (point.Tier <= WH40KStrategicPointTier.T0 ||
+                string.IsNullOrWhiteSpace(point.OwnerTeamId) ||
+                !string.Equals(point.OwnerTeamId, resolvedTeamId, StringComparison.OrdinalIgnoreCase) ||
+                !TryGetTierProfile(point, out var tier))
+            {
+                continue;
+            }
+
+            var intervalSeconds = Math.Max(1f, point.IncomeIntervalSeconds);
+            teamXpPerSecond += GetAverageIncomePerSecond(tier.TeamXpIncome, numerator, denominator, intervalSeconds);
+            influencePerSecond += GetAverageIncomePerSecond(tier.InfluenceIncome, numerator, denominator, intervalSeconds);
+            researchPerSecond += GetAverageIncomePerSecond(tier.ResearchIncome, numerator, denominator, intervalSeconds);
+            fundsPerSecond += GetAverageIncomePerSecond(tier.FundsIncome, numerator, denominator, intervalSeconds);
+        }
+
+        return true;
     }
 
     private int ApplyPhaseMultiplier(
@@ -938,6 +1045,22 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         return Loc.GetString("wh40k-strategic-point-callsign-unknown");
     }
 
+    private void EnsureAnchorCallsign(EntityUid anchorUid, WH40KStrategicPointAnchorComponent anchor)
+    {
+        if (!string.IsNullOrWhiteSpace(anchor.Callsign))
+            return;
+
+        anchor.Callsign = FormatCallsign(_nextAutoCallsignIndex++);
+    }
+
+    private static string FormatCallsign(int index)
+    {
+        var safeIndex = Math.Max(0, index);
+        var baseName = TacticalCallsignTokens[safeIndex % TacticalCallsignTokens.Length];
+        var tier = safeIndex / TacticalCallsignTokens.Length;
+        return tier == 0 ? baseName : $"{baseName}-{tier + 1}";
+    }
+
     private void AnnouncePointEvent(
         WH40KStrategicPointComponent point,
         WH40KStrategicPointAnchorComponent anchor,
@@ -972,9 +1095,12 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(teamId))
             return Loc.GetString("wh40k-strategic-point-owner-neutral");
 
-        return _teamRule.TryGetTeamDisplayName(teamId, out var teamName)
-            ? teamName
-            : teamId;
+        if (!_teamRule.TryGetTeamDisplayName(teamId, out var teamName))
+            return teamId;
+
+        return Loc.TryGetString(teamName, out var localized) && !string.IsNullOrWhiteSpace(localized)
+            ? localized
+            : teamName;
     }
 
     private bool CanUsePoint(EntityUid user, WH40KStrategicPointComponent point, EntityUid uid)
@@ -1007,6 +1133,14 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
             WH40KStrategicPointTier.T2 => WH40KStrategicPointTier.T3,
             _ => tier
         };
+    }
+
+    private static float GetAverageIncomePerSecond(int baseAmount, int numerator, int denominator, float intervalSeconds)
+    {
+        if (baseAmount <= 0 || numerator <= 0 || denominator <= 0 || intervalSeconds <= 0f)
+            return 0f;
+
+        return baseAmount * numerator / (float) denominator / intervalSeconds;
     }
 
     private static bool HasLoadedMaterials(

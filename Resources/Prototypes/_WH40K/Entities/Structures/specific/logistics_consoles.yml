@@ -34,10 +34,10 @@
   suffix: "WH40K, Imperium, Command Terminal"
   components:
   - type: Sprite
-    sprite: _WH40K/Structures/Specific/imp_command.rsi
+    sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
     scale: 0.3, 0.3
     layers:
-    - state: icon
+    - state: computer
   - type: UserInterface
     interfaces:
       enum.WH40KCommandNodeUiKey.Key:

@@ -79,27 +79,19 @@ public sealed partial class GrinderMenu : FancyWindow
 
         WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
         WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-        CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
         HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         StatusCard.Modulate = new Color(1f, 1f, 1f, 0f);
         DoctrineCard.Modulate = new Color(1f, 1f, 1f, 0f);
         VesselCard.Modulate = new Color(1f, 1f, 1f, 0f);
-        ActionPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        ChamberPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        BeakerPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
         WH40KUiChrome.PlayFadeIn(WindowHeader, "grinder-window-header-appear", 0.12f);
         WH40KUiChrome.PlayFadeIn(WindowTitle, "grinder-window-title-appear", 0.12f, 0.02f);
-        WH40KUiChrome.PlayFadeIn(CloseButton, "grinder-window-close-appear", 0.12f, 0.03f);
         WH40KUiChrome.PlayFadeIn(HeaderPanel, "grinder-header-appear", 0.16f, 0.03f);
         WH40KUiChrome.PlayFadeIn(StatusCard, "grinder-status-appear", 0.18f, 0.06f);
         WH40KUiChrome.PlayFadeIn(DoctrineCard, "grinder-doctrine-appear", 0.18f, 0.09f);
         WH40KUiChrome.PlayFadeIn(VesselCard, "grinder-vessel-appear", 0.18f, 0.12f);
-        WH40KUiChrome.PlayFadeIn(ActionPanel, "grinder-action-appear", 0.18f, 0.15f);
-        WH40KUiChrome.PlayFadeIn(ChamberPanel, "grinder-chamber-appear", 0.18f, 0.18f);
-        WH40KUiChrome.PlayFadeIn(BeakerPanel, "grinder-beaker-appear", 0.18f, 0.21f);
         WH40KUiChrome.PlayFadeIn(FooterDivider, "grinder-footer-appear", 0.18f, 0.24f);
         WH40KUiChrome.PlayFadeIn(FooterBar, "grinder-footer-bar-appear", 0.18f, 0.26f);
     }
@@ -364,7 +356,7 @@ public sealed partial class GrinderMenu : FancyWindow
             MinHeight = 40,
             Disabled = disabled,
             StyleBoxOverride = CreateListButtonStyle(disabled ? BorderColor : Accent.WithAlpha(0.78f), disabled ? 0.12f : 0.2f),
-            ModulateSelfOverride = disabled ? new Color(0.78f, 0.78f, 0.82f, 0.82f) : Color.White,
+            ModulateSelfOverride = Color.White,
         };
 
         var row = new BoxContainer
@@ -693,7 +685,7 @@ public sealed partial class GrinderMenu : FancyWindow
     {
         button.StyleBoxOverride = style;
         button.Label.FontColorOverride = disabled ? LabelText : fontColor;
-        button.ModulateSelfOverride = disabled ? new Color(0.82f, 0.82f, 0.86f, 0.82f) : Color.White;
+        button.ModulateSelfOverride = Color.White;
     }
 
     private static Color Blend(Color baseColor, Color accent, float amount)
