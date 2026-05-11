@@ -43,11 +43,31 @@
   icon: "JobIconCargoOfficer"
   supervisors: job-supervisors-wh40k-imperium-munitorum
   canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadLeader
+      - type: WH40KFriendlyFireAllowed
+      - type: WH40KMoraleExecution
+        cooldownSeconds: 1200
+        auraRadius: 10
+        buffDurationSeconds: 300
+        speedMultiplier: 1.1
+        outgoingDamageMultiplier: 1.1
+        incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: W40KOffMale
+          Female: W40KOffFemale
+          Unsexed: W40KOffMale
   access:
   - Maintenance
   - External
   - Command
+  - Medical
   - Cargo
+  - Engineering
+  - Research
 
 - type: startingGear
   id: TitheSupplierGear

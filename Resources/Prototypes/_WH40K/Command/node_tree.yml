@@ -299,8 +299,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank]
-      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank]
+      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank, WH40KImperiumStubRevolver, WH40KImperiumSpeedLoader11mm]
+      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank,  WH40KHereticsStubRevolver, WH40KHereticsSpeedLoader11mm]
   - id: wep_left_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-4-title
@@ -440,4 +440,3 @@
   teamProfiles:
     Imperium: WH40KCommandTreeProfileDefault
     Heretics: WH40KCommandTreeProfileDefault
-

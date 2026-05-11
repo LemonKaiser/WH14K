@@ -472,6 +472,15 @@
   - WH40KCommandPlasmaPistol
 
 - type: loadoutGroup
+  id: WH40KImperialColonelSidearm
+  name: loadout-group-wh40k-imperial-command-sidearm
+  loadouts:
+  - WH40KCommandLaspistolWillOfTheEmperor
+  - WH40KCommandBoltPistol
+  - WH40KCommandPlasmaPistol
+  - WH40KWeaponStubRevolverLoadout25
+
+- type: loadoutGroup
   id: WH40KPsykerForceStaff
   name: loadout-group-wh40k-psyker-force-staff
   loadouts:
@@ -623,6 +632,23 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KWeaponStubRevolverLoadout30
+
+- type: loadoutGroup
+  id: WH40KHereticCmdSecondaryWeapon
+  name: loadout-group-wh40k-heretic-secondary
+  loadouts:
+  - WH40KWeaponStubPistolLoadout
+  - WH40KWeaponStubSMGLoadout
+  - WH40KWeaponStubRevolverLoadout15
+
+- type: loadoutGroup
+  id: WH40KHereticSergSecondaryWeapon
+  name: loadout-group-wh40k-heretic-secondary
+  loadouts:
+  - WH40KWeaponStubPistolLoadout
+  - WH40KWeaponStubSMGLoadout
+  - WH40KWeaponStubRevolverLoadout20
 
 - type: loadoutGroup
   id: WH40KHereticMelee
@@ -737,6 +763,7 @@
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
+  - WH40KArmorTzeentchLiet
 
 - type: loadoutGroup
   id: WH40KHereticChampionHead
@@ -761,6 +788,7 @@
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
   - WH40KArmorKhorne
+  - WH40KArmorTzeentchSerg
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet

@@ -31,7 +31,7 @@
             HColonel: [ 1, 1 ]
             HGuardsman: [ -1, -1 ]
             HLexmechanic: [ 2, 2 ]
-            HLieutenant: [ 1, 1 ]
+            HLieutenant: [ 2, 2 ]
             HSergeant: [ 2, 2 ]
             HBandSupplier: [ 2, 2 ]
             #HVoxScout: [ 3, 3 ]

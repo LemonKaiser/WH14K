@@ -309,6 +309,26 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumStubRevolver
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponPistolBolter
+  cost: 12000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumSpeedLoader11mm
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SpeedLoader11mm
+  cost: 800
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumHeavyBolter
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1132,6 +1152,25 @@
   category: cpcat-arm
   group: WH40KHereticsMarket
 
+- type: cargoProduct
+  id: WH40KHereticsStubRevolver
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponPistolBolter
+  cost: 12000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSpeedLoader11mm
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SpeedLoader11mm
+  cost: 800
+  category: cpcat-arm
+  group: WH40KHereticsMarket
 
 - type: cargoProduct
   id: WH40KHereticsBolterPistol

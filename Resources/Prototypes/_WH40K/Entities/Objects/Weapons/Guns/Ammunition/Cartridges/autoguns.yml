@@ -50,3 +50,17 @@
     tags:
     - Cartridge
     - Cartridge10mmLong
+
+
+
+- type: entity
+  id: Cartridge11mm
+  parent: BaseCartridgePistol
+  suffix: WH40K
+  components:
+  - type: CartridgeAmmo
+    proto: Bullet11mm
+  - type: Tag
+    tags:
+    - Cartridge
+    - Cartridge11mm

@@ -1877,3 +1877,22 @@ ent-WeaponRevolverElectricArcDarkMech = Corrupted Electric Arc Pistol
 
 ent-AutoSyringe = autosyringe
     .desc = A medical device designed for the rapid introduction of liquids into living (or not so living) bodies.
+
+ent-ClothingOuterArmorTzeentchSerg = Tzeentch Champion's Armor
+    .desc = Tzeentch Champion's Sturdy Armor
+
+ent-ClothingHeadHoodTzeentchSerg = Tzeentch Champion's Hood
+    .desc = Tzeentch Champion's Sturdy Hood
+
+ent-ClothingOuterArmorTzeentchLiet = Tzeentch Chosen's Armor
+    .desc = Tzeentch Chosen's Sturdy Armor
+
+ent-ClothingHeadHoodTzeentchLiet = Tzeentch Chosen's Hood
+    .desc = Tzeentch Chosen's Sturdy Armor
+
+ent-WeaponStubRevolver = M748 "Burglar" Stub Revolver
+    .desc = A heavy stub revolver, named for the underhive bandits' fondness for picking locks with it.
+
+ent-Cartridge11mm = cartridge (11 mm)
+
+ent-SpeedLoader11mm = speedloader (11 mm)

@@ -66,3 +66,28 @@
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc_chs.rsi
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc_chs.rsi
+
+- type: entity
+  parent: BaseWeaponRevolver
+  id: WeaponStubRevolver
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Stubrevolver/heavystubrevolver.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Stubrevolver/heavystubrevolver.rsi
+  - type: Item
+    storedOffset: 0,-3
+  - type: Gun
+    fireRate: 3
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/mateba.ogg
+  - type: RevolverAmmoProvider
+    capacity: 6
+    chambers: [ True, True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null, null ]
+    whitelist:
+      tags:
+        - SpeedLoader11mm
+        - Cartridge11mm
+    proto: Cartridge11mm

@@ -588,3 +588,21 @@
     slowdownAmount: 3
     walkSpeedModifier: 0.9
     sprintSpeedModifier: 0.9
+
+- type: entity
+  parent: BaseBullet
+  id: Bullet11mm
+  categories: [ HideSpawnMenu ]
+  name: bullet (11mm)
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: StunOnCollide
+    stunAmount: 15
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.7
+    sprintSpeedModifier: 0.7

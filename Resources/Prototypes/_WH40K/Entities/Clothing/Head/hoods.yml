@@ -23,3 +23,29 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHoodTzeentchSerg
+  suffix: WH40K, Еретики, Тзинтч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadHoodTzeentchLiet
+  suffix: WH40K, Еретики, Тзинтч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood_liet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood_liet.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair
