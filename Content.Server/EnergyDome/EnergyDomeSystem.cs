@@ -124,6 +124,13 @@ public sealed class EnergyDomeSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var generator))
         {
+            if (generator.Enabled &&
+                generator.DomeParentEntity != GetProtectedEntity(uid))
+            {
+                TurnOff((uid, generator), startReloading: false, reason: EnergyDomeBreakReason.ParentChanged);
+                continue;
+            }
+
             TryRaiseRechargeReadyEvent((uid, generator));
             EnforceTeamBattleColor((uid, generator));
             EnforceLinkedSingleShield((uid, generator));

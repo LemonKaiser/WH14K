@@ -8,6 +8,7 @@ using Content.Server._WH40K.Combat;
 using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.GameTicking.Rules.Prototypes;
 using Content.Server._WH40K.LateJoin;
+using Content.Server._WH40K.Research;
 using Content.Shared._WH40K.Notifications;
 using Content.Server._WH40K.Store.Components;
 using Content.Shared._WH40K.GameTicking.Rules;
@@ -22,6 +23,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Rules;
 using Content.Server.KillTracking;
+using Content.Server.Maps;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server._WH40K.MetaProgress;
@@ -55,6 +57,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Polymorph;
 using Content.Shared.Players;
+using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Store;
@@ -87,6 +90,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly AdminSystem _admin = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
     [Dependency] private readonly KillTrackingSystem _killTracking = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
@@ -1266,11 +1270,15 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private void ApplyExternalConfigProfile(Components.WH40KTeamBattleRuleComponent component)
     {
         if (component.ConfigProfile is not { } profileId)
+        {
+            ApplySelectedMapProfileOverrides(component);
             return;
+        }
 
         if (!_proto.TryIndex(profileId, out WH40KTeamBattleConfigPrototype? profile))
         {
             _sawmill.Warning($"WH40K mode config profile '{profileId}' was not found. Using inline/default values.");
+            ApplySelectedMapProfileOverrides(component);
             return;
         }
 
@@ -1374,29 +1382,8 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.ReinforcementCurveExponent = Math.Clamp(economy.ReinforcementCurveExponent, 0f, 10f);
         component.LevelBuffPool = SanitizeLevelBuffPool(levelBuff.Pool);
 
-        component.WeatherMinStartDelaySeconds = weather.MinStartDelaySeconds;
-        component.WeatherFirstStartJitterSeconds = weather.FirstStartJitterSeconds;
-        component.WeatherNoRoundChance = weather.NoRoundChance;
-        component.WeatherMinDurationSeconds = weather.MinDurationSeconds;
-        component.WeatherMaxDurationSeconds = weather.MaxDurationSeconds;
-        component.WeatherGapMinSeconds = weather.GapMinSeconds;
-        component.WeatherGapMaxSeconds = weather.GapMaxSeconds;
-        component.WeatherRepeatChance = weather.RepeatChance;
-        component.WeatherWarningLeadSeconds = weather.WarningLeadSeconds;
-        component.WeatherPool = new List<EntProtoId>(weather.Pool);
-        component.WeatherDangerProfile = weatherDangerProfile;
-
-        component.RoundEventsEnabled = eventsCfg.Enabled;
-        component.RoundEventMinStartDelaySeconds = eventsCfg.MinStartDelaySeconds;
-        component.RoundEventFirstStartJitterSeconds = eventsCfg.FirstStartJitterSeconds;
-        component.RoundEventNoRoundChance = eventsCfg.NoRoundChance;
-        component.RoundEventMinDurationSeconds = eventsCfg.MinDurationSeconds;
-        component.RoundEventMaxDurationSeconds = eventsCfg.MaxDurationSeconds;
-        component.RoundEventGapMinSeconds = eventsCfg.GapMinSeconds;
-        component.RoundEventGapMaxSeconds = eventsCfg.GapMaxSeconds;
-        component.RoundEventRepeatChance = eventsCfg.RepeatChance;
-        component.RoundEventWarningLeadSeconds = eventsCfg.WarningLeadSeconds;
-        component.RoundEventPool = new List<WH40KRoundEventType>(eventsCfg.Pool);
+        ApplyWeatherConfig(component, weather, weatherDangerProfile);
+        ApplyRoundEventsConfig(component, eventsCfg);
 
         component.LogisticsAmmoPriceMultiplier = logistics.AmmoPriceMultiplier;
         component.LogisticsAmmoCategories = logistics.AmmoCategories.Count > 0
@@ -1419,28 +1406,155 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.OrbitalExplosionSlope = orbital.ExplosionSlope;
         component.OrbitalExplosionMaxTileIntensity = orbital.ExplosionMaxTileIntensity;
         component.OrbitalMarkerPrototype = orbital.MarkerPrototype;
+
+        ApplySelectedMapProfileOverrides(component);
     }
 
-    private static List<WH40KTeamBattleLevelBuffPoolEntry> SanitizeLevelBuffPool(
-        IReadOnlyCollection<WH40KTeamBattleLevelBuffPoolEntry> source)
+    private void ApplySelectedMapProfileOverrides(Components.WH40KTeamBattleRuleComponent component)
     {
-        var sanitized = new List<WH40KTeamBattleLevelBuffPoolEntry>(source.Count);
-        foreach (var entry in source)
-        {
-            if (entry.BuffType == WH40KLevelBuffType.None || entry.Weight <= 0)
-                continue;
+        var selectedMap = _gameMapManager.GetSelectedMap();
+        if (selectedMap == null)
+            return;
 
-            sanitized.Add(new WH40KTeamBattleLevelBuffPoolEntry
+        if (!string.IsNullOrWhiteSpace(selectedMap.WH40KWeatherProfile))
+        {
+            if (_proto.TryIndex<WH40KTeamBattleWeatherProfilePrototype>(selectedMap.WH40KWeatherProfile, out var weatherProfile))
             {
-                BuffType = entry.BuffType,
-                Weight = entry.Weight
-            });
+                ApplyWeatherConfig(component, weatherProfile.Config, component.WeatherDangerProfile);
+            }
+            else
+            {
+                _sawmill.Warning($"WH40K map weather profile '{selectedMap.WH40KWeatherProfile}' was not found for map '{selectedMap.ID}'.");
+            }
         }
 
-        if (sanitized.Count > 0)
-            return sanitized;
+        if (!string.IsNullOrWhiteSpace(selectedMap.WH40KEventsProfile))
+        {
+            if (_proto.TryIndex<WH40KTeamBattleRoundEventsProfilePrototype>(selectedMap.WH40KEventsProfile, out var eventsProfile))
+            {
+                ApplyRoundEventsConfig(component, eventsProfile.Config);
+            }
+            else
+            {
+                _sawmill.Warning($"WH40K map events profile '{selectedMap.WH40KEventsProfile}' was not found for map '{selectedMap.ID}'.");
+            }
+        }
+    }
 
-        return BuildDefaultLevelBuffPool();
+    private static void ApplyWeatherConfig(
+        Components.WH40KTeamBattleRuleComponent component,
+        WH40KTeamBattleWeatherConfig weather,
+        ProtoId<WH40KWeatherDangerProfilePrototype> weatherDangerProfile)
+    {
+        component.WeatherMinStartDelaySeconds = weather.MinStartDelaySeconds;
+        component.WeatherFirstStartJitterSeconds = weather.FirstStartJitterSeconds;
+        component.WeatherNoRoundChance = weather.NoRoundChance;
+        component.WeatherMinDurationSeconds = weather.MinDurationSeconds;
+        component.WeatherMaxDurationSeconds = weather.MaxDurationSeconds;
+        component.WeatherGapMinSeconds = weather.GapMinSeconds;
+        component.WeatherGapMaxSeconds = weather.GapMaxSeconds;
+        component.WeatherRepeatChance = weather.RepeatChance;
+        component.WeatherWarningLeadSeconds = weather.WarningLeadSeconds;
+        component.WeatherPool = BuildWeatherPool(weather);
+        component.WeatherWeightedPool = BuildWeatherWeightedPool(weather);
+        component.WeatherDangerProfile = weatherDangerProfile;
+    }
+
+    private static void ApplyRoundEventsConfig(
+        Components.WH40KTeamBattleRuleComponent component,
+        WH40KTeamBattleRoundEventsConfig eventsCfg)
+    {
+        component.RoundEventsEnabled = eventsCfg.Enabled;
+        component.RoundEventMinStartDelaySeconds = eventsCfg.MinStartDelaySeconds;
+        component.RoundEventFirstStartJitterSeconds = eventsCfg.FirstStartJitterSeconds;
+        component.RoundEventNoRoundChance = eventsCfg.NoRoundChance;
+        component.RoundEventMinDurationSeconds = eventsCfg.MinDurationSeconds;
+        component.RoundEventMaxDurationSeconds = eventsCfg.MaxDurationSeconds;
+        component.RoundEventGapMinSeconds = eventsCfg.GapMinSeconds;
+        component.RoundEventGapMaxSeconds = eventsCfg.GapMaxSeconds;
+        component.RoundEventRepeatChance = eventsCfg.RepeatChance;
+        component.RoundEventWarningLeadSeconds = eventsCfg.WarningLeadSeconds;
+        component.RoundEventPool = BuildRoundEventPool(eventsCfg);
+        component.RoundEventWeightedPool = BuildRoundEventWeightedPool(eventsCfg);
+    }
+
+    private static List<EntProtoId> BuildWeatherPool(WH40KTeamBattleWeatherConfig weather)
+    {
+        if (weather.WeightedPool.Count > 0)
+        {
+            return weather.WeightedPool
+                .Where(entry => entry.Weight > 0f)
+                .Select(entry => entry.WeatherId)
+                .Distinct()
+                .ToList();
+        }
+
+        return new List<EntProtoId>(weather.Pool);
+    }
+
+    private static List<WH40KTeamBattleWeightedWeatherEntry> BuildWeatherWeightedPool(WH40KTeamBattleWeatherConfig weather)
+    {
+        if (weather.WeightedPool.Count > 0)
+        {
+            return weather.WeightedPool
+                .Where(entry => entry.Weight > 0f)
+                .GroupBy(entry => entry.WeatherId)
+                .Select(group => new WH40KTeamBattleWeightedWeatherEntry
+                {
+                    WeatherId = group.Key,
+                    Weight = group.Sum(entry => entry.Weight)
+                })
+                .ToList();
+        }
+
+        return weather.Pool
+            .Distinct()
+            .Select(weatherId => new WH40KTeamBattleWeightedWeatherEntry
+            {
+                WeatherId = weatherId,
+                Weight = 1f
+            })
+            .ToList();
+    }
+
+    private static List<WH40KRoundEventType> BuildRoundEventPool(WH40KTeamBattleRoundEventsConfig eventsCfg)
+    {
+        if (eventsCfg.WeightedPool.Count > 0)
+        {
+            return eventsCfg.WeightedPool
+                .Where(entry => entry.Weight > 0f && entry.EventType != WH40KRoundEventType.None)
+                .Select(entry => entry.EventType)
+                .Distinct()
+                .ToList();
+        }
+
+        return new List<WH40KRoundEventType>(eventsCfg.Pool);
+    }
+
+    private static List<WH40KTeamBattleWeightedRoundEventEntry> BuildRoundEventWeightedPool(WH40KTeamBattleRoundEventsConfig eventsCfg)
+    {
+        if (eventsCfg.WeightedPool.Count > 0)
+        {
+            return eventsCfg.WeightedPool
+                .Where(entry => entry.Weight > 0f && entry.EventType != WH40KRoundEventType.None)
+                .GroupBy(entry => entry.EventType)
+                .Select(group => new WH40KTeamBattleWeightedRoundEventEntry
+                {
+                    EventType = group.Key,
+                    Weight = group.Sum(entry => entry.Weight)
+                })
+                .ToList();
+        }
+
+        return eventsCfg.Pool
+            .Where(eventType => eventType != WH40KRoundEventType.None)
+            .Distinct()
+            .Select(eventType => new WH40KTeamBattleWeightedRoundEventEntry
+            {
+                EventType = eventType,
+                Weight = 1f
+            })
+            .ToList();
     }
 
     private static void NormalizeEconomyRuntimeConfig(Components.WH40KTeamBattleRuleComponent component)
@@ -1503,6 +1617,31 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return true;
 
         return CountCriticalAsAlive && _mobState.IsCritical(entity);
+    }
+
+    private static List<WH40KTeamBattleLevelBuffPoolEntry> SanitizeLevelBuffPool(
+        IReadOnlyCollection<WH40KTeamBattleLevelBuffPoolEntry> source)
+    {
+        if (source.Count == 0)
+            return new List<WH40KTeamBattleLevelBuffPoolEntry>();
+
+        var sanitized = new List<WH40KTeamBattleLevelBuffPoolEntry>(source.Count);
+        foreach (var entry in source)
+        {
+            if (entry.BuffType == WH40KLevelBuffType.None || entry.Weight <= 0)
+                continue;
+
+            sanitized.Add(new WH40KTeamBattleLevelBuffPoolEntry
+            {
+                BuffType = entry.BuffType,
+                Weight = entry.Weight
+            });
+        }
+
+        if (sanitized.Count > 0)
+            return sanitized;
+
+        return BuildDefaultLevelBuffPool();
     }
 
     private bool TryGetTeamIndex(EntityUid mindId, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
@@ -1788,11 +1927,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         frontPoints = 0;
         pointsToNextLevel = null;
 
-        if (string.IsNullOrWhiteSpace(teamId))
+        if (string.IsNullOrWhiteSpace(teamId) ||
+            !TryGetActiveRule(out _, out var rule, out _))
+        {
             return false;
-
-        if (!TryGetActiveRule(out _, out var rule, out _))
-            return false;
+        }
 
         EnsureTeamProgress(rule);
         if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
@@ -1859,24 +1998,23 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             return false;
 
         var oldLevel = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
-        var currentPoints = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
-        var adjustment = WH40KTeamProgressionMath.AdjustTeamXp(
-            currentPoints,
+        var gained = WH40KTeamProgressionMath.AdjustTeamXp(
+            rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0),
             oldLevel,
             rule.BaseLevelThresholds,
             delta,
             allowDecrease);
 
-        teamXp = adjustment.TeamXp;
+        teamXp = gained.TeamXp;
         rule.TeamFrontPoints[resolvedTeamId] = teamXp;
         TraceEconomyDelta(
             rule,
             resolvedTeamId,
             source ?? "team-xp-adjust",
-            adjustment.AppliedDelta,
+            gained.AppliedDelta,
             0);
 
-        level = adjustment.Level;
+        level = gained.Level;
         rule.TeamBaseLevels[resolvedTeamId] = level;
         level = rule.TeamBaseLevels[resolvedTeamId];
 
@@ -1979,7 +2117,9 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         current -= amount;
         rule.TeamResearchPoints[resolvedTeamId] = current;
         remaining = current;
-        TraceEconomyDelta(rule, resolvedTeamId, source ?? "research-spend", 0, 0, -amount);
+        var resolvedSource = source ?? "research-spend";
+        TraceEconomyDelta(rule, resolvedTeamId, resolvedSource, 0, 0, -amount);
+        RaiseLocalEvent(new WH40KTeamResearchBalanceChangedEvent(resolvedTeamId, current, -amount, resolvedSource));
         return true;
     }
 
@@ -2006,7 +2146,11 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var current = rule.TeamResearchPoints.GetValueOrDefault(resolvedTeamId, 0);
         researchPoints = Math.Max(0, current + delta);
         rule.TeamResearchPoints[resolvedTeamId] = researchPoints;
-        TraceEconomyDelta(rule, resolvedTeamId, source ?? "research-adjust", 0, 0, researchPoints - current);
+        var actualDelta = researchPoints - current;
+        var resolvedSource = source ?? "research-adjust";
+        TraceEconomyDelta(rule, resolvedTeamId, resolvedSource, 0, 0, actualDelta);
+        if (actualDelta != 0)
+            RaiseLocalEvent(new WH40KTeamResearchBalanceChangedEvent(resolvedTeamId, researchPoints, actualDelta, resolvedSource));
         return true;
     }
 
@@ -2685,6 +2829,21 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private EntProtoId? PickWeather(Components.WH40KTeamBattleRuleComponent component)
     {
+        if (component.WeatherWeightedPool.Count > 0)
+        {
+            var weighted = new Dictionary<EntProtoId, float>();
+            foreach (var entry in component.WeatherWeightedPool)
+            {
+                if (entry.Weight <= 0f || !_weather.IsWeatherPrototype(entry.WeatherId))
+                    continue;
+
+                weighted[entry.WeatherId] = weighted.GetValueOrDefault(entry.WeatherId) + entry.Weight;
+            }
+
+            if (weighted.Count > 0)
+                return _random.Pick(weighted);
+        }
+
         var available = component.WeatherPool
             .Where(_weather.IsWeatherPrototype)
             .ToArray();
@@ -2815,6 +2974,21 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
     private WH40KRoundEventType? PickRoundEvent(Components.WH40KTeamBattleRuleComponent component)
     {
+        if (component.RoundEventWeightedPool.Count > 0)
+        {
+            var weighted = new Dictionary<WH40KRoundEventType, float>();
+            foreach (var entry in component.RoundEventWeightedPool)
+            {
+                if (entry.Weight <= 0f || entry.EventType == WH40KRoundEventType.None)
+                    continue;
+
+                weighted[entry.EventType] = weighted.GetValueOrDefault(entry.EventType) + entry.Weight;
+            }
+
+            if (weighted.Count > 0)
+                return _random.Pick(weighted);
+        }
+
         var available = component.RoundEventPool
             .Where(e => e != WH40KRoundEventType.None)
             .ToArray();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
+using Content.Client._WH40K.Command;
 using Content.Client._WH40K.Interface;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -104,7 +105,7 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
 
     public void UpdateInformationPanel(ResearchConsoleBoundInterfaceState state)
     {
-        ResearchPointsValueLabel.Text = state.Points.ToString();
+        ResearchPointsValueLabel.Text = WH40KCommandUiStyles.FormatResearch(state.Points);
 
         if (!_entity.TryGetComponent(Entity, out TechnologyDatabaseComponent? database))
         {
@@ -247,7 +248,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
                     _theme);
                 cardControl.OnPressed += () => OnTechnologyCardPressed?.Invoke(cardControl.TechnologyId);
                 TechnologyCardsContainer.AddChild(cardControl);
-                WH40KUiChrome.PlayFadeIn(cardControl, "appear", 0.22f, MathF.Min(visualIndex * 0.025f, 0.24f));
             }
             else if (TechnologyCardsContainer.GetChild(visualIndex) is TechnologyCardControl cardControl)
             {
@@ -280,7 +280,6 @@ public sealed partial class ResearchConsoleMenu : FancyWindow
             {
                 var mini = new MiniTechnologyCardControl(tech, _prototype, _sprite, description, _theme);
                 container.AddChild(mini);
-                WH40KUiChrome.PlayFadeIn(mini, "appear", 0.18f, MathF.Min(visualIndex * 0.02f, 0.2f));
             }
             else if (container.GetChild(visualIndex) is MiniTechnologyCardControl mini)
             {

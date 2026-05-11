@@ -27,8 +27,15 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
     private readonly BoxContainer _staffingRows;
     private readonly BoxContainer _roleRows;
     private readonly BoxContainer _memberRows;
+    private readonly PanelContainer _staffingSection;
+    private readonly PanelContainer _rolesSection;
+    private readonly PanelContainer _membersSection;
+    private readonly PanelContainer _staffingTitleBar;
+    private readonly PanelContainer _rolesTitleBar;
+    private readonly PanelContainer _membersTitleBar;
 
     private Color _accent = WH40KCommandUiStyles.DefaultAccent;
+    private bool _chaosTheme;
     private WH40KCommandNodeBoundUserInterfaceState? _latestState;
 
     public WH40KCommandNodeTeamCompositionWindow()
@@ -117,12 +124,13 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         };
         body.AddChild(left);
 
-        var staffingSection = CreateSection(
+        _staffingSection = CreateSection(
             Loc.GetString("w40k-cmd-team-composition-section-staffing"),
             out var staffingContent,
             out _staffingSectionTitleLabel,
+            out _staffingTitleBar,
             verticalExpand: false);
-        left.AddChild(staffingSection);
+        left.AddChild(_staffingSection);
 
         _staffingRows = new BoxContainer
         {
@@ -131,13 +139,14 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         };
         staffingContent.AddChild(_staffingRows);
 
-        var rolesSection = CreateSection(
+        _rolesSection = CreateSection(
             Loc.GetString("w40k-cmd-team-composition-section-roles"),
             out var rolesContent,
             out _rolesSectionTitleLabel,
+            out _rolesTitleBar,
             verticalExpand: true);
-        rolesSection.VerticalExpand = true;
-        left.AddChild(rolesSection);
+        _rolesSection.VerticalExpand = true;
+        left.AddChild(_rolesSection);
 
         var rolesScroll = new ScrollContainer
         {
@@ -153,15 +162,16 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         };
         rolesScroll.AddChild(_roleRows);
 
-        var membersSection = CreateSection(
+        _membersSection = CreateSection(
             Loc.GetString("w40k-cmd-team-composition-section-members"),
             out var membersContent,
             out _membersSectionTitleLabel,
+            out _membersTitleBar,
             verticalExpand: true);
-        membersSection.MinWidth = 300;
-        membersSection.VerticalExpand = true;
-        membersSection.SizeFlagsStretchRatio = 1.05f;
-        body.AddChild(membersSection);
+        _membersSection.MinWidth = 300;
+        _membersSection.VerticalExpand = true;
+        _membersSection.SizeFlagsStretchRatio = 1.05f;
+        body.AddChild(_membersSection);
 
         var membersScroll = new ScrollContainer
         {
@@ -196,9 +206,36 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
     {
         _latestState = state;
         _accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, WH40KCommandUiStyles.DefaultAccent);
+        _chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
 
+        _headerStyle.BackgroundColor = WH40KCommandUiStyles.ResolveHeaderBackground(_chaosTheme);
         _headerStyle.BorderColor = _accent;
         _headerTitleLabel.ModulateSelfOverride = _accent;
+        _teamLine.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(_chaosTheme);
+        _summaryLine.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(_chaosTheme);
+
+        var sectionHeading = _chaosTheme
+            ? WH40KCommandUiStyles.ResolveSoftText(true)
+            : _accent;
+        _staffingSectionTitleLabel.ModulateSelfOverride = sectionHeading;
+        _rolesSectionTitleLabel.ModulateSelfOverride = sectionHeading;
+        _membersSectionTitleLabel.ModulateSelfOverride = sectionHeading;
+
+        _staffingSection.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+            WH40KCommandUiStyles.ResolvePanelBackgroundAlt(_chaosTheme),
+            WH40KCommandUiStyles.ResolveStrongBorder(_chaosTheme),
+            2);
+        _rolesSection.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+            WH40KCommandUiStyles.ResolvePanelBackgroundAlt(_chaosTheme),
+            WH40KCommandUiStyles.ResolveStrongBorder(_chaosTheme),
+            2);
+        _membersSection.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
+            WH40KCommandUiStyles.ResolvePanelBackgroundAlt(_chaosTheme),
+            WH40KCommandUiStyles.ResolveStrongBorder(_chaosTheme),
+            2);
+        _staffingTitleBar.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.ResolveMutedBorder(_chaosTheme), _chaosTheme);
+        _rolesTitleBar.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.ResolveMutedBorder(_chaosTheme), _chaosTheme);
+        _membersTitleBar.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.ResolveMutedBorder(_chaosTheme), _chaosTheme);
 
         var resolvedTeamName = WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamName);
 
@@ -217,8 +254,11 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
             _summaryLine.Text = CompactLine(WH40KCommandUiStyles.ResolveLocalizedOrRaw(state.TeamCompositionSummary));
         }
 
-        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), _accent);
+        _teamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+            WH40KCommandUiStyles.ResolveBadgeBackground(_chaosTheme),
+            _accent);
         _teamBadgeLabel.Text = string.IsNullOrWhiteSpace(resolvedTeamName) ? "?" : resolvedTeamName.ToUpperInvariant();
+        _teamBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(_chaosTheme);
 
         var officerRoles = state.TeamCompositionOfficerRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
         var coreRoles = state.TeamCompositionCoreRoles ?? Array.Empty<WH40KTeamCompositionRoleEntry>();
@@ -230,7 +270,12 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         RebuildMembers(members);
     }
 
-    private PanelContainer CreateSection(string title, out BoxContainer content, out Label titleLabel, bool verticalExpand)
+    private PanelContainer CreateSection(
+        string title,
+        out BoxContainer content,
+        out Label titleLabel,
+        out PanelContainer titleBar,
+        bool verticalExpand)
     {
         var section = new PanelContainer
         {
@@ -250,7 +295,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         };
         section.AddChild(sectionRoot);
 
-        var titleBar = new PanelContainer
+        titleBar = new PanelContainer
         {
             PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(WH40KCommandUiStyles.MutedBorder)
         };
@@ -339,8 +384,8 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         var card = new PanelContainer
         {
             PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-                WH40KCommandUiStyles.CardBackground,
-                safeRoles.Count > 0 ? _accent : WH40KCommandUiStyles.MutedBorder)
+                WH40KCommandUiStyles.ResolveCardBackground(_chaosTheme),
+                safeRoles.Count > 0 ? _accent : WH40KCommandUiStyles.ResolveMutedBorder(_chaosTheme))
         };
         _roleRows.AddChild(card);
 
@@ -365,6 +410,7 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
             {
                 Text = Loc.GetString("w40k-cmd-team-composition-group-empty"),
                 StyleClasses = { "LabelSubText" },
+                ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(_chaosTheme),
                 ClipText = true
             });
             return false;
@@ -404,16 +450,23 @@ public sealed class WH40KCommandNodeTeamCompositionWindow : FancyWindow, ILocali
         {
             MinHeight = 28f,
             PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-                inset ? WH40KCommandUiStyles.CardBackgroundAlt : WH40KCommandUiStyles.CardBackground,
-                highlight ? _accent : WH40KCommandUiStyles.MutedBorder)
+                inset
+                    ? WH40KCommandUiStyles.ResolveCardBackgroundAlt(_chaosTheme)
+                    : WH40KCommandUiStyles.ResolveCardBackground(_chaosTheme),
+                highlight ? _accent : WH40KCommandUiStyles.ResolveMutedBorder(_chaosTheme))
         };
 
-        row.AddChild(new Label
+        var label = new Label
         {
             Text = CompactLine(text),
             ClipText = true,
             StyleClasses = { inset ? "LabelSubText" : "LabelBig" }
-        });
+        };
+        if (inset)
+            label.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(_chaosTheme);
+        else if (!highlight)
+            label.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(_chaosTheme);
+        row.AddChild(label);
 
         return row;
     }

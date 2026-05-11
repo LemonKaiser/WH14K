@@ -17,21 +17,12 @@ namespace Content.Client._WH40K.Command;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedControl
 {
-    private const string NoDoctrineSelectedLoc = "w40k-cmd-doctrine-card-none";
-    private const string NoDoctrineThemeLoc = "w40k-cmd-doctrine-card-none-theme";
-    private const string BattleTacticCooldownReadyLoc = "w40k-cmd-battle-tactic-window-cooldown-ready";
-    private const string BattleTacticCooldownActiveLoc = "w40k-cmd-battle-tactic-window-cooldown-active";
-
     public event Action? OnUpgradePressed;
     public event Action? OnTeamCompositionPressed;
     public event Action? OnTacticalBonusesPressed;
-    public event Action? OnDoctrinePressed;
-    public event Action? OnBattleTacticPressed;
 
     private readonly Color _fallbackAccent = WH40KCommandUiStyles.DefaultAccent;
     private WH40KCommandNodeBoundUserInterfaceState? _latestState;
-    private string _activeBattleTacticName = string.Empty;
-    private string _activeBattleTacticDescription = string.Empty;
 
     public WH40KCommandNodeWindow()
     {
@@ -40,8 +31,6 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         UpgradeButton.OnPressed += _ => OnUpgradePressed?.Invoke();
         TeamCompositionButton.OnPressed += _ => OnTeamCompositionPressed?.Invoke();
         TacticalBonusesButton.OnPressed += _ => OnTacticalBonusesPressed?.Invoke();
-        DoctrineButton.OnPressed += _ => OnDoctrinePressed?.Invoke();
-        BattleTacticButton.OnPressed += _ => OnBattleTacticPressed?.Invoke();
 
         Relocalize();
     }
@@ -55,15 +44,11 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         BaseCardTitleLabel.Text = Loc.GetString("w40k-cmd-base-card-title");
         ReadinessCardTitleLabel.Text = Loc.GetString("w40k-cmd-readiness-card-title");
         OperationsTitleLabel.Text = Loc.GetString("w40k-cmd-operations-title");
-        DoctrineCardTitleLabel.Text = Loc.GetString("w40k-cmd-doctrine-card-title");
-        BattleTacticCardTitleLabel.Text = Loc.GetString("w40k-cmd-battle-tactic-card-title");
         MissionCardTitleLabel.Text = Loc.GetString("w40k-cmd-mission-card-title");
         CompositionCardTitleLabel.Text = Loc.GetString("w40k-cmd-composition-card-title");
         IntelCardTitleLabel.Text = Loc.GetString("w40k-cmd-intel-card-title");
 
         UpgradeButton.Text = Loc.GetString("w40k-cmd-upgrade-button");
-        DoctrineButton.Text = Loc.GetString("w40k-cmd-doctrine-open-button");
-        BattleTacticButton.Text = Loc.GetString("w40k-cmd-battle-tactic-open-button");
         TeamCompositionButton.Text = Loc.GetString("w40k-cmd-team-composition-open-button");
         TacticalBonusesButton.Text = Loc.GetString("w40k-cmd-tactical-bonuses-open-button");
 
@@ -86,93 +71,102 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         ApplyBaseStatus(state, accent);
         ApplyReadiness(state);
         ApplyImmediateActions(state);
-        ApplyDoctrineCard(state);
-        ApplyBattleTacticCard(state);
         ApplyMissionCard(state);
         ApplyCompositionCard(state);
         ApplyIntelCard(state);
         ApplyFooter(state);
     }
 
-    public void SetBattleTacticPreview(string tacticName, string tacticDescription)
-    {
-        _activeBattleTacticName = string.IsNullOrWhiteSpace(tacticName)
-            ? Loc.GetString("w40k-cmd-battle-tactic-default-name")
-            : tacticName;
-        _activeBattleTacticDescription = string.IsNullOrWhiteSpace(tacticDescription)
-            ? Loc.GetString("w40k-cmd-battle-tactic-default-description")
-            : tacticDescription;
-
-        if (_latestState == null)
-            return;
-
-        ApplyBattleTacticCard(_latestState);
-    }
-
     private void ApplyAccent(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
     {
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
+
         HeaderPanel.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
-            WH40KCommandUiStyles.HeaderBackground,
+            WH40KCommandUiStyles.ResolveHeaderBackground(chaosTheme),
             accent,
             2);
         CommandRail.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
-            WH40KCommandUiStyles.PanelBackground,
-            WH40KCommandUiStyles.MutedBorder,
+            WH40KCommandUiStyles.ResolvePanelBackground(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme),
             2);
         OperationsPanel.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
-            WH40KCommandUiStyles.PanelBackgroundAlt,
-            WH40KCommandUiStyles.StrongBorder,
+            WH40KCommandUiStyles.ResolvePanelBackgroundAlt(chaosTheme),
+            WH40KCommandUiStyles.ResolveStrongBorder(chaosTheme),
             2);
-        RailHeaderPanel.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(accent);
-        OperationsHeaderPanel.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(accent);
+        RailHeaderPanel.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(accent, chaosTheme);
+        OperationsHeaderPanel.PanelOverride = WH40KCommandUiStyles.CreateHeaderStripStyle(accent, chaosTheme);
         FooterPanel.PanelOverride = WH40KCommandUiStyles.CreateBorderPanelStyle(
-            WH40KCommandUiStyles.FooterBackground,
-            WH40KCommandUiStyles.MutedBorder,
+            WH40KCommandUiStyles.ResolveFooterBackground(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme),
             1);
 
-        BaseStatusCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(WH40KCommandUiStyles.CardBackground, accent);
+        BaseStatusCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+            WH40KCommandUiStyles.ResolveCardBackground(chaosTheme),
+            accent);
         ReadinessCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            WH40KCommandUiStyles.MutedBorder);
+            WH40KCommandUiStyles.ResolveCardBackground(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme));
         ImmediateActionsCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            WH40KCommandUiStyles.MutedBorder);
-
-        DoctrineCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            ResolveDoctrineBorderColor(state, accent));
-        BattleTacticCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            WH40KCommandUiStyles.MutedBorder);
+            WH40KCommandUiStyles.ResolveCardBackgroundAlt(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme));
         MissionCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
+            WH40KCommandUiStyles.ResolveCardBackgroundAlt(chaosTheme),
             ResolveMissionBorderColor(state, accent));
         CompositionCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            WH40KCommandUiStyles.MutedBorder);
+            WH40KCommandUiStyles.ResolveCardBackground(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme));
         IntelCard.PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
-            WH40KCommandUiStyles.CardBackground,
-            WH40KCommandUiStyles.MutedBorder);
+            WH40KCommandUiStyles.ResolveCardBackground(chaosTheme),
+            WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme));
 
-        TeamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(Color.FromHex("#203227".AsSpan()), accent);
-        PhaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase, accent);
+        TeamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
+            WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
+            accent);
+        PhaseBadge.PanelOverride = ResolvePhaseBadgeStyle(state.Phase, accent, chaosTheme);
         LevelBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
-            Color.FromHex("#26314A".AsSpan()),
+            WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
             WH40KCommandUiStyles.InfoBadge);
-        StatusBadge.PanelOverride = ResolveStatusBadgeStyle(state, accent);
+        StatusBadge.PanelOverride = ResolveStatusBadgeStyle(state, accent, chaosTheme);
         RoundBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(
-            Color.FromHex("#22313B".AsSpan()),
+            WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
             accent);
 
-        BaseProgressBar.BackgroundStyleBoxOverride = WH40KCommandUiStyles.CreateProgressBackgroundStyle();
+        BaseProgressBar.BackgroundStyleBoxOverride = WH40KCommandUiStyles.CreateProgressBackgroundStyle(chaosTheme);
         BaseProgressBar.ForegroundStyleBoxOverride = WH40KCommandUiStyles.CreateProgressForegroundStyle(accent);
 
         HeaderTitleLabel.ModulateSelfOverride = accent;
-        TeamBadgeLabel.ModulateSelfOverride = Color.White;
-        PhaseBadgeLabel.ModulateSelfOverride = Color.White;
-        LevelBadgeLabel.ModulateSelfOverride = Color.White;
-        StatusBadgeLabel.ModulateSelfOverride = Color.White;
-        RoundBadgeLabel.ModulateSelfOverride = Color.White;
+        HeaderSubtitleLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        var sectionHeading = chaosTheme
+            ? WH40KCommandUiStyles.ResolveSoftText(true)
+            : accent;
+        RailTitleLabel.ModulateSelfOverride = sectionHeading;
+        BaseCardTitleLabel.ModulateSelfOverride = sectionHeading;
+        ReadinessCardTitleLabel.ModulateSelfOverride = sectionHeading;
+        OperationsTitleLabel.ModulateSelfOverride = sectionHeading;
+        MissionCardTitleLabel.ModulateSelfOverride = sectionHeading;
+        CompositionCardTitleLabel.ModulateSelfOverride = sectionHeading;
+        IntelCardTitleLabel.ModulateSelfOverride = sectionHeading;
+        TeamBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        PhaseBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        LevelBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        StatusBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        RoundBadgeLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+
+        BaseLevelLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        FrontPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        CommandPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        ResearchPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        DevelopmentPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        BaseProgressLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        UpgradeLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        MissionTitleLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        MissionStatusLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        MissionRewardLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        CompositionSummaryLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        CompositionStaffingLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        IntelSummaryLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        IntelDetailLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        FooterLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
     }
 
     private void ApplyHeader(WH40KCommandNodeBoundUserInterfaceState state)
@@ -194,12 +188,22 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
     private void ApplyBaseStatus(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
     {
         BaseLevelLineLabel.Text = Loc.GetString("w40k-cmd-level", ("level", state.BaseLevel));
-        FrontPointsLineLabel.Text = Loc.GetString("w40k-cmd-points", ("points", state.FrontPoints));
-        CommandPointsLineLabel.Text = Loc.GetString("w40k-cmd-influence-points", ("points", state.InfluencePoints));
+        FrontPointsLineLabel.Text = Loc.GetString(
+            "w40k-cmd-base-xp-line",
+            ("points", WH40KCommandUiStyles.FormatExperience(state.FrontPoints)),
+            ("income", BuildIncomeRate(state.TeamXpIncomePerSecond, WH40KCommandUiStyles.ExperienceSymbol)));
+        CommandPointsLineLabel.Text = Loc.GetString(
+            "w40k-cmd-base-influence-line",
+            ("points", WH40KCommandUiStyles.FormatInfluence(state.InfluencePoints)),
+            ("income", BuildIncomeRate(state.InfluenceIncomePerSecond, WH40KCommandUiStyles.InfluenceSymbol)));
+        ResearchPointsLineLabel.Text = Loc.GetString(
+            "w40k-cmd-base-research-line",
+            ("points", WH40KCommandUiStyles.FormatResearch(state.ResearchPoints)),
+            ("income", BuildIncomeRate(state.ResearchIncomePerSecond, WH40KCommandUiStyles.ResearchSymbol)));
         DevelopmentPointsLineLabel.Text = Loc.GetString(
-            "w40k-cmd-team-bank-line",
-            ("funds", state.Funds),
-            ("research", state.ResearchPoints));
+            "w40k-cmd-base-funds-line",
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(state.Funds)),
+            ("income", BuildIncomeRate(state.FundsIncomePerSecond, WH40KCommandUiStyles.ThroneGeltSymbol)));
 
         var (progress, segmentCurrent, segmentTotal) = CalculateBaseProgress(state);
         BaseProgressBar.Value = progress;
@@ -216,62 +220,36 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
 
     private void ApplyReadiness(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
         EventStatusLabel.Text = BuildCompactText(BuildEventReadinessText(state.TeamEventRuntime), 112);
-        EventStatusLabel.ModulateSelfOverride = WH40KCommandUiStyles.SoftText;
+        EventStatusLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
         FocusLineLabel.Text = BuildCompactText(BuildFocusText(state), 118);
-        FocusLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.MutedText;
+        FocusLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
     }
 
     private void ApplyImmediateActions(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        var accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, _fallbackAccent);
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
         UpgradeLineLabel.Text = Loc.GetString(
             "w40k-cmd-upgrade-line",
             ("level", state.UpgradeLevel),
             ("cost", FormatFundsResearchCost(state.UpgradeFundsCost, state.UpgradeResearchCost)));
 
         UpgradeButton.Disabled = !CanUpgradeNode(state);
-    }
-
-    private void ApplyDoctrineCard(WH40KCommandNodeBoundUserInterfaceState state)
-    {
-        WH40KCommandNodeDoctrineWindow.DoctrineDisplay? doctrineDisplay = string.IsNullOrWhiteSpace(state.ActiveDoctrineId)
-            ? null
-            : WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(state.ActiveDoctrineId, state.TeamId);
-
-        DoctrineCardStateLabel.Text = doctrineDisplay?.Name ?? Loc.GetString(NoDoctrineSelectedLoc);
-        DoctrineCardThemeLabel.Text = BuildCompactText(
-            doctrineDisplay?.Summary ?? Loc.GetString("w40k-cmd-doctrine-card-selection-hint"),
-            110);
-        DoctrineCardThemeLabel.ModulateSelfOverride = doctrineDisplay == null
-            ? WH40KCommandUiStyles.MutedText
-            : WH40KCommandUiStyles.SoftText;
-    }
-
-    private void ApplyBattleTacticCard(WH40KCommandNodeBoundUserInterfaceState state)
-    {
-        if (string.IsNullOrWhiteSpace(_activeBattleTacticName))
-        {
-            _activeBattleTacticName = Loc.GetString("w40k-cmd-battle-tactic-default-name");
-            _activeBattleTacticDescription = Loc.GetString("w40k-cmd-battle-tactic-default-description");
-        }
-
-        BattleTacticNameLabel.Text = _activeBattleTacticName;
-        BattleTacticCooldownLabel.Text = state.BattleTacticCooldownSeconds > 0
-            ? Loc.GetString(
-                BattleTacticCooldownActiveLoc,
-                ("time", FormatDuration(state.BattleTacticCooldownSeconds)))
-            : Loc.GetString(BattleTacticCooldownReadyLoc);
+        WH40KCommandUiStyles.ApplyPrimaryButtonTheme(UpgradeButton, accent, UpgradeButton.Disabled, chaosTheme);
     }
 
     private void ApplyMissionCard(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
         var mission = ResolveActiveMission(state);
         if (mission == null)
         {
             MissionTitleLabel.Text = Loc.GetString("w40k-cmd-mission-status-none-title");
             MissionStatusLabel.Text = Loc.GetString("w40k-cmd-mission-status-none-detail");
             MissionRewardLabel.Text = Loc.GetString("w40k-cmd-mission-status-none-description");
-            MissionRewardLabel.ModulateSelfOverride = WH40KCommandUiStyles.MutedText;
+            MissionRewardLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
             return;
         }
 
@@ -285,11 +263,13 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
             ("major", mission.RewardMajorDevelopmentPoints),
             ("minor", mission.RewardMinorDevelopmentPoints),
             ("tempo", mission.RewardTempoBonusPercent));
-        MissionRewardLabel.ModulateSelfOverride = WH40KCommandUiStyles.SoftText;
+        MissionRewardLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
     }
 
     private void ApplyCompositionCard(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        var accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, _fallbackAccent);
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
         var staffing = state.StaffingData;
         if (staffing != null)
         {
@@ -315,19 +295,23 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
                 "w40k-cmd-composition-card-no-staffing");
         }
 
-        CompositionStaffingLabel.ModulateSelfOverride = WH40KCommandUiStyles.SoftText;
+        CompositionStaffingLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        WH40KCommandUiStyles.ApplySecondaryButtonTheme(TeamCompositionButton, accent, chaos: chaosTheme);
     }
 
     private void ApplyIntelCard(WH40KCommandNodeBoundUserInterfaceState state)
     {
+        var accent = WH40KTeamIdentityClientResolver.ResolveAccentColor(state.TeamId, _fallbackAccent);
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
         var intel = state.BonusIntel;
         IntelSummaryLabel.Text = Loc.GetString(
             "w40k-cmd-intel-summary",
             ("engineering", intel.EngineeringTier),
             ("logistics", intel.LogisticsTier),
-            ("passive", intel.NodePassiveFrontPointsPerTick));
+            ("passive", WH40KCommandUiStyles.FormatExperience(intel.NodePassiveFrontPointsPerTick)));
         IntelDetailLabel.Text = BuildIntelDetailText(intel);
-        IntelDetailLabel.ModulateSelfOverride = WH40KCommandUiStyles.SoftText;
+        IntelDetailLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+        WH40KCommandUiStyles.ApplySecondaryButtonTheme(TacticalBonusesButton, accent, chaos: chaosTheme);
     }
 
     private void ApplyFooter(WH40KCommandNodeBoundUserInterfaceState state)
@@ -362,54 +346,53 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
             : Loc.GetString("w40k-cmd-status-badge-limited");
     }
 
-    private static StyleBoxFlat ResolvePhaseBadgeStyle(WH40KBattlePhase phase, Color accent)
+    private static StyleBoxFlat ResolvePhaseBadgeStyle(WH40KBattlePhase phase, Color accent, bool chaosTheme)
     {
         return phase switch
         {
             WH40KBattlePhase.Preparation => WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
                 WH40KCommandUiStyles.InfoBadge),
             WH40KBattlePhase.Assault => WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#3A2E1D".AsSpan()),
+                WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
                 accent),
             WH40KBattlePhase.Apocalypse => WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#3A2A2A".AsSpan()),
+                Color.FromHex("#231012".AsSpan()),
                 WH40KCommandUiStyles.DangerBadge),
             _ => WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#26314A".AsSpan()),
+                WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
                 WH40KCommandUiStyles.InfoBadge)
         };
     }
 
-    private static StyleBoxFlat ResolveStatusBadgeStyle(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
+    private static StyleBoxFlat ResolveStatusBadgeStyle(
+        WH40KCommandNodeBoundUserInterfaceState state,
+        Color accent,
+        bool chaosTheme)
     {
         if (CanUpgradeNode(state) || CanCallReinforcement(state))
         {
             return WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#223B2F".AsSpan()),
+                Color.FromHex("#162015".AsSpan()),
                 WH40KCommandUiStyles.ReadyBadge);
         }
 
         if (state.Phase >= WH40KBattlePhase.Apocalypse)
         {
             return WH40KCommandUiStyles.CreateBadgeStyle(
-                Color.FromHex("#3A2A2A".AsSpan()),
+                Color.FromHex("#231012".AsSpan()),
                 WH40KCommandUiStyles.DangerBadge);
         }
 
         return WH40KCommandUiStyles.CreateBadgeStyle(
-            Color.FromHex("#22313B".AsSpan()),
+            WH40KCommandUiStyles.ResolveBadgeBackground(chaosTheme),
             accent);
     }
 
     private static Color ResolveMissionBorderColor(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
     {
-        return ResolveActiveMission(state) != null ? accent : WH40KCommandUiStyles.MutedBorder;
-    }
-
-    private static Color ResolveDoctrineBorderColor(WH40KCommandNodeBoundUserInterfaceState state, Color accent)
-    {
-        return string.IsNullOrWhiteSpace(state.ActiveDoctrineId) ? WH40KCommandUiStyles.MutedBorder : accent;
+        var chaosTheme = WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(state.TeamId);
+        return ResolveActiveMission(state) != null ? accent : WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme);
     }
 
     private static (float Value, int SegmentCurrent, int SegmentTotal) CalculateBaseProgress(
@@ -491,8 +474,9 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         return BuildCompactText(
             Loc.GetString(
                 "w40k-cmd-intel-detail",
-                ("gain", intel.NodePassiveFrontPointsPerTick),
-                ("funds", passiveFunds),
+                ("xp", WH40KCommandUiStyles.FormatExperience(intel.NodePassiveFrontPointsPerTick)),
+                ("influence", WH40KCommandUiStyles.FormatInfluence(intel.NodePassiveFrontPointsPerTick)),
+                ("funds", WH40KCommandUiStyles.FormatThroneGelt(passiveFunds)),
                 ("interval", FormatDuration((int) MathF.Ceiling(intel.NodePassiveIntervalSeconds))),
                 ("eng_speed", intel.EngineeringSpeedBonusPercent),
                 ("log_eta", intel.LogisticsTierDeliveryReductionMinutes),
@@ -505,16 +489,24 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
     {
         return Loc.GetString(
             "w40k-cmd-cost-funds-research",
-            ("funds", Math.Max(0, funds)),
-            ("research", Math.Max(0, research)));
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(funds)),
+            ("research", WH40KCommandUiStyles.FormatResearch(research)));
     }
 
     private static string FormatFundsInfluenceCost(int funds, int influence)
     {
         return Loc.GetString(
             "w40k-cmd-cost-funds-influence",
-            ("funds", Math.Max(0, funds)),
-            ("influence", Math.Max(0, influence)));
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(funds)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(influence)));
+    }
+
+    private static string BuildIncomeRate(float amountPerSecond, string unitSuffix = "")
+    {
+        return Loc.GetString(
+            "w40k-cmd-income-rate",
+            ("amount", WH40KCommandUiStyles.FormatRate(amountPerSecond)),
+            ("unit", unitSuffix));
     }
 
     private static string BuildPreviewBlock(string[] lines, int maxLines, string emptyLoc)

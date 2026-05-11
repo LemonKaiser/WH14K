@@ -881,7 +881,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     {
         var phase = _teamRule.GetCurrentPhase();
         var teamId = runtime.TeamId;
-        var doctrineId = ResolveActiveDoctrineId(teamId);
         var levelGap = GetTrailingLevelGap(teamId, teamIds);
 
         var weightedCandidates = new List<(WH40KCommandTeamRandomEventConfig Event, float Weight)>();
@@ -907,12 +906,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 continue;
 
             var weight = Math.Max(0.001f, eventConfig.BaseWeight);
-            if (!string.IsNullOrWhiteSpace(doctrineId) &&
-                eventConfig.DoctrineWeightBias.TryGetValue(doctrineId, out var doctrineBias))
-            {
-                weight *= Math.Max(0.05f, doctrineBias);
-            }
-
             if (levelGap > 0)
             {
                 var trailingBonus = Math.Min(
@@ -1290,9 +1283,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         {
             if (!string.Equals(node.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
-
-            if (node.NextBattleTacticChangeAvailable > now)
-                node.NextBattleTacticChangeAvailable = MaxTime(now, node.NextBattleTacticChangeAvailable - reduction);
 
             if (node.NextReinforcementAvailable > now)
                 node.NextReinforcementAvailable = MaxTime(now, node.NextReinforcementAvailable - reduction);
@@ -2949,9 +2939,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             if (!string.Equals(node.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (node.NextBattleTacticChangeAvailable > now)
-                node.NextBattleTacticChangeAvailable = MaxTime(now, node.NextBattleTacticChangeAvailable - reduction);
-
             if (node.NextReinforcementAvailable > now)
                 node.NextReinforcementAvailable = MaxTime(now, node.NextReinforcementAvailable - reduction);
 
@@ -3480,26 +3467,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         }
 
         return Math.Max(0, highestEnemy - ownLevel);
-    }
-
-    private string ResolveActiveDoctrineId(string teamId)
-    {
-        if (string.IsNullOrWhiteSpace(teamId))
-            return string.Empty;
-
-        var query = EntityQueryEnumerator<WH40KCommandNodeComponent>();
-        while (query.MoveNext(out _, out var node))
-        {
-            if (!string.Equals(node.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            if (!node.DoctrineLocked || string.IsNullOrWhiteSpace(node.ActiveDoctrineId))
-                continue;
-
-            return node.ActiveDoctrineId;
-        }
-
-        return string.Empty;
     }
 
     private void EnsureRuntimeState(IReadOnlyList<string> teamIds, TimeSpan now)

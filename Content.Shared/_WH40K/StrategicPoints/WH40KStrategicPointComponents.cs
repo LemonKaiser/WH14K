@@ -14,9 +14,6 @@ public sealed partial class WH40KStrategicPointAnchorComponent : Component
     [DataField("callsign")]
     public string? Callsign;
 
-    [DataField("buildRadius")]
-    public float BuildRadius = 0.75f;
-
     [DataField("hideSpriteWhenBuilt")]
     public bool HideSpriteWhenBuilt;
 

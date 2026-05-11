@@ -94,19 +94,13 @@ public sealed partial class MicrowaveMenu : FancyWindow
 
         WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
         WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-        CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
         HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        IngredientsPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        ControlPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
         WH40KUiChrome.PlayFadeIn(WindowHeader, "microwave-window-header-appear", 0.12f);
         WH40KUiChrome.PlayFadeIn(WindowTitle, "microwave-window-title-appear", 0.12f, 0.02f);
-        WH40KUiChrome.PlayFadeIn(CloseButton, "microwave-window-close-appear", 0.12f, 0.03f);
         WH40KUiChrome.PlayFadeIn(HeaderPanel, "microwave-header-appear", 0.16f, 0.04f);
-        WH40KUiChrome.PlayFadeIn(IngredientsPanel, "microwave-chamber-appear", 0.18f, 0.08f);
-        WH40KUiChrome.PlayFadeIn(ControlPanel, "microwave-control-appear", 0.18f, 0.12f);
         WH40KUiChrome.PlayFadeIn(FooterDivider, "microwave-footer-appear", 0.18f, 0.16f);
         WH40KUiChrome.PlayFadeIn(FooterBar, "microwave-footer-panel-appear", 0.18f, 0.18f);
     }
@@ -508,9 +502,7 @@ public sealed partial class MicrowaveMenu : FancyWindow
             Disabled = IsBusy,
             ToolTip = entry.Name,
             StyleBoxOverride = normalButtonStyle,
-            ModulateSelfOverride = IsBusy
-                ? new Color(0.82f, 0.82f, 0.86f, 0.82f)
-                : Color.White,
+            ModulateSelfOverride = Color.White,
         };
 
         var panel = new PanelContainer
@@ -776,9 +768,7 @@ public sealed partial class MicrowaveMenu : FancyWindow
     {
         button.StyleBoxOverride = style;
         button.Label.FontColorOverride = disabled ? LabelText : fontColor;
-        button.ModulateSelfOverride = disabled
-            ? new Color(0.84f, 0.84f, 0.88f, 0.84f)
-            : Color.White;
+        button.ModulateSelfOverride = Color.White;
     }
 
     private static Color Blend(Color baseColor, Color accent, float amount)

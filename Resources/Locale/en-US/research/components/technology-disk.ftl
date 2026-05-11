@@ -7,6 +7,6 @@ tech-disk-examine-desc-unknown = [color=lightGray]A disk for the R&D server cont
 tech-disk-name-format = {$baseName} ({$technology})
 
 tech-disk-ui-name = technology disk terminal
-tech-disk-ui-total-label = There are {$amount} points on the selected server
-tech-disk-ui-cost-label = Each disk costs {$amount} points to print
+tech-disk-ui-total-label = There are {$amount}Ω on the selected server
+tech-disk-ui-cost-label = Each disk costs {$amount}Ω to print
 tech-disk-ui-print-button = Print Disk

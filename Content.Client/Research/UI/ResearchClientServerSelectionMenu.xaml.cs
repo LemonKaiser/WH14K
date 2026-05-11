@@ -141,7 +141,6 @@ public sealed partial class ResearchClientServerSelectionMenu : FancyWindow
             entry.OnPressed += OnEntryPressed;
             _serverEntries[id] = entry;
             ServerCardsContainer.AddChild(entry);
-            WH40KUiChrome.PlayFadeIn(entry, "appear", 0.18f, MathF.Min(i * 0.025f, 0.18f));
         }
     }
 

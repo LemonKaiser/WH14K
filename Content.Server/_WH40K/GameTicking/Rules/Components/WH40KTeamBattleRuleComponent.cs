@@ -200,6 +200,9 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
         "WHMachineCorrosionStorm"
     };
 
+    [DataField("weatherWeightedPool")]
+    public List<WH40KTeamBattleWeightedWeatherEntry> WeatherWeightedPool = new();
+
     [DataField("weatherDangerProfile")]
     public ProtoId<WH40KWeatherDangerProfilePrototype> WeatherDangerProfile = "WH40KWeatherDangerProfileDefault";
 
@@ -240,6 +243,9 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
         WH40KRoundEventType.OrbitalBombardment,
         WH40KRoundEventType.BlackFront
     };
+
+    [DataField("roundEventWeightedPool")]
+    public List<WH40KTeamBattleWeightedRoundEventEntry> RoundEventWeightedPool = new();
 
     [DataField("logisticsAmmoPriceMultiplier")]
     public float LogisticsAmmoPriceMultiplier = 0.7f;

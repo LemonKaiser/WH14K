@@ -25,7 +25,7 @@ public sealed class WH40KUpgradeTreeConsoleBoundUserInterface : BoundUserInterfa
         base.UpdateState(state);
 
         if (_window != null && state is WH40KCommandNodeBoundUserInterfaceState cast)
-            _window.UpdateState(cast, cast.ActiveDoctrineId);
+            _window.UpdateState(cast);
     }
 
     private void OnPurchaseRequested(string nodeId)

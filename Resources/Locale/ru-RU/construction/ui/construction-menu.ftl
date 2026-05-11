@@ -1,9 +1,32 @@
 ## ConstructionMenu.xaml.cs
 
 construction-menu-title = Строительство
+construction-menu-header-subtitle = Каталог сооружений, мебели и полевых схем.
+construction-menu-header-badge = { $count } схем
+construction-menu-catalog-title = Каталог схем
+construction-menu-results-title = Список конструкций
+construction-menu-results-summary = { $count } | { $category }
 construction-menu-place-ghost = Разместить призрак конструкции
 construction-menu-clear-all = Очистить всё
 construction-menu-eraser-mode = Режим ластика
-construction-menu-craft = Создание
+construction-menu-craft = Создать
 construction-menu-search = Поиск
 construction-menu-grid-view = Вид плиткой
+construction-menu-layout-grid = Плитка
+construction-menu-layout-list = Список
+construction-menu-layout-grid-short = плитка
+construction-menu-layout-list-short = список
+construction-menu-list-meta = { $category } | Шагов: { $count }
+construction-menu-type-structure = Сооружение
+construction-menu-type-item = Предмет
+construction-menu-favorite-add = В избранное
+construction-menu-favorite-remove = Убрать из избранного
+construction-menu-requirements-title = Порядок сборки
+construction-menu-requirements-summary = Шагов: { $count }
+construction-menu-requirements-summary-empty = Прямых шагов нет
+construction-menu-requirements-summary-idle = Выберите схему слева
+construction-menu-action-hint-structure = Разместите призрак, затем укажите точку постройки.
+construction-menu-action-hint-item = Изделие создаётся сразу после подтверждения.
+construction-menu-action-hint-idle = Выберите схему, чтобы увидеть требования и действия.
+construction-menu-details-placeholder-title = Выберите схему
+construction-menu-details-placeholder-description = Справа появятся описание, требования и быстрые действия для выбранной конструкции.

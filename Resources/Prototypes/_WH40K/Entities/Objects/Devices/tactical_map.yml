@@ -12,7 +12,6 @@
   components:
     - type: WH40KTacticalMap
       initializeWithStation: true
-      snapshotTexture: /Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png
       fogEnabled: true
       fogChunkSize: 8
       fogRevealRadiusChunks: 0
@@ -78,14 +77,6 @@
           layer:
             - MachineLayer
     - type: Computer
-    - type: ApcPowerReceiver
-      powerLoad: 50
-    - type: PowerState
-      idlePowerDraw: 50
-      workingPowerDraw: 500
-    - type: UIPowerState
-    - type: ExtensionCableReceiver
-    - type: ActivatableUIRequiresPower
     - type: Sprite
       sprite: _WH40K/Structures/Specific/mapimp.rsi
       layers:
@@ -108,7 +99,6 @@
           enum.WiresVisualLayers.MaintenancePanel:
             True: { visible: false }
             False: { visible: true }
-    - type: LitOnPowered
     - type: PointLight
       radius: 1.5
       energy: 3.0
@@ -153,6 +143,24 @@
           type: WiresBoundUserInterface
 
 - type: entity
+  id: WH40KBaseTacticalMapConsolePowered
+  parent: WH40KBaseTacticalMapConsole
+  abstract: true
+  components:
+    - type: ApcPowerReceiver
+      powerLoad: 50
+    - type: PowerState
+      idlePowerDraw: 50
+      workingPowerDraw: 500
+    - type: UIPowerState
+    - type: ExtensionCableReceiver
+    - type: ActivatableUIRequiresPower
+    - type: LitOnPowered
+    - type: Electrified
+      enabled: false
+      usesApcPower: true
+
+- type: entity
   id: WH40KCommandTacticalMapTablet
   parent:
     - WH40KBaseTacticalMapTablet
@@ -174,7 +182,7 @@
 
 - type: entity
   id: WH40KStandardTacticalMapConsole
-  parent: WH40KBaseTacticalMapConsole
+  parent: WH40KBaseTacticalMapConsolePowered
   suffix: Console, Standard
   components:
     - type: WH40KTacticalMap

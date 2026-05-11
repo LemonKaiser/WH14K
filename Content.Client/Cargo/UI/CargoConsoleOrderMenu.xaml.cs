@@ -107,19 +107,13 @@ namespace Content.Client.Cargo.UI
 
             WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
             WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-            CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
             HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-            OrderInfoPanel.Modulate = new Color(1f, 1f, 1f, 0f);
             FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
-            SubmitPanel.Modulate = new Color(1f, 1f, 1f, 0f);
 
             WH40KUiChrome.PlayFadeIn(WindowHeader, "window-header-appear", 0.14f);
             WH40KUiChrome.PlayFadeIn(WindowTitle, "window-title-appear", 0.14f, 0.02f);
-            WH40KUiChrome.PlayFadeIn(CloseButton, "window-close-appear", 0.14f, 0.04f);
             WH40KUiChrome.PlayFadeIn(HeaderPanel, "header-appear", 0.16f, 0.03f);
-            WH40KUiChrome.PlayFadeIn(OrderInfoPanel, "order-appear", 0.18f, 0.08f);
             WH40KUiChrome.PlayFadeIn(FooterDivider, "footer-appear", 0.18f, 0.11f);
-            WH40KUiChrome.PlayFadeIn(SubmitPanel, "submit-appear", 0.18f, 0.14f);
         }
 
         public override void Close()
@@ -136,12 +130,9 @@ namespace Content.Client.Cargo.UI
             _isClosingAnimated = true;
             var closeAccent = _theme.BorderStrongColor.WithAlpha(0.9f);
             var closeHighlight = _theme.Accent.WithAlpha(0.56f);
-            WH40KUiChrome.PlayFadeOut(SubmitPanel, "submit-close", closeHighlight, 0.14f);
             WH40KUiChrome.PlayFadeOut(FooterDivider, "footer-close", closeHighlight.WithAlpha(0.72f), 0.14f, 0.02f);
-            WH40KUiChrome.PlayFadeOut(OrderInfoPanel, "order-close", closeAccent, 0.16f, 0.03f);
             WH40KUiChrome.PlayFadeOut(HeaderPanel, "header-close", closeAccent, 0.12f, 0.04f);
             WH40KUiChrome.PlayFadeOut(WindowTitle, "window-title-close", closeHighlight, 0.1f, 0.04f);
-            WH40KUiChrome.PlayFadeOut(CloseButton, "window-close-close", closeHighlight, 0.1f, 0.02f);
             WH40KUiChrome.PlayFadeOut(WindowHeader, "window-header-close", closeAccent, 0.12f, 0.02f);
 
             Timer.Spawn(TimeSpan.FromSeconds(0.24f), () =>

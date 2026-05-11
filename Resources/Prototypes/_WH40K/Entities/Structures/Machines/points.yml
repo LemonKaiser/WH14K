@@ -1,49 +1,4 @@
 - type: entity
-  parent: BaseStructure
-  id: MachineChipProduser
-  suffix: WH40K
-  components:
-  - type: Sprite
-    sprite: _WH40K/Structures/Machines/data_chip_producer.rsi
-    offset: 0,1
-    noRot: true
-    layers:
-    - state: base
-    - state: unshaded
-      shader: unshaded
-  - type: AmbientSound
-    range: 10
-    volume: -5
-    sound:
-       path: /Audio/Ambience/Objects/periodic_beep.ogg
-  - type: PointLight
-    radius: 3
-    energy: 0.3
-    color: "#b3f02e"
-  - type: NavMapBeacon
-    color: "#ff0000"
-    text: Capture point
-  - type: WH40KInfluencePoint
-    captureRadius: 2.67
-    captureTimeSeconds: 20
-    captureEnabledFromPhase: Assault
-    rewardIntervalSeconds: 120
-    frontPointsPerInterval: 1
-  - type: SpriteFade
-
-- type: entity
-  parent: MachineChipProduser
-  id: MachineChipProduserCenter
-  suffix: WH40K, Center
-  components:
-  - type: WH40KInfluencePoint
-    captureRadius: 3
-    captureTimeSeconds: 30
-    captureEnabledFromPhase: Assault
-    rewardIntervalSeconds: 120
-    frontPointsPerInterval: 2
-
-- type: entity
   id: WH40KBasePointLathe
   parent: BaseStructure
   abstract: true
@@ -118,32 +73,6 @@
     tier2Pack: DataChipsForImpTier2
     tier3Pack: DataChipsForImpTier3
   - type: SpriteFade
-
-- type: entity
-  id: MachineChipProduserImperiumOwned
-  parent: MachineChipProduser
-  suffix: WH40K, Империум-владение
-  components:
-  - type: WH40KInfluencePoint
-    ownerTeamId: Imperium
-    captureRadius: 2.67
-    captureTimeSeconds: 20
-    captureEnabledFromPhase: Assault
-    rewardIntervalSeconds: 120
-    frontPointsPerInterval: 1
-
-- type: entity
-  id: MachineChipProduserHereticsOwned
-  parent: MachineChipProduser
-  suffix: WH40K, Еретики-владение
-  components:
-  - type: WH40KInfluencePoint
-    ownerTeamId: Heretics
-    captureRadius: 2.67
-    captureTimeSeconds: 20
-    captureEnabledFromPhase: Assault
-    rewardIntervalSeconds: 120
-    frontPointsPerInterval: 1
 
 - type: entity
   id: ChPointLathe

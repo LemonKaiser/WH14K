@@ -20,8 +20,6 @@
     text: Point (resource)
   - type: WH40KStrategicPointAnchor
     pointType: Resource
-    buildRadius: 0.9
-  - type: SpriteFade
 
 - type: entity
   parent: BaseStructure
@@ -47,9 +45,7 @@
     text: Point (research)
   - type: WH40KStrategicPointAnchor
     pointType: Research
-    buildRadius: 1.9
     builtOffset: 1.5,0
-  - type: SpriteFade
 
 - type: entity
   parent: BaseStructure
@@ -73,9 +69,7 @@
     text: Point (influence)
   - type: WH40KStrategicPointAnchor
     pointType: Influence
-    buildRadius: 0.9
     hideSpriteWhenBuilt: true
-  - type: SpriteFade
 
 - type: entity
   parent: BaseStructure
@@ -115,9 +109,6 @@
   - type: Repairable
     damageValue: -10
     doAfterDelay: 2
-  - type: Anchorable
-    flags:
-    - Anchorable
   - type: Construction
     graph: WH40KStrategicResourcePoint
     node: point
@@ -125,7 +116,23 @@
     pointType: Resource
     tier: T1
     profile: WH40KStrategicPointResource
-  - type: SpriteFade
+
+- type: entity
+  parent: WH40KStrategicPointResourceT1
+  id: WH40KStrategicPointResourceT1PreviewHeretics
+  suffix: WH40K, Strategic Point, Resource, T1, Preview, Heretics
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/resource/chaos/t1.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/resource/chaos/t1.rsi
+    state: base
 
 - type: entity
   parent: BaseStructure
@@ -165,9 +172,6 @@
   - type: Repairable
     damageValue: -10
     doAfterDelay: 2
-  - type: Anchorable
-    flags:
-    - Anchorable
   - type: Construction
     graph: WH40KStrategicResearchPoint
     node: point
@@ -175,7 +179,23 @@
     pointType: Research
     tier: T1
     profile: WH40KStrategicPointResearch
-  - type: SpriteFade
+
+- type: entity
+  parent: WH40KStrategicPointResearchT1
+  id: WH40KStrategicPointResearchT1PreviewHeretics
+  suffix: WH40K, Strategic Point, Research, T1, Preview, Heretics
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/research/t1/chaos.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/research/t1/chaos.rsi
+    state: base
 
 - type: entity
   parent: BaseStructure
@@ -215,9 +235,6 @@
   - type: Repairable
     damageValue: -10
     doAfterDelay: 2
-  - type: Anchorable
-    flags:
-    - Anchorable
   - type: Construction
     graph: WH40KStrategicInfluencePoint
     node: point
@@ -225,4 +242,20 @@
     pointType: Influence
     tier: T1
     profile: WH40KStrategicPointInfluence
-  - type: SpriteFade
+
+- type: entity
+  parent: WH40KStrategicPointInfluenceT1
+  id: WH40KStrategicPointInfluenceT1PreviewHeretics
+  suffix: WH40K, Strategic Point, Influence, T1, Preview, Heretics
+  components:
+  - type: Sprite
+    sprite: _WH40K/StrategicPoints/flag/chaos/t1.rsi
+    drawdepth: OverMobs
+    offset: 0,0.5
+    noRot: true
+    layers:
+    - state: base
+      map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: Icon
+    sprite: _WH40K/StrategicPoints/flag/chaos/t1.rsi
+    state: base

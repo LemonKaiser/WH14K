@@ -569,7 +569,6 @@ namespace Content.Server.Construction
                 Cleanup();
                 return;
             }
-
             RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack, GetNetEntity(structure)));
             _adminLogger.Add(LogType.Construction, LogImpact.Low, $"{ToPrettyString(user):player} has turned a {ev.PrototypeName} construction ghost into {ToPrettyString(structure)} at {Transform(structure).Coordinates}");
             Cleanup();
@@ -680,9 +679,7 @@ namespace Content.Server.Construction
                 if (mapPos.MapId != anchorPos.MapId)
                     return false;
 
-                var effectivePosition = anchorPos.Position + anchor.BuiltOffset;
-                var maxDistanceSquared = anchorCondition.MaxDistance * anchorCondition.MaxDistance;
-                return (effectivePosition - mapPos.Position).LengthSquared() <= maxDistanceSquared;
+                return true;
             }
 
             foreach (var condition in constructionPrototype.Conditions)

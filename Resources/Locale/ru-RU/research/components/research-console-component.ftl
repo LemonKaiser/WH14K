@@ -6,7 +6,7 @@ research-console-server-panel-title = Серверный uplink
 research-console-server-panel-subtitle = Просматривайте и переключайте связанный банк R&D-серверов для этой консоли.
 research-console-server-panel-status-timed = Активен uplink с таймерными исследованиями. Через список серверов можно проверить или сменить архивный банк.
 research-console-server-panel-status-instant = Режим прямой авторизации. Выберите сервер, если нужен другой банк исследований.
-research-console-menu-research-points-text = Очки исследований: [color=orchid]{ $points }[/color]
+research-console-menu-research-points-text = Очки исследований: [color=orchid]{ $points }Ω[/color]
 research-console-menu-main-discipline = Основная дисциплина: [color={ $color }]{ $name }[/color]
 research-console-menu-server-selection-button = Список серверов
 research-console-menu-server-short-button = Серверы
@@ -50,7 +50,7 @@ research-console-tier-discipline-info = Уровень { $tier }, [color={ $colo
 research-console-tier-info-small = : Уровень { $tier }
 research-console-tier-badge = Уровень { $tier }
 research-console-mini-tier = Уровень { $tier }
-research-console-cost = Стоимость: [color=orchid]{ $amount }[/color]
+research-console-cost = Стоимость: [color=orchid]{ $amount }Ω[/color]
 research-console-time = Время исследования: [color=lightblue]{ $seconds } сек[/color]
 research-console-card-cost-label = Стоимость
 research-console-card-time-label = Время
@@ -77,7 +77,7 @@ research-console-research-busy-popup = Уже идет другое исслед
 research-console-research-active-popup = Это исследование уже выполняется.
 research-console-research-busy-tooltip = Дождитесь завершения текущего исследования.
 research-console-research-active-tooltip = Это исследование уже выполняется.
-research-console-research-not-enough-points-tooltip = Не хватает очков исследований ({ $points }/{ $cost }).
-research-console-start-technology-radio-broadcast = Пользователь [bold]{ $approver }[/bold] начал исследование [bold]{ $technology }[/bold] за [bold]{ $amount }[/bold] очков исследований.
-research-console-unlock-technology-radio-broadcast = Пользователь [bold]{ $approver }[/bold] исследовал [bold]{ $technology }[/bold] за [bold]{ $amount }[/bold] очков исследований.
-wh40k-research-chip-uploaded = Загружено чипов данных: { $count }, +{ $points } очков исследований
+research-console-research-not-enough-points-tooltip = Не хватает очков исследований ({ $points }Ω/{ $cost }Ω).
+research-console-start-technology-radio-broadcast = Пользователь [bold]{ $approver }[/bold] начал исследование [bold]{ $technology }[/bold] за [bold]{ $amount }Ω[/bold].
+research-console-unlock-technology-radio-broadcast = Пользователь [bold]{ $approver }[/bold] исследовал [bold]{ $technology }[/bold] за [bold]{ $amount }Ω[/bold].
+wh40k-research-chip-uploaded = Загружено чипов данных: { $count }, +{ $points }Ω

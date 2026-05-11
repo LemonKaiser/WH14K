@@ -12,8 +12,8 @@ using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server._WH40K.OreExtractor.Components;
 using Content.Server._WH40K.Research.Components;
 using Content.Server._WH40K.Stats;
+using Content.Server._WH40K.StrategicPoints;
 using Content.Server._WH40K.Store.Components;
-using Content.Server._WH40K.Notifications;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Raffles;
@@ -70,12 +70,8 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     private const string TeamCompositionDefaultProfileId = "WH40KCommandTeamCompositionProfileImperium";
     private const string OreExtractorIntelTeamMapId = "WH40KCommandOreExtractorIntelTeamMap";
     private const string OreExtractorIntelDefaultProfileId = "WH40KCommandOreExtractorIntelProfileDefault";
-    private const string DoctrineTeamMapId = "WH40KCommandDoctrineTeamMap";
-    private const string DoctrineDefaultProfileId = "WH40KCommandDoctrineProfileDefault";
     private const string CommandTreeTeamMapId = "WH40KCommandTreeTeamMap";
     private const string CommandTreeDefaultProfileId = "WH40KCommandTreeProfileDefault";
-    private const string CommandTreeCostTeamMapId = "WH40KCommandTreeCostTeamMap";
-    private const string CommandTreeCostDefaultProfileId = "WH40KCommandTreeCostProfileDefault";
     private const int MissionBoardOfferCount = 3;
     private const uint ReinforcementRaffleDurationSeconds = 15;
     private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(5);
@@ -102,7 +98,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly WH40KNotificationSystem _notifications = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly SharedJobSystem _jobs = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -114,6 +109,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
     [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
     [Dependency] private readonly WH40KPlayerStatsSystem _stats = default!;
+    [Dependency] private readonly WH40KStrategicPointSystem _strategicPoints = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -136,8 +132,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         {
             subs.Event<WH40KCommandNodeUpgradePressedMessage>(OnUpgradePressed);
             subs.Event<WH40KCommandNodeTeamCompositionPressedMessage>(OnTeamCompositionPressed);
-            subs.Event<WH40KCommandNodeAssignDoctrineMessage>(OnDoctrineAssigned);
-            subs.Event<WH40KCommandNodeAssignBattleTacticMessage>(OnBattleTacticAssigned);
         });
 
         InitializeReinforcementUi();
@@ -178,14 +172,10 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     {
         component.UpgradeLevel = 0;
         component.PurchasedTreeNodeIds.Clear();
-        component.ActiveBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
-        component.ActiveDoctrineId = string.Empty;
-        component.DoctrineLocked = false;
         component.ActiveMissionTaskId = string.Empty;
         component.MissionBoardOfferedTaskIds.Clear();
         component.MissionBoardHadActiveFactionMission = false;
         component.NextReinforcementAvailable = TimeSpan.Zero;
-        component.NextBattleTacticChangeAvailable = TimeSpan.Zero;
         component.NextPassivePointTick = TimeSpan.Zero;
         component.NextUiRefresh = TimeSpan.Zero;
     }
@@ -272,8 +262,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (!_teamRule.TryGetTeamEconomySnapshot(ent.Owner, ent.Comp.TeamId, out var economy))
             return;
 
-        EnsureDoctrineStateConsistency(ent.Comp);
-
         var teamName = ent.Comp.TeamId;
         if (_teamRule.TryGetTeamDisplayName(ent.Comp.TeamId, out var localizedTeamName))
             teamName = localizedTeamName;
@@ -288,21 +276,17 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         var teamEventRuntime = _runtime.BuildTeamEventRuntimeState(ent.Comp.TeamId);
         var globalMissionRuntime = _runtime.BuildGlobalMissionRuntimeState();
         var teamMissionRuntime = _runtime.BuildTeamMissionRuntimeState(ent.Comp.TeamId);
-        var activeBattleTacticId = WH40KCommandNodeTactics.FindOrDefault(ent.Comp.ActiveBattleTacticId).Id;
         var currentPhase = _teamRule.GetCurrentPhase();
         var missionBoard = BuildMissionBoardState(ent.Comp, globalMissionRuntime, teamMissionRuntime);
         var reinforcementUiState = BuildReinforcementUiState(ent.Owner, ent.Comp.TeamId, teamName);
-        ent.Comp.ActiveBattleTacticId = activeBattleTacticId;
         var upgradeBaseCost = GetUpgradeCost(ent.Comp);
         var minimumReinforcementInfluenceCost = GetMinimumReinforcementCost(ent.Comp.TeamId, ent.Comp.ReinforcementCost);
+        var (teamXpIncomePerSecond, influenceIncomePerSecond, fundsIncomePerSecond, researchIncomePerSecond) =
+            GetIncomeRates(ent.Comp);
 
         var state = new WH40KCommandNodeBoundUserInterfaceState(
             ent.Comp.TeamId,
             teamName,
-            ent.Comp.ActiveDoctrineId,
-            ent.Comp.DoctrineLocked,
-            activeBattleTacticId,
-            GetRemainingBattleTacticCooldown(ent.Comp),
             currentPhase,
             economy.BaseLevel,
             economy.TeamXp,
@@ -310,6 +294,10 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             economy.Influence,
             economy.Funds,
             economy.ResearchPoints,
+            teamXpIncomePerSecond,
+            influenceIncomePerSecond,
+            fundsIncomePerSecond,
+            researchIncomePerSecond,
             ent.Comp.UpgradeLevel,
             upgradeBaseCost,
             WH40KCommandEconomyCalculator.GetCommandNodeUpgradeFundsCost(upgradeBaseCost),
@@ -344,6 +332,40 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.MissionBoard, state);
     }
 
+    private (float TeamXpPerSecond, float InfluencePerSecond, float FundsPerSecond, float ResearchPerSecond)
+        GetIncomeRates(WH40KCommandNodeComponent component)
+    {
+        var teamXpPerSecond = 0f;
+        var influencePerSecond = 0f;
+        var fundsPerSecond = 0f;
+        var researchPerSecond = 0f;
+
+        if (_strategicPoints.TryGetTeamIncomeRates(
+                component.TeamId,
+                out var strategicTeamXp,
+                out var strategicInfluence,
+                out var strategicResearch,
+                out var strategicFunds))
+        {
+            teamXpPerSecond += strategicTeamXp;
+            influencePerSecond += strategicInfluence;
+            researchPerSecond += strategicResearch;
+            fundsPerSecond += strategicFunds;
+        }
+
+        var passiveIntervalSeconds = GetPassiveIntervalSeconds(component);
+        if (passiveIntervalSeconds > 0f)
+        {
+            var passiveFrontPoints = GetPassiveFrontPointGain(component);
+            teamXpPerSecond += passiveFrontPoints / passiveIntervalSeconds;
+            influencePerSecond += passiveFrontPoints / passiveIntervalSeconds;
+            fundsPerSecond += WH40KCommandEconomyCalculator.GetPassiveFallbackFundsReward(passiveFrontPoints) /
+                              passiveIntervalSeconds;
+        }
+
+        return (teamXpPerSecond, influencePerSecond, fundsPerSecond, researchPerSecond);
+    }
+
     private void OnTreeNodePurchaseRequested(
         Entity<WH40KCommandNodeComponent> ent,
         ref WH40KCommandNodePurchaseTreeNodeMessage args)
@@ -353,8 +375,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
             return;
         }
-
-        EnsureDoctrineStateConsistency(ent.Comp);
 
         if (!TryResolveTreeNodeForTeam(ent.Comp.TeamId, args.NodeId, out _, out var nodeConfig))
         {
@@ -374,15 +394,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (ContainsNodeId(ent.Comp.PurchasedTreeNodeIds, canonicalNodeId))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-already-purchased"), ent.Owner, args.Actor);
-            UpdateUi(ent);
-            return;
-        }
-
-        var lockedDomainId = ResolveLockedTreeDomainId(ent.Comp.TeamId, ent.Comp.ActiveDoctrineId);
-        if (!string.IsNullOrWhiteSpace(lockedDomainId) &&
-            string.Equals(lockedDomainId, nodeConfig.Domain, StringComparison.OrdinalIgnoreCase))
-        {
-            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-tree-node-doctrine-locked"), ent.Owner, args.Actor);
             UpdateUi(ent);
             return;
         }
@@ -590,107 +601,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         UpdateUi(ent);
     }
 
-    private void OnDoctrineAssigned(Entity<WH40KCommandNodeComponent> ent, ref WH40KCommandNodeAssignDoctrineMessage args)
-    {
-        if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
-        {
-            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
-            return;
-        }
-
-        EnsureDoctrineStateConsistency(ent.Comp);
-
-        if (ent.Comp.DoctrineLocked)
-        {
-            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-doctrine-window-state-locked"), ent.Owner, args.Actor);
-            UpdateUi(ent);
-            return;
-        }
-
-        if (!TryResolveDoctrineProfileForTeam(ent.Comp.TeamId, out var profile))
-        {
-            UpdateUi(ent);
-            return;
-        }
-
-        var unlockLevel = Math.Max(1, profile.UnlockLevel);
-        var teamLevel = 1;
-        if (_teamRule.TryGetTeamProgress(ent.Comp.TeamId, out var currentLevel, out _, out _))
-            teamLevel = Math.Max(1, currentLevel);
-
-        if (teamLevel < unlockLevel)
-        {
-            _popup.PopupEntity(
-                Loc.GetString("w40k-cmd-doctrine-window-state-wait-level", ("level", unlockLevel)),
-                ent.Owner,
-                args.Actor);
-            UpdateUi(ent);
-            return;
-        }
-
-        if (!TryResolveDoctrineId(profile, args.DoctrineId, out var doctrineId))
-        {
-            UpdateUi(ent);
-            return;
-        }
-
-        ent.Comp.ActiveDoctrineId = doctrineId;
-        ent.Comp.DoctrineLocked = true;
-
-        var doctrineName = ResolveDoctrineName(profile, doctrineId, ent.Comp.TeamId);
-        _popup.PopupEntity(
-            Loc.GetString("w40k-cmd-doctrine-window-active-set", ("doctrine", doctrineName)),
-            ent.Owner,
-            args.Actor);
-
-        UpdateUi(ent);
-    }
-
-    private void OnBattleTacticAssigned(Entity<WH40KCommandNodeComponent> ent, ref WH40KCommandNodeAssignBattleTacticMessage args)
-    {
-        if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
-        {
-            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "wh40k-access-denied-wrong-team"), ent.Owner, args.Actor);
-            return;
-        }
-
-        var selectedTacticId = WH40KCommandNodeTactics.FindOrDefault(args.TacticId).Id;
-        var activeTacticId = WH40KCommandNodeTactics.FindOrDefault(ent.Comp.ActiveBattleTacticId).Id;
-        ent.Comp.ActiveBattleTacticId = activeTacticId;
-
-        if (string.Equals(activeTacticId, selectedTacticId, StringComparison.OrdinalIgnoreCase))
-        {
-            _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-battle-tactic-already-active"), ent.Owner, args.Actor);
-            UpdateUi(ent);
-            return;
-        }
-
-        var cooldownSeconds = GetRemainingBattleTacticCooldown(ent.Comp);
-        if (cooldownSeconds > 0)
-        {
-            _popup.PopupEntity(
-                Loc.GetString("w40k-cmd-battle-tactic-cooldown-popup",
-                    ("time", FormatClock(cooldownSeconds))),
-                ent.Owner,
-                args.Actor);
-            UpdateUi(ent);
-            return;
-        }
-
-        ent.Comp.ActiveBattleTacticId = selectedTacticId;
-        ent.Comp.NextBattleTacticChangeAvailable =
-            _timing.CurTime + TimeSpan.FromSeconds(Math.Max(1f, ent.Comp.BattleTacticChangeCooldownSeconds));
-
-        var tacticName = Loc.GetString(WH40KCommandNodeTactics.FindOrDefault(selectedTacticId).NameLocKey);
-        NotifyTeamBattleTacticChanged(ent.Comp.TeamId, tacticName);
-        _popup.PopupEntity(
-            Loc.GetString("w40k-cmd-battle-tactic-assigned-ok", ("tactic", tacticName)),
-            ent.Owner,
-            args.Actor);
-
-        UpdateUi(ent);
-    }
-
     private void OnMissionTaskAssigned(Entity<WH40KCommandNodeComponent> ent, ref WH40KCommandNodeAssignMissionTaskMessage args)
     {
         if (!IsUserAllowedForTeam(args.Actor, ent.Comp.TeamId))
@@ -794,14 +704,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             return 0;
 
         return (int) Math.Ceiling((component.NextReinforcementAvailable - _timing.CurTime).TotalSeconds);
-    }
-
-    private int GetRemainingBattleTacticCooldown(WH40KCommandNodeComponent component)
-    {
-        if (_timing.CurTime >= component.NextBattleTacticChangeAvailable)
-            return 0;
-
-        return (int) Math.Ceiling((component.NextBattleTacticChangeAvailable - _timing.CurTime).TotalSeconds);
     }
 
     private int GetCurrentReinforcementCost(
@@ -1076,25 +978,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return value;
     }
 
-    private void EnsureDoctrineStateConsistency(WH40KCommandNodeComponent component)
-    {
-        if (!component.DoctrineLocked)
-        {
-            component.ActiveDoctrineId = string.Empty;
-            return;
-        }
-
-        if (!TryResolveDoctrineProfileForTeam(component.TeamId, out var profile) ||
-            !TryResolveDoctrineId(profile, component.ActiveDoctrineId, out var resolvedDoctrineId))
-        {
-            component.ActiveDoctrineId = string.Empty;
-            component.DoctrineLocked = false;
-            return;
-        }
-
-        component.ActiveDoctrineId = resolvedDoctrineId;
-    }
-
     private bool TryResolveReinforcementProfileForTeam(string teamId, out WH40KCommandReinforcementProfilePrototype profile)
     {
         profile = default!;
@@ -1138,99 +1021,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         }
 
         return teamMap.DefaultProfile;
-    }
-
-    private bool TryResolveDoctrineProfileForTeam(string teamId, out WH40KCommandDoctrineProfilePrototype profile)
-    {
-        profile = default!;
-        var profileId = ResolveDoctrineProfileIdForTeam(teamId);
-        if (_proto.TryIndex(profileId, out WH40KCommandDoctrineProfilePrototype? indexedProfile))
-        {
-            profile = indexedProfile;
-            return true;
-        }
-
-        if (_proto.TryIndex(DoctrineDefaultProfileId, out WH40KCommandDoctrineProfilePrototype? fallbackProfile))
-        {
-            profile = fallbackProfile;
-            return true;
-        }
-
-        return false;
-    }
-
-    private ProtoId<WH40KCommandDoctrineProfilePrototype> ResolveDoctrineProfileIdForTeam(string teamId)
-    {
-        if (TryResolveTeamIdentityProfileForTeam(teamId, out var teamIdentityProfile) &&
-            teamIdentityProfile.DoctrineProfile is { } identityProfile)
-        {
-            return identityProfile;
-        }
-
-        if (!_proto.TryIndex(DoctrineTeamMapId, out WH40KCommandDoctrineTeamMapPrototype? teamMap))
-            return DoctrineDefaultProfileId;
-
-        if (!string.IsNullOrWhiteSpace(teamId))
-        {
-            if (teamMap.TeamProfiles.TryGetValue(teamId, out var directProfile))
-                return directProfile;
-
-            foreach (var (mappedTeamId, mappedProfile) in teamMap.TeamProfiles)
-            {
-                if (string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                    return mappedProfile;
-            }
-        }
-
-        return teamMap.DefaultProfile;
-    }
-
-    private static bool TryResolveDoctrineId(
-        WH40KCommandDoctrineProfilePrototype profile,
-        string? requestedDoctrineId,
-        out string doctrineId)
-    {
-        doctrineId = string.Empty;
-        var targetDoctrineId = string.IsNullOrWhiteSpace(requestedDoctrineId)
-            ? profile.DefaultDoctrineId
-            : requestedDoctrineId;
-
-        foreach (var doctrine in profile.Doctrines)
-        {
-            if (!string.Equals(doctrine.Id, targetDoctrineId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            doctrineId = doctrine.Id;
-            return true;
-        }
-
-        return false;
-    }
-
-    private string ResolveDoctrineName(
-        WH40KCommandDoctrineProfilePrototype profile,
-        string doctrineId,
-        string teamId)
-    {
-        foreach (var doctrine in profile.Doctrines)
-        {
-            if (!string.Equals(doctrine.Id, doctrineId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            var useHereticsPresentation = UsesHereticsDoctrinePresentation(teamId);
-            var nameKey = useHereticsPresentation ? doctrine.NameHereticsKey : doctrine.NameImperiumKey;
-            return string.IsNullOrWhiteSpace(nameKey) ? doctrine.Id : Loc.GetString(nameKey);
-        }
-
-        return doctrineId;
-    }
-
-    private bool UsesHereticsDoctrinePresentation(string teamId)
-    {
-        if (TryResolveTeamIdentityProfileForTeam(teamId, out var profile))
-            return profile.DoctrinePresentation == WH40KDoctrinePresentationVariant.Heretics;
-
-        return string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase);
     }
 
     private bool TryResolveTreeProfileForTeam(string teamId, out WH40KCommandTreeProfilePrototype profile)
@@ -1278,47 +1068,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return teamMap.DefaultProfile;
     }
 
-    private bool TryResolveTreeCostProfileForTeam(
-        string teamId,
-        out WH40KCommandTreeCostProfilePrototype profile)
-    {
-        profile = default!;
-        var profileId = ResolveTreeCostProfileIdForTeam(teamId);
-        if (_proto.TryIndex(profileId, out WH40KCommandTreeCostProfilePrototype? indexedProfile))
-        {
-            profile = indexedProfile;
-            return true;
-        }
-
-        if (_proto.TryIndex(CommandTreeCostDefaultProfileId, out WH40KCommandTreeCostProfilePrototype? fallbackProfile))
-        {
-            profile = fallbackProfile;
-            return true;
-        }
-
-        return false;
-    }
-
-    private ProtoId<WH40KCommandTreeCostProfilePrototype> ResolveTreeCostProfileIdForTeam(string teamId)
-    {
-        if (!_proto.TryIndex(CommandTreeCostTeamMapId, out WH40KCommandTreeCostTeamMapPrototype? teamMap))
-            return CommandTreeCostDefaultProfileId;
-
-        if (!string.IsNullOrWhiteSpace(teamId))
-        {
-            if (teamMap.TeamProfiles.TryGetValue(teamId, out var directProfile))
-                return directProfile;
-
-            foreach (var (mappedTeamId, mappedProfile) in teamMap.TeamProfiles)
-            {
-                if (string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                    return mappedProfile;
-            }
-        }
-
-        return teamMap.DefaultProfile;
-    }
-
     private bool TryResolveTreeNodeForTeam(
         string teamId,
         string nodeId,
@@ -1343,24 +1092,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return false;
     }
 
-    private string ResolveLockedTreeDomainId(string teamId, string doctrineId)
-    {
-        if (string.IsNullOrWhiteSpace(doctrineId) ||
-            !TryResolveDoctrineProfileForTeam(teamId, out var profile))
-        {
-            return string.Empty;
-        }
-
-        foreach (var doctrine in profile.Doctrines)
-        {
-            if (!string.Equals(doctrine.Id, doctrineId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            return doctrine.LockedDomain ?? string.Empty;
-        }
-
-        return string.Empty;
-    }
 
     private void ApplyTreeNodeUnlocks(string teamId, WH40KCommandTreeNodeConfig nodeConfig)
     {
@@ -1464,14 +1195,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (researchPoints <= 0)
             return;
 
-        var query = EntityQueryEnumerator<ResearchServerComponent, WH40KResearchTeamComponent>();
-        while (query.MoveNext(out var uid, out var server, out var team))
-        {
-            if (!string.Equals(team.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            _research.ModifyServerPoints(uid, researchPoints, server);
-        }
+        _teamRule.TryAdjustTeamResearchPoints(teamId, researchPoints, out _, out _, "command-tree-grant");
     }
 
     private void RefreshTeamCargoLogisticsBonuses(string teamId)
@@ -1685,29 +1409,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return purchasedNodeIds.Any(existing => string.Equals(existing, nodeId, StringComparison.OrdinalIgnoreCase));
     }
 
-    private void NotifyTeamBattleTacticChanged(string teamId, string tacticName)
-    {
-        var message = Loc.GetString("w40k-cmd-battle-tactic-change-notice",
-            ("tactic", tacticName));
-
-        foreach (var player in _players.Sessions)
-        {
-            if (player.AttachedEntity is not { } attachedEntity)
-                continue;
-
-            if (!_teamRule.TryGetTeamIdFromEntity(attachedEntity, out var playerTeamId))
-                continue;
-
-            if (!string.Equals(playerTeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            var accentColor = _teamRule.TryGetTeamColor(teamId, out var teamColor)
-                ? teamColor
-                : WH40KNotificationColors.ForTeam(teamId);
-            DispatchServerNotification(player, message, accentColor);
-        }
-    }
-
     private void RecordEconomySpendStats(
         EntityUid actor,
         string teamId,
@@ -1735,22 +1436,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
 
         _stats.Record(session.UserId, countStatKey, 1, metadata);
         _stats.Record(session.UserId, costStatKey, Math.Max(0, cost), metadata);
-    }
-
-    private void DispatchServerNotification(ICommonSession player, string message, Color accentColor)
-    {
-        _notifications.SendToSession(
-            player,
-            "wh40k-notification-title-vox",
-            message,
-            accentColor,
-            8f,
-            false,
-            WH40KNotificationSize.Wide,
-            WH40KNotificationCategory.Info,
-            WH40KNotificationPriority.Info,
-            WH40KNotificationIcon.Auto,
-            "command:info");
     }
 
     private static string FormatClock(int totalSeconds)

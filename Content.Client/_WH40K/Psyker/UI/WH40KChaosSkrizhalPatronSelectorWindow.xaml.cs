@@ -298,8 +298,7 @@ public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow
         for (var i = 0; i < CardOrder.Length; i++)
         {
             var panel = _entryPanels[CardOrder[i]];
-            panel.Modulate = new Color(1f, 1f, 1f, 0f);
-            WH40KUiChrome.PlayFadeIn(panel, $"chaos-selector-card-fade-{i}", 0.18f, 0.05f + i * 0.04f);
+            panel.Modulate = Color.White;
         }
     }
 

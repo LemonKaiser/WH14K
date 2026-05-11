@@ -1,0 +1,49 @@
+- type: gameMap
+  id: Warpforge
+  mapName: Warpforge
+  mapPath: /Maps/_WH40K/Azov.yml
+  minPlayers: 0
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/azov_snapshot.png
+  wh40kWeatherProfile: WH40KMapWeatherDisabled
+  wh40kEventsProfile: WH40KMapEventsDisabled
+  stations:
+    Warpforge:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Warpforge"
+        - type: StationJobs
+          availableJobs:
+            Colonel: [ 1, 1 ]
+            Commissar: [ 2, 2 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 3, 3 ]
+            Lieutenant: [ 2, 2 ]
+            Medic: [ 3, 3 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 2, 2 ]
+            Sergeant: [ 2, 2 ]
+            SpecialistHWS: [ 1, 1 ]
+            SpecialistSWS: [ 1, 1 ]
+            TitheSupplier: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
+            Major: [ 1, 1 ]
+            WH40KChaplain: [ 1, 1 ]
+            Explorator: [ 1, 1 ]
+            Genetor: [ 1, 1 ]
+            Enginseer: [ 1, 1 ]
+            Magos: [ 1, 1 ]
+            Novice: [ 1, 1 ]
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 3, 3 ]
+            HLieutenant: [ 2, 2 ]
+            HSergeant: [ 2, 2 ]
+            HSpecialistHWS: [ 1, 1 ]
+            HSpecialistSWS: [ 1, 1 ]
+            HBandSupplier: [ 3, 3 ]
+            HVoxScout: [ 1, 1 ]
+            HExplorator: [ 1, 1 ]
+            HEnginseer: [ 1, 1 ]
+            HMagos: [ 1, 1 ]
+            HNovice: [ 1, 1 ]

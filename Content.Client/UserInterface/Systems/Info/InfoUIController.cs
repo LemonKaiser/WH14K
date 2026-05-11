@@ -1,3 +1,5 @@
+using Robust.Shared;
+using Robust.Shared.Configuration;
 using Content.Client.Gameplay;
 using Content.Client.Info;
 using Content.Shared.Guidebook;
@@ -12,6 +14,10 @@ namespace Content.Client.UserInterface.Systems.Info;
 
 public sealed class InfoUIController : UIController, IOnStateExited<GameplayState>
 {
+    private const string RussianCultureName = "ru-RU";
+    private const string EnglishCultureName = "en-US";
+
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
     [Dependency] private readonly INetManager _netManager = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -71,7 +77,7 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
         };
 
         _rulesPopup.OnQuitPressed += OnQuitPressed;
-        _rulesPopup.OnAcceptPressed += OnAcceptPressed;
+        _rulesPopup.OnContinuePressed += OnContinuePressed;
         UIManager.WindowRoot.AddChild(_rulesPopup);
         LayoutContainer.SetAnchorPreset(_rulesPopup, LayoutContainer.LayoutPreset.Wide);
     }
@@ -79,6 +85,14 @@ public sealed class InfoUIController : UIController, IOnStateExited<GameplayStat
     private void OnQuitPressed()
     {
         _consoleHost.ExecuteCommand("quit");
+    }
+
+    private void OnContinuePressed(string cultureName)
+    {
+        if (cultureName == RussianCultureName || cultureName == EnglishCultureName)
+            _cfg.SetCVar(CVars.LocCultureName, cultureName);
+
+        OnAcceptPressed(false);
     }
 
     private void OnAcceptPressed(bool fuckRules)

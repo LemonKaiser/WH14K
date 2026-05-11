@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby;
-using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
+using Content.Client._WH40K.Command;
 using Content.Client._WH40K.Interface;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Whitelist;
@@ -43,7 +43,10 @@ namespace Content.Client.Construction.UI
         private ConstructionPrototype? _selected;
         private List<ConstructionPrototype> _favoritedRecipes = [];
         private readonly Dictionary<string, ContainerButton> _recipeButtons = new();
+        private readonly Dictionary<ContainerButton, (Label Title, Label Meta)> _gridButtonLabels = new();
         private string _selectedCategory = string.Empty;
+        private (string Search, string Category) _lastPopulateArgs = (string.Empty, string.Empty);
+        private bool _guideRefreshPending;
 
         private const string FavoriteCatName = "construction-category-favorites";
         private const string ForAllCategoryName = "construction-category-all";
@@ -76,6 +79,12 @@ namespace Content.Client.Construction.UI
                         _constructionView.MoveToFront();
                     else
                         _constructionView.OpenCentered();
+
+                    if (_guideRefreshPending)
+                    {
+                        _guideRefreshPending = false;
+                        OnViewPopulateRecipes(_constructionView, _lastPopulateArgs);
+                    }
 
                     if (_selected != null)
                         PopulateInfo(_selected);
@@ -189,11 +198,16 @@ namespace Content.Client.Construction.UI
             if (_constructionSystem is null)
                 return;
 
+            _lastPopulateArgs = (args.search, args.catagory);
+            ApplyViewThemeForCurrentTeam();
             var actualRecipes = GetAndSortRecipes(args);
+            var category = args.catagory;
+            var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
 
             var recipesList = _constructionView.Recipes;
             var recipesGrid = _constructionView.RecipesGrid;
             _recipeButtons.Clear();
+            _gridButtonLabels.Clear();
             recipesGrid.RemoveAllChildren();
 
             _constructionView.RecipesGridScrollContainer.Visible = _constructionView.GridViewButtonPressed;
@@ -205,44 +219,95 @@ namespace Content.Client.Construction.UI
                 _constructionView.ClearRecipeInfo();
             }
 
+            _constructionView.SetCatalogSummary(
+                actualRecipes.Count,
+                ResolveCategoryDisplayName(category, isEmptyCategory),
+                _constructionView.GridViewButtonPressed);
+
             if (_constructionView.GridViewButtonPressed)
             {
                 recipesList.PopulateList([]);
                 PopulateGrid(recipesGrid, actualRecipes);
+                if (_constructionView is ConstructionMenu menu)
+                    menu.RefreshRecipeGridLayout();
             }
             else
             {
                 recipesList.PopulateList(actualRecipes);
+                if (_constructionView is ConstructionMenu menu)
+                    menu.RefreshRecipeListSelectionTheme();
             }
         }
 
         private void PopulateGrid(GridContainer recipesGrid,
             IEnumerable<ConstructionMenu.ConstructionMenuListData> actualRecipes)
         {
+            var visualIndex = 0;
             foreach (var recipe in actualRecipes)
             {
                 var protoView = new EntityPrototypeView()
                 {
-                    Scale = new Vector2(1.2f),
+                    Scale = new Vector2(1.1f),
+                    Stretch = SpriteView.StretchMode.Fill,
+                    SetSize = new Vector2(42f),
                 };
                 protoView.SetPrototype(recipe.TargetPrototype);
 
+                var titleLabel = new Label
+                {
+                    Text = recipe.Prototype.Name,
+                    HorizontalAlignment = Control.HAlignment.Center,
+                    Align = Label.AlignMode.Center,
+                    ClipText = true,
+                    MaxWidth = 124
+                };
+
+                var metaLabel = new Label
+                {
+                    Text = BuildRecipeMetaTextDisplay(recipe.Prototype, recipe.StepCount),
+                    HorizontalAlignment = Control.HAlignment.Center,
+                    Align = Label.AlignMode.Center,
+                    ClipText = true,
+                    MaxWidth = 124,
+                    StyleClasses = { "LabelSubText" }
+                };
+
+                var content = new BoxContainer
+                {
+                    Orientation = BoxContainer.LayoutOrientation.Vertical,
+                    SeparationOverride = 3,
+                    HorizontalExpand = true,
+                    VerticalExpand = false,
+                    HorizontalAlignment = Control.HAlignment.Center,
+                    RectClipContent = true
+                };
+                content.AddChild(new Control { MinSize = new Vector2(0, 1) });
+                content.AddChild(protoView);
+                content.AddChild(titleLabel);
+                content.AddChild(metaLabel);
+
                 var itemButton = new ContainerButton()
                 {
+                    HorizontalExpand = true,
+                    VerticalExpand = false,
                     VerticalAlignment = Control.VAlignment.Center,
                     Name = recipe.Prototype.Name,
                     ToolTip = recipe.Prototype.Name,
                     ToggleMode = true,
-                    Children = { protoView },
+                    RectClipContent = true,
+                    Children = { content },
                 };
 
                 var itemButtonPanelContainer = new PanelContainer
                 {
-#pragma warning disable CS0618
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = StyleNano.ButtonColorDefault },
-#pragma warning restore CS0618
+                    HorizontalExpand = false,
+                    VerticalExpand = false,
+                    PanelOverride = WH40KCommandUiStyles.CreateCardStyle(
+                        WH40KCommandUiStyles.ResolveCardBackground(ResolveCurrentTheme().ChaosTheme),
+                        WH40KCommandUiStyles.ResolveMutedBorder(ResolveCurrentTheme().ChaosTheme)),
+                    RectClipContent = true,
                     Children = { itemButton },
-                };
+                    };
 
                 itemButton.OnToggled += buttonToggledEventArgs =>
                 {
@@ -261,9 +326,11 @@ namespace Content.Client.Construction.UI
 
                 recipesGrid.AddChild(itemButtonPanelContainer);
                 _recipeButtons[recipe.Prototype.ID] = itemButton;
+                _gridButtonLabels[itemButton] = (titleLabel, metaLabel);
                 var isCurrentButtonSelected = _selected == recipe.Prototype;
                 itemButton.Pressed = isCurrentButtonSelected;
                 SelectGridButton(itemButton, isCurrentButtonSelected);
+                visualIndex++;
             }
         }
 
@@ -312,10 +379,13 @@ namespace Content.Client.Construction.UI
                         continue;
                 }
 
-                if (!_prototypeManager.TryIndex(targetProtoId, out EntityPrototype? proto))
+                var previewProtoId = ResolveMenuTargetPrototype(recipe, targetProtoId);
+
+                if (!_prototypeManager.TryIndex(previewProtoId, out EntityPrototype? proto))
                     continue;
 
-                recipes.Add(new(recipe, proto));
+                var guide = _constructionSystem.GetGuide(recipe);
+                recipes.Add(new(recipe, proto, guide?.Entries.Length ?? 0));
             }
 
             recipes.Sort(
@@ -329,11 +399,25 @@ namespace Content.Client.Construction.UI
             if (button.Parent is not PanelContainer buttonPanel)
                 return;
 
-            button.Children.Single().Modulate = select ? Color.Green : Color.White;
-#pragma warning disable CS0618
-            var buttonColor = select ? StyleNano.ButtonColorDefault : Color.Transparent;
-#pragma warning restore CS0618
-            buttonPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = buttonColor };
+            var (accent, chaosTheme) = ResolveCurrentTheme();
+            buttonPanel.PanelOverride = select
+                ? WH40KCommandUiStyles.CreateCardStyle(
+                    WH40KCommandUiStyles.ResolveCardBackgroundAlt(chaosTheme),
+                    accent)
+                : WH40KCommandUiStyles.CreateCardStyle(
+                    WH40KCommandUiStyles.ResolveCardBackground(chaosTheme),
+                    WH40KCommandUiStyles.ResolveMutedBorder(chaosTheme));
+
+            if (button is ContainerButton containerButton &&
+                _gridButtonLabels.TryGetValue(containerButton, out var labels))
+            {
+                labels.Title.ModulateSelfOverride = select
+                    ? Color.White
+                    : WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+                labels.Meta.ModulateSelfOverride = select
+                    ? WH40KCommandUiStyles.ResolveSoftText(chaosTheme)
+                    : WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
+            }
         }
 
         private void PopulateCategories(string? selectCategory = null)
@@ -415,6 +499,7 @@ namespace Content.Client.Construction.UI
             if (_constructionSystem is null)
                 return;
 
+            ApplyViewThemeForCurrentTeam();
             _constructionView.ClearRecipeInfo();
 
             if (prototype is null)
@@ -423,15 +508,21 @@ namespace Content.Client.Construction.UI
             if (!_constructionSystem.TryGetRecipePrototype(prototype.ID, out var targetProtoId))
                 return;
 
-            if (!_prototypeManager.TryIndex(targetProtoId, out EntityPrototype? proto))
+            var previewProtoId = ResolveMenuTargetPrototype(prototype, targetProtoId);
+
+            if (!_prototypeManager.TryIndex(previewProtoId, out EntityPrototype? proto))
                 return;
+
+            var guide = _constructionSystem.GetGuide(prototype);
 
             _constructionView.SetRecipeInfo(
                 prototype.Name!,
                 prototype.Description!,
                 proto,
                 prototype.Type != ConstructionType.Item,
-                !_favoritedRecipes.Contains(prototype));
+                !_favoritedRecipes.Contains(prototype),
+                ResolveCategoryDisplayName(prototype.Category, string.IsNullOrWhiteSpace(prototype.Category)),
+                guide?.Entries.Length ?? 0);
 
             var stepList = _constructionView.RecipeStepList;
             GenerateStepList(prototype, stepList);
@@ -520,6 +611,70 @@ namespace Content.Client.Construction.UI
                 new ConstructionPlacementHijack(constructSystem, _selected));
 
             _constructionView.BuildButtonPressed = true;
+        }
+
+        private void ApplyViewThemeForCurrentTeam()
+        {
+            if (_constructionView is not ConstructionMenu menu)
+                return;
+
+            var teamId = _systemManager.TryGetEntitySystem<WH40KInterfaceThemeSystem>(out var themeSystem)
+                ? themeSystem.CurrentTeamId
+                : null;
+
+            menu.ApplyWh40KTheme(teamId);
+        }
+
+        private EntProtoId ResolveMenuTargetPrototype(ConstructionPrototype recipe, EntProtoId defaultTargetProtoId)
+        {
+            if (!_systemManager.TryGetEntitySystem<WH40KInterfaceThemeSystem>(out var themeSystem) ||
+                !string.Equals(themeSystem.CurrentTeamId, "Heretics", StringComparison.OrdinalIgnoreCase))
+            {
+                return defaultTargetProtoId;
+            }
+
+            return recipe.ID switch
+            {
+                "WH40KStrategicResourcePointT1" => "WH40KStrategicPointResourceT1PreviewHeretics",
+                "WH40KStrategicResearchPointT1" => "WH40KStrategicPointResearchT1PreviewHeretics",
+                "WH40KStrategicInfluencePointT1" => "WH40KStrategicPointInfluenceT1PreviewHeretics",
+                _ => defaultTargetProtoId
+            };
+        }
+
+        private (Color Accent, bool ChaosTheme) ResolveCurrentTheme()
+        {
+            var teamId = _systemManager.TryGetEntitySystem<WH40KInterfaceThemeSystem>(out var themeSystem)
+                ? themeSystem.CurrentTeamId
+                : null;
+            var accent = string.IsNullOrWhiteSpace(teamId)
+                ? WH40KCommandUiStyles.DefaultAccent
+                : WH40KTeamIdentityClientResolver.ResolveAccentColor(teamId, WH40KCommandUiStyles.DefaultAccent);
+            var chaosTheme = !string.IsNullOrWhiteSpace(teamId) &&
+                             WH40KTeamIdentityClientResolver.UsesHereticsDoctrinePresentation(teamId);
+            return (accent, chaosTheme);
+        }
+
+        private static string ResolveCategoryDisplayName(string? category, bool fallbackToAll = false)
+        {
+            if (fallbackToAll)
+                return Loc.GetString(ForAllCategoryName);
+
+            return string.IsNullOrWhiteSpace(category)
+                ? Loc.GetString("construction-category-misc")
+                : Loc.GetString(category);
+        }
+
+        private static string BuildRecipeMetaTextDisplay(ConstructionPrototype prototype, int stepCount)
+        {
+            var category = ResolveCategoryDisplayName(prototype.Category);
+            return Loc.GetString("construction-menu-list-meta", ("category", category), ("count", stepCount));
+        }
+
+        private static string BuildRecipeMetaText(ConstructionPrototype prototype, int stepCount)
+        {
+            var category = ResolveCategoryDisplayName(prototype.Category);
+            return Loc.GetString("construction-menu-list-meta", ("category", category), ("count", stepCount));
         }
 
         private void OnSystemLoaded(object? sender, SystemChangedArgs args)
@@ -681,12 +836,18 @@ namespace Content.Client.Construction.UI
                 return;
 
             if (!WindowOpen)
+            {
+                _guideRefreshPending = true;
                 return;
+            }
+
+            OnViewPopulateRecipes(_constructionView, _lastPopulateArgs);
 
             if (_selected == null)
                 return;
 
-            PopulateInfo(_selected);
+            if (string.Equals(_selected.ID, e, StringComparison.Ordinal))
+                PopulateInfo(_selected);
         }
     }
 }

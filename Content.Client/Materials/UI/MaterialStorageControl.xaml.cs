@@ -107,7 +107,6 @@ public sealed partial class MaterialStorageControl : ScrollContainer
             var volume = mats[mat];
             var display = new MaterialDisplay(_owner.Value, mat, volume, canEject);
             MaterialList.AddChild(display);
-            WH40KUiChrome.PlayFadeIn(display, $"material-entry-{mat}", 0.16f, MathF.Min(MaterialList.ChildCount * 0.016f, 0.14f));
         }
 
         _currentMaterials = mats;

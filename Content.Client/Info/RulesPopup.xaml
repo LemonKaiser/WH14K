@@ -8,15 +8,29 @@
              MaxWidth="800"
              MaxHeight="900">
         <PanelContainer StyleClasses="windowPanel" />
-            <BoxContainer Orientation="Vertical" SeparationOverride="10" Margin="10 10 5 10">
+            <BoxContainer Orientation="Vertical" SeparationOverride="10" Margin="10 10 10 10">
                 <info:RulesControl/>
-                <Label Name="WaitLabel" />
-                <BoxContainer Orientation="Horizontal">
-                    <Button Name="AcceptButton"
-                            Text="{Loc 'ui-rules-accept'}"
-                            Disabled="True" />
+                <Label Name="WaitLabel"
+                       StyleClasses="LabelSubText" />
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="8"
+                              HorizontalExpand="True">
+                    <BoxContainer Orientation="Horizontal"
+                                  HorizontalExpand="True">
+                        <Button Name="ContinueRuButton"
+                                Text="{Loc 'ui-rules-continue-ru'}"
+                                StyleClasses="OpenRight"
+                                HorizontalExpand="True"
+                                Disabled="True" />
+                        <Button Name="ContinueEnButton"
+                                Text="{Loc 'ui-rules-continue-en'}"
+                                StyleClasses="OpenLeft"
+                                HorizontalExpand="True"
+                                Disabled="True" />
+                    </BoxContainer>
                     <Button Name="QuitButton"
                             StyleClasses="negative"
+                            MinWidth="120"
                             Text="{Loc 'ui-escape-quit'}" />
                 </BoxContainer>
             </BoxContainer>

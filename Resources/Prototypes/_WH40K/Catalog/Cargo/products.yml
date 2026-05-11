@@ -341,8 +341,8 @@
 - type: cargoProduct
   id: WH40KImperiumFlameTank
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
+    state: base
   product: FlameThrowerTank
   cost: 5000
   category: cpcat-arm
@@ -1200,8 +1200,8 @@
 - type: cargoProduct
   id: WH40KHereticsFlameTank
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
+    state: base
   product: FlameThrowerTank
   cost: 5000
   category: cpcat-arm

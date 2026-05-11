@@ -155,25 +155,19 @@ public sealed partial class WH40KOreExtractorWindow : FancyWindow, ILocalizedCon
 
         WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
         WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-        CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
         HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         StatusCard.Modulate = new Color(1f, 1f, 1f, 0f);
         TierCard.Modulate = new Color(1f, 1f, 1f, 0f);
         YieldCard.Modulate = new Color(1f, 1f, 1f, 0f);
-        ControlPanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        OrePanel.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
         WH40KUiChrome.PlayFadeIn(WindowHeader, "ore-extractor-window-header-appear", 0.12f);
         WH40KUiChrome.PlayFadeIn(WindowTitle, "ore-extractor-window-title-appear", 0.12f, 0.02f);
-        WH40KUiChrome.PlayFadeIn(CloseButton, "ore-extractor-window-close-appear", 0.12f, 0.03f);
         WH40KUiChrome.PlayFadeIn(HeaderPanel, "ore-extractor-header-appear", 0.16f, 0.04f);
         WH40KUiChrome.PlayFadeIn(StatusCard, "ore-extractor-status-appear", 0.16f, 0.08f);
         WH40KUiChrome.PlayFadeIn(TierCard, "ore-extractor-tier-appear", 0.16f, 0.11f);
         WH40KUiChrome.PlayFadeIn(YieldCard, "ore-extractor-yield-appear", 0.16f, 0.14f);
-        WH40KUiChrome.PlayFadeIn(ControlPanel, "ore-extractor-controls-appear", 0.18f, 0.18f);
-        WH40KUiChrome.PlayFadeIn(OrePanel, "ore-extractor-ore-panel-appear", 0.18f, 0.22f);
         WH40KUiChrome.PlayFadeIn(FooterDivider, "ore-extractor-footer-appear", 0.18f, 0.26f);
         WH40KUiChrome.PlayFadeIn(FooterBar, "ore-extractor-footer-bar-appear", 0.18f, 0.28f);
     }

@@ -127,6 +127,19 @@ public sealed partial class WH40KTeamBattleWeatherConfig
         "WHGellarTremor",
         "WHMachineCorrosionStorm"
     };
+
+    [DataField("weightedPool")]
+    public List<WH40KTeamBattleWeightedWeatherEntry> WeightedPool = new();
+}
+
+[DataDefinition]
+public sealed partial class WH40KTeamBattleWeightedWeatherEntry
+{
+    [DataField("weatherId", required: true)]
+    public EntProtoId WeatherId = default!;
+
+    [DataField("weight")]
+    public float Weight = 1f;
 }
 
 [DataDefinition]
@@ -169,6 +182,19 @@ public sealed partial class WH40KTeamBattleRoundEventsConfig
         WH40KRoundEventType.OrbitalBombardment,
         WH40KRoundEventType.BlackFront
     };
+
+    [DataField("weightedPool")]
+    public List<WH40KTeamBattleWeightedRoundEventEntry> WeightedPool = new();
+}
+
+[DataDefinition]
+public sealed partial class WH40KTeamBattleWeightedRoundEventEntry
+{
+    [DataField("eventType", required: true)]
+    public WH40KRoundEventType EventType = WH40KRoundEventType.None;
+
+    [DataField("weight")]
+    public float Weight = 1f;
 }
 
 [DataDefinition]

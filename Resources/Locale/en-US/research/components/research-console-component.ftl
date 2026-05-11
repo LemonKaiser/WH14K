@@ -6,7 +6,7 @@ research-console-server-panel-title = Server uplink
 research-console-server-panel-subtitle = Review or switch the linked R&D server bank for this console.
 research-console-server-panel-status-timed = Timed research uplink active. Use the server list to inspect or switch the current archive bank.
 research-console-server-panel-status-instant = Direct authorization mode. Select a server if you need a different research bank.
-research-console-menu-research-points-text = Research: [color=orchid]{$points}[/color]
+research-console-menu-research-points-text = Research: [color=orchid]{$points}Ω[/color]
 research-console-menu-main-discipline = Main Discipline: [color={$color}]{$name}[/color]
 research-console-menu-server-selection-button = Server list
 research-console-menu-server-short-button = Servers
@@ -50,7 +50,7 @@ research-console-tier-discipline-info = Tier {$tier}, [color={$color}]{$discipli
 research-console-tier-info-small = : Tier {$tier}
 research-console-tier-badge = Tier {$tier}
 research-console-mini-tier = Tier {$tier}
-research-console-cost = Cost: [color=orchid]{$amount}[/color]
+research-console-cost = Cost: [color=orchid]{$amount}Ω[/color]
 research-console-time = Research time: [color=lightblue]{$seconds} sec[/color]
 research-console-card-cost-label = Cost
 research-console-card-time-label = Time
@@ -77,7 +77,7 @@ research-console-research-busy-popup = Another research project is already in pr
 research-console-research-active-popup = This technology is already being researched.
 research-console-research-busy-tooltip = Wait until the active research project is completed.
 research-console-research-active-tooltip = This technology is already being researched.
-research-console-research-not-enough-points-tooltip = Not enough research points ({$points}/{$cost}).
-research-console-start-technology-radio-broadcast = Started research [bold]{$technology}[/bold] for [bold]{$amount}[/bold] research by [bold]{$approver}[/bold].
-research-console-unlock-technology-radio-broadcast = Unlocked [bold]{$technology}[/bold] for [bold]{$amount}[/bold] research by [bold]{$approver}[/bold].
-wh40k-research-chip-uploaded = Uploaded {$count} data chip(s): +{$points} research
+research-console-research-not-enough-points-tooltip = Not enough research points ({$points}Ω/{$cost}Ω).
+research-console-start-technology-radio-broadcast = Started research [bold]{$technology}[/bold] for [bold]{$amount}Ω[/bold] by [bold]{$approver}[/bold].
+research-console-unlock-technology-radio-broadcast = Unlocked [bold]{$technology}[/bold] for [bold]{$amount}Ω[/bold] by [bold]{$approver}[/bold].
+wh40k-research-chip-uploaded = Uploaded {$count} data chip(s): +{$points}Ω

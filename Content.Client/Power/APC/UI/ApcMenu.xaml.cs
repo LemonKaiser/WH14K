@@ -62,23 +62,19 @@ public sealed partial class ApcMenu : FancyWindow
 
         WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
         WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-        CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
         HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         DevicePanel.Modulate = new Color(1f, 1f, 1f, 0f);
         StatusPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         ChargePanel.Modulate = new Color(1f, 1f, 1f, 0f);
-        ActionPanel.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
         FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
         WH40KUiChrome.PlayFadeIn(WindowHeader, "apc-window-header-appear", 0.12f);
         WH40KUiChrome.PlayFadeIn(WindowTitle, "apc-window-title-appear", 0.12f, 0.02f);
-        WH40KUiChrome.PlayFadeIn(CloseButton, "apc-window-close-appear", 0.12f, 0.03f);
         WH40KUiChrome.PlayFadeIn(HeaderPanel, "apc-header-appear", 0.16f, 0.04f);
         WH40KUiChrome.PlayFadeIn(DevicePanel, "apc-device-appear", 0.18f, 0.08f);
         WH40KUiChrome.PlayFadeIn(StatusPanel, "apc-status-appear", 0.18f, 0.12f);
         WH40KUiChrome.PlayFadeIn(ChargePanel, "apc-charge-appear", 0.18f, 0.16f);
-        WH40KUiChrome.PlayFadeIn(ActionPanel, "apc-action-appear", 0.18f, 0.2f);
         WH40KUiChrome.PlayFadeIn(FooterDivider, "apc-footer-appear", 0.18f, 0.24f);
         WH40KUiChrome.PlayFadeIn(FooterBar, "apc-footer-bar-appear", 0.18f, 0.26f);
     }
@@ -451,9 +447,7 @@ public sealed partial class ApcMenu : FancyWindow
     {
         button.StyleBoxOverride = style;
         button.Label.FontColorOverride = disabled ? LabelText : fontColor;
-        button.ModulateSelfOverride = disabled
-            ? new Color(0.84f, 0.84f, 0.88f, 0.84f)
-            : Color.White;
+        button.ModulateSelfOverride = Color.White;
     }
 
     private static Color Blend(Color baseColor, Color accent, float amount)

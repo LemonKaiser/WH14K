@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using Content.Client._WH40K.Command;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameMode;
+using Content.Shared.Research.Prototypes;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
@@ -12,7 +14,6 @@ using Robust.Shared.Localization;
 using Robust.Shared.Log;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.Command.Controls;
 
@@ -24,41 +25,34 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private static readonly ISawmill Sawmill = Logger.GetSawmill("wh40k.command");
     private static readonly Color CanvasBackgroundColor = WH40KCommandUiStyles.PanelBackgroundAlt;
     private static readonly Color CanvasBorderColor = WH40KCommandUiStyles.StrongBorder;
-    private static readonly Color DomainBackgroundColor = Color.FromHex("#101821");
-    private static readonly Color DomainBackgroundAltColor = Color.FromHex("#0F1822");
-    private static readonly Color DomainBorderColor = Color.FromHex("#243549");
-    private static readonly Color TierGuideColor = Color.FromHex("#243549");
-    private static readonly Color AvailableBackgroundColor = Color.FromHex("#162231");
+    private static readonly Color DomainBackgroundColor = Color.FromHex("#0E1015");
+    private static readonly Color DomainBackgroundAltColor = Color.FromHex("#101218");
+    private static readonly Color DomainBorderColor = Color.FromHex("#4B3E25");
+    private static readonly Color TierGuideColor = Color.FromHex("#4B3E25");
+    private static readonly Color AvailableBackgroundColor = Color.FromHex("#17130D");
     private static readonly Color AvailableBorderColor = WH40KCommandUiStyles.DefaultAccent;
-    private static readonly Color AvailableHoverBackgroundColor = Color.FromHex("#1C2B3D");
-    private static readonly Color LockedBackgroundColor = Color.FromHex("#121C28");
+    private static readonly Color AvailableHoverBackgroundColor = Color.FromHex("#1E1810");
+    private static readonly Color LockedBackgroundColor = Color.FromHex("#11131A");
     private static readonly Color LockedBorderColor = WH40KCommandUiStyles.MutedBorder;
-    private static readonly Color LockedHoverBackgroundColor = Color.FromHex("#172434");
-    private static readonly Color PurchasedBackgroundColor = Color.FromHex("#182A21");
+    private static readonly Color LockedHoverBackgroundColor = Color.FromHex("#171A21");
+    private static readonly Color PurchasedBackgroundColor = Color.FromHex("#162015");
     private static readonly Color PurchasedBorderColor = WH40KCommandUiStyles.ReadyBadge;
-    private static readonly Color PurchasedHoverBackgroundColor = Color.FromHex("#203628");
-    private static readonly Color DoctrineLockBackgroundColor = Color.FromHex("#291B21");
-    private static readonly Color DoctrineLockBorderColor = WH40KCommandUiStyles.DangerBadge;
-    private static readonly Color DoctrineLockHoverBackgroundColor = Color.FromHex("#34222B");
+    private static readonly Color PurchasedHoverBackgroundColor = Color.FromHex("#1B2819");
     private static readonly Color PointLockBackgroundColor = Color.FromHex("#2F2417");
     private static readonly Color PointLockBorderColor = WH40KCommandUiStyles.WarningBadge;
     private static readonly Color PointLockHoverBackgroundColor = Color.FromHex("#3A2D1C");
-    private static readonly Color InactiveBackgroundColor = Color.FromHex("#101821");
-    private static readonly Color InactiveBorderColor = Color.FromHex("#26384A");
-    private static readonly Color InactiveHoverBackgroundColor = Color.FromHex("#152131");
-    private static readonly Vector2 NodeSize = new(100f, 36f);
-    private const int MarqueeVisibleChars = 12;
-    private const float MarqueeTickSeconds = 0.12f;
-    private const float MarqueePauseSeconds = 0.65f;
+    private static readonly Color InactiveBackgroundColor = Color.FromHex("#0E1015");
+    private static readonly Color InactiveBorderColor = Color.FromHex("#3E3320");
+    private static readonly Color InactiveHoverBackgroundColor = Color.FromHex("#15181F");
+    private static readonly Color NodeInsetBackgroundColor = Color.FromHex("#0B0C10");
+    private static readonly Vector2 NodeSize = new(160f, 78f);
     private const float HorizontalPadding = 18f;
     private const float DomainInnerPadding = 8f;
-    private const float VerticalPaddingTop = 14f;
-    private const float VerticalPaddingBottom = 14f;
-    private const float HorizontalRankSpread = 1.45f;
+    private const float VerticalPaddingTop = 20f;
+    private const float VerticalPaddingBottom = 20f;
+    private const float HorizontalRankSpread = 1.05f;
     private const string CommandTreeTeamMapId = "WH40KCommandTreeTeamMap";
     private const string CommandTreeDefaultProfileId = "WH40KCommandTreeProfileDefault";
-    private const string CommandTreeCostTeamMapId = "WH40KCommandTreeCostTeamMap";
-    private const string CommandTreeCostDefaultProfileId = "WH40KCommandTreeCostProfileDefault";
 
     private enum NodeVisualState
     {
@@ -67,10 +61,32 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         LockedByLevel,
         LockedByTime,
         Purchased,
-        LockedByDoctrine,
         LockedByPoints,
         Inactive
     }
+
+    public sealed record WH40KCommandTreeNodeInfo(
+        string NodeId,
+        string DomainId,
+        string Title,
+        string BadgeStatus,
+        Color BadgeColor,
+        string Status,
+        string Cost,
+        string Requirements,
+        string ResearchUnlocks,
+        string Effects,
+        string Description,
+        IReadOnlyList<string> ResearchUnlockEntries,
+        int MinBaseLevel,
+        bool Purchased,
+        bool Available);
+
+    public sealed record WH40KCommandTreeDomainSummary(
+        string DomainId,
+        int PurchasedCount,
+        int AvailableCount,
+        int TotalCount);
 
     private readonly record struct TreeNodeDefinition(
         string Id,
@@ -80,31 +96,50 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         string[] Parents,
         int Cost,
         int MinBaseLevel,
-        int MinRoundTimeSeconds);
+        int MinRoundTimeSeconds,
+        string[] TechnologyUnlockIds,
+        string[] LatheRecipeUnlockIds,
+        string[] CargoProductUnlockIds,
+        int ResearchPointGrant,
+        int MachineSpeedBonusPercent,
+        int MachineStorageBonus,
+        int CargoDeliverySpeedBonusPercent,
+        int CargoMaxItemsBonusPercent,
+        int CargoPriceDiscountPercent,
+        int ResearchTimeSpeedBonusPercent,
+        int ResearchPointBonusPercent);
 
     private readonly record struct NodeLayout(int Tier, float Rank);
 
     private sealed class TreeNodeVisual
     {
         public TreeNodeDefinition Definition { get; }
-        public Button Button { get; }
+        public ContainerButton Button { get; }
         public StyleBoxFlat Style { get; }
+        public StyleBoxFlat InsetStyle { get; }
+        public Label TitleLabel { get; }
+        public Label MetaLabel { get; }
         public NodeVisualState State { get; set; }
         public bool Hovered { get; set; }
-        public string FullCaption { get; set; } = string.Empty;
-        public int MarqueeOffset { get; set; }
-        public float MarqueeTickAccumulator { get; set; }
-        public float MarqueePause { get; set; }
 
-        public TreeNodeVisual(TreeNodeDefinition definition, Button button, StyleBoxFlat style)
+        public TreeNodeVisual(
+            TreeNodeDefinition definition,
+            ContainerButton button,
+            StyleBoxFlat style,
+            StyleBoxFlat insetStyle,
+            Label titleLabel,
+            Label metaLabel)
         {
             Definition = definition;
             Button = button;
             Style = style;
+            InsetStyle = insetStyle;
+            TitleLabel = titleLabel;
+            MetaLabel = metaLabel;
         }
     }
 
-    public event Action<string, string>? OnNodeInfoChanged;
+    public event Action<WH40KCommandTreeNodeInfo>? OnNodeInfoChanged;
     public event Action<string>? OnPurchaseRequested;
 
     private readonly Dictionary<string, TreeNodeVisual> _nodes = new();
@@ -120,15 +155,13 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private int _researchPoints;
     private int _baseLevel = 1;
     private int _roundElapsedSeconds;
-    private WH40KBattlePhase _phase = WH40KBattlePhase.Preparation;
 
     private string _teamId = string.Empty;
     private string _activeProfileId = string.Empty;
-    private string _activeCostProfileId = string.Empty;
-    private string _activeDoctrineId = string.Empty;
-    private string _lockedDomainId = string.Empty;
     private Color _accentColor = WH40KCommandUiStyles.DefaultAccent;
-    private WH40KCommandTreeCostProfilePrototype? _activeCostProfile;
+    private string? _focusedNodeId;
+    private string _selectedDomainId = string.Empty;
+    private WH40KCommandTreeNodeInfo? _currentNodeInfo;
 
     public Color AccentColor
     {
@@ -141,26 +174,40 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     }
 
     public IReadOnlyList<string> ActiveDomainIds => _activeDomainIds;
+    public WH40KCommandTreeNodeInfo? CurrentNodeInfo => _currentNodeInfo;
+
+    public string SelectedDomainId
+    {
+        get => _selectedDomainId;
+        set
+        {
+            var normalized = NormalizeKey(value);
+            if (_selectedDomainId == normalized)
+                return;
+
+            _selectedDomainId = normalized;
+            RefreshCanvasMetrics();
+            RefreshVisualState();
+        }
+    }
 
     public WH40KCommandTreeSketchControl()
     {
         HorizontalExpand = true;
         VerticalExpand = true;
-        MinHeight = 520f;
-        MinWidth = 660f;
+        MinHeight = 680f;
+        MinWidth = 560f;
         LoadTreeForTeam(string.Empty);
-        LoadCostProfileForTeam(string.Empty);
         EmitDefaultInfo();
     }
 
-    public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state, string activeDoctrineId)
+    public void UpdateState(WH40KCommandNodeBoundUserInterfaceState state)
     {
         var teamChanged = !string.Equals(_teamId, state.TeamId, StringComparison.OrdinalIgnoreCase);
         if (teamChanged)
         {
             _purchasedNodes.Clear();
             LoadTreeForTeam(state.TeamId);
-            LoadCostProfileForTeam(state.TeamId);
         }
 
         _teamId = state.TeamId;
@@ -168,9 +215,6 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         _researchPoints = Math.Max(0, state.ResearchPoints);
         _baseLevel = Math.Max(1, state.BaseLevel);
         _roundElapsedSeconds = Math.Max(0, state.RoundElapsedSeconds);
-        _phase = state.Phase;
-        _activeDoctrineId = activeDoctrineId ?? string.Empty;
-        _lockedDomainId = NormalizeKey(WH40KCommandNodeDoctrineWindow.ResolveDoctrineLockedDomainId(_activeDoctrineId, _teamId));
         SyncPurchasedNodes(state.PurchasedTreeNodeIds);
         RefreshVisualState();
     }
@@ -179,6 +223,9 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         foreach (var node in _orderedNodes)
         {
+            if (!IsNodeVisible(node.Definition))
+                continue;
+
             var center = GetNodeCenter(node.Definition, finalSize);
             SetPosition(node.Button, center - NodeSize * 0.5f);
         }
@@ -201,6 +248,9 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                 continue;
             }
 
+            if (!IsNodeVisible(parent.Definition) || !IsNodeVisible(child.Definition))
+                continue;
+
             var start = GetNodeAnchorBottom(parent);
             var end = GetNodeAnchorTop(child);
             var points = BuildConnectorPoints(start, end);
@@ -208,15 +258,6 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             DrawConnector(handle, points, GetConnectorColor(parent.State, child.State));
         }
 
-        foreach (var node in _orderedNodes)
-        {
-            if (node.State != NodeVisualState.LockedByDoctrine)
-                continue;
-
-            var box = GetNodeDrawBox(node);
-            handle.DrawLine(box.TopLeft, box.BottomRight, DoctrineLockBorderColor);
-            handle.DrawLine(new Vector2(box.Left, box.Bottom), new Vector2(box.Right, box.Top), DoctrineLockBorderColor);
-        }
     }
 
     private static (Vector2 P0, Vector2 P1, Vector2 P2, Vector2 P3) BuildConnectorPoints(Vector2 start, Vector2 end)
@@ -263,7 +304,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             return;
 
         var usableWidth = MathF.Max(1f, size.X - HorizontalPadding * 2f);
-        var domainCount = Math.Max(1, _domainIndices.Count);
+        var domainCount = GetRenderedDomainCount();
         var domainWidth = usableWidth / domainCount;
         var top = VerticalPaddingTop * 0.5f;
         var bottom = MathF.Max(top + 1f, size.Y - VerticalPaddingBottom * 0.5f);
@@ -289,7 +330,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         var right = MathF.Max(left + 1f, size.X - HorizontalPadding);
         var rowTop = VerticalPaddingTop + NodeSize.Y * 0.5f;
         var rowBottom = MathF.Max(rowTop + 1f, size.Y - VerticalPaddingBottom - NodeSize.Y * 0.5f);
-        var maxTier = Math.Max(1, _maxComputedTier);
+        var maxTier = Math.Max(1, GetRenderedMaxTier());
         var rowStep = (rowBottom - rowTop) / maxTier;
 
         for (var tier = 0; tier <= maxTier; tier++)
@@ -318,29 +359,8 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             return;
         }
 
-        RebuildFromProfile(profile);
+        RebuildFromProfile(profile, teamId);
         _activeProfileId = profile.ID;
-    }
-
-    private void LoadCostProfileForTeam(string teamId)
-    {
-        var profileId = ResolveCostProfileForTeam(teamId);
-        if (_activeCostProfile is not null &&
-            string.Equals(_activeCostProfileId, profileId, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
-        if (!_prototype.TryIndex(profileId, out WH40KCommandTreeCostProfilePrototype? profile))
-        {
-            Sawmill.Error($"Missing command-tree cost profile prototype '{profileId}'.");
-            _activeCostProfile = null;
-            _activeCostProfileId = string.Empty;
-            return;
-        }
-
-        _activeCostProfile = profile;
-        _activeCostProfileId = profile.ID;
     }
 
     private string ResolveProfileForTeam(string teamId)
@@ -363,27 +383,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         return teamMap.DefaultProfile;
     }
 
-    private string ResolveCostProfileForTeam(string teamId)
-    {
-        if (!_prototype.TryIndex(CommandTreeCostTeamMapId, out WH40KCommandTreeCostTeamMapPrototype? teamMap))
-            return CommandTreeCostDefaultProfileId;
-
-        if (!string.IsNullOrWhiteSpace(teamId))
-        {
-            if (teamMap.TeamProfiles.TryGetValue(teamId, out var directProfile))
-                return directProfile;
-
-            foreach (var (mappedTeamId, mappedProfile) in teamMap.TeamProfiles)
-            {
-                if (string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
-                    return mappedProfile;
-            }
-        }
-
-        return teamMap.DefaultProfile;
-    }
-
-    private void RebuildFromProfile(WH40KCommandTreeProfilePrototype profile)
+    private void RebuildFromProfile(WH40KCommandTreeProfilePrototype profile, string teamId)
     {
         RemoveAllChildren();
         _nodes.Clear();
@@ -437,7 +437,18 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                 parents,
                 Math.Max(0, node.Cost),
                 Math.Max(1, node.MinBaseLevel),
-                Math.Max(0, node.MinRoundTimeSeconds)));
+                Math.Max(0, node.MinRoundTimeSeconds),
+                ResolveTechnologyUnlockIds(node, teamId),
+                ResolveLatheRecipeUnlockIds(node, teamId),
+                ResolveCargoProductUnlockIds(node, teamId),
+                Math.Max(0, node.ResearchPointGrant),
+                Math.Max(0, node.MachineSpeedBonusPercent),
+                Math.Max(0, node.MachineStorageBonus),
+                Math.Max(0, node.CargoDeliverySpeedBonusPercent),
+                Math.Max(0, node.CargoMaxItemsBonusPercent),
+                Math.Max(0, node.CargoPriceDiscountPercent),
+                Math.Max(0, node.ResearchTimeSpeedBonusPercent),
+                Math.Max(0, node.ResearchPointBonusPercent)));
         }
 
         foreach (var node in _orderedNodes)
@@ -449,7 +460,74 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         }
 
         RecomputeAutomaticLayout();
+        RefreshCanvasMetrics();
         RefreshVisualState();
+    }
+
+    private static string[] ResolveTechnologyUnlockIds(WH40KCommandTreeNodeConfig node, string teamId)
+    {
+        var resolved = new List<string>();
+        resolved.AddRange(node.TechnologyUnlocks.Select(id => id.ToString()));
+
+        if (!string.IsNullOrWhiteSpace(teamId))
+        {
+            foreach (var (mappedTeamId, unlocks) in node.TeamTechnologyUnlocks)
+            {
+                if (!string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                resolved.AddRange(unlocks.Select(id => id.ToString()));
+            }
+        }
+
+        return resolved
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    private static string[] ResolveLatheRecipeUnlockIds(WH40KCommandTreeNodeConfig node, string teamId)
+    {
+        var resolved = new List<string>();
+        resolved.AddRange(node.LatheRecipeUnlocks.Select(id => id.ToString()));
+
+        if (!string.IsNullOrWhiteSpace(teamId))
+        {
+            foreach (var (mappedTeamId, unlocks) in node.TeamLatheRecipeUnlocks)
+            {
+                if (!string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                resolved.AddRange(unlocks.Select(id => id.ToString()));
+            }
+        }
+
+        return resolved
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    private static string[] ResolveCargoProductUnlockIds(WH40KCommandTreeNodeConfig node, string teamId)
+    {
+        var resolved = new List<string>();
+        resolved.AddRange(node.CargoProductUnlocks.Select(id => id.ToString()));
+
+        if (!string.IsNullOrWhiteSpace(teamId))
+        {
+            foreach (var (mappedTeamId, unlocks) in node.TeamCargoProductUnlocks)
+            {
+                if (!string.Equals(mappedTeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                resolved.AddRange(unlocks.Select(id => id.ToString()));
+            }
+        }
+
+        return resolved
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 
     private void AddNode(TreeNodeDefinition definition)
@@ -458,13 +536,26 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         {
             BackgroundColor = AvailableBackgroundColor,
             BorderColor = AvailableBorderColor,
-            BorderThickness = new Thickness(1)
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 6,
+            ContentMarginTopOverride = 6,
+            ContentMarginRightOverride = 6,
+            ContentMarginBottomOverride = 6
         };
 
-        var button = new Button
+        var insetStyle = new StyleBoxFlat
         {
-            ClipText = true,
-            TextAlign = Label.AlignMode.Center,
+            BackgroundColor = NodeInsetBackgroundColor,
+            BorderColor = AvailableBorderColor.WithAlpha(0.5f),
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 6,
+            ContentMarginTopOverride = 2,
+            ContentMarginRightOverride = 6,
+            ContentMarginBottomOverride = 2
+        };
+
+        var button = new ContainerButton
+        {
             HorizontalExpand = false,
             VerticalExpand = false,
             SetSize = NodeSize,
@@ -472,7 +563,42 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             StyleBoxOverride = style
         };
 
-        var visual = new TreeNodeVisual(definition, button, style);
+        var content = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 5,
+            HorizontalExpand = true,
+            VerticalExpand = true
+        };
+        button.AddChild(content);
+
+        var titleLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            VAlign = Label.VAlignMode.Center,
+            ClipText = true,
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            StyleClasses = { "LabelSubText" }
+        };
+        content.AddChild(titleLabel);
+
+        var metaPanel = new PanelContainer
+        {
+            PanelOverride = insetStyle,
+            HorizontalExpand = true
+        };
+        var metaLabel = new Label
+        {
+            Align = Label.AlignMode.Center,
+            ClipText = true,
+            HorizontalExpand = true,
+            StyleClasses = { "LabelSubText" }
+        };
+        metaPanel.AddChild(metaLabel);
+        content.AddChild(metaPanel);
+
+        var visual = new TreeNodeVisual(definition, button, style, insetStyle, titleLabel, metaLabel);
         _nodes[definition.Id] = visual;
         _orderedNodes.Add(visual);
 
@@ -485,8 +611,13 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
     private void OnNodePressed(TreeNodeVisual node)
     {
+        _focusedNodeId = node.Definition.Id;
+
         if (node.State != NodeVisualState.Available)
+        {
+            EmitNodeInfo(node);
             return;
+        }
 
         OnPurchaseRequested?.Invoke(node.Definition.Id);
         EmitNodeInfo(node);
@@ -494,6 +625,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
     private void OnNodeMouseEntered(TreeNodeVisual node)
     {
+        _focusedNodeId = node.Definition.Id;
         node.Hovered = true;
         ApplyNodeStyle(node);
         EmitNodeInfo(node);
@@ -503,16 +635,39 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         node.Hovered = false;
         ApplyNodeStyle(node);
-        EmitDefaultInfo();
     }
 
     private void RefreshVisualState()
     {
+        var focusedNodeVisible = false;
+
         foreach (var node in _orderedNodes)
         {
             node.State = ResolveNodeState(node.Definition);
             ApplyNodeStyle(node);
+            node.Button.Visible = IsNodeVisible(node.Definition);
+
+            if (node.Button.Visible &&
+                _focusedNodeId != null &&
+                string.Equals(_focusedNodeId, node.Definition.Id, StringComparison.OrdinalIgnoreCase))
+            {
+                focusedNodeVisible = true;
+            }
         }
+
+        if (_focusedNodeId != null &&
+            focusedNodeVisible &&
+            _nodes.TryGetValue(_focusedNodeId, out var focusedNode))
+        {
+            EmitNodeInfo(focusedNode);
+        }
+        else
+        {
+            EmitDefaultInfo();
+        }
+
+        InvalidateMeasure();
+        InvalidateArrange();
     }
 
     private NodeVisualState ResolveNodeState(TreeNodeDefinition definition)
@@ -522,12 +677,6 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
         if (definition.Cost <= 0)
             return NodeVisualState.Inactive;
-
-        if (!string.IsNullOrWhiteSpace(_lockedDomainId) &&
-            string.Equals(_lockedDomainId, definition.DomainId, StringComparison.Ordinal))
-        {
-            return NodeVisualState.LockedByDoctrine;
-        }
 
         if (definition.Parents.Any(parentId => !_purchasedNodes.Contains(parentId)))
             return NodeVisualState.LockedByParent;
@@ -544,6 +693,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     private void ApplyNodeStyle(TreeNodeVisual node)
     {
         node.Button.ToolTip = null;
+        Color titleColor;
+        Color metaBorder;
+        Color metaBackground;
+        Color metaTextColor;
 
         switch (node.State)
         {
@@ -553,13 +706,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                     : PurchasedBackgroundColor;
                 node.Style.BorderColor = PurchasedBorderColor;
                 node.Button.Disabled = true;
-                break;
-            case NodeVisualState.LockedByDoctrine:
-                node.Style.BackgroundColor = node.Hovered
-                    ? DoctrineLockHoverBackgroundColor
-                    : DoctrineLockBackgroundColor;
-                node.Style.BorderColor = DoctrineLockBorderColor;
-                node.Button.Disabled = true;
+                titleColor = Color.FromHex("#E3F2D7");
+                metaBorder = PurchasedBorderColor;
+                metaBackground = PurchasedBorderColor.WithAlpha(0.18f);
+                metaTextColor = PurchasedBorderColor;
                 break;
             case NodeVisualState.LockedByPoints:
                 node.Style.BackgroundColor = node.Hovered
@@ -567,6 +717,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                     : PointLockBackgroundColor;
                 node.Style.BorderColor = PointLockBorderColor;
                 node.Button.Disabled = true;
+                titleColor = WH40KCommandUiStyles.SoftText;
+                metaBorder = LockedBorderColor;
+                metaBackground = LockedBorderColor.WithAlpha(0.14f);
+                metaTextColor = WH40KCommandUiStyles.MutedText;
                 break;
             case NodeVisualState.Inactive:
                 node.Style.BackgroundColor = node.Hovered
@@ -574,6 +728,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                     : InactiveBackgroundColor;
                 node.Style.BorderColor = InactiveBorderColor;
                 node.Button.Disabled = true;
+                titleColor = WH40KCommandUiStyles.MutedText;
+                metaBorder = InactiveBorderColor;
+                metaBackground = InactiveBorderColor.WithAlpha(0.14f);
+                metaTextColor = WH40KCommandUiStyles.MutedText;
                 break;
             case NodeVisualState.LockedByLevel:
             case NodeVisualState.LockedByTime:
@@ -583,6 +741,10 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                     : LockedBackgroundColor;
                 node.Style.BorderColor = LockedBorderColor;
                 node.Button.Disabled = true;
+                titleColor = WH40KCommandUiStyles.SoftText;
+                metaBorder = LockedBorderColor;
+                metaBackground = LockedBorderColor.WithAlpha(0.14f);
+                metaTextColor = WH40KCommandUiStyles.MutedText;
                 break;
             default:
                 node.Style.BackgroundColor = node.Hovered
@@ -590,75 +752,61 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
                     : AvailableBackgroundColor;
                 node.Style.BorderColor = node.Hovered ? AvailableBorderColor : _accentColor;
                 node.Button.Disabled = false;
+                titleColor = Color.White;
+                metaBorder = _accentColor;
+                metaBackground = _accentColor.WithAlpha(0.14f);
+                metaTextColor = _accentColor;
                 break;
         }
 
-        var caption = BuildNodeCaption(node);
-        if (!string.Equals(node.FullCaption, caption, StringComparison.Ordinal))
-        {
-            node.FullCaption = caption;
-            node.MarqueeOffset = 0;
-            node.MarqueeTickAccumulator = 0f;
-            node.MarqueePause = MarqueePauseSeconds;
-        }
-
-        UpdateNodeCaption(node);
+        node.InsetStyle.BorderColor = metaBorder;
+        node.InsetStyle.BackgroundColor = metaBackground;
+        node.TitleLabel.FontColorOverride = titleColor;
+        node.MetaLabel.FontColorOverride = metaTextColor;
+        node.TitleLabel.Text = BuildNodeTitle(node);
+        node.MetaLabel.Text = BuildNodeMeta(node);
+        node.Button.ToolTip = BuildNodeTooltip(node);
     }
 
     private void EmitNodeInfo(TreeNodeVisual node)
     {
-        OnNodeInfoChanged?.Invoke(
-            Loc.GetString(node.Definition.TitleKey),
-            BuildNodeDetail(node));
+        var info = BuildNodeInfo(node);
+        _currentNodeInfo = info;
+        OnNodeInfoChanged?.Invoke(info);
     }
 
     private void EmitDefaultInfo()
     {
-        OnNodeInfoChanged?.Invoke(
+        _currentNodeInfo = new WH40KCommandTreeNodeInfo(
+            string.Empty,
+            string.Empty,
             Loc.GetString("w40k-cmd-upgrade-tree-info-default-title"),
-            Loc.GetString("w40k-cmd-upgrade-tree-info-default-description"));
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-state"),
+            WH40KCommandUiStyles.ResolveMutedBorder(false),
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-state"),
+            string.Empty,
+            string.Empty,
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-research"),
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-effects"),
+            Loc.GetString("w40k-cmd-upgrade-tree-info-default-description"),
+            Array.Empty<string>(),
+            1,
+            false,
+            false);
+        OnNodeInfoChanged?.Invoke(_currentNodeInfo);
     }
 
-    private string BuildNodeCaption(TreeNodeVisual node)
+    public IReadOnlyList<WH40KCommandTreeNodeInfo> GetBranchIntel(string? domainId = null)
     {
-        var title = Loc.GetString(node.Definition.TitleKey);
-        return node.State switch
-        {
-            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-node-text-purchased",
-                ("title", title)),
-            NodeVisualState.LockedByDoctrine => Loc.GetString("w40k-cmd-upgrade-tree-node-text-doctrine-locked",
-                ("title", title)),
-            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-node-text-parent-locked",
-                ("title", title)),
-            _ => title
-        };
-    }
-
-    private string BuildNodeDetail(TreeNodeVisual node)
-    {
-        var cost = BuildCostText(node.Definition);
-        var statusLine = node.State switch
-        {
-            NodeVisualState.Available => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available-cost",
-                ("cost", cost)),
-            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-purchased"),
-            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-parent-locked"),
-            NodeVisualState.LockedByLevel => Loc.GetString(
-                "w40k-cmd-upgrade-tree-tooltip-state-level-locked",
-                ("level", node.Definition.MinBaseLevel),
-                ("current", _baseLevel)),
-            NodeVisualState.LockedByTime => BuildRoundTimeLockText(node.Definition.MinRoundTimeSeconds),
-            NodeVisualState.LockedByDoctrine => BuildDoctrineLockStateText(),
-            NodeVisualState.LockedByPoints => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-points-locked",
-                ("cost", cost)),
-            NodeVisualState.Inactive => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-inactive"),
-            _ => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available")
-        };
-
-        var detail = Loc.GetString("w40k-cmd-upgrade-tree-tooltip-template",
-            ("description", Loc.GetString(node.Definition.DescriptionKey)),
-            ("status", statusLine));
-        return NormalizeMultiline(detail);
+        var normalizedDomainId = NormalizeKey(domainId);
+        return _orderedNodes
+            .Where(node => string.IsNullOrWhiteSpace(normalizedDomainId) ||
+                           string.Equals(node.Definition.DomainId, normalizedDomainId, StringComparison.Ordinal))
+            .OrderBy(node => GetDomainIndex(node.Definition.DomainId))
+            .ThenBy(node => _nodeLayouts.TryGetValue(node.Definition.Id, out var layout) ? layout.Tier : 0)
+            .ThenBy(node => _nodeLayouts.TryGetValue(node.Definition.Id, out var layout) ? layout.Rank : 0f)
+            .Select(BuildNodeInfo)
+            .ToArray();
     }
 
     private bool CanAffordNode(TreeNodeDefinition definition)
@@ -671,8 +819,13 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         return Loc.GetString(
             "w40k-cmd-cost-funds-research",
-            ("funds", GetRuntimeFundsCost(definition)),
-            ("research", GetRuntimeResearchCost(definition)));
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(GetRuntimeFundsCost(definition))),
+            ("research", WH40KCommandUiStyles.FormatResearch(GetRuntimeResearchCost(definition))));
+    }
+
+    private string BuildCompactCostText(TreeNodeDefinition definition)
+    {
+        return $"{WH40KCommandUiStyles.FormatThroneGelt(GetRuntimeFundsCost(definition))} / {WH40KCommandUiStyles.FormatResearch(GetRuntimeResearchCost(definition))}";
     }
 
     private static int GetRuntimeFundsCost(TreeNodeDefinition definition)
@@ -685,16 +838,6 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         return WH40KCommandEconomyCalculator.GetCommandTreeResearchCost(Math.Max(0, definition.Cost));
     }
 
-    private string BuildDoctrineLockStateText()
-    {
-        if (string.IsNullOrWhiteSpace(_activeDoctrineId))
-            return Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-doctrine-locked");
-
-        var doctrine = WH40KCommandNodeDoctrineWindow.ResolveDoctrineDisplay(_activeDoctrineId, _teamId);
-        return Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-doctrine-locked-with-name",
-            ("doctrine", doctrine.Name));
-    }
-
     private string BuildRoundTimeLockText(int requiredRoundSeconds)
     {
         var required = Math.Max(0, requiredRoundSeconds);
@@ -703,6 +846,252 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             "w40k-cmd-upgrade-tree-tooltip-state-time-locked",
             ("time", FormatClock(required)),
             ("left", FormatClock(remaining)));
+    }
+
+    private string BuildNodeTitle(TreeNodeVisual node)
+    {
+        return SplitTitleIntoTwoLines(Loc.GetString(node.Definition.TitleKey), 14);
+    }
+
+    private string BuildNodeMeta(TreeNodeVisual node)
+    {
+        return node.State switch
+        {
+            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-node-meta-purchased"),
+            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-node-meta-locked"),
+            NodeVisualState.LockedByLevel => Loc.GetString("w40k-cmd-upgrade-tree-node-meta-locked"),
+            NodeVisualState.LockedByTime => Loc.GetString("w40k-cmd-upgrade-tree-node-meta-locked"),
+            NodeVisualState.LockedByPoints => BuildCompactCostText(node.Definition),
+            NodeVisualState.Inactive => Loc.GetString("w40k-cmd-upgrade-tree-node-meta-locked"),
+            _ => BuildCompactCostText(node.Definition)
+        };
+    }
+
+    private string BuildNodeBadgeStatus(TreeNodeVisual node)
+    {
+        return node.State switch
+        {
+            NodeVisualState.Available => Loc.GetString("w40k-cmd-upgrade-tree-badge-available"),
+            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-badge-purchased"),
+            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-badge-parent"),
+            NodeVisualState.LockedByLevel => Loc.GetString("w40k-cmd-upgrade-tree-badge-level"),
+            NodeVisualState.LockedByTime => Loc.GetString("w40k-cmd-upgrade-tree-badge-time"),
+            NodeVisualState.LockedByPoints => Loc.GetString("w40k-cmd-upgrade-tree-badge-budget"),
+            NodeVisualState.Inactive => Loc.GetString("w40k-cmd-upgrade-tree-badge-inactive"),
+            _ => Loc.GetString("w40k-cmd-upgrade-tree-badge-available")
+        };
+    }
+
+    private Color ResolveBadgeColor(NodeVisualState state)
+    {
+        return state switch
+        {
+            NodeVisualState.Available => _accentColor,
+            NodeVisualState.Purchased => PurchasedBorderColor,
+            NodeVisualState.LockedByPoints => PointLockBorderColor,
+            NodeVisualState.Inactive => InactiveBorderColor,
+            _ => LockedBorderColor
+        };
+    }
+
+    private string BuildNodeTooltip(TreeNodeVisual node)
+    {
+        return NormalizeMultiline(BuildNodeStatusText(node));
+    }
+
+    private string BuildNodeStatusText(TreeNodeVisual node)
+    {
+        return node.State switch
+        {
+            NodeVisualState.Available => Loc.GetString(
+                "w40k-cmd-upgrade-tree-tooltip-state-available-cost",
+                ("cost", BuildCostText(node.Definition))),
+            NodeVisualState.Purchased => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-purchased"),
+            NodeVisualState.LockedByParent => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-parent-locked"),
+            NodeVisualState.LockedByLevel => Loc.GetString(
+                "w40k-cmd-upgrade-tree-tooltip-state-level-locked",
+                ("level", node.Definition.MinBaseLevel),
+                ("current", _baseLevel)),
+            NodeVisualState.LockedByTime => BuildRoundTimeLockText(node.Definition.MinRoundTimeSeconds),
+            NodeVisualState.LockedByPoints => Loc.GetString(
+                "w40k-cmd-upgrade-tree-tooltip-state-points-locked",
+                ("cost", BuildCostText(node.Definition))),
+            NodeVisualState.Inactive => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-inactive"),
+            _ => Loc.GetString("w40k-cmd-upgrade-tree-tooltip-state-available")
+        };
+    }
+
+    private string BuildRequirementSummary(TreeNodeDefinition definition)
+    {
+        var parts = new List<string>();
+        if (definition.Parents.Length > 0)
+        {
+            parts.Add(definition.Parents.Length == 1
+                ? Loc.GetString("w40k-cmd-upgrade-tree-requirement-parent-single")
+                : Loc.GetString(
+                    "w40k-cmd-upgrade-tree-requirement-parent-multi",
+                    ("count", definition.Parents.Length)));
+        }
+
+        if (definition.MinBaseLevel > 1)
+        {
+            parts.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-requirement-level",
+                ("level", definition.MinBaseLevel)));
+        }
+
+        if (definition.MinRoundTimeSeconds > 0)
+        {
+            parts.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-requirement-time",
+                ("time", FormatClock(definition.MinRoundTimeSeconds))));
+        }
+
+        return parts.Count == 0
+            ? Loc.GetString("w40k-cmd-upgrade-tree-requirement-none")
+            : string.Join("\n", parts.Select(part => $"- {part}"));
+    }
+
+    private string BuildEffectSummary(TreeNodeDefinition definition)
+    {
+        var effects = new List<string>();
+
+        if (definition.MachineSpeedBonusPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-machine-speed",
+                ("value", definition.MachineSpeedBonusPercent)));
+        }
+
+        if (definition.MachineStorageBonus > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-machine-storage",
+                ("value", definition.MachineStorageBonus)));
+        }
+
+        if (definition.CargoMaxItemsBonusPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-logistics-cap",
+                ("value", definition.CargoMaxItemsBonusPercent)));
+        }
+
+        if (definition.CargoDeliverySpeedBonusPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-logistics-transit",
+                ("value", definition.CargoDeliverySpeedBonusPercent)));
+        }
+
+        if (definition.CargoPriceDiscountPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-logistics-discount",
+                ("value", definition.CargoPriceDiscountPercent)));
+        }
+
+        if (definition.ResearchPointGrant > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-research-grant",
+                ("value", WH40KCommandUiStyles.FormatResearch(definition.ResearchPointGrant))));
+        }
+
+        if (definition.ResearchPointBonusPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-research-yield",
+                ("value", definition.ResearchPointBonusPercent)));
+        }
+
+        if (definition.ResearchTimeSpeedBonusPercent > 0)
+        {
+            effects.Add(Loc.GetString(
+                "w40k-cmd-upgrade-tree-effect-research-speed",
+                ("value", definition.ResearchTimeSpeedBonusPercent)));
+        }
+
+        if (effects.Count == 0)
+            return Loc.GetString("w40k-cmd-upgrade-tree-effect-none");
+
+        return string.Join("\n", effects);
+    }
+
+    private WH40KCommandTreeNodeInfo BuildNodeInfo(TreeNodeVisual node)
+    {
+        var researchUnlockEntries = BuildResearchUnlockEntries(node.Definition);
+
+        return new WH40KCommandTreeNodeInfo(
+            node.Definition.Id,
+            node.Definition.DomainId,
+            Loc.GetString(node.Definition.TitleKey),
+            BuildNodeBadgeStatus(node),
+            ResolveBadgeColor(node.State),
+            BuildNodeStatusText(node),
+            BuildCostText(node.Definition),
+            BuildRequirementSummary(node.Definition),
+            BuildResearchUnlockSummary(researchUnlockEntries),
+            BuildEffectSummary(node.Definition),
+            NormalizeMultiline(Loc.GetString(node.Definition.DescriptionKey)),
+            researchUnlockEntries,
+            node.Definition.MinBaseLevel,
+            node.State == NodeVisualState.Purchased,
+            node.State == NodeVisualState.Available);
+    }
+
+    private string BuildResearchUnlockSummary(IReadOnlyList<string> entries)
+    {
+        return entries.Count == 0
+            ? Loc.GetString("w40k-cmd-upgrade-tree-research-empty")
+            : FormatBulletList(entries);
+    }
+
+    private List<string> BuildResearchUnlockEntries(TreeNodeDefinition definition)
+    {
+        return ResolveResearchUnlockNames(definition.TechnologyUnlockIds)
+            .Where(entry => !string.IsNullOrWhiteSpace(entry))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private List<string> ResolveResearchUnlockNames(IEnumerable<string> technologyIds)
+    {
+        var names = new List<string>();
+        var allTechnologies = _prototype.EnumeratePrototypes<TechnologyPrototype>().ToArray();
+
+        foreach (var technologyId in technologyIds)
+        {
+            if (!_prototype.TryIndex(technologyId, out TechnologyPrototype? technology))
+                continue;
+
+            if (!technology.Hidden)
+                names.Add(Loc.GetString(technology.Name));
+
+            foreach (var follower in allTechnologies)
+            {
+                if (follower.Hidden)
+                    continue;
+
+                if (!follower.TechnologyPrerequisites.Any(prereq =>
+                        string.Equals(prereq.ToString(), technologyId, StringComparison.OrdinalIgnoreCase)))
+                {
+                    continue;
+                }
+
+                names.Add(Loc.GetString(follower.Name));
+            }
+        }
+
+        return names
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    private static string FormatBulletList(IEnumerable<string> entries)
+    {
+        return string.Join("\n", entries.Select(entry => $"- {entry}"));
     }
 
     private Vector2 GetNodeAnchorBottom(TreeNodeVisual node)
@@ -724,60 +1113,23 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
         return new UIBox2(position.X, position.Y, position.X + size.X, position.Y + size.Y);
     }
 
-    protected override void FrameUpdate(FrameEventArgs args)
+    public IReadOnlyList<WH40KCommandTreeDomainSummary> GetDomainSummaries()
     {
-        base.FrameUpdate(args);
+        var summaries = new List<WH40KCommandTreeDomainSummary>(_activeDomainIds.Count);
 
-        var delta = (float) args.DeltaSeconds;
-        if (delta <= 0f)
-            return;
-
-        foreach (var node in _orderedNodes)
+        foreach (var domainId in _activeDomainIds)
         {
-            AdvanceNodeCaption(node, delta);
-        }
-    }
+            var domainNodes = _orderedNodes
+                .Where(node => string.Equals(node.Definition.DomainId, domainId, StringComparison.Ordinal))
+                .ToArray();
 
-    private void AdvanceNodeCaption(TreeNodeVisual node, float deltaSeconds)
-    {
-        if (node.FullCaption.Length <= MarqueeVisibleChars)
-            return;
-
-        if (node.MarqueePause > 0f)
-        {
-            node.MarqueePause -= deltaSeconds;
-            return;
+            var total = domainNodes.Length;
+            var purchased = domainNodes.Count(node => node.State == NodeVisualState.Purchased);
+            var available = domainNodes.Count(node => node.State == NodeVisualState.Available);
+            summaries.Add(new WH40KCommandTreeDomainSummary(domainId, purchased, available, total));
         }
 
-        node.MarqueeTickAccumulator += deltaSeconds;
-        if (node.MarqueeTickAccumulator < MarqueeTickSeconds)
-            return;
-
-        node.MarqueeTickAccumulator -= MarqueeTickSeconds;
-        node.MarqueeOffset++;
-
-        var cycleLength = node.FullCaption.Length + 3;
-        if (node.MarqueeOffset >= cycleLength)
-        {
-            node.MarqueeOffset = 0;
-            node.MarqueePause = MarqueePauseSeconds;
-        }
-
-        UpdateNodeCaption(node);
-    }
-
-    private static void UpdateNodeCaption(TreeNodeVisual node)
-    {
-        if (node.FullCaption.Length <= MarqueeVisibleChars)
-        {
-            node.Button.Text = node.FullCaption;
-            return;
-        }
-
-        var tape = $"{node.FullCaption}   {node.FullCaption}";
-        var offset = Math.Clamp(node.MarqueeOffset, 0, node.FullCaption.Length + 2);
-        var visible = tape.Substring(offset, Math.Min(MarqueeVisibleChars, tape.Length - offset));
-        node.Button.Text = visible;
+        return summaries;
     }
 
     private static string NormalizeMultiline(string text)
@@ -799,6 +1151,80 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             return string.Empty;
 
         return text.Trim().ToLowerInvariant();
+    }
+
+    private void RefreshCanvasMetrics()
+    {
+        var domainCount = GetRenderedDomainCount();
+        var width = HorizontalPadding * 2f + domainCount * (NodeSize.X + DomainInnerPadding * 2f + 20f);
+        var height = VerticalPaddingTop + VerticalPaddingBottom + (GetRenderedMaxTier() + 1) * (NodeSize.Y + 36f);
+        MinWidth = Math.Max(560f, width);
+        MinHeight = Math.Max(680f, height);
+        InvalidateMeasure();
+    }
+
+    private static string SplitTitleIntoTwoLines(string title, int targetLineLength)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return string.Empty;
+
+        var words = title.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length <= 1)
+            return TrimToNodeLength(title, targetLineLength * 2 + 1);
+
+        var firstLine = new StringBuilder();
+        var secondLine = new StringBuilder();
+
+        foreach (var word in words)
+        {
+            if (firstLine.Length == 0 ||
+                firstLine.Length + 1 + word.Length <= targetLineLength ||
+                secondLine.Length > 0)
+            {
+                if (secondLine.Length > 0)
+                {
+                    if (secondLine.Length > 0)
+                        secondLine.Append(' ');
+                    secondLine.Append(word);
+                }
+                else
+                {
+                    if (firstLine.Length > 0)
+                        firstLine.Append(' ');
+                    firstLine.Append(word);
+                }
+            }
+            else
+            {
+                if (secondLine.Length > 0)
+                    secondLine.Append(' ');
+                secondLine.Append(word);
+            }
+        }
+
+        if (secondLine.Length == 0)
+            return TrimToNodeLength(firstLine.ToString(), targetLineLength * 2 + 1);
+
+        return $"{TrimToNodeLength(firstLine.ToString(), targetLineLength)}\n{TrimToNodeLength(secondLine.ToString(), targetLineLength)}";
+    }
+
+    private static string TrimToNodeLength(string text, int maxLength)
+    {
+        if (maxLength <= 0 || text.Length <= maxLength)
+            return text;
+
+        if (maxLength <= 3)
+            return text[..maxLength];
+
+        return $"{text[..Math.Max(0, maxLength - 3)]}...";
+    }
+
+    private static string TrimToLength(string text, int maxLength)
+    {
+        if (maxLength <= 0 || text.Length <= maxLength)
+            return text;
+
+        return $"{text[..Math.Max(0, maxLength - 1)]}…";
     }
 
     private void SyncPurchasedNodes(IReadOnlyList<string> purchasedNodeIds)
@@ -1075,15 +1501,49 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
             : 0;
     }
 
+    private bool IsNodeVisible(TreeNodeDefinition definition)
+    {
+        return string.IsNullOrWhiteSpace(_selectedDomainId) ||
+               string.Equals(definition.DomainId, _selectedDomainId, StringComparison.Ordinal);
+    }
+
+    private int GetRenderedDomainCount()
+    {
+        return string.IsNullOrWhiteSpace(_selectedDomainId) ? Math.Max(1, _domainIndices.Count) : 1;
+    }
+
+    private int GetRenderedDomainIndex(string domainId)
+    {
+        return string.IsNullOrWhiteSpace(_selectedDomainId) ? GetDomainIndex(domainId) : 0;
+    }
+
+    private int GetRenderedMaxTier()
+    {
+        if (string.IsNullOrWhiteSpace(_selectedDomainId))
+            return _maxComputedTier;
+
+        var maxTier = 0;
+        foreach (var node in _orderedNodes)
+        {
+            if (!string.Equals(node.Definition.DomainId, _selectedDomainId, StringComparison.Ordinal))
+                continue;
+
+            if (_nodeLayouts.TryGetValue(node.Definition.Id, out var layout))
+                maxTier = Math.Max(maxTier, layout.Tier);
+        }
+
+        return Math.Max(1, maxTier);
+    }
+
     private Vector2 GetNodeCenter(TreeNodeDefinition definition, Vector2 finalSize)
     {
         var safeWidth = MathF.Max(1f, finalSize.X);
         var safeHeight = MathF.Max(1f, finalSize.Y);
 
         var usableWidth = MathF.Max(1f, safeWidth - HorizontalPadding * 2f);
-        var domainCount = Math.Max(1, _domainIndices.Count);
+        var domainCount = GetRenderedDomainCount();
         var domainWidth = usableWidth / domainCount;
-        var domainIndex = GetDomainIndex(definition.DomainId);
+        var domainIndex = GetRenderedDomainIndex(definition.DomainId);
         var domainLeft = HorizontalPadding + domainWidth * domainIndex;
         var domainRight = domainLeft + domainWidth;
 
@@ -1102,7 +1562,7 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
 
         var rowTop = VerticalPaddingTop + NodeSize.Y * 0.5f;
         var rowBottom = MathF.Max(rowTop + 1f, safeHeight - VerticalPaddingBottom - NodeSize.Y * 0.5f);
-        var maxTier = Math.Max(1, _maxComputedTier);
+        var maxTier = GetRenderedMaxTier();
         var rowStep = (rowBottom - rowTop) / maxTier;
         var tier = Math.Clamp(layout.Tier, 0, maxTier);
         var centerY = rowTop + rowStep * tier;
@@ -1114,9 +1574,6 @@ public sealed class WH40KCommandTreeSketchControl : LayoutContainer
     {
         if (childState == NodeVisualState.Purchased)
             return PurchasedBorderColor;
-
-        if (childState == NodeVisualState.LockedByDoctrine || parentState == NodeVisualState.LockedByDoctrine)
-            return DoctrineLockBorderColor.WithAlpha(0.75f);
 
         if (childState == NodeVisualState.Available)
             return _accentColor.WithAlpha(0.85f);

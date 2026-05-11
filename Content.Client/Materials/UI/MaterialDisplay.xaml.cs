@@ -112,7 +112,6 @@ public sealed partial class MaterialDisplay : PanelContainer
                 WH40KLatheMenuStyles.CreateSecondaryButtonStyle(WH40KLatheMenuTheme.Disabled),
                 Color.FromHex("#D9E3E8".AsSpan()));
             button.OnMouseEntered += _ => WH40KUiChrome.PlayHoverFlash(this, $"eject-hover-{sheetsToEject}", Color.FromHex("#E0D19B".AsSpan()), 0.16f);
-            WH40KUiChrome.PlayFadeIn(button, $"eject-appear-{sheetsToEject}", 0.14f, i * 0.02f);
 
             button.OnPressed += _ =>
             {

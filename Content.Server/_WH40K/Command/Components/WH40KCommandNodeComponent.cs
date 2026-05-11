@@ -39,15 +39,6 @@ public sealed partial class WH40KCommandNodeComponent : Component
     public float ReinforcementCooldownSeconds = 180f;
 
     [DataField]
-    public string ActiveBattleTacticId = WH40KCommandNodeTactics.DefaultTacticId;
-
-    [DataField]
-    public string ActiveDoctrineId = string.Empty;
-
-    [DataField]
-    public bool DoctrineLocked;
-
-    [DataField]
     public string ActiveMissionTaskId = string.Empty;
 
     [DataField]
@@ -55,9 +46,6 @@ public sealed partial class WH40KCommandNodeComponent : Component
 
     [DataField]
     public bool MissionBoardHadActiveFactionMission;
-
-    [DataField]
-    public float BattleTacticChangeCooldownSeconds = 300f;
 
     /// <summary>
     /// Interval in seconds for passive fallback income from this command node.
@@ -86,9 +74,6 @@ public sealed partial class WH40KCommandNodeComponent : Component
 
     [ViewVariables]
     public TimeSpan NextReinforcementAvailable = TimeSpan.Zero;
-
-    [ViewVariables]
-    public TimeSpan NextBattleTacticChangeAvailable = TimeSpan.Zero;
 
     [ViewVariables]
     public TimeSpan NextPassivePointTick = TimeSpan.Zero;

@@ -4,6 +4,9 @@
   mapPath: /Maps/_WH40K/TinyBattle.yml
   minPlayers: 0
   maxPlayers: 20
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/tinybattle_snapshot.png
+  wh40kWeatherProfile: WH40KMapWeatherTinyBattle
+  wh40kEventsProfile: WH40KMapEventsAll
   stations:
     TinyBattle:
       stationProto: WH40KStation

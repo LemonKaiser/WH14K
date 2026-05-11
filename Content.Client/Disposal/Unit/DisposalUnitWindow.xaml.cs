@@ -78,23 +78,19 @@ namespace Content.Client.Disposal.Unit
 
             WindowHeader.Modulate = new Color(1f, 1f, 1f, 0f);
             WindowTitle.Modulate = new Color(1f, 1f, 1f, 0f);
-            CloseButton.Modulate = new Color(1f, 1f, 1f, 0f);
             HeaderPanel.Modulate = new Color(1f, 1f, 1f, 0f);
             StatePanel.Modulate = new Color(1f, 1f, 1f, 0f);
             DiagnosticsPanel.Modulate = new Color(1f, 1f, 1f, 0f);
             PressurePanel.Modulate = new Color(1f, 1f, 1f, 0f);
-            ActionPanel.Modulate = new Color(1f, 1f, 1f, 0f);
             FooterDivider.Modulate = new Color(1f, 1f, 1f, 0f);
             FooterBar.Modulate = new Color(1f, 1f, 1f, 0f);
 
             WH40KUiChrome.PlayFadeIn(WindowHeader, "window-header-appear", 0.12f);
             WH40KUiChrome.PlayFadeIn(WindowTitle, "window-title-appear", 0.12f, 0.02f);
-            WH40KUiChrome.PlayFadeIn(CloseButton, "window-close-appear", 0.12f, 0.03f);
             WH40KUiChrome.PlayFadeIn(HeaderPanel, "header-appear", 0.16f, 0.03f);
             WH40KUiChrome.PlayFadeIn(StatePanel, "state-panel-appear", 0.18f, 0.06f);
             WH40KUiChrome.PlayFadeIn(DiagnosticsPanel, "diagnostics-panel-appear", 0.18f, 0.09f);
             WH40KUiChrome.PlayFadeIn(PressurePanel, "pressure-panel-appear", 0.18f, 0.12f);
-            WH40KUiChrome.PlayFadeIn(ActionPanel, "action-panel-appear", 0.18f, 0.15f);
             WH40KUiChrome.PlayFadeIn(FooterDivider, "footer-divider-appear", 0.18f, 0.18f);
             WH40KUiChrome.PlayFadeIn(FooterBar, "footer-panel-appear", 0.18f, 0.2f);
         }

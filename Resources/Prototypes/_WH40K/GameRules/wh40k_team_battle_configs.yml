@@ -56,6 +56,112 @@
     - WHGellarTremor
     - WHMachineCorrosionStorm
 
+- type: wh40kTeamBattleWeatherProfile
+  id: WH40KMapWeatherBattlefield
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 0.28
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 360
+    gapMaxSeconds: 840
+    repeatChance: 0.65
+    warningLeadSeconds: 30
+    weightedPool:
+    - weatherId: WHAsh
+      weight: 1
+    - weatherId: WHToxicAshFront
+      weight: 1
+    - weatherId: WHAcidRain
+      weight: 1
+    - weatherId: WHRadFront
+      weight: 1
+    - weatherId: WHIonStorm
+      weight: 1
+    - weatherId: WHBlackIce
+      weight: 1
+    - weatherId: WHSandHurricane
+      weight: 1
+    - weatherId: WHMetalHail
+      weight: 1
+    - weatherId: WHSporeDrift
+      weight: 1
+    - weatherId: WHGellarTremor
+      weight: 1
+    - weatherId: WHMachineCorrosionStorm
+      weight: 1
+
+- type: wh40kTeamBattleWeatherProfile
+  id: WH40KMapWeatherWinterAssault
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 0.22
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 360
+    gapMaxSeconds: 840
+    repeatChance: 0.7
+    warningLeadSeconds: 30
+    weightedPool:
+    - weatherId: WHBlackIce
+      weight: 6
+    - weatherId: WHMetalHail
+      weight: 3
+    - weatherId: WHRadFront
+      weight: 1
+    - weatherId: WHIonStorm
+      weight: 1
+    - weatherId: WHSporeDrift
+      weight: 1
+    - weatherId: WHGellarTremor
+      weight: 2
+    - weatherId: WHMachineCorrosionStorm
+      weight: 2
+
+- type: wh40kTeamBattleWeatherProfile
+  id: WH40KMapWeatherTinyBattle
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 0.2
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 300
+    gapMaxSeconds: 720
+    repeatChance: 0.72
+    warningLeadSeconds: 30
+    weightedPool:
+    - weatherId: WHSandHurricane
+      weight: 6
+    - weatherId: WHAsh
+      weight: 4
+    - weatherId: WHToxicAshFront
+      weight: 3
+    - weatherId: WHAcidRain
+      weight: 2
+    - weatherId: WHRadFront
+      weight: 1
+    - weatherId: WHIonStorm
+      weight: 1
+    - weatherId: WHSporeDrift
+      weight: 1
+
+- type: wh40kTeamBattleWeatherProfile
+  id: WH40KMapWeatherDisabled
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 1
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 360
+    gapMaxSeconds: 840
+    repeatChance: 0
+    warningLeadSeconds: 30
+    pool: []
+
 - type: wh40kWeatherDangerProfile
   id: WH40KWeatherDanger120m
   defaultDanger: 3
@@ -131,6 +237,42 @@
     - LogisticsSurge
     - OrbitalBombardment
     - BlackFront
+
+- type: wh40kTeamBattleRoundEventsProfile
+  id: WH40KMapEventsAll
+  config:
+    enabled: true
+    minStartDelaySeconds: 480
+    firstStartJitterSeconds: 720
+    noRoundChance: 0.12
+    minDurationSeconds: 180
+    maxDurationSeconds: 420
+    gapMinSeconds: 600
+    gapMaxSeconds: 1200
+    repeatChance: 0.85
+    warningLeadSeconds: 30
+    weightedPool:
+    - eventType: LogisticsSurge
+      weight: 1
+    - eventType: OrbitalBombardment
+      weight: 1
+    - eventType: BlackFront
+      weight: 1
+
+- type: wh40kTeamBattleRoundEventsProfile
+  id: WH40KMapEventsDisabled
+  config:
+    enabled: false
+    minStartDelaySeconds: 480
+    firstStartJitterSeconds: 720
+    noRoundChance: 1
+    minDurationSeconds: 180
+    maxDurationSeconds: 420
+    gapMinSeconds: 600
+    gapMaxSeconds: 1200
+    repeatChance: 0
+    warningLeadSeconds: 30
+    pool: []
 
 - type: wh40kTeamBattleLogisticsProfile
   id: WH40KTeamBattleLogistics120m

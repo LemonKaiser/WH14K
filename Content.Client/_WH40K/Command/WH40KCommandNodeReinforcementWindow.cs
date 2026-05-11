@@ -235,8 +235,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
     private void ApplyTheme()
     {
         HeaderPanel.PanelOverride = CreatePanelStyle(ThemePanel, _accent, 1, 14, 12);
-        TeamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(_chaosTheme ? Color.FromHex("#160B0D".AsSpan()) : Color.FromHex("#182110".AsSpan()), _accent);
-        PhaseBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(_chaosTheme ? Color.FromHex("#150C10".AsSpan()) : Color.FromHex("#171B24".AsSpan()), _accent);
+        TeamBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(WH40KCommandUiStyles.BadgeBackground, _accent);
+        PhaseBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(WH40KCommandUiStyles.BadgeBackground, _accent);
         StatusBadge.PanelOverride = WH40KCommandUiStyles.CreateBadgeStyle(_chaosTheme ? Color.FromHex("#170C0E".AsSpan()) : Color.FromHex("#171810".AsSpan()), ThemeAction);
 
         CatalogPanel.PanelOverride = CreatePanelStyle(ThemePanel, ThemeBorderStrong, 1, 10, 10);
@@ -337,8 +337,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         StatusBadgeLabel.Text = BuildHeaderStatus(state);
         HeaderStatusLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-header-status",
-            ("funds", state.Funds),
-            ("influence", state.InfluencePoints),
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(state.Funds)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(state.InfluencePoints)),
             ("alive", state.AliveCount),
             ("total", state.TotalCount),
             ("percent", state.AlivePercent),
@@ -384,8 +384,6 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             {
                 var row = CreateCatalogRow(role);
                 section.Entries.AddChild(row);
-                if (animateRows)
-                    WH40KUiChrome.PlayFadeIn(row, $"catalog-row-{index}", 0.16f, index * 0.02f);
 
                 index++;
             }
@@ -523,8 +521,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
                 ? "w40k-cmd-reinforcement-rework-pending-auto"
                 : "w40k-cmd-reinforcement-rework-pending-manual",
             ("count", pending.TotalCount),
-            ("funds", pending.TotalFundsCost),
-            ("influence", pending.TotalInfluenceCost),
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(pending.TotalFundsCost)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(pending.TotalInfluenceCost)),
             ("time", FormatDuration(pending.ArrivalSeconds)));
         PendingStatusLabel.ModulateSelfOverride = ThemeAction;
 
@@ -655,8 +653,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             "w40k-cmd-reinforcement-rework-manual-summary",
             ("count", manualCount),
             ("max", _latestState.MaxTotalCount),
-            ("funds", manualFundsCost),
-            ("influence", manualInfluenceCost),
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(manualFundsCost)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(manualInfluenceCost)),
             ("delay", _latestState.ManualDelaySeconds / 60));
         AutoMetaLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-auto-meta",
@@ -666,8 +664,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             "w40k-cmd-reinforcement-rework-auto-summary",
             ("count", autoCount),
             ("max", _latestState.MaxTotalCount),
-            ("funds", autoFundsCost),
-            ("influence", autoInfluenceCost));
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(autoFundsCost)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(autoInfluenceCost)));
         ThresholdValueLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-threshold",
             ("value", _autoThresholdPercent));
@@ -905,8 +903,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
     {
         return Loc.GetString(
             "w40k-cmd-cost-funds-influence",
-            ("funds", Math.Max(0, funds)),
-            ("influence", Math.Max(0, influence)));
+            ("funds", WH40KCommandUiStyles.FormatThroneGelt(funds)),
+            ("influence", WH40KCommandUiStyles.FormatInfluence(influence)));
     }
 
     private static string GetPhaseKey(WH40KBattlePhase phase)
