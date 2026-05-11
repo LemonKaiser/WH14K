@@ -17,7 +17,7 @@
     attackRate: 0.65
     damage:
       types:
-        Blunt: 20
+        Blunt: 35
         Structural: 50
     angle: 100
     soundHit:
@@ -28,8 +28,8 @@
   - type: IncreaseDamageOnWield
     damage:
       types:
-        Blunt: 20
-        Structural: 40
+        Blunt: 40
+        Structural: 50
   - type: Item
     size: Ginormous
   - type: Clothing
@@ -158,7 +158,7 @@
     damage:
       types:
         Blunt: 20
-        Shock: 50
+        Shock: 20
     angle: 100
     soundHit:
       collection: MetalThud

@@ -59,9 +59,9 @@
   suffix: WH40K, Еретики
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestheresy.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
 
 # Флак-броня (Облегчённая)
 - type: entity
@@ -183,9 +183,9 @@
   suffix: WH40K, Еретики, Адская Бригада
   components:
   - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
   - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/vraks_renegade_carapace_armor.rsi
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
