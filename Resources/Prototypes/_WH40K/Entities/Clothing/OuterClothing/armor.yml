@@ -360,3 +360,39 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
+
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorTzeentchSerg
+  suffix: WH40K, Еретики, Тзинтч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Robes/tzeentch_robe.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Robes/tzeentch_robe.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodTzeentchSerg
+    requiredSlot:
+    - outerClothing
+    slot: head
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorTzeentchLiet
+  suffix: WH40K, Еретики, Тзинтч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Robes/tzeentch_robe_liet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Robes/tzeentch_robe_liet.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodTzeentchLiet
+    requiredSlot:
+    - outerClothing
+    slot: head
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}

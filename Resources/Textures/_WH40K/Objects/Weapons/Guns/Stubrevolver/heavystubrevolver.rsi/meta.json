@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "by снова",
+    "copyright": "by FizzoGhoster",
     "size": {
         "x": 32,
         "y": 32
@@ -17,14 +17,19 @@
             "name": "base"
         },
         {
-            "name": "mag-0"
-        },
-        {
             "name": "inhand-left",
             "directions": 4
         },
         {
             "name": "inhand-right",
+            "directions": 4
+        },
+        {
+            "name": "equipped-SUITSTORAGE",
+            "directions": 4
+        },
+        {
+            "name": "equipped-BELT",
             "directions": 4
         }
     ]

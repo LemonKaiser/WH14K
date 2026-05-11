@@ -1895,3 +1895,22 @@ ent-WeaponRevolverElectricArcDarkMech = осквернённый электро�
 
 ent-AutoSyringe = автошприц
     .desc = Медицинское приспособление, предназначенное для ускоренного введения жидкостей в живые (или не очень) тела.
+
+ent-ClothingOuterArmorTzeentchSerg = доспех чемпиона Тзинча
+    .desc = Прочный доспех чемпиона Тзинча
+
+ent-ClothingHeadHoodTzeentchSerg = капюшон чемпиона Тзинча
+    .desc = Прочный капюшон чемпиона Тзинча
+
+ent-ClothingOuterArmorTzeentchLiet = доспех избранного Тзинча
+    .desc = Прочный доспех избранного Тзинча
+
+ent-ClothingHeadHoodTzeentchLiet = капюшон избранного Тзинча
+    .desc = Прочный доспех избранного Тзинча
+
+ent-WeaponStubRevolver = Стаб-револьвер M748 "Взломщик"
+    .desc = Тяжёлый стаб-револьвер, получивший своё название из-за любви бандитов подулья к вскрытию замков выстрелами из него.
+
+ent-Cartridge11mm = патрон (11мм)
+
+ent-SpeedLoader11mm = спидлоадер (11мм)

@@ -156,3 +156,9 @@
 
 - type: Tag
   id: SubstationMachineBoard
+
+- type: Tag
+  id: SpeedLoader11mm
+
+- type: Tag
+  id: Cartridge11mm

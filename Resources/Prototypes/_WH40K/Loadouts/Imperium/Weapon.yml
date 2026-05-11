@@ -108,3 +108,55 @@
     - PlasmPistolPowerCell
     - PlasmPistolPowerCell
   groupBy: "second"
+
+- type: loadout
+  id: WH40KWeaponStubRevolverLoadout30
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  dummyEntity: WeaponStubRevolver
+  equipment:
+    pocket1: WeaponStubRevolver
+  storage:
+    belt:
+    - SpeedLoader11mm
+    - SpeedLoader11mm
+
+- type: loadout
+  id: WH40KWeaponStubRevolverLoadout25
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  dummyEntity: WeaponStubRevolver
+  equipment:
+    pocket1: WeaponStubRevolver
+  storage:
+    belt:
+    - SpeedLoader11mm
+    - SpeedLoader11mm
+
+- type: loadout
+  id: WH40KWeaponStubRevolverLoadout20
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  dummyEntity: WeaponStubRevolver
+  equipment:
+    pocket1: WeaponStubRevolver
+  storage:
+    belt:
+    - SpeedLoader11mm
+    - SpeedLoader11mm
+
+- type: loadout
+  id: WH40KWeaponStubRevolverLoadout15
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  dummyEntity: WeaponStubRevolver
+  equipment:
+    pocket1: WeaponStubRevolver
+  storage:
+    belt:
+    - SpeedLoader11mm
+    - SpeedLoader11mm

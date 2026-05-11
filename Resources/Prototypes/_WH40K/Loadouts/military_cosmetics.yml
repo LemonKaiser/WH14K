@@ -1056,3 +1056,11 @@
   id: WH40KValhallanCaptainUniform
   equipment:
     jumpsuit: ClothingUniformJumpsuitValhallanCaptain
+
+- type: loadout
+  id: WH40KArmorTzeentchSerg
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorTzeentchSerg
