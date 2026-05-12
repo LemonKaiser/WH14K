@@ -57,3 +57,23 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: Appearance
   - type: SpentAmmoVisuals
+
+- type: entity
+  id: CartridgeAutocannon
+  parent: BaseCartridge
+  suffix: WH40K
+  components:
+  - type: Tag
+    tags:
+      - CartridgeAutocannon
+      - Cartridge
+  - type: CartridgeAmmo
+    proto: BulletSentine
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals

@@ -5,6 +5,11 @@
   displayWeight: 80
   playTimeTracker: JobLexmechanic
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobTitheSupplier
+      time: 1h
+    - !type:OverallPlaytimeRequirement
+      time: 3h
     - !type:SpeciesRequirement
       species:
       - Tau

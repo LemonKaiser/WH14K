@@ -68,7 +68,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 40
+        Heat: 50
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -185,3 +185,41 @@
     impactFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_laser
+
+- type: entity
+  parent: BasicHitscan
+  id: LaserLasCannon
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 25
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_u_laser
+    travelFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: u_laser
+    impactFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_u_laser
+
+- type: entity
+  parent: BasicHitscan
+  id: LaserMultilas
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 50
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_beam_multilas
+    travelFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_multilas
+    impactFlash:
+      sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_beam_multilas

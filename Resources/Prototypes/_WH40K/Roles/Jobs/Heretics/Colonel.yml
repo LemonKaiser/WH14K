@@ -5,8 +5,14 @@
   displayWeight: 60
   playTimeTracker: JobHColonel
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobHSergeant
+      time: 2h
+    - !type:RoleTimeRequirement
+      role: JobHLieutenant
+      time: 1h
     - !type:OverallPlaytimeRequirement
-      time: 60
+      time: 12h
     - !type:SpeciesRequirement
       species:
       - Tau

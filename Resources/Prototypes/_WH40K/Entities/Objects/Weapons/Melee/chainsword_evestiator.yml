@@ -8,12 +8,13 @@
     layers:
     - state: off-icon
       map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: MultiHandedItem
   - type: MeleeWeapon
     autoAttack: true
     angle: 0
     wideAnimationRotation: -135
-    attackRate: 4
-    range: 1.6
+    attackRate: 3
+    range: 1.8
     damage:
       types:
         Blunt: 1
@@ -33,17 +34,12 @@
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Slash: 10
+        Slash: 20
+        Shock: 10
     activatedSoundOnHit:
       path: /Audio/Weapons/chainsaw.ogg
       params:
         volume: -3
-  - type: Wieldable
-  - type: IncreaseDamageOnWield
-    damage:
-      types:
-        Slash: 10
-        Shock: 20
   - type: UseDelay
   - type: Item
     sprite: _WH40K/Objects/Weapons/Melee/chainsword_evestiator/long.rsi
@@ -53,6 +49,9 @@
   - type: ItemTogglePrefix
     prefixOn: on
     prefixOff: off
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: GenericVisualizer
     visuals:
       enum.ToggleableVisuals.Enabled:

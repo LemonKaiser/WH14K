@@ -305,13 +305,10 @@
   id: WH40KRecipeAmmoElectricArc
   result: WH40KAmmoBoxElectricArc
   materials:
-    Steel: 1000
-    Plasma: 100
-    Glass: 100
-    Plastic: 100
-    Gold: 100
+    Steel: 500
+    Plastic: 50
+    Gold: 50
     Silver: 100
-  completetime: 120
 
 - type: latheRecipe
   parent: BaseToolRecipe

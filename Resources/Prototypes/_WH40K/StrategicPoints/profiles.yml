@@ -5,31 +5,31 @@
     2:
       seconds: 30
       materials:
+        Steel: 10
+        Glass: 10
+    3:
+      seconds: 90
+      materials:
         Steel: 20
         Glass: 20
-    3:
-      seconds: 60
-      materials:
-        Steel: 40
-        Glass: 40
-        Uranium: 10
+        Uranium: 5
   tiers:
     1:
-      maxHp: 250
+      maxHp: 750
       teamXpIncome: 1
-      fundsIncome: 30
+      fundsIncome: 90
       destroyTeamXpReward: 5
       destroyInfluenceReward: 1
     2:
-      maxHp: 500
+      maxHp: 1500
       teamXpIncome: 2
-      fundsIncome: 70
+      fundsIncome: 500
       destroyTeamXpReward: 12
       destroyInfluenceReward: 3
     3:
-      maxHp: 750
+      maxHp: 2000
       teamXpIncome: 3
-      fundsIncome: 130
+      fundsIncome: 3000
       destroyTeamXpReward: 25
       destroyInfluenceReward: 6
 
@@ -40,31 +40,31 @@
     2:
       seconds: 30
       materials:
+        Steel: 10
+        Glass: 10
+    3:
+      seconds: 90
+      materials:
         Steel: 20
         Glass: 20
-    3:
-      seconds: 60
-      materials:
-        Steel: 40
-        Glass: 40
-        Plasma: 10
+        Plasma: 5
   tiers:
     1:
-      maxHp: 250
+      maxHp: 750
       teamXpIncome: 1
-      researchIncome: 15
+      researchIncome: 20
       destroyTeamXpReward: 5
       destroyInfluenceReward: 1
     2:
-      maxHp: 500
+      maxHp: 1500
       teamXpIncome: 2
-      researchIncome: 40
+      researchIncome: 60
       destroyTeamXpReward: 12
       destroyInfluenceReward: 3
     3:
-      maxHp: 750
+      maxHp: 2000
       teamXpIncome: 3
-      researchIncome: 80
+      researchIncome: 120
       destroyTeamXpReward: 25
       destroyInfluenceReward: 6
 
@@ -75,30 +75,30 @@
     2:
       seconds: 30
       materials:
+        Steel: 10
+        Glass: 10
+    3:
+      seconds: 90
+      materials:
         Steel: 20
         Glass: 20
-    3:
-      seconds: 60
-      materials:
-        Steel: 40
-        Glass: 40
-        Plasteel: 10
+        Plasteel: 5
   tiers:
     1:
-      maxHp: 250
+      maxHp: 750
       teamXpIncome: 1
       influenceIncome: 1
       destroyTeamXpReward: 5
       destroyInfluenceReward: 1
     2:
-      maxHp: 500
+      maxHp: 1500
       teamXpIncome: 2
-      influenceIncome: 2
+      influenceIncome: 5
       destroyTeamXpReward: 12
       destroyInfluenceReward: 3
     3:
-      maxHp: 750
+      maxHp: 2000
       teamXpIncome: 3
-      influenceIncome: 4
+      influenceIncome: 10
       destroyTeamXpReward: 25
       destroyInfluenceReward: 6

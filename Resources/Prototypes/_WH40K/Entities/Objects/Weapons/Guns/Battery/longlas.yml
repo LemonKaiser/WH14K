@@ -22,7 +22,7 @@
     availableModes:
     - SemiAuto
   - type: AimingCamera
-    maxOffset: 8
+    maxOffset: 17
     pvsIncrease: 0.8
   # - type: Telescope
   - type: GunRequiresWield

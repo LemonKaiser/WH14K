@@ -5,6 +5,12 @@
   displayWeight: 30
   playTimeTracker: JobVoxScout
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobTitheSupplier
+      time: 1h
+    - !type:RoleTimeRequirement
+      role: JobGuardsman
+      time: 1h
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -46,4 +52,3 @@
     pocket1: Binoculars
     pocket2: WH40KStandardTacticalMapTablet
     id: VoxScoutDogTag
-

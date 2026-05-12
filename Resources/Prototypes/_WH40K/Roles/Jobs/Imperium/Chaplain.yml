@@ -5,6 +5,12 @@
   displayWeight: 60
   playTimeTracker: JobWH40KChaplain
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobSergeant
+      time: 1h
+    - !type:RoleTimeRequirement
+      role: JobGuardsman
+      time: 2h
     - !type:SpeciesRequirement
       species:
       - Tau

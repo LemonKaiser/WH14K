@@ -162,3 +162,15 @@
 
 - type: Tag
   id: Cartridge11mm
+
+- type: Tag
+  id: WH40KMagazineAutocannon
+
+- type: Tag
+  id: CartridgeAutocannon
+
+- type: Tag
+  id: WH40KMagazineLascannon
+
+- type: Tag
+  id: WH40KMagazineMultilas

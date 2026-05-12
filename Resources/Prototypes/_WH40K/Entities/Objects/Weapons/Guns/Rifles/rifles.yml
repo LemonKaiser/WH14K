@@ -15,7 +15,7 @@
   - type: Gun
     fireRate: 4
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/ltrifle.ogg
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/rad_carbine.ogg
   - type: WH40KGunPrediction
   - type: ItemSlots
     slots:

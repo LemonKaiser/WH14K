@@ -5,6 +5,9 @@
   displayWeight: 70
   playTimeTracker: JobSergeant
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobGuardsman
+      time: 1.5h
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -123,4 +126,3 @@
     eyes: ClothingEyesHudGuard
     pocket1: WH40KStandardTacticalMapTablet
     id: SergeantDogTag
-

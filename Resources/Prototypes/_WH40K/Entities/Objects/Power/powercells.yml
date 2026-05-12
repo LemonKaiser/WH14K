@@ -224,3 +224,43 @@
   - type: BatteryAmmoProvider
     proto: WH40KRedHeavyLaserAstartesPistol
     fireCost: 80
+
+- type: entity
+  id: WH40KMagazineLascannon
+  parent: WH40KPowerCell
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    layers:
+    - state: lasgun
+    scale: 0.8, 0.8
+  - type: Tag
+    tags:
+      - WH40KMagazineLascannon
+  - type: Battery
+    maxCharge: 20000
+    startingCharge: 20000
+  - type: BatteryAmmoProvider
+    proto: LaserLasCannon
+    fireCost: 200
+
+- type: entity
+  id: WH40KMagazineMultilas
+  parent: WH40KPowerCell
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    layers:
+    - state: lasgun
+    scale: 0.8, 0.8
+  - type: Tag
+    tags:
+      - WH40KMagazineMultilas
+  - type: Battery
+    maxCharge: 30000
+    startingCharge: 30000
+  - type: BatteryAmmoProvider
+    proto: LaserMultilas
+    fireCost: 300
