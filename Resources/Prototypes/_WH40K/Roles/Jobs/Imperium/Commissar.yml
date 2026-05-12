@@ -5,6 +5,8 @@
   displayWeight: 120
   playTimeTracker: JobCommissar
   requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 12h
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -56,5 +58,3 @@
     id: CommissarDogTag
     pocket1: Bugle
     pocket2: WH40KCommandTacticalMapTablet
-
-

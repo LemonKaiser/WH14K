@@ -63,5 +63,3 @@
         color: "#62f7e6"
   - type: Appearance
   - type: SpentAmmoVisuals
-  - type: Electrified
-    requirePower: false

@@ -139,6 +139,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumLasgunLonglas
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserLonglas
+  cost: 4000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumFrag
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -384,7 +394,37 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarShellHE
-  cost: 5000
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumLauncherCadia
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLauncherCadia
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumGrenadeBlast
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: GrenadeBlast
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumGrenadeFrag
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: GrenadeFrag
+  cost: 3000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -943,6 +983,16 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsLasgunLonglas
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserLonglas
+  cost: 4000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsFrag
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1262,7 +1312,37 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarShellHE
-  cost: 5000
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsLauncherChs
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLauncherChs
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsGrenadeBlast
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: GrenadeBlast
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsGrenadeFrag
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: GrenadeFrag
+  cost: 3000
   category: cpcat-arm
   group: WH40KHereticsMarket
 

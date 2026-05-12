@@ -275,8 +275,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
-      Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell]
+      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell, WH40KImperiumLasgunLonglas]
+      Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell, WH40KHereticsLasgunLonglas]
   - id: wep_left_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-3-title
@@ -287,8 +287,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft3]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel, WH40KImperiumBolter, WH40KImperiumMagazineBolter, WH40KImperiumMagazineBolterPistol]
-      Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel, WH40KHereticsBolterPistol, WH40KHereticsMagazineBolter, WH40KHereticsMagazineBolterPistol]
+      Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel, WH40KImperiumBolter, WH40KImperiumMagazineBolter, WH40KImperiumMagazineBolterPistol, WH40KImperiumLauncherCadia, WH40KImperiumGrenadeFrag]
+      Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel, WH40KHereticsBolterPistol, WH40KHereticsMagazineBolter, WH40KHereticsMagazineBolterPistol, WH40KHereticsLauncherChs, WH40KHereticsGrenadeFrag]
   - id: wep_right_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-3-title
@@ -311,8 +311,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack]
-      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack]
+      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack, WH40KImperiumGrenadeBlast]
+      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack, WH40KHereticsGrenadeBlast]
   - id: wep_right_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-4-title

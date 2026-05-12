@@ -147,3 +147,30 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter_emplacement.rsi
     state: heavy_bolter
+
+- type: entity
+  parent: WH40KHeavyBolter
+  id: WH40KHeavyBolterChs
+  name: heavy bolter emplacement
+  description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+    - map: [ "enum.WH40KHeavyBolterVisualLayers.Folded" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosheavy_bolter.rsi
+      state: unanchored
+    - map: [ "enum.WH40KHeavyBolterVisualLayers.Deployed" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosheavy_bolter_emplacement.rsi
+      state: heavy_bolter
+      visible: false
+    - map: [ "enum.GunVisualLayers.Mag" ]
+      sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosheavy_bolter_emplacement.rsi
+      state: mag-0
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosheavy_bolter.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosheavy_bolter.rsi

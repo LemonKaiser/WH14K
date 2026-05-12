@@ -81,14 +81,14 @@
     - CannotSuicide
   - type: WH40KServoSkullMob
     followSpeed: 4
-    chargeSpeed: 8
+    chargeSpeed: 7.5
     followStopRange: 1.25
     chargeStopRange: 0.25
     hostileDetectionRange: 6
     scanInterval: 0.2
   - type: AmbientSound
     range: 10
-    volume: -10
+    volume: -9
     sound:
        path: /Audio/Ambience/Objects/portable_scrubber.ogg
 
@@ -194,7 +194,7 @@
   - type: WH40KServoSkullMob
     triggerOnHostile: true
     followSpeed: 4.5
-    chargeSpeed: 9
+    chargeSpeed: 8.5
     hostileDetectionRange: 7
     scanInterval: 0.15
   - type: TimerTrigger

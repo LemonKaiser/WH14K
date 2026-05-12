@@ -9,6 +9,8 @@
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/phosphor.rsi
   - type: Gun
     fireRate: 2
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/phosphor.ogg
   - type: RevolverAmmoProvider
     capacity: 6
     chambers: [ True, True, True, True, True, True ]
@@ -31,6 +33,8 @@
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
   - type: Gun
     fireRate: 0.6
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/electric_arc.ogg
   - type: RevolverAmmoProvider
     capacity: 6
     chambers: [ True, True, True, True, True, True ]

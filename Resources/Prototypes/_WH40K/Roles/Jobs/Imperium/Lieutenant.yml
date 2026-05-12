@@ -5,8 +5,11 @@
   displayWeight: 100
   playTimeTracker: JobLieutenant
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobSergeant
+      time: 1h
     - !type:OverallPlaytimeRequirement
-      time: 60
+      time: 4h
     - !type:SpeciesRequirement
       species:
       - Tau

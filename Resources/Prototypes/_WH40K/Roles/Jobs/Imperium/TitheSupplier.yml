@@ -30,6 +30,12 @@
   displayWeight: 90
   playTimeTracker: JobMunitorumOfficer
   requirements:
+    - !type:RoleTimeRequirement
+      role: JobTitheSupplier
+      time: 2h
+    - !type:RoleTimeRequirement
+      role: JobVoxScout
+      time: 0.5h
     - !type:SpeciesRequirement
       species:
       - Tau

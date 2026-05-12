@@ -533,13 +533,13 @@
     lightningPrototype: WH40KLightning
   - type: StunOnCollide
     stunAmount: 0
-    knockdownAmount: 5 # Enough to subdue and follow up with a stun baton
+    knockdownAmount: 0 # Enough to subdue and follow up with a stun baton
     drop: false #Ranged KD and item drop are too strong in one package
-    slowdownAmount: 0.5
+    slowdownAmount: 5
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
   - type: TimedDespawn
-    lifetime: 0.35
+    lifetime: 0.5
 
 - type: entity
   name: lightning
@@ -550,8 +550,8 @@
     - type: Lightning
       canArc: true
     - type: Electrified
-      shockTime: 0.01
-      probability: 0.8
+      shockTime: 0
+      shockDamage: 15
 
 - type: entity
   parent: BaseBullet

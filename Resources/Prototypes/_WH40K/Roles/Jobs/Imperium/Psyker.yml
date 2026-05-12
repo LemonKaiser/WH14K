@@ -5,6 +5,9 @@
   displayWeight: 50
   playTimeTracker: JobPsyker
   requirements:
+    - !type:DepartmentTimeRequirement
+      department: Heretics
+      time: 3h
     - !type:SpeciesRequirement
       species:
       - Tau
@@ -36,4 +39,3 @@
     head: ClothingHeadHelmetPsyker
     outerClothing: ClothingOuterPsykerWardCoat
     id: PsykerDogTag
-
