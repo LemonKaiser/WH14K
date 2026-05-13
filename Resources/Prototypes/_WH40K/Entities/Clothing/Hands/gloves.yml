@@ -96,3 +96,14 @@
     sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/vst_gloves.rsi
+
+- type: entity
+  parent: ClothingHandsGlovesColorBlack
+  id: ClothingHandsGlovesInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Hands/Gloves/gloves_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Hands/Gloves/gloves_inquisition.rsi
+  - type: Insulated

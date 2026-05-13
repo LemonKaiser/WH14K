@@ -172,3 +172,13 @@
     sprite: _WH40K/Clothing/Shoes/Boots/khorneboots.rsi
   - type: ClothingSlowOnDamageModifier
     modifier: 0.4
+
+- type: entity
+  parent: ClothingShoesAnkleBoots
+  id: ClothingShoesAnkleBootsInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi

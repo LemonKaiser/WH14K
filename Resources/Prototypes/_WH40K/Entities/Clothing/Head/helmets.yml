@@ -355,3 +355,33 @@
     sprite: _WH40K/Clothing/Head/Helmets/champion_khorne_helmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/champion_khorne_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetFlakInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_inquisition.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetFlakAdvInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/fullflakhelmet_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/fullflakhelmet_inquisition.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakMed
+  id: ClothingHeadHelmetFlakMedInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi

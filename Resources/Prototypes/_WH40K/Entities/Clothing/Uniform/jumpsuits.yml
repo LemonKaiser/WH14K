@@ -191,3 +191,13 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/valhallan_uniform_captain.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/valhallan_uniform_captain.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_inquisition.rsi

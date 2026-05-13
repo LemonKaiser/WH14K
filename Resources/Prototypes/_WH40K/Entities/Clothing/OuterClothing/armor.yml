@@ -396,3 +396,23 @@
   - type: ContainerContainer
     containers:
       toggleable-clothing: !type:ContainerSlot {}
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorFlakInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakarmor_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakarmor_inquisition.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorFlakVestLightInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_inquisition.rsi
