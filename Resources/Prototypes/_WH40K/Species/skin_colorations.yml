@@ -4,3 +4,9 @@
     hue: [0.56, 0.63]
     saturation: [0.22, 0.42]
     lightness: [0.45, 0.72]
+
+- type: skinColoration
+  id: OrkToned
+  strategy: !type:ClampedHslColoration
+    saturation: [0, 0.05]
+    lightness: [0.45, 0.72]

@@ -1,0 +1,22 @@
+- type: job
+  id: Boyz
+  name: job-name-ork-boyz
+  description: job-description-ork-boyz
+  displayWeight: 10
+  playTimeTracker: JobOrkBoyz
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Ork
+  startingGear: OrkBoysGear
+  icon: "JobIconTauFireWarrior"
+  supervisors: job-supervisors-wh40k-ork
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: OrkBoysGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOrk

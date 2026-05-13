@@ -3,7 +3,7 @@
   id: WH40KAutocannon
   name: heavy bolter emplacement
   description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
-  suffix: WH40K
+  suffix: WH40K, стационарное
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -41,7 +41,7 @@
   id: WH40KAutocannonChs
   name: heavy bolter emplacement
   description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
-  suffix: WH40K
+  suffix: WH40K, еретики, стационарное
   components:
   - type: Sprite
     drawdepth: Mobs

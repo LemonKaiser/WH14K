@@ -606,3 +606,48 @@
     slowdownAmount: 3
     walkSpeedModifier: 0.7
     sprintSpeedModifier: 0.7
+
+- type: entity
+  id: BulletSerpenta
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    layers:
+      - state: phosphorserpentaprojectile
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 10
+        Heat: 20
+  - type: PointLight
+    enabled: true
+    color: "#ff4300"
+    radius: 2.0
+    energy: 9.0
+  - type: ChangeTemperatureOnCollide
+    heat: 150000
+  - type: IgniteOnCollide
+    fireStacks: 3.5
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.9
+    sprintSpeedModifier: 0.9
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 100
+        hard: false
+        layer:
+        - LargeMobLayer
+        mask:
+        - Impassable
+        - BulletImpassable

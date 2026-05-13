@@ -48,3 +48,5 @@ job-description-hellish-foreman = Elite assault reinforcements in carapace armor
 job-description-tau-fire-warrior = Shas'la: a line warrior of the Fire Caste, fighting for the T'au'va with disciplined pulse fire and a full field kit.
 job-description-tau-officer = Shas'ui: a veteran Fire Caste leader, directing the cadre with command armour and coordinated pulse volleys.
 job-description-tau-ethereal = Ethereal: a spiritual and political leader of the T'au Empire, guiding the cadre through authority, regalia, and personal armament.
+
+job-description-ork-boyz = Nope.
