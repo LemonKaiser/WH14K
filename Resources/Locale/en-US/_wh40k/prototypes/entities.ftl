@@ -1917,3 +1917,30 @@ ent-WH40KAmmoBoxSerpenta = Serpenta Ammo Box
 
 ent-CartridgeSerpenta = cartridge for serpenta
     .desc = Emits a powerful glow.
+
+ent-ClothingHeadHelmetFlakInquisition = Inquisition Flak Helmet
+    .desc = Standard helmet issued to Imperial Guard soldiers.
+
+ent-ClothingHeadHelmetFlakAdvInquisition = Inquisition Flak Helmet with Respirator
+    .desc = Standard helmet issued to Imperial Guard soldiers, but with a respirator.
+
+ent-ClothingHeadHelmetFlakMedInquisition = Inquisition Visor Helmet
+    .desc = Helmet with a medical visor, worn by surgeons.
+
+ent-ClothingOuterArmorFlakInquisition = Inquisition Flak Armor
+    .desc = A full set of Flak armor for the average Guardsman. Provides moderate protection, but slightly restricts movement due to its weight.
+
+ent-ClothingHeadVetInquisition = Inquisition Beret
+    .desc = Guardsman's Beret, worn by a veteran or officer.
+
+ent-ClothingOuterArmorFlakVestLightInquisition = Inquisition Flak Vest
+    .desc = A lighter version of standard Imperial Flak armor, used primarily by scouts.
+
+ent-ClothingHandsGlovesInquisition = Inquisition Gloves
+    .desc = Combat Gloves.
+
+ent-ClothingUniformJumpsuitInquisition = Inquisition Uniform
+    .desc = Uniform issued to members of the Imperium's regular army - the Imperial Guard.
+
+ent-ClothingShoesAnkleBootsInquisition = Inquisition Boots
+    .desc = Boots without any attachments.

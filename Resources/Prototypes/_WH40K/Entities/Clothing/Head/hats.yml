@@ -162,3 +162,13 @@
   - type: HideLayerClothing
     layers:
       Hair: HEAD
+
+- type: entity
+  parent: ClothingHeadVet
+  id: ClothingHeadVetInquisition
+  suffix: WH40K, Инквизиция, BOOSTY
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/beret_inquisition.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/beret_inquisition.rsi

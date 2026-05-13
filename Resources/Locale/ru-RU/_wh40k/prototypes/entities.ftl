@@ -1935,3 +1935,30 @@ ent-WH40KAmmoBoxSerpenta = коробка патронов для серпент
 
 ent-CartridgeSerpenta = патрон серпенты
     .desc = Излучает свет и сжигает
+
+ent-ClothingHeadHelmetFlakInquisition = флак-шлем инквизиции
+    .desc = Стандартная каска, выдаваемая солдатам имперской гвардии.
+
+ent-ClothingHeadHelmetFlakAdvInquisition = флак-шлем с респиратором инквизиции
+    .desc = Стандартная каска, выдаваемая солдатам имперской гвардии, но с респиратором.
+
+ent-ClothingHeadHelmetFlakMedInquisition = шлем с визором инквизиции
+    .desc = Шлем с медицинским визором, что носят хирургеоны.
+
+ent-ClothingOuterArmorFlakInquisition = флак-броня инквизиции
+    .desc = Полный комплект флак-брони для среднестатестического гвардейца. Обеспечивает усреднённую защиту, но слегка стесняет движения из за своего веса.
+
+ent-ClothingHeadVetInquisition = берет инквизиции
+    .desc = Берет Гвардейца, что принадлежит ветерану или офицеру.
+
+ent-ClothingOuterArmorFlakVestLightInquisition = флак-жилет инквизиции
+    .desc = Облегчённая версия стандартной имперской флак-брони, используется в основном разведчиками.
+
+ent-ClothingHandsGlovesInquisition = перчатки инквизиции
+    .desc = боевые перчатки.
+
+ent-ClothingUniformJumpsuitInquisition = униформа инквизиции
+    .desc = Униформа, выдающаяся членам регулярной армии империума - имперской гвардии.
+
+ent-ClothingShoesAnkleBootsInquisition = ботинки инквизиции
+    .desc = Ботинки без каких либо дополнений.
