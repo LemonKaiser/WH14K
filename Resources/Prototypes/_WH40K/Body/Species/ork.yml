@@ -1,0 +1,191 @@
+- type: markingsGroup
+  parent: Undergarments
+  id: Ork
+  onlyGroupWhitelisted: true
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.SnoutCover:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Tail:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.TailOverlay:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceOrk
+  categories: [ HideSpawnMenu ]
+  name: Ork appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganOrkTorso
+      Head: OrganOrkHead
+      ArmLeft: OrganOrkArmLeft
+      ArmRight: OrganOrkArmRight
+      HandRight: OrganOrkHandRight
+      HandLeft: OrganOrkHandLeft
+      LegLeft: OrganOrkLegLeft
+      LegRight: OrganOrkLegRight
+      FootLeft: OrganOrkFootLeft
+      FootRight: OrganOrkFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganOrkEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Ork
+
+- type: entity
+  parent:
+  - AppearanceOrk
+  - MobHuman
+  id: MobOrk
+  suffix: WH40K, Орки
+  components:
+  - type: DamageVisuals
+    thresholds: [ 8, 16, 24, 40, 56, 80 ]
+    targetLayers:
+    - "enum.HumanoidVisualLayers.Chest"
+    - "enum.HumanoidVisualLayers.Head"
+    - "enum.HumanoidVisualLayers.LArm"
+    - "enum.HumanoidVisualLayers.LLeg"
+    - "enum.HumanoidVisualLayers.RArm"
+    - "enum.HumanoidVisualLayers.RLeg"
+    damageOverlayGroups:
+      Brute:
+        sprite: _WH40K/Mobs/Species/Ork/brute_damage.rsi
+        color: "#FF0000"
+      Burn:
+        sprite: _WH40K/Mobs/Species/Ork/burn_damage.rsi
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      180: 0.7
+      240: 0.5
+  - type: Bloodstream
+    bleedReductionAmount: 1
+    maxBleedAmount: 30
+    bloodRefreshAmount: 3
+    bleedPuddleThreshold: 3
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 900
+  - type: Stamina
+    baseCritThreshold: 300
+    animationThreshold: 150
+    forceStandStamina: 30
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      160: Critical
+      240: Dead
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 40
+        Structural: 20
+  - type: PassiveDamage
+    allowedStates:
+    - Alive
+    - Critical
+    damage:
+      types:
+        Heat: -0.7
+        Blunt: -0.5
+        Piercing: -0.5
+        Slash: -0.5
+
+- type: entity
+  parent: OrganHuman
+  id: OrganOrk
+  abstract: true
+  suffix: Ork
+
+- type: entity
+  parent: OrganOrk
+  id: OrganOrkExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _WH40K/Mobs/Species/Ork/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: _WH40K/Mobs/Species/Ork/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Ork
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganOrkExternal ]
+  id: OrganOrkTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganOrkExternal ]
+  id: OrganOrkHead
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganOrkExternal ]
+  id: OrganOrkArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganOrkExternal ]
+  id: OrganOrkArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganOrkExternal ]
+  id: OrganOrkHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganOrkExternal ]
+  id: OrganOrkHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganOrkExternal ]
+  id: OrganOrkLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganOrkExternal ]
+  id: OrganOrkLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganOrkExternal ]
+  id: OrganOrkFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganOrkExternal ]
+  id: OrganOrkFootRight
+
+- type: entity
+  parent: [ OrganBaseEyes, OrganHumanInternal, OrganHumanExternal ]
+  id: OrganOrkEyes
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _WH40K/Mobs/Species/Ork/parts.rsi

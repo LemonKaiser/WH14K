@@ -302,6 +302,14 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
+  id: WH40KAmmoBoxSerpenta
+  result: WH40KAmmoBoxSerpenta
+  materials:
+    Steel: 500
+    Plasma: 50
+
+- type: latheRecipe
+  parent: BaseToolRecipe
   id: WH40KRecipeAmmoElectricArc
   result: WH40KAmmoBoxElectricArc
   materials:

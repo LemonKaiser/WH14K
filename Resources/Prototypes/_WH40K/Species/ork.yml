@@ -1,0 +1,8 @@
+- type: species
+  id: Ork
+  name: species-name-ork
+  roundStart: true
+  prototype: MobOrk
+  dollPrototype: AppearanceOrk
+  defaultSkinTone: "#354f2f"
+  skinColoration: OrkToned

@@ -117,3 +117,11 @@
     requiredLevel: 15
   inhand:
   -  WHOmnissianAxe
+
+- type: loadout
+  id: TechpriestSerpenta
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WeaponRevolverPhosphorSerpenta

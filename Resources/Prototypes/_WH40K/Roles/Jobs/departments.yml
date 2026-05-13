@@ -72,3 +72,11 @@
   - TauEthereal
   - TauOfficer
   - TauFireWarrior
+
+- type: department
+  id: Ork
+  name: department-Ork
+  description: department-Ork-description
+  color: "#006400"
+  roles:
+  - Boyz

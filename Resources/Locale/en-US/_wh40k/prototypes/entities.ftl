@@ -1896,3 +1896,24 @@ ent-WeaponStubRevolver = M748 "Burglar" Stub Revolver
 ent-Cartridge11mm = cartridge (11 mm)
 
 ent-SpeedLoader11mm = speedloader (11 mm)
+
+ent-WeaponLauncherCadia = Cadian Pattern Grenade Launcher
+    .desc = Grenade launcher used by the Cadian Astra Militarum assault troops. On the buttstock mounting lock, you see the inscription "Kill them all! The Emperor will know his own!"
+
+ent-WeaponLauncherChs = Unknown Pattern Grenade Launcher
+    .desc = A black grenade launcher that has seen many missions; good design doesn't jam! Hey... What's this... Who the hell glued a skull on here?!
+
+ent-MobOrk = Urist McMushroom
+
+ent-ClothingUniformJumpsuitOrk = Ork uniform
+    .desc = Redesign it later.
+
+    ent-MobGretchin = Gretchin
+
+ent-WeaponRevolverPhosphorSerpenta = Phosphor Serpenta
+    .desc = The flaming pellets fired by the Phosphor weapon emit a powerful glow, targeting nearby Skitarii.
+
+ent-WH40KAmmoBoxSerpenta = Serpenta Ammo Box
+
+ent-CartridgeSerpenta = cartridge for serpenta
+    .desc = Emits a powerful glow.

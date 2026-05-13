@@ -117,6 +117,26 @@
       - CartridgeElectricArc
 
 - type: entity
+  id: WH40KAmmoBoxSerpenta
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeSerpenta
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeSerpenta
+  - type: StaticPrice
+    price: 180
+
+- type: entity
   id: WH40KAmmoBoxRadCarabin
   parent: BaseAmmoProvider
   suffix: WH40K

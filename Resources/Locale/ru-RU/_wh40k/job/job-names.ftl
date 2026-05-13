@@ -47,3 +47,5 @@ job-name-hellish-foreman = адский бригадир
 job-name-tau-fire-warrior = шас'ла
 job-name-tau-officer = шас'уи
 job-name-tau-ethereal = эфириал
+
+job-name-ork-boyz = бойзы

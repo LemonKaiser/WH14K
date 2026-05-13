@@ -171,3 +171,6 @@
 
 - type: playTimeTracker
   id: JobTauEthereal
+
+- type: playTimeTracker
+  id: JobOrkBoyz

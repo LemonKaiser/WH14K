@@ -95,3 +95,30 @@
         - SpeedLoader11mm
         - Cartridge11mm
     proto: Cartridge11mm
+
+- type: entity
+  parent: BaseWeaponRevolver
+  id: WeaponRevolverPhosphorSerpenta
+  suffix: WH40K, АдМехи
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/serpenta.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/serpenta.rsi
+  - type: Gun
+    fireRate: 0.75
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/phosphor.ogg
+  - type: RevolverAmmoProvider
+    capacity: 5
+    chambers: [ True, True, True, True, True ]
+    ammoSlots: [ null, null, null, null, null ]
+    whitelist:
+      tags:
+        - CartridgeSerpenta
+    proto: CartridgeSerpenta
+  - type: Appearance
+  - type: AimingCamera
+    maxOffset: 6
+    pvsIncrease: 0.6
+    requireWield: false

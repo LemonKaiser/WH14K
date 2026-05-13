@@ -39,3 +39,5 @@ job-supervisors-wh40k-dark-mechanicum-acolyte = еретек-техножрец�
 job-supervisors-wh40k-tau-fire-warrior = Шас'уи, командованию Огненной касты, Эфирным и идеалу Т'ау'ва
 job-supervisors-wh40k-tau-officer = Эфирным, высшему командованию Огненной касты и идеалу Т'ау'ва
 job-supervisors-wh40k-tau-ethereal = Высшему Благу, советам Эфирных и судьбе Империи Т'ау
+
+job-supervisors-wh40k-ork = Горку и Морку!

@@ -6,3 +6,4 @@ department-Imperium-description = Fight traitors, for the Emperor!
 department-Dark-Mechanicus-description = Maintain base power and integrity, and equip your faction with advanced devices recovered from ancient schematics.
 department-Heretics-description = Fight the slaves of the corpse on the throne in the name of Chaos!
 department-Tau-description = Fire Caste cadres and Ethereals of the T'au Empire, fighting in the name of the T'au'va.
+department-Ork-description = Nope

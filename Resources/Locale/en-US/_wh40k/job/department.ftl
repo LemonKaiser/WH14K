@@ -6,3 +6,4 @@ department-Imperium = Imperium
 department-Dark-Mechanicum = Dark Mechanicum
 department-Heretics = Heretics
 department-Tau = T'au Empire
+department-Ork = Orks

@@ -1,0 +1,13 @@
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitOrk
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/ork.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/ork.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

@@ -63,3 +63,24 @@
         color: "#62f7e6"
   - type: Appearance
   - type: SpentAmmoVisuals
+
+- type: entity
+  id: CartridgeSerpenta
+  parent: BaseCartridge
+  suffix: WH40K, АдМехи
+  components:
+  - type: Tag
+    tags:
+      - CartridgeSerpenta
+  - type: CartridgeAmmo
+    proto: BulletSerpenta
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+      - state: base
+        map: [ "enum.AmmoVisualLayers.Base" ]
+      - state: tip
+        map: [ "enum.AmmoVisualLayers.Tip" ]
+        color: "#ff4300"
+  - type: Appearance
+  - type: SpentAmmoVisuals
