@@ -52932,17 +52932,6 @@ entities:
         moles:
           Oxygen: 1.7459903
           Nitrogen: 6.568249
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          showEnts: False
-          occludes: True
-          ents:
-          - 3113
-        paper_label: !type:ContainerSlot
-          showEnts: False
-          occludes: True
-          ent: null
   - uid: 3221
     components:
     - type: Transform
