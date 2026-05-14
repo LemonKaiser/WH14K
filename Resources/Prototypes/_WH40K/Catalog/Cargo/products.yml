@@ -339,6 +339,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumSpeedLoaderSerpenta
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SpeedLoaderSerpenta
+  cost: 800
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumHeavyBolter
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1218,6 +1228,16 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: SpeedLoader11mm
+  cost: 800
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsSpeedLoaderSerpenta
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SpeedLoaderSerpenta
   cost: 800
   category: cpcat-arm
   group: WH40KHereticsMarket

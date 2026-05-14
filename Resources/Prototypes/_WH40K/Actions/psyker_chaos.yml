@@ -466,7 +466,7 @@
   description: Рванитесь сквозь строй, сбивая и оглушая всех, кого заденете.
   components:
   - type: Action
-    useDelay: 18
+    useDelay: 180
     icon:
       sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
       state: icon

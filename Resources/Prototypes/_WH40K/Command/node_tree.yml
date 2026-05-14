@@ -13,8 +13,8 @@
     descriptionKey: w40k-cmd-upgrade-tree-node-eng-root-description
     parents: []
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumAmmoPhosphor]
-      Heretics: [WH40KHereticsAmmoPhosphor]
+      Imperium: [WH40KImperiumAmmoPhosphor, WH40KImperiumSpeedLoaderSerpenta]
+      Heretics: [WH40KHereticsAmmoPhosphor, WH40KHereticsSpeedLoaderSerpenta]
     cost: 9
     minBaseLevel: 1
     minRoundTimeSeconds: 0

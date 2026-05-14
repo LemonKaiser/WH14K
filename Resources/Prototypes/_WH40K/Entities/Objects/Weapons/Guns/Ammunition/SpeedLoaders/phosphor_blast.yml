@@ -104,3 +104,37 @@
       right:
       - state: inhand-right-mag
       - state: inhand-right-ammo
+
+- type: entity
+  parent: BaseSpeedLoaderMagnum
+  id: SpeedLoaderSerpenta
+  components:
+  - type: Tag
+    tags:
+      - SpeedLoaderSerpenta
+  - type: BallisticAmmoProvider
+    proto: CartridgeSerpenta
+    whitelist:
+      tags:
+        - CartridgeSerpenta
+    capacity: 5
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi
+    layers:
+      - state: base
+        map: [ "enum.GunVisualLayers.Base" ]
+      - state: base-6
+        map: [ "enum.GunVisualLayers.Mag" ]
+  - type: MagazineVisuals
+    magState: base
+    steps: 7
+    zeroVisible: false
+  - type: Appearance
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left-mag
+      - state: inhand-left-ammo
+      right:
+      - state: inhand-right-mag
+      - state: inhand-right-ammo

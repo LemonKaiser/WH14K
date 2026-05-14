@@ -177,3 +177,6 @@
 
 - type: Tag
   id: CartridgeSerpenta
+
+- type: Tag
+  id: SpeedLoaderSerpenta

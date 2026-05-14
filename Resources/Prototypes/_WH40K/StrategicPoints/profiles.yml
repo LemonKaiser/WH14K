@@ -29,7 +29,7 @@
     3:
       maxHp: 2000
       teamXpIncome: 3
-      fundsIncome: 3000
+      fundsIncome: 1000
       destroyTeamXpReward: 25
       destroyInfluenceReward: 6
 

@@ -98,6 +98,9 @@
     animationThreshold: 40
   - type: ScaleVisuals
     scale: 1, 0.95
+  - type: NpcFactionMember
+    factions:
+    - Tau
 
 - type: entity
   parent: OrganHuman

@@ -1944,3 +1944,6 @@ ent-ClothingUniformJumpsuitInquisition = Inquisition Uniform
 
 ent-ClothingShoesAnkleBootsInquisition = Inquisition Boots
     .desc = Boots without any attachments.
+
+ent-SpeedLoaderSerpenta = serpenta speed loader
+    .desc = Speedloader for the serpenta.

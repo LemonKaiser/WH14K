@@ -11,6 +11,8 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Melee/hammer_imperial.rsi
     state: icon
+  - type: StaminaDamageOnHit
+    damage: 10
   - type: MeleeWeapon
     wideAnimationRotation: 135
     swingLeft: true

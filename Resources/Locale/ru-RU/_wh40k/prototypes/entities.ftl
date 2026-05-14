@@ -1962,3 +1962,6 @@ ent-ClothingUniformJumpsuitInquisition = униформа инквизиции
 
 ent-ClothingShoesAnkleBootsInquisition = ботинки инквизиции
     .desc = Ботинки без каких либо дополнений.
+
+ent-SpeedLoaderSerpenta = cпидлоадер серпенты
+    .desc = Магазин для фосфорной серпенты.

@@ -104,7 +104,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      160: Critical
+      145: Critical
       240: Dead
   - type: MeleeWeapon
     damage:
@@ -117,10 +117,13 @@
     - Critical
     damage:
       types:
-        Heat: -0.7
-        Blunt: -0.5
-        Piercing: -0.5
-        Slash: -0.5
+        Heat: -0.35
+        Blunt: -0.25
+        Piercing: -0.25
+        Slash: -0.25
+  - type: NpcFactionMember
+    factions:
+    - Orks
 
 - type: entity
   parent: OrganHuman

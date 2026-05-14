@@ -12,7 +12,9 @@
   - Wizard
   - Xenoborg
   - Tyranids
+  - Tau
   - Necrons
+  - Orks
 
 - type: npcFaction
   id: Heretics
@@ -29,12 +31,15 @@
   - Wizard
   - Xenoborg
   - Tyranids
+  - Tau
   - Necrons
+  - Orks
 
 - type: npcFaction
   id: Tyranids
-  hostile: 
+  hostile:
   - Imperium
+  - Tau
   - SimpleHostile
   - NanoTrasen
   - Syndicate
@@ -47,6 +52,7 @@
   - Xenoborg
   - Heretics
   - Necrons
+  - Orks
 
 - type: npcFaction
   id: Tau
@@ -65,9 +71,29 @@
   - Wizard
   - Xenoborg
   - Necrons
+  - Orks
 
 - type: npcFaction
   id: Necrons
+  hostile:
+  - Imperium
+  - Heretics
+  - Tyranids
+  - Tau
+  - SimpleHostile
+  - NanoTrasen
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg
+  - Orks
+
+- type: npcFaction
+  id: Orks
   hostile:
   - Imperium
   - Heretics

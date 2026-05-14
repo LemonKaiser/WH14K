@@ -116,6 +116,7 @@
     whitelist:
       tags:
         - CartridgeSerpenta
+        - SpeedLoaderSerpenta
     proto: CartridgeSerpenta
   - type: Appearance
   - type: AimingCamera
