@@ -13,8 +13,8 @@
     autoAttack: true
     angle: 0
     wideAnimationRotation: -135
-    attackRate: 3
-    range: 1.8
+    attackRate: 4
+    range: 1.6
     damage:
       types:
         Blunt: 1.25
