@@ -84,7 +84,7 @@ namespace Content.Client.Chat.UI
                     _plainTextElements.Length,
                     _profile.Value.CharactersPerSecond);
 
-            SetMessage(_fullMessage);
+            SetMessage(_fullMessage, tagsAllowed: null);
         }
 
         public void StartRevealIfEnabled()
@@ -98,7 +98,7 @@ namespace Content.Client.Chat.UI
             _revealAccumulator = 0f;
             _nextTextElementDelay = 0f;
             _animating = true;
-            SetMessage(FormattedMessage.Empty);
+            SetMessage(FormattedMessage.Empty, tagsAllowed: null);
         }
 
         protected override void FrameUpdate(FrameEventArgs args)
@@ -141,7 +141,7 @@ namespace Content.Client.Chat.UI
                     speedScale,
                     _profile.Value);
 
-            SetMessage(DialogueRevealTextElementHelper.BuildVisibleMessage(_fullMessage, _visibleTextElementCount));
+            SetMessage(DialogueRevealTextElementHelper.BuildVisibleMessage(_fullMessage, _visibleTextElementCount), tagsAllowed: null);
             TryPlayDialogueBlip(textElement, modulation);
 
             if (_visibleTextElementCount >= _plainTextElements.Length)
@@ -162,7 +162,7 @@ namespace Content.Client.Chat.UI
         private void CompleteReveal()
         {
             _animating = false;
-            SetMessage(_fullMessage);
+            SetMessage(_fullMessage, tagsAllowed: null);
         }
 
         private void TryPlayDialogueBlip(string textElement, DialogueBlipTextElementModulation modulation)

@@ -12,6 +12,7 @@ using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared._WH40K.HeavyBolter;
+using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -212,10 +213,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
     private void ClientDisarm(EntityUid attacker, MapCoordinates mousePos, EntityCoordinates coordinates)
     {
-        EntityUid? target = null;
-
-        if (_stateManager.CurrentState is GameplayStateBase screen)
-            target = screen.GetClickedEntity(mousePos);
+        var target = ResolveAttackTarget(attacker, mousePos);
 
         RaisePredictiveEvent(new DisarmAttackEvent(GetNetEntity(target), GetNetCoordinates(coordinates)));
     }
@@ -227,16 +225,66 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         if (mousePos.MapId != attackerPos.MapId || (attackerPos.Position - mousePos.Position).Length() > meleeComponent.Range)
             return;
 
-        EntityUid? target = null;
-
-        if (_stateManager.CurrentState is GameplayStateBase screen)
-            target = screen.GetClickedEntity(mousePos);
+        var target = ResolveAttackTarget(attacker, mousePos);
 
         // Don't light-attack if interaction will be handling this instead
         if (Interaction.CombatModeCanHandInteract(attacker, target))
             return;
 
         RaisePredictiveEvent(new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(coordinates)));
+    }
+
+    private EntityUid? ResolveAttackTarget(EntityUid attacker, MapCoordinates mousePos)
+    {
+        if (_stateManager.CurrentState is not GameplayStateBase screen)
+            return null;
+
+        if (!TryGetMountedVehicle(attacker, out var vehicle))
+            return screen.GetClickedEntity(mousePos);
+
+        foreach (var candidate in screen.GetClickableEntities(mousePos))
+        {
+            if (!ShouldIgnoreVehicleAttackTarget(attacker, vehicle, candidate))
+                return candidate;
+        }
+
+        return null;
+    }
+
+    private bool TryGetMountedVehicle(EntityUid attacker, out EntityUid vehicle)
+    {
+        vehicle = default;
+
+        if (TryComp<BuckleComponent>(attacker, out var buckle) &&
+            buckle.BuckledTo is { } buckledTo &&
+            HasComp<VehicleComponent>(buckledTo))
+        {
+            vehicle = buckledTo;
+            return true;
+        }
+
+        if (TryComp<VehicleOperatorComponent>(attacker, out var vehicleOperator) &&
+            vehicleOperator.Vehicle is { } operatedVehicle)
+        {
+            vehicle = operatedVehicle;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool ShouldIgnoreVehicleAttackTarget(EntityUid attacker, EntityUid vehicle, EntityUid candidate)
+    {
+        if (candidate == attacker || candidate == vehicle)
+            return true;
+
+        if (TryComp<BuckleComponent>(candidate, out var buckle) &&
+            buckle.BuckledTo == vehicle)
+        {
+            return true;
+        }
+
+        return Transform(candidate).ParentUid == vehicle;
     }
 
     private bool IsOperatingHeavyBolter(EntityUid user)

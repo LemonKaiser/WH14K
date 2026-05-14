@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Configuration;
+using Content.Shared.Chat;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
 
@@ -41,6 +42,12 @@ public sealed partial class CCVars
 
     public static readonly CVarDef<bool> ChatShowTypingIndicator =
         CVarDef.Create("chat.show_typing_indicator", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<string> ChatEmojiAllowedChannels =
+        CVarDef.Create("chat.emoji_allowed_channels",
+            ChatEmoji.DefaultAllowedChannelsCVar,
+            CVar.SERVER | CVar.REPLICATED,
+            "Comma-separated list of chat channels where emoji aliases and direct emoji are enabled. Example: OOC,LOOC");
 
     public static readonly CVarDef<bool> ChatEnableFancyBubbles =
         CVarDef.Create("chat.enable_fancy_bubbles",

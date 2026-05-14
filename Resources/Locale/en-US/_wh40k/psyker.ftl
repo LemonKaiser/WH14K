@@ -430,6 +430,7 @@ wh40k-psyker-astral-popup-catastrophe-exit = The shared Warp hurls you out of tr
 wh40k-psyker-astral-popup-reentry-cooldown = Your thoughts are still settling back into the body. Astral projection will be ready in {$seconds}s.
 wh40k-psyker-astral-popup-fatigue-locked = The astral tether is still frayed. Astral projection will be ready in {$seconds}s.
 wh40k-psyker-astral-popup-star-harvested = Astral spark: +{$xp} XP.
+wh40k-psyker-force-staff-user-required = Only a sanctioned psyker can channel a force staff.
 wh40k-psyker-astral-discipline-sanctioning = Sanctioning
 wh40k-psyker-astral-discipline-telekinesis = Telekinesis
 wh40k-psyker-astral-discipline-aegis = Aegis

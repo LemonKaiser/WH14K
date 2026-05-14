@@ -180,6 +180,13 @@
   - WH40KGuardsmanGlasses
 
 - type: loadoutGroup
+  id: WH40KHereticLineEyes
+  name: loadout-group-wh40k-heretic-line-eyes
+  minLimit: 0
+  loadouts:
+  - WH40KGuardsmanGlasses
+
+- type: loadoutGroup
   id: WH40KFieldKit
   name: loadout-group-wh40k-field-kit
   minLimit: 0

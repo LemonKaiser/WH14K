@@ -442,23 +442,6 @@
   - WH40KRecipeIntelDetectorHeretics
 
 - type: technology
-  id: WH40KEquipmentSentryLinks
-  name: research-technology-wh40k-equipment-sentry-links
-  icon:
-    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
-    state: sentrycomp_cl
-  discipline: WH40KEquipment
-  tier: 1
-  cost: 9000
-  researchTimeSeconds: 195
-  technologyPrerequisites:
-  - WH40KEquipmentAuthLeft3
-  - WH40KEquipmentFieldFlares
-  recipeUnlocks:
-  - WH40KRecipeSentryLaptopImperium
-  - WH40KRecipeSentryLaptopHeretics
-
-- type: technology
   id: WH40KEquipmentFultonRecovery
   name: research-technology-wh40k-equipment-fulton-recovery
   icon:
@@ -487,7 +470,7 @@
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft4
-  - WH40KEquipmentSentryLinks
+  - WH40KEquipmentFieldFlares
   recipeUnlocks:
   - WH40KRecipeMissionPinpointerRelayImperium
   - WH40KRecipeMissionPinpointerRelayHeretics

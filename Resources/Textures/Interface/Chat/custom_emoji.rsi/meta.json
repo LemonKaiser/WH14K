@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "Custom",
+  "copyright": "WH14K custom chat emoji",
+  "size": {
+    "x": 72,
+    "y": 72
+  },
+  "states": [
+    {
+      "name": "blunt"
+    }
+  ]
+}

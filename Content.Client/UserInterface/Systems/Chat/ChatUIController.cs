@@ -181,6 +181,7 @@ public sealed partial class ChatUIController : UIController
     public ChatChannel FilterableChannels { get; private set; }
     public ChatSelectChannel SelectableChannels { get; private set; }
     private ChatSelectChannel PreferredChannel { get; set; } = ChatSelectChannel.OOC;
+    private ChatSelectChannel _emojiAllowedChannels = ChatEmoji.DefaultAllowedChannels;
 
     public event Action<ChatSelectChannel>? CanSendChannelsChanged;
     public event Action<ChatChannel>? FilterableChannelsChanged;
@@ -202,6 +203,7 @@ public sealed partial class ChatUIController : UIController
         SubscribeNetworkEvent<DamageForceSayEvent>(OnDamageForceSay);
         _config.OnValueChanged(CCVars.ChatEnableColorName, (value) => { _chatNameColorsEnabled = value; });
         _chatNameColorsEnabled = _config.GetCVar(CCVars.ChatEnableColorName);
+        _config.OnValueChanged(CCVars.ChatEmojiAllowedChannels, OnEmojiAllowedChannelsChanged, true);
 
         _speechBubbleRoot = new LayoutContainer();
 
@@ -725,11 +727,30 @@ public sealed partial class ChatUIController : UIController
     public void UpdateSelectedChannel(ChatBox box)
     {
         var (prefixChannel, _, radioChannel) = SplitInputContents(box.ChatInput.Input.Text.ToLower());
+        var selectedChannel = box.SelectedChannel == ChatSelectChannel.None
+            ? GetPreferredChannel()
+            : box.SelectedChannel;
 
         if (prefixChannel == ChatSelectChannel.None)
-            box.ChatInput.ChannelSelector.UpdateChannelSelectButton(box.SelectedChannel, null);
+            box.ChatInput.ChannelSelector.UpdateChannelSelectButton(selectedChannel, null);
         else
             box.ChatInput.ChannelSelector.UpdateChannelSelectButton(prefixChannel, radioChannel);
+
+        var effectiveChannel = ResolveEffectiveInputChannel(box);
+
+        box.ChatInput.SetEmojiAllowed(IsEmojiAllowed(effectiveChannel));
+    }
+
+    public ChatSelectChannel ResolveEffectiveInputChannel(ChatBox box)
+    {
+        var (prefixChannel, _, _) = SplitInputContents(box.ChatInput.Input.Text.ToLower());
+        var selectedChannel = box.SelectedChannel == ChatSelectChannel.None
+            ? GetPreferredChannel()
+            : box.SelectedChannel;
+
+        return prefixChannel == ChatSelectChannel.None
+            ? MapLocalIfGhost(selectedChannel)
+            : prefixChannel;
     }
 
     public (ChatSelectChannel chatChannel, string text, RadioChannelPrototype? radioChannel) SplitInputContents(string text)
@@ -783,7 +804,7 @@ public sealed partial class ChatUIController : UIController
         {
             var locWarning = Loc.GetString("chat-manager-max-message-length",
                 ("maxMessageLength", MaxMessageLength));
-            box.AddLine(locWarning, Color.Orange);
+            box.AddLine(locWarning, Color.Orange, allowAliasMarkup: false);
             return;
         }
 
@@ -1193,6 +1214,7 @@ public sealed partial class ChatUIController : UIController
     public void RegisterChat(ChatBox chat)
     {
         _chats.Add(chat);
+        UpdateSelectedChannel(chat);
     }
 
     public void UnregisterChat(ChatBox chat)
@@ -1220,6 +1242,26 @@ public sealed partial class ChatUIController : UIController
         foreach (var chat in _chats)
         {
             chat.Repopulate();
+        }
+    }
+
+    public bool IsEmojiAllowed(ChatSelectChannel channel)
+    {
+        return ChatEmoji.IsAllowed(_emojiAllowedChannels, MapLocalIfGhost(channel));
+    }
+
+    public bool IsEmojiAllowed(ChatChannel channel)
+    {
+        return ChatEmoji.IsAllowed(_emojiAllowedChannels, channel);
+    }
+
+    private void OnEmojiAllowedChannelsChanged(string raw)
+    {
+        _emojiAllowedChannels = ChatEmoji.ParseAllowedChannels(raw);
+
+        foreach (var chat in _chats)
+        {
+            UpdateSelectedChannel(chat);
         }
     }
 

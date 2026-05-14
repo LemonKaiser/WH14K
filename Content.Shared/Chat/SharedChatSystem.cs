@@ -129,6 +129,9 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (!(input.StartsWith(RadioChannelPrefix) || input.StartsWith(RadioChannelAltPrefix)))
             return;
 
+        if (LooksLikeEmojiAliasPrefix(input))
+            return;
+
         if (!_keyCodes.TryGetValue(char.ToLower(input[1]), out _))
             return;
 
@@ -169,6 +172,9 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (!(input.StartsWith(RadioChannelPrefix) || input.StartsWith(RadioChannelAltPrefix)))
             return false;
 
+        if (LooksLikeEmojiAliasPrefix(input))
+            return false;
+
         if (input.Length < 2 || char.IsWhiteSpace(input[1]))
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
@@ -176,6 +182,9 @@ public abstract partial class SharedChatSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("chat-manager-no-radio-key"), source, source);
             return true;
         }
+
+        if (input[0] == RadioChannelPrefix && input.Length > 2 && !char.IsWhiteSpace(input[2]))
+            return false;
 
         var channelKey = input[1];
         channelKey = char.ToLower(channelKey);
@@ -198,6 +207,13 @@ public abstract partial class SharedChatSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private static bool LooksLikeEmojiAliasPrefix(string input)
+    {
+        return input.Length > 0 &&
+               input[0] == RadioChannelPrefix &&
+               ChatEmoji.StartsWithPotentialAlias(input);
     }
 
     public string SanitizeMessageCapital(string message)

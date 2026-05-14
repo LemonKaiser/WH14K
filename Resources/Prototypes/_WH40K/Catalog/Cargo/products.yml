@@ -833,16 +833,6 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
-  id: WH40KImperiumSentryLaptop
-  icon:
-    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
-    state: sentrycomp_cl
-  product: WH40KSentryLaptopImperium
-  cost: 9000
-  category: cpcat-cgo
-  group: WH40KImperiumMarket
-
-- type: cargoProduct
   id: WH40KImperiumTacticalFulton
   icon:
     sprite: Objects/Tools/fulton.rsi
@@ -1693,16 +1683,6 @@
     state: icon
   product: WH40KSignalFlareHeretics
   cost: 4200
-  category: cpcat-cgo
-  group: WH40KHereticsMarket
-
-- type: cargoProduct
-  id: WH40KHereticsSentryLaptop
-  icon:
-    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
-    state: sentrycomp_cl
-  product: WH40KSentryLaptopHeretics
-  cost: 9000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 

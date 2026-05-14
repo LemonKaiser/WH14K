@@ -27,6 +27,10 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -35,10 +39,12 @@ namespace Content.Server._WH40K.StrategicPoints;
 public sealed class WH40KStrategicPointSystem : EntitySystem
 {
     private static readonly TimeSpan IncomeInterval = TimeSpan.FromSeconds(10);
+    private static readonly TimeSpan TripleHoldDuration = TimeSpan.FromMinutes(10);
     private static readonly SoundSpecifier BuildSound = new SoundPathSpecifier("/Audio/Machines/machine_switch.ogg");
     private static readonly SoundSpecifier UpgradeSound = new SoundPathSpecifier("/Audio/Machines/twobeep.ogg");
     private static readonly SoundSpecifier DestroySound = new SoundPathSpecifier("/Audio/Effects/metal_break1.ogg");
     private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
+    private const int TripleHoldRequiredPoints = 3;
     private static readonly Dictionary<ProtoId<StackPrototype>, int> InitialBuildMaterials = new()
     {
         ["Steel"] = 5,
@@ -80,6 +86,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -92,6 +99,8 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
     private TimeSpan _nextFallbackIncomeTick = TimeSpan.Zero;
     private int _nextAutoCallsignIndex;
+    private readonly Dictionary<string, TimeSpan> _tripleHoldStartedAt = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _tripleHoldCompletedTeams = new(StringComparer.OrdinalIgnoreCase);
 
     public override void Initialize()
     {
@@ -126,6 +135,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         var now = _timing.CurTime;
         UpdateFallbackIncome(now);
         UpdatePointIncome(now);
+        UpdateTripleHoldMilestones(now);
     }
 
     public bool TryBindConstructedPoint(
@@ -190,6 +200,12 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         UpdateUi((pointUid, point));
         _audio.PlayPvs(BuildSound, pointUid);
         AnnouncePointEvent(point, anchor, "wh40k-strategic-point-notification-built");
+        RaiseLocalEvent(new WH40KStrategicPointBuiltEvent(
+            pointUid,
+            user,
+            resolvedTeamId,
+            point.PointType,
+            point.Tier));
 
         return true;
     }
@@ -237,11 +253,39 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         WH40KStrategicPointAnchorComponent anchor)
     {
         var anchorCoordinates = Transform(anchorUid).Coordinates;
-        _transform.SetCoordinates(pointUid, anchorCoordinates.Offset(anchor.BuiltOffset));
+        EnsureStrategicEntityLocked(pointUid, anchorCoordinates.Offset(anchor.BuiltOffset));
+    }
+
+    private void EnsureStrategicPointLocked(EntityUid uid, WH40KStrategicPointComponent point)
+    {
+        if (point.Anchor is { } anchorUid &&
+            TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
+        {
+            var anchorCoordinates = Transform(anchorUid).Coordinates;
+            EnsureStrategicEntityLocked(uid, anchorCoordinates.Offset(anchor.BuiltOffset));
+            return;
+        }
+
+        EnsureStrategicEntityLocked(uid);
+    }
+
+    private void EnsureStrategicEntityLocked(EntityUid uid, EntityCoordinates? desiredCoordinates = null)
+    {
+        var xform = Transform(uid);
+        var targetCoordinates = desiredCoordinates ?? xform.Coordinates;
+
+        if (!xform.Anchored && xform.GridUid != null)
+            _transform.AnchorEntity(uid, xform);
+
+        if (TryComp<PhysicsComponent>(uid, out var physics) && physics.BodyType != BodyType.Static)
+            _physics.SetBodyType(uid, BodyType.Static, body: physics);
+
+        _transform.SetCoordinates(uid, xform, targetCoordinates);
     }
 
     private void OnAnchorMapInit(Entity<WH40KStrategicPointAnchorComponent> ent, ref MapInitEvent args)
     {
+        EnsureStrategicEntityLocked(ent.Owner);
         EnsureAnchorCallsign(ent.Owner, ent.Comp);
 
         if (ent.Comp.BuiltPoint is { } built && !Exists(built))
@@ -254,6 +298,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
     private void OnPointMapInit(Entity<WH40KStrategicPointComponent> ent, ref MapInitEvent args)
     {
+        EnsureStrategicPointLocked(ent.Owner, ent.Comp);
         ent.Comp.NextIncomeTick = _timing.CurTime + GetIncomeInterval(ent.Comp);
         HealPointToFull(ent.Owner);
         UpdatePointAppearance(ent.Owner, ent.Comp);
@@ -262,6 +307,8 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
     {
         _nextAutoCallsignIndex = 0;
+        _tripleHoldStartedAt.Clear();
+        _tripleHoldCompletedTeams.Clear();
     }
 
     private void OnPointShutdown(Entity<WH40KStrategicPointComponent> ent, ref ComponentShutdown args)
@@ -439,6 +486,53 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
                 continue;
 
             ApplyPointIncome(uid, point, tier);
+        }
+    }
+
+    private void UpdateTripleHoldMilestones(TimeSpan now)
+    {
+        var ownedPointCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var query = EntityQueryEnumerator<WH40KStrategicPointComponent>();
+        while (query.MoveNext(out _, out var point))
+        {
+            if (point.Tier <= WH40KStrategicPointTier.T0 ||
+                string.IsNullOrWhiteSpace(point.OwnerTeamId))
+            {
+                continue;
+            }
+
+            ownedPointCounts[point.OwnerTeamId] = ownedPointCounts.GetValueOrDefault(point.OwnerTeamId) + 1;
+        }
+
+        var trackedTeams = new HashSet<string>(_teamRule.GetTeamIds(), StringComparer.OrdinalIgnoreCase);
+        trackedTeams.UnionWith(_tripleHoldStartedAt.Keys);
+        trackedTeams.UnionWith(_tripleHoldCompletedTeams);
+
+        foreach (var teamId in trackedTeams)
+        {
+            ownedPointCounts.TryGetValue(teamId, out var ownedPointCount);
+
+            if (ownedPointCount < TripleHoldRequiredPoints)
+            {
+                _tripleHoldStartedAt.Remove(teamId);
+                continue;
+            }
+
+            if (_tripleHoldCompletedTeams.Contains(teamId))
+                continue;
+
+            if (!_tripleHoldStartedAt.TryGetValue(teamId, out var startedAt))
+            {
+                _tripleHoldStartedAt[teamId] = now;
+                continue;
+            }
+
+            var heldDuration = now - startedAt;
+            if (heldDuration < TripleHoldDuration)
+                continue;
+
+            _tripleHoldCompletedTeams.Add(teamId);
+            RaiseLocalEvent(new WH40KStrategicPointTripleHoldCompletedEvent(teamId, ownedPointCount, heldDuration));
         }
     }
 
@@ -791,6 +885,16 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         if (ent.Comp.Anchor is { } anchorUid && TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
             AnnouncePointEvent(ent.Comp, anchor, "wh40k-strategic-point-notification-upgraded");
 
+        if (!string.IsNullOrWhiteSpace(ent.Comp.OwnerTeamId))
+        {
+            RaiseLocalEvent(new WH40KStrategicPointUpgradedEvent(
+                ent.Owner,
+                user,
+                ent.Comp.OwnerTeamId,
+                ent.Comp.PointType,
+                ent.Comp.Tier));
+        }
+
         _popup.PopupEntity(
             Loc.GetString("wh40k-strategic-point-popup-upgrade-complete", ("tier", (int) targetTier)),
             ent.Owner,
@@ -809,6 +913,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
             return;
 
         RewardDestroyer(point, tier, cause);
+        TryRaiseDestroyProgressEvent(uid, point, cause);
         RefundDestroyedPointMaterials(uid, point);
 
         if (point.Anchor is { } anchorUid && TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
@@ -823,10 +928,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         WH40KStrategicPointTierProfile tier,
         EntityUid? cause)
     {
-        if (cause is not { Valid: true } causeUid ||
-            !_teamRule.TryGetTeamIdFromEntity(causeUid, out var rawTeamId) ||
-            !_teamRule.TryResolveTeamId(rawTeamId, out var teamId) ||
-            string.Equals(teamId, point.OwnerTeamId, StringComparison.OrdinalIgnoreCase))
+        if (!TryResolveDestroyer(point, cause, out _, out var teamId))
         {
             return;
         }
@@ -836,6 +938,54 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
         if (tier.DestroyInfluenceReward > 0)
             _teamRule.TryAdjustTeamInfluence(teamId, tier.DestroyInfluenceReward, out _, out _, "strategic-point-destroy");
+    }
+
+    private bool TryResolveDestroyer(
+        WH40KStrategicPointComponent point,
+        EntityUid? cause,
+        out EntityUid attackerUid,
+        out string teamId)
+    {
+        attackerUid = EntityUid.Invalid;
+        teamId = string.Empty;
+
+        if (cause is not { Valid: true } causeUid)
+            return false;
+
+        if (!_attackerResolver.TryResolveAttacker(causeUid, out attackerUid, out _))
+            attackerUid = causeUid;
+
+        if (!_teamRule.TryGetTeamIdFromEntity(attackerUid, out var rawTeamId) ||
+            !_teamRule.TryResolveTeamId(rawTeamId, out teamId) ||
+            string.IsNullOrWhiteSpace(teamId) ||
+            string.Equals(teamId, point.OwnerTeamId, StringComparison.OrdinalIgnoreCase))
+        {
+            attackerUid = EntityUid.Invalid;
+            teamId = string.Empty;
+            return false;
+        }
+
+        return true;
+    }
+
+    private void TryRaiseDestroyProgressEvent(
+        EntityUid pointUid,
+        WH40KStrategicPointComponent point,
+        EntityUid? cause)
+    {
+        if (string.IsNullOrWhiteSpace(point.OwnerTeamId) ||
+            !TryResolveDestroyer(point, cause, out var attackerUid, out var attackerTeamId))
+        {
+            return;
+        }
+
+        RaiseLocalEvent(new WH40KStrategicPointDestroyedEvent(
+            pointUid,
+            attackerUid,
+            attackerTeamId,
+            point.OwnerTeamId,
+            point.PointType,
+            point.Tier));
     }
 
     private void RefundDestroyedPointMaterials(EntityUid uid, WH40KStrategicPointComponent point)

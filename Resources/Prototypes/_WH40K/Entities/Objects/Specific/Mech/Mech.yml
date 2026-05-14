@@ -41,6 +41,7 @@
   - type: MeleeWeapon
     animation: WeaponArcSmash
     wideAnimation: WeaponArcSmash
+  - type: WH40KMechPilotCatastrophicEject
 
 - type: entity
   id: WH40KMechModuleFanSentinel

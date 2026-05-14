@@ -17,7 +17,7 @@
     range: 1.8
     damage:
       types:
-        Blunt: 1
+        Blunt: 1.25
     soundHit:
       path: /Audio/Weapons/chainsaw.ogg
       params:
@@ -34,12 +34,16 @@
   - type: ItemToggleMeleeWeapon
     activatedDamage:
       types:
-        Slash: 20
-        Shock: 10
+        Slash: 22.5
     activatedSoundOnHit:
       path: /Audio/Weapons/chainsaw.ogg
       params:
         volume: -3
+  - type: Wieldable
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Slash: 12.5
   - type: UseDelay
   - type: Item
     sprite: _WH40K/Objects/Weapons/Melee/chainsword_evestiator/long.rsi

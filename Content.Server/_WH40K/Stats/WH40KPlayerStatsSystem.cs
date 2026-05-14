@@ -212,6 +212,10 @@ public static class WH40KPlayerStatKeys
     public const string ObjectiveCaptureSuccessValidated = "objective.capture.success.validated";
     public const string ObjectiveDefenseSuccess = "objective.defense.success";
     public const string ObjectiveDefenseSuccessValidated = "objective.defense.success.validated";
+    public const string StrategicPointBuildValidated = "strategic.point.build.validated";
+    public const string StrategicPointUpgradeValidated = "strategic.point.upgrade.validated";
+    public const string StrategicPointDestroyValidated = "strategic.point.destroy.validated";
+    public const string StrategicPointHoldTripleTenMinutesValidated = "strategic.point.hold.triple10m.validated";
     public const string EconomyCommandTreePurchaseCount = "economy.command.tree.purchase.count";
     public const string EconomyCommandTreePurchaseCost = "economy.command.tree.purchase.cost";
     public const string EconomyCommandUpgradeCount = "economy.command.upgrade.count";
@@ -229,6 +233,10 @@ public static class WH40KPlayerStatKeys
     public const string MetaXpKill = "meta.xp.kill";
     public const string MetaXpRoundWin = "meta.xp.round_win";
     public const string MetaXpObjective = "meta.xp.objective";
+    public const string MetaXpStrategicPointBuild = "meta.xp.strategic_point.build";
+    public const string MetaXpStrategicPointUpgrade = "meta.xp.strategic_point.upgrade";
+    public const string MetaXpStrategicPointDestroy = "meta.xp.strategic_point.destroy";
+    public const string MetaXpStrategicPointHold = "meta.xp.strategic_point.hold";
     public const string MetaAchievementProgress = "meta.achievement.progress_delta";
     public const string MetaAchievementCompleted = "meta.achievement.completed";
     public const string MetaAchievementRevoked = "meta.achievement.revoked";

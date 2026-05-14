@@ -61,17 +61,17 @@
   sortOrder: 40
 
 - type: wh40kMetaAchievement
-  id: wh40k-ach-frontline-anchor
+  id: wh40k-ach-triad-stand
   category: Objective
-  title: w40k-ach-frontline-anchor-t
-  description: w40k-ach-frontline-anchor-d
-  task: w40k-ach-frontline-anchor-k
+  title: w40k-ach-triad-stand-t
+  description: w40k-ach-triad-stand-d
+  task: w40k-ach-triad-stand-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 300
   rewardDecorations:
     - decor-title-trench-lord
-  target: 15
-  progressStatKey: objective.defense.success.validated
+  target: 1
+  progressStatKey: strategic.point.hold.triple10m.validated
   progressScope: Round
   sortOrder: 50
 
@@ -336,80 +336,78 @@
   sortOrder: 230
 
 - type: wh40kMetaAchievement
-  id: wh40k-ach-point-breaker
+  id: wh40k-ach-field-engineer
   category: Objective
-  title: w40k-ach-point-breaker-t
-  description: w40k-ach-point-breaker-d
-  task: w40k-ach-point-breaker-k
-  reward: wh40k-meta-progress-achievements-reward-none
-  rewardXp: 250
-  rewardDecorations:
-    - decor-title-blood-banner
-  target: 4
-  progressStatKey: objective.capture.success.validated
-  progressScope: Round
-  sortOrder: 240
-
-- type: wh40kMetaAchievement
-  id: wh40k-ach-flag-keeper
-  category: Objective
-  title: w40k-ach-flag-keeper-t
-  description: w40k-ach-flag-keeper-d
-  task: w40k-ach-flag-keeper-k
+  title: w40k-ach-field-engineer-t
+  description: w40k-ach-field-engineer-d
+  task: w40k-ach-field-engineer-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 325
   rewardDecorations:
     - decor-title-relic-keeper
-  target: 10
-  progressStatKey: objective.defense.success.validated
+  target: 3
+  progressStatKey: strategic.point.build.validated
   progressScope: Round
-  sortOrder: 250
+  sortOrder: 240
 
 - type: wh40kMetaAchievement
-  id: wh40k-ach-sector-dominator
+  id: wh40k-ach-escalation-order
   category: Objective
-  title: w40k-ach-sector-dominator-t
-  description: w40k-ach-sector-dominator-d
-  task: w40k-ach-sector-dominator-k
-  reward: wh40k-meta-progress-achievements-reward-none
-  rewardXp: 650
-  rewardDecorations:
-    - decor-title-astral-sentinel
-  target: 40
-  progressStatKey: objective.capture.success.validated
-  progressScope: Lifetime
-  sortOrder: 260
-
-- type: wh40kMetaAchievement
-  id: wh40k-ach-wall-of-steel
-  category: Objective
-  title: w40k-ach-wall-of-steel-t
-  description: w40k-ach-wall-of-steel-d
-  task: w40k-ach-wall-of-steel-k
-  reward: wh40k-meta-progress-achievements-reward-none
-  rewardXp: 700
-  rewardDecorations:
-    - decor-title-gatekeeper
-  target: 150
-  progressStatKey: objective.defense.success.validated
-  progressScope: Lifetime
-  sortOrder: 270
-
-- type: wh40kMetaAchievement
-  id: wh40k-ach-objective-ace
-  category: Objective
-  title: w40k-ach-objective-ace-t
-  description: w40k-ach-objective-ace-d
-  task: w40k-ach-objective-ace-k
+  title: w40k-ach-escalation-order-t
+  description: w40k-ach-escalation-order-d
+  task: w40k-ach-escalation-order-k
   reward: wh40k-meta-progress-achievements-reward-none
   rewardXp: 450
   rewardDecorations:
     - decor-title-pyre-marshal
-  target: 6
-  progressStatKey: objective.capture.success.validated
+  target: 4
+  progressStatKey: strategic.point.upgrade.validated
   progressScope: Round
-  roundBlockerStatKeys:
-    - combat.death
+  sortOrder: 250
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-master-builder
+  category: Objective
+  title: w40k-ach-master-builder-t
+  description: w40k-ach-master-builder-d
+  task: w40k-ach-master-builder-k
+  reward: wh40k-meta-progress-achievements-reward-none
+  rewardXp: 650
+  rewardDecorations:
+    - decor-title-astral-sentinel
+  target: 30
+  progressStatKey: strategic.point.build.validated
+  progressScope: Lifetime
+  sortOrder: 260
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-bastion-smith
+  category: Objective
+  title: w40k-ach-bastion-smith-t
+  description: w40k-ach-bastion-smith-d
+  task: w40k-ach-bastion-smith-k
+  reward: wh40k-meta-progress-achievements-reward-none
+  rewardXp: 700
+  rewardDecorations:
+    - decor-title-gatekeeper
+  target: 60
+  progressStatKey: strategic.point.upgrade.validated
+  progressScope: Lifetime
+  sortOrder: 270
+
+- type: wh40kMetaAchievement
+  id: wh40k-ach-strongpoint-saboteur
+  category: Objective
+  title: w40k-ach-strongpoint-saboteur-t
+  description: w40k-ach-strongpoint-saboteur-d
+  task: w40k-ach-strongpoint-saboteur-k
+  reward: wh40k-meta-progress-achievements-reward-none
+  rewardXp: 250
+  rewardDecorations:
+    - decor-title-blood-banner
+  target: 2
+  progressStatKey: strategic.point.destroy.validated
+  progressScope: Round
   sortOrder: 280
 
 - type: wh40kMetaAchievement

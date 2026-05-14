@@ -12,6 +12,7 @@
     damage:
       types:
         Blunt: 8
+  - type: WH40KPsykerForceStaff
 
 - type: entity
   name: biomantic force staff
@@ -34,6 +35,8 @@
     proto: ProjectileHealingBolt
     capacity: 5
     count: 5
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 45
   - type: PacifismAllowedGun
 
 - type: entity

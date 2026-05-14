@@ -1080,9 +1080,6 @@ ent-WH40KSignalFlare = signal flare
 ent-WH40KIntelDetector = intel detector
     .desc = A compact detector tuned for frontline intel signatures.
 
-ent-WH40KSentryLaptop = sentry control laptop
-    .desc = A portable control unit used to configure and redeploy sentry assets.
-
 ent-WH40KTacticalFultonField = tactical Fulton
     .desc = A recovery pack for fast field extraction of supplies and objectives.
 

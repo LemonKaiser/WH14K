@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client.Chat.Managers;
+using Content.Client.UserInterface.Systems.Chat.RichText;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Speech;
@@ -7,6 +8,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Configuration;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -17,6 +19,7 @@ namespace Content.Client.Chat.UI
         [Dependency] private readonly IGameTiming _timing = default!;
         [Dependency] private readonly IEyeManager _eyeManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] protected readonly IConfigurationManager ConfigManager = default!;
         private readonly SharedTransformSystem _transformSystem;
 
@@ -223,6 +226,14 @@ namespace Content.Client.Chat.UI
             return FormatSpeech(SharedChatSystem.GetStringInsideTag(message, tag), fontColor);
         }
 
+        protected bool ShouldRenderEmojiAliases(ChatMessage message)
+        {
+            var allowedChannels = ChatEmoji.ParseAllowedChannels(ConfigManager.GetCVar(CCVars.ChatEmojiAllowedChannels));
+            return ChatEmoji.IsAllowed(allowedChannels, message.Channel);
+        }
+
+        protected IPrototypeManager EmojiPrototypeManager => _prototypeManager;
+
     }
 
     public sealed class TextSpeechBubble : SpeechBubble
@@ -234,13 +245,16 @@ namespace Content.Client.Chat.UI
 
         protected override Control BuildBubble(SpeechType type, ChatMessage message, string speechStyleClass, Color? fontColor = null)
         {
-            var displayMessage = SpeechBubbleDisplayPolicy.LimitMessage(FormatSpeech(message.WrappedMessage, fontColor));
+            var displayMessage = ChatEmojiRichText.ReplaceEmojiText(
+                SpeechBubbleDisplayPolicy.LimitMessage(FormatSpeech(message.WrappedMessage, fontColor)),
+                ShouldRenderEmojiAliases(message),
+                EmojiPrototypeManager);
             var label = new RichTextLabel
             {
                 MaxWidth = SpeechMaxWidth,
             };
 
-            label.SetMessage(displayMessage);
+            label.SetMessage(displayMessage, tagsAllowed: null);
 
             var panel = new PanelContainer
             {
@@ -266,8 +280,11 @@ namespace Content.Client.Chat.UI
 
         protected override Control BuildBubble(SpeechType type, ChatMessage message, string speechStyleClass, Color? fontColor = null)
         {
-            var dialogueMessage = SpeechBubbleDisplayPolicy.LimitMessage(
-                ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor));
+            var dialogueMessage = ChatEmojiRichText.ReplaceEmojiText(
+                SpeechBubbleDisplayPolicy.LimitMessage(
+                    ExtractAndFormatSpeechSubstring(message, "BubbleContent", fontColor)),
+                ShouldRenderEmojiAliases(message),
+                EmojiPrototypeManager);
 
             if (!ConfigManager.GetCVar(CCVars.ChatEnableFancyBubbles))
             {
@@ -310,7 +327,12 @@ namespace Content.Client.Chat.UI
             };
 
             //We'll be honest. *Yes* this is hacky. Doing this in a cleaner way would require a bottom-up refactor of how saycode handles sending chat messages. -Myr
-            bubbleHeader.SetMessage(ExtractAndFormatSpeechSubstring(message, "BubbleHeader", fontColor));
+            bubbleHeader.SetMessage(
+                ChatEmojiRichText.ReplaceEmojiText(
+                    ExtractAndFormatSpeechSubstring(message, "BubbleHeader", fontColor),
+                    ShouldRenderEmojiAliases(message),
+                    EmojiPrototypeManager),
+                tagsAllowed: null);
 
             //As for below: Some day this could probably be converted to xaml. But that is not today. -Myr
             var mainPanel = new PanelContainer

@@ -689,10 +689,34 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.meta.xp_objective_failure", 0, CVar.SERVERONLY);
 
     /// <summary>
-    ///     Maximum objective XP per player per round. 0 means unlimited.
+    ///     Base XP grant for personally constructing a strategic point.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KMetaXpStrategicPointBuild =
+        CVarDef.Create("wh40k.meta.xp_strategic_point_build", 15, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Base XP grant for personally upgrading a strategic point tier.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KMetaXpStrategicPointUpgrade =
+        CVarDef.Create("wh40k.meta.xp_strategic_point_upgrade", 20, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Base XP grant for personally destroying an enemy strategic point.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KMetaXpStrategicPointDestroy =
+        CVarDef.Create("wh40k.meta.xp_strategic_point_destroy", 30, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Base XP grant for being on the team that holds three strategic points for ten continuous minutes.
+    /// </summary>
+    public static readonly CVarDef<int> WH40KMetaXpStrategicPointTripleHold =
+        CVarDef.Create("wh40k.meta.xp_strategic_point_triple_hold", 30, CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Maximum mission and strategic-point objective XP per player per round. 0 means unlimited.
     /// </summary>
     public static readonly CVarDef<int> WH40KMetaXpObjectiveCapPerRound =
-        CVarDef.Create("wh40k.meta.xp_objective_cap_per_round", 300, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.meta.xp_objective_cap_per_round", 500, CVar.SERVERONLY);
 
     /// <summary>
     ///     Maximum repeatable WH40K round XP per player per round.

@@ -82,7 +82,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private static readonly bool AnnounceTeamOnSpawn = true;
     private static readonly bool AnnounceWinner = true;
     private static readonly bool CountCriticalAsAlive = true;
-    private const float WH40KSprintDrain = 5f;
+    private const float WH40KSprintDrain = 3f;
     private const float WH40KWalkRecovery = 2f;
     private const float WH40KIdleRecovery = 4f;
     private const float WH40KSprintMinRemaining = 25f;
@@ -105,6 +105,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     [Dependency] private readonly StationJobsSystem _stationJobs = default!;
     [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private readonly WH40KCharacterDevelopmentRuntimeSystem _characterDevelopment = default!;
     [Dependency] private readonly WH40KFactionSystem _wh40kFactions = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private readonly SharedWeatherSystem _weather = default!;
@@ -451,6 +452,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         }
 
         ApplyWh40KStaminaProfile(ev.Mob);
+        _characterDevelopment.RefreshStaminaProfileModifiers(ev.Mob);
 
         if (!AnnounceTeamOnSpawn)
             return;
@@ -721,6 +723,7 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         while (query.MoveNext(out var uid, out _))
         {
             ApplyWh40KStaminaProfile(uid);
+            _characterDevelopment.RefreshStaminaProfileModifiers(uid);
             hits++;
         }
 

@@ -2,6 +2,7 @@ hud-chatbox-info = { $talk-key } чтобы говорить, { $cycle-key } д�
 hud-chatbox-info-talk = { $talk-key } чтобы говорить.
 hud-chatbox-info-cycle = Нажмите здесь чтобы говорить, { $cycle-key } для переключения каналов.
 hud-chatbox-info-unbound = Нажмите здесь чтобы говорить.
+
 hud-chatbox-select-name-prefixed = { $prefix } { $name }
 hud-chatbox-select-channel-Admin = Админ
 hud-chatbox-select-channel-Console = Консоль
@@ -14,6 +15,7 @@ hud-chatbox-select-channel-OOC = OOC
 hud-chatbox-select-channel-Damage = Повреждения
 hud-chatbox-select-channel-Visual = Действия
 hud-chatbox-select-channel-Radio = Рация
+
 hud-chatbox-channel-Admin = Админ Разное
 hud-chatbox-channel-AdminAlert = Админ Уведомления
 hud-chatbox-channel-AdminChat = Админ Чат
@@ -29,6 +31,7 @@ hud-chatbox-channel-Server = Сервер
 hud-chatbox-channel-Visual = Визуальный
 hud-chatbox-channel-Damage = Повреждения
 hud-chatbox-channel-Unspecified = Неопределённый
+
 hud-chatbox-highlights = Подсветка:
 hud-chatbox-highlights-button = Подтвердить
 hud-chatbox-highlights-tooltip =
@@ -39,3 +42,16 @@ hud-chatbox-highlights-placeholder =
     @МакХэндс
     "Судья"
     Медблок
+
+hud-chatbox-emoji-button-tooltip = Выбор эмодзи
+hud-chatbox-emoji-preview = {$emoji} :{$alias}:
+hud-chatbox-emoji-preview-empty = Выберите эмодзи
+hud-chatbox-emoji-category-Smileys = Эмоции и жесты
+hud-chatbox-emoji-category-Nature = Природа
+hud-chatbox-emoji-category-Food = Еда и напитки
+hud-chatbox-emoji-category-Activities = Активности
+hud-chatbox-emoji-category-Travel = Транспорт
+hud-chatbox-emoji-category-Objects = Предметы
+hud-chatbox-emoji-category-Symbols = Символы
+hud-chatbox-emoji-category-Flags = Флаги
+hud-chatbox-emoji-category-Custom = Кастомные

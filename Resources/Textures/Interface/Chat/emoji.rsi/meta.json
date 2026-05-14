@@ -1,0 +1,479 @@
+{
+  "version": 1,
+  "license": "CC-BY-4.0",
+  "copyright": "Emoji assets from Twemoji (https://twemoji.twitter.com/) by Twitter, Inc and contributors, licensed under CC-BY-4.0",
+  "size": {
+    "x": 72,
+    "y": 72
+  },
+  "states": [
+    {
+      "name": "grinning"
+    },
+    {
+      "name": "grin"
+    },
+    {
+      "name": "joy"
+    },
+    {
+      "name": "smiley"
+    },
+    {
+      "name": "smile"
+    },
+    {
+      "name": "sweat_smile"
+    },
+    {
+      "name": "laughing"
+    },
+    {
+      "name": "innocent"
+    },
+    {
+      "name": "wink"
+    },
+    {
+      "name": "blush"
+    },
+    {
+      "name": "heart_eyes"
+    },
+    {
+      "name": "sunglasses"
+    },
+    {
+      "name": "smirk"
+    },
+    {
+      "name": "neutral_face"
+    },
+    {
+      "name": "expressionless"
+    },
+    {
+      "name": "unamused"
+    },
+    {
+      "name": "sweat"
+    },
+    {
+      "name": "pensive"
+    },
+    {
+      "name": "worried"
+    },
+    {
+      "name": "pouting_face"
+    },
+    {
+      "name": "rage"
+    },
+    {
+      "name": "cry"
+    },
+    {
+      "name": "sob"
+    },
+    {
+      "name": "scream"
+    },
+    {
+      "name": "sleeping"
+    },
+    {
+      "name": "mask"
+    },
+    {
+      "name": "slightly_smiling_face"
+    },
+    {
+      "name": "upside_down_face"
+    },
+    {
+      "name": "rolling_eyes"
+    },
+    {
+      "name": "thinking"
+    },
+    {
+      "name": "rofl"
+    },
+    {
+      "name": "star_struck"
+    },
+    {
+      "name": "zany_face"
+    },
+    {
+      "name": "pleading_face"
+    },
+    {
+      "name": "smiling_face_with_tear"
+    },
+    {
+      "name": "partying_face"
+    },
+    {
+      "name": "saluting_face"
+    },
+    {
+      "name": "wave"
+    },
+    {
+      "name": "thumbsup"
+    },
+    {
+      "name": "thumbsdown"
+    },
+    {
+      "name": "clap"
+    },
+    {
+      "name": "point_left"
+    },
+    {
+      "name": "point_right"
+    },
+    {
+      "name": "ok_hand"
+    },
+    {
+      "name": "fist"
+    },
+    {
+      "name": "muscle"
+    },
+    {
+      "name": "pray"
+    },
+    {
+      "name": "handshake"
+    },
+    {
+      "name": "pinched_fingers"
+    },
+    {
+      "name": "v"
+    },
+    {
+      "name": "writing_hand"
+    },
+    {
+      "name": "point_up"
+    },
+    {
+      "name": "dog"
+    },
+    {
+      "name": "cat"
+    },
+    {
+      "name": "mouse"
+    },
+    {
+      "name": "wolf"
+    },
+    {
+      "name": "fox"
+    },
+    {
+      "name": "herb"
+    },
+    {
+      "name": "four_leaf_clover"
+    },
+    {
+      "name": "rose"
+    },
+    {
+      "name": "skull"
+    },
+    {
+      "name": "ghost"
+    },
+    {
+      "name": "alien"
+    },
+    {
+      "name": "robot"
+    },
+    {
+      "name": "fire"
+    },
+    {
+      "name": "sparkles"
+    },
+    {
+      "name": "star"
+    },
+    {
+      "name": "sunny"
+    },
+    {
+      "name": "moon"
+    },
+    {
+      "name": "zap"
+    },
+    {
+      "name": "snowflake"
+    },
+    {
+      "name": "cloud_with_rain"
+    },
+    {
+      "name": "apple"
+    },
+    {
+      "name": "burger"
+    },
+    {
+      "name": "pizza"
+    },
+    {
+      "name": "fries"
+    },
+    {
+      "name": "taco"
+    },
+    {
+      "name": "coffee"
+    },
+    {
+      "name": "tea"
+    },
+    {
+      "name": "beer"
+    },
+    {
+      "name": "tropical_drink"
+    },
+    {
+      "name": "birthday"
+    },
+    {
+      "name": "icecream"
+    },
+    {
+      "name": "lollipop"
+    },
+    {
+      "name": "bowl_with_spoon"
+    },
+    {
+      "name": "soccer"
+    },
+    {
+      "name": "basketball"
+    },
+    {
+      "name": "football"
+    },
+    {
+      "name": "baseball"
+    },
+    {
+      "name": "video_game"
+    },
+    {
+      "name": "game_die"
+    },
+    {
+      "name": "dart"
+    },
+    {
+      "name": "trophy"
+    },
+    {
+      "name": "medal"
+    },
+    {
+      "name": "musical_note"
+    },
+    {
+      "name": "microphone"
+    },
+    {
+      "name": "art"
+    },
+    {
+      "name": "performing_arts"
+    },
+    {
+      "name": "car"
+    },
+    {
+      "name": "taxi"
+    },
+    {
+      "name": "bus"
+    },
+    {
+      "name": "train"
+    },
+    {
+      "name": "airplane"
+    },
+    {
+      "name": "rocket"
+    },
+    {
+      "name": "ship"
+    },
+    {
+      "name": "satellite"
+    },
+    {
+      "name": "bicycle"
+    },
+    {
+      "name": "motorcycle"
+    },
+    {
+      "name": "package"
+    },
+    {
+      "name": "gift"
+    },
+    {
+      "name": "bulb"
+    },
+    {
+      "name": "wrench"
+    },
+    {
+      "name": "gear"
+    },
+    {
+      "name": "hammer"
+    },
+    {
+      "name": "hammer_and_wrench"
+    },
+    {
+      "name": "computer"
+    },
+    {
+      "name": "lock"
+    },
+    {
+      "name": "key"
+    },
+    {
+      "name": "moneybag"
+    },
+    {
+      "name": "gem"
+    },
+    {
+      "name": "book"
+    },
+    {
+      "name": "pill"
+    },
+    {
+      "name": "heart"
+    },
+    {
+      "name": "orange_heart"
+    },
+    {
+      "name": "yellow_heart"
+    },
+    {
+      "name": "green_heart"
+    },
+    {
+      "name": "blue_heart"
+    },
+    {
+      "name": "purple_heart"
+    },
+    {
+      "name": "broken_heart"
+    },
+    {
+      "name": "100"
+    },
+    {
+      "name": "boom"
+    },
+    {
+      "name": "warning"
+    },
+    {
+      "name": "white_check_mark"
+    },
+    {
+      "name": "x"
+    },
+    {
+      "name": "question"
+    },
+    {
+      "name": "grey_question"
+    },
+    {
+      "name": "exclamation"
+    },
+    {
+      "name": "grey_exclamation"
+    },
+    {
+      "name": "recycle"
+    },
+    {
+      "name": "peace"
+    },
+    {
+      "name": "biohazard"
+    },
+    {
+      "name": "radioactive"
+    },
+    {
+      "name": "infinity"
+    },
+    {
+      "name": "zzz"
+    },
+    {
+      "name": "triangular_flag_on_post"
+    },
+    {
+      "name": "checkered_flag"
+    },
+    {
+      "name": "black_flag"
+    },
+    {
+      "name": "white_flag"
+    },
+    {
+      "name": "rainbow_flag"
+    },
+    {
+      "name": "pirate_flag"
+    },
+    {
+      "name": "flag_ru"
+    },
+    {
+      "name": "flag_us"
+    },
+    {
+      "name": "flag_gb"
+    },
+    {
+      "name": "flag_fr"
+    },
+    {
+      "name": "flag_de"
+    },
+    {
+      "name": "flag_ua"
+    }
+  ]
+}

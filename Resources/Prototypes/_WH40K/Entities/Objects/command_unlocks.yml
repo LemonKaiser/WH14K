@@ -14,11 +14,6 @@
   suffix: WH40K
 
 - type: entity
-  id: WH40KSentryLaptop
-  parent: WH40KSentryLaptopBase
-  suffix: WH40K
-
-- type: entity
   id: WH40KTacticalFultonField
   parent: WH40KTacticalFultonBase
   suffix: WH40K

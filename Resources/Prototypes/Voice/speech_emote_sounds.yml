@@ -344,6 +344,8 @@
       collection: MaleGasp
     DefaultDeathgasp:
       collection: MaleDeathGasp
+    Battlecry:
+      collection: MaleBattlecry
   params:
     variation: 0.125
     pitch: 0.75
@@ -387,6 +389,8 @@
       collection: FemaleGasp
     DefaultDeathgasp:
       collection: FemaleDeathGasp
+    Battlecry:
+      collection: FemaleBattlecry
   params:
     variation: 0.125
     pitch: 0.75

@@ -21,6 +21,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared._WH40K.DiscordAuth;
 using Content.Shared._WH40K.MetaProgress;
+using Content.Shared._WH40K.StrategicPoints;
 using Robust.Server.Player;
 using Robust.Shared.Asynchronous;
 using Robust.Shared.Collections;
@@ -147,6 +148,16 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private const string AllCompleteAchievementId = "wh40k-ach-all-complete";
 
+	private static readonly HashSet<string> RetiredObjectiveAchievementIds = new(StringComparer.Ordinal)
+	{
+		"wh40k-ach-frontline-anchor",
+		"wh40k-ach-point-breaker",
+		"wh40k-ach-flag-keeper",
+		"wh40k-ach-sector-dominator",
+		"wh40k-ach-wall-of-steel",
+		"wh40k-ach-objective-ace"
+	};
+
 	private const string DefaultLevelRewardTableId = "WH40KMetaLevelRewardTableDefault";
 
 	private const string DefaultAchievementRewardLocKey = "wh40k-meta-progress-achievements-reward-none";
@@ -258,6 +269,14 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private int _xpObjectiveTimeout;
 
+	private int _xpStrategicPointBuild;
+
+	private int _xpStrategicPointDestroy;
+
+	private int _xpStrategicPointTripleHold;
+
+	private int _xpStrategicPointUpgrade;
+
 	private int _xpKill;
 
 	private int _xpKillCapPerRound;
@@ -294,6 +313,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveMinor, OnXpObjectiveMinorChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveTimeout, OnXpObjectiveTimeoutChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveFailure, OnXpObjectiveFailureChanged, invokeImmediately: true);
+		base.Subs.CVar(_config, CCVars.WH40KMetaXpStrategicPointBuild, OnXpStrategicPointBuildChanged, invokeImmediately: true);
+		base.Subs.CVar(_config, CCVars.WH40KMetaXpStrategicPointUpgrade, OnXpStrategicPointUpgradeChanged, invokeImmediately: true);
+		base.Subs.CVar(_config, CCVars.WH40KMetaXpStrategicPointDestroy, OnXpStrategicPointDestroyChanged, invokeImmediately: true);
+		base.Subs.CVar(_config, CCVars.WH40KMetaXpStrategicPointTripleHold, OnXpStrategicPointTripleHoldChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveCapPerRound, OnXpObjectiveCapPerRoundChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpRepeatableCapPerRound, OnXpRepeatableCapPerRoundChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaStatsTrace, OnStatsTraceChanged, invokeImmediately: true);
@@ -308,6 +331,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		SubscribeLocalEvent<WH40KTeamBattleHealingDoneEvent>(OnTeamBattleHealingDone);
 		SubscribeLocalEvent<WH40KInfluencePointCapturedEvent>(OnInfluencePointCaptured);
 		SubscribeLocalEvent<WH40KInfluencePointRewardTickEvent>(OnInfluencePointRewardTick);
+		SubscribeLocalEvent<WH40KStrategicPointBuiltEvent>(OnStrategicPointBuilt);
+		SubscribeLocalEvent<WH40KStrategicPointUpgradedEvent>(OnStrategicPointUpgraded);
+		SubscribeLocalEvent<WH40KStrategicPointDestroyedEvent>(OnStrategicPointDestroyed);
+		SubscribeLocalEvent<WH40KStrategicPointTripleHoldCompletedEvent>(OnStrategicPointTripleHoldCompleted);
 		SubscribeLocalEvent<WH40KMissionOutcomeAppliedEvent>(OnMissionOutcomeApplied);
 		SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEndMessage);
 		SubscribeLocalEvent<WH40KPlayerStatRecordedEvent>(OnPlayerStatRecorded);
@@ -1009,6 +1036,26 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_xpObjectiveFailure = Math.Max(0, value);
 	}
 
+	private void OnXpStrategicPointBuildChanged(int value)
+	{
+		_xpStrategicPointBuild = Math.Max(0, value);
+	}
+
+	private void OnXpStrategicPointUpgradeChanged(int value)
+	{
+		_xpStrategicPointUpgrade = Math.Max(0, value);
+	}
+
+	private void OnXpStrategicPointDestroyChanged(int value)
+	{
+		_xpStrategicPointDestroy = Math.Max(0, value);
+	}
+
+	private void OnXpStrategicPointTripleHoldChanged(int value)
+	{
+		_xpStrategicPointTripleHold = Math.Max(0, value);
+	}
+
 	private void OnXpObjectiveCapPerRoundChanged(int value)
 	{
 		_xpObjectiveCapPerRound = Math.Max(0, value);
@@ -1200,6 +1247,135 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			}
 		}
 		TraceStats($"Influence defense stats recorded: team={ev.TeamId}, point={ev.PointUid}, users={num}, reward={ev.FrontPointReward}.");
+	}
+
+	private void OnStrategicPointBuilt(WH40KStrategicPointBuiltEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound ||
+			string.IsNullOrWhiteSpace(ev.TeamId) ||
+			!TryEnsureTrackedInRoundUser(ev.UserUid, out var userId))
+		{
+			return;
+		}
+
+		if (!_teamBattleRule.TryGetTeamIdForUser(userId, out var teamId) ||
+			!string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
+		{
+			return;
+		}
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["teamId"] = ev.TeamId,
+			["pointUid"] = ev.PointUid.ToString(),
+			["pointType"] = ev.PointType.ToString(),
+			["tier"] = ((int) ev.Tier).ToString()
+		};
+
+		_stats.Record(userId, WH40KPlayerStatKeys.StrategicPointBuildValidated, 1L, metadata);
+		GrantStrategicPointXp(userId, _xpStrategicPointBuild, WH40KPlayerStatKeys.MetaXpStrategicPointBuild, metadata, "strategic-point-build");
+		TraceStats($"Strategic point build recorded: user={userId}, team={ev.TeamId}, point={ev.PointUid}, type={ev.PointType}, tier={ev.Tier}.");
+	}
+
+	private void OnStrategicPointUpgraded(WH40KStrategicPointUpgradedEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound ||
+			string.IsNullOrWhiteSpace(ev.TeamId) ||
+			!TryEnsureTrackedInRoundUser(ev.UserUid, out var userId))
+		{
+			return;
+		}
+
+		if (!_teamBattleRule.TryGetTeamIdForUser(userId, out var teamId) ||
+			!string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
+		{
+			return;
+		}
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["teamId"] = ev.TeamId,
+			["pointUid"] = ev.PointUid.ToString(),
+			["pointType"] = ev.PointType.ToString(),
+			["tier"] = ((int) ev.Tier).ToString()
+		};
+
+		_stats.Record(userId, WH40KPlayerStatKeys.StrategicPointUpgradeValidated, 1L, metadata);
+		GrantStrategicPointXp(userId, _xpStrategicPointUpgrade, WH40KPlayerStatKeys.MetaXpStrategicPointUpgrade, metadata, "strategic-point-upgrade");
+		TraceStats($"Strategic point upgrade recorded: user={userId}, team={ev.TeamId}, point={ev.PointUid}, type={ev.PointType}, tier={ev.Tier}.");
+	}
+
+	private void OnStrategicPointDestroyed(WH40KStrategicPointDestroyedEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound ||
+			string.IsNullOrWhiteSpace(ev.AttackerTeamId) ||
+			string.IsNullOrWhiteSpace(ev.OwnerTeamId) ||
+			!TryEnsureTrackedInRoundUser(ev.AttackerUid, out var userId))
+		{
+			return;
+		}
+
+		if (!_teamBattleRule.TryGetTeamIdForUser(userId, out var teamId) ||
+			!string.Equals(teamId, ev.AttackerTeamId, StringComparison.OrdinalIgnoreCase))
+		{
+			return;
+		}
+
+		var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+		{
+			["teamId"] = ev.AttackerTeamId,
+			["ownerTeamId"] = ev.OwnerTeamId,
+			["pointUid"] = ev.PointUid.ToString(),
+			["pointType"] = ev.PointType.ToString(),
+			["tier"] = ((int) ev.Tier).ToString()
+		};
+
+		_stats.Record(userId, WH40KPlayerStatKeys.StrategicPointDestroyValidated, 1L, metadata);
+		GrantStrategicPointXp(userId, _xpStrategicPointDestroy, WH40KPlayerStatKeys.MetaXpStrategicPointDestroy, metadata, "strategic-point-destroy");
+		TraceStats($"Strategic point destroy recorded: user={userId}, team={ev.AttackerTeamId}, owner={ev.OwnerTeamId}, point={ev.PointUid}, type={ev.PointType}, tier={ev.Tier}.");
+	}
+
+	private void OnStrategicPointTripleHoldCompleted(WH40KStrategicPointTripleHoldCompletedEvent ev)
+	{
+		if (_gameTicker.RunLevel != GameRunLevel.InRound || string.IsNullOrWhiteSpace(ev.TeamId))
+		{
+			return;
+		}
+
+		var rewardedPlayers = 0;
+		ICommonSession[] sessions = _players.Sessions;
+		foreach (ICommonSession commonSession in sessions)
+		{
+			if (commonSession.Status != SessionStatus.InGame)
+				continue;
+
+			var userId = commonSession.UserId;
+			if (!_states.ContainsKey(userId))
+			{
+				EnsureState(userId, commonSession);
+				if (!_states.ContainsKey(userId))
+					continue;
+			}
+
+			if (!_teamBattleRule.TryGetTeamIdForUser(userId, out var teamId) ||
+				!string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
+			{
+				continue;
+			}
+
+			var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+			{
+				["teamId"] = ev.TeamId,
+				["ownedPointCount"] = ev.OwnedPointCount.ToString(),
+				["heldSeconds"] = ((int) Math.Round(ev.HeldDuration.TotalSeconds)).ToString()
+			};
+
+			_stats.Record(userId, WH40KPlayerStatKeys.StrategicPointHoldTripleTenMinutesValidated, 1L, metadata);
+			GrantStrategicPointXp(userId, _xpStrategicPointTripleHold, WH40KPlayerStatKeys.MetaXpStrategicPointHold, metadata, "strategic-point-triple-hold");
+			rewardedPlayers++;
+		}
+
+		TraceStats($"Strategic point triple hold recorded: team={ev.TeamId}, players={rewardedPlayers}, heldSeconds={(int) Math.Round(ev.HeldDuration.TotalSeconds)}, ownedPoints={ev.OwnedPointCount}.");
 	}
 
 	private void OnKillReported(ref KillReportedEvent ev)
@@ -1769,6 +1945,55 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		}
 	}
 
+	private bool TryEnsureTrackedInRoundUser(EntityUid userUid, out NetUserId userId)
+	{
+		userId = default;
+		if (!_players.TryGetSessionByEntity(userUid, out ICommonSession session) ||
+			session.Status != SessionStatus.InGame)
+		{
+			return false;
+		}
+
+		userId = session.UserId;
+		if (!_states.ContainsKey(userId))
+		{
+			EnsureState(userId, session);
+		}
+
+		return _states.ContainsKey(userId);
+	}
+
+	private void GrantStrategicPointXp(
+		NetUserId userId,
+		int baseXp,
+		string statKey,
+		IReadOnlyDictionary<string, string> metadata,
+		string source)
+	{
+		if (baseXp <= 0)
+		{
+			TraceStats($"Strategic point XP disabled: user={userId}, source={source}.");
+			return;
+		}
+
+		int scaledXp = ScaleAwardXp(baseXp);
+		if (scaledXp <= 0)
+		{
+			TraceStats($"Strategic point XP scaled to zero: user={userId}, source={source}, baseXp={baseXp}, multiplier={_xpMultiplier}.");
+			return;
+		}
+
+		int grantedXp = ClampObjectiveXpByRoundCap(userId, scaledXp);
+		if (grantedXp <= 0)
+		{
+			TraceStats($"Strategic point XP denied by objective cap: user={userId}, source={source}, requested={scaledXp}, capPerRound={_xpObjectiveCapPerRound}, repeatableCap={_xpRepeatableCapPerRound}.");
+			return;
+		}
+
+		AddLifetimeXpInternal(userId, grantedXp, statKey, metadata);
+		TraceStats($"Granted strategic point XP: user={userId}, source={source}, granted={grantedXp}, requested={scaledXp}.");
+	}
+
 	private static bool IsRateLimited(NetUserId userId, Dictionary<NetUserId, RateLimitWindowState> limits, float periodSeconds, int maxCount)
 	{
 		if (maxCount <= 0 || periodSeconds <= 0f)
@@ -1926,6 +2151,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 									value2.ClaimedAchievementRewards.Add(item.AchievementId);
 								}
 							}
+						}
+						if (PruneRetiredAchievementState(value2))
+						{
+							flag = true;
 						}
 						if (RefreshStatDrivenAchievements(userId, value2, null, emitTelemetry: false))
 						{
@@ -2443,15 +2672,30 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			.ToList();
 	}
 
+	private static bool PruneRetiredAchievementState(RuntimeProgressState state)
+	{
+		var changed = false;
+		foreach (var achievementId in RetiredObjectiveAchievementIds)
+		{
+			changed |= state.AchievementProgress.Remove(achievementId);
+			changed |= state.CompletedAchievements.Remove(achievementId);
+			changed |= state.ClaimedAchievementRewards.Remove(achievementId);
+			changed |= state.LifetimeAchievementSourceCursor.Remove(achievementId);
+		}
+
+		return changed;
+	}
+
 	private void ReconcileState(NetUserId userId, RuntimeProgressState state)
 	{
 		if (!state.DbLoadCompleted)
 			return;
 
+		bool retiredAchievementStateChanged = PruneRetiredAchievementState(state);
 		bool rewardDecorationStateChanged = SyncAchievementRewardDecorations(state);
 		bool rewardClaimStateChanged = GrantPendingAchievementRewards(userId, state, "snapshot_reconcile", emitTelemetry: false);
 
-		if (rewardDecorationStateChanged || rewardClaimStateChanged)
+		if (retiredAchievementStateChanged || rewardDecorationStateChanged || rewardClaimStateChanged)
 		{
 			state.StateVersion++;
 			QueuePersistState(userId);

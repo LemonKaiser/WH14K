@@ -60,6 +60,7 @@ loadout-group-wh40k-imperial-line-hands = Имперская пехота, пе�
 loadout-group-wh40k-imperial-eyes = Имперские очки
 loadout-group-wh40k-imperial-line-feet = Имперская пехота, ботинки
 loadout-group-wh40k-imperial-line-eyes = Имперская пехота, очки
+loadout-group-wh40k-heretic-line-eyes = Еретическая пехота, очки
 loadout-group-wh40k-field-kit = Походный набор
 loadout-group-wh40k-imperial-main = Имперское оружие, основное
 loadout-group-wh40k-imperial-melee = Имперское оружие ближнего боя

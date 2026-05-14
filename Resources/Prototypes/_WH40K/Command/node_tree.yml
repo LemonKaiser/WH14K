@@ -419,8 +419,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRight4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryLaptop, WH40KImperiumMeltaGrenade]
-      Heretics: [WH40KHereticsSentryLaptop, WH40KHereticsMeltaGrenade]
+      Imperium: [WH40KImperiumMeltaGrenade]
+      Heretics: [WH40KHereticsMeltaGrenade]
   - id: eqp_cap
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-cap-title

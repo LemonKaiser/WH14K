@@ -430,6 +430,7 @@ wh40k-psyker-astral-popup-catastrophe-exit = Общий Варп выбрасы�
 wh40k-psyker-astral-popup-reentry-cooldown = Разум снова сцепляется с телом. Повторный вход будет готов через {$seconds}с.
 wh40k-psyker-astral-popup-fatigue-locked = Астральная связка ещё не восстановилась. Повторный вход будет готов через {$seconds}с.
 wh40k-psyker-astral-popup-star-harvested = Астральная искра: +{$xp} опыта.
+wh40k-psyker-force-staff-user-required = Только санкционированный псайкер может проводить силу через такой посох.
 wh40k-psyker-astral-discipline-sanctioning = Санкционирование
 wh40k-psyker-astral-discipline-telekinesis = Телекинез
 wh40k-psyker-astral-discipline-aegis = Эгида
