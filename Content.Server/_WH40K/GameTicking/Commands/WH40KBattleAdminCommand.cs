@@ -37,7 +37,9 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         "wh40kbattle level <teamId> <level>\n" +
         "wh40kbattle adjust <teamId> <xp|influence|research|gelt> <delta>\n" +
         "wh40kbattle point <list|reset|owner|tier> ...\n" +
+        "wh40kbattle point-list | point-reset <pointUid> | point-set-owner <pointUid> <teamId|neutral> | point-set-tier <pointUid> <0|1|2|3>\n" +
         "wh40kbattle telemetry <on|off> [intervalSeconds]\n" +
+        "wh40kbattle eco-telemetry <on|off> [intervalSeconds]\n" +
         "wh40kbattle unlock <tech|cargo> <teamId> <prototypeId>\n" +
         "wh40kbattle lock <tech|cargo> <teamId> <prototypeId>";
 
@@ -49,6 +51,7 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             return;
         }
 
+        args = NormalizeLegacyArgs(args);
         var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
         var action = args[0].ToLowerInvariant();
 
@@ -102,7 +105,12 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             "level",
             "adjust",
             "point",
+            "point-list",
+            "point-reset",
+            "point-set-owner",
+            "point-set-tier",
             "telemetry",
+            "eco-telemetry",
             "unlock",
             "lock"
         };
@@ -110,6 +118,7 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         if (args.Length == 1)
             return CompletionResult.FromHintOptions(subcommands, "<action>");
 
+        args = NormalizeLegacyArgs(args);
         var rule = _entityManager.EntitySysManager.GetEntitySystem<WH40KTeamBattleRuleSystem>();
         var action = args[0].ToLowerInvariant();
         switch (action)
@@ -207,6 +216,39 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         {
             WriteTeamStatus(shell, rule, teamId);
         }
+    }
+
+    private static string[] NormalizeLegacyArgs(string[] args)
+    {
+        if (args.Length == 0)
+            return args;
+
+        return args[0].ToLowerInvariant() switch
+        {
+            "point-list" => new[] { "point", "list" },
+            "point-reset" => PrependArgs("point", "reset", args),
+            "point-set-owner" => PrependArgs("point", "owner", args),
+            "point-set-tier" => PrependArgs("point", "tier", args),
+            "eco-telemetry" => PrependArgs("telemetry", args),
+            _ => args
+        };
+    }
+
+    private static string[] PrependArgs(string first, string[] args)
+    {
+        var normalized = new string[args.Length];
+        normalized[0] = first;
+        Array.Copy(args, 1, normalized, 1, args.Length - 1);
+        return normalized;
+    }
+
+    private static string[] PrependArgs(string first, string second, string[] args)
+    {
+        var normalized = new string[args.Length + 1];
+        normalized[0] = first;
+        normalized[1] = second;
+        Array.Copy(args, 1, normalized, 2, args.Length - 1);
+        return normalized;
     }
 
     private void ExecuteAdjust(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)

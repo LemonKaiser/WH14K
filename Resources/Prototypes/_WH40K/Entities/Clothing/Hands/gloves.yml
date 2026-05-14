@@ -45,6 +45,7 @@
     sprite: _WH40K/Clothing/Hands/Gloves/black_heresy.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/black_heresy.rsi
+  - type: Insulated
 
 - type: entity
   parent: ClothingHandsGlovesColorBlack

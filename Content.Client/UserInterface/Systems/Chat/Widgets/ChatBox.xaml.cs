@@ -1,4 +1,5 @@
 using Content.Client.UserInterface.Systems.Chat.Controls;
+using Content.Client.UserInterface.Systems.Chat.RichText;
 using Content.Shared.Chat;
 using Content.Shared.Input;
 using Content.Client.Localization;
@@ -11,6 +12,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Audio;
 using Robust.Shared.Input;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.LineEdit;
 
@@ -22,11 +24,13 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     private readonly ISawmill _sawmill;
     private readonly ChatUIController _controller;
     private readonly Dictionary<uint, int> _messageEntryIndices = new();
     private bool _warnedMessageUpdateFallback;
+    private bool _suppressEmojiAliasRewrite;
 
     public bool Main { get; set; }
 
@@ -72,7 +76,7 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
         var wrappedMessage = _controller.GetChatDisplayMessage(msg);
 
-        AddLine(wrappedMessage, color, msg.ServerMessageId);
+        AddLine(wrappedMessage, color, _controller.IsEmojiAllowed(msg.Channel), msg.ServerMessageId);
     }
 
     private void OnHighlightsUpdated(string highlights)
@@ -133,12 +137,12 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         _controller.UpdateHighlights(highlighs);
     }
 
-    public void AddLine(string message, Color color, uint? serverMessageId = null)
+    public void AddLine(string message, Color color, bool allowAliasMarkup, uint? serverMessageId = null)
     {
         if (serverMessageId is { } messageId)
             _messageEntryIndices[messageId] = Contents.EntryCount;
 
-        Contents.AddMessage(BuildFormattedMessage(message, color), tagsAllowed: null);
+        Contents.AddMessage(ChatEmojiRichText.BuildChatLine(message, color, allowAliasMarkup, _prototypeManager), tagsAllowed: null);
     }
 
     public bool TryUpdateMessage(ChatMessage msg)
@@ -151,7 +155,6 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 
         var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
         var wrappedMessage = _controller.GetChatDisplayMessage(msg);
-        var formatted = BuildFormattedMessage(wrappedMessage, color);
 
         if (!TryRebuildTailFromHistory(entryIndex, messageId))
         {
@@ -224,15 +227,6 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         {
             _messageEntryIndices.Remove(staleId);
         }
-    }
-
-    private static FormattedMessage BuildFormattedMessage(string message, Color color)
-    {
-        var formatted = new FormattedMessage(3);
-        formatted.PushColor(color);
-        formatted.AddMarkupOrThrow(message);
-        formatted.Pop();
-        return formatted;
     }
 
     private void ClearDisplayedMessages()
@@ -315,6 +309,24 @@ public partial class ChatBox : UIWidget, ILocalizedControl
 
     private void OnTextChanged(LineEditEventArgs args)
     {
+        if (!_suppressEmojiAliasRewrite)
+        {
+            var effectiveChannel = _controller.ResolveEffectiveInputChannel(this);
+            if (_controller.IsEmojiAllowed(effectiveChannel))
+            {
+                var input = ChatInput.Input;
+                var rewritten = ChatEmoji.ReplaceAliases(input.Text, input.CursorPosition, _prototypeManager, out var newCursorPosition);
+                if (!string.Equals(rewritten, input.Text, StringComparison.Ordinal))
+                {
+                    _suppressEmojiAliasRewrite = true;
+                    input.SetText(rewritten);
+                    input.CursorPosition = newCursorPosition;
+                    input.SelectionStart = newCursorPosition;
+                    _suppressEmojiAliasRewrite = false;
+                }
+            }
+        }
+
         // Update channel select button to correct channel if we have a prefix.
         _controller.UpdateSelectedChannel(this);
 

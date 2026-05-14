@@ -104,6 +104,8 @@
         type: WH40KStrategicPointBoundUserInterface
   - type: Damageable
     damageModifierSet: StructuralMetallicStrong
+  - type: ExplosionResistance
+    damageCoefficient: 0.3
   - type: Injurable
     damageContainer: StructuralInorganic
   - type: Repairable
@@ -167,6 +169,8 @@
         type: WH40KStrategicPointBoundUserInterface
   - type: Damageable
     damageModifierSet: StructuralMetallicStrong
+  - type: ExplosionResistance
+    damageCoefficient: 0.3
   - type: Injurable
     damageContainer: StructuralInorganic
   - type: Repairable
@@ -230,6 +234,8 @@
         type: WH40KStrategicPointBoundUserInterface
   - type: Damageable
     damageModifierSet: StructuralMetallicStrong
+  - type: ExplosionResistance
+    damageCoefficient: 0.3
   - type: Injurable
     damageContainer: StructuralInorganic
   - type: Repairable

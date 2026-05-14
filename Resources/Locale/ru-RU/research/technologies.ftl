@@ -88,7 +88,6 @@ research-technology-wh40k-weaponry-heavy-emplacements = Тяжёлые огне�
 research-technology-wh40k-equipment-signal-doctrine = Тактическая сигнальная доктрина
 research-technology-wh40k-equipment-field-flares = Полевые сигнальные ракеты
 research-technology-wh40k-equipment-intel-detectors = Производство детекторов разведданных
-research-technology-wh40k-equipment-sentry-links = Пульты связки турелей
 research-technology-wh40k-equipment-fulton-recovery = Тактическая эвакуация Fulton
 research-technology-wh40k-equipment-relay-trackers = Трекеры релейных задач
 research-technology-wh40k-equipment-cargo-trackers = Трекеры грузовых задач

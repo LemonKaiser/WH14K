@@ -63,6 +63,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     private bool _deadLoocEnabled;
     private bool _critLoocEnabled;
     private readonly bool _adminLoocEnabled = true;
+    private ChatSelectChannel _emojiAllowedChannels = ChatEmoji.DefaultAllowedChannels;
 
     public override void Initialize()
     {
@@ -71,8 +72,14 @@ public sealed partial class ChatSystem : SharedChatSystem
         Subs.CVar(_configurationManager, CCVars.LoocEnabled, OnLoocEnabledChanged, true);
         Subs.CVar(_configurationManager, CCVars.DeadLoocEnabled, OnDeadLoocEnabledChanged, true);
         Subs.CVar(_configurationManager, CCVars.CritLoocEnabled, OnCritLoocEnabledChanged, true);
+        Subs.CVar(_configurationManager, CCVars.ChatEmojiAllowedChannels, OnEmojiAllowedChannelsChanged, true);
 
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameChange);
+    }
+
+    private void OnEmojiAllowedChannelsChanged(string raw)
+    {
+        _emojiAllowedChannels = ChatEmoji.ParseAllowedChannels(raw);
     }
 
     private void OnLoocEnabledChanged(bool val)
@@ -201,7 +208,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         // Was there an emote in the message? If so, send it.
         if (player != null && emoteStr != message && emoteStr != null)
         {
-            SendEntityEmote(source, emoteStr, range, nameOverride, ignoreActionBlocker);
+            emoteStr = ApplyEmojiPolicy(emoteStr, ChatSelectChannel.Emotes);
+            if (!string.IsNullOrWhiteSpace(emoteStr))
+                SendEntityEmote(source, emoteStr, range, nameOverride, ignoreActionBlocker);
         }
 
         // This can happen if the entire string is sanitized out.
@@ -213,10 +222,24 @@ public sealed partial class ChatSystem : SharedChatSystem
         {
             if (TryProcessRadioMessage(source, message, out var modMessage, out var channel))
             {
+                modMessage = ApplyEmojiPolicy(modMessage, ChatSelectChannel.Radio);
+                if (string.IsNullOrWhiteSpace(modMessage))
+                    return;
+
                 SendEntityWhisper(source, modMessage, range, channel, nameOverride, hideLog, ignoreActionBlocker);
                 return;
             }
         }
+
+        message = ApplyEmojiPolicy(message, desiredType switch
+        {
+            InGameICChatType.Whisper => ChatSelectChannel.Whisper,
+            InGameICChatType.Emote => ChatSelectChannel.Emotes,
+            _ => ChatSelectChannel.Local,
+        });
+
+        if (string.IsNullOrWhiteSpace(message))
+            return;
 
         // Otherwise, send whatever type.
         switch (desiredType)
@@ -254,8 +277,6 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (player?.AttachedEntity is not { Valid: true } entity || source != entity)
             return;
 
-        message = SanitizeInGameOOCMessage(message);
-
         var sendType = type;
         // If dead player LOOC is disabled, unless you are an admin with Moderator perms, send dead messages to dead chat
         if ((_adminManager.IsAdmin(player) && _adminManager.HasAdminFlag(player, AdminFlags.Moderator)) // Override if admin
@@ -268,6 +289,13 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         // If crit player LOOC is disabled, don't send the message at all.
         if (!_critLoocEnabled && _mobStateSystem.IsCritical(source))
+            return;
+
+        message = SanitizeInGameOOCMessage(message, sendType == InGameOOCChatType.Dead
+            ? ChatSelectChannel.Dead
+            : ChatSelectChannel.LOOC);
+
+        if (string.IsNullOrWhiteSpace(message))
             return;
 
         // Systems can differentiate Looc and DeadChat by type, and cancel the speak attempt if necessary.
@@ -749,12 +777,17 @@ public sealed partial class ChatSystem : SharedChatSystem
         return prefix + newMessage;
     }
 
-    private string SanitizeInGameOOCMessage(string message)
+    private string SanitizeInGameOOCMessage(string message, ChatSelectChannel emojiChannel)
     {
-        var newMessage = message.Trim();
+        var newMessage = ApplyEmojiPolicy(message.Trim(), emojiChannel);
         newMessage = FormattedMessage.EscapeText(newMessage);
 
         return newMessage;
+    }
+
+    private string ApplyEmojiPolicy(string message, ChatSelectChannel channel)
+    {
+        return ChatEmoji.ApplyPolicy(message, channel, _emojiAllowedChannels);
     }
 
     public string TransformSpeech(EntityUid sender, string message)

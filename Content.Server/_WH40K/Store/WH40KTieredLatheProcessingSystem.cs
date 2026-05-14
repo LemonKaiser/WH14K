@@ -6,6 +6,7 @@ using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Store.Components;
 using Content.Server.Lathe;
+using Content.Server.Materials;
 using Content.Shared._WH40K.Tiers;
 using Content.Shared.Examine;
 using Content.Shared.Lathe;
@@ -29,6 +30,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
     [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
     [Dependency] private readonly LatheSystem _lathe = default!;
+    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
     [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
     [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
@@ -76,6 +78,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
         var desiredPack = SelectPackForTier(tier, processing);
 
         var changed = false;
+        var packChanged = false;
         if (MathF.Abs(lathe.TimeMultiplier - desiredTimeMultiplier) > 0.001f)
         {
             lathe.TimeMultiplier = desiredTimeMultiplier;
@@ -89,6 +92,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
                 lathe.StaticPacks.Clear();
                 lathe.StaticPacks.Add(pack);
                 changed = true;
+                packChanged = true;
             }
 
             if (processing.RemapQueueToSelectedTierPack &&
@@ -98,6 +102,9 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
                 changed = true;
             }
         }
+
+        if (packChanged)
+            _materialStorage.UpdateMaterialWhitelist(uid);
 
         if (changed)
             _lathe.UpdateUserInterfaceState(uid, lathe);

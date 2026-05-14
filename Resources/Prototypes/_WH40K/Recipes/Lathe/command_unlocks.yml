@@ -413,33 +413,6 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
-  id: WH40KRecipeSentryLaptop
-  result: WH40KSentryLaptop
-  materials:
-    Steel: 300
-    Glass: 200
-    Plastic: 250
-
-- type: latheRecipe
-  parent: BaseToolRecipe
-  id: WH40KRecipeSentryLaptopImperium
-  result: WH40KSentryLaptopImperium
-  materials:
-    Steel: 300
-    Glass: 200
-    Plastic: 250
-
-- type: latheRecipe
-  parent: BaseToolRecipe
-  id: WH40KRecipeSentryLaptopHeretics
-  result: WH40KSentryLaptopHeretics
-  materials:
-    Steel: 300
-    Glass: 200
-    Plastic: 250
-
-- type: latheRecipe
-  parent: BaseToolRecipe
   id: WH40KRecipeTacticalFulton
   result: WH40KTacticalFultonField
   materials:
@@ -637,7 +610,6 @@
   - WH40KRecipeCarapaceArmor
   - WH40KRecipeCarapaceHelmet
   - WH40KRecipeIntelDetectorImperium
-  - WH40KRecipeSentryLaptopImperium
   - WH40KRecipeTacticalFultonImperium
   - WH40KRecipeMissionPinpointerRelayImperium
   - WH40KRecipeMissionPinpointerCargoImperium
@@ -662,7 +634,6 @@
   - WH40KRecipeHereticCarapaceArmor
   - WH40KRecipeHereticCarapaceHelmet
   - WH40KRecipeIntelDetectorHeretics
-  - WH40KRecipeSentryLaptopHeretics
   - WH40KRecipeTacticalFultonHeretics
   - WH40KRecipeMissionPinpointerRelayHeretics
   - WH40KRecipeMissionPinpointerCargoHeretics

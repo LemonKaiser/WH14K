@@ -1,0 +1,4 @@
+- type: chatCustomEmoji
+  id: blunt
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: blunt

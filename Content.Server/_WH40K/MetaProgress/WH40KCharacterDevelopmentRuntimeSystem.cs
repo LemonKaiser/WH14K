@@ -1,6 +1,7 @@
 using Content.Server.Body.Components;
 using Content.Server.Body.Systems;
 using Content.Server.Damage.Systems;
+using Content.Server._WH40K.GameTicking.Rules;
 using Content.Shared.Body.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -32,7 +33,9 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
-        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawnComplete);
+        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(
+            OnPlayerSpawnComplete,
+            after: new[] { typeof(WH40KTeamBattleRuleSystem) });
         _metaProgress.SnapshotPushed += OnSnapshotPushed;
     }
 
@@ -78,6 +81,36 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
     {
         var modifiers = WH40KCharacterDevelopmentCalculator.Calculate(snapshot.Development.OpenedNodeIds);
         ApplyModifiers(uid, modifiers);
+    }
+
+    public void RefreshStaminaProfileModifiers(EntityUid uid)
+    {
+        if (!_players.TryGetSessionByEntity(uid, out var session))
+            return;
+
+        if (!TryComp(uid, out StaminaComponent? stamina))
+            return;
+
+        var modifiers = WH40KCharacterDevelopmentCalculator
+            .Calculate(_metaProgress.GetSnapshot(session.UserId).Development.OpenedNodeIds);
+
+        if (!HasDirectStaminaOverrides(modifiers))
+            return;
+
+        var baseline = EnsureComp<WH40KCharacterDevelopmentBaselineComponent>(uid);
+
+        if (!baseline.StaminaCaptured)
+        {
+            baseline.StaminaCaptured = true;
+            baseline.StaminaCooldown = stamina.Cooldown;
+            baseline.StaminaAfterCritDecayMultiplier = stamina.AfterCritDecayMultiplier;
+            baseline.StaminaForceStandStamina = stamina.ForceStandStamina;
+            baseline.StaminaStunTime = stamina.StunTime;
+        }
+
+        baseline.StaminaSprintDrain = stamina.SprintDrain;
+        baseline.StaminaWalkRecovery = stamina.WalkRecovery;
+        ApplyStamina(uid, stamina, baseline, modifiers);
     }
 
     private void ApplyModifiers(EntityUid uid, WH40KCharacterDevelopmentModifierSet modifiers)
@@ -331,6 +364,17 @@ public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
         changed |= SetIfDifferent(ref modifierComp.WarFurnaceUnlocked, modifiers.WarFurnaceUnlocked);
         changed |= SetIfDifferent(ref modifierComp.KidneyPurgeUnlocked, modifiers.KidneyPurgeUnlocked);
         return changed;
+    }
+
+    private static bool HasDirectStaminaOverrides(WH40KCharacterDevelopmentModifierSet modifiers)
+    {
+        return !CloseTo(modifiers.StaminaSprintDrainMultiplier, 1f) ||
+               !CloseTo(modifiers.StaminaWalkRecoveryMultiplier, 1f) ||
+               !CloseTo(modifiers.StaminaCooldownMultiplier, 1f) ||
+               !CloseTo(modifiers.StaminaCritThresholdMultiplier, 1f) ||
+               !CloseTo(modifiers.ForceStandStaminaMultiplier, 1f) ||
+               !CloseTo(modifiers.StaminaAfterCritRecoveryMultiplier, 1f) ||
+               !CloseTo(modifiers.StaminaCritStunTimeMultiplier, 1f);
     }
 
     private static bool SetIfDifferent(ref float current, float next)

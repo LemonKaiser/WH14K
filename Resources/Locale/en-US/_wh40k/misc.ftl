@@ -43,6 +43,7 @@ loadout-group-wh40k-imperial-line-uniform = imperial frontline uniform
 loadout-group-wh40k-imperial-line-hands = imperial frontline gloves
 loadout-group-wh40k-imperial-line-feet = imperial frontline boots
 loadout-group-wh40k-imperial-line-eyes = imperial frontline eyewear
+loadout-group-wh40k-heretic-line-eyes = heretic frontline eyewear
 loadout-group-wh40k-field-kit = frontline field kit
 loadout-group-wh40k-imperial-main = imperial main weapon
 loadout-group-wh40k-imperial-melee = imperial melee sidearm

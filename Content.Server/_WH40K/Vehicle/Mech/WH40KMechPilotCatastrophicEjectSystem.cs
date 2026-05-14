@@ -1,0 +1,48 @@
+using Content.Server.Mech.Systems;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Mech.Components;
+using Content.Shared.Stunnable;
+using Content.Shared.Vehicle.Components;
+using Content.Shared._WH40K.Vehicle.Mech;
+
+namespace Content.Server._WH40K.Vehicle.Mech;
+
+public sealed class WH40KMechPilotCatastrophicEjectSystem : EntitySystem
+{
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<WH40KMechPilotCatastrophicEjectComponent, DamageChangedEvent>(
+            OnDamageChanged,
+            before: [typeof(MechSystem)]);
+    }
+
+    private void OnDamageChanged(Entity<WH40KMechPilotCatastrophicEjectComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased ||
+            !TryComp<MechComponent>(ent.Owner, out var mech) ||
+            mech.Broken ||
+            mech.Integrity <= 0 ||
+            !TryComp<VehicleComponent>(ent.Owner, out var vehicle) ||
+            vehicle.Operator is not { } pilot)
+        {
+            return;
+        }
+
+        var currentIntegrity = mech.MaxIntegrity - _damageable.GetTotalDamage((ent.Owner, args.Damageable));
+        if (currentIntegrity > 0)
+            return;
+
+        var stunDuration = TimeSpan.FromSeconds(ent.Comp.StunSeconds);
+        if (stunDuration > TimeSpan.Zero)
+        {
+            _stun.TryKnockdown(pilot, stunDuration, force: true);
+            _stun.TryAddStunDuration(pilot, stunDuration);
+        }
+
+        if (!ent.Comp.Damage.Empty)
+            _damageable.TryChangeDamage(pilot, ent.Comp.Damage, origin: ent.Owner);
+    }
+}

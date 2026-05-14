@@ -98,29 +98,29 @@ w40k-ach-heavy-hauler-d = Let columns of materiel follow in your wake and accumu
 w40k-ach-heavy-hauler-k = Accumulate 350 cargo mission value total.
 
 # Objective
-w40k-ach-frontline-anchor-t = Frontline Anchor
-w40k-ach-frontline-anchor-d = Some soldiers become the point the line bends around; successfully defend objectives 15 times in a single round.
-w40k-ach-frontline-anchor-k = Defend 15 objectives in one round.
+w40k-ach-triad-stand-t = Triad Stand
+w40k-ach-triad-stand-d = Lock the whole front in place by holding three strategic points for ten continuous minutes in one round.
+w40k-ach-triad-stand-k = Hold 3 strategic points for 10 minutes in one round.
 
-w40k-ach-point-breaker-t = Point Breaker
-w40k-ach-point-breaker-d = Break into positions the enemy thought untouchable, and capture 4 objectives in a single round.
-w40k-ach-point-breaker-k = Capture 4 objectives in one round.
+w40k-ach-field-engineer-t = Field Engineer
+w40k-ach-field-engineer-d = Win the race for the map itself by constructing three strategic points in a single round.
+w40k-ach-field-engineer-k = Build 3 strategic points in one round.
 
-w40k-ach-flag-keeper-t = Flag Keeper
-w40k-ach-flag-keeper-d = Taking ground is one thing, but keeping it is what wins campaigns; defend objectives 10 times in a single round.
-w40k-ach-flag-keeper-k = Defend 10 objectives in one round.
+w40k-ach-escalation-order-t = Escalation Order
+w40k-ach-escalation-order-d = Keep the war machine climbing by upgrading four strategic point tiers in a single round.
+w40k-ach-escalation-order-k = Upgrade 4 strategic point tiers in one round.
 
-w40k-ach-sector-dominator-t = Sector Dominator
-w40k-ach-sector-dominator-d = Grind forward one strongpoint at a time until whole sectors remember your advance, and capture 40 objectives across your career.
-w40k-ach-sector-dominator-k = Capture 40 objectives total.
+w40k-ach-master-builder-t = Master Builder
+w40k-ach-master-builder-d = Lay down enough fortified positions that whole campaigns start on your foundations, and build 30 strategic points across your career.
+w40k-ach-master-builder-k = Build 30 strategic points total.
 
-w40k-ach-wall-of-steel-t = Wall of Steel
-w40k-ach-wall-of-steel-d = Become the defense that enemy assaults keep breaking against, and defend objectives 150 times across your career.
-w40k-ach-wall-of-steel-k = Defend 150 objectives total.
+w40k-ach-bastion-smith-t = Bastion Smith
+w40k-ach-bastion-smith-d = Turn raw structures into proper strongholds by upgrading 60 strategic point tiers across your career.
+w40k-ach-bastion-smith-k = Upgrade 60 strategic point tiers total.
 
-w40k-ach-objective-ace-t = Objective Ace
-w40k-ach-objective-ace-d = Take ground quickly, cleanly, and without giving the enemy your life in return by capturing 6 objectives in a single round without dying.
-w40k-ach-objective-ace-k = Capture 6 objectives in one round without dying.
+w40k-ach-strongpoint-saboteur-t = Strongpoint Saboteur
+w40k-ach-strongpoint-saboteur-d = Crack open enemy footholds before they snowball by destroying two hostile strategic points in a single round.
+w40k-ach-strongpoint-saboteur-k = Destroy 2 enemy strategic points in one round.
 
 # Participation
 w40k-ach-veteran-of-wars-t = Veteran of Wars

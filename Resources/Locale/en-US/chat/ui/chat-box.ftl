@@ -40,3 +40,16 @@ hud-chatbox-highlights-tooltip = The words need to be separated by a newline,
 hud-chatbox-highlights-placeholder = @McHands
                                      "Judge"
                                      Medical
+
+hud-chatbox-emoji-button-tooltip = Emoji picker
+hud-chatbox-emoji-preview = {$emoji} :{$alias}:
+hud-chatbox-emoji-preview-empty = Pick an emoji
+hud-chatbox-emoji-category-Custom = Custom
+hud-chatbox-emoji-category-Smileys = Smileys & People
+hud-chatbox-emoji-category-Nature = Nature
+hud-chatbox-emoji-category-Food = Food & Drink
+hud-chatbox-emoji-category-Activities = Activities
+hud-chatbox-emoji-category-Travel = Travel
+hud-chatbox-emoji-category-Objects = Objects
+hud-chatbox-emoji-category-Symbols = Symbols
+hud-chatbox-emoji-category-Flags = Flags

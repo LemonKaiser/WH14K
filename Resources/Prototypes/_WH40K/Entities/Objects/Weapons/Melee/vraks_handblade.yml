@@ -33,3 +33,7 @@
     quickEquip: false
     slots:
     - Belt
+    clothingVisuals:
+      belt:
+      - state: equipped-BELT
+        offset: "-0.18, 0.12"

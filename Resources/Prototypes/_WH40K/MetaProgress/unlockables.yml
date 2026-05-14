@@ -945,7 +945,7 @@
   preview: w40k-dec-title-trench-lord-preview-name
   requiredLevel: 12
   requiredAchievements:
-    - wh40k-ach-frontline-anchor
+    - wh40k-ach-triad-stand
   sortOrder: 110
 
 
@@ -987,7 +987,7 @@
   preview: w40k-dec-title-relic-keeper-preview-name
   requiredLevel: 16
   requiredAchievements:
-    - wh40k-ach-flag-keeper
+    - wh40k-ach-field-engineer
   sortOrder: 150
 
 
@@ -1038,7 +1038,7 @@
   preview: w40k-dec-title-gatekeeper-preview-name
   requiredLevel: 22
   requiredAchievements:
-    - wh40k-ach-wall-of-steel
+    - wh40k-ach-bastion-smith
   sortOrder: 200
 
 
@@ -1082,7 +1082,7 @@
   preview: w40k-dec-title-astral-sentinel-preview-name
   requiredLevel: 27
   requiredAchievements:
-    - wh40k-ach-sector-dominator
+    - wh40k-ach-master-builder
   sortOrder: 240
 
 
@@ -1093,7 +1093,7 @@
   preview: w40k-dec-title-blood-banner-preview-name
   requiredLevel: 28
   requiredAchievements:
-    - wh40k-ach-point-breaker
+    - wh40k-ach-strongpoint-saboteur
   sortOrder: 250
 
 
@@ -1156,7 +1156,7 @@
   preview: w40k-dec-title-pyre-marshal-preview-name
   requiredLevel: 34
   requiredAchievements:
-    - wh40k-ach-objective-ace
+    - wh40k-ach-escalation-order
   sortOrder: 300
 
 

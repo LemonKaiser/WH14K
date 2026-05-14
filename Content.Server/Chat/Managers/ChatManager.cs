@@ -80,6 +80,7 @@ internal sealed partial class ChatManager : IChatManager
 
     private bool _oocEnabled = true;
     private bool _adminOocEnabled = true;
+    private ChatSelectChannel _emojiAllowedChannels = ChatEmoji.DefaultAllowedChannels;
 
     private readonly Dictionary<NetUserId, ChatUser> _players = new();
 
@@ -93,6 +94,7 @@ internal sealed partial class ChatManager : IChatManager
 
         _configurationManager.OnValueChanged(CCVars.OocEnabled, OnOocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.AdminOocEnabled, OnAdminOocEnabledChanged, true);
+        _configurationManager.OnValueChanged(CCVars.ChatEmojiAllowedChannels, OnEmojiAllowedChannelsChanged, true);
 
         _sawmill = _logManager.GetSawmill("SERVER");
 
@@ -113,6 +115,11 @@ internal sealed partial class ChatManager : IChatManager
 
         _adminOocEnabled = val;
         DispatchServerAnnouncement(Loc.GetString(val ? "chat-manager-admin-ooc-chat-enabled-message" : "chat-manager-admin-ooc-chat-disabled-message"));
+    }
+
+    private void OnEmojiAllowedChannelsChanged(string raw)
+    {
+        _emojiAllowedChannels = ChatEmoji.ParseAllowedChannels(raw);
     }
 
         public void DeleteMessagesBy(NetUserId uid)
@@ -301,6 +308,10 @@ internal sealed partial class ChatManager : IChatManager
 
     private void SendOOC(ICommonSession player, string message)
     {
+        message = ChatEmoji.ApplyPolicy(message, ChatSelectChannel.OOC, _emojiAllowedChannels);
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
         var adminDecorationPriority = _configurationManager.GetCVar(CCVars.WH40KMetaAdminPriorityOverDecorations);
         var fullLineMode = NormalizeDecorationLineMode(_configurationManager.GetCVar(CCVars.WH40KMetaOocDecorationLineMode));
         var isAdmin = _adminManager.IsAdmin(player);
@@ -908,6 +919,10 @@ internal sealed partial class ChatManager : IChatManager
             _adminLogger.Add(LogType.Chat, LogImpact.Extreme, $"{player:Player} attempted to send admin message but was not admin");
             return;
         }
+
+        message = ChatEmoji.ApplyPolicy(message, ChatSelectChannel.Admin, _emojiAllowedChannels);
+        if (string.IsNullOrWhiteSpace(message))
+            return;
 
         var clients = _adminManager.ActiveAdmins.Select(p => p.Channel);
         var wrappedMessage = Loc.GetString("chat-manager-send-admin-chat-wrap-message",

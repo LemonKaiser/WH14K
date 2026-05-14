@@ -11,6 +11,7 @@ public class ChatInputBox : PanelContainer
     public const string StyleClassChatLineEdit = "ChatLineEdit";
     public const string StyleClassChatFilterOptionButton = "ChatFilterOptionButton";
 
+    public readonly EmojiPickerButton EmojiButton;
     public readonly ChannelSelectorButton ChannelSelector;
     public readonly HistoryLineEdit Input;
     public readonly ChannelFilterButton FilterButton;
@@ -25,6 +26,14 @@ public class ChatInputBox : PanelContainer
             SeparationOverride = 4
         };
         AddChild(Container);
+
+        EmojiButton = new EmojiPickerButton
+        {
+            Name = "EmojiButton",
+            StyleClasses = { StyleClassChatFilterOptionButton }
+        };
+        EmojiButton.OnEmojiPicked += InsertEmoji;
+        Container.AddChild(EmojiButton);
 
         ChannelSelector = new ChannelSelectorButton
         {
@@ -57,6 +66,12 @@ public class ChatInputBox : PanelContainer
         ActiveChannel = (ChatChannel) selectedChannel;
     }
 
+    private void InsertEmoji(string emoji)
+    {
+        Input.InsertAtCursor(emoji);
+        Input.GrabKeyboardFocus();
+    }
+
     private static string GetChatboxInfoPlaceholder()
     {
         return (BoundKeyHelper.IsBound(ContentKeyFunctions.FocusChat),
@@ -76,7 +91,26 @@ public class ChatInputBox : PanelContainer
     public void RefreshLocalization()
     {
         Input.PlaceHolder = GetChatboxInfoPlaceholder();
+        EmojiButton.RefreshLocalization();
         ChannelSelector.RefreshLocalization();
         FilterButton.RefreshLocalization();
+    }
+
+    public void SetEmojiAllowed(bool allowed)
+    {
+        EmojiButton.SetAvailable(allowed);
+    }
+
+    [Obsolete]
+    protected override void Dispose(bool disposing)
+    {
+#pragma warning disable CS0618
+        base.Dispose(disposing);
+#pragma warning restore CS0618
+
+        if (!disposing)
+            return;
+
+        EmojiButton.OnEmojiPicked -= InsertEmoji;
     }
 }

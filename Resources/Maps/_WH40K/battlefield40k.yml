@@ -49785,21 +49785,6 @@ entities:
     - type: Transform
       pos: -168.05632,47.34664
       parent: 2
-- proto: ClothingGasTechPriest
-  entities:
-  - uid: 3111
-    components:
-    - type: Transform
-      pos: -157.49155,27.465355
-      parent: 2
-  - uid: 3113
-    components:
-    - type: Transform
-      parent: 3112
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
-      storage: 3112
 - proto: ClothingHandsGlovesCombatColonel
   entities:
   - uid: 14

@@ -98,7 +98,6 @@ research-technology-wh40k-weaponry-heavy-emplacements = Heavy Emplacements
 research-technology-wh40k-equipment-signal-doctrine = Tactical Signal Doctrine
 research-technology-wh40k-equipment-field-flares = Field Signal Flares
 research-technology-wh40k-equipment-intel-detectors = Intel Detector Fabrication
-research-technology-wh40k-equipment-sentry-links = Sentry Link Consoles
 research-technology-wh40k-equipment-fulton-recovery = Tactical Fulton Recovery
 research-technology-wh40k-equipment-relay-trackers = Relay Mission Trackers
 research-technology-wh40k-equipment-cargo-trackers = Cargo Mission Trackers
