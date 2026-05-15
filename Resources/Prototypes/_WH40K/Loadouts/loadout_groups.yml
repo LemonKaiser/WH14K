@@ -479,6 +479,16 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KWeaponStubRevolverLoadout15
+
+- type: loadoutGroup
+  id: WH40KImperialSegeantSidearm
+  name: loadout-group-wh40k-imperial-command-sidearm
+  loadouts:
+  - WH40KCommandLaspistolWillOfTheEmperor
+  - WH40KCommandBoltPistol
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponSergStubShotgunLoadout
 
 - type: loadoutGroup
   id: WH40KImperialColonelSidearm
@@ -487,7 +497,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
-  - WH40KWeaponStubRevolverLoadout25
+  - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
   id: WH40KPsykerForceStaff
@@ -522,14 +532,30 @@
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword
-  - WH40KSaber
-  - WH40KPowerFist
   - WH40KCrowbarKit
   - WH40KCombatKnifeKit
   - WH40KSurvivalKnifeKit
   - WH40KSapperShovelKit
   - WH40KTruncheonKit
   - WH40KKukriKnifeKit
+
+- type: loadoutGroup
+  id: WH40KChosenMelee
+  name: loadout-group-wh40k-sergeant-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
@@ -729,7 +755,6 @@
   - WH40KChaosScarf
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
-  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticCommandUniform

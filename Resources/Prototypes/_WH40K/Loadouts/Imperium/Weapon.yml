@@ -100,7 +100,7 @@
   dummyEntity: WeaponLaserPlasmaPistol
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 40
+    requiredLevel: 30
   inhand:
   - WeaponLaserPlasmaPistol
   storage:
@@ -160,3 +160,33 @@
     belt:
     - SpeedLoader11mm
     - SpeedLoader11mm
+
+- type: loadout
+  id: WH40KWeaponSergStubShotgunLoadout
+  dummyEntity: WeaponCombatShotgun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  equipment:
+    suitstorage: WeaponCombatShotgun
+  storage:
+    belt:
+    - MagazineCombatShotgun
+    - MagazineCombatShotgun
+    - MagazineCombatShotgun
+
+
+
+- type: loadout
+  id: WH40KWeaponStubRifleLoadoutSerg
+  dummyEntity: WeaponStubRifle
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    suitstorage: WeaponStubRifle
+  storage:
+    belt:
+    - MagazineStubRifle
+    - MagazineStubRifle
+    - MagazineStubRifle
