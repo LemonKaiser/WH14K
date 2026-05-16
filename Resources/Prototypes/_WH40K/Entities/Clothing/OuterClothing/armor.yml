@@ -362,7 +362,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
 
 - type: entity
-  parent: ClothingOuterArmorCommissar
+  parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorTzeentchSerg
   suffix: WH40K, Еретики, Тзинтч
   components:
