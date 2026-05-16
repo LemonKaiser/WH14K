@@ -357,6 +357,16 @@
     sprite: _WH40K/Clothing/Head/Helmets/champion_khorne_helmet.rsi
 
 - type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadSlaanesh
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/champion_slaanesh_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/champion_slaanesh_helmet.rsi
+
+- type: entity
   parent: ClothingHeadHelmetFlak
   id: ClothingHeadHelmetFlakInquisition
   suffix: WH40K, Инквизиция, BOOSTY

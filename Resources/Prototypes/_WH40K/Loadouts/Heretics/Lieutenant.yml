@@ -53,3 +53,35 @@
     requiredLevel: 15
   equipment:
     outerClothing: ClothingOuterArmorTzeentchLiet
+
+- type: loadout
+  id: WH40KArmorSlaaneshLiet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorSlaaneshchampion
+
+- type: loadout
+  id: WH40KBootsSlaanesh
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    shoes: ClothingShoesBootsSlaanesh
+
+- type: loadout
+  id: WH40KHeadSlaanesh
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadSlaanesh
+
+- type: loadout
+  id: WH40KHeadSlaaneshsuit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingUniformJumpsuitslaanesh 

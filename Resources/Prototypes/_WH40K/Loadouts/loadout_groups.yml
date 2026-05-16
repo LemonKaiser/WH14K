@@ -763,6 +763,7 @@
   loadouts:
   - WH40KBloodPactUniform
   - WH40KSlaaneshUniform
+  - WH40KHeadSlaaneshsuit
 
 - type: loadoutGroup
   id: WH40KHereticCommandNecklace
@@ -810,6 +811,7 @@
   - WH40KBloodPactHelmet
   - WH40KHeadMauler
   - WH40KHeadKhorne
+  - WH40KHeadSlaanesh
 
 - type: loadoutGroup
   id: WH40KHereticChampionOuter
@@ -823,6 +825,7 @@
   - WH40KSlaaneshArmor
   - WH40KArmorKhorne
   - WH40KArmorTzeentchSerg
+  - WH40KArmorSlaaneshLiet
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
@@ -832,6 +835,7 @@
   - WH40KBloodPactBoots
   - WH40KBootsMauler
   - WH40KBootsKhorne
+  - WH40KBootsSlaanesh
 
 - type: loadoutGroup
   id: WH40KHeresiarchCultRaiment

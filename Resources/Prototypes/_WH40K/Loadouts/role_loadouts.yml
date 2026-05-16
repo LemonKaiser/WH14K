@@ -58,6 +58,7 @@
   id: JobGuardsman
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineEyes
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
