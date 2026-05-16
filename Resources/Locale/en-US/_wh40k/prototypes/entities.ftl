@@ -209,6 +209,12 @@ ent-ClothingHeadOfficerCyan = cyan officer's cap
 ent-ClothingHeadSgt = sergeant's cap
     .desc = The most ordinary cap, belonging to one of the sergeants.
 
+ent-WHPowerFist = Power Fist
+    .desc = A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
+
+ent-WHHereticPowerFist = Chaos Power Fist
+    .desc = A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
+
 ent-ClothingHeadVet = beret
     .desc = Takes a Guardsman that belongs to a veteran or officer
 

@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseItem
   id: WHPowerFist
-  name: power fist
-  description: A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
   suffix: WH40K
   components:
   - type: Sprite
@@ -12,8 +10,11 @@
     size: Large
     sprite: _WH40K/Objects/Weapons/Melee/power_fist.rsi
   - type: WH40KPowerFist
+  - type: MeleeThrowOnHit
+    stunTime: 1
+    activateOnThrown: false
   - type: MeleeWeapon
-    attackRate: 1.0
+    attackRate: 0.64
     range: 1.35
     angle: 35
     animation: WeaponArcFist
@@ -30,8 +31,6 @@
 - type: entity
   parent: WHPowerFist
   id: WHHereticPowerFist
-  name: power fist
-  description: A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
   suffix: WH40K
   components:
   - type: Sprite
@@ -40,18 +39,5 @@
   - type: Item
     size: Large
     sprite: _WH40K/Objects/Weapons/Melee/heretic_power_fist.rsi
-  - type: WH40KPowerFist
-  - type: MeleeWeapon
-    attackRate: 1.0
-    range: 1.35
-    angle: 35
-    animation: WeaponArcFist
-    wideAnimationRotation: -135
-    damage:
-      types:
-        Blunt: 20
-        Shock: 20
-    soundHit:
-      collection: MetalThud
-  - type: DisarmMalus
-    malus: 0.7
+
+
