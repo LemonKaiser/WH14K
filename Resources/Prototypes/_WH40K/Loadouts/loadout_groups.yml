@@ -177,7 +177,7 @@
   name: loadout-group-wh40k-imperial-line-eyes
   minLimit: 0
   loadouts:
-  - WH40KGuardsmanGlasses
+  - WH40KEyesGuard
 
 - type: loadoutGroup
   id: WH40KHereticLineEyes
@@ -287,15 +287,9 @@
   name: loadout-group-wh40k-imperial-logistics-head
   minLimit: 0
   loadouts:
-  - WH40KBandanaBrown
-  - WH40KCatachanBandana
-  - WH40KCatachanHeadband
   - WH40KCatachanBeret
-  - WH40KKriegHelmet
   - WH40KQuartermasterBeret
   - WH40KCommandBeret
-  - WH40KValhallanUshanka
-  - WH40KValhallanCap
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHonours
@@ -306,19 +300,16 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
-  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsOuter
   name: loadout-group-wh40k-imperial-logistics-outer
   minLimit: 0
   loadouts:
-  - WH40KLightFlakArmor
   - WH40KMunitorumCoat
   - WH40KMunitorumGreatcoat
   - WH40KMunitorumRig
   - WH40KMunitorumVest
-  - WH40KValhallanCoat
 
 - type: loadoutGroup
   id: WH40KImperialSergeantHead
