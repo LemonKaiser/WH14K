@@ -1,0 +1,28 @@
+- type: gameMap
+  id: WH40KWaveDefenceTest
+  mapName: Wave Defence Test
+  mapPath: /Maps/_WH40K/wave.yml
+  minPlayers: 0
+  maxPlayers: 20
+  wh40kWeatherProfile: WH40KMapWeatherBattlefield
+  wh40kEventsProfile: WH40KMapEventsAll
+  stations:
+    WH40KWaveDefenceTest:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Wave Defence Test"
+        - type: StationJobs
+          availableJobs:
+            Colonel: [ 1, 1 ]
+            Commissar: [ 1, 1 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 2, 2 ]
+            Lieutenant: [ 1, 1 ]
+            Medic: [ 2, 2 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 1, 1 ]
+            Sergeant: [ 2, 2 ]
+            TitheSupplier: [ 1, 1 ]
+            VoxScout: [ 1, 1 ]
+            WH40KChaplain: [ 1, 1 ]

@@ -3,7 +3,9 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:lobbyUi="clr-namespace:Content.Client.Lobby.UI">
     <lobbyUi:HighlightedContainer.PanelOverride>
-        <graphics:StyleBoxFlat BackgroundColor="#2F2F35"
+        <graphics:StyleBoxFlat BackgroundColor="#14171D"
+                               BorderColor="#4E4124"
+                               BorderThickness="1"
                                ContentMarginTopOverride="10"
                                ContentMarginBottomOverride="10"
                                ContentMarginLeftOverride="10"

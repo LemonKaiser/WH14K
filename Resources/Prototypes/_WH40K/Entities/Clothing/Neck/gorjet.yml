@@ -100,5 +100,8 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi
     state: icon
+  - type: WH40KWaveShader
+    speed: 1.6
+    dis: 1.8
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/vst_liet_cloak.rsi

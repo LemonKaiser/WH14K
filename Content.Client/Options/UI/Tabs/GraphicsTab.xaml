@@ -15,7 +15,8 @@
                 <CheckBox Name="ViewportLowResCheckBox" Text="{Loc 'ui-options-vp-low-res'}" />
                 <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'ui-options-parallax-low-quality'}" />
                 <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'ui-options-ambient-occlusion'}" />
-                <CheckBox Name="WH40KGrimdarkShaderCheckBox" Text="{Loc 'ui-options-wh40k-grimdark-shader'}" />
+                <CheckBox Name="WH40KPostProcessCheckBox" Text="{Loc 'ui-options-wh40k-post-process'}" />
+                <CheckBox Name="WH40KWaveShaderCheckBox" Text="{Loc 'ui-options-wh40k-wave-shader'}" />
 
                 <!-- Interface -->
                 <Label Name="InterfaceHeaderLabel" Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>

@@ -15,7 +15,8 @@ wh40k-faction-invalid-job-selection = Выбранная роль не прин�
 ent-ActionToggleAiming = Прицельная стрельба
     .desc = Смещает камеру к прицелу для обзора дальше.
 
-ui-options-wh40k-grimdark-shader = WH40K виньетка
+ui-options-wh40k-post-process = WH40K постобработка
+ui-options-wh40k-wave-shader = WH40K wave-шейдер
 wh40k-tank-engine-started = Двигатель с рокотом оживает.
 wh40k-tank-repair-engine-running = Заглушите двигатель перед ремонтом.
 wh40k-tank-ui-window-title = Диагностика Леман Русса

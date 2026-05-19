@@ -1,0 +1,6 @@
+- type: entity
+  id: WH40KWaveDefence
+  parent: BaseGameRule
+  components:
+  - type: WH40KWaveDefenceRule
+    config: WH40KWaveDefenceConfigMvpImperium

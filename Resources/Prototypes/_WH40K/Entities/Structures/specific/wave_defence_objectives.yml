@@ -1,0 +1,83 @@
+- type: entity
+  id: WH40KWaveDefenceCommandNodeBase
+  parent: BaseStructure
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Specific/imperium_throne.rsi
+    drawdepth: OverMobs
+    layers:
+    - state: base
+      offset: 0, 0.5
+  - type: WH40KAlwaysShowHealthBar
+    maxHealth: 2500
+    useMobThresholds: false
+    barWidthPixels: 72
+    barHeightPixels: 9
+    yOffsetSpritePercent: 0.2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - Opaque
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.Key:
+        type: WH40KCommandNodeBoundUserInterface
+      enum.WH40KCommandNodeUiKey.Reinforcement:
+        type: WH40KReinforcementConsoleBoundUserInterface
+      enum.WH40KCommandNodeUiKey.UpgradeTree:
+        type: WH40KCommandNodeUpgradeTreeBoundUserInterface
+      enum.WH40KCommandNodeUiKey.MissionBoard:
+        type: WH40KCommandNodeMissionBoardBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.Key
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: WaypointerTrackable
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      2500: Dead
+    triggersAlerts: false
+    showOverlays: false
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+  - type: WH40KCommandNode
+    teamId: Imperium
+    passiveFrontPointsPerInterval: 2
+    trackedCategories:
+    - VoxBasics
+    - VoxWeaponry
+    - VoxAmmo
+    - VoxArmor
+    - VoxSupport
+    - VoxReinforcements
+  - type: WH40KWaveDefenceObjective
+    teamId: Imperium
+    name: wh40k-wave-defence-command-node-name
+    maxHealth: 2500
+    warnAtPercent: 0.5
+    isPrimaryObjective: true
+
+- type: entity
+  id: WH40KWaveDefenceCommandNodeImperium
+  parent: WH40KWaveDefenceCommandNodeBase
+  name: command node
+  suffix: WH40K, WaveDefence, Imperium

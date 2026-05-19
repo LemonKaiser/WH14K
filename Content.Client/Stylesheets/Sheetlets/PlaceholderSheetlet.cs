@@ -19,6 +19,7 @@ public sealed class PlaceholderSheetlet<T> : Sheetlet<T> where T: PalettedStyles
             .IntoPatch(StyleBox.Margin.All, 19);
         placeholderBox.SetExpandMargin(StyleBox.Margin.All, -5);
         placeholderBox.Mode = StyleBoxTexture.StretchMode.Tile;
+        placeholderBox.Modulate = Color.FromHex("#8A723A");
 
         return
         [
@@ -28,7 +29,7 @@ public sealed class PlaceholderSheetlet<T> : Sheetlet<T> where T: PalettedStyles
             E<Label>()
                 .Class(Placeholder.StyleClassPlaceholderText)
                 .Font(sheet.BaseFont.GetFont(16))
-                .FontColor(new Color(103, 103, 103, 128)), // TODO: fix hardcoded color
+                .FontColor(Color.FromHex("#7E6B43").WithAlpha(0.82f)),
         ];
     }
 }

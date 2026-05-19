@@ -5,7 +5,9 @@
                 VerticalExpand="False"
                 VerticalAlignment="Top">
     <PanelContainer.PanelOverride>
-        <graphics:StyleBoxFlat BackgroundColor="#2F2F35"
+        <graphics:StyleBoxFlat BackgroundColor="#14171D"
+                               BorderColor="#4E4124"
+                               BorderThickness="1"
                                ContentMarginTopOverride="8"
                                ContentMarginBottomOverride="8"
                                ContentMarginLeftOverride="10"

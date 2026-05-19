@@ -10,15 +10,16 @@ public sealed class ProgressBarSheetlet : Sheetlet<PalettedStylesheet>
 {
     public override StyleRule[] GetRules(PalettedStylesheet sheet, object config)
     {
-        // TODO: 1) hardcoded colors, 2) yuck
         var progressBarBackground = new StyleBoxFlat
         {
-            BackgroundColor = new Color(0.25f, 0.25f, 0.25f),
+            BackgroundColor = Color.FromHex("#3A362E"),
+            BorderColor = Color.FromHex("#5C4A26"),
+            BorderThickness = new Thickness(1),
         };
         progressBarBackground.SetContentMarginOverride(StyleBox.Margin.Vertical, 14.5f);
         var progressBarForeground = new StyleBoxFlat
         {
-            BackgroundColor = new Color(0.25f, 0.50f, 0.25f),
+            BackgroundColor = Color.FromHex("#B69A4A"),
         };
         progressBarForeground.SetContentMarginOverride(StyleBox.Margin.Vertical, 14.5f);
 

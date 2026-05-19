@@ -16,8 +16,10 @@ public sealed partial class PlaytimeStatsEntry : ContainerButton
         RobustXamlLoader.Load(this);
 
         RoleLabel.Text = role;
+        RoleLabel.FontColorOverride = Color.FromHex("#D9B75B");
         Playtime = playtime;  // store the TimeSpan value directly
         PlaytimeLabel.Text = ContentLocalizationManager.FormatPlaytime(playtime);  // convert to string for display
+        PlaytimeLabel.FontColorOverride = Color.FromHex("#F2E8CF");
         BackgroundColorPanel.PanelOverride = styleBox;
     }
 

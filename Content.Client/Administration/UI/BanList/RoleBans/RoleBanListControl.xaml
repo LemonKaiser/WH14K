@@ -1,11 +1,12 @@
 ﻿<roleBans:RoleBanListControl
     xmlns="https://spacestation14.io"
-    xmlns:roleBans="clr-namespace:Content.Client.Administration.UI.BanList.RoleBans">
-    <PanelContainer StyleClasses="BackgroundDark">
+    xmlns:roleBans="clr-namespace:Content.Client.Administration.UI.BanList.RoleBans"
+    xmlns:lobby="clr-namespace:Content.Client.Lobby.UI">
+    <lobby:HighlightedContainer UseUiWindowOpacity="True">
         <ScrollContainer>
             <BoxContainer Name="RoleBans" Access="Public" Orientation="Vertical">
                 <roleBans:RoleBanListHeader Name="BansHeader"/>
             </BoxContainer>
         </ScrollContainer>
-    </PanelContainer>
+    </lobby:HighlightedContainer>
 </roleBans:RoleBanListControl>

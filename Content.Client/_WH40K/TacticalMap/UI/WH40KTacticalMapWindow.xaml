@@ -9,8 +9,8 @@
     <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="10 10 10 10">
         <PanelContainer>
             <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#0D1520"
-                                  BorderColor="#41556E"
+                <gfx:StyleBoxFlat BackgroundColor="#11141A"
+                                  BorderColor="#6A5530"
                                   BorderThickness="2"
                                   ContentMarginLeftOverride="14"
                                   ContentMarginTopOverride="12"
@@ -73,8 +73,8 @@
                             VerticalExpand="True"
                             HorizontalExpand="False">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#111924"
-                                      BorderColor="#33475F"
+                    <gfx:StyleBoxFlat BackgroundColor="#0F1217"
+                                      BorderColor="#4B3C22"
                                       BorderThickness="2"
                                       ContentMarginLeftOverride="0"
                                       ContentMarginTopOverride="0"
@@ -84,8 +84,8 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
                     <PanelContainer>
                         <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#162231"
-                                              BorderColor="#42566C"
+                            <gfx:StyleBoxFlat BackgroundColor="#171B22"
+                                              BorderColor="#6A5530"
                                               BorderThickness="0 0 0 1"
                                               ContentMarginLeftOverride="12"
                                               ContentMarginTopOverride="10"
@@ -108,8 +108,8 @@
                         <BoxContainer Orientation="Vertical" Margin="12 12 12 12" SeparationOverride="10">
                             <PanelContainer Name="StatusPanel">
                                 <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                      BorderColor="#324459"
+                                    <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                      BorderColor="#3D3422"
                                                       BorderThickness="1"
                                                       ContentMarginLeftOverride="10"
                                                       ContentMarginTopOverride="10"
@@ -150,8 +150,8 @@
                                           SeparationOverride="10">
                                 <PanelContainer Name="ToolsPanel">
                                     <PanelContainer.PanelOverride>
-                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                          BorderColor="#324459"
+                                        <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                          BorderColor="#3D3422"
                                                           BorderThickness="1"
                                                           ContentMarginLeftOverride="10"
                                                           ContentMarginTopOverride="10"
@@ -179,8 +179,8 @@
 
                                 <PanelContainer Name="ColorPanel">
                                     <PanelContainer.PanelOverride>
-                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                          BorderColor="#324459"
+                                        <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                          BorderColor="#3D3422"
                                                           BorderThickness="1"
                                                           ContentMarginLeftOverride="10"
                                                           ContentMarginTopOverride="10"
@@ -198,7 +198,7 @@
                                             <PanelContainer Name="CurrentColorPreview" SetSize="42 42">
                                                 <PanelContainer.PanelOverride>
                                                     <gfx:StyleBoxFlat BackgroundColor="#D43B3B"
-                                                                      BorderColor="#F1F1F1"
+                                                                      BorderColor="#D7B65A"
                                                                       BorderThickness="1" />
                                                 </PanelContainer.PanelOverride>
                                             </PanelContainer>
@@ -214,8 +214,8 @@
 
                                 <PanelContainer Name="ThicknessPanel">
                                     <PanelContainer.PanelOverride>
-                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                          BorderColor="#324459"
+                                        <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                          BorderColor="#3D3422"
                                                           BorderThickness="1"
                                                           ContentMarginLeftOverride="10"
                                                           ContentMarginTopOverride="10"
@@ -244,8 +244,8 @@
 
                                 <PanelContainer Name="AnnotationActionsPanel">
                                     <PanelContainer.PanelOverride>
-                                        <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                          BorderColor="#324459"
+                                        <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                          BorderColor="#3D3422"
                                                           BorderThickness="1"
                                                           ContentMarginLeftOverride="10"
                                                           ContentMarginTopOverride="10"
@@ -260,18 +260,17 @@
                                                 Text="{Loc 'wh40k-tactical-map-action-reload'}" />
                                         <Button Name="ClearAnnotationsButton"
                                                 Text="{Loc 'wh40k-tactical-map-action-clear'}"
-                                                StyleClasses="ButtonColorRed" />
+                                                StyleClasses="negative" />
                                         <Button Name="SaveAnnotationsButton"
-                                                Text="{Loc 'wh40k-tactical-map-action-save'}"
-                                                StyleClasses="ButtonColorGreen" />
+                                                Text="{Loc 'wh40k-tactical-map-action-save'}" />
                                     </BoxContainer>
                                 </PanelContainer>
                             </BoxContainer>
 
                             <PanelContainer Name="ActionsPanel">
                                 <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                      BorderColor="#324459"
+                                    <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                      BorderColor="#3D3422"
                                                       BorderThickness="1"
                                                       ContentMarginLeftOverride="10"
                                                       ContentMarginTopOverride="10"
@@ -293,8 +292,8 @@
 
             <PanelContainer HorizontalExpand="True" VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#0D141D"
-                                      BorderColor="#3A4E66"
+                    <gfx:StyleBoxFlat BackgroundColor="#0C0F14"
+                                      BorderColor="#4B3C22"
                                       BorderThickness="2"
                                       ContentMarginLeftOverride="6"
                                       ContentMarginTopOverride="6"
@@ -304,8 +303,8 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalExpand="True">
                     <PanelContainer>
                         <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#162231"
-                                              BorderColor="#42566C"
+                            <gfx:StyleBoxFlat BackgroundColor="#171B22"
+                                              BorderColor="#6A5530"
                                               BorderThickness="1"
                                               ContentMarginLeftOverride="12"
                                               ContentMarginTopOverride="8"
@@ -340,8 +339,8 @@
 
                     <PanelContainer HorizontalExpand="True" VerticalExpand="True">
                         <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#080C11"
-                                              BorderColor="#233549"
+                            <gfx:StyleBoxFlat BackgroundColor="#08090D"
+                                              BorderColor="#3D3422"
                                               BorderThickness="1"
                                               ContentMarginLeftOverride="0"
                                               ContentMarginTopOverride="0"
@@ -359,8 +358,8 @@
                             VerticalExpand="True"
                             HorizontalExpand="False">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#111924"
-                                      BorderColor="#33475F"
+                    <gfx:StyleBoxFlat BackgroundColor="#0F1217"
+                                      BorderColor="#4B3C22"
                                       BorderThickness="2"
                                       ContentMarginLeftOverride="0"
                                       ContentMarginTopOverride="0"
@@ -370,8 +369,8 @@
                 <BoxContainer Orientation="Vertical" SeparationOverride="0" VerticalExpand="True">
                     <PanelContainer>
                         <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#162231"
-                                              BorderColor="#42566C"
+                            <gfx:StyleBoxFlat BackgroundColor="#171B22"
+                                              BorderColor="#6A5530"
                                               BorderThickness="0 0 0 1"
                                               ContentMarginLeftOverride="12"
                                               ContentMarginTopOverride="10"
@@ -407,8 +406,8 @@
 
                         <PanelContainer>
                             <PanelContainer.PanelOverride>
-                                <gfx:StyleBoxFlat BackgroundColor="#121C28"
-                                                  BorderColor="#324459"
+                                <gfx:StyleBoxFlat BackgroundColor="#11151B"
+                                                  BorderColor="#3D3422"
                                                   BorderThickness="1"
                                                   ContentMarginLeftOverride="6"
                                                   ContentMarginTopOverride="6"
@@ -422,8 +421,8 @@
 
                         <PanelContainer HorizontalExpand="True" VerticalExpand="True">
                             <PanelContainer.PanelOverride>
-                                <gfx:StyleBoxFlat BackgroundColor="#0F1822"
-                                                  BorderColor="#324459"
+                                <gfx:StyleBoxFlat BackgroundColor="#0D1117"
+                                                  BorderColor="#3D3422"
                                                   BorderThickness="1"
                                                   ContentMarginLeftOverride="6"
                                                   ContentMarginTopOverride="6"
@@ -443,8 +442,8 @@
 
         <PanelContainer>
             <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#0E141C"
-                                  BorderColor="#314055"
+                <gfx:StyleBoxFlat BackgroundColor="#0E1116"
+                                  BorderColor="#3D3422"
                                   BorderThickness="1"
                                   ContentMarginLeftOverride="10"
                                   ContentMarginTopOverride="6"

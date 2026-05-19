@@ -27,7 +27,7 @@ public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
     [Dependency] private readonly LatheSystem _lathe = default!;
     [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;

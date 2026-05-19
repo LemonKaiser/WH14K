@@ -242,6 +242,44 @@
     popupCooldownSeconds: 1.5
 
 - type: entity
+  id: WH40KWaveDefenceBarrierAttackersOnly
+  name: wave defence attackers-only barrier
+  suffix: WH40K, invisible, attackers pass
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Tag
+    tags:
+    - Wall
+    - ForceFixRotations
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: Markers/cross.rsi
+    state: red
+  - type: Icon
+    sprite: Markers/cross.rsi
+    state: red
+  - type: WH40KWaveAttackersOnlyBarrier
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+            bounds: "-0.5,-0.5,0.5,0.5"
+        hard: true
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+  - type: Airtight
+
+- type: entity
   id: WH40KWallForceShieldBase
   parent: WH40KShieldBarricade
   name: psyker shield barrier

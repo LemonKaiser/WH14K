@@ -396,7 +396,6 @@ public sealed class ListContainerButton : ContainerButton, IEntityControl
         AddStyleClass(StyleClassButton);
         Data = data;
         Index = index;
-        StyleBoxOverride = new StyleBoxFlat(Color.White);
         // AddChild(Background = new PanelContainer
         // {
         //     HorizontalExpand = true,

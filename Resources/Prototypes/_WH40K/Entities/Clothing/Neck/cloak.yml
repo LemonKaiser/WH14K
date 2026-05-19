@@ -6,6 +6,9 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/colonelcloak.rsi
     state: icon
+  - type: WH40KWaveShader
+    speed: 1.6
+    dis: 1.8
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/colonelcloak.rsi
 
@@ -16,6 +19,9 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/imp_rain.rsi
+  - type: WH40KWaveShader
+    speed: 1.9
+    dis: 2.0
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHoodRainImp
     requiredSlot:
@@ -32,6 +38,9 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/chs_rain.rsi
+  - type: WH40KWaveShader
+    speed: 1.9
+    dis: 2.0
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHoodRainChs
     requiredSlot:
@@ -59,3 +68,6 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/flesh.rsi
+  - type: WH40KWaveShader
+    speed: 1.7
+    dis: 2.1

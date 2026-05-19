@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
@@ -14,6 +15,12 @@ using Robust.Shared.Random;
 
 namespace Content.Client.Lobby.UI.Loadouts;
 
+public enum LoadoutWindowSection
+{
+    Equipment,
+    Armament,
+}
+
 [GenerateTypedNameReferences]
 public sealed partial class LoadoutWindow : FancyWindow
 {
@@ -24,14 +31,22 @@ public sealed partial class LoadoutWindow : FancyWindow
     private List<LoadoutGroupContainer> _groups = new();
 
     public HumanoidCharacterProfile Profile;
+    public LoadoutWindowSection Section { get; }
 
     // CCvar.
     private int _maxLoadoutNameLength;
 
-    public LoadoutWindow(HumanoidCharacterProfile profile, RoleLoadout loadout, RoleLoadoutPrototype proto, ICommonSession session, IDependencyCollection collection)
+    public LoadoutWindow(
+        HumanoidCharacterProfile profile,
+        RoleLoadout loadout,
+        RoleLoadoutPrototype proto,
+        ICommonSession session,
+        IDependencyCollection collection,
+        LoadoutWindowSection section = LoadoutWindowSection.Equipment)
     {
         RobustXamlLoader.Load(this);
         Profile = profile;
+        Section = section;
         var protoManager = collection.Resolve<IPrototypeManager>();
         var configManager = collection.Resolve<IConfigurationManager>();
 
@@ -58,17 +73,20 @@ public sealed partial class LoadoutWindow : FancyWindow
             RoleNameEdit.OnTextChanged += args => OnNameChanged?.Invoke(args.Text);
         }
 
-        // Hide if no groups
-        if (proto.Groups.Count == 0)
+        var visibleGroups = proto.Groups
+            .Where(group => ShouldIncludeGroup(group, section))
+            .ToList();
+
+        if (visibleGroups.Count == 0)
         {
             LoadoutGroupsContainer.Visible = false;
             SetSize = Vector2.Zero;
         }
         else
         {
-            foreach (var group in proto.Groups)
+            foreach (var group in visibleGroups)
             {
-                if (!protoManager.Resolve(group, out var groupProto))
+                if (!protoManager.Resolve(group, out LoadoutGroupPrototype? groupProto))
                     continue;
 
                 if (groupProto.Hidden)
@@ -91,11 +109,48 @@ public sealed partial class LoadoutWindow : FancyWindow
         }
     }
 
+    public static bool HasVisibleGroups(
+        RoleLoadoutPrototype proto,
+        IPrototypeManager protoManager,
+        LoadoutWindowSection section)
+    {
+        foreach (var group in proto.Groups)
+        {
+            if (!ShouldIncludeGroup(group, section))
+                continue;
+
+            if (!protoManager.Resolve(group, out LoadoutGroupPrototype? groupProto))
+                continue;
+
+            if (groupProto.Hidden)
+                continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
     public void RefreshLoadouts(RoleLoadout loadout, ICommonSession session, IDependencyCollection collection)
     {
         foreach (var group in _groups)
         {
             group.RefreshLoadouts(Profile, loadout, session, collection);
         }
+    }
+
+    private static bool ShouldIncludeGroup(ProtoId<LoadoutGroupPrototype> groupId, LoadoutWindowSection section)
+    {
+        var isArmament = IsArmamentGroup(groupId.ToString());
+        return section == LoadoutWindowSection.Armament ? isArmament : !isArmament;
+    }
+
+    private static bool IsArmamentGroup(string groupId)
+    {
+        return groupId.Contains("Weapon", StringComparison.OrdinalIgnoreCase) ||
+               groupId.Contains("Melee", StringComparison.OrdinalIgnoreCase) ||
+               groupId.Contains("Sidearm", StringComparison.OrdinalIgnoreCase) ||
+               groupId.Contains("Shield", StringComparison.OrdinalIgnoreCase) ||
+               groupId.Contains("Staff", StringComparison.OrdinalIgnoreCase);
     }
 }

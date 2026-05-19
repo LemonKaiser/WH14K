@@ -20,7 +20,6 @@ void fragment()
             vec2(waveCenter.x, waveCenter.y * ratio)
         );
 
-        // Skip the first tiny part of the wave to avoid a bright center artifact.
         dist = max(dist, 0.13);
 
         highp float offset = (TIME - floor(TIME)) / TIME;

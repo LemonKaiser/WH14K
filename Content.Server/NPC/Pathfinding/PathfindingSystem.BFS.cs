@@ -55,11 +55,8 @@ public sealed partial class PathfindingSystem
             return PathResult.NoPath;
         }
 
-        if (request.CostSoFar.Count == 0)
-        {
-            request.Frontier.Add((0.0f, startNode));
-            request.CostSoFar[startNode] = 0.0f;
-        }
+        request.Frontier.Add((0.0f, startNode));
+        request.CostSoFar[startNode] = 0.0f;
         var count = 0;
 
         while (request.Frontier.Count > 0 && count < NodeLimit && count < request.ExpansionLimit)

@@ -348,6 +348,7 @@
     availableModes:
       - FullAuto
     soundGunshot: /Audio/Weapons/Xeno/alien_spitacid.ogg
+  - type: NPCFriendlyFireAvoidance
   - type: Fixtures
     fixtures:
       fix1:

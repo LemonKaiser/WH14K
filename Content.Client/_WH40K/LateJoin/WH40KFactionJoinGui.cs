@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Localization;
 using Content.Client.Resources;
+using Content.Client.UserInterface.Controls;
+using Content.Shared.CCVar;
 using Content.Shared._WH40K.LateJoin;
 using Content.Shared.Roles;
 using Robust.Client.GameObjects;
@@ -12,6 +14,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
@@ -19,7 +22,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.LateJoin;
 
-public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
+public sealed class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
 {
     private static readonly ProtoId<DepartmentPrototype> MechanicusDepartment = "Mechanicus";
     private static readonly ProtoId<DepartmentPrototype> DarkMechanicumDepartment = "DarkMechanicum";
@@ -42,12 +45,15 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         { "Heretics", Color.FromHex("#C7483F") },
     };
 
-    private static readonly Color CardBackground = Color.FromHex("#16161E");
-    private static readonly Color CardHoverBackground = Color.FromHex("#22222E");
-    private static readonly Color SeparatorColor = Color.FromHex("#3D4059");
+    private static readonly Color CardBackground = Color.FromHex("#12151B");
+    private static readonly Color CardHoverBackground = Color.FromHex("#1B1F27");
+    private static readonly Color SeparatorColor = Color.FromHex("#5D4D2A");
+    private static readonly Color SoftTextColor = Color.FromHex("#A79668");
+    private static readonly Color VsTextColor = Color.FromHex("#7E6A3A");
 
     [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
     [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private readonly SpriteSystem _sprites;
     private readonly BoxContainer _root;
@@ -55,6 +61,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
     private readonly PanelContainer _statusPanel;
     private readonly RichTextLabel _statusLabel;
     private IReadOnlyList<WH40KFactionInfo> _latestFactions;
+    private float _uiWindowOpacity = 1f;
 
     public event Action<string>? FactionSelected;
 
@@ -83,23 +90,14 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             HorizontalExpand = true,
             MaxWidth = 452,
         };
-        _statusLabel.SetMessage(string.Empty, defaultColor: Color.FromHex("#8D90AA"));
+        _statusLabel.SetMessage(string.Empty, defaultColor: SoftTextColor);
 
         _statusPanel = new PanelContainer
         {
             HorizontalExpand = true,
             Visible = false,
             Margin = new Thickness(8, 0, 8, 8),
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = CardBackground.WithAlpha(0.95f),
-                BorderColor = SeparatorColor,
-                BorderThickness = new Thickness(1),
-                ContentMarginLeftOverride = 10,
-                ContentMarginRightOverride = 10,
-                ContentMarginTopOverride = 8,
-                ContentMarginBottomOverride = 8,
-            }
+            PanelOverride = CreateCardStyle(CardBackground.WithAlpha(0.95f), SeparatorColor, new Thickness(1), 10, 10, 8, 8)
         };
         _statusPanel.AddChild(_statusLabel);
 
@@ -114,7 +112,15 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
 
         ContentsContainer.AddChild(_root);
         ApplyFactions(initialFactions);
+        _cfg.OnValueChanged(CCVars.UiWindowOpacity, OnUiWindowOpacityChanged, true);
         Relocalize();
+    }
+
+    private void OnUiWindowOpacityChanged(float opacity)
+    {
+        _uiWindowOpacity = opacity;
+        _statusPanel.PanelOverride = CreateCardStyle(CardBackground.WithAlpha(0.95f), SeparatorColor, new Thickness(1), 10, 10, 8, 8);
+        ApplyFactions(_latestFactions);
     }
 
     public void Relocalize()
@@ -194,27 +200,17 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         if (disabled && !string.IsNullOrWhiteSpace(faction.DisabledReason))
             button.ToolTip = GetDisabledReasonText(faction);
 
-        var normalStyle = new StyleBoxFlat
-        {
-            BackgroundColor = disabled ? CardBackground.WithAlpha(0.85f) : CardBackground,
-            BorderColor = disabled ? accentDim.WithAlpha(0.5f) : accentDim,
-            BorderThickness = new Thickness(2),
-            ContentMarginLeftOverride = 16,
-            ContentMarginRightOverride = 16,
-            ContentMarginTopOverride = 12,
-            ContentMarginBottomOverride = 12,
-        };
+        var normalStyle = CreateCardStyle(
+            disabled ? CardBackground.WithAlpha(0.85f) : CardBackground,
+            disabled ? accentDim.WithAlpha(0.5f) : accentDim,
+            new Thickness(2),
+            16, 16, 12, 12);
 
-        var hoverStyle = new StyleBoxFlat
-        {
-            BackgroundColor = CardHoverBackground,
-            BorderColor = accent,
-            BorderThickness = new Thickness(2),
-            ContentMarginLeftOverride = 16,
-            ContentMarginRightOverride = 16,
-            ContentMarginTopOverride = 12,
-            ContentMarginBottomOverride = 12,
-        };
+        var hoverStyle = CreateCardStyle(
+            CardHoverBackground,
+            accent,
+            new Thickness(2),
+            16, 16, 12, 12);
 
         var cardPanel = new PanelContainer
         {
@@ -227,7 +223,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         {
             MinSize = new Vector2(0, 3),
             HorizontalExpand = true,
-            PanelOverride = new StyleBoxFlat { BackgroundColor = accent },
+            PanelOverride = CreateFlatStyle(accent),
         };
 
         var inner = new BoxContainer
@@ -329,7 +325,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             VerticalExpand = true,
             HorizontalAlignment = HAlignment.Center,
             MinSize = new Vector2(2, 0),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = SeparatorColor },
+            PanelOverride = CreateFlatStyle(SeparatorColor),
         };
 
         var vsLabel = new Label
@@ -337,7 +333,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             HorizontalAlignment = HAlignment.Center,
             Align = Label.AlignMode.Center,
             Text = "VS",
-            FontColorOverride = Color.FromHex("#6D7099"),
+            FontColorOverride = VsTextColor,
             Margin = new Thickness(0, 6, 0, 6),
         };
         vsLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 16);
@@ -347,7 +343,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             VerticalExpand = true,
             HorizontalAlignment = HAlignment.Center,
             MinSize = new Vector2(2, 0),
-            PanelOverride = new StyleBoxFlat { BackgroundColor = SeparatorColor },
+            PanelOverride = CreateFlatStyle(SeparatorColor),
         };
 
         container.AddChild(topLine);
@@ -364,7 +360,7 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
 
         if (disabledFactions.Length == 0)
         {
-            _statusLabel.SetMessage(string.Empty, defaultColor: Color.FromHex("#8D90AA"));
+            _statusLabel.SetMessage(string.Empty, defaultColor: SoftTextColor);
             _statusPanel.Visible = false;
             return;
         }
@@ -372,8 +368,36 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
         var showFactionPrefix = disabledFactions.Length > 1;
         var lines = disabledFactions.Select(faction => GetDisabledReasonText(faction, showFactionPrefix));
 
-        _statusLabel.SetMessage(string.Join("\n", lines), defaultColor: Color.FromHex("#8D90AA"));
+        _statusLabel.SetMessage(string.Join("\n", lines), defaultColor: SoftTextColor);
         _statusPanel.Visible = true;
+    }
+
+    private StyleBox CreateFlatStyle(Color background)
+    {
+        return WindowOpacityHelper.CreateOpacityStyle(new StyleBoxFlat { BackgroundColor = background }, _uiWindowOpacity);
+    }
+
+    private StyleBox CreateCardStyle(
+        Color background,
+        Color border,
+        Thickness borderThickness,
+        float marginLeft,
+        float marginRight,
+        float marginTop,
+        float marginBottom)
+    {
+        var style = new StyleBoxFlat
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+            BorderThickness = borderThickness,
+            ContentMarginLeftOverride = marginLeft,
+            ContentMarginRightOverride = marginRight,
+            ContentMarginTopOverride = marginTop,
+            ContentMarginBottomOverride = marginBottom,
+        };
+
+        return WindowOpacityHelper.CreateOpacityStyle(style, _uiWindowOpacity);
     }
 
     private static string GetDisabledReasonText(WH40KFactionInfo faction, bool showFactionPrefix = false)
@@ -396,5 +420,16 @@ public sealed class WH40KFactionJoinGui : DefaultWindow, ILocalizedControl
             return reason;
 
         return $"{Loc.GetString(faction.Name)}: {reason}";
+    }
+
+    [Obsolete]
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            _cfg.UnsubValueChanged(CCVars.UiWindowOpacity, OnUiWindowOpacityChanged);
+
+#pragma warning disable CS0618
+        base.Dispose(disposing);
+#pragma warning restore CS0618
     }
 }

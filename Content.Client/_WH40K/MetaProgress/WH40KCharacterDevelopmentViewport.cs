@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.Client._WH40K.Command;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared._WH40K.MetaProgress;
@@ -115,27 +116,27 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 
 	private const float RootWorldWidthMax = 390f;
 
-	private static readonly Color CanvasBackgroundColor = Color.FromHex("#101822".AsSpan());
+	private static readonly Color CanvasBackgroundColor = WH40KCommandUiStyles.PanelBackground;
 
-	private static readonly Color CanvasBorderColor = Color.FromHex("#3E5365".AsSpan());
+	private static readonly Color CanvasBorderColor = WH40KCommandUiStyles.StrongBorder.WithAlpha(0.72f);
 
-	private static readonly Color GridColor = Color.FromHex("#5E735B".AsSpan()).WithAlpha(0.08f);
+	private static readonly Color GridColor = WH40KCommandUiStyles.MutedBorder.WithAlpha(0.08f);
 
-	private static readonly Color DesignFrameColor = Color.FromHex("#6A7A88".AsSpan()).WithAlpha(0.38f);
+	private static readonly Color DesignFrameColor = WH40KCommandUiStyles.StrongBorder.WithAlpha(0.34f);
 
-	private static readonly Color CardBackgroundColor = Color.FromHex("#16212D".AsSpan());
+	private static readonly Color CardBackgroundColor = WH40KCommandUiStyles.CardBackgroundAlt;
 
-	private static readonly Color CardMutedBackgroundColor = Color.FromHex("#141A22".AsSpan());
+	private static readonly Color CardMutedBackgroundColor = WH40KCommandUiStyles.CardBackgroundMuted;
 
-	private static readonly Color CardLockedBorderColor = Color.FromHex("#4E5D69".AsSpan());
+	private static readonly Color CardLockedBorderColor = WH40KCommandUiStyles.MutedBorder;
 
 	private static readonly Color CardDeniedColor = Color.FromHex("#b70000".AsSpan());
 
-	private static readonly Color TextPrimaryColor = Color.FromHex("#E7F2F7".AsSpan());
+	private static readonly Color TextPrimaryColor = Color.FromHex("#E6DEC7".AsSpan());
 
-	private static readonly Color TextMutedColor = Color.FromHex("#9FB0BC".AsSpan());
+	private static readonly Color TextMutedColor = WH40KCommandUiStyles.MutedText;
 
-	private static readonly Color RootConnectorColor = Color.FromHex("#D2A454".AsSpan());
+	private static readonly Color RootConnectorColor = WH40KCommandUiStyles.DefaultAccent;
 
 	private const float MinZoom = 1.04f;
 
@@ -663,9 +664,9 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 		}
 		Vector2 screenCenter = _screenCenter;
 		float num = 0.5f + 0.5f * MathF.Sin(_time * 1.9f);
-		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.15f, Color.FromHex("#4A8D79".AsSpan()).WithAlpha(0.05f + num * 0.02f));
-		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.23f, Color.FromHex("#D2A454".AsSpan()).WithAlpha(0.035f));
-		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.31f, Color.FromHex("#7EC8FF".AsSpan()).WithAlpha(0.025f));
+		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.15f, Color.FromHex("#6A5530".AsSpan()).WithAlpha(0.05f + num * 0.02f));
+		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.23f, WH40KCommandUiStyles.DefaultAccent.WithAlpha(0.035f));
+		handle.DrawCircle(screenCenter, MathF.Min(base.PixelWidth, base.PixelHeight) * 0.31f, Color.FromHex("#4B3E25".AsSpan()).WithAlpha(0.03f));
 	}
 
 	private void DrawDesignFrame(DrawingHandleScreen handle)

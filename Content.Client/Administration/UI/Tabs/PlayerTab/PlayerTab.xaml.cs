@@ -10,6 +10,7 @@ using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
+using Robust.Shared.Maths;
 using static Content.Client.Administration.UI.Tabs.PlayerTab.PlayerTabHeader;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
@@ -24,8 +25,12 @@ public sealed partial class PlayerTab : Control, ILocalizedControl
 
     private const string ArrowUp = "↑";
     private const string ArrowDown = "↓";
-    private readonly Color _altColor = Color.FromHex("#292B38");
-    private readonly Color _defaultColor = Color.FromHex("#2F2F3B");
+    private static readonly Color HeaderBackgroundColor = Color.FromHex("#151820");
+    private static readonly Color HeaderBorderColor = Color.FromHex("#6A5530");
+    private static readonly Color HeaderTextColor = Color.FromHex("#D7B65A");
+    private static readonly Color RowAltColor = Color.FromHex("#13161D");
+    private static readonly Color RowDefaultColor = Color.FromHex("#181B23");
+    private static readonly Color RowBorderColor = Color.FromHex("#4D4024");
     private readonly AdminSystem _adminSystem;
     private IReadOnlyList<PlayerInfo> _players = new List<PlayerInfo>();
 
@@ -57,7 +62,8 @@ public sealed partial class PlayerTab : Control, ILocalizedControl
         OverlayButton.OnPressed += OverlayButtonPressed;
         ShowDisconnectedButton.OnPressed += ShowDisconnectedPressed;
 
-        ListHeader.BackgroundColorPanel.PanelOverride = new StyleBoxFlat(_altColor);
+        ListHeader.BackgroundColorPanel.PanelOverride = CreateListStyle(HeaderBackgroundColor, HeaderBorderColor);
+        ListHeader.SetHeaderFontColor(HeaderTextColor);
         ListHeader.OnHeaderClicked += HeaderClicked;
 
         SearchList.SearchBar = SearchLineEdit;
@@ -171,7 +177,7 @@ public sealed partial class PlayerTab : Control, ILocalizedControl
 
         var entry = new PlayerTabEntry(
             player,
-            new StyleBoxFlat(button.Index % 2 == 0 ? _altColor : _defaultColor),
+            CreateListStyle(button.Index % 2 == 0 ? RowAltColor : RowDefaultColor, RowBorderColor),
             _playerTabColorSetting,
             _playerTabRoleSetting,
             _playerTabSymbolSetting);
@@ -279,6 +285,20 @@ public sealed partial class PlayerTab : Control, ILocalizedControl
     }
 
     #endregion
+
+    private static StyleBoxFlat CreateListStyle(Color background, Color border)
+    {
+        return new StyleBoxFlat
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 6,
+            ContentMarginRightOverride = 6,
+            ContentMarginTopOverride = 4,
+            ContentMarginBottomOverride = 4,
+        };
+    }
 }
 
 public record PlayerListData(PlayerInfo Info, string FilteringString) : ListData;

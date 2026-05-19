@@ -2,14 +2,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Shared.Doors.Components;
 using Content.Shared.NPC;
 using Content.Shared.Physics;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
-using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -19,9 +17,6 @@ namespace Content.Server.NPC.Pathfinding;
 public sealed partial class PathfindingSystem
 {
     private static readonly TimeSpan UpdateCooldown = TimeSpan.FromSeconds(0.45);
-    private const float ObstaclePadding = 0.22f;
-    private const float IrregularObstaclePadding = 0.38f;
-    private const float ClosedDoorPadding = 0.10f;
 
     // What relevant collision groups we track for pathfinding.
     // Stuff like chairs have collision but aren't relevant for mobs.
@@ -220,6 +215,7 @@ public sealed partial class PathfindingSystem
             }
 
             comp.DirtyChunks.Clear();
+            comp.TopologyVersion++;
         }
     }
 
@@ -238,19 +234,6 @@ public sealed partial class PathfindingSystem
         }
 
         return false;
-    }
-
-    private bool IsEnvironmentalHazardRelevant(EntityUid ent, FixturesComponent fixtures)
-    {
-        if (!_damageContactsQuery.HasComponent(ent) &&
-            !_slipperyQuery.HasComponent(ent) &&
-            (!_speedModifierContactsQuery.TryComp(ent, out var slow) ||
-             (slow.WalkSpeedModifier > 0.35f && slow.SprintSpeedModifier > 0.35f)))
-        {
-            return false;
-        }
-
-        return fixtures.Fixtures.Count > 0;
     }
 
     private void OnCollisionChange(ref CollisionChangeEvent ev)
@@ -453,24 +436,16 @@ public sealed partial class PathfindingSystem
                 foreach (var ent in available)
                 {
                     // Irrelevant for pathfinding
-                    if (!_fixturesQuery.TryGetComponent(ent, out var fixtures))
-                    {
-                        continue;
-                    }
-
-                    var isBodyRelevant = IsBodyRelevant(fixtures);
-                    var isHazardRelevant = IsEnvironmentalHazardRelevant(ent, fixtures);
-                    if (!isBodyRelevant && !isHazardRelevant)
+                    if (!_fixturesQuery.TryGetComponent(ent, out var fixtures) ||
+                        !IsBodyRelevant(fixtures))
                     {
                         continue;
                     }
 
                     var xform = _xformQuery.GetComponent(ent);
 
-                    // Wide or off-center fixtures can overlap neighboring tiles even when their
-                    // anchor remains on a different tile. Keep any intersecting entity that belongs
-                    // to this grid so pathing respects real occupied space instead of only anchor tiles.
-                    if (xform.ParentUid != grid.Owner)
+                    if (xform.ParentUid != grid.Owner ||
+                        _maps.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tilePos)
                     {
                         continue;
                     }
@@ -497,32 +472,9 @@ public sealed partial class PathfindingSystem
                                 continue;
 
                             var colliding = false;
-                            var hazardIntersect = false;
-                            var trackHazard = IsEnvironmentalHazardRelevant(ent, fixtures);
-                            if (!_xformQuery.TryGetComponent(ent, out var xform))
-                                continue;
 
                             foreach (var fixture in fixtures.Fixtures.Values)
                             {
-                                if (trackHazard && !hazardIntersect)
-                                {
-                                    var hazardAabbHit = false;
-                                    foreach (var proxy in fixture.Proxies)
-                                    {
-                                        if (proxy.AABB.Contains(localPos))
-                                        {
-                                            hazardAabbHit = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if (hazardAabbHit &&
-                                        _fixtures.TestPoint(fixture.Shape, new Transform(xform.LocalPosition, xform.LocalRotation), localPos))
-                                    {
-                                        hazardIntersect = true;
-                                    }
-                                }
-
                                 // Don't need to re-do it.
                                 if (!fixture.Hard ||
                                     (collisionMask & fixture.CollisionMask) == fixture.CollisionMask &&
@@ -533,38 +485,18 @@ public sealed partial class PathfindingSystem
 
                                 // Do an AABB check first as it's probably faster, then do an actual point check.
                                 var intersects = false;
-                                var paddedIntersect = false;
-                                var padding = GetObstaclePadding(ent, fixture.Shape);
-                                var applyPadding = padding > 0f;
 
                                 foreach (var proxy in fixture.Proxies)
                                 {
                                     if (!proxy.AABB.Contains(localPos))
-                                    {
-                                        if (!applyPadding ||
-                                            !proxy.AABB.Enlarged(padding).Contains(localPos))
-                                        {
-                                            continue;
-                                        }
-
-                                        paddedIntersect = true;
                                         continue;
-                                    }
 
                                     intersects = true;
                                 }
 
-                                if (!intersects && !paddedIntersect)
+                                if (!intersects ||
+                                    !_xformQuery.TryGetComponent(ent, out var xform))
                                 {
-                                    continue;
-                                }
-
-                                if (!intersects &&
-                                    paddedIntersect)
-                                {
-                                    collisionLayer |= fixture.CollisionLayer;
-                                    collisionMask |= fixture.CollisionMask;
-                                    colliding = true;
                                     continue;
                                 }
 
@@ -579,25 +511,20 @@ public sealed partial class PathfindingSystem
                             }
 
                             // If entity doesn't intersect this node (e.g. thindows) then ignore it.
-                            if (!colliding && !hazardIntersect)
+                            if (!colliding)
                                 continue;
 
-                            if (hazardIntersect)
-                            {
-                                flags |= PathfindingBreadcrumbFlag.Hazard;
-                            }
-
-                            if (colliding && _accessQuery.HasComponent(ent))
+                            if (_accessQuery.HasComponent(ent))
                             {
                                 flags |= PathfindingBreadcrumbFlag.Access;
                             }
 
-                            if (colliding && _doorQuery.HasComponent(ent))
+                            if (_doorQuery.HasComponent(ent))
                             {
                                 flags |= PathfindingBreadcrumbFlag.Door;
                             }
 
-                            if (colliding && _climbableQuery.HasComponent(ent))
+                            if (_climbableQuery.HasComponent(ent))
                             {
                                 flags |= PathfindingBreadcrumbFlag.Climb;
                             }
@@ -776,30 +703,6 @@ public sealed partial class PathfindingSystem
                 existing.AddRange(polys);
             }
         }
-    }
-
-    private float GetObstaclePadding(EntityUid ent, IPhysShape shape)
-    {
-        if (_doorQuery.TryComp(ent, out var door))
-        {
-            return door.State is DoorState.Open or DoorState.Opening
-                ? 0f
-                : ClosedDoorPadding;
-        }
-
-        if (_climbableQuery.HasComponent(ent))
-            return 0f;
-
-        if (!_xformQuery.TryGetComponent(ent, out var xform) || !xform.Anchored)
-            return 0f;
-
-        return shape switch
-        {
-            PolygonShape => IrregularObstaclePadding,
-            EdgeShape => IrregularObstaclePadding,
-            ChainShape => IrregularObstaclePadding,
-            _ => ObstaclePadding,
-        };
     }
 
     private void BuildNavmesh(GridPathfindingChunk chunk, Entity<GridPathfindingComponent> pathfinding)

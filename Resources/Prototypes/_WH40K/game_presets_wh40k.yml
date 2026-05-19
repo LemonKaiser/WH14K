@@ -9,3 +9,15 @@
   supportedMaps: WH40KMapPool
   rules:
   - WH40KTeamBattle
+
+- type: gamePreset
+  id: WH40KWaveDefence
+  alias:
+  - wh40kwave
+  - wavedef
+  name: wh40k-wave-defence-title
+  description: wh40k-wave-defence-description
+  showInVote: false
+  supportedMaps: WH40KWaveDefenceMapPool
+  rules:
+  - WH40KWaveDefence

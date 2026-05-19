@@ -14,7 +14,7 @@ public sealed partial class WH40KMinPhaseCondition : ListingCondition
 
     public override bool Condition(ListingConditionArgs args)
     {
-        var rule = args.EntityManager.System<WH40KTeamBattleRuleSystem>();
+        var rule = args.EntityManager.System<WH40KTeamRuleFacadeSystem>();
         return rule.GetCurrentPhase() >= Phase;
     }
 }

@@ -1,7 +1,23 @@
 - type: shader
-  id: WH40KGrimdark
+  id: WH40KWave
   kind: source
-  path: "/Textures/_WH40K/Shaders/grimdark.swsl"
+  path: "/Textures/_WH40K/Shaders/wave.swsl"
+
+- type: shader
+  id: WH40KPostProcess
+  kind: source
+  path: "/Textures/_WH40K/Shaders/post_process.swsl"
+  params:
+    CircleRadius: 420.0
+    CircleMinDist: 0.0
+    CirclePow: 1.0
+    CircleMax: 4.0
+    CircleMult: 0.25
+    FalloffClampMin: 0.075
+    FalloffClampMax: 1.0
+    FalloffStrength: 0.75
+    FalloffPow: 3.0
+    HDR: 1.5
 
 - type: shader
   id: WH40KShockWave

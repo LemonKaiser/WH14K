@@ -71,6 +71,19 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
         return Interaction.InRangeUnobstructed(user, target, range, predicate: predicate);
     }
 
+    protected override bool InRange(EntityUid user, EntityUid target, EntityCoordinates targetCoordinates, float range, ICommonSession? session)
+    {
+        if (session is { } pSession)
+        {
+            var (_, targetLocalAngle) = _lag.GetCoordinatesAngle(target, pSession);
+            var lagPredicate = GetDirectionalMeleePredicate(user, target, targetCoordinates);
+            return Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, predicate: lagPredicate, overlapCheck: false);
+        }
+
+        var predicate = GetDirectionalMeleePredicate(user, target, targetCoordinates);
+        return Interaction.InRangeUnobstructed(user, targetCoordinates, range, predicate: predicate);
+    }
+
     protected override void DoDamageEffect(List<EntityUid> targets, EntityUid? user, TransformComponent targetXform)
     {
         var filter = Filter.Pvs(targetXform.Coordinates, entityMan: EntityManager).RemoveWhereAttachedEntity(o => o == user);

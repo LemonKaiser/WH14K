@@ -56,7 +56,7 @@
        height="5.1954541"
        x="78.147339"
        y="142.25995"
-       style="display:inline;fill:#3d4059;fill-opacity:1;fill-rule:nonzero;stroke:#3d4059;stroke-width:1.15454543;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       style="display:inline;fill:#2b2f36;fill-opacity:1;fill-rule:nonzero;stroke:#50555f;stroke-width:1.15454543;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
        ry="0.5931561" />
   </g>
   <g
@@ -66,14 +66,14 @@
     <g
        id="g9680"
        transform="matrix(0.25712973,0.25712973,-0.25712973,0.25712973,12.687721,15.603163)"
-       style="fill:#a88b5e;fill-opacity:1">
+       style="fill:#d7b65a;fill-opacity:1">
       <rect
          y="8.996666"
          x="-9.5863533"
          height="10.583333"
          width="1.8520833"
          id="rect9671"
-         style="fill:#a88b5e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.17499995;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         style="fill:#d7b65a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.17499995;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
          rx="0.52916664" />
       <rect
          y="17.727915"
@@ -81,7 +81,7 @@
          height="1.8520832"
          width="5.2916665"
          id="rect9673"
-         style="fill:#a88b5e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.17499971;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         style="fill:#d7b65a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3.17499971;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
          rx="0.52916664" />
     </g>
   </g>

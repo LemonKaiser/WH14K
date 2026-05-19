@@ -22,6 +22,17 @@ namespace Content.Client._WH40K.MetaProgress;
 public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedControl
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    private static readonly Color SummaryBackground = Color.FromHex("#1B1A14");
+    private static readonly Color SummaryBorder = Color.FromHex("#7B6430");
+    private static readonly Color LockedBackground = Color.FromHex("#1A1D24");
+    private static readonly Color LockedBorder = Color.FromHex("#4C4127");
+    private static readonly Color LockedChip = Color.FromHex("#5B5446");
+    private static readonly Color InProgressBackground = Color.FromHex("#201D15");
+    private static readonly Color InProgressBorder = Color.FromHex("#8B743A");
+    private static readonly Color InProgressChip = Color.FromHex("#9E8140");
+    private static readonly Color UnlockedBackground = Color.FromHex("#182017");
+    private static readonly Color UnlockedBorder = Color.FromHex("#6E845A");
+    private static readonly Color UnlockedChip = Color.FromHex("#5F7A50");
 
     private readonly List<WH40KMetaAchievementSnapshotEntry> _entries = new();
     private readonly WH40KMetaProgressSystem _metaProgress;
@@ -224,15 +235,15 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
             PanelOverride = new StyleBoxFlat
             {
                 BackgroundColor = unlocked
-                    ? Color.FromHex("#2C3A2D")
+                    ? UnlockedBackground
                     : inProgress
-                        ? Color.FromHex("#2F3446")
-                        : Color.FromHex("#30323A"),
+                        ? InProgressBackground
+                        : LockedBackground,
                 BorderColor = unlocked
-                    ? Color.FromHex("#5A8A60")
+                    ? UnlockedBorder
                     : inProgress
-                        ? Color.FromHex("#6570A0")
-                        : Color.FromHex("#6A6D79"),
+                        ? InProgressBorder
+                        : LockedBorder,
                 BorderThickness = new Thickness(1),
                 ContentMarginTopOverride = 8,
                 ContentMarginBottomOverride = 8,
@@ -265,10 +276,10 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
             PanelOverride = new StyleBoxFlat
             {
                 BackgroundColor = unlocked
-                    ? Color.FromHex("#3D6643")
+                    ? UnlockedChip
                     : inProgress
-                        ? Color.FromHex("#4A4E7A")
-                        : Color.FromHex("#5C5F6A"),
+                        ? InProgressChip
+                        : LockedChip,
                 ContentMarginTopOverride = 2,
                 ContentMarginBottomOverride = 2,
                 ContentMarginLeftOverride = 6,
@@ -387,8 +398,8 @@ public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedCo
     {
         SummaryProgressHighlight.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#3A3F57"),
-            BorderColor = Color.FromHex("#7D88BA"),
+            BackgroundColor = SummaryBackground,
+            BorderColor = SummaryBorder,
             BorderThickness = new Thickness(1),
         };
     }

@@ -21,3 +21,47 @@
 - type: lobbyBackground
   id: AnimatedWp6
   backgroundGif: /Textures/LobbyScreens/Animated/wp6.gif
+
+- type: lobbyBackground
+  id: AnimatedWp7
+  backgroundGif: /Textures/LobbyScreens/Animated/wp7.gif
+
+- type: lobbyBackground
+  id: AnimatedWp8
+  backgroundGif: /Textures/LobbyScreens/Animated/wp8.gif
+
+- type: lobbyBackground
+  id: AnimatedWp9
+  backgroundGif: /Textures/LobbyScreens/Animated/wp9.gif
+
+- type: lobbyBackground
+  id: AnimatedWp10
+  backgroundGif: /Textures/LobbyScreens/Animated/wp10.gif
+
+- type: lobbyBackground
+  id: AnimatedWp11
+  backgroundGif: /Textures/LobbyScreens/Animated/wp11.gif
+
+- type: lobbyBackground
+  id: AnimatedWp12
+  backgroundGif: /Textures/LobbyScreens/Animated/wp12.gif
+
+- type: lobbyBackground
+  id: AnimatedWp13
+  backgroundGif: /Textures/LobbyScreens/Animated/wp13.gif
+
+- type: lobbyBackground
+  id: AnimatedWp14
+  backgroundGif: /Textures/LobbyScreens/Animated/wp14.gif
+
+- type: lobbyBackground
+  id: AnimatedWp15
+  backgroundGif: /Textures/LobbyScreens/Animated/wp15.gif
+
+- type: lobbyBackground
+  id: AnimatedWp16
+  backgroundGif: /Textures/LobbyScreens/Animated/wp16.gif
+
+- type: lobbyBackground
+  id: AnimatedWp17
+  backgroundGif: /Textures/LobbyScreens/Animated/wp17.gif

@@ -14,7 +14,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using ClimbingComponent = Content.Shared.Climbing.Components.ClimbingComponent;
-using Robust.Shared.Random;
 
 namespace Content.Server.NPC.Systems;
 
@@ -61,7 +60,7 @@ public sealed partial class NPCSteeringSystem
 
         // TODO: Ideally for "FreeSpace" we check all entities on the tile and build flags dynamically (pathfinder refactor in future).
         var ents = _entSetPool.Get();
-        _lookup.GetLocalEntitiesIntersecting(node.GraphUid, node.Box.Enlarged(-0.04f), ents, flags: LookupFlags.Static);
+        _lookup.GetLocalEntitiesIntersecting(node.GraphUid, node.Box.Enlarged(-0.04f), ents, flags: LookupFlags.Dynamic | LookupFlags.Static);
         var result = true;
 
         if (ents.Count > 0)
@@ -103,13 +102,9 @@ public sealed partial class NPCSteeringSystem
         ref bool forceSteer,
         ref float moveMultiplier)
     {
-        using var benchScope = _bench.Measure("npc.steering.try_seek");
-
         var ourCoordinates = xform.Coordinates;
         var destinationCoordinates = steering.Coordinates;
         var inLos = true;
-
-        // check if we should ignore all pathing logic and go straight to the target coordinates
         var directMove = steering.DirectMove;
 
         // Check if we're in LOS if that's required.
@@ -142,15 +137,16 @@ public sealed partial class NPCSteeringSystem
         }
 
         var velLen = body.LinearVelocity.Length();
-
         var careAboutSpeed = steering.InRangeMaxSpeed != null;
-        var finalInRange = ourCoordinates.TryDistance(EntityManager, destinationCoordinates, out var targetDistance) && inLos && targetDistance <= steering.Range;
+        var finalInRange =
+            ourCoordinates.TryDistance(EntityManager, destinationCoordinates, out var targetDistance) &&
+            inLos &&
+            targetDistance <= steering.Range;
         var velocityHigh = careAboutSpeed && velLen > steering.InRangeMaxSpeed!.Value;
-        // if we're in range and we care about velocity, stop trying to move if we early return
+
         if (finalInRange && careAboutSpeed)
             moveMultiplier = 0f;
 
-        // We've arrived and velocity is acceptable, nothing else matters.
         if (finalInRange && !velocityHigh)
         {
             steering.Status = SteeringStatus.InRange;
@@ -159,7 +155,7 @@ public sealed partial class NPCSteeringSystem
         }
 
         // Grab the target position, either the next path node or our end goal..
-        var targetCoordinates = steering.DirectMove ? steering.Coordinates : GetTargetCoordinates(steering);
+        var targetCoordinates = directMove ? steering.Coordinates : GetTargetCoordinates(steering);
 
         if (!targetCoordinates.IsValid(EntityManager))
         {
@@ -172,7 +168,8 @@ public sealed partial class NPCSteeringSystem
         // If the next node is invalid then get new ones
         if (!targetCoordinates.IsValid(EntityManager))
         {
-            if (!directMove && steering.CurrentPath.TryPeek(out var poly) &&
+            if (!directMove &&
+                steering.CurrentPath.TryPeek(out var poly) &&
                 (poly.Data.Flags & PathfindingBreadcrumbFlag.Invalid) != 0x0)
             {
                 steering.CurrentPath.Dequeue();
@@ -221,12 +218,12 @@ public sealed partial class NPCSteeringSystem
         if (arrived)
         {
             // Node needs some kind of special handling like access or smashing.
-            if (!directMove && steering.CurrentPath.TryPeek(out var node) && !IsFreeSpace(uid, steering, node))
+            if (!directMove &&
+                steering.CurrentPath.TryPeek(out var node) &&
+                !IsFreeSpace(uid, steering, node))
             {
                 // Ignore stuck while handling obstacles.
                 ResetStuck(steering, ourCoordinates);
-
-                // Breaking behaviours and the likes.
                 var status = TryHandleFlags(uid, steering, node);
 
                 // TODO: Need to handle re-pathing in case the target moves around.
@@ -234,24 +231,12 @@ public sealed partial class NPCSteeringSystem
                 {
                     case SteeringObstacleStatus.Completed:
                         steering.DoAfterId = null;
-                        steering.ObstacleFailureCount = 0;
                         break;
                     case SteeringObstacleStatus.Failed:
                         steering.DoAfterId = null;
-                        if (!TryRecoverFromObstacleFailure(steering, ourCoordinates, steering.Coordinates, out var laneDirection))
-                        {
-                            steering.Status = SteeringStatus.NoPath;
-                            return false;
-                        }
-
-                        if (laneDirection != Vector2.Zero)
-                        {
-                            forceSteer = true;
-                            ApplySeek(interest, offsetRot.RotateVec(laneDirection), _obstacleLaneRotateWeight);
-                        }
-
-                        CheckPath(uid, steering, xform, needsPath: true, targetDistance);
-                        return true;
+                        // TODO: Blacklist the poly for next query
+                        steering.Status = SteeringStatus.NoPath;
+                        return false;
                     case SteeringObstacleStatus.Continuing:
                         CheckPath(uid, steering, xform, needsPath, targetDistance);
                         return true;
@@ -341,48 +326,49 @@ public sealed partial class NPCSteeringSystem
         if (!directMove)
             CheckPath(uid, steering, xform, needsPath, targetDistance);
 
-        // whether we should want to brake right now
         var haveToBrake = finalInRange && velocityHigh;
 
         // If we don't have a path yet then do nothing; this is to avoid stutter-stepping if it turns out there's no path
-        // available but we assume there was. Brake if we have to, though.
-        if (!directMove && steering is { Pathfind: true, CurrentPath.Count: 0 } && !haveToBrake)
+        // available but we assume there was.
+        if (!directMove &&
+            steering is { Pathfind: true, CurrentPath.Count: 0 } &&
+            !haveToBrake)
             return true;
 
-        if (moveSpeed == 0f || direction == Vector2.Zero)
+        if (moveSpeed == 0f || (!haveToBrake && direction == Vector2.Zero))
         {
             steering.Status = SteeringStatus.NoPath;
             return false;
         }
 
         var moveType = MovementType.MovingToTarget;
-
         var realAccel = acceleration * moveSpeed;
         var frameAccel = realAccel * frameTime;
+        var tgVel = body.LinearVelocity;
 
-        // check our tangential velocity
-        var normVel = direction * Vector2.Dot(body.LinearVelocity, direction) / direction.LengthSquared();
-        var tgVel = body.LinearVelocity - normVel;
-
-        // we're near final node but haven't braked, do so
         if (haveToBrake)
         {
-            // how much distance we'll pass before hitting our desired max speed
-            var brakePath = (velLen - steering.InRangeMaxSpeed ?? 0f) / friction;
-            var hardBrake = brakePath > MathF.Min(0.5f, steering.Range); // hard brake if it takes more than half a tile
-
+            var targetBrakeSpeed = steering.InRangeMaxSpeed ?? 0f;
+            var effectiveFriction = MathF.Max(friction, 0.0001f);
+            var brakePath = (velLen - targetBrakeSpeed) / effectiveFriction;
+            var hardBrake = brakePath > MathF.Min(0.5f, steering.Range);
             moveType = hardBrake ? MovementType.Braking : MovementType.Coasting;
         }
         else
         {
-            // scary magic number but shouldn't be a datafield since what this actually does is implementation-dependent
             const float circlingTolerance = 0.5f;
+            var dirLenSq = direction.LengthSquared();
 
-            var dirLen = direction.Length();
-            // tangentially brake if we'll be spiraling outwards at our current tangential velocity
-            var tangentialBrake = !arrived && realAccel * circlingTolerance < tgVel.LengthSquared() / dirLen;
+            if (dirLenSq > 0f)
+            {
+                var normVel = direction * Vector2.Dot(body.LinearVelocity, direction) / dirLenSq;
+                tgVel = body.LinearVelocity - normVel;
 
-            moveType = tangentialBrake ? MovementType.BrakingTangential : MovementType.MovingToTarget;
+                var dirLen = MathF.Sqrt(dirLenSq);
+                var tangentialBrake = !arrived &&
+                                      realAccel * circlingTolerance < tgVel.LengthSquared() / dirLen;
+                moveType = tangentialBrake ? MovementType.BrakingTangential : MovementType.MovingToTarget;
+            }
         }
 
         switch (moveType)
@@ -394,14 +380,9 @@ public sealed partial class NPCSteeringSystem
             case MovementType.Braking:
                 if (velLen > 0f)
                 {
-                    // copy our velocity and apply friction to the copy
                     var cvel = body.LinearVelocity;
                     _mover.Friction(0f, frameTime, friction, ref cvel);
-                    // clamp our braking to what our post-friction velocity would be
-                    // otherwise we can overbrake in this frame and reverse movement direction
-                    // TODO: a way to tell calling code that we don't want to reverse movement direction to not have to do this
                     moveMultiplier = MapValue(cvel.Length(), 0f, frameAccel);
-                                        // brake                                 // normalise
                     ApplySeek(interest, -offsetRot.RotateVec(body.LinearVelocity / velLen), 1f);
                 }
                 break;
@@ -409,7 +390,6 @@ public sealed partial class NPCSteeringSystem
                 if (velLen > 0f)
                 {
                     moveMultiplier = MapValue(tgVel.Length(), 0f, frameAccel);
-                                        // brake
                     ApplySeek(interest, -offsetRot.RotateVec(tgVel.Normalized()), tgVel.Length() / velLen);
                 }
                 break;
@@ -421,7 +401,6 @@ public sealed partial class NPCSteeringSystem
         return true;
     }
 
-    // used in TrySeek()
     private enum MovementType
     {
         MovingToTarget,
@@ -434,53 +413,6 @@ public sealed partial class NPCSteeringSystem
     {
         component.LastStuckCoordinates = ourCoordinates;
         component.LastStuckTime = _timing.CurTime;
-    }
-
-    private bool TryRecoverFromObstacleFailure(
-        NPCSteeringComponent steering,
-        EntityCoordinates ourCoordinates,
-        EntityCoordinates destinationCoordinates,
-        out Vector2 laneDirection)
-    {
-        laneDirection = Vector2.Zero;
-        var now = _timing.CurTime;
-
-        if ((now - steering.LastObstacleFailureTime).TotalSeconds > _obstacleFailureResetSeconds)
-            steering.ObstacleFailureCount = 0;
-
-        steering.LastObstacleFailureTime = now;
-        steering.ObstacleFailureCount++;
-        _bench.RecordCount("npc.steering.obstacle.failed", 1);
-
-        if (steering.CurrentPath.Count > 0)
-            steering.CurrentPath.Dequeue();
-
-        steering.PathfindToken?.Cancel();
-        steering.PathfindToken = null;
-        steering.NextPathRequestTime = TimeSpan.Zero;
-
-        var ourMap = _transform.ToMapCoordinates(ourCoordinates);
-        var targetMap = _transform.ToMapCoordinates(destinationCoordinates);
-        if (ourMap.MapId == targetMap.MapId)
-        {
-            var delta = targetMap.Position - ourMap.Position;
-            if (delta != Vector2.Zero)
-            {
-                var normalized = delta.Normalized();
-                laneDirection = new Vector2(-normalized.Y, normalized.X) * steering.LaneRotateSign;
-                steering.LaneRotateSign *= -1;
-                _bench.RecordCount("npc.steering.obstacle.lane_rotate", 1);
-            }
-        }
-
-        if (steering.ObstacleFailureCount > _obstacleRetryLimit)
-        {
-            _bench.RecordCount("npc.steering.obstacle.timeout", 1);
-            return false;
-        }
-
-        _bench.RecordCount("npc.steering.obstacle.reroute_attempt", 1);
-        return true;
     }
 
     private void CheckPath(EntityUid uid, NPCSteeringComponent steering, TransformComponent xform, bool needsPath, float targetDistance)
@@ -630,14 +562,12 @@ public sealed partial class NPCSteeringSystem
         TransformComponent xform,
         Span<float> danger)
     {
-        using var benchScope = _bench.Measure("npc.steering.collision_avoidance");
-
         var objectRadius = 0.25f;
         var detectionRadius = MathF.Max(0.35f, agentRadius + objectRadius);
         var ents = _entSetPool.Get();
         _lookup.GetEntitiesInRange(uid, detectionRadius, ents, LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Approximate);
-        // Filter out stuff that we can pry/vault/bash through
         FilterObstacleEntities((uid, steering), mask, layer, ents, false);
+
         foreach (var ent in ents)
         {
             var xformB = _xformQuery.GetComponent(ent);
@@ -682,10 +612,9 @@ public sealed partial class NPCSteeringSystem
     }
 
     /// <summary>
-    /// Filter down a list of entities into what can be considered obstacles.
-    ///
-    /// If allObstacles is set to false, don't filter out obstacles that can
-    /// be avoided by prying/vaulting/punching.
+    /// Filters a set of nearby entities down to actual steering obstacles.
+    /// When <paramref name="allObstacles"/> is false, doors/climbables/breakables that the NPC
+    /// can already handle are excluded so they do not poison collision avoidance.
     /// </summary>
     private void FilterObstacleEntities(
         Entity<NPCSteeringComponent> ent,
@@ -694,66 +623,62 @@ public sealed partial class NPCSteeringSystem
         HashSet<EntityUid> nearbyEntities,
         bool allObstacles = true)
     {
-        using var benchScope = _bench.Measure("npc.steering.filter_obstacles", nearbyEntities.Count);
-        var hasPath = ent.Comp.CurrentPath.TryPeek(out var poly);
+        var hasPoly = ent.Comp.CurrentPath.TryPeek(out var poly);
+        var polyFlags = PathfindingBreadcrumbFlag.None;
+        var polyGraph = EntityUid.Invalid;
 
+        if (hasPoly)
+        {
+            polyFlags = poly!.Data.Flags;
+            polyGraph = poly.GraphUid;
+        }
         var climbing = CompOrNull<ClimbingComponent>(ent.Owner);
         var combatMode = CompOrNull<CombatModeComponent>(ent.Owner);
-
-        var pathFlags = PathfindingBreadcrumbFlag.None;
-        if (hasPath && poly != null)
-            pathFlags = poly.Data.Flags;
-
-        var checkDoors = hasPath && (pathFlags & PathfindingBreadcrumbFlag.Door) != 0x0;
-        var checkClimbs = hasPath &&
-                          (pathFlags & PathfindingBreadcrumbFlag.Climb) != 0x0 &&
+        var checkDoors = (polyFlags & PathfindingBreadcrumbFlag.Door) != 0x0;
+        var checkClimbs = hasPoly &&
+                          (polyFlags & PathfindingBreadcrumbFlag.Climb) != 0x0 &&
                           (ent.Comp.Flags & PathFlags.Climbing) != 0x0 &&
                           climbing != null;
-        var checkSmash = (ent.Comp.Flags & PathFlags.Smashing) != 0x0 &&
+        var checkSmash = hasPoly &&
+                         (ent.Comp.Flags & PathFlags.Smashing) != 0x0 &&
                          combatMode != null &&
-                         _melee.TryGetWeapon(ent, out _, out var weapon) &&
-                         weapon.NextAttack <= _timing.CurTime;
+                         _melee.TryGetWeapon(ent.Owner, out _, out _);
 
-        var toRemove = new List<EntityUid>();
+        var ownerGrid = Transform(ent.Owner).GridUid;
+        var removals = new List<EntityUid>();
+
         foreach (var nearbyEnt in nearbyEntities)
         {
-            // Get rid of stuff we can phase through
-            if (!_physicsQuery.TryGetComponent(nearbyEnt, out var otherBody) ||
+            if (nearbyEnt == ent.Owner ||
+                nearbyEnt == ownerGrid ||
+                nearbyEnt == polyGraph ||
+                !_physicsQuery.TryGetComponent(nearbyEnt, out var otherBody) ||
                 !otherBody.Hard ||
                 !otherBody.CanCollide ||
                 otherBody.BodyType == BodyType.KinematicController ||
                 (mask & otherBody.CollisionLayer) == 0x0 &&
                 (layer & otherBody.CollisionMask) == 0x0)
             {
-                toRemove.Add(nearbyEnt);
+                removals.Add(nearbyEnt);
                 continue;
             }
 
-            // If we just care about physical obstacles then this entity's checks are done.
-            if (allObstacles)
+            if (allObstacles || !hasPoly)
                 continue;
 
-            // If we're walking into a door we can handle...
-            if (checkDoors &&
-                CanHandleDoor(ent, pathFlags, nearbyEnt))
-                toRemove.Add(nearbyEnt);
-            // Then check climbability
-            else if (checkClimbs &&
-                     CanHandleClimb((ent, climbing!), nearbyEnt, out _))
-                toRemove.Add(nearbyEnt);
-            // Check if we can smash. Should also check if we can even damage the entity at some point.
-            else if (checkSmash &&
-                     _destructibleQuery.HasComponent(nearbyEnt))
-                toRemove.Add(nearbyEnt);
+            if (checkDoors && CanHandleDoor((ent.Owner, ent.Comp), polyFlags, nearbyEnt))
+                removals.Add(nearbyEnt);
+            else if (checkClimbs && CanHandleClimb((ent.Owner, climbing!), nearbyEnt, out _))
+                removals.Add(nearbyEnt);
+            else if (checkSmash && _destructibleQuery.HasComponent(nearbyEnt))
+                removals.Add(nearbyEnt);
         }
 
-        foreach (var entUid in toRemove)
-        {
-            nearbyEntities.Remove(entUid);
-        }
+        nearbyEntities.ExceptWith(removals);
     }
 
-    private bool CanHandleDoor(Entity<NPCSteeringComponent> ent,
+    private bool CanHandleDoor(
+        Entity<NPCSteeringComponent> ent,
         PathfindingBreadcrumbFlag flags,
         EntityUid doorUid,
         bool allowPrying = true)
@@ -765,15 +690,12 @@ public sealed partial class NPCSteeringSystem
             return true;
 
         var isAccessRequired = (flags & PathfindingBreadcrumbFlag.Access) != 0x0 &&
-                               !_access.IsAllowed(ent, doorUid);
+                               !_access.IsAllowed(ent.Owner, doorUid);
         var canInteract = (ent.Comp.Flags & PathFlags.Interact) != 0x0;
 
-        // If not access locked we're fine if it can be bumped open or we can interact
-        if (!isAccessRequired
-            && (door.BumpOpen || canInteract))
+        if (!isAccessRequired && (door.BumpOpen || canInteract))
             return true;
 
-        // Last possibility is that we can pry it open.
         return allowPrying && (ent.Comp.Flags & PathFlags.Prying) != 0x0;
     }
 
@@ -785,12 +707,10 @@ public sealed partial class NPCSteeringSystem
         if (!_climbableQuery.TryComp(climbableUid, out climbable))
             return false;
 
-        // We're already climbing something, we're fine.
         if (ent.Comp.IsClimbing || ent.Comp.NextTransition != null)
             return true;
 
-        // Actually check if we can climb this
-        return _climb.CanVault(climbable, ent, climbableUid, out _);
+        return _climb.CanVault(climbable, ent.Owner, ent.Owner, out _);
     }
 
     #endregion
@@ -811,8 +731,6 @@ public sealed partial class NPCSteeringSystem
         TransformComponent xform,
         Span<float> danger)
     {
-        using var benchScope = _bench.Measure("npc.steering.separation");
-
         var objectRadius = 0.25f;
         var detectionRadius = MathF.Max(0.35f, agentRadius + objectRadius);
         var ourVelocity = body.LinearVelocity;

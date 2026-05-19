@@ -24,15 +24,21 @@ public sealed class EmojiPickerPopup : Popup
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    private static readonly Color BackgroundColor = Color.FromHex("#2B2D31");
-    private static readonly Color RailColor = Color.FromHex("#232428");
-    private static readonly Color BorderColor = Color.FromHex("#1A1B1E");
+    private static readonly Color PanelBackgroundColor = Color.FromHex("#181B22");
+    private static readonly Color RailBackgroundColor = Color.FromHex("#121419");
+    private static readonly Color ContentBackgroundColor = Color.FromHex("#141721");
+    private static readonly Color BorderColor = Color.FromHex("#6A5530");
+    private static readonly Color HeaderTextColor = Color.FromHex("#D7B65A");
+    private static readonly Color PreviewTextColor = Color.FromHex("#E6DEC7");
 
     private readonly Dictionary<ChatEmojiCategory, Button> _categoryButtons = new();
     private readonly BoxContainer _categoryBox;
     private readonly GridContainer _emojiGrid;
     private readonly Label _headerLabel;
     private readonly RichTextLabel _previewLabel;
+    private readonly PanelContainer _panel;
+    private readonly PanelContainer _categoryRail;
+    private readonly PanelContainer _emojiPanel;
     private readonly ButtonGroup _categoryGroup = new(false);
     private ChatEmojiCategory _selectedCategory = ChatEmojiCategory.Smileys;
     private bool _openedOnce;
@@ -45,17 +51,17 @@ public sealed class EmojiPickerPopup : Popup
 
         MinSize = new Vector2(PopupWidth, PopupHeight);
 
-        var panel = new PanelContainer
+        _panel = new PanelContainer
         {
             MinSize = MinSize,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = BackgroundColor,
+                BackgroundColor = PanelBackgroundColor,
                 BorderColor = BorderColor,
                 BorderThickness = new Thickness(1),
             }
         };
-        AddChild(panel);
+        AddChild(_panel);
 
         var root = new BoxContainer
         {
@@ -65,19 +71,19 @@ public sealed class EmojiPickerPopup : Popup
             HorizontalExpand = true,
             VerticalExpand = true,
         };
-        panel.AddChild(root);
+        _panel.AddChild(root);
 
-        var categoryRail = new PanelContainer
+        _categoryRail = new PanelContainer
         {
             MinWidth = 42f,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = RailColor,
-                BorderColor = BorderColor,
+                BackgroundColor = RailBackgroundColor,
+                BorderColor = BorderColor.WithAlpha(0.8f),
                 BorderThickness = new Thickness(1),
             }
         };
-        root.AddChild(categoryRail);
+        root.AddChild(_categoryRail);
 
         _categoryBox = new BoxContainer
         {
@@ -85,7 +91,7 @@ public sealed class EmojiPickerPopup : Popup
             SeparationOverride = 4,
             Margin = new Thickness(4),
         };
-        categoryRail.AddChild(_categoryBox);
+        _categoryRail.AddChild(_categoryBox);
 
         var content = new BoxContainer
         {
@@ -99,7 +105,7 @@ public sealed class EmojiPickerPopup : Popup
         _headerLabel = new Label
         {
             Margin = new Thickness(4, 0, 4, 0),
-            FontColorOverride = Color.WhiteSmoke,
+            FontColorOverride = HeaderTextColor,
         };
         content.AddChild(_headerLabel);
 
@@ -112,17 +118,17 @@ public sealed class EmojiPickerPopup : Popup
         };
         content.AddChild(emojiScroll);
 
-        var emojiPanel = new PanelContainer
+        _emojiPanel = new PanelContainer
         {
             HorizontalExpand = true,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = RailColor,
-                BorderColor = BorderColor,
+                BackgroundColor = ContentBackgroundColor,
+                BorderColor = BorderColor.WithAlpha(0.8f),
                 BorderThickness = new Thickness(1),
             }
         };
-        emojiScroll.AddChild(emojiPanel);
+        emojiScroll.AddChild(_emojiPanel);
 
         _emojiGrid = new GridContainer
         {
@@ -131,11 +137,12 @@ public sealed class EmojiPickerPopup : Popup
             VSeparationOverride = 10,
             Margin = new Thickness(10, 10, 14, 10),
         };
-        emojiPanel.AddChild(_emojiGrid);
+        _emojiPanel.AddChild(_emojiGrid);
 
         _previewLabel = new RichTextLabel
         {
             Margin = new Thickness(4, 0, 4, 0),
+            ModulateSelfOverride = PreviewTextColor,
         };
         content.AddChild(_previewLabel);
 

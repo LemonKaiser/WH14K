@@ -94,7 +94,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
     [Dependency] private readonly StackSystem _stack = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
 
     private TimeSpan _nextFallbackIncomeTick = TimeSpan.Zero;

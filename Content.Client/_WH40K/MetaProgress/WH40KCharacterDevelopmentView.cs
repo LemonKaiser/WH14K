@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Client._WH40K.Command;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared._WH40K.MetaProgress;
@@ -24,6 +25,30 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 
 	private const string RewardTableId = "WH40KMetaLevelRewardTableDefault";
 	private const float InfoDescriptionMaxWidth = 720f;
+
+	private static readonly Color DevelopmentPanelBackground = WH40KCommandUiStyles.PanelBackgroundAlt;
+
+	private static readonly Color DevelopmentPanelBorder = WH40KCommandUiStyles.StrongBorder;
+
+	private static readonly Color DevelopmentCardBackground = WH40KCommandUiStyles.CardBackgroundAlt;
+
+	private static readonly Color DevelopmentCardBackgroundAlt = WH40KCommandUiStyles.CardBackgroundMuted;
+
+	private static readonly Color DevelopmentCardBorder = WH40KCommandUiStyles.MutedBorder;
+
+	private static readonly Color DevelopmentSectionText = WH40KCommandUiStyles.MutedText;
+
+	private static readonly Color DevelopmentTitleText = WH40KCommandUiStyles.DefaultAccent;
+
+	private static readonly Color DevelopmentBodyText = Color.FromHex("#E6DEC7".AsSpan());
+
+	private static readonly Color DevelopmentSoftText = WH40KCommandUiStyles.SoftText;
+
+	private static readonly Color DevelopmentWarningText = Color.FromHex("#F0DDD1".AsSpan());
+
+	private static readonly Color StateChipBackground = WH40KCommandUiStyles.ButtonBackgroundAlt;
+
+	private static readonly Color CostChipBackground = WH40KCommandUiStyles.BadgeBackground;
 
 	private readonly WH40KCharacterDevelopmentViewport _viewport;
 
@@ -74,10 +99,10 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		base.VerticalExpand = true;
 		base.RectClipContent = true;
 		base.Margin = new Thickness(4f);
-		StyleBoxFlat panelOverride = CreatePanelStyle("#121B26", "#445767", 14, 12);
-		StyleBoxFlat panelOverride2 = CreatePanelStyle("#17222D", "#516577", 12, 10);
-		StyleBoxFlat panelOverride3 = CreatePanelStyle("#182531", "#597080", 12, 10);
-		StyleBoxFlat panelOverride4 = CreatePanelStyle("#0E151E", "#495B6A", 6, 6);
+		StyleBoxFlat panelOverride = CreatePanelStyle(DevelopmentPanelBackground, DevelopmentPanelBorder, 14, 12);
+		StyleBoxFlat panelOverride2 = CreatePanelStyle(DevelopmentCardBackground, DevelopmentCardBorder, 12, 10);
+		StyleBoxFlat panelOverride3 = CreatePanelStyle(DevelopmentCardBackgroundAlt, DevelopmentPanelBorder, 12, 10);
+		StyleBoxFlat panelOverride4 = CreatePanelStyle(WH40KCommandUiStyles.PanelBackground, DevelopmentCardBorder, 6, 6);
 		PanelContainer panelContainer = new PanelContainer
 		{
 			PanelOverride = panelOverride,
@@ -112,16 +137,17 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		};
 		_sectionLabel = new Label
 		{
-			FontColorOverride = Color.FromHex("#91A6B6".AsSpan())
+			FontColorOverride = DevelopmentSectionText
 		};
 		_branchLabel = new Label
 		{
 			StyleClasses = { "LabelHeading" },
+			FontColorOverride = DevelopmentTitleText,
 			ClipText = true
 		};
 		_nodeLabel = new Label
 		{
-			FontColorOverride = Color.FromHex("#E7F2F7".AsSpan()),
+			FontColorOverride = DevelopmentBodyText,
 			ClipText = true
 		};
 		_descriptionLabel = new RichTextLabel
@@ -141,15 +167,18 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		};
 		_stateChipStyle = new StyleBoxFlat
 		{
-			BackgroundColor = Color.FromHex("#233443".AsSpan()),
-			BorderColor = Color.FromHex("#5A6F80".AsSpan()),
+			BackgroundColor = StateChipBackground,
+			BorderColor = DevelopmentCardBorder,
 			BorderThickness = new Thickness(1f),
 			ContentMarginLeftOverride = 8f,
 			ContentMarginRightOverride = 8f,
 			ContentMarginTopOverride = 4f,
 			ContentMarginBottomOverride = 4f
 		};
-		_stateChipLabel = new Label();
+		_stateChipLabel = new Label
+		{
+			FontColorOverride = DevelopmentBodyText
+		};
 		_stateChipContainer = new PanelContainer
 		{
 			PanelOverride = _stateChipStyle
@@ -157,15 +186,18 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_stateChipContainer.AddChild(_stateChipLabel);
 		_costChipStyle = new StyleBoxFlat
 		{
-			BackgroundColor = Color.FromHex("#2B2A1B".AsSpan()),
-			BorderColor = Color.FromHex("#A98C4C".AsSpan()),
+			BackgroundColor = CostChipBackground,
+			BorderColor = DevelopmentTitleText.WithAlpha(0.82f),
 			BorderThickness = new Thickness(1f),
 			ContentMarginLeftOverride = 8f,
 			ContentMarginRightOverride = 8f,
 			ContentMarginTopOverride = 4f,
 			ContentMarginBottomOverride = 4f
 		};
-		_costChipLabel = new Label();
+		_costChipLabel = new Label
+		{
+			FontColorOverride = DevelopmentTitleText
+		};
 		_costChipContainer = new PanelContainer
 		{
 			PanelOverride = _costChipStyle
@@ -197,6 +229,11 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_plannedLabel = new Label();
 		_remainingLabel = new Label();
 		_zoomLabel = new Label();
+		_levelLabel.FontColorOverride = DevelopmentTitleText;
+		_pointsLabel.FontColorOverride = DevelopmentBodyText;
+		_plannedLabel.FontColorOverride = DevelopmentBodyText;
+		_remainingLabel.FontColorOverride = DevelopmentSoftText;
+		_zoomLabel.FontColorOverride = DevelopmentSectionText;
 		_resetViewButton = new Button
 		{
 			HorizontalExpand = true,
@@ -363,15 +400,15 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 	{
 		_branchLabel.Text = Loc.GetString("w40k-cd-default-branch");
 		_nodeLabel.Text = Loc.GetString("w40k-cd-default-node");
-		_descriptionLabel.SetMessage(Loc.GetString("w40k-cd-default-description"), Color.FromHex("#C6D4DD".AsSpan()));
+		_descriptionLabel.SetMessage(Loc.GetString("w40k-cd-default-description"), DevelopmentBodyText);
 		_stateChipLabel.Text = Loc.GetString("w40k-cd-default-state");
 		_costChipLabel.Text = string.Empty;
 		_costChipContainer.Visible = false;
-		_branchLabel.FontColorOverride = Color.FromHex("#E7F2F7".AsSpan());
-		_stateChipStyle.BorderColor = Color.FromHex("#5A6F80".AsSpan());
-		_stateChipStyle.BackgroundColor = Color.FromHex("#233443".AsSpan());
-		_costChipStyle.BorderColor = Color.FromHex("#A98C4C".AsSpan());
-		_costChipStyle.BackgroundColor = Color.FromHex("#2B2A1B".AsSpan());
+		_branchLabel.FontColorOverride = DevelopmentTitleText;
+		_stateChipStyle.BorderColor = DevelopmentCardBorder;
+		_stateChipStyle.BackgroundColor = StateChipBackground;
+		_costChipStyle.BorderColor = DevelopmentTitleText.WithAlpha(0.82f);
+		_costChipStyle.BackgroundColor = CostChipBackground;
 	}
 
 	private void ApplyHoverInfo(WH40KCharacterDevelopmentNodePresentation presentation)
@@ -382,20 +419,20 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		if (!string.IsNullOrWhiteSpace(presentation.DescriptionSupplement))
 			description += "\n\n" + presentation.DescriptionSupplement;
 
-		_descriptionLabel.SetMessage(description, Color.FromHex("#C6D4DD".AsSpan()));
+		_descriptionLabel.SetMessage(description, DevelopmentBodyText);
 		_stateChipLabel.Text = presentation.StateText;
 		_costChipLabel.Text = Loc.GetString("w40k-cd-cost-chip", ("cost", presentation.Cost));
 		_costChipContainer.Visible = true;
 		_branchLabel.FontColorOverride = presentation.Accent.WithAlpha(0.96f);
-		_stateChipStyle.BorderColor = presentation.Accent.WithAlpha(0.95f);
-		_stateChipStyle.BackgroundColor = Blend(Color.FromHex("#233443".AsSpan()), presentation.Accent.WithAlpha(0.22f), 0.55f);
-		_costChipStyle.BorderColor = Blend(Color.FromHex("#A98C4C".AsSpan()), presentation.Accent.WithAlpha(0.65f), 0.35f);
-		_costChipStyle.BackgroundColor = Blend(Color.FromHex("#2B2A1B".AsSpan()), presentation.Accent.WithAlpha(0.15f), 0.25f);
+		_stateChipStyle.BorderColor = Blend(DevelopmentCardBorder, presentation.Accent.WithAlpha(0.9f), 0.46f);
+		_stateChipStyle.BackgroundColor = Blend(StateChipBackground, presentation.Accent.WithAlpha(0.18f), 0.34f);
+		_costChipStyle.BorderColor = Blend(DevelopmentTitleText.WithAlpha(0.82f), presentation.Accent.WithAlpha(0.65f), 0.24f);
+		_costChipStyle.BackgroundColor = Blend(CostChipBackground, presentation.Accent.WithAlpha(0.12f), 0.18f);
 	}
 
 	private void ApplyConfirmWarningInfo()
 	{
-		var warningAccent = Color.FromHex("#D9915B".AsSpan());
+		var warningAccent = WH40KCommandUiStyles.WarningBadge;
 		var availableNow = Math.Max(0, _viewport.TotalSkillPoints - _viewport.OpenedCost - _viewport.SubmittedCost);
 		var remainingAfterConfirm = Math.Max(0, availableNow - _viewport.PlannedCost);
 
@@ -407,7 +444,7 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 				("nodes", _viewport.PlannedNodeCount),
 				("cost", _viewport.PlannedCost),
 				("remaining", remainingAfterConfirm)),
-			Color.FromHex("#F0DDD1".AsSpan()));
+			DevelopmentWarningText);
 		_stateChipLabel.Text = Loc.GetString("w40k-cd-confirm-state");
 		_costChipLabel.Text = Loc.GetString(
 			"w40k-cd-confirm-cost",
@@ -416,9 +453,9 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		_costChipContainer.Visible = true;
 		_branchLabel.FontColorOverride = warningAccent;
 		_stateChipStyle.BorderColor = warningAccent.WithAlpha(0.95f);
-		_stateChipStyle.BackgroundColor = Blend(Color.FromHex("#233443".AsSpan()), warningAccent.WithAlpha(0.22f), 0.6f);
-		_costChipStyle.BorderColor = Blend(Color.FromHex("#A98C4C".AsSpan()), warningAccent.WithAlpha(0.8f), 0.45f);
-		_costChipStyle.BackgroundColor = Blend(Color.FromHex("#2B2A1B".AsSpan()), warningAccent.WithAlpha(0.18f), 0.3f);
+		_stateChipStyle.BackgroundColor = Blend(StateChipBackground, warningAccent.WithAlpha(0.2f), 0.42f);
+		_costChipStyle.BorderColor = Blend(DevelopmentTitleText.WithAlpha(0.82f), warningAccent.WithAlpha(0.8f), 0.38f);
+		_costChipStyle.BackgroundColor = Blend(CostChipBackground, warningAccent.WithAlpha(0.18f), 0.26f);
 	}
 
 	private void RefreshInfoPanel()
@@ -439,12 +476,12 @@ public sealed class WH40KCharacterDevelopmentView : BoxContainer
 		ApplyDefaultInfo();
 	}
 
-	private static StyleBoxFlat CreatePanelStyle(string backgroundHex, string borderHex, int horizontalPadding, int verticalPadding)
+	private static StyleBoxFlat CreatePanelStyle(Color background, Color border, int horizontalPadding, int verticalPadding)
 	{
 		return new StyleBoxFlat
 		{
-			BackgroundColor = Color.FromHex(backgroundHex.AsSpan()),
-			BorderColor = Color.FromHex(borderHex.AsSpan()),
+			BackgroundColor = background,
+			BorderColor = border,
 			BorderThickness = new Thickness(1f),
 			ContentMarginLeftOverride = horizontalPadding,
 			ContentMarginRightOverride = horizontalPadding,

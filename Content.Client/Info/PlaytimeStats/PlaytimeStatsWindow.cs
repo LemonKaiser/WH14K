@@ -13,8 +13,11 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
 {
     [Dependency] private readonly JobRequirementsManager _jobRequirementsManager = default!;
     private ISawmill _sawmill = Logger.GetSawmill("PlaytimeStatsWindow");
-    private readonly Color _altColor = Color.FromHex("#292B38");
-    private readonly Color _defaultColor = Color.FromHex("#2F2F3B");
+    private readonly Color _headerColor = Color.FromHex("#1B1A14");
+    private readonly Color _altColor = Color.FromHex("#171A21");
+    private readonly Color _defaultColor = Color.FromHex("#12151B");
+    private readonly Color _headerBorder = Color.FromHex("#6E5A2F");
+    private readonly Color _headingText = Color.FromHex("#E2C160");
     private bool _useAltColor;
 
     public PlaytimeStatsWindow()
@@ -30,7 +33,14 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
     {
         var header = new PlaytimeStatsHeader();
         header.OnHeaderClicked += HeaderClicked;
-        header.BackgroundColorPlaytimePanel.PanelOverride = new StyleBoxFlat(_altColor);
+        header.BackgroundColorPlaytimePanel.PanelOverride = new StyleBoxFlat
+        {
+            BackgroundColor = _headerColor,
+            BorderColor = _headerBorder,
+            BorderThickness = new Thickness(1)
+        };
+        header.RoleLabel.FontColorOverride = _headingText;
+        header.PlaytimeLabel.FontColorOverride = _headingText;
         RolesPlaytimeList.AddChild(header);
     }
 

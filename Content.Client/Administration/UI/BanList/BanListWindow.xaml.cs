@@ -2,11 +2,12 @@
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+using Content.Client.UserInterface.Controls;
 
 namespace Content.Client.Administration.UI.BanList;
 
 [GenerateTypedNameReferences]
-public sealed partial class BanListWindow : DefaultWindow
+public sealed partial class BanListWindow : FancyWindow
 {
     public BanListWindow()
     {

@@ -5,5 +5,8 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Neck/Cloaks/tau_commander_cloak.rsi
+  - type: WH40KWaveShader
+    speed: 1.7
+    dis: 1.9
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/tau_commander_cloak.rsi

@@ -119,3 +119,25 @@ wh40k-ghost-role-heretic-reinforcement-name = Подкрепление Ерет�
 wh40k-ghost-role-heretic-reinforcement-description = Вступите в бой как доброволец еретических варбанд.
 wh40k-ghost-role-reinforcement-rules = Следуйте приказам командования фракции и поддерживайте линию фронта.
 
+wh40k-wave-defence-title = Волновая оборона WH40K
+wh40k-wave-defence-description = Империум удерживает командный узел против нарастающих волн враждебных NPC.
+wh40k-wave-defence-command-node-name = Командный узел
+wh40k-wave-defence-command-node-desc = Ключевая точка обороны Империума. Потеря узла означает провал обороны.
+wh40k-wave-defence-preparation-announce = Оборона развёрнута. Подготовьтесь к первой волне.
+wh40k-wave-defence-wave-start = Началась волна { $wave }.
+wh40k-wave-defence-wave-clear = Волна { $wave } отражена.
+wh40k-wave-defence-victory = Все настроенные волны отражены. Империум удержал узел.
+wh40k-wave-defence-defeat-objective = Командный узел уничтожен. Оборона пала.
+wh40k-wave-defence-defeat-defenders = Все защитники Империума мертвы. Оборона пала.
+wh40k-wave-defence-defeat-admin = Раунд завершён администратором.
+wh40k-wave-defence-defeat-missing-profile = Для следующей волны не найден профиль. Раунд прерван.
+wh40k-wave-defence-round-end-header = [bold][color=gold]+++ Отчёт Волновой Обороны +++[/color][/bold]
+wh40k-wave-defence-round-end-wave = Достигнутая волна: [color=white]{ $wave }[/color] / [color=gray]{ $final }[/color]
+wh40k-wave-defence-wave-announce-01 = Первая разведывательная волна противника приближается.
+wh40k-wave-defence-wave-announce-02 = Противник усиливает натиск и подтягивает дальнюю поддержку.
+wh40k-wave-defence-wave-announce-03 = Командование фиксирует тяжёлый штурм. Приготовьтесь к прорыву.
+wh40k-wave-defence-phase-preparation = Подготовка
+wh40k-wave-defence-phase-wave-active = Волна в наступлении
+wh40k-wave-defence-phase-intermission = Передышка
+wh40k-wave-defence-spawn-briefing = Волновая оборона активна. Фаза: { $phase }. Волна: { $wave } / { $final }. Удержите командный узел и не дайте защитникам пасть.
+

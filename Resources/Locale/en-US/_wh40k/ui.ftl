@@ -4,7 +4,8 @@ action-aiming-desc = Offsets the camera toward the cursor for a longer view.
 ent-ActionToggleAiming = Aiming
     .desc = Offsets the camera toward the cursor for a longer view.
 
-ui-options-wh40k-grimdark-shader = WH40K Vignette
+ui-options-wh40k-post-process = WH40K Post-Process
+ui-options-wh40k-wave-shader = WH40K Wave Shader
 wh40k-tank-engine-started = The engine rumbles to life.
 wh40k-tank-repair-engine-running = Shut the engine down before attempting repairs.
 wh40k-tank-ui-window-title = Leman Russ Diagnostics

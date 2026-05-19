@@ -415,6 +415,16 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         AttemptAttack(user, weaponUid, weapon, new LightAttackEvent(null, GetNetEntity(weaponUid), GetNetCoordinates(coordinates)), null);
     }
 
+    public bool AttemptLightAttack(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, EntityUid target, EntityCoordinates targetCoordinates)
+    {
+        return AttemptAttack(
+            user,
+            weaponUid,
+            weapon,
+            new LightAttackEvent(GetNetEntity(target), GetNetEntity(weaponUid), GetNetCoordinates(targetCoordinates), useCoordinatesForTargeting: true),
+            null);
+    }
+
     public bool AttemptLightAttack(EntityUid user, EntityUid weaponUid, MeleeWeaponComponent weapon, EntityUid target)
     {
         if (!TryComp(target, out TransformComponent? targetXform))
@@ -555,6 +565,11 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
 
     protected abstract bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session);
 
+    protected virtual bool InRange(EntityUid user, EntityUid target, EntityCoordinates targetCoordinates, float range, ICommonSession? session)
+    {
+        return InRange(user, target, range, session);
+    }
+
     protected virtual void DoLightAttack(EntityUid user, LightAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
     {
         // If I do not come back later to fix Light Attacks being Heavy Attacks you can throw me in the spider pit -Errant
@@ -570,7 +585,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
             !HasComp<DamageableComponent>(target) ||
             !TryComp(target, out TransformComponent? targetXform) ||
             // Not in LOS.
-            !InRange(user, target.Value, component.Range, session))
+            !(ev.UseCoordinatesForTargeting
+                ? InRange(user, target.Value, GetCoordinates(ev.Coordinates), component.Range, session)
+                : InRange(user, target.Value, component.Range, session)))
         {
             // Leave IsHit set to true, because the only time it's set to false
             // is when a melee weapon is examined. Misses are inferred from an

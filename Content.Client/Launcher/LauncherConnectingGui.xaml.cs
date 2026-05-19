@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Content.Client.Stylesheets;
+using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
 using Content.Shared._WH40K.DiscordAuth;
@@ -89,6 +90,7 @@ namespace Content.Client.Launcher
             state.ConnectFailed += HandleDisconnectReason;
             state.AddressChanged += AddressChanged;
             state.AlternativeConnectAvailabilityChanged += AlternativeConnectAvailabilityChanged;
+            _cfg.OnValueChanged(CCVars.UiWindowOpacity, ApplyConfiguredWindowOpacity, true);
 
             ConnectionStateChanged(state.ConnectionState);
             UpdateAlternativeConnectControls();
@@ -122,6 +124,7 @@ namespace Content.Client.Launcher
                 _state.AddressChanged -= AddressChanged;
                 _state.AlternativeConnectAvailabilityChanged -= AlternativeConnectAvailabilityChanged;
                 _extendedDisconnectInformationManager.LastNetDisconnectedArgsChanged -= LastNetDisconnectedArgsChanged;
+                _cfg.UnsubValueChanged(CCVars.UiWindowOpacity, ApplyConfiguredWindowOpacity);
 
                 RetryButton.OnPressed -= ReconnectButtonPressed;
                 ReconnectButton.OnPressed -= ReconnectButtonPressed;
@@ -492,6 +495,14 @@ namespace Content.Client.Launcher
 
             _nextDiscordAutoRetryAt = now + DiscordAutoRetryInterval;
             _state.RetryConnect();
+        }
+
+        private void ApplyConfiguredWindowOpacity(float opacity)
+        {
+            WindowOpacityHelper.ApplyPanelOpacity(ConnectingPanel, opacity);
+            WindowOpacityHelper.ApplyPanelOpacity(ConnectingFooterDivider, opacity, Color.FromHex("#444444"));
+            WindowOpacityHelper.ApplyPanelOpacity(LoginTips, opacity);
+            WindowOpacityHelper.ApplySelfModulateOpacity(LoginTipsHeaderStripe, opacity);
         }
     }
 }

@@ -15,7 +15,7 @@ public sealed partial class WH40KMinBaseLevelCondition : ListingCondition
 
     public override bool Condition(ListingConditionArgs args)
     {
-        var rule = args.EntityManager.System<WH40KTeamBattleRuleSystem>();
+        var rule = args.EntityManager.System<WH40KTeamRuleFacadeSystem>();
 
         var teamId = ResolveTeamId(args, rule);
         if (string.IsNullOrEmpty(teamId))
@@ -27,7 +27,7 @@ public sealed partial class WH40KMinBaseLevelCondition : ListingCondition
         return currentLevel >= Math.Max(1, Level);
     }
 
-    private static string ResolveTeamId(ListingConditionArgs args, WH40KTeamBattleRuleSystem rule)
+    private static string ResolveTeamId(ListingConditionArgs args, WH40KTeamRuleFacadeSystem rule)
     {
         if (args.StoreEntity is { } storeUid &&
             args.EntityManager.TryGetComponent(storeUid, out WH40KStoreTeamComponent? storeTeam) &&

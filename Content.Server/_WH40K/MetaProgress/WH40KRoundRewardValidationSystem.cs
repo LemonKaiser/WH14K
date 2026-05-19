@@ -157,7 +157,7 @@ public sealed class WH40KRoundRewardValidationSystem : EntitySystem
     [Dependency] private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly KillTrackingSystem _killTracking = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattle = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamBattle = default!;
 
     private readonly HashSet<RewardPairKey> _consumedRewardPairs = new();
     private readonly Dictionary<EntityUid, PendingDeathState> _pendingDeaths = new();

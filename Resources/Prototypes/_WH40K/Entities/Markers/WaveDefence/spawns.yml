@@ -1,0 +1,57 @@
+- type: entity
+  id: WH40KWaveDefenceSpawnAttacker
+  parent: MarkerBase
+  name: WaveDefence Attacker Spawn
+  suffix: WH40K
+  components:
+  - type: WH40KWaveSpawnPoint
+    spawnType: Attacker
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: heretic
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceSpawnDefenderStart
+  parent: MarkerBase
+  name: WaveDefence Defender Start
+  suffix: WH40K
+  components:
+  - type: WH40KWaveSpawnPoint
+    spawnType: DefenderStart
+    teamId: Imperium
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: guardsman
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceSpawnDefenderReinforcement
+  parent: MarkerBase
+  name: WaveDefence Defender Reinforcement
+  suffix: WH40K
+  components:
+  - type: WH40KWaveSpawnPoint
+    spawnType: DefenderReinforcement
+    teamId: Imperium
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: late
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceImperiumBaseMarker
+  parent: MarkerBase
+  name: WaveDefence Imperium Base
+  suffix: WH40K
+  components:
+  - type: WH40KWaveImperiumBase
+    teamId: Imperium
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: colonel
+      shader: unshaded

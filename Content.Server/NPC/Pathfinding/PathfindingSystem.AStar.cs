@@ -61,12 +61,9 @@ public sealed partial class PathfindingSystem
             return PathResult.NoPath;
         }
 
-        if (request.CostSoFar.Count == 0)
-        {
-            currentNode = startNode;
-            request.Frontier.Add((0.0f, startNode));
-            request.CostSoFar[startNode] = 0.0f;
-        }
+        currentNode = startNode;
+        request.Frontier.Add((0.0f, startNode));
+        request.CostSoFar[startNode] = 0.0f;
         var count = 0;
         var arrived = false;
 
@@ -97,6 +94,13 @@ public sealed partial class PathfindingSystem
 
             foreach (var neighbor in currentNode.Neighbors)
             {
+                if (request.AvoidPolys.Count > 0 &&
+                    request.IsPolyAvoided(neighbor) &&
+                    !neighbor.Equals(endNode))
+                {
+                    continue;
+                }
+
                 var tileCost = GetTileCost(request, currentNode, neighbor);
 
                 if (tileCost.Equals(0f))
@@ -129,16 +133,8 @@ public sealed partial class PathfindingSystem
 
         if (!arrived)
         {
-            // We exhausted the per-update expansion budget, but still have frontier nodes.
-            // Continue this same request next update instead of reporting a hard no-path.
-            if (request.Frontier.Count > 0 && count >= NodeLimit)
-                return PathResult.Continuing;
-
             return PathResult.NoPath;
         }
-
-        if (currentNode == null)
-            return PathResult.NoPath;
 
         var route = ReconstructPath(request.CameFrom, currentNode);
         var path = new Queue<EntityCoordinates>(route.Count);

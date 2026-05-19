@@ -8,11 +8,12 @@ using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+using Content.Client.UserInterface.Controls;
 
 namespace Content.Client.UserInterface.Systems.Sandbox.Windows;
 
 [GenerateTypedNameReferences]
-public sealed partial class SandboxWindow : DefaultWindow
+public sealed partial class SandboxWindow : FancyWindow
 {
     [Dependency] private readonly IEntityManager _entManager = null!;
     [Dependency] private readonly IEyeManager _eyeManager = null!;

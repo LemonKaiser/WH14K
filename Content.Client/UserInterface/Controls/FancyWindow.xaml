@@ -3,7 +3,14 @@
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       MouseFilter="Stop"
                       MinWidth="200" MinHeight="150">
-    <PanelContainer StyleClasses="BackgroundPanel" />
+    <PanelContainer Name="WindowBackgroundPanel" StyleClasses="BackgroundPanel" />
+    <TextureRect Name="WindowCenterLogoRect" StyleClasses="WindowCenterLogo"
+                 Stretch="KeepAspectCentered"
+                 CanShrink="True"
+                 MaxSize="460 460"
+                 Margin="28 44 28 28"
+                 Visible="False"
+                 MouseFilter="Ignore" />
 
     <BoxContainer Orientation="Vertical">
         <Control>
@@ -16,7 +23,10 @@
                                VerticalAlignment="Center" />
             </BoxContainer>
         </Control>
-        <PanelContainer StyleClasses="LowDivider" />
-        <Control Access="Public" Name="ContentsContainer" StyleClasses="WindowContentsContainer" RectClipContent="True" VerticalExpand="true" />
+        <PanelContainer Name="WindowDivider" StyleClasses="LowDivider" />
+        <Control Name="ContentsHost" HorizontalExpand="True" VerticalExpand="True">
+            <PanelContainer Name="WindowContentsBackdrop" MouseFilter="Ignore" />
+            <Control Access="Public" Name="ContentsContainer" StyleClasses="WindowContentsContainer" RectClipContent="True" VerticalExpand="true" />
+        </Control>
     </BoxContainer>
 </controls:FancyWindow>

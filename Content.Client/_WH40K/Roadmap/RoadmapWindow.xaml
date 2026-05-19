@@ -2,69 +2,48 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._WH40K.Roadmap"
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
     MinSize="980 760"
     Title="{Loc 'server-info-roadmap-button'}">
-    <PanelContainer>
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat
-                BackgroundColor="#1E2027"
-                BorderColor="#4A4E5D"
-                BorderThickness="1"
-                ContentMarginLeftOverride="10"
-                ContentMarginTopOverride="10"
-                ContentMarginRightOverride="10"
-                ContentMarginBottomOverride="10" />
-        </PanelContainer.PanelOverride>
-
-        <ScrollContainer>
-            <BoxContainer Orientation="Vertical" SeparationOverride="10">
-                <BoxContainer Orientation="Horizontal" SeparationOverride="6">
-                    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-                        <RichTextLabel Name="Header" Access="Public" />
-                    </BoxContainer>
-
-                        <Button Name="DiscordButton" Access="Public" Text="{Loc 'server-info-discord-button'}" Visible="False" MinSize="110 0" />
-                        <Button Name="CreditsButton" Access="Public" Text="{Loc 'server-info-credits-button'}" MinSize="110 0" />
+    <ScrollContainer Margin="10 10 10 10">
+        <BoxContainer Orientation="Vertical" SeparationOverride="10">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <RichTextLabel Name="Header" Access="Public" />
                 </BoxContainer>
 
-                <PanelContainer MinHeight="2" MaxHeight="2">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#505463" />
-                    </PanelContainer.PanelOverride>
-                </PanelContainer>
-
-                <BoxContainer Orientation="Horizontal" SeparationOverride="10">
-                    <PanelContainer HorizontalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#272A34" BorderColor="#444957" BorderThickness="1" ContentMarginLeftOverride="8" ContentMarginTopOverride="8" ContentMarginRightOverride="8" ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Name="NowColumn" Access="Public" Orientation="Vertical">
-                            <controls:RoadmapVersionHeader Name="NowHeader" Text="{Loc 'roadmap-column-now'}" />
-                            <BoxContainer Name="NowTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
-                        </BoxContainer>
-                    </PanelContainer>
-
-                    <PanelContainer HorizontalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#272A34" BorderColor="#444957" BorderThickness="1" ContentMarginLeftOverride="8" ContentMarginTopOverride="8" ContentMarginRightOverride="8" ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Name="NextColumn" Access="Public" Orientation="Vertical">
-                            <controls:RoadmapVersionHeader Name="NextHeader" Text="{Loc 'roadmap-column-next'}" />
-                            <BoxContainer Name="NextTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
-                        </BoxContainer>
-                    </PanelContainer>
-
-                    <PanelContainer HorizontalExpand="True">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#272A34" BorderColor="#444957" BorderThickness="1" ContentMarginLeftOverride="8" ContentMarginTopOverride="8" ContentMarginRightOverride="8" ContentMarginBottomOverride="8" />
-                        </PanelContainer.PanelOverride>
-                        <BoxContainer Name="LaterColumn" Access="Public" Orientation="Vertical">
-                            <controls:RoadmapVersionHeader Name="LaterHeader" Text="{Loc 'roadmap-column-later'}" />
-                            <BoxContainer Name="LaterTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
-                        </BoxContainer>
-                    </PanelContainer>
-                </BoxContainer>
+                <Button Name="DiscordButton" Access="Public" Text="{Loc 'server-info-discord-button'}" Visible="False" MinSize="110 0" />
+                <Button Name="CreditsButton" Access="Public" Text="{Loc 'server-info-credits-button'}" MinSize="110 0" />
             </BoxContainer>
-        </ScrollContainer>
-    </PanelContainer>
+
+            <PanelContainer MinHeight="2" MaxHeight="2">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#5D4D2A" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+                <lobby:HighlightedContainer HorizontalExpand="True" UseUiWindowOpacity="True">
+                    <BoxContainer Name="NowColumn" Access="Public" Orientation="Vertical">
+                        <controls:RoadmapVersionHeader Name="NowHeader" Text="{Loc 'roadmap-column-now'}" />
+                        <BoxContainer Name="NowTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+                    </BoxContainer>
+                </lobby:HighlightedContainer>
+
+                <lobby:HighlightedContainer HorizontalExpand="True" UseUiWindowOpacity="True">
+                    <BoxContainer Name="NextColumn" Access="Public" Orientation="Vertical">
+                        <controls:RoadmapVersionHeader Name="NextHeader" Text="{Loc 'roadmap-column-next'}" />
+                        <BoxContainer Name="NextTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+                    </BoxContainer>
+                </lobby:HighlightedContainer>
+
+                <lobby:HighlightedContainer HorizontalExpand="True" UseUiWindowOpacity="True">
+                    <BoxContainer Name="LaterColumn" Access="Public" Orientation="Vertical">
+                        <controls:RoadmapVersionHeader Name="LaterHeader" Text="{Loc 'roadmap-column-later'}" />
+                        <BoxContainer Name="LaterTasks" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+                    </BoxContainer>
+                </lobby:HighlightedContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </ScrollContainer>
 </controls:RoadmapWindow>

@@ -43,10 +43,19 @@ public sealed class LinkedEntitySystem : EntitySystem
     /// <param name="second">The second entity to link</param>
     /// <param name="deleteOnEmptyLinks">Whether both entities should now delete once their links are removed</param>
     /// <returns>Whether linking was successful (e.g. they weren't already linked)</returns>
-    public bool TryLink(EntityUid first, EntityUid second, bool deleteOnEmptyLinks=false)
+    public bool TryLink(EntityUid first, EntityUid second, bool deleteOnEmptyLinks = false)
     {
         var firstLink = EnsureComp<LinkedEntityComponent>(first);
         var secondLink = EnsureComp<LinkedEntityComponent>(second);
+
+        if (!firstLink.LinkedEntities.Add(second))
+            return false;
+
+        if (!secondLink.LinkedEntities.Add(first))
+        {
+            firstLink.LinkedEntities.Remove(second);
+            return false;
+        }
 
         firstLink.DeleteOnEmptyLinks = deleteOnEmptyLinks;
         secondLink.DeleteOnEmptyLinks = deleteOnEmptyLinks;
@@ -56,25 +65,32 @@ public sealed class LinkedEntitySystem : EntitySystem
 
         Dirty(first, firstLink);
         Dirty(second, secondLink);
-
-        return firstLink.LinkedEntities.Add(second)
-            && secondLink.LinkedEntities.Add(first);
+        var ev1 = new EntityLinkedEvent(second);
+        var ev2 = new EntityLinkedEvent(first);
+        RaiseLocalEvent(first, ref ev1);
+        RaiseLocalEvent(second, ref ev2);
+        return true;
     }
 
     /// <summary>
     /// Does a one-way link from source to target.
     /// </summary>
     /// <param name="deleteOnEmptyLinks">Whether both entities should now delete once their links are removed</param>
-    public bool OneWayLink(EntityUid source, EntityUid target, bool deleteOnEmptyLinks=false)
+    public bool OneWayLink(EntityUid source, EntityUid target, bool deleteOnEmptyLinks = false)
     {
         var firstLink = EnsureComp<LinkedEntityComponent>(source);
+
+        if (!firstLink.LinkedEntities.Add(target))
+            return false;
+
         firstLink.DeleteOnEmptyLinks = deleteOnEmptyLinks;
 
         _appearance.SetData(source, LinkedEntityVisuals.HasAnyLinks, true);
 
         Dirty(source, firstLink);
-
-        return firstLink.LinkedEntities.Add(target);
+        var ev = new EntityLinkedEvent(target);
+        RaiseLocalEvent(source, ref ev);
+        return true;
     }
 
     /// <summary>
@@ -98,8 +114,15 @@ public sealed class LinkedEntitySystem : EntitySystem
         var success = firstLink.LinkedEntities.Remove(second)
                       && secondLink.LinkedEntities.Remove(first);
 
+        if (!success)
+            return false;
+
         _appearance.SetData(first, LinkedEntityVisuals.HasAnyLinks, firstLink.LinkedEntities.Any());
         _appearance.SetData(second, LinkedEntityVisuals.HasAnyLinks, secondLink.LinkedEntities.Any());
+        var ev1 = new EntityUnlinkedEvent(second);
+        var ev2 = new EntityUnlinkedEvent(first);
+        RaiseLocalEvent(first, ref ev1);
+        RaiseLocalEvent(second, ref ev2);
 
         Dirty(first, firstLink);
         Dirty(second, secondLink);
@@ -110,7 +133,7 @@ public sealed class LinkedEntitySystem : EntitySystem
         if (secondLink.LinkedEntities.Count == 0 && secondLink.DeleteOnEmptyLinks)
             QueueDel(second);
 
-        return success;
+        return true;
     }
 
     /// <summary>
@@ -135,3 +158,15 @@ public sealed class LinkedEntitySystem : EntitySystem
 
     #endregion
 }
+
+/// <summary>
+/// Raised on an entity when another entity gets linked to it.
+/// </summary>
+[ByRefEvent]
+public readonly record struct EntityLinkedEvent(EntityUid Other);
+
+/// <summary>
+/// Raised on an entity when another entity gets unlinked from it.
+/// </summary>
+[ByRefEvent]
+public readonly record struct EntityUnlinkedEvent(EntityUid Other);

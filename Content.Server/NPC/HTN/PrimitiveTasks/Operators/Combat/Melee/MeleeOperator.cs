@@ -4,6 +4,7 @@ using Content.Server.NPC.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Robust.Shared.Map;
 
 namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators.Combat.Melee;
 
@@ -12,7 +13,8 @@ namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators.Combat.Melee;
 /// </summary>
 public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private SharedCombatModeSystem _combatModeSystem = default!;
 
     /// <summary>
     /// When to shut the task down.
@@ -25,6 +27,13 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
     /// </summary>
     [DataField("targetKey", required: true)]
     public string TargetKey = default!;
+
+    /// <summary>
+    /// Optional approach coordinates used only for steering. Actual melee range/hit validation
+    /// should still be done against the live target entity.
+    /// </summary>
+    [DataField("targetCoordinatesKey")]
+    public string? TargetCoordinatesKey;
 
     /// <summary>
     /// Minimum damage state that the target has to be in for us to consider attacking.
@@ -40,6 +49,7 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
         var melee = _entManager.EnsureComponent<NPCMeleeCombatComponent>(blackboard.GetValue<EntityUid>(NPCBlackboard.Owner));
         melee.MissChance = blackboard.GetValueOrDefault<float>(NPCBlackboard.MeleeMissChance, _entManager);
         melee.Target = blackboard.GetValue<EntityUid>(TargetKey);
+        melee.TargetCoordinates = ResolveTargetCoordinates(blackboard);
     }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,
@@ -63,7 +73,7 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
     public void ConditionalShutdown(NPCBlackboard blackboard)
     {
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
-        _entManager.System<SharedCombatModeSystem>().SetInCombatMode(owner, false);
+        _combatModeSystem.SetInCombatMode(owner, false);
         _entManager.RemoveComponent<NPCMeleeCombatComponent>(owner);
         blackboard.Remove<EntityUid>(TargetKey);
     }
@@ -78,7 +88,6 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
     public override void PlanShutdown(NPCBlackboard blackboard)
     {
         base.PlanShutdown(blackboard);
-        
         ConditionalShutdown(blackboard);
     }
 
@@ -93,6 +102,7 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
             target != EntityUid.Invalid)
         {
             combat.Target = target;
+            combat.TargetCoordinates = ResolveTargetCoordinates(blackboard);
 
             // Success
             if (_entManager.TryGetComponent<MobStateComponent>(target, out var mobState) &&
@@ -126,5 +136,17 @@ public sealed partial class MeleeOperator : HTNOperator, IHtnConditionalShutdown
         }
 
         return status;
+    }
+
+    private EntityCoordinates ResolveTargetCoordinates(NPCBlackboard blackboard)
+    {
+        if (TargetCoordinatesKey != null &&
+            blackboard.TryGetValue<EntityCoordinates>(TargetCoordinatesKey, out var coordinates, _entManager) &&
+            coordinates.IsValid(_entManager))
+        {
+            return coordinates;
+        }
+
+        return EntityCoordinates.Invalid;
     }
 }

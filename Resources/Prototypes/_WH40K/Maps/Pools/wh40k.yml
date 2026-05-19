@@ -5,3 +5,8 @@
   - WinterAssault
   - TinyBattle
   - Warpforge
+
+- type: gameMapPool
+  id: WH40KWaveDefenceMapPool
+  maps:
+  - WH40KWaveDefenceWhwave

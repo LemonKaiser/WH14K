@@ -408,6 +408,7 @@ ui-options-lobby-animated-background = Animated lobby background
 ui-options-lobby-background-auto = Auto
 ui-options-lobby-panel-opacity = Lobby panel background opacity
 ui-options-customization-panel-opacity = Character customization background opacity
+ui-options-ui-window-opacity = UI window background opacity
 
 ui-options-chat-window-opacity = Chat window opacity
 ui-options-speech-bubble-text-opacity = Speech bubble text opacity

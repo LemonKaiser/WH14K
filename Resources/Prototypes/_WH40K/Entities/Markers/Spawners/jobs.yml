@@ -281,6 +281,66 @@
       - state: green
       - state: guardsman
 
+# Tau
+
+- type: entity
+  id: SpawnPointTauFireWarrior
+  parent: SpawnPointJobBase
+  name: TauFireWarrior
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauFireWarrior
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointTauOfficer
+  parent: SpawnPointJobBase
+  name: TauOfficer
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauOfficer
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: lieutenant
+
+- type: entity
+  id: SpawnPointTauEthereal
+  parent: SpawnPointJobBase
+  name: TauEthereal
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauEthereal
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: head_officer
+
+# Ork
+
+- type: entity
+  id: SpawnPointBoyz
+  parent: SpawnPointJobBase
+  name: Boyz
+  suffix: WH40K, Ork
+  components:
+  - type: SpawnPoint
+    job_id: Boyz
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
 # Heretics
 
 - type: entity

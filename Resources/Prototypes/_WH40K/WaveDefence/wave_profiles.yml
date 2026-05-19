@@ -1,0 +1,70 @@
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave01
+  waveNumber: 1
+  announcement: wh40k-wave-defence-wave-announce-01
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceXenoMeleeLight
+    count: 4
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    visionRadius: 14
+    aggroVisionRadius: 18
+    playerMemorySeconds: 5
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave02
+  waveNumber: 2
+  announcement: wh40k-wave-defence-wave-announce-02
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceXenoMeleeLight
+    count: 5
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    visionRadius: 14
+    aggroVisionRadius: 18
+    playerMemorySeconds: 5
+  - delaySeconds: 8
+    entityTable: WH40KWaveDefenceXenoRanged
+    count: 2
+    aiProfile: SimpleSwarm
+    squadRole: Support
+    stallSeconds: 10
+    combatStallSeconds: 16
+    visionRadius: 15
+    aggroVisionRadius: 19
+    playerMemorySeconds: 5
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave03
+  waveNumber: 3
+  announcement: wh40k-wave-defence-wave-announce-03
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceXenoMeleeHeavy
+    count: 3
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    laneCommitSeconds: 12
+    visionRadius: 15
+    aggroVisionRadius: 20
+    playerMemorySeconds: 5
+  - delaySeconds: 6
+    entityTable: WH40KWaveDefenceXenoMeleeLight
+    count: 6
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    visionRadius: 14
+    aggroVisionRadius: 18
+    playerMemorySeconds: 5
+  - delaySeconds: 12
+    entityTable: WH40KWaveDefenceXenoRanged
+    count: 3
+    aiProfile: SimpleSwarm
+    squadRole: Support
+    stallSeconds: 10
+    combatStallSeconds: 16
+    visionRadius: 15
+    aggroVisionRadius: 19
+    playerMemorySeconds: 5

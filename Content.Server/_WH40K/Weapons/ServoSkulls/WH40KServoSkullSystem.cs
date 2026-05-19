@@ -314,9 +314,7 @@ public sealed class WH40KServoSkullSystem : EntitySystem
         }
 
         steering.Range = stopRange;
-        steering.DirectMove = false;
         steering.ArriveOnLineOfSight = false;
-        steering.InRangeMaxSpeed = 0.03f;
         steering.Status = SteeringStatus.Moving;
         skull.CurrentMovementTarget = movementTarget;
     }
