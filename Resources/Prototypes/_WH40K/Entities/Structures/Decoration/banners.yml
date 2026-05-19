@@ -44,6 +44,9 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/banners.rsi
     state: chaos_banner
+  - type: WH40KWaveShader
+    speed: 2.4
+    dis: 4.2
   - type: Construction
     graph: WH40KBanners
     node: chaosBanner

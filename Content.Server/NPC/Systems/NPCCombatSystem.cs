@@ -1,7 +1,8 @@
 using Content.Server.Interaction;
+using Content.Server.NPC.Pathfinding;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared.NPC.Systems;
 using Content.Shared.Weapons.Melee;
+using Content.Shared.NPC.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -16,20 +17,19 @@ namespace Content.Server.NPC.Systems;
 /// </summary>
 public sealed partial class NPCCombatSystem : EntitySystem
 {
-    [Dependency] private readonly NPCBenchmarkSystem _bench = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly GunSystem _gun = default!;
-    [Dependency] private readonly InteractionSystem _interaction = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly NPCWaveCommunicationSystem _waveComms = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GunSystem _gun = default!;
+    [Dependency] private InteractionSystem _interaction = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private NpcFactionSystem _factions = default!;
+    [Dependency] private PathfindingSystem _pathfinding = default!;
 
     /// <summary>
     /// If disabled we'll move into range but not attack.
@@ -46,8 +46,6 @@ public sealed partial class NPCCombatSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        using var benchScope = _bench.Measure("npc.combat.update");
         UpdateMelee(frameTime);
         UpdateRanged(frameTime);
     }

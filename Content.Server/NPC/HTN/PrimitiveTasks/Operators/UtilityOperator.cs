@@ -1,8 +1,6 @@
-using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Server.NPC;
 using Content.Server.NPC.Queries;
 using Content.Server.NPC.Systems;
 using Robust.Shared.Map;
@@ -15,11 +13,13 @@ namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators;
 /// </summary>
 public sealed partial class UtilityOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private NPCUtilitySystem _npcUtilitySystem = default!;
 
-    [DataField] public string Key = "Target";
+    [DataField]
+    public string Key = "Target";
 
-    [DataField] public ReturnTypeResult ReturnType = ReturnTypeResult.Highest;
+    [DataField]
+    public ReturnTypeResult ReturnType = ReturnTypeResult.Highest;
 
     /// <summary>
     /// The EntityCoordinates of the specified target.
@@ -33,7 +33,7 @@ public sealed partial class UtilityOperator : HTNOperator
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,
         CancellationToken cancelToken)
     {
-        var result = _entManager.System<NPCUtilitySystem>().GetEntities(blackboard, Prototype);
+        var result = _npcUtilitySystem.GetEntities(blackboard, Prototype);
         Dictionary<string, object> effects;
 
         switch (ReturnType)
@@ -51,12 +51,6 @@ public sealed partial class UtilityOperator : HTNOperator
                     {Key, target},
                     {KeyCoordinates, new EntityCoordinates(target, Vector2.Zero)},
                 };
-
-                if (blackboard.TryGetValue<bool>(NPCBlackboard.WaveCoordinationEnabled, out var coordinationEnabled, _entManager) &&
-                    coordinationEnabled)
-                {
-                    effects[NPCBlackboard.CurrentOrderedTarget] = target;
-                }
 
                 return (true, effects);
 

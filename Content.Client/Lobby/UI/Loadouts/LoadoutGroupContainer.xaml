@@ -1,14 +1,15 @@
 <BoxContainer xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
          Orientation="Vertical">
-    <PanelContainer StyleClasses="BackgroundPanel" HorizontalExpand="True" Margin="5">
+    <lobby:HighlightedContainer HorizontalExpand="True" Margin="5" UseUiWindowOpacity="True">
         <BoxContainer Name="LoadoutsContainer" Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True"/>
-    </PanelContainer>
+    </lobby:HighlightedContainer>
     <!-- Buffer space so we have 10 margin between controls but also 10 to the borders -->
-    <PanelContainer StyleClasses="AngleRect" HorizontalExpand="True" Margin="5">
+    <lobby:HighlightedContainer HorizontalExpand="True" Margin="5" UseUiWindowOpacity="True">
         <BoxContainer Orientation="Vertical">
             <Label Text="{Loc 'loadout-restrictions'}"/>
             <BoxContainer Name="RestrictionsContainer" Orientation="Vertical" HorizontalExpand="True" />
         </BoxContainer>
-    </PanelContainer>
+    </lobby:HighlightedContainer>
 </BoxContainer>

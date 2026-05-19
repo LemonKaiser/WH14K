@@ -53,4 +53,16 @@ public sealed partial class PortalComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public bool RandomTeleport = true;
+
+    /// <summary>
+    /// If true, linked portals also create pathfinding links for NPC navigation.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool NavPortal = true;
+
+    /// <summary>
+    /// Server-side bookkeeping for generated pathfinding portal handles.
+    /// </summary>
+    [DataField(serverOnly: true)]
+    public Dictionary<EntityUid, int> NavPortalHandles = new();
 }

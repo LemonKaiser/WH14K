@@ -17,7 +17,7 @@ public sealed class WH40KCargoLogisticsTierSyncSystem : EntitySystem
 
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly CargoSystem _cargo = default!;
 
     private TimeSpan _nextSync = TimeSpan.Zero;

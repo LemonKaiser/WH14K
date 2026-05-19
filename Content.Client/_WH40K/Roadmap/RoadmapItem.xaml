@@ -6,8 +6,8 @@
     <PanelContainer Name="CardBackground" Access="Public">
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat
-                BackgroundColor="#2C2F39"
-                BorderColor="#444957"
+                BackgroundColor="#161920"
+                BorderColor="#4E4124"
                 BorderThickness="1"
                 ContentMarginLeftOverride="6"
                 ContentMarginTopOverride="4"

@@ -124,6 +124,6 @@ public sealed partial class WH40KTacticalMapSignalEntry : Control, IComparable<W
         if (!string.IsNullOrWhiteSpace(marker.OwnerTeamId))
             return marker.OwnerColor;
 
-        return Color.FromHex("#B7C1CF".AsSpan());
+        return Color.White;
     }
 }

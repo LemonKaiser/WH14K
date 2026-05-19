@@ -1762,7 +1762,6 @@ public sealed partial class WH40KCinematicSystem
                 return;
 
             var steering = system._steering.Register(_actor.Entity, _targetCoordinates);
-            steering.DirectMove = _directMove;
             steering.Range = _range;
             _timeoutAt = system._timing.CurTime + _timeoutDuration;
             _started = true;
@@ -1900,7 +1899,6 @@ public sealed partial class WH40KCinematicSystem
 
             _activeTarget = _targets.Dequeue();
             var steering = system._steering.Register(_actor.Entity, _activeTarget.Value);
-            steering.DirectMove = false;
             steering.Range = NpcPathMoveRange;
             _timeoutAt = system._timing.CurTime + _timeoutDuration;
         }

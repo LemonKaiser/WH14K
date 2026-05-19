@@ -61,7 +61,8 @@ public sealed partial class GraphicsTab : Control, ILocalizedControl
         Control.AddOption(new OptionIntegerScaling(Control, _cfg, IntegerScalingCheckBox));
         Control.AddOptionCheckBox(CCVars.ViewportScaleRender, ViewportLowResCheckBox, invert: true);
         Control.AddOptionCheckBox(CCVars.ParallaxLowQuality, ParallaxLowQualityCheckBox);
-        Control.AddOptionCheckBox(CCVars.WH40KGrimdarkShaderEnabled, WH40KGrimdarkShaderCheckBox);
+        Control.AddOptionCheckBox(CCVars.WH40KPostProcessEnabled, WH40KPostProcessCheckBox);
+        Control.AddOptionCheckBox(CCVars.WH40KWaveShaderEnabled, WH40KWaveShaderCheckBox);
         Control.AddOptionCheckBox(CCVars.HudFpsCounterVisible, FpsCounterCheckBox);
 
         Control.Initialize();
@@ -86,7 +87,8 @@ public sealed partial class GraphicsTab : Control, ILocalizedControl
         ViewportLowResCheckBox.Text = Loc.GetString("ui-options-vp-low-res");
         ParallaxLowQualityCheckBox.Text = Loc.GetString("ui-options-parallax-low-quality");
         AmbientOcclusionCheckBox.Text = Loc.GetString("ui-options-ambient-occlusion");
-        WH40KGrimdarkShaderCheckBox.Text = Loc.GetString("ui-options-wh40k-grimdark-shader");
+        WH40KPostProcessCheckBox.Text = Loc.GetString("ui-options-wh40k-post-process");
+        WH40KWaveShaderCheckBox.Text = Loc.GetString("ui-options-wh40k-wave-shader");
         DropDownUIScale.Title = Loc.GetString("ui-options-scale-label");
         ViewportStretchCheckBox.Text = Loc.GetString("ui-options-vp-stretch");
         ViewportScaleSlider.Title = Loc.GetString("ui-options-vp-scale");

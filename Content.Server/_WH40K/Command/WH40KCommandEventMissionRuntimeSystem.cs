@@ -260,7 +260,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly CargoSystem _cargo = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;

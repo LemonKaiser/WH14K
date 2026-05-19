@@ -119,3 +119,25 @@ wh40k-ghost-role-heretic-reinforcement-name = Heretic Reinforcement
 wh40k-ghost-role-heretic-reinforcement-description = Deploy as a frontline volunteer for the heretic warbands.
 wh40k-ghost-role-reinforcement-rules = Follow your faction leadership and support the front.
 
+wh40k-wave-defence-title = WH40K Wave Defence
+wh40k-wave-defence-description = The Imperium holds a command node against escalating NPC assault waves.
+wh40k-wave-defence-command-node-name = Command Node
+wh40k-wave-defence-command-node-desc = The Imperium's primary defensive objective. Losing it means the defence has failed.
+wh40k-wave-defence-preparation-announce = Defences are in place. Prepare for the first wave.
+wh40k-wave-defence-wave-start = Wave { $wave } has begun.
+wh40k-wave-defence-wave-clear = Wave { $wave } has been cleared.
+wh40k-wave-defence-victory = All configured waves have been repelled. The Imperium holds the node.
+wh40k-wave-defence-defeat-objective = The command node has been destroyed. The defence has fallen.
+wh40k-wave-defence-defeat-defenders = All Imperium defenders are dead. The defence has fallen.
+wh40k-wave-defence-defeat-admin = The round was ended by an administrator.
+wh40k-wave-defence-defeat-missing-profile = No wave profile was found for the next wave. The round was aborted.
+wh40k-wave-defence-round-end-header = [bold][color=gold]+++ Wave Defence Report +++[/color][/bold]
+wh40k-wave-defence-round-end-wave = Reached wave: [color=white]{ $wave }[/color] / [color=gray]{ $final }[/color]
+wh40k-wave-defence-wave-announce-01 = The first probing enemy wave is approaching.
+wh40k-wave-defence-wave-announce-02 = The enemy is escalating with ranged support.
+wh40k-wave-defence-wave-announce-03 = Command reports a heavy push. Prepare for a breach.
+wh40k-wave-defence-phase-preparation = Preparation
+wh40k-wave-defence-phase-wave-active = Active assault wave
+wh40k-wave-defence-phase-intermission = Intermission
+wh40k-wave-defence-spawn-briefing = Wave Defence is active. Phase: { $phase }. Wave: { $wave } / { $final }. Hold the command node and do not let the defenders fall.
+

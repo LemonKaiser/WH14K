@@ -206,7 +206,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
 
 	[Dependency]
-	private readonly WH40KTeamBattleRuleSystem _teamBattleRule = default!;
+	private readonly WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
 
 	[Dependency]
 	private readonly ITaskManager _task = default!;

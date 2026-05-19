@@ -499,7 +499,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
     }
     public bool IsAdmin => false;
     public bool IsOpen => _window is { Disposed: false, IsOpen: true };
-    private DefaultWindow? _window;
+    private FancyWindow? _window;
     private BwoinkPanel? _chatPanel;
     private bool _discordRelayActive;
 
@@ -566,16 +566,14 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
-        _window = new DefaultWindow()
+        _window = new FancyWindow()
         {
-            TitleClass="windowTitleAlert",
-            HeaderClass="windowHeaderAlert",
             Title=Loc.GetString("bwoink-user-title"),
             MinSize = new Vector2(500, 300),
         };
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
-        _window.Contents.AddChild(_chatPanel);
+        _window.ContentsContainer.AddChild(_chatPanel);
 
         var introText = Loc.GetString("bwoink-system-introductory-message");
         var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);

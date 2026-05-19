@@ -5,7 +5,7 @@
          xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <parallax:ParallaxControl SpeedX="20"/>
     <Control HorizontalAlignment="Center" VerticalAlignment="Center">
-        <PanelContainer StyleClasses="BackgroundPanel" />
+        <PanelContainer Name="ConnectingPanel" StyleClasses="BackgroundPanel" />
         <BoxContainer Orientation="Vertical" MinSize="300 200">
             <BoxContainer Orientation="Horizontal">
                 <Label Margin="8 0 0 0" Text="{Loc 'connecting-title'}"
@@ -66,7 +66,7 @@
                 </Control>
                 <Label Name="ConnectingAddress" StyleClasses="LabelSubText" HorizontalAlignment="Center" />
             </BoxContainer>
-            <PanelContainer>
+            <PanelContainer Name="ConnectingFooterDivider">
                 <PanelContainer.PanelOverride>
                     <gfx:StyleBoxFlat BackgroundColor="#444" ContentMarginTopOverride="2" />
                 </PanelContainer.PanelOverride>
@@ -82,7 +82,7 @@
     <!-- Bottom window for tips -->
     <PanelContainer Name="LoginTips" StyleClasses="BackgroundPanel" Margin="0 10" MaxWidth="600" VerticalExpand="True" VerticalAlignment="Bottom">
         <BoxContainer Orientation="Vertical" VerticalExpand="True">
-            <controls:StripeBack>
+            <controls:StripeBack Name="LoginTipsHeaderStripe">
                 <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center">
                     <Label Name="LoginTipTitle" Text="Tip" StyleClasses="LabelHeading" Align="Center"/>
                 </BoxContainer>

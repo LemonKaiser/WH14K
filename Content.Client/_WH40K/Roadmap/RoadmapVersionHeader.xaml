@@ -7,7 +7,7 @@
     <Label Name="Version" Access="Public" Align="Center" HorizontalAlignment="Center" />
     <PanelContainer Margin="0 5 0 0" MinHeight="2" MaxHeight="2">
         <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#505463" />
+            <gfx:StyleBoxFlat BackgroundColor="#5D4D2A" />
         </PanelContainer.PanelOverride>
     </PanelContainer>
 </controls:RoadmapVersionHeader>

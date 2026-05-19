@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
@@ -5,6 +6,7 @@ using Content.Client.Stylesheets.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
 using static Content.Client.Stylesheets.StylesheetHelpers;
 
 namespace Content.Client.Stylesheets.Sheetlets;
@@ -20,27 +22,12 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
         var crossTex = sheet.GetTextureOr(iconCfg.CrossIconPath, NanotrasenStylesheet.TextureRoot);
         var refreshTex = sheet.GetTextureOr(iconCfg.RefreshIconPath, NanotrasenStylesheet.TextureRoot);
         var helpTex = sheet.GetTextureOr(iconCfg.HelpIconPath, NanotrasenStylesheet.TextureRoot);
+        var neutralVisuals = CreateButtonVisuals(sheet, buttonCfg.ButtonPalette);
+        var positiveVisuals = CreateButtonVisuals(sheet, buttonCfg.PositiveButtonPalette);
+        var negativeVisuals = CreateButtonVisuals(sheet, buttonCfg.NegativeButtonPalette);
 
         var rules = new List<StyleRule>
         {
-            // Set textures for the kinds of buttons
-            CButton()
-                .Box(StyleBoxHelpers.BaseStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonOpenLeft)
-                .Box(StyleBoxHelpers.OpenLeftStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonOpenRight)
-                .Box(StyleBoxHelpers.OpenRightStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonOpenBoth)
-                .Box(StyleBoxHelpers.SquareStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonSquare)
-                .Box(StyleBoxHelpers.SquareStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonSmall)
-                .Box(StyleBoxHelpers.SmallStyleBox(sheet)),
             CButton()
                 .Class(StyleClass.ButtonSmall)
                 .ParentOf(E<Label>())
@@ -61,26 +48,106 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
             E<TextureButton>()
                 .Class(StyleClass.HelpButton)
                 .Prop(TextureButton.StylePropertyTexture, helpTex),
-
-            // Ensure labels in buttons are aligned.
-            E<Label>()
-                // ReSharper disable once AccessToStaticMemberViaDerivedType
-                .Class(Button.StyleClassButton)
-                .AlignMode(Label.AlignMode.Center),
-
-            // Have disabled button's text be faded
-            CButton().PseudoDisabled().ParentOf(E<Label>()).FontColor(Color.FromHex("#E5E5E581")),
-            CButton().PseudoDisabled().ParentOf(E()).ParentOf(E<Label>()).FontColor(Color.FromHex("#E5E5E581")),
         };
+
+        AddButtonStateRules(rules, sheet, neutralVisuals, null);
+        AddButtonStateRules(rules, sheet, positiveVisuals, StyleClass.Positive);
+        AddButtonStateRules(rules, sheet, negativeVisuals, StyleClass.Negative);
+
+        AddLabelRules(rules, neutralVisuals, null);
+        AddLabelRules(rules, positiveVisuals, StyleClass.Positive);
+        AddLabelRules(rules, negativeVisuals, StyleClass.Negative);
+
         // Texture button modulation
         MakeButtonRules<TextureButton>(rules, Palettes.AlphaModulate, null);
         MakeButtonRules<TextureButton>(rules, sheet.NegativePalette, StyleClass.CrossButtonRed);
 
-        MakeButtonRules(rules, buttonCfg.ButtonPalette, null);
-        MakeButtonRules(rules, buttonCfg.PositiveButtonPalette, StyleClass.Positive);
-        MakeButtonRules(rules, buttonCfg.NegativeButtonPalette, StyleClass.Negative);
-
         return rules.ToArray();
+    }
+
+    private static void AddButtonStateRules(List<StyleRule> rules, T sheet, ButtonVisuals visuals, string? toneClass)
+    {
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.Default, null, toneClass);
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.OpenLeft, StyleClass.ButtonOpenLeft, toneClass);
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.OpenRight, StyleClass.ButtonOpenRight, toneClass);
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.OpenBoth, StyleClass.ButtonOpenBoth, toneClass);
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.Square, StyleClass.ButtonSquare, toneClass);
+        AddButtonShapeRules(rules, sheet, visuals, ButtonShape.Small, StyleClass.ButtonSmall, toneClass);
+    }
+
+    private static void AddButtonShapeRules(
+        List<StyleRule> rules,
+        T sheet,
+        ButtonVisuals visuals,
+        ButtonShape shape,
+        string? shapeClass,
+        string? toneClass)
+    {
+        StyleBox normal = StyleBoxHelpers.ImperialButtonStyleBox(sheet, shape, ButtonVisualState.Normal);
+        StyleBox hovered = StyleBoxHelpers.ImperialButtonStyleBox(sheet, shape, ButtonVisualState.Hovered);
+        StyleBox pressed = StyleBoxHelpers.ImperialButtonStyleBox(sheet, shape, ButtonVisualState.Pressed);
+        StyleBox disabled = StyleBoxHelpers.ImperialButtonStyleBox(sheet, shape, ButtonVisualState.Disabled);
+
+        rules.AddRange([
+            CButton(shapeClass, toneClass)
+                .PseudoNormal()
+                .Box(normal),
+            CButton(shapeClass, toneClass)
+                .PseudoHovered()
+                .Box(hovered),
+            CButton(shapeClass, toneClass)
+                .PseudoPressed()
+                .Box(pressed),
+            CButton(shapeClass, toneClass)
+                .PseudoDisabled()
+                .Box(disabled),
+        ]);
+    }
+
+    private static void AddLabelRules(List<StyleRule> rules, ButtonVisuals visuals, string? toneClass)
+    {
+        rules.AddRange([
+            CButton(null, toneClass)
+                .ParentOf(E<Label>())
+                .AlignMode(Label.AlignMode.Center)
+                .FontColor(visuals.Text),
+            CButton(null, toneClass)
+                .PseudoDisabled()
+                .ParentOf(E<Label>())
+                .FontColor(visuals.DisabledText),
+            CButton(null, toneClass)
+                .PseudoDisabled()
+                .ParentOf(E())
+                .ParentOf(E<Label>())
+                .FontColor(visuals.DisabledText),
+        ]);
+    }
+
+    private static ButtonVisuals CreateButtonVisuals(PalettedStylesheet sheet, ColorPalette palette)
+    {
+        var accent = palette.Text;
+
+        return new ButtonVisuals(
+            NormalBackground: Blend(sheet.PrimaryPalette.BackgroundDark, accent, 0.05f),
+            HoveredBackground: Blend(sheet.PrimaryPalette.Background, accent, 0.08f),
+            PressedBackground: Blend(sheet.PrimaryPalette.BackgroundDark, accent, 0.12f),
+            DisabledBackground: Blend(sheet.PrimaryPalette.BackgroundDark, accent, 0.02f),
+            NormalBorder: Blend(sheet.SecondaryPalette.TextDark, palette.TextDark, 0.55f).WithAlpha(0.96f),
+            HoveredBorder: palette.Text.WithAlpha(0.96f),
+            PressedBorder: Blend(palette.TextDark, palette.Text, 0.24f).WithAlpha(0.96f),
+            DisabledBorder: Blend(sheet.SecondaryPalette.TextDark, palette.TextDark, 0.25f).WithAlpha(0.55f),
+            Text: palette.Text,
+            DisabledText: palette.TextDark.WithAlpha(0.62f));
+    }
+
+    private static Color Blend(Color baseColor, Color accent, float amount)
+    {
+        amount = Math.Clamp(amount, 0f, 1f);
+        return new Color(
+            baseColor.R + (accent.R - baseColor.R) * amount,
+            baseColor.G + (accent.G - baseColor.G) * amount,
+            baseColor.B + (accent.B - baseColor.B) * amount,
+            MathF.Max(baseColor.A, accent.A));
     }
 
     public static void MakeButtonRules<TC>(
@@ -113,10 +180,48 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
         ]);
     }
 
-    private static MutableSelectorElement CButton()
+    private static MutableSelectorElement CButton(string? shapeClass = null, string? toneClass = null)
     {
-        return E<ContainerButton>().Class(ContainerButton.StyleClassButton);
+        var selector = E<ContainerButton>().Class(ContainerButton.StyleClassButton);
+
+        if (!string.IsNullOrEmpty(shapeClass))
+            selector = selector.Class(shapeClass);
+
+        if (!string.IsNullOrEmpty(toneClass))
+            selector = selector.Class(toneClass);
+
+        return selector;
     }
+}
+
+internal readonly record struct ButtonVisuals(
+    Color NormalBackground,
+    Color HoveredBackground,
+    Color PressedBackground,
+    Color DisabledBackground,
+    Color NormalBorder,
+    Color HoveredBorder,
+    Color PressedBorder,
+    Color DisabledBorder,
+    Color Text,
+    Color DisabledText);
+
+internal enum ButtonShape
+{
+    Default,
+    OpenLeft,
+    OpenRight,
+    OpenBoth,
+    Square,
+    Small,
+}
+
+internal enum ButtonVisualState
+{
+    Normal,
+    Hovered,
+    Pressed,
+    Disabled,
 }
 
 // this is currently the only other "helper" type class, if any more crop up consider making a specific directory for them
@@ -181,6 +286,103 @@ public static class StyleBoxHelpers
         {
             Texture = sheet.GetTextureOr(sheet.SmallButtonPath, NanotrasenStylesheet.TextureRoot),
         };
+        smallBox.SetPatchMargin(StyleBox.Margin.Left, 8);
+        smallBox.SetPatchMargin(StyleBox.Margin.Right, 8);
+        smallBox.SetPatchMargin(StyleBox.Margin.Top, 4);
+        smallBox.SetPatchMargin(StyleBox.Margin.Bottom, 4);
+        smallBox.SetContentMarginOverride(StyleBox.Margin.Left, 10);
+        smallBox.SetContentMarginOverride(StyleBox.Margin.Right, 10);
+        smallBox.SetContentMarginOverride(StyleBox.Margin.Top, 4);
+        smallBox.SetContentMarginOverride(StyleBox.Margin.Bottom, 4);
         return smallBox;
+    }
+
+    internal static StyleBoxTexture ImperialButtonStyleBox<T>(T sheet, ButtonShape shape, ButtonVisualState state)
+        where T : PalettedStylesheet, IButtonConfig
+    {
+        StyleBoxTexture style = shape switch
+        {
+            ButtonShape.OpenLeft => OpenLeftStyleBox(sheet),
+            ButtonShape.OpenRight => OpenRightStyleBox(sheet),
+            ButtonShape.OpenBoth => SquareStyleBox(sheet),
+            ButtonShape.Square => SquareStyleBox(sheet),
+            ButtonShape.Small => SmallStyleBox(sheet),
+            _ => BaseStyleBox(sheet),
+        };
+
+        style.Modulate = state switch
+        {
+            ButtonVisualState.Hovered => Color.FromHex("#FFF1C6"),
+            ButtonVisualState.Pressed => Color.FromHex("#C9AF70"),
+            ButtonVisualState.Disabled => Color.FromHex("#5B5751").WithAlpha(0.75f),
+            _ => Color.White,
+        };
+
+        return style;
+    }
+
+    internal static StyleBoxFlat FlatButtonStyleBox(ButtonVisuals visuals, ButtonShape shape, ButtonVisualState state)
+    {
+        var (background, border) = state switch
+        {
+            ButtonVisualState.Hovered => (visuals.HoveredBackground, visuals.HoveredBorder),
+            ButtonVisualState.Pressed => (visuals.PressedBackground, visuals.PressedBorder),
+            ButtonVisualState.Disabled => (visuals.DisabledBackground, visuals.DisabledBorder),
+            _ => (visuals.NormalBackground, visuals.NormalBorder),
+        };
+
+        var style = new StyleBoxFlat
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+        };
+
+        switch (shape)
+        {
+            case ButtonShape.OpenLeft:
+                style.BorderThickness = new Thickness(0f, 1f, 1f, 2f);
+                style.ContentMarginLeftOverride = 12;
+                style.ContentMarginTopOverride = 6;
+                style.ContentMarginRightOverride = 16;
+                style.ContentMarginBottomOverride = 6;
+                break;
+            case ButtonShape.OpenRight:
+                style.BorderThickness = new Thickness(1f, 1f, 0f, 2f);
+                style.ContentMarginLeftOverride = 16;
+                style.ContentMarginTopOverride = 6;
+                style.ContentMarginRightOverride = 12;
+                style.ContentMarginBottomOverride = 6;
+                break;
+            case ButtonShape.OpenBoth:
+                style.BorderThickness = new Thickness(1f, 1f, 1f, 2f);
+                style.ContentMarginLeftOverride = 12;
+                style.ContentMarginTopOverride = 6;
+                style.ContentMarginRightOverride = 12;
+                style.ContentMarginBottomOverride = 6;
+                break;
+            case ButtonShape.Square:
+                style.BorderThickness = new Thickness(1f, 1f, 1f, 2f);
+                style.ContentMarginLeftOverride = 10;
+                style.ContentMarginTopOverride = 6;
+                style.ContentMarginRightOverride = 10;
+                style.ContentMarginBottomOverride = 6;
+                break;
+            case ButtonShape.Small:
+                style.BorderThickness = new Thickness(1f);
+                style.ContentMarginLeftOverride = 9;
+                style.ContentMarginTopOverride = 4;
+                style.ContentMarginRightOverride = 9;
+                style.ContentMarginBottomOverride = 4;
+                break;
+            default:
+                style.BorderThickness = new Thickness(1f, 1f, 1f, 2f);
+                style.ContentMarginLeftOverride = 16;
+                style.ContentMarginTopOverride = 6;
+                style.ContentMarginRightOverride = 16;
+                style.ContentMarginBottomOverride = 6;
+                break;
+        }
+
+        return style;
     }
 }

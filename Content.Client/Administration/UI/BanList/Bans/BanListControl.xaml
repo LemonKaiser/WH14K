@@ -1,11 +1,12 @@
 ﻿<bans:BanListControl
     xmlns="https://spacestation14.io"
-    xmlns:bans="clr-namespace:Content.Client.Administration.UI.BanList.Bans">
-    <PanelContainer StyleClasses="BackgroundDark">
+    xmlns:bans="clr-namespace:Content.Client.Administration.UI.BanList.Bans"
+    xmlns:lobby="clr-namespace:Content.Client.Lobby.UI">
+    <lobby:HighlightedContainer UseUiWindowOpacity="True">
         <ScrollContainer>
             <BoxContainer Name="Bans" Access="Public" Orientation="Vertical">
                 <bans:BanListHeader Name="BansHeader"/>
             </BoxContainer>
         </ScrollContainer>
-    </PanelContainer>
+    </lobby:HighlightedContainer>
 </bans:BanListControl>

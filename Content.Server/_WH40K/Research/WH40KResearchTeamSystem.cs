@@ -16,7 +16,7 @@ namespace Content.Server._WH40K.Research;
 /// </summary>
 public sealed class WH40KResearchTeamSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly ResearchSystem _research = default!;
 

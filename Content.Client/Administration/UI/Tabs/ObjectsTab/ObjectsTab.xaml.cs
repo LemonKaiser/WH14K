@@ -8,6 +8,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Maths;
 
 namespace Content.Client.Administration.UI.Tabs.ObjectsTab;
 
@@ -18,8 +19,12 @@ public sealed partial class ObjectsTab : Control, ILocalizedControl
     [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IClientConsoleHost _console = default!;
 
-    private readonly Color _altColor = Color.FromHex("#292B38");
-    private readonly Color _defaultColor = Color.FromHex("#2F2F3B");
+    private static readonly Color HeaderBackgroundColor = Color.FromHex("#151820");
+    private static readonly Color HeaderBorderColor = Color.FromHex("#6A5530");
+    private static readonly Color HeaderTextColor = Color.FromHex("#D7B65A");
+    private static readonly Color RowAltColor = Color.FromHex("#13161D");
+    private static readonly Color RowDefaultColor = Color.FromHex("#181B23");
+    private static readonly Color RowBorderColor = Color.FromHex("#4D4024");
 
     private bool _ascending;
     private ObjectsTabHeader.Header _headerClicked = ObjectsTabHeader.Header.ObjectName;
@@ -44,6 +49,8 @@ public sealed partial class ObjectsTab : Control, ILocalizedControl
             ObjectTypeOptions.AddItem(GetLocalizedEnumValue(type));
         }
 
+        ListHeader.BackgroundColorPanel.PanelOverride = CreateListStyle(HeaderBackgroundColor, HeaderBorderColor);
+        ListHeader.SetHeaderFontColor(HeaderTextColor);
         ListHeader.OnHeaderClicked += HeaderClicked;
         SearchList.SearchBar = SearchLineEdit;
         SearchList.GenerateItem += GenerateButton;
@@ -146,7 +153,7 @@ public sealed partial class ObjectsTab : Control, ILocalizedControl
             var info = entities[index];
             listData.Add(new ObjectsListData(info,
                 $"{info.Name} {info.Entity}",
-                index % 2 == 0 ? _altColor : _defaultColor));
+                index % 2 == 0 ? RowAltColor : RowDefaultColor));
         }
 
         SearchList.PopulateList(listData);
@@ -157,7 +164,7 @@ public sealed partial class ObjectsTab : Control, ILocalizedControl
         if (data is not ObjectsListData { Info: var info, BackgroundColor: var backgroundColor })
             return;
 
-        var entry = new ObjectsTabEntry(_admin, info.Name, info.Entity, new StyleBoxFlat { BackgroundColor = backgroundColor });
+        var entry = new ObjectsTabEntry(_admin, info.Name, info.Entity, CreateListStyle(backgroundColor, RowBorderColor));
         entry.OnTeleport += TeleportTo;
         entry.OnDelete += Delete;
         button.ToolTip = $"{info.Name}, {info.Entity}";
@@ -240,6 +247,20 @@ public sealed partial class ObjectsTab : Control, ILocalizedControl
         Grids,
         Maps,
         Stations,
+    }
+
+    private static StyleBoxFlat CreateListStyle(Color background, Color border)
+    {
+        return new StyleBoxFlat
+        {
+            BackgroundColor = background,
+            BorderColor = border,
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 6,
+            ContentMarginRightOverride = 6,
+            ContentMarginTopOverride = 4,
+            ContentMarginBottomOverride = 4,
+        };
     }
 }
 

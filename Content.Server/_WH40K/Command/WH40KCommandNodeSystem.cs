@@ -91,7 +91,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     private readonly List<EntityCoordinates> _reinforcementSpawnPoints = new();
     private readonly List<EntityCoordinates> _reinforcementMapSpawnPoints = new();
 
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;

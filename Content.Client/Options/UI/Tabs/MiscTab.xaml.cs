@@ -94,6 +94,7 @@ public sealed partial class MiscTab : Control, ILocalizedControl
         Control.AddOptionPercentSlider(CCVars.WH40KNotificationSoundVolume, NotificationSoundVolumeSlider);
         Control.AddOptionPercentSlider(CCVars.LobbyPanelOpacity, LobbyPanelOpacitySlider);
         Control.AddOptionPercentSlider(CCVars.LobbyCustomizationPanelOpacity, CustomizationPanelOpacitySlider);
+        Control.AddOptionPercentSlider(CCVars.UiWindowOpacity, UiWindowOpacitySlider, min: 0.75f, max: 1f);
 
         _chatTranslationEnabledOption.ImmediateValueChanged += UpdateChatTranslationLanguageSelectorState;
         _lobbyBackgroundModeOption.ImmediateValueChanged += UpdateLobbyBackgroundSelectorVisibility;
@@ -132,6 +133,7 @@ public sealed partial class MiscTab : Control, ILocalizedControl
         DropDownLobbyAnimatedBackground.Title = Loc.GetString("ui-options-lobby-animated-background");
         LobbyPanelOpacitySlider.Title = Loc.GetString("ui-options-lobby-panel-opacity");
         CustomizationPanelOpacitySlider.Title = Loc.GetString("ui-options-customization-panel-opacity");
+        UiWindowOpacitySlider.Title = Loc.GetString("ui-options-ui-window-opacity");
         ChatTranslationEnabledCheckBox.Text = Loc.GetString("ui-options-chat-translation-enabled");
         DiscordRich.Text = Loc.GetString("ui-options-discordrich");
         ShowOocPatronColor.Text = Loc.GetString("ui-options-show-ooc-patron-color");
@@ -241,8 +243,10 @@ public sealed partial class MiscTab : Control, ILocalizedControl
             new(string.Empty, Loc.GetString("ui-options-lobby-background-auto")),
         };
 
-        foreach (var proto in _prototypeManager.EnumeratePrototypes<LobbyBackgroundPrototype>()
-                     .OrderBy(GetBackgroundDisplayName))
+        var backgrounds = _prototypeManager.EnumeratePrototypes<LobbyBackgroundPrototype>().ToList();
+        backgrounds.Sort((a, b) => CompareBackgroundDisplayNames(GetBackgroundDisplayName(a), GetBackgroundDisplayName(b)));
+
+        foreach (var proto in backgrounds)
         {
             if (animated && proto.BackgroundGif == null)
                 continue;
@@ -254,6 +258,45 @@ public sealed partial class MiscTab : Control, ILocalizedControl
         }
 
         return options;
+    }
+
+    private static int CompareBackgroundDisplayNames(string left, string right)
+    {
+        var leftHasNumber = TrySplitTrailingNumber(left, out var leftPrefix, out var leftNumber);
+        var rightHasNumber = TrySplitTrailingNumber(right, out var rightPrefix, out var rightNumber);
+
+        if (leftHasNumber &&
+            rightHasNumber &&
+            string.Equals(leftPrefix, rightPrefix, StringComparison.CurrentCultureIgnoreCase))
+        {
+            var prefixCompare = string.Compare(leftPrefix, rightPrefix, StringComparison.CurrentCultureIgnoreCase);
+            if (prefixCompare != 0)
+                return prefixCompare;
+
+            return leftNumber.CompareTo(rightNumber);
+        }
+
+        return string.Compare(left, right, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private static bool TrySplitTrailingNumber(string value, out string prefix, out int number)
+    {
+        var splitIndex = value.Length;
+
+        while (splitIndex > 0 && char.IsDigit(value[splitIndex - 1]))
+        {
+            splitIndex--;
+        }
+
+        if (splitIndex == value.Length || !int.TryParse(value[splitIndex..], out number))
+        {
+            prefix = value;
+            number = 0;
+            return false;
+        }
+
+        prefix = value[..splitIndex];
+        return true;
     }
 
     private string GetBackgroundDisplayName(LobbyBackgroundPrototype proto)

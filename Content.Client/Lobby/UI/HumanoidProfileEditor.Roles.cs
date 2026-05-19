@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
+using Content.Client.Stylesheets;
 using Content.Shared.Clothing;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -16,6 +17,9 @@ namespace Content.Client.Lobby.UI;
 
 public sealed partial class HumanoidProfileEditor
 {
+    private static readonly Color JobGroupHeaderBackground = Color.FromHex("#181B22");
+    private static readonly Color JobGroupHeaderBorder = Color.FromHex("#6E5A2F");
+    private static readonly Color JobGroupHeaderText = Color.FromHex("#E2C160");
 
     /// <summary>
     /// Temporary override of their selected job, used to preview roles.
@@ -61,7 +65,11 @@ public sealed partial class HumanoidProfileEditor
         _activeLoadoutCollection = null;
     }
 
-    private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
+    private void OpenLoadout(
+        JobPrototype? jobProto,
+        RoleLoadout roleLoadout,
+        RoleLoadoutPrototype roleLoadoutProto,
+        LoadoutWindowSection section)
     {
         CloseLoadoutWindow();
         var collection = IoCManager.Instance;
@@ -74,10 +82,19 @@ public sealed partial class HumanoidProfileEditor
         _activeLoadout = roleLoadout;
         _activeLoadoutSession = session;
         _activeLoadoutCollection = collection;
+        var titleLocKey = section == LoadoutWindowSection.Armament
+            ? "loadout-window-title-armament"
+            : "loadout-window-title-loadout";
 
-        _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, _playerManager.LocalSession, collection)
+        _loadoutWindow = new LoadoutWindow(
+            Profile,
+            roleLoadout,
+            roleLoadoutProto,
+            _playerManager.LocalSession,
+            collection,
+            section)
         {
-            Title = Loc.GetString("loadout-window-title-loadout", ("job", $"{jobProto?.LocalizedName}")),
+            Title = Loc.GetString(titleLocKey, ("job", $"{jobProto?.LocalizedName}")),
         };
 
         // Refresh the buttons etc.
@@ -182,19 +199,7 @@ public sealed partial class HumanoidProfileEditor
                     });
                 }
 
-                category.AddChild(new PanelContainer
-                {
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#464966") },
-                    Children =
-                        {
-                            new Label
-                            {
-                                Text = Loc.GetString("humanoid-profile-editor-department-jobs-label",
-                                    ("departmentName", departmentName)),
-                                Margin = new Thickness(5f, 0, 0, 0)
-                            }
-                        }
-                });
+                category.AddChild(CreateJobCategoryHeader(departmentName));
 
                 _jobCategories[department.ID] = category;
                 JobList.AddChild(category);
@@ -212,6 +217,7 @@ public sealed partial class HumanoidProfileEditor
                 {
                     Orientation = LayoutOrientation.Horizontal,
                 };
+                Control? loadoutControl = null;
 
                 var selector = new RequirementsSelector()
                 {
@@ -266,51 +272,148 @@ public sealed partial class HumanoidProfileEditor
                     SetDirty();
                 };
 
-                var loadoutWindowBtn = new Button()
-                {
-                    Text = Loc.GetString("loadout-window"),
-                    HorizontalAlignment = HAlignment.Right,
-                    VerticalAlignment = VAlignment.Center,
-                    Margin = new Thickness(3f, 3f, 0f, 0f),
-                };
-
                 var collection = IoCManager.Instance!;
                 var protoManager = collection.Resolve<IPrototypeManager>();
 
-                // If no loadout found then disabled button
                 if (!protoManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var roleLoadoutProto))
                 {
-                    loadoutWindowBtn.Disabled = true;
+                    loadoutControl = CreateLoadoutButton("loadout-window", null, enabled: false);
                 }
-                // else
                 else
                 {
-                    loadoutWindowBtn.OnPressed += args =>
+                    var hasEquipmentGroups = LoadoutWindow.HasVisibleGroups(roleLoadoutProto, protoManager, LoadoutWindowSection.Equipment);
+                    var hasArmamentGroups = LoadoutWindow.HasVisibleGroups(roleLoadoutProto, protoManager, LoadoutWindowSection.Armament);
+
+                    if (hasEquipmentGroups || hasArmamentGroups)
                     {
-                        RoleLoadout? loadout = null;
-
-                        // Clone so we don't modify the underlying loadout.
-                        Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out loadout);
-                        loadout = loadout?.Clone();
-
-                        if (loadout == null)
-                        {
-                            loadout = new RoleLoadout(roleLoadoutProto.ID);
-                            loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
-                        }
-
-                        OpenLoadout(job, loadout, roleLoadoutProto);
-                    };
+                        loadoutControl = CreateLoadoutButtonCluster(
+                            job,
+                            roleLoadoutProto,
+                            hasEquipmentGroups,
+                            hasArmamentGroups);
+                    }
                 }
 
                 _jobPriorities.Add((job.ID, selector));
                 jobContainer.AddChild(selector);
-                jobContainer.AddChild(loadoutWindowBtn);
+                if (loadoutControl != null)
+                    jobContainer.AddChild(loadoutControl);
                 category.AddChild(jobContainer);
             }
         }
 
         UpdateJobPriorities();
+    }
+
+    private PanelContainer CreateJobCategoryHeader(string departmentName)
+    {
+        return new PanelContainer
+        {
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = JobGroupHeaderBackground,
+                BorderColor = JobGroupHeaderBorder.WithAlpha(0.8f),
+                BorderThickness = new Thickness(0f, 0f, 0f, 1f),
+            },
+            Margin = new Thickness(0f, 0f, 0f, 3f),
+            Children =
+            {
+                new Label
+                {
+                    Text = Loc.GetString(
+                        "humanoid-profile-editor-department-jobs-label",
+                        ("departmentName", departmentName)),
+                    Margin = new Thickness(5f, 0f, 0f, 0f),
+                    FontColorOverride = JobGroupHeaderText,
+                }
+            }
+        };
+    }
+
+    private Control CreateLoadoutButtonCluster(
+        JobPrototype jobProto,
+        RoleLoadoutPrototype roleLoadoutProto,
+        bool hasEquipmentGroups,
+        bool hasArmamentGroups)
+    {
+        if (hasEquipmentGroups && !hasArmamentGroups)
+        {
+            return CreateLoadoutButton(
+                "loadout-window",
+                () => OpenFilteredLoadout(jobProto, roleLoadoutProto, LoadoutWindowSection.Equipment));
+        }
+
+        if (hasArmamentGroups && !hasEquipmentGroups)
+        {
+            return CreateLoadoutButton(
+                "loadout-window-armament",
+                () => OpenFilteredLoadout(jobProto, roleLoadoutProto, LoadoutWindowSection.Armament));
+        }
+
+        var cluster = new BoxContainer
+        {
+            Orientation = LayoutOrientation.Horizontal,
+            HorizontalAlignment = HAlignment.Right,
+            VerticalAlignment = VAlignment.Center,
+            Margin = new Thickness(3f, 3f, 0f, 0f),
+            SeparationOverride = 0,
+        };
+
+        cluster.AddChild(CreateLoadoutButton(
+            "loadout-window",
+            () => OpenFilteredLoadout(jobProto, roleLoadoutProto, LoadoutWindowSection.Equipment),
+            StyleClass.ButtonOpenRight));
+
+        cluster.AddChild(CreateLoadoutButton(
+            "loadout-window-armament",
+            () => OpenFilteredLoadout(jobProto, roleLoadoutProto, LoadoutWindowSection.Armament),
+            StyleClass.ButtonOpenLeft));
+
+        return cluster;
+    }
+
+    private Button CreateLoadoutButton(
+        string locKey,
+        Action? onPressed,
+        string? styleClass = null,
+        bool enabled = true)
+    {
+        var button = new Button
+        {
+            Text = Loc.GetString(locKey),
+            Disabled = !enabled,
+            HorizontalAlignment = HAlignment.Right,
+            HorizontalExpand = false,
+            VerticalAlignment = VAlignment.Center,
+            Margin = new Thickness(3f, 3f, 0f, 0f),
+        };
+
+        if (!string.IsNullOrWhiteSpace(styleClass))
+            button.AddStyleClass(styleClass);
+
+        if (onPressed != null)
+            button.OnPressed += _ => onPressed();
+
+        return button;
+    }
+
+    private void OpenFilteredLoadout(
+        JobPrototype jobProto,
+        RoleLoadoutPrototype roleLoadoutProto,
+        LoadoutWindowSection section)
+    {
+        RoleLoadout? loadout = null;
+
+        Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(jobProto.ID), out loadout);
+        loadout = loadout?.Clone();
+
+        if (loadout == null)
+        {
+            loadout = new RoleLoadout(roleLoadoutProto.ID);
+            loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);
+        }
+
+        OpenLoadout(jobProto, loadout, roleLoadoutProto, section);
     }
 
     public void RefreshAntags()

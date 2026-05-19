@@ -608,10 +608,16 @@ public sealed partial class CCVars
         CVarDef.Create("wh40k.warp.mutation_max_severity", 0.75f, CVar.SERVERONLY);
 
     /// <summary>
-    ///     Enables the WH40K vignette fullscreen post-process shader.
+    ///     Enables the WH40K sprite wave post-shader for entities that opt into it.
     /// </summary>
-    public static readonly CVarDef<bool> WH40KGrimdarkShaderEnabled =
-        CVarDef.Create("wh40k.grimdark_shader_enabled", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+    public static readonly CVarDef<bool> WH40KWaveShaderEnabled =
+        CVarDef.Create("wh40k.wave_shader_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    ///     Enables the WH40K fullscreen post-process pass for additive lighting and falloff shaping.
+    /// </summary>
+    public static readonly CVarDef<bool> WH40KPostProcessEnabled =
+        CVarDef.Create("wh40k.post_process_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     ///     Account-level cap for WH40K player meta progression. 0 means no cap.

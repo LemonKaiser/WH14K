@@ -831,6 +831,9 @@ public sealed partial class WH40KCommandNodeSystem
 
     private TeamAliveSnapshot BuildTeamAliveSnapshot(string teamId)
     {
+        if (_teamRule.TryGetTeamAliveSnapshot(teamId, out var activeAlive, out var activeTotal))
+            return new TeamAliveSnapshot(activeAlive, activeTotal);
+
         var alive = 0;
         var total = 0;
 

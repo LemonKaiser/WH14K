@@ -29,11 +29,9 @@ public sealed class RoadmapUIController : UIController
         if (_config.GetCVar(CCVars.InfoLinksDiscord) is { Length: > 0 } discordLink)
         {
             _window.DiscordButton.Visible = true;
-            _window.DiscordButton.StyleClasses.Add("negative");
             _window.DiscordButton.OnPressed += _ => _uriOpener.OpenUri(discordLink);
         }
 
-        _window.CreditsButton.StyleClasses.Add("negative");
         _window.CreditsButton.OnPressed += _ =>
         {
             if (_creditsWindow?.IsOpen == true)

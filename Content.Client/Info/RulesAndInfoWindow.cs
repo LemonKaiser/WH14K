@@ -1,13 +1,13 @@
 using System.Numerics;
+using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.EscapeMenu;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.ContentPack;
 
 namespace Content.Client.Info
 {
-    public sealed class RulesAndInfoWindow : DefaultWindow
+    public sealed class RulesAndInfoWindow : FancyWindow
     {
         [Dependency] private readonly IResourceManager _resourceManager = default!;
 

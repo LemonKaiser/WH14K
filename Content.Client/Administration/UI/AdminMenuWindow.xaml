@@ -1,13 +1,16 @@
-<DefaultWindow
+<controls:FancyWindow
     xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:adminTab="clr-namespace:Content.Client.Administration.UI.Tabs.AdminTab"
     xmlns:adminbusTab="clr-namespace:Content.Client.Administration.UI.Tabs.AdminbusTab"
     xmlns:atmosTab="clr-namespace:Content.Client.Administration.UI.Tabs.AtmosTab"
     xmlns:tabs="clr-namespace:Content.Client.Administration.UI.Tabs"
     xmlns:playerTab="clr-namespace:Content.Client.Administration.UI.Tabs.PlayerTab"
     xmlns:objectsTab="clr-namespace:Content.Client.Administration.UI.Tabs.ObjectsTab"
-    xmlns:panic="clr-namespace:Content.Client.Administration.UI.Tabs.PanicBunkerTab">
-    <TabContainer Name="MasterTabContainer">
+    xmlns:panic="clr-namespace:Content.Client.Administration.UI.Tabs.PanicBunkerTab"
+    ShowBackgroundLogo="True"
+    BackgroundLogoTexturePath="/Textures/Interface/Nano/adeptus-administratum.svg.96dpi.png">
+    <TabContainer Name="MasterTabContainer" Margin="10">
         <adminTab:AdminTab Name="AdminTabControl" Access="Public" />
         <adminbusTab:AdminbusTab Name="AdminbusTabControl" Access="Public" />
         <atmosTab:AtmosTab Name="AtmosTabControl" Access="Public" />
@@ -17,4 +20,4 @@
         <playerTab:PlayerTab Name="PlayerTabControl" Access="Public" />
         <objectsTab:ObjectsTab Name="ObjectsTabControl" Access="Public" />
     </TabContainer>
-</DefaultWindow>
+</controls:FancyWindow>

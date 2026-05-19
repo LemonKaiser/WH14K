@@ -1,0 +1,314 @@
+- type: htnCompound
+  id: WH40KWaveDefenceAdvanceCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickLaneTargetOperator
+            targetKey: WH40KWaveMovementTargetCoordinates
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyBoolEqualsPrecondition
+              key: WH40KWaveMovementRole
+              value: true
+          operator: !type:MoveToOperator
+            shutdownState: TaskFinished
+            pathfindInPlanning: false
+            removeKeyOnFinish: true
+            targetKey: WH40KWaveMovementTargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MovementRange
+
+- type: htnCompound
+  id: WH40KWaveDefenceMeleeAttackTargetCompound
+  branches:
+    - preconditions:
+        - !type:KeyBoolEqualsPrecondition
+          key: WH40KWavePlayerCombatRole
+          value: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWavePlayerTarget
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            brakeMaxVelocity: null
+            targetKey: WH40KWavePlayerTargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: WH40KWavePlayerTarget
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWavePlayerTarget
+            - !type:TargetInRangePrecondition
+              targetKey: WH40KWavePlayerTarget
+              rangeKey: MeleeRange
+
+- type: htnCompound
+  id: WH40KWaveDefenceObjectiveMeleeAttackTargetCompound
+  branches:
+    - preconditions:
+        - !type:KeyBoolEqualsPrecondition
+          key: WH40KWaveObjectiveCombatRole
+          value: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWaveObjectiveTarget
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            brakeMaxVelocity: null
+            targetKey: WH40KWaveObjectiveTargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: WH40KWaveObjectiveTarget
+            targetCoordinatesKey: WH40KWaveObjectiveTargetCoordinates
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWaveObjectiveTarget
+            - !type:TargetInRangePrecondition
+              targetKey: WH40KWaveObjectiveTarget
+              rangeKey: MeleeRange
+
+- type: htnCompound
+  id: WH40KWaveDefencePlayerMeleeCombatCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickPlayerTargetOperator
+            targetKey: WH40KWavePlayerTarget
+            targetCoordinatesKey: WH40KWavePlayerTargetCoordinates
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceMeleeAttackTargetCompound
+
+- type: htnCompound
+  id: WH40KWaveDefenceObjectiveMeleeAttackCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickObjectiveOperator
+            targetKey: WH40KWaveObjectiveTarget
+            targetCoordinatesKey: WH40KWaveObjectiveTargetCoordinates
+            maxDistance: 1.85
+            requireLineOfSight: false
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveMeleeAttackTargetCompound
+
+- type: htnCompound
+  id: WH40KWaveDefencePlayerGunAttackTargetCompound
+  branches:
+    - preconditions:
+        - !type:KeyBoolEqualsPrecondition
+          key: WH40KWavePlayerCombatRole
+          value: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: WH40KWavePlayerTargetCoordinates
+            pathfindKey: TargetPathfind
+            stopOnLineOfSight: true
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: AdjacentTile
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWavePlayerTarget
+          operator: !type:GunOperator
+            targetKey: WH40KWavePlayerTarget
+
+- type: htnCompound
+  id: WH40KWaveDefenceObjectiveGunAttackTargetCompound
+  branches:
+    - preconditions:
+        - !type:KeyBoolEqualsPrecondition
+          key: WH40KWaveObjectiveCombatRole
+          value: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: WH40KWaveObjectiveTargetCoordinates
+            pathfindKey: TargetPathfind
+            stopOnLineOfSight: true
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: AdjacentTile
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: WH40KWaveObjectiveTarget
+          operator: !type:GunOperator
+            targetKey: WH40KWaveObjectiveTarget
+
+- type: htnCompound
+  id: WH40KWaveDefencePlayerInnateRangedCombatCompound
+  branches:
+    - preconditions:
+        - !type:GunAmmoPrecondition
+          minPercent: 0.001
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickPlayerTargetOperator
+            targetKey: WH40KWavePlayerTarget
+            targetCoordinatesKey: WH40KWavePlayerTargetCoordinates
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerGunAttackTargetCompound
+
+- type: htnCompound
+  id: WH40KWaveDefenceObjectiveRangedAttackCompound
+  branches:
+    - preconditions:
+        - !type:GunAmmoPrecondition
+          minPercent: 0.001
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickObjectiveOperator
+            targetKey: WH40KWaveObjectiveTarget
+            targetCoordinatesKey: WH40KWaveObjectiveTargetCoordinates
+            maxDistance: 10.5
+            requireLineOfSight: false
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveGunAttackTargetCompound
+
+- type: htnCompound
+  id: WH40KWaveDefencePlayerRangedCombatCompound
+  branches:
+    - preconditions:
+        - !type:ActiveHandComponentPrecondition
+          components:
+            - type: Gun
+        - !type:GunAmmoPrecondition
+          minPercent: 0.001
+        - !type:NeedToRackBoltPrecondition
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:RackBoltOperator
+    - preconditions:
+        - !type:ActiveHandComponentPrecondition
+          components:
+            - type: Gun
+        - !type:WieldedPrecondition
+          wielded: false
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WieldOperator
+    - preconditions:
+        - !type:GunAmmoPrecondition
+          minPercent: 0.001
+      tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerInnateRangedCombatCompound
+    - preconditions:
+        - !type:ActiveHandComponentPrecondition
+          components:
+            - type: Gun
+          invert: true
+      tasks:
+        - !type:HTNCompoundTask
+          task: PickupGunCompound
+    - preconditions:
+        - !type:ActiveHandComponentPrecondition
+          components:
+            - type: Gun
+        - !type:GunAmmoPrecondition
+          maxPercent: 0.001
+      tasks:
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:ActiveHandEntityPrecondition
+          operator: !type:DropOperator
+
+- type: htnCompound
+  id: WH40KWaveDefenceAIProfileSimpleSwarm
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerInnateRangedCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerMeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveRangedAttackCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveMeleeAttackCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAdvanceCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveDefenceAIProfileAdvancedHumanoidConcept
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerRangedCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefencePlayerMeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveRangedAttackCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceObjectiveMeleeAttackCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAdvanceCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: WH40KWaveDefenceSimpleMeleeHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAIProfileSimpleSwarm
+
+- type: htnCompound
+  id: WH40KWaveDefenceSimpleRangedHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAIProfileSimpleSwarm
+
+- type: htnCompound
+  id: WH40KWaveDefenceAdvancedHumanoidHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAIProfileAdvancedHumanoidConcept
+
+- type: htnCompound
+  id: WH40KWaveDefenceSimpleHumanoidHostileCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceAIProfileAdvancedHumanoidConcept

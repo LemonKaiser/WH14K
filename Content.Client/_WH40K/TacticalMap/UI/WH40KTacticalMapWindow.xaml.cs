@@ -22,6 +22,20 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
     [Dependency] private readonly IEntityManager _entMan = default!;
 
     private const float LeftRailWidth = 308f;
+    private static readonly Color AccentBorderBrightColor = Color.FromHex("#D7B65A".AsSpan());
+    private static readonly Color AccentBorderSoftColor = Color.FromHex("#4A3A22".AsSpan());
+    private static readonly Color OriginalSuccessPanelColor = Color.FromHex("#203227".AsSpan());
+    private static readonly Color OriginalSuccessBorderColor = Color.FromHex("#63A77A".AsSpan());
+    private static readonly Color OriginalViewOnlyPanelColor = Color.FromHex("#20313A".AsSpan());
+    private static readonly Color OriginalViewOnlyBorderColor = Color.FromHex("#6EA2C7".AsSpan());
+    private static readonly Color OriginalLocalOnlyPanelColor = Color.FromHex("#2E2526".AsSpan());
+    private static readonly Color OriginalLocalOnlyBorderColor = Color.FromHex("#A57A7A".AsSpan());
+    private static readonly Color OriginalPendingPanelColor = Color.FromHex("#26314A".AsSpan());
+    private static readonly Color OriginalPendingBorderColor = Color.FromHex("#7FA0D8".AsSpan());
+    private static readonly Color OriginalRemotePanelColor = Color.FromHex("#3A2E1D".AsSpan());
+    private static readonly Color OriginalRemoteBorderColor = Color.FromHex("#D5A356".AsSpan());
+    private static readonly Color OriginalDirtyPanelColor = Color.FromHex("#40311A".AsSpan());
+    private static readonly Color OriginalDirtyBorderColor = Color.FromHex("#C6A45A".AsSpan());
 
     private readonly List<WH40KTacticalMapSignalEntry> _signalEntries = new();
     private readonly List<(ContainerButton Button, Color Color)> _colorButtons = new();
@@ -327,7 +341,7 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
         CurrentColorPreview.PanelOverride = new StyleBoxFlat
         {
             BackgroundColor = color,
-            BorderColor = Color.White,
+            BorderColor = AccentBorderBrightColor,
             BorderThickness = new Thickness(1),
         };
 
@@ -357,8 +371,8 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
             SyncBadgeLabel.Text = Loc.GetString("wh40k-tactical-map-sync-badge-view");
             DraftBadgeLabel.Text = string.Empty;
             SyncBadge.PanelOverride = CreateBadgeStyle(
-                Color.FromHex("#20313A".AsSpan()),
-                Color.FromHex("#6EA2C7".AsSpan()));
+                OriginalViewOnlyPanelColor,
+                OriginalViewOnlyBorderColor);
             return;
         }
 
@@ -396,24 +410,24 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
                     : Loc.GetString("wh40k-tactical-map-draft-badge-saved");
 
         SyncBadge.PanelOverride = CreateBadgeStyle(
-            canSave ? Color.FromHex("#203227".AsSpan()) : Color.FromHex("#2E2526".AsSpan()),
-            canSave ? Color.FromHex("#63A77A".AsSpan()) : Color.FromHex("#A57A7A".AsSpan()));
+            canSave ? OriginalSuccessPanelColor : OriginalLocalOnlyPanelColor,
+            canSave ? OriginalSuccessBorderColor : OriginalLocalOnlyBorderColor);
 
         DraftBadge.PanelOverride = CreateBadgeStyle(
             savePending
-                ? Color.FromHex("#26314A".AsSpan())
+                ? OriginalPendingPanelColor
                 : remoteDirty
-                    ? Color.FromHex("#3A2E1D".AsSpan())
+                    ? OriginalRemotePanelColor
                     : dirty
-                        ? Color.FromHex("#40311A".AsSpan())
-                        : Color.FromHex("#203327".AsSpan()),
+                        ? OriginalDirtyPanelColor
+                        : OriginalSuccessPanelColor,
             savePending
-                ? Color.FromHex("#7FA0D8".AsSpan())
+                ? OriginalPendingBorderColor
                 : remoteDirty
-                    ? Color.FromHex("#D5A356".AsSpan())
+                    ? OriginalRemoteBorderColor
                     : dirty
-                        ? Color.FromHex("#C6A45A".AsSpan())
-                        : Color.FromHex("#63A77A".AsSpan()));
+                        ? OriginalDirtyBorderColor
+                        : OriginalSuccessBorderColor);
     }
 
     private void ConfigureAnnotationMode(bool canAnnotate)
@@ -509,7 +523,7 @@ public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedCont
         return new StyleBoxFlat
         {
             BackgroundColor = Color.Transparent,
-            BorderColor = selected ? Color.White : Color.FromHex("#243545".AsSpan()),
+            BorderColor = selected ? AccentBorderBrightColor : AccentBorderSoftColor,
             BorderThickness = new Thickness(borderThickness),
             ContentMarginLeftOverride = inset,
             ContentMarginTopOverride = inset,

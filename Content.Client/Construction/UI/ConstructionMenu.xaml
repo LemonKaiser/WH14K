@@ -1,5 +1,5 @@
-<DefaultWindow xmlns="https://spacestation14.io"
-               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
     <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="6" SeparationOverride="6">
             <PanelContainer Name="HeaderPanel">
@@ -97,4 +97,4 @@
             </BoxContainer>
         </BoxContainer>
     </PanelContainer>
-</DefaultWindow>
+</controls:FancyWindow>

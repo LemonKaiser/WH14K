@@ -47,6 +47,9 @@ public sealed class WH40KTacticalMapControl : Control
     private const float CursorCoordinatesMargin = 10f;
     private const float CursorCoordinatesPadding = 6f;
     private static readonly Color TacticalBlackoutColor = Color.Black;
+    private static readonly Color TacticalPanelColor = Color.FromHex("#08090D".AsSpan());
+    private static readonly Color TacticalPanelBorderStrongColor = Color.FromHex("#6A5530".AsSpan());
+    private static readonly Color TacticalWarmTextColor = Color.FromHex("#E6DEC7".AsSpan());
 
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IClyde _clyde = default!;
@@ -901,13 +904,14 @@ public sealed class WH40KTacticalMapControl : Control
         var boxSize = new Vector2(
             textSize.X + CursorCoordinatesPadding * 2f,
             textSize.Y + CursorCoordinatesPadding * 2f);
+        var desiredTopLeft = _lastPointerPixel + new Vector2(14f, -(boxSize.Y + 14f));
         var topLeft = new Vector2(
-            mapRect.Right - boxSize.X - CursorCoordinatesMargin,
-            mapRect.Bottom - boxSize.Y - CursorCoordinatesMargin);
+            Math.Clamp(desiredTopLeft.X, mapRect.Left + CursorCoordinatesMargin, mapRect.Right - boxSize.X - CursorCoordinatesMargin),
+            Math.Clamp(desiredTopLeft.Y, mapRect.Top + CursorCoordinatesMargin, mapRect.Bottom - boxSize.Y - CursorCoordinatesMargin));
         var box = UIBox2.FromDimensions(topLeft, boxSize);
 
-        handle.DrawRect(box, Color.FromHex("#0B121A".AsSpan()).WithAlpha(0.86f), true);
-        handle.DrawRect(box, Color.FromHex("#324459".AsSpan()).WithAlpha(0.95f), false);
+        handle.DrawRect(box, TacticalPanelColor.WithAlpha(0.92f), true);
+        handle.DrawRect(box, TacticalPanelBorderStrongColor.WithAlpha(0.98f), false);
         handle.DrawString(
             _detailFont,
             topLeft + new Vector2(CursorCoordinatesPadding + 1f, CursorCoordinatesPadding + 1f),
@@ -917,7 +921,7 @@ public sealed class WH40KTacticalMapControl : Control
             _detailFont,
             topLeft + new Vector2(CursorCoordinatesPadding, CursorCoordinatesPadding),
             text,
-            Color.FromHex("#D7E2EE".AsSpan()));
+            TacticalWarmTextColor);
     }
 
     private void DrawFog(DrawingHandleScreen handle, ViewState view, Box2 bounds)

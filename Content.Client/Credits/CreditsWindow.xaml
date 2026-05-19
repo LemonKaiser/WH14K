@@ -1,7 +1,8 @@
-﻿<DefaultWindow xmlns="https://spacestation14.io"
-               Title="{Loc 'credits-window-title'}"
-               SetSize="650 650">
-    <TabContainer Name="MasterTabContainer">
+<ui:CreditsWindow xmlns="https://spacestation14.io"
+                  xmlns:ui="clr-namespace:Content.Client.Credits"
+                  Title="{Loc 'credits-window-title'}"
+                  SetSize="650 650">
+    <TabContainer Name="MasterTabContainer" Margin="10 10 10 10">
         <ScrollContainer Name="Ss14ContributorsTab"
                          HScrollEnabled="False">
             <BoxContainer Name="Ss14ContributorsContainer"
@@ -33,4 +34,4 @@
                           Margin="2 2 0 0" />
         </ScrollContainer>
     </TabContainer>
-</DefaultWindow>
+</ui:CreditsWindow>

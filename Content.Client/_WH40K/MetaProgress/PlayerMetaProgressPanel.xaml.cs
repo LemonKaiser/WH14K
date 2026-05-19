@@ -15,6 +15,10 @@ public sealed partial class PlayerMetaProgressPanel : PanelContainer
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     private const int DefaultPreviewLevelCap = 40;
+    private static readonly Color PanelBackground = Color.FromHex("#14171D");
+    private static readonly Color PanelBorder = Color.FromHex("#4E4124");
+    private static readonly Color BadgeBackground = Color.FromHex("#1B1A14");
+    private static readonly Color BadgeBorder = Color.FromHex("#7B6430");
 
     public PlayerMetaProgressPanel()
     {
@@ -107,10 +111,21 @@ public sealed partial class PlayerMetaProgressPanel : PanelContainer
 
     private void ApplyStyles()
     {
+        PanelOverride = new StyleBoxFlat
+        {
+            BackgroundColor = PanelBackground,
+            BorderColor = PanelBorder,
+            BorderThickness = new Thickness(1),
+            ContentMarginTopOverride = 8,
+            ContentMarginBottomOverride = 8,
+            ContentMarginLeftOverride = 10,
+            ContentMarginRightOverride = 10,
+        };
+
         LevelBadgeContainer.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#3A3D54"),
-            BorderColor = Color.FromHex("#70789A"),
+            BackgroundColor = BadgeBackground,
+            BorderColor = BadgeBorder,
             BorderThickness = new Thickness(1),
         };
     }

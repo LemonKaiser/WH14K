@@ -1,0 +1,24 @@
+- type: entityTable
+  id: WH40KWaveDefenceXenoMeleeLight
+  table: !type:GroupSelector
+    children:
+    - id: MobXeno
+      weight: 1
+    - id: MobXenoRunner
+      weight: 3
+
+- type: entityTable
+  id: WH40KWaveDefenceXenoMeleeHeavy
+  table: !type:GroupSelector
+    children:
+    - id: MobXenoDrone
+      weight: 2
+    - id: MobXenoPraetorian
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceXenoRanged
+  table: !type:GroupSelector
+    children:
+    - id: MobXenoSpitter
+      weight: 1

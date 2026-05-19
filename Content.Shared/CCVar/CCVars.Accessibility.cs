@@ -68,6 +68,13 @@ public sealed partial class CCVars
         CVarDef.Create("accessibility.lobby_customization_panel_opacity", 0.85f, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    ///     General FancyWindow background opacity for themed UI windows like settings and admin menus.
+    ///     Goes from 0.75 (up to 25% transparent) to 1 (fully opaque)
+    /// </summary>
+    public static readonly CVarDef<float> UiWindowOpacity =
+        CVarDef.Create("accessibility.ui_window_opacity", 0.95f, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
     ///     A generic toggle for various visual effects that are color sensitive.
     ///     As of 2/16/24, only applies to progress bar colors.
     /// </summary>

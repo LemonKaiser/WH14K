@@ -1,8 +1,9 @@
-<DefaultWindow
+<ui:FancyWindow
     xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     Title="{Loc ban-panel-title}" MinSize="410 500">
-    <BoxContainer Orientation="Vertical">
+    <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="4">
         <TabContainer Name="Tabs" VerticalExpand="True">
             <!-- Basic info -->
             <BoxContainer Orientation="Vertical" HorizontalExpand="True">
@@ -47,4 +48,4 @@
         </TabContainer>
         <Button Name="SubmitButton" Text="{Loc ban-panel-submit}" HorizontalExpand="True" />
     </BoxContainer>
-</DefaultWindow>
+</ui:FancyWindow>

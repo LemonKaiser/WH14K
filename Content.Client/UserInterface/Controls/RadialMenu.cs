@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client._WH40K.Command;
 using Content.Shared.Input;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -420,10 +421,10 @@ public class RadialMenuButtonWithSector : RadialMenuButton, IRadialMenuItemWithS
     private bool _isWholeCircle;
     private Vector2? _parentCenter;
 
-    private Color _backgroundColorSrgb = Color.ToSrgb(new Color(70, 73, 102, 128));
-    private Color _hoverBackgroundColorSrgb = Color.ToSrgb(new Color(87, 91, 127, 128));
-    private Color _borderColorSrgb = Color.ToSrgb(new Color(173, 216, 230, 70));
-    private Color _hoverBorderColorSrgb = Color.ToSrgb(new Color(87, 91, 127, 128));
+    private Color _backgroundColorSrgb = Color.ToSrgb(Color.FromHex("#11131ACC"));
+    private Color _hoverBackgroundColorSrgb = Color.ToSrgb(Color.FromHex("#1A1D25E0"));
+    private Color _borderColorSrgb = Color.ToSrgb(Color.FromHex("#6A5530AA"));
+    private Color _hoverBorderColorSrgb = Color.ToSrgb(Color.FromHex("#C9A94CCC"));
 
     /// <summary>
     /// Marker, that controls if border of segment should be rendered. Is false by default.
@@ -479,7 +480,7 @@ public class RadialMenuButtonWithSector : RadialMenuButton, IRadialMenuItemWithS
     /// Color of separator lines.
     /// Separator lines are used to visually separate sector of radial menu items.
     /// </summary>
-    public Color SeparatorColor { get; set; } = new Color(128, 128, 128, 128);
+    public Color SeparatorColor { get; set; } = WH40KCommandUiStyles.StrongBorder.WithAlpha(0.55f);
 
     /// <inheritdoc />
     float IRadialMenuItemWithSector.AngleSectorFrom

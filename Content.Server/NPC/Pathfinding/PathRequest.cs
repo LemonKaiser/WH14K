@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Shared.NPC;
@@ -21,7 +20,6 @@ public abstract class PathRequest
     public List<PathPoly> Polys = new();
 
     public bool Started = false;
-    public TimeSpan EnqueuedAt = TimeSpan.Zero;
 
     #region Pathfinding state
 
@@ -35,9 +33,9 @@ public abstract class PathRequest
     #region Data
 
     public readonly PathFlags Flags;
-    public readonly PathCostProfile Profile;
     public readonly int CollisionLayer;
     public readonly int CollisionMask;
+    public readonly HashSet<PathPolyKey> AvoidPolys;
 
     #endregion
 
@@ -47,14 +45,21 @@ public abstract class PathRequest
         int layer,
         int mask,
         CancellationToken cancelToken,
-        PathCostProfile profile = PathCostProfile.Default)
+        IReadOnlyCollection<PathPolyKey>? avoidPolys = null)
     {
         Start = start;
         Flags = flags;
-        Profile = profile;
         CollisionLayer = layer;
         CollisionMask = mask;
+        AvoidPolys = avoidPolys != null
+            ? new HashSet<PathPolyKey>(avoidPolys)
+            : new HashSet<PathPolyKey>();
         Tcs = new TaskCompletionSource<PathResult>(cancelToken);
+    }
+
+    public bool IsPolyAvoided(PathPoly poly)
+    {
+        return AvoidPolys.Contains(PathPolyKey.FromPoly(poly));
     }
 }
 
@@ -75,7 +80,7 @@ public sealed class AStarPathRequest : PathRequest
         int layer,
         int mask,
         CancellationToken cancelToken,
-        PathCostProfile profile = PathCostProfile.Default) : base(start, flags, layer, mask, cancelToken, profile)
+        IReadOnlyCollection<PathPolyKey>? avoidPolys = null) : base(start, flags, layer, mask, cancelToken, avoidPolys)
     {
         Distance = distance;
         End = end;
@@ -102,7 +107,7 @@ public sealed class BFSPathRequest : PathRequest
         int layer,
         int mask,
         CancellationToken cancelToken,
-        PathCostProfile profile = PathCostProfile.Default) : base(start, flags, layer, mask, cancelToken, profile)
+        IReadOnlyCollection<PathPolyKey>? avoidPolys = null) : base(start, flags, layer, mask, cancelToken, avoidPolys)
         {
             ExpansionRange = expansionRange;
             ExpansionLimit = expansionLimit;

@@ -3,7 +3,6 @@ using Content.Shared.Ghost;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Projectiles;
 using Content.Shared.Teleportation.Components;
 using Content.Shared.Weapons.Misc;
 using Content.Shared.Verbs;
@@ -235,17 +234,11 @@ public abstract class SharedPortalSystem : EntitySystem
         var arrivalSound = CompOrNull<PortalComponent>(targetEntity)?.ArrivalSound ?? ent.Comp.ArrivalSound;
         var departureSound = ent.Comp.DepartureSound;
 
-        // Some special cased stuff: projectiles should stop ignoring shooter when they enter a portal, to avoid
-        // stacking 500 bullets in between 2 portals and instakilling people--you'll just hit yourself instead
-        // (as expected)
-        if (TryComp<ProjectileComponent>(subject, out var projectile))
-        {
-            projectile.IgnoreShooter = false;
-        }
-
         LogTeleport(ent, subject, Transform(subject).Coordinates, target);
 
         _transform.SetCoordinates(subject, target);
+        var teleported = new TeleportedEvent();
+        RaiseLocalEvent(subject, ref teleported);
 
         if (!playSound)
             return;
@@ -285,3 +278,9 @@ public abstract class SharedPortalSystem : EntitySystem
     {
     }
 }
+
+/// <summary>
+/// Raised on an entity after it has been teleported through a portal.
+/// </summary>
+[ByRefEvent]
+public readonly record struct TeleportedEvent;

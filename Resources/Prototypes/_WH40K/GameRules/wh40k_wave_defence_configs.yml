@@ -1,0 +1,28 @@
+- type: wh40kWaveDefenceConfig
+  id: WH40KWaveDefenceConfigMvpImperium
+  mode: Fixed
+  defendingTeamId: Imperium
+  attackingTeamId: Heretics
+  preparationDurationSeconds: 20
+  intermissionDurationSeconds: 10
+  lateJoinDuringWaveQueuesUntilPreparation: true
+  respawnUsesReinforcementMarkers: true
+  finalWaveNumber: 3
+  countCritAsAlive: true
+  minimumRequiredAttackLanes: 1
+  teamStartingPoints: 20
+  frontPointsPerKill: 1
+  baseLevelThresholds: [120, 300, 600, 1000, 1500, 2200, 3100, 4200]
+  economyPreparationMultiplier: 1
+  economyAssaultMultiplier: 2
+  economyApocalypseMultiplier: 3
+  reinforcementCurveDurationMinSeconds: 3600
+  reinforcementCurveDurationMaxSeconds: 10800
+  reinforcementCurveFallbackApocalypseSeconds: 6600
+  reinforcementCurveBaseMultiplier: 1
+  reinforcementCurveScale: 1.25
+  reinforcementCurveExponent: 2
+  waveProfiles:
+  - WH40KWaveDefenceWave01
+  - WH40KWaveDefenceWave02
+  - WH40KWaveDefenceWave03

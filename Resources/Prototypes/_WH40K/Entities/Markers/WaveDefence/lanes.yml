@@ -1,0 +1,343 @@
+- type: entity
+  id: WH40KWaveDefenceLaneWaypoint
+  parent: MarkerBase
+  name: WaveDefence Lane Waypoint
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Waypoint
+    order: 0
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: DodgerBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneWaypointA
+  parent: MarkerBase
+  name: WaveDefence Lane Waypoint A
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Waypoint
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: DodgerBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneWaypointB
+  parent: MarkerBase
+  name: WaveDefence Lane Waypoint B
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-b
+    pointType: Waypoint
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: DeepSkyBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneWaypointC
+  parent: MarkerBase
+  name: WaveDefence Lane Waypoint C
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-c
+    pointType: Waypoint
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: RoyalBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneRally
+  parent: MarkerBase
+  name: WaveDefence Lane Rally
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Rally
+    order: 0
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: green
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneRallyA
+  parent: MarkerBase
+  name: WaveDefence Lane Rally A
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Rally
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: green
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneRallyB
+  parent: MarkerBase
+  name: WaveDefence Lane Rally B
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-b
+    pointType: Rally
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: green
+      color: DeepSkyBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneRallyC
+  parent: MarkerBase
+  name: WaveDefence Lane Rally C
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-c
+    pointType: Rally
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: green
+      color: RoyalBlue
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneFallback
+  parent: MarkerBase
+  name: WaveDefence Lane Fallback
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Fallback
+    order: 0
+    fallbackAnchor: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: Gold
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneFallbackA
+  parent: MarkerBase
+  name: WaveDefence Lane Fallback A
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Fallback
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: Gold
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneFallbackB
+  parent: MarkerBase
+  name: WaveDefence Lane Fallback B
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-b
+    pointType: Fallback
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: Khaki
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneFallbackC
+  parent: MarkerBase
+  name: WaveDefence Lane Fallback C
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-c
+    pointType: Fallback
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/teg_arrow.rsi
+    layers:
+    - state: arrow
+      color: Goldenrod
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneBreach
+  parent: MarkerBase
+  name: WaveDefence Lane Breach
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Breach
+    order: 0
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneBreachA
+  parent: MarkerBase
+  name: WaveDefence Lane Breach A
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Breach
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneBreachB
+  parent: MarkerBase
+  name: WaveDefence Lane Breach B
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-b
+    pointType: Breach
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: OrangeRed
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneBreachC
+  parent: MarkerBase
+  name: WaveDefence Lane Breach C
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-c
+    pointType: Breach
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: Firebrick
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneSiege
+  parent: MarkerBase
+  name: WaveDefence Lane Siege
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Siege
+    order: 0
+    fallbackAnchor: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: Gold
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneSiegeA
+  parent: MarkerBase
+  name: WaveDefence Lane Siege A
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-a
+    pointType: Siege
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: Gold
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneSiegeB
+  parent: MarkerBase
+  name: WaveDefence Lane Siege B
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-b
+    pointType: Siege
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: Khaki
+      shader: unshaded
+
+- type: entity
+  id: WH40KWaveDefenceLaneSiegeC
+  parent: MarkerBase
+  name: WaveDefence Lane Siege C
+  suffix: WH40K
+  components:
+  - type: WH40KWaveLanePoint
+    laneId: lane-c
+    pointType: Siege
+    fallbackAnchor: true
+    autoOrder: true
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    layers:
+    - state: red
+      color: Goldenrod
+      shader: unshaded

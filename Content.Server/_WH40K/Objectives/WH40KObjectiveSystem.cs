@@ -31,7 +31,7 @@ public sealed class WH40KObjectiveSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly TriggerSystem _trigger = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly IGameTiming _timing = default!;

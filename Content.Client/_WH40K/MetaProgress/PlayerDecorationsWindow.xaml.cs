@@ -29,6 +29,16 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow, ILocalizedCon
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IResourceCache _resources = default!;
+    private static readonly Color SummaryBackground = Color.FromHex("#1B1A14");
+    private static readonly Color SummaryBorder = Color.FromHex("#7B6430");
+    private static readonly Color PreviewBackground = Color.FromHex("#11141A");
+    private static readonly Color PreviewBorder = Color.FromHex("#4E4124");
+    private static readonly Color SelectedBackground = Color.FromHex("#231D12");
+    private static readonly Color SelectedBorder = Color.FromHex("#B38E39");
+    private static readonly Color UnlockedBackground = Color.FromHex("#1A1D24");
+    private static readonly Color UnlockedBorder = Color.FromHex("#7B6430");
+    private static readonly Color LockedBackground = Color.FromHex("#161920");
+    private static readonly Color LockedBorder = Color.FromHex("#4B4129");
 
     private static readonly Direction[] GhostPreviewDirections =
     {
@@ -327,8 +337,8 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow, ILocalizedCon
             VerticalExpand = true,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = Color.FromHex("#232632"),
-                BorderColor = Color.FromHex("#5D6588"),
+                BackgroundColor = PreviewBackground,
+                BorderColor = PreviewBorder,
                 BorderThickness = new Thickness(1),
                 ContentMarginTopOverride = 6,
                 ContentMarginBottomOverride = 6,
@@ -1084,15 +1094,15 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow, ILocalizedCon
     {
         SummaryProgressHighlight.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#3A3F57"),
-            BorderColor = Color.FromHex("#7D88BA"),
+            BackgroundColor = SummaryBackground,
+            BorderColor = SummaryBorder,
             BorderThickness = new Thickness(1),
         };
 
         AccountLevelHighlight.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#343852"),
-            BorderColor = Color.FromHex("#6975A8"),
+            BackgroundColor = SummaryBackground,
+            BorderColor = SummaryBorder,
             BorderThickness = new Thickness(1),
         };
     }
@@ -1102,19 +1112,19 @@ public sealed partial class PlayerDecorationsWindow : FancyWindow, ILocalizedCon
         if (selected)
         {
             return (
-                Color.FromHex("#24402A"),
-                Color.FromHex("#4F9A60"));
+                SelectedBackground,
+                SelectedBorder);
         }
 
         if (unlocked)
         {
             return (
-                Color.FromHex("#2F3446"),
-                Color.FromHex("#6570A0"));
+                UnlockedBackground,
+                UnlockedBorder);
         }
 
         return (
-            Color.FromHex("#30323A"),
-            Color.FromHex("#6A6D79"));
+            LockedBackground,
+            LockedBorder);
     }
 }

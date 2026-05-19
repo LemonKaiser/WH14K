@@ -320,11 +320,6 @@ public sealed partial class NPCBlackboard : IEnumerable<KeyValuePair<string, obj
     public const string NavClimb = "NavClimb";
 
     /// <summary>
-    /// Optional explicit path cost profile override (`default`, `assault`, `breach`, `safe`).
-    /// </summary>
-    public const string NavCostProfile = "NavCostProfile";
-
-    /// <summary>
     /// Default key storage for a movement pathfind.
     /// </summary>
     public const string PathfindKey = "MovementPathfind";
@@ -344,71 +339,6 @@ public sealed partial class NPCBlackboard : IEnumerable<KeyValuePair<string, obj
     /// A configurable target that's ordered by external sources.
     /// </summary>
     public const string CurrentOrderedTarget = "CurrentOrderedTarget";
-
-    /// <summary>
-    /// Temporary obstacle target on the route to the currently ordered objective.
-    /// </summary>
-    public const string CurrentObjectiveBlockerTarget = "CurrentObjectiveBlockerTarget";
-
-    /// <summary>
-    /// Enables squad target-coordination helpers in utility selection.
-    /// </summary>
-    public const string WaveCoordinationEnabled = "WaveCoordinationEnabled";
-
-    /// <summary>
-    /// Marks this NPC as a wave-defense role participant.
-    /// </summary>
-    public const string WaveRoleEnabled = "WaveRoleEnabled";
-
-    /// <summary>
-    /// Enables sapper-first mine handling helpers.
-    /// </summary>
-    public const string WaveMineHandlingEnabled = "WaveMineHandlingEnabled";
-
-    /// <summary>
-    /// Enables spawn-without-gear acquire/equip flow.
-    /// </summary>
-    public const string WaveLoadoutAcquireEnabled = "WaveLoadoutAcquireEnabled";
-
-    /// <summary>
-    /// Enables weather shelter pivot/return behavior.
-    /// </summary>
-    public const string WaveWeatherShelterEnabled = "WaveWeatherShelterEnabled";
-
-    /// <summary>
-    /// Runtime marker for active shelter behavior.
-    /// </summary>
-    public const string WaveShelterActive = "WaveShelterActive";
-
-    /// <summary>
-    /// Enables service logistics micro-jobs (carry/open/restock).
-    /// </summary>
-    public const string WaveServiceEnabled = "WaveServiceEnabled";
-
-    /// <summary>
-    /// Enables role-gated engineering/deploy helpers (for example mortar placement).
-    /// </summary>
-    public const string WaveDeployEnabled = "WaveDeployEnabled";
-
-    /// <summary>
-    /// Enables influence-point capture/defense behavior for wave roles.
-    /// </summary>
-    public const string WaveInfluenceEnabled = "WaveInfluenceEnabled";
-
-    /// <summary>
-    /// Enables enemy team objective assault behavior for wave roles.
-    /// </summary>
-    public const string WaveObjectiveEnabled = "WaveObjectiveEnabled";
-
-    /// <summary>
-    /// Enables collective wave-director order layer for this NPC role.
-    /// </summary>
-    public const string WaveDirectorEnabled = "WaveDirectorEnabled";
-
-    /// <summary>
-    /// Current macro order token assigned by wave director.
-    /// </summary>
-    public const string WaveDirectorOrder = "WaveDirectorOrder";
 
     public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
     {

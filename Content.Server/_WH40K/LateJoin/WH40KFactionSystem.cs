@@ -38,7 +38,7 @@ public sealed class WH40KFactionSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattleRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
 
     private readonly Dictionary<NetUserId, string> _lobbySelections = new();
     private readonly Dictionary<NetUserId, PendingLateJoinSelection> _lateJoinSelections = new();

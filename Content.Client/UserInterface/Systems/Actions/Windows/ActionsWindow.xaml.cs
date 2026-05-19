@@ -2,11 +2,12 @@
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
+using Content.Client.UserInterface.Controls;
 
 namespace Content.Client.UserInterface.Systems.Actions.Windows;
 
 [GenerateTypedNameReferences]
-public sealed partial class ActionsWindow : DefaultWindow
+public sealed partial class ActionsWindow : FancyWindow
 {
     public const string StyleClassActionSearchBox = "actionSearchBox";
 

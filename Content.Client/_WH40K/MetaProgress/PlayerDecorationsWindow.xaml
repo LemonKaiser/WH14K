@@ -5,7 +5,7 @@
                 SetSize="1000 640">
     <Control>
         <BoxContainer Orientation="Vertical" Margin="10 10 10 10">
-            <lobby:HighlightedContainer>
+            <lobby:HighlightedContainer UseUiWindowOpacity="True">
                 <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True">
                     <Label Name="MenuHeaderLabel" Text="{Loc w40k-decs-menu-header}" StyleClasses="LabelHeadingBigger" />
                     <BoxContainer Orientation="Horizontal">
@@ -35,7 +35,7 @@
 
             <Control MinHeight="8" />
 
-            <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True">
+            <lobby:HighlightedContainer HorizontalExpand="True" VerticalExpand="True" UseUiWindowOpacity="True">
                 <ScrollContainer VerticalExpand="True">
                     <BoxContainer Name="CardsList" Orientation="Vertical" SeparationOverride="8" />
                 </ScrollContainer>

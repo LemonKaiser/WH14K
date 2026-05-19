@@ -58,6 +58,9 @@
     layers:
     - state: base
       map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: WH40KWaveShader
+    speed: 2.2
+    dis: 2.8
   - type: Icon
     sprite: _WH40K/StrategicPoints/flag/t0.rsi
     state: base
@@ -214,6 +217,9 @@
     layers:
     - state: base
       map: [ enum.WH40KStrategicPointVisualLayers.Base ]
+  - type: WH40KWaveShader
+    speed: 2.4
+    dis: 3.0
   - type: Icon
     sprite: _WH40K/StrategicPoints/flag/imperium/t1.rsi
     state: base

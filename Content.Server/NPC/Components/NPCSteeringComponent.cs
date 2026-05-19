@@ -99,12 +99,14 @@ public sealed partial class NPCSteeringComponent : Component
     [ViewVariables(VVAccess.ReadWrite)] public float Range = 0.2f;
 
     /// <summary>
-    /// Whether to ignore pathing and just move directly to target.
+    /// Whether to ignore pathing and move directly to the target coordinates.
+    /// Useful for off-grid and different-grid movement.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public bool DirectMove = false;
 
     /// <summary>
-    /// Up to how fast can we be going before being considered in range, if not null.
+    /// Maximum speed that still counts as being "in range".
+    /// If null, velocity is ignored when evaluating arrival.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public float? InRangeMaxSpeed = null;
 
@@ -120,35 +122,36 @@ public sealed partial class NPCSteeringComponent : Component
     /// </summary>
     [ViewVariables] public int FailedPathCount;
 
-    /// <summary>
-    /// Earliest next time this NPC may request another path.
-    /// </summary>
-    [ViewVariables] public TimeSpan NextPathRequestTime = TimeSpan.Zero;
-
-    /// <summary>
-    /// Current retry backoff in seconds after repeated no-path outcomes.
-    /// </summary>
-    [ViewVariables] public float PathRequestBackoffSeconds = 0f;
-
-    /// <summary>
-    /// Amount of consecutive obstacle-policy failures inside the active failure window.
-    /// </summary>
-    [ViewVariables] public int ObstacleFailureCount = 0;
-
-    /// <summary>
-    /// Last time obstacle failure was recorded.
-    /// </summary>
-    [ViewVariables]
-    public TimeSpan LastObstacleFailureTime = TimeSpan.Zero;
-
-    /// <summary>
-    /// Alternating sign used for lane-rotation retry nudges.
-    /// </summary>
-    [ViewVariables] public int LaneRotateSign = 1;
-
     [ViewVariables] public SteeringStatus Status = SteeringStatus.Moving;
 
     [ViewVariables(VVAccess.ReadWrite)] public PathFlags Flags = PathFlags.None;
+
+    /// <summary>
+    /// Whether steering is currently blocked by an obstacle that can be handled
+    /// through interaction, prying, climbing, or smashing.
+    /// </summary>
+    [ViewVariables]
+    public bool ActionableObstacle;
+
+    /// <summary>
+    /// The obstacle currently being handled, when known.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid ActiveObstacle = EntityUid.Invalid;
+
+    /// <summary>
+    /// Human-readable description of the current obstacle handling mode.
+    /// </summary>
+    [ViewVariables]
+    public string ActiveObstacleMode = string.Empty;
+
+    [DataField("lastObstacleSeenAt", customTypeSerializer: typeof(TimeOffsetSerializer))]
+    [AutoPausedField]
+    public TimeSpan LastObstacleSeenAt;
+
+    [DataField("lastObstacleProgressAt", customTypeSerializer: typeof(TimeOffsetSerializer))]
+    [AutoPausedField]
+    public TimeSpan LastObstacleProgressAt;
 
     /// <summary>
     /// If the NPC is using a do_after to clear an obstacle.

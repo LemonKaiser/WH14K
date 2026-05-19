@@ -21,7 +21,6 @@ public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStyles
     public override StyleRule[] GetRules(T sheet, object config)
     {
         IButtonConfig cfg = sheet;
-
         var buttonTex = sheet.GetTextureOr(cfg.BaseButtonPath, NanotrasenStylesheet.TextureRoot);
         var topButtonBase = new StyleBoxTexture
         {
@@ -51,30 +50,72 @@ public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStyles
 
         var rules = new List<StyleRule>
         {
+            CButton().Box(topButtonBase),
             CButton().Class(StyleClass.ButtonSquare).Box(topButtonSquare),
             CButton().Class(StyleClass.ButtonOpenLeft).Box(topButtonOpenLeft),
             CButton().Class(StyleClass.ButtonOpenRight).Box(topButtonOpenRight),
-            CButton().Box(StyleBoxHelpers.BaseStyleBox(sheet)),
             CButton()
                 .Class(StyleClass.ButtonOpenLeft)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.OpenLeftStyleBox(sheet)),
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonOpenLeft, ButtonVisualState.Normal)),
             CButton()
                 .Class(StyleClass.ButtonOpenRight)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.OpenRightStyleBox(sheet)),
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonOpenRight, ButtonVisualState.Normal)),
             CButton()
                 .Class(StyleClass.ButtonOpenBoth)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.SquareStyleBox(sheet)),
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal)),
             CButton()
                 .Class(StyleClass.ButtonSquare)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.SquareStyleBox(sheet)),
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal)),
+            CButton()
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonBase, ButtonVisualState.Normal)),
             E<Label>()
                 .Class(MenuButton.StyleClassLabelTopButton)
                 .Prop(Label.StylePropertyFont, sheet.BaseFont.GetFont(14, FontKind.Bold)),
             // new StyleProperty(Label.StylePropertyFont, notoSansDisplayBold14),
         };
 
-        ButtonSheetlet<T>.MakeButtonRules<MenuButton>(rules, cfg.ButtonPalette, null);
+        AddMenuButtonStateRules(rules, topButtonBase, null);
+        AddMenuButtonStateRules(rules, topButtonOpenLeft, StyleClass.ButtonOpenLeft);
+        AddMenuButtonStateRules(rules, topButtonOpenRight, StyleClass.ButtonOpenRight);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonSquare);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonOpenBoth);
 
         return rules.ToArray();
+    }
+
+    private static void AddMenuButtonStateRules(
+        List<StyleRule> rules,
+        StyleBoxTexture baseBox,
+        string? shapeClass)
+    {
+        rules.AddRange([
+            CButton().MaybeClass(shapeClass).PseudoNormal()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Normal)),
+            CButton().MaybeClass(shapeClass).PseudoHovered()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Hovered)),
+            CButton().MaybeClass(shapeClass).PseudoPressed()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Pressed)),
+            CButton().MaybeClass(shapeClass).PseudoDisabled()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Disabled)),
+        ]);
+    }
+
+    private static StyleBoxTexture MenuButtonStateBox(StyleBoxTexture baseBox, ButtonVisualState state)
+    {
+        var box = new StyleBoxTexture(baseBox);
+        box.Modulate = state switch
+        {
+            ButtonVisualState.Hovered => Color.FromHex("#F3E6BF"),
+            ButtonVisualState.Pressed => Color.FromHex("#D5BE86"),
+            ButtonVisualState.Disabled => Color.FromHex("#6A6458").WithAlpha(0.75f),
+            _ => Color.FromHex("#E3D2A5"),
+        };
+
+        return box;
     }
 }

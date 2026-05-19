@@ -25,13 +25,13 @@ public sealed class LineEditSheetlet<T> : Sheetlet<T> where T : PalettedStyleshe
             // TODO: Hardcoded colors bad, kill.
             E<LineEdit>()
                 .Class(LineEdit.StyleClassLineEditNotEditable)
-                .Prop("font-color", new Color(192, 192, 192)),
+                .Prop("font-color", sheet.SecondaryPalette.TextDark),
             E<LineEdit>()
                 .Pseudo(LineEdit.StylePseudoClassPlaceholder)
-                .Prop("font-color", Color.Gray),
+                .Prop("font-color", sheet.HighlightPalette.TextDark.WithAlpha(0.7f)),
             E<TextEdit>()
                 .Pseudo(TextEdit.StylePseudoClassPlaceholder)
-                .Prop("font-color", Color.Gray),
+                .Prop("font-color", sheet.HighlightPalette.TextDark.WithAlpha(0.7f)),
         ];
     }
 }

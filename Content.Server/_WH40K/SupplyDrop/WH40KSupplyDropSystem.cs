@@ -43,7 +43,7 @@ public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedRoofSystem _roof = default!;
     [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;

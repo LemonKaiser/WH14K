@@ -53,6 +53,7 @@ public abstract class CommonStylesheet : PalettedStylesheet, IButtonConfig, IWin
 
     ResPath IWindowConfig.WindowHeaderTexturePath => new("window_header.png");
     ResPath IWindowConfig.WindowHeaderAlertTexturePath => new("window_header_alert.png");
+    ResPath IWindowConfig.WindowCenterLogoPath => new("adeptus-mechanicus.svg.96dpi.png");
     ResPath IWindowConfig.WindowBackgroundPath => new("window_background.png");
     ResPath IWindowConfig.WindowBackgroundBorderedPath => new("window_background_bordered.png");
     ResPath IWindowConfig.TransparentWindowBackgroundBorderedPath => new("transparent_window_background_bordered.png");
@@ -70,7 +71,7 @@ public abstract class CommonStylesheet : PalettedStylesheet, IButtonConfig, IWin
     ResPath IButtonConfig.MonotoneOpenRightButtonPath => new("Monotone/monotone_button_open_right.svg.96dpi.png");
     ResPath IButtonConfig.MonotoneOpenBothButtonPath => new("Monotone/monotone_button_open_both.svg.96dpi.png");
 
-    ColorPalette IButtonConfig.ButtonPalette => PrimaryPalette with { PressedElement = PositivePalette.PressedElement };
+    ColorPalette IButtonConfig.ButtonPalette => Palettes.Button;
     ColorPalette IButtonConfig.PositiveButtonPalette => PositivePalette;
     ColorPalette IButtonConfig.NegativeButtonPalette => NegativePalette;
 

@@ -56,7 +56,7 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NavMapSystem _navMap = default!;
     [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<string, int> _presentTeamCounts = new(StringComparer.OrdinalIgnoreCase);

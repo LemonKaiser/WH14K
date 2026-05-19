@@ -43,6 +43,9 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
         };
         backgroundBox.SetPatchMargin(StyleBox.Margin.Horizontal | StyleBox.Margin.Bottom, 2);
         backgroundBox.SetExpandMargin(StyleBox.Margin.Horizontal | StyleBox.Margin.Bottom, 2);
+        var windowHeadingBackground = StyleBoxHelpers.OpenLeftStyleBox(sheet);
+        windowHeadingBackground.SetPadding(StyleBox.Margin.All, 0);
+        windowHeadingBackground.SetContentMarginOverride(StyleBox.Margin.All, 0);
         var borderedBackgroundBox = new StyleBoxTexture
         {
             Texture = sheet.GetTextureOr(windowCfg.WindowBackgroundBorderedPath, NanotrasenStylesheet.TextureRoot),
@@ -78,6 +81,18 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
             E()
                 .Class(StyleClass.BorderedWindowPanel)
                 .Panel(borderedBackgroundBox),
+            E<PanelContainer>()
+                .Class("WindowHeadingBackground")
+                .Prop(PanelContainer.StylePropertyPanel, windowHeadingBackground)
+                .Modulate(Palettes.Button.Element),
+            E<PanelContainer>()
+                .Class("WindowHeadingBackgroundLight")
+                .Prop(PanelContainer.StylePropertyPanel, windowHeadingBackground)
+                .Modulate(Palettes.Button.HoveredElement),
+            E<TextureRect>()
+                .Class(StyleClass.WindowCenterLogo)
+                .Prop(TextureRect.StylePropertyTexture, sheet.GetTextureOr(windowCfg.WindowCenterLogoPath, NanotrasenStylesheet.TextureRoot))
+                .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#8F8F8F")),
 
             // Close button
             E<TextureButton>()
@@ -87,19 +102,19 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
             E<TextureButton>()
                 .Class(DefaultWindow.StyleClassWindowCloseButton)
                 .PseudoNormal()
-                .Modulate(Palettes.Neutral.Element),
+                .Modulate(sheet.HighlightPalette.TextDark),
             E<TextureButton>()
                 .Class(DefaultWindow.StyleClassWindowCloseButton)
                 .PseudoHovered()
-                .Modulate(Palettes.Red.HoveredElement),
+                .Modulate(sheet.HighlightPalette.Text),
             E<TextureButton>()
                 .Class(DefaultWindow.StyleClassWindowCloseButton)
                 .PseudoPressed()
-                .Modulate(Palettes.Red.PressedElement),
+                .Modulate(sheet.NegativePalette.Text),
             E<TextureButton>()
                 .Class(DefaultWindow.StyleClassWindowCloseButton)
                 .PseudoDisabled()
-                .Modulate(Palettes.Red.DisabledElement),
+                .Modulate(sheet.SecondaryPalette.TextDark.WithAlpha(0.6f)),
 
             // Title
             E<Label>()
@@ -112,21 +127,21 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Prop(TextureButton.StylePropertyTexture,
                     sheet.GetTextureOr(iconCfg.HelpIconPath, NanotrasenStylesheet.TextureRoot))
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.Element),
+                .Prop(Control.StylePropertyModulateSelf, Palettes.Button.TextDark),
             E<TextureButton>()
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Pseudo(ContainerButton.StylePseudoClassHover)
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.HoveredElement),
+                .Prop(Control.StylePropertyModulateSelf, Palettes.Button.Text),
             E<TextureButton>()
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Pseudo(ContainerButton.StylePseudoClassPressed)
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.PressedElement),
+                .Prop(Control.StylePropertyModulateSelf, sheet.HighlightPalette.TextDark),
 
             // Footer
             E<Label>()
                 .Class("WindowFooterText") // TODO: hardcoding font
                 .Prop(Label.StylePropertyFont, sheet.BaseFont.GetFont(8))
-                .Prop(Label.StylePropertyFontColor, Color.FromHex("#757575")),
+                .Prop(Label.StylePropertyFontColor, sheet.HighlightPalette.TextDark.WithAlpha(0.75f)),
         ];
     }
 }

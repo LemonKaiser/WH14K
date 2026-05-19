@@ -32,10 +32,10 @@ public sealed partial class RoadmapItem : Control
             _itemState = value;
             _baseStateColor = _itemState switch
             {
-                RoadmapItemState.Planned => Color.FromHex("#A46C6C"),
-                RoadmapItemState.InProgress => Color.FromHex("#A89A66"),
-                RoadmapItemState.Complete => Color.FromHex("#6A9371"),
-                _ => Color.FromHex("#A46C6C")
+                RoadmapItemState.Planned => Color.FromHex("#B25B4E"),
+                RoadmapItemState.InProgress => Color.FromHex("#C4A14A"),
+                RoadmapItemState.Complete => Color.FromHex("#779260"),
+                _ => Color.FromHex("#B25B4E")
             };
 
             StateText.Text = _itemState switch

@@ -1,4 +1,5 @@
 using Content.Shared.NPC;
+using Robust.Shared.Physics;
 
 namespace Content.Server.NPC.Pathfinding;
 
@@ -40,13 +41,17 @@ public sealed partial class PathfindingSystem
 
     private float GetTileCost(PathRequest request, PathPoly start, PathPoly end)
     {
+        return GetTileCost(request.Flags, request.CollisionLayer, request.CollisionMask, start, end);
+    }
+
+    private float GetTileCost(
+        PathFlags flags,
+        int collisionLayer,
+        int collisionMask,
+        PathPoly start,
+        PathPoly end)
+    {
         var modifier = 1f;
-        var isHazard = (end.Data.Flags & PathfindingBreadcrumbFlag.Hazard) != 0x0;
-        var profile = request.Profile;
-        var doorScale = GetDoorPenaltyScale(profile);
-        var smashScale = GetSmashPenaltyScale(profile);
-        var climbScale = GetClimbPenaltyScale(profile);
-        var hazardScale = GetHazardPenaltyScale(profile);
 
         // TODO
         if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)
@@ -54,8 +59,8 @@ public sealed partial class PathfindingSystem
             return 0f;
         }
 
-        if ((request.CollisionLayer & end.Data.CollisionMask) != 0x0 ||
-            (request.CollisionMask & end.Data.CollisionLayer) != 0x0)
+        if ((collisionLayer & end.Data.CollisionMask) != 0x0 ||
+            (collisionMask & end.Data.CollisionLayer) != 0x0)
         {
             var isDoor = (end.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
             var isAccess = (end.Data.Flags & PathfindingBreadcrumbFlag.Access) != 0x0;
@@ -65,22 +70,22 @@ public sealed partial class PathfindingSystem
             // Door we should be able to open
             if (isDoor)
             {
-                if (!isAccess && (request.Flags & PathFlags.Interact) != 0x0)
-                    modifier += 0.5f * doorScale;
-                else if (isAccess && (request.Flags & PathFlags.Prying) != 0x0)
-                    modifier += 10f * doorScale;
+                if (!isAccess && (flags & PathFlags.Interact) != 0x0)
+                    modifier += 0.5f;
+                else if (isAccess && (flags & PathFlags.Prying) != 0x0)
+                    modifier += 10f;
+                else if ((flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
+                    modifier += 12f + end.Data.Damage / 10f;
                 else
-                    // Last ditch - try to bump the door if it's the only feasible option.
-                    modifier += 20f * doorScale;
+                    modifier += 20f;
             }
-            else if ((request.Flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
+            else if ((flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
             {
-                // Breaking stuff should be usually last resort, especially because we WILL try to punch walls.
-                modifier += (10f + end.Data.Damage / 10f) * smashScale;
+                modifier += 10f + end.Data.Damage / 10f;
             }
-            else if (isClimb && (request.Flags & PathFlags.Climbing) != 0x0)
+            else if (isClimb && (flags & PathFlags.Climbing) != 0x0)
             {
-                modifier += 0.5f * climbScale;
+                modifier += 0.5f;
             }
             else
             {
@@ -88,59 +93,49 @@ public sealed partial class PathfindingSystem
             }
         }
 
-        if (isHazard)
-        {
-            // Severe slow/damage contacts such as barbed wire should be avoided even when they
-            // don't fully block the tile. Keep them traversable as a last resort, but far costlier
-            // than a normal detour so squads stop choosing hazard strips as the "shortest" lane.
-            modifier += (16f + MathF.Min(12f, end.Data.Damage / 6f)) * hazardScale;
-        }
-
         return modifier * OctileDistance(end, start);
     }
 
-    private static float GetDoorPenaltyScale(PathCostProfile profile)
+    public float EstimatePathCost(EntityUid entity, IReadOnlyList<PathPoly> path, PathFlags flags)
     {
-        return profile switch
+        if (path.Count <= 1)
+            return 0f;
+
+        var layer = 0;
+        var mask = 0;
+        if (TryComp<FixturesComponent>(entity, out var fixtures))
+            (layer, mask) = _physics.GetHardCollision(entity, fixtures);
+
+        var total = 0f;
+        for (var i = 1; i < path.Count; i++)
         {
-            PathCostProfile.Assault => 0.78f,
-            PathCostProfile.Breach => 0.55f,
-            PathCostProfile.Safe => 1.35f,
-            _ => 1f,
-        };
+            total += GetTileCost(flags, layer, mask, path[i - 1], path[i]);
+        }
+
+        return total;
     }
 
-    private static float GetSmashPenaltyScale(PathCostProfile profile)
+    public List<float> BuildCumulativePathCosts(EntityUid entity, IReadOnlyList<PathPoly> path, PathFlags flags)
     {
-        return profile switch
-        {
-            PathCostProfile.Assault => 0.72f,
-            PathCostProfile.Breach => 0.45f,
-            PathCostProfile.Safe => 1.5f,
-            _ => 1f,
-        };
-    }
+        var costs = new List<float>(path.Count);
+        if (path.Count == 0)
+            return costs;
 
-    private static float GetClimbPenaltyScale(PathCostProfile profile)
-    {
-        return profile switch
-        {
-            PathCostProfile.Assault => 0.9f,
-            PathCostProfile.Breach => 0.82f,
-            PathCostProfile.Safe => 1.15f,
-            _ => 1f,
-        };
-    }
+        var layer = 0;
+        var mask = 0;
+        if (TryComp<FixturesComponent>(entity, out var fixtures))
+            (layer, mask) = _physics.GetHardCollision(entity, fixtures);
 
-    private static float GetHazardPenaltyScale(PathCostProfile profile)
-    {
-        return profile switch
+        var total = 0f;
+        costs.Add(0f);
+
+        for (var i = 1; i < path.Count; i++)
         {
-            PathCostProfile.Assault => 0.82f,
-            PathCostProfile.Breach => 0.9f,
-            PathCostProfile.Safe => 1.65f,
-            _ => 1f,
-        };
+            total += GetTileCost(flags, layer, mask, path[i - 1], path[i]);
+            costs.Add(total);
+        }
+
+        return costs;
     }
 
     #region Simplifier
@@ -212,4 +207,3 @@ public sealed partial class PathfindingSystem
 
     #endregion
 }
-

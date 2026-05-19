@@ -5,6 +5,9 @@
   - type: Sprite
     sprite: _WH40K/Objects/Misc/impflag.rsi
     state: icon
+  - type: WH40KWaveShader
+    speed: 2.8
+    dis: 3.2
   - type: Item
     sprite: _WH40K/Objects/Misc/impflag.rsi
     size: Normal
@@ -19,6 +22,9 @@
   - type: Sprite
     sprite: _WH40K/Objects/Misc/chaosflag.rsi
     state: icon
+  - type: WH40KWaveShader
+    speed: 2.8
+    dis: 3.2
   - type: Item
     sprite: _WH40K/Objects/Misc/chaosflag.rsi
     size: Normal

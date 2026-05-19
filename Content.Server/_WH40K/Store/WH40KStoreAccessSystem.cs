@@ -17,7 +17,7 @@ namespace Content.Server._WH40K.Store;
 /// </summary>
 public sealed class WH40KStoreAccessSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
 
