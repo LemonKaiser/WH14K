@@ -209,6 +209,12 @@ ent-ClothingHeadOfficerCyan = cyan officer's cap
 ent-ClothingHeadSgt = sergeant's cap
     .desc = The most ordinary cap, belonging to one of the sergeants.
 
+ent-WHPowerFist = Power Fist
+    .desc = A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
+
+ent-WHHereticPowerFist = Chaos Power Fist
+    .desc = A brutal powered gauntlet built for close assault. The locking grip keeps it on the wielder's hand even when they hit the deck.
+
 ent-ClothingHeadVet = beret
     .desc = Takes a Guardsman that belongs to a veteran or officer
 
@@ -1411,6 +1417,18 @@ ent-ClothingHeadHelmetAstartesChaos = Chaos Space Marine helmet
 
 ent-ClothingOuterArmorAstartesChaos = Chaos Space Marine power armour
     .desc = A corrupted suit of power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+
+ent-ClothingShoesBootsSlaanesh = Slaanesh Champion Boots
+    .desc = Exquisite boots, specially designed for the most sophisticated champions of Slaanesh
+
+ent-ClothingHeadSlaanesh = Slaanesh Champion Helmet
+    .desc = What a luxury! Especially for those who want to save face
+
+ent-ClothingUniformJumpsuitslaanesh = Champion of Slaanesh suit
+    .desc = A gorgeous purple suit, very expensive, exquisite, and decorated with everything you can and can't.
+
+ent-ClothingOuterArmorSlaaneshchampion =  Slaanesh Champion Armor
+    .desc = Strong, and most importantly, beautiful armor.
 
 ent-MobAstartesWH40KImperiumMk2 = Imperium Space Marine Mk II
 ent-MobAstartesWH40KImperiumMk4 = Imperium Space Marine Mk IV

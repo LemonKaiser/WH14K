@@ -53,7 +53,7 @@
   dummyEntity: WeaponChsStubShotgun
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 35
+    requiredLevel: 25
   equipment:
     suitstorage: WeaponChsStubShotgun
   storage:

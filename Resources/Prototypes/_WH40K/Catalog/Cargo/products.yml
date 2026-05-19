@@ -4,7 +4,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FlashlightLantern
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -14,7 +14,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingUniformJumpsuitGuardsman
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -24,7 +24,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingEyesHudGuard
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -34,7 +34,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingBackpackGuard
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -44,7 +44,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorFlakVestLight
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -54,7 +54,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: guardbelt
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -64,7 +64,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBox10mmLong
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -74,7 +74,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBoxPhosphor
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -84,7 +84,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBox10mm
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -94,7 +94,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBoxAutogun
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -104,7 +104,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MedkitFilled
-  cost: 1200
+  cost: 600
   category: cpcat-med
   group: WH40KImperiumMarket
 
@@ -114,7 +114,7 @@
     sprite: Objects/Specific/Medical/defib.rsi
     state: icon
   product: WH40KDefibrillator
-  cost: 4000
+  cost: 2000
   category: cpcat-med
   group: WH40KImperiumMarket
 
@@ -124,7 +124,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: CrateMaterialPlastic
-  cost: 2000
+  cost: 1000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -134,7 +134,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserLasgun
-  cost: 2500
+  cost: 1250
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -144,7 +144,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserLonglas
-  cost: 4000
+  cost: 2000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -154,7 +154,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FragGrenade
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -164,7 +164,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: KrakGrenade
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -174,7 +174,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltaGrenade
-  cost: 4000
+  cost: 2000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -184,7 +184,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubRifle
-  cost: 2500
+  cost: 1250
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -194,7 +194,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubSMG
-  cost: 100
+  cost: 50
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -204,7 +204,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStub3SMG
-  cost: 125
+  cost: 60
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -214,7 +214,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubPistol
-  cost: 75
+  cost: 30
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -226,7 +226,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
-  cost: 200
+  cost: 100
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -238,7 +238,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStabLMG
-  cost: 150
+  cost: 75
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -248,7 +248,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineCombatShotgun
-  cost: 175
+  cost: 80
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -260,7 +260,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubRifle
-  cost: 75
+  cost: 30
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -270,7 +270,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLethalshot
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -280,7 +280,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: Chainsword
-  cost: 6000
+  cost: 3000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -290,7 +290,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponRifleBolter
-  cost: 13000
+  cost: 6500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -302,7 +302,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineBolter
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -314,7 +314,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineBolterPistol
-  cost: 400
+  cost: 200
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -324,7 +324,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponPistolBolter
-  cost: 12000
+  cost: 6000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -334,7 +334,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: SpeedLoader11mm
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -344,7 +344,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: SpeedLoaderSerpenta
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -354,7 +354,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KHeavyBolter
-  cost: 17000
+  cost: 8500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -364,7 +364,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMagazineHeavyBolter
-  cost: 5000
+  cost: 2500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -374,7 +374,7 @@
     sprite: _WH40K/Objects/Weapons/Flamethrower/flamethrower.rsi
     state: icon
   product: FlameThrowerGun
-  cost: 17000
+  cost: 8500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -384,7 +384,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
     state: base
   product: FlameThrowerTank
-  cost: 5000
+  cost: 2500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -394,7 +394,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarKit
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -404,7 +404,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarShellHE
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -414,7 +414,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLauncherCadia
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -424,7 +424,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: GrenadeBlast
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -434,7 +434,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: GrenadeFrag
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -444,7 +444,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserPlasmagun
-  cost: 19000
+  cost: 9500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -454,7 +454,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmGunPowerCell
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -464,7 +464,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmPistolPowerCell
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -474,7 +474,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserMeltagun
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -484,7 +484,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 3400
+  cost: 1700
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -494,7 +494,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
     state: base
   product: WeaponHellgun
-  cost: 22000
+  cost: 11000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -504,7 +504,7 @@
     sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
     state: icon
   product: ClothingBackpackHellEnergy
-  cost: 6000
+  cost: 3000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -514,7 +514,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubSMG2
-  cost: 9000
+  cost: 4500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -524,7 +524,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubPistol
-  cost: 1000
+  cost: 500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -534,7 +534,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubSMG3
-  cost: 9000
+  cost: 4500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -546,7 +546,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubMG
-  cost: 13000
+  cost: 6500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -556,7 +556,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubShotgun
-  cost: 7000
+  cost: 3500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -568,7 +568,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubLMG
-  cost: 13000
+  cost: 6500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -578,7 +578,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLasgunPowerCell
-  cost: 1250
+  cost: 625
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -588,7 +588,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorFlakVest
-  cost: 1800
+  cost: 900
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -598,7 +598,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingHeadHelmetFlak
-  cost: 1200
+  cost: 600
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -608,7 +608,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadv.rsi
     state: icon
   product: ClothingOuterArmorAdvancedFlakVest
-  cost: 4200
+  cost: 2100
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -618,7 +618,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmetadv.rsi
     state: icon
   product: ClothingHeadHelmetFlakAdv
-  cost: 2600
+  cost: 1300
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -628,7 +628,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MedkitCombatFilled
-  cost: 6000
+  cost: 3000
   category: cpcat-med
   group: WH40KImperiumMarket
 
@@ -638,7 +638,7 @@
     sprite: Structures/Machines/cloning.rsi
     state: pod_0
   product: WH40KCrateImperiumCloningSuite
-  cost: 30000
+  cost: 15000
   category: cpcat-med
   group: WH40KImperiumMarket
 
@@ -648,7 +648,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MechSentinelBatteryAutogun
-  cost: 50000
+  cost: 25000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -658,7 +658,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
     state: base
   product: WH40KWeaponTurretImperium
-  cost: 22000
+  cost: 11000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -668,7 +668,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: mini_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumMini
-  cost: 18000
+  cost: 9000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -678,7 +678,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: dmr_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumDmr
-  cost: 28000
+  cost: 14000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -688,7 +688,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: shotgun_uac_sentry_handheld
   product: WH40KWeaponTurretImperiumShotgun
-  cost: 30000
+  cost: 15000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -698,7 +698,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulaimp.rsi
     state: multilas
   product: WH40KWeaponTurretImperiumLaser
-  cost: 34000
+  cost: 17000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -708,7 +708,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KInflatableCoverKitImperium
-  cost: 5500
+  cost: 2750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -718,7 +718,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBars
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -728,7 +728,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -738,7 +738,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeWarhammer
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -748,7 +748,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeSandbags
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -758,7 +758,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -768,7 +768,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: MaterialWH40KBarbedWire
-  cost: 2500
+  cost: 1250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -778,7 +778,7 @@
     sprite: Objects/Misc/landmine.rsi
     state: landmine
   product: WH40KDeployableMineKit
-  cost: 2000
+  cost: 1000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -788,7 +788,7 @@
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KMissionPinpointerKitImperium
-  cost: 6500
+  cost: 3250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -798,7 +798,7 @@
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KServoSkullMelta
-  cost: 7500
+  cost: 3750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -808,7 +808,7 @@
     sprite: _RMC14/Objects/Tools/intel_detector.rsi
     state: datadetector
   product: WH40KIntelDetectorImperium
-  cost: 7000
+  cost: 3500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -818,7 +818,7 @@
     sprite: Objects/Fun/whistles.rsi
     state: trench
   product: WH40KTacticalWhistleImperium
-  cost: 3500
+  cost: 1750
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -828,7 +828,7 @@
     sprite: Objects/Misc/flare.rsi
     state: icon
   product: WH40KSignalFlareImperium
-  cost: 4200
+  cost: 2100
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -838,7 +838,7 @@
     sprite: Objects/Tools/fulton.rsi
     state: extraction_pack
   product: WH40KTacticalFultonImperium
-  cost: 12000
+  cost: 6000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -848,7 +848,7 @@
     sprite: Objects/Tools/fulton.rsi
     state: extraction_pack
   product: Gorjet
-  cost: 20000
+  cost: 10000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -858,7 +858,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FlashlightLantern
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -868,7 +868,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingUniformJumpsuitCultist2
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -878,7 +878,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorChaosVest
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -888,7 +888,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingBackpackCULT1
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -898,7 +898,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: chaosbelt
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -908,7 +908,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBox10mmLong
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -918,7 +918,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBoxPhosphor
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -928,7 +928,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBox10mm
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -938,7 +938,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBoxAutogun
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -948,7 +948,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ChaosMedkitFilled
-  cost: 1250
+  cost: 625
   category: cpcat-med
   group: WH40KHereticsMarket
 
@@ -958,7 +958,7 @@
     sprite: Objects/Specific/Medical/defib.rsi
     state: icon
   product: WH40KDefibrillator
-  cost: 4000
+  cost: 2000
   category: cpcat-med
   group: WH40KHereticsMarket
 
@@ -968,7 +968,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: CrateMaterialPlastic
-  cost: 2000
+  cost: 1000
   category: cpcat-med
   group: WH40KHereticsMarket
 
@@ -978,7 +978,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponHereticLaserLasgun
-  cost: 2500
+  cost: 1250
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -988,7 +988,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserLonglas
-  cost: 4000
+  cost: 2000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -998,7 +998,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: FragGrenade
-  cost: 500
+  cost: 250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1008,7 +1008,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: KrakGrenade
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1018,7 +1018,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltaGrenade
-  cost: 4000
+  cost: 2000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1028,7 +1028,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubRifle
-  cost: 2500
+  cost: 1250
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1038,7 +1038,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ChaosMachete
-  cost: 6000
+  cost: 3000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1048,7 +1048,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubSMG
-  cost: 100
+  cost: 50
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1058,7 +1058,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStub3SMG
-  cost: 125
+  cost: 60
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1068,7 +1068,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineHevStubPistol
-  cost: 100
+  cost: 50
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1078,7 +1078,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubPistol
-  cost: 75
+  cost: 30
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1090,7 +1090,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
-  cost: 200
+  cost: 100
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1102,7 +1102,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStabLMG
-  cost: 150
+  cost: 75
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1112,7 +1112,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineCombatShotgun
-  cost: 175
+  cost: 80
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1124,7 +1124,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubRifle
-  cost: 75
+  cost: 30
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1134,7 +1134,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLethalshot
-  cost: 1500
+  cost: 750
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1144,7 +1144,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponChsStubSMG2
-  cost: 9000
+  cost: 4500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1154,7 +1154,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubSMG
-  cost: 1000
+  cost: 500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1164,7 +1164,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponChsStubSMG3
-  cost: 9000
+  cost: 4500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1176,7 +1176,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubMG
-  cost: 13000
+  cost: 6500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1186,7 +1186,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponChsStubShotgun
-  cost: 7000
+  cost: 3500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1198,7 +1198,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubLMG
-  cost: 13000
+  cost: 6500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1208,7 +1208,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponPistolBolter
-  cost: 12000
+  cost: 6000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1218,7 +1218,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: SpeedLoader11mm
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1228,7 +1228,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: SpeedLoaderSerpenta
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1238,7 +1238,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponPistolBolter
-  cost: 16000
+  cost: 8000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1250,7 +1250,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineBolter
-  cost: 800
+  cost: 400
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1262,7 +1262,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineBolterPistol
-  cost: 400
+  cost: 200
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1272,7 +1272,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KHeavyBolter
-  cost: 17000
+  cost: 8500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1282,7 +1282,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMagazineHeavyBolter
-  cost: 5000
+  cost: 2500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1292,7 +1292,7 @@
     sprite: _WH40K/Objects/Weapons/Flamethrower/chaos_flamethrower.rsi
     state: icon
   product: ChaosFlameThrowerGun
-  cost: 17000
+  cost: 8500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1302,7 +1302,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/flamethrowerCanister.rsi
     state: base
   product: FlameThrowerTank
-  cost: 5000
+  cost: 2500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1312,7 +1312,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarKit
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1322,7 +1322,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarShellHE
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1332,7 +1332,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLauncherChs
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1342,7 +1342,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: GrenadeBlast
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1352,7 +1352,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: GrenadeFrag
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1362,7 +1362,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserPlasmaPistol
-  cost: 19000
+  cost: 9500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1372,7 +1372,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmGunPowerCell
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1382,7 +1382,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmPistolPowerCell
-  cost: 3000
+  cost: 1500
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1392,7 +1392,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponLaserMeltagun
-  cost: 20000
+  cost: 10000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1402,7 +1402,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 3400
+  cost: 1700
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1412,7 +1412,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Battery/hellgun_mk2/hellgun_mk2.rsi
     state: base
   product: WeaponHellgun
-  cost: 22000
+  cost: 11000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1422,7 +1422,7 @@
     sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
     state: icon
   product: ClothingBackpackHellEnergy
-  cost: 6000
+  cost: 3000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1432,7 +1432,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLasgunPowerCell
-  cost: 1250
+  cost: 625
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1442,7 +1442,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorFlakVestHeretic
-  cost: 1800
+  cost: 900
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1452,7 +1452,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingHeadHelmetFlakCHAOS
-  cost: 1200
+  cost: 600
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1462,7 +1462,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
     state: icon
   product: ClothingOuterArmorAdvancedFlakVestHeretic
-  cost: 4200
+  cost: 2100
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1472,7 +1472,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
     state: icon
   product: ClothingHeadHelmetFlakAdvHeresy
-  cost: 2600
+  cost: 1300
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1482,7 +1482,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ChaosMedkitCombatFilled
-  cost: 6000
+  cost: 3000
   category: cpcat-med
   group: WH40KHereticsMarket
 
@@ -1492,7 +1492,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MechSentinelBatteryAutogun
-  cost: 50000
+  cost: 25000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1502,7 +1502,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
     state: base
   product: WH40KWeaponTurretHeretics
-  cost: 22000
+  cost: 11000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1512,7 +1512,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: mini_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsMini
-  cost: 18000
+  cost: 9000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1522,7 +1522,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: dmr_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsDmr
-  cost: 28000
+  cost: 14000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1532,7 +1532,7 @@
     sprite: _RMC14/Objects/Weapons/Sentries/rmc_sentry.rsi
     state: shotgun_uac_sentry_handheld
   product: WH40KWeaponTurretHereticsShotgun
-  cost: 30000
+  cost: 15000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1542,7 +1542,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Turrets/tarantulachaos.rsi
     state: multilas
   product: WH40KWeaponTurretHereticsLaser
-  cost: 34000
+  cost: 17000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1552,7 +1552,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KInflatableCoverKitHeretics
-  cost: 5500
+  cost: 2750
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1562,7 +1562,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBars
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1572,7 +1572,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1582,7 +1582,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeChaosGreen
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1592,7 +1592,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeChaosBlack
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1602,7 +1602,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeSandbags
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1612,7 +1612,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 1000
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1622,7 +1622,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: MaterialWH40KBarbedWire
-  cost: 2500
+  cost: 1250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1632,7 +1632,7 @@
     sprite: Objects/Misc/landmine.rsi
     state: landmine
   product: WH40KDeployableMineKit
-  cost: 2000
+  cost: 1000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1642,7 +1642,7 @@
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KMissionPinpointerKitHeretics
-  cost: 6500
+  cost: 3250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1652,7 +1652,7 @@
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   product: WH40KServoSkullMelta
-  cost: 7500
+  cost: 3750
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1662,7 +1662,7 @@
     sprite: _RMC14/Objects/Tools/intel_detector.rsi
     state: datadetector
   product: WH40KIntelDetectorHeretics
-  cost: 7000
+  cost: 3500
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1672,7 +1672,7 @@
     sprite: Objects/Fun/whistles.rsi
     state: trench
   product: WH40KTacticalWhistleHeretics
-  cost: 3500
+  cost: 1750
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1682,7 +1682,7 @@
     sprite: Objects/Misc/flare.rsi
     state: icon
   product: WH40KSignalFlareHeretics
-  cost: 4200
+  cost: 2100
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1692,7 +1692,7 @@
     sprite: Objects/Tools/fulton.rsi
     state: extraction_pack
   product: WH40KTacticalFultonHeretics
-  cost: 12000
+  cost: 6000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1702,6 +1702,6 @@
     sprite: Objects/Tools/fulton.rsi
     state: extraction_pack
   product: NecklaceChaosCultistReflectWeak
-  cost: 20000
+  cost: 10000
   category: cpcat-cgo
   group: WH40KHereticsMarket

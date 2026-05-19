@@ -177,7 +177,7 @@
   name: loadout-group-wh40k-imperial-line-eyes
   minLimit: 0
   loadouts:
-  - WH40KGuardsmanGlasses
+  - WH40KEyesGuard
 
 - type: loadoutGroup
   id: WH40KHereticLineEyes
@@ -287,15 +287,9 @@
   name: loadout-group-wh40k-imperial-logistics-head
   minLimit: 0
   loadouts:
-  - WH40KBandanaBrown
-  - WH40KCatachanBandana
-  - WH40KCatachanHeadband
   - WH40KCatachanBeret
-  - WH40KKriegHelmet
   - WH40KQuartermasterBeret
   - WH40KCommandBeret
-  - WH40KValhallanUshanka
-  - WH40KValhallanCap
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHonours
@@ -306,19 +300,16 @@
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
-  - WH40KImperialRainCloak
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsOuter
   name: loadout-group-wh40k-imperial-logistics-outer
   minLimit: 0
   loadouts:
-  - WH40KLightFlakArmor
   - WH40KMunitorumCoat
   - WH40KMunitorumGreatcoat
   - WH40KMunitorumRig
   - WH40KMunitorumVest
-  - WH40KValhallanCoat
 
 - type: loadoutGroup
   id: WH40KImperialSergeantHead
@@ -479,6 +470,16 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KWeaponStubRevolverLoadout15
+
+- type: loadoutGroup
+  id: WH40KImperialSegeantSidearm
+  name: loadout-group-wh40k-imperial-command-sidearm
+  loadouts:
+  - WH40KCommandLaspistolWillOfTheEmperor
+  - WH40KCommandBoltPistol
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponSergStubShotgunLoadout
 
 - type: loadoutGroup
   id: WH40KImperialColonelSidearm
@@ -487,7 +488,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
-  - WH40KWeaponStubRevolverLoadout25
+  - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
   id: WH40KPsykerForceStaff
@@ -522,14 +523,30 @@
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword
-  - WH40KSaber
-  - WH40KPowerFist
   - WH40KCrowbarKit
   - WH40KCombatKnifeKit
   - WH40KSurvivalKnifeKit
   - WH40KSapperShovelKit
   - WH40KTruncheonKit
   - WH40KKukriKnifeKit
+
+- type: loadoutGroup
+  id: WH40KChosenMelee
+  name: loadout-group-wh40k-sergeant-melee
+  minLimit: 0
+  loadouts:
+  - WH40KCommandChainsword
+  - WH40KChaosCrowbarKit
+  - WH40KChaosNailBoardKit
+  - WH40KAxeChaosKit
+  - WH40KChaosKnifeKit
+  - WH40KChaosclubKit
+  - WH40KChaosTrenchKnifeKit
+  - WH40KVraksHandBladeKit
+  - WH40KChaosSapperShovelKit
+  - WH40KChaosTruncheonKit
+  - WH40KChaosMacheteKit
+  - WH40KChaosSerpKit
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
@@ -729,7 +746,6 @@
   - WH40KChaosScarf
   - WH40KHeresyHelmet
   - WH40KBloodPactHelmet
-  - WH40KHeadKhorne
 
 - type: loadoutGroup
   id: WH40KHereticCommandUniform
@@ -738,6 +754,7 @@
   loadouts:
   - WH40KBloodPactUniform
   - WH40KSlaaneshUniform
+  - WH40KHeadSlaaneshsuit
 
 - type: loadoutGroup
   id: WH40KHereticCommandNecklace
@@ -785,6 +802,7 @@
   - WH40KBloodPactHelmet
   - WH40KHeadMauler
   - WH40KHeadKhorne
+  - WH40KHeadSlaanesh
 
 - type: loadoutGroup
   id: WH40KHereticChampionOuter
@@ -798,6 +816,7 @@
   - WH40KSlaaneshArmor
   - WH40KArmorKhorne
   - WH40KArmorTzeentchSerg
+  - WH40KArmorSlaaneshLiet
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
@@ -807,6 +826,7 @@
   - WH40KBloodPactBoots
   - WH40KBootsMauler
   - WH40KBootsKhorne
+  - WH40KBootsSlaanesh
 
 - type: loadoutGroup
   id: WH40KHeresiarchCultRaiment

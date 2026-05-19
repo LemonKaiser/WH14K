@@ -58,6 +58,7 @@
   id: JobGuardsman
   groups:
   - WH40KImperialLineHead
+  - WH40KImperialLineEyes
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
@@ -193,7 +194,7 @@
   - WH40KImperialCommandHands
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
-  - WH40KImperialCommandSidearm
+  - WH40KImperialSegeantSidearm
   - WH40KSergeantMelee
 
 - type: roleLoadout
@@ -366,7 +367,7 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
-  - WH40KHereticCommandMelee
+  - WH40KChosenMelee
   - WH40KHereticMainWeapon
   - WH40KHereticSergSecondaryWeapon
 

@@ -10,6 +10,16 @@
 
 - type: entity
   parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitslaanesh
+  suffix: WH40K, слаанеш, еретики
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/slaanesh.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/slaanesh.rsi
+
+- type: entity
+  parent: ClothingUniformBase
   id: ClothingUniformJumpsuitVoidsman
   suffix: WH40K, войдсмены
   components:
