@@ -44,7 +44,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorFlakVestLight
-  cost: 250
+  cost: 350
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -124,7 +124,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: CrateMaterialPlastic
-  cost: 1000
+  cost: 1900
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -226,7 +226,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
-  cost: 100
+  cost: 200
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -454,7 +454,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmGunPowerCell
-  cost: 1500
+  cost: 2200
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -484,7 +484,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 1700
+  cost: 3400
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -504,7 +504,7 @@
     sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
     state: icon
   product: ClothingBackpackHellEnergy
-  cost: 3000
+  cost: 3100
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -524,7 +524,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubPistol
-  cost: 500
+  cost: 550
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -578,7 +578,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLasgunPowerCell
-  cost: 625
+  cost: 1250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -878,7 +878,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: ClothingOuterArmorChaosVest
-  cost: 250
+  cost: 350
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -968,7 +968,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: CrateMaterialPlastic
-  cost: 1000
+  cost: 1900
   category: cpcat-med
   group: WH40KHereticsMarket
 
@@ -1090,7 +1090,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MagazineStubMG
-  cost: 100
+  cost: 200
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1154,7 +1154,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WeaponStubSMG
-  cost: 500
+  cost: 550
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1372,7 +1372,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: PlasmGunPowerCell
-  cost: 1500
+  cost: 2200
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1402,7 +1402,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: MeltPowerCell
-  cost: 1700
+  cost: 3400
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1422,7 +1422,7 @@
     sprite: _WH40K/Objects/Power/hellgunbackpack.rsi
     state: icon
   product: ClothingBackpackHellEnergy
-  cost: 3000
+  cost: 3100
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1432,7 +1432,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: BoxLasgunPowerCell
-  cost: 625
+  cost: 1250
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
