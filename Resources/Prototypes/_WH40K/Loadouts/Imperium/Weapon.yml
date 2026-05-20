@@ -190,3 +190,57 @@
     - MagazineStubRifle
     - MagazineStubRifle
     - MagazineStubRifle
+
+- type: loadout
+  id: WH40KWeaponStubmachinegun
+  dummyEntity: WeaponStubLMG
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  equipment:
+    suitstorage: WeaponStubLMG
+  storage:
+    belt:
+    - MagazineStabLMG
+    - MagazineStabLMG
+    - MagazineStabLMG
+
+- type: loadout
+  id: WH40KWeaponflamer
+  dummyEntity: FlameThrowerGun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    suitstorage: FlameThrowerGun
+  storage:
+    belt:
+    - FlameThrowerTank
+
+- type: loadout
+  id: WH40KWeaponplasma
+  dummyEntity: WeaponLaserPlasmagun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  equipment:
+    suitstorage: WeaponLaserPlasmagun
+  storage:
+    belt:
+    - PlasmGunPowerCell
+    - PlasmGunPowerCell
+    - PlasmGunPowerCell
+
+- type: loadout
+  id: WH40KWeaponmelta
+  dummyEntity: WeaponLaserMeltagun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    suitstorage: WeaponLaserMeltagun
+  storage:
+    belt:
+    - MeltPowerCell
+    - MeltPowerCell
+    - MeltPowerCell

@@ -215,7 +215,10 @@
   - WH40KWeaponLaserLasgunVossLoadout
   - WH40KWeaponLaserLonglasLoadout
   - WH40KWeaponLaserLasgunAccatranLoadout
-  - WH40KWeaponLaserLasgunKriegLoadout
+  - WH40KWeaponflamer
+  - WH40KWeaponStubmachinegun
+  - WH40KWeaponplasma
+  - WH40KWeaponmelta
 
 - type: loadoutGroup
   id: WH40KImperialMelee
