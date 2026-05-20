@@ -33038,52 +33038,6 @@ entities:
     - type: NavMap
     - type: TileHistory
       chunkHistory: {}
-  - uid: 4
-    mapInit: true
-    paused: true
-    components:
-    - type: MetaData
-      name: solution - tank
-    - type: Transform
-      parent: 3
-    - type: Solution
-      solution:
-        maxVol: 5000
-        reagents:
-        - data: []
-          ReagentId: Saline
-          Quantity: 1500
-        - data: []
-          ReagentId: Protein
-          Quantity: 2000
-        - data: []
-          ReagentId: Tricordrazine
-          Quantity: 1500
-    - type: ContainedSolution
-      container: 3
-  - uid: 6
-    mapInit: true
-    paused: true
-    components:
-    - type: MetaData
-      name: solution - tank
-    - type: Transform
-      parent: 5
-    - type: Solution
-      solution:
-        maxVol: 5000
-        reagents:
-        - data: []
-          ReagentId: Protein
-          Quantity: 1500
-        - data: []
-          ReagentId: Tricordrazine
-          Quantity: 2000
-        - data: []
-          ReagentId: Saline
-          Quantity: 1500
-    - type: ContainedSolution
-      container: 5
 - proto: AccordionInstrument
   entities:
   - uid: 7
@@ -73091,7 +73045,7 @@ entities:
     - type: Transform
       pos: 4.5,9.5
       parent: 2
-- proto: GenericTank
+- proto: WH40KVselechinTank
   entities:
   - uid: 3
     mapInit: true
@@ -73100,18 +73054,8 @@ entities:
     - type: MetaData
       name: имперский резервуар Вселечина
     - type: Transform
-      anchored: True
       pos: -145.5,73.5
       parent: 2
-    - type: Physics
-      bodyType: Static
-    - type: SolutionContainerManager
-      containers:
-      - tank
-    - type: ContainerContainer
-      containers:
-        solution@tank: !type:ContainerSlot
-          ent: 4
   - uid: 5
     mapInit: true
     paused: true
@@ -73119,18 +73063,8 @@ entities:
     - type: MetaData
       name: Еретический резервуар Вселечина
     - type: Transform
-      anchored: True
       pos: 120.5,50.5
       parent: 2
-    - type: Physics
-      bodyType: Static
-    - type: SolutionContainerManager
-      containers:
-      - tank
-    - type: ContainerContainer
-      containers:
-        solution@tank: !type:ContainerSlot
-          ent: 6
 - proto: GhostWarpPoint
   entities:
   - uid: 7028

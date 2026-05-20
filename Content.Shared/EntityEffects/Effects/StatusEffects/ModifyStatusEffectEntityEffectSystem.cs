@@ -53,13 +53,13 @@ public sealed partial class ModifyStatusEffect : BaseStatusEntityEffect<ModifySt
                 "entity-effect-guidebook-status-effect-indef",
                 ("chance", Probability),
                 ("type", Type),
-                ("key", prototype.Index(EffectProto).Name),
+                ("name", prototype.Index(EffectProto).Name),
                 ("delay", Delay.TotalSeconds))
             : Loc.GetString(
                 "entity-effect-guidebook-status-effect",
                 ("chance", Probability),
                 ("type", Type),
                 ("time", Time.Value.TotalSeconds),
-                ("key", prototype.Index(EffectProto).Name),
+                ("name", prototype.Index(EffectProto).Name),
                 ("delay", Delay.TotalSeconds));
 }

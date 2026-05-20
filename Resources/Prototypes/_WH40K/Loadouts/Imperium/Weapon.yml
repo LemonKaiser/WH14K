@@ -115,8 +115,8 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 30
   dummyEntity: WeaponStubRevolver
-  equipment:
-    pocket1: WeaponStubRevolver
+  inhand:
+  - WeaponStubRevolver
   storage:
     belt:
     - SpeedLoader11mm
@@ -128,8 +128,8 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 25
   dummyEntity: WeaponStubRevolver
-  equipment:
-    pocket1: WeaponStubRevolver
+  inhand:
+  - WeaponStubRevolver
   storage:
     belt:
     - SpeedLoader11mm
@@ -141,8 +141,8 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 20
   dummyEntity: WeaponStubRevolver
-  equipment:
-    pocket1: WeaponStubRevolver
+  inhand:
+  - WeaponStubRevolver
   storage:
     belt:
     - SpeedLoader11mm
@@ -154,8 +154,8 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 15
   dummyEntity: WeaponStubRevolver
-  equipment:
-    pocket1: WeaponStubRevolver
+  inhand:
+  - WeaponStubRevolver
   storage:
     belt:
     - SpeedLoader11mm

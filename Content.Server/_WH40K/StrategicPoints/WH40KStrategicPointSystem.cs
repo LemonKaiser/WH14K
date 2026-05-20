@@ -107,7 +107,11 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<WH40KStrategicPointAnchorComponent, MapInitEvent>(OnAnchorMapInit);
+        SubscribeLocalEvent<WH40KStrategicPointAnchorComponent, AnchorStateChangedEvent>(OnAnchorAnchorStateChanged);
+        SubscribeLocalEvent<WH40KStrategicPointAnchorComponent, MoveEvent>(OnAnchorMoved);
         SubscribeLocalEvent<WH40KStrategicPointComponent, MapInitEvent>(OnPointMapInit);
+        SubscribeLocalEvent<WH40KStrategicPointComponent, AnchorStateChangedEvent>(OnPointAnchorStateChanged);
+        SubscribeLocalEvent<WH40KStrategicPointComponent, MoveEvent>(OnPointMoved);
         SubscribeLocalEvent<WH40KStrategicPointComponent, ComponentShutdown>(OnPointShutdown);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<WH40KStrategicPointComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
@@ -192,6 +196,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
         anchor.BuiltPoint = pointUid;
 
+        anchor.LockedCoordinates ??= Transform(anchorUid).Coordinates;
         SnapBuiltPointToAnchor(pointUid, anchorUid, anchor);
         HealPointToFull(pointUid);
         UpdatePointAppearance(pointUid, point);
@@ -253,7 +258,7 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         WH40KStrategicPointAnchorComponent anchor)
     {
         var anchorCoordinates = Transform(anchorUid).Coordinates;
-        EnsureStrategicEntityLocked(pointUid, anchorCoordinates.Offset(anchor.BuiltOffset));
+        EnsureStrategicEntityLocked(pointUid, anchorCoordinates.Offset(anchor.BuiltOffset), point: CompOrNull<WH40KStrategicPointComponent>(pointUid));
     }
 
     private void EnsureStrategicPointLocked(EntityUid uid, WH40KStrategicPointComponent point)
@@ -262,17 +267,30 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
             TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
         {
             var anchorCoordinates = Transform(anchorUid).Coordinates;
-            EnsureStrategicEntityLocked(uid, anchorCoordinates.Offset(anchor.BuiltOffset));
+            EnsureStrategicEntityLocked(uid, anchorCoordinates.Offset(anchor.BuiltOffset), point: point);
             return;
         }
 
-        EnsureStrategicEntityLocked(uid);
+        EnsureStrategicEntityLocked(uid, point: point);
     }
 
-    private void EnsureStrategicEntityLocked(EntityUid uid, EntityCoordinates? desiredCoordinates = null)
+    private void EnsureStrategicEntityLocked(
+        EntityUid uid,
+        EntityCoordinates? desiredCoordinates = null,
+        WH40KStrategicPointAnchorComponent? anchor = null,
+        WH40KStrategicPointComponent? point = null)
     {
         var xform = Transform(uid);
-        var targetCoordinates = desiredCoordinates ?? xform.Coordinates;
+        var targetCoordinates = desiredCoordinates ??
+                                anchor?.LockedCoordinates ??
+                                point?.LockedCoordinates ??
+                                xform.Coordinates;
+
+        if (anchor != null)
+            anchor.LockedCoordinates = targetCoordinates;
+
+        if (point != null)
+            point.LockedCoordinates = targetCoordinates;
 
         if (!xform.Anchored && xform.GridUid != null)
             _transform.AnchorEntity(uid, xform);
@@ -285,7 +303,8 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
     private void OnAnchorMapInit(Entity<WH40KStrategicPointAnchorComponent> ent, ref MapInitEvent args)
     {
-        EnsureStrategicEntityLocked(ent.Owner);
+        ent.Comp.LockedCoordinates ??= Transform(ent).Coordinates;
+        EnsureStrategicEntityLocked(ent.Owner, anchor: ent.Comp);
         EnsureAnchorCallsign(ent.Owner, ent.Comp);
 
         if (ent.Comp.BuiltPoint is { } built && !Exists(built))
@@ -302,6 +321,45 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         ent.Comp.NextIncomeTick = _timing.CurTime + GetIncomeInterval(ent.Comp);
         HealPointToFull(ent.Owner);
         UpdatePointAppearance(ent.Owner, ent.Comp);
+    }
+
+    private void OnAnchorAnchorStateChanged(Entity<WH40KStrategicPointAnchorComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (args.Anchored && !NeedsRelock(ent.Owner, ent.Comp.LockedCoordinates, out _))
+            return;
+
+        EnsureStrategicEntityLocked(ent.Owner, anchor: ent.Comp);
+    }
+
+    private void OnAnchorMoved(Entity<WH40KStrategicPointAnchorComponent> ent, ref MoveEvent args)
+    {
+        if (!NeedsRelock(ent.Owner, ent.Comp.LockedCoordinates, out _))
+            return;
+
+        EnsureStrategicEntityLocked(ent.Owner, anchor: ent.Comp);
+    }
+
+    private void OnPointAnchorStateChanged(Entity<WH40KStrategicPointComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (args.Anchored && !NeedsRelock(ent.Owner, ent.Comp.LockedCoordinates, out _))
+            return;
+
+        EnsureStrategicPointLocked(ent.Owner, ent.Comp);
+    }
+
+    private void OnPointMoved(Entity<WH40KStrategicPointComponent> ent, ref MoveEvent args)
+    {
+        if (!NeedsRelock(ent.Owner, ent.Comp.LockedCoordinates, out _))
+            return;
+
+        EnsureStrategicPointLocked(ent.Owner, ent.Comp);
+
+        if (ent.Comp.Anchor is { } anchorUid &&
+            TryComp<WH40KStrategicPointAnchorComponent>(anchorUid, out var anchor))
+        {
+            var expectedCoords = Transform(anchorUid).Coordinates.Offset(anchor.BuiltOffset);
+            ent.Comp.LockedCoordinates = expectedCoords;
+        }
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
@@ -1264,6 +1322,27 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         }
 
         return string.Equals(resolvedTeamId, point.OwnerTeamId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool NeedsRelock(EntityUid uid, EntityCoordinates? expectedCoordinates, out EntityCoordinates? currentCoordinates)
+    {
+        var xform = Transform(uid);
+        currentCoordinates = xform.Coordinates;
+
+        if (!xform.Anchored)
+            return true;
+
+        if (TryComp<PhysicsComponent>(uid, out var physics) && physics.BodyType != BodyType.Static)
+            return true;
+
+        if (expectedCoordinates == null)
+            return false;
+
+        var expected = expectedCoordinates.Value;
+        if (expected.EntityId != currentCoordinates.Value.EntityId)
+            return true;
+
+        return (expected.Position - currentCoordinates.Value.Position).LengthSquared() > 0.0001f;
     }
 
     private bool IsUserOnOwnerTeam(EntityUid user, WH40KStrategicPointComponent point)

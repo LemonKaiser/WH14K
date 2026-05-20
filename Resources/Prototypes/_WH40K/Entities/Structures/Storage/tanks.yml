@@ -1,0 +1,25 @@
+- type: entity
+  id: WH40KVselechinTank
+  parent: GenericTank
+  name: vselechin reservoir
+  description: A fortified frontline reservoir filled with battlefield stabilizers.
+  suffix: WH40K
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: Solution
+    id: tank
+    solution:
+      maxVol: 5000
+      reagents:
+      - ReagentId: Saline
+        Quantity: 1500
+      - ReagentId: Protein
+        Quantity: 2000
+      - ReagentId: Tricordrazine
+        Quantity: 1500
+  - type: RefillableSolution
+    solution: tank

@@ -1,8 +1,8 @@
 - type: entity
   parent: WH40KHeavyBolter
   id: WH40KMultilas
-  name: heavy bolter emplacement
-  description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
+  name: multilaser emplacement
+  description: A crew-operated multilaser. Deploy it, take position behind the gun, and rake advancing infantry with sustained beams.
   suffix: WH40K, стационарное
   components:
   - type: Sprite
@@ -48,10 +48,10 @@
           - WH40KMagazineMultilas
 
 - type: entity
-  parent: WH40KAutocannon
+  parent: WH40KMultilas
   id: WH40KMultilasChs
-  name: heavy bolter emplacement
-  description: A crew-operated heavy bolter. Deploy it, take position behind the gun, and suppress the lane.
+  name: multilaser emplacement
+  description: A crew-operated multilaser. Deploy it, take position behind the gun, and rake advancing infantry with sustained beams.
   suffix: WH40K, еретики, стационарное
   components:
   - type: Sprite

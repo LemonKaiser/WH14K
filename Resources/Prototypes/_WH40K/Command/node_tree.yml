@@ -311,8 +311,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack, WH40KImperiumGrenadeBlast]
-      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack, WH40KHereticsGrenadeBlast]
+      Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack, WH40KImperiumGrenadeBlast, WH40KImperiumLascannon, WH40KImperiumMagazineLascannon]
+      Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack, WH40KHereticsGrenadeBlast, WH40KHereticsLascannon, WH40KHereticsMagazineLascannon]
   - id: wep_right_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-right-4-title
@@ -323,8 +323,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight4]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretShotgun]
-      Heretics: [WH40KHereticsSentryTurretShotgun]
+      Imperium: [WH40KImperiumSentryTurretShotgun, WH40KImperiumAutocannon, WH40KImperiumMagazineAutocannon]
+      Heretics: [WH40KHereticsSentryTurretShotgun, WH40KHereticsAutocannon, WH40KHereticsMagazineAutocannon]
   - id: wep_cap
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-cap-title
@@ -335,8 +335,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthCap]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretLaser]
-      Heretics: [WH40KHereticsSentryTurretLaser]
+      Imperium: [WH40KImperiumSentryTurretLaser, WH40KImperiumMultilas, WH40KImperiumMagazineMultilas]
+      Heretics: [WH40KHereticsSentryTurretLaser, WH40KHereticsMultilas, WH40KHereticsMagazineMultilas]
   - id: eqp_root
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-root-title
