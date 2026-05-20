@@ -113,6 +113,46 @@
     Plastic: 800
 
 - type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMortarShellHE
+  result: WH40KMortarShellHE
+  materials:
+    Steel: 300
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMortarShellFlare
+  result: WH40KMortarShellFlare
+  materials:
+    Steel: 200
+    Plastic: 100
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMortarShellSmoke
+  result: WH40KMortarShellSmoke
+  materials:
+    Steel: 250
+    Plastic: 150
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMortarShellIncendiary
+  result: WH40KMortarShellIncendiary
+  materials:
+    Steel: 250
+    Plasma: 100
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMortarShellEMP
+  result: WH40KMortarShellEMP
+  materials:
+    Steel: 250
+    Glass: 100
+    Gold: 50
+
+- type: latheRecipe
   parent: BaseWeaponRecipeLong
   id: WH40KRecipeWeaponLaserPlasmagun
   result: WeaponLaserPlasmagun
@@ -562,6 +602,14 @@
   materials:
     Steel: 100
 
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KSpeedLoaderSerpentaEmpty
+  result: SpeedLoaderSerpentaEmpty
+  completetime: 4
+  materials:
+    Steel: 100
+
 - type: latheRecipePack
   id: WH40KCommandWeaponryResearchImperium
   recipes:
@@ -573,6 +621,11 @@
   - WH40KRecipeHellgunPowerPack
   - WH40KRecipeWeaponRifleBolter
   - WH40KRecipeMortarKit
+  - WH40KRecipeMortarShellHE
+  - WH40KRecipeMortarShellFlare
+  - WH40KRecipeMortarShellSmoke
+  - WH40KRecipeMortarShellIncendiary
+  - WH40KRecipeMortarShellEMP
   - WH40KRecipeWeaponLaserPlasmagun
   - WH40KRecipeHeavyBolter
   - WH40KRecipeWeaponLaserLasgunVoss
@@ -589,6 +642,11 @@
   - WH40KRecipeHellgunPowerPack
   - WH40KRecipeWeaponPistolBolter
   - WH40KRecipeMortarKit
+  - WH40KRecipeMortarShellHE
+  - WH40KRecipeMortarShellFlare
+  - WH40KRecipeMortarShellSmoke
+  - WH40KRecipeMortarShellIncendiary
+  - WH40KRecipeMortarShellEMP
   - WH40KRecipeWeaponLaserPlasmaPistol
   - WH40KRecipeHeavyBolter
   - WH40KRecipeWeaponChsStubShotgun

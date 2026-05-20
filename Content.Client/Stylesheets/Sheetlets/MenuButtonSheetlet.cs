@@ -1,5 +1,6 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Stylesheets.Fonts;
+using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Client.UserInterface.Controls;
@@ -13,9 +14,17 @@ namespace Content.Client.Stylesheets.Sheetlets;
 [CommonSheetlet]
 public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet, IButtonConfig, IIconConfig
 {
-    private static MutableSelectorElement CButton()
+    private static MutableSelectorElement CButton(string? shapeClass = null, string? toneClass = null)
     {
-        return E<MenuButton>();
+        var selector = E<MenuButton>();
+
+        if (!string.IsNullOrEmpty(shapeClass))
+            selector = selector.Class(shapeClass);
+
+        if (!string.IsNullOrEmpty(toneClass))
+            selector = selector.Class(toneClass);
+
+        return selector;
     }
 
     public override StyleRule[] GetRules(T sheet, object config)
@@ -51,39 +60,34 @@ public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStyles
         var rules = new List<StyleRule>
         {
             CButton().Box(topButtonBase),
-            CButton().Class(StyleClass.ButtonSquare).Box(topButtonSquare),
-            CButton().Class(StyleClass.ButtonOpenLeft).Box(topButtonOpenLeft),
-            CButton().Class(StyleClass.ButtonOpenRight).Box(topButtonOpenRight),
-            CButton()
-                .Class(StyleClass.ButtonOpenLeft)
+            CButton(StyleClass.ButtonSquare).Box(topButtonSquare),
+            CButton(StyleClass.ButtonOpenLeft).Box(topButtonOpenLeft),
+            CButton(StyleClass.ButtonOpenRight).Box(topButtonOpenRight),
+            CButton(StyleClass.ButtonOpenLeft)
                 .PseudoNormal()
-                .Box(MenuButtonStateBox(topButtonOpenLeft, ButtonVisualState.Normal)),
-            CButton()
-                .Class(StyleClass.ButtonOpenRight)
+                .Box(MenuButtonStateBox(topButtonOpenLeft, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonOpenRight)
                 .PseudoNormal()
-                .Box(MenuButtonStateBox(topButtonOpenRight, ButtonVisualState.Normal)),
-            CButton()
-                .Class(StyleClass.ButtonOpenBoth)
+                .Box(MenuButtonStateBox(topButtonOpenRight, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonOpenBoth)
                 .PseudoNormal()
-                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal)),
-            CButton()
-                .Class(StyleClass.ButtonSquare)
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonSquare)
                 .PseudoNormal()
-                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal)),
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal, cfg.ButtonPalette)),
             CButton()
                 .PseudoNormal()
-                .Box(MenuButtonStateBox(topButtonBase, ButtonVisualState.Normal)),
+                .Box(MenuButtonStateBox(topButtonBase, ButtonVisualState.Normal, cfg.ButtonPalette)),
             E<Label>()
                 .Class(MenuButton.StyleClassLabelTopButton)
                 .Prop(Label.StylePropertyFont, sheet.BaseFont.GetFont(14, FontKind.Bold)),
-            // new StyleProperty(Label.StylePropertyFont, notoSansDisplayBold14),
         };
 
-        AddMenuButtonStateRules(rules, topButtonBase, null);
-        AddMenuButtonStateRules(rules, topButtonOpenLeft, StyleClass.ButtonOpenLeft);
-        AddMenuButtonStateRules(rules, topButtonOpenRight, StyleClass.ButtonOpenRight);
-        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonSquare);
-        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonOpenBoth);
+        AddMenuButtonStateRules(rules, topButtonBase, null, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonOpenLeft, StyleClass.ButtonOpenLeft, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonOpenRight, StyleClass.ButtonOpenRight, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonSquare, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonOpenBoth, cfg.ButtonPalette);
 
         return rules.ToArray();
     }
@@ -91,29 +95,31 @@ public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStyles
     private static void AddMenuButtonStateRules(
         List<StyleRule> rules,
         StyleBoxTexture baseBox,
-        string? shapeClass)
+        string? shapeClass,
+        ColorPalette palette,
+        string? toneClass = null)
     {
         rules.AddRange([
-            CButton().MaybeClass(shapeClass).PseudoNormal()
-                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Normal)),
-            CButton().MaybeClass(shapeClass).PseudoHovered()
-                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Hovered)),
-            CButton().MaybeClass(shapeClass).PseudoPressed()
-                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Pressed)),
-            CButton().MaybeClass(shapeClass).PseudoDisabled()
-                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Disabled)),
+            CButton(shapeClass, toneClass).PseudoNormal()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Normal, palette)),
+            CButton(shapeClass, toneClass).PseudoHovered()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Hovered, palette)),
+            CButton(shapeClass, toneClass).PseudoPressed()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Pressed, palette)),
+            CButton(shapeClass, toneClass).PseudoDisabled()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Disabled, palette)),
         ]);
     }
 
-    private static StyleBoxTexture MenuButtonStateBox(StyleBoxTexture baseBox, ButtonVisualState state)
+    private static StyleBoxTexture MenuButtonStateBox(StyleBoxTexture baseBox, ButtonVisualState state, ColorPalette palette)
     {
         var box = new StyleBoxTexture(baseBox);
         box.Modulate = state switch
         {
-            ButtonVisualState.Hovered => Color.FromHex("#F3E6BF"),
-            ButtonVisualState.Pressed => Color.FromHex("#D5BE86"),
-            ButtonVisualState.Disabled => Color.FromHex("#6A6458").WithAlpha(0.75f),
-            _ => Color.FromHex("#E3D2A5"),
+            ButtonVisualState.Hovered => palette.HoveredElement,
+            ButtonVisualState.Pressed => palette.PressedElement,
+            ButtonVisualState.Disabled => palette.DisabledElement.WithAlpha(0.75f),
+            _ => palette.Element,
         };
 
         return box;

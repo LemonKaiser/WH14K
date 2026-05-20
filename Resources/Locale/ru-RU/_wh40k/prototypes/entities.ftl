@@ -1541,9 +1541,6 @@ ent-WH40KPromethiumJerrycan = канистра прометия
 ent-WH40KNeedaddFlowerBouquet = полевой букет
     .desc = Небольшой букет ярких цветов, каким-то чудом уцелевший после боя.
 
-ent-WH40KNeedaddCornerTrim = тёмная угловая накладка
-    .desc = Низкая тёмная металлическая угловая накладка для фронтовых интерьеров.
-
 ent-MobWH40KSlaaneshDemonette = демонетка Слаанеш
     .desc = Юркая младшая демонесса, чья тревожная грация заканчивается бритвенными когтями и экстатическим насилием.
 
@@ -1980,3 +1977,5 @@ ent-ClothingShoesAnkleBootsInquisition = ботинки инквизиции
 
 ent-SpeedLoaderSerpenta = cпидлоадер серпенты
     .desc = Магазин для фосфорной серпенты.
+ent-SpeedLoaderSerpentaEmpty = cпидлоадер серпенты
+    .desc = Пустой магазин для фосфорной серпенты.

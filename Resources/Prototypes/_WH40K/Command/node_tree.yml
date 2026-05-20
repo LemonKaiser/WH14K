@@ -13,8 +13,8 @@
     descriptionKey: w40k-cmd-upgrade-tree-node-eng-root-description
     parents: []
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumAmmoPhosphor, WH40KImperiumSpeedLoaderSerpenta]
-      Heretics: [WH40KHereticsAmmoPhosphor, WH40KHereticsSpeedLoaderSerpenta]
+      Imperium: [WH40KImperiumAmmoPhosphor, WH40KImperiumAmmoSerpenta]
+      Heretics: [WH40KHereticsAmmoPhosphor, WH40KHereticsAmmoSerpenta]
     cost: 9
     minBaseLevel: 1
     minRoundTimeSeconds: 0
@@ -251,8 +251,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun, WH40KImperiumMortar, WH40KImperiumMortarHE]
-      Heretics: [WH40KHereticsMachete, WH40KHereticsMortar, WH40KHereticsMortarHE]
+      Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun, WH40KImperiumMortar, WH40KImperiumMortarHE, WH40KImperiumMortarFlare, WH40KImperiumMortarSmoke, WH40KImperiumMortarIncendiary, WH40KImperiumMortarEMP]
+      Heretics: [WH40KHereticsMachete, WH40KHereticsMortar, WH40KHereticsMortarHE, WH40KHereticsMortarFlare, WH40KHereticsMortarSmoke, WH40KHereticsMortarIncendiary, WH40KHereticsMortarEMP]
   - id: wep_left_2
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-2-title

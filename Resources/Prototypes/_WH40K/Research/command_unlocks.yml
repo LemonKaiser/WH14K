@@ -314,6 +314,11 @@
   - WH40KWeaponryAccatranPatterns
   recipeUnlocks:
   - WH40KRecipeMortarKit
+  - WH40KRecipeMortarShellHE
+  - WH40KRecipeMortarShellFlare
+  - WH40KRecipeMortarShellSmoke
+  - WH40KRecipeMortarShellIncendiary
+  - WH40KRecipeMortarShellEMP
 
 - type: technology
   id: WH40KWeaponryPlasmaArming

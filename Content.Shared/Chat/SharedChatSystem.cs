@@ -110,9 +110,6 @@ public abstract partial class SharedChatSystem : EntitySystem
     /// <summary>
     /// Splits the input message into a radio prefix part and the rest to preserve it during sanitization.
     /// </summary>
-    /// <remarks>
-    /// This is primarily for the chat emote sanitizer, which can match against ":b" as an emote, which is a valid radio keycode.
-    /// </remarks>
     public void GetRadioKeycodePrefix(EntityUid source,
         string input,
         out string output,
@@ -127,9 +124,6 @@ public abstract partial class SharedChatSystem : EntitySystem
             return;
 
         if (!(input.StartsWith(RadioChannelPrefix) || input.StartsWith(RadioChannelAltPrefix)))
-            return;
-
-        if (LooksLikeEmojiAliasPrefix(input))
             return;
 
         if (!_keyCodes.TryGetValue(char.ToLower(input[1]), out _))
@@ -172,9 +166,6 @@ public abstract partial class SharedChatSystem : EntitySystem
         if (!(input.StartsWith(RadioChannelPrefix) || input.StartsWith(RadioChannelAltPrefix)))
             return false;
 
-        if (LooksLikeEmojiAliasPrefix(input))
-            return false;
-
         if (input.Length < 2 || char.IsWhiteSpace(input[1]))
         {
             output = SanitizeMessageCapital(input[1..].TrimStart());
@@ -208,14 +199,6 @@ public abstract partial class SharedChatSystem : EntitySystem
 
         return true;
     }
-
-    private static bool LooksLikeEmojiAliasPrefix(string input)
-    {
-        return input.Length > 0 &&
-               input[0] == RadioChannelPrefix &&
-               ChatEmoji.StartsWithPotentialAlias(input);
-    }
-
     public string SanitizeMessageCapital(string message)
     {
         if (string.IsNullOrEmpty(message))

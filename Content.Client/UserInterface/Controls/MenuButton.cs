@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Client.Stylesheets;
+using Content.Client.Stylesheets.Palette;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.UserInterface.Controls;
@@ -19,6 +21,11 @@ public sealed class MenuButton : ContainerButton
     private static readonly Color ColorNormal = Color.FromHex("#E6E0CF");
     private static readonly Color ColorHovered = Color.FromHex("#F0E7CF");
     private static readonly Color ColorPressed = Color.FromHex("#D7C89B");
+    private static readonly Color ColorDisabled = Color.FromHex("#6A6458");
+    private static readonly Color ColorAlertNormal = Palettes.Red.Text;
+    private static readonly Color ColorAlertHovered = Palettes.Red.Text;
+    private static readonly Color ColorAlertPressed = Palettes.Red.TextDark;
+    private static readonly Color ColorAlertDisabled = Palettes.Red.TextDark.WithAlpha(0.65f);
 
     private const float VertPad = 4f;
 
@@ -110,24 +117,28 @@ public sealed class MenuButton : ContainerButton
     private void UpdateChildColors()
     {
         if (_buttonIcon == null || _buttonLabel == null) return;
+        var useAlertPalette = HasStyleClass(StyleClass.Negative);
+
         switch (DrawMode)
         {
             case DrawModeEnum.Normal:
-                _buttonIcon.ModulateSelfOverride = ColorNormal;
-                _buttonLabel.ModulateSelfOverride = ColorNormal;
+                _buttonIcon.ModulateSelfOverride = useAlertPalette ? ColorAlertNormal : ColorNormal;
+                _buttonLabel.ModulateSelfOverride = useAlertPalette ? ColorAlertNormal : ColorNormal;
                 break;
 
             case DrawModeEnum.Pressed:
-                _buttonIcon.ModulateSelfOverride = ColorPressed;
-                _buttonLabel.ModulateSelfOverride = ColorPressed;
+                _buttonIcon.ModulateSelfOverride = useAlertPalette ? ColorAlertPressed : ColorPressed;
+                _buttonLabel.ModulateSelfOverride = useAlertPalette ? ColorAlertPressed : ColorPressed;
                 break;
 
             case DrawModeEnum.Hover:
-                _buttonIcon.ModulateSelfOverride = ColorHovered;
-                _buttonLabel.ModulateSelfOverride = ColorHovered;
+                _buttonIcon.ModulateSelfOverride = useAlertPalette ? ColorAlertHovered : ColorHovered;
+                _buttonLabel.ModulateSelfOverride = useAlertPalette ? ColorAlertHovered : ColorHovered;
                 break;
 
             case DrawModeEnum.Disabled:
+                _buttonIcon.ModulateSelfOverride = useAlertPalette ? ColorAlertDisabled : ColorDisabled;
+                _buttonLabel.ModulateSelfOverride = useAlertPalette ? ColorAlertDisabled : ColorDisabled;
                 break;
         }
     }

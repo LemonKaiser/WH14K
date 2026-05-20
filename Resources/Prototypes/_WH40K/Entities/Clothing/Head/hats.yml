@@ -56,9 +56,6 @@
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/beret.rsi
-  - type: HideLayerClothing
-    layers:
-      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadBase
@@ -118,9 +115,6 @@
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_bandana.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_bandana.rsi
-  - type: HideLayerClothing
-    layers:
-      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadBase
@@ -131,9 +125,6 @@
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_beret.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_beret.rsi
-  - type: HideLayerClothing
-    layers:
-      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadBase
@@ -144,9 +135,6 @@
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_headband.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hats/catachan_red_headband.rsi
-  - type: HideLayerClothing
-    layers:
-      Hair: HEAD
 
 - type: entity
   parent: ClothingHeadBase

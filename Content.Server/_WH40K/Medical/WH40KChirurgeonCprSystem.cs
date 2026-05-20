@@ -135,8 +135,7 @@ public sealed class WH40KChirurgeonCprSystem : EntitySystem
             !Resolve(user, ref cpr, false) ||
             !Resolve(target, ref mobState, false) ||
             !_mobState.IsCritical(target, mobState) ||
-            !TryComp<MindContainerComponent>(target, out var mind) ||
-            !mind.HasMind ||
+            !IsValidCprTarget(target) ||
             HasComp<UnrevivableComponent>(target) ||
             _rotting.IsRotten(target) ||
             IsEnemyMedicalTarget(user, target))
@@ -148,6 +147,14 @@ public sealed class WH40KChirurgeonCprSystem : EntitySystem
         }
 
         return true;
+    }
+
+    private bool IsValidCprTarget(EntityUid target)
+    {
+        // Catatonic / SSD bodies may temporarily have no active mind attached,
+        // but they should still be treated like valid medical CPR targets.
+        return HasComp<MindExaminableComponent>(target) ||
+               (TryComp<MindContainerComponent>(target, out var mind) && mind.HasMind);
     }
 
     private void RestoreBreathing(EntityUid target)

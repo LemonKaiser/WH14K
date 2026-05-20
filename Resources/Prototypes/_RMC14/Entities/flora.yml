@@ -3,6 +3,9 @@
   id: RMCBasePalm
   abstract: true
   components:
+  - type: WH40KWaveShader
+    speed: 1.6
+    dis: 3.0
   - type: Sprite
     sprite: _RMC14/Objects/Flora/palm.rsi
     offset: 0,0.7
@@ -115,6 +118,9 @@
   description: A small, leafy bush.
   name: Bush
   components:
+  - type: WH40KWaveShader
+    speed: 1.8
+    dis: 1.8
   - type: Sprite
     state: tree_1
     sprite: _RMC14/Objects/Flora/dam.rsi
@@ -125,6 +131,9 @@
   description: A small, leafy bush.
   name: Bush
   components:
+  - type: WH40KWaveShader
+    speed: 1.8
+    dis: 1.8
   - type: Sprite
     state: tree_2
     sprite: _RMC14/Objects/Flora/dam.rsi
@@ -135,6 +144,9 @@
   description: A small, leafy bush.
   name: Bush
   components:
+  - type: WH40KWaveShader
+    speed: 1.8
+    dis: 1.8
   - type: Sprite
     state: tree_3
     sprite: _RMC14/Objects/Flora/dam.rsi
@@ -145,6 +157,9 @@
   description: A small, leafy bush.
   name: Bush
   components:
+  - type: WH40KWaveShader
+    speed: 1.8
+    dis: 1.8
   - type: Sprite
     state: tree_4
     sprite: _RMC14/Objects/Flora/dam.rsi

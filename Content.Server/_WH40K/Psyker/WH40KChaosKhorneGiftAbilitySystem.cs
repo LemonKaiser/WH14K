@@ -8,7 +8,6 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Gravity;
 using Content.Shared.Interaction;
@@ -46,7 +45,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     [Dependency] private readonly RepulseAttractSystem _repulseAttract = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
@@ -75,7 +74,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     private const float JumpExExplosionRadius = 2.4f;
     private const float JumpExExplosionDamage = 5.5f;
     private const float JumpExExplosionRepulseSpeed = 2f;
-    private const float DashHitRadius = 0.8f;
+    private const float DashHitPadding = 0.15f;
 
     public override void Initialize()
     {
@@ -274,11 +273,10 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
             return;
 
         var maxRange = GetDashRange(progression.KhorneGiftThreeUtilityTier);
-        var end = FindDashEndpoint(start, direction, maxRange);
+        var end = FindDashEndpoint(args.Performer, start, direction, maxRange);
         if ((end.Position - start.Position).LengthSquared() < 0.05f)
             return;
 
-        ApplyDashPathDamage(args.Performer, start, end, progression.KhorneGiftThreePowerTier, giftThreeExUnlocked);
         var dashVector = end.Position - start.Position;
 
         // Dash direction must be deterministic (cursor-driven), not affected by prior movement inertia.
@@ -297,6 +295,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         if (!HasComp<ThrownItemComponent>(args.Performer))
             return;
 
+        ApplyDashPathDamage(args.Performer, start, end, progression.KhorneGiftThreePowerTier, giftThreeExUnlocked);
         args.Handled = true;
     }
 
@@ -314,7 +313,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         _actions.RemoveCooldown((ent.Owner, action));
     }
 
-    private MapCoordinates FindDashEndpoint(MapCoordinates start, Vector2 direction, float maxRange)
+    private MapCoordinates FindDashEndpoint(EntityUid caster, MapCoordinates start, Vector2 direction, float maxRange)
     {
         var step = 0.25f;
         var norm = Vector2.Normalize(direction);
@@ -323,7 +322,12 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         for (var travelled = step; travelled <= maxRange + 0.001f; travelled += step)
         {
             var candidate = new MapCoordinates(start.Position + norm * travelled, start.MapId);
-            if (!_examine.InRangeUnOccluded(start, candidate, maxRange, predicate: null, ignoreInsideBlocker: true))
+            if (!_interaction.InRangeUnobstructed(
+                    start,
+                    candidate,
+                    maxRange,
+                    CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
+                    e => e == caster))
                 break;
 
             best = candidate;
@@ -335,7 +339,7 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     private void ApplyDashPathDamage(EntityUid caster, MapCoordinates start, MapCoordinates end, byte powerTier, bool exUnlocked)
     {
         _dashTargets.Clear();
-        var max = (end.Position - start.Position).Length() + DashHitRadius + 0.5f;
+        var max = (end.Position - start.Position).Length() + 1f;
         _lookup.GetEntitiesInRange(
             start.MapId,
             start.Position,
@@ -361,14 +365,20 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
             if (targetPos.MapId != start.MapId)
                 continue;
 
-            var distance = DistanceToSegment(targetPos.Position, start.Position, end.Position);
-            if (distance > DashHitRadius)
+            if (!DoesDashIntersectTarget(start.Position, end.Position, target))
                 continue;
 
             _damageable.TryChangeDamage((target, damageable), damage, origin: caster);
             _stun.TryKnockdown(target, TimeSpan.FromSeconds(exUnlocked ? 2.6f : 2f), true, false, false, true);
             _stun.TryAddStunDuration(target, TimeSpan.FromSeconds(exUnlocked ? 1.2f : 0.8f));
         }
+    }
+
+    private bool DoesDashIntersectTarget(Vector2 start, Vector2 end, EntityUid target)
+    {
+        var xform = Transform(target);
+        var bounds = _lookup.GetAABBNoContainer(target, xform.Coordinates.Position, xform.LocalRotation).Enlarged(DashHitPadding);
+        return SegmentIntersectsBox(start, end, bounds);
     }
 
     private void ApplyTieredCooldown(EntityUid performer, Entity<ActionComponent> action, float baseSeconds, byte tier)
@@ -586,16 +596,41 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
         };
     }
 
-    private static float DistanceToSegment(Vector2 point, Vector2 start, Vector2 end)
+    private static bool SegmentIntersectsBox(Vector2 start, Vector2 end, Box2 box)
     {
-        var segment = end - start;
-        var segmentLengthSq = segment.LengthSquared();
-        if (segmentLengthSq <= 0.0001f)
-            return (point - start).Length();
+        var tMin = 0f;
+        var tMax = 1f;
+        var delta = end - start;
 
-        var t = Vector2.Dot(point - start, segment) / segmentLengthSq;
-        t = Math.Clamp(t, 0f, 1f);
-        var projection = start + segment * t;
-        return (point - projection).Length();
+        return ClipSegmentAxis(-delta.X, start.X - box.Left, ref tMin, ref tMax) &&
+               ClipSegmentAxis(delta.X, box.Right - start.X, ref tMin, ref tMax) &&
+               ClipSegmentAxis(-delta.Y, start.Y - box.Bottom, ref tMin, ref tMax) &&
+               ClipSegmentAxis(delta.Y, box.Top - start.Y, ref tMin, ref tMax);
+    }
+
+    private static bool ClipSegmentAxis(float p, float q, ref float tMin, ref float tMax)
+    {
+        if (MathF.Abs(p) <= 0.0001f)
+            return q >= 0f;
+
+        var ratio = q / p;
+        if (p < 0f)
+        {
+            if (ratio > tMax)
+                return false;
+
+            if (ratio > tMin)
+                tMin = ratio;
+        }
+        else
+        {
+            if (ratio < tMin)
+                return false;
+
+            if (ratio < tMax)
+                tMax = ratio;
+        }
+
+        return true;
     }
 }

@@ -3,6 +3,9 @@
   abstract: true
   parent: BaseTree
   components:
+  - type: WH40KWaveShader
+    speed: 1.4
+    dis: 2.6
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -25,6 +28,9 @@
   abstract: true
   parent: BaseTreeSnow
   components:
+  - type: WH40KWaveShader
+    speed: 1.4
+    dis: 2.6
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -47,6 +53,9 @@
   abstract: true
   parent: BaseTreeLarge
   components:
+  - type: WH40KWaveShader
+    speed: 1.2
+    dis: 2.8
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -69,6 +78,9 @@
   abstract: true
   parent: BaseTreeConifer
   components:
+  - type: WH40KWaveShader
+    speed: 1.3
+    dis: 2.5
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -109,6 +121,9 @@
   abstract: true
   parent: RMCBaseTree
   components:
+  - type: WH40KWaveShader
+    speed: 1.4
+    dis: 2.6
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -131,6 +146,9 @@
   abstract: true
   parent: RMCBaseTreeSnow
   components:
+  - type: WH40KWaveShader
+    speed: 1.4
+    dis: 2.6
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -153,6 +171,9 @@
   abstract: true
   parent: RMCBaseTreeLarge
   components:
+  - type: WH40KWaveShader
+    speed: 1.2
+    dis: 2.8
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -175,6 +196,9 @@
   abstract: true
   parent: RMCBaseTreeConifer
   components:
+  - type: WH40KWaveShader
+    speed: 1.3
+    dis: 2.5
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1
@@ -197,6 +221,9 @@
   abstract: true
   parent: RMCBaseTreeAlien
   components:
+  - type: WH40KWaveShader
+    speed: 1.1
+    dis: 3.0
   - type: Flammable
     alwaysCombustible: true
     firestacksOnIgnite: 1

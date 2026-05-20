@@ -225,6 +225,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
 
 - type: latheRecipePack
   id: WH40KProtolatheTier1
@@ -260,6 +261,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -316,6 +318,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -372,6 +375,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -428,6 +432,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
 
 - type: latheRecipePack
   id: WH40KProtolatheTier1Heretics
@@ -463,6 +468,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -519,6 +525,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer
@@ -575,6 +582,7 @@
   - PartRodMetal1
   - WH40KSpeedLoaderPhosphorEmpty
   - WH40KSpeedLoaderElectricArcEmpty
+  - WH40KSpeedLoaderSerpentaEmpty
   - Implanter
   - WH40KDefibrillator
   - HandheldHealthAnalyzer

@@ -23,6 +23,12 @@
     components:
       - type: WH40KSquadAssignable
       - type: WH40KChirurgeonCpr
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: W40KGdMale
+          Female: W40KGdFemale
+          Unsexed: W40KGdMale
   access:
   - Maintenance
   - External

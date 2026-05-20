@@ -9,6 +9,9 @@
     sprite: Structures/Decoration/banner.rsi
     state: banner
     noRot: true
+  - type: WH40KWaveShader
+    speed: 2.4
+    dis: 4.2
   - type: Transform
     noRot: true
   - type: Fixtures

@@ -5,6 +5,9 @@
   components:
   - type: Sprite
     sprite: Structures/Wallmounts/flags.rsi
+  - type: WH40KWaveShader
+    speed: 2.6
+    dis: 3.4
 
 - type: entity
   parent: BaseFlag
