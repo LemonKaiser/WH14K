@@ -24,6 +24,7 @@
     components:
       - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
         auraRadius: 10
@@ -31,6 +32,11 @@
         speedMultiplier: 1.1
         outgoingDamageMultiplier: 1.1
         incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: W40KOffMale
+          Female: W40KOffFemale
+          Unsexed: W40KOffMale
   access:
   - Maintenance
   - External
@@ -62,6 +68,7 @@
     components:
       - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
         auraRadius: 10
@@ -69,6 +76,11 @@
         speedMultiplier: 1.1
         outgoingDamageMultiplier: 1.1
         incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: W40KOffMale
+          Female: W40KOffFemale
+          Unsexed: W40KOffMale
   access:
   - Maintenance
   - External
@@ -100,6 +112,7 @@
     components:
       - type: WH40KSquadLeader
       - type: WH40KFriendlyFireAllowed
+      - type: WH40KOfficerVoice
       - type: WH40KMoraleExecution
         cooldownSeconds: 1200
         auraRadius: 10
@@ -107,6 +120,11 @@
         speedMultiplier: 1.1
         outgoingDamageMultiplier: 1.1
         incomingDamageMultiplier: 0.9
+      - type: Vocal
+        sounds:
+          Male: W40KOffMale
+          Female: W40KOffFemale
+          Unsexed: W40KOffMale
   access:
   - Maintenance
   - External

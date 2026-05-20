@@ -25,6 +25,12 @@
       - type: WH40KSquadAssignable
       - type: WH40KMoraleExecutionTarget
       - type: WH40KPsykerRole
+      - type: WH40KGuardsmanVoice
+      - type: Vocal
+        sounds:
+          Male: W40KGdMale
+          Female: W40KGdFemale
+          Unsexed: W40KGdMale
   access:
   - Maintenance
   - External

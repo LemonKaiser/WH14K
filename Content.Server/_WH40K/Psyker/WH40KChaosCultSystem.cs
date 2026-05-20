@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared.GameTicking;
+using Content.Shared.Mind;
 using Content.Shared._WH40K.Psyker;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -13,6 +14,7 @@ namespace Content.Server._WH40K.Psyker;
 /// </summary>
 public sealed class WH40KChaosCultSystem : EntitySystem
 {
+    [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
 
     private const float SharedPassiveXpBasePerTick = 1f;
@@ -252,7 +254,7 @@ public sealed class WH40KChaosCultSystem : EntitySystem
         return HasComp<WH40KChaosLeaderRoleComponent>(leader) &&
                TryComp<WH40KChaosGiftProgressionComponent>(leader, out var progression) &&
                progression.AttunedPatron == patron &&
-               !IsDeadLeader(leader);
+               !IsLeaderUnavailable(leader);
     }
 
     private EntityUid? PickLeader(WH40KChaosPatron patron)
@@ -267,7 +269,7 @@ public sealed class WH40KChaosCultSystem : EntitySystem
                 !HasComp<WH40KChaosLeaderRoleComponent>(uid) ||
                 progression.PatronLeadershipOrder <= 0 ||
                 TerminatingOrDeleted(uid) ||
-                IsDeadLeader(uid))
+                IsLeaderUnavailable(uid))
             {
                 continue;
             }
@@ -298,16 +300,22 @@ public sealed class WH40KChaosCultSystem : EntitySystem
         }
 
         var awaitingLeaderSuccessor = state.AwaitingLeaderSuccessor;
-        if (state.ActiveLeader is { } previousLeader && IsDeadLeader(previousLeader))
+        if (state.ActiveLeader is { } previousLeader && IsLeaderUnavailable(previousLeader))
             awaitingLeaderSuccessor = true;
 
         state.ActiveLeader = PickLeader(patron);
         state.AwaitingLeaderSuccessor = state.ActiveLeader is null && awaitingLeaderSuccessor;
     }
 
-    private bool IsDeadLeader(EntityUid uid)
+    private bool IsLeaderUnavailable(EntityUid uid)
     {
-        return TryComp<MobStateComponent>(uid, out var mobState) && _mobState.IsDead(uid, mobState);
+        if (TryComp<MobStateComponent>(uid, out var mobState) && _mobState.IsDead(uid, mobState))
+            return true;
+
+        if (_mind.TryGetMind(uid, out _, out var mind) && _mind.IsCharacterUnrevivableIc(mind))
+            return true;
+
+        return !HasComp<MobStateComponent>(uid);
     }
 
     private ChaosCultState GetOrCreateState(WH40KChaosPatron patron, WH40KChaosGiftProgressionComponent? seed = null)

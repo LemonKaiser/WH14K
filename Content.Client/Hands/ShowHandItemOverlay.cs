@@ -75,9 +75,9 @@ namespace Content.Client.Hands
             }
 
             _hands ??= _entMan.System<HandsSystem>();
-            var handEntity = _hands.GetActiveHandEntity();
+            var entity = EntityOverride ?? _hands.GetActiveHandEntity();
 
-            if (handEntity == null || !_entMan.TryGetComponent(handEntity, out SpriteComponent? sprite))
+            if (entity == null || !_entMan.TryGetComponent(entity, out SpriteComponent? sprite))
                 return;
 
             var halfSize = _renderBackbuffer.Size / 2;
@@ -85,7 +85,7 @@ namespace Content.Client.Hands
 
             screen.RenderInRenderTarget(_renderBackbuffer, () =>
             {
-                screen.DrawEntity(handEntity.Value, halfSize, new Vector2(1f, 1f) * uiScale, Angle.Zero, Angle.Zero, Direction.South, sprite);
+                screen.DrawEntity(entity.Value, halfSize, new Vector2(1f, 1f) * uiScale, Angle.Zero, Angle.Zero, Direction.South, sprite);
             }, Color.Transparent);
 
             screen.DrawTexture(_renderBackbuffer.Texture, mousePos.Position - halfSize + offsetVec, Color.White.WithAlpha(0.75f));

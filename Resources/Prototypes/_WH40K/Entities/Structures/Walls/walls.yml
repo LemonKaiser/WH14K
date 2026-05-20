@@ -83,6 +83,27 @@
     state: state0
 
 - type: entity
+  parent: WallReinforcedDiagonal
+  id: WH40KWallReinforcedDiagonalDark
+  suffix: WH40K, dark, diagonal, reinforced
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    drawdepth: Walls
+    sprite: _WH40K/Structures/Walls/solid_diagonal.rsi
+    state: state0
+  - type: IconSmooth
+    mode: Diagonal
+    key: walls
+    base: state
+  - type: Icon
+    sprite: _WH40K/Structures/Walls/solid_diagonal.rsi
+    state: state0
+
+- type: entity
   parent: BaseWall
   id: WallRockIndestructible
   suffix: неразрушимая

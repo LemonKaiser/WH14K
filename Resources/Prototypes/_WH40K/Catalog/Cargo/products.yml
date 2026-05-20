@@ -299,8 +299,8 @@
   name: cargoproduct-name-wh40k-magazine-bolter
   description: cargoproduct-description-wh40k-magazine-bolter
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/bolter.rsi
+    state: base
   product: MagazineBolter
   cost: 400
   category: cpcat-arm
@@ -308,11 +308,11 @@
 
 - type: cargoProduct
   id: WH40KImperiumMagazineBolterPistol
-  name: cargoproduct-name-wh40k-magazine-bolter
-  description: cargoproduct-description-wh40k-magazine-bolter
+  name: cargoproduct-name-wh40k-magazine-bolter-pistol
+  description: cargoproduct-description-wh40k-magazine-bolter-pistol
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/pistol.rsi
+    state: base
   product: MagazineBolterPistol
   cost: 200
   category: cpcat-arm
@@ -339,13 +339,13 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
-  id: WH40KImperiumSpeedLoaderSerpenta
+  id: WH40KImperiumAmmoSerpenta
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
     state: icon
-  product: SpeedLoaderSerpenta
-  cost: 400
-  category: cpcat-arm
+  product: WH40KAmmoBoxSerpenta
+  cost: 750
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -405,6 +405,46 @@
     state: icon
   product: WH40KMortarShellHE
   cost: 1500
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortarFlare
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_flr
+  product: WH40KMortarShellFlare
+  cost: 1000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortarSmoke
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_smk
+  product: WH40KMortarShellSmoke
+  cost: 1250
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortarIncendiary
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_cin
+  product: WH40KMortarShellIncendiary
+  cost: 1750
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMortarEMP
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: morta_ammo_fsh
+  product: WH40KMortarShellEMP
+  cost: 2000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -1223,13 +1263,13 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
-  id: WH40KHereticsSpeedLoaderSerpenta
+  id: WH40KHereticsAmmoSerpenta
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
     state: icon
-  product: SpeedLoaderSerpenta
-  cost: 400
-  category: cpcat-arm
+  product: WH40KAmmoBoxSerpenta
+  cost: 750
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -1244,11 +1284,11 @@
 
 - type: cargoProduct
   id: WH40KHereticsMagazineBolter
-  name: cargoproduct-name-wh40k-magazine-bolter-pistol
-  description: cargoproduct-description-wh40k-magazine-bolter-pistol
+  name: cargoproduct-name-wh40k-magazine-bolter
+  description: cargoproduct-description-wh40k-magazine-bolter
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/bolter.rsi
+    state: base
   product: MagazineBolter
   cost: 400
   category: cpcat-arm
@@ -1259,8 +1299,8 @@
   name: cargoproduct-name-wh40k-magazine-bolter-pistol
   description: cargoproduct-description-wh40k-magazine-bolter-pistol
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/pistol.rsi
+    state: base
   product: MagazineBolterPistol
   cost: 200
   category: cpcat-arm
@@ -1323,6 +1363,46 @@
     state: icon
   product: WH40KMortarShellHE
   cost: 1500
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortarFlare
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_flr
+  product: WH40KMortarShellFlare
+  cost: 1000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortarSmoke
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_smk
+  product: WH40KMortarShellSmoke
+  cost: 1250
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortarIncendiary
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_cin
+  product: WH40KMortarShellIncendiary
+  cost: 1750
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMortarEMP
+  icon:
+    sprite: _WH40K/Objects/Weapons/mortar.rsi
+    state: morta_ammo_fsh
+  product: WH40KMortarShellEMP
+  cost: 2000
   category: cpcat-arm
   group: WH40KHereticsMarket
 

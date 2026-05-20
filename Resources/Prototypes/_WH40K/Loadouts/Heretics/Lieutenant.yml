@@ -84,4 +84,4 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 15
   equipment:
-    head: ClothingUniformJumpsuitslaanesh 
+    jumpsuit: ClothingUniformJumpsuitslaanesh

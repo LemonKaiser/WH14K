@@ -5,6 +5,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: WH40KWaveShader
+    speed: 0.9
+    dis: 3.6
   - type: Physics
     bodyType: Static
   - type: Fixtures

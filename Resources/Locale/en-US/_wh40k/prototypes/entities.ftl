@@ -1727,9 +1727,6 @@ ent-WH40KPromethiumJerrycan = promethium jerrycan
 ent-WH40KNeedaddFlowerBouquet = battlefield flower bouquet
     .desc = A small bouquet of bright flowers, improbably intact after the fighting.
 
-ent-WH40KNeedaddCornerTrim = dark corner trim
-    .desc = A low-profile dark metal corner trim for battlefield interiors.
-
 ent-MobWH40KSlaaneshDemonette = daemonette of Slaanesh
     .desc = A lithe lesser daemon whose unsettling grace ends in razor claws and ecstatic violence.
 
@@ -1962,3 +1959,5 @@ ent-ClothingShoesAnkleBootsInquisition = Inquisition Boots
 
 ent-SpeedLoaderSerpenta = serpenta speed loader
     .desc = Speedloader for the serpenta.
+ent-SpeedLoaderSerpentaEmpty = empty serpenta speed loader
+    .desc = An empty speedloader for the serpenta.

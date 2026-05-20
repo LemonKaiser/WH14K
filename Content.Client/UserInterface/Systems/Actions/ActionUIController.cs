@@ -803,18 +803,24 @@ public sealed class ActionUIController : UIController, IOnStateChanged<GameplayS
         _actionsSystem?.SetToggled(uid, true);
 
         // override "held-item" overlay
-        var provider = action.Container;
-
         if (target.TargetingIndicator && _overlays.TryGetOverlay<ShowHandItemOverlay>(out var handOverlay))
         {
-            if (action.ItemIconStyle == ItemActionIconStyle.BigItem && action.Container != null)
+            handOverlay.IconOverride = null;
+            handOverlay.EntityOverride = null;
+
+            if (action.ItemIconStyle == ItemActionIconStyle.BigItem &&
+                action.EntityIcon is { } entityIcon)
             {
-                handOverlay.EntityOverride = provider;
+                handOverlay.EntityOverride = entityIcon;
             }
             else if (action.Toggled && action.IconOn != null)
+            {
                 handOverlay.IconOverride = _spriteSystem.Frame0(action.IconOn);
+            }
             else if (action.Icon != null)
+            {
                 handOverlay.IconOverride = _spriteSystem.Frame0(action.Icon);
+            }
         }
 
         if (_container != null)
