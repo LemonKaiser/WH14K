@@ -211,3 +211,13 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_inquisition.rsi
+
+- type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitSmug
+  suffix: WH40K, Контрабандист
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/smug_uniform1.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/smug_uniform1.rsi

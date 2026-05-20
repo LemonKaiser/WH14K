@@ -143,6 +143,15 @@ ent-ClothingHandsGlovesCombatColonel = Colonel's gloves
 ent-ClothingHeadHelmetFlak = Flak helmet
     .desc = The standard helmet issued to Imperial Guard soldiers.
 
+ent-ClothingOuterArmorsmugCoat = Smuggler's Cloak
+    .desc = A sturdy raincoat. You look mysterious in it.
+
+ent-ClothingOuterArmorFlaksmug = Chain mail
+    .desc = Chain mail made from industrial waste, so beloved by the inhabitants of the lower reaches of the hive
+
+ent-ClothingUniformJumpsuitSmug = Smuggler's Jumpsuit
+    .desc = The product will be delivered on time.
+
 ent-ClothingHeadHelmetFlakCyan = cyan-pattern flak helmet
     .desc = { ent-ClothingHeadHelmetFlak.desc }
 

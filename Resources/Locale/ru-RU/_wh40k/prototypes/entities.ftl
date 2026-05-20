@@ -1397,6 +1397,15 @@ ent-ClothingUniformJumpsuitValhallan = униформа вальхалльца
 ent-ClothingUniformJumpsuitValhallanSergeant = униформа сержанта вальхалльцев
     .desc = Вальхалльская полевая униформа с сержантскими знаками отличия для того, кто удерживает строй среди метелей и разрывов.
 
+ent-ClothingOuterArmorsmugCoat = Плащ контрабандиста
+    .desc = Крепкий плащ. В нём вы выглядите загадочно.
+
+ent-ClothingOuterArmorFlaksmug = Кольчуга
+    .desc = Кольчуга из промышленного мусора, столь любимая жителями низов улья
+
+ent-ClothingUniformJumpsuitSmug = Комбинезон Контрабандиста
+    .desc = Товар будет доставлен в срок
+
 ent-ClothingUniformJumpsuitValhallanCaptain = униформа капитана вальхалльцев
     .desc = Офицерская зимняя униформа, рассчитанная на ледяные поля боя и суровую выучку Валхаллы.
 

@@ -426,3 +426,13 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_inquisition.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorFlaksmug
+  suffix: WH40K, Контрабандист
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi

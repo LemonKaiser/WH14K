@@ -85,6 +85,16 @@
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorsmugCoat
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Coats/smug_coat.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Coats/smug_coat.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
   id: ClothingOuterArmorKriegCoat
   suffix: WH40K, Krieg
   components:

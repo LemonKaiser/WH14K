@@ -205,7 +205,6 @@
   loadouts:
   - WH40KWeaponLaserLasgunLoadout
   - WH40KWeaponLaserLasgunVossLoadout
-  - WH40KWeaponLaserLonglasLoadout
   - WH40KWeaponLaserLasgunKriegLoadout
 
 - type: loadoutGroup
@@ -581,6 +580,13 @@
   - WH40KSlaaneshUniform
 
 - type: loadoutGroup
+  id: WH40KHereticsupUniform
+  name: loadout-group-wh40k-heretic-line-uniform
+  minLimit: 0
+  loadouts:
+  - WH40KcontrabandUniform
+
+- type: loadoutGroup
   id: WH40KHereticLineOuter
   name: loadout-group-wh40k-heretic-line-outer
   minLimit: 0
@@ -590,6 +596,14 @@
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
+
+- type: loadoutGroup
+  id: WH40KHereticsuppOuter
+  name: loadout-group-wh40k-heretic-line-outer
+  minLimit: 0
+  loadouts:
+  - WH40Kcolchuga 
+  - WH40Kcontrabandcoat
 
 - type: loadoutGroup
   id: WH40KHereticLineMask
