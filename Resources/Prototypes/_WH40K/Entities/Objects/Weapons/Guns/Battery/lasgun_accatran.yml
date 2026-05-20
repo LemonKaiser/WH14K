@@ -12,6 +12,8 @@
     slots:
     - Back
     - suitStorage
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun_in-hands.rsi
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun.rsi
     scale: 0.85,0.85

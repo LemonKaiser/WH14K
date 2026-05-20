@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using Content.Shared.Stacks;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Map;
 
 namespace Content.Shared._WH40K.StrategicPoints;
 
@@ -22,6 +23,9 @@ public sealed partial class WH40KStrategicPointAnchorComponent : Component
 
     [ViewVariables]
     public EntityUid? BuiltPoint;
+
+    [ViewVariables]
+    public EntityCoordinates? LockedCoordinates;
 }
 
 [RegisterComponent]
@@ -59,6 +63,9 @@ public sealed partial class WH40KStrategicPointComponent : Component
 
     [ViewVariables]
     public WH40KStrategicPointTier PendingUpgradeTier;
+
+    [ViewVariables]
+    public EntityCoordinates? LockedCoordinates;
 }
 
 [RegisterComponent]

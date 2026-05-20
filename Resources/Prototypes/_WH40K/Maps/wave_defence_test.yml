@@ -13,16 +13,4 @@
         - type: StationNameSetup
           mapNameTemplate: "Wave Defence Test"
         - type: StationJobs
-          availableJobs:
-            Colonel: [ 1, 1 ]
-            Commissar: [ 1, 1 ]
-            Guardsman: [ -1, -1 ]
-            Lexmechanic: [ 2, 2 ]
-            Lieutenant: [ 1, 1 ]
-            Medic: [ 2, 2 ]
-            MunitorumOfficer: [ 1, 1 ]
-            Psyker: [ 1, 1 ]
-            Sergeant: [ 2, 2 ]
-            TitheSupplier: [ 1, 1 ]
-            VoxScout: [ 1, 1 ]
-            WH40KChaplain: [ 1, 1 ]
+          availableJobs: { }

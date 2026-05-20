@@ -369,6 +369,66 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumAutocannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/autocannon.rsi
+    state: icon
+  product: WH40KAutocannon
+  cost: 10000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineAutocannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter.rsi
+    state: base
+  product: WH40KMagazineAutocannon
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumLascannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/lascannon.rsi
+    state: icon
+  product: WH40KLascannon
+  cost: 11500
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineLascannon
+  icon:
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    state: lasgun
+  product: WH40KMagazineLascannon
+  cost: 3500
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMultilas
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/multilas.rsi
+    state: icon
+  product: WH40KMultilas
+  cost: 11000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineMultilas
+  icon:
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    state: lasgun
+  product: WH40KMagazineMultilas
+  cost: 3250
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumFlameThrower
   icon:
     sprite: _WH40K/Objects/Weapons/Flamethrower/flamethrower.rsi
@@ -1323,6 +1383,66 @@
     state: icon
   product: WH40KMagazineHeavyBolter
   cost: 2500
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAutocannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosautocannon.rsi
+    state: icon
+  product: WH40KAutocannonChs
+  cost: 10000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineAutocannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/heavy_bolter.rsi
+    state: base
+  product: WH40KMagazineAutocannon
+  cost: 3000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsLascannon
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaoslascannon.rsi
+    state: icon
+  product: WH40KLascannonChs
+  cost: 11500
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineLascannon
+  icon:
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    state: lasgun
+  product: WH40KMagazineLascannon
+  cost: 3500
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMultilas
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Bolters/chaosmultilas.rsi
+    state: icon
+  product: WH40KMultilasChs
+  cost: 11000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineMultilas
+  icon:
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    state: lasgun
+  product: WH40KMagazineMultilas
+  cost: 3250
   category: cpcat-arm
   group: WH40KHereticsMarket
 
