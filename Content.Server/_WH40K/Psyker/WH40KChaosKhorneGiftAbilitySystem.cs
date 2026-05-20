@@ -377,7 +377,8 @@ public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     private bool DoesDashIntersectTarget(Vector2 start, Vector2 end, EntityUid target)
     {
         var xform = Transform(target);
-        var bounds = _lookup.GetAABBNoContainer(target, xform.Coordinates.Position, xform.LocalRotation).Enlarged(DashHitPadding);
+        var (worldPos, worldRot) = _transform.GetWorldPositionRotation(xform);
+        var bounds = _lookup.GetAABBNoContainer(target, worldPos, worldRot).Enlarged(DashHitPadding);
         return SegmentIntersectsBox(start, end, bounds);
     }
 

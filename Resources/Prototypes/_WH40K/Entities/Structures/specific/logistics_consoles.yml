@@ -75,8 +75,6 @@
   - type: ActivatableUI
     key: enum.CargoPalletConsoleUiKey.Sale
   - type: CargoPalletConsole
-    acceptedStackTypes:
-    - DataChipImp
   - type: WH40KStoreTeam
     teamId: Imperium
   - type: SpriteFade
@@ -157,8 +155,6 @@
     - type: ActivatableUI
       key: enum.CargoPalletConsoleUiKey.Sale
     - type: CargoPalletConsole
-      acceptedStackTypes:
-      - DataChipChaos
     - type: WH40KStoreTeam
       teamId: Heretics
 

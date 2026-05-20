@@ -9,6 +9,9 @@
   "states": [
     {
       "name": "blunt"
+    },
+    {
+      "name": "good"
     }
   ]
 }

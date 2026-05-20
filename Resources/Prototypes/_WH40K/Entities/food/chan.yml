@@ -1,5 +1,5 @@
 - type: entity
-  parent: GuardFlag
+  parent: FoodSnackNutribrick
   id: WHSoup
   suffix: WH40K
   components:

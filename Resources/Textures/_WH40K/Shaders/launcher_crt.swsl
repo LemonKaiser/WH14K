@@ -1,0 +1,94 @@
+uniform highp vec2 RenderSize;
+uniform highp float Curvature;
+uniform highp float GlowStrength;
+uniform highp float ScanlineStrength;
+uniform highp float NoiseStrength;
+uniform highp float SweepStrength;
+uniform highp float JitterStrength;
+uniform highp float AberrationStrength;
+uniform highp float VignetteStrength;
+uniform highp float FlickerStrength;
+uniform highp float PhosphorStrength;
+
+highp float wh40k_rand(highp vec2 co)
+{
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+highp vec2 wh40k_curve(highp vec2 uv)
+{
+    highp vec2 centered = uv * 2.0 - 1.0;
+    highp float r2 = dot(centered, centered);
+    centered *= 1.0 + r2 * Curvature;
+    return centered * 0.5 + 0.5;
+}
+
+highp vec4 wh40k_sample(highp vec2 uv)
+{
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec4(0.0, 0.0, 0.0, 1.0);
+
+    return texture2D(TEXTURE, uv);
+}
+
+void fragment()
+{
+    highp vec2 uv = UV;
+    highp float lineNoise = wh40k_rand(vec2(floor(uv.y * RenderSize.y), floor(TIME * 10.0)));
+    highp float jitter = (lineNoise - 0.5) * JitterStrength * TEXTURE_PIXEL_SIZE.x;
+
+    highp vec2 sourceUv = wh40k_curve(uv + vec2(jitter, 0.0));
+    highp vec2 chroma = vec2(AberrationStrength * TEXTURE_PIXEL_SIZE.x, 0.0);
+
+    highp vec4 base = wh40k_sample(sourceUv);
+    highp float red = wh40k_sample(sourceUv + chroma).r;
+    highp float blue = wh40k_sample(sourceUv - chroma).b;
+    base.rgb = vec3(red, base.g, blue);
+
+    highp vec2 glowStepX = vec2(TEXTURE_PIXEL_SIZE.x, 0.0);
+    highp vec2 glowStepY = vec2(0.0, TEXTURE_PIXEL_SIZE.y);
+    highp vec3 glowTint = vec3(1.0, 0.66, 0.22);
+    highp float glow = zGrayscale(base.rgb) * 0.20;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepX * 2.0).rgb) * 0.085;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 2.0).rgb) * 0.085;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepY * 2.0).rgb) * 0.085;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepY * 2.0).rgb) * 0.085;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepX * 5.0).rgb) * 0.060;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 5.0).rgb) * 0.060;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepY * 5.0).rgb) * 0.060;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepY * 5.0).rgb) * 0.060;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepX * 10.0 + glowStepY * 4.0).rgb) * 0.035;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 10.0 + glowStepY * 4.0).rgb) * 0.035;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepX * 10.0 - glowStepY * 4.0).rgb) * 0.035;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 10.0 - glowStepY * 4.0).rgb) * 0.035;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepX * 16.0).rgb) * 0.020;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 16.0).rgb) * 0.020;
+    glow += zGrayscale(wh40k_sample(sourceUv + glowStepY * 12.0).rgb) * 0.020;
+    glow += zGrayscale(wh40k_sample(sourceUv - glowStepY * 12.0).rgb) * 0.020;
+
+    highp vec3 color = base.rgb * 1.08 + glowTint * glow * GlowStrength;
+
+    highp float scan = 0.92 + 0.08 * sin(FRAGCOORD.y * 3.14159265);
+    color *= mix(1.0, scan, ScanlineStrength);
+
+    highp float phosphor = wh40k_rand(floor(FRAGCOORD.xy / vec2(2.0, 1.0)));
+    color *= 1.0 + (phosphor - 0.5) * PhosphorStrength;
+
+    highp float noiseFrame = floor(TIME * 16.0);
+    highp float noise = wh40k_rand(floor(FRAGCOORD.xy) + vec2(noiseFrame * 17.0, noiseFrame * 29.0));
+    color += (noise - 0.5) * NoiseStrength;
+
+    highp float sweepY = fract(TIME * 0.18);
+    highp float sweep = smoothstep(0.052, 0.0, abs(uv.y - sweepY));
+    color += vec3(1.0, 0.72, 0.28) * sweep * SweepStrength;
+    color *= 1.0 + sweep * SweepStrength * 0.12;
+
+    highp vec2 centered = uv * 2.0 - 1.0;
+    highp float vignette = smoothstep(1.25, 0.18, dot(centered, centered));
+    color *= mix(1.0 - VignetteStrength, 1.0, vignette);
+
+    highp float flicker = 1.0 + sin(TIME * 45.0) * FlickerStrength + sin(TIME * 13.0) * FlickerStrength * 0.5;
+    color *= flicker;
+
+    COLOR = vec4(color, 1.0);
+}

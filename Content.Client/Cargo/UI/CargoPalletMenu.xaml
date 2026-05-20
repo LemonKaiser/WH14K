@@ -114,18 +114,21 @@
                 </PanelContainer>
 
                 <PanelContainer Name="ButtonsFrame">
-                    <BoxContainer Name="ButtonsPanel"
-                                  Orientation="Horizontal"
+                    <BoxContainer Orientation="Vertical"
                                   Margin="8 8 8 8"
                                   SeparationOverride="8">
-                        <Button Name="AppraiseButton"
-                                Text="{Loc 'cargo-pallet-appraise-button'}"
-                                HorizontalExpand="True"
-                                MinHeight="40" />
-                        <Button Name="SellButton"
-                                Text="{Loc 'cargo-pallet-sell-button'}"
-                                HorizontalExpand="True"
-                                MinHeight="40" />
+                        <BoxContainer Name="ButtonsPanel"
+                                      Orientation="Horizontal"
+                                      SeparationOverride="8">
+                            <Button Name="AppraiseButton"
+                                    Text="{Loc 'cargo-pallet-appraise-button'}"
+                                    HorizontalExpand="True"
+                                    MinHeight="40" />
+                            <Button Name="SellButton"
+                                    Text="{Loc 'cargo-pallet-sell-button'}"
+                                    HorizontalExpand="True"
+                                    MinHeight="40" />
+                        </BoxContainer>
                     </BoxContainer>
                 </PanelContainer>
             </BoxContainer>
