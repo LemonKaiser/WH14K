@@ -90,6 +90,35 @@
   - WH40KEyesGuard
 
 - type: loadoutGroup
+  id: WH40KImperialGameBuns
+  name: game-buns-wh40k-imperial
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - CigarGoldCaseWH40K
+  - CigPackBlueWH40K
+  - AcousticGuitarInstrumentWH40K
+  - HarmonicaInstrumentWH40K
+  - PlushieRounyWH40K
+  - PlushieRGBeeWH40K
+  - PlushieSharkBlueWH40K
+  - PlushieSharkPinkWH40K
+  - FlippoEngravedLighterWH40K
+  - CigPackGreenWH40K
+  - CigPackBlackWH40K
+  - CigPackRedWH40K
+  - FoodBoxDonkpocketHonkWH40K
+  - FoodBoxDonkpocketPizzaWH40K
+  - FoodBoxDonkpocketTeriyakiWH40K
+  - FoodBoxDonkpocketBerryWH40K
+  - PlushieIfi07WH40K
+  - PlushieRadWH40K
+  - PlushieKaiserWH40K
+  - PlushieGGadosWH40K
+  - PlushieEndrAnimetWH40K
+  - PlushieFizzoWH40K
+
+- type: loadoutGroup
   id: WH40KImperialLineHead
   name: loadout-group-wh40k-imperial-line-head
   loadouts:
@@ -549,6 +578,35 @@
   - WH40KChaosTruncheonKit
   - WH40KChaosMacheteKit
   - WH40KChaosSerpKit
+
+- type: loadoutGroup
+  id: WH40KHereticGameBuns
+  name: game-buns-wh40k-heretic
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - CigarGoldCaseWH40K
+  - CigPackBlueWH40K
+  - AcousticGuitarInstrumentWH40K
+  - HarmonicaInstrumentWH40K
+  - PlushieRounyWH40K
+  - PlushieRGBeeWH40K
+  - PlushieSharkBlueWH40K
+  - PlushieSharkPinkWH40K
+  - FlippoEngravedLighterWH40K
+  - CigPackGreenWH40K
+  - CigPackBlackWH40K
+  - CigPackRedWH40K
+  - FoodBoxDonkpocketHonkWH40K
+  - FoodBoxDonkpocketPizzaWH40K
+  - FoodBoxDonkpocketTeriyakiWH40K
+  - FoodBoxDonkpocketBerryWH40K
+  - PlushieIfi07WH40K
+  - PlushieRadWH40K
+  - PlushieKaiserWH40K
+  - PlushieGGadosWH40K
+  - PlushieEndrAnimetWH40K
+  - PlushieFizzoWH40K
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
