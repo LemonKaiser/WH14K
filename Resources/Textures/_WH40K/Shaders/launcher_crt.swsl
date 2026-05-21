@@ -2,8 +2,6 @@ uniform highp vec2 RenderSize;
 uniform highp float Curvature;
 uniform highp float GlowStrength;
 uniform highp float ScanlineStrength;
-uniform highp float NoiseStrength;
-uniform highp float SweepStrength;
 uniform highp float JitterStrength;
 uniform highp float AberrationStrength;
 uniform highp float VignetteStrength;
@@ -29,6 +27,23 @@ highp vec4 wh40k_sample(highp vec2 uv)
         return vec4(0.0, 0.0, 0.0, 1.0);
 
     return texture2D(TEXTURE, uv);
+}
+
+highp vec3 wh40k_phosphor_mask(highp vec2 coord)
+{
+    highp float stripe = mod(floor(coord.x * 1.45), 3.0);
+    highp vec3 mask = vec3(0.72, 0.72, 0.72);
+
+    if (stripe < 1.0)
+        mask = vec3(1.24, 0.72, 0.72);
+    else if (stripe < 2.0)
+        mask = vec3(0.72, 1.24, 0.72);
+    else
+        mask = vec3(0.72, 0.72, 1.24);
+
+    highp float row = mod(floor(coord.y * 1.35), 3.0);
+    highp float rowMask = row < 2.0 ? 1.0 : 0.58;
+    return mix(vec3(1.0), mask * rowMask, PhosphorStrength);
 }
 
 void fragment()
@@ -65,23 +80,14 @@ void fragment()
     glow += zGrayscale(wh40k_sample(sourceUv - glowStepX * 16.0).rgb) * 0.020;
     glow += zGrayscale(wh40k_sample(sourceUv + glowStepY * 12.0).rgb) * 0.020;
     glow += zGrayscale(wh40k_sample(sourceUv - glowStepY * 12.0).rgb) * 0.020;
-
     highp vec3 color = base.rgb * 1.08 + glowTint * glow * GlowStrength;
 
-    highp float scan = 0.92 + 0.08 * sin(FRAGCOORD.y * 3.14159265);
-    color *= mix(1.0, scan, ScanlineStrength);
+    highp float scanPos = sourceUv.y * RenderSize.y / 2.5;
+    highp float scanDist = -((scanPos - floor(scanPos)) - 0.5);
+    highp float scan = exp2(-22.0 * scanDist * scanDist);
+    color *= mix(1.0, 0.14 + scan * 1.14, ScanlineStrength);
 
-    highp float phosphor = wh40k_rand(floor(FRAGCOORD.xy / vec2(2.0, 1.0)));
-    color *= 1.0 + (phosphor - 0.5) * PhosphorStrength;
-
-    highp float noiseFrame = floor(TIME * 16.0);
-    highp float noise = wh40k_rand(floor(FRAGCOORD.xy) + vec2(noiseFrame * 17.0, noiseFrame * 29.0));
-    color += (noise - 0.5) * NoiseStrength;
-
-    highp float sweepY = fract(TIME * 0.18);
-    highp float sweep = smoothstep(0.052, 0.0, abs(uv.y - sweepY));
-    color += vec3(1.0, 0.72, 0.28) * sweep * SweepStrength;
-    color *= 1.0 + sweep * SweepStrength * 0.12;
+    color *= wh40k_phosphor_mask(FRAGCOORD.xy);
 
     highp vec2 centered = uv * 2.0 - 1.0;
     highp float vignette = smoothstep(1.25, 0.18, dot(centered, centered));

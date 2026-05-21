@@ -230,3 +230,17 @@
     - PlasmGunPowerCell
     - PlasmGunPowerCell
     - PlasmGunPowerCell
+
+- type: loadout
+  id: WH40KWeaponmelta
+  dummyEntity: WeaponLaserMeltagun
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 67
+  equipment:
+    suitstorage: WeaponLaserMeltagun
+  storage:
+    belt:
+    - MeltPowerCell
+    - MeltPowerCell
+    - MeltPowerCell

@@ -1,10 +1,11 @@
 - type: entity
-  parent: FoodSnackNutribrick
+  parent: FoodBowlBase
   id: WHSoup
   suffix: WH40K
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Food/Chan.rsi
+    state: icon
   - type: Item
     sprite: _WH40K/Objects/Food/Chan.rsi
     size: Huge
