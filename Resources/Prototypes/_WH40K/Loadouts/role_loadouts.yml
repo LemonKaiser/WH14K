@@ -19,6 +19,7 @@
 - type: roleLoadout
   id: JobLexmechanic
   groups:
+  - WH40KImperialGameBuns
   - TechpriestNeck
   - TechpriestEyes
   - TechpriestBack
@@ -47,6 +48,7 @@
 - type: roleLoadout
   id: JobHLexmechanic
   groups:
+  - WH40KHereticGameBuns
   - HTechpriestNeck
   - TechpriestEyes
   - HTechpriestBack
@@ -57,6 +59,7 @@
 - type: roleLoadout
   id: JobGuardsman
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineEyes
   - WH40KImperialLineMask
@@ -74,6 +77,7 @@
 - type: roleLoadout
   id: JobSpecialistSWS
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
@@ -90,6 +94,7 @@
 - type: roleLoadout
   id: JobSpecialistHWS
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
@@ -106,6 +111,7 @@
 - type: roleLoadout
   id: JobVoxScout
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
@@ -122,6 +128,7 @@
 - type: roleLoadout
   id: JobPsyker
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialLineHands
@@ -134,6 +141,7 @@
 - type: roleLoadout
   id: JobMedic
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialMedicHead
   - WH40KImperialLineMask
   - WH40KImperialMedicHonours
@@ -150,6 +158,7 @@
 - type: roleLoadout
   id: JobTitheSupplier
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLogisticsHead
   - WH40KImperialLineMask
   - WH40KImperialLogisticsHonours
@@ -165,6 +174,7 @@
 - type: roleLoadout
   id: JobMunitorumOfficer
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialLogisticsHead
   - WH40KImperialLineMask
   - WH40KImperialLogisticsHonours
@@ -186,6 +196,7 @@
 - type: roleLoadout
   id: JobSergeant
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialSergeantHead
   - WH40KImperialSpecialistMask
   - WH40KImperialCommandNeck
@@ -200,6 +211,7 @@
 - type: roleLoadout
   id: JobSergeantSWS
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
   - WH40KImperialSergeantUniform
@@ -213,6 +225,7 @@
 - type: roleLoadout
   id: JobSergeantHWS
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
   - WH40KImperialSergeantUniform
@@ -226,6 +239,7 @@
 - type: roleLoadout
   id: JobMajor
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialEyes
   - WH40KImperialCommandNeckGorget
@@ -242,6 +256,7 @@
 - type: roleLoadout
   id: JobLieutenant
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialEyes
   - WH40KImperialLineMask
@@ -257,6 +272,7 @@
 - type: roleLoadout
   id: JobCommissar
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommissarHead
   - WH40KImperialEyes
   - WH40KImperialLineMask
@@ -269,6 +285,7 @@
 - type: roleLoadout
   id: JobColonel
   groups:
+  - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialEyes
   - WH40KImperialLineMask
@@ -284,6 +301,7 @@
 - type: roleLoadout
   id: JobHGuardsman
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineEyes
   - WH40KHereticLineUniform
@@ -299,6 +317,7 @@
 - type: roleLoadout
   id: JobHSpecialistSWS
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineHonours
   - WH40KHereticLineUniform
@@ -314,6 +333,7 @@
 - type: roleLoadout
   id: JobHSpecialistHWS
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineHonours
   - WH40KHereticLineUniform
@@ -329,6 +349,7 @@
 - type: roleLoadout
   id: JobHVoxScout
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineEyes
   - WH40KHereticLineUniform
@@ -344,6 +365,7 @@
 - type: roleLoadout
   id: JobHBandSupplier
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLogisticsHonours
   - WH40KHereticsupUniform
@@ -359,6 +381,7 @@
 - type: roleLoadout
   id: JobHSergeant
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNecklace
@@ -374,6 +397,7 @@
 - type: roleLoadout
   id: JobHSergeantSWS
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNecklace
@@ -389,6 +413,7 @@
 - type: roleLoadout
   id: JobHSergeantHWS
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNecklace
@@ -404,6 +429,7 @@
 - type: roleLoadout
   id: JobHLieutenant
   groups:
+  - WH40KHereticGameBuns
   - WH40KHereticChampionHead
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNecklace
@@ -419,6 +445,7 @@
 - type: roleLoadout
   id: JobHColonel
   groups:
+  - WH40KHereticGameBuns
   - WH40KHeresiarchCultRaiment
   - WH40KHereticCommandUniform
   - WH40KHereticCommandNeck

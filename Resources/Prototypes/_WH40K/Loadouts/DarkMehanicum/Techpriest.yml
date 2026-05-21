@@ -75,3 +75,213 @@
     requiredLevel: 15
   inhand:
   - WHOmnissianAxeBattle
+
+- type: loadout
+  id: WH40KFlippoKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  storage:
+    belt:
+    - FlippoLighter
+  groupBy: "ignition"
+
+- type: loadout
+  id: CigPackGreenWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - CigPackGreen
+  groupBy: "cigarettes"
+
+- type: loadout
+  id: CigPackBlackWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - CigPackBlack
+  groupBy: "cigarettes"
+
+- type: loadout
+  id: CigPackRedWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - CigPackRed
+  groupBy: "cigarettes"
+
+- type: loadout
+  id: CigPackBlueWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  inhand:
+  - CigPackBlue
+  groupBy: "cigarettes"
+
+- type: loadout
+  id: CigarGoldCaseWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+  - CigarGoldCase
+  groupBy: "cigars"
+
+- type: loadout
+  id: FlippoEngravedLighterWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+  - FlippoEngravedLighter
+  groupBy: "cigars"
+
+- type: loadout
+  id: FoodBoxDonkpocketHonkWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - FoodBoxDonkpocketHonk
+  groupBy: "donkpocket"
+
+- type: loadout
+  id: FoodBoxDonkpocketPizzaWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - FoodBoxDonkpocketPizza
+  groupBy: "donkpocket"
+
+- type: loadout
+  id: FoodBoxDonkpocketTeriyakiWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - FoodBoxDonkpocketTeriyaki
+  groupBy: "donkpocket"
+
+- type: loadout
+  id: FoodBoxDonkpocketBerryWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - FoodBoxDonkpocketBerry
+  groupBy: "donkpocket"
+
+- type: loadout
+  id: AcousticGuitarInstrumentWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  inhand:
+  - AcousticGuitarInstrument
+  groupBy: "instruments"
+
+- type: loadout
+  id: HarmonicaInstrumentWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  inhand:
+  - HarmonicaInstrument
+  groupBy: "instruments"
+
+- type: loadout
+  id: PlushieRounyWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - PlushieRouny
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieRGBeeWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - PlushieRGBee
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieSharkBlueWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - PlushieSharkBlue
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieSharkPinkWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - PlushieSharkPink
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieIfi07WH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieIfi07
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieRadWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieRad
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieKaiserWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieKaiser
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieGGadosWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieGGados
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieEndrAnimetWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieEndrAnimet
+  groupBy: "plushies"
+
+- type: loadout
+  id: PlushieFizzoWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieFizzo
+  groupBy: "plushies"
