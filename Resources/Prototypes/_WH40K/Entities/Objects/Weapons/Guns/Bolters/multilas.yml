@@ -25,9 +25,9 @@
   - type: Item
     sprite: _WH40K/Objects/Weapons/Guns/Bolters/multilas.rsi
   - type: Gun
-    fireRate: 2
+    fireRate: 7
     soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/lasgunpew.ogg
   - type: Fixtures
     fixtures:
       fix1:
