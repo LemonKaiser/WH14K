@@ -9,8 +9,8 @@ namespace Content.Server.Cargo.Components;
 public sealed partial class CargoPalletConsoleComponent : Component
 {
     /// <summary>
-    /// Optional list of allowed stack types for this sale console.
-    /// If empty, any sellable entity is accepted.
+    /// Legacy sale filter kept only for prototype and map compatibility.
+    /// Sale consoles now accept any sellable entity regardless of this field.
     /// </summary>
     [DataField]
     public List<ProtoId<StackPrototype>> AcceptedStackTypes = new();

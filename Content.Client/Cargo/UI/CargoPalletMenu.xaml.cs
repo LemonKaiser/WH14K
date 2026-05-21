@@ -17,6 +17,7 @@ public sealed partial class CargoPalletMenu : FancyWindow
 
     private WH40KCargoConsoleTheme _theme = WH40KCargoConsoleTheme.Disabled;
     private int _appraisal;
+    private int _saleValue;
     private int _count;
     private bool _enabled;
     private string _titleLocKey = "cargo-pallet-console-menu-title";
@@ -26,6 +27,8 @@ public sealed partial class CargoPalletMenu : FancyWindow
     private string _acceptedGoodsLocKey = "cargo-pallet-menu-accepted-default";
     private string _footerLocKey = "cargo-pallet-menu-footer-status";
     private string _footerRightLocKey = "cargo-pallet-menu-footer-right";
+    private string? _prototypeId;
+    private int _salePayoutPercent = 50;
 
     public CargoPalletMenu()
     {
@@ -38,6 +41,8 @@ public sealed partial class CargoPalletMenu : FancyWindow
 
     public void ApplyThemeFromPrototype(string? prototypeId)
     {
+        _prototypeId = prototypeId;
+
         switch (prototypeId)
         {
             case "StructureLogisticsConsoleImperiumSell":
@@ -78,9 +83,22 @@ public sealed partial class CargoPalletMenu : FancyWindow
         UpdateMetrics();
     }
 
-    public void SetAppraisal(int amount)
+    public void ApplyRuntimeSaleRules(int salePayoutPercent)
     {
-        _appraisal = amount;
+        salePayoutPercent = Math.Clamp(salePayoutPercent, 0, 100);
+        if (_salePayoutPercent == salePayoutPercent)
+        {
+            return;
+        }
+
+        _salePayoutPercent = salePayoutPercent;
+        ApplyThemeFromPrototype(_prototypeId);
+    }
+
+    public void SetValuation(int appraisal, int saleValue)
+    {
+        _appraisal = appraisal;
+        _saleValue = saleValue;
         UpdateMetrics();
     }
 
@@ -100,17 +118,21 @@ public sealed partial class CargoPalletMenu : FancyWindow
 
     private void ApplyVisualTheme()
     {
+        var saleTaxPercent = Math.Clamp(100 - _salePayoutPercent, 0, 100);
+
         Title = Loc.GetString(_titleLocKey);
         HeaderTitle.Text = WH40KUiChrome.DecorateTitle(WH40KUiChrome.DiamondNested, Title);
-        HeaderSubtitle.SetMessage(Loc.GetString(_subtitleLocKey), defaultColor: _theme.SecondaryText);
+        HeaderSubtitle.SetMessage(Loc.GetString(_subtitleLocKey, ("tax", saleTaxPercent), ("payout", _salePayoutPercent)), defaultColor: _theme.SecondaryText);
         DetailsHeaderTitle.Text = WH40KUiChrome.DecorateIfMissing(Loc.GetString(_detailsLocKey), WH40KUiChrome.Diamond);
         RoutingValueLabel.SetMessage(Loc.GetString(_routingLocKey), defaultColor: _theme.PrimaryText);
-        AcceptedGoodsValueLabel.SetMessage(Loc.GetString(_acceptedGoodsLocKey), defaultColor: _theme.PrimaryText);
+        AcceptedGoodsValueLabel.SetMessage(Loc.GetString(_acceptedGoodsLocKey, ("tax", saleTaxPercent), ("payout", _salePayoutPercent)), defaultColor: _theme.PrimaryText);
         FooterLeftLabel.Text = Loc.GetString(_footerLocKey);
         FooterRightLabel.Text = Loc.GetString(_footerRightLocKey);
-        AppraisalKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(AppraisalKeyLabel.Text, WH40KUiChrome.Diamond);
-        CountKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(CountKeyLabel.Text, WH40KUiChrome.Diamond);
-        AverageKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(AverageKeyLabel.Text, WH40KUiChrome.DiamondOutline);
+        AppraisalKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(Loc.GetString("cargo-pallet-menu-appraisal-label"), WH40KUiChrome.Diamond);
+        CountKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(Loc.GetString("cargo-pallet-menu-count-label"), WH40KUiChrome.Diamond);
+        AverageKeyLabel.Text = WH40KUiChrome.DecorateIfMissing(
+            Loc.GetString("cargo-pallet-menu-total-label", ("tax", saleTaxPercent)),
+            WH40KUiChrome.DiamondOutline);
         StatusLabel.Text = WH40KUiChrome.DecorateIfMissing(StatusLabel.Text, WH40KUiChrome.DiamondNested);
         RoutingLabel.Text = WH40KUiChrome.DecorateIfMissing(RoutingLabel.Text, WH40KUiChrome.Arrow);
         AcceptedGoodsLabel.Text = WH40KUiChrome.DecorateIfMissing(AcceptedGoodsLabel.Text, WH40KUiChrome.Cog);
@@ -173,11 +195,7 @@ public sealed partial class CargoPalletMenu : FancyWindow
     {
         AppraisalLabel.Text = FormatDisplayCurrency(_appraisal);
         CountLabel.Text = _count.ToString();
-
-        var average = _count > 0
-            ? (int) Math.Round((double) _appraisal / _count)
-            : 0;
-        AverageValueLabel.Text = FormatDisplayCurrency(average);
+        AverageValueLabel.Text = FormatDisplayCurrency(_saleValue);
 
         string statusLocKey;
         Color statusColor;
