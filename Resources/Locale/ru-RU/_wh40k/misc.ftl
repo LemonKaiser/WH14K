@@ -114,3 +114,6 @@ loadout-group-wh40k-imperial-line-mask = Имперская пехота, рес
 loadout-group-wh40k-imperial-line-shield = Имперская пехота, щит
 
 wh40k-astartes-only-power-sword = Машинный дух оружия отвергает неусиленную руку.
+
+game-buns-wh40k-imperial = Плюшки
+game-buns-wh40k-heretic = Плюшки
