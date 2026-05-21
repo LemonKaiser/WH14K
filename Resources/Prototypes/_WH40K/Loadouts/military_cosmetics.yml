@@ -665,18 +665,6 @@
   groupBy: "ignition"
 
 - type: loadout
-  id: WH40KFlippoKit
-  effects:
-  - !type:GroupLoadoutEffect
-    proto: WH40KBattleHardened
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 30
-  storage:
-    belt:
-    - FlippoLighter
-  groupBy: "ignition"
-
-- type: loadout
   id: WH40KCigaretteKit
   storage:
     belt:
