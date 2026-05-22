@@ -5,7 +5,7 @@
   description: A very festive tree for a very festive holiday.
   components:
   - type: WH40KWaveShader
-    speed: 1.2
+    speed: 1.45
     dis: 2.2
   - type: Sprite
     sprite: Structures/Decoration/decorated_fir_tree.rsi

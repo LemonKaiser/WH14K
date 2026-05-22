@@ -206,7 +206,7 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 5000
+  cost: 2500
   researchTimeSeconds: 135
   technologyPrerequisites:
   - WH40KWeaponryAuthRoot
@@ -222,7 +222,7 @@
     state: off-icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 7000
+  cost: 3500
   researchTimeSeconds: 165
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft2
@@ -239,7 +239,7 @@
     state: icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 7000
+  cost: 3500
   researchTimeSeconds: 165
   technologyPrerequisites:
   - WH40KWeaponryAuthRight2
@@ -256,7 +256,7 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 9000
+  cost: 4500
   researchTimeSeconds: 195
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft3
@@ -273,7 +273,7 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 12000
+  cost: 6000
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft4
@@ -290,7 +290,7 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 9000
+  cost: 4500
   researchTimeSeconds: 195
   technologyPrerequisites:
   - WH40KWeaponryAuthRight3
@@ -307,7 +307,7 @@
     state: mortar_m402_carry
   discipline: WH40KWeaponry
   tier: 1
-  cost: 12000
+  cost: 6000
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft4
@@ -328,7 +328,7 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 12000
+  cost: 6000
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KWeaponryAuthRight4
@@ -345,7 +345,7 @@
     state: icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 16000
+  cost: 8000
   researchTimeSeconds: 300
   technologyPrerequisites:
   - WH40KWeaponryAuthCap
@@ -364,7 +364,7 @@
     state: trench
   discipline: WH40KEquipment
   tier: 1
-  cost: 5000
+  cost: 2500
   researchTimeSeconds: 135
   technologyPrerequisites:
   - WH40KEquipmentAuthRoot
@@ -380,7 +380,7 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 7000
+  cost: 3500
   researchTimeSeconds: 165
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft2
@@ -397,7 +397,7 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 5000
+  cost: 2500
   researchTimeSeconds: 135
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft2
@@ -422,7 +422,7 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 7000
+  cost: 3500
   researchTimeSeconds: 165
   technologyPrerequisites:
   - WH40KEquipmentAuthRight2
@@ -437,7 +437,7 @@
     state: datadetector
   discipline: WH40KEquipment
   tier: 1
-  cost: 7000
+  cost: 3500
   researchTimeSeconds: 165
   technologyPrerequisites:
   - WH40KEquipmentAuthRight2
@@ -454,7 +454,7 @@
     state: extraction_pack
   discipline: WH40KEquipment
   tier: 1
-  cost: 9000
+  cost: 4500
   researchTimeSeconds: 195
   technologyPrerequisites:
   - WH40KEquipmentAuthRight3
@@ -471,7 +471,7 @@
     state: pinpointer
   discipline: WH40KEquipment
   tier: 1
-  cost: 12000
+  cost: 6000
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft4
@@ -488,7 +488,7 @@
     state: pinpointer
   discipline: WH40KEquipment
   tier: 1
-  cost: 12000
+  cost: 6000
   researchTimeSeconds: 225
   technologyPrerequisites:
   - WH40KEquipmentAuthRight4
@@ -505,7 +505,7 @@
     state: pinpointer
   discipline: WH40KEquipment
   tier: 1
-  cost: 16000
+  cost: 8000
   researchTimeSeconds: 300
   technologyPrerequisites:
   - WH40KEquipmentAuthCap
@@ -525,7 +525,7 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 18000
+  cost: 9000
   researchTimeSeconds: 315
   technologyPrerequisites:
   - WH40KEquipmentAuthCap

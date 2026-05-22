@@ -2,3 +2,8 @@
   id: blunt
   rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
   state: blunt
+
+- type: chatCustomEmoji
+  id: good
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: good

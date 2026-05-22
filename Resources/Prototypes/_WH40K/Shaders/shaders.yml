@@ -28,3 +28,17 @@
   id: WH40KWarpBreach
   kind: source
   path: "/Textures/_WH40K/Shaders/warp_breach.swsl"
+
+- type: shader
+  id: WH40KLauncherCrt
+  kind: source
+  path: "/Textures/_WH40K/Shaders/launcher_crt.swsl"
+  params:
+    Curvature: 0.025
+    GlowStrength: 1.20
+    ScanlineStrength: 0.92
+    JitterStrength: 0.05
+    AberrationStrength: 0.22
+    VignetteStrength: 0.22
+    FlickerStrength: 0.010
+    PhosphorStrength: 0.48

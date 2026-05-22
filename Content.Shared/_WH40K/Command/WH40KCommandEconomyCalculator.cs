@@ -5,9 +5,9 @@ namespace Content.Shared._WH40K.Command;
 public static class WH40KCommandEconomyCalculator
 {
     public const int CommandTreeFundsPerCost = 35;
-    public const int CommandTreeResearchPerCost = 10;
+    public const int CommandTreeResearchPerCost = 5;
     public const int CommandNodeUpgradeFundsPerCost = 35;
-    public const int CommandNodeUpgradeResearchPerCost = 10;
+    public const int CommandNodeUpgradeResearchPerCost = 5;
     public const int ReinforcementFundsPerInfluence = 20;
     public const int PassiveFallbackFundsPerPoint = 20;
     public const int MissionFundsPerDevelopmentPoint = 35;

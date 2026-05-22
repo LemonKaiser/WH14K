@@ -271,6 +271,9 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
     private void EnsureStrategicEntityLocked(EntityUid uid, EntityCoordinates? desiredCoordinates = null)
     {
+        if (TerminatingOrDeleted(uid))
+            return;
+
         var xform = Transform(uid);
         var targetCoordinates = desiredCoordinates ?? xform.Coordinates;
 
@@ -279,6 +282,9 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
 
         if (TryComp<PhysicsComponent>(uid, out var physics) && physics.BodyType != BodyType.Static)
             _physics.SetBodyType(uid, BodyType.Static, body: physics);
+
+        if (TerminatingOrDeleted(uid))
+            return;
 
         _transform.SetCoordinates(uid, xform, targetCoordinates);
     }

@@ -4,7 +4,7 @@
   abstract: true
   components:
   - type: WH40KWaveShader
-    speed: 1.6
+    speed: 1.9
     dis: 3.0
   - type: Sprite
     sprite: _RMC14/Objects/Flora/palm.rsi

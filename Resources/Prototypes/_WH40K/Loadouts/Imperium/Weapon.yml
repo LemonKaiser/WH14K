@@ -210,7 +210,7 @@
   dummyEntity: FlameThrowerGun
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
+    requiredLevel: 20
   equipment:
     suitstorage: FlameThrowerGun
   storage:
@@ -222,7 +222,7 @@
   dummyEntity: WeaponLaserPlasmagun
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 25
+    requiredLevel: 30
   equipment:
     suitstorage: WeaponLaserPlasmagun
   storage:
@@ -236,7 +236,7 @@
   dummyEntity: WeaponLaserMeltagun
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 30
+    requiredLevel: 67
   equipment:
     suitstorage: WeaponLaserMeltagun
   storage:
