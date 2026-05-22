@@ -8,7 +8,6 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.Cargo.Events;
 using Content.Shared.Cargo.Prototypes;
 using Content.Shared.CCVar;
-using Content.Shared.Stacks;
 using Content.Shared.HijackBeacon;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
@@ -22,6 +21,8 @@ public sealed partial class CargoSystem
      */
 
     private static readonly SoundPathSpecifier ApproveSound = new("/Audio/Effects/Cargo/ping.ogg");
+    private const float DefaultSalePayoutMultiplier = 0.5f;
+    private const int DefaultSalePayoutPercent = (int) (DefaultSalePayoutMultiplier * 100f);
     private bool _lockboxCutEnabled;
 
     private void InitializeShuttle()
@@ -45,15 +46,20 @@ public sealed partial class CargoSystem
         {
             _uiSystem.SetUiState(uid,
                 CargoPalletConsoleUiKey.Sale,
-                new CargoPalletConsoleInterfaceState(0, 0, false));
+                new CargoPalletConsoleInterfaceState(0, 0, 0, false, DefaultSalePayoutPercent));
             return;
         }
 
-        GetPalletGoods(gridUid, out var toSell, out var goods, console);
-        var totalAmount = goods.Sum(t => t.Item3);
+        GetPalletGoods(gridUid, out var toSell, out var goods, out var grossTotal);
+        var saleTotal = goods.Sum(t => t.Item3);
         _uiSystem.SetUiState(uid,
             CargoPalletConsoleUiKey.Sale,
-            new CargoPalletConsoleInterfaceState((int) totalAmount, toSell.Count, true));
+            new CargoPalletConsoleInterfaceState(
+                (int) Math.Round(grossTotal),
+                (int) Math.Round(saleTotal),
+                toSell.Count,
+                true,
+                DefaultSalePayoutPercent));
     }
 
     private void OnPalletUIOpen(EntityUid uid, CargoPalletConsoleComponent component, BoundUIOpenedEvent args)
@@ -139,10 +145,9 @@ public sealed partial class CargoSystem
     private bool SellPallets(
         EntityUid gridUid,
         EntityUid station,
-        CargoPalletConsoleComponent? console,
         out HashSet<(EntityUid, OverrideSellComponent?, double)> goods)
     {
-        GetPalletGoods(gridUid, out var toSell, out goods, console);
+        GetPalletGoods(gridUid, out var toSell, out goods, out _);
 
         if (toSell.Count == 0)
             return false;
@@ -162,10 +167,11 @@ public sealed partial class CargoSystem
         EntityUid gridUid,
         out HashSet<EntityUid> toSell,
         out HashSet<(EntityUid, OverrideSellComponent?, double)> goods,
-        CargoPalletConsoleComponent? console = null)
+        out double grossTotal)
     {
         goods = new HashSet<(EntityUid, OverrideSellComponent?, double)>();
         toSell = new HashSet<EntityUid>();
+        grossTotal = 0d;
 
         foreach (var (palletUid, _, _) in GetCargoPallets(gridUid, BuySellType.Sell))
         {
@@ -193,27 +199,16 @@ public sealed partial class CargoSystem
                 if (_blacklistQuery.HasComponent(ent))
                     continue;
 
-                if (!IsAllowedByConsoleFilter(ent, console))
+                var grossPrice = _pricing.GetPrice(ent);
+                if (grossPrice == 0)
                     continue;
 
-                var price = _pricing.GetPrice(ent);
-                if (price == 0)
-                    continue;
+                var price = grossPrice * DefaultSalePayoutMultiplier;
                 toSell.Add(ent);
+                grossTotal += grossPrice;
                 goods.Add((ent, CompOrNull<OverrideSellComponent>(ent), price));
             }
         }
-    }
-
-    private bool IsAllowedByConsoleFilter(EntityUid ent, CargoPalletConsoleComponent? console)
-    {
-        if (console == null || console.AcceptedStackTypes.Count == 0)
-            return true;
-
-        if (!TryComp<StackComponent>(ent, out var stack))
-            return false;
-
-        return console.AcceptedStackTypes.Contains(stack.StackTypeId);
     }
 
     private bool CanSell(EntityUid uid, TransformComponent xform)
@@ -253,11 +248,11 @@ public sealed partial class CargoSystem
         {
             _uiSystem.SetUiState(uid,
                 CargoPalletConsoleUiKey.Sale,
-                new CargoPalletConsoleInterfaceState(0, 0, false));
+                new CargoPalletConsoleInterfaceState(0, 0, 0, false, DefaultSalePayoutPercent));
             return;
         }
 
-        if (!SellPallets(gridUid, station, component, out var goods))
+        if (!SellPallets(gridUid, station, out var goods))
             return;
 
         if (TryGetWh40KSaleAccount(uid, out var wh40kAccount))

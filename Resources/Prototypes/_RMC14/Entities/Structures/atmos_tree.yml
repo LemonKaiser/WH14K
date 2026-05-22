@@ -6,7 +6,7 @@
     mode: SnapgridCenter
   components:
   - type: WH40KWaveShader
-    speed: 0.9
+    speed: 1.15
     dis: 3.6
   - type: Physics
     bodyType: Static
