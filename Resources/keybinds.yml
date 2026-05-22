@@ -257,7 +257,7 @@ binds:
   mod1: Shift
 - function: SmartEquipPocket1
   type: State
-  key: J
+  key: F
   mod1: Shift
 - function: SmartEquipPocket2
   type: State
@@ -302,7 +302,7 @@ binds:
   mod1: Shift
 - function: FlipObject
   type: State
-  key: J
+  key: F
 - function: TextCursorLeft
   type: State
   key: Left
@@ -651,6 +651,3 @@ binds:
   type: State
   key: MouseRight
   canFocus: true
-- function: SmartEquipSuitStorage
-  type: State
-  key: F

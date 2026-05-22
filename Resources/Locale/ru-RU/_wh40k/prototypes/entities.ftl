@@ -1988,3 +1988,12 @@ ent-SpeedLoaderSerpenta = cпидлоадер серпенты
     .desc = Магазин для фосфорной серпенты.
 ent-SpeedLoaderSerpentaEmpty = cпидлоадер серпенты
     .desc = Пустой магазин для фосфорной серпенты.
+
+ent-ChaosSlaaneshChoisenHelmet = Шлем Избранного Слаанеш
+    .desc = Какая роскошь! Специально для тех кто хочет сохранить лицо
+
+ent-ChaosSlaaneshChoisenBoots = Ботинки Избранного Слаанеш
+    .desc = Какая роскошь! Специально для тех кто хочет сохранить ступни
+
+ent-ChaosSlaaneshCultistArmor = Броня Культиста Слаанеш
+    .desc = Специально для тех кто хочет сохранить тело

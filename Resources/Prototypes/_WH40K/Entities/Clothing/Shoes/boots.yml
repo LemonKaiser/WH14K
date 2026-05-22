@@ -194,3 +194,15 @@
     sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ChaosSlaaneshChoisenBoots
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_armor.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

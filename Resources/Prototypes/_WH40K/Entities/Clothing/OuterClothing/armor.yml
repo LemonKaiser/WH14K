@@ -436,3 +436,32 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi
+
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorAdvancedFlakVest
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadv.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadv.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.45
+        Heat: 0.35
+  - type: ExplosionResistance
+    damageCoefficient: 0.4
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ChaosSlaaneshCultistArmor
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_Slaanesh_cultist_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_Slaanesh_cultist_armor.rsi

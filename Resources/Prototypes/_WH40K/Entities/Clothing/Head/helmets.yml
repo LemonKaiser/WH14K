@@ -395,3 +395,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ChaosSlaaneshChoisenHelmet
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/chaos_slaanesh_choisen_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/chaos_slaanesh_choisen_helmet.rsi
