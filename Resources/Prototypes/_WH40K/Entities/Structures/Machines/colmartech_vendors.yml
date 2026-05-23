@@ -460,8 +460,36 @@
     - name: Food
       entries: []
     - name: Tools
-      entries: []
+      entries:
+      - id: Crowbar
+        amount: 5
+      - id: Wirecutter
+        amount: 3
+      - id: Screwdriver
+        amount: 3
+      - id: Wrench
+        amount: 3
+      - id: Welder
+        amount: 2
+      - id: Multitool
+        amount: 1
+      - id: ClothingHeadHatWelding
+        amount: 2
+      - id: ClothingHandsGlovesColorYellow
+        amount: 2
+      - id: PowerCellMedium
+        amount: 5
+      - id: CableApcStack
+        amount: 5
+      - id: CableMVStack
+        amount: 2
+      - id: CableHVStack
+        amount: 2
     - name: Flare and light
-      entries: []
+      entries:
+      - id: BoxFlare
+        amount: 4
+      - id: FlashlightLantern
+        amount: 3
     - name: Miscellaneous
       entries: []
