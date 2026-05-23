@@ -229,6 +229,24 @@
   - WH40KGoldCigarKit
 
 - type: loadoutGroup
+  id: WH40KImperialAdditionalSupplies
+  name: loadout-group-wh40k-imperial-supplies
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - WH40KImperialSupplyFlask
+  - WH40KImperialSupplyNutriCan
+  - WH40KImperialSupplyHardtack
+  - WH40KImperialSupplyNutriBar
+  - WH40KImperialSupplyGroxPorridge
+  - WH40KImperialSupplyGroxMeat
+  - WH40KImperialSupplyNutriPaste
+  - WH40KImperialSupplyNutriPasteMeat
+  - WH40KImperialSupplyMRE
+  - WH40KImperialSupplyMRESmall
+  - WH40KImperialSupplyMatches
+
+- type: loadoutGroup
   id: WH40KImperialMainWeapon
   name: loadout-group-wh40k-imperial-main
   loadouts:
@@ -347,6 +365,10 @@
   name: loadout-group-wh40k-imperial-command-head
   loadouts:
   - WH40KSergeantCap
+  - WH40KCommandCatachanBandana
+  - WH40KCommandCatachanHeadband
+  - WH40KCommandCatachanBeret
+  - WH40KCommandCatachanCap
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
   - WH40KImperialVeteranBeret
@@ -359,6 +381,10 @@
   name: loadout-group-wh40k-imperial-command-uniform
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanUniform1
+  - WH40KCommandCatachanUniform2
+  - WH40KCommandCatachanUniform3
+  - WH40KCommandCatachanPants
   - WH40KJumpsuitGuardVst
   - WH40KValhallanSergeantUniform
 
@@ -366,6 +392,9 @@
   id: WH40KImperialSergeantOuter
   name: loadout-group-wh40k-imperial-command-outer
   loadouts:
+  - WH40KCommandCatachanLightArmor
+  - WH40KCommandCatachanMediumArmor
+  - WH40KCommandCatachanVest
   - WH40KFlakArmorSrg
   - WH40KCyanFlakArmorSrg
   - WH40KCoatVst
@@ -384,6 +413,10 @@
   name: loadout-group-wh40k-imperial-command-head
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanBandana
+  - WH40KCommandCatachanHeadband
+  - WH40KCommandCatachanBeret
+  - WH40KCommandCatachanCap
   - WH40KOfficerCap
   - WH40KCyanOfficerCap
   - WH40KCommandBeret
@@ -404,6 +437,7 @@
   name: loadout-group-wh40k-imperial-command-neck
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanToken
   - WH40KImperialAquilaMedal
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
@@ -414,6 +448,7 @@
   id: WH40KImperialColonelNeck
   name: loadout-group-wh40k-imperial-command-neck
   loadouts:
+  - WH40KCommandCatachanToken
   - WH40KColonelCloak
   - WH40KGorgetZero
   - WH40KRosariusZero
@@ -429,6 +464,7 @@
   name: loadout-group-wh40k-imperial-command-neck
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanToken
   - WH40KGorget
   - WH40KRosarius
   - WH40KNeckVst
@@ -443,16 +479,10 @@
   name: loadout-group-wh40k-imperial-command-outer
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanLightArmor
+  - WH40KCommandCatachanMediumArmor
+  - WH40KCommandCatachanVest
   - WH40KOfficerCoat
-  - WH40KCoatLietVst
-  - WH40KValhallanCaptainCoat
-
-- type: loadoutGroup
-  id: WH40KImperialCommandOuterMajor
-  name: loadout-group-wh40k-imperial-command-outer
-  minLimit: 0
-  loadouts:
-  - WH40KArmorMajor
   - WH40KCoatLietVst
   - WH40KValhallanCaptainCoat
 
@@ -461,6 +491,10 @@
   name: loadout-group-wh40k-imperial-command-uniform
   minLimit: 0
   loadouts:
+  - WH40KCommandCatachanUniform1
+  - WH40KCommandCatachanUniform2
+  - WH40KCommandCatachanUniform3
+  - WH40KCommandCatachanPants
   - WH40KValhallanCaptainUniform
 
 - type: loadoutGroup
@@ -522,6 +556,14 @@
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
+  id: WH40KImperialColonelMainWeapon
+  name: loadout-group-wh40k-imperial-main
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WH40KWeaponLondoronMk2AquilaLoadout
+
+- type: loadoutGroup
   id: WH40KPsykerForceStaff
   name: loadout-group-wh40k-psyker-force-staff
   loadouts:
@@ -544,6 +586,7 @@
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword
+  - WH40KCommandCatachanMachete
   - WH40KCommandPowerSaber
   - WH40KMace
   - WH40KCommandPowerFist
@@ -556,6 +599,7 @@
   - WH40KCommandChainsword
   - WH40KCrowbarKit
   - WH40KCombatKnifeKit
+  - WH40KCatachanMacheteKit
   - WH40KSurvivalKnifeKit
   - WH40KSapperShovelKit
   - WH40KTruncheonKit
@@ -726,6 +770,27 @@
   - WH40KWeaponHereticLaserLasgunLoadout
   - WH40KWeaponStubRifleLoadout
   - WH40KWeaponChsStubShotgunLoadout
+
+- type: loadoutGroup
+  id: WH40KHereticBandSupplierMainWeapon
+  name: loadout-group-wh40k-heretic-main
+  loadouts:
+  - WH40KWeaponChsStubSMG3Loadout
+  - WH40KWeaponChsStubSMG2Loadout
+  - WH40KWeaponHereticShortlasLoadout
+  - WH40KWeaponStubRifleLoadout
+  - WH40KWeaponChsStubShotgunLoadout
+
+- type: loadoutGroup
+  id: WH40KHeresiarchMainWeapon
+  name: loadout-group-wh40k-heretic-main
+  loadouts:
+  - WH40KWeaponChsStubSMG3Loadout
+  - WH40KWeaponChsStubSMG2Loadout
+  - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponStubRifleLoadout
+  - WH40KWeaponChsStubShotgunLoadout
+  - WH40KWeaponLondoronMk2BloodPactLoadout
 
 - type: loadoutGroup
   id: WH40KHereticSecondaryWeapon
@@ -968,9 +1033,48 @@
   - WH40KTauArmorStandard
 
 - type: loadoutGroup
+  id: WH40KTauSupportHead
+  name: loadout-group-wh40k-tau-support-head
+  minLimit: 0
+  loadouts:
+  - WH40KTauHelmetStandard
+  - WH40KTauHelmetBreach
+
+- type: loadoutGroup
+  id: WH40KTauSupportOuter
+  name: loadout-group-wh40k-tau-support-outer
+  loadouts:
+  - WH40KTauArmorPathfinder
+  - WH40KTauArmorStandard
+
+- type: loadoutGroup
   id: WH40KTauMainWeapon
   name: loadout-group-wh40k-tau-main
   loadouts:
+  - WH40KTauPulseRifleLoadout
+  - WH40KTauPulseCarbineLoadout
+  - WH40KTauPulseBlasterLoadout
+  - WH40KTauPulseSniperRifleLoadout
+
+- type: loadoutGroup
+  id: WH40KTauEarthWeapon
+  name: loadout-group-wh40k-tau-earth-main
+  loadouts:
+  - WH40KTauPulseRifleLoadout
+  - WH40KTauPulseCarbineLoadout
+
+- type: loadoutGroup
+  id: WH40KTauAirWeapon
+  name: loadout-group-wh40k-tau-air-main
+  loadouts:
+  - WH40KTauPulseCarbineLoadout
+  - WH40KTauPulseSniperRifleLoadout
+
+- type: loadoutGroup
+  id: WH40KTauWaterWeapon
+  name: loadout-group-wh40k-tau-water-main
+  loadouts:
+  - WH40KTauPulseCarbineLoadout
   - WH40KTauPulseRifleLoadout
 
 - type: loadoutGroup
@@ -1003,7 +1107,12 @@
   name: loadout-group-wh40k-tau-command-outer
   loadouts:
   - WH40KTauArmorOfficer
-  - WH40KTauArmorCommander
+
+- type: loadoutGroup
+  id: WH40KTauEtherealOuter
+  name: loadout-group-wh40k-tau-ethereal-outer
+  loadouts:
+  - WH40KTauArmorEthereal
 
 - type: loadoutGroup
   id: WH40KTauCommandNeck
@@ -1011,3 +1120,16 @@
   minLimit: 0
   loadouts:
   - WH40KTauCommanderCloakLoadout
+
+- type: loadoutGroup
+  id: WH40KTauCommandWeapon
+  name: loadout-group-wh40k-tau-command-main
+  loadouts:
+  - WH40KTauPulseRifleLoadout
+  - WH40KTauPulseCarbineLoadout
+  - WH40KTauPulseBlasterLoadout
+  - WH40KTauPulseSniperRifleLoadout
+  - WH40KTauPulseRifleVeteranLoadout
+  - WH40KTauPulseCarbineVeteranLoadout
+  - WH40KTauPulseSniperRifleVeteranLoadout
+  - WH40KTauRailgunLoadout

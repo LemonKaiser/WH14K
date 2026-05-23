@@ -17,3 +17,10 @@
   id: WH40KVolcanoWarning
   files:
     - /Audio/_WH40K/Announcements/volcano-warning.ogg
+
+- type: soundCollection
+  id: WH40KDreadnoughtAssaultCannon
+  files:
+    - /Audio/_WH40K/Weapons/Guns/Gunshots/dreadnought_assault_cannon_1.ogg
+    - /Audio/_WH40K/Weapons/Guns/Gunshots/dreadnought_assault_cannon_2.ogg
+    - /Audio/_WH40K/Weapons/Guns/Gunshots/dreadnought_assault_cannon_3.ogg

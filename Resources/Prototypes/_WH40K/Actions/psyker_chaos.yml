@@ -124,6 +124,9 @@
   components:
   - type: Action
     useDelay: 12
+    icon:
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: portal
   - type: TargetAction
     range: 16
     repeat: false
@@ -146,8 +149,8 @@
   - type: Action
     useDelay: 14
     icon:
-      sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
-      state: icon
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: blade
   - type: InstantAction
     event: !type:WH40KChaosKhorneBladeActionEvent
   - type: WH40KWarpActionCost
@@ -165,6 +168,9 @@
   components:
   - type: Action
     useDelay: 180
+    icon:
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: smoke
   - type: InstantAction
     event: !type:InstantSpawnSpellEvent
       prototype: WH40KChaosNurgleMiasmaSmoke
@@ -184,8 +190,8 @@
   - type: Action
     useDelay: 18
     icon:
-      sprite: Objects/Magic/Eldritch/eldritch_actions.rsi
-      state: voidblink
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: portal
   - type: TargetAction
     accessMask:
     - Opaque
@@ -213,6 +219,9 @@
   components:
   - type: Action
     useDelay: 16
+    icon:
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: shield
   - type: InstantAction
     event: !type:InstantSpawnSpellEvent
       prototype: WH40KWallForceShieldChaosBase
@@ -338,6 +347,9 @@
   components:
   - type: Action
     useDelay: 10
+    icon:
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: portal
   - type: TargetAction
     range: 16
     repeat: false
@@ -359,6 +371,9 @@
   components:
   - type: Action
     useDelay: 14
+    icon:
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: shield
   - type: InstantAction
     event: !type:InstantSpawnSpellEvent
       prototype: WH40KWallForceShieldChaosBase
@@ -379,7 +394,7 @@
   - type: Action
     useDelay: 16
     icon:
-      sprite: Objects/Magic/magicactions.rsi
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
       state: shield
   - type: InstantAction
     event: !type:WH40KChaosKhorneBloodHealActionEvent
@@ -428,8 +443,8 @@
   - type: Action
     useDelay: 26
     icon:
-      sprite: Actions/smokeaction.rsi
-      state: smokeaction
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: stim
   - type: InstantAction
     event: !type:WH40KChaosSlaaneshStimAuraActionEvent
   - type: WH40KWarpActionCost
@@ -448,8 +463,8 @@
   - type: Action
     useDelay: 30
     icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: dash
   - type: InstantAction
     event: !type:WH40KChaosTzeentchSpeedAuraActionEvent
   - type: WH40KWarpActionCost
@@ -468,8 +483,8 @@
   - type: Action
     useDelay: 180
     icon:
-      sprite: _WH40K/Objects/Weapons/Melee/khornkatana.rsi
-      state: icon
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: dash
   - type: TargetAction
     checkCanAccess: false
     range: 16
@@ -512,8 +527,8 @@
   - type: Action
     useDelay: 35
     icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: gib
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: zombie
   - type: TargetAction
     range: 8
     repeat: false
@@ -536,7 +551,7 @@
   - type: Action
     useDelay: 18
     icon:
-      sprite: Objects/Magic/magicactions.rsi
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
       state: shield
   - type: InstantAction
     event: !type:WH40KChaosSlaaneshMasochismActionEvent
@@ -556,8 +571,8 @@
   - type: Action
     useDelay: 18
     icon:
-      sprite: Objects/Magic/magicactions.rsi
-      state: blink
+      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
+      state: portal
   - type: TargetAction
     range: 16
     repeat: false

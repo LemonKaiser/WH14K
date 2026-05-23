@@ -73,7 +73,7 @@
 # Тёмный Механикум
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeTechpriestMarsChaos
   description: desc-darkmech-m
   suffix: WH40K, ТёмнМех, Марс
@@ -82,7 +82,7 @@
     sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_mars.rsi
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeTechpriestSamexChaos
   description: desc-darkmech-sam
   suffix: WH40K, ТёмнМех, Самех
@@ -91,7 +91,7 @@
     sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_samex.rsi
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeTechpriestSarumChaos
   description: desc-darkmech-sar
   suffix: WH40K, ТёмнМех, Сарум
@@ -100,7 +100,7 @@
     sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_sarum.rsi
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeTechpriestXanaChaos
   description: desc-darkmech-xan
   suffix: WH40K, ТёмнМех, Ксана II
@@ -109,7 +109,7 @@
     sprite: _WH40K/Clothing/Neck/Robes/DM/techpriest_xana_ii.rsi
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeGenetorTechpriestMarsChaos
   description: desc-gen-darkmech-m
   suffix: WH40K, ТёмнМех
@@ -118,7 +118,7 @@
     sprite: _WH40K/Clothing/Neck/Robes/DM/genetor_mars.rsi
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckRobeGenetorTechpriestSlaanesh
   description: desc-gen-darkmech-sla
   suffix: WH40K, ТёмнМех, Слаанеш

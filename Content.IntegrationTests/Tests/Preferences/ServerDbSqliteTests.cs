@@ -158,6 +158,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: 334,
                 SeasonXp: 12,
                 LastProgressAt: new DateTimeOffset(2026, 2, 19, 10, 0, 0, TimeSpan.Zero),
+                LastAccountResetAt: new DateTimeOffset(2026, 2, 1, 10, 0, 0, TimeSpan.Zero),
                 SelectedGhostSkinId: "decor.ghost.standard",
                 SelectedOocTitleId: "decor.title.none",
                 SelectedOocNameColorId: "decor.color.default");
@@ -172,6 +173,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 Assert.That(loaded!.LifetimeXp, Is.EqualTo(334));
                 Assert.That(loaded.SeasonXp, Is.EqualTo(12));
                 Assert.That(loaded.LastProgressAt, Is.EqualTo(original.LastProgressAt));
+                Assert.That(loaded.LastAccountResetAt, Is.EqualTo(original.LastAccountResetAt));
                 Assert.That(loaded.SelectedGhostSkinId, Is.EqualTo("decor.ghost.standard"));
                 Assert.That(loaded.SelectedOocTitleId, Is.EqualTo("decor.title.none"));
                 Assert.That(loaded.SelectedOocNameColorId, Is.EqualTo("decor.color.default"));
@@ -181,6 +183,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: 777,
                 SeasonXp: 15,
                 LastProgressAt: new DateTimeOffset(2026, 2, 19, 12, 30, 0, TimeSpan.Zero),
+                LastAccountResetAt: null,
                 SelectedGhostSkinId: "decor.ghost.iron",
                 SelectedOocTitleId: "decor.title.legend",
                 SelectedOocNameColorId: "decor.color.gold");
@@ -195,6 +198,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 Assert.That(reloaded!.LifetimeXp, Is.EqualTo(777));
                 Assert.That(reloaded.SeasonXp, Is.EqualTo(15));
                 Assert.That(reloaded.LastProgressAt, Is.EqualTo(updated.LastProgressAt));
+                Assert.That(reloaded.LastAccountResetAt, Is.Null);
                 Assert.That(reloaded.SelectedGhostSkinId, Is.EqualTo("decor.ghost.iron"));
                 Assert.That(reloaded.SelectedOocTitleId, Is.EqualTo("decor.title.legend"));
                 Assert.That(reloaded.SelectedOocNameColorId, Is.EqualTo("decor.color.gold"));
@@ -239,6 +243,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: 250,
                 SeasonXp: 20,
                 LastProgressAt: new DateTimeOffset(2026, 2, 20, 10, 0, 0, TimeSpan.Zero),
+                LastAccountResetAt: new DateTimeOffset(2026, 1, 25, 18, 15, 0, TimeSpan.Zero),
                 SelectedGhostSkinId: "decor.ghost.iron",
                 SelectedOocTitleId: "decor.title.legend",
                 SelectedOocNameColorId: "decor.color.gold");
@@ -249,6 +254,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: -50,
                 SeasonXp: -5,
                 LastProgressAt: new DateTimeOffset(2026, 2, 20, 10, 30, 0, TimeSpan.Zero),
+                LastAccountResetAt: null,
                 SelectedGhostSkinId: "   ",
                 SelectedOocTitleId: "\t",
                 SelectedOocNameColorId: string.Empty);
@@ -263,6 +269,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 Assert.That(loaded!.LifetimeXp, Is.EqualTo(0));
                 Assert.That(loaded.SeasonXp, Is.EqualTo(0));
                 Assert.That(loaded.LastProgressAt, Is.EqualTo(normalized.LastProgressAt));
+                Assert.That(loaded.LastAccountResetAt, Is.Null);
                 Assert.That(loaded.SelectedGhostSkinId, Is.Null);
                 Assert.That(loaded.SelectedOocTitleId, Is.Null);
                 Assert.That(loaded.SelectedOocNameColorId, Is.Null);
@@ -601,6 +608,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: 120,
                 SeasonXp: 4,
                 LastProgressAt: now,
+                LastAccountResetAt: now.AddDays(-10),
                 SelectedGhostSkinId: "decor.ghost.standard",
                 SelectedOocTitleId: "decor.title.none",
                 SelectedOocNameColorId: "decor.color.default"));
@@ -608,6 +616,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 LifetimeXp: 990,
                 SeasonXp: 12,
                 LastProgressAt: now,
+                LastAccountResetAt: null,
                 SelectedGhostSkinId: "decor.ghost.warp",
                 SelectedOocTitleId: "decor.title.legend",
                 SelectedOocNameColorId: "decor.color.gold"));
@@ -668,6 +677,8 @@ namespace Content.IntegrationTests.Tests.Preferences
 
                 Assert.That(progressA!.LifetimeXp, Is.EqualTo(120));
                 Assert.That(progressB!.LifetimeXp, Is.EqualTo(990));
+                Assert.That(progressA.LastAccountResetAt, Is.EqualTo(now.AddDays(-10)));
+                Assert.That(progressB.LastAccountResetAt, Is.Null);
                 Assert.That(progressA.SelectedGhostSkinId, Is.EqualTo("decor.ghost.standard"));
                 Assert.That(progressB.SelectedGhostSkinId, Is.EqualTo("decor.ghost.warp"));
 

@@ -85,11 +85,11 @@
   id: RedMeltaLaser
   components:
   - type: HitscanBasicRaycast
-    maxDistance: 9.5
+    maxDistance: 7.5
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 250
+        Heat: 200
         Structural: 200
   - type: ChangeTemperatureOnCollide
     heat: 100000
@@ -185,6 +185,24 @@
     impactFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_laser
+
+- type: entity
+  parent: WH40KRedHeavyLaserAstartesPistol
+  id: WH40KShortlasBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 15
+
+- type: entity
+  parent: WH40KShortlasBeam
+  id: WH40KShortlasBurst
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileSpread
+    proto: WH40KShortlasBeam
+    count: 3
+    spread: 8
 
 - type: entity
   parent: BasicHitscan

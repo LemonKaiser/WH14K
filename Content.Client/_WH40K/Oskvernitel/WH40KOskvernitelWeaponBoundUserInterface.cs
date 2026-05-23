@@ -52,7 +52,10 @@ public sealed class WH40KOskvernitelWeaponBoundUserInterface(EntityUid owner, En
     {
         foreach (var entry in state.Entries.OrderBy(static entry => entry.Id))
         {
-            var localizedName = Loc.GetString(entry.NameLocKey);
+            var localizedName = Loc.TryGetString($"ent-{entry.PrototypeId}", out var prototypeName) &&
+                                !string.IsNullOrWhiteSpace(prototypeName)
+                ? prototypeName
+                : Loc.GetString(entry.NameLocKey);
 
             yield return new RadialMenuActionOption<WH40KOskvernitelWeaponUiEntryId>(HandleRadialMenuClick, entry.Id)
             {

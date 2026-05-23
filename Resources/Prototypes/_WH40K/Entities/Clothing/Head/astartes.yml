@@ -99,7 +99,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk6.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetBasic
+  parent: [ClothingHeadHelmetBasic, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetAstartesChaos
   suffix: WH40K, Astartes, Chaos
   components:

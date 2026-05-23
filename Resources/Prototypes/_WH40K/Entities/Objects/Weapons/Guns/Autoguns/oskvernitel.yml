@@ -1,28 +1,28 @@
 - type: entity
-  id: WH40KOskvernitelWeaponMinigun
+  id: WH40KOskvernitelWeaponAutocannon
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_mg.rsi
-    state: base
+    sprite: Objects/Specific/Mech/mecha_equipment.rsi
+    state: mecha_uac2
   - type: Gun
-    fireRate: 8
+    fireRate: 2.5
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    minAngle: 8
-    maxAngle: 18
-    angleIncrease: 1.4
-    angleDecay: 15
+    minAngle: 5
+    maxAngle: 12
+    angleIncrease: 1.1
+    angleDecay: 12
     soundGunshot:
-      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_2.wav
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/bolter.ogg
   - type: WH40KGunPrediction
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
   - type: BallisticAmmoProvider
-    capacity: 100
-    proto: Bullet825mmLong
+    capacity: 50
+    proto: BulletSentine
     cycleable: false
   - type: BallisticAmmoSelfRefiller
     autoRefillRate: 1s
@@ -30,14 +30,14 @@
     autoRefillPauseDuration: 1s
 
 - type: entity
-  id: WH40KOskvernitelWeaponAutogun
+  id: WH40KOskvernitelWeaponSiegeCannon
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     state: sentinel_autogun
   - type: Gun
-    fireRate: 2
+    fireRate: 1
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -53,7 +53,7 @@
       ballistic-ammo: !type:Container
   - type: BallisticAmmoProvider
     capacity: 5
-    proto: BulletSentine
+    proto: WH40KBulletOskvernitelSiegeShell
     cycleable: false
   - type: BallisticAmmoSelfRefiller
     autoRefillRate: 30s

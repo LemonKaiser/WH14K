@@ -65,3 +65,14 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
 
+- type: entity
+  parent: WHSoup
+  id: WHSoupNurgl
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Food/ChanNurgl.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Food/ChanNurgl.rsi
+    size: Huge

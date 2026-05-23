@@ -17,8 +17,7 @@ job-supervisors-nobody = никому
 
 job-supervisors-wh40k-imperium-colonel = высшему командованию Астра Милитарум, воле Департаменто Муниторум и приказам лордов-сегментум
 job-supervisors-wh40k-imperium-commissar = Официо Префектус, Имперскому Кредо и личному долгу перед Императором
-job-supervisors-wh40k-imperium-major = полковнику, комиссариату и приказам штаба полка
-job-supervisors-wh40k-imperium-officer = майору, полковнику и комиссариату
+job-supervisors-wh40k-imperium-officer = полковнику, комиссариату и приказам штаба полка
 job-supervisors-wh40k-imperium-sergeant = взводным офицерам, полковому командованию и комиссариату
 job-supervisors-wh40k-imperium-line = сержантам отделения, взводным офицерам, полковому командованию и комиссариату
 job-supervisors-wh40k-imperium-psyker = санкционированным приказам полкового командования, комиссариату и надзору Империума

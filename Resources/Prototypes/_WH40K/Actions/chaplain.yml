@@ -1,0 +1,17 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KChaplainDash
+  name: Священный Рывок
+  description: Рванитесь сквозь строй врага, сбивая тех, кого заденете.
+  components:
+  - type: Action
+    useDelay: 300
+    icon:
+      sprite: Interface/Actions/jump.rsi
+      state: icon
+  - type: TargetAction
+    checkCanAccess: false
+    range: 16
+    repeat: false
+  - type: WorldTargetAction
+    event: !type:WH40KChaplainDashActionEvent

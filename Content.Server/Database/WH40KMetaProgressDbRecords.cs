@@ -7,6 +7,7 @@ public sealed record WH40KMetaProgressDbData(
     int LifetimeXp,
     int SeasonXp,
     DateTimeOffset LastProgressAt,
+    DateTimeOffset? LastAccountResetAt,
     string? SelectedGhostSkinId,
     string? SelectedOocTitleId,
     string? SelectedOocNameColorId);

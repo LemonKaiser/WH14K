@@ -1,0 +1,411 @@
+- type: entity
+  parent: FlaskBase
+  id: DrinkGuardsmanFlask
+  suffix: WH40K, Full
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Drinks/guardsman_flask.rsi
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 60
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: DrinkCanBaseFull
+  id: DrinkImperialNutriCan
+  suffix: WH40K, Full
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Drinks/imperial_nutri_can.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Drinks/imperial_nutri_can.rsi
+    size: Tiny
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 12
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Vitamin
+        Quantity: 8
+
+- type: entity
+  parent: BaseItem
+  id: FoodSnackImperialHardtack
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    state: hardtack
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    size: Tiny
+  - type: Tag
+    tags:
+    - FoodSnack
+  - type: SpawnItemsOnUse
+    items:
+      - id: FoodPacketImperialHardtackTrash
+      - id: FoodSnackImperialHardtackOpen
+    sound:
+      path: /Audio/Effects/unwrap.ogg
+
+- type: entity
+  parent: [SolutionVeryTiny, FoodSnackBase]
+  id: FoodSnackImperialHardtackOpen
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    state: hardtack-open
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    size: Tiny
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: Fiber
+        Quantity: 2
+      - ReagentId: Vitamin
+        Quantity: 1
+
+- type: entity
+  parent: FoodPacketTrash
+  id: FoodPacketImperialHardtackTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    state: wrapper
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_hardtack.rsi
+    size: Tiny
+
+- type: entity
+  parent: BaseItem
+  id: FoodSnackImperialNutriBar
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    state: bar
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    size: Tiny
+  - type: Tag
+    tags:
+    - FoodSnack
+  - type: SpawnItemsOnUse
+    items:
+      - id: FoodPacketImperialNutriBarTrash
+      - id: FoodSnackImperialNutriBarOpen
+    sound:
+      path: /Audio/Effects/unwrap.ogg
+
+- type: entity
+  parent: [SolutionVeryTiny, FoodSnackBase]
+  id: FoodSnackImperialNutriBarOpen
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    state: bar-open
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    size: Tiny
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8
+      - ReagentId: Vitamin
+        Quantity: 2
+
+- type: entity
+  parent: FoodPacketTrash
+  id: FoodPacketImperialNutriBarTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    state: wrapper
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/imperial_nutri_bar.rsi
+    size: Tiny
+
+- type: entity
+  parent: FoodTinMRE
+  id: FoodTinGroxPorridge
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_porridge.rsi
+  - type: Edible
+    trash:
+    - FoodTinGroxPorridgeTrash
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 14
+      - ReagentId: Protein
+        Quantity: 6
+
+- type: entity
+  parent: FoodTinMRETrash
+  id: FoodTinGroxPorridgeTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_porridge.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_porridge.rsi
+
+- type: entity
+  parent: FoodTinMRE
+  id: FoodTinGroxMeat
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_meat_tin.rsi
+  - type: Tag
+    tags:
+    - Meat
+  - type: Edible
+    trash:
+    - FoodTinGroxMeatTrash
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 10
+
+- type: entity
+  parent: FoodTinMRETrash
+  id: FoodTinGroxMeatTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_meat_tin.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Tins/grox_meat_tin.rsi
+
+- type: entity
+  parent: FoodTinMRE
+  id: FoodTinNutriPaste
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste.rsi
+  - type: Edible
+    trash:
+    - FoodTinNutriPasteTrash
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: Vitamin
+        Quantity: 8
+
+- type: entity
+  parent: FoodTinMRETrash
+  id: FoodTinNutriPasteTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste.rsi
+
+- type: entity
+  parent: FoodTinMRE
+  id: FoodTinNutriPasteMeat
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste_meat.rsi
+  - type: Tag
+    tags:
+    - Meat
+  - type: Edible
+    trash:
+    - FoodTinNutriPasteMeatTrash
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 5
+      - ReagentId: Vitamin
+        Quantity: 5
+
+- type: entity
+  parent: FoodTinMRETrash
+  id: FoodTinNutriPasteMeatTrash
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste_meat.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Tins/nutri_paste_meat.rsi
+
+- type: entity
+  parent: [BoxCardboard, BaseBagOpenClose]
+  id: FoodBoxImperialMRE
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Boxes/imperial_mre.rsi
+    layers:
+    - state: box
+      map: ["closeLayer"]
+    - state: box-open
+      map: ["openLayer"]
+      visible: false
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Boxes/imperial_mre.rsi
+    size: Small
+    shape:
+    - 0,0,1,0
+  - type: Storage
+    grid:
+    - 0,0,3,1
+    maxItemSize: Small
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: DrinkGuardsmanFlask
+        - id: MatchboxGuardsman
+        - id: FoodSnackImperialHardtack
+        - !type:GroupSelector
+          rolls: 2
+          children:
+          - id: FoodTinGroxPorridge
+          - id: FoodTinGroxMeat
+          - id: FoodTinNutriPaste
+          - id: FoodTinNutriPasteMeat
+  - type: Appearance
+
+- type: entity
+  parent: [BoxCardboardSmall, BaseBagOpenClose]
+  id: FoodBoxImperialMRESmall
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Consumable/Food/Boxes/imperial_mre_small.rsi
+    layers:
+    - state: box
+      map: ["closeLayer"]
+    - state: box-open
+      map: ["openLayer"]
+      visible: false
+  - type: Item
+    sprite: _WH40K/Objects/Consumable/Food/Boxes/imperial_mre_small.rsi
+    size: Small
+  - type: Storage
+    grid:
+    - 0,0,2,1
+    maxItemSize: Small
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: FoodSnackImperialNutriBar
+        - !type:GroupSelector
+          children:
+          - id: FoodTinGroxPorridge
+          - id: FoodTinGroxMeat
+          - id: FoodTinNutriPaste
+          - id: FoodTinNutriPasteMeat
+  - type: Appearance
+
+- type: entity
+  name: guardsman matchbox
+  parent: [SmallboxItem, BaseBagOpenClose]
+  id: MatchboxGuardsman
+  description: A military issue box of storm-proof matches.
+  suffix: WH40K
+  components:
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/matchbox_drop.ogg
+  - type: Matchbox
+  - type: Sprite
+    sprite: _WH40K/Objects/Tools/guardsman_matchpack.rsi
+    layers:
+    - state: matchbox
+    - state: matchbox-open
+      map: ["openLayer"]
+    - state: matchbox1
+      map: ["matchbox1"]
+      visible: false
+    - state: matchbox2
+      map: ["matchbox2"]
+      visible: false
+    - state: matchbox3
+      map: ["matchbox3"]
+      visible: false
+    - state: matchbox4
+      map: ["matchbox4"]
+      visible: false
+    - state: matchbox5
+      map: ["matchbox5"]
+      visible: false
+    - state: matchbox6
+      map: ["matchbox6"]
+      visible: false
+    - state: matchbox7
+      map: ["matchbox7"]
+      visible: false
+    - state: matchbox8
+      map: ["matchbox8"]
+      visible: false
+  - type: Item
+    sprite: _WH40K/Objects/Tools/guardsman_matchpack.rsi
+    size: Small
+  - type: Storage
+    grid:
+    - 0,0,3,1
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: MatchstickGuardsman
+        amount: 8
+  - type: ItemCounter
+    count:
+      tags: [Matchstick]
+    composite: true
+    layerStates:
+    - matchbox1
+    - matchbox2
+    - matchbox3
+    - matchbox4
+    - matchbox5
+    - matchbox6
+    - matchbox7
+    - matchbox8
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Trash
+  - type: SpaceGarbage
+
+- type: entity
+  parent: Matchstick
+  id: MatchstickGuardsman
+  description: A military issue match stick that burns longer than a standard one.
+  suffix: WH40K
+  components:
+  - type: Matchstick
+    duration: 20

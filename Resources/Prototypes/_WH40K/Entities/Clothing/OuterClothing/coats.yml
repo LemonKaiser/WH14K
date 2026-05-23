@@ -33,7 +33,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/officrercoat.rsi
 
 - type: entity
-  parent: ClothingOuterArmorOfficer
+  parent: [ClothingOuterArmorOfficer, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorCultistCoat
   name: шинель культиста
   description: Тёмная шинель, пропитанная символами Хаоса. Она внушает страх своим видом.
@@ -84,7 +84,7 @@
         Caustic: 0.9
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: [ClothingOuterArmorFlakVestLight, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorsmugCoat
   suffix: WH40K, Chaos
   components:
@@ -139,26 +139,6 @@
     sprite: _WH40K/Clothing/OuterClothing/Robes/chaplain_robe.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Robes/chaplain_robe.rsi
-
-- type: entity
-  parent: ClothingOuterArmorCommissar
-  id: ClothingOuterArmorFlakVestMajor
-  suffix: WH40K, Майор
-  components:
-  - type: Armor
-    modifiers:
-      coefficients:
-        Blunt: 0.35
-        Slash: 0.35
-        Piercing: 0.4
-        Heat: 0.45
-        Caustic: 0.8
-  - type: ExplosionResistance
-    damageCoefficient: 0.6
-  - type: Sprite
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
-  - type: Clothing
-    sprite: _WH40K/Clothing/OuterClothing/Armor/flakcoat.rsi
 
 - type: entity
   parent: ClothingOuterArmorFlakVestLight

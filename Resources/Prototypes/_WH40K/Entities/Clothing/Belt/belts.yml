@@ -30,7 +30,7 @@
   - type: Appearance
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: [ClothingBeltStorageBase, WH40KChaosDamnationClothing]
   id: chaosbelt
   name: ритуальная разгрузка Хаоса
   description: Жуткий пояс, сшитый из неизвестной кожи и пропитанный шёпотом Варпа.
@@ -42,7 +42,7 @@
     sprite: _WH40K/Clothing/Belt/beltcultchaos.rsi
 
 - type: entity
-  parent: ClothingBeltStorageBase
+  parent: [ClothingBeltStorageBase, WH40KChaosDamnationClothing]
   id: chaosbelt2
   name: пояс Культа Хаоса
   description: Жуткий пояс, сшитый из неизвестной кожи и пропитанный кровью.

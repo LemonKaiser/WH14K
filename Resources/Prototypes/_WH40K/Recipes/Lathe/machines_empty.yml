@@ -194,13 +194,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheStatic
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -230,13 +226,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier1
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -287,13 +279,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier2
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -344,13 +332,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier3
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -401,10 +385,6 @@
 - type: latheRecipePack
   id: WH40KProtolatheStaticHeretics
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
-  - WH40KRecipeAmmoLethalshot
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
@@ -437,13 +417,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier1Heretics
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
@@ -494,13 +470,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier2Heretics
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
@@ -551,13 +523,9 @@
 - type: latheRecipePack
   id: WH40KProtolatheTier3Heretics
   recipes:
-  - WH40KRecipeAmmoAutogun
-  - WH40KRecipeAmmo10mm
-  - WH40KRecipeAmmo10mmLong
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
   - WH40KRecipeAmmoElectricArc
-  - WH40KRecipeAmmoLethalshot
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker

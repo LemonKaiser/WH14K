@@ -20,12 +20,9 @@ internal static class WH40KChaosUiShared
     public const int UpgradeExCost = 3;
 
     private static readonly ResPath SkrizhalRsi = new("_WH40K/Interface/Abilities/skrizhali_runes.rsi");
+    private static readonly ResPath CultistActionsRsi = new("_WH40K/Interface/Actions/cultist_abilities.rsi");
     private static readonly ResPath MagicActionsRsi = new("Objects/Magic/magicactions.rsi");
-    private static readonly ResPath SmokeActionRsi = new("Actions/smokeaction.rsi");
-    private static readonly ResPath EldritchActionsRsi = new("Objects/Magic/Eldritch/eldritch_actions.rsi");
-    private static readonly ResPath OrgansRsi = new("Mobs/Species/Human/organs.rsi");
-    private static readonly ResPath JumpActionRsi = new("Interface/Actions/jump.rsi");
-    private static readonly ResPath EnergyKatanaRsi = new("_WH40K/Objects/Weapons/Melee/khornkatana.rsi");
+    private static readonly ResPath XenoToxicRsi = new("Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi");
 
     public static SpriteSpecifier.Rsi GetGiftIconSpecifier(WH40KChaosPatron patron, int slot)
     {
@@ -33,36 +30,36 @@ internal static class WH40KChaosUiShared
         {
             WH40KChaosPatron.Khorne => slot switch
             {
-                1 => new SpriteSpecifier.Rsi(EnergyKatanaRsi, "icon"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
-                3 => new SpriteSpecifier.Rsi(JumpActionRsi, "icon"),
+                1 => new SpriteSpecifier.Rsi(CultistActionsRsi, "blade"),
+                2 => new SpriteSpecifier.Rsi(CultistActionsRsi, "shield"),
+                3 => new SpriteSpecifier.Rsi(CultistActionsRsi, "dash"),
                 _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
             },
             WH40KChaosPatron.Nurgle => slot switch
             {
-                1 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-                3 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                _ => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
+                1 => new SpriteSpecifier.Rsi(CultistActionsRsi, "smoke"),
+                2 => new SpriteSpecifier.Rsi(XenoToxicRsi, "xeno_toxic"),
+                3 => new SpriteSpecifier.Rsi(CultistActionsRsi, "zombie"),
+                _ => new SpriteSpecifier.Rsi(CultistActionsRsi, "smoke"),
             },
             WH40KChaosPatron.Slaanesh => slot switch
             {
-                1 => new SpriteSpecifier.Rsi(EldritchActionsRsi, "voidblink"),
-                2 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                3 => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
+                1 => new SpriteSpecifier.Rsi(CultistActionsRsi, "portal"),
+                2 => new SpriteSpecifier.Rsi(CultistActionsRsi, "stim"),
+                3 => new SpriteSpecifier.Rsi(CultistActionsRsi, "shield"),
+                _ => new SpriteSpecifier.Rsi(CultistActionsRsi, "portal"),
             },
             WH40KChaosPatron.Tzeentch => slot switch
             {
-                1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
-                2 => new SpriteSpecifier.Rsi(JumpActionRsi, "icon"),
-                3 => new SpriteSpecifier.Rsi(OrgansRsi, "brain"),
+                1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
+                2 => new SpriteSpecifier.Rsi(CultistActionsRsi, "shield"),
+                3 => new SpriteSpecifier.Rsi(CultistActionsRsi, "portal"),
                 _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
             },
             _ => slot switch
             {
-                1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
+                1 => new SpriteSpecifier.Rsi(CultistActionsRsi, "portal"),
+                2 => new SpriteSpecifier.Rsi(CultistActionsRsi, "shield"),
                 3 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
                 _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
             },

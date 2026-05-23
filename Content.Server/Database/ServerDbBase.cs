@@ -521,6 +521,7 @@ namespace Content.Server.Database
                 Math.Max(0, progress.LifetimeXp),
                 Math.Max(0, progress.SeasonXp),
                 NormalizeDatabaseTime(progress.LastProgressAt),
+                progress.LastAccountResetAt == null ? null : NormalizeDatabaseTime(progress.LastAccountResetAt.Value),
                 progress.SelectedGhostSkinId,
                 progress.SelectedOocTitleId,
                 progress.SelectedOocNameColorId);
@@ -533,6 +534,7 @@ namespace Content.Server.Database
             var lifetimeXp = Math.Max(0, data.LifetimeXp);
             var seasonXp = Math.Max(0, data.SeasonXp);
             var lastProgressAt = data.LastProgressAt.UtcDateTime;
+            var lastAccountResetAt = data.LastAccountResetAt?.UtcDateTime;
             var ghostSkinId = string.IsNullOrWhiteSpace(data.SelectedGhostSkinId)
                 ? null
                 : data.SelectedGhostSkinId;
@@ -574,6 +576,7 @@ namespace Content.Server.Database
             metaRow.LifetimeXp = lifetimeXp;
             metaRow.SeasonXp = seasonXp;
             metaRow.LastProgressAt = lastProgressAt;
+            metaRow.LastAccountResetAt = lastAccountResetAt;
             metaRow.SelectedGhostSkinId = ghostSkinId;
             metaRow.SelectedOocTitleId = oocTitleId;
             metaRow.SelectedOocNameColorId = oocColorId;
@@ -798,6 +801,7 @@ namespace Content.Server.Database
                 var lifetimeXp = Math.Max(0, progressData.LifetimeXp);
                 var seasonXp = Math.Max(0, progressData.SeasonXp);
                 var lastProgressAt = progressData.LastProgressAt.UtcDateTime;
+                var lastAccountResetAt = progressData.LastAccountResetAt?.UtcDateTime;
                 var ghostSkinId = string.IsNullOrWhiteSpace(progressData.SelectedGhostSkinId) ? null : progressData.SelectedGhostSkinId;
                 var oocTitleId = string.IsNullOrWhiteSpace(progressData.SelectedOocTitleId) ? null : progressData.SelectedOocTitleId;
                 var oocColorId = string.IsNullOrWhiteSpace(progressData.SelectedOocNameColorId) ? null : progressData.SelectedOocNameColorId;
@@ -830,6 +834,7 @@ namespace Content.Server.Database
                 metaRow.LifetimeXp = lifetimeXp;
                 metaRow.SeasonXp = seasonXp;
                 metaRow.LastProgressAt = lastProgressAt;
+                metaRow.LastAccountResetAt = lastAccountResetAt;
                 metaRow.SelectedGhostSkinId = ghostSkinId;
                 metaRow.SelectedOocTitleId = oocTitleId;
                 metaRow.SelectedOocNameColorId = oocColorId;

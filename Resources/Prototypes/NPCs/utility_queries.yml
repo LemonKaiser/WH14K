@@ -251,6 +251,30 @@
     - !type:TargetInLOSOrCurrentCon
       curve: !type:BoolCurve
 
+- type: utilityQuery
+  id: NearbyTurretGunTargets
+  query:
+    - !type:NearbyTurretHostilesQuery
+  considerations:
+    - !type:TargetIsAliveOrDamageableCon
+      curve: !type:BoolCurve
+    - !type:TargetIsCritCon
+      curve: !type:InverseBoolCurve
+    - !type:TargetIsStunnedCon
+      curve: !type:InverseBoolCurve
+    - !type:TurretTargetingCon
+      curve: !type:BoolCurve
+    - !type:TargetDistanceCon
+      curve: !type:PresetCurve
+        preset: TargetDistance
+    - !type:TargetHealthOrIntegrityCon
+      curve: !type:PresetCurve
+        preset: TargetHealth
+    - !type:TargetAccessibleCon
+      curve: !type:BoolCurve
+    - !type:TargetInLOSOrCurrentCon
+      curve: !type:BoolCurve
+
 #- type: utilityQuery
 #  id: NearbyShoes
 #  query:

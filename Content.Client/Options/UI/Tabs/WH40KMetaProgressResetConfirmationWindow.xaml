@@ -1,0 +1,18 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title="Meta Progress Reset"
+                      Resizable="False">
+    <BoxContainer Orientation="Vertical" Margin="14 12 14 12" SetWidth="460">
+        <RichTextLabel Name="BodyLabel" Margin="0 0 0 8" />
+        <RichTextLabel Name="FooterLabel" Margin="0 0 0 10" />
+        <BoxContainer Orientation="Horizontal">
+            <Button Name="CancelButton"
+                    Text="{Loc 'ui-options-meta-progression-reset-cancel'}"
+                    SetWidth="150" />
+            <Control HorizontalExpand="True" />
+            <Button Name="ConfirmButton"
+                    SetWidth="170" />
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>

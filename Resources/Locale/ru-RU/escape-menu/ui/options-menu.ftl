@@ -23,6 +23,7 @@ ui-options-general-discord = Discord
 ui-options-general-cursor = Курсор
 ui-options-general-speech = Речь
 ui-options-general-storage = Инвентарь
+ui-options-general-meta-progression = Мета прогрессия
 ui-options-general-accessibility = Доступность
 ui-options-wh40k-notifications-mode = Вид оповещений:
 ui-options-wh40k-notifications-mode-full = Полный
@@ -187,6 +188,41 @@ ui-options-function-move-stored-item = Переместить хранящийс
 ui-options-function-rotate-stored-item = Повернуть хранящийся объект
 ui-options-function-save-item-location = Сохранить расположение объекта
 ui-options-static-storage-ui = Закрепить интерфейс хранилища на хотбаре
+ui-options-meta-progression-reset-description =
+    Полный сброс аккаунтного прогресса WH40K.
+ui-options-meta-progression-reset-button = Сбросить прогресс
+ui-options-meta-progression-reset-status-unavailable = Статус сброса: недоступно вне сервера.
+ui-options-meta-progression-reset-status-loading = Статус сброса: загружаем данные мета прогрессии...
+ui-options-meta-progression-reset-status-processing = Статус сброса: запрос отправлен, выполняем сброс...
+ui-options-meta-progression-reset-status-ready = Статус сброса: сброс доступен.
+ui-options-meta-progression-reset-status-cooldown = Статус сброса: повторный сброс будет доступен через { $time }.
+ui-options-meta-progression-reset-warning-one-title = Сброс мета прогрессии
+ui-options-meta-progression-reset-warning-one-body =
+    Вы собираетесь полностью сбросить аккаунтный прогресс WH40K.
+    Будут удалены:
+    - уровень и накопленный опыт;
+    - достижения и их награды;
+    - открытые украшения и активные косметические выборы;
+    - прокачка развития персонажа;
+    - мета-зависимые loadout selections.
+ui-options-meta-progression-reset-warning-one-footer = Это действие необратимо. Продолжить можно будет через 10 секунд.
+ui-options-meta-progression-reset-warning-two-title = Подтвердите сброс
+ui-options-meta-progression-reset-warning-two-body =
+    Точно сбросить прогресс этого аккаунта?
+    Сброс затронет только ваш собственный аккаунт и не повлияет на других игроков.
+ui-options-meta-progression-reset-warning-two-footer = Сбрасывать аккаунтный прогресс можно только один раз в месяц. Подтвердить можно будет через 10 секунд.
+ui-options-meta-progression-reset-cancel = Отмена
+ui-options-meta-progression-reset-continue = Продолжить
+ui-options-meta-progression-reset-confirm = Подтвердить сброс
+ui-options-meta-progression-reset-confirm-wait = Подождите { $seconds } сек.
+ui-options-meta-progression-reset-popup-success = Аккаунтный прогресс WH40K успешно сброшен.
+ui-options-meta-progression-reset-popup-cooldown = Сброс пока недоступен. Повторно можно будет сбросить прогресс через { $time }.
+ui-options-meta-progression-reset-popup-unavailable = Сброс пока недоступен. Попробуйте ещё раз через несколько секунд.
+ui-options-meta-progression-reset-popup-failed = Не удалось сбросить аккаунтный прогресс WH40K.
+ui-options-meta-progression-reset-time-days-hours = { $days }д { $hours }ч
+ui-options-meta-progression-reset-time-hours-minutes = { $hours }ч { $minutes }м
+ui-options-meta-progression-reset-time-minutes-seconds = { $minutes }м { $seconds }с
+ui-options-meta-progression-reset-time-seconds = { $seconds }с
 ui-options-function-smart-equip-backpack = Умная экипировка в рюкзак
 ui-options-function-smart-equip-belt = Умная экипировка на пояс
 ui-options-function-smart-equip-suit-storage = Умная экипировка на хранилище костюма

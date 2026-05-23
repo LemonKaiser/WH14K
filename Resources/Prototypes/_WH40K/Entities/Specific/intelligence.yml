@@ -23,6 +23,8 @@
     layerFunction: Threshold
   - type: StackLayerThreshold
     thresholds: [ 2, 3, 4 ]
+  - type: StackPrice
+    price: 1
   - type: Appearance
   - type: PhysicalComposition
     materialComposition:
@@ -76,7 +78,7 @@
   - type: StackLayerThreshold
     thresholds: [ 2, 3, 4 ]
   - type: StackPrice
-    price: 1000
+    price: 1
   - type: Currency
     price:
       intelligence_imp: 1
@@ -118,4 +120,4 @@
   unit: materials-unit-piece
   icon: { sprite: /Textures/_WH40K/Objects/Specific/intelligence.rsi, state: datachip }
   color: "#8A9A5B"
-  price: 0
+  price: 1

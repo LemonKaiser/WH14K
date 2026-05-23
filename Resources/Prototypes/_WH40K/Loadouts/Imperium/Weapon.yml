@@ -236,7 +236,7 @@
   dummyEntity: WeaponLaserMeltagun
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 67
+    requiredLevel: 40
   equipment:
     suitstorage: WeaponLaserMeltagun
   storage:
@@ -244,3 +244,14 @@
     - MeltPowerCell
     - MeltPowerCell
     - MeltPowerCell
+
+- type: loadout
+  id: WH40KWeaponLondoronMk2AquilaLoadout
+  dummyEntity: WeaponSniperLondoronMk2Aquila
+  equipment:
+    suitstorage: WeaponSniperLondoronMk2Aquila
+  storage:
+    belt:
+    - MagazineLondoronMk2
+    - MagazineLondoronMk2
+    - MagazineLondoronMk2

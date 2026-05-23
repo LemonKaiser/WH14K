@@ -72,14 +72,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconMajor
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: Major
-  jobName: job-name-major
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconLieutenant
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -229,6 +221,30 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: TauWarrior
   jobName: job-name-tau-fire-warrior
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauEarthCaste
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauWarrior
+  jobName: job-name-tau-earth-caste
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauAirCaste
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauWarrior
+  jobName: job-name-tau-air-caste
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconTauWaterCaste
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: TauWarrior
+  jobName: job-name-tau-water-caste
 
 - type: jobIcon
   parent: JobIcon

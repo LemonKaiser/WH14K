@@ -1,0 +1,8 @@
+- type: entity
+  id: WH40KChaosDamnationClothing
+  abstract: true
+  components:
+  - type: WH40KChaosDamnationClothing
+    delaySeconds: 2
+    fireStacks: 1
+    tickIntervalSeconds: 1

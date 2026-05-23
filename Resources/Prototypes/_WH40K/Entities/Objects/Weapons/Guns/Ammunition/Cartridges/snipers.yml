@@ -1,0 +1,38 @@
+- type: entity
+  id: CartridgeLondoronMk2
+  parent: BaseCartridge
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CartridgeLondoronMk2
+  - type: CartridgeAmmo
+    proto: BulletLondoronMk2
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals
+
+- type: entity
+  id: CartridgeLondoronMk2Possessed
+  parent: BaseCartridge
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CartridgeLondoronMk2Possessed
+  - type: CartridgeAmmo
+    proto: BulletLondoronMk2Possessed
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals

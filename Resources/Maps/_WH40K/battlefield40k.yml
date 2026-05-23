@@ -91097,7 +91097,7 @@ entities:
     - type: Transform
       pos: -156.5,76.5
       parent: 2
-- proto: SpawnPointMajor
+- proto: SpawnPointLieutenant
   entities:
   - uid: 9662
     components:

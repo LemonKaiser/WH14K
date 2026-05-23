@@ -114,7 +114,7 @@ public sealed class RadioSystem : EntitySystem
                     ? WH40KChatTranslationPayload.CreatePlaceholder(message, sourceLanguage)
                     : null;
 
-                DispatchRadioMessageCore(messageSource, message, channel, radioSource, true, initialTranslation, serverMessageId);
+                DispatchRadioMessageCore(messageSource, message, channel, radioSource, true, initialTranslation, serverMessageId, fallbackLanguage);
 
                 if (translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
                 {
@@ -124,13 +124,14 @@ public sealed class RadioSystem : EntitySystem
                         message,
                         channel,
                         radioSource,
+                        fallbackLanguage,
                         translationDispatch.PendingTranslation);
                 }
 
                 return;
             }
 
-            DispatchRadioMessageCore(messageSource, message, channel, radioSource, true, translationDispatch.ImmediateTranslation);
+            DispatchRadioMessageCore(messageSource, message, channel, radioSource, true, translationDispatch.ImmediateTranslation, null, fallbackLanguage);
         });
     }
 
@@ -140,6 +141,7 @@ public sealed class RadioSystem : EntitySystem
         string message,
         RadioChannelPrototype channel,
         EntityUid radioSource,
+        string? senderLanguage,
         Task<WH40KChatTranslationPayload?> pendingTranslation)
     {
         var translation = await pendingTranslation;
@@ -148,7 +150,7 @@ public sealed class RadioSystem : EntitySystem
 
         await RunOnMainThreadAsync(() =>
         {
-            DispatchRadioMessageUpdate(messageSource, message, channel, radioSource, translation, serverMessageId);
+            DispatchRadioMessageUpdate(messageSource, message, channel, radioSource, translation, serverMessageId, senderLanguage);
         });
     }
 
@@ -159,7 +161,8 @@ public sealed class RadioSystem : EntitySystem
         EntityUid radioSource,
         bool escapeMarkup,
         WH40KChatTranslationPayload? translation,
-        uint? serverMessageId = null)
+        uint? serverMessageId = null,
+        string? senderLanguage = null)
     {
         // TODO if radios ever garble / modify messages, feedback-prevention needs to be handled better than this.
         if (!_messages.Add(message))
@@ -252,6 +255,7 @@ public sealed class RadioSystem : EntitySystem
                         name,
                         translation,
                         serverMessageId,
+                        senderLanguage,
                         radioCache!,
                         out var translatedChatMsg))
                 {
@@ -281,7 +285,8 @@ public sealed class RadioSystem : EntitySystem
         RadioChannelPrototype channel,
         EntityUid radioSource,
         WH40KChatTranslationPayload translation,
-        uint serverMessageId)
+        uint serverMessageId,
+        string? senderLanguage)
     {
         var evt = new TransformSpeakerNameEvent(messageSource, MetaData(messageSource).EntityName);
         RaiseLocalEvent(messageSource, evt);
@@ -333,7 +338,13 @@ public sealed class RadioSystem : EntitySystem
             var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
             if (!radioCache.TryGetValue(cacheKey, out var cached))
             {
-                var visibleText = translation.GetVisibleText(recipientLanguage);
+                var preserveOriginal = IsMessageAuthorSession(messageSource, session);
+                var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                    translation,
+                    originalMessage,
+                    senderLanguage,
+                    recipientLanguage,
+                    preserveOriginal);
                 if (string.Equals(visibleText, originalMessage, StringComparison.Ordinal))
                 {
                     radioCache[cacheKey] = (null, null);
@@ -349,7 +360,12 @@ public sealed class RadioSystem : EntitySystem
                     speechVerbLocKey,
                     visibleText,
                     translation.SourceLanguage,
-                    translation.OriginalText);
+                    WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                        translation,
+                        originalMessage,
+                        senderLanguage,
+                        recipientLanguage,
+                        preserveOriginal));
                 cached = (visibleText, wrappedMessage);
                 radioCache[cacheKey] = cached;
             }
@@ -383,6 +399,7 @@ public sealed class RadioSystem : EntitySystem
         string escapedName,
         WH40KChatTranslationPayload translation,
         uint? serverMessageId,
+        string? senderLanguage,
         Dictionary<(string?, string?), MsgChatMessage?> radioCache,
         out MsgChatMessage chatMsg)
     {
@@ -404,7 +421,13 @@ public sealed class RadioSystem : EntitySystem
             return true;
         }
 
-        var visibleText = translation.GetVisibleText(recipientLanguage);
+        var preserveOriginal = IsMessageAuthorSession(messageSource, session);
+        var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+            translation,
+            originalMessage,
+            senderLanguage,
+            recipientLanguage,
+            preserveOriginal);
         var wrappedMessage = WH40KChatTranslationFormatting.BuildRadioWrappedMessage(
             _wh40kPlayerCulture,
             session,
@@ -414,7 +437,12 @@ public sealed class RadioSystem : EntitySystem
             speechVerbLocKey,
             visibleText,
             translation.SourceLanguage,
-            translation.OriginalText);
+            WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                translation,
+                originalMessage,
+                senderLanguage,
+                recipientLanguage,
+                preserveOriginal));
 
         chatMsg = new MsgChatMessage
         {
@@ -430,6 +458,12 @@ public sealed class RadioSystem : EntitySystem
 
         radioCache[cacheKey] = chatMsg;
         return true;
+    }
+
+    private bool IsMessageAuthorSession(EntityUid messageSource, ICommonSession session)
+    {
+        return TryComp(messageSource, out ActorComponent? actor) &&
+               actor.PlayerSession.UserId == session.UserId;
     }
 
     private bool TryGetRecipientSession(EntityUid receiver, out ICommonSession session)

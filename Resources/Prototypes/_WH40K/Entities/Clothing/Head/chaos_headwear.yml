@@ -1,0 +1,12 @@
+- type: entity
+  parent: [ClothingHeadBase, WH40KChaosDamnationClothing]
+  id: ClothingHeadArafatkaChaos
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/headscarf/chaos_arafatka.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/headscarf/chaos_arafatka.rsi
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD

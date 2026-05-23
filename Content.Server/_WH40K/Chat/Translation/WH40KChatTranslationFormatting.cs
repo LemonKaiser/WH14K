@@ -9,6 +9,40 @@ namespace Content.Server._WH40K.Chat.Translation;
 
 public static class WH40KChatTranslationFormatting
 {
+    public static bool ShouldPreserveOriginalText(string? senderLanguage, string? recipientLanguage)
+    {
+        var normalizedSender = WH40KChatTranslationMarkup.NormalizeLanguageCode(senderLanguage);
+        var normalizedRecipient = WH40KChatTranslationMarkup.NormalizeLanguageCode(recipientLanguage);
+
+        return normalizedSender != null &&
+               normalizedRecipient != null &&
+               normalizedSender == normalizedRecipient;
+    }
+
+    public static string ResolveVisibleText(
+        WH40KChatTranslationPayload translation,
+        string originalMessage,
+        string? senderLanguage,
+        string? recipientLanguage,
+        bool preserveOriginal = false)
+    {
+        return preserveOriginal || ShouldPreserveOriginalText(senderLanguage, recipientLanguage)
+            ? originalMessage
+            : translation.GetVisibleText(recipientLanguage);
+    }
+
+    public static string ResolveOriginalTextForTag(
+        WH40KChatTranslationPayload translation,
+        string originalMessage,
+        string? senderLanguage,
+        string? recipientLanguage,
+        bool preserveOriginal = false)
+    {
+        return preserveOriginal || ShouldPreserveOriginalText(senderLanguage, recipientLanguage)
+            ? string.Empty
+            : translation.OriginalText;
+    }
+
     public static bool ShouldShowLanguageTag(string? recipientLanguage, string sourceLanguage)
     {
         var normalizedSource = WH40KChatTranslationMarkup.NormalizeLanguageCode(sourceLanguage);

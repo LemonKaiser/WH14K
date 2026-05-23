@@ -398,6 +398,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         var activeCount = activeDraft.GetValueOrDefault(role.RoleId);
         var hasActiveDraft = activeCount > 0;
         var blockedByMode = _catalogAutoMode && !role.AllowAuto;
+        var roleCapReached = !_catalogAutoMode && GetDraftRoleCap(role, false) <= 0;
 
         var row = new BoxContainer
         {
@@ -429,7 +430,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             HorizontalExpand = true,
             PanelOverride = CreatePanelStyle(
                 hasActiveDraft ? (_chaosTheme ? Color.FromHex("#19090C".AsSpan()) : Color.FromHex("#171713".AsSpan())) : ThemeInset,
-                hasActiveDraft ? _accent : blockedByMode ? TerminalDanger : ThemeBorder,
+                hasActiveDraft ? _accent : blockedByMode || roleCapReached ? TerminalDanger : ThemeBorder,
                 1,
                 8,
                 6)
@@ -437,13 +438,18 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         namePanel.AddChild(new Label
         {
             Text = WH40KCommandUiStyles.ResolveLocalizedOrRaw(role.Name),
-            FontColorOverride = blockedByMode ? ThemeMuted : hasActiveDraft ? Color.White : ThemeText,
+            FontColorOverride = blockedByMode || roleCapReached ? ThemeMuted : hasActiveDraft ? Color.White : ThemeText,
             ClipText = true,
             HorizontalExpand = true,
             VerticalAlignment = VAlignment.Center
         });
         row.AddChild(namePanel);
 
+        row.AddChild(CreateMiniBadge(
+            $"{role.CurrentTeamCount}/{role.PerRoleCap}",
+            ThemeInset,
+            roleCapReached ? TerminalDanger : ThemeBorder,
+            roleCapReached ? TerminalDanger : ThemeMuted));
         row.AddChild(CreateMiniBadge(FormatFundsInfluenceCost(role.UnitFundsCost, role.UnitInfluenceCost), ThemeInset, ThemeAction, ThemeText));
         row.AddChild(CreateCatalogStepper(role, activeDraft, activeCount, _catalogAutoMode));
 
@@ -720,7 +726,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             return;
 
         var current = draft.GetValueOrDefault(roleId);
-        var next = Math.Clamp(current + delta, 0, role.PerRoleCap);
+        var roleCap = GetDraftRoleCap(role, autoMode);
+        var next = Math.Clamp(current + delta, 0, roleCap);
         if (next == current)
             return;
 
@@ -751,7 +758,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             return false;
 
         var current = draft.GetValueOrDefault(roleId);
-        if (current >= role.PerRoleCap)
+        if (current >= GetDraftRoleCap(role, autoMode))
             return false;
 
         var (totalCount, _, _) = GetDraftTotals(draft);
@@ -777,7 +784,14 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
                 continue;
             }
 
-            draft[roleId] = Math.Clamp(draft[roleId], 1, role.PerRoleCap);
+            var roleCap = GetDraftRoleCap(role, autoMode);
+            if (roleCap <= 0)
+            {
+                draft.Remove(roleId);
+                continue;
+            }
+
+            draft[roleId] = Math.Clamp(draft[roleId], 1, roleCap);
         }
 
         while (GetDraftTotals(draft).TotalCount > _latestState.MaxTotalCount)
@@ -843,6 +857,13 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         }
 
         return (totalCount, totalFundsCost, totalInfluenceCost);
+    }
+
+    private static int GetDraftRoleCap(WH40KCommandReinforcementCatalogEntryState role, bool autoMode)
+    {
+        return autoMode
+            ? Math.Max(0, role.PerRoleCap)
+            : Math.Max(0, role.AvailableRoleCap);
     }
 
     private bool CanSubmitManual(
@@ -1004,6 +1025,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             hash.Add(entry.UnitFundsCost);
             hash.Add(entry.UnitInfluenceCost);
             hash.Add(entry.PerRoleCap);
+            hash.Add(entry.CurrentTeamCount);
             hash.Add(entry.AllowAuto);
         }
 

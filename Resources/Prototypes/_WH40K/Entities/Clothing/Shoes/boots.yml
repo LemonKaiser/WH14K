@@ -89,7 +89,7 @@
     damageCoefficient: 0.7
 
 - type: entity
-  parent: ClothingShoesBootsworkTechpriest
+  parent: [ClothingShoesBootsworkTechpriest, WH40KChaosDamnationClothing]
   id: ClothingShoesBootsBloodPact
   suffix: WH40K, Бладпакт
   components:
@@ -99,7 +99,7 @@
     sprite: _WH40K/Clothing/Shoes/Boots/heresyboots.rsi
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
+  parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
   id: ClothingShoesChaosBoots1
   name: Ботинки культиста хаоса
   description: Жуткие сапоги, сшитые из неизвестной кожи и пропитанные шёпотом Варпа. Они служат не только защитой, но и символом преданности Хаоса.
@@ -113,7 +113,7 @@
     modifier: 0.5
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
+  parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
   id: ClothingShoesChaosBoots2
   name: Сапоги культиста хаоса
   description: Сапоги культиста, сделанные из странно мягкой и нежной кожи, чья гладкость вызывает ужас, словно она ещё хранит тепло своих владельцев.
@@ -150,7 +150,7 @@
     modifier: 0.5
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
+  parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
   id: ClothingShoesBootsMauler
   suffix: WH40K, Культ Хаоса, Маулер
   components:
@@ -162,7 +162,7 @@
     modifier: 0.5
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
+  parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
   id: ClothingShoesBootsKhorne
   suffix: WH40K, Культ Хаоса, Кхорн
   components:
@@ -174,7 +174,7 @@
     modifier: 0.4
 
 - type: entity
-  parent: ClothingShoesMilitaryBase
+  parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
   id: ClothingShoesBootsSlaanesh
   suffix: WH40K, Культ Хаоса, Слаанеш
   components:

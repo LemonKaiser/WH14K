@@ -102,6 +102,7 @@ public sealed partial class ChatSystem
                         var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                         if (!placeholderWrappedCache.TryGetValue(cacheKey, out var initialWrapped))
                         {
+                            var preserveOriginal = IsSourceAuthorSession(source, session);
                             initialWrapped = WH40KChatTranslationFormatting.BuildEntitySayWrappedMessage(
                                 _wh40kPlayerCulture,
                                 session,
@@ -110,7 +111,12 @@ public sealed partial class ChatSystem
                                 speechVerbLocKey,
                                 placeholderTranslation.OriginalText,
                                 placeholderTranslation.SourceLanguage,
-                                placeholderTranslation.OriginalText);
+                                WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                                    placeholderTranslation,
+                                    message,
+                                    fallbackLanguage,
+                                    recipientLanguage,
+                                    preserveOriginal));
                             placeholderWrappedCache[cacheKey] = initialWrapped;
                         }
 
@@ -143,6 +149,7 @@ public sealed partial class ChatSystem
                             speechVerbLocKey,
                             escapedName,
                             range,
+                            fallbackLanguage,
                             translationDispatch.PendingTranslation));
                     }
 
@@ -161,6 +168,7 @@ public sealed partial class ChatSystem
                         speechVerbLocKey,
                         escapedName,
                         range,
+                        fallbackLanguage,
                         translationDispatch.PendingTranslation));
                 }
 
@@ -189,7 +197,13 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var translatedWrapped))
                 {
-                    var visibleText = translationDispatch.ImmediateTranslation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = IsSourceAuthorSession(source, session);
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translationDispatch.ImmediateTranslation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     translatedWrapped = WH40KChatTranslationFormatting.BuildEntitySayWrappedMessage(
                         _wh40kPlayerCulture,
                         session,
@@ -198,7 +212,12 @@ public sealed partial class ChatSystem
                         speechVerbLocKey,
                         visibleText,
                         translationDispatch.ImmediateTranslation.SourceLanguage,
-                        translationDispatch.ImmediateTranslation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translationDispatch.ImmediateTranslation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     wrappedCache[cacheKey] = translatedWrapped;
                 }
 
@@ -229,6 +248,7 @@ public sealed partial class ChatSystem
         string speechVerbLocKey,
         string escapedName,
         ChatTransmitRange range,
+        string? fallbackLanguage,
         Task<WH40KChatTranslationPayload?> pendingTranslation)
     {
         var translation = await pendingTranslation;
@@ -253,7 +273,13 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var cached))
                 {
-                    var visibleText = translation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = IsSourceAuthorSession(source, session);
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     if (!ShouldSendLateTranslationUpdate(message, visibleText))
                     {
                         wrappedCache[cacheKey] = (null, null);
@@ -268,7 +294,12 @@ public sealed partial class ChatSystem
                         speechVerbLocKey,
                         visibleText,
                         translation.SourceLanguage,
-                        translation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     cached = (visibleText, translatedWrapped);
                     wrappedCache[cacheKey] = cached;
                 }
@@ -366,6 +397,7 @@ public sealed partial class ChatSystem
                 initialTranslation,
                 escapedName,
                 escapedIdentityName,
+                fallbackLanguage,
                 serverMessageId);
 
             if (translationDispatch.ImmediateTranslation == null && translationDispatch.PendingTranslation != null && serverMessageId is { } delayedMessageId)
@@ -378,6 +410,7 @@ public sealed partial class ChatSystem
                     channel,
                     escapedName,
                     escapedIdentityName,
+                    fallbackLanguage,
                     translationDispatch.PendingTranslation));
             }
 
@@ -401,6 +434,7 @@ public sealed partial class ChatSystem
         RadioChannelPrototype? channel,
         string escapedName,
         string escapedIdentityName,
+        string? fallbackLanguage,
         Task<WH40KChatTranslationPayload?> pendingTranslation)
     {
         var translation = await pendingTranslation;
@@ -421,6 +455,7 @@ public sealed partial class ChatSystem
                 translation,
                 escapedName,
                 escapedIdentityName,
+                fallbackLanguage,
                 serverMessageId,
                 update: true);
         });
@@ -438,6 +473,7 @@ public sealed partial class ChatSystem
         WH40KChatTranslationPayload? translation,
         string escapedName,
         string escapedIdentityName,
+        string? fallbackLanguage,
         uint? serverMessageId = null,
         bool update = false)
     {
@@ -472,7 +508,13 @@ public sealed partial class ChatSystem
                         var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                         if (!whisperCache!.TryGetValue(cacheKey, out var cached))
                         {
-                            visibleText = translation.GetVisibleText(recipientLanguage);
+                            var preserveOriginal = IsSourceAuthorSession(source, session);
+                            visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                                translation,
+                                message,
+                                fallbackLanguage,
+                                recipientLanguage,
+                                preserveOriginal);
                             if (update && !ShouldSendLateTranslationUpdate(message, visibleText))
                             {
                                 whisperCache[cacheKey] = (null, null);
@@ -485,7 +527,12 @@ public sealed partial class ChatSystem
                                 escapedName,
                                 visibleText,
                                 translation.SourceLanguage,
-                                translation.OriginalText);
+                                WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                                    translation,
+                                    message,
+                                    fallbackLanguage,
+                                    recipientLanguage,
+                                    preserveOriginal));
                             whisperCache[cacheKey] = (visibleText, finalWrapped);
                         }
                         else if (cached.Wrapped == null)
@@ -636,13 +683,19 @@ public sealed partial class ChatSystem
                         var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                         if (!placeholderWrappedCache.TryGetValue(cacheKey, out var initialWrapped))
                         {
+                            var preserveOriginal = session.UserId == author;
                             initialWrapped = WH40KChatTranslationFormatting.BuildLoocWrappedMessage(
                                 _wh40kPlayerCulture,
                                 session,
                                 escapedName,
                                 placeholderTranslation.OriginalText,
                                 placeholderTranslation.SourceLanguage,
-                                placeholderTranslation.OriginalText);
+                                WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                                    placeholderTranslation,
+                                    message,
+                                    fallbackLanguage,
+                                    recipientLanguage,
+                                    preserveOriginal));
                             placeholderWrappedCache[cacheKey] = initialWrapped;
                         }
 
@@ -675,6 +728,7 @@ public sealed partial class ChatSystem
                             range,
                             author,
                             escapedName,
+                            fallbackLanguage,
                             translationDispatch.PendingTranslation));
                     }
 
@@ -692,6 +746,7 @@ public sealed partial class ChatSystem
                         range,
                         author,
                         escapedName,
+                        fallbackLanguage,
                         translationDispatch.PendingTranslation));
                 }
 
@@ -721,14 +776,25 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var translatedWrapped))
                 {
-                    var visibleText = translationDispatch.ImmediateTranslation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = session.UserId == author;
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translationDispatch.ImmediateTranslation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     translatedWrapped = WH40KChatTranslationFormatting.BuildLoocWrappedMessage(
                         _wh40kPlayerCulture,
                         session,
                         escapedName,
                         visibleText,
                         translationDispatch.ImmediateTranslation.SourceLanguage,
-                        translationDispatch.ImmediateTranslation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translationDispatch.ImmediateTranslation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     wrappedCache[cacheKey] = translatedWrapped;
                 }
 
@@ -759,6 +825,7 @@ public sealed partial class ChatSystem
         ChatTransmitRange range,
         NetUserId author,
         string escapedName,
+        string? fallbackLanguage,
         Task<WH40KChatTranslationPayload?> pendingTranslation)
     {
         var translation = await pendingTranslation;
@@ -783,7 +850,13 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var cached))
                 {
-                    var visibleText = translation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = session.UserId == author;
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     if (!ShouldSendLateTranslationUpdate(message, visibleText))
                     {
                         wrappedCache[cacheKey] = (null, null);
@@ -796,7 +869,12 @@ public sealed partial class ChatSystem
                         escapedName,
                         visibleText,
                         translation.SourceLanguage,
-                        translation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     cached = (visibleText, translatedWrapped);
                     wrappedCache[cacheKey] = cached;
                 }
@@ -894,6 +972,7 @@ public sealed partial class ChatSystem
                         var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                         if (!placeholderWrappedCache.TryGetValue(cacheKey, out var initialWrapped))
                         {
+                            var preserveOriginal = session.UserId == player.UserId;
                             initialWrapped = WH40KChatTranslationFormatting.BuildDeadWrappedMessage(
                                 _wh40kPlayerCulture,
                                 session,
@@ -902,7 +981,12 @@ public sealed partial class ChatSystem
                                 player.Channel.UserName,
                                 placeholderTranslation.OriginalText,
                                 placeholderTranslation.SourceLanguage,
-                                placeholderTranslation.OriginalText);
+                                WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                                    placeholderTranslation,
+                                    message,
+                                    fallbackLanguage,
+                                    recipientLanguage,
+                                    preserveOriginal));
                             placeholderWrappedCache[cacheKey] = initialWrapped;
                         }
 
@@ -936,6 +1020,7 @@ public sealed partial class ChatSystem
                             hideChat,
                             fromAdmin,
                             playerName,
+                            fallbackLanguage,
                             translationDispatch.PendingTranslation));
                     }
 
@@ -954,6 +1039,7 @@ public sealed partial class ChatSystem
                         hideChat,
                         fromAdmin,
                         playerName,
+                        fallbackLanguage,
                         translationDispatch.PendingTranslation));
                 }
 
@@ -979,7 +1065,13 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var translatedWrapped))
                 {
-                    var visibleText = translationDispatch.ImmediateTranslation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = session.UserId == player.UserId;
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translationDispatch.ImmediateTranslation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     translatedWrapped = WH40KChatTranslationFormatting.BuildDeadWrappedMessage(
                         _wh40kPlayerCulture,
                         session,
@@ -988,7 +1080,12 @@ public sealed partial class ChatSystem
                         player.Channel.UserName,
                         visibleText,
                         translationDispatch.ImmediateTranslation.SourceLanguage,
-                        translationDispatch.ImmediateTranslation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translationDispatch.ImmediateTranslation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     wrappedCache[cacheKey] = translatedWrapped;
                 }
 
@@ -1020,6 +1117,7 @@ public sealed partial class ChatSystem
         bool hideChat,
         bool fromAdmin,
         string playerName,
+        string? fallbackLanguage,
         Task<WH40KChatTranslationPayload?> pendingTranslation)
     {
         var translation = await pendingTranslation;
@@ -1037,7 +1135,13 @@ public sealed partial class ChatSystem
                 var cacheKey = (_wh40kPlayerCulture.GetCulture(session), recipientLanguage);
                 if (!wrappedCache.TryGetValue(cacheKey, out var cached))
                 {
-                    var visibleText = translation.GetVisibleText(recipientLanguage);
+                    var preserveOriginal = session.UserId == player.UserId;
+                    var visibleText = WH40KChatTranslationFormatting.ResolveVisibleText(
+                        translation,
+                        message,
+                        fallbackLanguage,
+                        recipientLanguage,
+                        preserveOriginal);
                     if (!ShouldSendLateTranslationUpdate(message, visibleText))
                     {
                         wrappedCache[cacheKey] = (null, null);
@@ -1052,7 +1156,12 @@ public sealed partial class ChatSystem
                         player.Channel.UserName,
                         visibleText,
                         translation.SourceLanguage,
-                        translation.OriginalText);
+                        WH40KChatTranslationFormatting.ResolveOriginalTextForTag(
+                            translation,
+                            message,
+                            fallbackLanguage,
+                            recipientLanguage,
+                            preserveOriginal));
                     cached = (visibleText, translatedWrapped);
                     wrappedCache[cacheKey] = cached;
                 }
@@ -1090,6 +1199,12 @@ public sealed partial class ChatSystem
     private static bool ShouldSendLateTranslationUpdate(string originalMessage, string translatedMessage)
     {
         return !string.Equals(originalMessage, translatedMessage, StringComparison.Ordinal);
+    }
+
+    private bool IsSourceAuthorSession(EntityUid source, ICommonSession session)
+    {
+        return TryComp(source, out ActorComponent? actor) &&
+               actor.PlayerSession.UserId == session.UserId;
     }
 
     private bool CanDispatchFromSource(EntityUid source)

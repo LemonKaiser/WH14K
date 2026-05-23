@@ -16,9 +16,9 @@ public static class ChatEmojiRichText
 {
     public const string EmojiMarkupTag = "chatemoji";
 
-    private static readonly Dictionary<char, ChatEmojiDefinition[]> DefinitionsByFirstChar = BuildDefinitionsByFirstChar();
+    private static readonly Dictionary<char, EmojiMatchPattern[]> DefinitionsByFirstChar = BuildDefinitionsByFirstChar();
 
-    private const float InlineEmojiScale = 16f / 72f;
+    private const float InlineEmojiScale = 20f / 72f;
     private const float PickerEmojiScale = 24f / 72f;
     private const float CategoryEmojiScale = 22f / 72f;
 
@@ -56,7 +56,7 @@ public static class ChatEmojiRichText
 
     public static TextureRect CreateInlineTextureRect(IResourceCache resourceCache, ChatEmojiDefinition emoji)
     {
-        return CreateTextureRect(resourceCache, emoji, InlineEmojiScale, 20f, new Thickness(1f, 2f, 1f, 2f));
+        return CreateTextureRect(resourceCache, emoji, InlineEmojiScale, 25f, new Thickness(1f, 2f, 1f, 2f));
     }
 
     public static TextureRect CreatePickerTextureRect(IResourceCache resourceCache, ChatEmojiDefinition emoji)
@@ -139,7 +139,7 @@ public static class ChatEmojiRichText
                 continue;
             }
 
-            if (TryMatchEmoji(text, index, out var emoji))
+            if (TryMatchEmoji(text, index, out var emoji, out var emojiLength))
             {
                 if (index > plainStart)
                     builder.Append(FormattedMessage.EscapeText(text.Substring(plainStart, index - plainStart)));
@@ -150,7 +150,7 @@ public static class ChatEmojiRichText
                     .Append(emoji.Alias)
                     .Append("\"/]");
 
-                index += emoji.Value.Length;
+                index += emojiLength;
                 plainStart = index;
                 continue;
             }
@@ -162,9 +162,10 @@ public static class ChatEmojiRichText
             builder.Append(FormattedMessage.EscapeText(text.Substring(plainStart)));
     }
 
-    private static bool TryMatchEmoji(string text, int index, out ChatEmojiDefinition emoji)
+    private static bool TryMatchEmoji(string text, int index, out ChatEmojiDefinition emoji, out int consumedLength)
     {
         emoji = default;
+        consumedLength = 0;
 
         if (index >= text.Length)
             return false;
@@ -180,37 +181,79 @@ public static class ChatEmojiRichText
             if (string.CompareOrdinal(text, index, definition.Value, 0, definition.Value.Length) != 0)
                 continue;
 
-            emoji = definition;
+            emoji = definition.Emoji;
+            consumedLength = definition.Value.Length;
             return true;
         }
 
         return false;
     }
 
-    private static Dictionary<char, ChatEmojiDefinition[]> BuildDefinitionsByFirstChar()
+    private static Dictionary<char, EmojiMatchPattern[]> BuildDefinitionsByFirstChar()
     {
-        var grouped = new Dictionary<char, List<ChatEmojiDefinition>>();
+        var grouped = new Dictionary<char, List<EmojiMatchPattern>>();
 
         foreach (var definition in ChatEmoji.All)
         {
             if (string.IsNullOrEmpty(definition.Value))
                 continue;
 
-            var key = definition.Value[0];
-            if (!grouped.TryGetValue(key, out var list))
-            {
-                list = new List<ChatEmojiDefinition>();
-                grouped[key] = list;
-            }
+            AddMatchPattern(grouped, definition.Value, definition);
 
-            list.Add(definition);
+            var simplifiedValue = StripVariationSelectors(definition.Value);
+            if (!string.Equals(simplifiedValue, definition.Value, StringComparison.Ordinal) &&
+                !string.IsNullOrEmpty(simplifiedValue))
+            {
+                AddMatchPattern(grouped, simplifiedValue, definition);
+            }
         }
 
         return grouped.ToDictionary(
             pair => pair.Key,
             pair => pair.Value
+                .GroupBy(definition => definition.Value, StringComparer.Ordinal)
+                .Select(group => group.First())
                 .OrderByDescending(definition => definition.Value.Length)
-                .ThenBy(definition => definition.Alias, StringComparer.Ordinal)
+                .ThenBy(definition => definition.Emoji.Alias, StringComparer.Ordinal)
                 .ToArray());
     }
+
+    private static void AddMatchPattern(
+        Dictionary<char, List<EmojiMatchPattern>> grouped,
+        string value,
+        ChatEmojiDefinition definition)
+    {
+        if (string.IsNullOrEmpty(value))
+            return;
+
+        var key = value[0];
+        if (!grouped.TryGetValue(key, out var list))
+        {
+            list = new List<EmojiMatchPattern>();
+            grouped[key] = list;
+        }
+
+        list.Add(new EmojiMatchPattern(value, definition));
+    }
+
+    private static string StripVariationSelectors(string value)
+    {
+        var builder = new StringBuilder(value.Length);
+        foreach (var rune in value.EnumerateRunes())
+        {
+            if (IsVariationSelector(rune))
+                continue;
+
+            builder.Append(rune.ToString());
+        }
+
+        return builder.ToString();
+    }
+
+    private static bool IsVariationSelector(Rune rune)
+    {
+        return rune.Value is >= 0xFE00 and <= 0xFE0F or >= 0xE0100 and <= 0xE01EF;
+    }
+
+    private readonly record struct EmojiMatchPattern(string Value, ChatEmojiDefinition Emoji);
 }

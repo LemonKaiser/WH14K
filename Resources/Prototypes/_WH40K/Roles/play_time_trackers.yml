@@ -155,9 +155,6 @@
   id: JobHVoxScout
 
 - type: playTimeTracker
-  id: JobMajor
-
-- type: playTimeTracker
   id: JobWH40KChaplain
 
 - type: playTimeTracker
@@ -165,6 +162,15 @@
 
 - type: playTimeTracker
   id: JobTauFireWarrior
+
+- type: playTimeTracker
+  id: JobTauEarthCaste
+
+- type: playTimeTracker
+  id: JobTauAirCaste
+
+- type: playTimeTracker
+  id: JobTauWaterCaste
 
 - type: playTimeTracker
   id: JobTauOfficer

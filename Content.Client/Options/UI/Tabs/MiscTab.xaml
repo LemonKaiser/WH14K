@@ -51,6 +51,14 @@
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="OpaqueStorageWindowCheckBox" Text="{Loc 'ui-options-opaque-storage-window'}" />
                 <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
+                <Label Name="MetaProgressHeaderLabel" Text="{Loc 'ui-options-general-meta-progression'}"
+                       StyleClasses="LabelKeyText" Margin="0 8 0 0"/>
+                <RichTextLabel Name="MetaProgressResetDescriptionLabel" Margin="0 2 0 0" />
+                <RichTextLabel Name="MetaProgressResetStatusLabel" Margin="0 2 0 4" />
+                <Button Name="ResetMetaProgressButton"
+                        Text="{Loc 'ui-options-meta-progression-reset-button'}"
+                        HorizontalAlignment="Left"
+                        MinWidth="220" />
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

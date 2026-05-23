@@ -96,13 +96,6 @@ public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow
     private static readonly string[] AmbientGlyphs = { "✦", "·", "◇", "✧", "·", "✦" };
     private static readonly string[] BurstGlyphs = { "✦", "◆", "✧", "◇", "✦", "◆", "✧", "◇" };
 
-    private static readonly ResPath MagicActionsRsi = new("Objects/Magic/magicactions.rsi");
-    private static readonly ResPath SmokeActionRsi = new("Actions/smokeaction.rsi");
-    private static readonly ResPath JumpActionRsi = new("Interface/Actions/jump.rsi");
-    private static readonly ResPath EldritchActionsRsi = new("Objects/Magic/Eldritch/eldritch_actions.rsi");
-    private static readonly ResPath EnergyKatanaRsi = new("_WH40K/Objects/Weapons/Melee/khornkatana.rsi");
-    private static readonly ResPath OrgansRsi = new("Mobs/Species/Human/organs.rsi");
-
     public event Action<WH40KChaosPatron>? PatronSelected;
 
     public WH40KChaosSkrizhalPatronSelectorWindow()
@@ -1278,7 +1271,7 @@ public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow
         for (var slot = 1; slot <= icons.Length; slot++)
         {
             var icon = icons[slot - 1];
-            icon.Texture = _sprite.Frame0(GetGiftIconSpecifier(patron, slot));
+            icon.Texture = _sprite.Frame0(WH40KChaosUiShared.GetGiftIconSpecifier(patron, slot));
             icon.ToolTip = $"{Loc.GetString(GetGiftTitleKey(patron, slot))}\n{Loc.GetString(GetGiftDescriptionKey(patron, slot))}";
         }
     }
@@ -1564,48 +1557,6 @@ public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow
             WH40KChaosPatron.Slaanesh => $"wh40k-chaos-selector-slaanesh-gift-{index}-brief",
             WH40KChaosPatron.Tzeentch => $"wh40k-chaos-selector-tzeentch-gift-{index}-brief",
             _ => $"wh40k-chaos-selector-khorne-gift-{index}-brief",
-        };
-    }
-
-    private static SpriteSpecifier.Rsi GetGiftIconSpecifier(WH40KChaosPatron patron, int slot)
-    {
-        return patron switch
-        {
-            WH40KChaosPatron.Khorne => slot switch
-            {
-                1 => new SpriteSpecifier.Rsi(EnergyKatanaRsi, "icon"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
-                3 => new SpriteSpecifier.Rsi(JumpActionRsi, "icon"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-            },
-            WH40KChaosPatron.Nurgle => slot switch
-            {
-                1 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-                3 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                _ => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-            },
-            WH40KChaosPatron.Slaanesh => slot switch
-            {
-                1 => new SpriteSpecifier.Rsi(EldritchActionsRsi, "voidblink"),
-                2 => new SpriteSpecifier.Rsi(SmokeActionRsi, "smokeaction"),
-                3 => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
-            },
-            WH40KChaosPatron.Tzeentch => slot switch
-            {
-                1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
-                2 => new SpriteSpecifier.Rsi(JumpActionRsi, "icon"),
-                3 => new SpriteSpecifier.Rsi(OrgansRsi, "brain"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-            },
-            _ => slot switch
-            {
-                1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "blink"),
-                2 => new SpriteSpecifier.Rsi(MagicActionsRsi, "shield"),
-                3 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
-            },
         };
     }
 

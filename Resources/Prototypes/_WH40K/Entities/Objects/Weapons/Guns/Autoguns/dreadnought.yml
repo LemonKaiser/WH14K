@@ -1,0 +1,56 @@
+- type: entity
+  id: WH40KDreadnoughtWeaponAssaultCannon
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_mg.rsi
+    state: base
+  - type: Gun
+    fireRate: 12
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    minAngle: 8
+    maxAngle: 18
+    angleIncrease: 1.2
+    angleDecay: 18
+    soundGunshot:
+      collection: WH40KDreadnoughtAssaultCannon
+  - type: WH40KGunPrediction
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: BallisticAmmoProvider
+    capacity: 500
+    proto: Bullet825mmLong
+    cycleable: false
+  - type: BallisticAmmoSelfRefiller
+    autoRefillRate: 1s
+    firingPausesAutoRefill: true
+    autoRefillPauseDuration: 1s
+
+- type: entity
+  id: WH40KDreadnoughtWeaponMissileRack
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Mech/mecha_equipment.rsi
+    state: mecha_missilerack_six
+  - type: Gun
+    fireRate: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    minAngle: 4
+    maxAngle: 10
+    angleIncrease: 1
+    angleDecay: 10
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: WH40KGunPrediction
+  - type: BasicEntityAmmoProvider
+    proto: BulletWeakRocket
+    capacity: 6
+    count: 6
+  - type: WH40KReloadOnEmptyAmmo
+    reloadCooldown: 30

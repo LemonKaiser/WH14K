@@ -1,0 +1,9 @@
+- type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetSavlar
+  suffix: WH40K, Savlar
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/savlar_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/savlar_helmet.rsi

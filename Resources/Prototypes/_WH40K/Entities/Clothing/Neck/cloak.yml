@@ -32,7 +32,7 @@
       toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckCloakRainChs
   suffix: WH40K, Культ Хаоса
   components:

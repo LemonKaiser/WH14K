@@ -74,6 +74,13 @@ public sealed partial class WH40KCommandNodeSystem
         public List<ReinforcementPendingEntry> Roles = new();
     }
 
+    private enum ReinforcementRoleCapMode : byte
+    {
+        IgnoreCurrentCounts,
+        RejectWhenExceeded,
+        TrimToAvailable
+    }
+
     private sealed class TeamReinforcementRuntime
     {
         public TimeSpan NextAvailable = TimeSpan.Zero;
@@ -179,6 +186,7 @@ public sealed partial class WH40KCommandNodeSystem
                 ent.Comp.TeamId,
                 args.Roles,
                 false,
+                ReinforcementRoleCapMode.RejectWhenExceeded,
                 out var entries,
                 out var totalCount,
                 out var totalCost,
@@ -253,6 +261,7 @@ public sealed partial class WH40KCommandNodeSystem
                         ent.Comp.TeamId,
                         args.Roles,
                         true,
+                        ReinforcementRoleCapMode.IgnoreCurrentCounts,
                         out var disabledEntries,
                         out _,
                         out _,
@@ -282,6 +291,7 @@ public sealed partial class WH40KCommandNodeSystem
                 ent.Comp.TeamId,
                 args.Roles,
                 true,
+                ReinforcementRoleCapMode.IgnoreCurrentCounts,
                 out var entries,
                 out _,
                 out _,
@@ -331,6 +341,7 @@ public sealed partial class WH40KCommandNodeSystem
         string teamId,
         IReadOnlyCollection<WH40KCommandReinforcementDraftEntry> draftEntries,
         bool autoMode,
+        ReinforcementRoleCapMode roleCapMode,
         out List<ReinforcementPendingEntry> entries,
         out int totalCount,
         out int totalCost,
@@ -347,6 +358,10 @@ public sealed partial class WH40KCommandNodeSystem
 
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile))
             return false;
+
+        var currentRoleCounts = roleCapMode != ReinforcementRoleCapMode.IgnoreCurrentCounts
+            ? BuildCurrentReinforcementRoleCounts(teamId, profile)
+            : null;
 
         var countsByRole = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var entry in draftEntries)
@@ -377,11 +392,37 @@ public sealed partial class WH40KCommandNodeSystem
                 return false;
             }
 
-            var cap = Math.Clamp(option.MaxCount, 1, ReinforcementMaxTotalCount);
-            if (requestedCount > cap)
+            var cap = GetReinforcementRoleCap(option);
+            var effectiveRequestedCount = requestedCount;
+            if (effectiveRequestedCount > cap)
+            {
+                if (roleCapMode == ReinforcementRoleCapMode.TrimToAvailable)
+                {
+                    effectiveRequestedCount = cap;
+                }
+                else
+                {
+                    errorKey = "w40k-cmd-reinforcement-role-cap-hit";
+                    return false;
+                }
+            }
+
+            var currentRoleCount = currentRoleCounts?.GetValueOrDefault(option.Id) ?? 0;
+            if (roleCapMode == ReinforcementRoleCapMode.RejectWhenExceeded &&
+                currentRoleCount + effectiveRequestedCount > cap)
             {
                 errorKey = "w40k-cmd-reinforcement-role-cap-hit";
                 return false;
+            }
+
+            if (roleCapMode == ReinforcementRoleCapMode.TrimToAvailable)
+            {
+                effectiveRequestedCount = Math.Min(
+                    effectiveRequestedCount,
+                    Math.Max(0, cap - currentRoleCount));
+
+                if (effectiveRequestedCount <= 0)
+                    continue;
             }
 
             if (autoMode && !option.AllowAuto)
@@ -392,9 +433,9 @@ public sealed partial class WH40KCommandNodeSystem
 
             var unitInfluenceCost = GetReinforcementUnitCost(option);
             var unitFundsCost = WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost);
-            var optionTotalCost = unitInfluenceCost * requestedCount;
-            var optionTotalFundsCost = unitFundsCost * requestedCount;
-            totalCount += requestedCount;
+            var optionTotalCost = unitInfluenceCost * effectiveRequestedCount;
+            var optionTotalFundsCost = unitFundsCost * effectiveRequestedCount;
+            totalCount += effectiveRequestedCount;
             totalCost += optionTotalCost;
             totalInfluenceCost += optionTotalCost;
             totalFundsCost += optionTotalFundsCost;
@@ -404,7 +445,7 @@ public sealed partial class WH40KCommandNodeSystem
                 option.Job,
                 ResolveReinforcementOptionName(option),
                 ResolveReinforcementOptionDescription(option),
-                requestedCount,
+                effectiveRequestedCount,
                 unitInfluenceCost,
                 unitFundsCost,
                 unitInfluenceCost));
@@ -494,6 +535,7 @@ public sealed partial class WH40KCommandNodeSystem
                 teamId,
                 runtime.AutoConfig.Roles,
                 true,
+                ReinforcementRoleCapMode.TrimToAvailable,
                 out var entries,
                 out var totalCount,
                 out var totalCost,
@@ -740,6 +782,7 @@ public sealed partial class WH40KCommandNodeSystem
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile) || profile.Options.Count == 0)
             return Array.Empty<WH40KCommandReinforcementCatalogEntryState>();
 
+        var currentRoleCounts = BuildCurrentReinforcementRoleCounts(teamId, profile);
         var catalog = new List<WH40KCommandReinforcementCatalogEntryState>(profile.Options.Count);
         foreach (var option in profile.Options
                      .Where(option => !string.IsNullOrWhiteSpace(option.Id))
@@ -758,11 +801,58 @@ public sealed partial class WH40KCommandNodeSystem
                 unitInfluenceCost,
                 WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost),
                 unitInfluenceCost,
-                Math.Clamp(option.MaxCount, 1, ReinforcementMaxTotalCount),
+                GetReinforcementRoleCap(option),
+                Math.Max(0, currentRoleCounts.GetValueOrDefault(option.Id)),
                 option.AllowAuto));
         }
 
         return catalog.ToArray();
+    }
+
+    private Dictionary<string, int> BuildCurrentReinforcementRoleCounts(
+        string teamId,
+        WH40KCommandReinforcementProfilePrototype profile)
+    {
+        var counts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var optionIdsByJob = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var option in profile.Options)
+        {
+            if (string.IsNullOrWhiteSpace(option.Id))
+                continue;
+
+            counts[option.Id] = 0;
+
+            var jobId = option.Job.ToString();
+            if (!optionIdsByJob.TryGetValue(jobId, out var optionIds))
+            {
+                optionIds = new List<string>();
+                optionIdsByJob[jobId] = optionIds;
+            }
+
+            optionIds.Add(option.Id);
+        }
+
+        var teamMembers = EntityQueryEnumerator<WH40KTeamMemberComponent>();
+        while (teamMembers.MoveNext(out var memberUid, out var teamMember))
+        {
+            if (!string.Equals(teamMember.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (!_mobState.IsAlive(memberUid) && !_mobState.IsCritical(memberUid))
+                continue;
+
+            var (roleId, _) = GetRoleInfo(memberUid, teamId);
+            if (!optionIdsByJob.TryGetValue(roleId, out var optionIds))
+                continue;
+
+            foreach (var optionId in optionIds)
+            {
+                counts[optionId] = counts.GetValueOrDefault(optionId) + 1;
+            }
+        }
+
+        return counts;
     }
 
     private WH40KCommandReinforcementAutoConfigState BuildAutoConfigState(
@@ -888,6 +978,11 @@ public sealed partial class WH40KCommandNodeSystem
     private int GetReinforcementUnitCost(WH40KCommandReinforcementOptionPrototype option)
     {
         return Math.Max(1, option.BaseCost);
+    }
+
+    private static int GetReinforcementRoleCap(WH40KCommandReinforcementOptionPrototype option)
+    {
+        return Math.Clamp(option.MaxCount, 1, ReinforcementMaxTotalCount);
     }
 
     private string ResolveReinforcementOptionName(WH40KCommandReinforcementOptionPrototype option)

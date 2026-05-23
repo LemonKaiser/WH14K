@@ -27,6 +27,47 @@
   dummyEntity: WeaponTauPulseRifle
   equipment:
     suitstorage: WeaponTauPulseRifle
+  storage:
+    belt:
+    - TauPulseCellRifle
+    - TauPulseCellRifle
+    - TauPulseCellRifle
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulseCarbineLoadout
+  dummyEntity: WeaponTauPulseCarbine
+  equipment:
+    suitstorage: WeaponTauPulseCarbine
+  storage:
+    belt:
+    - TauPulseCellCarbine
+    - TauPulseCellCarbine
+    - TauPulseCellCarbine
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulseBlasterLoadout
+  dummyEntity: WeaponTauPulseBlaster
+  equipment:
+    suitstorage: WeaponTauPulseBlaster
+  storage:
+    belt:
+    - TauPulseCellBlaster
+    - TauPulseCellBlaster
+    - TauPulseCellBlaster
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulseSniperRifleLoadout
+  dummyEntity: WeaponTauPulseSniperRifle
+  equipment:
+    suitstorage: WeaponTauPulseSniperRifle
+  storage:
+    belt:
+    - TauPulseCellSniper
+    - TauPulseCellSniper
+    - TauPulseCellSniper
   groupBy: "main"
 
 - type: loadout

@@ -1559,6 +1559,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("player_user_id");
 
+                    b.Property<DateTime?>("LastAccountResetAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("last_account_reset_at");
+
                     b.Property<DateTime>("LastProgressAt")
                         .HasColumnType("TEXT")
                         .HasColumnName("last_progress_at");

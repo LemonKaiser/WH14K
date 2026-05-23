@@ -90,7 +90,7 @@
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
 
 - type: entity
-  parent: ClothingBackpack
+  parent: [ClothingBackpack, WH40KChaosDamnationClothing]
   id: ClothingBackpackAstartesChaosPowerpack
   suffix: WH40K, Astartes, Chaos
   components:

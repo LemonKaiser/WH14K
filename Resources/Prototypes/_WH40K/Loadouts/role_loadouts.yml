@@ -71,6 +71,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -88,6 +89,7 @@
   - WH40KImperialLineEyes
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -105,6 +107,7 @@
   - WH40KImperialLineEyes
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -122,6 +125,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KImperialOperatorMainWeapon
 
@@ -134,6 +138,7 @@
   - WH40KImperialLineHands
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KPsykerForceStaff
   - WH40KImperialCommandSidearm
@@ -152,6 +157,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
   - WH40KImperialMainWeapon
 
@@ -169,6 +175,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialMelee
 
 - type: roleLoadout
@@ -185,6 +192,7 @@
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
+  - WH40KImperialAdditionalSupplies
   - WH40KImperialCommandSidearm
   - WH40KImperialMelee
 
@@ -237,23 +245,6 @@
   - WH40KSergeantMelee
 
 - type: roleLoadout
-  id: JobMajor
-  groups:
-  - WH40KImperialGameBuns
-  - WH40KImperialCommandHead
-  - WH40KImperialEyes
-  - WH40KImperialCommandNeckGorget
-  - WH40KImperialSpecialistMask
-  - WH40KImperialCommandUniform
-  - WH40KImperialCommandOuter
-  - WH40KImperialCommandHands
-  - WH40KImperialCommandFeet
-  - WH40KCommandFieldKit
-  - WH40KImperialCommandSidearm
-  - WH40KImperialMelee
-
-
-- type: roleLoadout
   id: JobLieutenant
   groups:
   - WH40KImperialGameBuns
@@ -291,7 +282,7 @@
   - WH40KImperialLineMask
   - WH40KImperialColonelNeck
   - WH40KImperialCommandUniform
-  - WH40KImperialCommandOuterMajor
+  - WH40KImperialCommandOuter
   - WH40KImperialCommandHands
   - WH40KImperialCommandFeet
   - WH40KCommandFieldKit

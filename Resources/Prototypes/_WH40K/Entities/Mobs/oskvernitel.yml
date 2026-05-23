@@ -71,8 +71,8 @@
     containers:
       wh40k-oskvernitel-weapon-container: !type:Container
   - type: WH40KOskvernitelWeapon
-    minigunPrototype: WH40KOskvernitelWeaponMinigun
-    autogunPrototype: WH40KOskvernitelWeaponAutogun
+    minigunPrototype: WH40KOskvernitelWeaponAutocannon
+    autogunPrototype: WH40KOskvernitelWeaponSiegeCannon
   - type: UserInterface
     interfaces:
       enum.WH40KOskvernitelWeaponUiKey.Key:

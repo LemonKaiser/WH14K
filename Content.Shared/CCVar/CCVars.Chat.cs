@@ -47,7 +47,7 @@ public sealed partial class CCVars
         CVarDef.Create("chat.emoji_allowed_channels",
             ChatEmoji.DefaultAllowedChannelsCVar,
             CVar.SERVER | CVar.REPLICATED,
-            "Comma-separated list of chat channels where emoji aliases and direct emoji are enabled. Example: OOC,LOOC");
+            "Comma-separated list of chat channels where emoji aliases and direct emoji are enabled. Example: Local,Radio,OOC,Dead,Admin");
 
     public static readonly CVarDef<bool> ChatEnableFancyBubbles =
         CVarDef.Create("chat.enable_fancy_bubbles",

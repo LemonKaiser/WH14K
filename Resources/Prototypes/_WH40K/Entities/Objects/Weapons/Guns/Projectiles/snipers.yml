@@ -1,0 +1,33 @@
+- type: entity
+  parent: BaseBullet
+  id: BulletLondoronMk2
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 100
+        Structural: 75
+  - type: StaminaDamageOnCollide
+    damage: 50
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.25
+    sprintSpeedModifier: 0.25
+
+- type: entity
+  parent: BaseBullet
+  id: BulletLondoronMk2Possessed
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
+        Structural: 50
+        Heat: 25
+  - type: IgniteOnCollide
+    fireStacks: 1

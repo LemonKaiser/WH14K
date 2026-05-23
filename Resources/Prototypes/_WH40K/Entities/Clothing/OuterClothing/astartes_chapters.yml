@@ -1,0 +1,83 @@
+- type: entity
+  parent: ClothingOuterArmorBasic
+  id: ClothingOuterArmorAstartesMk7BlackTemplars
+  suffix: WH40K, Astartes, Imperium, Black Templars
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7_black_templars.rsi
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7_black_templars.rsi
+    stripDelay: 34
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.35
+        Heat: 0.45
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
+  - type: ExplosionResistance
+    damageCoefficient: 0.45
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: [ClothingOuterArmorBasic, WH40KChaosDamnationClothing]
+  id: ClothingOuterArmorAstartesMk7EmperorsChildren
+  suffix: WH40K, Astartes, Chaos, Emperor's Children
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7_emperors_children.rsi
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7_emperors_children.rsi
+    stripDelay: 34
+    clothingVisuals:
+      outerClothing:
+      - state: equipped-OUTERCLOTHING
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.35
+        Heat: 0.45
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
+  - type: ExplosionResistance
+    damageCoefficient: 0.45
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

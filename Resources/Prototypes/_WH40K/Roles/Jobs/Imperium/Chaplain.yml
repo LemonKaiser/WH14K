@@ -31,6 +31,8 @@
     - type: Reflect
       reflectProb: 0.4
       spread: 90
+    - type: WH40KChaplainDash
+      cooldownSeconds: 300
     - type: WH40KOfficerVoice
     - type: Vocal
       sounds:

@@ -1,0 +1,10 @@
+stack-wh40k-barricade-warhammer = ящики с имперской баррикадой
+stack-wh40k-barricade-sandbags = ящики с мешками для баррикады
+stack-wh40k-barricade-chaos-black = ящики с черной баррикадой Хаоса
+stack-wh40k-barricade-chaos-green = ящики с зеленой баррикадой Хаоса
+stack-wh40k-barricade-hedgehog = ящики с противотанковым ежом
+stack-wh40k-barricade-hedgehog-a = ящики с противотанковым ежом A
+stack-wh40k-barricade-hedgehog-b = ящики с противотанковым ежом B
+stack-wh40k-barricade-hedgehog-c = ящики с противотанковым ежом C
+stack-wh40k-barricade-boarded = ящики с заколоченной баррикадой
+stack-wh40k-barricade-bars = ящики с баррикадой-решеткой

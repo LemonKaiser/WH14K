@@ -164,6 +164,15 @@
   id: Cartridge11mm
 
 - type: Tag
+  id: MagazineLondoronMk2
+
+- type: Tag
+  id: CartridgeLondoronMk2
+
+- type: Tag
+  id: CartridgeLondoronMk2Possessed
+
+- type: Tag
   id: WH40KMagazineAutocannon
 
 - type: Tag
@@ -180,3 +189,18 @@
 
 - type: Tag
   id: SpeedLoaderSerpenta
+
+- type: Tag
+  id: TauPulseCellRifle
+
+- type: Tag
+  id: TauPulseCellCarbine
+
+- type: Tag
+  id: TauPulseCellBlaster
+
+- type: Tag
+  id: TauPulseCellSniper
+
+- type: Tag
+  id: TauRailgunCell

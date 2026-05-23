@@ -1,0 +1,20 @@
+﻿{
+    "version":  1,
+    "license":  "CC-BY-SA-3.0",
+    "copyright":  "sprites by Leman Russ Battle Tank, adapted by WH14K contributors",
+    "size":  {
+                 "x":  32,
+                 "y":  32
+             },
+    "states":  [
+                   {
+                       "name":  "icon"
+                   },
+                   {
+                       "name":  "mag-0"
+                   },
+                   {
+                       "name":  "mag-1"
+                   }
+               ]
+}

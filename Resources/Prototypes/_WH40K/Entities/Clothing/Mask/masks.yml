@@ -55,7 +55,7 @@
     damageCoefficient: 0.7
 
 - type: entity
-  parent: ClothingMaskGas
+  parent: [ClothingMaskGas, WH40KChaosDamnationClothing]
   id: ClothingMaskGasChaosCultist1
   name: Противогаз Хаоса
   description: Оно вообще работает? Был обмыт в крови детей.
@@ -73,7 +73,7 @@
         - Snout
 
 - type: entity
-  parent: ClothingMaskGas
+  parent: [ClothingMaskGas, WH40KChaosDamnationClothing]
   id: ClothingMaskGasChaosCultist2
   name: противогаз Хаоса
   description: Оно вообще работает? Сделан из человеческой кожи.
@@ -91,7 +91,7 @@
         - Snout
 
 - type: entity
-  parent: ClothingMaskGas
+  parent: [ClothingMaskGas, WH40KChaosDamnationClothing]
   id: ClothingMaskGasBloodPact
   suffix: WH40K, Бладпакт
   components:
@@ -107,7 +107,7 @@
     - Snout
 
 - type: entity
-  parent: ClothingMaskGas
+  parent: [ClothingMaskGas, WH40KChaosDamnationClothing]
   id: ClothingMaskGasCultist3
   name: респиратор культиста
   description: Зловещий респиратор, украшенный символами Хаоса. Он защищает дыхательные пути и лишь изредка смягчает удары по лицу за счет твердого каркаса.
@@ -173,7 +173,7 @@
     sprite: _WH40K/Clothing/Mask/vst_gasmask.rsi
 
 - type: entity
-  parent: ClothingMaskGasGuardsman
+  parent: [ClothingMaskGasGuardsman, WH40KChaosDamnationClothing]
   id: ClothingMaskGasHellishForeman
   suffix: WH40K, Культ Хаоса, Адская Бригада
   components:

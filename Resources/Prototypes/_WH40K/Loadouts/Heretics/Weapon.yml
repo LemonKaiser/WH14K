@@ -49,6 +49,12 @@
     - LasgunPowerCell
 
 - type: loadout
+  id: WH40KWeaponHereticShortlasLoadout
+  dummyEntity: WeaponHereticShortlas
+  equipment:
+    suitstorage: WeaponHereticShortlas
+
+- type: loadout
   id: WH40KWeaponChsStubShotgunLoadout
   dummyEntity: WeaponChsStubShotgun
   effects:
@@ -59,6 +65,20 @@
   storage:
     belt:
     - BoxLethalshot
+
+- type: loadout
+  id: WH40KWeaponLondoronMk2BloodPactLoadout
+  dummyEntity: WeaponSniperLondoronMk2BloodPact
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  equipment:
+    suitstorage: WeaponSniperLondoronMk2BloodPact
+  storage:
+    belt:
+    - MagazineLondoronMk2
+    - MagazineLondoronMk2
+    - MagazineLondoronMk2
 
 - type: loadout
   id: WH40KWeaponStubSMGLoadout

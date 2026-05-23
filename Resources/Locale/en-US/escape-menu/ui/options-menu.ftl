@@ -25,6 +25,7 @@ ui-options-general-discord = Discord
 ui-options-general-cursor = Cursor
 ui-options-general-speech = Speech
 ui-options-general-storage = Storage
+ui-options-general-meta-progression = Meta progression
 ui-options-general-accessibility = Accessibility
 ui-options-wh40k-notifications-mode = Notification style:
 ui-options-wh40k-notifications-mode-full = Full
@@ -197,6 +198,41 @@ ui-options-function-move-stored-item = Move stored item
 ui-options-function-rotate-stored-item = Rotate stored item
 ui-options-function-save-item-location = Save item location
 ui-options-static-storage-ui = Lock storage window to hotbar
+ui-options-meta-progression-reset-description =
+    Fully reset your WH40K account progression.
+ui-options-meta-progression-reset-button = Reset progression
+ui-options-meta-progression-reset-status-unavailable = Reset status: unavailable outside an active server session.
+ui-options-meta-progression-reset-status-loading = Reset status: loading meta progression data...
+ui-options-meta-progression-reset-status-processing = Reset status: request sent, resetting progression...
+ui-options-meta-progression-reset-status-ready = Reset status: reset is available.
+ui-options-meta-progression-reset-status-cooldown = Reset status: the next reset will be available in { $time }.
+ui-options-meta-progression-reset-warning-one-title = Reset meta progression
+ui-options-meta-progression-reset-warning-one-body =
+    You are about to fully reset your WH40K account progression.
+    The following will be removed:
+    - level and accumulated XP;
+    - achievements and their rewards;
+    - unlocked decorations and active cosmetic selections;
+    - character development progression;
+    - meta-dependent loadout selections.
+ui-options-meta-progression-reset-warning-one-footer = This action cannot be undone. You can continue in 10 seconds.
+ui-options-meta-progression-reset-warning-two-title = Confirm reset
+ui-options-meta-progression-reset-warning-two-body =
+    Are you absolutely sure you want to reset this account's progression?
+    This only affects your own account and will not impact any other players.
+ui-options-meta-progression-reset-warning-two-footer = Account progression can only be reset once per month. You can confirm in 10 seconds.
+ui-options-meta-progression-reset-cancel = Cancel
+ui-options-meta-progression-reset-continue = Continue
+ui-options-meta-progression-reset-confirm = Confirm reset
+ui-options-meta-progression-reset-confirm-wait = Wait { $seconds }s
+ui-options-meta-progression-reset-popup-success = WH40K account progression has been reset successfully.
+ui-options-meta-progression-reset-popup-cooldown = Reset is not available yet. You can reset this progression again in { $time }.
+ui-options-meta-progression-reset-popup-unavailable = Reset is not available right now. Please try again in a few seconds.
+ui-options-meta-progression-reset-popup-failed = Failed to reset WH40K account progression.
+ui-options-meta-progression-reset-time-days-hours = { $days }d { $hours }h
+ui-options-meta-progression-reset-time-hours-minutes = { $hours }h { $minutes }m
+ui-options-meta-progression-reset-time-minutes-seconds = { $minutes }m { $seconds }s
+ui-options-meta-progression-reset-time-seconds = { $seconds }s
 
 ui-options-function-smart-equip-backpack = Smart-equip to backpack
 ui-options-function-smart-equip-belt = Smart-equip to belt

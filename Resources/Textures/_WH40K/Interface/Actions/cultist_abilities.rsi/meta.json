@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Converted for WH40K cultist abilities from provided source sprites",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "blade"
+    },
+    {
+      "name": "dash"
+    },
+    {
+      "name": "portal"
+    },
+    {
+      "name": "shield"
+    },
+    {
+      "name": "smoke"
+    },
+    {
+      "name": "stim"
+    },
+    {
+      "name": "zombie"
+    }
+  ]
+}

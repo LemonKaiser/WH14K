@@ -37,7 +37,7 @@
   - type: FingerprintMask
 
 - type: entity
-  parent: ClothingHandsBase
+  parent: [ClothingHandsBase, WH40KChaosDamnationClothing]
   id: ClothingHandsGlovesBloodPact
   suffix: WH40K, Бладпакт
   components:
@@ -70,7 +70,7 @@
   - type: Insulated
 
 - type: entity
-  parent: ClothingHandsGlovesColorBlack
+  parent: [ClothingHandsGlovesColorBlack, WH40KChaosDamnationClothing]
   id: ClothingHandsGlovesCombatcult
   name: боевые перчатки
   description: Боевые перчатки культа.

@@ -1,0 +1,56 @@
+- type: entity
+  parent: Pulse
+  id: WH40KTauPulseRifleBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 24
+
+- type: entity
+  parent: Pulse
+  id: WH40KTauPulseCarbineBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 18
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 28
+
+- type: entity
+  parent: Pulse
+  id: WH40KTauPulseBlasterBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 13
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 45
+
+- type: entity
+  parent: Pulse
+  id: WH40KTauPulseSniperBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 35
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 50
+
+- type: entity
+  parent: Pulse
+  id: WH40KTauRailgunBeam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 45
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Piercing: 85
+        Structural: 45
