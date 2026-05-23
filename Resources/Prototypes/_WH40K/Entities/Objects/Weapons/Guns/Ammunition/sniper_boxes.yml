@@ -1,0 +1,14 @@
+- type: entity
+  id: WH40KAmmoBoxLondoronMk2
+  parent: BaseMagazineBoxAntiMateriel
+  suffix: WH40K
+  components:
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CartridgeLondoronMk2
+    proto: CartridgeLondoronMk2
+    capacity: 10
+  - type: StaticPrice
+    price: 300

@@ -1,0 +1,10 @@
+stack-wh40k-barricade-warhammer = imperial barricade kits
+stack-wh40k-barricade-sandbags = sandbag barricade kits
+stack-wh40k-barricade-chaos-black = chaos black barricade kits
+stack-wh40k-barricade-chaos-green = chaos green barricade kits
+stack-wh40k-barricade-hedgehog = anti-tank hedgehog kits
+stack-wh40k-barricade-hedgehog-a = anti-tank hedgehog kits A
+stack-wh40k-barricade-hedgehog-b = anti-tank hedgehog kits B
+stack-wh40k-barricade-hedgehog-c = anti-tank hedgehog kits C
+stack-wh40k-barricade-boarded = boarded barricade kits
+stack-wh40k-barricade-bars = bars barricade kits

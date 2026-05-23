@@ -24,7 +24,9 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
     public int UnitFundsCost { get; }
     public int UnitInfluenceCost { get; }
     public int PerRoleCap { get; }
+    public int CurrentTeamCount { get; }
     public bool AllowAuto { get; }
+    public int AvailableRoleCap => Math.Max(0, PerRoleCap - CurrentTeamCount);
 
     public WH40KCommandReinforcementCatalogEntryState(
         string roleId,
@@ -37,6 +39,7 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
         int unitFundsCost,
         int unitInfluenceCost,
         int perRoleCap,
+        int currentTeamCount,
         bool allowAuto)
     {
         RoleId = roleId;
@@ -49,6 +52,7 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
         UnitFundsCost = unitFundsCost;
         UnitInfluenceCost = unitInfluenceCost;
         PerRoleCap = perRoleCap;
+        CurrentTeamCount = currentTeamCount;
         AllowAuto = allowAuto;
     }
 }

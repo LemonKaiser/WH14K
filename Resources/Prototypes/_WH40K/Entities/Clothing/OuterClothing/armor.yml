@@ -43,7 +43,7 @@
 
 # броня бладпакта
 - type: entity
-  parent: ClothingOuterArmorFlakVest
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorBloodpact
   suffix: WH40K, Бладпакт
   components:
@@ -54,7 +54,7 @@
 
 # броня еретика
 - type: entity
-  parent: ClothingOuterArmorFlakVest
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorFlakVestHeretic
   suffix: WH40K, Еретики
   components:
@@ -125,7 +125,7 @@
 
 # Осквернённая бронижелет хаоса
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: [ClothingOuterArmorFlakVestLight, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorChaosVest
   name: флак-жилет Хаоса
   description: Полный комплект осквернённой брони хаоса для рядового культиста. Обеспечивает надёжную защиту, но её чуждый металл давит на тело и ограничивает движения.
@@ -178,7 +178,7 @@
 
 # броня адской бригады
 - type: entity
-  parent: ClothingOuterArmorAdvancedFlakVest
+  parent: [ClothingOuterArmorAdvancedFlakVest, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorAdvancedFlakVestHeretic
   suffix: WH40K, Еретики, Адская Бригада
   components:
@@ -240,7 +240,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_heavy_armor.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchChaos
   suffix: WH40K, Heresiarch
   components:
@@ -250,7 +250,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_chaos.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchKhorne
   suffix: WH40K, Heresiarch
   components:
@@ -260,7 +260,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_khorne.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchNurgle
   suffix: WH40K, Heresiarch
   components:
@@ -270,7 +270,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_nurgle.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchSlaanesh
   suffix: WH40K, Heresiarch
   components:
@@ -280,7 +280,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_slaanesh.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchTzeentch
   suffix: WH40K, Heresiarch
   components:
@@ -290,7 +290,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/heresiarch_tzeentch.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestGen
+  parent: [ClothingOuterArmorFlakVestGen, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorHeresiarchCardinal
   suffix: WH40K, Heresiarch
   components:
@@ -309,7 +309,7 @@
     damageCoefficient: 0.55
 
 - type: entity
-  parent: ClothingOuterArmorFlakVest
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorSlaanech
   suffix: WH40K, Еретики, Слаанеш
   components:
@@ -319,7 +319,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/slaanesh_vest.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: [ClothingOuterArmorFlakVestLight, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorKini
   suffix: WH40K, Еретики, Слаанеш
   components:
@@ -329,7 +329,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/armorkini.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: [ClothingOuterArmorFlakVestLight, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorMauler
   suffix: WH40K, Еретики, Маулер
   components:
@@ -352,7 +352,7 @@
 
   #чемпион кхорна
 - type: entity
-  parent: ClothingOuterArmorCommissar
+  parent: [ClothingOuterArmorCommissar, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorKhornechampion
   suffix: WH40K, Еретики, Кхорн
   components:
@@ -362,7 +362,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/champion_khorne.rsi
 
 - type: entity
-  parent: ClothingOuterArmorCommissar
+  parent: [ClothingOuterArmorCommissar, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorSlaaneshchampion
   suffix: WH40K, Еретики, Слаанеш
   components:
@@ -372,7 +372,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/champion_slaanesh.rsi
 
 - type: entity
-  parent: ClothingOuterArmorCommissar
+  parent: [ClothingOuterArmorCommissar, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorTzeentchSerg
   suffix: WH40K, Еретики, Тзинтч
   components:
@@ -390,7 +390,7 @@
       toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
-  parent: ClothingOuterArmorFlakVest
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorTzeentchLiet
   suffix: WH40K, Еретики, Тзинтч
   components:

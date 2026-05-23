@@ -446,6 +446,23 @@
     sprintSpeedModifier: 0.9
 
 - type: entity
+  id: WH40KBulletOskvernitelSiegeShell
+  parent: BulletSentine
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 80
+        Structural: 110
+  - type: Explosive
+    explosionType: Default
+    maxIntensity: 5
+    intensitySlope: 1
+    totalIntensity: 12
+    maxTileBreak: 1
+
+- type: entity
   id: WH40KBulletRocketHE
   parent: BulletRocket
   categories: [ HideSpawnMenu ]

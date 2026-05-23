@@ -1,0 +1,45 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackAstartesMk7BlackTemplarsPowerpack
+  suffix: WH40K, Astartes, Imperium, Black Templars
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_black_templars_powerpack.rsi
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_black_templars_powerpack.rsi
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: [ClothingBackpack, WH40KChaosDamnationClothing]
+  id: ClothingBackpackAstartesMk7EmperorsChildrenPowerpack
+  suffix: WH40K, Astartes, Chaos, Emperor's Children
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_emperors_children_powerpack.rsi
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_emperors_children_powerpack.rsi
+    clothingVisuals:
+      back:
+      - state: equipped-BACKPACK
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

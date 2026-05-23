@@ -54,11 +54,6 @@
   startingGear: MedicGear
 
 - type: chameleonOutfit
-  id: WH40KMajorChameleonOutfit
-  job: Major
-  startingGear: MajorGear
-
-- type: chameleonOutfit
   id: WH40KLieutenantChameleonOutfit
   job: Lieutenant
   startingGear: LieutenantGear
@@ -127,6 +122,21 @@
   id: WH40KTauFireWarriorChameleonOutfit
   job: TauFireWarrior
   startingGear: TauFireWarriorGear
+
+- type: chameleonOutfit
+  id: WH40KTauEarthCasteChameleonOutfit
+  job: TauEarthCaste
+  startingGear: TauEarthCasteGear
+
+- type: chameleonOutfit
+  id: WH40KTauAirCasteChameleonOutfit
+  job: TauAirCaste
+  startingGear: TauAirCasteGear
+
+- type: chameleonOutfit
+  id: WH40KTauWaterCasteChameleonOutfit
+  job: TauWaterCaste
+  startingGear: TauWaterCasteGear
 
 - type: chameleonOutfit
   id: WH40KTauOfficerChameleonOutfit

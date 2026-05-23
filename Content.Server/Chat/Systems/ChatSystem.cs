@@ -541,7 +541,8 @@ public sealed partial class ChatSystem : SharedChatSystem
                 channel,
                 null,
                 name,
-                nameIdentity);
+                nameIdentity,
+                null);
 
             _replay.RecordServerMessage(new ChatMessage(
                 ChatChannel.Whisper,
@@ -822,8 +823,9 @@ public sealed partial class ChatSystem : SharedChatSystem
     {
         if (string.IsNullOrEmpty(message))
             return message;
-        // Adds a period if the last character is a letter.
-        if (char.IsLetter(message[^1]))
+
+        // Avoid splitting surrogate pairs or emoji sequences when checking the trailing text element.
+        if (ChatTextElementUtility.EndsWithLetterTextElement(message))
             message += ".";
         return message;
     }

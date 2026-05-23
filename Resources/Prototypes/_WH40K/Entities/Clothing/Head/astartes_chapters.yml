@@ -1,0 +1,89 @@
+- type: entity
+  parent: [ClothingHeadHelmetBasic, ShowMedicalIcons]
+  id: ClothingHeadHelmetAstartesMk7BlackTemplars
+  suffix: WH40K, Astartes, Imperium, Black Templars
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7_black_templars.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7_black_templars.rsi
+    stripDelay: 26
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: BreathMask
+  - type: IngestionBlocker
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.75
+        Piercing: 0.8
+        Heat: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: [ClothingHeadHelmetBasic, ShowMedicalIcons, WH40KChaosDamnationClothing]
+  id: ClothingHeadHelmetAstartesMk7EmperorsChildren
+  suffix: WH40K, Astartes, Chaos, Emperor's Children
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7_emperors_children.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7_emperors_children.rsi
+    stripDelay: 26
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      right:
+      - state: inhand-right
+  - type: BreathMask
+  - type: IngestionBlocker
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.75
+        Piercing: 0.8
+        Heat: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only

@@ -19,10 +19,10 @@ public sealed class WH40KConnectingCrtBackground : Control
     private const string UplinkPrompt = "[guard@battlefleet uplink]$ ";
     private const string HandshakeText = "awaiting handshake";
     private const string GratitudeMessage =
-        "Спасибо всем разработчиками Heretec, lemon_kaiser, gadosex, the_walking_rad, fizzoghoster, wickerler2, hos7719, suslik2331, comradlie, londorondondon, litoryionn, endr_animet, myr04ka, .car_bon, igornoopi и всем другим за работу и помощь проекту!";
-    private const float HandshakeHoldSeconds = 30f;
+        "Спасибо всем разработчиками Heretek, lemon_kaiser, gadosex, the_walking_rad, fizzoghoster, wickerler2, hos7719, suslik2331, comradlie, londorondondon, litoryionn, endr_animet, myr04ka, .car_bon, igornoopi и всем другим за работу и помощь проекту!";
+    private const float HandshakeHoldSeconds = 60f;
     private const float BackspaceCharsPerSecond = 8f;
-    private const float TypeCharsPerSecond = 18f;
+    private const float TypeCharsPerSecond = 16f;
     private const float HeartRevealDelaySeconds = 2f;
     private const int HeartScale = 2;
     private const float HeartLineHeight = 18f;

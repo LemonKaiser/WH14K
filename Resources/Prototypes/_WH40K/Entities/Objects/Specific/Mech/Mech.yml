@@ -25,6 +25,7 @@
     pilotPassiveEnergyPerSecond: 0.5
     movementEnergyPerSecond: 2.5
   - type: Vehicle
+    transferDamage: false
     transferDamageMultiplier: 0.15
   - type: SpriteMovement
     movementLayers:

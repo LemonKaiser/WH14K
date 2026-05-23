@@ -11,7 +11,61 @@
     outerClothing: ClothingOuterArmorTauCommander
 
 - type: loadout
+  id: WH40KTauArmorEthereal
+  dummyEntity: ClothingOuterArmorTauEthereal
+  equipment:
+    outerClothing: ClothingOuterArmorTauEthereal
+
+- type: loadout
   id: WH40KTauCommanderCloakLoadout
   dummyEntity: ClothingNeckCloakTauCommander
   equipment:
     neck: ClothingNeckCloakTauCommander
+
+- type: loadout
+  id: WH40KTauPulseRifleVeteranLoadout
+  dummyEntity: WeaponTauPulseRifleVeteran
+  equipment:
+    suitstorage: WeaponTauPulseRifleVeteran
+  storage:
+    belt:
+    - TauPulseCellRifle
+    - TauPulseCellRifle
+    - TauPulseCellRifle
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulseCarbineVeteranLoadout
+  dummyEntity: WeaponTauPulseCarbineVeteran
+  equipment:
+    suitstorage: WeaponTauPulseCarbineVeteran
+  storage:
+    belt:
+    - TauPulseCellCarbine
+    - TauPulseCellCarbine
+    - TauPulseCellCarbine
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauPulseSniperRifleVeteranLoadout
+  dummyEntity: WeaponTauPulseSniperRifleVeteran
+  equipment:
+    suitstorage: WeaponTauPulseSniperRifleVeteran
+  storage:
+    belt:
+    - TauPulseCellSniper
+    - TauPulseCellSniper
+    - TauPulseCellSniper
+  groupBy: "main"
+
+- type: loadout
+  id: WH40KTauRailgunLoadout
+  dummyEntity: WeaponTauRailgun
+  equipment:
+    suitstorage: WeaponTauRailgun
+  storage:
+    belt:
+    - TauRailgunCell
+    - TauRailgunCell
+    - TauRailgunCell
+  groupBy: "main"

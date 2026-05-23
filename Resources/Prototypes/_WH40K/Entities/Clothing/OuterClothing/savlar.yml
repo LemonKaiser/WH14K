@@ -1,0 +1,19 @@
+- type: entity
+  parent: ClothingOuterArmorAdvancedFlakVest
+  id: ClothingOuterArmorSavlar
+  suffix: WH40K, Savlar
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/savlar_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/savlar_armor.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorSavlarVest
+  suffix: WH40K, Savlar
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/savlar_vest.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/savlar_vest.rsi

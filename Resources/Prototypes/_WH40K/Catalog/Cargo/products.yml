@@ -149,6 +149,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumLondoronMk2Aquila
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Snipers/londoron_mk2_aquila.rsi
+    state: icon
+  product: WeaponSniperLondoronMk2Aquila
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumFrag
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -262,6 +272,26 @@
   product: MagazineStubRifle
   cost: 30
   category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineLondoronMk2
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/londoron_mk2.rsi
+    state: base
+  product: MagazineLondoronMk2
+  cost: 400
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumAmmoLondoronMk2
+  icon:
+    sprite: Objects/Weapons/Guns/Ammunition/Boxes/anti_materiel.rsi
+    state: base
+  product: WH40KAmmoBoxLondoronMk2
+  cost: 1500
+  category: cpcat-cgo
   group: WH40KImperiumMarket
 
 - type: cargoProduct
@@ -424,7 +454,7 @@
     sprite: _WH40K/Objects/Power/power_cells.rsi
     state: lasgun
   product: WH40KMagazineMultilas
-  cost: 5000
+  cost: 9500
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -1093,6 +1123,16 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsLondoronMk2Vengeance
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Snipers/londoron_mk2_vengeance.rsi
+    state: icon
+  product: WeaponSniperLondoronMk2Vengeance
+  cost: 20000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsFrag
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1226,6 +1266,26 @@
   product: MagazineStubRifle
   cost: 30
   category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineLondoronMk2
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/londoron_mk2.rsi
+    state: base
+  product: MagazineLondoronMk2
+  cost: 400
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmoLondoronMk2
+  icon:
+    sprite: Objects/Weapons/Guns/Ammunition/Boxes/anti_materiel.rsi
+    state: base
+  product: WH40KAmmoBoxLondoronMk2
+  cost: 1500
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -1442,7 +1502,7 @@
     sprite: _WH40K/Objects/Power/power_cells.rsi
     state: lasgun
   product: WH40KMagazineMultilas
-  cost: 5000
+  cost: 9500
   category: cpcat-arm
   group: WH40KHereticsMarket
 

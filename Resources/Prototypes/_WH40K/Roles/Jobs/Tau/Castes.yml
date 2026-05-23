@@ -1,0 +1,104 @@
+- type: job
+  id: TauEarthCaste
+  name: job-name-tau-earth-caste
+  description: job-description-tau-earth-caste
+  displayWeight: 10
+  playTimeTracker: JobTauEarthCaste
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauEarthCasteGear
+  icon: "JobIconTauEarthCaste"
+  supervisors: job-supervisors-wh40k-tau-caste
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: TauEarthCasteGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTau
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTau
+    id: TauEarthCasteDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables
+
+- type: job
+  id: TauAirCaste
+  name: job-name-tau-air-caste
+  description: job-description-tau-air-caste
+  displayWeight: 10
+  playTimeTracker: JobTauAirCaste
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauAirCasteGear
+  icon: "JobIconTauAirCaste"
+  supervisors: job-supervisors-wh40k-tau-caste
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: TauAirCasteGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTau
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTau
+    id: TauAirCasteDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables
+
+- type: job
+  id: TauWaterCaste
+  name: job-name-tau-water-caste
+  description: job-description-tau-water-caste
+  displayWeight: 10
+  playTimeTracker: JobTauWaterCaste
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Tau
+  startingGear: TauWaterCasteGear
+  icon: "JobIconTauWaterCaste"
+  supervisors: job-supervisors-wh40k-tau-caste
+  canBeAntag: false
+  access:
+  - Maintenance
+  - External
+
+- type: startingGear
+  id: TauWaterCasteGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitTau
+    back: ClothingBackpackTau
+    gloves: ClothingHandsGlovesTau
+    shoes: ClothingShoesBootsTau
+    belt: ClothingBeltTau
+    id: TauWaterCasteDogTag
+  storage:
+    belt:
+    - DrinkTauFlask
+    back:
+    - DrinkTauNutriLiquid
+    - FoodTauSublimatedMeat
+    - FoodTauSublimatedVegetables

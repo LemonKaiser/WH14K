@@ -11,7 +11,6 @@ job-name-recruit = рекрут
 job-name-voidsman = войдсман
 job-name-colonel = полковник
 job-name-commissar = комиссар
-job-name-major = майор
 job-name-lieutenant = лейтенант
 job-name-sergeant-hws = сержант ОТВ
 job-name-sergeant-sws = сержант ОСВ
@@ -44,8 +43,8 @@ job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит Тёмного Механикума
 job-name-hellish-foreman = адский бригадир
 
-job-name-tau-fire-warrior = шас'ла
-job-name-tau-officer = шас'уи
-job-name-tau-ethereal = эфириал
+job-name-tau-fire-warrior = Шас'ла
+job-name-tau-officer = Шас'уи
+job-name-tau-ethereal = Эфириал
 
 job-name-ork-boyz = бойзы

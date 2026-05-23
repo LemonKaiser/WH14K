@@ -1,0 +1,34 @@
+- type: explosion
+  id: WH40KChaosDynamiteBelt
+  damagePerIntensity:
+    types:
+      Heat: 6
+      Blunt: 6
+      Piercing: 6
+      Structural: 20
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [1, 10, 15]
+  tileBreakRerollReduction: 30
+  intensityPerState: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 800
+
+- type: explosion
+  id: WH40KMeltaChargeBelt
+  damagePerIntensity:
+    types:
+      Heat: 8
+      Blunt: 6
+      Piercing: 6
+      Structural: 20
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [1, 10, 15]
+  tileBreakRerollReduction: 30
+  intensityPerState: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  fireStacks: 3
+  temperature: 1500

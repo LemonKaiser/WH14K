@@ -1,0 +1,76 @@
+- type: loadout
+  id: WH40KImperialSupplyFlask
+  dummyEntity: DrinkGuardsmanFlask
+  storage:
+    back:
+    - DrinkGuardsmanFlask
+
+- type: loadout
+  id: WH40KImperialSupplyNutriCan
+  dummyEntity: DrinkImperialNutriCan
+  storage:
+    back:
+    - DrinkImperialNutriCan
+
+- type: loadout
+  id: WH40KImperialSupplyHardtack
+  dummyEntity: FoodSnackImperialHardtack
+  storage:
+    back:
+    - FoodSnackImperialHardtack
+
+- type: loadout
+  id: WH40KImperialSupplyNutriBar
+  dummyEntity: FoodSnackImperialNutriBar
+  storage:
+    back:
+    - FoodSnackImperialNutriBar
+
+- type: loadout
+  id: WH40KImperialSupplyGroxPorridge
+  dummyEntity: FoodTinGroxPorridge
+  storage:
+    back:
+    - FoodTinGroxPorridge
+
+- type: loadout
+  id: WH40KImperialSupplyGroxMeat
+  dummyEntity: FoodTinGroxMeat
+  storage:
+    back:
+    - FoodTinGroxMeat
+
+- type: loadout
+  id: WH40KImperialSupplyNutriPaste
+  dummyEntity: FoodTinNutriPaste
+  storage:
+    back:
+    - FoodTinNutriPaste
+
+- type: loadout
+  id: WH40KImperialSupplyNutriPasteMeat
+  dummyEntity: FoodTinNutriPasteMeat
+  storage:
+    back:
+    - FoodTinNutriPasteMeat
+
+- type: loadout
+  id: WH40KImperialSupplyMRE
+  dummyEntity: FoodBoxImperialMRE
+  storage:
+    back:
+    - FoodBoxImperialMRE
+
+- type: loadout
+  id: WH40KImperialSupplyMRESmall
+  dummyEntity: FoodBoxImperialMRESmall
+  storage:
+    back:
+    - FoodBoxImperialMRESmall
+
+- type: loadout
+  id: WH40KImperialSupplyMatches
+  dummyEntity: MatchboxGuardsman
+  storage:
+    back:
+    - MatchboxGuardsman

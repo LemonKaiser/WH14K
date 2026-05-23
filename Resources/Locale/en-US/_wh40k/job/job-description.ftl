@@ -12,7 +12,6 @@ job-description-lexmechanic = Lexmechanic: process tactical data and maintain in
 
 job-description-colonel = Command the Astra Militarum regiment, distribute forces, and hold the front.
 job-description-commissar = Enforce regiment discipline and suppress panic in the Emperor's name.
-job-description-major = Major
 job-description-lieutenant = Lead your platoon, relay orders, and coordinate squads.
 job-description-sergeant-hws = Command the heavy weapons team and control key fire positions.
 job-description-sergeant-sws = Coordinate the special weapons team for breakthroughs and counterattacks.
@@ -45,8 +44,8 @@ job-description-henginseer = Renegade Tech-Priest: maintain machines and profane
 job-description-hnovice = Dark Mechanicum Acolyte: serve the hereteks and learn forbidden rites.
 job-description-hellish-foreman = Elite assault reinforcements in carapace armor, with a hellgun and a shoulder battery.
 
-job-description-tau-fire-warrior = Shas'la: a line warrior of the Fire Caste, fighting for the T'au'va with disciplined pulse fire and a full field kit.
-job-description-tau-officer = Shas'ui: a veteran Fire Caste leader, directing the cadre with command armour and coordinated pulse volleys.
-job-description-tau-ethereal = Ethereal: a spiritual and political leader of the T'au Empire, guiding the cadre through authority, regalia, and personal armament.
+job-description-tau-fire-warrior = Shas'la: a line warrior of the Fire Caste, armed and drilled to deliver disciplined pulse fire for the T'au'va.
+job-description-tau-officer = Shas'ui: a Fire Caste officer who leads the cadre's battle line, coordinates volleys, and answers to the Ethereals rather than ruling in their place.
+job-description-tau-ethereal = Ethereal: the spiritual and political leader of the cadre, standing above the castes to direct them in the name of the Greater Good.
 
 job-description-ork-boyz = Nope.

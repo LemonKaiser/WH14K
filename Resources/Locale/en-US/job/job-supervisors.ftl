@@ -17,8 +17,7 @@ job-supervisors-nobody = nobody
 
 job-supervisors-wh40k-imperium-colonel = Astra Militarum high command, the Departmento Munitorum, and the orders of the Lords Segmentum
 job-supervisors-wh40k-imperium-commissar = the Officio Prefectus, the Imperial Creed, and your personal duty to the Emperor
-job-supervisors-wh40k-imperium-major = the Colonel, the Commissariat, and regimental command
-job-supervisors-wh40k-imperium-officer = the Major, the Colonel, and the Commissariat
+job-supervisors-wh40k-imperium-officer = the Colonel, the Commissariat, and regimental command
 job-supervisors-wh40k-imperium-sergeant = platoon officers, regimental command, and the Commissariat
 job-supervisors-wh40k-imperium-line = squad sergeants, platoon officers, regimental command, and the Commissariat
 job-supervisors-wh40k-imperium-psyker = sanctioned orders of regimental command, the Commissariat, and Imperial oversight

@@ -5,5 +5,5 @@ department-Voidsmen-description = Ship military forces
 department-Imperium-description = Fight traitors, for the Emperor!
 department-Dark-Mechanicus-description = Maintain base power and integrity, and equip your faction with advanced devices recovered from ancient schematics.
 department-Heretics-description = Fight the slaves of the corpse on the throne in the name of Chaos!
-department-Tau-description = Fire Caste cadres and Ethereals of the T'au Empire, fighting in the name of the T'au'va.
+department-Tau-description = The Fire, Earth, Air, and Water Castes of the T'au Empire, guided by Ethereals in service to the T'au'va.
 department-Ork-description = Nope

@@ -61,10 +61,48 @@ ent-WeaponTauPulsePistol = Pulse pistol
 ent-WeaponTauPulseRifle = Pulse rifle
     .desc = The signature line weapon of the Fire Caste, built for accurate disciplined volleys.
 
+ent-WeaponTauPulseRifleVeteran = Veteran pulse rifle
+    .desc = An upgraded pulse rifle reserved for seasoned Shas'ui who can make every disciplined volley count.
+
+ent-WeaponTauPulseCarbine = Pulse carbine
+    .desc = A faster-firing pulse weapon that trades range and stopping power for a more aggressive cadence.
+
+ent-WeaponTauPulseCarbineVeteran = Veteran pulse carbine
+    .desc = A refined pulse carbine issued to veteran Fire Caste leaders who demand a sharper rate of fire.
+
+ent-WeaponTauPulseBlaster = Pulse blaster
+    .desc = A brutal short-ranged pulse gun built for breach work and elite shock assaults.
+
+ent-WeaponTauPulseSniperRifle = Pulse sniper rifle
+    .desc = A precision pulse rifle with a heavier charge cycle and extended sightline for cadre marksmen.
+
+ent-WeaponTauPulseSniperRifleVeteran = Veteran pulse sniper rifle
+    .desc = A veteran-pattern pulse sniper rifle tuned for Shas'ui marksmen and exacting long-range fire.
+
+ent-WeaponTauRailgun = Railgun
+    .desc = A high-calibre rail weapon that launches a devastating hypervelocity shot through armour and cover alike.
+
+ent-TauPulseCellRifle = rifle pulse cell
+    .desc = A standardized pulse ammunition module for T'au pulse rifles.
+
+ent-TauPulseCellCarbine = carbine pulse cell
+    .desc = A rapid-discharge pulse ammunition module tuned for T'au carbines.
+
+ent-TauPulseCellBlaster = blaster pulse cell
+    .desc = A heavy-output pulse ammunition module for close-range breacher blasters.
+
+ent-TauPulseCellSniper = sniper pulse cell
+    .desc = A precision pulse ammunition module calibrated for T'au marksman rifles.
+
+ent-TauRailgunCell = railgun charge pack
+    .desc = A dense charge pack used to feed a T'au railgun with a handful of punishing shots.
+
 loadout-group-wh40k-tau-head = Fire Caste helmets
 loadout-group-wh40k-tau-outer = Fire Caste armour
 loadout-group-wh40k-tau-main = Cadre primary weapon
+loadout-group-wh40k-tau-command-main = Command primary weapon
 loadout-group-wh40k-tau-sidearm = Sidearm
 loadout-group-wh40k-tau-supplies = Field supplies
 loadout-group-wh40k-tau-command-outer = Command armour
+loadout-group-wh40k-tau-ethereal-outer = Ethereal armour
 loadout-group-wh40k-tau-command-neck = Command regalia

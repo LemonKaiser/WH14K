@@ -206,13 +206,14 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 2500
-  researchTimeSeconds: 135
+  cost: 1000
+  researchTimeSeconds: 30
   technologyPrerequisites:
   - WH40KWeaponryAuthRoot
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLasgun
   - WH40KRecipeWeaponHereticLaserLasgun
+  - WH40KRecipeWeaponLaserLasgunVoss
 
 - type: technology
   id: WH40KWeaponryChainblades
@@ -222,8 +223,8 @@
     state: off-icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 3500
-  researchTimeSeconds: 165
+  cost: 1500
+  researchTimeSeconds: 50
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft2
   - WH40KWeaponryStandardLasguns
@@ -239,13 +240,14 @@
     state: icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 3500
-  researchTimeSeconds: 165
+  cost: 2000
+  researchTimeSeconds: 60
   technologyPrerequisites:
   - WH40KWeaponryAuthRight2
   - WH40KWeaponryStandardLasguns
   recipeUnlocks:
   - WH40KRecipeWeaponStubRifle
+  - WH40KRecipeWeaponStubSMG2
   - WH40KRecipeWeaponChsStubSMG2
 
 - type: technology
@@ -256,14 +258,29 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 4500
-  researchTimeSeconds: 195
+  cost: 3000
+  researchTimeSeconds: 90
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft3
   - WH40KWeaponryChainblades
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLasgunAccatran
-  - WH40KRecipeWeaponChsStubSMG3
+
+- type: technology
+  id: WH40KWeaponryLonglasPatterns
+  name: research-technology-wh40k-weaponry-longlas-patterns
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/longlas.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 3000
+  researchTimeSeconds: 90
+  technologyPrerequisites:
+  - WH40KWeaponryAuthLeft4
+  - WH40KWeaponryAccatranPatterns
+  recipeUnlocks:
+  - WH40KRecipeWeaponLaserLonglas
 
 - type: technology
   id: WH40KWeaponryHellgunPatterns
@@ -273,14 +290,13 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 6000
-  researchTimeSeconds: 225
+  cost: 5000
+  researchTimeSeconds: 130
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft4
-  - WH40KWeaponryAccatranPatterns
+  - WH40KWeaponryLonglasPatterns
   recipeUnlocks:
   - WH40KRecipeWeaponHellgun
-  - WH40KRecipeHellgunPowerPack
 
 - type: technology
   id: WH40KWeaponryBolterArming
@@ -290,14 +306,33 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 4500
-  researchTimeSeconds: 195
+  cost: 6000
+  researchTimeSeconds: 130
+  technologyPrerequisites:
+  - WH40KWeaponryAuthRight4
+  - WH40KWeaponryStubberCloseQuarters
+  recipeUnlocks:
+  - WH40KRecipeWeaponRifleBolter
+  - WH40KRecipeWeaponPistolBolter
+
+- type: technology
+  id: WH40KWeaponryStubberCloseQuarters
+  name: research-technology-wh40k-weaponry-stubber-close-quarters
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg3.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 4000
+  researchTimeSeconds: 80
   technologyPrerequisites:
   - WH40KWeaponryAuthRight3
   - WH40KWeaponryStubberLines
   recipeUnlocks:
-  - WH40KRecipeWeaponRifleBolter
-  - WH40KRecipeWeaponPistolBolter
+  - WH40KRecipeWeaponStubSMG3
+  - WH40KRecipeWeaponStubShotgun
+  - WH40KRecipeWeaponChsStubSMG3
+  - WH40KRecipeWeaponChsStubShotgun
 
 - type: technology
   id: WH40KWeaponryMortarSupport
@@ -308,17 +343,12 @@
   discipline: WH40KWeaponry
   tier: 1
   cost: 6000
-  researchTimeSeconds: 225
+  researchTimeSeconds: 120
   technologyPrerequisites:
   - WH40KWeaponryAuthLeft4
-  - WH40KWeaponryAccatranPatterns
+  - WH40KWeaponryLonglasPatterns
   recipeUnlocks:
   - WH40KRecipeMortarKit
-  - WH40KRecipeMortarShellHE
-  - WH40KRecipeMortarShellFlare
-  - WH40KRecipeMortarShellSmoke
-  - WH40KRecipeMortarShellIncendiary
-  - WH40KRecipeMortarShellEMP
 
 - type: technology
   id: WH40KWeaponryPlasmaArming
@@ -328,14 +358,30 @@
     state: base
   discipline: WH40KWeaponry
   tier: 1
-  cost: 6000
-  researchTimeSeconds: 225
+  cost: 4000
+  researchTimeSeconds: 150
   technologyPrerequisites:
   - WH40KWeaponryAuthRight4
   - WH40KWeaponryBolterArming
   recipeUnlocks:
   - WH40KRecipeWeaponLaserPlasmagun
   - WH40KRecipeWeaponLaserPlasmaPistol
+
+- type: technology
+  id: WH40KWeaponryMeltaArming
+  name: research-technology-wh40k-weaponry-melta-arming
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/meltagun.rsi
+    state: base
+  discipline: WH40KWeaponry
+  tier: 1
+  cost: 6000
+  researchTimeSeconds: 170
+  technologyPrerequisites:
+  - WH40KWeaponryAuthCap
+  - WH40KWeaponryPlasmaArming
+  recipeUnlocks:
+  - WH40KRecipeWeaponLaserMeltagun
 
 - type: technology
   id: WH40KWeaponryHeavyEmplacements
@@ -345,16 +391,14 @@
     state: icon
   discipline: WH40KWeaponry
   tier: 1
-  cost: 8000
-  researchTimeSeconds: 300
+  cost: 4000
+  researchTimeSeconds: 60
   technologyPrerequisites:
   - WH40KWeaponryAuthCap
   - WH40KWeaponryMortarSupport
   - WH40KWeaponryPlasmaArming
   recipeUnlocks:
   - WH40KRecipeHeavyBolter
-  - WH40KRecipeWeaponLaserLasgunVoss
-  - WH40KRecipeWeaponChsStubShotgun
 
 - type: technology
   id: WH40KEquipmentSignalDoctrine
@@ -364,13 +408,36 @@
     state: trench
   discipline: WH40KEquipment
   tier: 1
-  cost: 2500
-  researchTimeSeconds: 135
+  cost: 100
+  researchTimeSeconds: 10
   technologyPrerequisites:
   - WH40KEquipmentAuthRoot
   recipeUnlocks:
   - WH40KRecipeTacticalWhistleImperium
   - WH40KRecipeTacticalWhistleHeretics
+
+- type: technology
+  id: WH40KEquipmentBasicAmmunition
+  name: research-technology-wh40k-equipment-basic-ammunition
+  icon:
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    state: lasgun
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 1000
+  researchTimeSeconds: 40
+  technologyPrerequisites:
+  - WH40KEquipmentAuthRoot
+  recipeUnlocks:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeLasgunPowerCell
+  - WH40KRecipeLonglasPowerCell
+  - WH40KRecipeAccatranPowerCell
+  - WH40KRecipeLasgunPowerCellLucius
+  - WH40KRecipePowerCellVoss
 
 - type: technology
   id: WH40KEquipmentFieldFlares
@@ -380,8 +447,8 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 3500
-  researchTimeSeconds: 165
+  cost: 1000
+  researchTimeSeconds: 50
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft2
   - WH40KEquipmentSignalDoctrine
@@ -391,14 +458,14 @@
 
 - type: technology
   id: WH40KEquipmentBarricades
-  name: research-technology-wh40k-equipment-intel-detectors
+  name: research-technology-wh40k-equipment-barricades
   icon:
     sprite: _WH40K/Objects/Misc/barricade_kit.rsi
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 2500
-  researchTimeSeconds: 135
+  cost: 1000
+  researchTimeSeconds: 30
   technologyPrerequisites:
   - WH40KEquipmentAuthLeft2
   recipeUnlocks:
@@ -416,32 +483,35 @@
 
 - type: technology
   id: WH40KEquipmentServoSkull
-  name: research-technology-wh40k-equipment-intel-detectors
+  name: research-technology-wh40k-equipment-explosive-ordnance
   icon:
-    sprite: Clothing/Head/Helmets/bone_helmet.rsi
-    state: icon
+    sprite: _WH40K/Objects/Devices/servo_skull_melta.rsi
+    state: deactivate
   discipline: WH40KEquipment
   tier: 1
-  cost: 3500
-  researchTimeSeconds: 165
+  cost: 5000
+  researchTimeSeconds: 80
   technologyPrerequisites:
-  - WH40KEquipmentAuthRight2
+  - WH40KEquipmentAuthLeft3
+  - WH40KEquipmentBarricades
   recipeUnlocks:
   - WH40KRecipeServoSkull
+  - WH40KRecipeFragGrenade
+  - WH40KRecipeKrakGrenade
+  - WH40KRecipeMeltaGrenade
 
 - type: technology
   id: WH40KEquipmentIntelDetectors
-  name: research-technology-wh40k-equipment-intel-detectors
+  name: research-technology-wh40k-equipment-tactical-scanners
   icon:
     sprite: _RMC14/Objects/Tools/intel_detector.rsi
     state: datadetector
   discipline: WH40KEquipment
   tier: 1
-  cost: 3500
-  researchTimeSeconds: 165
+  cost: 500
+  researchTimeSeconds: 30
   technologyPrerequisites:
   - WH40KEquipmentAuthRight2
-  - WH40KEquipmentSignalDoctrine
   recipeUnlocks:
   - WH40KRecipeIntelDetectorImperium
   - WH40KRecipeIntelDetectorHeretics
@@ -454,8 +524,8 @@
     state: extraction_pack
   discipline: WH40KEquipment
   tier: 1
-  cost: 4500
-  researchTimeSeconds: 195
+  cost: 2000
+  researchTimeSeconds: 60
   technologyPrerequisites:
   - WH40KEquipmentAuthRight3
   - WH40KEquipmentIntelDetectors
@@ -465,53 +535,65 @@
 
 - type: technology
   id: WH40KEquipmentRelayTrackers
-  name: research-technology-wh40k-equipment-relay-trackers
+  name: research-technology-wh40k-equipment-mortar-shells
   icon:
-    sprite: Objects/Devices/pinpointer.rsi
-    state: pinpointer
+    sprite: _WH40K/Objects/Weapons/mortar/classic.rsi
+    state: mortar_m402_carry
   discipline: WH40KEquipment
   tier: 1
-  cost: 6000
-  researchTimeSeconds: 225
+  cost: 2000
+  researchTimeSeconds: 40
   technologyPrerequisites:
-  - WH40KEquipmentAuthLeft4
-  - WH40KEquipmentFieldFlares
+  - WH40KEquipmentAuthLeft3
+  - WH40KEquipmentBarricades
   recipeUnlocks:
-  - WH40KRecipeMissionPinpointerRelayImperium
-  - WH40KRecipeMissionPinpointerRelayHeretics
+  - WH40KRecipeMortarShellHE
+  - WH40KRecipeMortarShellFlare
+  - WH40KRecipeMortarShellSmoke
+  - WH40KRecipeMortarShellIncendiary
+  - WH40KRecipeMortarShellEMP
 
 - type: technology
   id: WH40KEquipmentCargoTrackers
-  name: research-technology-wh40k-equipment-cargo-trackers
+  name: research-technology-wh40k-equipment-advanced-ammunition
   icon:
-    sprite: Objects/Devices/pinpointer.rsi
-    state: pinpointer
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/Bolter/bolter.rsi
+    state: base
   discipline: WH40KEquipment
   tier: 1
-  cost: 6000
-  researchTimeSeconds: 225
+  cost: 2000
+  researchTimeSeconds: 80
   technologyPrerequisites:
-  - WH40KEquipmentAuthRight4
-  - WH40KEquipmentFultonRecovery
+  - WH40KEquipmentAuthRight3
+  - WH40KEquipmentBasicAmmunition
   recipeUnlocks:
-  - WH40KRecipeMissionPinpointerCargoImperium
-  - WH40KRecipeMissionPinpointerCargoHeretics
+  - WH40KRecipeHellgunPowerPack
+  - WH40KRecipePlasmGunPowerCell
+  - WH40KRecipePlasmPistolPowerCell
+  - WH40KRecipeMeltPowerCell
+  - WH40KRecipeMagazineBolter
+  - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineHeavyBolter
 
 - type: technology
   id: WH40KEquipmentMissionCommand
-  name: research-technology-wh40k-equipment-mission-command
+  name: research-technology-wh40k-equipment-pinpointer-suite
   icon:
     sprite: Objects/Devices/pinpointer.rsi
     state: pinpointer
   discipline: WH40KEquipment
   tier: 1
-  cost: 8000
-  researchTimeSeconds: 300
+  cost: 3000
+  researchTimeSeconds: 70
   technologyPrerequisites:
   - WH40KEquipmentAuthCap
-  - WH40KEquipmentRelayTrackers
-  - WH40KEquipmentCargoTrackers
+  - WH40KEquipmentFieldFlares
+  - WH40KEquipmentFultonRecovery
   recipeUnlocks:
+  - WH40KRecipeMissionPinpointerRelayImperium
+  - WH40KRecipeMissionPinpointerRelayHeretics
+  - WH40KRecipeMissionPinpointerCargoImperium
+  - WH40KRecipeMissionPinpointerCargoHeretics
   - WH40KRecipeMissionPinpointerBannerImperium
   - WH40KRecipeMissionPinpointerBannerHeretics
   - WH40KRecipeMissionPinpointerKitImperium
@@ -525,8 +607,8 @@
     state: icon
   discipline: WH40KEquipment
   tier: 1
-  cost: 9000
-  researchTimeSeconds: 315
+  cost: 6000
+  researchTimeSeconds: 200
   technologyPrerequisites:
   - WH40KEquipmentAuthCap
   - WH40KEquipmentMissionCommand

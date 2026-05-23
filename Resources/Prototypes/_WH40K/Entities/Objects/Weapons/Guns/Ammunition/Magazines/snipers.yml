@@ -1,0 +1,26 @@
+- type: entity
+  id: MagazineLondoronMk2
+  parent: BaseMagazineRifle
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/londoron_mk2.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Appearance
+  - type: Tag
+    tags:
+    - MagazineLondoronMk2
+  - type: BallisticAmmoProvider
+    capacity: 5
+    proto: CartridgeLondoronMk2
+    mayTransfer: true
+    whitelist:
+      tags:
+      - CartridgeLondoronMk2

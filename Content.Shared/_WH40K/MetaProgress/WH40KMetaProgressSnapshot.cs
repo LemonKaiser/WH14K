@@ -1,4 +1,5 @@
 using System;
+using System;
 using System.Collections.Generic;
 using Robust.Shared.Serialization;
 
@@ -32,7 +33,9 @@ public sealed class WH40KMetaProgressSnapshot
 
 	public WH40KMetaDevelopmentSnapshot Development { get; }
 
-	public WH40KMetaProgressSnapshot(int level, int currentXp, int requiredXp, int lifetimeXp, int levelCap, int completedAchievements, int totalAchievements, List<WH40KMetaAchievementSnapshotEntry> achievements, WH40KMetaNextRewardPreview? nextReward, List<WH40KMetaDecorationSnapshotEntry> decorations, WH40KMetaDecorationSelectionSnapshot decorationSelection, WH40KMetaDevelopmentSnapshot development)
+	public int AccountResetCooldownRemainingSeconds { get; }
+
+	public WH40KMetaProgressSnapshot(int level, int currentXp, int requiredXp, int lifetimeXp, int levelCap, int completedAchievements, int totalAchievements, List<WH40KMetaAchievementSnapshotEntry> achievements, WH40KMetaNextRewardPreview? nextReward, List<WH40KMetaDecorationSnapshotEntry> decorations, WH40KMetaDecorationSelectionSnapshot decorationSelection, WH40KMetaDevelopmentSnapshot development, int accountResetCooldownRemainingSeconds)
 	{
 		Level = level;
 		CurrentXp = currentXp;
@@ -46,5 +49,6 @@ public sealed class WH40KMetaProgressSnapshot
 		Decorations = decorations;
 		DecorationSelection = decorationSelection;
 		Development = development;
+		AccountResetCooldownRemainingSeconds = Math.Max(0, accountResetCooldownRemainingSeconds);
 	}
 }

@@ -19,7 +19,6 @@
   roles:
   - Colonel
   - Commissar
-  - Major
   - Lieutenant
   - Sergeant
   - SpecialistSWS
@@ -72,6 +71,9 @@
   - TauEthereal
   - TauOfficer
   - TauFireWarrior
+  - TauAirCaste
+  - TauEarthCaste
+  - TauWaterCaste
 
 - type: department
   id: Ork

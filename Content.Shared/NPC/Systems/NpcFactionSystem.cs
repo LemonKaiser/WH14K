@@ -175,15 +175,23 @@ public sealed partial class NpcFactionSystem : EntitySystem
             RefreshFactions((ent, ent.Comp));
     }
 
-    public IEnumerable<EntityUid> GetNearbyHostiles(Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> ent, float range)
+    public IEnumerable<EntityUid> GetNearbyHostiles(
+        Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> ent,
+        float range,
+        bool ignoreFriendlyOverlap = true)
     {
         if (!Resolve(ent, ref ent.Comp1, false))
             return Array.Empty<EntityUid>();
 
-        var hostiles = GetNearbyFactions(ent, range, ent.Comp1.HostileFactions)
+        var hostiles = GetNearbyFactions(ent, range, ent.Comp1.HostileFactions);
+
+        if (ignoreFriendlyOverlap)
+        {
             // ignore mobs that have both hostile faction and the same faction,
             // otherwise having multiple factions is strictly negative
-            .Where(target => !IsEntityFriendly((ent, ent.Comp1), target));
+            hostiles = hostiles.Where(target => !IsEntityFriendly((ent, ent.Comp1), target));
+        }
+
         if (!Resolve(ent, ref ent.Comp2, false))
             return hostiles;
 
@@ -223,6 +231,11 @@ public sealed partial class NpcFactionSystem : EntitySystem
     public bool IsEntityFriendly(Entity<NpcFactionMemberComponent?> ent, Entity<NpcFactionMemberComponent?> other)
     {
         if (!Resolve(ent, ref ent.Comp, false) || !Resolve(other, ref other.Comp, false))
+            return false;
+
+        // If the candidate belongs to any explicitly hostile faction, do not treat
+        // it as friendly just because it also shares an allied faction.
+        if (ent.Comp.HostileFactions.Overlaps(other.Comp.Factions))
             return false;
 
         return ent.Comp.Factions.Overlaps(other.Comp.Factions) || ent.Comp.FriendlyFactions.Overlaps(other.Comp.Factions);

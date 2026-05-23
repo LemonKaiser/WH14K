@@ -149,7 +149,7 @@
   parent: WH40KMortarShellBase
   id: WH40KMortarShellIncendiary
   name: 80mm incendiary mortar shell
-  description: 80mm shell that spreads burning incendiary fragments on impact.
+  description: 80mm shell that splashes the impact area with ignited napalm fuel.
   components:
   - type: Item
     heldPrefix: he
@@ -158,8 +158,13 @@
   - type: WH40KMortarShell
     uiShellType: incendiary
     triggerExplosion: false
-    spawnOnLand: GrenadeIncendiary
-    spawnOnLandTriggerKey: timer
+    spillReagentOnLand: Napalm
+    spillAmountOnLand: 18
+    spillAmountFalloffOnLand: 4
+    spillRadiusOnLand: 2
+    igniteHotspotTemperatureOnLand: 1100
+    igniteHotspotVolumeOnLand: 25
+    igniteBurnableTilesOnLand: true
 
 - type: entity
   parent: WH40KMortarShellBase

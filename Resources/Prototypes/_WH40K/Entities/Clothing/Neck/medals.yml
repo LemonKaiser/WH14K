@@ -55,6 +55,29 @@
 
 - type: entity
   parent: ClothingNeckBase
+  id: ClothingNeckImperialCatachanToken
+  suffix: WH40K, Катачан
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/catachan_token.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Medals/Imperium/catachan_token.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.95
+        Slash: 0.95
+        Piercing: 0.95
+        Heat: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.95
+  - type: Tag
+    tags:
+      - Medal
+      - WhitelistChameleon
+
+- type: entity
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckChaosUndividedMedal
   components:
   - type: Sprite
@@ -67,7 +90,7 @@
       - WhitelistChameleon
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckChaosKhorneMedal
   components:
   - type: Sprite
@@ -80,7 +103,7 @@
       - WhitelistChameleon
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckChaosNurgleMedal
   components:
   - type: Sprite
@@ -93,7 +116,7 @@
       - WhitelistChameleon
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckChaosSlaaneshMedal
   components:
   - type: Sprite
@@ -106,7 +129,7 @@
       - WhitelistChameleon
 
 - type: entity
-  parent: ClothingNeckBase
+  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
   id: ClothingNeckChaosTzeentchMedal
   components:
   - type: Sprite

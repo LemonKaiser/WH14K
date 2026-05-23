@@ -25,7 +25,7 @@
       - type: WH40KFriendlyFireAllowed
       - type: WH40KCommissarVoice
       - type: WH40KMoraleExecution
-        cooldownSeconds: 1200
+        cooldownSeconds: 300
         auraRadius: 10
         buffDurationSeconds: 300
         speedMultiplier: 1.1

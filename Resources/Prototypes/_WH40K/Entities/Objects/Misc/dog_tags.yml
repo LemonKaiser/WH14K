@@ -54,13 +54,6 @@
 
 - type: entity
   parent: StandardDogTag
-  id: MajorDogTag
-  components:
-  - type: PresetIdCard
-    job: Major
-
-- type: entity
-  parent: StandardDogTag
   id: MedicDogTag
   components:
   - type: PresetIdCard
@@ -256,6 +249,27 @@
   components:
   - type: PresetIdCard
     job: TauFireWarrior
+
+- type: entity
+  parent: StandardDogTag
+  id: TauEarthCasteDogTag
+  components:
+  - type: PresetIdCard
+    job: TauEarthCaste
+
+- type: entity
+  parent: StandardDogTag
+  id: TauAirCasteDogTag
+  components:
+  - type: PresetIdCard
+    job: TauAirCaste
+
+- type: entity
+  parent: StandardDogTag
+  id: TauWaterCasteDogTag
+  components:
+  - type: PresetIdCard
+    job: TauWaterCaste
 
 - type: entity
   parent: StandardDogTag

@@ -1,7 +1,12 @@
 using System.Numerics;
+using Content.Server.Atmos.EntitySystems;
+using Content.Server.Fluids.EntitySystems;
+using Content.Server._WH40K.Fire;
+using Content.Shared.Chemistry.Components;
 using Content.Server.Popups;
 using Content.Server._WH40K.Rangefinder;
 using Content.Server._WH40K.Signals.Flare;
+using Content.Shared.FixedPoint;
 using Content.Server.Light.Components;
 using Content.Server.Light.EntitySystems;
 using Content.Shared._WH40K.Mortar;
@@ -44,15 +49,18 @@ public sealed class WH40KMortarSystem : EntitySystem
 
     [Dependency] private readonly ISharedAdminLogManager _adminLogs = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly WH40KEnvironmentalFireSystem _environmentalFire = default!;
     [Dependency] private readonly SharedExplosionSystem _explosion = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly FixtureSystem _fixture = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private readonly PuddleSystem _puddle = default!;
     [Dependency] private readonly ExpendableLightSystem _expLight = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -134,6 +142,8 @@ public sealed class WH40KMortarSystem : EntitySystem
                 if (!string.IsNullOrWhiteSpace(shell.SpawnOnLandTriggerKey))
                     _trigger.Trigger(landedUid, null, shell.SpawnOnLandTriggerKey);
             }
+
+            TryApplyLandingSpillEffects(uid, active.Coordinates, shell);
 
             if (shell.TriggerExplosion)
                 _explosion.TriggerExplosive(uid);
@@ -1012,6 +1022,52 @@ public sealed class WH40KMortarSystem : EntitySystem
             return 0;
 
         return Math.Max(0, (int) Math.Ceiling((nextReadyAt - now).TotalSeconds));
+    }
+
+    private void TryApplyLandingSpillEffects(EntityUid shellUid, EntityCoordinates coordinates, WH40KMortarShellComponent shell)
+    {
+        if (shell.SpillReagentOnLand is not { } spillReagent ||
+            shell.SpillAmountOnLand <= FixedPoint2.Zero)
+        {
+            return;
+        }
+
+        var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+        if (!TryGetGroundTile(mapCoordinates, out var gridUid, out var grid, out var originTile))
+            return;
+
+        var radius = Math.Max(0, shell.SpillRadiusOnLand);
+        var baseAmount = shell.SpillAmountOnLand.Float();
+        var falloff = shell.SpillAmountFalloffOnLand.Float();
+        var igniteHotspot = shell.IgniteHotspotTemperatureOnLand > 0f && shell.IgniteHotspotVolumeOnLand > 0f;
+
+        for (var dx = -radius; dx <= radius; dx++)
+        {
+            for (var dy = -radius; dy <= radius; dy++)
+            {
+                var ring = Math.Max(Math.Abs(dx), Math.Abs(dy));
+                var amount = baseAmount - falloff * ring;
+                if (amount <= 0f)
+                    continue;
+
+                var tile = originTile + new Vector2i(dx, dy);
+                if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) ||
+                    tileRef.Tile.IsEmpty ||
+                    _turf.IsSpace(tileRef))
+                {
+                    continue;
+                }
+
+                var solution = new Solution(spillReagent, FixedPoint2.New(amount));
+                _puddle.TrySpillAt(tileRef, solution, out _, sound: false);
+
+                if (igniteHotspot)
+                    _atmosphere.HotspotExpose(gridUid, tile, shell.IgniteHotspotTemperatureOnLand, shell.IgniteHotspotVolumeOnLand, shellUid, true);
+
+                if (shell.IgniteBurnableTilesOnLand)
+                    _environmentalFire.TryIgniteBurnableTile(gridUid, tile, shellUid);
+            }
+        }
     }
 
     private static int ClampSigned(int value, int absLimit)

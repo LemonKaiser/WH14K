@@ -13,6 +13,9 @@ ent-WH40KObjectiveHeretics = Heretic Command Relay
 ent-WHSoup = Guards soup
     .desc = The vat is full... And it’s better not to know.
 
+ent-WHSoupNurgl = Nurgle chan
+    .desc = The vat is full... And it’s better not to know.
+
 ent-GenaWH40 = Gena
     .desc = Gene cabinet 2.5
 
@@ -630,6 +633,9 @@ ent-WeaponLaserLasgun = M36 Cantrael
 ent-WeaponHereticLaserLasgun = Heretic M36 Cantrael
     .desc = The cursed weapon of the heretics Troops.
 
+ent-WeaponHereticShortlas = Shortlas
+    .desc = A cut-down heretic lasgun with an internal battery that discharges three brutal beams at once.
+
 ent-WeaponLaserLasgunKrieg = lucius-pattern lasgun
     .desc = A Lucius-pattern lasgun tuned for harsh trench service and long marches across dead frontlines.
 
@@ -1158,6 +1164,9 @@ ent-ClothingHeadHatCatachanBeret = catachan beret
 ent-ClothingHeadHatCatachanHeadband = catachan headband
     .desc = A simple headband that keeps sweat out of your eyes.
 
+ent-ClothingHeadHatCatachanCap = catachan cap
+    .desc = A light field cap that stays practical in jungle heat and does not snag on every branch.
+
 ent-ClothingOuterArmorCatachanLight = catachan light armor
     .desc = Light field armor built for speed and freedom of movement.
 
@@ -1176,8 +1185,17 @@ ent-ClothingUniformJumpsuitCatachan2 = catachan patrol fatigues
 ent-ClothingUniformJumpsuitCatachan3 = catachan tank top
     .desc = A stripped-down jungle fighter shirt for the hottest warzones.
 
+ent-ClothingUniformJumpsuitCatachanPants = catachan camo pants
+    .desc = Lightweight camouflage fatigue pants with suspenders for jungle operations and long marches.
+
 ent-CatachanKnife = catachan knife
     .desc = A sturdy fighting knife favored by Catachan jungle fighters.
+
+ent-CatachanMachete = catachan machete
+    .desc = A heavy jungle machete meant for hacking through undergrowth and enemies alike.
+
+ent-ClothingNeckImperialCatachanToken = catachan token
+    .desc = A simple service tag on a chain. The plate is sturdy enough to offer at least a little extra protection.
 
 ent-WeaponRocketLauncherImperial = imperial rocket launcher
     .desc = A reusable rocket launcher with a blast shield, issued to Imperial heavy teams.
@@ -1583,9 +1601,6 @@ ent-ClothingShoesBootsVst = Vostroyan boots
 ent-ClothingNeckCloakVst = Vostroyan lieutenant's cloak
     .desc = Standard uniform.
 
-ent-ClothingOuterArmorFlakVestMajor = Officer's greatcoat
-    .desc = An officer's greatcoat—here it is, a symbol of authority on the battlefield.
-
 ent-ClothingUniformJumpsuitValhallan = Valhallan uniform
     .desc = A field uniform cut for the killing cold of Valhalla and the trench discipline of its Ice Warriors.
 
@@ -1793,7 +1808,7 @@ ent-ClothingNeckCloakFlesh = Cloak of Flesh
     .desc = Among the many faces woven into a single fabric, you recognize one... It's your face!
 
 ent-MobWH40KDreadnought = Dreadnought
-    .desc = A massive war machine piloted by a venerable Space Marine hero whose body suffered fatal wounds in battle.
+    .desc = A massive war machine piloted by a venerable Space Marine hero, armed with an assault cannon and a missile rack.
 
 ent-WH40KAstartesLaserPistolPowerCell = Astartes laser pistol power cell
     .desc = A reinforced charge cell tuned for the high-output discharge profile of an Astartes laser pistol.

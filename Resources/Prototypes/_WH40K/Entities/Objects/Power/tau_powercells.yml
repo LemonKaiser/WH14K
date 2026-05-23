@@ -1,0 +1,99 @@
+- type: entity
+  id: TauPulseCellRifle
+  parent: WH40KPowerCell
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/tau_pulse_ammo.rsi
+    state: icon
+    scale: 0.9, 0.9
+  - type: Tag
+    tags:
+    - TauPulseCellRifle
+  - type: Battery
+    maxCharge: 2000
+    startingCharge: 2000
+    pricePerJoule: 0.15
+  - type: BatteryAmmoProvider
+    proto: WH40KTauPulseRifleBeam
+    fireCost: 100
+
+- type: entity
+  id: TauPulseCellCarbine
+  parent: WH40KPowerCell
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/tau_pulse_ammo.rsi
+    state: icon
+    scale: 0.9, 0.9
+  - type: Tag
+    tags:
+    - TauPulseCellCarbine
+  - type: Battery
+    maxCharge: 2400
+    startingCharge: 2400
+    pricePerJoule: 0.15
+  - type: BatteryAmmoProvider
+    proto: WH40KTauPulseCarbineBeam
+    fireCost: 100
+
+- type: entity
+  id: TauPulseCellBlaster
+  parent: WH40KPowerCell
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/tau_pulse_ammo.rsi
+    state: icon
+    scale: 0.9, 0.9
+  - type: Tag
+    tags:
+    - TauPulseCellBlaster
+  - type: Battery
+    maxCharge: 1500
+    startingCharge: 1500
+    pricePerJoule: 0.15
+  - type: BatteryAmmoProvider
+    proto: WH40KTauPulseBlasterBeam
+    fireCost: 150
+
+- type: entity
+  id: TauPulseCellSniper
+  parent: WH40KPowerCell
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/tau_pulse_ammo.rsi
+    state: icon
+    scale: 0.9, 0.9
+  - type: Tag
+    tags:
+    - TauPulseCellSniper
+  - type: Battery
+    maxCharge: 1500
+    startingCharge: 1500
+    pricePerJoule: 0.15
+  - type: BatteryAmmoProvider
+    proto: WH40KTauPulseSniperBeam
+    fireCost: 150
+
+- type: entity
+  id: TauRailgunCell
+  parent: WH40KPowerCell
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/tau_railgun_ammo.rsi
+    state: icon
+    scale: 0.9, 0.9
+  - type: Tag
+    tags:
+    - TauRailgunCell
+  - type: Battery
+    maxCharge: 1000
+    startingCharge: 1000
+    pricePerJoule: 0.15
+  - type: BatteryAmmoProvider
+    proto: WH40KTauRailgunBeam
+    fireCost: 200

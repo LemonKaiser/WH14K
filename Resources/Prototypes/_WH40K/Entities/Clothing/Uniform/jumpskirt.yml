@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingUniformBase
+  parent: [ClothingUniformBase, WH40KChaosDamnationClothing]
   id: ClothingUniformJumpskirtSlaanesh
   suffix: WH40K, Еретики, Слаанеш
   components:

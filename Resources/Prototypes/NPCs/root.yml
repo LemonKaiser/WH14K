@@ -7,7 +7,7 @@
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:UtilityOperator
-            proto: NearbyGunTargets
+            proto: NearbyTurretGunTargets
         
         - !type:HTNPrimitiveTask
           preconditions:
@@ -26,7 +26,7 @@
           services:
             - !type:UtilityService
               id: RangedService
-              proto: NearbyGunTargets
+              proto: NearbyTurretGunTargets
               key: Target
 
     - tasks:
@@ -39,7 +39,7 @@
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:UtilityOperator
-            proto: NearbyGunTargets
+            proto: NearbyTurretGunTargets
         
         - !type:HTNPrimitiveTask
           preconditions:
@@ -59,7 +59,7 @@
           services:
             - !type:UtilityService
               id: RangedService
-              proto: NearbyGunTargets
+              proto: NearbyTurretGunTargets
               key: Target
 
     - tasks:

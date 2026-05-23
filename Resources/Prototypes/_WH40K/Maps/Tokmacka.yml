@@ -1,0 +1,49 @@
+- type: gameMap
+  id: Tokmacka
+  mapName: Tokmacka
+  mapPath: /Maps/_WH40K/Tokmacka.yml
+  minPlayers: 0
+  wh40kWeatherProfile: WH40KMapWeatherBattlefield
+  wh40kEventsProfile: WH40KMapEventsAll
+  stations:
+    Tokmacka:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Tokmacka"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ 1, 1 ]
+            Commissar: [ 2, 2 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 3, 3 ]
+            Lieutenant: [ 3, 3 ]
+            Medic: [ 3, 3 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 2, 2 ]
+            Sergeant: [ 2, 2 ]
+            TitheSupplier: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
+            WH40KChaplain: [ 2, 2 ]
+            Explorator: [ 1, 1 ]
+            Enginseer: [ 1, 1 ]
+            Magos: [ 1, 1 ]
+            Novice: [ 1, 1 ]
+            SpecialistHWS: [ 1, 1 ]
+            SpecialistSWS: [ 1, 1 ]
+            # Heretics
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 3, 3 ]
+            HLieutenant: [ 4, 4 ]
+            HSergeant: [ 4, 4 ]
+            HBandSupplier: [ 3, 3 ]
+            HVoxScout: [ 1, 1 ]
+            HExplorator: [ 1, 1 ]
+            HGenetor: [ 1, 1 ]
+            HEnginseer: [ 1, 1 ]
+            HMagos: [ 1, 1 ]
+            HNovice: [ 1, 1 ]
+            HSpecialistHWS: [ 1, 1 ]
+            HSpecialistSWS: [ 1, 1 ]

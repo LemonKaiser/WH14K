@@ -871,6 +871,8 @@ namespace Content.Server.Database
 
         public DateTime LastProgressAt { get; set; }
 
+        public DateTime? LastAccountResetAt { get; set; }
+
         [MaxLength(128)]
         public string? SelectedGhostSkinId { get; set; }
 

@@ -7,7 +7,7 @@ department-Mechanicus-description = Поддерживайте наличие э
 department-Imperium-description = Сражайтесь с предателями, за Императора!
 department-Dark-Mechanicus-description = Поддерживайте наличие электроэнергии и целостность базы, обеспечивайте членов экипажа новыми продвинутыми устройствами, находя их древние чертежи.
 department-Heretics-description = Сражайтесь с рабами трупа на троне во имя хаоса!
-department-Tau-description = Кадры касты Огня и эфириалы Империи Тау, сражающиеся во имя Тау'ва.
+department-Tau-description = Касты Огня, Земли, Воздуха и Воды Империи Тау, ведомые Эфириалами во имя Тау'ва.
 department-Ork-description = Пастук за жубы
 
 department-Personnel-description = обслуживающий персонал корабля

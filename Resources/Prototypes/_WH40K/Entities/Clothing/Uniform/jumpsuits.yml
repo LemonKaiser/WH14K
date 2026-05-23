@@ -9,7 +9,7 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/command.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: [ClothingUniformBase, WH40KChaosDamnationClothing]
   id: ClothingUniformJumpsuitslaanesh
   suffix: WH40K, слаанеш, еретики
   components:
@@ -89,6 +89,16 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_uniform3.rsi
 
 - type: entity
+  parent: UnsensoredClothingUniformBase
+  id: ClothingUniformJumpsuitCatachanPants
+  suffix: WH40K, Катачан
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_pants.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/catachan_pants.rsi
+
+- type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitTechpriest
   suffix: WH40K, АдМехи
@@ -99,7 +109,7 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/techpriest.rsi
 
 - type: entity
-  parent: UnsensoredClothingUniformBase
+  parent: [UnsensoredClothingUniformBase, WH40KChaosDamnationClothing]
   id: ClothingUniformJumpsuitBloodPact
   suffix: WH40K, Бладпакт
   components:
@@ -129,7 +139,7 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/colonel.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: [ClothingUniformBase, WH40KChaosDamnationClothing]
   id: ClothingUniformJumpsuitCultist1
   name: униформа культиста
   description: Тёмный комбинезон, испещрённый символами Хаоса. Он внушает страх своим видом, но не даёт никакой защиты.
@@ -141,7 +151,7 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/uniform_cult1.rsi
 
 - type: entity
-  parent: ClothingUniformBase
+  parent: [ClothingUniformBase, WH40KChaosDamnationClothing]
   id: ClothingUniformJumpsuitCultist2
   name: облачение культиста
   description: Зловещий комбинезон, сотканный из тёмных тканей и испещрённый рунами варпа. Его вид внушает трепет и подчёркивает преданность культу Хаоса.

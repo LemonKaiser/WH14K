@@ -10,16 +10,20 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public event Action<WH40KMetaProgressSnapshot>? SnapshotUpdated;
+    public event Action<WH40KMetaProgressResetAccountResultEvent>? AccountResetResultReceived;
 
     private WH40KMetaProgressSnapshot? _snapshot;
     private bool _hasCache;
     private bool _requestInFlight;
+    private bool _accountResetRequestInFlight;
     private TimeSpan _lastRequest;
+    private TimeSpan _snapshotReceivedAt;
 
     public override void Initialize()
     {
         base.Initialize();
         SubscribeNetworkEvent<WH40KMetaProgressStateEvent>(OnStateEvent);
+        SubscribeNetworkEvent<WH40KMetaProgressResetAccountResultEvent>(OnAccountResetResultEvent);
     }
 
     public bool HasCache => _hasCache;
@@ -42,6 +46,26 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
             RequestSnapshot();
     }
 
+    public bool AccountResetRequestInFlight => _accountResetRequestInFlight;
+
+    public int GetAccountResetCooldownRemainingSeconds()
+    {
+        if (!_hasCache || _snapshot == null)
+            return 0;
+
+        var elapsed = (_timing.CurTime - _snapshotReceivedAt).TotalSeconds;
+        var remaining = _snapshot.AccountResetCooldownRemainingSeconds - (int) Math.Floor(elapsed);
+        return Math.Max(0, remaining);
+    }
+
+    public bool CanRequestAccountReset()
+    {
+        return _hasCache &&
+               _snapshot != null &&
+               !_accountResetRequestInFlight &&
+               GetAccountResetCooldownRemainingSeconds() <= 0;
+    }
+
     public void RequestSnapshot(bool force = false)
     {
         var now = _timing.CurTime;
@@ -58,6 +82,16 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
         _requestInFlight = true;
         _lastRequest = now;
         RaiseNetworkEvent(new WH40KMetaProgressRequestStateEvent());
+    }
+
+    public bool RequestAccountReset()
+    {
+        if (_accountResetRequestInFlight)
+            return false;
+
+        _accountResetRequestInFlight = true;
+        RaiseNetworkEvent(new WH40KMetaProgressResetAccountRequestEvent());
+        return true;
     }
 
     public void SetDecorationSelection(WH40KMetaDecorationCategory category, string decorationId)
@@ -97,6 +131,13 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
         _requestInFlight = false;
         _snapshot = ev.Snapshot;
         _hasCache = true;
+        _snapshotReceivedAt = _timing.CurTime;
         SnapshotUpdated?.Invoke(ev.Snapshot);
+    }
+
+    private void OnAccountResetResultEvent(WH40KMetaProgressResetAccountResultEvent ev, EntitySessionEventArgs args)
+    {
+        _accountResetRequestInFlight = false;
+        AccountResetResultReceived?.Invoke(ev);
     }
 }

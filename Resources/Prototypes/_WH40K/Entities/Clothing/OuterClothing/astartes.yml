@@ -101,7 +101,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk6.rsi
 
 - type: entity
-  parent: ClothingOuterArmorBasic
+  parent: [ClothingOuterArmorBasic, WH40KChaosDamnationClothing]
   id: ClothingOuterArmorAstartesChaos
   suffix: WH40K, Astartes, Chaos
   components:

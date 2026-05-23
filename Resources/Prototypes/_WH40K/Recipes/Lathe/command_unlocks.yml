@@ -50,8 +50,24 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponStubSMG2
+  result: WeaponStubSMG2
+  materials:
+    Steel: 1200
+    Plastic: 350
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
   id: WH40KRecipeWeaponChsStubSMG3
   result: WeaponChsStubSMG3
+  materials:
+    Steel: 1400
+    Plastic: 400
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponStubSMG3
+  result: WeaponStubSMG3
   materials:
     Steel: 1400
     Plastic: 400
@@ -64,6 +80,15 @@
     Steel: 1200
     Glass: 500
     Plastic: 250
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserLonglas
+  result: WeaponLaserLonglas
+  materials:
+    Steel: 1500
+    Glass: 650
+    Plastic: 300
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
@@ -174,6 +199,17 @@
 
 - type: latheRecipe
   parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponLaserMeltagun
+  result: WeaponLaserMeltagun
+  materials:
+    Steel: 1800
+    Glass: 900
+    Plastic: 450
+    Gold: 350
+    Plasma: 700
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
   id: WH40KRecipeHeavyBolter
   result: WH40KHeavyBolter
   completetime: 10
@@ -198,6 +234,146 @@
   materials:
     Steel: 1600
     Plastic: 450
+
+- type: latheRecipe
+  parent: BaseWeaponRecipeLong
+  id: WH40KRecipeWeaponStubShotgun
+  result: WeaponStubShotgun
+  materials:
+    Steel: 1600
+    Plastic: 450
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeLasgunPowerCell
+  result: LasgunPowerCell
+  materials:
+    Steel: 150
+    Glass: 80
+    Plastic: 80
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeLonglasPowerCell
+  result: LonglasPowerCell
+  materials:
+    Steel: 200
+    Glass: 100
+    Plastic: 80
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeAccatranPowerCell
+  result: AccatranPowerCell
+  materials:
+    Steel: 180
+    Glass: 100
+    Plastic: 80
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeLasgunPowerCellLucius
+  result: LasgunPowerCellLucius
+  materials:
+    Steel: 180
+    Glass: 100
+    Plastic: 90
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipePowerCellVoss
+  result: PowerCellVoss
+  materials:
+    Steel: 180
+    Glass: 100
+    Plastic: 90
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipePlasmGunPowerCell
+  result: PlasmGunPowerCell
+  materials:
+    Steel: 500
+    Glass: 500
+    Plastic: 150
+    Gold: 100
+    Plasma: 250
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipePlasmPistolPowerCell
+  result: PlasmPistolPowerCell
+  materials:
+    Steel: 350
+    Glass: 350
+    Plastic: 100
+    Gold: 75
+    Plasma: 175
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMeltPowerCell
+  result: MeltPowerCell
+  materials:
+    Steel: 650
+    Glass: 600
+    Plastic: 200
+    Gold: 150
+    Plasma: 350
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMagazineBolter
+  result: MagazineBolter
+  materials:
+    Steel: 250
+    Plastic: 100
+    Gold: 30
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMagazineBolterPistol
+  result: MagazineBolterPistol
+  materials:
+    Steel: 175
+    Plastic: 75
+    Gold: 20
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMagazineHeavyBolter
+  result: WH40KMagazineHeavyBolter
+  materials:
+    Steel: 500
+    Plastic: 200
+    Gold: 50
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeFragGrenade
+  result: FragGrenade
+  materials:
+    Steel: 175
+    Plastic: 125
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeKrakGrenade
+  result: KrakGrenade
+  materials:
+    Steel: 200
+    Plastic: 100
+    Gold: 25
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
+  id: WH40KRecipeMeltaGrenade
+  result: MeltaGrenade
+  materials:
+    Steel: 200
+    Plastic: 100
+    Gold: 50
+    Plasma: 150
 
 - type: latheRecipe
   parent: BaseToolRecipe
@@ -616,9 +792,12 @@
   - WH40KRecipeWeaponLaserLasgun
   - WH40KRecipeChainsword
   - WH40KRecipeWeaponStubRifle
+  - WH40KRecipeWeaponStubSMG2
   - WH40KRecipeWeaponLaserLasgunAccatran
+  - WH40KRecipeWeaponLaserLonglas
   - WH40KRecipeWeaponHellgun
-  - WH40KRecipeHellgunPowerPack
+  - WH40KRecipeWeaponStubSMG3
+  - WH40KRecipeWeaponStubShotgun
   - WH40KRecipeWeaponRifleBolter
   - WH40KRecipeMortarKit
   - WH40KRecipeMortarShellHE
@@ -627,6 +806,7 @@
   - WH40KRecipeMortarShellIncendiary
   - WH40KRecipeMortarShellEMP
   - WH40KRecipeWeaponLaserPlasmagun
+  - WH40KRecipeWeaponLaserMeltagun
   - WH40KRecipeHeavyBolter
   - WH40KRecipeWeaponLaserLasgunVoss
 
@@ -637,9 +817,10 @@
   - WH40KRecipeChaosMachete
   - WH40KRecipeWeaponStubRifle
   - WH40KRecipeWeaponChsStubSMG2
-  - WH40KRecipeWeaponChsStubSMG3
+  - WH40KRecipeWeaponLaserLonglas
   - WH40KRecipeWeaponHellgun
-  - WH40KRecipeHellgunPowerPack
+  - WH40KRecipeWeaponChsStubSMG3
+  - WH40KRecipeWeaponChsStubShotgun
   - WH40KRecipeWeaponPistolBolter
   - WH40KRecipeMortarKit
   - WH40KRecipeMortarShellHE
@@ -648,12 +829,31 @@
   - WH40KRecipeMortarShellIncendiary
   - WH40KRecipeMortarShellEMP
   - WH40KRecipeWeaponLaserPlasmaPistol
+  - WH40KRecipeWeaponLaserMeltagun
   - WH40KRecipeHeavyBolter
-  - WH40KRecipeWeaponChsStubShotgun
 
 - type: latheRecipePack
   id: WH40KCommandEquipmentResearchImperium
   recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeLasgunPowerCell
+  - WH40KRecipeLonglasPowerCell
+  - WH40KRecipeAccatranPowerCell
+  - WH40KRecipeLasgunPowerCellLucius
+  - WH40KRecipePowerCellVoss
+  - WH40KRecipePlasmGunPowerCell
+  - WH40KRecipePlasmPistolPowerCell
+  - WH40KRecipeMeltPowerCell
+  - WH40KRecipeMagazineBolter
+  - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineHeavyBolter
+  - WH40KRecipeFragGrenade
+  - WH40KRecipeKrakGrenade
+  - WH40KRecipeMeltaGrenade
+  - WH40KRecipeHellgunPowerPack
   - WH40KRecipeTacticalWhistleImperium
   - WH40KRecipeSignalFlareImperium
   - WH40KRecipeServoSkull
@@ -677,6 +877,25 @@
 - type: latheRecipePack
   id: WH40KCommandEquipmentResearchHeretics
   recipes:
+  - WH40KRecipeAmmoAutogun
+  - WH40KRecipeAmmo10mm
+  - WH40KRecipeAmmo10mmLong
+  - WH40KRecipeAmmoLethalshot
+  - WH40KRecipeLasgunPowerCell
+  - WH40KRecipeLonglasPowerCell
+  - WH40KRecipeAccatranPowerCell
+  - WH40KRecipeLasgunPowerCellLucius
+  - WH40KRecipePowerCellVoss
+  - WH40KRecipePlasmGunPowerCell
+  - WH40KRecipePlasmPistolPowerCell
+  - WH40KRecipeMeltPowerCell
+  - WH40KRecipeMagazineBolter
+  - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineHeavyBolter
+  - WH40KRecipeFragGrenade
+  - WH40KRecipeKrakGrenade
+  - WH40KRecipeMeltaGrenade
+  - WH40KRecipeHellgunPowerPack
   - WH40KRecipeTacticalWhistleHeretics
   - WH40KRecipeSignalFlareHeretics
   - WH40KRecipeServoSkull

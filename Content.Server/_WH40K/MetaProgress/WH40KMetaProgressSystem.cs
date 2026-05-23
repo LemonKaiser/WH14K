@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Content.Server.Preferences.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.KillTracking;
@@ -87,6 +88,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		public int LifetimeXp;
 
 		public int SeasonXp;
+
+		public DateTimeOffset? LastAccountResetAt;
 
 		public bool DbLoadStarted;
 
@@ -176,6 +179,12 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private const int ConfirmDevelopmentRateLimitCount = 4;
 
+	private const float ResetAccountRateLimitPeriodSeconds = 5f;
+
+	private const int ResetAccountRateLimitCount = 1;
+
+	private const int AccountResetCooldownMonths = 1;
+
 	private const int ValidatedHealBucketsPerPairPerRoundCap = 3;
 
 	[Dependency]
@@ -217,6 +226,9 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	[Dependency]
 	private readonly IGameTiming _timing = default!;
 
+	[Dependency]
+	private readonly IServerPreferencesManager _prefs = default!;
+
 	private readonly Dictionary<NetUserId, RuntimeProgressState> _states = new Dictionary<NetUserId, RuntimeProgressState>();
 
 	private readonly Dictionary<NetUserId, int> _roundKillXpSpent = new Dictionary<NetUserId, int>();
@@ -240,6 +252,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private readonly Dictionary<NetUserId, RateLimitWindowState> _setDecorationRateLimits = new Dictionary<NetUserId, RateLimitWindowState>();
 
 	private readonly Dictionary<NetUserId, RateLimitWindowState> _confirmDevelopmentRateLimits = new Dictionary<NetUserId, RateLimitWindowState>();
+
+	private readonly Dictionary<NetUserId, RateLimitWindowState> _resetAccountRateLimits = new Dictionary<NetUserId, RateLimitWindowState>();
 
 	private readonly HashSet<string> _processedMissionOutcomeRewardKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -341,6 +355,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		SubscribeNetworkEvent<WH40KMetaProgressRequestStateEvent>(OnRequestState);
 		SubscribeNetworkEvent<WH40KMetaProgressSetDecorationSelectionEvent>(OnSetDecorationSelection);
 		SubscribeNetworkEvent<WH40KMetaProgressConfirmDevelopmentPlanEvent>(OnConfirmDevelopmentPlan);
+		SubscribeNetworkEvent<WH40KMetaProgressResetAccountRequestEvent>(OnResetAccountRequest);
 		_players.PlayerStatusChanged += OnPlayerStatusChanged;
 		_proto.PrototypesReloaded += OnPrototypesReloaded;
 	}
@@ -881,44 +896,65 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	public void ResetForAdmin(NetUserId userId, AdminResetScope scope)
 	{
 		RuntimeProgressState runtimeProgressState = EnsureState(userId);
-		bool flag = false;
-		if ((scope == AdminResetScope.Progress || scope == AdminResetScope.All) ? true : false)
-		{
-			runtimeProgressState.LifetimeXp = 0;
-			runtimeProgressState.SeasonXp = 0;
-			Recalculate(runtimeProgressState);
-			flag = true;
-		}
-		bool flag2 = ((scope == AdminResetScope.Development || scope == AdminResetScope.All) ? true : false);
-		if (flag2 && runtimeProgressState.DevelopmentUnlockState.Count > 0)
-		{
-			runtimeProgressState.DevelopmentUnlockState.Clear();
-			flag = true;
-		}
-		flag2 = ((scope == AdminResetScope.Achievements || scope == AdminResetScope.All) ? true : false);
-		if (flag2 && (runtimeProgressState.AchievementProgress.Count > 0 || runtimeProgressState.CompletedAchievements.Count > 0))
-		{
-			runtimeProgressState.AchievementProgress.Clear();
-			runtimeProgressState.CompletedAchievements.Clear();
-			runtimeProgressState.LifetimeAchievementSourceCursor.Clear();
-			SyncAllCompleteAchievement(userId, runtimeProgressState);
-			flag = true;
-		}
-		flag2 = scope == AdminResetScope.Decorations || scope == AdminResetScope.All;
-		if (flag2 && (runtimeProgressState.DecorationUnlockState.Count > 0 || !string.IsNullOrWhiteSpace(runtimeProgressState.SelectedGhostSkinId) || !string.IsNullOrWhiteSpace(runtimeProgressState.SelectedOocTitleId) || !string.IsNullOrWhiteSpace(runtimeProgressState.SelectedOocNameColorId)))
-		{
-			runtimeProgressState.DecorationUnlockState.Clear();
-			runtimeProgressState.SelectedGhostSkinId = string.Empty;
-			runtimeProgressState.SelectedOocTitleId = string.Empty;
-			runtimeProgressState.SelectedOocNameColorId = string.Empty;
-			flag = true;
-		}
-		if (flag)
+		if (ResetState(userId, runtimeProgressState, scope))
 		{
 			runtimeProgressState.StateVersion++;
 			QueuePersistState(userId);
 			PushSnapshotIfOnline(userId);
 		}
+	}
+
+	private bool ResetState(NetUserId userId, RuntimeProgressState state, AdminResetScope scope)
+	{
+		var changed = false;
+
+		if (scope == AdminResetScope.Progress || scope == AdminResetScope.All)
+		{
+			if (state.LifetimeXp != 0 || state.SeasonXp != 0)
+			{
+				state.LifetimeXp = 0;
+				state.SeasonXp = 0;
+				changed = true;
+			}
+
+			Recalculate(state);
+		}
+
+		if ((scope == AdminResetScope.Development || scope == AdminResetScope.All) &&
+		    state.DevelopmentUnlockState.Count > 0)
+		{
+			state.DevelopmentUnlockState.Clear();
+			changed = true;
+		}
+
+		if ((scope == AdminResetScope.Achievements || scope == AdminResetScope.All) &&
+		    (state.AchievementProgress.Count > 0 ||
+		     state.CompletedAchievements.Count > 0 ||
+		     state.ClaimedAchievementRewards.Count > 0 ||
+		     state.LifetimeAchievementSourceCursor.Count > 0))
+		{
+			state.AchievementProgress.Clear();
+			state.CompletedAchievements.Clear();
+			state.ClaimedAchievementRewards.Clear();
+			state.LifetimeAchievementSourceCursor.Clear();
+			SyncAllCompleteAchievement(userId, state);
+			changed = true;
+		}
+
+		if ((scope == AdminResetScope.Decorations || scope == AdminResetScope.All) &&
+		    (state.DecorationUnlockState.Count > 0 ||
+		     !string.IsNullOrWhiteSpace(state.SelectedGhostSkinId) ||
+		     !string.IsNullOrWhiteSpace(state.SelectedOocTitleId) ||
+		     !string.IsNullOrWhiteSpace(state.SelectedOocNameColorId)))
+		{
+			state.DecorationUnlockState.Clear();
+			state.SelectedGhostSkinId = string.Empty;
+			state.SelectedOocTitleId = string.Empty;
+			state.SelectedOocNameColorId = string.Empty;
+			changed = true;
+		}
+
+		return changed;
 	}
 
 	private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -952,6 +988,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_requestStateRateLimits.Clear();
 		_setDecorationRateLimits.Clear();
 		_confirmDevelopmentRateLimits.Clear();
+		_resetAccountRateLimits.Clear();
 		_processedMissionOutcomeRewardKeys.Clear();
 		_networkSnapshotSubscribers.IntersectWith(connectedUsers);
 		if (_queuedSnapshotPushes.Count > 0)
@@ -1914,6 +1951,123 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		}
 	}
 
+	private void OnResetAccountRequest(WH40KMetaProgressResetAccountRequestEvent ev, EntitySessionEventArgs args)
+	{
+		NetUserId userId = args.SenderSession.UserId;
+		if (IsRateLimited(userId, _resetAccountRateLimits, ResetAccountRateLimitPeriodSeconds, ResetAccountRateLimitCount))
+			return;
+
+		MarkNetworkSnapshotInterested(userId);
+		var task = HandleResetAccountRequestAsync(args.SenderSession);
+		TrackPending(task);
+	}
+
+	private async Task HandleResetAccountRequestAsync(ICommonSession session)
+	{
+		var userId = session.UserId;
+
+		try
+		{
+			var state = await EnsureStateLoadedAsync(userId);
+			var now = DateTimeOffset.UtcNow;
+			var cooldownRemainingSeconds = GetAccountResetCooldownRemainingSeconds(state.LastAccountResetAt, now);
+
+			if (cooldownRemainingSeconds > 0)
+			{
+				_task.RunOnMainThread(() =>
+				{
+					if (session.Status == SessionStatus.Disconnected)
+						return;
+
+					SendSnapshot(session);
+					RaiseNetworkEvent(
+						new WH40KMetaProgressResetAccountResultEvent(
+							WH40KMetaProgressResetAccountStatus.CooldownActive,
+							cooldownRemainingSeconds),
+						session);
+				});
+				return;
+			}
+
+			WH40KMetaProgressSnapshot? snapshot = null;
+			await RunOnMainThreadAsync(() =>
+			{
+				if (!_states.TryGetValue(userId, out var currentState) || !currentState.DbLoadCompleted)
+				{
+					if (session.Status != SessionStatus.Disconnected)
+					{
+						SendSnapshot(session);
+						RaiseNetworkEvent(
+							new WH40KMetaProgressResetAccountResultEvent(WH40KMetaProgressResetAccountStatus.Unavailable),
+							session);
+					}
+
+					return Task.CompletedTask;
+				}
+
+				ResetState(userId, currentState, AdminResetScope.All);
+				currentState.LastAccountResetAt = now;
+				currentState.StateVersion++;
+				QueuePersistState(userId);
+				ReconcileState(userId, currentState);
+				snapshot = BuildSnapshot(userId, currentState);
+				return Task.CompletedTask;
+			});
+
+			if (snapshot == null)
+				return;
+
+			await AwaitPersistQueueAsync(userId);
+			await _prefs.ResetWH40KMetaSelectionsAsync(userId, snapshot);
+			_stats.Record(userId, "meta.account_reset", 1L);
+
+			await RunOnMainThreadAsync(() =>
+			{
+				if (session.Status == SessionStatus.Disconnected)
+					return Task.CompletedTask;
+
+				if (_states.TryGetValue(userId, out var currentState))
+				{
+					ReconcileState(userId, currentState);
+				}
+
+				SendSnapshot(session);
+				RaiseNetworkEvent(
+					new WH40KMetaProgressResetAccountResultEvent(WH40KMetaProgressResetAccountStatus.Success),
+					session);
+				return Task.CompletedTask;
+			});
+		}
+		catch (TimeoutException ex)
+		{
+			_sawmill.Warning($"Timed out preparing WH40K meta reset for {userId}: {ex.Message}");
+			_task.RunOnMainThread(() =>
+			{
+				if (session.Status != SessionStatus.Disconnected)
+				{
+					SendSnapshot(session);
+					RaiseNetworkEvent(
+						new WH40KMetaProgressResetAccountResultEvent(WH40KMetaProgressResetAccountStatus.Unavailable),
+						session);
+				}
+			});
+		}
+		catch (Exception ex)
+		{
+			_sawmill.Error($"Failed resetting WH40K meta progression for {userId}: {ex}");
+			_task.RunOnMainThread(() =>
+			{
+				if (session.Status != SessionStatus.Disconnected)
+				{
+					SendSnapshot(session);
+					RaiseNetworkEvent(
+						new WH40KMetaProgressResetAccountResultEvent(WH40KMetaProgressResetAccountStatus.Failed),
+						session);
+				}
+			});
+		}
+	}
+
 	private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
 	{
 		TraceStats($"Player status changed: user={args.Session.UserId}, newStatus={args.NewStatus}.");
@@ -1932,6 +2086,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			_requestStateRateLimits.Remove(args.Session.UserId);
 			_setDecorationRateLimits.Remove(args.Session.UserId);
 			_confirmDevelopmentRateLimits.Remove(args.Session.UserId);
+			_resetAccountRateLimits.Remove(args.Session.UserId);
 			_networkSnapshotSubscribers.Remove(args.Session.UserId);
 			_queuedSnapshotPushes.Remove(args.Session.UserId);
 		}
@@ -2108,6 +2263,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 						{
 							value2.LifetimeXp = Math.Max(0, progress.LifetimeXp);
 							value2.SeasonXp = Math.Max(0, progress.SeasonXp);
+							value2.LastAccountResetAt = progress.LastAccountResetAt;
 							value2.SelectedGhostSkinId = progress.SelectedGhostSkinId ?? string.Empty;
 							value2.SelectedOocTitleId = progress.SelectedOocTitleId ?? string.Empty;
 							value2.SelectedOocNameColorId = progress.SelectedOocNameColorId ?? string.Empty;
@@ -2227,7 +2383,14 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			return;
 		}
 		DateTimeOffset utcNow = DateTimeOffset.UtcNow;
-		WH40KMetaProgressDbData progressData = new WH40KMetaProgressDbData(value.LifetimeXp, value.SeasonXp, utcNow, NormalizeSelectedId(value.SelectedGhostSkinId), NormalizeSelectedId(value.SelectedOocTitleId), NormalizeSelectedId(value.SelectedOocNameColorId));
+		WH40KMetaProgressDbData progressData = new WH40KMetaProgressDbData(
+			value.LifetimeXp,
+			value.SeasonXp,
+			utcNow,
+			value.LastAccountResetAt,
+			NormalizeSelectedId(value.SelectedGhostSkinId),
+			NormalizeSelectedId(value.SelectedOocTitleId),
+			NormalizeSelectedId(value.SelectedOocNameColorId));
 		HashSet<string> hashSet = new HashSet<string>(value.AchievementProgress.Keys, StringComparer.Ordinal);
 		hashSet.UnionWith(value.CompletedAchievements);
 		hashSet.UnionWith(value.ClaimedAchievementRewards);
@@ -2430,6 +2593,25 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 				_pendingTasks.Remove(task);
 			}
 		}, TaskScheduler.Default);
+	}
+
+	private Task RunOnMainThreadAsync(Func<Task> action)
+	{
+		var completion = new TaskCompletionSource<bool>();
+		_task.RunOnMainThread(async () =>
+		{
+			try
+			{
+				await action();
+				completion.TrySetResult(true);
+			}
+			catch (Exception ex)
+			{
+				completion.TrySetException(ex);
+			}
+		});
+
+		return completion.Task;
 	}
 
 	private Task[] SnapshotPendingTasks()
@@ -2719,7 +2901,38 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 			state.StateVersion++;
 			QueuePersistState(userId);
 		}
-		return new WH40KMetaProgressSnapshot(state.Level, state.CurrentXp, state.RequiredXp, state.LifetimeXp, _levelCap, completedAchievements, totalAchievements, achievements, BuildNextRewardPreview(state.Level), decorations, decorationSelection, development);
+
+		return new WH40KMetaProgressSnapshot(
+			state.Level,
+			state.CurrentXp,
+			state.RequiredXp,
+			state.LifetimeXp,
+			_levelCap,
+			completedAchievements,
+			totalAchievements,
+			achievements,
+			BuildNextRewardPreview(state.Level),
+			decorations,
+			decorationSelection,
+			development,
+			GetAccountResetCooldownRemainingSeconds(state.LastAccountResetAt, DateTimeOffset.UtcNow));
+	}
+
+	private static DateTimeOffset? GetNextAccountResetAt(DateTimeOffset? lastAccountResetAt)
+	{
+		if (lastAccountResetAt == null)
+			return null;
+
+		return lastAccountResetAt.Value.AddMonths(AccountResetCooldownMonths);
+	}
+
+	private static int GetAccountResetCooldownRemainingSeconds(DateTimeOffset? lastAccountResetAt, DateTimeOffset now)
+	{
+		var nextResetAt = GetNextAccountResetAt(lastAccountResetAt);
+		if (nextResetAt == null || nextResetAt <= now)
+			return 0;
+
+		return Math.Max(0, (int) Math.Ceiling((nextResetAt.Value - now).TotalSeconds));
 	}
 
 	private bool SyncAchievementRewardDecorations(RuntimeProgressState state)

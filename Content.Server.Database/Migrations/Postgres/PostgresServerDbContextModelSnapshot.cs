@@ -1640,6 +1640,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("uuid")
                         .HasColumnName("player_user_id");
 
+                    b.Property<DateTime?>("LastAccountResetAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_account_reset_at");
+
                     b.Property<DateTime>("LastProgressAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_progress_at");

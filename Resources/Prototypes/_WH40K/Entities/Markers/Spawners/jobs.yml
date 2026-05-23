@@ -196,20 +196,6 @@
       - state: sergeant
 
 - type: entity
-  id: SpawnPointMajor
-  parent: SpawnPointJobBase
-  name: Major
-  suffix: WH40K, Imperium
-  components:
-  - type: SpawnPoint
-    job_id: Major
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: head_officer
-
-- type: entity
   id: SpawnPointWH40KChaplain
   parent: SpawnPointJobBase
   name: WH40KChaplain
@@ -291,6 +277,48 @@
   components:
   - type: SpawnPoint
     job_id: TauFireWarrior
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointTauEarthCaste
+  parent: SpawnPointJobBase
+  name: TauEarthCaste
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauEarthCaste
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointTauAirCaste
+  parent: SpawnPointJobBase
+  name: TauAirCaste
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauAirCaste
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+      - state: green
+      - state: guardsman
+
+- type: entity
+  id: SpawnPointTauWaterCaste
+  parent: SpawnPointJobBase
+  name: TauWaterCaste
+  suffix: WH40K, Tau
+  components:
+  - type: SpawnPoint
+    job_id: TauWaterCaste
   - type: Sprite
     sprite: _WH40K/Markers/jobs.rsi
     layers:

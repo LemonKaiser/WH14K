@@ -26,7 +26,7 @@
   - type: StackLayerThreshold
     thresholds: [ 2, 3, 4 ]
   - type: StackPrice
-    price: 1000
+    price: 1
   - type: Currency
     price:
       intelligence_ch: 1

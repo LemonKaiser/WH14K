@@ -37,6 +37,9 @@
   name: imperial barricade kit
   description: Basic Imperium barricade in a deployment crate.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeWarhammer
+    count: 1
   - type: HandheldEntityPlacement
     entityType: BarricadeWarhammer
     previewEntityType: BarricadeWarhammer
@@ -47,6 +50,9 @@
   name: sandbag barricade kit
   description: Field-deployable sandbag cover section.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeSandbags
+    count: 1
   - type: HandheldEntityPlacement
     entityType: BarricadeSandbags
     previewEntityType: BarricadeSandbags
@@ -57,6 +63,9 @@
   name: chaos black barricade kit
   description: Crated chaos barricade section with firing loophole.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeChaosBlack
+    count: 1
   - type: HandheldEntityPlacement
     entityType: BarricadeWarhammerChaos
     previewEntityType: BarricadeWarhammerChaos
@@ -67,6 +76,9 @@
   name: chaos green barricade kit
   description: Crated chaos barricade section with firing loophole.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeChaosGreen
+    count: 1
   - type: HandheldEntityPlacement
     entityType: BarricadeWarhammerChaosgreen
     previewEntityType: BarricadeWarhammerChaosgreen
@@ -77,6 +89,9 @@
   name: anti-tank hedgehog kit
   description: Heavy anti-vehicle hedgehog barricade in crate form.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeHedgehog
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades
     previewEntityType: FalloutBarricades
@@ -87,6 +102,9 @@
   name: anti-tank hedgehog kit A
   description: Heavy anti-vehicle hedgehog barricade in crate form.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeHedgehogA
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades3
     previewEntityType: FalloutBarricades3
@@ -97,6 +115,9 @@
   name: anti-tank hedgehog kit B
   description: Heavy anti-vehicle hedgehog barricade in crate form.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeHedgehog2
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades4
     previewEntityType: FalloutBarricades4
@@ -107,6 +128,9 @@
   name: anti-tank hedgehog kit C
   description: Heavy anti-vehicle hedgehog barricade in crate form.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeHedgehog2A
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades5
     previewEntityType: FalloutBarricades5
@@ -117,6 +141,9 @@
   name: boarded barricade kit
   description: Boarded fortification segment packed for rapid deployment.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeBoarded
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades6
     previewEntityType: FalloutBarricades6
@@ -127,6 +154,9 @@
   name: bars barricade kit
   description: Metal bars barricade segment packed for rapid deployment.
   components:
+  - type: Stack
+    stackType: WH40KDeployableBarricadeBars
+    count: 1
   - type: HandheldEntityPlacement
     entityType: FalloutBarricades7
     previewEntityType: FalloutBarricades7

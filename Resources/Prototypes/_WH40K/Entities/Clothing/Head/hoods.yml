@@ -12,7 +12,7 @@
     - Hair
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, WH40KChaosDamnationClothing]
   id: ClothingHeadHoodRainChs
   suffix: WH40K, Культ Хаоса
   components:
@@ -25,7 +25,7 @@
     - Hair
 
 - type: entity
-  parent: ClothingHeadHelmetFlak
+  parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
   id: ClothingHeadHoodTzeentchSerg
   suffix: WH40K, Еретики, Тзинтч
   components:

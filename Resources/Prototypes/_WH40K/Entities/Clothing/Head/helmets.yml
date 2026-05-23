@@ -68,7 +68,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_cyan.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetFlak
+  parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetBloodPact
   suffix: WH40K, Бладпакт
   components:
@@ -78,7 +78,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/bloodpact_helmet.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetFlak
+  parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetrHeresy
   suffix: WH40K, Еретики
   components:
@@ -88,7 +88,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/heresy_helmet2.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetFlakAdv
+  parent: [ClothingHeadHelmetFlakAdv, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetFlakAdvHeresy
   suffix: WH40K, Еретики, Адская Бригада
   components:
@@ -187,7 +187,7 @@
     sprite: _WH40K/Clothing/Head/Helmets/psyhelmet.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetBasic
+  parent: [ClothingHeadHelmetBasic, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetFlakCHAOS
   name: композитный каска культа Хаоса
   description: Стандартная каска, выкованная из тёмного металла и осквернённая рунами Хаоса. Защищает голову культиста, но внушает ужас своим видом.
@@ -297,7 +297,7 @@
     autoRechargeRate: 2
 
 - type: entity
-  parent: ClothingHeadHelmetFlakCandle
+  parent: [ClothingHeadHelmetFlakCandle, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetFlakCandleChaos
   suffix: WH40K, Еретики
   components:

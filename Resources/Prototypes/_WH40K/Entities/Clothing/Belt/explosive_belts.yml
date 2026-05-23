@@ -1,0 +1,93 @@
+- type: entity
+  parent: [ClothingBeltBase, WH40KChaosDamnationClothing]
+  id: ClothingBeltChaosDynamite
+  suffix: WH40K, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/chaos_dynamite_belt.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/chaos_dynamite_belt.rsi
+  - type: Item
+    size: Small
+  - type: WH40KExplosiveBelt
+    defaultDelaySeconds: 1
+  - type: ActionGrant
+    actions:
+    - ActionWH40KChaosDynamiteBeltShort
+    - ActionWH40KChaosDynamiteBeltLong
+  - type: ItemActionGrant
+    actions:
+    - ActionWH40KChaosDynamiteBeltShort
+    - ActionWH40KChaosDynamiteBeltLong
+    activeIfWorn: true
+  - type: TriggerOnSignal
+  - type: TimerTrigger
+    delay: 1
+    initialBeepDelay: 0
+    beepSound: /Audio/Machines/Nuke/general_beep.ogg
+  - type: DeviceLinkSink
+    ports:
+    - Trigger
+  - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: DeleteOnTrigger
+    keysIn:
+    - timer
+  - type: GibOnTrigger
+    keysIn:
+    - timer
+    targetUser: true
+    deleteItems: true
+  - type: Explosive
+    explosionType: WH40KChaosDynamiteBelt
+    totalIntensity: 2400
+    intensitySlope: 12
+    maxIntensity: 45
+    canCreateVacuum: false
+
+- type: entity
+  parent: ClothingBeltBase
+  id: ClothingBeltChaplainMeltaCharge
+  suffix: WH40K, Imperium
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Belt/chaplain_melta_belt.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Belt/chaplain_melta_belt.rsi
+  - type: Item
+    size: Small
+  - type: WH40KExplosiveBelt
+    defaultDelaySeconds: 10
+  - type: ActionGrant
+    actions:
+    - ActionWH40KMeltaChargeBelt
+  - type: ItemActionGrant
+    actions:
+    - ActionWH40KMeltaChargeBelt
+    activeIfWorn: true
+  - type: TriggerOnSignal
+  - type: TimerTrigger
+    delay: 10
+    initialBeepDelay: 0
+    beepSound: /Audio/Machines/Nuke/general_beep.ogg
+  - type: DeviceLinkSink
+    ports:
+    - Trigger
+  - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: DeleteOnTrigger
+    keysIn:
+    - timer
+  - type: GibOnTrigger
+    keysIn:
+    - timer
+    targetUser: true
+    deleteItems: true
+  - type: Explosive
+    explosionType: WH40KMeltaChargeBelt
+    totalIntensity: 700
+    intensitySlope: 45
+    maxIntensity: 10
+    canCreateVacuum: false

@@ -1,0 +1,79 @@
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeWarhammer
+  name: stack-wh40k-barricade-warhammer
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeWarhammer
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeSandbags
+  name: stack-wh40k-barricade-sandbags
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeSandbags
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeChaosBlack
+  name: stack-wh40k-barricade-chaos-black
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeChaosBlack
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeChaosGreen
+  name: stack-wh40k-barricade-chaos-green
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeChaosGreen
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeHedgehog
+  name: stack-wh40k-barricade-hedgehog
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeHedgehog
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeHedgehogA
+  name: stack-wh40k-barricade-hedgehog-a
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeHedgehogA
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeHedgehog2
+  name: stack-wh40k-barricade-hedgehog-b
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeHedgehog2
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeHedgehog2A
+  name: stack-wh40k-barricade-hedgehog-c
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeHedgehog2A
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeBoarded
+  name: stack-wh40k-barricade-boarded
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeBoarded
+  maxCount: 5
+
+- type: stack
+  parent: BaseVerySmallStack
+  id: WH40KDeployableBarricadeBars
+  name: stack-wh40k-barricade-bars
+  icon: { sprite: "/Textures/_WH40K/Objects/Misc/barricade_kit.rsi", state: icon }
+  spawn: WH40KDeployableBarricadeBars
+  maxCount: 5

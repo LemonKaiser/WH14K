@@ -98,7 +98,7 @@
         location: Middle
 
 - type: entity
-  parent: ClothingBackpackTechpriestDendrite
+  parent: [ClothingBackpackTechpriestDendrite, WH40KChaosDamnationClothing]
   id: ClothingBackpackTechpriestDendriteSlaanesh
   suffix: WH40K, ТёмнМехи, Слаанеш
   components:
@@ -154,7 +154,7 @@
     size: Ginormous
 
 - type: entity
-  parent: Clothing
+  parent: [Clothing, WH40KChaosDamnationClothing]
   id: ClothingBackpackVoxChaos
   suffix: WH40K, Heretics
   components:
@@ -195,7 +195,7 @@
     size: Ginormous
 
 - type: entity
-  parent: ClothingBackpack
+  parent: [ClothingBackpack, WH40KChaosDamnationClothing]
   id: ClothingBackpackCULT1
   name: рюкзак культиста Хаоса
   description: Рюкзак, сотканный из кожи неведомого происхождения, вмещает припасы, оружие и тайные книги служителей Хаоса.
@@ -204,7 +204,7 @@
     sprite: _WH40K/Clothing/Back/Backpacks/cultchaospack.rsi
 
 - type: entity
-  parent: ClothingBackpack
+  parent: [ClothingBackpack, WH40KChaosDamnationClothing]
   id: ClothingBackpackCULT2
   name: рюкзак культиста Хаоса с черепом
   description: Рюкзак, сотканный из кожи неведомого происхождения и с черепом, вмещает припасы, оружие и тайные книги служителей Хаоса.
@@ -213,7 +213,7 @@
     sprite: _WH40K/Clothing/Back/Backpacks/cultchaospak2.rsi
 
 - type: entity
-  parent: ClothingBackpack
+  parent: [ClothingBackpack, WH40KChaosDamnationClothing]
   id: ClothingBackpackSatchelChaosWheel
   name: сумка с колесом Хаоса
   description: Потёртая сумка культиста, украшенная конструкцией Колеса Хаоса. Символы варпа на её поверхности изредка вспыхивают, внушая страх и даруя странную защиту.

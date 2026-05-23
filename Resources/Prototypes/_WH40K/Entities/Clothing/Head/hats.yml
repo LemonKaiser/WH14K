@@ -138,6 +138,16 @@
 
 - type: entity
   parent: ClothingHeadBase
+  id: ClothingHeadHatCatachanCap
+  suffix: WH40K, Катачан
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hats/catachan_cap.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hats/catachan_cap.rsi
+
+- type: entity
+  parent: [ClothingHeadBase, WH40KChaosDamnationClothing]
   id: ClothingHeadScarfChaos
   name: головной мешок
   description: Простой головной мешок, но его ткань пропитана символами Хаоса. Защищает голову, придавая жуткий вид культисту.

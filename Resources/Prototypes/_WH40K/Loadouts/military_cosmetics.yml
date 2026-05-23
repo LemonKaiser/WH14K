@@ -98,6 +98,26 @@
     head: ClothingHeadHatCatachanHeadband
 
 - type: loadout
+  id: WH40KCommandCatachanBandana
+  equipment:
+    head: ClothingHeadHatCatachanBandana
+
+- type: loadout
+  id: WH40KCommandCatachanBeret
+  equipment:
+    head: ClothingHeadHatCatachanBeret
+
+- type: loadout
+  id: WH40KCommandCatachanHeadband
+  equipment:
+    head: ClothingHeadHatCatachanHeadband
+
+- type: loadout
+  id: WH40KCommandCatachanCap
+  equipment:
+    head: ClothingHeadHatCatachanCap
+
+- type: loadout
   id: WH40KQuartermasterBeret
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -304,6 +324,11 @@
     neck: ClothingNeckImperialGoldenPrize
 
 - type: loadout
+  id: WH40KCommandCatachanToken
+  equipment:
+    neck: ClothingNeckImperialCatachanToken
+
+- type: loadout
   id: WH40KChaosSlaaneshMedal
   effects:
   - !type:GroupLoadoutEffect
@@ -481,6 +506,21 @@
     outerClothing: ClothingOuterArmorCatachanVest
 
 - type: loadout
+  id: WH40KCommandCatachanLightArmor
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanLight
+
+- type: loadout
+  id: WH40KCommandCatachanMediumArmor
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanMedium
+
+- type: loadout
+  id: WH40KCommandCatachanVest
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanVest
+
+- type: loadout
   id: WH40KMunitorumCoat
   equipment:
     outerClothing: ClothingOuterArmorMunitorumCoat
@@ -531,6 +571,26 @@
     requiredLevel: 15
   equipment:
     jumpsuit: ClothingUniformJumpsuitCatachan3
+
+- type: loadout
+  id: WH40KCommandCatachanUniform1
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan1
+
+- type: loadout
+  id: WH40KCommandCatachanUniform2
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan2
+
+- type: loadout
+  id: WH40KCommandCatachanUniform3
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan3
+
+- type: loadout
+  id: WH40KCommandCatachanPants
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachanPants
 
 - type: loadout
   id: WH40KBloodPactUniform
@@ -775,6 +835,13 @@
   groupBy: "melee"
 
 - type: loadout
+  id: WH40KCatachanMacheteKit
+  storage:
+    belt:
+    - CatachanMachete
+  groupBy: "melee"
+
+- type: loadout
   id: WH40KSurvivalKnifeKit
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
@@ -849,6 +916,11 @@
   id: WH40KCommandChainsword
   inhand:
   - Chainsword
+
+- type: loadout
+  id: WH40KCommandCatachanMachete
+  inhand:
+  - CatachanMachete
 
 - type: loadout
   id: WH40KCommandPowerSaber
@@ -1001,19 +1073,6 @@
     requiredLevel: 15
   equipment:
     neck: ClothingNeckCloakVst
-
-- type: loadout
-  id: WH40KArmorFlakCoatLiet
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 30
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestMajor
-
-- type: loadout
-  id: WH40KArmorMajor
-  equipment:
-    outerClothing: ClothingOuterArmorFlakVestMajor
 
 - type: loadout
   id: WH40KValhallanPapakhaSergeant

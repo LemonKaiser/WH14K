@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "from food/matches, adapted for WH40K",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "matchbox"
+    },
+    {
+      "name": "matchbox-open"
+    },
+    {
+      "name": "matchbox1"
+    },
+    {
+      "name": "matchbox2"
+    },
+    {
+      "name": "matchbox3"
+    },
+    {
+      "name": "matchbox4"
+    },
+    {
+      "name": "matchbox5"
+    },
+    {
+      "name": "matchbox6"
+    },
+    {
+      "name": "matchbox7"
+    },
+    {
+      "name": "matchbox8"
+    }
+  ]
+}
