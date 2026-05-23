@@ -107,3 +107,5 @@ loadout-group-wh40k-tau-supplies = Полевые припасы
 loadout-group-wh40k-tau-command-outer = Командные доспехи
 loadout-group-wh40k-tau-ethereal-outer = Доспехи эфирного
 loadout-group-wh40k-tau-command-neck = Знаки ранга
+loadout-group-wh40k-Eretik-boom-belt = пояса
+loadout-group-wh40k-imperial-boom-belt = пояса

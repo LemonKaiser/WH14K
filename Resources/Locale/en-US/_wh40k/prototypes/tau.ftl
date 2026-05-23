@@ -106,3 +106,5 @@ loadout-group-wh40k-tau-supplies = Field supplies
 loadout-group-wh40k-tau-command-outer = Command armour
 loadout-group-wh40k-tau-ethereal-outer = Ethereal armour
 loadout-group-wh40k-tau-command-neck = Command regalia
+loadout-group-wh40k-Eretik-boom-belt = belt
+loadout-group-wh40k-imperial-boom-belt = belt

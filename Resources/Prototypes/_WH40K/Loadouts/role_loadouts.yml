@@ -200,6 +200,7 @@
   id: JobWH40KChaplain
   groups:
   - WH40KChaplainMelee
+  - WH40KImperialBeltBase
 
 - type: roleLoadout
   id: JobSergeant
@@ -292,6 +293,7 @@
 - type: roleLoadout
   id: JobHGuardsman
   groups:
+  - WH40KEretikBeltBase
   - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineEyes
