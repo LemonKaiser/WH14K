@@ -24,8 +24,8 @@ PRIMARY_FORK_ID = "ebengrad"
 
 # Mirror CDN — your own CDN, clients should download from here.
 # Set MIRROR_PUBLISH_TOKEN env var to enable mirror publishing.
-MIRROR_CDN_URL = "https://cdn.heretec.online/"
-MIRROR_FORK_ID = "heretec-online"
+MIRROR_CDN_URL = "https://2612.hosted-by.koara.io/cdn/"
+MIRROR_FORK_ID = "2612-hosted-koara"
 
 UPLOAD_RETRIES = 4
 TRANSIENT_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504}
