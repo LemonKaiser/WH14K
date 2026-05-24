@@ -109,9 +109,9 @@
     uiShellType: he
   - type: Explosive
     explosionType: Default
-    maxIntensity: 10
-    intensitySlope: 2.5
-    totalIntensity: 250
+    maxIntensity: 50
+    intensitySlope: 8
+    totalIntensity: 900
     canCreateVacuum: false
 
 - type: entity

@@ -493,8 +493,8 @@
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
-  product: WH40KMortarShellHE
-  cost: 1500
+  product: CrateWH40KMortarShellHE
+  cost: 5000
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -1532,7 +1532,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KMortarKit
-  cost: 10000
+  cost: 5000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1541,8 +1541,8 @@
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
-  product: WH40KMortarShellHE
-  cost: 1500
+  product: CrateWH40KMortarShellHE
+  cost: 5000
   category: cpcat-arm
   group: WH40KHereticsMarket
 
