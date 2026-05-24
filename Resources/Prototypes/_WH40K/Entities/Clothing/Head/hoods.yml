@@ -49,3 +49,16 @@
   - type: HideLayerClothing
     slots:
     - Hair
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdvHeresy
+  id: ClothingHeadChaosSlaaneshChoisenHelmet
+  suffix: WH40K, Еретики, Тзинтч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/chaos_slaanesh_choisen_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/chaos_slaanesh_choisen_helmet.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair

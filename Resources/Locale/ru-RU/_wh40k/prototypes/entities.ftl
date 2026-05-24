@@ -2003,3 +2003,15 @@ ent-SpeedLoaderSerpenta = cпидлоадер серпенты
     .desc = Магазин для фосфорной серпенты.
 ent-SpeedLoaderSerpentaEmpty = cпидлоадер серпенты
     .desc = Пустой магазин для фосфорной серпенты.
+
+ent-ClothingHeadChaosSlaaneshChoisenHelmet = Шлем избранного Слаанеша
+    .desc = Прочная броня избранного Слаанеша
+
+ent-ClothingShoesChaosSlaaneshChoisenBoots = Ботинки избранного Слаанеша
+    .desc = Прочная броня избранного Слаанеша
+
+ent-ClothingOuterChaosSlaaneshChoisenArmor = Броня избранного Слаанеша
+    .desc = Прочная броня избранного Слаанеша
+
+ent-ClothingOuterChaosSlaaneshCultistArmor = Броня культиста Слаанеша
+    .desc = Прочная броня культиста Слаанеша

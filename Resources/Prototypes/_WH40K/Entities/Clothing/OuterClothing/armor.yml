@@ -436,3 +436,23 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/colchuga.rsi
+
+- type: entity
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
+  id: ClothingOuterChaosSlaaneshChoisenArmor
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_choisen_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_choisen_armor.rsi
+
+- type: entity
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
+  id: ClothingOuterChaosSlaaneshCultistArmor
+  suffix: WH40K, Еретики, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_cultist_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_cultist_armor.rsi
