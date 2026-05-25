@@ -28,3 +28,5 @@ ent-CrateMaterialSilo = material silo crate
     .desc = A package including all the materials to create a material silo.
 ent-CrateMaterialBasicResource = basic sheet crate
     .desc = 30 sheets of steel, glass, and plastic.
+ent-CrateWH40KMortarShellHE = mortar shells crate x20
+.desc = 20 mortar shells — plenty and cheap
