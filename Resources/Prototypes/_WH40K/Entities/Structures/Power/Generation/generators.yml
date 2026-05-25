@@ -160,6 +160,6 @@
           temperature: 10273.15
   - type: Explosive
     explosionType: Default
-    maxIntensity: 100
+    maxIntensity: 50
     intensitySlope: 5
-    totalIntensity: 5000000
+    totalIntensity: 500

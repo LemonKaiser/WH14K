@@ -606,6 +606,7 @@ public sealed partial class WH40KCommandNodeSystem
                     role.Name,
                     role.Description);
                 TryReadyReinforcementWeapon(spawned);
+                _reinforcementAi.Enable(spawned, coordinates);
                 spawnedCount++;
             }
         }

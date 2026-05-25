@@ -94,7 +94,7 @@
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
     state: icon
   product: WH40KAmmoBoxAutogun
-  cost: 750
+  cost: 250
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -276,6 +276,8 @@
 
 - type: cargoProduct
   id: WH40KImperiumMagazineLondoronMk2
+  name: cargoproduct-name-wh40k-magazine-londoron-mk2
+  description: cargoproduct-description-wh40k-magazine-londoron-mk2
   icon:
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/londoron_mk2.rsi
     state: base
@@ -286,6 +288,8 @@
 
 - type: cargoProduct
   id: WH40KImperiumAmmoLondoronMk2
+  name: cargoproduct-name-wh40k-ammobox-londoron-mk2
+  description: cargoproduct-description-wh40k-ammobox-londoron-mk2
   icon:
     sprite: Objects/Weapons/Guns/Ammunition/Boxes/anti_materiel.rsi
     state: base
@@ -1270,6 +1274,8 @@
 
 - type: cargoProduct
   id: WH40KHereticsMagazineLondoronMk2
+  name: cargoproduct-name-wh40k-magazine-londoron-mk2
+  description: cargoproduct-description-wh40k-magazine-londoron-mk2
   icon:
     sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/londoron_mk2.rsi
     state: base
@@ -1280,6 +1286,8 @@
 
 - type: cargoProduct
   id: WH40KHereticsAmmoLondoronMk2
+  name: cargoproduct-name-wh40k-ammobox-londoron-mk2
+  description: cargoproduct-description-wh40k-ammobox-londoron-mk2
   icon:
     sprite: Objects/Weapons/Guns/Ammunition/Boxes/anti_materiel.rsi
     state: base

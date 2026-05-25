@@ -141,6 +141,7 @@
     listingDropAmounts:
       VoxSupplyDropNutribrick: 4
       VoxSupplyDropMagazineStubRifle: 4
+      VoxSupplyDropAutogunAmmoBox: 4
       VoxSupplyDropMortarShellHE: 2
     listings:
     - VoxSupplyDropNutribrick
@@ -182,6 +183,7 @@
     listingDropAmounts:
       VoxSupplyDropNutribrick: 4
       VoxSupplyDropMagazineStubRifle: 4
+      VoxSupplyDropAutogunAmmoBox: 4
       VoxSupplyDropMortarShellHE: 2
     listings:
     - VoxSupplyDropNutribrick

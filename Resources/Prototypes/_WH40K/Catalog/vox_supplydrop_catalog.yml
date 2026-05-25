@@ -32,7 +32,7 @@
   id: VoxSupplyDropAutogunAmmoBox
   productEntity: WH40KAmmoBoxAutogun
   cost:
-    WH40KFactionFunds: 700
+    WH40KFactionFunds: 300
 
 - type: listing
   id: VoxSupplyDropMortarShellHE

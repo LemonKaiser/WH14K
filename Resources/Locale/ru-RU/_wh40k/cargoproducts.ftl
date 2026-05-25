@@ -18,3 +18,9 @@ cargoproduct-description-wh40k-magazine-bolter = Запасной магазин
 
 cargoproduct-name-wh40k-magazine-bolter-pistol = пистолетный магазин болтера (.75 болт)
 cargoproduct-description-wh40k-magazine-bolter-pistol = Запасной магазин для болт-пистолета.
+
+cargoproduct-name-wh40k-magazine-londoron-mk2 = магазин Лондорона MK2
+cargoproduct-description-wh40k-magazine-londoron-mk2 = Запасной магазин на 5 патронов для винтовок семейства Лондорон MK2.
+
+cargoproduct-name-wh40k-ammobox-londoron-mk2 = коробка патронов Лондорона MK2
+cargoproduct-description-wh40k-ammobox-londoron-mk2 = Коробка тяжёлых патронов для винтовок семейства Лондорон MK2.
