@@ -726,7 +726,7 @@ ent-MagazineStubMG = магазин (8,25 мм удлинённый)
 ent-MagazineStubPistol = магазин (10 мм)
 
 ent-MagazineStubRifle = магазин (8,25 мм удлинённый)
-
+    .desc = удлинённый магазин 8.25mm
 ent-MagazineStubSMG = магазин (10 мм удлинённый)
 
 ent-MagazineStub3SMG = магазин "Разбрызгивателя"
