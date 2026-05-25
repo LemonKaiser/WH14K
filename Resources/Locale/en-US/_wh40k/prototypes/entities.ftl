@@ -1986,3 +1986,15 @@ ent-SpeedLoaderSerpenta = serpenta speed loader
     .desc = Speedloader for the serpenta.
 ent-SpeedLoaderSerpentaEmpty = empty serpenta speed loader
     .desc = An empty speedloader for the serpenta.
+
+ent-ClothingHeadChaosSlaaneshChoisenHelmet = Slaanesh Chosen's Helmet
+    .desc = Slaanesh Chosen's Sturdy Armor
+
+ent-ClothingShoesChaosSlaaneshChoisenBoots = Slaanesh Chosen's Boots
+    .desc = Slaanesh Chosen's Sturdy Armor
+
+ent-ClothingOuterChaosSlaaneshChoisenArmor = Slaanesh Chosen's Armor
+    .desc = Slaanesh Chosen's Sturdy Armor
+
+ent-ClothingOuterChaosSlaaneshCultistArmor = Slaanesh Cultist's Armor
+    .desc = Sturdy armor of a Slaanesh cultist

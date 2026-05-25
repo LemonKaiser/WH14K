@@ -196,3 +196,13 @@
     sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/boots_inquisition.rsi
+
+- type: entity
+  parent: ClothingShoesAnkleBoots
+  id: ClothingShoesChaosSlaaneshChoisenBoots
+  suffix: WH40K, Культ Хаоса, Слаанеш
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_boots_.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_boots_.rsi
