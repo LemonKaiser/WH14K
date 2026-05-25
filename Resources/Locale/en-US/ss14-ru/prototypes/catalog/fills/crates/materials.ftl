@@ -29,4 +29,4 @@ ent-CrateMaterialSilo = material silo crate
 ent-CrateMaterialBasicResource = basic sheet crate
     .desc = 30 sheets of steel, glass, and plastic.
 ent-CrateWH40KMortarShellHE = mortar shells crate x20
-.desc = 20 mortar shells — plenty and cheap
+    .desc = 20 mortar shells — plenty and cheap
