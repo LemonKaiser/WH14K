@@ -222,19 +222,15 @@
     sections:
     - name: cm-automated-vendor-section-armor-piercing-ammunition
       entries:
-      - id: LasgunPowerCell
+      - id: LasgunPowerCellLucius
         amount: 9
     - name: cm-automated-vendor-section-extended-ammunition
       entries:
-      - id: LasgunPowerCell
+      - id: AccatranPowerCell
         amount: 9
     - name: cm-automated-vendor-section-special-ammunition
       entries:
       - id: LonglasPowerCell
-        amount: 9
-      - id: AccatranPowerCell
-        amount: 9
-      - id: LasgunPowerCellLucius
         amount: 9
       - id: PowerCellVoss
         amount: 9

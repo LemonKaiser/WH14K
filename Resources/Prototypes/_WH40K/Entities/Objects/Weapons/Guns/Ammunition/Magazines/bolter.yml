@@ -63,14 +63,13 @@
 
 - type: entity
   id: WH40KMagazineHeavyBolter
-  parent: BaseMagazineLightRifle
+  parent: MagazineLightRifleBox
   name: heavy bolter magazine
   suffix: WH40K
   components:
   - type: Tag
     tags:
       - WH40KMagazineHeavyBolter
-      - MagazineLightRifleBox
   - type: BallisticAmmoProvider
     mayTransfer: true
     proto: CartridgeHeavyBolter
@@ -93,8 +92,8 @@
 
 - type: entity
   id: WH40KMagazineAutocannon
-  parent: BaseMagazineLightRifle
-  name: heavy bolter magazine
+  parent: MagazineLightRifleBox
+  name: autocannon magazine
   suffix: WH40K
   components:
   - type: Tag

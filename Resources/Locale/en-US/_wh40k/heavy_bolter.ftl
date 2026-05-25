@@ -24,8 +24,20 @@ ent-WH40KHeavyBolter = heavy bolter emplacement
 ent-WH40KMagazineHeavyBolter = heavy bolter magazine
     .desc = A 100-round belt box for the heavy bolter.
 
+ent-CartridgeHeavyBolter = heavy bolter round
+    .desc = A heavy bolt round for a crew-served heavy bolter.
+
 ent-ActionWH40KHeavyBolterRotateLeft = rotate left
     .desc = Rotate the mounted heavy bolter to the left.
 
 ent-ActionWH40KHeavyBolterRotateRight = rotate right
     .desc = Rotate the mounted heavy bolter to the right.
+
+ent-WH40KAutocannon = autocannon emplacement
+    .desc = Crew-operated autocannon. Deploy it, take position behind the gun, and hammer armored targets and fortified lanes.
+
+ent-WH40KMagazineAutocannon = autocannon box
+    .desc = A 50-round belt box for the autocannon.
+
+ent-CartridgeAutocannon = autocannon round
+    .desc = A heavy round for a crew-served autocannon.

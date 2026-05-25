@@ -112,6 +112,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly WH40KStrategicPointSystem _strategicPoints = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private readonly WH40KReinforcementAiSystem _reinforcementAi = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
@@ -1520,6 +1521,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             var spawned = _stationSpawning.SpawnPlayerMob(coordinates, option.Job, profile, station);
             ApplySpawnedReinforcementTeamData(spawned, ent.Comp.TeamId, option);
             TryReadyReinforcementWeapon(spawned);
+            _reinforcementAi.Enable(spawned, coordinates);
             spawnedCount++;
         }
 
@@ -1833,6 +1835,8 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         WH40KReinforcementGhostRoleOneShotComponent component,
         MindAddedMessage args)
     {
+        _reinforcementAi.Disable(uid);
+
         var rewardState = EnsureComp<WH40KReinforcementRewardStateComponent>(uid);
         rewardState.WasClaimedByPlayer = true;
         rewardState.ClaimedUserId = args.Mind.Comp.UserId;

@@ -102,7 +102,6 @@
         priority: 2
         whitelist:
           tags:
-          - MagazineLightRifleBox
           - WH40KMagazineHeavyBolter
   - type: ContainerContainer
     containers:
