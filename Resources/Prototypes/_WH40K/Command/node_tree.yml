@@ -275,8 +275,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight2]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell, WH40KImperiumLasgunLonglas]
-      Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell, WH40KHereticsLasgunLonglas]
+      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
+      Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell]
   - id: wep_left_3
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-3-title
