@@ -1133,3 +1133,20 @@
   - WH40KTauPulseCarbineVeteranLoadout
   - WH40KTauPulseSniperRifleVeteranLoadout
   - WH40KTauRailgunLoadout
+
+- type: loadoutGroup
+  id: WH40KEretikBeltBase
+  name: loadout-group-wh40k-Eretik-boom-belt
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WH40KClothingBeltChaosDynamitebase
+  - chaosbelt2base
+
+- type: loadoutGroup
+  id: WH40KImperialBeltBase
+  name: loadout-group-wh40k-imperial-boom-belt
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - ClothingBeltChaplainMeltaChargebase
