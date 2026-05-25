@@ -12,7 +12,6 @@ using Content.Server.KillTracking;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server._WH40K.Command;
 using Content.Server._WH40K.Command.Components;
-using Content.Server._WH40K.Diagnostics;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Influence;
 using Content.Server._WH40K.Stats;
@@ -194,9 +193,6 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private readonly IServerDbManager _db = default!;
 
 	[Dependency]
-	private readonly WH40KDbDiagnosticsSystem _dbDiag = default!;
-
-	[Dependency]
 	private readonly ISharedWH40KDiscordAuthManager _discordAuth = default!;
 
 	[Dependency]
@@ -299,8 +295,6 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 
 	private bool _unlockRequirementsBypassed;
 
-	private bool _statsTrace;
-
 	private List<WH40KMetaAchievementPrototype>? _sortedAchievementPrototypes;
 
 	private List<WH40KMetaDecorationPrototype>? _sortedDecorationPrototypes;
@@ -333,7 +327,6 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpStrategicPointTripleHold, OnXpStrategicPointTripleHoldChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpObjectiveCapPerRound, OnXpObjectiveCapPerRoundChanged, invokeImmediately: true);
 		base.Subs.CVar(_config, CCVars.WH40KMetaXpRepeatableCapPerRound, OnXpRepeatableCapPerRoundChanged, invokeImmediately: true);
-		base.Subs.CVar(_config, CCVars.WH40KMetaStatsTrace, OnStatsTraceChanged, invokeImmediately: true);
 		SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 		SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
 		SubscribeLocalEvent<KillReportedEvent>(OnKillReported);
@@ -1103,18 +1096,8 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_xpRepeatableCapPerRound = Math.Max(0, value);
 	}
 
-	private void OnStatsTraceChanged(bool value)
-	{
-		_statsTrace = value;
-		_sawmill.Info("WH40K meta stats trace logging " + (value ? "enabled" : "disabled") + ".");
-	}
-
 	private void TraceStats(string message)
 	{
-		if (_statsTrace)
-		{
-			_sawmill.Info("[trace] " + message);
-		}
 	}
 
 	private void OnMobStateChanged(MobStateChangedEvent ev)
@@ -2240,18 +2223,10 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	{
 		try
 		{
-			WH40KMetaProgressDbData progress = await _dbDiag.MeasureAsync(
-				"meta_progress.db.get_progress",
-				() => _db.GetWH40KMetaProgress(userId));
-			List<WH40KMetaAchievementDbData> achievements = await _dbDiag.MeasureAsync(
-				"meta_progress.db.get_achievements",
-				() => _db.GetWH40KMetaAchievements(userId));
-			List<WH40KMetaDecorationDbData> decorations = await _dbDiag.MeasureAsync(
-				"meta_progress.db.get_decorations",
-				() => _db.GetWH40KMetaDecorations(userId));
-			List<WH40KMetaDevelopmentUnlockDbData> developmentUnlocks = await _dbDiag.MeasureAsync(
-				"meta_progress.db.get_development_unlocks",
-				() => _db.GetWH40KMetaDevelopmentUnlocks(userId));
+			WH40KMetaProgressDbData progress = await _db.GetWH40KMetaProgress(userId);
+			List<WH40KMetaAchievementDbData> achievements = await _db.GetWH40KMetaAchievements(userId);
+			List<WH40KMetaDecorationDbData> decorations = await _db.GetWH40KMetaDecorations(userId);
+			List<WH40KMetaDevelopmentUnlockDbData> developmentUnlocks = await _db.GetWH40KMetaDevelopmentUnlocks(userId);
 			_task.RunOnMainThread(delegate
 			{
 				if (_states.TryGetValue(userId, out RuntimeProgressState value2))
@@ -2481,9 +2456,7 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 		_ = 3;
 		try
 		{
-			await _dbDiag.MeasureAsync(
-				"meta_progress.db.batch_set_all",
-				() => _db.BatchSetWH40KMetaProgressAll(userId, progressData, achievementData, decorationData, developmentData));
+			await _db.BatchSetWH40KMetaProgressAll(userId, progressData, achievementData, decorationData, developmentData);
 		}
 		catch (Exception value)
 		{

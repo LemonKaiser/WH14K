@@ -393,6 +393,14 @@
       - material: Cloth
         amount: 2
         doAfter: 1
+    - to: tauBanner
+      steps:
+      - material: Steel
+        amount: 1
+        doAfter: 1
+      - material: Cloth
+        amount: 2
+        doAfter: 1
 
   - node: chaosBanner
     entity: WHChaosBanner
@@ -460,6 +468,22 @@
 
   - node: medicalBanner
     entity: WHMedicalBanner
+    edges:
+    - to: start
+      completed:
+      - !type:GivePrototype
+        prototype: SheetSteel1
+        amount: 1
+      - !type:GivePrototype
+        prototype: MaterialCloth1
+        amount: 2
+      - !type:DeleteEntity {}
+      steps:
+      - tool: Anchoring
+        doAfter: 2
+
+  - node: tauBanner
+    entity: WHTauBanner
     edges:
     - to: start
       completed:

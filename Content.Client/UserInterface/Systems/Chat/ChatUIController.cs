@@ -96,17 +96,17 @@ public sealed partial class ChatUIController : UIController
         {SharedChatSystem.DeadPrefix, ChatSelectChannel.Dead}
     };
 
-    public static readonly Dictionary<ChatSelectChannel, char> ChannelPrefixes = new()
+    public static readonly Dictionary<ChatSelectChannel, string> ChannelPrefixes = new()
     {
-        {ChatSelectChannel.Local, SharedChatSystem.LocalPrefix},
-        {ChatSelectChannel.Whisper, SharedChatSystem.WhisperPrefix},
-        {ChatSelectChannel.Console, SharedChatSystem.ConsolePrefix},
-        {ChatSelectChannel.LOOC, SharedChatSystem.LOOCPrefix},
-        {ChatSelectChannel.OOC, SharedChatSystem.OOCPrefix},
-        {ChatSelectChannel.Emotes, SharedChatSystem.EmotesPrefix},
-        {ChatSelectChannel.Admin, SharedChatSystem.AdminPrefix},
-        {ChatSelectChannel.Radio, SharedChatSystem.RadioCommonPrefix},
-        {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix}
+        {ChatSelectChannel.Local, SharedChatSystem.LocalPrefix.ToString()},
+        {ChatSelectChannel.Whisper, SharedChatSystem.WhisperPrefix.ToString()},
+        {ChatSelectChannel.Console, SharedChatSystem.ConsolePrefix.ToString()},
+        {ChatSelectChannel.LOOC, SharedChatSystem.LOOCPrefix.ToString()},
+        {ChatSelectChannel.OOC, SharedChatSystem.OOCPrefix.ToString()},
+        {ChatSelectChannel.Emotes, SharedChatSystem.EmotesPrefix.ToString()},
+        {ChatSelectChannel.Admin, SharedChatSystem.AdminPrefix.ToString()},
+        {ChatSelectChannel.Radio, SharedChatSystem.DefaultChannelPrefix},
+        {ChatSelectChannel.Dead, SharedChatSystem.DeadPrefix.ToString()}
     };
 
     /// <summary>
@@ -726,7 +726,7 @@ public sealed partial class ChatUIController : UIController
 
     public void UpdateSelectedChannel(ChatBox box)
     {
-        var (prefixChannel, _, radioChannel) = SplitInputContents(box.ChatInput.Input.Text.ToLower());
+        var (prefixChannel, _, radioChannel) = SplitInputContents(box.ChatInput.Input.Text);
         var selectedChannel = box.SelectedChannel == ChatSelectChannel.None
             ? GetPreferredChannel()
             : box.SelectedChannel;
@@ -743,7 +743,7 @@ public sealed partial class ChatUIController : UIController
 
     public ChatSelectChannel ResolveEffectiveInputChannel(ChatBox box)
     {
-        var (prefixChannel, _, _) = SplitInputContents(box.ChatInput.Input.Text.ToLower());
+        var (prefixChannel, _, _) = SplitInputContents(box.ChatInput.Input.Text);
         var selectedChannel = box.SelectedChannel == ChatSelectChannel.None
             ? GetPreferredChannel()
             : box.SelectedChannel;
@@ -812,11 +812,16 @@ public sealed partial class ChatUIController : UIController
             channel = prefixChannel;
         else if (channel == ChatSelectChannel.Radio)
         {
-            // radio must have prefix as it goes through the say command.
-            text = $";{text}";
+            // Selected radio should use the headset's default channel, not the common channel.
+            text = BuildSelectedRadioMessage(text);
         }
 
         _manager.SendMessage(text, prefixChannel == 0 ? channel : prefixChannel);
+    }
+
+    internal static string BuildSelectedRadioMessage(string text)
+    {
+        return $"{SharedChatSystem.DefaultChannelPrefix} {text}";
     }
 
     private void OnDamageForceSay(DamageForceSayEvent ev, EntitySessionEventArgs _)

@@ -26,7 +26,7 @@ public sealed class ChannelSelectorItemButton : Button
         Text = ChannelSelectorButton.ChannelSelectorName(Channel);
 
         var prefix = ChatUIController.ChannelPrefixes[Channel];
-        if (prefix != default)
+        if (!string.IsNullOrEmpty(prefix))
             Text = Loc.GetString("hud-chatbox-select-name-prefixed", ("name", Text), ("prefix", prefix));
     }
 }

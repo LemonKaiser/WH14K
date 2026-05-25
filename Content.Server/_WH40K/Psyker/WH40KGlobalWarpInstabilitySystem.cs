@@ -35,10 +35,8 @@ using Content.Shared.Polymorph;
 using Content.Shared.Stunnable;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Traits.Assorted;
-using Content.Shared.CCVar;
 using Content.Shared._WH40K.Psyker;
 using Robust.Shared.Audio;
-using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
@@ -91,6 +89,7 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private static readonly TimeSpan PossessionDuration = TimeSpan.FromMinutes(1);
     private static readonly TimeSpan HallucinationDuration = TimeSpan.FromSeconds(45);
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
+    private static readonly ProtoId<WH40KWarpConfigPrototype> DefaultWarpConfigId = "WH40KWarpDefault";
 
     private readonly List<WarpDropCandidate> _dropCandidates = new();
     private readonly List<EntityUid> _entityBuffer = new();
@@ -99,7 +98,6 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
 
     [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly DrunkSystem _drunk = default!;
     [Dependency] private readonly EmpSystem _emp = default!;
@@ -208,57 +206,72 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
     {
         _heatDamage = _prototype.Index(HeatDamageType);
 
-        InitializeRuntimeConfig();
+        LoadRuntimeConfig();
 
         SubscribeLocalEvent<WH40KWarpInstabilityContributionEvent>(OnInstabilityContribution);
         SubscribeLocalEvent<WH40KWarpInstabilityComponent, ComponentStartup>(OnInstabilityStartup);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
 
-    private void InitializeRuntimeConfig()
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        Subs.CVar(_config, CCVars.WH40KWarpEnabled, value => { _warpEnabled = value; ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpMaxInstability, value => { _maxInstability = Math.Max(1f, value); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpDecayPerSecond, value => { _decayPerSecond = Math.Max(0f, value); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpPersonalBacklashEnabled, value => _personalBacklashEnabled = value, true);
-        Subs.CVar(_config, CCVars.WH40KWarpGlobalPulsesEnabled, value => { _globalPulsesEnabled = value; ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpCatastropheEnabled, value => _catastropheEnabled = value, true);
-        Subs.CVar(_config, CCVars.WH40KWarpHighestTierChance, value => _highestTierChance = Math.Clamp(value, 0f, 1f), true);
-        Subs.CVar(_config, CCVars.WH40KWarpMildBacklashThreshold, value => _mildBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpStunBacklashThreshold, value => _stunBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpCollapseBacklashThreshold, value => _collapseBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpDropBacklashThreshold, value => _dropBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpBleedBacklashThreshold, value => _bleedBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpDoppelgangerBacklashThreshold, value => _doppelgangerBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpFleshRiftBacklashThreshold, value => _fleshRiftBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPossessionBacklashThreshold, value => _possessionBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpMutationBacklashThreshold, value => _mutationBacklashThreshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse500Threshold, value => _pulse500Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse550Threshold, value => _pulse550Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse600Threshold, value => _pulse600Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse650Threshold, value => _pulse650Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse700Threshold, value => _pulse700Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse750Threshold, value => _pulse750Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse800Threshold, value => _pulse800Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse850Threshold, value => _pulse850Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse900Threshold, value => _pulse900Threshold = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse500IntervalSeconds, value => { _pulse500Interval = TimeSpan.FromSeconds(Math.Max(0f, value)); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse600IntervalSeconds, value => { _pulse600Interval = TimeSpan.FromSeconds(Math.Max(0f, value)); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse700IntervalSeconds, value => { _pulse700Interval = TimeSpan.FromSeconds(Math.Max(0f, value)); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse800IntervalSeconds, value => { _pulse800Interval = TimeSpan.FromSeconds(Math.Max(0f, value)); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpPulse900IntervalSeconds, value => { _pulse900Interval = TimeSpan.FromSeconds(Math.Max(0f, value)); ApplyRuntimeConfigChanges(); }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpMildBurnDamage, value => _mildBurnDamage = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpStunDurationSeconds, value => _stunDurationSeconds = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpStunDrunkennessSeconds, value => _stunDrunkennessSeconds = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpCollapseStunSeconds, value => _collapseStunSeconds = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpCollapseDrunkennessSeconds, value => _collapseDrunkennessSeconds = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpBleedTarget, value => _bleedTarget = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpDropMaxCount, value => _dropMaxCount = Math.Max(1, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpFleshRiftDemonChance, value => _fleshRiftDemonChance = Math.Clamp(value, 0f, 1f), true);
-        Subs.CVar(_config, CCVars.WH40KWarpFleshRiftDeathChance, value => _fleshRiftDeathChance = Math.Clamp(value, 0f, 1f), true);
-        Subs.CVar(_config, CCVars.WH40KWarpFleshRiftDeathDamage, value => _fleshRiftDeathDamage = Math.Max(0f, value), true);
-        Subs.CVar(_config, CCVars.WH40KWarpMutationMinSeverity, value => { _mutationMinSeverity = Math.Clamp(value, 0f, 1f); if (_mutationMaxSeverity < _mutationMinSeverity) _mutationMaxSeverity = _mutationMinSeverity; }, true);
-        Subs.CVar(_config, CCVars.WH40KWarpMutationMaxSeverity, value => { _mutationMaxSeverity = Math.Clamp(value, 0f, 1f); if (_mutationMinSeverity > _mutationMaxSeverity) _mutationMinSeverity = _mutationMaxSeverity; }, true);
+        if (args.WasModified<WH40KWarpConfigPrototype>())
+            LoadRuntimeConfig();
+    }
+
+    private void LoadRuntimeConfig()
+    {
+        var config = _prototype.Index<WH40KWarpConfigPrototype>(DefaultWarpConfigId);
+        _warpEnabled = config.Runtime.Enabled;
+        _maxInstability = Math.Max(1f, config.Runtime.MaxInstability);
+        _decayPerSecond = Math.Max(0f, config.Runtime.DecayPerSecond);
+        _personalBacklashEnabled = config.Runtime.PersonalBacklashEnabled;
+        _globalPulsesEnabled = config.Runtime.GlobalPulsesEnabled;
+        _catastropheEnabled = config.Runtime.CatastropheEnabled;
+        _highestTierChance = Math.Clamp(config.Runtime.HighestTierChance, 0f, 1f);
+
+        _mildBacklashThreshold = Math.Max(0f, config.BacklashThresholds.MildBurn);
+        _stunBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Stun);
+        _collapseBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Collapse);
+        _dropBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Drop);
+        _bleedBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Bleed);
+        _doppelgangerBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Doppelganger);
+        _fleshRiftBacklashThreshold = Math.Max(0f, config.BacklashThresholds.FleshRift);
+        _possessionBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Possession);
+        _mutationBacklashThreshold = Math.Max(0f, config.BacklashThresholds.Mutation);
+
+        _pulse500Threshold = Math.Max(0f, config.GlobalPulses.Threshold500);
+        _pulse550Threshold = Math.Max(0f, config.GlobalPulses.Threshold550);
+        _pulse600Threshold = Math.Max(0f, config.GlobalPulses.Threshold600);
+        _pulse650Threshold = Math.Max(0f, config.GlobalPulses.Threshold650);
+        _pulse700Threshold = Math.Max(0f, config.GlobalPulses.Threshold700);
+        _pulse750Threshold = Math.Max(0f, config.GlobalPulses.Threshold750);
+        _pulse800Threshold = Math.Max(0f, config.GlobalPulses.Threshold800);
+        _pulse850Threshold = Math.Max(0f, config.GlobalPulses.Threshold850);
+        _pulse900Threshold = Math.Max(0f, config.GlobalPulses.Threshold900);
+        _pulse500Interval = TimeSpan.FromSeconds(Math.Max(0f, config.GlobalPulses.Interval500Seconds));
+        _pulse600Interval = TimeSpan.FromSeconds(Math.Max(0f, config.GlobalPulses.Interval600Seconds));
+        _pulse700Interval = TimeSpan.FromSeconds(Math.Max(0f, config.GlobalPulses.Interval700Seconds));
+        _pulse800Interval = TimeSpan.FromSeconds(Math.Max(0f, config.GlobalPulses.Interval800Seconds));
+        _pulse900Interval = TimeSpan.FromSeconds(Math.Max(0f, config.GlobalPulses.Interval900Seconds));
+
+        _mildBurnDamage = Math.Max(0f, config.Effects.MildBurnDamage);
+        _stunDurationSeconds = Math.Max(0f, config.Effects.StunDurationSeconds);
+        _stunDrunkennessSeconds = Math.Max(0f, config.Effects.StunDrunkennessSeconds);
+        _collapseStunSeconds = Math.Max(0f, config.Effects.CollapseStunSeconds);
+        _collapseDrunkennessSeconds = Math.Max(0f, config.Effects.CollapseDrunkennessSeconds);
+        _bleedTarget = Math.Max(0f, config.Effects.BleedTarget);
+        _dropMaxCount = Math.Max(1, config.Effects.DropMaxCount);
+        _fleshRiftDemonChance = Math.Clamp(config.Effects.FleshRiftDemonChance, 0f, 1f);
+        _fleshRiftDeathChance = Math.Clamp(config.Effects.FleshRiftDeathChance, 0f, 1f);
+        _fleshRiftDeathDamage = Math.Max(0f, config.Effects.FleshRiftDeathDamage);
+        _mutationMinSeverity = Math.Clamp(config.Effects.MutationMinSeverity, 0f, 1f);
+        _mutationMaxSeverity = Math.Clamp(config.Effects.MutationMaxSeverity, 0f, 1f);
+        if (_mutationMaxSeverity < _mutationMinSeverity)
+            _mutationMaxSeverity = _mutationMinSeverity;
+
+        ApplyRuntimeConfigChanges();
     }
 
     private void ApplyRuntimeConfigChanges()

@@ -115,22 +115,50 @@ public abstract partial class SharedChatSystem : EntitySystem
         out string output,
         out string prefix)
     {
+        TrySplitRadioPrefixForSanitization(
+            input,
+            channelKey => channelKey == DefaultChannelKey || _keyCodes.ContainsKey(channelKey),
+            out output,
+            out prefix);
+    }
+
+    internal static bool TrySplitRadioPrefixForSanitization(
+        string input,
+        Func<char, bool> isSupportedChannelKey,
+        out string output,
+        out string prefix)
+    {
         prefix = string.Empty;
         output = input;
 
         // If the string is less than 2, then it's probably supposed to be an emote.
         // No one is sending empty radio messages!
-        if (input.Length <= 2)
-            return;
+        if (input.Length < 2 || !input.StartsWith(RadioChannelPrefix))
+            return false;
 
-        if (!input.StartsWith(RadioChannelPrefix))
-            return;
+        var channelKey = char.ToLower(input[1]);
+        if (!isSupportedChannelKey(channelKey))
+            return false;
 
-        if (!_keyCodes.TryGetValue(char.ToLower(input[1]), out _))
-            return;
+        if (input.Length == 2)
+        {
+            prefix = input;
+            output = string.Empty;
+            return true;
+        }
 
-        prefix = input[..2];
-        output = input[2..];
+        if (!char.IsWhiteSpace(input[2]))
+            return false;
+
+        var bodyStart = 2;
+        while (bodyStart < input.Length && char.IsWhiteSpace(input[bodyStart]))
+        {
+            bodyStart++;
+        }
+
+        prefix = $"{input[..2]} ";
+        output = input[bodyStart..];
+        return true;
     }
 
     /// <summary>

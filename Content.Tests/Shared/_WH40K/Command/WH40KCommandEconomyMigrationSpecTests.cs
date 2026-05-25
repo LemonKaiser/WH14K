@@ -55,7 +55,7 @@ public sealed class WH40KCommandEconomyMigrationSpecTests
     }
 
     [Test]
-    public void BattleAdminCommandExposesPointDebugAndTelemetrySubcommands()
+    public void BattleAdminCommandExposesPointDebugSubcommandsWithoutTelemetryLegacyAlias()
     {
         var source = ReadRepoFile("Content.Server/_WH40K/GameTicking/Commands/WH40KBattleAdminCommand.cs");
 
@@ -65,7 +65,8 @@ public sealed class WH40KCommandEconomyMigrationSpecTests
             Assert.That(source, Does.Contain("point-reset"));
             Assert.That(source, Does.Contain("point-set-owner"));
             Assert.That(source, Does.Contain("point-set-tier"));
-            Assert.That(source, Does.Contain("eco-telemetry"));
+            Assert.That(source, Does.Not.Contain("eco-telemetry"));
+            Assert.That(source, Does.Not.Contain("telemetry <on|off>"));
         });
     }
 

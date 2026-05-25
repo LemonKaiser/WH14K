@@ -1554,3 +1554,5 @@ w40k-dec-color-discord-blurple-title = Discord Blurple
 w40k-dec-color-discord-blurple-description = OOC-цвет имени в фирменном оттенке Discord.
 wh40k-cargo-pallet-footer-left-imperium = Экспортный реестр Муниторума активен.
 wh40k-cargo-pallet-footer-left-heretics = Реестр трофеев варбанды активен.
+wh40k-command-runtime-mission-her_raise_the_warp_standard-title = Поднять варп-штандарт
+wh40k-command-runtime-mission-her_raise_the_warp_standard-description = Цель: установить в зоне миссии знамя Хаоса (WHChaosBanner), затем удерживать ритуальный круг до заполнения прогресса.

@@ -1814,6 +1814,7 @@ ent-WH40KAstartesLaserPistolPowerCell = Astartes laser pistol power cell
     .desc = A reinforced charge cell tuned for the high-output discharge profile of an Astartes laser pistol.
 
 ent-WHMedicalBanner = medical banner
+ent-WHTauBanner = tau banner
 ent-WH40KAirlockImperium = Imperium airlock
 ent-WH40KAirlockChaos = Chaos airlock
 ent-WallMetalChaosBrick = chaos brick wall

@@ -19,4 +19,32 @@ public sealed class WH40KChatTranslationFormattingTests
             WH40KChatTranslationFormatting.ShouldShowLanguageTag(recipientLanguage, sourceLanguage),
             Is.EqualTo(expected));
     }
+
+    [Test]
+    public void BuildAHelpWrappedMessage_PrefixesLanguageTagForTranslatedRecipient()
+    {
+        var wrapped = WH40KChatTranslationFormatting.BuildAHelpWrappedMessage(
+            "[color=red]Admin[/color]",
+            "Hello there",
+            "RU",
+            "EN",
+            "Hello there",
+            "(S)");
+
+        Assert.That(wrapped, Does.StartWith($"[{Content.Shared._WH40K.Chat.Translation.WH40KChatTranslationMarkup.TagName} "));
+        Assert.That(wrapped, Does.Contain("(S) [color=red]Admin[/color]: Hello there"));
+    }
+
+    [Test]
+    public void BuildAHelpWrappedMessage_SkipsLanguageTagForSameLanguage()
+    {
+        var wrapped = WH40KChatTranslationFormatting.BuildAHelpWrappedMessage(
+            "Guardsman",
+            "Привет",
+            "RU",
+            "RU",
+            "Привет");
+
+        Assert.That(wrapped, Is.EqualTo("Guardsman: Привет"));
+    }
 }
