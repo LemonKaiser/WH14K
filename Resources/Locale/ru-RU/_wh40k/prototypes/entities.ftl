@@ -137,7 +137,7 @@ ent-ClothingHandsGlovesCombatCommissar = перчатки комиссара
 ent-ClothingHandsGlovesTechpriest = перчатки техножреца
     .desc = Изолированные перчатки для работы.
 
-ent-ClothingHandsGlovesBloodPact = перчатки Кровавого Договора
+ent-ClothingHandsGlovesBloodPact = перчатки Армии Кровавого Договора
     .desc = боевые перчатки.
 
 ent-ClothingHandsGlovesKrieg = перчатки Крига
@@ -152,10 +152,10 @@ ent-ClothingHeadHelmetFlak = флак-шлем
 ent-ClothingHeadHelmetFlakCyan = циановый флак-шлем
     .desc = { ent-ClothingHeadHelmetFlak.desc }
 
-ent-ClothingHeadHelmetBloodPact = шлем бладпакта
+ent-ClothingHeadHelmetBloodPact = шлем Армии Кровавого Договора
     .desc = Стандартный шлем
 
-ent-ClothingMaskGasBloodPact = маска бладпакта
+ent-ClothingMaskGasBloodPact = маска Армии Кровавого Договора
     .desc = Грубая боевая маска Кровавого Договора, скрывающая лицо и защищающая дыхание от пыли и газа.
 
 ent-ClothingHeadHelmetrHeresy = шлем еретика
@@ -323,7 +323,7 @@ ent-ClothingOuterArmorFlakVestCyan = циановая флак-броня
 ent-ClothingOuterArmorFlakVestMed = флак-жилет медика
     .desc = Стандартный противоосколочный жилет Имперского Гвардейца с пометкой медика на плече, Кадийского образца. Защитит от осколков, слабых лазеров и мелкокалиберных пуль.
 
-ent-ClothingOuterArmorBloodpact = броня Кровавого Договора
+ent-ClothingOuterArmorBloodpact = броня Армии Кровавого Договора
     .desc = Достаточно крепкая и лёгкая броня.
 
 ent-ClothingOuterArmorFlakVestHeretic = броня еретика
@@ -386,7 +386,7 @@ ent-ClothingShoesBootsworkTechpriest = рабочие ботинки
 ent-ClothingShoesArmoredWorkbootsTechpriest = бронированные рабочие ботинки
     .desc = Рабочие сапоги оснащённые бронёй для работ в не самых благоприятных условиях.
 
-ent-ClothingShoesBootsBloodPact = ботинки бладпакта
+ent-ClothingShoesBootsBloodPact = Ботинки Армии Кровавого Договора
     .desc = Ботинки без каких либо дополнений.
 
 ent-ClothingShoesBootsMagTechpriest = магнитные сапоги
@@ -410,7 +410,7 @@ ent-ClothingUniformJumpsuitKrieg = униформа Крига
 ent-ClothingUniformJumpsuitTechpriest = комбинезон техножреца
     .desc = Комбинезон, выдающийся всем техножрецам, что ещё имеют гуманоидную форму тела.
 
-ent-ClothingUniformJumpsuitBloodPact = униформа Кровавого Договора
+ent-ClothingUniformJumpsuitBloodPact = униформа Армии Кровавого Договора
     .desc = Обычная униформа.
 
 ent-ClothingUniformJumpsuitOfficer = униформа офицера

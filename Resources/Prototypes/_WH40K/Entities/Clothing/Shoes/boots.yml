@@ -97,6 +97,8 @@
     sprite: _WH40K/Clothing/Shoes/Boots/heresyboots.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/heresyboots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5
 
 - type: entity
   parent: [ClothingShoesMilitaryBase, WH40KChaosDamnationClothing]
