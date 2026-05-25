@@ -1716,6 +1716,7 @@ ent-MobWH40KDreadnought = Дредноут
     .desc = Крупная боевая машина, управляемая уважаемым героем-космодесантником, вооружённая штурмовой пушкой и залповой ракетницей.
 
 ent-WHMedicalBanner = медицинское знамя
+ent-WHTauBanner = знамя тау
 ent-WH40KAirlockImperium = имперский шлюз
 ent-WH40KAirlockChaos = шлюз Хаоса
 ent-WallMetalChaosBrick = кирпичная стена Хаоса

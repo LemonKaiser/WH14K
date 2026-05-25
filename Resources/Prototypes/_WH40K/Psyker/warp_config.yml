@@ -1,0 +1,48 @@
+- type: wh40kWarpConfig
+  id: WH40KWarpDefault
+  runtime:
+    enabled: true
+    maxInstability: 1000
+    decayPerSecond: 1.2
+    personalBacklashEnabled: true
+    globalPulsesEnabled: true
+    catastropheEnabled: true
+    highestTierChance: 0.8
+  backlashThresholds:
+    mildBurn: 350
+    stun: 400
+    collapse: 500
+    drop: 550
+    bleed: 600
+    doppelganger: 650
+    fleshRift: 700
+    possession: 800
+    mutation: 900
+  globalPulses:
+    threshold500: 500
+    threshold550: 550
+    threshold600: 600
+    threshold650: 650
+    threshold700: 700
+    threshold750: 750
+    threshold800: 800
+    threshold850: 850
+    threshold900: 900
+    interval500Seconds: 60
+    interval600Seconds: 45
+    interval700Seconds: 30
+    interval800Seconds: 20
+    interval900Seconds: 11
+  effects:
+    mildBurnDamage: 10
+    stunDurationSeconds: 1
+    stunDrunkennessSeconds: 10
+    collapseStunSeconds: 5
+    collapseDrunkennessSeconds: 20
+    bleedTarget: 5
+    dropMaxCount: 3
+    fleshRiftDemonChance: 0.15
+    fleshRiftDeathChance: 0.35
+    fleshRiftDeathDamage: 500
+    mutationMinSeverity: 0.25
+    mutationMaxSeverity: 0.75

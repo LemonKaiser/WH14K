@@ -27,7 +27,7 @@
   - type: SpriteFade
 
 - type: entity
-  parent: BaseStructure
+  parent: WH40KBasePlaceholderConsole
   id: StructureLogisticsConsoleImperiumCmd
   name: imperium command terminal
   description: Strategic command terminal for imperial control.
@@ -35,8 +35,17 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
+    drawdepth: LargeObjects
     layers:
-    - state: computer
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
+    state: computer
   - type: UserInterface
     interfaces:
       enum.WH40KCommandNodeUiKey.Key:
@@ -53,7 +62,6 @@
     - VoxArmor
     - VoxSupport
     - VoxReinforcements
-  - type: SpriteFade
 
 - type: entity
   parent: BaseStructure
@@ -107,33 +115,41 @@
       teamId: Heretics
 
 - type: entity
-  parent: BaseStructure
+  parent: WH40KBasePlaceholderConsole
   id: StructureLogisticsConsoleHereticsCmd
   name: heretic command terminal
   description: Strategic command terminal for heretic control.
   suffix: "WH40K, Heretics, Command Terminal"
   components:
-    - type: Sprite
-      sprite: _WH40K/Structures/Specific/ch_command.rsi
-      scale: 0.3, 0.3
-      layers:
-      - state: icon
-    - type: UserInterface
-      interfaces:
-        enum.WH40KCommandNodeUiKey.Key:
-          type: WH40KCommandNodeBoundUserInterface
-    - type: ActivatableUI
-      key: enum.WH40KCommandNodeUiKey.Key
-    - type: WH40KCommandNode
-      teamId: Heretics
-      passiveFrontPointsPerInterval: 2
-      trackedCategories:
-      - AltarBasics
-      - AltarWeaponry
-      - AltarAmmo
-      - AltarArmor
-      - AltarSupport
-      - AltarReinforcements
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/Computers/srtchaos.rsi
+    drawdepth: LargeObjects
+    layers:
+    - map: [ "computerLayerBody" ]
+      state: computer
+    - map: [ "computerLayerScreen" ]
+      state: computer_on
+      shader: unshaded
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/Computers/srtchaos.rsi
+    state: computer
+  - type: UserInterface
+    interfaces:
+      enum.WH40KCommandNodeUiKey.Key:
+        type: WH40KCommandNodeBoundUserInterface
+  - type: ActivatableUI
+    key: enum.WH40KCommandNodeUiKey.Key
+  - type: WH40KCommandNode
+    teamId: Heretics
+    passiveFrontPointsPerInterval: 2
+    trackedCategories:
+    - AltarBasics
+    - AltarWeaponry
+    - AltarAmmo
+    - AltarArmor
+    - AltarSupport
+    - AltarReinforcements
 
 - type: entity
   parent: BaseStructure
@@ -169,7 +185,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/reinforcementsimp.rsi
-    drawdepth: SmallObjects
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor
@@ -205,7 +221,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/reinforcementschaos.rsi
-    drawdepth: SmallObjects
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor
@@ -243,6 +259,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/upgardeimp.rsi
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor
@@ -267,6 +284,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/upgardechaos.rsi
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor
@@ -293,6 +311,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/taskcomp.rsi
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor
@@ -317,6 +336,7 @@
   components:
   - type: Sprite
     sprite: _WH40K/Structures/Specific/taskchaos.rsi
+    drawdepth: LargeObjects
     layers:
     - state: computer
     - state: decorative_monitor

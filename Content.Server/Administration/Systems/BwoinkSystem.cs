@@ -686,54 +686,57 @@ namespace Content.Server.Administration.Systems
 
             var admins = GetTargetAdmins();
 
-            // Notify all admins
-            foreach (var channel in admins)
+            if (!TryDispatchTranslatedAHelp(message, senderSession, senderAdmin, admins, playSound))
             {
-                RaiseNetworkEvent(msg, channel);
-            }
-
-            string adminPrefixWebhook = "";
-
-            if (_config.GetCVar(CCVars.AhelpAdminPrefixWebhook) && senderAdmin is not null && senderAdmin.Title is not null)
-            {
-                adminPrefixWebhook = $"[bold]\\[{senderAdmin.Title}\\][/bold] ";
-            }
-
-            // Notify player
-            if (_playerManager.TryGetSessionById(message.UserId, out var session) && !message.AdminOnly)
-            {
-                if (!admins.Contains(session.Channel))
+                // Notify all admins
+                foreach (var channel in admins)
                 {
-                    // If _overrideClientName is set, we generate a new message with the override name. The admins name will still be the original name for the webhooks.
-                    if (_overrideClientName != string.Empty)
+                    RaiseNetworkEvent(msg, channel);
+                }
+
+                string adminPrefixWebhook = "";
+
+                if (_config.GetCVar(CCVars.AhelpAdminPrefixWebhook) && senderAdmin is not null && senderAdmin.Title is not null)
+                {
+                    adminPrefixWebhook = $"[bold]\\[{senderAdmin.Title}\\][/bold] ";
+                }
+
+                // Notify player
+                if (_playerManager.TryGetSessionById(message.UserId, out var session) && !message.AdminOnly)
+                {
+                    if (!admins.Contains(session.Channel))
                     {
-                        string overrideMsgText;
-                        // Doing the same thing as above, but with the override name. Theres probably a better way to do this.
-                        if (senderAdmin is not null &&
-                            senderAdmin.Flags ==
-                            AdminFlags.Adminhelp) // Mentor. Not full admin. That's why it's colored differently.
+                        // If _overrideClientName is set, we generate a new message with the override name. The admins name will still be the original name for the webhooks.
+                        if (_overrideClientName != string.Empty)
                         {
-                            overrideMsgText = $"[color=purple]{adminPrefixWebhook}{_overrideClientName}[/color]";
-                        }
-                        else if (senderAdmin is not null && senderAdmin.HasFlag(AdminFlags.Adminhelp))
-                        {
-                            overrideMsgText = $"[color=red]{adminPrefixWebhook}{_overrideClientName}[/color]";
+                            string overrideMsgText;
+                            // Doing the same thing as above, but with the override name. Theres probably a better way to do this.
+                            if (senderAdmin is not null &&
+                                senderAdmin.Flags ==
+                                AdminFlags.Adminhelp) // Mentor. Not full admin. That's why it's colored differently.
+                            {
+                                overrideMsgText = $"[color=purple]{adminPrefixWebhook}{_overrideClientName}[/color]";
+                            }
+                            else if (senderAdmin is not null && senderAdmin.HasFlag(AdminFlags.Adminhelp))
+                            {
+                                overrideMsgText = $"[color=red]{adminPrefixWebhook}{_overrideClientName}[/color]";
+                            }
+                            else
+                            {
+                                overrideMsgText = $"{senderSession.Name}"; // Not an admin, name is not overridden.
+                            }
+
+                            overrideMsgText = $"{(message.PlaySound ? "" : "(S) ")}{overrideMsgText}: {escapedText}";
+
+                            RaiseNetworkEvent(new BwoinkTextMessage(message.UserId,
+                                    senderSession.UserId,
+                                    overrideMsgText,
+                                    playSound: playSound),
+                                session.Channel);
                         }
                         else
-                        {
-                            overrideMsgText = $"{senderSession.Name}"; // Not an admin, name is not overridden.
-                        }
-
-                        overrideMsgText = $"{(message.PlaySound ? "" : "(S) ")}{overrideMsgText}: {escapedText}";
-
-                        RaiseNetworkEvent(new BwoinkTextMessage(message.UserId,
-                                senderSession.UserId,
-                                overrideMsgText,
-                                playSound: playSound),
-                            session.Channel);
+                            RaiseNetworkEvent(msg, session.Channel);
                     }
-                    else
-                        RaiseNetworkEvent(msg, session.Channel);
                 }
             }
 

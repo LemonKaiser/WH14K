@@ -98,3 +98,15 @@
   - type: Construction
     graph: WH40KBanners
     node: medicalBanner
+
+- type: entity
+  id: WHTauBanner
+  parent: WHChaosBanner
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/banners.rsi
+    state: tau_banner
+  - type: Construction
+    graph: WH40KBanners
+    node: tauBanner

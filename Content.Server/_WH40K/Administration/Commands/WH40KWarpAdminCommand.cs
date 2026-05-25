@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Content.Server.Administration;
 using Content.Server._WH40K.Psyker;
 using Content.Shared.Administration;
-using Content.Shared.CCVar;
 using Robust.Server.Player;
-using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
@@ -17,7 +14,6 @@ namespace Content.Server._WH40K.Administration.Commands;
 [AdminCommand(AdminFlags.Admin)]
 public sealed class WH40KWarpAdminCommand : LocalizedCommands
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly IEntityManager _entity = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
 
@@ -31,15 +27,7 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         "backlash",
         "pulse",
         "catastrophe",
-        "config",
         "control",
-    };
-
-    private static readonly string[] ConfigActions =
-    {
-        "list",
-        "get",
-        "set",
     };
 
     private static readonly string[] ControlActions =
@@ -88,52 +76,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         "all",
     };
 
-    private static readonly WarpSetting[] Settings =
-    {
-        BoolSetting("enabled", "Enable or disable the warp runtime.", CCVars.WH40KWarpEnabled),
-        FloatSetting("max-instability", "Maximum shared warp instability.", CCVars.WH40KWarpMaxInstability),
-        FloatSetting("decay", "Passive warp recovery per second.", CCVars.WH40KWarpDecayPerSecond),
-        BoolSetting("personal-backlash", "Enable contributor backlash effects.", CCVars.WH40KWarpPersonalBacklashEnabled),
-        BoolSetting("global-pulses", "Enable scheduled global warp pulses.", CCVars.WH40KWarpGlobalPulsesEnabled),
-        BoolSetting("catastrophe", "Enable the max-instability catastrophe.", CCVars.WH40KWarpCatastropheEnabled),
-        FloatSetting("highest-tier-chance", "Chance to pick the highest unlocked backlash tier.", CCVars.WH40KWarpHighestTierChance),
-        FloatSetting("threshold-mild", "Backlash threshold for mild burn.", CCVars.WH40KWarpMildBacklashThreshold),
-        FloatSetting("threshold-stun", "Backlash threshold for stun.", CCVars.WH40KWarpStunBacklashThreshold),
-        FloatSetting("threshold-collapse", "Backlash threshold for collapse.", CCVars.WH40KWarpCollapseBacklashThreshold),
-        FloatSetting("threshold-drop", "Backlash threshold for forced drops.", CCVars.WH40KWarpDropBacklashThreshold),
-        FloatSetting("threshold-bleed", "Backlash threshold for bleed.", CCVars.WH40KWarpBleedBacklashThreshold),
-        FloatSetting("threshold-doppelganger", "Backlash threshold for doppelganger spawn.", CCVars.WH40KWarpDoppelgangerBacklashThreshold),
-        FloatSetting("threshold-flesh-rift", "Backlash threshold for flesh-rift outcome.", CCVars.WH40KWarpFleshRiftBacklashThreshold),
-        FloatSetting("threshold-possession", "Backlash threshold for possession.", CCVars.WH40KWarpPossessionBacklashThreshold),
-        FloatSetting("threshold-mutation", "Backlash threshold for irreversible mutation.", CCVars.WH40KWarpMutationBacklashThreshold),
-        FloatSetting("pulse-500-threshold", "Threshold for the 500 pulse band.", CCVars.WH40KWarpPulse500Threshold),
-        FloatSetting("pulse-550-threshold", "Threshold for the 550 pulse band.", CCVars.WH40KWarpPulse550Threshold),
-        FloatSetting("pulse-600-threshold", "Threshold for the 600 pulse band.", CCVars.WH40KWarpPulse600Threshold),
-        FloatSetting("pulse-650-threshold", "Threshold for the 650 pulse band.", CCVars.WH40KWarpPulse650Threshold),
-        FloatSetting("pulse-700-threshold", "Threshold for the 700 pulse band.", CCVars.WH40KWarpPulse700Threshold),
-        FloatSetting("pulse-750-threshold", "Threshold for the 750 pulse band.", CCVars.WH40KWarpPulse750Threshold),
-        FloatSetting("pulse-800-threshold", "Threshold for the 800 pulse band.", CCVars.WH40KWarpPulse800Threshold),
-        FloatSetting("pulse-850-threshold", "Threshold for the 850 pulse band.", CCVars.WH40KWarpPulse850Threshold),
-        FloatSetting("pulse-900-threshold", "Threshold for the 900 pulse band.", CCVars.WH40KWarpPulse900Threshold),
-        FloatSetting("pulse-500-interval", "Seconds between 500/550 pulses.", CCVars.WH40KWarpPulse500IntervalSeconds),
-        FloatSetting("pulse-600-interval", "Seconds between 600/650 pulses.", CCVars.WH40KWarpPulse600IntervalSeconds),
-        FloatSetting("pulse-700-interval", "Seconds between 700/750 pulses.", CCVars.WH40KWarpPulse700IntervalSeconds),
-        FloatSetting("pulse-800-interval", "Seconds between 800/850 pulses.", CCVars.WH40KWarpPulse800IntervalSeconds),
-        FloatSetting("pulse-900-interval", "Seconds between 900 pulses.", CCVars.WH40KWarpPulse900IntervalSeconds),
-        FloatSetting("mild-burn-damage", "Heat damage for mild backlash.", CCVars.WH40KWarpMildBurnDamage),
-        FloatSetting("stun-duration", "Stun duration for stun backlash.", CCVars.WH40KWarpStunDurationSeconds),
-        FloatSetting("stun-drunkenness", "Drunkenness duration for stun backlash.", CCVars.WH40KWarpStunDrunkennessSeconds),
-        FloatSetting("collapse-stun", "Stun duration for collapse backlash.", CCVars.WH40KWarpCollapseStunSeconds),
-        FloatSetting("collapse-drunkenness", "Drunkenness duration for collapse backlash.", CCVars.WH40KWarpCollapseDrunkennessSeconds),
-        FloatSetting("bleed-target", "Target bleed amount for bleed backlash.", CCVars.WH40KWarpBleedTarget),
-        IntSetting("drop-max-count", "Maximum dropped items from drop backlash.", CCVars.WH40KWarpDropMaxCount),
-        FloatSetting("flesh-rift-demon-chance", "Chance that flesh-rift creates a hellspawn outcome.", CCVars.WH40KWarpFleshRiftDemonChance),
-        FloatSetting("flesh-rift-death-chance", "Chance that flesh-rift kills after demon roll fails.", CCVars.WH40KWarpFleshRiftDeathChance),
-        FloatSetting("flesh-rift-death-damage", "Damage used by the lethal flesh-rift branch.", CCVars.WH40KWarpFleshRiftDeathDamage),
-        FloatSetting("mutation-min-severity", "Minimum irreversible mutation severity.", CCVars.WH40KWarpMutationMinSeverity),
-        FloatSetting("mutation-max-severity", "Maximum irreversible mutation severity.", CCVars.WH40KWarpMutationMaxSeverity),
-    };
-
     public override string Command => "wh40kwarp";
 
     public override string Description => "WH40K warp runtime admin controls and live settings.";
@@ -148,9 +90,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         "wh40kwarp backlash <user|entityUid> [auto|mild|stun|collapse|drop|bleed|doppelganger|flesh-rift|possession|mutation]\n" +
         "wh40kwarp pulse [auto|500|550|600|650|700|750|800|850|900]\n" +
         "wh40kwarp catastrophe [user|entityUid]\n" +
-        "wh40kwarp config list\n" +
-        "wh40kwarp config get <setting>\n" +
-        "wh40kwarp config set <setting> <value>\n" +
         "wh40kwarp control get <user|entityUid>\n" +
         "wh40kwarp control set <user|entityUid> <field> <value>\n" +
         "wh40kwarp control clear <user|entityUid> <field|all>\n" +
@@ -202,11 +141,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
                 ExecuteCatastrophe(shell, system, args);
                 return;
 
-            case "config":
-            case "cfg":
-                ExecuteConfig(shell, args);
-                return;
-
             case "control":
             case "ctl":
                 ExecuteControl(shell, args);
@@ -238,10 +172,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
                 if (args.Length == 2)
                     return CompletionResult.FromHintOptions(PulseTiers, "<tier>");
                 return CompletionResult.Empty;
-
-            case "config":
-            case "cfg":
-                return GetConfigCompletion(args);
 
             case "control":
             case "ctl":
@@ -422,78 +352,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         shell.WriteLine("Forced warp catastrophe.");
     }
 
-    private void ExecuteConfig(IConsoleShell shell, string[] args)
-    {
-        if (args.Length < 2)
-        {
-            shell.WriteError("Usage: wh40kwarp config <list|get|set> ...");
-            return;
-        }
-
-        switch (args[1].ToLowerInvariant())
-        {
-            case "list":
-                if (args.Length != 2)
-                {
-                    shell.WriteError("Usage: wh40kwarp config list");
-                    return;
-                }
-
-                foreach (var setting in Settings.OrderBy(setting => setting.Key, StringComparer.Ordinal))
-                {
-                    shell.WriteLine($"{setting.Key} = {setting.GetValue(_config)} [{setting.CVarName}] - {setting.Description}");
-                }
-
-                return;
-
-            case "get":
-                if (args.Length != 3)
-                {
-                    shell.WriteError("Usage: wh40kwarp config get <setting>");
-                    return;
-                }
-
-                if (!TryGetSetting(args[2], out var getSetting))
-                {
-                    shell.WriteError($"Unknown warp setting '{args[2]}'.");
-                    return;
-                }
-
-                shell.WriteLine($"{getSetting.Key} = {getSetting.GetValue(_config)} [{getSetting.CVarName}]");
-                return;
-
-            case "set":
-                if (args.Length != 4)
-                {
-                    shell.WriteError("Usage: wh40kwarp config set <setting> <value>");
-                    return;
-                }
-
-                if (!TryGetSetting(args[2], out var setSetting))
-                {
-                    shell.WriteError($"Unknown warp setting '{args[2]}'.");
-                    return;
-                }
-
-                try
-                {
-                    setSetting.SetValue(_config, args[3]);
-                }
-                catch (FormatException ex)
-                {
-                    shell.WriteError(ex.Message);
-                    return;
-                }
-
-                shell.WriteLine($"{setSetting.Key} set to {setSetting.GetValue(_config)}.");
-                return;
-
-            default:
-                shell.WriteError($"Unknown config action '{args[1]}'.");
-                return;
-        }
-    }
-
     private void ExecuteControl(IConsoleShell shell, string[] args)
     {
         if (args.Length < 3)
@@ -562,25 +420,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
 
         if (args.Length == 4 && args[0].Equals("contribute", StringComparison.OrdinalIgnoreCase))
             return CompletionResult.FromHint("<sourceKey>");
-
-        return CompletionResult.Empty;
-    }
-
-    private CompletionResult GetConfigCompletion(string[] args)
-    {
-        if (args.Length == 2)
-            return CompletionResult.FromHintOptions(ConfigActions, "<action>");
-
-        if (args.Length == 3 && (args[1].Equals("get", StringComparison.OrdinalIgnoreCase) || args[1].Equals("set", StringComparison.OrdinalIgnoreCase)))
-        {
-            return CompletionResult.FromHintOptions(
-                Settings.OrderBy(setting => setting.Key, StringComparer.Ordinal)
-                    .Select(setting => new CompletionOption(setting.Key, setting.Description)),
-                "<setting>");
-        }
-
-        if (args.Length == 4 && args[1].Equals("set", StringComparison.OrdinalIgnoreCase) && TryGetSetting(args[2], out var setting))
-            return CompletionResult.FromHint(setting.ValueHint);
 
         return CompletionResult.Empty;
     }
@@ -799,22 +638,6 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         return false;
     }
 
-    private static bool TryGetSetting(string key, out WarpSetting setting)
-    {
-        var normalized = NormalizeKey(key);
-        foreach (var candidate in Settings)
-        {
-            if (NormalizeKey(candidate.Key) != normalized)
-                continue;
-
-            setting = candidate;
-            return true;
-        }
-
-        setting = null!;
-        return false;
-    }
-
     private static bool TryParseBacklashTier(string rawTier, out WH40KWarpBacklashTier? tier)
     {
         switch (NormalizeKey(rawTier))
@@ -921,80 +744,4 @@ public sealed class WH40KWarpAdminCommand : LocalizedCommands
         return value.ToString("hh\\:mm\\:ss", CultureInfo.InvariantCulture);
     }
 
-    private static WarpSetting BoolSetting(string key, string description, CVarDef<bool> cvar)
-    {
-        return new WarpSetting(
-            key,
-            cvar.Name,
-            description,
-            "<bool>",
-            config => config.GetCVar(cvar) ? "true" : "false",
-            (config, value) =>
-            {
-                if (!TryParseBool(value, out var parsed))
-                    throw new FormatException($"{key} expects a boolean value.");
-
-                config.SetCVar(cvar, parsed);
-            });
-    }
-
-    private static WarpSetting FloatSetting(string key, string description, CVarDef<float> cvar)
-    {
-        return new WarpSetting(
-            key,
-            cvar.Name,
-            description,
-            "<float>",
-            config => FormatFloat(config.GetCVar(cvar)),
-            (config, value) =>
-            {
-                if (!TryParseFloat(value, out var parsed))
-                    throw new FormatException($"{key} expects a float value.");
-
-                config.SetCVar(cvar, parsed);
-            });
-    }
-
-    private static WarpSetting IntSetting(string key, string description, CVarDef<int> cvar)
-    {
-        return new WarpSetting(
-            key,
-            cvar.Name,
-            description,
-            "<int>",
-            config => config.GetCVar(cvar).ToString(CultureInfo.InvariantCulture),
-            (config, value) =>
-            {
-                if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
-                    throw new FormatException($"{key} expects an integer value.");
-
-                config.SetCVar(cvar, parsed);
-            });
-    }
-
-    private sealed class WarpSetting
-    {
-        public WarpSetting(
-            string key,
-            string cVarName,
-            string description,
-            string valueHint,
-            Func<IConfigurationManager, string> getValue,
-            Action<IConfigurationManager, string> setValue)
-        {
-            Key = key;
-            CVarName = cVarName;
-            Description = description;
-            ValueHint = valueHint;
-            GetValue = getValue;
-            SetValue = setValue;
-        }
-
-        public string Key { get; }
-        public string CVarName { get; }
-        public string Description { get; }
-        public string ValueHint { get; }
-        public Func<IConfigurationManager, string> GetValue { get; }
-        public Action<IConfigurationManager, string> SetValue { get; }
-    }
 }

@@ -1,35 +1,83 @@
 param(
-    [string]$MapPath = "Resources/Maps/_WH40K/battlefield40k.yml",
+    [string]$MapPath,
     [string]$OutputRoot = "Temp/_wh40k_tactical_render",
-    [string]$Destination = "Resources/Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png"
+    [string]$Destination,
+    [string]$MapsRoot = "Resources/Maps/_WH40K",
+    [string]$SnapshotsRoot = "Resources/Textures/_WH40K/Interface/TacticalMap",
+    [string]$Configuration = "Release",
+    [switch]$AllWh40KMaps
 )
 
 $ErrorActionPreference = "Stop"
 
-$mapShortName = [System.IO.Path]::GetFileNameWithoutExtension($MapPath)
+function Get-SnapshotDestination {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$CurrentMapPath
+    )
 
-dotnet run --project Content.MapRenderer -- -f $MapPath -o $OutputRoot --viewer
-
-$renderDir = Join-Path $OutputRoot $mapShortName
-if (-not (Test-Path $renderDir))
-{
-    throw "Map renderer output directory not found: $renderDir"
+    $mapShortName = [System.IO.Path]::GetFileNameWithoutExtension($CurrentMapPath).ToLowerInvariant()
+    return Join-Path $SnapshotsRoot "$($mapShortName)_snapshot.png"
 }
 
-$mainSnapshot = Get-ChildItem $renderDir -Filter "$mapShortName-*.png" |
-    Sort-Object Length -Descending |
-    Select-Object -First 1
+function Render-Wh40KTacticalMap {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$CurrentMapPath,
+        [Parameter(Mandatory = $true)]
+        [string]$CurrentDestination
+    )
 
-if ($null -eq $mainSnapshot)
-{
-    throw "No rendered PNG files were produced for $mapShortName"
+    $mapShortName = [System.IO.Path]::GetFileNameWithoutExtension($CurrentMapPath)
+    Write-Host "Rendering $mapShortName -> $CurrentDestination"
+
+    dotnet run --project Content.MapRenderer -c $Configuration -- -f $CurrentMapPath -o $OutputRoot --viewer
+
+    $renderDir = Join-Path $OutputRoot $mapShortName
+    if (-not (Test-Path $renderDir))
+    {
+        throw "Map renderer output directory not found: $renderDir"
+    }
+
+    $mainSnapshot = Get-ChildItem $renderDir -Filter "$mapShortName-*.png" |
+        Sort-Object Length -Descending |
+        Select-Object -First 1
+
+    if ($null -eq $mainSnapshot)
+    {
+        throw "No rendered PNG files were produced for $mapShortName"
+    }
+
+    $destinationDir = Split-Path $CurrentDestination -Parent
+    if (-not (Test-Path $destinationDir))
+    {
+        New-Item -ItemType Directory -Path $destinationDir | Out-Null
+    }
+
+    Copy-Item $mainSnapshot.FullName $CurrentDestination -Force
+    Write-Host "Copied $($mainSnapshot.FullName) -> $CurrentDestination"
 }
 
-$destinationDir = Split-Path $Destination -Parent
-if (-not (Test-Path $destinationDir))
+if ($AllWh40KMaps)
 {
-    New-Item -ItemType Directory -Path $destinationDir | Out-Null
+    $maps = Get-ChildItem $MapsRoot -Filter *.yml | Sort-Object Name
+    foreach ($map in $maps)
+    {
+        $snapshotDestination = Get-SnapshotDestination -CurrentMapPath $map.FullName
+        Render-Wh40KTacticalMap -CurrentMapPath $map.FullName -CurrentDestination $snapshotDestination
+    }
+
+    return
 }
 
-Copy-Item $mainSnapshot.FullName $Destination -Force
-Write-Host "Copied $($mainSnapshot.FullName) -> $Destination"
+if ([string]::IsNullOrWhiteSpace($MapPath))
+{
+    $MapPath = "Resources/Maps/_WH40K/battlefield40k.yml"
+}
+
+if ([string]::IsNullOrWhiteSpace($Destination))
+{
+    $Destination = Get-SnapshotDestination -CurrentMapPath $MapPath
+}
+
+Render-Wh40KTacticalMap -CurrentMapPath $MapPath -CurrentDestination $Destination

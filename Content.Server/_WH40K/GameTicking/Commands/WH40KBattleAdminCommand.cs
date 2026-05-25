@@ -38,8 +38,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         "wh40kbattle adjust <teamId> <xp|influence|research|gelt> <delta>\n" +
         "wh40kbattle point <list|reset|owner|tier> ...\n" +
         "wh40kbattle point-list | point-reset <pointUid> | point-set-owner <pointUid> <teamId|neutral> | point-set-tier <pointUid> <0|1|2|3>\n" +
-        "wh40kbattle telemetry <on|off> [intervalSeconds]\n" +
-        "wh40kbattle eco-telemetry <on|off> [intervalSeconds]\n" +
         "wh40kbattle unlock <tech|cargo> <teamId> <prototypeId>\n" +
         "wh40kbattle lock <tech|cargo> <teamId> <prototypeId>";
 
@@ -77,10 +75,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
                 ExecutePoint(shell, rule, args);
                 return;
 
-            case "telemetry":
-                ExecuteEconomyTelemetry(shell, rule, args);
-                return;
-
             case "unlock":
                 ExecuteUnlock(shell, rule, args, unlock: true);
                 return;
@@ -109,8 +103,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             "point-reset",
             "point-set-owner",
             "point-set-tier",
-            "telemetry",
-            "eco-telemetry",
             "unlock",
             "lock"
         };
@@ -158,13 +150,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
                     return CompletionResult.FromHintOptions(rule.GetTeamIds().Concat(new[] { "neutral" }), "<teamId|neutral>");
                 if (args.Length == 4 && args[1].Equals("tier", StringComparison.OrdinalIgnoreCase))
                     return CompletionResult.FromHintOptions(new[] { "0", "1", "2", "3" }, "<tier>");
-                return CompletionResult.Empty;
-
-            case "telemetry":
-                if (args.Length == 2)
-                    return CompletionResult.FromHintOptions(new[] { "on", "off" }, "<on|off>");
-                if (args.Length == 3)
-                    return CompletionResult.FromHint("<intervalSeconds>");
                 return CompletionResult.Empty;
 
             case "unlock":
@@ -229,7 +214,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
             "point-reset" => PrependArgs("point", "reset", args),
             "point-set-owner" => PrependArgs("point", "owner", args),
             "point-set-tier" => PrependArgs("point", "tier", args),
-            "eco-telemetry" => PrependArgs("telemetry", args),
             _ => args
         };
     }
@@ -543,44 +527,6 @@ public sealed class WH40KBattleAdminCommand : IConsoleCommand
         }
 
         shell.WriteLine($"Strategic point '{pointUid}' forced to T{tierValue}.");
-    }
-
-    private void ExecuteEconomyTelemetry(IConsoleShell shell, WH40KTeamBattleRuleSystem rule, string[] args)
-    {
-        if (args.Length != 2 && args.Length != 3)
-        {
-            shell.WriteError("Usage: wh40kbattle telemetry <on|off> [intervalSeconds]");
-            return;
-        }
-
-        var value = args[1];
-        var enabled = value.ToLowerInvariant() switch
-        {
-            "on" or "true" or "1" => true,
-            "off" or "false" or "0" => false,
-            _ => (bool?) null
-        };
-
-        if (enabled == null)
-        {
-            shell.WriteError("Value must be 'on' or 'off'.");
-            return;
-        }
-
-        if (args.Length == 3)
-        {
-            if (!float.TryParse(args[2], out var intervalSeconds))
-            {
-                shell.WriteError("Interval must be a number of seconds.");
-                return;
-            }
-
-            rule.SetEconomyTelemetrySnapshotIntervalSeconds(intervalSeconds);
-        }
-
-        rule.SetEconomyTelemetryTrace(enabled.Value);
-        rule.GetEconomyTelemetrySettings(out var currentEnabled, out var interval);
-        shell.WriteLine($"Economy telemetry {(currentEnabled ? "enabled" : "disabled")}, snapshot interval {interval:0.#}s.");
     }
 
     private bool TryGetTeamFunds(string teamId, out int funds)

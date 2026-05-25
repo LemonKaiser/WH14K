@@ -4,6 +4,7 @@
   mapPath: /Maps/_WH40K/whwave.yml
   minPlayers: 0
   maxPlayers: 30
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/whwave_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherBattlefield
   wh40kEventsProfile: WH40KMapEventsAll
   stations:

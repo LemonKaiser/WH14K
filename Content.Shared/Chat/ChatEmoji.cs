@@ -38,16 +38,12 @@ public readonly record struct ChatEmojiDefinition(
 
 public static partial class ChatEmoji
 {
-    public const string DefaultAllowedChannelsCVar = "Local,Whisper,Radio,LOOC,OOC,Emotes,Dead,Admin";
+    public const string DefaultAllowedChannelsCVar = "LOOC,OOC,Dead,Admin";
     public static readonly ResPath DefaultEmojiRsiPath = new("/Textures/Interface/Chat/emoji.rsi");
 
     public const ChatSelectChannel DefaultAllowedChannels =
-        ChatSelectChannel.Local |
-        ChatSelectChannel.Whisper |
-        ChatSelectChannel.Radio |
         ChatSelectChannel.LOOC |
         ChatSelectChannel.OOC |
-        ChatSelectChannel.Emotes |
         ChatSelectChannel.Dead |
         ChatSelectChannel.Admin;
 

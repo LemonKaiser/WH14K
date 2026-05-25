@@ -1550,3 +1550,5 @@ w40k-dec-title-fish-description = An OOC title with a fish swimming left to righ
 w40k-dec-title-fish-preview-name = fish
 w40k-dec-color-discord-blurple-title = Discord Blurple
 w40k-dec-color-discord-blurple-description = An OOC name color using Discord's signature blurple.
+wh40k-command-runtime-mission-her_raise_the_warp_standard-title = Raise the Warp Standard
+wh40k-command-runtime-mission-her_raise_the_warp_standard-description = Objective: place a Chaos banner in the mission zone - Chaos Banner (WHChaosBanner) - then hold the ritual circle until progress completes.

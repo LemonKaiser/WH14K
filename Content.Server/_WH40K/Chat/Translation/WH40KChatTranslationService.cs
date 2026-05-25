@@ -19,6 +19,8 @@ public interface IWH40KChatTranslationService
 {
     bool IsConfiguredForChannel(ChatChannel channel);
 
+    bool IsConfiguredForAHelp();
+
     uint AllocateMessageId();
 
     Task<WH40KChatTranslationDispatch> TranslateWithSoftHoldAsync(
@@ -31,6 +33,11 @@ public interface IWH40KChatTranslationService
         string text,
         string? fallbackLanguage,
         ChatChannel channel,
+        CancellationToken cancel = default);
+
+    Task<WH40KChatTranslationPayload?> TranslateAHelpAsync(
+        string text,
+        string? fallbackLanguage,
         CancellationToken cancel = default);
 }
 
@@ -98,27 +105,52 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
 
     public bool IsConfiguredForChannel(ChatChannel channel)
     {
-        if (!_config.GetCVar(CCVars.WH40KChatTranslationEnabled))
-            return false;
-
-        if (!IsProviderConfigured(GetProvider()))
-            return false;
-
-        return channel switch
+        return IsTranslationConfigured() && IsChannelEnabled(channel switch
         {
-            ChatChannel.Local => _config.GetCVar(CCVars.WH40KChatTranslationLocalEnabled),
-            ChatChannel.Whisper => _config.GetCVar(CCVars.WH40KChatTranslationWhisperEnabled),
-            ChatChannel.Radio => _config.GetCVar(CCVars.WH40KChatTranslationRadioEnabled),
-            ChatChannel.LOOC => _config.GetCVar(CCVars.WH40KChatTranslationLoocEnabled),
-            ChatChannel.Dead => _config.GetCVar(CCVars.WH40KChatTranslationDeadEnabled),
-            ChatChannel.OOC => _config.GetCVar(CCVars.WH40KChatTranslationOocEnabled),
-            _ => false,
-        };
+            ChatChannel.Local => "local",
+            ChatChannel.Whisper => "whisper",
+            ChatChannel.Radio => "radio",
+            ChatChannel.LOOC => "looc",
+            ChatChannel.Dead => "dead",
+            ChatChannel.OOC => "ooc",
+            _ => null,
+        });
+    }
+
+    public bool IsConfiguredForAHelp()
+    {
+        return IsTranslationConfigured() && IsChannelEnabled("ahelp");
     }
 
     public uint AllocateMessageId()
     {
         return unchecked((uint) Interlocked.Increment(ref _nextMessageId));
+    }
+
+    private bool IsChannelEnabled(string? channelKey)
+    {
+        if (string.IsNullOrWhiteSpace(channelKey))
+            return false;
+
+        var configuredChannels = _config.GetCVar(CCVars.WH40KChatTranslationChannels);
+        if (string.IsNullOrWhiteSpace(configuredChannels))
+            return false;
+
+        var tokens = configuredChannels.Split(
+            [',', ';', ' ', '\t', '\r', '\n'],
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        foreach (var token in tokens)
+        {
+            if (token == "*" ||
+                token.Equals("all", StringComparison.OrdinalIgnoreCase) ||
+                token.Equals(channelKey, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public async Task<WH40KChatTranslationDispatch> TranslateWithSoftHoldAsync(
@@ -138,98 +170,28 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
         return new WH40KChatTranslationDispatch(null, translationTask);
     }
 
-    public async Task<WH40KChatTranslationPayload?> TranslateAsync(
+    public Task<WH40KChatTranslationPayload?> TranslateAsync(
         string text,
         string? fallbackLanguage,
         ChatChannel channel,
         CancellationToken cancel = default)
     {
-        if (!IsConfiguredForChannel(channel))
-            return null;
+        return TranslateCoreAsync(text, fallbackLanguage, IsConfiguredForChannel(channel), channel.ToString(), cancel);
+    }
 
-        if (DateTimeOffset.UtcNow < _failureBackoffUntil)
-            return null;
-
-        if (string.IsNullOrWhiteSpace(text))
-            return null;
-
-        if (text.Length > _config.GetCVar(CCVars.WH40KChatTranslationMaxMessageLength))
-            return null;
-
-        var normalizedText = WH40KChatTranslationMarkup.NormalizeTranslationText(text);
-        if (string.IsNullOrWhiteSpace(normalizedText))
-            return null;
-
-        var provider = GetProvider();
-        string? sourceLanguage = null;
-        string cacheSourceLanguage;
-        IReadOnlyList<string> targetLanguages;
-
-        if (provider == WH40KChatTranslationProviderSettings.ServiceProvider)
-        {
-            cacheSourceLanguage = ServiceAutoDetectSourceCacheKey;
-            targetLanguages = BuildServiceTargetLanguages();
-        }
-        else
-        {
-            sourceLanguage = WH40KChatTranslationMarkup.ResolveLanguageFromText(text, fallbackLanguage);
-            if (!WH40KChatTranslationMarkup.IsSupportedLanguage(sourceLanguage))
-                return null;
-
-            cacheSourceLanguage = sourceLanguage!;
-            targetLanguages = BuildTargetLanguages(sourceLanguage!);
-        }
-
-        var cacheKey = BuildCacheKey(BuildProviderCacheSegment(provider, cacheSourceLanguage, targetLanguages), cacheSourceLanguage, normalizedText);
-        if (TryGetCachedTranslation(cacheKey, out var cached))
-            return cached;
-
-        var baseUrl = _config.GetCVar(CCVars.WH40KChatTranslationServiceUrl).TrimEnd('/');
-        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancel);
-        linkedCts.CancelAfter(TimeSpan.FromMilliseconds(_config.GetCVar(CCVars.WH40KChatTranslationTimeoutMs)));
-
-        try
-        {
-            var result = provider switch
-            {
-                WH40KChatTranslationProviderSettings.DeepLProvider => await TranslateWithDeepLAsync(
-                    normalizedText,
-                    sourceLanguage!,
-                    targetLanguages,
-                    channel,
-                    linkedCts.Token),
-                _ => await TranslateWithServiceAsync(
-                    normalizedText,
-                    sourceLanguage,
-                    targetLanguages,
-                    channel,
-                    baseUrl,
-                    linkedCts.Token),
-            };
-
-            if (result == null)
-                return null;
-
-            StoreCachedTranslation(cacheKey, result);
-            return result;
-        }
-        catch (OperationCanceledException) when (!cancel.IsCancellationRequested)
-        {
-            RegisterFailure($"Translation timed out for {channel}.");
-            return null;
-        }
-        catch (Exception e)
-        {
-            RegisterFailure($"Translation request failed: {e.Message}");
-            return null;
-        }
+    public Task<WH40KChatTranslationPayload?> TranslateAHelpAsync(
+        string text,
+        string? fallbackLanguage,
+        CancellationToken cancel = default)
+    {
+        return TranslateCoreAsync(text, fallbackLanguage, IsConfiguredForAHelp(), "AHelp", cancel);
     }
 
     private async Task<WH40KChatTranslationPayload?> TranslateWithServiceAsync(
         string normalizedText,
         string? sourceLanguage,
         IReadOnlyList<string> targetLanguages,
-        ChatChannel channel,
+        string channelName,
         string baseUrl,
         CancellationToken cancel)
     {
@@ -237,7 +199,7 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
             normalizedText,
             sourceLanguage,
             targetLanguages,
-            channel.ToString());
+            channelName);
 
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/translate")
         {
@@ -253,7 +215,7 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
         using var response = await _http.SendAsync(httpRequest, cancel);
         if (!response.IsSuccessStatusCode)
         {
-            RegisterFailure($"Translation service returned {(int) response.StatusCode} for {channel}.");
+            RegisterFailure($"Translation service returned {(int) response.StatusCode} for {channelName}.");
             return null;
         }
 
@@ -284,7 +246,7 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
         string normalizedText,
         string sourceLanguage,
         IReadOnlyList<string> targetLanguages,
-        ChatChannel channel,
+        string channelName,
         CancellationToken cancel)
     {
         var authKey = _config.GetCVar(CCVars.WH40KChatTranslationDeepLAuthKey).Trim();
@@ -332,7 +294,7 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
             if (!response.IsSuccessStatusCode)
             {
                 var failureBody = await response.Content.ReadAsStringAsync(cancel);
-                RegisterFailure($"DeepL returned {(int) response.StatusCode} for {channel}: {TrimFailureBody(failureBody)}");
+                RegisterFailure($"DeepL returned {(int) response.StatusCode} for {channelName}: {TrimFailureBody(failureBody)}");
                 return null;
             }
 
@@ -340,7 +302,7 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
             var translatedText = payload?.Translations?.FirstOrDefault()?.Text?.Trim();
             if (string.IsNullOrWhiteSpace(translatedText))
             {
-                RegisterFailure($"DeepL returned an empty translation for {channel}.");
+                RegisterFailure($"DeepL returned an empty translation for {channelName}.");
                 return null;
             }
 
@@ -435,6 +397,102 @@ public sealed class WH40KChatTranslationService : IWH40KChatTranslationService
         var backoffSeconds = Math.Max(1, _config.GetCVar(CCVars.WH40KChatTranslationFailureBackoffSeconds));
         _failureBackoffUntil = DateTimeOffset.UtcNow.AddSeconds(backoffSeconds);
         _sawmill.Warning(reason);
+    }
+
+    private bool IsTranslationConfigured()
+    {
+        if (!_config.GetCVar(CCVars.WH40KChatTranslationEnabled))
+            return false;
+
+        return IsProviderConfigured(GetProvider());
+    }
+
+    private async Task<WH40KChatTranslationPayload?> TranslateCoreAsync(
+        string text,
+        string? fallbackLanguage,
+        bool enabled,
+        string channelName,
+        CancellationToken cancel)
+    {
+        if (!enabled)
+            return null;
+
+        if (DateTimeOffset.UtcNow < _failureBackoffUntil)
+            return null;
+
+        if (string.IsNullOrWhiteSpace(text))
+            return null;
+
+        if (text.Length > _config.GetCVar(CCVars.WH40KChatTranslationMaxMessageLength))
+            return null;
+
+        var normalizedText = WH40KChatTranslationMarkup.NormalizeTranslationText(text);
+        if (string.IsNullOrWhiteSpace(normalizedText))
+            return null;
+
+        var provider = GetProvider();
+        string? sourceLanguage = null;
+        string cacheSourceLanguage;
+        IReadOnlyList<string> targetLanguages;
+
+        if (provider == WH40KChatTranslationProviderSettings.ServiceProvider)
+        {
+            cacheSourceLanguage = ServiceAutoDetectSourceCacheKey;
+            targetLanguages = BuildServiceTargetLanguages();
+        }
+        else
+        {
+            sourceLanguage = WH40KChatTranslationMarkup.ResolveLanguageFromText(text, fallbackLanguage);
+            if (!WH40KChatTranslationMarkup.IsSupportedLanguage(sourceLanguage))
+                return null;
+
+            cacheSourceLanguage = sourceLanguage!;
+            targetLanguages = BuildTargetLanguages(sourceLanguage!);
+        }
+
+        var cacheKey = BuildCacheKey(BuildProviderCacheSegment(provider, cacheSourceLanguage, targetLanguages), cacheSourceLanguage, normalizedText);
+        if (TryGetCachedTranslation(cacheKey, out var cached))
+            return cached;
+
+        var baseUrl = _config.GetCVar(CCVars.WH40KChatTranslationServiceUrl).TrimEnd('/');
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+        linkedCts.CancelAfter(TimeSpan.FromMilliseconds(_config.GetCVar(CCVars.WH40KChatTranslationTimeoutMs)));
+
+        try
+        {
+            var result = provider switch
+            {
+                WH40KChatTranslationProviderSettings.DeepLProvider => await TranslateWithDeepLAsync(
+                    normalizedText,
+                    sourceLanguage!,
+                    targetLanguages,
+                    channelName,
+                    linkedCts.Token),
+                _ => await TranslateWithServiceAsync(
+                    normalizedText,
+                    sourceLanguage,
+                    targetLanguages,
+                    channelName,
+                    baseUrl,
+                    linkedCts.Token),
+            };
+
+            if (result == null)
+                return null;
+
+            StoreCachedTranslation(cacheKey, result);
+            return result;
+        }
+        catch (OperationCanceledException) when (!cancel.IsCancellationRequested)
+        {
+            RegisterFailure($"Translation timed out for {channelName}.");
+            return null;
+        }
+        catch (Exception e)
+        {
+            RegisterFailure($"Translation request failed for {channelName}: {e.Message}");
+            return null;
+        }
     }
 
     private string GetProvider()

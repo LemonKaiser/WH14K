@@ -168,6 +168,12 @@
       - state: lieutenant
 
 - type: entity
+  id: SpawnPointMajor
+  parent: SpawnPointLieutenant
+  name: Major
+  suffix: WH40K, Imperium, Legacy
+
+- type: entity
   id: SpawnPointMedic
   parent: SpawnPointJobBase
   name: Medic

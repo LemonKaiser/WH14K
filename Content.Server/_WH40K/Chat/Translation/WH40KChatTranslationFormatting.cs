@@ -143,6 +143,22 @@ public static class WH40KChatTranslationFormatting
         return PrefixWithLanguageTag(wrappedMessage, culture.ResolveChatLanguageCode(recipient), sourceLanguage, originalText);
     }
 
+    public static string BuildAHelpWrappedMessage(
+        string senderMarkup,
+        string visibleText,
+        string? recipientLanguage,
+        string sourceLanguage,
+        string originalText,
+        string? statusPrefix = null)
+    {
+        var escapedMessage = FormattedMessage.EscapeText(visibleText);
+        var wrappedMessage = string.IsNullOrWhiteSpace(statusPrefix)
+            ? $"{senderMarkup}: {escapedMessage}"
+            : $"{statusPrefix} {senderMarkup}: {escapedMessage}";
+
+        return PrefixWithLanguageTag(wrappedMessage, recipientLanguage, sourceLanguage, originalText);
+    }
+
     public static string BuildRadioWrappedMessage(
         WH40KPlayerCultureTracker culture,
         ICommonSession recipient,

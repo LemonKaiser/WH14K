@@ -7,13 +7,10 @@ using Content.Server.GameTicking.Events;
 using Content.Server.KillTracking;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
-using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs;
 using Robust.Server.Player;
-using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Log;
 using Robust.Shared.Network;
 
 namespace Content.Server._WH40K.MetaProgress;
@@ -153,7 +150,6 @@ public sealed class WH40KRoundRewardValidationSystem : EntitySystem
         public bool ReservesClaimedReinforcementSlot;
     }
 
-    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly KillTrackingSystem _killTracking = default!;
@@ -163,25 +159,15 @@ public sealed class WH40KRoundRewardValidationSystem : EntitySystem
     private readonly Dictionary<EntityUid, PendingDeathState> _pendingDeaths = new();
     private readonly Dictionary<NetUserId, int> _confirmedClaimedReinforcementEliminations = new();
 
-    private ISawmill _sawmill = default!;
-    private bool _traceEnabled;
     private int _lastConfirmedRoundId = -1;
 
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = Logger.GetSawmill("wh40k.round.reward.validation");
-        Subs.CVar(_config, CCVars.WH40KMetaAntiFarmTrace, OnTraceChanged, true);
-
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<AttributedKilledEvent>(OnAttributedKilled);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEndMessage);
-    }
-
-    private void OnTraceChanged(bool value)
-    {
-        _traceEnabled = value;
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -382,7 +368,5 @@ public sealed class WH40KRoundRewardValidationSystem : EntitySystem
     }
     private void Trace(string message)
     {
-        if (_traceEnabled)
-            _sawmill.Info($"[trace] {message}");
     }
 }

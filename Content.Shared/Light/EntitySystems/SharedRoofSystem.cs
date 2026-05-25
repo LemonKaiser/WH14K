@@ -92,6 +92,7 @@ public abstract class SharedRoofSystem : EntitySystem
             return;
 
         var convertedImplicitRoof = TryEnsureExplicitRoof(ref grid);
+        Resolve(grid.Owner, ref grid.Comp2, false);
 
         var chunkOrigin = SharedMapSystem.GetChunkIndices(index, RoofComponent.ChunkSize);
         var roof = grid.Comp2;

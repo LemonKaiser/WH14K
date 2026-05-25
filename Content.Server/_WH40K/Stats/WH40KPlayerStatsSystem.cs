@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.GameTicking;
-using Content.Shared.CCVar;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 
 namespace Content.Server._WH40K.Stats;
@@ -17,46 +15,20 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
 {
     private const int RecentEntriesLimit = 512;
 
-    [Dependency] private readonly IConfigurationManager _config = default!;
-
     private readonly Dictionary<NetUserId, Dictionary<string, long>> _lifetimeCounters = new();
     private readonly Dictionary<NetUserId, Dictionary<string, long>> _roundCounters = new();
     private readonly LinkedList<WH40KPlayerStatLogEntry> _recent = new();
-    private ISawmill _sawmill = default!;
-    private bool _traceEnabled;
-    private bool _traceConfigured;
 
     public event Action<WH40KPlayerStatLogEntry>? ActionRecorded;
 
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = Logger.GetSawmill("wh40k.player.stats");
-        Subs.CVar(_config, CCVars.WH40KMetaStatsTrace, OnStatsTraceChanged, true);
-
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
-    }
-
-    private void OnStatsTraceChanged(bool value)
-    {
-        var previous = _traceEnabled;
-        _traceEnabled = value;
-
-        // Stay quiet on startup when tracing is already disabled by default.
-        if (value || (_traceConfigured && previous != value))
-            _sawmill.Info($"WH40K stats trace logging {(value ? "enabled" : "disabled")}.");
-
-        _traceConfigured = true;
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        if (_traceEnabled)
-        {
-            _sawmill.Info(
-                $"[trace] Round restart cleanup: clearing round counters for {_roundCounters.Count} tracked players.");
-        }
-
         _roundCounters.Clear();
     }
 
@@ -72,8 +44,6 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
         var normalizedKey = key.Trim();
         IncrementCounter(_lifetimeCounters, userId, normalizedKey, delta);
         IncrementCounter(_roundCounters, userId, normalizedKey, delta);
-        var lifetimeTotal = GetLifetimeCounter(userId, normalizedKey);
-        var roundTotal = GetRoundCounter(userId, normalizedKey);
 
         var entry = new WH40KPlayerStatLogEntry(
             userId,
@@ -87,13 +57,6 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
         PushRecent(entry);
         RaiseLocalEvent(new WH40KPlayerStatRecordedEvent(entry));
         ActionRecorded?.Invoke(entry);
-
-        if (_traceEnabled)
-        {
-            _sawmill.Info(
-                $"[trace] stat+ user={userId}, key={normalizedKey}, delta={delta}, " +
-                $"roundTotal={roundTotal}, lifetimeTotal={lifetimeTotal}, meta={FormatMetadata(entry.Metadata)}");
-        }
     }
 
     public IReadOnlyDictionary<string, long> GetLifetimeCounters(NetUserId userId)
@@ -167,13 +130,6 @@ public sealed class WH40KPlayerStatsSystem : EntitySystem
         counters[key] = current + delta;
     }
 
-    private static string FormatMetadata(IReadOnlyDictionary<string, string> metadata)
-    {
-        if (metadata.Count == 0)
-            return "{}";
-
-        return $"{{{string.Join(", ", metadata.Select(pair => $"{pair.Key}={pair.Value}"))}}}";
-    }
 }
 
 public readonly record struct WH40KPlayerStatLogEntry(

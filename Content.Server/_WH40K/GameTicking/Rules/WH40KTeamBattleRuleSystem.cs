@@ -127,15 +127,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
     private float _checkInterval;
     private bool _requireAllTeamsPresent;
     private float _roundTimeLimitSeconds;
-    private bool _economyTelemetryTrace;
-    private float _economyTelemetrySnapshotIntervalSeconds;
-    private int _economyTelemetryBurstCommandDelta;
-    private TimeSpan _lastEconomyTelemetrySnapshotAt = TimeSpan.Zero;
-    private TimeSpan _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
-    private readonly Dictionary<string, int> _economySnapshotFrontPoints = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, int> _economySnapshotCommandPoints = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, int> _economySnapshotResearchPoints = new(StringComparer.OrdinalIgnoreCase);
-    private readonly Dictionary<string, int> _economySnapshotFunds = new(StringComparer.OrdinalIgnoreCase);
     private EntityUid? _activeRuleUid;
 
     public override void Initialize()
@@ -159,22 +150,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         {
             _roundTimeLimitSeconds = Math.Max(0f, v);
             ApplyConfigToActiveRules();
-        }, true);
-
-        Subs.CVar(_config, CCVars.WH40KEconomyTelemetryTrace, v =>
-        {
-            _economyTelemetryTrace = v;
-            _sawmill.Info($"WH40K economy telemetry trace logging {(v ? "enabled" : "disabled")}.");
-        }, true);
-
-        Subs.CVar(_config, CCVars.WH40KEconomyTelemetrySnapshotIntervalSeconds, v =>
-        {
-            _economyTelemetrySnapshotIntervalSeconds = Math.Max(30f, v);
-        }, true);
-
-        Subs.CVar(_config, CCVars.WH40KEconomyTelemetryBurstCommandDelta, v =>
-        {
-            _economyTelemetryBurstCommandDelta = Math.Max(1, v);
         }, true);
 
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnPlayerBeforeSpawn);
@@ -234,7 +209,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         component.LevelBuffPool = SanitizeLevelBuffPool(component.LevelBuffPool);
         EnsureTeamArrays(component);
         EnsureTeamProgress(component);
-        ResetEconomyTelemetryState(component);
         InitializeWeatherState(component);
         InitializeRoundEventState(component);
         ApplyMapStabilitySafeguards();
@@ -256,8 +230,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         if (_activeRuleUid == uid)
             _activeRuleUid = null;
-
-        ResetEconomyTelemetryState(null);
         _wh40kFactions.BroadcastFactionsToAll();
     }
 
@@ -276,9 +248,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.weather"))
             UpdateWeather(component);
-
-        using (_attribution.EnterScope("game_ticking.wh40k_team_battle_rule.eco_telemetry"))
-            UpdateEconomyTelemetrySnapshots(component);
 
         if (component.RoundTimeLimitSeconds > 0f)
         {
@@ -1148,128 +1117,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         rule.RoundTimeLimitSeconds = _roundTimeLimitSeconds;
     }
 
-    private void ResetEconomyTelemetryState(Components.WH40KTeamBattleRuleComponent? component)
-    {
-        _lastEconomyTelemetrySnapshotAt = TimeSpan.Zero;
-        _nextEconomyTelemetrySnapshotAt = TimeSpan.Zero;
-        _economySnapshotFrontPoints.Clear();
-        _economySnapshotCommandPoints.Clear();
-        _economySnapshotResearchPoints.Clear();
-        _economySnapshotFunds.Clear();
-
-        if (component == null)
-            return;
-
-        foreach (var team in component.Teams)
-        {
-            if (string.IsNullOrWhiteSpace(team.Id))
-                continue;
-
-            var front = component.TeamFrontPoints.GetValueOrDefault(team.Id, 0);
-            var command = component.TeamCommandPoints.GetValueOrDefault(team.Id, 0);
-            var research = component.TeamResearchPoints.GetValueOrDefault(team.Id, 0);
-            TryGetTeamFunds(null, team.Id, out var funds);
-            _economySnapshotFrontPoints[team.Id] = front;
-            _economySnapshotCommandPoints[team.Id] = command;
-            _economySnapshotResearchPoints[team.Id] = research;
-            _economySnapshotFunds[team.Id] = funds;
-        }
-
-        _lastEconomyTelemetrySnapshotAt = Timing.CurTime;
-        var interval = Math.Max(30f, _economyTelemetrySnapshotIntervalSeconds);
-        _nextEconomyTelemetrySnapshotAt = Timing.CurTime + TimeSpan.FromSeconds(interval);
-    }
-
-    private void UpdateEconomyTelemetrySnapshots(Components.WH40KTeamBattleRuleComponent component)
-    {
-        if (!_economyTelemetryTrace)
-            return;
-
-        var now = Timing.CurTime;
-        if (now < _nextEconomyTelemetrySnapshotAt)
-            return;
-
-        var elapsedSeconds = Math.Max(0, (int) (now - component.RoundStartTime).TotalSeconds);
-        var windowSeconds = _lastEconomyTelemetrySnapshotAt == TimeSpan.Zero
-            ? Math.Max(1f, _economyTelemetrySnapshotIntervalSeconds)
-            : Math.Max(1f, (float) (now - _lastEconomyTelemetrySnapshotAt).TotalSeconds);
-
-        foreach (var team in component.Teams)
-        {
-            if (string.IsNullOrWhiteSpace(team.Id))
-                continue;
-
-            var teamId = team.Id;
-            var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
-            var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
-            var research = component.TeamResearchPoints.GetValueOrDefault(teamId, 0);
-            TryGetTeamFunds(null, teamId, out var funds);
-            var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
-            var previousFront = _economySnapshotFrontPoints.GetValueOrDefault(teamId, front);
-            var previousCommand = _economySnapshotCommandPoints.GetValueOrDefault(teamId, command);
-            var previousResearch = _economySnapshotResearchPoints.GetValueOrDefault(teamId, research);
-            var previousFunds = _economySnapshotFunds.GetValueOrDefault(teamId, funds);
-            var deltaFront = front - previousFront;
-            var deltaCommand = command - previousCommand;
-            var deltaResearch = research - previousResearch;
-            var deltaFunds = funds - previousFunds;
-            var frontPerMinute = deltaFront * 60f / windowSeconds;
-            var commandPerMinute = deltaCommand * 60f / windowSeconds;
-            var researchPerMinute = deltaResearch * 60f / windowSeconds;
-            var fundsPerMinute = deltaFunds * 60f / windowSeconds;
-
-            _sawmill.Info(
-                $"[eco][snapshot] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
-                $"lvl={level} fp={front} cp={command} rp={research} funds={funds} " +
-                $"dFp={deltaFront} dCp={deltaCommand} dRp={deltaResearch} dFunds={deltaFunds} " +
-                $"fpPerMin={frontPerMinute:F1} cpPerMin={commandPerMinute:F1} " +
-                $"rpPerMin={researchPerMinute:F1} fundsPerMin={fundsPerMinute:F1}");
-
-            _economySnapshotFrontPoints[teamId] = front;
-            _economySnapshotCommandPoints[teamId] = command;
-            _economySnapshotResearchPoints[teamId] = research;
-            _economySnapshotFunds[teamId] = funds;
-        }
-
-        _lastEconomyTelemetrySnapshotAt = now;
-        var interval = Math.Max(30f, _economyTelemetrySnapshotIntervalSeconds);
-        _nextEconomyTelemetrySnapshotAt = now + TimeSpan.FromSeconds(interval);
-    }
-
-    private void TraceEconomyDelta(
-        Components.WH40KTeamBattleRuleComponent component,
-        string teamId,
-        string source,
-        int frontDelta,
-        int commandDelta,
-        int researchDelta = 0)
-    {
-        if (!_economyTelemetryTrace)
-            return;
-
-        var front = component.TeamFrontPoints.GetValueOrDefault(teamId, 0);
-        var command = component.TeamCommandPoints.GetValueOrDefault(teamId, 0);
-        var research = component.TeamResearchPoints.GetValueOrDefault(teamId, 0);
-        TryGetTeamFunds(null, teamId, out var funds);
-        var level = component.TeamBaseLevels.GetValueOrDefault(teamId, 1);
-        var elapsedSeconds = Math.Max(0, (int) (Timing.CurTime - component.RoundStartTime).TotalSeconds);
-        var burst = Math.Abs(commandDelta) >= Math.Max(1, _economyTelemetryBurstCommandDelta);
-        var burstMarker = burst ? " burst=true" : string.Empty;
-
-        _sawmill.Info(
-            $"[eco] t={FormatClockShort(elapsedSeconds)} phase={component.CurrentPhase} team={teamId} " +
-            $"source={source} dFp={frontDelta} dCp={commandDelta} dRp={researchDelta} " +
-            $"fp={front} cp={command} rp={research} funds={funds} lvl={level}{burstMarker}");
-    }
-
-    private static string FormatClockShort(int totalSeconds)
-    {
-        var safeSeconds = Math.Max(0, totalSeconds);
-        var minutes = safeSeconds / 60;
-        var seconds = safeSeconds % 60;
-        return $"{minutes:00}:{seconds:00}";
-    }
-
     private void ApplyExternalConfigProfile(Components.WH40KTeamBattleRuleComponent component)
     {
         if (component.ConfigProfile is not { } profileId)
@@ -2010,12 +1857,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         teamXp = gained.TeamXp;
         rule.TeamFrontPoints[resolvedTeamId] = teamXp;
-        TraceEconomyDelta(
-            rule,
-            resolvedTeamId,
-            source ?? "team-xp-adjust",
-            gained.AppliedDelta,
-            0);
 
         level = gained.Level;
         rule.TeamBaseLevels[resolvedTeamId] = level;
@@ -2121,7 +1962,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         rule.TeamResearchPoints[resolvedTeamId] = current;
         remaining = current;
         var resolvedSource = source ?? "research-spend";
-        TraceEconomyDelta(rule, resolvedTeamId, resolvedSource, 0, 0, -amount);
         RaiseLocalEvent(new WH40KTeamResearchBalanceChangedEvent(resolvedTeamId, current, -amount, resolvedSource));
         return true;
     }
@@ -2151,7 +1991,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         rule.TeamResearchPoints[resolvedTeamId] = researchPoints;
         var actualDelta = researchPoints - current;
         var resolvedSource = source ?? "research-adjust";
-        TraceEconomyDelta(rule, resolvedTeamId, resolvedSource, 0, 0, actualDelta);
         if (actualDelta != 0)
             RaiseLocalEvent(new WH40KTeamResearchBalanceChangedEvent(resolvedTeamId, researchPoints, actualDelta, resolvedSource));
         return true;
@@ -2197,12 +2036,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
 
         rule.TeamFrontPoints[resolvedTeamId] = points;
         rule.TeamCommandPoints[resolvedTeamId] = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0) + gained;
-        TraceEconomyDelta(
-            rule,
-            resolvedTeamId,
-            source ?? (applyEconomyMultiplier ? "front-gain" : "front-gain-unscaled"),
-            gained,
-            gained);
 
         var newLevel = CalculateTeamLevel(points, rule.BaseLevelThresholds);
         rule.TeamBaseLevels[resolvedTeamId] = newLevel;
@@ -2283,12 +2116,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         current -= amount;
         rule.TeamCommandPoints[resolvedTeamId] = current;
         remaining = current;
-        TraceEconomyDelta(
-            rule,
-            resolvedTeamId,
-            source ?? "command-spend",
-            0,
-            -amount);
         return true;
     }
 
@@ -2315,12 +2142,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var current = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0);
         commandPoints = Math.Max(0, current + delta);
         rule.TeamCommandPoints[resolvedTeamId] = commandPoints;
-        TraceEconomyDelta(
-            rule,
-            resolvedTeamId,
-            source ?? "command-adjust",
-            0,
-            commandPoints - current);
         return true;
     }
 
@@ -2349,12 +2170,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
         var currentPoints = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
         frontPoints = Math.Max(0, currentPoints + delta);
         rule.TeamFrontPoints[resolvedTeamId] = frontPoints;
-        TraceEconomyDelta(
-            rule,
-            resolvedTeamId,
-            source ?? "front-adjust",
-            frontPoints - currentPoints,
-            0);
 
         level = CalculateTeamLevel(frontPoints, rule.BaseLevelThresholds);
         rule.TeamBaseLevels[resolvedTeamId] = level;
@@ -2445,23 +2260,6 @@ public sealed class WH40KTeamBattleRuleSystem : GameRuleSystem<Components.WH40KT
             level,
             pointsToNextLevel);
         return true;
-    }
-
-    public void SetEconomyTelemetryTrace(bool enabled)
-    {
-        _economyTelemetryTrace = enabled;
-        _sawmill.Info($"WH40K economy telemetry trace logging {(enabled ? "enabled" : "disabled")}.");
-    }
-
-    public void SetEconomyTelemetrySnapshotIntervalSeconds(float seconds)
-    {
-        _economyTelemetrySnapshotIntervalSeconds = Math.Max(30f, seconds);
-    }
-
-    public void GetEconomyTelemetrySettings(out bool enabled, out float snapshotIntervalSeconds)
-    {
-        enabled = _economyTelemetryTrace;
-        snapshotIntervalSeconds = _economyTelemetrySnapshotIntervalSeconds;
     }
 
     private static bool TryResolveTeamId(

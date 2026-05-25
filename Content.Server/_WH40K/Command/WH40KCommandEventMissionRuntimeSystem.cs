@@ -28,12 +28,9 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Storage.Components;
 using Content.Shared.Tools.Components;
-using Content.Shared.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
-using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
-using Robust.Shared.Log;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -91,8 +88,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     private const float MissionBannerDetectionRadius = 1.45f;
     private const float MissionDeliveryMarkerRadius = 5.0f;
     private const float MissionAirdropMinDistanceFromCommandNode = 18f;
-    private const float MissionCargoDebugLogIntervalSeconds = 4.0f;
-
     private enum MissionObjectiveType : byte
     {
         ZoneControl = 0,
@@ -184,20 +179,9 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         public TimeSpan ParachuteStartAt;
         public TimeSpan ParachuteEndAt;
         public List<EntityUid> DeliveryMarkerUids = new();
-        public TimeSpan LastCargoDebugLogAt = TimeSpan.Zero;
-
         public readonly Dictionary<string, float> TeamProgress =
             new(StringComparer.OrdinalIgnoreCase);
     }
-
-    private readonly record struct CargoDeliveryDebugSnapshot(
-        int NodeCount,
-        int SameMapNodeCount,
-        string ClosestNodeTeamId,
-        float ClosestNodeDistance,
-        bool ClosestInsideRadius,
-        MapId CargoMapId,
-        Vector2 CargoWorld);
 
     private sealed class ActiveEventRuntime
     {
@@ -250,7 +234,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     }
 
     [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
@@ -277,10 +260,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _pendingFactionMissionOfferRefreshTeams =
         new(StringComparer.OrdinalIgnoreCase);
-    private ISawmill _sawmill = default!;
-    private bool _missionDebugTraceEnabled;
-    private bool _missionDebugTraceConfigured;
-
     private ActiveMissionRuntime? _globalMission;
     private TimeSpan _nextGlobalMissionRollAt = TimeSpan.Zero;
     private TimeSpan _nextRuntimeTickAt = TimeSpan.Zero;
@@ -288,31 +267,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = Logger.GetSawmill("wh40k.mission-runtime");
-        Subs.CVar(_config, CCVars.WH40KMissionRuntimeDebugTrace, OnMissionDebugTraceChanged, true);
-    }
-
-    private void OnMissionDebugTraceChanged(bool value)
-    {
-        var previous = _missionDebugTraceEnabled;
-        _missionDebugTraceEnabled = value;
-
-        // Stay quiet on startup when mission debug tracing is disabled by default.
-        if (value || (_missionDebugTraceConfigured && previous != value))
-            _sawmill.Info($"WH40K mission runtime debug logging {(value ? "enabled" : "disabled")}.");
-
-        _missionDebugTraceConfigured = true;
-    }
-
-    private void MissionDebug(string message, bool warning = false)
-    {
-        if (!_missionDebugTraceEnabled)
-            return;
-
-        if (warning)
-            _sawmill.Warning(message);
-        else
-            _sawmill.Info(message);
     }
 
     public override void Update(float frameTime)
@@ -1117,10 +1071,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             Tags = selected.Tags.Where(static tag => !string.IsNullOrWhiteSpace(tag)).ToList()
         };
 
-        var resolvedObjectiveType = ResolveObjectiveType(mission);
-        MissionDebug(
-            $"[MissionDebug] Start mission '{mission.MissionId}' scope={mission.Scope} team='{mission.TeamId}' objectiveConfigured={mission.ObjectiveType} objectiveResolved={resolvedObjectiveType} tags=[{string.Join(", ", mission.Tags)}]");
-
         if ((mission.ObjectiveType == WH40KCommandMissionObjectiveType.BannerHold ||
              HasAnyTag(mission.Tags, "banner", "standard")) &&
             mission.RequiredObjectiveEntityPrototypes.Count == 0)
@@ -1128,17 +1078,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             mission.RequiredObjectiveEntityPrototypes = ResolveDefaultRequiredObjectivePrototypes(mission.TeamId);
         }
 
-        if (!TryInitializeMissionObjective(mission, teamIds, now))
-        {
-            MissionDebug(
-                $"[MissionDebug] Mission '{mission.MissionId}' objective initialization failed. scope={mission.Scope} team='{mission.TeamId}' objectiveResolved={resolvedObjectiveType}",
-                warning: true);
-        }
-        else if (mission.Objective is { } objective)
-        {
-            MissionDebug(
-                $"[MissionDebug] Mission '{mission.MissionId}' objective initialized. type={objective.Type} anchorTile={FormatMapCoordinates(objective.Anchor)} anchorWorld={FormatWorldCoordinates(objective.Anchor.Position)} map={objective.Anchor.MapId} radius={objective.Radius:0.##}");
-        }
+        TryInitializeMissionObjective(mission, teamIds, now);
 
         return mission;
     }
@@ -1361,9 +1301,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var objectiveType = ResolveObjectiveType(mission);
         if (!TryPickMissionAnchor(teamIds, mission.TeamId, objectiveType, out var anchor))
         {
-            MissionDebug(
-                $"[MissionDebug] Mission '{mission.MissionId}' failed to pick anchor. type={objectiveType} scope={mission.Scope} team='{mission.TeamId}'",
-                warning: true);
             return false;
         }
 
@@ -1441,8 +1378,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 SpawnCargoDeliveryMarkers(mission, objective);
             }
 
-            MissionDebug(
-                $"[MissionDebug] Cargo objective prepared for mission '{mission.MissionId}'. anchorTile={FormatMapCoordinates(anchor)} anchorWorld={FormatWorldCoordinates(anchor.Position)} map={anchor.MapId} parachuteSpawned={objective.ParachuteUid is not null} cargoSpawned={objective.CargoSpawned} cargoUid={(objective.CargoUid?.ToString() ?? "null")}");
         }
 
         mission.Objective = objective;
@@ -1639,23 +1574,10 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         outcomeTier = MissionOutcomeTier.Timeout;
 
         if (!objective.CargoSpawned)
-        {
-            MaybeLogCargoObjective(
-                mission,
-                objective,
-                now,
-                "cargo not spawned yet");
             return false;
-        }
 
         if (objective.CargoUid is not { } cargoUid || !Exists(cargoUid))
         {
-            MaybeLogCargoObjective(
-                mission,
-                objective,
-                now,
-                "cargo entity missing or deleted");
-
             if (mission.Scope == WH40KCommandDynamicMissionScope.Faction)
             {
                 winnerTeamId = mission.TeamId;
@@ -1666,19 +1588,8 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             return false;
         }
 
-        if (!TryResolveCargoDeliveredTeam(cargoUid, out var deliveredTeamId, out var snapshot))
-        {
-            MaybeLogCargoObjective(
-                mission,
-                objective,
-                now,
-                "cargo not inside delivery radius",
-                snapshot);
+        if (!TryResolveCargoDeliveredTeam(cargoUid, out var deliveredTeamId))
             return false;
-        }
-
-        MissionDebug(
-            $"[MissionDebug] Cargo objective complete for mission '{mission.MissionId}'. deliveredTeam='{deliveredTeamId}' expectedTeam='{mission.TeamId}' scope={mission.Scope}");
 
         if (mission.Scope == WH40KCommandDynamicMissionScope.Global)
         {
@@ -1730,9 +1641,6 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
                 Math.Max(1.2f, MissionCargoDeliveryRadius * 0.42f),
                 mission.Scope == WH40KCommandDynamicMissionScope.Faction ? mission.TeamId : string.Empty);
         }
-
-        MissionDebug(
-            $"[MissionDebug] Airdrop cargo spawned for mission '{mission.MissionId}'. cargoUid={(objective.CargoUid?.ToString() ?? "null")} cargoTile={FormatMapCoordinates(objective.Anchor)} cargoWorld={FormatWorldCoordinates(objective.Anchor.Position)} map={objective.Anchor.MapId}");
 
         AnnounceAirdropLanded(mission);
     }
@@ -1981,47 +1889,21 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     private bool TryResolveCargoDeliveredTeam(
         EntityUid cargoUid,
-        out string teamId,
-        out CargoDeliveryDebugSnapshot snapshot)
+        out string teamId)
     {
         teamId = string.Empty;
-        snapshot = default;
 
         if (!TryComp(cargoUid, out TransformComponent? cargoXform))
-        {
-            snapshot = new CargoDeliveryDebugSnapshot(
-                NodeCount: 0,
-                SameMapNodeCount: 0,
-                ClosestNodeTeamId: string.Empty,
-                ClosestNodeDistance: -1f,
-                ClosestInsideRadius: false,
-                CargoMapId: MapId.Nullspace,
-                CargoWorld: Vector2.Zero);
             return false;
-        }
 
         if (cargoXform.MapID == MapId.Nullspace)
-        {
-            snapshot = new CargoDeliveryDebugSnapshot(
-                NodeCount: 0,
-                SameMapNodeCount: 0,
-                ClosestNodeTeamId: string.Empty,
-                ClosestNodeDistance: -1f,
-                ClosestInsideRadius: false,
-                CargoMapId: cargoXform.MapID,
-                CargoWorld: Vector2.Zero);
             return false;
-        }
 
         var xformQuery = GetEntityQuery<TransformComponent>();
         var cargoWorld = _transform.GetWorldPosition(cargoXform, xformQuery);
         var radiusSquared = MissionCargoDeliveryRadius * MissionCargoDeliveryRadius;
 
-        var nodeCount = 0;
-        var sameMapNodeCount = 0;
         var bestInsideDistanceSquared = float.MaxValue;
-        var closestNodeDistanceSquared = float.MaxValue;
-        var closestNodeTeamId = string.Empty;
 
         var nodeQuery = EntityQueryEnumerator<WH40KCommandNodeComponent, TransformComponent>();
         while (nodeQuery.MoveNext(out _, out var node, out var nodeXform))
@@ -2029,20 +1911,11 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             if (string.IsNullOrWhiteSpace(node.TeamId))
                 continue;
 
-            nodeCount++;
-
             if (nodeXform.MapID != cargoXform.MapID)
                 continue;
 
-            sameMapNodeCount++;
             var nodeWorld = _transform.GetWorldPosition(nodeXform, xformQuery);
             var distanceSquared = (nodeWorld - cargoWorld).LengthSquared();
-
-            if (distanceSquared < closestNodeDistanceSquared)
-            {
-                closestNodeDistanceSquared = distanceSquared;
-                closestNodeTeamId = node.TeamId;
-            }
 
             if (distanceSquared > radiusSquared)
                 continue;
@@ -2054,50 +1927,7 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
             teamId = node.TeamId;
         }
 
-        snapshot = new CargoDeliveryDebugSnapshot(
-            NodeCount: nodeCount,
-            SameMapNodeCount: sameMapNodeCount,
-            ClosestNodeTeamId: closestNodeTeamId,
-            ClosestNodeDistance: closestNodeDistanceSquared < float.MaxValue
-                ? MathF.Sqrt(closestNodeDistanceSquared)
-                : -1f,
-            ClosestInsideRadius: closestNodeDistanceSquared <= radiusSquared,
-            CargoMapId: cargoXform.MapID,
-            CargoWorld: cargoWorld);
-
         return !string.IsNullOrWhiteSpace(teamId);
-    }
-
-    private void MaybeLogCargoObjective(
-        ActiveMissionRuntime mission,
-        MissionObjectiveRuntime objective,
-        TimeSpan now,
-        string reason,
-        CargoDeliveryDebugSnapshot? snapshot = null)
-    {
-        if (!ShouldLogCargoObjective(objective, now))
-            return;
-
-        var anchorText = FormatMapCoordinates(objective.Anchor);
-        var anchorWorldText = FormatWorldCoordinates(objective.Anchor.Position);
-        var details = snapshot is { } info
-            ? $" cargoMap={info.CargoMapId} cargoTile={FormatMapCoordinates(new MapCoordinates(info.CargoWorld, info.CargoMapId))} cargoWorld={FormatWorldCoordinates(info.CargoWorld)} nodeCount={info.NodeCount} sameMapNodes={info.SameMapNodeCount} closestNodeTeam='{info.ClosestNodeTeamId}' closestNodeDistance={info.ClosestNodeDistance:0.##} insideRadius={info.ClosestInsideRadius}"
-            : string.Empty;
-
-        MissionDebug(
-            $"[MissionDebug] Cargo objective pending for mission '{mission.MissionId}'. scope={mission.Scope} team='{mission.TeamId}' reason={reason} cargoUid={(objective.CargoUid?.ToString() ?? "null")} anchorTile={anchorText} anchorWorld={anchorWorldText} anchorMap={objective.Anchor.MapId}.{details}");
-    }
-
-    private static bool ShouldLogCargoObjective(MissionObjectiveRuntime objective, TimeSpan now)
-    {
-        if (objective.LastCargoDebugLogAt != TimeSpan.Zero &&
-            now - objective.LastCargoDebugLogAt < TimeSpan.FromSeconds(MissionCargoDebugLogIntervalSeconds))
-        {
-            return false;
-        }
-
-        objective.LastCargoDebugLogAt = now;
-        return true;
     }
 
     private bool TryPickMissionAnchor(
@@ -3729,20 +3559,24 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     private static string ResolveMissionTitle(WH40KCommandDynamicMissionConfig config)
     {
+        var fallback = string.IsNullOrWhiteSpace(config.Title) ? config.Id : config.Title;
         var titleKey = $"wh40k-command-runtime-mission-{NormalizeMissionIdForLoc(config.Id)}-title";
-        if (!string.IsNullOrWhiteSpace(config.Id))
+        if (!string.IsNullOrWhiteSpace(config.Id) &&
+            Robust.Shared.Localization.Loc.TryGetString(titleKey, out _))
             return titleKey;
 
-        return string.IsNullOrWhiteSpace(config.Title) ? config.Id : config.Title;
+        return fallback;
     }
 
     private static string ResolveMissionDescription(WH40KCommandDynamicMissionConfig config)
     {
+        var fallback = string.IsNullOrWhiteSpace(config.Description) ? config.Id : config.Description;
         var descriptionKey = $"wh40k-command-runtime-mission-{NormalizeMissionIdForLoc(config.Id)}-description";
-        if (!string.IsNullOrWhiteSpace(config.Id))
+        if (!string.IsNullOrWhiteSpace(config.Id) &&
+            Robust.Shared.Localization.Loc.TryGetString(descriptionKey, out _))
             return descriptionKey;
 
-        return string.IsNullOrWhiteSpace(config.Description) ? config.Id : config.Description;
+        return fallback;
     }
 
     private static string NormalizeMissionIdForLoc(string missionId)

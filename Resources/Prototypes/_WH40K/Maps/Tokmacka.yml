@@ -3,6 +3,7 @@
   mapName: Tokmacka
   mapPath: /Maps/_WH40K/Tokmacka.yml
   minPlayers: 0
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/tokmacka_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherBattlefield
   wh40kEventsProfile: WH40KMapEventsAll
   stations:
