@@ -22,7 +22,6 @@ public sealed partial class HTNSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private NPCUtilitySystem _utility = default!;
-    [Dependency] private IDependencyCollection _collection = default!;
 
     private readonly JobQueue _planQueue = new(0.004);
 
@@ -98,7 +97,7 @@ public sealed partial class HTNSystem : EntitySystem
 
             foreach (var precon in branch.Preconditions)
             {
-                precon.Initialize(_collection);
+                precon.Initialize(EntityManager.EntitySysManager);
             }
 
             foreach (var task in branch.Tasks)
@@ -118,9 +117,10 @@ public sealed partial class HTNSystem : EntitySystem
             case HTNPrimitiveTask primitive:
                 foreach (var precon in primitive.Preconditions)
                 {
-                    precon.Initialize(_collection);
+                    precon.Initialize(EntityManager.EntitySysManager);
                 }
-                primitive.Operator.Initialize(_collection);
+
+                primitive.Operator.Initialize(EntityManager.EntitySysManager);
                 break;
             default:
                 throw new NotImplementedException();

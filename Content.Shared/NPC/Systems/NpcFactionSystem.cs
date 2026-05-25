@@ -11,9 +11,9 @@ namespace Content.Shared.NPC.Systems;
 /// </summary>
 public sealed partial class NpcFactionSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
 
     /// <summary>
     /// To avoid prototype mutability we store an intermediary data class that gets used instead.
@@ -175,23 +175,15 @@ public sealed partial class NpcFactionSystem : EntitySystem
             RefreshFactions((ent, ent.Comp));
     }
 
-    public IEnumerable<EntityUid> GetNearbyHostiles(
-        Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> ent,
-        float range,
-        bool ignoreFriendlyOverlap = true)
+    public IEnumerable<EntityUid> GetNearbyHostiles(Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> ent, float range)
     {
         if (!Resolve(ent, ref ent.Comp1, false))
             return Array.Empty<EntityUid>();
 
-        var hostiles = GetNearbyFactions(ent, range, ent.Comp1.HostileFactions);
-
-        if (ignoreFriendlyOverlap)
-        {
+        var hostiles = GetNearbyFactions(ent, range, ent.Comp1.HostileFactions)
             // ignore mobs that have both hostile faction and the same faction,
             // otherwise having multiple factions is strictly negative
-            hostiles = hostiles.Where(target => !IsEntityFriendly((ent, ent.Comp1), target));
-        }
-
+            .Where(target => !IsEntityFriendly((ent, ent.Comp1), target));
         if (!Resolve(ent, ref ent.Comp2, false))
             return hostiles;
 
@@ -231,11 +223,6 @@ public sealed partial class NpcFactionSystem : EntitySystem
     public bool IsEntityFriendly(Entity<NpcFactionMemberComponent?> ent, Entity<NpcFactionMemberComponent?> other)
     {
         if (!Resolve(ent, ref ent.Comp, false) || !Resolve(other, ref other.Comp, false))
-            return false;
-
-        // If the candidate belongs to any explicitly hostile faction, do not treat
-        // it as friendly just because it also shares an allied faction.
-        if (ent.Comp.HostileFactions.Overlaps(other.Comp.Factions))
             return false;
 
         return ent.Comp.Factions.Overlaps(other.Comp.Factions) || ent.Comp.FriendlyFactions.Overlaps(other.Comp.Factions);

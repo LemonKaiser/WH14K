@@ -1,5 +1,3 @@
-using Robust.Shared.Map;
-
 namespace Content.Server.NPC.Components;
 
 /// <summary>
@@ -16,9 +14,6 @@ public sealed partial class NPCMeleeCombatComponent : Component
 
     [ViewVariables]
     public EntityUid Target;
-
-    [ViewVariables]
-    public EntityCoordinates TargetCoordinates = EntityCoordinates.Invalid;
 
     [ViewVariables]
     public CombatStatus Status = CombatStatus.Normal;
@@ -50,11 +45,6 @@ public enum CombatStatus : byte
     /// Set if the weapon we were assigned is no longer valid.
     /// </summary>
     NoWeapon,
-
-    /// <summary>
-    /// We have a target in sight, but a friendly is blocking the shot line so we need to reposition.
-    /// </summary>
-    FriendlyFireBlocked,
 
     /// <summary>
     /// No dramas.

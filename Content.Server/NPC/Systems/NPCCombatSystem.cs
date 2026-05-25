@@ -1,8 +1,6 @@
 using Content.Server.Interaction;
-using Content.Server.NPC.Pathfinding;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Melee;
-using Content.Shared.NPC.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -27,9 +25,6 @@ public sealed partial class NPCCombatSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private NpcFactionSystem _factions = default!;
-    [Dependency] private PathfindingSystem _pathfinding = default!;
 
     /// <summary>
     /// If disabled we'll move into range but not attack.

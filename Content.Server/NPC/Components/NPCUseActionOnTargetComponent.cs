@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Content.Server.NPC.Systems;
 using Content.Shared.Actions.Components;
 using Robust.Shared.Prototypes;
@@ -7,46 +5,23 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.NPC.Components;
 
 /// <summary>
-/// Allows an NPC to repeatedly try using one or more actions on targets resolved from its blackboard.
+/// This is used for an NPC that constantly tries to use an action on a given target.
 /// </summary>
 [RegisterComponent, Access(typeof(NPCUseActionOnTargetSystem))]
 public sealed partial class NPCUseActionOnTargetComponent : Component
 {
     /// <summary>
-    /// Actions this NPC may use, together with the blackboard keys they read targets from.
-    /// </summary>
-    [DataField]
-    public List<NpcActionData> Actions = new();
-}
-
-/// <summary>
-/// Describes a single NPC action slot and how it is sourced.
-/// </summary>
-[Serializable]
-[DataDefinition]
-public sealed partial class NpcActionData
-{
-    /// <summary>
-    /// Prototype used to spawn or match the action.
-    /// </summary>
-    [DataField(required: true)]
-    public EntProtoId<ActionComponent> ActionId;
-
-    /// <summary>
-    /// Blackboard key used to retrieve the current target entity for this action.
+    /// HTN blackboard key for the target entity
     /// </summary>
     [DataField]
     public string TargetKey = "Target";
 
     /// <summary>
-    /// Runtime entity for the action, if currently available.
+    /// Action that's going to attempt to be used.
     /// </summary>
+    [DataField(required: true)]
+    public EntProtoId<TargetActionComponent> ActionId;
+
     [DataField]
     public EntityUid? ActionEnt;
-
-    /// <summary>
-    /// If true, do not spawn an action and instead wait for a matching action to be added externally.
-    /// </summary>
-    [DataField]
-    public bool Ref;
 }

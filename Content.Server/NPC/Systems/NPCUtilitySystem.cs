@@ -22,7 +22,6 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Whitelist;
-using Content.Server.Destructible;
 using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
@@ -31,12 +30,10 @@ using Content.Shared.Atmos.Components;
 using System.Linq;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
-using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
-using Content.Shared.Mech.Components;
 
 namespace Content.Server.NPC.Systems;
 
@@ -62,11 +59,8 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     [Dependency] private MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private TurretTargetSettingsSystem _turretTargetSettings = default!;
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private DestructibleSystem _destructible = default!;
     [Dependency] private SharedStealthSystem _stealth = default!;
-
-    private EntityQuery<PuddleComponent> _puddleQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>(), 256);
@@ -75,13 +69,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     private List<EntityUid> _entityList = new();
     private HashSet<Entity<IComponent>> _entitySet = new();
     private List<EntityPrototype.ComponentRegistryEntry> _compTypes = new();
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _puddleQuery = GetEntityQuery<PuddleComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
 
     /// <summary>
     /// Runs the UtilityQueryPrototype and returns the best-matching entities.
@@ -331,43 +318,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                     return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
                 return 0f;
             }
-            case TargetHealthOrIntegrityCon con:
-            {
-                if (!TryComp(targetUid, out DamageableComponent? damage))
-                    return 0f;
-
-                var totalDamage = _damageable.GetTotalDamage((targetUid, damage));
-
-                if (TryComp(targetUid, out MobThresholdsComponent? threshold))
-                {
-                    if (con.TargetState != MobState.Invalid &&
-                        _thresholdSystem.TryGetPercentageForState(targetUid, con.TargetState, totalDamage, out var percentage, threshold))
-                    {
-                        return Math.Clamp((float)(1 - percentage), 0f, 1f);
-                    }
-
-                    if (_thresholdSystem.TryGetIncapPercentage(targetUid, totalDamage, out var incapPercentage, threshold))
-                        return Math.Clamp((float)(1 - incapPercentage), 0f, 1f);
-                }
-
-                if (TryComp(targetUid, out MechComponent? mech) && mech.MaxIntegrity > 0)
-                {
-                    var remaining = FixedPoint2.Max(FixedPoint2.Zero, mech.MaxIntegrity - totalDamage);
-                    return Math.Clamp((remaining / mech.MaxIntegrity).Float(), 0f, 1f);
-                }
-
-                if (TryComp(targetUid, out DestructibleComponent? destructible))
-                {
-                    var destroyedAt = _destructible.DestroyedAt(targetUid, destructible);
-                    if (destroyedAt > 0)
-                    {
-                        var remaining = FixedPoint2.Max(FixedPoint2.Zero, destroyedAt - totalDamage);
-                        return Math.Clamp((remaining / destroyedAt).Float(), 0f, 1f);
-                    }
-                }
-
-                return totalDamage > 0 ? 0.5f : 1f;
-            }
             case TargetInLOSCon:
             {
                 var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
@@ -394,16 +344,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             case TargetIsAliveCon:
             {
                 return _mobState.IsAlive(targetUid) ? 1f : 0f;
-            }
-            case TargetIsAliveOrDamageableCon:
-            {
-                if (TryComp(targetUid, out MobStateComponent? mobState))
-                    return mobState.CurrentState == MobState.Alive ? 1f : 0f;
-
-                if (TryComp<DamageableComponent>(targetUid, out _))
-                    return Deleted(targetUid) ? 0f : 1f;
-
-                return 0f;
             }
             case TargetIsCritCon:
             {
@@ -480,7 +420,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 if (compQuery.Components.Count == 0)
                     return;
 
-                var mapPos = _transform.GetMapCoordinates(owner, xform: _xformQuery.GetComponent(owner));
+                var mapPos = _transform.GetMapCoordinates(owner, xform: Transform(owner));
                 _compTypes.Clear();
                 var i = -1;
                 EntityPrototype.ComponentRegistryEntry compZero = default!;
@@ -550,14 +490,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
                 }
                 break;
             }
-            case NearbyTurretHostilesQuery:
-            {
-                foreach (var ent in _npcFaction.GetNearbyHostiles(owner, vision, ignoreFriendlyOverlap: false))
-                {
-                    entities.Add(ent);
-                }
-                break;
-            }
             default:
                 throw new NotImplementedException();
         }
@@ -566,7 +498,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     private void RecursiveAdd(EntityUid uid, HashSet<EntityUid> entities)
     {
         // TODO: Probably need a recursive struct enumerator on engine.
-        var xform = _xformQuery.GetComponent(uid);
+        var xform = Transform(uid);
         var enumerator = xform.ChildEnumerator;
         entities.Add(uid);
 

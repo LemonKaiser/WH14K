@@ -6,7 +6,6 @@ using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Server._WH40K.WaveDefence.Components;
-using Content.Shared.Examine;
 using Content.Shared._WH40K.WaveDefence;
 using Robust.Shared.Map;
 
@@ -15,7 +14,7 @@ namespace Content.Server._WH40K.WaveDefence.HTN.Operators;
 public sealed partial class WH40KWaveDefencePickObjectiveOperator : HTNOperator
 {
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    private WH40KWaveDefenceObjectiveNavigationSystem _objectiveNavigation = default!;
 
     [DataField("targetKey")]
     public string TargetKey = WH40KWaveDefenceHtnBlackboardKeys.ObjectiveTarget;
@@ -32,8 +31,11 @@ public sealed partial class WH40KWaveDefencePickObjectiveOperator : HTNOperator
     [DataField("requireLineOfSight")]
     public bool RequireLineOfSight = true;
 
-    [DataField("ignoreMaxDistanceWhenRouteCompleted")]
-    public bool IgnoreMaxDistanceWhenRouteCompleted = true;
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _objectiveNavigation = sysManager.GetEntitySystem<WH40KWaveDefenceObjectiveNavigationSystem>();
+    }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
         NPCBlackboard blackboard,
@@ -48,33 +50,23 @@ public sealed partial class WH40KWaveDefencePickObjectiveOperator : HTNOperator
             !_entityManager.TryGetComponent<WH40KWaveDefenceObjectiveComponent>(objective, out var objectiveComp) ||
             objectiveComp.Destroyed ||
             !_entityManager.TryGetComponent<TransformComponent>(owner, out var ownerXform) ||
-            !_entityManager.TryGetComponent<TransformComponent>(objective, out var objectiveXform))
+            !_entityManager.TryGetComponent<TransformComponent>(objective, out var objectiveXform) ||
+            ownerXform.MapID != objectiveXform.MapID)
         {
             return (false, null);
         }
 
-        if (ownerXform.MapID != objectiveXform.MapID)
-            return (false, null);
+        if (!_objectiveNavigation.TryResolveObjectiveAssaultTarget(owner, ownerXform.Coordinates, objective, out var targetCoordinates))
+            targetCoordinates = objectiveXform.Coordinates;
 
-        if (!TryGetAuthoritativeObjectiveTarget(attacker, objective, out var targetCoordinates))
-            return (false, null);
-
-        var ignoreMaxDistance = IgnoreMaxDistanceWhenRouteCompleted && attacker.RouteCompleted;
-        if (!ignoreMaxDistance &&
-            MaxDistance is { } maxDistance &&
+        if (MaxDistance is { } maxDistance &&
             (!ownerXform.Coordinates.TryDistance(_entityManager, targetCoordinates, out var distance) ||
              distance > maxDistance))
         {
             return (false, null);
         }
 
-        if (RequireLineOfSight &&
-            MaxDistance is { } losRange &&
-            !_examine.InRangeUnOccluded(owner, objective, losRange + 0.5f, null))
-        {
-            return (false, null);
-        }
-
+        attacker.DebugState = "attacking-objective";
         var effects = new Dictionary<string, object>
         {
             [TargetKey] = objective,
@@ -85,7 +77,7 @@ public sealed partial class WH40KWaveDefencePickObjectiveOperator : HTNOperator
         };
 
         if (!string.Equals(AttackCoordinatesKey, TargetCoordinatesKey, StringComparison.Ordinal))
-            effects[AttackCoordinatesKey] = EntityCoordinates.Invalid;
+            effects[AttackCoordinatesKey] = targetCoordinates;
 
         return (true, effects);
     }
@@ -93,82 +85,5 @@ public sealed partial class WH40KWaveDefencePickObjectiveOperator : HTNOperator
     public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
     {
         return HTNOperatorStatus.Finished;
-    }
-
-    private bool TryGetAuthoritativeObjectiveTarget(
-        WH40KWaveDefenceAttackerComponent attacker,
-        EntityUid objective,
-        out EntityCoordinates targetCoordinates)
-    {
-        if (attacker.ForcedTargetKind == WH40KWaveDefenceForcedTargetKind.DirectObjective &&
-            attacker.ForcedTarget.IsValid(_entityManager))
-        {
-            targetCoordinates = attacker.ForcedTarget;
-            return true;
-        }
-
-        if (attacker.MovementTargetDirective.IsValid(_entityManager) &&
-            IsObjectiveMovementDirective(attacker, objective))
-        {
-            targetCoordinates = attacker.MovementTargetDirective;
-            return true;
-        }
-
-        if (attacker.DesiredTargetProposal.IsValid(_entityManager) &&
-            IsObjectiveProposal(attacker, objective))
-        {
-            targetCoordinates = attacker.DesiredTargetProposal;
-            return true;
-        }
-
-        if (attacker.LocomotionMode == WH40KWaveDefenceLocomotionMode.Objective &&
-            attacker.LocomotionTarget.IsValid(_entityManager) &&
-            IsObjectiveLocomotionTarget(attacker, objective))
-        {
-            targetCoordinates = attacker.LocomotionTarget;
-            return true;
-        }
-
-        targetCoordinates = EntityCoordinates.Invalid;
-        return false;
-    }
-
-    private bool IsObjectiveMovementDirective(WH40KWaveDefenceAttackerComponent attacker, EntityUid objective)
-    {
-        var label = attacker.MovementTargetDirectiveLabel;
-        if (string.IsNullOrWhiteSpace(label))
-            return false;
-
-        if (label.StartsWith("objective:", StringComparison.Ordinal))
-            return true;
-
-        return label.StartsWith("forced:objective", StringComparison.Ordinal) &&
-               attacker.Objective == objective;
-    }
-
-    private bool IsObjectiveProposal(WH40KWaveDefenceAttackerComponent attacker, EntityUid objective)
-    {
-        var label = attacker.DesiredTargetProposalLabel;
-        if (string.IsNullOrWhiteSpace(label))
-            return false;
-
-        if (label.StartsWith("objective:", StringComparison.Ordinal))
-            return true;
-
-        return label.StartsWith("forced:objective", StringComparison.Ordinal) &&
-               attacker.Objective == objective;
-    }
-
-    private bool IsObjectiveLocomotionTarget(WH40KWaveDefenceAttackerComponent attacker, EntityUid objective)
-    {
-        var label = attacker.LocomotionTargetLabel;
-        if (string.IsNullOrWhiteSpace(label))
-            return false;
-
-        if (label.StartsWith("objective:", StringComparison.Ordinal))
-            return true;
-
-        return label.StartsWith("forced:objective", StringComparison.Ordinal) &&
-               attacker.Objective == objective;
     }
 }

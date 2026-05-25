@@ -1,6 +1,5 @@
 using Content.Server.NPC.Systems;
 using Robust.Shared.Audio;
-using Robust.Shared.Map;
 
 namespace Content.Server.NPC.Components;
 
@@ -12,9 +11,6 @@ public sealed partial class NPCRangedCombatComponent : Component
 {
     [ViewVariables]
     public EntityUid Target;
-
-    [ViewVariables]
-    public EntityCoordinates TargetCoordinates = EntityCoordinates.Invalid;
 
     [ViewVariables]
     public CombatStatus Status = CombatStatus.Normal;
@@ -65,34 +61,4 @@ public sealed partial class NPCRangedCombatComponent : Component
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public SoundSpecifier? SoundTargetInLOS;
-
-    [ViewVariables]
-    public bool FriendlyFireRepositionActive;
-
-    [ViewVariables]
-    public EntityCoordinates FriendlyFireRepositionCoordinates = EntityCoordinates.Invalid;
-
-    [ViewVariables]
-    public EntityUid FriendlyFireBlockedBy = EntityUid.Invalid;
-
-    [ViewVariables]
-    public bool FriendlyFireHadSteeringSnapshot;
-
-    [ViewVariables]
-    public EntityCoordinates FriendlyFireSnapshotCoordinates = EntityCoordinates.Invalid;
-
-    [ViewVariables]
-    public float FriendlyFireSnapshotRange;
-
-    [ViewVariables]
-    public bool FriendlyFireSnapshotDirectMove;
-
-    [ViewVariables]
-    public bool FriendlyFireSnapshotArriveOnLineOfSight;
-
-    [ViewVariables]
-    public bool FriendlyFireSnapshotHasInRangeMaxSpeed;
-
-    [ViewVariables]
-    public float FriendlyFireSnapshotInRangeMaxSpeed;
 }

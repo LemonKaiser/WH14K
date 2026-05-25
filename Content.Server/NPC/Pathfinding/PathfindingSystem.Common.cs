@@ -1,5 +1,8 @@
+using Content.Shared.Gravity;
+using Content.Shared.Maps;
 using Content.Shared.NPC;
-using Robust.Shared.Physics;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Spawners;
 
 namespace Content.Server.NPC.Pathfinding;
 
@@ -41,16 +44,6 @@ public sealed partial class PathfindingSystem
 
     private float GetTileCost(PathRequest request, PathPoly start, PathPoly end)
     {
-        return GetTileCost(request.Flags, request.CollisionLayer, request.CollisionMask, start, end);
-    }
-
-    private float GetTileCost(
-        PathFlags flags,
-        int collisionLayer,
-        int collisionMask,
-        PathPoly start,
-        PathPoly end)
-    {
         var modifier = 1f;
 
         // TODO
@@ -59,8 +52,8 @@ public sealed partial class PathfindingSystem
             return 0f;
         }
 
-        if ((collisionLayer & end.Data.CollisionMask) != 0x0 ||
-            (collisionMask & end.Data.CollisionLayer) != 0x0)
+        if ((request.CollisionLayer & end.Data.CollisionMask) != 0x0 ||
+            (request.CollisionMask & end.Data.CollisionLayer) != 0x0)
         {
             var isDoor = (end.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
             var isAccess = (end.Data.Flags & PathfindingBreadcrumbFlag.Access) != 0x0;
@@ -68,22 +61,20 @@ public sealed partial class PathfindingSystem
 
             // TODO: Handling power + door prying
             // Door we should be able to open
-            if (isDoor)
+            if (isDoor && !isAccess && (request.Flags & PathFlags.Interact) != 0x0)
             {
-                if (!isAccess && (flags & PathFlags.Interact) != 0x0)
-                    modifier += 0.5f;
-                else if (isAccess && (flags & PathFlags.Prying) != 0x0)
-                    modifier += 10f;
-                else if ((flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
-                    modifier += 12f + end.Data.Damage / 10f;
-                else
-                    modifier += 20f;
+                modifier += 0.5f;
             }
-            else if ((flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
+            // Door we can force open one way or another
+            else if (isDoor && isAccess && (request.Flags & PathFlags.Prying) != 0x0)
             {
-                modifier += 10f + end.Data.Damage / 10f;
+                modifier += 10f;
             }
-            else if (isClimb && (flags & PathFlags.Climbing) != 0x0)
+            else if ((request.Flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
+            {
+                modifier += 10f + end.Data.Damage / 100f;
+            }
+            else if (isClimb && (request.Flags & PathFlags.Climbing) != 0x0)
             {
                 modifier += 0.5f;
             }
@@ -94,48 +85,6 @@ public sealed partial class PathfindingSystem
         }
 
         return modifier * OctileDistance(end, start);
-    }
-
-    public float EstimatePathCost(EntityUid entity, IReadOnlyList<PathPoly> path, PathFlags flags)
-    {
-        if (path.Count <= 1)
-            return 0f;
-
-        var layer = 0;
-        var mask = 0;
-        if (TryComp<FixturesComponent>(entity, out var fixtures))
-            (layer, mask) = _physics.GetHardCollision(entity, fixtures);
-
-        var total = 0f;
-        for (var i = 1; i < path.Count; i++)
-        {
-            total += GetTileCost(flags, layer, mask, path[i - 1], path[i]);
-        }
-
-        return total;
-    }
-
-    public List<float> BuildCumulativePathCosts(EntityUid entity, IReadOnlyList<PathPoly> path, PathFlags flags)
-    {
-        var costs = new List<float>(path.Count);
-        if (path.Count == 0)
-            return costs;
-
-        var layer = 0;
-        var mask = 0;
-        if (TryComp<FixturesComponent>(entity, out var fixtures))
-            (layer, mask) = _physics.GetHardCollision(entity, fixtures);
-
-        var total = 0f;
-        costs.Add(0f);
-
-        for (var i = 1; i < path.Count; i++)
-        {
-            total += GetTileCost(flags, layer, mask, path[i - 1], path[i]);
-            costs.Add(total);
-        }
-
-        return costs;
     }
 
     #region Simplifier

@@ -21,3 +21,11 @@
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: Team_tau
+
+- type: factionIcon
+  id: WH40KReinforcementAiActiveIcon
+  priority: -7
+  locationPreference: Left
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: ReinforcementAI

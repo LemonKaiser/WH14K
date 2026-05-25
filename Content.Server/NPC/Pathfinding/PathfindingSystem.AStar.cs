@@ -94,13 +94,6 @@ public sealed partial class PathfindingSystem
 
             foreach (var neighbor in currentNode.Neighbors)
             {
-                if (request.AvoidPolys.Count > 0 &&
-                    request.IsPolyAvoided(neighbor) &&
-                    !neighbor.Equals(endNode))
-                {
-                    continue;
-                }
-
                 var tileCost = GetTileCost(request, currentNode, neighbor);
 
                 if (tileCost.Equals(0f))

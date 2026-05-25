@@ -34,25 +34,6 @@ public sealed class WH40KWaveDefenceMapRegistrySystem : EntitySystem
         if (GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker).Count == 0)
             errors.Add($"WaveDefence map {mapId} has no attacker spawn markers.");
 
-        if (GetLaneIds(mapId).Count < Math.Max(1, minimumRequiredAttackLanes))
-        {
-            errors.Add(
-                $"WaveDefence map {mapId} has fewer than {Math.Max(1, minimumRequiredAttackLanes)} configured attack lanes.");
-        }
-
-        if (!HasImperiumBaseMarker(mapId, defendingTeamId))
-            errors.Add($"WaveDefence map {mapId} has no base marker for team '{defendingTeamId}'.");
-
-        foreach (var laneId in GetLaneIds(mapId).OrderBy(id => id, StringComparer.OrdinalIgnoreCase))
-        {
-            ValidateLaneRouteVariant(mapId, laneId, null, errors);
-
-            foreach (var role in Enum.GetValues<WH40KWaveSquadRole>())
-            {
-                ValidateLaneRouteVariant(mapId, laneId, role, errors);
-            }
-        }
-
         return errors.Count == 0;
     }
 

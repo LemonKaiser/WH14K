@@ -1,3 +1,4 @@
+using System;
 using Robust.Shared.Map;
 
 namespace Content.Server._WH40K.Command.Components;
@@ -6,6 +7,8 @@ namespace Content.Server._WH40K.Command.Components;
 public sealed partial class WH40KReinforcementAiRuntimeComponent : Component
 {
     public EntityCoordinates HomeCoordinates = EntityCoordinates.Invalid;
+    public TimeSpan NextWeaponReadyAttempt = TimeSpan.Zero;
+    public TimeSpan WeaponReadyRetryInterval = TimeSpan.FromSeconds(0.5);
     public float IdleRange = 3.5f;
     public float VisionRadius = 9f;
     public float AggroVisionRadius = 12f;

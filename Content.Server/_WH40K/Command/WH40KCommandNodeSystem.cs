@@ -22,7 +22,6 @@ using Content.Server.Popups;
 using Content.Server.Research.Systems;
 using Content.Server.Station.Systems;
 using Content.Shared.Clothing;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared._WH40K.Command;
 using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.GameMode;
@@ -114,8 +113,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private readonly WH40KReinforcementAiSystem _reinforcementAi = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
 
     public override void Initialize()
     {
@@ -1520,7 +1517,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             var profile = HumanoidCharacterProfile.RandomWithSpecies(HumanoidCharacterProfile.DefaultSpecies);
             var spawned = _stationSpawning.SpawnPlayerMob(coordinates, option.Job, profile, station);
             ApplySpawnedReinforcementTeamData(spawned, ent.Comp.TeamId, option);
-            TryReadyReinforcementWeapon(spawned);
+            _reinforcementAi.TryReadyWeapon(spawned);
             _reinforcementAi.Enable(spawned, coordinates);
             spawnedCount++;
         }
@@ -1607,14 +1604,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             currentLevel = Math.Max(1, level);
 
         return currentLevel >= minLevel;
-    }
-
-    private void TryReadyReinforcementWeapon(EntityUid entity)
-    {
-        if (!_inventory.TryGetSlotEntity(entity, "suitstorage", out var weapon) || weapon == null)
-            return;
-
-        _hands.TryPickupAnyHand(entity, weapon.Value, checkActionBlocker: false, animateUser: false, animate: false);
     }
 
     private string BuildReinforcementEquipmentSummary(ProtoId<JobPrototype> jobId)
