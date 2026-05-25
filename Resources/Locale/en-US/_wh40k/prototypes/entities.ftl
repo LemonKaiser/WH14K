@@ -746,7 +746,7 @@ ent-MagazineStubMG = magazine (8.25 mm extended)
 ent-MagazineStubPistol = magazine (10 mm)
 
 ent-MagazineStubRifle = magazine (8.25 mm extended)
-
+    .desc = extended magazine 8.25mm
 ent-MagazineStubSMG = magazine (10 mm extended)
 
 ent-MagazineStub3SMG = magazine "Sprinkler"

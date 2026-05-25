@@ -87,6 +87,7 @@ wh40k-mortar-shell-type-unknown = Unknown
 
 ent-WH40KMortarKit = M402 mortar portable kit
 ent-WH40KMortarShellHE = 80mm HE mortar shell
+    .desc = Mortar do booom
 ent-WH40KMortarShellFlare = 80mm flare mortar shell
 ent-WH40KMortarShellSmoke = 80mm smoke mortar shell
 ent-WH40KMortarShellIncendiary = 80mm incendiary mortar shell

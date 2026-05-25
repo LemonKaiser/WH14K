@@ -52,6 +52,7 @@ wh40k-mortar-shell-impact-warning = Скорое падение минометн
 
 ent-WH40KMortarKit = переносной комплект миномета M402
 ent-WH40KMortarShellHE = 80мм осколочно-фугасный минометный снаряд
+    .desc = минометный снаряд заряжать в мортиру
 ent-WH40KMortarShellFlare = 80мм осветительный минометный снаряд
 ent-WH40KMortarShellSmoke = 80мм дымовой минометный снаряд
 ent-WH40KMortarShellIncendiary = 80мм зажигательный минометный снаряд
