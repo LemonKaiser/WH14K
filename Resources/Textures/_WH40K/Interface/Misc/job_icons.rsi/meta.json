@@ -106,6 +106,9 @@
         },
         {
             "name": "Team_tau"
+        },
+        {
+            "name": "ReinforcementAI"
         }
     ]
 }

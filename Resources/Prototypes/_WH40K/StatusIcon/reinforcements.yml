@@ -1,6 +1,0 @@
-- type: factionIcon
-  id: WH40KReinforcementAiActiveIcon
-  priority: -7
-  locationPreference: Left
-  icon:
-    texture: _WH40K/Interface/Misc/ai_icon.png

@@ -18,7 +18,7 @@ public sealed class WH40KReinforcementAiStatusIconSystem : EntitySystem
 
     private void OnGetStatusIcons(Entity<WH40KReinforcementAiStatusIconComponent> ent, ref GetStatusIconsEvent args)
     {
-        if (_prototype.Resolve(ReinforcementAiIcon, out var icon))
+        if (_prototype.TryIndex<FactionIconPrototype>(ReinforcementAiIcon, out var icon))
             args.StatusIcons.Add(icon);
     }
 }

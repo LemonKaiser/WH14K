@@ -15,9 +15,9 @@ namespace Content.Server.NPC.HTN.PrimitiveTasks.Operators;
 public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdown
 {
     [Dependency] private IEntityManager _entManager = default!;
-    [Dependency] private NPCSteeringSystem _steering = default!;
-    [Dependency] private PathfindingSystem _pathfind = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
+    private NPCSteeringSystem _steering = default!;
+    private PathfindingSystem _pathfind = default!;
+    private SharedTransformSystem _transform = default!;
 
     /// <summary>
     /// When to shut the task down.
@@ -61,20 +61,15 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
     [DataField("stopOnLineOfSight")]
     public bool StopOnLineOfSight;
 
-    /// <summary>
-    /// Velocity below which the NPC counts as successfully braked at its destination.
-    /// Null means the arrival check ignores velocity.
-    /// </summary>
-    [DataField]
-    public float? BrakeMaxVelocity = 0.03f;
-
-    /// <summary>
-    /// Blackboard key used to flag that this move should skip pathfinding and move directly instead.
-    /// </summary>
-    [DataField]
-    public string DirectMoveTargetKey = "DirectMoveTarget";
-
     private const string MovementCancelToken = "MovementCancelToken";
+
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _pathfind = sysManager.GetEntitySystem<PathfindingSystem>();
+        _steering = sysManager.GetEntitySystem<NPCSteeringSystem>();
+        _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
+    }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,
         CancellationToken cancelToken)
@@ -87,14 +82,14 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
         if (!_entManager.TryGetComponent<TransformComponent>(owner, out var xform) ||
-            !_entManager.HasComponent<PhysicsComponent>(owner))
+            !_entManager.TryGetComponent<PhysicsComponent>(owner, out var body))
             return (false, null);
 
-        var ownerGridUid = xform.GridUid;
-        var targetGridUid = _transform.GetGrid(targetCoordinates);
-        var doDirectMove = !_entManager.HasComponent<MapGridComponent>(ownerGridUid) ||
-                           !_entManager.HasComponent<MapGridComponent>(targetGridUid) ||
-                           ownerGridUid != targetGridUid;
+        if (!_entManager.TryGetComponent<MapGridComponent>(xform.GridUid, out var ownerGrid) ||
+            !_entManager.TryGetComponent<MapGridComponent>(_transform.GetGrid(targetCoordinates), out var targetGrid))
+        {
+            return (false, null);
+        }
 
         var range = blackboard.GetValueOrDefault<float>(RangeKey, _entManager);
 
@@ -115,32 +110,23 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
             });
         }
 
-        if (!doDirectMove)
-        {
-            var path = await _pathfind.GetPath(
-                blackboard.GetValue<EntityUid>(NPCBlackboard.Owner),
-                xform.Coordinates,
+        var path = await _pathfind.GetPath(
+            blackboard.GetValue<EntityUid>(NPCBlackboard.Owner),
+            xform.Coordinates,
                 targetCoordinates,
-                range,
-                cancelToken,
-                _pathfind.GetFlags(blackboard));
+            range,
+            cancelToken,
+            _pathfind.GetFlags(blackboard));
 
-            if (path.Result != PathResult.Path)
-            {
-                return (false, null);
-            }
-
-            return (true, new Dictionary<string, object>()
-            {
-                {NPCBlackboard.OwnerCoordinates, targetCoordinates},
-                {PathfindKey, path}
-            });
+        if (path.Result != PathResult.Path)
+        {
+            return (false, null);
         }
 
         return (true, new Dictionary<string, object>()
         {
             {NPCBlackboard.OwnerCoordinates, targetCoordinates},
-            {DirectMoveTargetKey, true}
+            {PathfindKey, path}
         });
 
     }
@@ -159,21 +145,13 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
         // Re-use the path we may have if applicable.
         var comp = _steering.Register(uid, targetCoordinates);
         comp.ArriveOnLineOfSight = StopOnLineOfSight;
-        comp.InRangeMaxSpeed = BrakeMaxVelocity;
-        comp.DirectMove = false;
 
         if (blackboard.TryGetValue<float>(RangeKey, out var range, _entManager))
         {
             comp.Range = range;
         }
 
-        if (blackboard.TryGetValue<bool>(DirectMoveTargetKey, out var doDirectMove, _entManager) && doDirectMove)
-        {
-            comp.CurrentPath.Clear();
-            comp.Coordinates = targetCoordinates;
-            comp.DirectMove = true;
-        }
-        else if (blackboard.TryGetValue<PathResultEvent>(PathfindKey, out var result, _entManager))
+        if (blackboard.TryGetValue<PathResultEvent>(PathfindKey, out var result, _entManager))
         {
             if (blackboard.TryGetValue<EntityCoordinates>(NPCBlackboard.OwnerCoordinates, out var coordinates, _entManager))
             {
@@ -218,7 +196,6 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
 
         // OwnerCoordinates is only used in planning so dump it.
         blackboard.Remove<PathResultEvent>(PathfindKey);
-        blackboard.Remove<bool>(DirectMoveTargetKey);
 
         if (RemoveKeyOnFinish)
         {

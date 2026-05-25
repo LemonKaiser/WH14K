@@ -6,19 +6,21 @@ using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Server._WH40K.WaveDefence.Components;
-using Robust.Shared.Map;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Systems;
+using Robust.Shared.Map;
 
 namespace Content.Server._WH40K.WaveDefence.HTN.Operators;
 
-/// <summary>
-/// Thin HTN bridge that consumes the authoritative player contact state maintained by WaveDefence AI.
-/// Perception itself is handled by the main-thread brain plus the perception scheduler pipeline.
-/// </summary>
 public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperator
 {
+    private const string VisionRadiusKey = "VisionRadius";
+    private const string AggroVisionRadiusKey = "AggroVisionRadius";
+
     [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    private MobStateSystem _mobState = default!;
+    private NpcFactionSystem _npcFaction = default!;
 
     [DataField("targetKey")]
     public string TargetKey = WH40KWaveDefenceHtnBlackboardKeys.PlayerTarget;
@@ -29,6 +31,13 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
     [DataField("attackCoordinatesKey")]
     public string AttackCoordinatesKey = WH40KWaveDefenceHtnBlackboardKeys.PlayerTargetCoordinates;
 
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _mobState = sysManager.GetEntitySystem<MobStateSystem>();
+        _npcFaction = sysManager.GetEntitySystem<NpcFactionSystem>();
+    }
+
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
         NPCBlackboard blackboard,
         CancellationToken cancelToken)
@@ -36,27 +45,34 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
         await Task.CompletedTask;
 
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
-        if (!_entityManager.TryGetComponent<WH40KWaveDefenceAttackerComponent>(owner, out var attacker))
-            return (false, null);
-
-        if (TryGetCombatFocus(attacker, out var combatTarget, out var combatCoordinates))
+        if (!_entityManager.TryGetComponent<WH40KWaveDefenceAttackerComponent>(owner, out var attacker) ||
+            !_entityManager.TryGetComponent<TransformComponent>(owner, out var ownerXform))
         {
-            var effects = new Dictionary<string, object>
-            {
-                [TargetKey] = combatTarget,
-                [TargetCoordinatesKey] = combatCoordinates,
-                [WH40KWaveDefenceHtnBlackboardKeys.PlayerCombatRole] = true,
-                [WH40KWaveDefenceHtnBlackboardKeys.ObjectiveCombatRole] = false,
-                [WH40KWaveDefenceHtnBlackboardKeys.MovementRole] = false
-            };
-
-            if (!string.Equals(AttackCoordinatesKey, TargetCoordinatesKey, StringComparison.Ordinal))
-                effects[AttackCoordinatesKey] = EntityCoordinates.Invalid;
-
-            return (true, effects);
+            return (false, null);
         }
 
-        return (false, null);
+        var searchRadius = Math.Max(
+            blackboard.GetValueOrDefault<float>(AggroVisionRadiusKey, _entityManager),
+            blackboard.GetValueOrDefault<float>(VisionRadiusKey, _entityManager));
+        searchRadius = Math.Max(searchRadius, Math.Max(attacker.VisionRadius, attacker.AggroVisionRadius));
+
+        if (!TryPickTarget(owner, ownerXform.MapID, ownerXform.Coordinates, searchRadius, out var target, out var targetCoordinates))
+            return (false, null);
+
+        attacker.DebugState = $"combat-target:{_entityManager.ToPrettyString(target)}";
+        var effects = new Dictionary<string, object>
+        {
+            [TargetKey] = target,
+            [TargetCoordinatesKey] = targetCoordinates,
+            [WH40KWaveDefenceHtnBlackboardKeys.PlayerCombatRole] = true,
+            [WH40KWaveDefenceHtnBlackboardKeys.ObjectiveCombatRole] = false,
+            [WH40KWaveDefenceHtnBlackboardKeys.MovementRole] = false
+        };
+
+        if (!string.Equals(AttackCoordinatesKey, TargetCoordinatesKey, StringComparison.Ordinal))
+            effects[AttackCoordinatesKey] = targetCoordinates;
+
+        return (true, effects);
     }
 
     public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
@@ -64,25 +80,54 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
         return HTNOperatorStatus.Finished;
     }
 
-    private bool TryGetCombatFocus(
-        WH40KWaveDefenceAttackerComponent attacker,
+    private bool TryPickTarget(
+        EntityUid owner,
+        MapId ownerMap,
+        EntityCoordinates ownerCoordinates,
+        float searchRadius,
         out EntityUid target,
-        out EntityCoordinates coordinates)
+        out EntityCoordinates targetCoordinates)
     {
         target = EntityUid.Invalid;
-        coordinates = EntityCoordinates.Invalid;
+        targetCoordinates = EntityCoordinates.Invalid;
 
-        if (attacker.PlayerContactMode != WH40KWaveDefencePlayerContactMode.VisibleCombat ||
-            !attacker.CombatFocusTarget.IsValid() ||
-            !attacker.CombatFocusCoordinates.IsValid(_entityManager) ||
-            !_entityManager.EntityExists(attacker.CombatFocusTarget) ||
-            !_mobState.IsAlive(attacker.CombatFocusTarget))
+        var hostiles = _npcFaction.GetNearbyHostiles((
+            owner,
+            _entityManager.TryGetComponent(owner, out NpcFactionMemberComponent? faction) ? faction : null,
+            _entityManager.TryGetComponent(owner, out FactionExceptionComponent? exception) ? exception : null), searchRadius);
+
+        var bestAnyDistance = float.MaxValue;
+        var bestAnyTarget = EntityUid.Invalid;
+        var bestAnyCoordinates = EntityCoordinates.Invalid;
+
+        foreach (var candidate in hostiles)
         {
-            return false;
+            if (!_mobState.IsAlive(candidate) ||
+                !_entityManager.TryGetComponent<TransformComponent>(candidate, out var candidateXform) ||
+                candidateXform.MapID != ownerMap)
+            {
+                continue;
+            }
+
+            if (!ownerCoordinates.TryDistance(_entityManager, candidateXform.Coordinates, out var distance))
+                continue;
+
+            if (distance < bestAnyDistance)
+            {
+                bestAnyDistance = distance;
+                bestAnyTarget = candidate;
+                bestAnyCoordinates = candidateXform.Coordinates;
+            }
+
         }
 
-        target = attacker.CombatFocusTarget;
-        coordinates = attacker.CombatFocusCoordinates;
-        return true;
+        if (bestAnyTarget != EntityUid.Invalid)
+        {
+            target = bestAnyTarget;
+            targetCoordinates = bestAnyCoordinates;
+            return true;
+        }
+
+        return false;
     }
 }

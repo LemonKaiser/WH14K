@@ -22,13 +22,6 @@ public sealed partial class GridPathfindingComponent : Component
     public readonly Dictionary<Vector2i, GridPathfindingChunk> Chunks = new();
 
     /// <summary>
-    /// Monotonic version of the grid topology that increments after a dirty rebuild completes.
-    /// Route-mind systems can use this to decide when a previously committed route may be stale.
-    /// </summary>
-    [ViewVariables]
-    public int TopologyVersion;
-
-    /// <summary>
     /// Retrieves the chunk where the specified portal is stored on this grid.
     /// </summary>
     [ViewVariables]

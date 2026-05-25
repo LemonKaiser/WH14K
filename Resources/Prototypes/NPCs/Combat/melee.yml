@@ -138,7 +138,6 @@
             shutdownState: PlanFinished
             pathfindInPlanning: true
             removeKeyOnFinish: false
-            brakeMaxVelocity: null
             targetKey: TargetCoordinates
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange
@@ -187,7 +186,6 @@
             shutdownState: PlanFinished
             pathfindInPlanning: true
             removeKeyOnFinish: false
-            brakeMaxVelocity: null
             targetKey: TargetCoordinates
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange

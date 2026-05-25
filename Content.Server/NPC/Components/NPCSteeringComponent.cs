@@ -99,18 +99,6 @@ public sealed partial class NPCSteeringComponent : Component
     [ViewVariables(VVAccess.ReadWrite)] public float Range = 0.2f;
 
     /// <summary>
-    /// Whether to ignore pathing and move directly to the target coordinates.
-    /// Useful for off-grid and different-grid movement.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)] public bool DirectMove = false;
-
-    /// <summary>
-    /// Maximum speed that still counts as being "in range".
-    /// If null, velocity is ignored when evaluating arrival.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)] public float? InRangeMaxSpeed = null;
-
-    /// <summary>
     /// How far does the last node in the path need to be before considering re-pathfinding.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)] public float RepathRange = 1.5f;
@@ -125,33 +113,6 @@ public sealed partial class NPCSteeringComponent : Component
     [ViewVariables] public SteeringStatus Status = SteeringStatus.Moving;
 
     [ViewVariables(VVAccess.ReadWrite)] public PathFlags Flags = PathFlags.None;
-
-    /// <summary>
-    /// Whether steering is currently blocked by an obstacle that can be handled
-    /// through interaction, prying, climbing, or smashing.
-    /// </summary>
-    [ViewVariables]
-    public bool ActionableObstacle;
-
-    /// <summary>
-    /// The obstacle currently being handled, when known.
-    /// </summary>
-    [ViewVariables]
-    public EntityUid ActiveObstacle = EntityUid.Invalid;
-
-    /// <summary>
-    /// Human-readable description of the current obstacle handling mode.
-    /// </summary>
-    [ViewVariables]
-    public string ActiveObstacleMode = string.Empty;
-
-    [DataField("lastObstacleSeenAt", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    [AutoPausedField]
-    public TimeSpan LastObstacleSeenAt;
-
-    [DataField("lastObstacleProgressAt", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    [AutoPausedField]
-    public TimeSpan LastObstacleProgressAt;
 
     /// <summary>
     /// If the NPC is using a do_after to clear an obstacle.

@@ -1,22 +1,34 @@
+using System.Collections.Generic;
 using Content.Server.NPC;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Server._WH40K.Command.Components;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.NPC;
+using Content.Shared.Storage;
 using Content.Shared._WH40K.Command;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Command;
 
 public sealed class WH40KReinforcementAiSystem : EntitySystem
 {
     private static readonly ProtoId<HTNCompoundPrototype> ReinforcementRootTask = "SimpleHumanoidHostileCompound";
+    private readonly record struct WeaponCandidate(EntityUid Weapon, string? SlotName);
 
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly HTNSystem _htn = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly NPCSystem _npc = default!;
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -32,6 +44,7 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
         var query = EntityQueryEnumerator<WH40KReinforcementAiRuntimeComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var runtime, out var xform))
         {
+            UpdatePreparedWeapon(uid, runtime);
             UpdateLeash((uid, runtime, xform));
         }
     }
@@ -40,6 +53,7 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
     {
         var runtime = EnsureComp<WH40KReinforcementAiRuntimeComponent>(uid);
         runtime.HomeCoordinates = homeCoordinates;
+        runtime.NextWeaponReadyAttempt = _timing.CurTime;
         runtime.ReturningHome = false;
 
         EnsureComp<WH40KReinforcementAiStatusIconComponent>(uid);
@@ -62,6 +76,29 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
         _htn.Replan(htn);
     }
 
+    public bool TryReadyWeapon(EntityUid uid)
+    {
+        if (TryGetHeldGun(uid, out var heldGun))
+        {
+            _hands.TrySelect(uid, heldGun);
+            return true;
+        }
+
+        if (TryComp(uid, out InventoryComponent? inventory) &&
+            TryReadyInventoryWeapon(uid, inventory, rangedOnly: true))
+        {
+            return true;
+        }
+
+        if (TryGetHeldMelee(uid, out var heldMelee))
+        {
+            _hands.TrySelect(uid, heldMelee);
+            return true;
+        }
+
+        return TryComp(uid, out inventory) && TryReadyInventoryWeapon(uid, inventory, rangedOnly: false);
+    }
+
     public void Disable(EntityUid uid)
     {
         if (TryComp<NPCSteeringComponent>(uid, out var steering))
@@ -76,6 +113,28 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
         RemComp<ActiveNPCComponent>(uid);
         RemComp<WH40KReinforcementAiRuntimeComponent>(uid);
         RemComp<WH40KReinforcementAiStatusIconComponent>(uid);
+    }
+
+    private void UpdatePreparedWeapon(EntityUid uid, WH40KReinforcementAiRuntimeComponent runtime)
+    {
+        if (TryGetHeldGun(uid, out var heldGun))
+        {
+            _hands.TrySelect(uid, heldGun);
+            return;
+        }
+
+        if (_timing.CurTime < runtime.NextWeaponReadyAttempt)
+        {
+            if (TryGetHeldMelee(uid, out var heldMelee))
+                _hands.TrySelect(uid, heldMelee);
+
+            return;
+        }
+
+        if (!TryReadyWeapon(uid) && TryGetHeldMelee(uid, out var fallbackMelee))
+            _hands.TrySelect(uid, fallbackMelee);
+
+        runtime.NextWeaponReadyAttempt = _timing.CurTime + runtime.WeaponReadyRetryInterval;
     }
 
     private void UpdateLeash(Entity<WH40KReinforcementAiRuntimeComponent, TransformComponent> ent)
@@ -123,7 +182,6 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
         var steering = _steering.Register(ent.Owner, ent.Comp.HomeCoordinates, CompOrNull<NPCSteeringComponent>(ent.Owner));
         steering.Range = ent.Comp.ReturnRange;
         steering.ArriveOnLineOfSight = false;
-        steering.DirectMove = false;
     }
 
     private void RefreshReturnHome(Entity<WH40KReinforcementAiRuntimeComponent> ent)
@@ -138,7 +196,6 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
 
         steering.Range = ent.Comp.ReturnRange;
         steering.ArriveOnLineOfSight = false;
-        steering.DirectMove = false;
     }
 
     private void FinishReturnHome(Entity<WH40KReinforcementAiRuntimeComponent> ent)
@@ -153,5 +210,110 @@ public sealed class WH40KReinforcementAiSystem : EntitySystem
 
         _npc.WakeNPC(ent.Owner, htn);
         _htn.SetHTNEnabled((ent.Owner, htn), true, 0.2f);
+    }
+
+    private bool TryGetHeldGun(EntityUid uid, out EntityUid weapon)
+    {
+        weapon = EntityUid.Invalid;
+        if (!TryComp(uid, out HandsComponent? hands))
+            return false;
+
+        foreach (var held in _hands.EnumerateHeld((uid, hands)))
+        {
+            if (!HasComp<GunComponent>(held))
+                continue;
+
+            weapon = held;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryGetHeldMelee(EntityUid uid, out EntityUid weapon)
+    {
+        weapon = EntityUid.Invalid;
+        if (!TryComp(uid, out HandsComponent? hands))
+            return false;
+
+        foreach (var held in _hands.EnumerateHeld((uid, hands)))
+        {
+            if (!HasComp<MeleeWeaponComponent>(held))
+                continue;
+
+            weapon = held;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryReadyInventoryWeapon(EntityUid uid, InventoryComponent inventory, bool rangedOnly)
+    {
+        foreach (var slot in inventory.Slots)
+        {
+            if (!_inventory.TryGetSlotEntity(uid, slot.Name, out var item, inventory))
+                continue;
+
+            if (!TryFindWeaponCandidate(item.Value, slot.Name, rangedOnly, new HashSet<EntityUid>(), out var candidate))
+                continue;
+
+            if (TryPickupWeaponCandidate(uid, candidate))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryFindWeaponCandidate(
+        EntityUid entity,
+        string? slotName,
+        bool rangedOnly,
+        HashSet<EntityUid> visited,
+        out WeaponCandidate candidate)
+    {
+        candidate = default;
+        if (!visited.Add(entity))
+            return false;
+
+        if (HasComp<GunComponent>(entity))
+        {
+            candidate = new WeaponCandidate(entity, slotName);
+            return true;
+        }
+
+        if (!rangedOnly && HasComp<MeleeWeaponComponent>(entity))
+        {
+            candidate = new WeaponCandidate(entity, slotName);
+            return true;
+        }
+
+        if (!TryComp<StorageComponent>(entity, out var storage))
+            return false;
+
+        foreach (var contained in storage.Container.ContainedEntities)
+        {
+            if (TryFindWeaponCandidate(contained, null, rangedOnly, visited, out candidate))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryPickupWeaponCandidate(EntityUid uid, WeaponCandidate candidate)
+    {
+        if (candidate.SlotName != null)
+        {
+            _inventory.TryUnequip(uid, uid, candidate.SlotName, out _, silent: true, force: true);
+        }
+
+        var pickedUp =
+            _hands.TryPickupAnyHand(uid, candidate.Weapon, checkActionBlocker: false, animateUser: false, animate: false) ||
+            _hands.TryForcePickupAnyHand(uid, candidate.Weapon, checkActionBlocker: false);
+
+        if (pickedUp)
+            _hands.TrySelect(uid, candidate.Weapon);
+
+        return pickedUp;
     }
 }

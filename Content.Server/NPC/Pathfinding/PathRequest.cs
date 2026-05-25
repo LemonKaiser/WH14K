@@ -35,31 +35,16 @@ public abstract class PathRequest
     public readonly PathFlags Flags;
     public readonly int CollisionLayer;
     public readonly int CollisionMask;
-    public readonly HashSet<PathPolyKey> AvoidPolys;
 
     #endregion
 
-    public PathRequest(
-        EntityCoordinates start,
-        PathFlags flags,
-        int layer,
-        int mask,
-        CancellationToken cancelToken,
-        IReadOnlyCollection<PathPolyKey>? avoidPolys = null)
+    public PathRequest(EntityCoordinates start, PathFlags flags, int layer, int mask, CancellationToken cancelToken)
     {
         Start = start;
         Flags = flags;
         CollisionLayer = layer;
         CollisionMask = mask;
-        AvoidPolys = avoidPolys != null
-            ? new HashSet<PathPolyKey>(avoidPolys)
-            : new HashSet<PathPolyKey>();
         Tcs = new TaskCompletionSource<PathResult>(cancelToken);
-    }
-
-    public bool IsPolyAvoided(PathPoly poly)
-    {
-        return AvoidPolys.Contains(PathPolyKey.FromPoly(poly));
     }
 }
 
@@ -79,8 +64,7 @@ public sealed class AStarPathRequest : PathRequest
         float distance,
         int layer,
         int mask,
-        CancellationToken cancelToken,
-        IReadOnlyCollection<PathPolyKey>? avoidPolys = null) : base(start, flags, layer, mask, cancelToken, avoidPolys)
+        CancellationToken cancelToken) : base(start, flags, layer, mask, cancelToken)
     {
         Distance = distance;
         End = end;
@@ -106,8 +90,7 @@ public sealed class BFSPathRequest : PathRequest
         PathFlags flags,
         int layer,
         int mask,
-        CancellationToken cancelToken,
-        IReadOnlyCollection<PathPolyKey>? avoidPolys = null) : base(start, flags, layer, mask, cancelToken, avoidPolys)
+        CancellationToken cancelToken) : base(start, flags, layer, mask, cancelToken)
         {
             ExpansionRange = expansionRange;
             ExpansionLimit = expansionLimit;

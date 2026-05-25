@@ -66,7 +66,6 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly PlayTimeTrackingSystem _playTimeTracking = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
@@ -77,6 +76,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
     [Dependency] private readonly StationSystem _stations = default!;
     [Dependency] private readonly ShuttleSystem _shuttles = default!;
     [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private readonly WH40KWaveDefenceAISystem _waveAi = default!;
     [Dependency] private readonly WH40KWaveDefenceMapRegistrySystem _registry = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
 
@@ -120,7 +120,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         component.IntermissionDurationSeconds = Math.Max(5f, config.IntermissionDurationSeconds);
         component.FinalWaveNumber = Math.Max(1, config.FinalWaveNumber);
         component.CountCritAsAlive = config.CountCritAsAlive;
-        component.MinimumRequiredAttackLanes = Math.Max(1, config.MinimumRequiredAttackLanes);
+        component.MinimumRequiredAttackLanes = Math.Max(0, config.MinimumRequiredAttackLanes);
         component.LateJoinQueuesDuringWave = config.LateJoinDuringWaveQueuesUntilPreparation;
         component.WaveProfiles = new List<ProtoId<WH40KWaveProfilePrototype>>(config.WaveProfiles);
         component.ActiveAttackers.Clear();
@@ -788,14 +788,19 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             return;
         }
 
-        var availableLanes = batch.PreferredLaneIds.Count > 0
-            ? batch.PreferredLaneIds
-            : _registry.GetLaneIds(mapId).ToList();
+        var candidateSpawns = ResolveAttackerSpawnPoints(mapId, batch.SpawnId, batch.PreferredLaneIds);
+        if (candidateSpawns.Count == 0)
+        {
+            rule.LastBatchSummary =
+                $"Wave batch '{batch.EntityTable}' failed: attacker spawn '{batch.SpawnId ?? "<any>"}' could not resolve a spawn marker.";
+            _sawmill.Warning(rule.LastBatchSummary);
+            return;
+        }
 
         var requestedCount = Math.Max(1, batch.Count);
         var spawnedCount = 0;
         var spawnedPrototypes = new List<string>(requestedCount);
-        var assignedLanes = new List<string>(requestedCount);
+        var usedSpawns = new List<string>(requestedCount);
 
         for (var i = 0; i < requestedCount; i++)
         {
@@ -805,21 +810,8 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             if (string.IsNullOrWhiteSpace(protoId))
                 continue;
 
-            if (!TryResolveSpawnAssignment(
-                    mapId,
-                    availableLanes,
-                    batch.SpawnId,
-                    batch.SquadRole,
-                    batch.AiProfile,
-                    out var laneId,
-                    out var spawnCoordinates,
-                    out var candidateLaneIds))
-            {
-                rule.LastBatchSummary =
-                    $"Wave batch '{batch.EntityTable}' failed: attacker spawn '{batch.SpawnId ?? "<any>"}' could not resolve a spawn/lane assignment.";
-                _sawmill.Warning(rule.LastBatchSummary);
-                continue;
-            }
+            var selectedSpawn = PickWeightedSpawnPoint(candidateSpawns);
+            var spawnCoordinates = selectedSpawn.Xform.Coordinates;
 
             var spawned = Spawn(protoId, spawnCoordinates);
             rule.ActiveAttackers.Add(spawned);
@@ -848,213 +840,79 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             attacker.Objective = rule.PrimaryObjective;
             attacker.Role = batch.SquadRole;
             attacker.AiProfile = batch.AiProfile;
-            attacker.CandidateLaneIds = candidateLaneIds;
-            attacker.HomeLaneId = laneId;
-            attacker.LaneId = laneId;
-            attacker.LanePointIndex = 0;
-            attacker.LaneCommitSeconds = Math.Max(4f, batch.LaneCommitSeconds);
-            attacker.StallSeconds = Math.Max(2f, batch.StallSeconds);
-            attacker.CombatStallSeconds = Math.Max(4f, batch.CombatStallSeconds);
-            attacker.RecoveryCooldownSeconds = Math.Max(1f, batch.RecoveryCooldownSeconds);
             attacker.VisionRadius = Math.Max(6f, batch.VisionRadius);
             attacker.AggroVisionRadius = Math.Max(attacker.VisionRadius, batch.AggroVisionRadius);
-            attacker.PlayerMemorySeconds = Math.Max(0f, batch.PlayerMemorySeconds);
-            attacker.RuntimeInitialized = false;
             attacker.RootTaskOverride = ResolveAssaultRootOverride(spawned, batch.RootTaskOverride, batch.AiProfile);
-            attacker.LanePoints = string.IsNullOrWhiteSpace(attacker.LaneId)
-                ? new List<EntityUid>()
-                : _registry.GetLaneRoute(mapId, attacker.LaneId, attacker.Role);
-            assignedLanes.Add(string.IsNullOrWhiteSpace(attacker.LaneId) ? "<direct-objective>" : attacker.LaneId);
-
-            ApplyAssaultRootOverride(spawned, attacker.RootTaskOverride);
+            attacker.DebugState = $"spawn:{DescribeAttackerSpawn(selectedSpawn.Spawn)}";
+            usedSpawns.Add(DescribeAttackerSpawn(selectedSpawn.Spawn));
+            _waveAi.ConfigureAttacker(spawned, attacker);
         }
 
         rule.LastBatchSummary =
-            $"Wave {rule.CurrentWaveNumber}: spawned {spawnedCount}/{requestedCount} attackers from '{batch.EntityTable}' on map {mapId}; protos=[{string.Join(", ", spawnedPrototypes)}]; lanes=[{string.Join(", ", assignedLanes)}].";
+            $"Wave {rule.CurrentWaveNumber}: spawned {spawnedCount}/{requestedCount} attackers from '{batch.EntityTable}' on map {mapId}; protos=[{string.Join(", ", spawnedPrototypes)}]; spawns=[{string.Join(", ", usedSpawns)}].";
 
         if (spawnedCount == 0)
         {
             _sawmill.Warning(
-                $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' failed to spawn attackers from candidate lanes [{string.Join(", ", availableLanes)}].");
+                $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' failed to spawn attackers from candidate spawn markers.");
             return;
         }
 
         _sawmill.Info(
-            $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' spawned {spawnedCount}/{requestedCount} attackers; active attackers={rule.ActiveAttackers.Count}, candidateLanes={availableLanes.Count}, assignedLanes=[{string.Join(", ", assignedLanes)}].");
+            $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' spawned {spawnedCount}/{requestedCount} attackers; active attackers={rule.ActiveAttackers.Count}, candidateSpawns={candidateSpawns.Count}, usedSpawns=[{string.Join(", ", usedSpawns)}].");
     }
 
-    private bool TryResolveSpawnAssignment(
+    private List<(EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform)> ResolveAttackerSpawnPoints(
         MapId mapId,
-        IReadOnlyList<string> laneIds,
         string? spawnId,
-        WH40KWaveSquadRole role,
-        WH40KWaveAiProfile aiProfile,
-        out string laneId,
-        out EntityCoordinates spawnCoordinates,
-        out List<string> candidateLaneIds)
+        IReadOnlyList<string> preferredLaneIds)
     {
-        laneId = string.Empty;
-        spawnCoordinates = EntityCoordinates.Invalid;
-        candidateLaneIds = new List<string>();
-
         var spawnPoints = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker, spawnId: spawnId);
-        if (spawnPoints.Count == 0)
-            return false;
+        if (spawnPoints.Count == 0 || preferredLaneIds.Count == 0)
+            return spawnPoints;
 
-        var weightedSpawnPoints = new List<(EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform)>();
+        var filtered = spawnPoints
+            .Where(point => point.Spawn.LaneIds.Count == 0 ||
+                            point.Spawn.LaneIds.Any(spawnLane =>
+                                preferredLaneIds.Any(preferredLane =>
+                                    string.Equals(spawnLane, preferredLane, StringComparison.OrdinalIgnoreCase))))
+            .ToList();
+        return filtered.Count > 0 ? filtered : spawnPoints;
+    }
+
+    private (EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform) PickWeightedSpawnPoint(
+        IReadOnlyList<(EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform)> spawnPoints)
+    {
+        if (spawnPoints.Count == 0)
+            throw new ArgumentException("At least one spawn point is required.", nameof(spawnPoints));
+
+        var totalWeight = 0;
         foreach (var point in spawnPoints)
         {
-            var weight = Math.Max(1, point.Spawn.Priority);
-            for (var i = 0; i < weight; i++)
-            {
-                weightedSpawnPoints.Add(point);
-            }
+            totalWeight += Math.Max(1, point.Spawn.Priority);
         }
 
-        if (weightedSpawnPoints.Count == 0)
-            weightedSpawnPoints.AddRange(spawnPoints);
+        if (totalWeight <= 0)
+            return _random.Pick(spawnPoints);
 
-        var selectedSpawn = _random.Pick(weightedSpawnPoints);
-        spawnCoordinates = selectedSpawn.Xform.Coordinates;
-
-        candidateLaneIds = laneIds
-            .Where(id =>
-                !string.IsNullOrWhiteSpace(id) &&
-                (selectedSpawn.Spawn.LaneIds.Count == 0 ||
-                 selectedSpawn.Spawn.LaneIds.Any(spawnLane => string.Equals(spawnLane, id, StringComparison.OrdinalIgnoreCase))))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-
-        if (candidateLaneIds.Count == 0)
+        var roll = _random.Next(totalWeight);
+        foreach (var point in spawnPoints)
         {
-            candidateLaneIds = laneIds
-                .Where(id => !string.IsNullOrWhiteSpace(id))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+            roll -= Math.Max(1, point.Spawn.Priority);
+            if (roll < 0)
+                return point;
         }
 
-        laneId = PickLaneIdForSpawn(mapId, candidateLaneIds, role, aiProfile, spawnCoordinates);
-        if (string.IsNullOrWhiteSpace(laneId))
-            return false;
-
-        candidateLaneIds = OrderLaneCandidatesBySpawnProximity(mapId, candidateLaneIds, role, spawnCoordinates, laneId);
-        return true;
+        return spawnPoints[^1];
     }
 
-    private string PickLaneIdForSpawn(
-        MapId mapId,
-        IReadOnlyList<string> laneIds,
-        WH40KWaveSquadRole role,
-        WH40KWaveAiProfile aiProfile,
-        EntityCoordinates spawnCoordinates)
+    private static string DescribeAttackerSpawn(WH40KWaveSpawnPointComponent spawn)
     {
-        if (laneIds.Count == 0)
-            return string.Empty;
+        var spawnId = string.IsNullOrWhiteSpace(spawn.SpawnId) ? "<any>" : spawn.SpawnId;
+        if (spawn.LaneIds.Count == 0)
+            return spawnId;
 
-        string? bestLane = null;
-        var bestDistance = float.MaxValue;
-        var bestScore = float.MinValue;
-
-        foreach (var laneId in laneIds)
-        {
-            if (string.IsNullOrWhiteSpace(laneId) ||
-                !TryGetLaneEntryCoordinates(mapId, laneId, role, out var laneEntry))
-            {
-                continue;
-            }
-
-            var distance = spawnCoordinates.TryDistance(EntityManager, laneEntry, out var resolvedDistance)
-                ? resolvedDistance
-                : float.MaxValue;
-            var score = EvaluateLaneSpawnScore(mapId, laneId, role, aiProfile);
-
-            if (distance + 0.1f < bestDistance ||
-                (Math.Abs(distance - bestDistance) <= 0.1f && score > bestScore))
-            {
-                bestLane = laneId;
-                bestDistance = distance;
-                bestScore = score;
-            }
-        }
-
-        return bestLane ?? laneIds.FirstOrDefault(id => !string.IsNullOrWhiteSpace(id)) ?? string.Empty;
-    }
-
-    private List<string> OrderLaneCandidatesBySpawnProximity(
-        MapId mapId,
-        IReadOnlyList<string> laneIds,
-        WH40KWaveSquadRole role,
-        EntityCoordinates spawnCoordinates,
-        string primaryLaneId)
-    {
-        return laneIds
-            .Where(id => !string.IsNullOrWhiteSpace(id))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .Select(id =>
-            {
-                var distance = TryGetLaneEntryCoordinates(mapId, id, role, out var laneEntry) &&
-                               spawnCoordinates.TryDistance(EntityManager, laneEntry, out var resolvedDistance)
-                    ? resolvedDistance
-                    : float.MaxValue;
-                return (LaneId: id, Distance: distance);
-            })
-            .OrderBy(entry => string.Equals(entry.LaneId, primaryLaneId, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
-            .ThenBy(entry => entry.Distance)
-            .ThenBy(entry => entry.LaneId, StringComparer.OrdinalIgnoreCase)
-            .Select(entry => entry.LaneId)
-            .ToList();
-    }
-
-    private bool TryGetLaneEntryCoordinates(
-        MapId mapId,
-        string laneId,
-        WH40KWaveSquadRole role,
-        out EntityCoordinates coordinates)
-    {
-        var route = _registry.GetLanePoints(mapId, laneId, role);
-        if (route.Count == 0)
-        {
-            coordinates = EntityCoordinates.Invalid;
-            return false;
-        }
-
-        coordinates = route[0].Xform.Coordinates;
-        return true;
-    }
-
-    private float EvaluateLaneSpawnScore(MapId mapId, string laneId, WH40KWaveSquadRole role, WH40KWaveAiProfile aiProfile)
-    {
-        var activeAttackers = 0;
-        var recoveringAttackers = 0;
-        var query = EntityQueryEnumerator<WH40KWaveDefenceAttackerComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var attacker, out var xform))
-        {
-            if (xform.MapID != mapId ||
-                !string.Equals(attacker.LaneId, laneId, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            activeAttackers++;
-            if (attacker.RecoveryAttempts > 0)
-                recoveringAttackers++;
-        }
-
-        var score = 100f - activeAttackers * 12f - recoveringAttackers * 18f + _random.NextFloat();
-        if (aiProfile != WH40KWaveAiProfile.SimpleSwarm &&
-            role == WH40KWaveSquadRole.Breacher &&
-            _registry.LaneHasPointType(mapId, laneId, WH40KWaveLanePointType.Breach, role))
-        {
-            score += 8f;
-        }
-        else if (aiProfile != WH40KWaveAiProfile.SimpleSwarm &&
-                 role != WH40KWaveSquadRole.Breacher &&
-                 _registry.LaneHasPointType(mapId, laneId, WH40KWaveLanePointType.Breach))
-        {
-            score -= 15f;
-        }
-
-        return score;
+        return $"{spawnId}:{string.Join("/", spawn.LaneIds)}";
     }
 
     private string? ResolveAssaultRootOverride(EntityUid uid, string? explicitOverride, WH40KWaveAiProfile aiProfile)
@@ -1101,23 +959,6 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             return "Imperium";
 
         return "Heretics";
-    }
-
-    private void ApplyAssaultRootOverride(EntityUid uid, string? overrideTaskId)
-    {
-        if (string.IsNullOrWhiteSpace(overrideTaskId) || !TryComp<HTNComponent>(uid, out var htn))
-            return;
-
-        htn.PlanningToken?.Cancel();
-        htn.PlanningToken = null;
-        htn.PlanningJob = null;
-        htn.RootTask = new HTNCompoundTask
-        {
-            Task = overrideTaskId
-        };
-        htn.Plan = null;
-        htn.PlanAccumulator = 0f;
-        _htn.Replan(htn);
     }
 
     private void CompleteCurrentWave(WH40KWaveDefenceRuleComponent rule)
@@ -1807,14 +1648,13 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         var attackerSpawns = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker);
         var laneIds = _registry.GetLaneIds(mapId).OrderBy(id => id).ToList();
         var hasObjective = _registry.TryGetPrimaryObjective(mapId, defendingTeamId, out var objective);
-        var hasBaseMarker = _registry.HasImperiumBaseMarker(mapId, defendingTeamId);
 
         var attackerCoordinates = string.Join(", ", attackerSpawns.Select(spawn => spawn.Xform.Coordinates.ToString()));
         var defenderStartCoordinates = string.Join(", ", defenderStarts.Select(spawn => spawn.Xform.Coordinates.ToString()));
         var defenderReinforcementCoordinates = string.Join(", ", defenderReinforcements.Select(spawn => spawn.Xform.Coordinates.ToString()));
 
         _sawmill.Info(
-            $"WaveDefence map layout: map={mapId}, team={defendingTeamId}, objective={(hasObjective ? ToPrettyString(objective) : "<missing>")}, defenderStarts={defenderStarts.Count}[{defenderStartCoordinates}], defenderReinforcements={defenderReinforcements.Count}[{defenderReinforcementCoordinates}], attackerSpawns={attackerSpawns.Count}[{attackerCoordinates}], lanes={laneIds.Count}[{string.Join(", ", laneIds)}], baseMarker={hasBaseMarker}.");
+            $"WaveDefence map layout: map={mapId}, team={defendingTeamId}, objective={(hasObjective ? ToPrettyString(objective) : "<missing>")}, defenderStarts={defenderStarts.Count}[{defenderStartCoordinates}], defenderReinforcements={defenderReinforcements.Count}[{defenderReinforcementCoordinates}], attackerSpawns={attackerSpawns.Count}[{attackerCoordinates}], legacyLaneMarkers={laneIds.Count}[{string.Join(", ", laneIds)}].");
     }
 
     private void ApplyMapStabilitySafeguards(WH40KWaveDefenceRuleComponent rule, MapId mapId)

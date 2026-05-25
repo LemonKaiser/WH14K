@@ -2,18 +2,13 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
-using Content.Server.Destructible;
 using Content.Server.DoAfter;
-using Content.Server.Gravity;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Events;
 using Content.Server.NPC.Pathfinding;
-using Content.Shared.Access.Systems;
 using Content.Shared.CCVar;
-using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.CombatMode;
-using Content.Shared.Doors.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
@@ -34,7 +29,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Prying.Systems;
-using Content.Shared.Teleportation.Systems;
 using Microsoft.Extensions.ObjectPool;
 using Prometheus;
 
@@ -60,14 +54,13 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private IConfigurationManager _configManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private AccessReaderSystem _access = default!;
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private DoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private GravitySystem _gravity = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private PathfindingSystem _pathfindingSystem = default!;
     [Dependency] private PryingSystem _pryingSystem = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private SharedMoverController _mover = default!;
@@ -75,14 +68,11 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
 
-    private EntityQuery<FixturesComponent> _fixturesQuery;
-    private EntityQuery<MovementSpeedModifierComponent> _modifierQuery;
-    private EntityQuery<NpcFactionMemberComponent> _factionQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-    private EntityQuery<DoorComponent> _doorQuery;
-    private EntityQuery<ClimbableComponent> _climbableQuery;
-    private EntityQuery<DestructibleComponent> _destructibleQuery;
+    [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+    [Dependency] private EntityQuery<MovementSpeedModifierComponent> _modifierQuery = default!;
+    [Dependency] private EntityQuery<NpcFactionMemberComponent> _factionQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entSetPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>());
@@ -100,6 +90,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
     private readonly HashSet<ICommonSession> _subscribedSessions = new();
 
+    private object _obstacles = new();
+
     private int _activeSteeringCount;
 
     public override void Initialize()
@@ -107,14 +99,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         base.Initialize();
 
         Log.Level = LogLevel.Info;
-        _fixturesQuery = GetEntityQuery<FixturesComponent>();
-        _modifierQuery = GetEntityQuery<MovementSpeedModifierComponent>();
-        _factionQuery = GetEntityQuery<NpcFactionMemberComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-        _doorQuery = GetEntityQuery<DoorComponent>();
-        _climbableQuery = GetEntityQuery<ClimbableComponent>();
-        _destructibleQuery = GetEntityQuery<DestructibleComponent>();
 
         for (var i = 0; i < InterestDirections; i++)
         {
@@ -126,15 +110,7 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         Subs.CVar(_configManager, CCVars.NPCPathfinding, SetNPCPathfinding, true);
 
         SubscribeLocalEvent<NPCSteeringComponent, ComponentShutdown>(OnSteeringShutdown);
-        SubscribeLocalEvent<NPCSteeringComponent, TeleportedEvent>(OnTeleported);
         SubscribeNetworkEvent<RequestNPCSteeringDebugEvent>(OnDebugRequest);
-    }
-
-    private void OnTeleported(Entity<NPCSteeringComponent> ent, ref TeleportedEvent args)
-    {
-        ent.Comp.PathfindToken?.Cancel();
-        ent.Comp.PathfindToken = null;
-        ent.Comp.CurrentPath.Clear();
     }
 
     private void SetNPCEnabled(bool obj)
@@ -220,40 +196,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         }
 
         Register(uid, coordinates, component);
-        return true;
-    }
-
-    /// <summary>
-    /// Clears the current steering path so the NPC can immediately commit to a fresh route.
-    /// Optionally cancels obstacle handling do_afters when the old blocker is no longer worth pursuing.
-    /// </summary>
-    public bool ForceRepath(
-        EntityUid uid,
-        EntityCoordinates? coordinates = null,
-        bool cancelObstacleHandling = true,
-        NPCSteeringComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return false;
-
-        component.PathfindToken?.Cancel();
-        component.PathfindToken = null;
-        component.CurrentPath.Clear();
-
-        if (coordinates != null)
-            component.Coordinates = coordinates.Value;
-
-        if (cancelObstacleHandling && component.DoAfterId != null)
-            _doAfter.Cancel(component.DoAfterId, force: true);
-
-        component.DoAfterId = null;
-        component.ActionableObstacle = false;
-        component.ActiveObstacle = EntityUid.Invalid;
-        component.ActiveObstacleMode = string.Empty;
-        component.LastObstacleSeenAt = TimeSpan.Zero;
-        component.LastObstacleProgressAt = TimeSpan.Zero;
-        component.Status = SteeringStatus.Moving;
-        ResetStuck(component, Transform(uid).Coordinates);
         return true;
     }
 
@@ -396,11 +338,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         // Use rotation relative to parent to rotate our context vectors by.
         var offsetRot = -_mover.GetParentGridAngle(mover);
         _modifierQuery.TryGetComponent(uid, out var modifier);
-        var body = _physicsQuery.GetComponent(uid);
-        var weightless = _gravity.IsWeightless(uid);
         var moveSpeed = GetSprintSpeed(uid, modifier);
-        var acceleration = GetAcceleration((uid, modifier), weightless);
-        var friction = GetFriction((uid, modifier), weightless);
+        var body = _physicsQuery.GetComponent(uid);
         var dangerPoints = steering.DangerPoints;
         dangerPoints.Clear();
         Span<float> interest = stackalloc float[InterestDirections];
@@ -413,10 +352,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         RaiseLocalEvent(uid, ref ev);
         // If seek has arrived at the target node for example then immediately re-steer.
         var forceSteer = true;
-        var moveMultiplier = 1f;
 
-        if (steering.CanSeek &&
-            !TrySeek(uid, mover, steering, body, xform, offsetRot, moveSpeed, acceleration, friction, interest, frameTime, ref forceSteer, ref moveMultiplier))
+        if (steering.CanSeek && !TrySeek(uid, mover, steering, body, xform, offsetRot, moveSpeed, interest, frameTime, ref forceSteer))
         {
             SetDirection(uid, mover, steering, Vector2.Zero);
             return;
@@ -436,7 +373,7 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         }
 
         // Avoid static objects like walls
-        CollisionAvoidance(uid, steering, offsetRot, worldPos, agentRadius, layer, mask, xform, danger);
+        CollisionAvoidance(uid, offsetRot, worldPos, agentRadius, layer, mask, xform, danger);
         DebugTools.Assert(!float.IsNaN(danger[0]));
 
         Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, danger);
@@ -463,7 +400,7 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
         if (desiredDirection != -1)
         {
-            resultDirection = new Angle(desiredDirection * InterestRadians).ToVec() * moveMultiplier;
+            resultDirection = new Angle(desiredDirection * InterestRadians).ToVec();
         }
 
         steering.LastSteerDirection = resultDirection;
@@ -548,25 +485,5 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         }
 
         return modifier.CurrentSprintSpeed;
-    }
-
-    private float GetAcceleration(Entity<MovementSpeedModifierComponent?> ent, bool weightless)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return weightless
-                ? MovementSpeedModifierComponent.DefaultWeightlessAcceleration
-                : MovementSpeedModifierComponent.DefaultAcceleration;
-
-        return weightless ? ent.Comp.WeightlessAcceleration : ent.Comp.Acceleration;
-    }
-
-    private float GetFriction(Entity<MovementSpeedModifierComponent?> ent, bool weightless)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return weightless
-                ? MovementSpeedModifierComponent.DefaultWeightlessFriction
-                : MovementSpeedModifierComponent.DefaultFriction;
-
-        return weightless ? ent.Comp.WeightlessFriction : ent.Comp.Friction;
     }
 }

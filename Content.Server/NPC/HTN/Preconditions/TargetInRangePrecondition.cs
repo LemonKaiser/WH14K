@@ -1,5 +1,4 @@
 using Robust.Shared.Map;
-using Content.Server.Interaction;
 
 namespace Content.Server.NPC.HTN.Preconditions;
 
@@ -9,34 +8,30 @@ namespace Content.Server.NPC.HTN.Preconditions;
 public sealed partial class TargetInRangePrecondition : HTNPrecondition
 {
     [Dependency] private IEntityManager _entManager = default!;
-    [Dependency] private InteractionSystem _interaction = default!;
+    private SharedTransformSystem _transformSystem = default!;
 
     [DataField("targetKey", required: true)] public string TargetKey = default!;
-    [DataField("targetCoordinatesKey")] public string? TargetCoordinatesKey;
 
     [DataField("rangeKey", required: true)]
     public string RangeKey = default!;
+    public override void Initialize(IEntitySystemManager sysManager)
+    {
+        base.Initialize(sysManager);
+        _transformSystem = sysManager.GetEntitySystem<SharedTransformSystem>();
+    }
 
     [DataField]
     public bool Invert;
 
     public override bool IsMet(NPCBlackboard blackboard)
     {
-        if (!blackboard.TryGetValue<EntityUid>(NPCBlackboard.Owner, out var owner, _entManager))
+        if (!blackboard.TryGetValue<EntityCoordinates>(NPCBlackboard.OwnerCoordinates, out var coordinates, _entManager))
             return false;
 
-        var range = blackboard.GetValueOrDefault<float>(RangeKey, _entManager);
-
-        if (TargetCoordinatesKey != null &&
-            blackboard.TryGetValue<EntityCoordinates>(TargetCoordinatesKey, out var targetCoordinates, _entManager) &&
-            targetCoordinates.IsValid(_entManager))
-        {
-            return _interaction.InRangeUnobstructed(owner, targetCoordinates, range) ^ Invert;
-        }
-
-        if (!blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager))
+        if (!blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager) ||
+            !_entManager.TryGetComponent<TransformComponent>(target, out var targetXform))
             return false;
 
-        return _interaction.InRangeUnobstructed(owner, target, range) ^ Invert;
+        return _transformSystem.InRange(coordinates, targetXform.Coordinates, blackboard.GetValueOrDefault<float>(RangeKey, _entManager)) ^ Invert;
     }
 }

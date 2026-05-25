@@ -53,6 +53,13 @@ namespace Content.Server.NPC.Pathfinding
         [Dependency] private SharedPhysicsSystem _physics = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
 
+        [Dependency] private EntityQuery<AccessReaderComponent> _accessReaderQuery = default!;
+        [Dependency] private EntityQuery<DestructibleComponent> _destructibleQuery = default!;
+        [Dependency] private EntityQuery<DoorComponent> _doorQuery = default!;
+        [Dependency] private EntityQuery<ClimbableComponent> _climbableQuery = default!;
+        [Dependency] private EntityQuery<FixturesComponent> _fixturesQuery = default!;
+        [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+
         private readonly Dictionary<ICommonSession, PathfindingDebugMode> _subscribedSessions = new();
 
         [ViewVariables]
@@ -68,26 +75,9 @@ namespace Content.Server.NPC.Pathfinding
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
 
-        private EntityQuery<AccessReaderComponent> _accessQuery;
-        private EntityQuery<DestructibleComponent> _destructibleQuery;
-        private EntityQuery<DoorComponent> _doorQuery;
-        private EntityQuery<ClimbableComponent> _climbableQuery;
-        private EntityQuery<FixturesComponent> _fixturesQuery;
-        private EntityQuery<MapGridComponent> _gridQuery;
-        private EntityQuery<TransformComponent> _xformQuery;
-
         public override void Initialize()
         {
             base.Initialize();
-
-            _accessQuery = GetEntityQuery<AccessReaderComponent>();
-            _destructibleQuery = GetEntityQuery<DestructibleComponent>();
-            _doorQuery = GetEntityQuery<DoorComponent>();
-            _climbableQuery = GetEntityQuery<ClimbableComponent>();
-            _fixturesQuery = GetEntityQuery<FixturesComponent>();
-            _gridQuery = GetEntityQuery<MapGridComponent>();
-            _xformQuery = GetEntityQuery<TransformComponent>();
-
             _playerManager.PlayerStatusChanged += OnPlayerChange;
             InitializeGrid();
             SubscribeNetworkEvent<RequestPathfindingDebugMessage>(OnBreadcrumbs);
@@ -212,8 +202,8 @@ namespace Content.Server.NPC.Pathfinding
             var originA = GetOrigin(coordsA, gridUidA.Value);
             var originB = GetOrigin(coordsB, gridUidB.Value);
 
-            gridA.PortalLookup[portal] = originA;
-            gridB.PortalLookup[portal] = originB;
+            gridA.PortalLookup.Add(portal, originA);
+            gridB.PortalLookup.Add(portal, originB);
 
             var chunkA = GetChunk(originA, gridUidA.Value);
             var chunkB = GetChunk(originB, gridUidB.Value);
@@ -354,10 +344,9 @@ namespace Content.Server.NPC.Pathfinding
             EntityCoordinates end,
             float range,
             CancellationToken cancelToken,
-            PathFlags flags = PathFlags.None,
-            IReadOnlyCollection<PathPolyKey>? avoidPolys = null)
+            PathFlags flags = PathFlags.None)
         {
-            var request = GetRequest(entity, start, end, range, cancelToken, flags, avoidPolys);
+            var request = GetRequest(entity, start, end, range, cancelToken, flags);
             return await GetPath(request, true);
         }
 
@@ -371,11 +360,10 @@ namespace Content.Server.NPC.Pathfinding
             int layer,
             int mask,
             CancellationToken cancelToken,
-            PathFlags flags = PathFlags.None,
-            IReadOnlyCollection<PathPolyKey>? avoidPolys = null)
+            PathFlags flags = PathFlags.None)
         {
             // Don't allow the caller to pass in the request in case they try to do something with its data.
-            var request = new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken, avoidPolys);
+            var request = new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken);
             return await GetPath(request);
         }
 
@@ -427,14 +415,7 @@ namespace Content.Server.NPC.Pathfinding
             return null;
         }
 
-        private PathRequest GetRequest(
-            EntityUid entity,
-            EntityCoordinates start,
-            EntityCoordinates end,
-            float range,
-            CancellationToken cancelToken,
-            PathFlags flags,
-            IReadOnlyCollection<PathPolyKey>? avoidPolys = null)
+        private PathRequest GetRequest(EntityUid entity, EntityCoordinates start, EntityCoordinates end, float range, CancellationToken cancelToken, PathFlags flags)
         {
             var layer = 0;
             var mask = 0;
@@ -444,7 +425,7 @@ namespace Content.Server.NPC.Pathfinding
                 (layer, mask) = _physics.GetHardCollision(entity, fixtures);
             }
 
-            return new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken, avoidPolys);
+            return new AStarPathRequest(start, end, flags, range, layer, mask, cancelToken);
         }
 
         public PathFlags GetFlags(EntityUid uid)
