@@ -1,0 +1,241 @@
+- type: htnCompound
+  id: WH40KPathfinderMoveToPointCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickPathfindPointOperator
+            targetKey: MovementTarget
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            pathfindInPlanning: false
+            targetKey: MovementTarget
+            rangeKey: MovementRangeClose
+
+- type: htnCompound
+  id: WH40KCombatMeleeAttackVisibleTargetCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCombatTargetOperator
+            targetKey: Target
+            targetCoordinatesKey: TargetCoordinates
+            requireVisible: true
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: TargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: Target
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+            - !type:TargetInRangePrecondition
+              targetKey: Target
+              rangeKey: MeleeRange
+
+- type: htnCompound
+  id: WH40KCombatInvestigateLastKnownCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:PickCombatInvestigationOperator
+            targetKey: CombatInvestigationTarget
+            targetCoordinatesKey: CombatLastKnownCoordinates
+            searchTimeKey: CombatSearchTime
+            searchTime: 1.25
+
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            pathfindInPlanning: true
+            targetKey: CombatLastKnownCoordinates
+            pathfindKey: CombatLastKnownPathfind
+            rangeKey: MovementRangeClose
+
+        - !type:HTNPrimitiveTask
+          operator: !type:WaitOperator
+            key: CombatSearchTime
+
+- type: htnCompound
+  id: WH40KPathfinderCollectiveCombatCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KCombatMeleeAttackVisibleTargetCompound
+
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KCombatInvestigateLastKnownCompound
+
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KPathfinderMoveToPointCompound
+
+- type: entity
+  id: MobWH40KPathfinderBaseline
+  name: WH40K pathfinder individual baseline runner
+  suffix: NPC, Pathfinder Test, Individual, Walk Only
+  parent: MobXenoRouny
+  components:
+    - type: NPCGroup
+      groupId: WH40KPathfinderIndividual
+      collectiveMind: false
+    - type: HTN
+      rootTask:
+        task: WH40KPathfinderMoveToPointCompound
+      blackboard:
+        NavClimb: !type:Bool
+          false
+        NavInteract: !type:Bool
+          false
+        NavPry: !type:Bool
+          false
+        NavSmash: !type:Bool
+          false
+        MovementRangeClose: !type:Single
+          0.25
+    - type: NPCSteering
+      preserveOnUnregister: true
+      radius: 0.35
+      range: 0.25
+      repathRange: 1.5
+      failedPathLimit: 3
+      enablePathShortcutting: false
+      obstacleRepathInterval: 0
+
+- type: entity
+  id: MobWH40KPathfinderShortcut
+  name: WH40K pathfinder individual shortcut runner
+  suffix: NPC, Pathfinder Test, Individual, Walk Only, Shortcut
+  parent: MobWH40KPathfinderBaseline
+  components:
+    - type: NPCSteering
+      preserveOnUnregister: true
+      radius: 0.35
+      range: 0.25
+      repathRange: 1.0
+      failedPathLimit: 6
+      enablePathShortcutting: true
+      pathShortcutLookahead: 10
+      obstacleRepathInterval: 0
+
+- type: entity
+  id: MobWH40KPathfinderObstacle
+  name: WH40K pathfinder individual obstacle runner
+  suffix: NPC, Pathfinder Test, Individual, Adaptive Obstacles
+  parent: MobWH40KPathfinderShortcut
+  components:
+    - type: HTN
+      rootTask:
+        task: WH40KPathfinderMoveToPointCompound
+      blackboard:
+        NavClimb: !type:Bool
+          true
+        NavInteract: !type:Bool
+          true
+        NavPry: !type:Bool
+          true
+        NavSmash: !type:Bool
+          true
+        MovementRangeClose: !type:Single
+          0.25
+    - type: NPCSteering
+      preserveOnUnregister: true
+      radius: 0.35
+      range: 0.25
+      repathRange: 0.9
+      failedPathLimit: 8
+      enablePathShortcutting: true
+      pathShortcutLookahead: 10
+      obstacleRepathInterval: 1.0
+    - type: Prying
+      pryPowered: true
+      force: true
+      speedModifier: 1.5
+    - type: MeleeWeapon
+      damage:
+        types:
+          Slash: 8
+          Structural: 15
+
+- type: entity
+  id: MobWH40KPathfinderCollectiveObstacle
+  name: WH40K pathfinder collective obstacle runner
+  suffix: NPC, Pathfinder Test, Collective Mind, Adaptive Obstacles
+  parent: MobWH40KPathfinderObstacle
+  components:
+    - type: NPCGroup
+      groupId: WH40KPathfinderCollective
+      collectiveMind: true
+      coordinateObstacles: true
+      waitForGroupObstacle: true
+      workGroupRadius: 3.0
+      separationRadius: 1.1
+      separationWeight: 0.75
+    - type: NPCSteering
+      preserveOnUnregister: true
+      radius: 0.35
+      range: 0.25
+      repathRange: 0.9
+      failedPathLimit: 8
+      enablePathShortcutting: true
+      pathShortcutLookahead: 10
+      obstacleRepathInterval: 1.0
+      enablePathOffsets: true
+      pathOffsetMin: 0.1
+      pathOffsetMax: 0.32
+
+- type: entity
+  id: MobWH40KPathfinderCollectiveCombat
+  name: WH40K pathfinder collective combat runner
+  suffix: NPC, Pathfinder Test, Collective Mind, Adaptive Obstacles, Combat
+  parent: MobWH40KPathfinderCollectiveObstacle
+  components:
+    - type: HTN
+      rootTask:
+        task: WH40KPathfinderCollectiveCombatCompound
+      blackboard:
+        NavClimb: !type:Bool
+          true
+        NavInteract: !type:Bool
+          true
+        NavPry: !type:Bool
+          true
+        NavSmash: !type:Bool
+          true
+        MovementRangeClose: !type:Single
+          0.25
+        MeleeRange: !type:Single
+          1.0
+        VisionRadius: !type:Single
+          10.0
+        AggroVisionRadius: !type:Single
+          14.0
+    - type: NPCCombatMemory
+    - type: NPCCombatPerception
+      visionRadius: 10.0
+      aggroVisionRadius: 14.0
+      visionCheckInterval: 0.2
+      shareContactInterval: 0.45
+      assignmentInterval: 0.45
+      shareContactRadius: 8.0
+      shareRequiresLineOfSight: true
+      requireSameGroupForReports: true
+      memoryDuration: 8.0
+      searchDuration: 3.0
+      visibleGrace: 0.35
+      reportConfidenceMultiplier: 0.75
+      meleeSlotsPerTarget: 3
+      rangedSlotsPerTarget: 2
+      useOpaqueForLOSChecks: true

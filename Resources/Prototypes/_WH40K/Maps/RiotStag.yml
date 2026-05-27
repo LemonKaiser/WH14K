@@ -1,0 +1,34 @@
+- type: gameMap
+  id: WH40KWaveDefenceRiotStag
+  mapName: Riot Stag
+  mapPath: /Maps/_WH40K/RiotStag.yml
+  minPlayers: 0
+  maxPlayers: 40
+  wh40kWeatherProfile: WH40KMapWeatherBattlefield
+  wh40kEventsProfile: WH40KMapEventsAll
+  stations:
+    WH40KWaveDefenceRiotStag:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Riot Stag"
+        - type: StationJobs
+          availableJobs:
+            Colonel: [ 1, 1 ]
+            Commissar: [ 1, 1 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 2, 2 ]
+            Lieutenant: [ 2, 2 ]
+            Medic: [ 3, 3 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 2, 2 ]
+            Sergeant: [ 3, 3 ]
+            TitheSupplier: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
+            WH40KChaplain: [ 1, 1 ]
+            SpecialistHWS: [ 1, 1 ]
+            SpecialistSWS: [ 1, 1 ]
+            Explorator: [ 1, 1 ]
+            Enginseer: [ 1, 1 ]
+            Magos: [ 1, 1 ]
+            Novice: [ 1, 1 ]

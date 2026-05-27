@@ -45,4 +45,9 @@ public enum PathfindingDebugMode : ushort
     RouteCosts = 1 << 7,
 
     Steering = 1 << 8,
+
+    /// <summary>
+    /// Shows the current steering path and the swept corridor for the NPC radius.
+    /// </summary>
+    SteeringPath = 1 << 9,
 }

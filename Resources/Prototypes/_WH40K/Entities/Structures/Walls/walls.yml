@@ -285,6 +285,7 @@
     sprite: Markers/cross.rsi
     state: red
   - type: WH40KWaveAttackersOnlyBarrier
+  - type: PathfindingIgnored
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -294,8 +295,6 @@
           !type:PhysShapeAabb
             bounds: "-0.5,-0.5,0.5,0.5"
         hard: true
-        mask:
-        - FullTileMask
         layer:
         - WallLayer
   - type: Airtight

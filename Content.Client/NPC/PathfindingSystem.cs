@@ -42,7 +42,10 @@ namespace Content.Client.NPC
                     _overlayManager.AddOverlay(new PathfindingOverlay(EntityManager, _eyeManager, _inputManager, _mapManager, _cache, this, _mapSystem, _transformSystem));
                 }
 
-                if ((value & PathfindingDebugMode.Steering) != 0x0)
+                _steering.DrawSteeringVectors = (value & PathfindingDebugMode.Steering) != 0x0;
+                _steering.DrawPathWidth = (value & PathfindingDebugMode.SteeringPath) != 0x0;
+
+                if ((value & (PathfindingDebugMode.Steering | PathfindingDebugMode.SteeringPath)) != 0x0)
                 {
                     _steering.DebugEnabled = true;
                 }

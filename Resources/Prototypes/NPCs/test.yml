@@ -9,6 +9,7 @@
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
             pathfindInPlanning: false
+            targetKey: MovementTarget
 
 
 - type: entity

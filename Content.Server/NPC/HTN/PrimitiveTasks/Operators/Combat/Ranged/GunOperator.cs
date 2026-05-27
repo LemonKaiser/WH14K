@@ -116,6 +116,9 @@ public sealed partial class GunOperator : HTNOperator, IHtnConditionalShutdown
                         else
                             status = HTNOperatorStatus.Continuing;
                         break;
+                    case CombatStatus.FriendlyFireBlocked:
+                        status = HTNOperatorStatus.Continuing;
+                        break;
                     case CombatStatus.Normal:
                         status = HTNOperatorStatus.Continuing;
                         break;

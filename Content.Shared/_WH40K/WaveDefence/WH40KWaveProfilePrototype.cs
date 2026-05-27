@@ -37,9 +37,6 @@ public sealed partial class WH40KWaveBatchEntry
     [DataField("count")]
     public int Count = 1;
 
-    [DataField("preferredLaneIds")]
-    public List<string> PreferredLaneIds = new();
-
     [DataField("squadRole")]
     public WH40KWaveSquadRole SquadRole = WH40KWaveSquadRole.Soldier;
 

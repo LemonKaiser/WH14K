@@ -118,9 +118,9 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         component.AttackingTeamId = ResolveAttackingTeamId(config.AttackingTeamId, component.DefendingTeamId);
         component.PreparationDurationSeconds = Math.Max(5f, config.PreparationDurationSeconds);
         component.IntermissionDurationSeconds = Math.Max(5f, config.IntermissionDurationSeconds);
+        component.MaxWaveDurationSeconds = Math.Max(30f, config.MaxWaveDurationSeconds);
         component.FinalWaveNumber = Math.Max(1, config.FinalWaveNumber);
         component.CountCritAsAlive = config.CountCritAsAlive;
-        component.MinimumRequiredAttackLanes = Math.Max(0, config.MinimumRequiredAttackLanes);
         component.LateJoinQueuesDuringWave = config.LateJoinDuringWaveQueuesUntilPreparation;
         component.WaveProfiles = new List<ProtoId<WH40KWaveProfilePrototype>>(config.WaveProfiles);
         component.ActiveAttackers.Clear();
@@ -136,6 +136,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         component.CurrentWaveNumber = 0;
         component.Phase = WH40KWaveDefencePhase.Preparation;
         component.NextPhaseChange = Timing.CurTime + TimeSpan.FromSeconds(component.PreparationDurationSeconds);
+        component.ActiveWaveEndsAt = TimeSpan.Zero;
         component.RoundStartTime = Timing.CurTime;
         component.NextLayoutRetryAt = Timing.CurTime;
         component.LayoutRetryCount = 0;
@@ -184,7 +185,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         }
 
         _sawmill.Info(
-            $"WaveDefence starting: rule={ToPrettyString(uid)}, config={component.Config}, station={ToPrettyString(component.Station.Value)}, map={mapId}, mode={component.Mode}, defendingTeam={component.DefendingTeamId}, preparation={component.PreparationDurationSeconds}s, intermission={component.IntermissionDurationSeconds}s, finalWave={component.FinalWaveNumber}, profileCount={component.WaveProfiles.Count}.");
+            $"WaveDefence starting: rule={ToPrettyString(uid)}, config={component.Config}, station={ToPrettyString(component.Station.Value)}, map={mapId}, mode={component.Mode}, defendingTeam={component.DefendingTeamId}, preparation={component.PreparationDurationSeconds}s, intermission={component.IntermissionDurationSeconds}s, maxWave={component.MaxWaveDurationSeconds}s, finalWave={component.FinalWaveNumber}, profileCount={component.WaveProfiles.Count}.");
 
         ApplyMapStabilitySafeguards(component, mapId);
         TryInitializeLayout(component, announceOnSuccess: true);
@@ -253,6 +254,13 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
 
             case WH40KWaveDefencePhase.WaveActive:
                 ProcessPendingWaveBatches(component);
+                if (component.ActiveWaveEndsAt > TimeSpan.Zero &&
+                    Timing.CurTime >= component.ActiveWaveEndsAt)
+                {
+                    ExpireCurrentWave(component);
+                    break;
+                }
+
                 if (component.PendingBatches.All(batch => batch.Spawned) && component.ActiveAttackers.Count == 0)
                     CompleteCurrentWave(component);
                 break;
@@ -301,7 +309,6 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         var valid = _registry.ValidateLayout(
             mapId,
             component.DefendingTeamId,
-            component.MinimumRequiredAttackLanes,
             out var errors);
 
         var hasObjective = _registry.TryGetPrimaryObjective(mapId, component.DefendingTeamId, out var resolvedObjective);
@@ -694,6 +701,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
 
         rule.CurrentWaveNumber = nextWaveNumber;
         rule.Phase = WH40KWaveDefencePhase.WaveActive;
+        rule.ActiveWaveEndsAt = Timing.CurTime + TimeSpan.FromSeconds(rule.MaxWaveDurationSeconds);
         rule.PendingBatches.Clear();
         foreach (var batch in profile.Batches)
         {
@@ -708,7 +716,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         var batchSummary = string.Join(
             "; ",
             profile.Batches.Select(batch =>
-                $"delay={Math.Max(0f, batch.DelaySeconds)}s table={batch.EntityTable} count={Math.Max(1, batch.Count)} spawnId={batch.SpawnId ?? "<any>"} lanes={(batch.PreferredLaneIds.Count == 0 ? "<any>" : string.Join(",", batch.PreferredLaneIds))} root={batch.RootTaskOverride ?? "<auto>"} faction={batch.NpcFactionId ?? "<unchanged>"}"));
+                $"delay={Math.Max(0f, batch.DelaySeconds)}s table={batch.EntityTable} count={Math.Max(1, batch.Count)} spawnId={batch.SpawnId ?? "<any>"} root={batch.RootTaskOverride ?? "<auto>"} faction={batch.NpcFactionId ?? "<unchanged>"}"));
         _sawmill.Info(
             $"WaveDefence wave start: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, mode={rule.Mode}, completion={profile.CompletionPolicy}, batches={profile.Batches.Count}. {batchSummary}");
 
@@ -788,7 +796,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             return;
         }
 
-        var candidateSpawns = ResolveAttackerSpawnPoints(mapId, batch.SpawnId, batch.PreferredLaneIds);
+        var candidateSpawns = ResolveAttackerSpawnPoints(mapId, batch.SpawnId);
         if (candidateSpawns.Count == 0)
         {
             rule.LastBatchSummary =
@@ -842,6 +850,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             attacker.AiProfile = batch.AiProfile;
             attacker.VisionRadius = Math.Max(6f, batch.VisionRadius);
             attacker.AggroVisionRadius = Math.Max(attacker.VisionRadius, batch.AggroVisionRadius);
+            attacker.PlayerMemorySeconds = Math.Max(1f, batch.PlayerMemorySeconds);
             attacker.RootTaskOverride = ResolveAssaultRootOverride(spawned, batch.RootTaskOverride, batch.AiProfile);
             attacker.DebugState = $"spawn:{DescribeAttackerSpawn(selectedSpawn.Spawn)}";
             usedSpawns.Add(DescribeAttackerSpawn(selectedSpawn.Spawn));
@@ -864,20 +873,9 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
 
     private List<(EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform)> ResolveAttackerSpawnPoints(
         MapId mapId,
-        string? spawnId,
-        IReadOnlyList<string> preferredLaneIds)
+        string? spawnId)
     {
-        var spawnPoints = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker, spawnId: spawnId);
-        if (spawnPoints.Count == 0 || preferredLaneIds.Count == 0)
-            return spawnPoints;
-
-        var filtered = spawnPoints
-            .Where(point => point.Spawn.LaneIds.Count == 0 ||
-                            point.Spawn.LaneIds.Any(spawnLane =>
-                                preferredLaneIds.Any(preferredLane =>
-                                    string.Equals(spawnLane, preferredLane, StringComparison.OrdinalIgnoreCase))))
-            .ToList();
-        return filtered.Count > 0 ? filtered : spawnPoints;
+        return _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker, spawnId: spawnId);
     }
 
     private (EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform) PickWeightedSpawnPoint(
@@ -909,10 +907,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
     private static string DescribeAttackerSpawn(WH40KWaveSpawnPointComponent spawn)
     {
         var spawnId = string.IsNullOrWhiteSpace(spawn.SpawnId) ? "<any>" : spawn.SpawnId;
-        if (spawn.LaneIds.Count == 0)
-            return spawnId;
-
-        return $"{spawnId}:{string.Join("/", spawn.LaneIds)}";
+        return spawnId;
     }
 
     private string? ResolveAssaultRootOverride(EntityUid uid, string? explicitOverride, WH40KWaveAiProfile aiProfile)
@@ -963,6 +958,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
 
     private void CompleteCurrentWave(WH40KWaveDefenceRuleComponent rule)
     {
+        rule.ActiveWaveEndsAt = TimeSpan.Zero;
         _sawmill.Info(
             $"WaveDefence wave complete: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, remainingAttackers={rule.ActiveAttackers.Count}, pendingBatches={rule.PendingBatches.Count(batch => !batch.Spawned)}.");
         BroadcastWaveMessage(Loc.GetString(
@@ -993,11 +989,34 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             WH40KNotificationCategory.Info);
     }
 
+    private void ExpireCurrentWave(WH40KWaveDefenceRuleComponent rule)
+    {
+        _sawmill.Warning(
+            $"WaveDefence wave timeout: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, maxDuration={rule.MaxWaveDurationSeconds:0.#}s, activeAttackers={rule.ActiveAttackers.Count}, pendingBatches={rule.PendingBatches.Count(batch => !batch.Spawned)}; counting wave as completed.");
+
+        foreach (var attacker in rule.ActiveAttackers.ToArray())
+        {
+            if (Exists(attacker))
+                QueueDel(attacker);
+        }
+
+        rule.ActiveAttackers.Clear();
+        foreach (var batch in rule.PendingBatches)
+        {
+            batch.Spawned = true;
+        }
+
+        rule.LastBatchSummary =
+            $"Wave {rule.CurrentWaveNumber} expired after {rule.MaxWaveDurationSeconds:0.#} seconds and was counted as completed.";
+        CompleteCurrentWave(rule);
+    }
+
     private void SetVictory(WH40KWaveDefenceRuleComponent rule, string reason)
     {
         if (rule.Phase is WH40KWaveDefencePhase.Victory or WH40KWaveDefencePhase.Defeat)
             return;
 
+        rule.ActiveWaveEndsAt = TimeSpan.Zero;
         rule.Phase = WH40KWaveDefencePhase.Victory;
         rule.EndReason = reason;
         _sawmill.Info($"WaveDefence victory: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, reason='{reason}'.");
@@ -1014,6 +1033,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         if (rule.Phase is WH40KWaveDefencePhase.Victory or WH40KWaveDefencePhase.Defeat)
             return;
 
+        rule.ActiveWaveEndsAt = TimeSpan.Zero;
         rule.Phase = WH40KWaveDefencePhase.Defeat;
         rule.EndReason = reason;
         _sawmill.Warning($"WaveDefence defeat: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, reason='{reason}'.");
@@ -1625,6 +1645,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
             $"Phase: {rule.Phase}\n" +
             $"Wave: {rule.CurrentWaveNumber}/{rule.FinalWaveNumber}\n" +
             $"Manual wave advance: {rule.ManualWaveAdvanceOnly}\n" +
+            $"Active wave ends at: {(rule.ActiveWaveEndsAt > TimeSpan.Zero ? rule.ActiveWaveEndsAt.ToString() : "none")}\n" +
             $"Map: {mapDescription}\n" +
             $"Objective: {objective}\n" +
             $"Layout ready: {rule.LayoutReady}\n" +
@@ -1646,7 +1667,6 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         var defenderStarts = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.DefenderStart, defendingTeamId);
         var defenderReinforcements = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.DefenderReinforcement, defendingTeamId);
         var attackerSpawns = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker);
-        var laneIds = _registry.GetLaneIds(mapId).OrderBy(id => id).ToList();
         var hasObjective = _registry.TryGetPrimaryObjective(mapId, defendingTeamId, out var objective);
 
         var attackerCoordinates = string.Join(", ", attackerSpawns.Select(spawn => spawn.Xform.Coordinates.ToString()));
@@ -1654,7 +1674,7 @@ public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefence
         var defenderReinforcementCoordinates = string.Join(", ", defenderReinforcements.Select(spawn => spawn.Xform.Coordinates.ToString()));
 
         _sawmill.Info(
-            $"WaveDefence map layout: map={mapId}, team={defendingTeamId}, objective={(hasObjective ? ToPrettyString(objective) : "<missing>")}, defenderStarts={defenderStarts.Count}[{defenderStartCoordinates}], defenderReinforcements={defenderReinforcements.Count}[{defenderReinforcementCoordinates}], attackerSpawns={attackerSpawns.Count}[{attackerCoordinates}], legacyLaneMarkers={laneIds.Count}[{string.Join(", ", laneIds)}].");
+            $"WaveDefence map layout: map={mapId}, team={defendingTeamId}, objective={(hasObjective ? ToPrettyString(objective) : "<missing>")}, defenderStarts={defenderStarts.Count}[{defenderStartCoordinates}], defenderReinforcements={defenderReinforcements.Count}[{defenderReinforcementCoordinates}], attackerSpawns={attackerSpawns.Count}[{attackerCoordinates}].");
     }
 
     private void ApplyMapStabilitySafeguards(WH40KWaveDefenceRuleComponent rule, MapId mapId)

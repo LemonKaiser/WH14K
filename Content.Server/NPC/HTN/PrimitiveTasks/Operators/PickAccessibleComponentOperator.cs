@@ -80,7 +80,7 @@ public sealed partial class PickAccessibleComponentOperator : HTNOperator
 
         foreach (var target in targets)
         {
-            var path = await _pathfinding.GetPath(
+            var path = await _pathfinding.GetPreferredPath(
                 owner,
                 target,
                 1f,

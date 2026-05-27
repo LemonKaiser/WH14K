@@ -75,6 +75,8 @@
         layer:
         - MidImpassable
         - LowImpassable
+  - type: Climbable
+    vaultable: false
   - type: Sprite
     state: map_prop7
 

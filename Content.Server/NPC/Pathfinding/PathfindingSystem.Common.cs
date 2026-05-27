@@ -13,9 +13,20 @@ public sealed partial class PathfindingSystem
      */
 
     /// <summary>
-    /// Maximum amount of nodes we're allowed to expand.
+    /// Maximum amount of nodes we're allowed to expand per update slice.
     /// </summary>
     private const int NodeLimit = 512;
+
+    /// <summary>
+    /// Hard cap for one search, to avoid spending forever on disconnected graphs.
+    /// </summary>
+    private const int NodeSearchLimit = 65536;
+
+    /// <summary>
+    /// Maximum number of time-sliced continuations before a far A* request returns the best partial route it has.
+    /// This prevents wave mobs from standing still for seconds while a huge/disconnected graph is still being searched.
+    /// </summary>
+    private const int PathContinuationSliceLimit = 48;
 
     private sealed class PathComparer : IComparer<ValueTuple<float, PathPoly>>
     {
@@ -44,20 +55,43 @@ public sealed partial class PathfindingSystem
 
     private float GetTileCost(PathRequest request, PathPoly start, PathPoly end)
     {
-        var modifier = 1f;
-
-        // TODO
-        if ((end.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)
+        if (!TryGetTileCostModifier(request, end, out var modifier))
         {
             return 0f;
         }
 
-        if ((request.CollisionLayer & end.Data.CollisionMask) != 0x0 ||
-            (request.CollisionMask & end.Data.CollisionLayer) != 0x0)
+        return modifier * OctileDistance(end, start);
+    }
+
+    private bool CanPathThrough(PathRequest request, PathPoly poly)
+    {
+        if (request.BlockedPolys.Contains(poly))
+            return false;
+
+        return TryGetTileCostModifier(request, poly, out _);
+    }
+
+    private bool TryGetTileCostModifier(PathRequest request, PathPoly poly, out float modifier)
+    {
+        modifier = 1f;
+
+        if (request.BlockedPolys.Contains(poly))
         {
-            var isDoor = (end.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
-            var isAccess = (end.Data.Flags & PathfindingBreadcrumbFlag.Access) != 0x0;
-            var isClimb = (end.Data.Flags & PathfindingBreadcrumbFlag.Climb) != 0x0;
+            return false;
+        }
+
+        // TODO
+        if ((poly.Data.Flags & PathfindingBreadcrumbFlag.Space) != 0x0)
+        {
+            return false;
+        }
+
+        if ((request.CollisionLayer & poly.Data.CollisionMask) != 0x0 ||
+            (request.CollisionMask & poly.Data.CollisionLayer) != 0x0)
+        {
+            var isDoor = (poly.Data.Flags & PathfindingBreadcrumbFlag.Door) != 0x0;
+            var isAccess = (poly.Data.Flags & PathfindingBreadcrumbFlag.Access) != 0x0;
+            var isClimb = (poly.Data.Flags & PathfindingBreadcrumbFlag.Climb) != 0x0;
 
             // TODO: Handling power + door prying
             // Door we should be able to open
@@ -68,23 +102,23 @@ public sealed partial class PathfindingSystem
             // Door we can force open one way or another
             else if (isDoor && isAccess && (request.Flags & PathFlags.Prying) != 0x0)
             {
-                modifier += 10f;
-            }
-            else if ((request.Flags & PathFlags.Smashing) != 0x0 && end.Data.Damage > 0f)
-            {
-                modifier += 10f + end.Data.Damage / 100f;
+                modifier += 18f;
             }
             else if (isClimb && (request.Flags & PathFlags.Climbing) != 0x0)
             {
-                modifier += 0.5f;
+                modifier += 3f;
+            }
+            else if ((request.Flags & PathFlags.Smashing) != 0x0 && poly.Data.Damage > 0f)
+            {
+                modifier += 35f + poly.Data.Damage / 20f;
             }
             else
             {
-                return 0f;
+                return false;
             }
         }
 
-        return modifier * OctileDistance(end, start);
+        return true;
     }
 
     #region Simplifier

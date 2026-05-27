@@ -17,7 +17,7 @@
   - wavedef
   name: wh40k-wave-defence-title
   description: wh40k-wave-defence-description
-  showInVote: false
+  showInVote: true
   supportedMaps: WH40KWaveDefenceMapPool
   rules:
   - WH40KWaveDefence

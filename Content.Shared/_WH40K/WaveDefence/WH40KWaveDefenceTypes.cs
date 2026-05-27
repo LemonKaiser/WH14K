@@ -22,15 +22,6 @@ public enum WH40KWaveSpawnPointType : byte
     DefenderReinforcement = 2,
 }
 
-public enum WH40KWaveLanePointType : byte
-{
-    Waypoint = 0,
-    Rally = 1,
-    Fallback = 2,
-    Breach = 3,
-    Siege = 4,
-}
-
 public enum WH40KWaveSquadRole : byte
 {
     Soldier = 0,

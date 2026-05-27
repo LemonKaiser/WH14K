@@ -3,13 +3,13 @@
   mode: Fixed
   defendingTeamId: Imperium
   attackingTeamId: Heretics
-  preparationDurationSeconds: 20
-  intermissionDurationSeconds: 10
+  preparationDurationSeconds: 600
+  intermissionDurationSeconds: 180
+  maxWaveDurationSeconds: 600
   lateJoinDuringWaveQueuesUntilPreparation: true
   respawnUsesReinforcementMarkers: true
-  finalWaveNumber: 3
+  finalWaveNumber: 30
   countCritAsAlive: true
-  minimumRequiredAttackLanes: 1
   teamStartingPoints: 20
   frontPointsPerKill: 1
   baseLevelThresholds: [120, 300, 600, 1000, 1500, 2200, 3100, 4200]
@@ -26,3 +26,30 @@
   - WH40KWaveDefenceWave01
   - WH40KWaveDefenceWave02
   - WH40KWaveDefenceWave03
+  - WH40KWaveDefenceWave04
+  - WH40KWaveDefenceWave05
+  - WH40KWaveDefenceWave06
+  - WH40KWaveDefenceWave07
+  - WH40KWaveDefenceWave08
+  - WH40KWaveDefenceWave09
+  - WH40KWaveDefenceWave10
+  - WH40KWaveDefenceWave11
+  - WH40KWaveDefenceWave12
+  - WH40KWaveDefenceWave13
+  - WH40KWaveDefenceWave14
+  - WH40KWaveDefenceWave15
+  - WH40KWaveDefenceWave16
+  - WH40KWaveDefenceWave17
+  - WH40KWaveDefenceWave18
+  - WH40KWaveDefenceWave19
+  - WH40KWaveDefenceWave20
+  - WH40KWaveDefenceWave21
+  - WH40KWaveDefenceWave22
+  - WH40KWaveDefenceWave23
+  - WH40KWaveDefenceWave24
+  - WH40KWaveDefenceWave25
+  - WH40KWaveDefenceWave26
+  - WH40KWaveDefenceWave27
+  - WH40KWaveDefenceWave28
+  - WH40KWaveDefenceWave29
+  - WH40KWaveDefenceWave30

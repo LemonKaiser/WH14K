@@ -1,0 +1,78 @@
+- type: entity
+  id: WH40KPathfinderTargetPoint
+  parent: PathfindPoint
+  name: WH40K pathfinder target point
+  suffix: Pathfinder Test
+
+- type: entity
+  id: SpawnMobWH40KPathfinderBaseline
+  parent: MarkerBase
+  name: WH40K pathfinder individual baseline runner spawner
+  suffix: Pathfinder Test, Individual, Walk Only
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+        - state: pink
+    - type: ConditionalSpawner
+      prototypes:
+        - MobWH40KPathfinderBaseline
+
+- type: entity
+  id: SpawnMobWH40KPathfinderShortcut
+  parent: MarkerBase
+  name: WH40K pathfinder individual shortcut runner spawner
+  suffix: Pathfinder Test, Individual, Walk Only, Shortcut
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+        - state: blue
+    - type: ConditionalSpawner
+      prototypes:
+        - MobWH40KPathfinderShortcut
+
+- type: entity
+  id: SpawnMobWH40KPathfinderObstacle
+  parent: MarkerBase
+  name: WH40K pathfinder individual obstacle runner spawner
+  suffix: Pathfinder Test, Individual, Adaptive Obstacles
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+        - state: red
+    - type: ConditionalSpawner
+      prototypes:
+        - MobWH40KPathfinderObstacle
+
+- type: entity
+  id: SpawnMobWH40KPathfinderCollectiveObstacle
+  parent: MarkerBase
+  name: WH40K pathfinder collective obstacle runner spawner
+  suffix: Pathfinder Test, Collective Mind, Adaptive Obstacles
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+        - state: blue
+        - state: red
+    - type: ConditionalSpawner
+      prototypes:
+        - MobWH40KPathfinderCollectiveObstacle
+
+- type: entity
+  id: SpawnMobWH40KPathfinderCollectiveCombat
+  parent: MarkerBase
+  name: WH40K pathfinder collective combat runner spawner
+  suffix: Pathfinder Test, Collective Mind, Adaptive Obstacles, Combat
+  components:
+    - type: Sprite
+      layers:
+        - state: green
+        - state: blue
+        - state: red
+        - state: pink
+    - type: ConditionalSpawner
+      prototypes:
+        - MobWH40KPathfinderCollectiveCombat

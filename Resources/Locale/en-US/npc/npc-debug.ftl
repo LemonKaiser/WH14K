@@ -9,3 +9,4 @@ npc-debug-overlay-window-path-polygons-checkbox = Polygons
 npc-debug-overlay-window-path-neighbors-checkbox = Neighbors
 npc-debug-overlay-window-path-route-costs-checkbox = Route costs
 npc-debug-overlay-window-path-routes-checkbox = Routes
+npc-debug-overlay-window-path-steering-path-checkbox = NPC path width

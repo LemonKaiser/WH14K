@@ -1,70 +1,977 @@
 - type: wh40kWaveProfile
   id: WH40KWaveDefenceWave01
   waveNumber: 1
-  announcement: wh40k-wave-defence-wave-announce-01
   batches:
   - delaySeconds: 0
-    entityTable: WH40KWaveDefenceXenoMeleeLight
-    count: 4
+    entityTable: WH40KWaveDefenceTyranidLight
+    count: 6
     aiProfile: SimpleSwarm
     squadRole: Soldier
+    npcFactionId: Heretics
     visionRadius: 14
     aggroVisionRadius: 18
-    playerMemorySeconds: 5
+    playerMemorySeconds: 6
 
 - type: wh40kWaveProfile
   id: WH40KWaveDefenceWave02
   waveNumber: 2
-  announcement: wh40k-wave-defence-wave-announce-02
   batches:
   - delaySeconds: 0
-    entityTable: WH40KWaveDefenceXenoMeleeLight
-    count: 5
+    entityTable: WH40KWaveDefenceTyranidLight
+    count: 8
     aiProfile: SimpleSwarm
     squadRole: Soldier
+    npcFactionId: Heretics
     visionRadius: 14
     aggroVisionRadius: 18
-    playerMemorySeconds: 5
-  - delaySeconds: 8
-    entityTable: WH40KWaveDefenceXenoRanged
+    playerMemorySeconds: 6
+  - delaySeconds: 12
+    entityTable: WH40KWaveDefenceChaosMeleeTable
     count: 2
-    aiProfile: SimpleSwarm
-    squadRole: Support
-    stallSeconds: 10
-    combatStallSeconds: 16
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Breacher
+    npcFactionId: Heretics
     visionRadius: 15
-    aggroVisionRadius: 19
-    playerMemorySeconds: 5
+    aggroVisionRadius: 20
+    playerMemorySeconds: 8
 
 - type: wh40kWaveProfile
   id: WH40KWaveDefenceWave03
   waveNumber: 3
-  announcement: wh40k-wave-defence-wave-announce-03
   batches:
   - delaySeconds: 0
-    entityTable: WH40KWaveDefenceXenoMeleeHeavy
+    entityTable: WH40KWaveDefenceDaemonetteLight
+    count: 7
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 15
+    aggroVisionRadius: 20
+    playerMemorySeconds: 7
+  - delaySeconds: 14
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 3
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 9
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave04
+  waveNumber: 4
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidLight
+    count: 10
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 15
+    aggroVisionRadius: 20
+    playerMemorySeconds: 7
+  - delaySeconds: 18
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 9
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave05
+  waveNumber: 5
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 15
+    aggroVisionRadius: 20
+    playerMemorySeconds: 7
+  - delaySeconds: 18
+    entityTable: WH40KWaveDefenceDaemonetteLight
+    count: 4
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 21
+    playerMemorySeconds: 8
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosMeleeTable
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 9
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave06
+  waveNumber: 6
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 10
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 15
+    aggroVisionRadius: 21
+    playerMemorySeconds: 7
+  - delaySeconds: 22
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 5
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 9
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave07
+  waveNumber: 7
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 8
+  - delaySeconds: 20
+    entityTable: WH40KWaveDefenceTyranidHeavy
     count: 3
     aiProfile: SimpleSwarm
     squadRole: Breacher
-    laneCommitSeconds: 12
-    visionRadius: 15
-    aggroVisionRadius: 20
-    playerMemorySeconds: 5
-  - delaySeconds: 6
-    entityTable: WH40KWaveDefenceXenoMeleeLight
-    count: 6
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 8
+  - delaySeconds: 40
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 5
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 10
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave08
+  waveNumber: 8
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceDaemonetteLight
+    count: 12
     aiProfile: SimpleSwarm
     squadRole: Soldier
-    visionRadius: 14
-    aggroVisionRadius: 18
-    playerMemorySeconds: 5
-  - delaySeconds: 12
-    entityTable: WH40KWaveDefenceXenoRanged
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 8
+  - delaySeconds: 24
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 4
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 45
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 24
+    playerMemorySeconds: 10
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave09
+  waveNumber: 9
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 12
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 8
+  - delaySeconds: 28
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 6
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 10
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave10
+  waveNumber: 10
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 10
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 16
+    aggroVisionRadius: 22
+    playerMemorySeconds: 8
+  - delaySeconds: 20
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 5
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 42
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 6
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 10
+  - delaySeconds: 60
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 1
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 25
+    playerMemorySeconds: 12
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave11
+  waveNumber: 11
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceDaemonetteLight
+    count: 14
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 24
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 5
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 9
+  - delaySeconds: 48
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 10
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave12
+  waveNumber: 12
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 16
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 32
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 11
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave13
+  waveNumber: 13
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 12
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 22
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 7
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 9
+  - delaySeconds: 48
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 11
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave14
+  waveNumber: 14
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 16
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 23
+    playerMemorySeconds: 8
+  - delaySeconds: 26
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 6
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 9
+  - delaySeconds: 52
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 11
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave15
+  waveNumber: 15
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 10
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 17
+    aggroVisionRadius: 24
+    playerMemorySeconds: 9
+  - delaySeconds: 20
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 12
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 11
+  - delaySeconds: 50
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 7
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 12
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 2
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 27
+    playerMemorySeconds: 12
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave16
+  waveNumber: 16
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 18
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 9
+  - delaySeconds: 30
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 9
+  - delaySeconds: 60
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 12
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave17
+  waveNumber: 17
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceDaemonetteLight
+    count: 16
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 24
+    playerMemorySeconds: 9
+  - delaySeconds: 25
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 10
+  - delaySeconds: 55
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 10
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 12
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave18
+  waveNumber: 18
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidMedium
+    count: 18
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 9
+  - delaySeconds: 28
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 10
+  - delaySeconds: 58
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 10
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 27
+    playerMemorySeconds: 12
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave19
+  waveNumber: 19
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 20
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 18
+    aggroVisionRadius: 25
+    playerMemorySeconds: 9
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 10
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 27
+    playerMemorySeconds: 12
+  - delaySeconds: 70
+    entityTable: WH40KWaveDefenceChaosElite
     count: 3
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 13
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave20
+  waveNumber: 20
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 15
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 10
+  - delaySeconds: 28
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 10
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 10
+  - delaySeconds: 60
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 12
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 13
+  - delaySeconds: 90
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 2
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave21
+  waveNumber: 21
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 24
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 26
+    playerMemorySeconds: 10
+  - delaySeconds: 32
+    entityTable: WH40KWaveDefenceChaosRanged
+    count: 10
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 13
+  - delaySeconds: 62
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 27
+    playerMemorySeconds: 10
+  - delaySeconds: 90
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave22
+  waveNumber: 22
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 18
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 27
+    playerMemorySeconds: 10
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 14
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 13
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave23
+  waveNumber: 23
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 18
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 27
+    playerMemorySeconds: 10
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 16
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+  - delaySeconds: 80
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 30
+    playerMemorySeconds: 14
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave24
+  waveNumber: 24
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 24
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 19
+    aggroVisionRadius: 27
+    playerMemorySeconds: 10
+  - delaySeconds: 30
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 12
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 11
+  - delaySeconds: 65
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 12
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+  - delaySeconds: 95
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 3
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave25
+  waveNumber: 25
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 20
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 11
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 16
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 29
+    playerMemorySeconds: 14
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 105
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 2
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave26
+  waveNumber: 26
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 28
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 11
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 18
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 8
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 28
+    playerMemorySeconds: 11
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave27
+  waveNumber: 27
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 22
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 29
+    playerMemorySeconds: 11
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 16
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 6
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 105
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 3
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave28
+  waveNumber: 28
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceDaemonetteHeavy
+    count: 24
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 29
+    playerMemorySeconds: 11
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceChaosVeterans
+    count: 18
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 105
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 3
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave29
+  waveNumber: 29
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceTyranidHeavy
+    count: 26
+    aiProfile: SimpleSwarm
+    squadRole: Breacher
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 29
+    playerMemorySeconds: 11
+  - delaySeconds: 35
+    entityTable: WH40KWaveDefenceMixedElite
+    count: 22
     aiProfile: SimpleSwarm
     squadRole: Support
-    stallSeconds: 10
-    combatStallSeconds: 16
-    visionRadius: 15
-    aggroVisionRadius: 19
-    playerMemorySeconds: 5
+    npcFactionId: Heretics
+    visionRadius: 21
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 80
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 10
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 115
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 4
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+
+- type: wh40kWaveProfile
+  id: WH40KWaveDefenceWave30
+  waveNumber: 30
+  batches:
+  - delaySeconds: 0
+    entityTable: WH40KWaveDefenceMixedHorde
+    count: 24
+    aiProfile: SimpleSwarm
+    squadRole: Soldier
+    npcFactionId: Heretics
+    visionRadius: 20
+    aggroVisionRadius: 30
+    playerMemorySeconds: 12
+  - delaySeconds: 30
+    entityTable: WH40KWaveDefenceMixedElite
+    count: 30
+    aiProfile: SimpleSwarm
+    squadRole: Support
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 75
+    entityTable: WH40KWaveDefenceChaosElite
+    count: 20
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15
+  - delaySeconds: 120
+    entityTable: WH40KWaveDefenceChaosAstartesTable
+    count: 8
+    aiProfile: AdvancedHumanoidConcept
+    squadRole: Leader
+    npcFactionId: Heretics
+    visionRadius: 22
+    aggroVisionRadius: 30
+    playerMemorySeconds: 15

@@ -34,7 +34,6 @@
             shutdownState: PlanFinished
             pathfindInPlanning: true
             removeKeyOnFinish: false
-            brakeMaxVelocity: null
             targetKey: WH40KWavePlayerTargetCoordinates
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange
@@ -67,7 +66,6 @@
             shutdownState: PlanFinished
             pathfindInPlanning: true
             removeKeyOnFinish: false
-            brakeMaxVelocity: null
             targetKey: WH40KWaveObjectiveTargetCoordinates
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange
@@ -77,7 +75,6 @@
         - !type:HTNPrimitiveTask
           operator: !type:MeleeOperator
             targetKey: WH40KWaveObjectiveTarget
-            targetCoordinatesKey: WH40KWaveObjectiveTargetCoordinates
           preconditions:
             - !type:KeyExistsPrecondition
               key: WH40KWaveObjectiveTarget
@@ -95,6 +92,26 @@
             targetCoordinatesKey: WH40KWavePlayerTargetCoordinates
         - !type:HTNCompoundTask
           task: WH40KWaveDefenceMeleeAttackTargetCompound
+
+- type: htnCompound
+  id: WH40KWaveDefenceInvestigateLastKnownPlayerCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:WH40KWaveDefencePickCombatInvestigationOperator
+            targetKey: WH40KWaveCombatInvestigationTarget
+            targetCoordinatesKey: WH40KWaveCombatLastKnownCoordinates
+            searchTimeKey: WH40KWaveCombatSearchTime
+            searchTime: 1.25
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            pathfindInPlanning: true
+            targetKey: WH40KWaveCombatLastKnownCoordinates
+            pathfindKey: WH40KWaveCombatLastKnownPathfind
+            rangeKey: MovementRange
+        - !type:HTNPrimitiveTask
+          operator: !type:WaitOperator
+            key: WH40KWaveCombatSearchTime
 
 - type: htnCompound
   id: WH40KWaveDefenceObjectiveMeleeAttackCompound
@@ -135,6 +152,7 @@
               key: WH40KWavePlayerTarget
           operator: !type:GunOperator
             targetKey: WH40KWavePlayerTarget
+            requireLOS: true
 
 - type: htnCompound
   id: WH40KWaveDefenceObjectiveGunAttackTargetCompound
@@ -252,6 +270,9 @@
           task: WH40KWaveDefencePlayerMeleeCombatCompound
     - tasks:
         - !type:HTNCompoundTask
+          task: WH40KWaveDefenceInvestigateLastKnownPlayerCompound
+    - tasks:
+        - !type:HTNCompoundTask
           task: WH40KWaveDefenceObjectiveRangedAttackCompound
     - tasks:
         - !type:HTNCompoundTask
@@ -272,6 +293,9 @@
     - tasks:
         - !type:HTNCompoundTask
           task: WH40KWaveDefencePlayerMeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: WH40KWaveDefenceInvestigateLastKnownPlayerCompound
     - tasks:
         - !type:HTNCompoundTask
           task: WH40KWaveDefenceObjectiveRangedAttackCompound

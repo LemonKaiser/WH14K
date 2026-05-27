@@ -1,0 +1,221 @@
+- type: startingGear
+  id: WH40KWaveChaosMeleeGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackCULT1
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorChaosVest
+    pocket1: CrowbarRed
+    id: HGuardsmanDogTag
+  inhand:
+  - ChaosMachete
+
+- type: startingGear
+  id: WH40KWaveChaosLasgunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackCULT1
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    head: ClothingHeadHelmetFlakCHAOS
+    outerClothing: ClothingOuterArmorChaosVest
+    pocket1: CrowbarRed
+    id: HGuardsmanDogTag
+  inhand:
+  - WeaponHereticLaserLasgun
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+
+- type: startingGear
+  id: WH40KWaveChaosSMGGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist2
+    back: ClothingBackpackSatchelChaosWheel
+    shoes: ClothingShoesChaosBoots2
+    ears: ClothingHeadsetVoxBackpackHeretics
+    belt: chaosbelt
+    head: ClothingHeadHelmetrHeresy
+    outerClothing: ClothingOuterArmorCultistCoat
+    pocket1: CrowbarRed
+    id: HSergeantDogTag
+  inhand:
+  - WeaponChsStubSMG2
+  storage:
+    belt:
+    - MagazineStubSMG
+    - MagazineStubSMG
+    - MagazineStubSMG
+
+- type: startingGear
+  id: WH40KWaveChaosHellgunnerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist1
+    back: ClothingBackpackHellEnergy
+    head: ClothingHeadHelmetFlakAdvHeresy
+    mask: ClothingMaskGasHellishForeman
+    eyes: ClothingEyesHudGuard
+    outerClothing: ClothingOuterArmorAdvancedFlakVestHeretic
+    gloves: ClothingHandsGlovesCombat
+    shoes: ClothingShoesChaosBoots1
+    belt: chaosbelt2
+    pocket1: CrowbarRed
+    id: HGuardsmanDogTag
+  inhand:
+  - WeaponHellgun
+
+- type: startingGear
+  id: WH40KWaveChaosLeaderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCultist2
+    back: ClothingBackpackSatchelChaosWheel
+    shoes: ClothingShoesChaosBoots2
+    ears: ClothingHeadsetVoxBackpackHeretics
+    belt: chaosbelt
+    neck: NecklaceChaosCultistReflectWeak
+    head: ClothingHeadHelmetrHeresy
+    outerClothing: ClothingOuterArmorCultistCoat
+    pocket1: CrowbarRed
+    pocket2: WH40KCommandTacticalMapTablet
+    id: HLieutenantDogTag
+  inhand:
+  - WeaponHereticShortlas
+
+- type: startingGear
+  id: WH40KWaveChaosAstartesGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackHeretics
+    back: ClothingBackpackAstartesChaosPowerpack
+    head: ClothingHeadHelmetAstartesChaos
+    outerClothing: ClothingOuterArmorAstartesChaos
+    shoes: ClothingShoesAstartesChaosBoots
+    belt: WeaponPistolAstartesBolt
+    pocket1: CrowbarRed
+    pocket2: MagazineBolter
+    id: HSergeantDogTag
+  inhand:
+  - WeaponRifleBolter
+
+- type: entity
+  id: WH40KWaveDefenceChaosHumanoidBase
+  parent: MobHuman
+  abstract: true
+  suffix: WH40K, WaveDefence, Chaos
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+  - type: WH40KTeamMember
+    teamId: Heretics
+  - type: CombatMode
+  - type: Tool
+    speedModifier: 2
+    qualities:
+    - Prying
+  - type: Prying
+    pryPowered: !type:Bool
+      true
+    force: !type:Bool
+      true
+    useSound:
+      path: /Audio/Items/crowbar.ogg
+  - type: HTN
+    rootTask:
+      task: WH40KWaveDefenceAdvancedHumanoidHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+
+- type: entity
+  id: WH40KWaveDefenceChaosMelee
+  parent: WH40KWaveDefenceChaosHumanoidBase
+  name: chaos assault cultist
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosMeleeGear
+
+- type: entity
+  id: WH40KWaveDefenceChaosLasgunner
+  parent: WH40KWaveDefenceChaosHumanoidBase
+  name: chaos lasgunner
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosLasgunnerGear
+
+- type: entity
+  id: WH40KWaveDefenceChaosSMG
+  parent: WH40KWaveDefenceChaosHumanoidBase
+  name: chaos stubber gunner
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosSMGGear
+
+- type: entity
+  id: WH40KWaveDefenceChaosHellgunner
+  parent: WH40KWaveDefenceChaosHumanoidBase
+  name: chaos hellgunner
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosHellgunnerGear
+
+- type: entity
+  id: WH40KWaveDefenceChaosLeader
+  parent: WH40KWaveDefenceChaosHumanoidBase
+  name: chaos assault leader
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosLeaderGear
+
+- type: entity
+  id: WH40KWaveDefenceChaosAstartes
+  parent: MobAstartesWH40KHereticsChaos
+  name: chaos space marine
+  suffix: WH40K, WaveDefence, Chaos
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KWaveChaosAstartesGear
+  - type: NpcFactionMember
+    factions:
+    - Heretics
+  - type: CombatMode
+  - type: Tool
+    speedModifier: 2
+    qualities:
+    - Prying
+  - type: Prying
+    pryPowered: !type:Bool
+      true
+    force: !type:Bool
+      true
+    useSound:
+      path: /Audio/Items/crowbar.ogg
+  - type: HTN
+    rootTask:
+      task: WH40KWaveDefenceAdvancedHumanoidHostileCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavInteract: !type:Bool
+        true
+      NavPry: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true

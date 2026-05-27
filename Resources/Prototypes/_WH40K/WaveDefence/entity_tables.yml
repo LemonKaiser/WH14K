@@ -1,24 +1,121 @@
 - type: entityTable
-  id: WH40KWaveDefenceXenoMeleeLight
+  id: WH40KWaveDefenceTyranidLight
   table: !type:GroupSelector
     children:
-    - id: MobXeno
+    - id: MobHormagaunt
+      weight: 4
+    - id: MobGenestealer
       weight: 1
-    - id: MobXenoRunner
+
+- type: entityTable
+  id: WH40KWaveDefenceTyranidMedium
+  table: !type:GroupSelector
+    children:
+    - id: MobHormagaunt
+      weight: 2
+    - id: MobGenestealer
       weight: 3
 
 - type: entityTable
-  id: WH40KWaveDefenceXenoMeleeHeavy
+  id: WH40KWaveDefenceTyranidHeavy
   table: !type:GroupSelector
     children:
-    - id: MobXenoDrone
-      weight: 2
-    - id: MobXenoPraetorian
+    - id: MobGenestealer
+      weight: 3
+    - id: MobRavener
       weight: 1
 
 - type: entityTable
-  id: WH40KWaveDefenceXenoRanged
+  id: WH40KWaveDefenceDaemonetteLight
   table: !type:GroupSelector
     children:
-    - id: MobXenoSpitter
+    - id: MobWH40KSlaaneshDemonette
+      weight: 4
+    - id: MobWH40KSlaaneshRapturousDemonette
+      weight: 2
+    - id: MobWH40KSlaaneshClawDancer
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceDaemonetteHeavy
+  table: !type:GroupSelector
+    children:
+    - id: MobWH40KSlaaneshClawDancer
+      weight: 3
+    - id: MobWH40KSlaaneshRapturousDemonette
+      weight: 2
+    - id: MobWH40KSlaaneshAlluress
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceChaosMeleeTable
+  table: !type:GroupSelector
+    children:
+    - id: WH40KWaveDefenceChaosMelee
+      weight: 4
+    - id: WH40KWaveDefenceChaosLasgunner
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceChaosRanged
+  table: !type:GroupSelector
+    children:
+    - id: WH40KWaveDefenceChaosLasgunner
+      weight: 4
+    - id: WH40KWaveDefenceChaosSMG
+      weight: 2
+    - id: WH40KWaveDefenceChaosHellgunner
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceChaosVeterans
+  table: !type:GroupSelector
+    children:
+    - id: WH40KWaveDefenceChaosSMG
+      weight: 3
+    - id: WH40KWaveDefenceChaosHellgunner
+      weight: 2
+    - id: WH40KWaveDefenceChaosLeader
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceChaosElite
+  table: !type:GroupSelector
+    children:
+    - id: WH40KWaveDefenceChaosHellgunner
+      weight: 3
+    - id: WH40KWaveDefenceChaosLeader
+      weight: 2
+    - id: WH40KWaveDefenceChaosAstartes
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceChaosAstartesTable
+  table: !type:GroupSelector
+    children:
+    - id: WH40KWaveDefenceChaosAstartes
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceMixedHorde
+  table: !type:GroupSelector
+    children:
+    - id: MobHormagaunt
+      weight: 3
+    - id: MobWH40KSlaaneshDemonette
+      weight: 2
+    - id: WH40KWaveDefenceChaosMelee
+      weight: 1
+
+- type: entityTable
+  id: WH40KWaveDefenceMixedElite
+  table: !type:GroupSelector
+    children:
+    - id: MobGenestealer
+      weight: 2
+    - id: MobWH40KSlaaneshAlluress
+      weight: 1
+    - id: WH40KWaveDefenceChaosLeader
+      weight: 1
+    - id: WH40KWaveDefenceChaosAstartes
       weight: 1

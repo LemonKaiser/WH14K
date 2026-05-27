@@ -71,6 +71,7 @@
       components:
         - type: Gun
         - type: Item
+    - !type:RemoveAnchoredFilter
   considerations:
     # TODO: Prefer highest DPC probably?
     - !type:TargetAmmoCon

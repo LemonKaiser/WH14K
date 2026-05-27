@@ -27,6 +27,10 @@ public abstract class PathRequest
     public PriorityQueue<ValueTuple<float, PathPoly>> Frontier = default!;
     public readonly Dictionary<PathPoly, float> CostSoFar = new();
     public readonly Dictionary<PathPoly, PathPoly> CameFrom = new();
+    public PathPoly? StartNode;
+    public int ExpandedNodes;
+    public int ContinuationSlices;
+    public readonly HashSet<PathPoly> BlockedPolys = new();
 
     #endregion
 
@@ -35,6 +39,7 @@ public abstract class PathRequest
     public readonly PathFlags Flags;
     public readonly int CollisionLayer;
     public readonly int CollisionMask;
+    public readonly CancellationToken CancelToken;
 
     #endregion
 
@@ -44,6 +49,7 @@ public abstract class PathRequest
         Flags = flags;
         CollisionLayer = layer;
         CollisionMask = mask;
+        CancelToken = cancelToken;
         Tcs = new TaskCompletionSource<PathResult>(cancelToken);
     }
 }
@@ -51,6 +57,9 @@ public abstract class PathRequest
 public sealed class AStarPathRequest : PathRequest
 {
     public EntityCoordinates End;
+    public PathPoly? EndNode;
+    public PathPoly? BestNode;
+    public float BestNodeHeuristic = float.PositiveInfinity;
 
     /// <summary>
     /// How close we need to be to the end node to be considered as arrived.
