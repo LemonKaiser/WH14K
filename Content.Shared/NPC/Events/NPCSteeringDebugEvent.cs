@@ -1,4 +1,5 @@
 using System.Numerics;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.NPC.Events;
@@ -23,11 +24,19 @@ public readonly record struct NPCSteeringDebugData(
     Vector2 Direction,
     float[] Interest,
     float[] Danger,
-    List<Vector2> DangerPoints)
+    List<Vector2> DangerPoints,
+    NetCoordinates Destination,
+    float Radius,
+    List<NetCoordinates> CurrentPath,
+    List<DebugPathPoly> CurrentPathPolys)
 {
     public readonly NetEntity EntityUid = EntityUid;
     public readonly Vector2 Direction = Direction;
     public readonly float[] Interest = Interest;
     public readonly float[] Danger = Danger;
     public readonly List<Vector2> DangerPoints = DangerPoints;
+    public readonly NetCoordinates Destination = Destination;
+    public readonly float Radius = Radius;
+    public readonly List<NetCoordinates> CurrentPath = CurrentPath;
+    public readonly List<DebugPathPoly> CurrentPathPolys = CurrentPathPolys;
 }

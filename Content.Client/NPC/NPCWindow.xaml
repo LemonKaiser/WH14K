@@ -19,6 +19,7 @@
             <CheckBox Name="PathNeighbors" Text="{Loc npc-debug-overlay-window-path-neighbors-checkbox}"/>
             <CheckBox Name="PathRouteCosts" Text="{Loc npc-debug-overlay-window-path-route-costs-checkbox}"/>
             <CheckBox Name="PathRoutes" Text="{Loc npc-debug-overlay-window-path-routes-checkbox}"/>
+            <CheckBox Name="PathSteeringPath" Text="{Loc npc-debug-overlay-window-path-steering-path-checkbox}"/>
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

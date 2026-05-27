@@ -35,22 +35,25 @@ public sealed partial class WH40KWaveDefenceRuleComponent : Component
     public float IntermissionDurationSeconds = 60f;
 
     [ViewVariables]
+    public float MaxWaveDurationSeconds = 600f;
+
+    [ViewVariables]
     public int FinalWaveNumber = 10;
 
     [ViewVariables]
     public bool CountCritAsAlive = true;
 
     [ViewVariables]
-    public int MinimumRequiredAttackLanes = 1;
-
-    [ViewVariables]
     public bool LateJoinQueuesDuringWave = true;
 
     [ViewVariables]
-    public bool ManualWaveAdvanceOnly = true;
+    public bool ManualWaveAdvanceOnly = false;
 
     [ViewVariables]
     public TimeSpan NextPhaseChange = TimeSpan.Zero;
+
+    [ViewVariables]
+    public TimeSpan ActiveWaveEndsAt = TimeSpan.Zero;
 
     [ViewVariables]
     public int CurrentWaveNumber;

@@ -23,6 +23,7 @@ public sealed partial class NPCWindow : FancyWindow
         PathNeighbors.Pressed = (path.Modes & PathfindingDebugMode.PolyNeighbors) != 0x0;
         PathRouteCosts.Pressed = (path.Modes & PathfindingDebugMode.RouteCosts) != 0x0;
         PathRoutes.Pressed = (path.Modes & PathfindingDebugMode.Routes) != 0x0;
+        PathSteeringPath.Pressed = (path.Modes & PathfindingDebugMode.SteeringPath) != 0x0;
 
         NPCThonk.OnToggled += args => htn.EnableOverlay = args.Pressed;
         PathCrumbs.OnToggled += args => path.Modes ^= PathfindingDebugMode.Breadcrumbs;
@@ -30,5 +31,6 @@ public sealed partial class NPCWindow : FancyWindow
         PathNeighbors.OnToggled += args => path.Modes ^= PathfindingDebugMode.PolyNeighbors;
         PathRouteCosts.OnToggled += args => path.Modes ^= PathfindingDebugMode.RouteCosts;
         PathRoutes.OnToggled += args => path.Modes ^= PathfindingDebugMode.Routes;
+        PathSteeringPath.OnToggled += args => path.Modes ^= PathfindingDebugMode.SteeringPath;
     }
 }

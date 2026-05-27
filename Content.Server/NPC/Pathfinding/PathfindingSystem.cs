@@ -65,7 +65,8 @@ namespace Content.Server.NPC.Pathfinding
         [ViewVariables]
         private readonly List<PathRequest> _pathRequests = new(PathTickLimit);
 
-        private static readonly TimeSpan PathTime = TimeSpan.FromMilliseconds(3);
+        private static readonly TimeSpan PathTime = TimeSpan.FromMilliseconds(6);
+        private static readonly TimeSpan PathRequestTime = TimeSpan.FromMilliseconds(0.75);
 
         /// <summary>
         /// How many paths we can process in a single tick.
@@ -101,7 +102,15 @@ namespace Content.Server.NPC.Pathfinding
 
             UpdateGrid(options);
             _stopwatch.Restart();
-            var amount = Math.Min(PathTickLimit, _pathRequests.Count);
+            List<PathRequest> requests;
+            lock (_pathRequests)
+            {
+                var amountToTake = Math.Min(PathTickLimit, _pathRequests.Count);
+                requests = _pathRequests.GetRange(0, amountToTake);
+                _pathRequests.RemoveRange(0, amountToTake);
+            }
+
+            var amount = requests.Count;
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
 
 
@@ -114,7 +123,7 @@ namespace Content.Server.NPC.Pathfinding
                     return;
                 }
 
-                var request = _pathRequests[i];
+                var request = requests[i];
 
                 try
                 {
@@ -137,13 +146,10 @@ namespace Content.Server.NPC.Pathfinding
                 }
             });
 
-            var offset = 0;
-
             // then, single-threaded cleanup.
             for (var i = 0; i < amount; i++)
             {
-                var resultIndex = i + offset;
-                var path = _pathRequests[resultIndex];
+                var path = requests[i];
                 var result = results[i];
 
                 if (path.Task.Exception != null)
@@ -154,14 +160,15 @@ namespace Content.Server.NPC.Pathfinding
                 switch (result)
                 {
                     case PathResult.Continuing:
+                        lock (_pathRequests)
+                        {
+                            _pathRequests.Add(path);
+                        }
                         break;
                     case PathResult.PartialPath:
                     case PathResult.Path:
                     case PathResult.NoPath:
                         SendDebug(path);
-                        // Don't use RemoveSwap because we still want to try and process them in order.
-                        _pathRequests.RemoveAt(resultIndex);
-                        offset--;
                         path.Tcs.SetResult(result);
                         SendRoute(path);
                         break;
@@ -323,6 +330,28 @@ namespace Content.Server.NPC.Pathfinding
             return await GetPath(request);
         }
 
+        public async Task<PathResultEvent> GetPreferredPath(
+            EntityUid entity,
+            EntityUid target,
+            float range,
+            CancellationToken cancelToken,
+            PathFlags flags = PathFlags.None)
+        {
+            if (!TryComp(entity, out TransformComponent? xform) ||
+                !TryComp(target, out TransformComponent? targetXform))
+            {
+                return new PathResultEvent(PathResult.NoPath, new List<PathPoly>());
+            }
+
+            return await GetPreferredPath(
+                entity,
+                xform.Coordinates,
+                targetXform.Coordinates,
+                range,
+                cancelToken,
+                flags);
+        }
+
         public async Task<PathResultEvent> GetPath(
             EntityUid entity,
             EntityCoordinates start,
@@ -335,6 +364,26 @@ namespace Content.Server.NPC.Pathfinding
             return await GetPath(request);
         }
 
+        public async Task<PathResultEvent> GetPreferredPath(
+            EntityUid entity,
+            EntityCoordinates start,
+            EntityCoordinates end,
+            float range,
+            CancellationToken cancelToken,
+            PathFlags flags = PathFlags.None,
+            PathPoly? blockedPoly = null)
+        {
+            return await GetPreferredPathInternal(
+                entity,
+                start,
+                end,
+                range,
+                cancelToken,
+                flags,
+                blockedPoly,
+                false);
+        }
+
         /// <summary>
         /// Gets a path in a thread-safe way.
         /// </summary>
@@ -344,10 +393,113 @@ namespace Content.Server.NPC.Pathfinding
             EntityCoordinates end,
             float range,
             CancellationToken cancelToken,
-            PathFlags flags = PathFlags.None)
+            PathFlags flags = PathFlags.None,
+            PathPoly? blockedPoly = null)
         {
             var request = GetRequest(entity, start, end, range, cancelToken, flags);
+            if (blockedPoly is { } blocked && blocked.IsValid())
+            {
+                request.BlockedPolys.Add(blocked);
+            }
+
             return await GetPath(request, true);
+        }
+
+        /// <summary>
+        /// Gets a preferred movement path: walk/open first, then obstacle actions only if walking cannot reach the target.
+        /// </summary>
+        public async Task<PathResultEvent> GetPreferredPathSafe(
+            EntityUid entity,
+            EntityCoordinates start,
+            EntityCoordinates end,
+            float range,
+            CancellationToken cancelToken,
+            PathFlags flags = PathFlags.None,
+            PathPoly? blockedPoly = null)
+        {
+            return await GetPreferredPathInternal(
+                entity,
+                start,
+                end,
+                range,
+                cancelToken,
+                flags,
+                blockedPoly,
+                true);
+        }
+
+        public static PathFlags GetConservativeFlags(PathFlags flags)
+        {
+            return flags & ~(PathFlags.Prying | PathFlags.Smashing | PathFlags.Climbing);
+        }
+
+        private async Task<PathResultEvent> GetPreferredPathInternal(
+            EntityUid entity,
+            EntityCoordinates start,
+            EntityCoordinates end,
+            float range,
+            CancellationToken cancelToken,
+            PathFlags flags,
+            PathPoly? blockedPoly,
+            bool safe)
+        {
+            var conservativeFlags = GetConservativeFlags(flags);
+            var useConservativeFirst = !start.TryDistance(EntityManager, end, out var distance) ||
+                                       distance <= 24f;
+
+            if (useConservativeFirst && conservativeFlags != flags)
+            {
+                var result = await GetPathWithBlockedPoly(entity, start, end, range, cancelToken, conservativeFlags, blockedPoly, safe);
+                if (IsUsablePathResult(result))
+                    return result;
+
+                if (cancelToken.IsCancellationRequested)
+                    return result;
+
+                if (blockedPoly != null)
+                {
+                    result = await GetPathWithBlockedPoly(entity, start, end, range, cancelToken, conservativeFlags, null, safe);
+                    if (IsUsablePathResult(result) && !result.Path.Contains(blockedPoly))
+                        return result;
+
+                    if (cancelToken.IsCancellationRequested)
+                        return result;
+                }
+            }
+
+            var fullResult = await GetPathWithBlockedPoly(entity, start, end, range, cancelToken, flags, blockedPoly, safe);
+            if (fullResult.Result == PathResult.Path ||
+                (fullResult.Result == PathResult.PartialPath && (blockedPoly == null || !fullResult.Path.Contains(blockedPoly))) ||
+                blockedPoly == null ||
+                cancelToken.IsCancellationRequested)
+                return fullResult;
+
+            return await GetPathWithBlockedPoly(entity, start, end, range, cancelToken, flags, null, safe);
+        }
+
+        private static bool IsUsablePathResult(PathResultEvent result)
+        {
+            return (result.Result is PathResult.Path or PathResult.PartialPath) &&
+                   result.Path.Count > 0;
+        }
+
+        private async Task<PathResultEvent> GetPathWithBlockedPoly(
+            EntityUid entity,
+            EntityCoordinates start,
+            EntityCoordinates end,
+            float range,
+            CancellationToken cancelToken,
+            PathFlags flags,
+            PathPoly? blockedPoly,
+            bool safe)
+        {
+            var request = GetRequest(entity, start, end, range, cancelToken, flags);
+            if (blockedPoly is { } blocked && blocked.IsValid())
+            {
+                request.BlockedPolys.Add(blocked);
+            }
+
+            return await GetPath(request, safe);
         }
 
         /// <summary>
@@ -396,6 +548,11 @@ namespace Content.Server.NPC.Pathfinding
             }
 
             var localPos = Vector2.Transform(_transform.ToMapCoordinates(coordinates).Position, _transform.GetInvWorldMatrix(xform));
+            return GetPolyAtLocal(comp, localPos);
+        }
+
+        private PathPoly? GetPolyAtLocal(GridPathfindingComponent comp, Vector2 localPos)
+        {
             var origin = GetOrigin(localPos);
 
             if (!TryGetChunk(origin, comp, out var chunk))
@@ -410,6 +567,69 @@ namespace Content.Server.NPC.Pathfinding
                     continue;
 
                 return poly;
+            }
+
+            return null;
+        }
+
+        private PathPoly? GetNearestPathablePoly(EntityCoordinates coordinates, PathRequest request, float range = 8f)
+        {
+            var gridUid = _transform.GetGrid(coordinates);
+
+            if (!TryComp<GridPathfindingComponent>(gridUid, out var comp) ||
+                !TryComp(gridUid, out TransformComponent? xform))
+            {
+                return null;
+            }
+
+            var localPos = Vector2.Transform(_transform.ToMapCoordinates(coordinates).Position, _transform.GetInvWorldMatrix(xform));
+            var directPoly = GetPolyAtLocal(comp, localPos);
+
+            if (directPoly != null && CanPathThrough(request, directPoly))
+            {
+                return directPoly;
+            }
+
+            var bestDistance = float.MaxValue;
+            PathPoly? bestPoly = null;
+            var step = 1f / SubStep;
+            var steps = (int) MathF.Ceiling(range / step);
+
+            for (var radius = 1; radius <= steps; radius++)
+            {
+                for (var x = -radius; x <= radius; x++)
+                {
+                    for (var y = -radius; y <= radius; y++)
+                    {
+                        if (Math.Abs(x) != radius && Math.Abs(y) != radius)
+                        {
+                            continue;
+                        }
+
+                        var offset = new Vector2(x * step, y * step);
+                        var poly = GetPolyAtLocal(comp, localPos + offset);
+
+                        if (poly == null || !CanPathThrough(request, poly))
+                        {
+                            continue;
+                        }
+
+                        var distance = offset.LengthSquared();
+
+                        if (distance >= bestDistance)
+                        {
+                            continue;
+                        }
+
+                        bestDistance = distance;
+                        bestPoly = poly;
+                    }
+                }
+
+                if (bestPoly != null)
+                {
+                    return bestPoly;
+                }
             }
 
             return null;
@@ -471,14 +691,7 @@ namespace Content.Server.NPC.Pathfinding
             // We could maybe try an initial quick run to avoid forcing time-slicing over ticks.
             // For now it seems okay and it shouldn't block on 1 NPC anyway.
 
-            if (safe)
-            {
-                lock (_pathRequests)
-                {
-                    _pathRequests.Add(request);
-                }
-            }
-            else
+            lock (_pathRequests)
             {
                 _pathRequests.Add(request);
             }

@@ -2,13 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.Destructible;
 using Content.Server.NPC;
+using Content.Server.NPC.Components;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
+using Content.Server.NPC.Systems;
 using Content.Server._WH40K.WaveDefence.Components;
+using Content.Shared._WH40K.Combat;
+using Content.Shared.Damage.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Turrets;
 using Robust.Shared.Map;
 
 namespace Content.Server._WH40K.WaveDefence.HTN.Operators;
@@ -21,6 +27,8 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
     [Dependency] private readonly IEntityManager _entityManager = default!;
     private MobStateSystem _mobState = default!;
     private NpcFactionSystem _npcFaction = default!;
+    private WH40KWaveDefenceObjectiveNavigationSystem _objectiveNavigation = default!;
+    private NPCPerceptionSystem _perception = default!;
 
     [DataField("targetKey")]
     public string TargetKey = WH40KWaveDefenceHtnBlackboardKeys.PlayerTarget;
@@ -36,6 +44,8 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
         base.Initialize(sysManager);
         _mobState = sysManager.GetEntitySystem<MobStateSystem>();
         _npcFaction = sysManager.GetEntitySystem<NpcFactionSystem>();
+        _objectiveNavigation = sysManager.GetEntitySystem<WH40KWaveDefenceObjectiveNavigationSystem>();
+        _perception = sysManager.GetEntitySystem<NPCPerceptionSystem>();
     }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
@@ -51,6 +61,17 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
             return (false, null);
         }
 
+        if (_entityManager.HasComponent<NPCCombatMemoryComponent>(owner))
+        {
+            if (!_perception.TryGetCombatTarget(owner, requireVisible: true, out var combatTarget, out var combatCoordinates))
+                return (false, null);
+
+            attacker.DebugState = $"combat-visible:{_entityManager.ToPrettyString(combatTarget)}";
+            return (true, BuildEffects(
+                combatTarget,
+                ResolveAttackCoordinates(owner, ownerXform.Coordinates, combatTarget, combatCoordinates)));
+        }
+
         var searchRadius = Math.Max(
             blackboard.GetValueOrDefault<float>(AggroVisionRadiusKey, _entityManager),
             blackboard.GetValueOrDefault<float>(VisionRadiusKey, _entityManager));
@@ -60,6 +81,18 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
             return (false, null);
 
         attacker.DebugState = $"combat-target:{_entityManager.ToPrettyString(target)}";
+        return (true, BuildEffects(
+            target,
+            ResolveAttackCoordinates(owner, ownerXform.Coordinates, target, targetCoordinates)));
+    }
+
+    public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
+    {
+        return HTNOperatorStatus.Finished;
+    }
+
+    private Dictionary<string, object> BuildEffects(EntityUid target, EntityCoordinates targetCoordinates)
+    {
         var effects = new Dictionary<string, object>
         {
             [TargetKey] = target,
@@ -72,12 +105,7 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
         if (!string.Equals(AttackCoordinatesKey, TargetCoordinatesKey, StringComparison.Ordinal))
             effects[AttackCoordinatesKey] = targetCoordinates;
 
-        return (true, effects);
-    }
-
-    public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
-    {
-        return HTNOperatorStatus.Finished;
+        return effects;
     }
 
     private bool TryPickTarget(
@@ -102,7 +130,7 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
 
         foreach (var candidate in hostiles)
         {
-            if (!_mobState.IsAlive(candidate) ||
+            if (!IsUsableCombatTarget(candidate) ||
                 !_entityManager.TryGetComponent<TransformComponent>(candidate, out var candidateXform) ||
                 candidateXform.MapID != ownerMap)
             {
@@ -129,5 +157,45 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
         }
 
         return false;
+    }
+
+    private EntityCoordinates ResolveAttackCoordinates(
+        EntityUid owner,
+        EntityCoordinates ownerCoordinates,
+        EntityUid target,
+        EntityCoordinates fallback)
+    {
+        if (IsStaticCombatThreat(target) &&
+            _entityManager.TryGetComponent<TransformComponent>(target, out var targetXform) &&
+            _objectiveNavigation.TryResolvePointApproach(ownerCoordinates, targetXform.Coordinates, out var approach))
+        {
+            return approach;
+        }
+
+        if (_objectiveNavigation.TryResolveSwarmSlotTarget(owner, ownerCoordinates, fallback, out var slot))
+            return slot;
+
+        return fallback;
+    }
+
+    private bool IsUsableCombatTarget(EntityUid target)
+    {
+        if (_mobState.IsAlive(target))
+            return true;
+
+        if (!IsStaticCombatThreat(target) ||
+            !_entityManager.HasComponent<DamageableComponent>(target))
+        {
+            return false;
+        }
+
+        return !_entityManager.TryGetComponent<DestructibleComponent>(target, out var destructible) ||
+               !destructible.IsBroken;
+    }
+
+    private bool IsStaticCombatThreat(EntityUid target)
+    {
+        return _entityManager.HasComponent<WH40KTurretProfileComponent>(target) ||
+               _entityManager.HasComponent<DeployableTurretComponent>(target);
     }
 }

@@ -24,6 +24,9 @@ public sealed partial class WH40KWaveDefenceConfigPrototype : IPrototype
     [DataField("intermissionDurationSeconds")]
     public float IntermissionDurationSeconds = 60f;
 
+    [DataField("maxWaveDurationSeconds")]
+    public float MaxWaveDurationSeconds = 600f;
+
     [DataField("lateJoinDuringWaveQueuesUntilPreparation")]
     public bool LateJoinDuringWaveQueuesUntilPreparation = true;
 
@@ -38,9 +41,6 @@ public sealed partial class WH40KWaveDefenceConfigPrototype : IPrototype
 
     [DataField("countCritAsAlive")]
     public bool CountCritAsAlive = true;
-
-    [DataField("minimumRequiredAttackLanes")]
-    public int MinimumRequiredAttackLanes = 1;
 
     [DataField("teamStartingPoints")]
     public int TeamStartingPoints = 50;

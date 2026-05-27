@@ -8,12 +8,11 @@ public sealed partial class PathfindingSystem
 {
     private PathResult UpdateBFSPath(IRobustRandom random, BFSPathRequest request)
     {
-        if (request.Task.IsCanceled)
+        if (request.Task.IsCanceled || request.CancelToken.IsCancellationRequested)
         {
             return PathResult.NoPath;
         }
 
-        // TODO: Need partial planning that uses best node.
         PathPoly? currentNode = null;
 
         // First run
@@ -21,6 +20,17 @@ public sealed partial class PathfindingSystem
         {
             request.Frontier = new PriorityQueue<(float, PathPoly)>(PathPolyComparer);
             request.Started = true;
+
+            var startNode = GetPoly(request.Start);
+
+            if (startNode == null)
+            {
+                return PathResult.NoPath;
+            }
+
+            request.StartNode = startNode;
+            request.Frontier.Add((0.0f, startNode));
+            request.CostSoFar[startNode] = 0.0f;
         }
         // Re-validate nodes
         else
@@ -43,39 +53,51 @@ public sealed partial class PathfindingSystem
             {
                 return PathResult.NoPath;
             }
+
+            if (request.StartNode == null || !request.StartNode.IsValid())
+            {
+                return PathResult.NoPath;
+            }
         }
 
         DebugTools.Assert(!request.Task.IsCompleted);
         request.Stopwatch.Restart();
 
-        var startNode = GetPoly(request.Start);
-
-        if (startNode == null)
-        {
-            return PathResult.NoPath;
-        }
-
-        request.Frontier.Add((0.0f, startNode));
-        request.CostSoFar[startNode] = 0.0f;
         var count = 0;
 
-        while (request.Frontier.Count > 0 && count < NodeLimit && count < request.ExpansionLimit)
+        while (request.Frontier.Count > 0 &&
+               count < NodeLimit &&
+               request.ExpandedNodes < request.ExpansionLimit)
         {
             // Handle whether we need to pause if we've taken too long
-            if (count % 20 == 0 && count > 0 && request.Stopwatch.Elapsed > PathTime)
+            if (count % 20 == 0 && count > 0 && request.Stopwatch.Elapsed > PathRequestTime)
             {
+                if (request.CancelToken.IsCancellationRequested)
+                    return PathResult.NoPath;
+
                 // I had this happen once in testing but I don't think it should be possible?
                 DebugTools.Assert(request.Frontier.Count > 0);
                 return PathResult.Continuing;
             }
 
             count++;
+            request.ExpandedNodes++;
 
             // Actual pathfinding here
             (_, currentNode) = request.Frontier.Take();
 
+            if (!currentNode.IsValid())
+            {
+                return PathResult.NoPath;
+            }
+
             foreach (var neighbor in currentNode.Neighbors)
             {
+                if (!neighbor.IsValid())
+                {
+                    continue;
+                }
+
                 var tileCost = GetTileCost(request, currentNode, neighbor);
 
                 if (tileCost.Equals(0f))
@@ -96,6 +118,11 @@ public sealed partial class PathfindingSystem
                 request.CostSoFar[neighbor] = gScore;
                 request.Frontier.Add((gScore, neighbor));
             }
+        }
+
+        if (request.Frontier.Count > 0 && request.ExpandedNodes < request.ExpansionLimit)
+        {
+            return PathResult.Continuing;
         }
 
         if (request.CostSoFar.Count == 0)

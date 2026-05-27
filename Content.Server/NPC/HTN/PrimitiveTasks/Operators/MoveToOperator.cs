@@ -110,7 +110,7 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
             });
         }
 
-        var path = await _pathfind.GetPath(
+        var path = await _pathfind.GetPreferredPath(
             blackboard.GetValue<EntityUid>(NPCBlackboard.Owner),
             xform.Coordinates,
                 targetCoordinates,
@@ -156,7 +156,7 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
             if (blackboard.TryGetValue<EntityCoordinates>(NPCBlackboard.OwnerCoordinates, out var coordinates, _entManager))
             {
                 var mapCoords = _transform.ToMapCoordinates(coordinates);
-                _steering.PrunePath(uid, mapCoords, _transform.ToMapCoordinates(targetCoordinates).Position - mapCoords.Position, result.Path);
+                _steering.PrunePath(uid, mapCoords, _transform.ToMapCoordinates(targetCoordinates).Position - mapCoords.Position, result.Path, comp);
             }
 
             comp.CurrentPath = new Queue<PathPoly>(result.Path);

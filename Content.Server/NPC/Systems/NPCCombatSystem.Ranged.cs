@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Interaction;
@@ -151,6 +152,13 @@ public sealed partial class NPCCombatSystem
                 _audio.PlayPvs(comp.SoundTargetInLOS, uid);
             }
 
+            if (HasFriendlyInFireLane(uid, comp.Target, xform, worldPos, targetPos, distance))
+            {
+                comp.ShootAccumulator = 0f;
+                comp.Status = CombatStatus.FriendlyFireBlocked;
+                continue;
+            }
+
             comp.ShootAccumulator += frameTime;
 
             if (comp.ShootAccumulator < comp.ShootDelay)
@@ -201,5 +209,45 @@ public sealed partial class NPCCombatSystem
 
             _gun.AttemptShoot(uid, gun, targetCordinates, comp.Target);
         }
+    }
+
+    private bool HasFriendlyInFireLane(
+        EntityUid uid,
+        EntityUid target,
+        TransformComponent xform,
+        Vector2 worldPos,
+        Vector2 targetPos,
+        float distance)
+    {
+        var lane = targetPos - worldPos;
+        var laneLengthSquared = lane.LengthSquared();
+
+        if (laneLengthSquared <= 0.01f)
+            return false;
+
+        foreach (var friendly in _npcFaction.GetNearbyFriendlies(uid, distance + 0.75f))
+        {
+            if (friendly == uid ||
+                friendly == target ||
+                !_xformQuery.TryGetComponent(friendly, out var friendlyXform) ||
+                friendlyXform.MapID != xform.MapID)
+            {
+                continue;
+            }
+
+            var friendlyPos = _transform.GetWorldPosition(friendlyXform);
+            var projection = Vector2.Dot(friendlyPos - worldPos, lane) / laneLengthSquared;
+
+            if (projection <= 0.05f || projection >= 0.95f)
+                continue;
+
+            var closest = worldPos + lane * projection;
+            var laneRadius = 0.45f;
+
+            if (Vector2.DistanceSquared(friendlyPos, closest) <= laneRadius * laneRadius)
+                return true;
+        }
+
+        return false;
     }
 }

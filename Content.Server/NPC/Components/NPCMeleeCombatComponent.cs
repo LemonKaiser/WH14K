@@ -47,6 +47,11 @@ public enum CombatStatus : byte
     NoWeapon,
 
     /// <summary>
+    /// A friendly actor is currently in the fire lane.
+    /// </summary>
+    FriendlyFireBlocked,
+
+    /// <summary>
     /// No dramas.
     /// </summary>
     Normal,

@@ -11,4 +11,7 @@ internal static class WH40KWaveDefenceHtnBlackboardKeys
     public const string ObjectiveTarget = "WH40KWaveObjectiveTarget";
     public const string ObjectiveTargetCoordinates = "WH40KWaveObjectiveTargetCoordinates";
     public const string MovementTargetCoordinates = "WH40KWaveMovementTargetCoordinates";
+    public const string CombatInvestigationTarget = "WH40KWaveCombatInvestigationTarget";
+    public const string CombatLastKnownCoordinates = "WH40KWaveCombatLastKnownCoordinates";
+    public const string CombatSearchTime = "WH40KWaveCombatSearchTime";
 }

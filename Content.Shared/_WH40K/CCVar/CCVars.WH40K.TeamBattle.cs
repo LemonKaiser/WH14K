@@ -33,7 +33,7 @@ public sealed partial class CCVars
     ///     Automatically starts a preset vote when WH40K lobby auto-vote is active.
     /// </summary>
     public static readonly CVarDef<bool> WH40KLobbyAutoVotePresetEnabled =
-        CVarDef.Create("wh40k.lobby_auto_vote.preset_enabled", false, CVar.SERVERONLY);
+        CVarDef.Create("wh40k.lobby_auto_vote.preset_enabled", true, CVar.SERVERONLY);
 
     /// <summary>
     ///     Automatically starts a map vote after preset voting when WH40K lobby auto-vote is active.
