@@ -13,6 +13,7 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Prying.Components;
 using Content.Shared.Weapons.Melee;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
