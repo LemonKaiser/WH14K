@@ -13,10 +13,10 @@ using Robust.Shared.Timing;
 namespace Content.Client.UserInterface.Systems.WindowOpacity;
 
 [UsedImplicitly]
-public sealed class LegacyWindowOpacityUIController : UIController
+public sealed partial class LegacyWindowOpacityUIController : UIController
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IUserInterfaceManager _uiManager = default!;
 
     private float _windowOpacity = WindowOpacityHelper.MaxUiWindowOpacity;
     private bool _pendingApply = true;

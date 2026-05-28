@@ -8,9 +8,9 @@ using Content.Shared._WH40K.Clothing;
 
 namespace Content.Server._WH40K.Clothing;
 
-public sealed class WH40KExplosiveBeltSystem : EntitySystem
+public sealed partial class WH40KExplosiveBeltSystem : EntitySystem
 {
-    [Dependency] private readonly TriggerSystem _trigger = default!;
+    [Dependency] private  TriggerSystem _trigger = default!;
 
     public override void Initialize()
     {

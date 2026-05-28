@@ -4,12 +4,12 @@ using Robust.Shared.Physics.Components;
 
 namespace Content.Client._WH40K.Vehicle.Visuals;
 
-public sealed class WH40KVehicleWheelAnimationSystem : EntitySystem
+public sealed partial class WH40KVehicleWheelAnimationSystem : EntitySystem
 {
     private const int MovementLayerIndex = 0;
     private const float MovingSpeedThreshold = 0.08f;
 
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
 
     public override void FrameUpdate(float frameTime)
     {

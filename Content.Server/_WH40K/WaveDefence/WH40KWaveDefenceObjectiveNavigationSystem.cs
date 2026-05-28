@@ -15,11 +15,11 @@ namespace Content.Server._WH40K.WaveDefence;
 /// This avoids steering directly into the center of a solid objective tile,
 /// which would otherwise make A* fail before the NPC ever starts the siege.
 /// </summary>
-public sealed class WH40KWaveDefenceObjectiveNavigationSystem : EntitySystem
+public sealed partial class WH40KWaveDefenceObjectiveNavigationSystem : EntitySystem
 {
-    [Dependency] private readonly PathfindingSystem _pathfinding = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  PathfindingSystem _pathfinding = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private const int MaxApproachSearchRadius = 6;
     private static readonly float[] ForwardOffsets = [0.85f, 1.25f, 1.75f, 2.25f, 2.85f, 3.45f];

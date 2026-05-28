@@ -16,9 +16,9 @@ namespace Content.Client._WH40K.StrategicPoints;
 /// Snaps the strategic point preview onto the point's actual build tile
 /// while the cursor is near a free T0 anchor.
 /// </summary>
-public sealed class WH40KStrategicPointPlacement : SnapgridCenter
+public sealed partial class WH40KStrategicPointPlacement : SnapgridCenter
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     private readonly SharedTransformSystem _transform;
 

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Server.Chat.Managers;
 using Content.Server.Connection;
+using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Shared.CCVar;
@@ -27,19 +27,19 @@ namespace Content.Server.Administration.Managers;
 
 public sealed partial class BanManager : IBanManager, IPostInjectInit
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly ILocalizationManager _localizationManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-    [Dependency] private readonly ITaskManager _taskManager = default!;
-    [Dependency] private readonly UserDbDataManager _userDbData = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
+    [Dependency] private ILocalizationManager _localizationManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntitySystemManager _systems = default!;
+    [Dependency] private ITaskManager _taskManager = default!;
+    [Dependency] private UserDbDataManager _userDbData = default!;
 
     private ISawmill _sawmill = default!;
 

@@ -16,7 +16,7 @@ namespace Content.Client.Humanoid;
 [GenerateTypedNameReferences]
 public sealed partial class LayerMarkingPicker : BoxContainer
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     private readonly IReadOnlyDictionary<string, MarkingPrototype> _allMarkings;
     private readonly ProtoId<OrganCategoryPrototype> _organ;
     private readonly HumanoidVisualLayers _layer;

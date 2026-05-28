@@ -16,9 +16,9 @@ using Content.Shared.Interaction.Events;
 namespace Content.Server.Stray.AudioLoop;
 
 [UsedImplicitly]
-public sealed class DiceSystem : SharedAudioLoopSystem
+public sealed partial class DiceSystem : SharedAudioLoopSystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
 
 
     public override void ActToggle(EntityUid uid, AudioLoopComponent audiCom, UseInHandEvent args){

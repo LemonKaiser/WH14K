@@ -15,11 +15,11 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._WH40K.Vehicle.Movement;
 
-public abstract class SharedWH40KVehicleCarMovementController : VirtualController
+public abstract partial class SharedWH40KVehicleCarMovementController : VirtualController
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private EntityQuery<VehicleComponent> _vehicleQuery;
     private EntityQuery<BuckleComponent> _buckleQuery;

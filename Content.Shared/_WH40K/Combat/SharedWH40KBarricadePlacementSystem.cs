@@ -15,13 +15,13 @@ namespace Content.Shared._WH40K.Combat;
 /// Handheld deployment flow for WH40K barricade kits:
 /// validates tile, waits deploy time, spawns configured barricade entity and consumes one kit item.
 /// </summary>
-public sealed class SharedWH40KBarricadePlacementSystem : EntitySystem
+public sealed partial class SharedWH40KBarricadePlacementSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedMapSystem _maps = default!;
+    [Dependency] private  SharedStackSystem _stack = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

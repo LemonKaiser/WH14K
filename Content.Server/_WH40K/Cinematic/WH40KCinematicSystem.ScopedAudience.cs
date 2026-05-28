@@ -26,13 +26,13 @@ namespace Content.Server._WH40K.Cinematic;
 
 public sealed partial class WH40KCinematicSystem
 {
-    [Dependency] private readonly GodmodeSystem _godmode = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private  GodmodeSystem _godmode = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MindSystem _mind = default!;
+    [Dependency] private  JobSystem _jobs = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  SharedTransformSystem _xform = default!;
 
     private readonly List<ActiveCinematicRun> _scopedRuns = new();
     private readonly Queue<QueuedScopedCinematicRequest> _scopedQueue = new();

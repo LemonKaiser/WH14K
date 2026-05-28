@@ -8,9 +8,9 @@ using Robust.Client.UserInterface;
 namespace Content.Client.Mech.Ui;
 
 [UsedImplicitly]
-public sealed class MechBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey), IBuiPreTickUpdate
+public sealed partial class MechBoundUserInterface(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey), IBuiPreTickUpdate
 {
-    [Dependency] private readonly IClientGameTiming _gameTiming = null!;
+    [Dependency] private  IClientGameTiming _gameTiming = null!;
 
     [ViewVariables]
     private MechMenu? _menu;

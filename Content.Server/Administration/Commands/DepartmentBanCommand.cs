@@ -10,14 +10,13 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Ban)]
-public sealed class DepartmentBanCommand : IConsoleCommand
+public sealed partial class DepartmentBanCommand : IConsoleCommand
 {
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly IBanManager _banManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ILogManager _log = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IBanManager _banManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ILogManager _log = default!;
 
     private ISawmill? _sawmill;
 
@@ -96,16 +95,6 @@ public sealed class DepartmentBanCommand : IConsoleCommand
 
         var targetUid = located.UserId;
         var targetHWid = located.LastHWId;
-
-        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
-                shell.Player,
-                targetUid,
-                Loc.GetString("admin-hierarchy-action-department-ban"),
-                located.Username,
-                shell.WriteLine))
-        {
-            return;
-        }
 
         var banInfo = new CreateRoleBanInfo(reason);
         if (minutes > 0)

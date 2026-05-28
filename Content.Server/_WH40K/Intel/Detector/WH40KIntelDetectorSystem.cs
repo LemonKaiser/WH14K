@@ -29,21 +29,21 @@ namespace Content.Server._WH40K.Intel.Detector;
 /// Mission-recon scanner for active WH40K runtime objective markers.
 /// The detector only reports mission-tagged visuals and keeps faction-safe visibility rules.
 /// </summary>
-public sealed class WH40KIntelDetectorSystem : EntitySystem
+public sealed partial class WH40KIntelDetectorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KCommandEventMissionRuntimeSystem _runtime = default!;
-    [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  INetManager _net = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KCommandEventMissionRuntimeSystem _runtime = default!;
+    [Dependency] private  WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<Entity<WH40KMissionObjectiveVisualComponent>> _trackedMarkers = new();
 

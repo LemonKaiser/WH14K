@@ -5,9 +5,9 @@ namespace Content.Client._WH40K.Overlays;
 /// <summary>
 /// Keeps the always-show health bar overlay active.
 /// </summary>
-public sealed class WH40KAlwaysShowHealthBarSystem : EntitySystem
+public sealed partial class WH40KAlwaysShowHealthBarSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private  IOverlayManager _overlayMan = default!;
 
     private WH40KAlwaysShowHealthBarOverlay _overlay = default!;
 

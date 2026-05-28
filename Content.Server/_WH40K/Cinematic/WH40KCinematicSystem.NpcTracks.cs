@@ -44,15 +44,15 @@ public sealed partial class WH40KCinematicSystem
     private const float NpcDefaultActionTimeoutSeconds = 8f;
     private const float NpcTrackEntryRuntimeIdSalt = 7919f;
 
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly OutfitSystem _outfit = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private  HTNSystem _htn = default!;
+    [Dependency] private  NPCSteeringSystem _steering = default!;
+    [Dependency] private  HandsSystem _hands = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  OutfitSystem _outfit = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private  SharedCombatModeSystem _combatMode = default!;
 
     private readonly Dictionary<NetUserId, NpcRecordingSession> _activeNpcRecordingSessions = new();
     private readonly Dictionary<NetUserId, NpcRecordingSession> _completedNpcRecordingSessions = new();

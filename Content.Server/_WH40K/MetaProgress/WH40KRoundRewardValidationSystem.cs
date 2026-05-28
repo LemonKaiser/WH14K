@@ -15,7 +15,7 @@ using Robust.Shared.Network;
 
 namespace Content.Server._WH40K.MetaProgress;
 
-public sealed class WH40KValidatedKillRewardEvent : EntityEventArgs
+public sealed partial class WH40KValidatedKillRewardEvent : EntityEventArgs
 {
     public EntityUid Victim { get; }
     public NetUserId KillerUserId { get; }
@@ -96,7 +96,7 @@ public sealed class WH40KConfirmedEliminationEvent : EntityEventArgs
     }
 }
 
-public sealed class WH40KRoundRewardValidationSystem : EntitySystem
+public sealed partial class WH40KRoundRewardValidationSystem : EntitySystem
 {
     private const int ClaimedReinforcementRewardCapPerRound = 3;
 
@@ -150,10 +150,10 @@ public sealed class WH40KRoundRewardValidationSystem : EntitySystem
         public bool ReservesClaimedReinforcementSlot;
     }
 
-    [Dependency] private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly KillTrackingSystem _killTracking = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamBattle = default!;
+    [Dependency] private  WH40KCombatVictimResolverSystem _combatVictims = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private  KillTrackingSystem _killTracking = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamBattle = default!;
 
     private readonly HashSet<RewardPairKey> _consumedRewardPairs = new();
     private readonly Dictionary<EntityUid, PendingDeathState> _pendingDeaths = new();

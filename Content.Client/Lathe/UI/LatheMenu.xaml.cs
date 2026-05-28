@@ -27,9 +27,9 @@ public sealed partial class LatheMenu : FancyWindow
 {
     private const string InfinitySymbol = "Inf";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly SpriteSystem _spriteSystem;
     private readonly LatheSystem _lathe;

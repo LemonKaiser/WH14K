@@ -9,9 +9,9 @@ using Robust.Shared.Localization;
 namespace Content.Server._WH40K.GameTicking.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KWaveDefenceAdminCommand : IConsoleCommand
+public sealed partial class WH40KWaveDefenceAdminCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     public string Command => "wh40kwave";
     public string Description => "Admin control for WH40K WaveDefence.";

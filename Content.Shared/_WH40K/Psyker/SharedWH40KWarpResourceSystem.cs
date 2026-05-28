@@ -9,12 +9,12 @@ namespace Content.Shared._WH40K.Psyker;
 /// Shared validation and spending logic for warp-powered actions.
 /// Server also runs passive regen/decay for warp resource channels.
 /// </summary>
-public sealed class SharedWH40KWarpResourceSystem : EntitySystem
+public sealed partial class SharedWH40KWarpResourceSystem : EntitySystem
 {
     private static readonly TimeSpan PassiveNetworkSyncCooldown = TimeSpan.FromSeconds(0.25);
 
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  INetManager _netManager = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Initialize()
     {

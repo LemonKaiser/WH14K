@@ -69,7 +69,7 @@ namespace Content.Client.Construction.UI
         private const float RecipeGridMinCellWidth = 78f;
         private const float RecipeGridCellHeight = 104f;
         private static readonly Color BuildDangerAccent = WH40KCommandUiStyles.DangerBadge.WithAlpha(0.64f);
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private  IConfigurationManager _cfg = default!;
         private readonly Dictionary<ContainerButton, (Label Title, Label Meta)> _listButtonLabels = new();
         private Color _accent = WH40KCommandUiStyles.DefaultAccent;
         private bool _chaosTheme;

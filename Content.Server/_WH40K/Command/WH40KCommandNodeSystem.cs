@@ -90,29 +90,29 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     private readonly List<EntityCoordinates> _reinforcementSpawnPoints = new();
     private readonly List<EntityCoordinates> _reinforcementMapSpawnPoints = new();
 
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly SharedJobSystem _jobs = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly WH40KCommandEventMissionRuntimeSystem _runtime = default!;
-    [Dependency] private readonly WH40KMissionPinpointerSystem _missionPinpointer = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly StationSystem _stations = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
-    [Dependency] private readonly WH40KPlayerStatsSystem _stats = default!;
-    [Dependency] private readonly WH40KStrategicPointSystem _strategicPoints = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
-    [Dependency] private readonly WH40KReinforcementAiSystem _reinforcementAi = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  MindSystem _mind = default!;
+    [Dependency] private  SharedJobSystem _jobs = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  WH40KCommandEventMissionRuntimeSystem _runtime = default!;
+    [Dependency] private  WH40KMissionPinpointerSystem _missionPinpointer = default!;
+    [Dependency] private  ResearchSystem _research = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  StationSystem _stations = default!;
+    [Dependency] private  StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private  WH40KCommandTreeBonusSystem _treeBonuses = default!;
+    [Dependency] private  WH40KPlayerStatsSystem _stats = default!;
+    [Dependency] private  WH40KStrategicPointSystem _strategicPoints = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private  WH40KReinforcementAiSystem _reinforcementAi = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

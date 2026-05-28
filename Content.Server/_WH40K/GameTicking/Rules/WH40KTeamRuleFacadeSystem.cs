@@ -13,10 +13,10 @@ namespace Content.Server._WH40K.GameTicking.Rules;
 /// Bridges WH40K team-aware systems to whichever mode currently owns shared team state.
 /// TeamBattle remains the primary provider, while WaveDefence can expose a compatible subset.
 /// </summary>
-public sealed class WH40KTeamRuleFacadeSystem : EntitySystem
+public sealed partial class WH40KTeamRuleFacadeSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattle = default!;
-    [Dependency] private readonly WH40KWaveDefenceRuleSystem _waveDefence = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamBattle = default!;
+    [Dependency] private  WH40KWaveDefenceRuleSystem _waveDefence = default!;
 
     public bool AreObjectivesEnabled()
     {

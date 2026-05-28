@@ -8,11 +8,11 @@ using Robust.Shared.Console;
 namespace Content.Server._WH40K.Administration.Commands;
 
 [AdminCommand(AdminFlags.Moderator)]
-internal sealed class WH40KScreenCheckCommand : LocalizedCommands
+internal sealed partial class WH40KScreenCheckCommand : LocalizedCommands
 {
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly ScreenCheckManager _screenChecks = default!;
+    [Dependency] private  IPlayerLocator _locator = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  ScreenCheckManager _screenChecks = default!;
 
     public override string Command => "screencheck";
 

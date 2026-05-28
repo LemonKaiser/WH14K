@@ -20,16 +20,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Combat;
 
-public sealed class WH40KTdmWarningBarrierSystem : EntitySystem
+public sealed partial class WH40KTdmWarningBarrierSystem : EntitySystem
 {
     private static readonly TimeSpan MoveCorrectionSuppression = TimeSpan.FromSeconds(0.2);
 
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattle = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamBattle = default!;
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextPopupAt = new();
     private readonly Dictionary<EntityUid, TimeSpan> _moveSuppressedUntil = new();

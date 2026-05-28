@@ -19,7 +19,7 @@ namespace Content.Client._WH40K.TacticalMap.UI;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KTacticalMapWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
 
     private const float LeftRailWidth = 308f;
     private static readonly Color AccentBorderBrightColor = Color.FromHex("#D7B65A".AsSpan());

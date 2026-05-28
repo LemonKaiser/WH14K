@@ -5,10 +5,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._WH40K.Light;
 
-public sealed class SharedWH40KWeaponLightSystem : EntitySystem
+public sealed partial class SharedWH40KWeaponLightSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedPointLightSystem _lights = default!;
 
     public override void Initialize()
     {

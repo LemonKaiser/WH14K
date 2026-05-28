@@ -23,18 +23,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Objectives;
 
-public sealed class WH40KObjectiveSystem : EntitySystem
+public sealed partial class WH40KObjectiveSystem : EntitySystem
 {
     private const float ObjectiveNotificationDuration = 9f;
 
-    [Dependency] private readonly WH40KNotificationSystem _notifications = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  WH40KNotificationSystem _notifications = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  TriggerSystem _trigger = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  IGameTiming _timing = default!;
     private readonly Dictionary<EntityUid, string> _objectiveTeams = new();
     private readonly Dictionary<string, int> _teamObjectiveTotals = new();
     private readonly Dictionary<string, int> _teamObjectiveRemaining = new();

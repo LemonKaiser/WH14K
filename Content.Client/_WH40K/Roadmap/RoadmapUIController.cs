@@ -6,10 +6,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Client._WH40K.Roadmap;
 
-public sealed class RoadmapUIController : UIController
+public sealed partial class RoadmapUIController : UIController
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IUriOpener _uriOpener = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  IUriOpener _uriOpener = default!;
 
     private RoadmapWindow? _window;
     private CreditsWindow? _creditsWindow;

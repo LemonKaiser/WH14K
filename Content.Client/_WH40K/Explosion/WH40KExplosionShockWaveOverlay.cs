@@ -8,13 +8,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.Explosion;
 
-public sealed class WH40KExplosionShockWaveOverlay : Overlay
+public sealed partial class WH40KExplosionShockWaveOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "WH40KShockWave";
 
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     private SharedTransformSystem? _xform;
 

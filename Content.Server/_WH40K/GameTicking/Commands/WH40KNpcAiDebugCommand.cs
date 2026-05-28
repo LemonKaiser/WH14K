@@ -6,9 +6,9 @@ using Robust.Shared.Console;
 namespace Content.Server._WH40K.GameTicking.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KNpcAiDebugCommand : IConsoleCommand
+public sealed partial class WH40KNpcAiDebugCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     public string Command => "wh40kai";
     public string Description => "General AI debug for HTN NPCs.";

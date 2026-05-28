@@ -65,8 +65,8 @@ public sealed partial class BatteryMenu : FancyWindow
         DimStorageColor(StorageColors[3]),
     ];
 
-    [Dependency] private readonly IEntityManager _entityManager = null!;
-    [Dependency] private readonly ILocalizationManager _loc = null!;
+    [Dependency] private  IEntityManager _entityManager = null!;
+    [Dependency] private  ILocalizationManager _loc = null!;
 
     private StyleBoxFlat[] _chargeMeterBoxes = Array.Empty<StyleBoxFlat>();
     private float _blinkPulseValue;

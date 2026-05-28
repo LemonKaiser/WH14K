@@ -10,13 +10,13 @@ using Content.Shared.Stacks;
 
 namespace Content.Server._WH40K.Research;
 
-public sealed class WH40KResearchPointChipSystem : EntitySystem
+public sealed partial class WH40KResearchPointChipSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly WH40KResearchTeamSystem _researchTeam = default!;
-    [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
+    [Dependency] private  AccessReaderSystem _accessReader = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  ResearchSystem _research = default!;
+    [Dependency] private  WH40KResearchTeamSystem _researchTeam = default!;
+    [Dependency] private  WH40KCommandTreeBonusSystem _treeBonuses = default!;
 
     public override void Initialize()
     {

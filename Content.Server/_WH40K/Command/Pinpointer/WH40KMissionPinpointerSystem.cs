@@ -9,12 +9,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Command.Pinpointer;
 
-public sealed class WH40KMissionPinpointerSystem : EntitySystem
+public sealed partial class WH40KMissionPinpointerSystem : EntitySystem
 {
-    [Dependency] private readonly PinpointerSystem _pinpointer = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly WH40KCommandEventMissionRuntimeSystem _runtime = default!;
+    [Dependency] private  PinpointerSystem _pinpointer = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  WH40KCommandEventMissionRuntimeSystem _runtime = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
 

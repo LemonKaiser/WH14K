@@ -23,18 +23,18 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Combat.Inflatable;
 
-public sealed class WH40KInflatableDeploySystem : EntitySystem
+public sealed partial class WH40KInflatableDeploySystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedMapSystem _maps = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  StackSystem _stack = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  UseDelaySystem _useDelay = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

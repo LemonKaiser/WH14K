@@ -5,7 +5,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed class FrontalLispSystem : EntitySystem
+public sealed partial class FrontalLispSystem : EntitySystem
 {
     // @formatter:off
     private static readonly Regex RegexUpperTh = new(@"[T]+[Ss]+|[S]+[Cc]+(?=[IiEeYy]+)|[C]+(?=[IiEeYy]+)|[P][Ss]+|([S]+[Tt]+|[T]+)(?=[Ii]+[Oo]+[Uu]*[Nn]*)|[C]+[Hh]+(?=[Ii]*[Ee]*)|[Z]+|[S]+|[X]+(?=[Ee]+)");
@@ -24,7 +24,7 @@ public sealed class FrontalLispSystem : EntitySystem
     private static readonly Regex RegexUpperZe = new(@"\u0417");
     // @formatter:on
 
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     public override void Initialize()
     {

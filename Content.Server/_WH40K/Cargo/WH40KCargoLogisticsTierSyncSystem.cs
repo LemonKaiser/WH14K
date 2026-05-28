@@ -11,14 +11,14 @@ namespace Content.Server._WH40K.Cargo;
 /// <summary>
 /// Synchronizes WH40K cargo logistics tier from current team base level.
 /// </summary>
-public sealed class WH40KCargoLogisticsTierSyncSystem : EntitySystem
+public sealed partial class WH40KCargoLogisticsTierSyncSystem : EntitySystem
 {
     private static readonly TimeSpan SyncInterval = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
 
     private TimeSpan _nextSync = TimeSpan.Zero;
 

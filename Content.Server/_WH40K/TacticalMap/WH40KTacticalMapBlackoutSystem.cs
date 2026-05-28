@@ -4,9 +4,9 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server._WH40K.TacticalMap;
 
-public sealed class WH40KTacticalMapBlackoutSystem : SharedWH40KTacticalMapBlackoutSystem
+public sealed partial class WH40KTacticalMapBlackoutSystem : SharedWH40KTacticalMapBlackoutSystem
 {
-    [Dependency] private readonly SharedMapSystem _maps = default!;
+    [Dependency] private  SharedMapSystem _maps = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
 

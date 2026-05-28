@@ -16,11 +16,11 @@ namespace Content.Shared.Mech.Systems;
 /// </summary>
 public sealed partial class MechLockSystem : EntitySystem
 {
-    [Dependency] private readonly EmagSystem _emag = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private  EmagSystem _emag = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedIdCardSystem _idCard = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

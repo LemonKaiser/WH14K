@@ -12,16 +12,16 @@ using Robust.Shared.Random;
 
 namespace Content.Shared._RMC14.Vendors;
 
-public abstract class SharedCMAutomatedVendorSystem : EntitySystem
+public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedJobSystem _job = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedJobSystem _job = default!;
+    [Dependency] private  SharedMindSystem _mind = default!;
+    [Dependency] private  INetManager _net = default!;
+    [Dependency] private  IPrototypeManager _prototypes = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

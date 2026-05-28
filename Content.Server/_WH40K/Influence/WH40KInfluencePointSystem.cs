@@ -19,7 +19,7 @@ namespace Content.Server._WH40K.Influence;
 /// <summary>
 /// Ownership and control logic for WH40K influence points.
 /// </summary>
-public sealed class WH40KInfluencePointSystem : EntitySystem
+public sealed partial class WH40KInfluencePointSystem : EntitySystem
 {
     private static readonly string[] TacticalCallsigns =
     {
@@ -51,13 +51,13 @@ public sealed class WH40KInfluencePointSystem : EntitySystem
         "Зулу",
     };
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NavMapSystem _navMap = default!;
-    [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  NavMapSystem _navMap = default!;
+    [Dependency] private  WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<string, int> _presentTeamCounts = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<EntityUid> _nearby = new();

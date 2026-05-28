@@ -5,9 +5,9 @@ namespace Content.Shared._WH40K.Psyker;
 /// <summary>
 /// Imperium psyker bootstrap is kept separate from chaos runtime wiring.
 /// </summary>
-public sealed class SharedWH40KPsykerRoleBootstrapSystem : EntitySystem
+public sealed partial class SharedWH40KPsykerRoleBootstrapSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private  INetManager _netManager = default!;
 
     public override void Initialize()
     {

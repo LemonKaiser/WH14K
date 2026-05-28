@@ -21,8 +21,8 @@ public sealed partial class WH40KOreExtractorWindow : FancyWindow, ILocalizedCon
 {
     private const float FloatComparisonEpsilon = 0.001f;
 
-    [Dependency] private readonly ILocalizationManager _localization = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  ILocalizationManager _localization = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     private WH40KOreExtractorTheme _theme = WH40KOreExtractorTheme.Disabled;
     private WH40KOreExtractorBuiState? _state;

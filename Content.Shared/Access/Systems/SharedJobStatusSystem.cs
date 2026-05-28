@@ -11,12 +11,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Access.Systems;
 
-public abstract class SharedJobStatusSystem : EntitySystem
+public abstract partial class SharedJobStatusSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly SharedJobSystem _jobSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mindSystem = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  AccessReaderSystem _accessReader = default!;
+    [Dependency] private  SharedJobSystem _jobSystem = default!;
+    [Dependency] private  SharedMindSystem _mindSystem = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     private static readonly ProtoId<JobIconPrototype> JobIconForNoId = "JobIconNoId";
     private static readonly ProtoId<JobIconPrototype> JobIconForUnknown = "JobIconUnknown";

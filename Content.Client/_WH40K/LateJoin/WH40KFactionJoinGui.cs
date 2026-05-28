@@ -22,7 +22,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.LateJoin;
 
-public sealed class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
+public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
 {
     private static readonly ProtoId<DepartmentPrototype> MechanicusDepartment = "Mechanicus";
     private static readonly ProtoId<DepartmentPrototype> DarkMechanicumDepartment = "DarkMechanicum";
@@ -51,9 +51,9 @@ public sealed class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
     private static readonly Color SoftTextColor = Color.FromHex("#A79668");
     private static readonly Color VsTextColor = Color.FromHex("#7E6A3A");
 
-    [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  IEntitySystemManager _entitySystems = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
 
     private readonly SpriteSystem _sprites;
     private readonly BoxContainer _root;

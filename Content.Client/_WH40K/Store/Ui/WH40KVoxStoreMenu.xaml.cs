@@ -23,9 +23,9 @@ public sealed partial class WH40KVoxStoreMenu : FancyWindow
 {
     private const char PurchaseCurrencySymbol = '\u20AE';
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly SpriteSystem _spriteSystem;
     private readonly ActionsSystem _actionsSystem;

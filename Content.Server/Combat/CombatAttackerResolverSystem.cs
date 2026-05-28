@@ -15,12 +15,12 @@ namespace Content.Server.Combat;
 /// Resolves the entity ultimately responsible for damage when the immediate origin is a projectile,
 /// held item, mech equipment, thrown item, timer-triggered entity, or nested child entity.
 /// </summary>
-public sealed class CombatAttackerResolverSystem : EntitySystem
+public sealed partial class CombatAttackerResolverSystem : EntitySystem
 {
     private const int MaxResolveDepth = 6;
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  VehicleSystem _vehicle = default!;
 
     public bool TryResolveResponsibleEntity(EntityUid origin, out EntityUid responsible)
     {

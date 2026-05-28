@@ -19,18 +19,18 @@ using static Robust.Client.UserInterface.Controls.BaseButton;
 namespace Content.Client.UserInterface.Systems.EscapeMenu;
 
 [UsedImplicitly]
-public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [Dependency] private readonly IClientConsoleHost _console = default!;
-    [Dependency] private readonly IUriOpener _uri = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ChangelogUIController _changelog = default!;
-    [Dependency] private readonly InfoUIController _info = default!;
-    [Dependency] private readonly OptionsUIController _options = default!;
-    [Dependency] private readonly GuidebookUIController _guidebook = default!;
-    [Dependency] private readonly WH40KDiscordAuthUIController _discordAuth = default!;
-    [Dependency] private readonly RoadmapUIController _roadmap = default!;
-    [Dependency] private readonly FeedbackPopupUIController _feedback = null!;
+    [Dependency] private  IClientConsoleHost _console = default!;
+    [Dependency] private  IUriOpener _uri = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  ChangelogUIController _changelog = default!;
+    [Dependency] private  InfoUIController _info = default!;
+    [Dependency] private  OptionsUIController _options = default!;
+    [Dependency] private  GuidebookUIController _guidebook = default!;
+    [Dependency] private  WH40KDiscordAuthUIController _discordAuth = default!;
+    [Dependency] private  RoadmapUIController _roadmap = default!;
+    [Dependency] private  FeedbackPopupUIController _feedback = null!;
 
     private Options.UI.EscapeMenu? _escapeWindow;
 

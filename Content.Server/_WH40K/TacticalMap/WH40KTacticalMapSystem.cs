@@ -26,7 +26,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._WH40K.TacticalMap;
 
-public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
+public sealed partial class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
 {
     private const string ScannerPrototype = "WH40KTacticalMapScannerEye";
     private const bool LiveRefreshRuntimeEnabled = false;
@@ -73,16 +73,16 @@ public sealed class WH40KTacticalMapSystem : SharedWH40KTacticalMapSystem
         public WH40KTacticalMapCapturePointMarker[] CapturePoints = Array.Empty<WH40KTacticalMapCapturePointMarker>();
     }
 
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly PowerCellSystem _cell = default!;
-    [Dependency] private readonly SharedStationSystem _station = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscribers = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  PowerCellSystem _cell = default!;
+    [Dependency] private  SharedStationSystem _station = default!;
+    [Dependency] private  IGameMapManager _gameMapManager = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  SharedTransformSystem _xform = default!;
+    [Dependency] private  ViewSubscriberSystem _viewSubscribers = default!;
+    [Dependency] private  SharedEyeSystem _eye = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly Dictionary<EntityUid, FogGridConfig> _fogGridConfigs = new();
     private readonly Dictionary<TeamMapKey, TeamFogState> _teamFogStates = new();

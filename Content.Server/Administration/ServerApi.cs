@@ -14,7 +14,6 @@ using Content.Server.GameTicking.Presets;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Maps;
 using Content.Server.RoundEnd;
-using Content.Shared.Administration;
 using Content.Shared.Administration.Managers;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -49,23 +48,22 @@ public sealed partial class ServerApi : IPostInjectInit
         CCVars.PanicBunkerCustomReason.Name,
     ];
 
-    [Dependency] private readonly IStatusHost _statusHost = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
-    [Dependency] private readonly IGameMapManager _gameMapManager = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly ITaskManager _taskManager = default!;
-    [Dependency] private readonly EntityManager _entityManager = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IBanManager _bans = default!;
-    [Dependency] private readonly IAdminHierarchyManager _adminHierarchy = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
+    [Dependency] private IStatusHost _statusHost = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IGameMapManager _gameMapManager = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ITaskManager _taskManager = default!;
+    [Dependency] private EntityManager _entityManager = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IBanManager _bans = default!;
+    [Dependency] private IServerDbManager _db = default!;
 
     private string _token = string.Empty;
     private ISawmill _sawmill = default!;
@@ -115,9 +113,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionPanicPunker(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "change panic bunker settings", AdminFlags.Server))
-            return;
-
         var request = await ReadJson<JsonObject>(context);
         if (request == null)
             return;
@@ -201,9 +196,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionForceMotd(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "change the MOTD", AdminFlags.Moderator))
-            return;
-
         var motd = await ReadJson<MotdActionBody>(context);
         if (motd == null)
             return;
@@ -220,9 +212,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionForcePreset(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "force the preset", AdminFlags.Round))
-            return;
-
         var body = await ReadJson<PresetActionBody>(context);
         if (body == null)
             return;
@@ -263,9 +252,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionEndGameRule(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "end a game rule", AdminFlags.Fun))
-            return;
-
         var body = await ReadJson<GameRuleActionBody>(context);
         if (body == null)
             return;
@@ -300,9 +286,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionAddGameRule(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "add a game rule", AdminFlags.Fun))
-            return;
-
         var body = await ReadJson<GameRuleActionBody>(context);
         if (body == null)
             return;
@@ -336,9 +319,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionBan(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "ban players", AdminFlags.Ban))
-            return;
-
         var body = await ReadJson<BanActionBody>(context);
         if (body == null)
             return;
@@ -369,16 +349,6 @@ public sealed partial class ServerApi : IPostInjectInit
                     ErrorCode.PlayerAlreadyBanned,
                     HttpStatusCode.Conflict,
                     "Player is already banned.");
-                return;
-            }
-
-            if (!await CheckHierarchyForActorAsync(
-                    context,
-                    actor,
-                    located.UserId,
-                    located.Username,
-                    "ban"))
-            {
                 return;
             }
 
@@ -418,9 +388,6 @@ public sealed partial class ServerApi : IPostInjectInit
     /// </summary>
     private async Task ActionKick(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "kick players", AdminFlags.Moderator, AdminFlags.Ban))
-            return;
-
         var body = await ReadJson<KickActionBody>(context);
         if (body == null)
             return;
@@ -437,16 +404,6 @@ public sealed partial class ServerApi : IPostInjectInit
                 return;
             }
 
-            if (!await CheckHierarchyForActorAsync(
-                    context,
-                    actor,
-                    player.UserId,
-                    player.Name,
-                    "kick"))
-            {
-                return;
-            }
-
             var reason = body.Reason ?? "No reason supplied";
             reason += " (kicked by admin)";
 
@@ -459,9 +416,6 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task ActionRoundStart(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "start rounds", AdminFlags.Round))
-            return;
-
         await RunOnMainThread(async () =>
         {
             var ticker = _entitySystemManager.GetEntitySystem<GameTicker>();
@@ -484,9 +438,6 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task ActionRoundEnd(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "end rounds", AdminFlags.Round))
-            return;
-
         await RunOnMainThread(async () =>
         {
             var roundEndSystem = _entitySystemManager.GetEntitySystem<RoundEndSystem>();
@@ -510,9 +461,6 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task ActionRoundRestartNow(IStatusHandlerContext context, Actor actor)
     {
-        if (!await CheckActorPermissionsAsync(context, actor, "restart rounds", AdminFlags.Round))
-            return;
-
         await RunOnMainThread(async () =>
         {
             var ticker = _entitySystemManager.GetEntitySystem<GameTicker>();
@@ -801,9 +749,7 @@ public sealed partial class ServerApi : IPostInjectInit
     private async Task<bool> CheckKnownAdminActorAsync(IStatusHandlerContext context, Actor actor)
     {
         if (await GetActiveActorAdminDataAsync(actor) != null)
-        {
             return true;
-        }
 
         await RespondError(
             context,
@@ -811,54 +757,6 @@ public sealed partial class ServerApi : IPostInjectInit
             HttpStatusCode.Forbidden,
             "Actor must reference an active admin account.");
         _sawmill.Warning($"Denied admin API request from {context.RemoteEndPoint} because actor {FormatLogActor(actor)} is not an active admin.");
-        return false;
-    }
-
-    private async Task<bool> CheckHierarchyForActorAsync(
-        IStatusHandlerContext context,
-        Actor actor,
-        NetUserId targetUserId,
-        string targetName,
-        string action)
-    {
-        var actorData = await GetActiveActorAdminDataAsync(actor);
-        if (actorData != null && actor.Guid == targetUserId.UserId)
-            return true;
-
-        var actorHierarchy = actorData == null
-            ? AdminHierarchyInfo.Missing
-            : new AdminHierarchyInfo(
-                true,
-                actorData.IsHost,
-                actorData.EffectiveHierarchyLevel,
-                actorData.IsHost ? null : actorData.EffectiveHierarchyLevel);
-
-        AdminHierarchyInfo targetHierarchy;
-        if (_playerManager.TryGetSessionById(targetUserId, out var targetSession))
-        {
-            targetHierarchy = _adminHierarchy.GetAdminHierarchy(targetSession, includeDeAdmin: true);
-        }
-        else
-        {
-            var targetAdmin = await _db.GetAdminDataForAsync(targetUserId);
-            targetHierarchy = targetAdmin == null
-                ? AdminHierarchyInfo.Missing
-                : _adminHierarchy.GetAdminHierarchy(targetAdmin);
-        }
-
-        if (!targetHierarchy.Exists)
-            return true;
-
-        var decision = AdminHierarchyManager.CanManageTarget(actorHierarchy, targetHierarchy);
-        if (decision.Allowed)
-            return true;
-
-        await RespondError(
-            context,
-            ErrorCode.ProtectedByHierarchy,
-            HttpStatusCode.Forbidden,
-            $"Cannot {action} protected admin target {targetName}.");
-        _sawmill.Warning($"Server API actor {FormatLogActor(actor)} was denied {action} on protected admin {targetName} ({targetUserId}): {decision.Reason}");
         return false;
     }
 

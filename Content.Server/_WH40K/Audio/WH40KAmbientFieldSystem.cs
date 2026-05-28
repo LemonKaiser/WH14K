@@ -12,13 +12,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Audio;
 
-public sealed class WH40KAmbientFieldSystem : EntitySystem
+public sealed partial class WH40KAmbientFieldSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan RebuildInterval = TimeSpan.FromSeconds(0.5);
 

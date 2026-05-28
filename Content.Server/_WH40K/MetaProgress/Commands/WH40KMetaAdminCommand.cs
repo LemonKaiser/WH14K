@@ -21,28 +21,28 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._WH40K.MetaProgress.Commands;
 
 [AdminCommand(AdminFlags.Host)]
-public sealed class WH40KMetaAdminCommand : LocalizedCommands
+public sealed partial class WH40KMetaAdminCommand : LocalizedCommands
 {
 	[Robust.Shared.IoC.Dependency]
-	private readonly IEntityManager _entity = default!;
+	private IEntityManager _entity = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly IPlayerLocator _playerLocator = default!;
+	private IPlayerLocator _playerLocator = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly IPlayerManager _players = default!;
+	private IPlayerManager _players = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly IServerPreferencesManager _prefs = default!;
+	private IServerPreferencesManager _prefs = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly IServerDbManager _db = default!;
+	private IServerDbManager _db = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly IPrototypeManager _prototypes = default!;
+	private IPrototypeManager _prototypes = default!;
 
 	[Robust.Shared.IoC.Dependency]
-	private readonly ILogManager _log = default!;
+	private ILogManager _log = default!;
 
 	private ISawmill? _sawmill;
 

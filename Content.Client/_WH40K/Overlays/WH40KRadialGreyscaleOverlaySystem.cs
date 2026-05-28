@@ -5,9 +5,9 @@ namespace Content.Client._WH40K.Overlays;
 /// <summary>
 /// Keeps WH40K radial grayscale overlay active.
 /// </summary>
-public sealed class WH40KRadialGreyscaleOverlaySystem : EntitySystem
+public sealed partial class WH40KRadialGreyscaleOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private  IOverlayManager _overlay = default!;
 
     private WH40KRadialGreyscaleOverlay _radialOverlay = default!;
 

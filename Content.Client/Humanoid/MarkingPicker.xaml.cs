@@ -13,7 +13,7 @@ namespace Content.Client.Humanoid;
 [GenerateTypedNameReferences]
 public sealed partial class MarkingPicker : Control
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     private MarkingsViewModel? _markingsModel;
     private float _panelOpacity = 1f;
 

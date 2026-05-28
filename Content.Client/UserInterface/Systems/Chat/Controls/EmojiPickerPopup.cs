@@ -13,16 +13,16 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.Controls;
 
-public sealed class EmojiPickerPopup : Popup
+public sealed partial class EmojiPickerPopup : Popup
 {
     public const float PopupWidth = 540f;
     public const float PopupHeight = 440f;
     public const int EmojiColumns = 6;
     private const float EmojiButtonSize = 48f;
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     private static readonly Color PanelBackgroundColor = Color.FromHex("#181B22");
     private static readonly Color RailBackgroundColor = Color.FromHex("#121419");

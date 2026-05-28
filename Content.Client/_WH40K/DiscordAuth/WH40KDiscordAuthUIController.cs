@@ -6,9 +6,9 @@ using Robust.Shared.GameObjects;
 namespace Content.Client._WH40K.DiscordAuth;
 
 [UsedImplicitly]
-public sealed class WH40KDiscordAuthUIController : UIController
+public sealed partial class WH40KDiscordAuthUIController : UIController
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     private WH40KDiscordAuthSystem? _discordAuth;
     private WH40KDiscordAuthStatusWindow? _window;

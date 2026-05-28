@@ -2,9 +2,9 @@ using Content.Shared.Movement.Systems;
 
 namespace Content.Shared._WH40K.MetaProgress;
 
-public sealed class SharedWH40KCharacterDevelopmentSpeedBoostSystem : EntitySystem
+public sealed partial class SharedWH40KCharacterDevelopmentSpeedBoostSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
 
     public override void Initialize()
     {

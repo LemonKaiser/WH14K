@@ -7,10 +7,10 @@ using Content.Shared._WH40K.Vehicle.Mech;
 
 namespace Content.Server._WH40K.Vehicle.Mech;
 
-public sealed class WH40KMechPilotCatastrophicEjectSystem : EntitySystem
+public sealed partial class WH40KMechPilotCatastrophicEjectSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedStunSystem _stun = default!;
 
     public override void Initialize()
     {

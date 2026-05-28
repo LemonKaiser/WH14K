@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
@@ -240,6 +241,11 @@ public sealed class StationJobsTest : GameTest
             {
                 foreach (var gameMap in prototypeManager.EnumeratePrototypes<GameMapPrototype>())
                 {
+                    // WH40K maps use a custom faction / role assignment flow instead of the
+                    // standard SS14 job-preference contract that this test validates.
+                    if (gameMap.MapPath.CanonPath.StartsWith("/Maps/_WH40K/", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
                     foreach (var (stationId, station) in gameMap.Stations)
                     {
                         if (!station.StationComponentOverrides.TryGetComponent(name, out var comp))

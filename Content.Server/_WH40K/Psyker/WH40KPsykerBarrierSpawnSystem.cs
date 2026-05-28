@@ -14,15 +14,15 @@ namespace Content.Server._WH40K.Psyker;
 /// The vanilla force wall uses square walls and does not need rotation,
 /// but shield barricades must face the caster to form proper cover lines.
 /// </summary>
-public sealed class WH40KPsykerBarrierSpawnSystem : EntitySystem
+public sealed partial class WH40KPsykerBarrierSpawnSystem : EntitySystem
 {
     private const string ImperialAegisAction = "ActionWH40KPsykerAegisWall";
     private const string ChaosTzeentchBarrierAction = "ActionWH40KChaosTzeentchBarrier";
     private const string ChaosUndividedAegisAction = "ActionWH40KChaosUndividedAegis";
 
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedMapSystem _mapSystem = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

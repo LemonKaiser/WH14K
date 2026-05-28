@@ -1,4 +1,3 @@
-using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Shared.Administration;
@@ -10,17 +9,16 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class ForceGhostCommand : LocalizedEntityCommands
+public sealed partial class ForceGhostCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private GhostSystem _ghost = default!;
 
     public override string Command => "forceghost";
 
-    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length == 0 || args.Length > 1)
         {
@@ -31,16 +29,6 @@ public sealed class ForceGhostCommand : LocalizedEntityCommands
         if (!_playerManager.TryGetSessionByUsername(args[0], out var player))
         {
             shell.WriteError(LocalizationManager.GetString("shell-target-player-does-not-exist"));
-            return;
-        }
-
-        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
-                shell.Player,
-                player.UserId,
-                Loc.GetString("admin-hierarchy-action-force-ghost"),
-                player.Name,
-                shell.WriteError))
-        {
             return;
         }
 

@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.Psyker.UI;
 
-public sealed class WH40KPsykerAstralOverlay : LayoutContainer
+public sealed partial class WH40KPsykerAstralOverlay : LayoutContainer
 {
     private static readonly Color HeaderTextColor = Color.FromHex("#EEF7FF");
     private static readonly Color PanelBackgroundColor = Color.FromHex("#08111A").WithAlpha(0.34f);
@@ -28,9 +28,9 @@ public sealed class WH40KPsykerAstralOverlay : LayoutContainer
     private static readonly Color PurchaseUnlockedColor = Color.FromHex("#F5E9B4");
     private static readonly Color DescriptionColor = Color.FromHex("#C9D9E8");
 
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly Texture _warpTexture;
     private readonly BoxContainer _content;

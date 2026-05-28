@@ -19,12 +19,12 @@
       types:
         Blunt: 1.25
     soundHit:
-      path: /Audio/Weapons/chainsaw.ogg
+      path: /Audio/Weapons/chainsaw_rev.ogg
       params:
         volume: -3
   - type: ItemToggle
     soundActivate:
-      path: /Audio/Weapons/chainsaw.ogg
+      path: /Audio/Weapons/chainsaw_pull.ogg
       params:
         volume: -3
     soundDeactivate:
@@ -37,7 +37,7 @@
         Slash: 40
         Shock: 5
     activatedSoundOnHit:
-      path: /Audio/Weapons/chainsaw.ogg
+      path: /Audio/Weapons/chainsaw_rev.ogg
       params:
         volume: -3
   - type: Wieldable

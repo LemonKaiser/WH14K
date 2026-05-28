@@ -13,15 +13,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.Weather;
 
-public abstract class SharedWeatherSystem : EntitySystem
+public abstract partial class SharedWeatherSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IPrototypeManager ProtoMan = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [Dependency] protected  IGameTiming Timing = default!;
+    [Dependency] protected  IPrototypeManager ProtoMan = default!;
+    [Dependency] private  ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _mapSystem = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
+    [Dependency] private  StatusEffectsSystem _statusEffects = default!;
 
     private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
     private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;

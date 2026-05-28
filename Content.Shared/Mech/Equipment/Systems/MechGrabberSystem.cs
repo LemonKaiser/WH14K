@@ -17,15 +17,15 @@ namespace Content.Shared.Mech.Equipment.Systems;
 /// <summary>
 /// Handles <see cref="MechGrabberComponent"/> and all related UI logic.
 /// </summary>
-public sealed class MechGrabberSystem : EntitySystem
+public sealed partial class MechGrabberSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  VehicleSystem _vehicle = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

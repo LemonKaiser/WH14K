@@ -1,16 +1,13 @@
 using Content.Server.Administration.Managers;
-using Content.Server.Database;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Ban)]
-public sealed class RoleUnbanCommand : LocalizedCommands
+public sealed partial class RoleUnbanCommand : LocalizedCommands
 {
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly IBanManager _banManager = default!;
-    [Dependency] private readonly IServerDbManager _dbManager = default!;
+    [Dependency] private IBanManager _banManager = default!;
 
     public override string Command => "roleunban";
 
@@ -25,17 +22,6 @@ public sealed class RoleUnbanCommand : LocalizedCommands
         if (!int.TryParse(args[0], out var banId))
         {
             shell.WriteLine(Loc.GetString($"cmd-roleunban-unable-to-parse-id", ("id", args[0]), ("help", Help)));
-            return;
-        }
-
-        var ban = await _dbManager.GetBanAsync(banId);
-        if (ban != null
-            && await _adminActionGuard.TryDenyProtectedBanAsync(
-                shell.Player,
-                ban,
-                Loc.GetString("admin-hierarchy-action-role-unban"),
-                shell.WriteLine))
-        {
             return;
         }
 

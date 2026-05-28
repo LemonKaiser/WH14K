@@ -10,15 +10,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Notifications;
 
-public sealed class WH40KNotificationSystem : EntitySystem
+public sealed partial class WH40KNotificationSystem : EntitySystem
 {
     private const float MaxDurationSeconds = 120f;
     private const float DefaultSpamCooldownSeconds = 1.0f;
     private const int MaxTitleLength = 96;
     private const int MaxTextLength = 512;
 
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly Dictionary<string, TimeSpan> _lastSentByStackKey = new(StringComparer.OrdinalIgnoreCase);
 

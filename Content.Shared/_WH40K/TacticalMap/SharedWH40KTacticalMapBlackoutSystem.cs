@@ -1,5 +1,4 @@
 using System.Diagnostics.Contracts;
-using Robust.Shared.Analyzers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
@@ -9,7 +8,6 @@ namespace Content.Shared._WH40K.TacticalMap;
 /// <summary>
 /// Handles mapper-authored blackout tiles for tactical-map rendering.
 /// </summary>
-[Virtual]
 public abstract class SharedWH40KTacticalMapBlackoutSystem : EntitySystem
 {
     /// <summary>

@@ -23,10 +23,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._WH40K.GameTicking.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KBattleAdminCommand : IConsoleCommand
+public sealed partial class WH40KBattleAdminCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
 
     public string Command => "wh40kbattle";
     public string Description => "WH40K admin control for phase, team economy, strategic points, and unlocks.";

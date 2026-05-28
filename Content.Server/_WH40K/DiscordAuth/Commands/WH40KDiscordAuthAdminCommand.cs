@@ -13,13 +13,13 @@ using Robust.Shared.Log;
 namespace Content.Server._WH40K.DiscordAuth.Commands;
 
 [AdminCommand(AdminFlags.Moderator)]
-public sealed class WH40KDiscordAuthAdminCommand : LocalizedCommands
+public sealed partial class WH40KDiscordAuthAdminCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IPlayerLocator _playerLocator = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private  IServerDbManager _db = default!;
+    [Dependency] private  IEntityManager _entity = default!;
+    [Dependency] private  ILogManager _log = default!;
+    [Dependency] private  IPlayerLocator _playerLocator = default!;
+    [Dependency] private  IPlayerManager _players = default!;
 
     private ISawmill? _sawmill;
 

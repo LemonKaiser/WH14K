@@ -11,10 +11,10 @@ namespace Content.Shared._WH40K.Psyker;
 /// - passive meditation XP while sleeping;
 /// - active cast XP with anti-spam diminishing return.
 /// </summary>
-public sealed class SharedWH40KPsykerProgressionSystem : EntitySystem
+public sealed partial class SharedWH40KPsykerProgressionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  INetManager _netManager = default!;
 
     public override void Initialize()
     {

@@ -13,11 +13,11 @@ namespace Content.Server.Mech.Systems;
 /// <summary>
 /// Handles atmospheric systems for mechs including air circulation, fans, and life support.
 /// </summary>
-public sealed class MechAtmosphereSystem : EntitySystem
+public sealed partial class MechAtmosphereSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  AtmosphereSystem _atmosphere = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     private const float MinExternalPressure = 0.05f;
     private const float PressureTolerance = 0.1f;

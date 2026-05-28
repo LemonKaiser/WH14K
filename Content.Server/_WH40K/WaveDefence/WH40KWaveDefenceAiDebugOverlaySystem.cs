@@ -15,16 +15,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.WaveDefence;
 
-public sealed class WH40KWaveDefenceAiDebugOverlaySystem : SharedWH40KWaveDefenceAiDebugOverlaySystem
+public sealed partial class WH40KWaveDefenceAiDebugOverlaySystem : SharedWH40KWaveDefenceAiDebugOverlaySystem
 {
     private const string VisionRadiusKey = "VisionRadius";
     private const string AggroVisionRadiusKey = "AggroVisionRadius";
     private const string GenericCombatTargetKey = "Target";
     private const string GenericMoveTargetKey = "TargetCoordinates";
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly HashSet<ICommonSession> _observers = [];
     private TimeSpan? _nextTick;

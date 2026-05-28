@@ -23,7 +23,7 @@ namespace Content.Client._WH40K.Psyker.UI;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KChaosSkrizhalPatronSelectorWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
     private readonly SharedAudioSystem _audio;
     private readonly SpriteSystem _sprite;
 

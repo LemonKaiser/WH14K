@@ -13,13 +13,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.GameTicking;
 
-public sealed class WH40KLobbyAutoVoteSystem : EntitySystem
+public sealed partial class WH40KLobbyAutoVoteSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IVoteManager _voteManager = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
+    [Dependency] private  IVoteManager _voteManager = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
 
     private const float AutoVoteSafetyBufferSeconds = 1f;
 

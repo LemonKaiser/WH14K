@@ -17,14 +17,14 @@ using Robust.Shared.Timing;
 namespace Content.Shared._WH40K.Vehicle.Fuel;
 
 [UsedImplicitly]
-public sealed class SharedWH40KVehicleFuelSystem : EntitySystem
+public sealed partial class SharedWH40KVehicleFuelSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private  VehicleSystem _vehicle = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Initialize()
     {

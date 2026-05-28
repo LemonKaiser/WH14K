@@ -24,14 +24,14 @@ using Robust.Shared.Utility;
 namespace Content.Client._WH40K.Notifications;
 
 [UsedImplicitly]
-public sealed class WH40KNotificationUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class WH40KNotificationUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
     private const int HudTopMargin = 18;
     private const int MaxPendingNotifications = 12;
     private static readonly SoundSpecifier DefaultNotificationSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
 
     private readonly List<WH40KNotificationEvent> _pending = new();
     private SharedAudioSystem? _audio;

@@ -26,23 +26,23 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Fulton;
 
-public sealed class WH40KTacticalFultonSystem : EntitySystem
+public sealed partial class WH40KTacticalFultonSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly WH40KCommandEventMissionRuntimeSystem _missionRuntime = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  WH40KCommandEventMissionRuntimeSystem _missionRuntime = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  SharedStackSystem _stack = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private const string FultonEffectPrototype = "FultonEffect";
 

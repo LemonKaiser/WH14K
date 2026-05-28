@@ -15,11 +15,11 @@ using Robust.Shared.Timing;
 namespace Content.Client._WH40K.Psyker.UI;
 
 [UsedImplicitly]
-public sealed class WH40KWarpUiController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class WH40KWarpUiController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPlayerManager _player = default!;
 
     private WH40KWarpHudControl? _hud;
     private WH40KPsykerProgressionWindow? _psykerWindow;

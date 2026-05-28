@@ -32,7 +32,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
 {
     private const string SlaaneshSwapAction = "ActionWH40KChaosSlaaneshSwap";
     private const string SlaaneshMasochismAction = "ActionWH40KChaosSlaaneshExquisiteTempo";
@@ -49,19 +49,19 @@ public sealed class WH40KChaosSlaaneshGiftAbilitySystem : EntitySystem
     private static readonly ProtoId<ReagentPrototype> OmnizineReagent = "Omnizine";
     private static readonly ProtoId<ReagentPrototype> TranexamicAcidReagent = "TranexamicAcid";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
-    [Dependency] private readonly StunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  BloodstreamSystem _bloodstream = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  PullingSystem _pulling = default!;
+    [Dependency] private  StunSystem _stun = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly List<SlaaneshPositionSwapState> _activePositionSwaps = new();

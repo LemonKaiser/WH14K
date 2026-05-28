@@ -22,19 +22,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Vehicle.Fabrication;
 
-public sealed class WH40KVehicleFabricationSystem : EntitySystem
+public sealed partial class WH40KVehicleFabricationSystem : EntitySystem
 {
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMaterialStorageSystem _materials = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  SharedContainerSystem _containers = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedMaterialStorageSystem _materials = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  SharedStackSystem _stack = default!;
+    [Dependency] private  StationSystem _station = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

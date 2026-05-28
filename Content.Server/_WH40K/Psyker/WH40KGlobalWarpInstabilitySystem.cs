@@ -50,7 +50,7 @@ namespace Content.Server._WH40K.Psyker;
 /// Server-authoritative global warp instability pool shared by Imperium psykers and chaos leaders.
 /// Individual instability components are now mirrored read-models for UI/networking.
 /// </summary>
-public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
+public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
 {
     private const float WarpMutationMinSeverity = 0.25f;
     private const float WarpMutationMaxSeverity = 0.75f;
@@ -96,29 +96,29 @@ public sealed class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private readonly Dictionary<EntityUid, WarpPossessionState> _activePossessions = new();
     private readonly Dictionary<EntityUid, WarpHallucinationState> _activeHallucinations = new();
 
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly DrunkSystem _drunk = default!;
-    [Dependency] private readonly EmpSystem _emp = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly WH40KWarpMutationSystem _mutation = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly ParacusiaSystem _paracusia = default!;
-    [Dependency] private readonly PolymorphSystem _polymorph = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StunSystem _stun = default!;
-    [Dependency] private readonly SharedVisualBodySystem _visualBody = default!;
-    [Dependency] private readonly ZombieSystem _zombie = default!;
+    [Dependency] private  BloodstreamSystem _bloodstream = default!;
+    [Dependency] private  ChatSystem _chat = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  DrunkSystem _drunk = default!;
+    [Dependency] private  EmpSystem _emp = default!;
+    [Dependency] private  GhostSystem _ghost = default!;
+    [Dependency] private  HandsSystem _hands = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  HTNSystem _htn = default!;
+    [Dependency] private  MindSystem _mind = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  WH40KWarpMutationSystem _mutation = default!;
+    [Dependency] private  NPCSystem _npc = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  ParacusiaSystem _paracusia = default!;
+    [Dependency] private  PolymorphSystem _polymorph = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedStaminaSystem _stamina = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  StunSystem _stun = default!;
+    [Dependency] private  SharedVisualBodySystem _visualBody = default!;
+    [Dependency] private  ZombieSystem _zombie = default!;
 
     private DamageTypePrototype _heatDamage = default!;
     private float _currentInstability;

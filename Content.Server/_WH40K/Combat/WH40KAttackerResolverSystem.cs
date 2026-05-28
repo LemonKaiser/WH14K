@@ -6,9 +6,9 @@ namespace Content.Server._WH40K.Combat;
 /// <summary>
 /// Legacy WH40K wrapper over the shared combat attacker resolver.
 /// </summary>
-public sealed class WH40KAttackerResolverSystem : EntitySystem
+public sealed partial class WH40KAttackerResolverSystem : EntitySystem
 {
-    [Dependency] private readonly CombatAttackerResolverSystem _resolver = default!;
+    [Dependency] private  CombatAttackerResolverSystem _resolver = default!;
 
     public bool TryResolveAttacker(EntityUid origin, out EntityUid attacker)
     {

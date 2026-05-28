@@ -20,17 +20,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Vehicle.Fuel;
 
-public sealed class WH40KVehicleFuelSystem : EntitySystem
+public sealed partial class WH40KVehicleFuelSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly SharedWH40KVehicleFuelSystem _sharedFuel = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private  SharedContainerSystem _containers = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private  SharedWH40KVehicleFuelSystem _sharedFuel = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

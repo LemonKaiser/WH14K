@@ -5,9 +5,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server._WH40K.Examine;
 
-public sealed class WH40KPlayerLanguageExamineSystem : EntitySystem
+public sealed partial class WH40KPlayerLanguageExamineSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KPlayerCultureTracker _cultureTracker = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _cultureTracker = default!;
 
     public override void Initialize()
     {

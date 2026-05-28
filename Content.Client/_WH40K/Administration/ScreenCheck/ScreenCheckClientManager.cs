@@ -9,11 +9,11 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Content.Client._WH40K.Administration.ScreenCheck;
 
-public sealed class ScreenCheckClientManager
+public sealed partial class ScreenCheckClientManager
 {
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly ILogManager _logs = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
+    [Dependency] private  IClyde _clyde = default!;
+    [Dependency] private  ILogManager _logs = default!;
+    [Dependency] private  IClientNetManager _net = default!;
 
     private ISawmill _sawmill = default!;
     private int _captureInProgress;

@@ -10,9 +10,9 @@ using Robust.Shared.Maths;
 namespace Content.Server._WH40K.Notifications.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KNotificationAdminCommand : IConsoleCommand
+public sealed partial class WH40KNotificationAdminCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     public string Command => "wh40knotify";
     public string Description => "Show a WH40K top-center HUD notification to everyone or one team.";

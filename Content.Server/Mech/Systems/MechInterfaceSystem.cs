@@ -25,14 +25,14 @@ namespace Content.Server.Mech.Systems;
 /// This system is responsible for updating the mech UI state and handling UI interactions.
 /// It is not responsible for any mech logic on its own, it merely provides UI functionality.
 /// </remarks>
-public sealed class MechInterfaceSystem : EntitySystem
+public sealed partial class MechInterfaceSystem : EntitySystem
 {
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] private readonly MechLockSystem _mechLock = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private  ContainerSystem _container = default!;
+    [Dependency] private  IGameTiming _gameTiming = default!;
+    [Dependency] private  MechLockSystem _mechLock = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
+    [Dependency] private  UserInterfaceSystem _uiSystem = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

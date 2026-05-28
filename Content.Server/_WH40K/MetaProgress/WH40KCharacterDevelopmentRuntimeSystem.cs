@@ -17,16 +17,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.MetaProgress;
 
-public sealed class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
+public sealed partial class WH40KCharacterDevelopmentRuntimeSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KCharacterDevelopmentAbilitySystem _abilities = default!;
-    [Dependency] private readonly HungerSystem _hunger = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly WH40KMetaProgressSystem _metaProgress = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly RespiratorSystem _respirator = default!;
-    [Dependency] private readonly StaminaSystem _staminaSystem = default!;
-    [Dependency] private readonly ThirstSystem _thirst = default!;
+    [Dependency] private  WH40KCharacterDevelopmentAbilitySystem _abilities = default!;
+    [Dependency] private  HungerSystem _hunger = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  WH40KMetaProgressSystem _metaProgress = default!;
+    [Dependency] private  BloodstreamSystem _bloodstream = default!;
+    [Dependency] private  RespiratorSystem _respirator = default!;
+    [Dependency] private  StaminaSystem _staminaSystem = default!;
+    [Dependency] private  ThirstSystem _thirst = default!;
 
     public override void Initialize()
     {

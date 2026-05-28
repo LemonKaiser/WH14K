@@ -27,7 +27,7 @@ namespace Content.Client._WH40K.TacticalMap.UI;
 /// Fits the battlefield into the real control size,
 /// keeps local drafts separate from the snapshot, and handles its own pan/zoom input.
 /// </summary>
-public sealed class WH40KTacticalMapControl : Control
+public sealed partial class WH40KTacticalMapControl : Control
 {
     private const float LiveRefreshCaptureDelaySeconds = 0.75f;
     private const float DefaultAnnotationThickness = 1.5f;
@@ -51,10 +51,10 @@ public sealed class WH40KTacticalMapControl : Control
     private static readonly Color TacticalPanelBorderStrongColor = Color.FromHex("#6A5530".AsSpan());
     private static readonly Color TacticalWarmTextColor = Color.FromHex("#E6DEC7".AsSpan());
 
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IResourceManager _resources = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
+    [Dependency] private  IClyde _clyde = default!;
+    [Dependency] private  IResourceManager _resources = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly SharedTransformSystem _transformSystem;
     private readonly SpriteSystem _sprite;

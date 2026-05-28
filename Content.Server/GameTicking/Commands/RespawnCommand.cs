@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Administration;
-using Content.Server.Administration.Managers;
 using Content.Server.Mind;
 using Content.Shared.Players;
 using Robust.Server.Player;
@@ -9,13 +8,12 @@ using Robust.Shared.Network;
 
 namespace Content.Server.GameTicking.Commands
 {
-    sealed class RespawnCommand : LocalizedEntityCommands
+    sealed partial class RespawnCommand : LocalizedEntityCommands
     {
-        [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-        [Dependency] private readonly IPlayerManager _player = default!;
-        [Dependency] private readonly IPlayerLocator _locator = default!;
-        [Dependency] private readonly GameTicker _gameTicker = default!;
-        [Dependency] private readonly MindSystem _mind = default!;
+        [Dependency] private IPlayerManager _player = default!;
+        [Dependency] private IPlayerLocator _locator = default!;
+        [Dependency] private GameTicker _gameTicker = default!;
+        [Dependency] private MindSystem _mind = default!;
 
         public override string Command => "respawn";
 
@@ -62,16 +60,6 @@ namespace Content.Server.GameTicking.Commands
 
                 _mind.WipeMind(data.ContentData()?.Mind);
                 shell.WriteError(Loc.GetString("cmd-respawn-player-not-online"));
-                return;
-            }
-
-            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
-                    player,
-                    userId,
-                    Loc.GetString("admin-hierarchy-action-respawn"),
-                    targetPlayer.Name,
-                    shell.WriteError))
-            {
                 return;
             }
 

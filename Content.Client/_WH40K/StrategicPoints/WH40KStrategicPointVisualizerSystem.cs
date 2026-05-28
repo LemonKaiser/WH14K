@@ -7,9 +7,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.StrategicPoints;
 
-public sealed class WH40KStrategicPointVisualizerSystem : EntitySystem
+public sealed partial class WH40KStrategicPointVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

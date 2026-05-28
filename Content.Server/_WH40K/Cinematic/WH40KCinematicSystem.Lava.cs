@@ -14,8 +14,8 @@ namespace Content.Server._WH40K.Cinematic;
 
 public sealed partial class WH40KCinematicSystem
 {
-    [Dependency] private readonly TileSystem _tiles = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private  TileSystem _tiles = default!;
+    [Dependency] private  TagSystem _tags = default!;
 
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private const string LavaPreviewMarkerPrototype = "WH40KCinematicLavaPreviewMarker";

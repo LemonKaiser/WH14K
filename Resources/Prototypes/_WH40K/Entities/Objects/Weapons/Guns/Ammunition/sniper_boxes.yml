@@ -1,6 +1,6 @@
 - type: entity
   id: WH40KAmmoBoxLondoronMk2
-  parent: BaseMagazineBoxAntiMateriel
+  parent: MagazineBoxAntiMateriel
   suffix: WH40K
   components:
   - type: BallisticAmmoProvider

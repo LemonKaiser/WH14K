@@ -9,15 +9,15 @@ namespace Content.Server._WH40K.Explosion;
 /// <summary>
 /// Spawns WH40K-only secondary explosion visuals (shockwave and debris puffs).
 /// </summary>
-public sealed class WH40KExplosionVisualEffectsSystem : EntitySystem
+public sealed partial class WH40KExplosionVisualEffectsSystem : EntitySystem
 {
     private const string ShockWaveEffect = "WH40KExplosionEffectShockWave";
     private const string DebrisEffect = "WH40KExplosionEffectDebris";
     private const int ShockWaveMinIterations = 5;
     private const float ShockWaveMinPeakIntensity = 4.5f;
 
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     private readonly HashSet<EntityUid> _spawnedEffects = new();
 

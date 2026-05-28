@@ -3,9 +3,9 @@ using Content.Shared.Weather;
 
 namespace Content.Shared.Trigger.Systems;
 
-public sealed class WeatherTriggerSystem : XOnTriggerSystem<WeatherOnTriggerComponent>
+public sealed partial class WeatherTriggerSystem : XOnTriggerSystem<WeatherOnTriggerComponent>
 {
-    [Dependency] private readonly SharedWeatherSystem _weather = default!;
+    [Dependency] private  SharedWeatherSystem _weather = default!;
 
     protected override void OnTrigger(Entity<WeatherOnTriggerComponent> ent, EntityUid target, ref TriggerEvent args)
     {

@@ -30,7 +30,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
 {
     private const string NurgleMiasmaAction = "ActionWH40KChaosNurgleMiasma";
     private const string NurgleAcidSpitAction = "ActionWH40KChaosNurgleRepulse";
@@ -44,17 +44,17 @@ public sealed class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     private static readonly EntProtoId AcidSpitTierThreeProjectile = "WH40KProjectileChaosNurgleAcidSpitTier3";
     private static readonly EntProtoId AcidSpitExProjectile = "WH40KProjectileChaosNurgleAcidSpitEx";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
-    [Dependency] private readonly GhostSystem _ghost = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ZombieSystem _zombie = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private  GhostSystem _ghost = default!;
+    [Dependency] private  MindSystem _mind = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  ZombieSystem _zombie = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
 

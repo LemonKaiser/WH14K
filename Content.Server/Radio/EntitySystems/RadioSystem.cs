@@ -24,17 +24,17 @@ namespace Content.Server.Radio.EntitySystems;
 /// <summary>
 ///     This system handles intrinsic radios and the general process of converting radio messages into chat messages.
 /// </summary>
-public sealed class RadioSystem : EntitySystem
+public sealed partial class RadioSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _netMan = default!;
-    [Dependency] private readonly IReplayRecordingManager _replay = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly IWH40KChatTranslationService _wh40kChatTranslation = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _wh40kPlayerCulture = default!;
-    [Dependency] private readonly ITaskManager _wh40kTaskManager = default!;
+    [Dependency] private  INetManager _netMan = default!;
+    [Dependency] private  IReplayRecordingManager _replay = default!;
+    [Dependency] private  IAdminLogManager _adminLogger = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  ChatSystem _chat = default!;
+    [Dependency] private  IWH40KChatTranslationService _wh40kChatTranslation = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _wh40kPlayerCulture = default!;
+    [Dependency] private  ITaskManager _wh40kTaskManager = default!;
 
     // set used to prevent radio feedback loops.
     private readonly HashSet<string> _messages = new();

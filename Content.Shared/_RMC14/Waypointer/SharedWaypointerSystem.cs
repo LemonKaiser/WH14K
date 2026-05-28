@@ -11,11 +11,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Waypointer;
 
-public abstract class SharedWaypointerSystem : EntitySystem
+public abstract partial class SharedWaypointerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] protected readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] protected  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedUserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

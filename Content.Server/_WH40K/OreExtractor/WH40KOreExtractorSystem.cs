@@ -35,19 +35,19 @@ namespace Content.Server._WH40K.OreExtractor;
 /// <summary>
 /// Powered ore extractor that periodically spawns ore on its output tile.
 /// </summary>
-public sealed class WH40KOreExtractorSystem : EntitySystem
+public sealed partial class WH40KOreExtractorSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<EntityUid> _tileEntities = new();
     private readonly CollisionGroup _outputCollisionMask =

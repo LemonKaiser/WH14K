@@ -19,11 +19,11 @@ namespace Content.Server._WH40K.Localizations;
 ///     and provides helpers to temporarily scope <see cref="ILocalizationManager"/>
 ///     to that culture when building per-player text (popups, verbs, examine, etc.).
 /// </summary>
-public sealed class WH40KPlayerCultureTracker : EntitySystem
+public sealed partial class WH40KPlayerCultureTracker : EntitySystem
 {
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly INetConfigurationManager _netConfig = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
+    [Dependency] private  INetConfigurationManager _netConfig = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
 
     private readonly Dictionary<NetUserId, string> _cultures = new();
 

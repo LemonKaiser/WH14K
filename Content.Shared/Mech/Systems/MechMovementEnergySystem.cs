@@ -11,11 +11,11 @@ namespace Content.Shared.Mech.Systems;
 /// <summary>
 /// Handles per-frame movement energy drain for mechs to avoid.
 /// </summary>
-public sealed class MechMovementEnergySystem : EntitySystem
+public sealed partial class MechMovementEnergySystem : EntitySystem
 {
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
 
     private readonly HashSet<EntityUid> _activeMechs = [];
     private readonly Dictionary<EntityUid, float> _passiveEnergyBuffers = [];

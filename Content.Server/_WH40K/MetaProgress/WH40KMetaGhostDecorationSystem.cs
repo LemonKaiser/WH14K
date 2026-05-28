@@ -21,7 +21,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.MetaProgress;
 
-public sealed class WH40KMetaGhostDecorationSystem : EntitySystem
+public sealed partial class WH40KMetaGhostDecorationSystem : EntitySystem
 {
 	private const string DefaultGhostRsiPath = "/Textures/Mobs/Ghosts/ghost_human.rsi";
 
@@ -30,25 +30,25 @@ public sealed class WH40KMetaGhostDecorationSystem : EntitySystem
 	private const float ReapplyIntervalSeconds = 1f;
 
 	[Dependency]
-	private readonly SharedGhostSystem _ghosts = default!;
+	private  SharedGhostSystem _ghosts = default!;
 
 	[Dependency]
-	private readonly SharedAppearanceSystem _appearance = default!;
+	private  SharedAppearanceSystem _appearance = default!;
 
 	[Dependency]
-	private readonly GhostSpriteStateSystem _ghostSpriteState = default!;
+	private  GhostSpriteStateSystem _ghostSpriteState = default!;
 
 	[Dependency]
-	private readonly WH40KMetaProgressSystem _metaProgress = default!;
+	private  WH40KMetaProgressSystem _metaProgress = default!;
 
 	[Dependency]
-	private readonly IPlayerManager _players = default!;
+	private  IPlayerManager _players = default!;
 
 	[Dependency]
-	private readonly SharedMindSystem _minds = default!;
+	private  SharedMindSystem _minds = default!;
 
 	[Dependency]
-	private readonly IConfigurationManager _cfg = default!;
+	private  IConfigurationManager _cfg = default!;
 
 	private ISawmill _sawmill;
 

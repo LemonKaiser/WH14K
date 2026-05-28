@@ -19,14 +19,14 @@ namespace Content.Server._WH40K.Store;
 /// Applies WH40K team progression to chip converters:
 /// recipe tier switching and active-job limit by tier.
 /// </summary>
-public sealed class WH40KChipConverterSystem : EntitySystem
+public sealed partial class WH40KChipConverterSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly LatheSystem _lathe = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  LatheSystem _lathe = default!;
+    [Dependency] private  StackSystem _stack = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

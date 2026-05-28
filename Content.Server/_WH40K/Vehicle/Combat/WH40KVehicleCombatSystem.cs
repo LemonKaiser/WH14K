@@ -21,21 +21,21 @@ using Content.Server._WH40K.GameTicking.Rules;
 
 namespace Content.Server._WH40K.Vehicle.Combat;
 
-public sealed class WH40KVehicleCombatSystem : EntitySystem
+public sealed partial class WH40KVehicleCombatSystem : EntitySystem
 {
     private const int SolidImpactLayers = (int) (CollisionGroup.Impassable |
                                                  CollisionGroup.MidImpassable |
                                                  CollisionGroup.HighImpassable |
                                                  CollisionGroup.LowImpassable);
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedStaminaSystem _stamina = default!;
+    [Dependency] private  SharedStunSystem _stun = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Initialize()
     {

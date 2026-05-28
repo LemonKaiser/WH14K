@@ -1,5 +1,3 @@
-using System;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -9,17 +7,14 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
-using Content.Shared.Localizations;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
-using Robust.Shared;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input.Binding;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using static Content.Shared.Interaction.SharedInteractionSystem;
@@ -29,14 +24,13 @@ using Direction = Robust.Shared.Maths.Direction;
 namespace Content.Client.Examine
 {
     [UsedImplicitly]
-    public sealed class ExamineSystem : ExamineSystemShared
+    public sealed partial class ExamineSystem : ExamineSystemShared
     {
-        [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly IEyeManager _eyeManager = default!;
-        [Dependency] private readonly VerbSystem _verbSystem = default!;
-        [Dependency] private readonly SpriteSystem _sprite = default!;
-        [Dependency] private readonly ILocalizationManager _loc = default!;
+        [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IEyeManager _eyeManager = default!;
+        [Dependency] private VerbSystem _verbSystem = default!;
+        [Dependency] private SpriteSystem _sprite = default!;
 
         private List<Verb> _verbList = new();
 
@@ -142,7 +136,7 @@ namespace Content.Client.Examine
             verb.Priority = 10;
             // Center it on the entity if they use the verb instead.
             verb.Act = () => DoExamine(args.Target, false);
-            verb.TextLocId = "examine-verb-name";
+            verb.Text = Loc.GetString("examine-verb-name");
             verb.Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/examine.svg.192dpi.png"));
             verb.ShowOnExamineTooltip = false;
             verb.ClientExclusive = true;
@@ -162,20 +156,10 @@ namespace Content.Client.Examine
             // Tooltips coming in from the server generally prioritize
             // opening at the old tooltip rather than the cursor/another entity,
             // since there's probably one open already if it's coming in from the server.
-            if (!IsCurrentCultureResponse(ev.CultureName))
-                return;
-
             var entity = GetEntity(ev.EntityUid);
-            var message = ev.Message;
-
-            // Keep localization override only for the initial examine request (id == _idCounter).
-            // Verb-triggered responses (id == 0, e.g. group examine Damage/Clothing) must keep
-            // the server's detailed message and NOT be replaced with basic examine text.
-            if (ev.Id != 0 && ShouldUseClientItemLocalization(entity))
-                message = GetExamineText(entity, player.Value);
 
             OpenTooltip(player.Value, entity, ev.CenterAtCursor, ev.OpenAtOldTooltip, ev.KnowTarget);
-            UpdateTooltipInfo(player.Value, entity, message, ev.Verbs, getVerbs: false);
+            UpdateTooltipInfo(player.Value, entity, ev.Message, ev.Verbs, getVerbs: false);
         }
 
         public override void SendExamineTooltip(EntityUid player, EntityUid target, FormattedMessage message, bool getVerbs, bool centerAtCursor)
@@ -254,7 +238,7 @@ namespace Content.Client.Examine
 
             if (knowTarget)
             {
-                var itemName = FormattedMessage.EscapeText(GetTooltipEntityName(target, player));
+                var itemName = FormattedMessage.EscapeText(Identity.Name(target, EntityManager, player));
                 var labelMessage = FormattedMessage.FromMarkupPermissive($"[bold]{itemName}[/bold]");
                 var label = new RichTextLabel();
                 label.SetMessage(labelMessage);
@@ -386,7 +370,7 @@ namespace Content.Client.Examine
             var vbox = _examineTooltipOpen?.GetChild(0).GetChild(0);
             if (vbox == null)
             {
-                buttonsHBox.Orphan();
+                buttonsHBox.Dispose();
                 return;
             }
 
@@ -435,39 +419,10 @@ namespace Content.Client.Examine
                 {
                     _idCounter += 1;
                 }
-                RaiseNetworkEvent(new ExamineSystemMessages.RequestExamineInfoMessage(
-                    GetNetEntity(entity),
-                    _idCounter,
-                    true,
-                    _loc.GetCurrentCultureName()));
+                RaiseNetworkEvent(new ExamineSystemMessages.RequestExamineInfoMessage(GetNetEntity(entity), _idCounter, true));
             }
 
             RaiseLocalEvent(entity, new ClientExaminedEvent(entity, playerEnt.Value));
-        }
-
-        private bool ShouldUseClientItemLocalization(EntityUid entity)
-        {
-            return HasComp<ItemComponent>(entity);
-        }
-
-        private bool IsCurrentCultureResponse(string? cultureName)
-        {
-            if (string.IsNullOrWhiteSpace(cultureName))
-                return true;
-
-            return string.Equals(cultureName, _loc.GetCurrentCultureName(), StringComparison.OrdinalIgnoreCase);
-        }
-
-        private string GetTooltipEntityName(EntityUid entity, EntityUid examiner)
-        {
-            if (ShouldUseClientItemLocalization(entity) &&
-                TryComp(entity, out MetaDataComponent? meta) &&
-                meta.EntityPrototype != null)
-            {
-                return meta.EntityPrototype.Name;
-            }
-
-            return Identity.Name(entity, EntityManager, examiner);
         }
 
         private void CloseTooltip()
@@ -481,7 +436,7 @@ namespace Content.Client.Examine
                         button.OnPressed -= VerbButtonPressed;
                     }
                 }
-                _examineTooltipOpen.Orphan();
+                _examineTooltipOpen.Dispose();
                 _examineTooltipOpen = null;
             }
 

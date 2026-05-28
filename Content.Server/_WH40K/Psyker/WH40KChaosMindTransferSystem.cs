@@ -9,9 +9,9 @@ namespace Content.Server._WH40K.Psyker;
 /// <summary>
 /// Keeps chaos-gift runtime attached to the mind when a player changes bodies.
 /// </summary>
-public sealed class WH40KChaosMindTransferSystem : EntitySystem
+public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
 
     private readonly Dictionary<EntityUid, ChaosMindTransferState> _pendingTransfers = new();
 

@@ -9,12 +9,12 @@ namespace Content.Server._WH40K.Psyker;
 /// <summary>
 /// Imperium psyker starter action delivery.
 /// </summary>
-public sealed class WH40KPsykerStarterActionLoadoutSystem : EntitySystem
+public sealed partial class WH40KPsykerStarterActionLoadoutSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
-    [Dependency] private readonly WH40KPsykerDisciplineModifierSystem _modifiers = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  WH40KPsykerDisciplineModifierSystem _modifiers = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
     private const string PsykerUiActionPrototype = "ActionWH40KPsykerAstralProjection";
 
     public override void Initialize()

@@ -13,7 +13,7 @@ namespace Content.Server._WH40K.Psyker;
 /// Applies purchased astral nodes to the real psyker kit:
 /// warp pool, action tuning and persistent passive bonuses.
 /// </summary>
-public sealed class WH40KPsykerDisciplineModifierSystem : EntitySystem
+public sealed partial class WH40KPsykerDisciplineModifierSystem : EntitySystem
 {
     public const string AstralAnchorNode = "PsykerAstralAnchor";
     public const string LitanyOfControlNode = "PsykerLitanyOfControl";
@@ -137,9 +137,9 @@ public sealed class WH40KPsykerDisciplineModifierSystem : EntitySystem
     private const string IronHaloWallPrototype = "WH40KWallForceImperialAegisTier2";
     private const string BaseAegisWallPrototype = "WH40KWallForceShieldImperialBase";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KPsykerDisciplineRuntimeSystem _runtime = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KPsykerDisciplineRuntimeSystem _runtime = default!;
 
     public override void Initialize()
     {

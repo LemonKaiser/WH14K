@@ -13,12 +13,12 @@ namespace Content.Client._WH40K.Manipulator;
 /// <summary>
 /// Plays client-side arc motion visuals for WH40K conveyor manipulator transfers.
 /// </summary>
-public sealed class WH40KConveyorManipulatorVisualizerSystem : EntitySystem
+public sealed partial class WH40KConveyorManipulatorVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animations = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  AnimationPlayerSystem _animations = default!;
+    [Dependency] private  MetaDataSystem _metadata = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

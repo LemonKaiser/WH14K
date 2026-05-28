@@ -30,27 +30,27 @@ namespace Content.Server._WH40K.Manipulator;
 /// <summary>
 /// Rotation-aware left->right item manipulator with smart receiver feeding.
 /// </summary>
-public sealed class WH40KConveyorManipulatorSystem : EntitySystem
+public sealed partial class WH40KConveyorManipulatorSystem : EntitySystem
 {
     private static readonly TimeSpan EmptyInputRetryDelay = TimeSpan.FromSeconds(0.5);
     private static readonly TimeSpan IncompatibleItemRetryDelay = TimeSpan.FromSeconds(0.75);
     private static readonly TimeSpan ReceiverCapacityRetryDelay = TimeSpan.FromSeconds(0.35);
     private static readonly TimeSpan NoPowerRetryDelay = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly MaterialReclaimerSystem _materialReclaimer = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly _WH40K.Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  MaterialStorageSystem _materialStorage = default!;
+    [Dependency] private  MaterialReclaimerSystem _materialReclaimer = default!;
+    [Dependency] private  StackSystem _stack = default!;
+    [Dependency] private  ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private  _WH40K.Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly HashSet<EntityUid> _tileEntities = new();
     private readonly List<EntityUid> _leftCandidates = new();

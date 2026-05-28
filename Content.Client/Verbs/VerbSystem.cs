@@ -5,7 +5,6 @@ using Content.Client.Gameplay;
 using Content.Client.Popups;
 using Content.Shared.CCVar;
 using Content.Shared.Examine;
-using Content.Shared.Localizations;
 using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
@@ -16,7 +15,6 @@ using Robust.Client.Player;
 using Robust.Client.State;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
-using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -24,20 +22,19 @@ using Robust.Shared.Utility;
 namespace Content.Client.Verbs
 {
     [UsedImplicitly]
-    public sealed class VerbSystem : SharedVerbSystem
+    public sealed partial class VerbSystem : SharedVerbSystem
     {
-        [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly ExamineSystem _examine = default!;
-        [Dependency] private readonly SpriteTreeSystem _tree = default!;
-        [Dependency] private readonly TagSystem _tagSystem = default!;
-        [Dependency] private readonly IStateManager _stateManager = default!;
-        [Dependency] private readonly IEyeManager _eyeManager = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly SharedContainerSystem _containers = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly EntityLookupSystem _lookup = default!;
-        [Dependency] private readonly ILocalizationManager _loc = default!;
-        [Dependency] private readonly EntityQuery<SpriteComponent> _spriteQuery = default!;
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private ExamineSystem _examine = default!;
+        [Dependency] private SpriteTreeSystem _tree = default!;
+        [Dependency] private TagSystem _tagSystem = default!;
+        [Dependency] private IStateManager _stateManager = default!;
+        [Dependency] private IEyeManager _eyeManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private SharedContainerSystem _containers = default!;
+        [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private EntityLookupSystem _lookup = default!;
+        [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
 
         private float _lookupSize;
 
@@ -179,11 +176,7 @@ namespace Content.Client.Verbs
         public SortedSet<Verb> GetVerbs(NetEntity target, EntityUid user, List<Type> verbTypes, out List<VerbCategory> extraCategories, bool force = false)
         {
             if (!target.IsClientSide())
-                RaiseNetworkEvent(new RequestServerVerbsEvent(
-                    target,
-                    verbTypes,
-                    adminRequest: force,
-                    cultureName: _loc.GetCurrentCultureName()));
+                RaiseNetworkEvent(new RequestServerVerbsEvent(target, verbTypes, adminRequest: force));
 
             // Some admin menu interactions will try get verbs for entities that have not yet been sent to the player.
             if (!TryGetEntity(target, out var local))
@@ -232,17 +225,11 @@ namespace Content.Client.Verbs
                 // is this a client exclusive (gui) verb?
                 ExecuteVerb(verb, user, GetEntity(target));
             else
-                RaisePredictiveEvent(new ExecuteVerbEvent(target, verb, _loc.GetCurrentCultureName()));
+                RaisePredictiveEvent(new ExecuteVerbEvent(target, verb));
         }
 
         private void HandleVerbResponse(VerbsResponseEvent msg)
         {
-            if (!string.IsNullOrWhiteSpace(msg.CultureName) &&
-                !string.Equals(msg.CultureName, _loc.GetCurrentCultureName(), StringComparison.OrdinalIgnoreCase))
-            {
-                return;
-            }
-
             OnVerbsResponse?.Invoke(msg);
         }
     }

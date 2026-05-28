@@ -8,9 +8,9 @@ using Robust.Shared.Console;
 
 namespace Content.Client.Commands;
 
-internal sealed class ShowMarkersCommand : LocalizedEntityCommands
+internal sealed partial class ShowMarkersCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly MarkerSystem _markerSystem = default!;
+    [Dependency] private MarkerSystem _markerSystem = default!;
 
     public override string Command => "showmarkers";
 
@@ -20,9 +20,9 @@ internal sealed class ShowMarkersCommand : LocalizedEntityCommands
     }
 }
 
-internal sealed class ShowSubFloor : LocalizedEntityCommands
+internal sealed partial class ShowSubFloor : LocalizedEntityCommands
 {
-    [Dependency] private readonly SubFloorHideSystem _subfloorSystem = default!;
+    [Dependency] private SubFloorHideSystem _subfloorSystem = default!;
 
     public override string Command => "showsubfloor";
 
@@ -32,9 +32,9 @@ internal sealed class ShowSubFloor : LocalizedEntityCommands
     }
 }
 
-internal sealed class NotifyCommand : LocalizedEntityCommands
+internal sealed partial class NotifyCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly PopupSystem _popupSystem = default!;
+    [Dependency] private PopupSystem _popupSystem = default!;
 
     public override string Command => "notify";
 
@@ -44,9 +44,9 @@ internal sealed class NotifyCommand : LocalizedEntityCommands
     }
 }
 
-internal sealed class ShowRoofCommand : LocalizedEntityCommands
+internal sealed partial class ShowRoofCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private  IOverlayManager _overlay = default!;
 
     public override string Command => "showroof";
 
@@ -62,9 +62,9 @@ internal sealed class ShowRoofCommand : LocalizedEntityCommands
     }
 }
 
-internal sealed class ShowTacticalBlackoutCommand : LocalizedEntityCommands
+internal sealed partial class ShowTacticalBlackoutCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private  IOverlayManager _overlay = default!;
 
     public override string Command => "showtacticalblackout";
 

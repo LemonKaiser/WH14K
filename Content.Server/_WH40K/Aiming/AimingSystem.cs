@@ -13,12 +13,12 @@ using Content.Shared.Wieldable.Components;
 
 namespace Content.Server._WH40K.Aiming;
 
-public sealed class AimingSystem : EntitySystem
+public sealed partial class AimingSystem : EntitySystem
 {
-    [Dependency] private readonly ContentEyeSystem _eye = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedAimingSystem _shared = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  ContentEyeSystem _eye = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedAimingSystem _shared = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {

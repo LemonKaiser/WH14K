@@ -1,18 +1,16 @@
 ﻿using System.Linq;
 using System.Text;
 using Content.Server.Database;
-using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Ban)]
-public sealed class BanExemptionUpdateCommand : LocalizedCommands
+public sealed partial class BanExemptionUpdateCommand : LocalizedCommands
 {
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly IServerDbManager _dbManager = default!;
-    [Dependency] private readonly IPlayerLocator _playerLocator = default!;
+    [Dependency] private IServerDbManager _dbManager = default!;
+    [Dependency] private IPlayerLocator _playerLocator = default!;
 
     public override string Command => "ban_exemption_update";
 
@@ -45,16 +43,6 @@ public sealed class BanExemptionUpdateCommand : LocalizedCommands
             return;
         }
 
-        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
-                shell.Player,
-                playerData.UserId,
-                Loc.GetString("admin-hierarchy-action-ban-exemption-update"),
-                playerData.Username,
-                shell.WriteLine))
-        {
-            return;
-        }
-
         await _dbManager.UpdateBanExemption(playerData.UserId, flags);
         shell.WriteLine(LocalizationManager.GetString(
             "cmd-ban_exemption_update-success",
@@ -74,10 +62,10 @@ public sealed class BanExemptionUpdateCommand : LocalizedCommands
 }
 
 [AdminCommand(AdminFlags.Ban)]
-public sealed class BanExemptionGetCommand : LocalizedCommands
+public sealed partial class BanExemptionGetCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _dbManager = default!;
-    [Dependency] private readonly IPlayerLocator _playerLocator = default!;
+    [Dependency] private IServerDbManager _dbManager = default!;
+    [Dependency] private IPlayerLocator _playerLocator = default!;
 
     public override string Command => "ban_exemption_get";
 

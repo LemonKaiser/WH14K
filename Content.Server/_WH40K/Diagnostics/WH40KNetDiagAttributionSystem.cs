@@ -14,9 +14,9 @@ namespace Content.Server._WH40K.Diagnostics;
 /// Systems can report dirty/activity hits with a source tag, then the diagnostics system
 /// prints top contributors for each sampling window.
 /// </summary>
-public sealed class WH40KNetDiagAttributionSystem : EntitySystem
+public sealed partial class WH40KNetDiagAttributionSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
 
     private const int MaxTrackedNetEntitiesPerSource = 48;
 

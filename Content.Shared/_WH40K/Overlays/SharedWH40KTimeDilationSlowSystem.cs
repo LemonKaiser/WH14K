@@ -5,12 +5,12 @@ using Content.Shared.Weapons.Melee.Events;
 
 namespace Content.Shared._WH40K.Overlays;
 
-public sealed class SharedWH40KTimeDilationSlowSystem : EntitySystem
+public sealed partial class SharedWH40KTimeDilationSlowSystem : EntitySystem
 {
     // Prevent near-zero melee rates from feeling like a permanent weapon lock.
     private const float MinEffectiveMeleeMultiplier = 0.25f;
 
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
 
     public override void Initialize()
     {

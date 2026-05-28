@@ -1,24 +1,26 @@
 using System.Linq;
 using Content.Server.Verbs;
 using Content.Shared.Examine;
-using Content.Shared.Localizations;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
-using Robust.Shared.Localization;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Examine
 {
     [UsedImplicitly]
-    public sealed class ExamineSystem : ExamineSystemShared
+    public sealed partial class ExamineSystem : ExamineSystemShared
     {
-        [Dependency] private readonly ILocalizationManager _localizationManager = default!;
-        [Dependency] private readonly VerbSystem _verbSystem = default!;
+        [Dependency] private VerbSystem _verbSystem = default!;
+
+        private readonly FormattedMessage _entityNotFoundMessage = new();
+        private readonly FormattedMessage _entityOutOfRangeMessage = new();
 
         public override void Initialize()
         {
             base.Initialize();
+            _entityNotFoundMessage.AddText(Loc.GetString("examine-system-entity-does-not-exist"));
+            _entityOutOfRangeMessage.AddText(Loc.GetString("examine-system-cant-see-entity"));
 
             SubscribeNetworkEvent<ExamineSystemMessages.RequestExamineInfoMessage>(ExamineInfoRequest);
         }
@@ -35,7 +37,7 @@ namespace Content.Server.Examine
                 verbs = _verbSystem.GetLocalVerbs(target, player, typeof(ExamineVerb));
 
             var ev = new ExamineSystemMessages.ExamineInfoResponseMessage(
-                GetNetEntity(target), 0, message, verbs?.ToList(), centerAtCursor, cultureName: _localizationManager.GetCurrentCultureName()
+                GetNetEntity(target), 0, message, verbs?.ToList(), centerAtCursor
             );
 
             RaiseNetworkEvent(ev, session.Channel);
@@ -43,8 +45,6 @@ namespace Content.Server.Examine
 
         private void ExamineInfoRequest(ExamineSystemMessages.RequestExamineInfoMessage request, EntitySessionEventArgs eventArgs)
         {
-            using var cultureScope = new LocalizationCultureScope(_localizationManager, request.CultureName);
-
             var player = eventArgs.SenderSession;
             var session = eventArgs.SenderSession;
             var channel = player.Channel;
@@ -54,14 +54,14 @@ namespace Content.Server.Examine
                 || !Exists(entity))
             {
                 RaiseNetworkEvent(new ExamineSystemMessages.ExamineInfoResponseMessage(
-                    request.NetEntity, request.Id, CreateMessage("examine-system-entity-does-not-exist"), cultureName: request.CultureName), channel);
+                    request.NetEntity, request.Id, _entityNotFoundMessage), channel);
                 return;
             }
 
             if (!CanExamine(playerEnt, entity))
             {
                 RaiseNetworkEvent(new ExamineSystemMessages.ExamineInfoResponseMessage(
-                    request.NetEntity, request.Id, CreateMessage("examine-system-cant-see-entity"), knowTarget: false, cultureName: request.CultureName), channel);
+                    request.NetEntity, request.Id, _entityOutOfRangeMessage, knowTarget: false), channel);
                 return;
             }
 
@@ -71,14 +71,7 @@ namespace Content.Server.Examine
 
             var text = GetExamineText(entity, player.AttachedEntity);
             RaiseNetworkEvent(new ExamineSystemMessages.ExamineInfoResponseMessage(
-                request.NetEntity, request.Id, text, verbs?.ToList(), cultureName: request.CultureName), channel);
-        }
-
-        private FormattedMessage CreateMessage(string locId)
-        {
-            var message = new FormattedMessage();
-            message.AddText(Loc.GetString(locId));
-            return message;
+                request.NetEntity, request.Id, text, verbs?.ToList()), channel);
         }
     }
 }

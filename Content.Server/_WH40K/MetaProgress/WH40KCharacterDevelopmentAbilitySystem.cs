@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.MetaProgress;
 
-public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
+public sealed partial class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
 {
     private const string ToxinGroup = "Toxins";
     private static readonly ProtoId<AlertCategoryPrototype> StomachImpulseAlertCategory = "WH40KCharacterDevelopmentStomachImpulse";
@@ -38,10 +38,10 @@ public sealed class WH40KCharacterDevelopmentAbilitySystem : EntitySystem
     private static readonly FixedPoint2 KidneyPurgeAmount = FixedPoint2.New(5f);
     private static readonly FixedPoint2 WarFurnaceHealPerTick = FixedPoint2.New(-2.5f);
 
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  AlertsSystem _alerts = default!;
+    [Dependency] private  BloodstreamSystem _bloodstream = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Initialize()
     {

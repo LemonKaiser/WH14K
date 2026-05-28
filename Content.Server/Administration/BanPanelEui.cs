@@ -11,15 +11,14 @@ using Robust.Shared.Network;
 
 namespace Content.Server.Administration;
 
-public sealed class BanPanelEui : BaseEui
+public sealed partial class BanPanelEui : BaseEui
 {
-    [Dependency] private readonly IBanManager _banManager = default!;
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly ILogManager _log = default!;
-    [Dependency] private readonly IPlayerLocator _playerLocator = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IAdminManager _admins = default!;
+    [Dependency] private IBanManager _banManager = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private IPlayerLocator _playerLocator = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private IAdminManager _admins = default!;
 
     private readonly ISawmill _sawmill;
 
@@ -121,19 +120,6 @@ public sealed class BanPanelEui : BaseEui
                 addressRange = (targetAddress, hid);
             }
             targetHWid = ban.UseLastHwid ? located.LastHWId : ban.Hwid;
-        }
-
-        if (targetUid != null
-            && await _adminActionGuard.TryDenyProtectedTargetAsync(
-                Player,
-                targetUid.Value,
-                Loc.GetString(isRoleBan
-                    ? "admin-hierarchy-action-role-ban"
-                    : "admin-hierarchy-action-ban"),
-                ban.Target,
-                message => _chat.DispatchServerMessage(Player, message)))
-        {
-            return;
         }
 
         if (addressRange != null)

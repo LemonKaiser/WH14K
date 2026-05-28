@@ -14,7 +14,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.RichText;
 
-public sealed class WH40KGradientTag : IMarkupTagHandler
+public sealed partial class WH40KGradientTag : IMarkupTagHandler
 {
     public string Name => "wh40kgradient";
 
@@ -191,9 +191,9 @@ internal enum WH40KTitleEffectMode : byte
     Scan = 2,
 }
 
-internal sealed class WH40KGradientNameControl : Control
+internal sealed partial class WH40KGradientNameControl : Control
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
     private const int BinaryScrambleHoldMs = 5000;
 
     private readonly List<Rune> _runes;

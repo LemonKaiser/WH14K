@@ -22,15 +22,15 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Aiming;
 
-public sealed class AimingCameraSystem : EntitySystem
+public sealed partial class AimingCameraSystem : EntitySystem
 {
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IClientGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
+    [Dependency] private  IEyeManager _eyeManager = default!;
+    [Dependency] private  IInputManager _inputManager = default!;
+    [Dependency] private  IClientGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _xform = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  TagSystem _tags = default!;
 
     // Prevents needing to move mouse fully to the screen edge to reach full offset.
     private const float EdgeOffset = 0.8f;

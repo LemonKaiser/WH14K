@@ -1,22 +1,18 @@
-using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.Follower;
-using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Enums;
 
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class FollowCommand : LocalizedEntityCommands
+public sealed partial class FollowCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-    [Dependency] private readonly FollowerSystem _followerSystem = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private FollowerSystem _followerSystem = default!;
 
     public override string Command => "follow";
 
-    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (shell.Player is not { } player)
         {
@@ -37,19 +33,6 @@ public sealed class FollowCommand : LocalizedEntityCommands
         }
 
         if (NetEntity.TryParse(args[0], out var uidNet) && EntityManager.TryGetEntity(uidNet, out var uid))
-        {
-            if (_playerManager.TryGetSessionByEntity(uid.Value, out var targetSession)
-                && await _adminActionGuard.TryDenyProtectedTargetAsync(
-                    player,
-                    targetSession.UserId,
-                    Loc.GetString("admin-hierarchy-action-follow"),
-                    targetSession.Name,
-                    shell.WriteError))
-            {
-                return;
-            }
-
             _followerSystem.StartFollowingEntity(playerEntity, uid.Value);
-        }
     }
 }

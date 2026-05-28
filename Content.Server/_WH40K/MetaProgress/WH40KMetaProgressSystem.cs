@@ -37,7 +37,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.MetaProgress;
 
-public sealed class WH40KMetaProgressSystem : EntitySystem
+public sealed partial class WH40KMetaProgressSystem : EntitySystem
 {
 	public enum AdminResetScope : byte
 	{
@@ -187,43 +187,43 @@ public sealed class WH40KMetaProgressSystem : EntitySystem
 	private const int ValidatedHealBucketsPerPairPerRoundCap = 3;
 
 	[Dependency]
-	private readonly IConfigurationManager _config = default!;
+	private  IConfigurationManager _config = default!;
 
 	[Dependency]
-	private readonly IServerDbManager _db = default!;
+	private  IServerDbManager _db = default!;
 
 	[Dependency]
-	private readonly ISharedWH40KDiscordAuthManager _discordAuth = default!;
+	private  ISharedWH40KDiscordAuthManager _discordAuth = default!;
 
 	[Dependency]
-	private readonly GameTicker _gameTicker = default!;
+	private  GameTicker _gameTicker = default!;
 
 	[Dependency]
-	private readonly IPlayerManager _players = default!;
+	private  IPlayerManager _players = default!;
 
 	[Dependency]
-	private readonly IPrototypeManager _proto = default!;
+	private  IPrototypeManager _proto = default!;
 
 	[Dependency]
-	private readonly WH40KPlayerStatsSystem _stats = default!;
+	private  WH40KPlayerStatsSystem _stats = default!;
 
 	[Dependency]
-	private readonly WH40KCombatVictimResolverSystem _combatVictims = default!;
+	private  WH40KCombatVictimResolverSystem _combatVictims = default!;
 
 	[Dependency]
-	private readonly WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
+	private  WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
 
 	[Dependency]
-	private readonly ITaskManager _task = default!;
+	private  ITaskManager _task = default!;
 
 	[Dependency]
-	private readonly PlayTimeTrackingManager _playTime = default!;
+	private  PlayTimeTrackingManager _playTime = default!;
 
 	[Dependency]
-	private readonly IGameTiming _timing = default!;
+	private  IGameTiming _timing = default!;
 
 	[Dependency]
-	private readonly IServerPreferencesManager _prefs = default!;
+	private  IServerPreferencesManager _prefs = default!;
 
 	private readonly Dictionary<NetUserId, RuntimeProgressState> _states = new Dictionary<NetUserId, RuntimeProgressState>();
 

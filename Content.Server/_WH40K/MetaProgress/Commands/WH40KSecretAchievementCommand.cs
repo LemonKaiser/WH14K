@@ -6,11 +6,11 @@ using Robust.Shared.GameObjects;
 namespace Content.Server._WH40K.MetaProgress.Commands;
 
 [AnyCommand]
-public sealed class WH40KSecretAchievementCommand : LocalizedCommands
+public sealed partial class WH40KSecretAchievementCommand : LocalizedCommands
 {
     private const string SecretAchievementId = "wh40k-ach-whispers-in-void";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     public override string Command => "kaiser";
 

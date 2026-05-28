@@ -15,7 +15,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Chat.RichText;
 
-public sealed class WH40KTitleEffectTag : IMarkupTagHandler
+public sealed partial class WH40KTitleEffectTag : IMarkupTagHandler
 {
     private static readonly Color DefaultTitleColor = new(135, 206, 250);
 
@@ -209,9 +209,9 @@ internal enum WH40KTitleFxMode : byte
     Flip = 10,
 }
 
-internal sealed class WH40KTitleEffectControl : Control
+internal sealed partial class WH40KTitleEffectControl : Control
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private static readonly Rune[] NoiseRunes = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*+-?".EnumerateRunes().ToArray();
     private static readonly Rune FishRune = new(0x1F41F);

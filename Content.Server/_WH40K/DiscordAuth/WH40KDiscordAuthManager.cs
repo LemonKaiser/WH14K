@@ -5,9 +5,9 @@ using Robust.Shared.Network;
 
 namespace Content.Server._WH40K.DiscordAuth;
 
-public sealed class WH40KDiscordAuthManager : ISharedWH40KDiscordAuthManager
+public sealed partial class WH40KDiscordAuthManager : ISharedWH40KDiscordAuthManager
 {
-    [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
+    [Dependency] private  IEntitySystemManager _entitySystems = default!;
 
     public bool TryGetSnapshot(NetUserId userId, out WH40KDiscordAuthSnapshot snapshot)
     {

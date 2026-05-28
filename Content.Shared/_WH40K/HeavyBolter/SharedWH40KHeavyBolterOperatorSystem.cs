@@ -25,20 +25,20 @@ namespace Content.Shared._WH40K.HeavyBolter;
 /// <summary>
 /// Blocks hand usage and combat actions while a user is operating a deployed WH40K heavy bolter.
 /// </summary>
-public sealed class SharedWH40KHeavyBolterOperatorSystem : EntitySystem
+public sealed partial class SharedWH40KHeavyBolterOperatorSystem : EntitySystem
 {
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
     private static readonly ProtoId<TagPrototype> AirlockTag = "Airlock";
     private static readonly TimeSpan ClientPopupSpamCooldown = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedBuckleSystem _buckle = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  INetManager _net = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
     private readonly Dictionary<(EntityUid User, string Key), TimeSpan> _popupCooldowns = new();
 
     public override void Initialize()

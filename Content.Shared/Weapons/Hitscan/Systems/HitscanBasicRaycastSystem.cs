@@ -17,13 +17,13 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Weapons.Hitscan.Systems;
 
-public sealed class HitscanBasicRaycastSystem : EntitySystem
+public sealed partial class HitscanBasicRaycastSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly ISharedAdminLogManager _log = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  ISharedAdminLogManager _log = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  IRobustRandom _random = default!;
     private EntityQuery<HitscanBasicVisualsComponent> _visualsQuery = default!;
     private EntityQuery<WH40KDirectionalBarricadeComponent> _barricadeQuery = default!;
     private EntityQuery<EnergyDomeVisualsComponent> _domeVisualsQuery = default!;

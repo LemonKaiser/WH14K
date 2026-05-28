@@ -8,11 +8,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Clothing;
 
-public sealed class WH40KChaosDamnationClothingSystem : EntitySystem
+public sealed partial class WH40KChaosDamnationClothingSystem : EntitySystem
 {
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  FlammableSystem _flammable = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
 
     public override void Initialize()
     {

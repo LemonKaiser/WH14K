@@ -21,7 +21,7 @@ namespace Content.Client._WH40K.MetaProgress;
 [GenerateTypedNameReferences]
 public sealed partial class PlayerAchievementsWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
     private static readonly Color SummaryBackground = Color.FromHex("#1B1A14");
     private static readonly Color SummaryBorder = Color.FromHex("#7B6430");
     private static readonly Color LockedBackground = Color.FromHex("#1A1D24");

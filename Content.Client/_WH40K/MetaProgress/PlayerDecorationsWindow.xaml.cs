@@ -25,10 +25,10 @@ namespace Content.Client._WH40K.MetaProgress;
 [GenerateTypedNameReferences]
 public sealed partial class PlayerDecorationsWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceCache _resources = default!;
+    [Dependency] private  IEntityManager _entManager = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IResourceCache _resources = default!;
     private static readonly Color SummaryBackground = Color.FromHex("#1B1A14");
     private static readonly Color SummaryBorder = Color.FromHex("#7B6430");
     private static readonly Color PreviewBackground = Color.FromHex("#11141A");

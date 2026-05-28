@@ -10,10 +10,10 @@ namespace Content.Server._WH40K.Spawners;
 /// <summary>
 /// Keeps selected timed spawners disabled until a configured WH40K battle phase.
 /// </summary>
-public sealed class WH40KPhaseTimedSpawnerSystem : EntitySystem
+public sealed partial class WH40KPhaseTimedSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
 
     public override void Initialize()
     {

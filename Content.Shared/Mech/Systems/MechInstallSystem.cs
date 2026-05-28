@@ -11,14 +11,14 @@ namespace Content.Shared.Mech.Systems;
 /// Provides shared helper logic for installing mech equipment and modules.
 /// Intended to be inherited by specific mech install systems.
 /// </summary>
-public abstract class MechInstallSystem : EntitySystem
+public abstract partial class MechInstallSystem : EntitySystem
 {
-    [Dependency] protected readonly EntityWhitelistSystem Whitelist = default!;
-    [Dependency] protected readonly SharedDoAfterSystem DoAfter = default!;
-    [Dependency] protected readonly SharedMechSystem Mech = default!;
-    [Dependency] protected readonly MechLockSystem MechLock = default!;
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] protected readonly VehicleSystem Vehicle = default!;
+    [Dependency] protected  EntityWhitelistSystem Whitelist = default!;
+    [Dependency] protected  SharedDoAfterSystem DoAfter = default!;
+    [Dependency] protected  SharedMechSystem Mech = default!;
+    [Dependency] protected  MechLockSystem MechLock = default!;
+    [Dependency] protected  SharedPopupSystem Popup = default!;
+    [Dependency] protected  VehicleSystem Vehicle = default!;
 
     /// <summary>
     /// Common precondition checks before starting install. Validates mech, broken/closed states and actor relation.

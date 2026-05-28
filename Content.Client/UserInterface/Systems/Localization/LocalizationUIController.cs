@@ -25,15 +25,15 @@ using Robust.Shared.IoC;
 
 namespace Content.Client.UserInterface.Systems.Localization;
 
-public sealed class LocalizationUIController : UIController
+public sealed partial class LocalizationUIController : UIController
 {
     private const string DefaultCultureName = ContentLocalizationManager.DefaultCultureName;
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly ContentLocalizationManager _contentLoc = default!;
-    [Dependency] private readonly IDependencyCollection _dependencies = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
-    [Dependency] private readonly Robust.Client.State.IStateManager _state = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  ContentLocalizationManager _contentLoc = default!;
+    [Dependency] private  IDependencyCollection _dependencies = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
+    [Dependency] private  Robust.Client.State.IStateManager _state = default!;
 
     private bool _suppressCultureChanged;
 

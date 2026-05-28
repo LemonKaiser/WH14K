@@ -18,18 +18,18 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Administration;
 
-public sealed class PlayerPanelEui : BaseEui
+public sealed partial class PlayerPanelEui : BaseEui
 {
-    [Dependency] private readonly IAdminManager _admins = default!;
-    [Dependency] private readonly IAdminHierarchyManager _adminHierarchy = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IAdminNotesManager _notesMan = default!;
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly ScreenCheckManager _screenChecks = default!;
+    [Dependency] private  IAdminManager _admins = default!;
+    [Dependency] private  IAdminHierarchyManager _adminHierarchy = default!;
+    [Dependency] private  IServerDbManager _db = default!;
+    [Dependency] private  IAdminNotesManager _notesMan = default!;
+    [Dependency] private  IEntityManager _entity = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  EuiManager _eui = default!;
+    [Dependency] private  IAdminLogManager _adminLog = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  ScreenCheckManager _screenChecks = default!;
 
     private readonly LocatedPlayerData _targetPlayer;
     private int? _notes;

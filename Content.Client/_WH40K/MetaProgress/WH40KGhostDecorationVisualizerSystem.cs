@@ -5,12 +5,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KGhostDecorationVisualizerSystem : EntitySystem
+public sealed partial class WH40KGhostDecorationVisualizerSystem : EntitySystem
 {
     private const string DefaultGhostRsiPath = "/Textures/Mobs/Ghosts/ghost_human.rsi";
     private const string DefaultGhostState = "animated";
 
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
 
     private ISawmill _sawmill = default!;
 

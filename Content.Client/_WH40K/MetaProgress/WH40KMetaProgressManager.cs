@@ -8,11 +8,11 @@ using Robust.Shared.Player;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KMetaProgressManager : ISharedWH40KMetaProgressManager
+public sealed partial class WH40KMetaProgressManager : ISharedWH40KMetaProgressManager
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
-    [Dependency] private readonly ISharedPlaytimeManager _playtime = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  IEntitySystemManager _entitySystems = default!;
+    [Dependency] private  ISharedPlaytimeManager _playtime = default!;
 
     public bool TryGetMetaLevel(ICommonSession session, out int level)
     {

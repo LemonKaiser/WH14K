@@ -17,7 +17,7 @@ using Robust.Shared.Random;
 
 namespace Content.Client._WH40K.Cinematic;
 
-public sealed class WH40KCinematicSystem : EntitySystem
+public sealed partial class WH40KCinematicSystem : EntitySystem
 {
     private const float ShakeBaseDurationSeconds = 0.70f;
     private const float ShakeDurationScaleSeconds = 0.45f;
@@ -34,12 +34,12 @@ public sealed class WH40KCinematicSystem : EntitySystem
     private const float ShakeNoiseFrequency = 1f;
     private const float OverlayShakeNoiseTimeOffset = 137.5f;
 
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
+    [Dependency] private  IEyeManager _eyeManager = default!;
+    [Dependency] private  IUserInterfaceManager _ui = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  IClientNetManager _net = default!;
 
     public WH40KCinematicNetState? ActiveState { get; private set; }
     public WH40KCinematicStoppedEvent? LastStoppedEvent { get; private set; }

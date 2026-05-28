@@ -12,11 +12,11 @@ namespace Content.Server._WH40K.Overlays;
 /// Mirrors WH40K team icon data from the mech pilot to the mech entity itself
 /// so ally-only faction status icons remain visible while piloting.
 /// </summary>
-public sealed class WH40KMechFactionIconSyncSystem : EntitySystem
+public sealed partial class WH40KMechFactionIconSyncSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFactions = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private  NpcFactionSystem _npcFactions = default!;
 
     public override void Initialize()
     {

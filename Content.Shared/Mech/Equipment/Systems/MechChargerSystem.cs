@@ -12,11 +12,11 @@ namespace Content.Shared.Mech.Equipment.Systems;
 /// <summary>
 /// Charges equipment batteries inside mechs using the mech's own power cell.
 /// </summary>
-public sealed class MechChargerSystem : EntitySystem
+public sealed partial class MechChargerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
 
     private readonly Dictionary<EntityUid, float> _rechargeTimers = [];
 

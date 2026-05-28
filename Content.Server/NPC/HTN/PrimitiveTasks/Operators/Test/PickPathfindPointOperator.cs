@@ -11,9 +11,6 @@ public sealed partial class PickPathfindPointOperator : HTNOperator
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IRobustRandom _random = default!;
 
-    [DataField("targetKey")]
-    public string TargetKey = NPCBlackboard.MovementTarget;
-
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(NPCBlackboard blackboard,
         CancellationToken cancelToken)
     {
@@ -43,7 +40,7 @@ public sealed partial class PickPathfindPointOperator : HTNOperator
 
         return (true, new Dictionary<string, object>()
         {
-            { TargetKey, selected.Coordinates }
+            { NPCBlackboard.MovementTarget, selected.Coordinates }
         });
     }
 }

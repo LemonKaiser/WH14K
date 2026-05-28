@@ -3,9 +3,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.WarpBreach;
 
-public sealed class WH40KWarpBreachSystem : EntitySystem
+public sealed partial class WH40KWarpBreachSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Initialize()
     {

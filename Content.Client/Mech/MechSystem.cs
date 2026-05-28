@@ -7,9 +7,9 @@ using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.Mech;
 
-public sealed class MechSystem : SharedMechSystem
+public sealed partial class MechSystem : SharedMechSystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
     private const string MovementLayerKey = "movement";
 
     public override void Initialize()

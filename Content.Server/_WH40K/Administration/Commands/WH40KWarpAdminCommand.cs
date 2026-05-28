@@ -12,10 +12,10 @@ using Robust.Shared.Network;
 namespace Content.Server._WH40K.Administration.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KWarpAdminCommand : LocalizedCommands
+public sealed partial class WH40KWarpAdminCommand : LocalizedCommands
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private  IEntityManager _entity = default!;
+    [Dependency] private  IPlayerManager _players = default!;
 
     private static readonly string[] Subcommands =
     {

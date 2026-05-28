@@ -13,10 +13,10 @@ using Robust.Shared.Utility;
 namespace Content.Client.UserInterface.Systems.Chat.RichText;
 
 [UsedImplicitly]
-public sealed class WH40KJobIconTag : IMarkupTagHandler
+public sealed partial class WH40KJobIconTag : IMarkupTagHandler
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private  IPrototypeManager _prototypes = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
 
     private const float IconScale = 3.0f;
     private const float IconRightMargin = 6f;

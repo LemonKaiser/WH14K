@@ -11,7 +11,7 @@ namespace Content.Server._WH40K.WaveDefence.HTN.Operators;
 
 public sealed partial class WH40KWaveDefencePickCombatInvestigationOperator : HTNOperator
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
     private NPCPerceptionSystem _perception = default!;
 
     [DataField("targetKey")]

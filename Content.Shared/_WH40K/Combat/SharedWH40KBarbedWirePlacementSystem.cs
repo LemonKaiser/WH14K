@@ -10,12 +10,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._WH40K.Combat;
 
-public sealed class SharedWH40KBarbedWirePlacementSystem : EntitySystem
+public sealed partial class SharedWH40KBarbedWirePlacementSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedMapSystem _maps = default!;
+    [Dependency] private  SharedStackSystem _stack = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

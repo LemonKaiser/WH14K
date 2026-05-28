@@ -38,8 +38,8 @@ public sealed partial class GrinderMenu : FancyWindow
     private static readonly Color DangerAccent = Color.FromHex("#8B3030".AsSpan());
     private static readonly Color VesselAccent = Color.FromHex("#5B8F3E".AsSpan());
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
     private readonly ItemSlotsSystem _slots = default!;
     private readonly SharedPowerReceiverSystem _power = default!;
     private readonly SharedReagentGrinderSystem _grinder = default!;

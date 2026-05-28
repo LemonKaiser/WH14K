@@ -5,9 +5,9 @@ using Robust.Shared.Maths;
 
 namespace Content.Client._WH40K.Notifications;
 
-public sealed class WH40KNotificationSystem : EntitySystem
+public sealed partial class WH40KNotificationSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private  IUserInterfaceManager _ui = default!;
 
     public WH40KNotificationEvent? LastNotification { get; private set; }
     public WH40KLocalizedNotificationEvent? LastLocalizedNotification { get; private set; }

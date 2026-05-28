@@ -33,7 +33,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
 {
     private const string KhorneBladeAction = "ActionWH40KChaosKhorneRepulse";
     private const string KhorneBloodHealAction = "ActionWH40KChaosKhorneExecutionStep";
@@ -46,16 +46,16 @@ public sealed class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
     private static readonly ProtoId<DamageTypePrototype> PiercingDamageType = "Piercing";
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly BloodstreamSystem _bloodstream = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  BloodstreamSystem _bloodstream = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private DamageTypePrototype _bluntDamage = default!;
     private DamageTypePrototype _slashDamage = default!;

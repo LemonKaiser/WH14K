@@ -19,17 +19,17 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Rangefinder;
 
-public sealed class WH40KRangefinderSystem : EntitySystem
+public sealed partial class WH40KRangefinderSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  ExamineSystemShared _examine = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  UseDelaySystem _useDelay = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<int, EntityUid> _designatorMarkers = new();
     private int _nextDesignatorId = 100;

@@ -11,8 +11,8 @@ namespace Content.Client.Administration.UI.Tabs
     [GenerateTypedNameReferences]
     public sealed partial class ServerTab : Control, ILocalizedControl
     {
-        [Dependency] private readonly IConfigurationManager _config = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
+        [Dependency] private IConfigurationManager _config = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
 
         public ServerTab()
         {

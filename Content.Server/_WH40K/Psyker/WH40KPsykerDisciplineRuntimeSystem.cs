@@ -24,10 +24,10 @@ public sealed partial class WH40KPsykerDisciplineRuntimeComponent : Component
 /// Applies node-driven passive bonuses that need runtime hooks:
 /// movement, effective health thresholds and incoming damage scaling.
 /// </summary>
-public sealed class WH40KPsykerDisciplineRuntimeSystem : EntitySystem
+public sealed partial class WH40KPsykerDisciplineRuntimeSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  MobThresholdSystem _mobThresholds = default!;
 
     public override void Initialize()
     {

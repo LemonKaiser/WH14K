@@ -15,8 +15,8 @@ namespace Content.Client._WH40K.Roadmap;
 [GenerateTypedNameReferences]
 public sealed partial class RoadmapWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly RoadmapManager _roadmapManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  RoadmapManager _roadmapManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
     private readonly int _currentYear = DateTime.UtcNow.Year;
 
     public RoadmapWindow()

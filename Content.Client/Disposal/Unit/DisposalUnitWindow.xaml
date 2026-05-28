@@ -1,170 +1,44 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
+﻿<controls:FancyWindow xmlns="https://spacestation14.io"
                       xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
                       xmlns:disposal="clr-namespace:Content.Client.Disposal"
-                      MinSize="520 408"
-                      SetSize="560 426"
-                      Resizable="False">
-    <BoxContainer Name="RootLayout"
-                  Orientation="Vertical"
-                  HorizontalExpand="True"
-                  VerticalExpand="True">
-        <PanelContainer Name="RootFrame"
-                        HorizontalExpand="True"
-                        VerticalExpand="True">
-            <BoxContainer Orientation="Vertical"
-                          Margin="6 5 6 5"
-                          SeparationOverride="6"
-                          VerticalExpand="True">
-                <PanelContainer Name="HeaderPanel">
-                    <BoxContainer Orientation="Vertical"
-                                  Margin="8 7 8 7"
-                                  SeparationOverride="2">
-                        <Label Name="HeaderTitleLabel"
-                               Text="{Loc 'ui-disposal-unit-title'}"
-                               StyleClasses="LabelKeyText" />
-                        <RichTextLabel Name="HeaderSubtitleLabel"
-                                       Text="{Loc 'ui-disposal-unit-header-subtitle'}"
-                                       HorizontalExpand="True"
-                                       StyleClasses="LabelSubText" />
-                    </BoxContainer>
-                </PanelContainer>
-
-                <BoxContainer Orientation="Horizontal"
-                              SeparationOverride="6">
-                    <PanelContainer Name="StatePanel"
-                                    HorizontalExpand="True">
-                        <BoxContainer Orientation="Vertical"
-                                      Margin="8 7 8 7"
-                                      SeparationOverride="2">
-                            <Label Name="StatePanelTitleLabel"
-                                   Text="{Loc 'ui-disposal-unit-card-state'}"
-                                   StyleClasses="LabelKeyText" />
-                            <Label Name="StateValueLabel"
-                                   ClipText="True"
-                                   Text="{Loc 'ui-disposal-unit-label-status'}" />
-                            <RichTextLabel Name="StateHintLabel"
-                                           Text="{Loc 'ui-disposal-unit-state-note-ready'}"
-                                           HorizontalExpand="True"
-                                           StyleClasses="LabelSubText" />
-                        </BoxContainer>
-                    </PanelContainer>
-
-                    <PanelContainer Name="DiagnosticsPanel"
-                                    SetWidth="168">
-                        <BoxContainer Orientation="Vertical"
-                                      Margin="8 7 8 7"
-                                      SeparationOverride="5">
-                            <Label Name="DiagnosticsTitleLabel"
-                                   Text="{Loc 'ui-disposal-unit-card-diagnostics'}"
-                                   StyleClasses="LabelKeyText" />
-                            <BoxContainer Orientation="Vertical"
-                                          SeparationOverride="1">
-                                <Label Name="PowerKeyLabel"
-                                       ClipText="True"
-                                       Text="{Loc 'ui-disposal-unit-line-power'}"
-                                       StyleClasses="LabelSubText" />
-                                <Label Name="SpiritValueLabel"
-                                       ClipText="True"
-                                       Text="{Loc 'ui-disposal-unit-power-online'}" />
-                            </BoxContainer>
-                            <BoxContainer Orientation="Vertical"
-                                          SeparationOverride="1">
-                                <Label Name="SanctionKeyLabel"
-                                       ClipText="True"
-                                       Text="{Loc 'ui-disposal-unit-line-sanction'}"
-                                       StyleClasses="LabelSubText" />
-                                <Label Name="SanctionValueLabel"
-                                       ClipText="True"
-                                       Text="{Loc 'ui-disposal-unit-sanction-idle'}" />
-                            </BoxContainer>
-                        </BoxContainer>
-                    </PanelContainer>
-                </BoxContainer>
-
-                <PanelContainer Name="PressurePanel">
-                    <BoxContainer Orientation="Vertical"
-                                  Margin="8 7 8 7"
-                                  SeparationOverride="4">
-                        <BoxContainer Orientation="Horizontal"
-                                      SeparationOverride="6">
-                            <Label Name="PressurePanelTitleLabel"
-                                   Text="{Loc 'ui-disposal-unit-pressure-panel-title'}"
-                                   HorizontalExpand="True"
-                                   StyleClasses="LabelKeyText" />
-                            <Label Name="PressureFillLabel"
-                                   Text="0%"
-                                   StyleClasses="LabelSubText" />
-                        </BoxContainer>
-
-                        <disposal:PressureBar Name="PressureBar"
-                                              Access="Public"
-                                              HorizontalExpand="True"
-                                              MinHeight="20"
-                                              MinValue="0"
-                                              MaxValue="1"
-                                              Page="0"
-                                              Value="0" />
-
-                        <RichTextLabel Name="PressureStatusLabel"
-                                       Text="{Loc 'ui-disposal-unit-pressure-charging'}"
-                                       HorizontalExpand="True"
-                                       StyleClasses="LabelSubText" />
-                    </BoxContainer>
-                </PanelContainer>
-
-                <PanelContainer Name="ActionPanel">
-                    <BoxContainer Orientation="Vertical"
-                                  Margin="8 7 8 7"
-                                  SeparationOverride="4">
-                        <BoxContainer Orientation="Horizontal"
-                                      SeparationOverride="6"
-                                      HorizontalExpand="True">
-                            <Button Name="Engage"
-                                    Access="Public"
-                                    Text="{Loc 'ui-disposal-unit-button-flush-wh40k'}"
-                                    HorizontalExpand="True"
-                                    MinHeight="32"
-                                    ToggleMode="True" />
-                            <Button Name="Eject"
-                                    Access="Public"
-                                    Text="{Loc 'ui-disposal-unit-button-eject-wh40k'}"
-                                    HorizontalExpand="True"
-                                    MinHeight="32" />
-                            <Button Name="Power"
-                                    Access="Public"
-                                    Text="{Loc 'ui-disposal-unit-button-power-on'}"
-                                    HorizontalExpand="True"
-                                    MinHeight="32" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </PanelContainer>
-            </BoxContainer>
-        </PanelContainer>
-
-        <BoxContainer Name="FooterWrapper"
-                      Orientation="Vertical"
-                      VerticalAlignment="Bottom">
-            <PanelContainer Name="FooterDivider" />
-
-            <BoxContainer Name="FooterBar"
-                          Orientation="Horizontal"
-                          Margin="12 0 6 2"
-                          VerticalAlignment="Bottom">
-                <Label Name="FooterLeftLabel"
-                       ClipText="True"
-                       Text="{Loc 'ui-disposal-unit-footer-ready'}"
-                       VerticalAlignment="Center"
-                       StyleClasses="WindowFooterText" />
-
-                <Label Name="FooterRightLabel"
-                       ClipText="True"
-                       Text="{Loc 'ui-disposal-unit-footer-right'}"
-                       StyleClasses="WindowFooterText"
-                       HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       HorizontalExpand="True"
-                       Margin="0 0 4 0" />
-            </BoxContainer>
+                      MinSize="300 140"
+            SetSize="300 160"
+            Resizable="False">
+    <BoxContainer Orientation="Vertical" Margin="10">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+            <Label Text="{Loc 'ui-disposal-unit-label-state'}" />
+            <Label Name="UnitState" Access="Public"
+                   Text="{Loc 'ui-disposal-unit-label-status'}" />
+        </BoxContainer>
+        <Control MinSize="0 5" />
+        <BoxContainer Orientation="Horizontal"
+                      SeparationOverride="4">
+            <Label Text="{Loc 'ui-disposal-unit-label-pressure'}" />
+            <disposal:PressureBar Name="PressureBar"
+                         Access="Public"
+                         MinSize="190 20"
+                         HorizontalAlignment="Right"
+                         MinValue="0"
+                         MaxValue="1"
+                         Page="0"
+                         Value="0.5" />
+        </BoxContainer>
+        <Control MinSize="0 10" />
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+            <Button Name="Engage"
+                    Access="Public"
+                    Text="{Loc 'ui-disposal-unit-button-flush'}"
+                    StyleClasses="OpenRight"
+                    ToggleMode="True" />
+            <Button Name="Eject"
+                    Access="Public"
+                    Text="{Loc 'ui-disposal-unit-button-eject'}"
+                    StyleClasses="OpenBoth" />
+            <Button Name="Power"
+                    Access="Public"
+                    Text="{Loc 'ui-disposal-unit-button-power'}"
+                    StyleClasses="OpenLeft"
+                    ToggleMode="True" />
         </BoxContainer>
     </BoxContainer>
 </controls:FancyWindow>

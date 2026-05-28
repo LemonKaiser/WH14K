@@ -13,12 +13,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server._WH40K.Spawning;
 
-public sealed class WH40KSpawnPointSystem : EntitySystem
+public sealed partial class WH40KSpawnPointSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  StationSystem _stationSystem = default!;
+    [Dependency] private  StationSpawningSystem _stationSpawning = default!;
     private readonly Dictionary<(EntityUid Station, ProtoId<JobPrototype> Job), List<EntityCoordinates>> _spawnCache = new();
 
     public override void Initialize()

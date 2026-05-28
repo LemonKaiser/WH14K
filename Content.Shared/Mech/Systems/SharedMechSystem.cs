@@ -61,31 +61,31 @@ namespace Content.Shared.Mech.Systems;
 
 public abstract partial class SharedMechSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly EntityWhitelistSystem _entWhitelist = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly MechLockSystem _mechLock = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedHandheldLightSystem _handheldLight = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedMaterialStorageSystem _material = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly IGameTiming _gameTiming = default!;
-    [Dependency] protected readonly VehicleSystem Vehicle = default!;
+    [Dependency] private  ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private  AlertsSystem _alerts = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  EntityWhitelistSystem _entWhitelist = default!;
+    [Dependency] private  INetManager _net = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private  MechLockSystem _mechLock = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedHandheldLightSystem _handheldLight = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  SharedMaterialStorageSystem _material = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  SharedToolSystem _tool = default!;
+    [Dependency] private  SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private  SharedVirtualItemSystem _virtualItem = default!;
+    [Dependency] private  ThrowingSystem _throwing = default!;
+    [Dependency] private  IGameTiming _gameTiming = default!;
+    [Dependency] protected  VehicleSystem Vehicle = default!;
 
     private static readonly ProtoId<ToolQualityPrototype> PryingQuality = "Prying";
 

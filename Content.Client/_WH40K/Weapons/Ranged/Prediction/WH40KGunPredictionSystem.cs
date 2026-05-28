@@ -10,12 +10,12 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.Weapons.Ranged.Prediction;
 
-public sealed class WH40KGunPredictionSystem : EntitySystem
+public sealed partial class WH40KGunPredictionSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private bool _predictionEnabled;
 

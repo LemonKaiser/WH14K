@@ -7,9 +7,9 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Chat;
 
-public sealed class WH40KLocalizedChatSystem : EntitySystem
+public sealed partial class WH40KLocalizedChatSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private  IUserInterfaceManager _uiManager = default!;
 
     public override void Initialize()
     {

@@ -6,11 +6,11 @@ namespace Content.Server._WH40K.Psyker;
 /// <summary>
 /// Chaos gift action delivery isolated from the Imperium psyker path.
 /// </summary>
-public sealed class WH40KChaosStarterActionLoadoutSystem : EntitySystem
+public sealed partial class WH40KChaosStarterActionLoadoutSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
-    [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  WH40KChaosCultSystem _cult = default!;
 
     public override void Initialize()
     {

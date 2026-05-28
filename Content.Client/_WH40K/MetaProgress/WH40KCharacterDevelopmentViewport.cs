@@ -19,7 +19,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
+public sealed partial class WH40KCharacterDevelopmentViewport : LayoutContainer
 {
 	private enum BranchLane : byte
 	{
@@ -82,7 +82,7 @@ public sealed class WH40KCharacterDevelopmentViewport : LayoutContainer
 	}
 
 	[Dependency]
-	private readonly IResourceCache _resources = default!;
+	private  IResourceCache _resources = default!;
 
 	private static readonly Vector2 NodeSize = new Vector2(220f, 100f);
 

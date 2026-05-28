@@ -105,7 +105,7 @@ public sealed class HumanoidProfileTests : GameTest
             Assert.That(proto.Sexes.Contains(humanoidComponent.Sex), Is.True);
             Assert.That(humanoidComponent.Species, Is.EqualTo(species));
             var strategy = Server.ProtoMan.Index(proto.SkinColoration).Strategy;
-            Assert.That(strategy.VerifySkinColor(profile.Appearance.SkinColor), Is.True);
+            Assert.That(strategy.VerifySkinColor(profile.Appearance.SkinColor, out var reason), Is.True, reason);
 
             AssertValidProfile((body, humanoidComponent), profile);
         });

@@ -5,9 +5,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._WH40K.Vehicle.Visuals;
 
-public sealed class WH40KVehicleRiderSeatVisualSystem : EntitySystem
+public sealed partial class WH40KVehicleRiderSeatVisualSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private  SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, Vector2> _originalOffsets = new();
 

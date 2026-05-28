@@ -22,10 +22,10 @@ public sealed partial class WH40KWarpMutationComponent : Component
 /// Applies irreversible warp-flesh degradation for the 900-999 instability band.
 /// The mutation persists until the entity is deleted or the round is reset.
 /// </summary>
-public sealed class WH40KWarpMutationSystem : EntitySystem
+public sealed partial class WH40KWarpMutationSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  MobThresholdSystem _mobThresholds = default!;
 
     public override void Initialize()
     {

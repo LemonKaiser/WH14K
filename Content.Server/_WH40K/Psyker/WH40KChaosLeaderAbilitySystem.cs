@@ -7,16 +7,16 @@ using Content.Shared._WH40K.GameMode;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KChaosLeaderAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosLeaderAbilitySystem : EntitySystem
 {
     private const float SacrificeWarpRestore = 100f;
     private const float SacrificeCultXpReward = 100f;
     private static readonly TimeSpan SacrificeCooldown = TimeSpan.FromMinutes(5);
     private const string LeaderSacrificeAction = "ActionWH40KChaosLeaderSacrifice";
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  WH40KChaosCultSystem _cult = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
 
     public override void Initialize()
     {

@@ -16,7 +16,7 @@ namespace Content.Client.Power.APC.UI;
 [GenerateTypedNameReferences]
 public sealed partial class ApcMenu : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
 
     private static readonly Color Accent = Color.FromHex("#C9A94C".AsSpan());
     private static readonly Color WarningAccent = Color.FromHex("#A57C35".AsSpan());

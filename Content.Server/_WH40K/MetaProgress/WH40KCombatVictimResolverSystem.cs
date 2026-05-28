@@ -24,10 +24,10 @@ public readonly record struct WH40KCombatVictimResolution(
     public bool CountsForRawStats => Kind == WH40KCombatVictimKind.PlayerOwned;
 }
 
-public sealed class WH40KCombatVictimResolverSystem : EntitySystem
+public sealed partial class WH40KCombatVictimResolverSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private  SharedMindSystem _mind = default!;
+    [Dependency] private  IPlayerManager _players = default!;
 
     public WH40KCombatVictimResolution ResolveForValidatedRewards(EntityUid victim)
     {

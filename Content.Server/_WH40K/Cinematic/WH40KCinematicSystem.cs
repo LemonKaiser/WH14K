@@ -35,17 +35,17 @@ public sealed partial class WH40KCinematicSystem : EntitySystem
     private const float AudienceShakeKickScale = 0.055f;
     private const float AudienceShakeMaxKickMagnitude = 0.25f;
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly WH40KNotificationSystem _notifications = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscribers = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _prototypes = default!;
+    [Dependency] private  ISharedPlayerManager _players = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private  ChatSystem _chat = default!;
+    [Dependency] private  WH40KNotificationSystem _notifications = default!;
+    [Dependency] private  ViewSubscriberSystem _viewSubscribers = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     private readonly Queue<QueuedCinematicRequest> _queue = new();
     private readonly HashSet<string> _completedNonRepeatable = new(StringComparer.OrdinalIgnoreCase);

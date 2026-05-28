@@ -1,4 +1,3 @@
-using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -9,17 +8,16 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands
 {
     [AdminCommand(AdminFlags.Admin)]
-    public sealed class SetMindCommand : LocalizedEntityCommands
+    public sealed partial class SetMindCommand : LocalizedEntityCommands
     {
-        [Dependency] private readonly IAdminActionGuard _adminActionGuard = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly SharedMindSystem _mindSystem = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private SharedMindSystem _mindSystem = default!;
 
         public override string Command => "setmind";
 
         public override string Description => Loc.GetString("cmd-setmind-desc", ("requiredComponent", nameof(MindContainerComponent)));
 
-        public override async void Execute(IConsoleShell shell, string argStr, string[] args)
+        public override void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length < 2)
             {
@@ -56,16 +54,6 @@ namespace Content.Server.Administration.Commands
             if (!_playerManager.TryGetSessionByUsername(args[1], out var session))
             {
                 shell.WriteLine(Loc.GetString("shell-target-player-does-not-exist"));
-                return;
-            }
-
-            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
-                    shell.Player,
-                    session.UserId,
-                    Loc.GetString("admin-hierarchy-action-set-mind"),
-                    session.Name,
-                    shell.WriteError))
-            {
                 return;
             }
 

@@ -9,9 +9,9 @@ using Content.Shared.Weapons.Ranged.Systems;
 
 namespace Content.Shared._WH40K.Vehicle.Combat;
 
-public sealed class SharedWH40KVehicleCombatSystem : EntitySystem
+public sealed partial class SharedWH40KVehicleCombatSystem : EntitySystem
 {
-    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private  SharedGunSystem _gun = default!;
 
     public override void Initialize()
     {

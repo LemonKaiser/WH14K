@@ -1,6 +1,7 @@
 ﻿using Content.Server.StationRecords.Systems;
 using Content.Shared.Dataset;
 using Content.Shared.Silicons.Laws;
+using Content.Shared.Station;
 using Content.Shared.StationRecords;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -11,17 +12,17 @@ namespace Content.Server.Silicons.Laws;
 /// <summary>
 /// This handles generating random ion laws.
 /// </summary>
-public sealed class IonLawSystem : EntitySystem
+public sealed partial class IonLawSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StationRecordsSystem _stationRecordsSystem = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedStationSystem _stationSystem = default!;
+    [Dependency] private StationRecordsSystem _stationRecordsSystem = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private ISawmill _sawmill = default!;
     private readonly Dictionary<string, List<IonLawSelector>> _selectors = new();
     private IonLawPrototype? _ionLaw;
-    private EntityUid? _ionLawStation;
 
     public override void Initialize()
     {
@@ -131,7 +132,7 @@ public sealed class IonLawSystem : EntitySystem
     /// Generates a random ion law by picking an ion law prototype and filling its placeholders with random values, from datasets.
     /// </summary>
     /// <returns>A formatted string representing the new ion law.</returns>
-    public string GetIonLaw(EntityUid? station = null)
+    public string GetIonLaw()
     {
         var laws = _prototypeManager.EnumeratePrototypes<IonLawPrototype>().ToList();
         if (laws.Count == 0)
@@ -172,15 +173,7 @@ public sealed class IonLawSystem : EntitySystem
             return Loc.GetString("ion-law-error-was-null");
         }
 
-        _ionLawStation = station;
-        try
-        {
-            return Loc.GetString(_ionLaw.LawString, ("ion", 0));
-        }
-        finally
-        {
-            _ionLawStation = null;
-        }
+        return Loc.GetString(_ionLaw.LawString, ("ion", 0));
     }
 
     /// <summary>
@@ -269,14 +262,19 @@ public sealed class IonLawSystem : EntitySystem
                 _sawmill.Error("Selected DataSet (" + selector + ") was empty or not found" );
                 return Loc.GetString("ion-law-error-dataset-empty-or-not-found");
             case RandomManifestFill randomManifestFill:
-                if (_ionLawStation != null &&
-                    TryComp(_ionLawStation, out StationRecordsComponent? stationRecords) &&
-                    _stationRecordsSystem.TryGetRandomRecord((_ionLawStation.Value, stationRecords), out GeneralStationRecord? record))
+                var stations = _stationSystem.GetStations();
+                if (stations.Count > 0)
                 {
-                    return "'" + record.Name.ToUpper() + "'";
+                    var station = _random.Pick(stations);
+                    if (TryComp(station, out StationRecordsComponent? stationRecords) &&
+                        _stationRecordsSystem.TryGetRandomRecord((station, stationRecords), out GeneralStationRecord? record))
+                    {
+                        var upperName = "'" + record.Name.ToUpper() + "'";
+                        return upperName;
+                    }
                 }
 
-                // Fallback to dataset if no manifest record was found for the affected station.
+                // Fallback to dataset if no manifest record found or stations are empty
                 if (_prototypeManager.TryIndex(randomManifestFill.FallbackDataset, out var fallbackDataset) && fallbackDataset.Values.Any())
                 {
                     return _random.Pick(fallbackDataset.Values);

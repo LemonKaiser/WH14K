@@ -23,15 +23,15 @@ namespace Content.Server._WH40K.Atmos;
 ///     Simulates open sky on planetary maps by pulling unroofed tiles toward the map's ambient atmosphere.
 /// </summary>
 [UsedImplicitly]
-public sealed class WH40KOutdoorAtmosphereSystem : EntitySystem
+public sealed partial class WH40KOutdoorAtmosphereSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmos = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefs = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
+    [Dependency] private  AtmosphereSystem _atmos = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  ITileDefinitionManager _tileDefs = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
 
     private const float MinIntervalSeconds = 0.05f;
     private const float GasDeltaEpsilon = 0.05f;

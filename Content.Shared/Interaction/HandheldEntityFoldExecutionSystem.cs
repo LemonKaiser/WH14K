@@ -8,10 +8,10 @@ namespace Content.Shared.Interaction;
 /// Server execution path for generic in-world fold actions for entities that use
 /// <see cref="HandheldEntityPlacementComponent"/>.
 /// </summary>
-public sealed class HandheldEntityFoldExecutionSystem : EntitySystem
+public sealed partial class HandheldEntityFoldExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  INetManager _net = default!;
 
     public override void Initialize()
     {

@@ -1,51 +1,15 @@
-using Content.Server.NPC.Pathfinding;
-using Content.Shared.Administration.Logs;
+﻿using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
-using Content.Shared.Teleportation.Components;
 using Content.Shared.Teleportation.Systems;
 using Robust.Shared.Map;
 
 namespace Content.Server.Teleportation;
 
-public sealed class PortalSystem : SharedPortalSystem
+public sealed partial class PortalSystem : SharedPortalSystem
 {
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly PathfindingSystem _pathfinding = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<PortalComponent, EntityLinkedEvent>(OnLinked);
-        SubscribeLocalEvent<PortalComponent, EntityUnlinkedEvent>(OnUnlinked);
-    }
-
-    private void OnLinked(Entity<PortalComponent> ent, ref EntityLinkedEvent args)
-    {
-        if (!ent.Comp.NavPortal)
-            return;
-
-        // Only create one navigation edge per linked pair.
-        if (ent.Owner.Id > args.Other.Id)
-            return;
-
-        var xformA = Transform(ent);
-        var xformB = Transform(args.Other);
-
-        if (_pathfinding.TryCreatePortal(xformA.Coordinates, xformB.Coordinates, out var handle))
-            ent.Comp.NavPortalHandles[args.Other] = handle;
-    }
-
-    private void OnUnlinked(Entity<PortalComponent> ent, ref EntityUnlinkedEvent args)
-    {
-        if (!ent.Comp.NavPortalHandles.TryGetValue(args.Other, out var handle))
-            return;
-
-        _pathfinding.RemovePortal(handle);
-        ent.Comp.NavPortalHandles.Remove(args.Other);
-    }
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     // TODO Move to shared
     protected override void LogTeleport(EntityUid portal, EntityUid subject, EntityCoordinates source,

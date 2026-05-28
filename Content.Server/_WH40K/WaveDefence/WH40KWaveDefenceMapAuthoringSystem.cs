@@ -9,9 +9,9 @@ namespace Content.Server._WH40K.WaveDefence;
 /// Adds map-authoring quality-of-life for WaveDefence markers:
 /// richer debug names and useful examine info.
 /// </summary>
-public sealed class WH40KWaveDefenceMapAuthoringSystem : EntitySystem
+public sealed partial class WH40KWaveDefenceMapAuthoringSystem : EntitySystem
 {
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private  MetaDataSystem _metaData = default!;
 
     public override void Initialize()
     {

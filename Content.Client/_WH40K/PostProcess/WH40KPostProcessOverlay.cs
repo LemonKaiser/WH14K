@@ -10,14 +10,14 @@ namespace Content.Client._WH40K.PostProcess;
 /// <summary>
 /// Basic WH40K fullscreen post-process pass for additive lighting and light falloff shaping.
 /// </summary>
-public sealed class WH40KPostProcessOverlay : Overlay
+public sealed partial class WH40KPostProcessOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "WH40KPostProcess";
 
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly ILightManager _lightManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
+    [Dependency] private  ILightManager _lightManager = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
 
     public override bool RequestScreenTexture => true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -63,10 +63,10 @@ public sealed class WH40KPostProcessOverlay : Overlay
     }
 }
 
-public sealed class WH40KPostProcessSystem : EntitySystem
+public sealed partial class WH40KPostProcessSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  IOverlayManager _overlay = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {

@@ -10,7 +10,7 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class HighlightedContainer : PanelContainer
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
     private float _lobbyOpacity = 1f;
     private float _uiWindowOpacity = 1f;
     private bool _useUiWindowOpacity;

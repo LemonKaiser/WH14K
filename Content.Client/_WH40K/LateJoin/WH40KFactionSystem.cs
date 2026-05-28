@@ -5,9 +5,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.LateJoin;
 
-public sealed class WH40KFactionSystem : EntitySystem
+public sealed partial class WH40KFactionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public event Action<WH40KFactionsEvent>? FactionsUpdated;
     public event Action<WH40KFactionSelectionResultEvent>? FactionSelectionResultReceived;

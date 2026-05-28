@@ -9,10 +9,10 @@ namespace Content.Server._WH40K.Psyker;
 /// - grants default chaos skrizhal on chaos-role spawn;
 /// - binds the starter skrizhal to owner progression state.
 /// </summary>
-public sealed class WH40KChaosSkrizhalProvisionSystem : EntitySystem
+public sealed partial class WH40KChaosSkrizhalProvisionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
 
     private const string DefaultSkrizhalPrototype = "WH40KRuneSkrizhalChaos";
 

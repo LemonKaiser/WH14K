@@ -16,10 +16,10 @@ namespace Content.Server.KillTracking;
 /// <summary>
 /// Tracks damage attribution over an entity's life and emits down / kill attribution events.
 /// </summary>
-public sealed class KillTrackingSystem : EntitySystem
+public sealed partial class KillTrackingSystem : EntitySystem
 {
-    [Dependency] private readonly CombatAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  CombatAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public void SetKillState(EntityUid uid, MobState state, KillTrackerComponent? component = null)
     {

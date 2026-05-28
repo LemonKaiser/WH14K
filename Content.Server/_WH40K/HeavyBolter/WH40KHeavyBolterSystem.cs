@@ -33,7 +33,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.HeavyBolter;
 
-public sealed class WH40KHeavyBolterSystem : EntitySystem
+public sealed partial class WH40KHeavyBolterSystem : EntitySystem
 {
     private const float ArcDotEpsilon = 0.001f;
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -42,23 +42,23 @@ public sealed class WH40KHeavyBolterSystem : EntitySystem
     private static readonly TimeSpan PopupSpamCooldown = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan AttemptShootMessageCooldown = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedBuckleSystem _buckle = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  ActionContainerSystem _actionContainer = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedBuckleSystem _buckle = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  FixtureSystem _fixture = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedGunSystem _gun = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
     private readonly Dictionary<(EntityUid User, string Key), TimeSpan> _popupCooldowns = new();
 
     public override void Initialize()

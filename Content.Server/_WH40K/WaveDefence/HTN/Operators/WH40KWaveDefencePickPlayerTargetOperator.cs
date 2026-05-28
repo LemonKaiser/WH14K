@@ -24,7 +24,7 @@ public sealed partial class WH40KWaveDefencePickPlayerTargetOperator : HTNOperat
     private const string VisionRadiusKey = "VisionRadius";
     private const string AggroVisionRadiusKey = "AggroVisionRadius";
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
     private MobStateSystem _mobState = default!;
     private NpcFactionSystem _npcFaction = default!;
     private WH40KWaveDefenceObjectiveNavigationSystem _objectiveNavigation = default!;

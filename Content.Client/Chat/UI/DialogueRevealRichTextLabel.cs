@@ -17,12 +17,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.Chat.UI
 {
-    internal sealed class DialogueRevealRichTextLabel : RichTextLabel
+    internal sealed partial class DialogueRevealRichTextLabel : RichTextLabel
     {
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IEntityManager _entManager = default!;
-        [Dependency] private readonly IPrototypeManager _protoManager = default!;
-        [Dependency] private readonly IGameTiming _timing = default!;
+        [Dependency] private  IConfigurationManager _cfg = default!;
+        [Dependency] private  IEntityManager _entManager = default!;
+        [Dependency] private  IPrototypeManager _protoManager = default!;
+        [Dependency] private  IGameTiming _timing = default!;
 
         private static TimeSpan _nextGlobalBlipTime;
         private readonly SharedAudioSystem? _audio;

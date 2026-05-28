@@ -13,7 +13,7 @@ namespace Content.Client._WH40K.MetaProgress;
 [GenerateTypedNameReferences]
 public sealed partial class PlayerMetaProgressPanel : PanelContainer
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
     private const int DefaultPreviewLevelCap = 40;
     private static readonly Color PanelBackground = Color.FromHex("#14171D");
     private static readonly Color PanelBorder = Color.FromHex("#4E4124");

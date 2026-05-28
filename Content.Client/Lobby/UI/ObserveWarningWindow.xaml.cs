@@ -12,8 +12,8 @@ namespace Content.Client.Lobby.UI;
 [UsedImplicitly]
 public sealed partial class ObserveWarningWindow : DefaultWindow, ILocalizedControl
 {
-    [Dependency] private readonly ISharedAdminManager _adminManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private ISharedAdminManager _adminManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public ObserveWarningWindow()
     {

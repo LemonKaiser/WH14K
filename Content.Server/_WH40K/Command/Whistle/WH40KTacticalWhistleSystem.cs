@@ -22,19 +22,19 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Command.Whistle;
 
-public sealed class WH40KTacticalWhistleSystem : EntitySystem
+public sealed partial class WH40KTacticalWhistleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  UseDelaySystem _useDelay = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

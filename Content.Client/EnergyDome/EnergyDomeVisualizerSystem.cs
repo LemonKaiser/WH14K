@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.EnergyDome;
 
-public sealed class EnergyDomeVisualizerSystem : VisualizerSystem<EnergyDomeVisualsComponent>
+public sealed partial class EnergyDomeVisualizerSystem : VisualizerSystem<EnergyDomeVisualsComponent>
 {
     private const float FullChargeHoleScale = 10.0f;
     private const float CriticalChargeHoleScale = 7.2f;
@@ -16,9 +16,9 @@ public sealed class EnergyDomeVisualizerSystem : VisualizerSystem<EnergyDomeVisu
     private const float BaseAnimationSpeed = 0.55f;
     private const float ExtraAnimationSpeed = 0.65f;
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<EntityUid, ShaderInstance> _shaderCache = new();
     private readonly Dictionary<EntityUid, float> _alphaCache = new();

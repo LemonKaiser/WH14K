@@ -11,7 +11,7 @@ using Robust.Shared.Localization;
 
 namespace Content.Server._WH40K.WaveDefence;
 
-public sealed class WH40KWaveDefenceObjectiveDestroyedEvent : EntityEventArgs
+public sealed partial class WH40KWaveDefenceObjectiveDestroyedEvent : EntityEventArgs
 {
     public readonly EntityUid Objective;
     public readonly string TeamId;
@@ -23,10 +23,10 @@ public sealed class WH40KWaveDefenceObjectiveDestroyedEvent : EntityEventArgs
     }
 }
 
-public sealed class WH40KWaveDefenceObjectiveSystem : EntitySystem
+public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly WH40KWaveDefenceRuleSystem _rule = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  WH40KWaveDefenceRuleSystem _rule = default!;
 
     private ISawmill _sawmill = default!;
 

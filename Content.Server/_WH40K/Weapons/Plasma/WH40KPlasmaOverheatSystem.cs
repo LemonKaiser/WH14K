@@ -5,10 +5,10 @@ using Robust.Shared.Random;
 
 namespace Content.Server._WH40K.Weapons.Plasma;
 
-public sealed class WH40KPlasmaOverheatSystem : EntitySystem
+public sealed partial class WH40KPlasmaOverheatSystem : EntitySystem
 {
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  ExplosionSystem _explosion = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     public override void Initialize()
     {

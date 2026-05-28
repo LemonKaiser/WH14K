@@ -12,10 +12,10 @@ namespace Content.Server._WH40K.Animals;
 /// <summary>
 /// Makes nearby herd members join retaliation when one member is attacked.
 /// </summary>
-public sealed class WH40KCollectiveRetaliationSystem : EntitySystem
+public sealed partial class WH40KCollectiveRetaliationSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
 
     public override void Initialize()
     {

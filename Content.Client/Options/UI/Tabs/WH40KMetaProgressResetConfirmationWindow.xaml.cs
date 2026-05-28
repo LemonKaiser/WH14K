@@ -17,7 +17,7 @@ public enum WH40KMetaProgressResetConfirmationStep : byte
 [GenerateTypedNameReferences]
 public sealed partial class WH40KMetaProgressResetConfirmationWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly WH40KMetaProgressResetConfirmationStep _step;
     private readonly TimeSpan _unlockAt;

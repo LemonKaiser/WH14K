@@ -6,7 +6,7 @@ namespace Content.Client.Mech.Ui.Equipment;
 
 public sealed partial class MechSoundboardUi : UIFragment
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
 
     private MechSoundboardUiFragment? _fragment;
 

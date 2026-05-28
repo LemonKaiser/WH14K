@@ -9,10 +9,10 @@ namespace Content.Server._WH40K.Psyker;
 /// Imperium biomancy utility action backend.
 /// Keeps the healing effect separate from the discipline modifier tuning.
 /// </summary>
-public sealed class WH40KPsykerBiomancyAbilitySystem : EntitySystem
+public sealed partial class WH40KPsykerBiomancyAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly WH40KPsykerDisciplineModifierSystem _modifiers = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  WH40KPsykerDisciplineModifierSystem _modifiers = default!;
 
     public override void Initialize()
     {

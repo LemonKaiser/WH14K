@@ -11,13 +11,13 @@ namespace Content.Client._WH40K.Wave;
 /// <summary>
 /// Applies the WH40K sprite wave post-shader to entities with <see cref="WH40KWaveShaderComponent"/>.
 /// </summary>
-public sealed class WH40KWaveShaderSystem : EntitySystem
+public sealed partial class WH40KWaveShaderSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "WH40KWave";
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _protoMan = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IPrototypeManager _protoMan = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<EntityUid, ShaderInstance> _shaderInstances = new();
     private bool _enabled;

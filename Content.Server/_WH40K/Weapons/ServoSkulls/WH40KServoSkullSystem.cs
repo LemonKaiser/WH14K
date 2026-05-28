@@ -32,7 +32,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Weapons.ServoSkulls;
 
-public sealed class WH40KServoSkullSystem : EntitySystem
+public sealed partial class WH40KServoSkullSystem : EntitySystem
 {
     private const string DeployNeedsTeamLoc = "wh40k-servo-skull-popup-deploy-team-required";
     private const string FollowingLoc = "wh40k-servo-skull-popup-following";
@@ -43,19 +43,19 @@ public sealed class WH40KServoSkullSystem : EntitySystem
     private const string ArmedLoc = "wh40k-servo-skull-popup-armed";
     private static readonly SoundPathSpecifier BreakSound = new("/Audio/Effects/metal_break5.ogg");
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly ExplosionSystem _explosion = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFactions = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  ExplosionSystem _explosion = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  TriggerSystem _trigger = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  NpcFactionSystem _npcFactions = default!;
+    [Dependency] private  NPCSteeringSystem _steering = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
 
     public override void Initialize()
     {

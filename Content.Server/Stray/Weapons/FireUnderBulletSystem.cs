@@ -11,11 +11,11 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.Stray.Weapons.FireUnderBullet;
 
-public sealed class FireUnderBulletSystem : SharedFireUnderBulletSystem
+public sealed partial class FireUnderBulletSystem : SharedFireUnderBulletSystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphereSystem = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private  TransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private EntityQuery<TransformComponent> _xformQuery = default!;
 

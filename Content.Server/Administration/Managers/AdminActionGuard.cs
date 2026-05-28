@@ -9,13 +9,13 @@ using Robust.Shared.Player;
 
 namespace Content.Server.Administration.Managers;
 
-public sealed class AdminActionGuard : IAdminActionGuard
+public sealed partial class AdminActionGuard : IAdminActionGuard
 {
-    [Dependency] private readonly IAdminHierarchyManager _adminHierarchyManager = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private  IAdminHierarchyManager _adminHierarchyManager = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  IServerDbManager _db = default!;
+    [Dependency] private  IEntityManager _entities = default!;
+    [Dependency] private  ILogManager _logManager = default!;
 
     private ISawmill Sawmill => _logManager.GetSawmill("admin.action_guard");
 

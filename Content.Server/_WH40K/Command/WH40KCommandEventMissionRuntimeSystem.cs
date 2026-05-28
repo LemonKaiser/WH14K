@@ -44,7 +44,7 @@ namespace Content.Server._WH40K.Command;
 /// Runtime scheduler for team-random events and dynamic missions.
 /// Phase-3 adds gameplay-effect routing, map mission objectives, and reward application pipeline.
 /// </summary>
-public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
+public sealed partial class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 {
     private const string EventTeamMapId = "WH40KCommandTeamRandomEventTeamMap";
     private const string EventDefaultProfileId = "WH40KCommandTeamRandomEventProfileDefault";
@@ -233,20 +233,20 @@ public sealed class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         public TimeSpan LastProgressTick = TimeSpan.Zero;
     }
 
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<string, TeamEventRuntime> _teamEvents =
         new(StringComparer.OrdinalIgnoreCase);

@@ -5,10 +5,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.DiscordAuth;
 
-public sealed class WH40KDiscordAuthSystem : EntitySystem
+public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IUriOpener _uri = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IUriOpener _uri = default!;
 
     public event Action<WH40KDiscordAuthSnapshot>? SnapshotUpdated;
 

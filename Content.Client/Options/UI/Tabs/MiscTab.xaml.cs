@@ -34,11 +34,11 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class MiscTab : Control, ILocalizedControl
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ILocalizationManager _localization = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
+    [Dependency] private  ILocalizationManager _localization = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
     private const string LobbyBackgroundModeServer = "server";
     private const string LobbyBackgroundModeStatic = "static";
     private const string LobbyBackgroundModeAnimated = "animated";

@@ -12,11 +12,11 @@ namespace Content.Client._WH40K.Overlays;
 /// <summary>
 /// Draws a grayscale filter inside radial areas defined by WH40KRadialGreyscaleComponent entities.
 /// </summary>
-public sealed class WH40KRadialGreyscaleOverlay : Overlay
+public sealed partial class WH40KRadialGreyscaleOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> ShaderId = "WH40KRadialGreyscale";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     private readonly IEntityManager _entManager;
     private readonly SharedTransformSystem _transform;

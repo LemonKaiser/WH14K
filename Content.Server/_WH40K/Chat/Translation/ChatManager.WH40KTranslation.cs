@@ -17,9 +17,9 @@ namespace Content.Server.Chat.Managers;
 
 internal sealed partial class ChatManager
 {
-    [Dependency] private readonly IWH40KChatTranslationService _wh40kChatTranslation = default!;
-    [Dependency] private readonly IEntitySystemManager _entitySystems = default!;
-    [Dependency] private readonly ITaskManager _wh40kTaskManager = default!;
+    [Dependency] private  IWH40KChatTranslationService _wh40kChatTranslation = default!;
+    [Dependency] private  IEntitySystemManager _entitySystems = default!;
+    [Dependency] private  ITaskManager _wh40kTaskManager = default!;
 
     private WH40KPlayerCultureTracker WH40KPlayerCulture => _entitySystems.GetEntitySystem<WH40KPlayerCultureTracker>();
 

@@ -13,7 +13,7 @@ namespace Content.Client.Options.UI.Tabs;
 [GenerateTypedNameReferences]
 public sealed partial class GraphicsTab : Control, ILocalizedControl
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private readonly OptionLightingQuality _lightingQualityOption;
     private readonly OptionDropDownCVar<float> _uiScaleOption;

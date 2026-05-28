@@ -6,9 +6,9 @@ namespace Content.Server.Stray.SpriteOnOffState;
 
 
 [UsedImplicitly]
-public sealed class SpriteOnOffStateSystem : SharedSpriteOnOffStateSystem
+public sealed partial class SpriteOnOffStateSystem : SharedSpriteOnOffStateSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
     public override void ShangeIsOn(EntityUid uid, SpriteOnOffStateComponent? comp = null){
         if (!Resolve(uid, ref comp))
             return;

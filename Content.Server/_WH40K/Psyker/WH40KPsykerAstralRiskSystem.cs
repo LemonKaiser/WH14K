@@ -8,7 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KPsykerAstralRiskSystem : EntitySystem
+public sealed partial class WH40KPsykerAstralRiskSystem : EntitySystem
 {
     private static readonly TimeSpan StrainGracePeriod = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan StrainTickInterval = TimeSpan.FromSeconds(12);
@@ -21,12 +21,12 @@ public sealed class WH40KPsykerAstralRiskSystem : EntitySystem
     private const float MaxExitInstabilityBonus = 3f;
     private const float MaxExitFatigueBonusSeconds = 12f;
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
-    [Dependency] private readonly WH40KPsykerDisciplineModifierSystem _modifiers = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  WH40KPsykerDisciplineModifierSystem _modifiers = default!;
 
     public override void Update(float frameTime)
     {

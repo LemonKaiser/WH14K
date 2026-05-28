@@ -15,9 +15,9 @@ namespace Content.Client.Administration.UI.Tabs.ObjectsTab;
 [GenerateTypedNameReferences]
 public sealed partial class ObjectsTab : Control, ILocalizedControl
 {
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IClientConsoleHost _console = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IClientConsoleHost _console = default!;
 
     private static readonly Color HeaderBackgroundColor = Color.FromHex("#151820");
     private static readonly Color HeaderBorderColor = Color.FromHex("#6A5530");

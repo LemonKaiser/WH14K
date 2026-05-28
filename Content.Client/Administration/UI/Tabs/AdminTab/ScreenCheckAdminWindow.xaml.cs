@@ -10,7 +10,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab;
 [GenerateTypedNameReferences]
 public sealed partial class ScreenCheckAdminWindow : DefaultWindow
 {
-    [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
+    [Dependency] private  IClientConsoleHost _consoleHost = default!;
 
     private PlayerInfo? _selectedPlayer;
 

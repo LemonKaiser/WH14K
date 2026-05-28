@@ -6,10 +6,10 @@ namespace Content.Shared._WH40K.Psyker;
 /// WH40K combat blink backend.
 /// TargetAction validation keeps range/same-map checks; this avoids the base magic line-of-sight cast check.
 /// </summary>
-public sealed class WH40KWarpStepSystem : EntitySystem
+public sealed partial class WH40KWarpStepSystem : EntitySystem
 {
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

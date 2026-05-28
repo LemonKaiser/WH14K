@@ -11,12 +11,12 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._WH40K.Tools;
 
 [UsedImplicitly]
-public sealed class WH40KMultipleToolRadialBoundUserInterface : BoundUserInterface
+public sealed partial class WH40KMultipleToolRadialBoundUserInterface : BoundUserInterface
 {
     private static readonly Color SelectedOptionColor = Palettes.Green.Element.WithAlpha(128);
     private static readonly Color SelectedOptionHoverColor = Palettes.Green.HoveredElement.WithAlpha(128);
 
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
 
     private SimpleRadialMenu? _menu;
 

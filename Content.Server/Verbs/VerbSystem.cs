@@ -6,20 +6,17 @@ using Content.Shared.Administration;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Inventory.VirtualItem;
-using Content.Shared.Localizations;
 using Content.Shared.Verbs;
-using Robust.Shared.Localization;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Verbs
 {
-    public sealed class VerbSystem : SharedVerbSystem
+    public sealed partial class VerbSystem : SharedVerbSystem
     {
-        [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-        [Dependency] private readonly HandsSystem _hands = default!;
-        [Dependency] private readonly PopupSystem _popupSystem = default!;
-        [Dependency] private readonly IAdminManager _adminMgr = default!;
-        [Dependency] private readonly ILocalizationManager _localizationManager = default!;
+        [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private HandsSystem _hands = default!;
+        [Dependency] private PopupSystem _popupSystem = default!;
+        [Dependency] private IAdminManager _adminMgr = default!;
 
         public override void Initialize()
         {
@@ -30,8 +27,6 @@ namespace Content.Server.Verbs
 
         private void HandleVerbRequest(RequestServerVerbsEvent args, EntitySessionEventArgs eventArgs)
         {
-            using var cultureScope = new LocalizationCultureScope(_localizationManager, args.CultureName);
-
             var player = eventArgs.SenderSession;
 
             if (!Exists(GetEntity(args.EntityUid)))
@@ -65,7 +60,7 @@ namespace Content.Server.Verbs
             }
 
             var response =
-                new VerbsResponseEvent(args.EntityUid, GetLocalVerbs(GetEntity(args.EntityUid), attached, verbTypes, force), args.CultureName);
+                new VerbsResponseEvent(args.EntityUid, GetLocalVerbs(GetEntity(args.EntityUid), attached, verbTypes, force));
             RaiseNetworkEvent(response, player.Channel);
         }
 

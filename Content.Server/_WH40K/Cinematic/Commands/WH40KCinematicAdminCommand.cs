@@ -9,10 +9,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._WH40K.Cinematic.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class WH40KCinematicAdminCommand : IConsoleCommand
+public sealed partial class WH40KCinematicAdminCommand : IConsoleCommand
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private  IEntityManager _entities = default!;
+    [Dependency] private  IPrototypeManager _prototypes = default!;
 
     public string Command => "wh40kcinematic";
     public string Description => "Admin control for WH40K cinematic runtime and queue orchestration.";

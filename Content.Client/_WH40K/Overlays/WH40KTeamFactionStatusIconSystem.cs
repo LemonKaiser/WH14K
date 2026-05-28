@@ -12,14 +12,14 @@ namespace Content.Client._WH40K.Overlays;
 /// Shows WH40K team faction icons without HUD equipment.
 /// Icon is only visible for allies (same team as local viewer).
 /// </summary>
-public sealed class WH40KTeamFactionStatusIconSystem : EntitySystem
+public sealed partial class WH40KTeamFactionStatusIconSystem : EntitySystem
 {
     private static readonly ProtoId<FactionIconPrototype> ImperiumIcon = "WH40KFactionIconImperium";
     private static readonly ProtoId<FactionIconPrototype> HereticsIcon = "WH40KFactionIconHeretics";
     private static readonly ProtoId<FactionIconPrototype> TauIcon = "WH40KFactionIconTau";
 
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

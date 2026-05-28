@@ -1,7 +1,6 @@
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.DoAfter;
 
@@ -51,7 +50,7 @@ public sealed partial class DoAfter
     public NetCoordinates NetUserPosition;
 
     /// <summary>
-    ///     The entity whose movement is treated as the user's effective movement for break-on-move checks.
+    ///     The entity whose movement is treated as the user's effective movement for BreakOnMove checks.
     /// </summary>
     [NonSerialized]
     public EntityUid MovementEntity;
@@ -108,9 +107,10 @@ public sealed partial class DoAfter
         InitialItem = other.InitialItem;
 
         NetUserPosition = other.NetUserPosition;
+        NetInitialItem = other.NetInitialItem;
+
         MovementEntity = other.MovementEntity;
         NetMovementEntity = other.NetMovementEntity;
-        NetInitialItem = other.NetInitialItem;
     }
 }
 

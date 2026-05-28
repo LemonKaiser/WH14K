@@ -13,14 +13,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
 
-public sealed class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly WH40KChaosNurgleGiftAbilitySystem _nurgle = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedEyeSystem _eye = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  WH40KChaosNurgleGiftAbilitySystem _nurgle = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private static readonly EntProtoId BarrierWallTierOnePrototype = "WH40KWallForceTzeentchTier1";
     private static readonly EntProtoId BarrierWallTierTwoPrototype = "WH40KWallForceTzeentchTier2";

@@ -9,10 +9,10 @@ namespace Content.Shared.Mech.Systems;
 /// Applies the sum of recharge rates accumulated on a mech during the current tick to the mech's battery
 /// by enabling <see cref="BatterySelfRechargerComponent"/> at the computed rate, then clears the accumulator.
 /// </summary>
-public sealed class MechBatteryRechargeApplySystem : EntitySystem
+public sealed partial class MechBatteryRechargeApplySystem : EntitySystem
 {
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
 
     /// <inheritdoc/>
     public override void Update(float frameTime)

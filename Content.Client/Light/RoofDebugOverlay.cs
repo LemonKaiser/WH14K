@@ -11,13 +11,13 @@ namespace Content.Client.Light;
 /// <summary>
 /// Debug overlay that highlights roofed and unroofed tiles in the current viewport.
 /// </summary>
-public sealed class RoofDebugOverlay : Overlay
+public sealed partial class RoofDebugOverlay : Overlay
 {
     private static readonly Color RoofedColor = new(0.15f, 0.70f, 1.0f, 0.33f);
     private static readonly Color UnroofedColor = new(0.22f, 1.0f, 0.35f, 0.12f);
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
 
     private readonly EntityLookupSystem _lookup;
     private readonly SharedMapSystem _mapSystem;

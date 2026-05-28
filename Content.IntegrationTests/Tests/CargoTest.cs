@@ -57,7 +57,6 @@ public sealed class CargoTest : GameTest
                 finally
                 {
                     entManager.DeleteEntity(ent);
-                    entManager.FlushEntities();
                 }
             }
 
@@ -96,7 +95,6 @@ public sealed class CargoTest : GameTest
                     }
 
                     entManager.DeleteEntity(ent);
-                    entManager.FlushEntities();
                 }
             });
 
@@ -199,12 +197,10 @@ public sealed class CargoTest : GameTest
                         if (!cargo.IsValidBountyEntry(slice, entry))
                         {
                             entManager.DeleteEntity(slice);
-                            entManager.FlushEntities();
                             continue;
                         }
 
                         entManager.DeleteEntity(slice);
-                        entManager.FlushEntities();
 
                         // If for some reason it can only make one slice, that's okay, I guess
                         Assert.That(sliceable.TotalCount, Is.EqualTo(1), $"{proto} counts as part of cargo bounty {bounty.ID} and slices into {sliceable.TotalCount} slices which count for the same bounty!");
@@ -212,7 +208,6 @@ public sealed class CargoTest : GameTest
                 }
 
                 entManager.DeleteEntity(ent);
-                entManager.FlushEntities();
             }
             mapSystem.DeleteMap(mapId);
         });

@@ -20,7 +20,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.WaveDefence;
 
-public sealed class WH40KWaveDefenceAISystem : EntitySystem
+public sealed partial class WH40KWaveDefenceAISystem : EntitySystem
 {
     private const string VisionRadiusKey = "VisionRadius";
     private const string AggroVisionRadiusKey = "AggroVisionRadius";
@@ -28,11 +28,11 @@ public sealed class WH40KWaveDefenceAISystem : EntitySystem
     private const string MeleeRangeKey = "MeleeRange";
     private const string CombatGroupPrefix = "WH40KWaveDefence";
 
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly PathfindingSystem _pathfinding = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  HTNSystem _htn = default!;
+    [Dependency] private  NPCSystem _npc = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  PathfindingSystem _pathfinding = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     private ISawmill _sawmill = default!;
 

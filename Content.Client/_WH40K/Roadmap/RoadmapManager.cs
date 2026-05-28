@@ -9,12 +9,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Roadmap;
 
-public sealed class RoadmapManager : IPostInjectInit
+public sealed partial class RoadmapManager : IPostInjectInit
 {
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IConfigurationManager _configManager = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  ILogManager _logManager = default!;
+    [Dependency] private  IConfigurationManager _configManager = default!;
+    [Dependency] private  IResourceManager _resourceManager = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
 
     private const string SawmillName = "roadmap";
     private const int FallbackRoadmapRevision = 1;

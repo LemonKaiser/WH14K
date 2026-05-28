@@ -36,7 +36,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.StrategicPoints;
 
-public sealed class WH40KStrategicPointSystem : EntitySystem
+public sealed partial class WH40KStrategicPointSystem : EntitySystem
 {
     private static readonly TimeSpan IncomeInterval = TimeSpan.FromSeconds(10);
     private static readonly TimeSpan TripleHoldDuration = TimeSpan.FromMinutes(10);
@@ -80,22 +80,22 @@ public sealed class WH40KStrategicPointSystem : EntitySystem
         "Zulu",
     };
 
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  StationSystem _station = default!;
+    [Dependency] private  StackSystem _stack = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     private TimeSpan _nextFallbackIncomeTick = TimeSpan.Zero;
     private int _nextAutoCallsignIndex;

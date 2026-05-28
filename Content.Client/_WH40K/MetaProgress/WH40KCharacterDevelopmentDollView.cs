@@ -16,12 +16,12 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KCharacterDevelopmentDollView : LayoutContainer
+public sealed partial class WH40KCharacterDevelopmentDollView : LayoutContainer
 {
 	private sealed record OrganTextureInfo(TextureRect Rect, float VisibleWidthFactor, Vector2 BodyAnchor, Vector2 VisibleCenterFraction, Vector2 VisibleSizeFraction);
 
 	[Dependency]
-	private readonly IResourceCache _resources = default!;
+	private  IResourceCache _resources = default!;
 
 	private static readonly Vector2 PreviewFillRatio = new Vector2(0.92f, 0.96f);
 

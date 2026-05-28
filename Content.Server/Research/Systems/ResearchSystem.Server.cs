@@ -11,7 +11,7 @@ namespace Content.Server.Research.Systems;
 
 public sealed partial class ResearchSystem
 {
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
 
     private void InitializeServer()
     {

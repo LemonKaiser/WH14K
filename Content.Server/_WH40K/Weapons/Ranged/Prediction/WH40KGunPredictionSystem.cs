@@ -17,16 +17,16 @@ using PhysicsTransform = Robust.Shared.Physics.Transform;
 
 namespace Content.Server._WH40K.Weapons.Ranged.Prediction;
 
-public sealed class WH40KGunPredictionSystem : EntitySystem
+public sealed partial class WH40KGunPredictionSystem : EntitySystem
 {
     private const int DefaultMaxHitsPerReport = 8;
 
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly ProjectileSystem _projectiles = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  ProjectileSystem _projectiles = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private readonly List<(WH40KPredictedProjectileHitEvent Event, ICommonSession Reporter)> _pendingHits = [];
 

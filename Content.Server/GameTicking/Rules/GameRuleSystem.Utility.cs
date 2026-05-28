@@ -106,27 +106,29 @@ public abstract partial class GameRuleSystem<T> where T: IComponent
 
         (targetGrid, var gridComp) = RobustRandom.Pick(weights);
 
-        var found = false;
-        var aabb = gridComp.LocalAABB;
+        var tiles = _map.GetAllTiles(targetGrid, gridComp)
+            .Select(tileRef => tileRef.GridIndices)
+            .ToList();
 
-        for (var i = 0; i < 10; i++)
+        if (tiles.Count == 0)
+            return false;
+
+        RobustRandom.Shuffle(tiles);
+
+        foreach (var randomTile in tiles)
         {
-            var randomX = RobustRandom.Next((int) aabb.Left, (int) aabb.Right);
-            var randomY = RobustRandom.Next((int) aabb.Bottom, (int) aabb.Top);
-
-            tile = new Vector2i(randomX, randomY);
+            tile = randomTile;
             if (_atmosphere.IsTileSpace(targetGrid, Transform(targetGrid).MapUid, tile)
                 || _atmosphere.IsTileAirBlockedCached(targetGrid, tile))
             {
                 continue;
             }
 
-            found = true;
             targetCoords = _map.GridTileToLocal(targetGrid, gridComp, tile);
-            break;
+            return true;
         }
 
-        return found;
+        return false;
     }
 
     protected void ForceEndSelf(EntityUid uid, GameRuleComponent? component = null)

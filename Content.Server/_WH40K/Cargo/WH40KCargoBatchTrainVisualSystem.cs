@@ -16,13 +16,13 @@ namespace Content.Server._WH40K.Cargo;
 /// Decorative train visuals for WH40K delayed cargo batches.
 /// Trains are persistent map entities: never deleted, only hidden (Nullspace) and shown back.
 /// </summary>
-public sealed class WH40KCargoBatchTrainVisualSystem : EntitySystem
+public sealed partial class WH40KCargoBatchTrainVisualSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvsOverride = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  PvsOverrideSystem _pvsOverride = default!;
+    [Dependency] private  StationSystem _station = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
 
     private readonly Dictionary<(EntityUid Station, ProtoId<CargoAccountPrototype> Account), CargoTrainTransitState> _transitStates = new();
 

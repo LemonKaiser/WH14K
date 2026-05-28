@@ -5,9 +5,9 @@ using Content.Shared.Trigger.Components;
 
 namespace Content.Server._WH40K.Weapons.ServoSkulls;
 
-public sealed class WH40KCombineWithPrototypeSystem : EntitySystem
+public sealed partial class WH40KCombineWithPrototypeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
 
     public override void Initialize()
     {

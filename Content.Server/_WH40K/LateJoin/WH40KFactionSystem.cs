@@ -21,7 +21,7 @@ using NetUserId = Robust.Shared.Network.NetUserId;
 
 namespace Content.Server._WH40K.LateJoin;
 
-public sealed class WH40KFactionSystem : EntitySystem
+public sealed partial class WH40KFactionSystem : EntitySystem
 {
     private const string TeamBattleRulePrototypeId = "WH40KTeamBattle";
     private const string BalanceBlockedLocKey = "wh40k-faction-balance-blocked";
@@ -33,12 +33,12 @@ public sealed class WH40KFactionSystem : EntitySystem
     private const int SameFactionStreakLimit = 3;
     private static readonly TimeSpan LateJoinReservationLifetime = TimeSpan.FromMinutes(2);
 
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly IChatManager _chatManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private  IChatManager _chatManager = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamBattleRule = default!;
 
     private readonly Dictionary<NetUserId, string> _lobbySelections = new();
     private readonly Dictionary<NetUserId, PendingLateJoinSelection> _lateJoinSelections = new();

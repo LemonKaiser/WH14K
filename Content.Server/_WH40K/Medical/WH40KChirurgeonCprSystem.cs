@@ -20,7 +20,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server._WH40K.Medical;
 
-public sealed class WH40KChirurgeonCprSystem : EntitySystem
+public sealed partial class WH40KChirurgeonCprSystem : EntitySystem
 {
     private const string VerbLoc = "wh40k-cpr-verb";
     private const string InvalidLoc = "wh40k-cpr-popup-invalid";
@@ -28,15 +28,15 @@ public sealed class WH40KChirurgeonCprSystem : EntitySystem
     private const string HelpedLoc = "wh40k-cpr-popup-helped";
     private const string RevivedLoc = "wh40k-cpr-popup-revived";
 
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private readonly RespiratorSystem _respirator = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedRottingSystem _rotting = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattle = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private  RespiratorSystem _respirator = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  SharedRottingSystem _rotting = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamBattle = default!;
 
     public override void Initialize()
     {

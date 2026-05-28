@@ -14,9 +14,9 @@ namespace Content.Client.Lobby.UI
     [GenerateTypedNameReferences]
     public sealed partial class LobbyGui : UIScreen, ILocalizedControl
     {
-        [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
-        [Dependency] private readonly IUriOpener _uriOpener = default!;
+        [Dependency] private  IClientConsoleHost _consoleHost = default!;
+        [Dependency] private  IConfigurationManager _cfg = default!;
+        [Dependency] private  IUriOpener _uriOpener = default!;
 
         public LobbyGui()
         {

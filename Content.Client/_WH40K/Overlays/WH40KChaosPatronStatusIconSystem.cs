@@ -13,7 +13,7 @@ namespace Content.Client._WH40K.Overlays;
 /// Shows the selected chaos patron below the heretics faction icon.
 /// Leader cultists get a colored outline mod layered over the patron icon.
 /// </summary>
-public sealed class WH40KChaosPatronStatusIconSystem : EntitySystem
+public sealed partial class WH40KChaosPatronStatusIconSystem : EntitySystem
 {
     private static readonly ProtoId<FactionIconPrototype> KhorneIcon = "WH40KChaosPatronIconKhorne";
     private static readonly ProtoId<FactionIconPrototype> NurgleIcon = "WH40KChaosPatronIconNurgle";
@@ -25,8 +25,8 @@ public sealed class WH40KChaosPatronStatusIconSystem : EntitySystem
     private static readonly ProtoId<FactionIconPrototype> SlaaneshLeaderOutline = "WH40KChaosPatronLeaderOutlineSlaanesh";
     private static readonly ProtoId<FactionIconPrototype> TzeentchLeaderOutline = "WH40KChaosPatronLeaderOutlineTzeentch";
 
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

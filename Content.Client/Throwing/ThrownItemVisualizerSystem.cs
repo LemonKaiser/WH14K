@@ -1,19 +1,19 @@
 ﻿using Content.Shared.Throwing;
+using Robust.Client.Animations;
 using Robust.Client.GameObjects;
-using Robust.Shared.Timing;
+using Robust.Shared.Animations;
 
 namespace Content.Client.Throwing;
 
 /// <summary>
 ///     Handles animating thrown items.
 /// </summary>
-public sealed class ThrownItemVisualizerSystem : EntitySystem
+public sealed partial class ThrownItemVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private AnimationPlayerSystem _anim = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
-    private const float ThrowScalePeak = 1.4f;
-    private const float ScaleEpsilon = 0.0001f;
+    private const string AnimationKey = "thrown-item";
 
     public override void Initialize()
     {
@@ -28,74 +28,60 @@ public sealed class ThrownItemVisualizerSystem : EntitySystem
         if (!TryComp<SpriteComponent>(uid, out var sprite) || !component.Animate)
             return;
 
-        component.OriginalScale ??= sprite.Scale;
-        ApplyThrowScale((uid, component, sprite));
-    }
+        var animationPlayer = EnsureComp<AnimationPlayerComponent>(uid);
 
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
+        if (_anim.HasRunningAnimation(uid, animationPlayer, AnimationKey))
+            return;
 
-        var query = EntityQueryEnumerator<ThrownItemComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid, out var thrown, out var sprite))
-        {
-            if (!thrown.Animate)
-                continue;
+        var anim = GetAnimation((uid, component, sprite));
+        if (anim == null)
+            return;
 
-            thrown.OriginalScale ??= sprite.Scale;
-            ApplyThrowScale((uid, thrown, sprite));
-        }
+        component.OriginalScale = sprite.Scale;
+        _anim.Play((uid, animationPlayer), anim, AnimationKey);
     }
 
     private void OnShutdown(EntityUid uid, ThrownItemComponent component, ComponentShutdown args)
     {
+        if (!_anim.HasRunningAnimation(uid, AnimationKey))
+            return;
+
         if (TryComp<SpriteComponent>(uid, out var sprite) && component.OriginalScale != null)
             _sprite.SetScale((uid, sprite), component.OriginalScale.Value);
+
+        _anim.Stop(uid, AnimationKey);
     }
 
-    private void ApplyThrowScale(Entity<ThrownItemComponent, SpriteComponent> ent)
+    private static Animation? GetAnimation(Entity<ThrownItemComponent, SpriteComponent> ent)
     {
-        if (ent.Comp1.OriginalScale is not { } originalScale)
-            return;
+        if (ent.Comp1.LandTime - ent.Comp1.ThrownTime is not { } length)
+            return null;
 
-        var targetScale = originalScale * GetThrowScaleMultiplier(ent.Comp1);
-        if ((ent.Comp2.Scale - targetScale).LengthSquared() <= ScaleEpsilon)
-            return;
+        if (length <= TimeSpan.Zero)
+            return null;
 
-        _sprite.SetScale((ent.Owner, ent.Comp2), targetScale);
-    }
+        var scale = ent.Comp2.Scale;
+        var lenFloat = (float)length.TotalSeconds;
 
-    private float GetThrowScaleMultiplier(ThrownItemComponent component)
-    {
-        if (component.ThrownTime == null || component.LandTime == null)
-            return 1.0f;
-
-        var start = component.ThrownTime.Value;
-        var end = component.LandTime.Value;
-        if (end <= start)
-            return 1.0f;
-
-        var progress = (float) ((_timing.CurTime - start).TotalSeconds / (end - start).TotalSeconds);
-        progress = Math.Clamp(progress, 0.0f, 1.0f);
-
-        if (progress <= 0.25f)
+        // TODO use like actual easings here
+        return new Animation
         {
-            var t = progress / 0.25f;
-            return Lerp(1.0f, ThrowScalePeak, t);
-        }
-
-        if (progress <= 0.75f)
-        {
-            var t = (progress - 0.25f) / 0.5f;
-            return Lerp(ThrowScalePeak, 1.0f, t);
-        }
-
-        return 1.0f;
-    }
-
-    private static float Lerp(float from, float to, float t)
-    {
-        t = Math.Clamp(t, 0.0f, 1.0f);
-        return from + (to - from) * t;
+            Length = length,
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Scale),
+                    KeyFrames =
+                    {
+                        new AnimationTrackProperty.KeyFrame(scale, 0.0f),
+                        new AnimationTrackProperty.KeyFrame(scale * 1.4f, lenFloat * 0.25f),
+                        new AnimationTrackProperty.KeyFrame(scale, lenFloat * 0.75f)
+                    },
+                    InterpolationMode = AnimationInterpolationMode.Linear
+                }
+            }
+        };
     }
 }

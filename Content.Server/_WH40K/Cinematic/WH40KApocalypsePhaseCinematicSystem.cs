@@ -2,11 +2,11 @@ using Content.Shared._WH40K.GameMode;
 
 namespace Content.Server._WH40K.Cinematic;
 
-public sealed class WH40KApocalypsePhaseCinematicSystem : EntitySystem
+public sealed partial class WH40KApocalypsePhaseCinematicSystem : EntitySystem
 {
     private const string ApocalypseCinematicId = "WH40KCinematicBattlefield40kVolcanoEruption";
 
-    [Dependency] private readonly WH40KCinematicSystem _cinematics = default!;
+    [Dependency] private  WH40KCinematicSystem _cinematics = default!;
 
     public override void Initialize()
     {

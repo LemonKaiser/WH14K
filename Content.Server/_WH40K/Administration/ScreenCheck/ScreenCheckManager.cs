@@ -26,16 +26,16 @@ public readonly record struct ScreenCheckTargetSnapshot(
     DateTime LastUpdatedUtc,
     ScreenCheckUiStatus LastStatus);
 
-public sealed class ScreenCheckManager
+public sealed partial class ScreenCheckManager
 {
     private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(10);
     private const int MaxConcurrentChecks = 16;
 
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly EuiManager _euis = default!;
-    [Dependency] private readonly ILogManager _logs = default!;
-    [Dependency] private readonly IServerNetManager _net = default!;
+    [Dependency] private  IAdminLogManager _adminLog = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  EuiManager _euis = default!;
+    [Dependency] private  ILogManager _logs = default!;
+    [Dependency] private  IServerNetManager _net = default!;
 
     private readonly Dictionary<uint, PendingScreenCheck> _pendingChecks = new();
     private readonly Dictionary<NetUserId, uint> _pendingByAdmin = new();

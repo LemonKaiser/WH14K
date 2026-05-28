@@ -15,13 +15,13 @@ namespace Content.Server._WH40K.Diagnostics;
 /// Runtime diagnostics for net-buffer pressure without engine changes.
 /// Reports outgoing bursts, blocked channels and hot dirty entities/prototypes.
 /// </summary>
-public sealed class WH40KNetBufferDiagnosticsSystem : EntitySystem
+public sealed partial class WH40KNetBufferDiagnosticsSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly INetManager _netManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private  INetManager _netManager = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private readonly Dictionary<Type, long> _lastMessageTotals = new();
     private readonly Dictionary<NetEntity, DirtyEntitySample> _dirtyByNetEntity = new();

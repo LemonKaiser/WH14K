@@ -14,11 +14,11 @@ namespace Content.Server._WH40K.Research;
 /// <summary>
 /// Team-locks WH40K research consoles and keeps research clients bound to a same-team R&D server.
 /// </summary>
-public sealed class WH40KResearchTeamSystem : EntitySystem
+public sealed partial class WH40KResearchTeamSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  ResearchSystem _research = default!;
 
     public override void Initialize()
     {

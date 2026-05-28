@@ -12,7 +12,7 @@ namespace Content.Client._WH40K.SupplyDrop;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KSupplyDropWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private WH40KSupplyDropBuiState? _state;
 

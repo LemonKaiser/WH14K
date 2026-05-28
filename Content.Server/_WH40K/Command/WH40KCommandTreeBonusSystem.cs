@@ -10,12 +10,12 @@ namespace Content.Server._WH40K.Command;
 /// <summary>
 /// Aggregates persistent command-tree gameplay bonuses from purchased team nodes.
 /// </summary>
-public sealed class WH40KCommandTreeBonusSystem : EntitySystem
+public sealed partial class WH40KCommandTreeBonusSystem : EntitySystem
 {
     private const string CommandTreeTeamMapId = "WH40KCommandTreeTeamMap";
     private const string CommandTreeDefaultProfileId = "WH40KCommandTreeProfileDefault";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
 
     public WH40KCommandTreeTeamBonuses GetTeamBonuses(string teamId)
     {

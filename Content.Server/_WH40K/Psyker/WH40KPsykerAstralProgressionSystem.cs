@@ -20,7 +20,7 @@ namespace Content.Server._WH40K.Psyker;
 /// Handles Imperium astral node ownership and discipline point spending.
 /// The client only requests purchases; all unlock validation lives here.
 /// </summary>
-public sealed class WH40KPsykerAstralProgressionSystem : EntitySystem
+public sealed partial class WH40KPsykerAstralProgressionSystem : EntitySystem
 {
     private const string RootNodeId = "PsykerAstralAnchor";
     private const int MaxCollectibleStars = 10;
@@ -29,14 +29,14 @@ public sealed class WH40KPsykerAstralProgressionSystem : EntitySystem
     private static readonly TimeSpan CollectibleStarMinInterval = TimeSpan.FromSeconds(10);
     private static readonly TimeSpan CollectibleStarMaxInterval = TimeSpan.FromSeconds(30);
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly WH40KPsykerAstralRiskSystem _risks = default!;
-    [Dependency] private readonly SharedWH40KPsykerProgressionSystem _progression = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  WH40KPsykerAstralRiskSystem _risks = default!;
+    [Dependency] private  SharedWH40KPsykerProgressionSystem _progression = default!;
 
     private string _activeLayoutId = string.Empty;
     private int _activeLayoutRoundId = -1;

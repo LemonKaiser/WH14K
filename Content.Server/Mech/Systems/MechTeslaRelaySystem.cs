@@ -10,10 +10,10 @@ namespace Content.Server.Mech.Systems;
 /// Aggregates recharge contributions from Tesla relay mech modules by detecting powered APCs near mechs
 /// and adding their configured chargeRate into the mech's per-tick recharge accumulator.
 /// </summary>
-public sealed class MechTeslaRelaySystem : EntitySystem
+public sealed partial class MechTeslaRelaySystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
 
     /// <inheritdoc/>
     public override void Update(float frameTime)

@@ -19,15 +19,15 @@ namespace Content.Client._WH40K.Interface;
 /// Resolves WH40K UI themes from the player's saved preference.
 /// Auto follows faction assignment; explicit themes stay fixed until changed by the player.
 /// </summary>
-public sealed class WH40KInterfaceThemeSystem : EntitySystem
+public sealed partial class WH40KInterfaceThemeSystem : EntitySystem
 {
     private const string TeamIdentityMapId = "WH40KTeamIdentityMap";
     private const string TeamIdentityDefaultProfileId = "WH40KTeamIdentityProfileImperium";
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IClientConsoleHost _console = default!;
-    [Dependency] private readonly IStateManager _state = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IClientConsoleHost _console = default!;
+    [Dependency] private  IStateManager _state = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
 
     private ClientGameTicker _ticker = default!;
     private WH40KFactionSystem _factions = default!;

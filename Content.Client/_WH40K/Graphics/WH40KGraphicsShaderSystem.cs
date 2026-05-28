@@ -7,9 +7,9 @@ namespace Content.Client._WH40K.Graphics;
 /// <summary>
 /// Manages WH40K-specific always-on client overlays.
 /// </summary>
-public sealed class WH40KGraphicsShaderSystem : EntitySystem
+public sealed partial class WH40KGraphicsShaderSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private  IOverlayManager _overlayMan = default!;
 
     private WH40KExplosionShockWaveOverlay _shockWaveOverlay = default!;
     private WH40KWarpBreachOverlay _warpBreachOverlay = default!;

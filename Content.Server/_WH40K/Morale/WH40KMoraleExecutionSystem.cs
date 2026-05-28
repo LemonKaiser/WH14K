@@ -30,25 +30,25 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Morale;
 
-public sealed class WH40KMoraleExecutionSystem : EntitySystem
+public sealed partial class WH40KMoraleExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  AlertsSystem _alerts = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedGunSystem _gun = default!;
+    [Dependency] private  SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
 
     private static readonly ProtoId<AlertPrototype> MoraleBuffAlert = "WH40KMoraleBoosted";
     private static readonly ProtoId<DamageTypePrototype> MoraleExecutionDamageType = "Piercing";

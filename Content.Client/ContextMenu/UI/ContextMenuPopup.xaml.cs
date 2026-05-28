@@ -16,7 +16,7 @@ namespace Content.Client.ContextMenu.UI
     [GenerateTypedNameReferences]
     public sealed partial class ContextMenuPopup : Popup
     {
-        [Dependency] private readonly IConfigurationManager _cfg = default!;
+        [Dependency] private  IConfigurationManager _cfg = default!;
 
         public const string StyleClassContextMenuPopup = "contextMenuPopup";
 

@@ -4,9 +4,9 @@ using Content.Shared.Whitelist;
 
 namespace Content.Shared._RMC14.Interaction;
 
-public sealed class RMCInteractionSystem : EntitySystem
+public sealed partial class RMCInteractionSystem : EntitySystem
 {
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private  EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

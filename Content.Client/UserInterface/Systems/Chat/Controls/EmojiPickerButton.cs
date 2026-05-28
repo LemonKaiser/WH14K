@@ -8,10 +8,10 @@ using Robust.Shared.IoC;
 
 namespace Content.Client.UserInterface.Systems.Chat.Controls;
 
-public sealed class EmojiPickerButton : ChatPopupButton<EmojiPickerPopup>
+public sealed partial class EmojiPickerButton : ChatPopupButton<EmojiPickerPopup>
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private  IUserInterfaceManager _uiManager = default!;
 
     private const float PopupMargin = 8f;
 

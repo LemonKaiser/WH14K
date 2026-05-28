@@ -53,32 +53,32 @@ using Robust.Shared.Maths;
 
 namespace Content.Server._WH40K.GameTicking.Rules;
 
-public sealed class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefenceRuleComponent>
+public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWaveDefenceRuleComponent>
 {
     private const string DefaultHumanoidAssaultRoot = "WH40KWaveDefenceSimpleHumanoidHostileCompound";
     private const string DefaultRangedAssaultRoot = "WH40KWaveDefenceSimpleRangedHostileCompound";
     private const string DefaultMeleeAssaultRoot = "WH40KWaveDefenceSimpleMeleeHostileCompound";
 
-    [Dependency] private readonly AdminSystem _admin = default!;
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly PlayTimeTrackingSystem _playTimeTracking = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly StationSpawningSystem _stationSpawning = default!;
-    [Dependency] private readonly StationJobsSystem _stationJobs = default!;
-    [Dependency] private readonly StationSystem _stations = default!;
-    [Dependency] private readonly ShuttleSystem _shuttles = default!;
-    [Dependency] private readonly WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
-    [Dependency] private readonly WH40KWaveDefenceAISystem _waveAi = default!;
-    [Dependency] private readonly WH40KWaveDefenceMapRegistrySystem _registry = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private  AdminSystem _admin = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  EntityTableSystem _entityTable = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  MindSystem _mind = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  PlayTimeTrackingSystem _playTimeTracking = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  RoundEndSystem _roundEnd = default!;
+    [Dependency] private  SharedRoleSystem _roles = default!;
+    [Dependency] private  StationSpawningSystem _stationSpawning = default!;
+    [Dependency] private  StationJobsSystem _stationJobs = default!;
+    [Dependency] private  StationSystem _stations = default!;
+    [Dependency] private  ShuttleSystem _shuttles = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
+    [Dependency] private  WH40KWaveDefenceAISystem _waveAi = default!;
+    [Dependency] private  WH40KWaveDefenceMapRegistrySystem _registry = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
 
     private ISawmill _sawmill = default!;
     private EntityUid? _activeRuleUid;

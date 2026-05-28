@@ -23,18 +23,18 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.Chaplain;
 
-public sealed class WH40KChaplainDashSystem : EntitySystem
+public sealed partial class WH40KChaplainDashSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly StunSystem _stun = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  StunSystem _stun = default!;
+    [Dependency] private  ThrowingSystem _throwing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private static readonly ProtoId<DamageTypePrototype> SlashDamageType = "Slash";
 

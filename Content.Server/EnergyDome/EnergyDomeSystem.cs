@@ -38,7 +38,7 @@ namespace Content.Server.EnergyDome;
 /// <summary>
 /// Server logic for energy dome generators and their spawned domes.
 /// </summary>
-public sealed class EnergyDomeSystem : EntitySystem
+public sealed partial class EnergyDomeSystem : EntitySystem
 {
     private static readonly TimeSpan VisualSyncInterval = TimeSpan.FromSeconds(0.2);
     private const float VisualChargeEpsilon = 0.002f;
@@ -60,21 +60,21 @@ public sealed class EnergyDomeSystem : EntitySystem
     private const string TeamChaos = "Chaos";
     private const string TeamNeutral = "Neutral";
 
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedBatterySystem _battery = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PowerCellSystem _powerCell = default!;
-    [Dependency] private readonly DeviceLinkSystem _deviceLink = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  SharedBatterySystem _battery = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  UseDelaySystem _useDelay = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  PowerCellSystem _powerCell = default!;
+    [Dependency] private  DeviceLinkSystem _deviceLink = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     private readonly HashSet<EntityUid> _nearbyEntities = new();
     private readonly List<(EntityUid Uid, float DistanceSq)> _linkedDonors = new();

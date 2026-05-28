@@ -39,24 +39,24 @@ namespace Content.Server._WH40K.Psyker;
 /// - handles dash-through-hit behavior and EX triple-dash cadence;
 /// - applies passive path effects (speed, max HP, melee damage) from base values.
 /// </summary>
-public sealed class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
+public sealed partial class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly RepulseAttractSystem _repulseAttract = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly MobThresholdSystem _mobThresholds = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly StunSystem _stun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  RepulseAttractSystem _repulseAttract = default!;
+    [Dependency] private  ThrowingSystem _throwing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedGravitySystem _gravity = default!;
+    [Dependency] private  StandingStateSystem _standing = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private  MobThresholdSystem _mobThresholds = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  StunSystem _stun = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
 
     private readonly HashSet<EntityUid> _dashTargets = new();
     private readonly HashSet<EntityUid> _impactTargets = new();

@@ -25,16 +25,16 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Command.Comms.Megaphone;
 
-public sealed class WH40KMegaphoneSystem : EntitySystem
+public sealed partial class WH40KMegaphoneSystem : EntitySystem
 {
-    [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly QuickDialogSystem _quickDialog = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  ChatSystem _chat = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  QuickDialogSystem _quickDialog = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  UseDelaySystem _useDelay = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Queue<MegaphoneOrderLogEntry> _orderLog = new();
     private static readonly TimeSpan GlobalLogRetention = TimeSpan.FromMinutes(5);

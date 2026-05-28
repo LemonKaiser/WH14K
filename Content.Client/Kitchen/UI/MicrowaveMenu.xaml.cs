@@ -20,7 +20,7 @@ namespace Content.Client.Kitchen.UI;
 [GenerateTypedNameReferences]
 public sealed partial class MicrowaveMenu : FancyWindow
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private static readonly Color Accent = Color.FromHex("#C9A94C".AsSpan());
     private static readonly Color WarningAccent = Color.FromHex("#A57C35".AsSpan());

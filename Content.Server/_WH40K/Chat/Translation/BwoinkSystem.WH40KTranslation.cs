@@ -15,9 +15,9 @@ namespace Content.Server.Administration.Systems;
 
 public sealed partial class BwoinkSystem
 {
-    [Dependency] private readonly ITaskManager _wh40kTaskManager = default!;
-    [Dependency] private readonly IWH40KChatTranslationService _wh40kChatTranslation = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _wh40kPlayerCulture = default!;
+    [Dependency] private  ITaskManager _wh40kTaskManager = default!;
+    [Dependency] private  IWH40KChatTranslationService _wh40kChatTranslation = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _wh40kPlayerCulture = default!;
 
     private bool TryDispatchTranslatedAHelp(
         SharedBwoinkSystem.BwoinkTextMessage message,

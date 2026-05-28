@@ -18,10 +18,10 @@ using Content.Shared.Wieldable;
 
 namespace Content.Shared._WH40K.Cinematic;
 
-public sealed class SharedWH40KCinematicLockSystem : EntitySystem
+public sealed partial class SharedWH40KCinematicLockSystem : EntitySystem
 {
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly PullingSystem _pulling = default!;
+    [Dependency] private  ActionBlockerSystem _blocker = default!;
+    [Dependency] private  PullingSystem _pulling = default!;
 
     public override void Initialize()
     {

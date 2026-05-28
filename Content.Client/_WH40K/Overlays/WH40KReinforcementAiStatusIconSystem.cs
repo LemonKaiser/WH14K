@@ -5,11 +5,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.Overlays;
 
-public sealed class WH40KReinforcementAiStatusIconSystem : EntitySystem
+public sealed partial class WH40KReinforcementAiStatusIconSystem : EntitySystem
 {
     private static readonly ProtoId<FactionIconPrototype> ReinforcementAiIcon = "WH40KReinforcementAiActiveIcon";
 
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

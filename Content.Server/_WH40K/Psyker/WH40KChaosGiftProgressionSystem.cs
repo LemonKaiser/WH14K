@@ -30,21 +30,21 @@ namespace Content.Server._WH40K.Psyker;
 /// - personal chaos level + development points progression;
 /// - R5 branch unlock economy (free primary + paid unlocks).
 /// </summary>
-public sealed class WH40KChaosGiftProgressionSystem : EntitySystem
+public sealed partial class WH40KChaosGiftProgressionSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KChaosCultSystem _cult = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly FlammableSystem _flammableSystem = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ItemToggleSystem _itemToggle = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly WH40KPlayerStatsSystem _stats = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KChaosCultSystem _cult = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  FlammableSystem _flammableSystem = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  ItemToggleSystem _itemToggle = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  WH40KPlayerStatsSystem _stats = default!;
 
     private const string ChaosSkrizhalPrototype = "WH40KRuneSkrizhalChaos";
     private const string KhorneSkrizhalPrototype = "WH40KRuneSkrizhalKhorn";

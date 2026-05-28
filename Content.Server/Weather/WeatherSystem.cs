@@ -34,23 +34,23 @@ using Robust.Shared.Spawners;
 
 namespace Content.Server.Weather;
 
-public sealed class WeatherSystem : SharedWeatherSystem
+public sealed partial class WeatherSystem : SharedWeatherSystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedEmpSystem _emp = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedJitteringSystem _jittering = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly MovementModStatusSystem _movement = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly PuddleSystem _puddle = default!;
-    [Dependency] private readonly PvsOverrideSystem _pvs = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly VomitSystem _vomit = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
+    [Dependency] private  SharedEmpSystem _emp = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  SharedJitteringSystem _jittering = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedMapSystem _mapSystem = default!;
+    [Dependency] private  MovementModStatusSystem _movement = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  PuddleSystem _puddle = default!;
+    [Dependency] private  PvsOverrideSystem _pvs = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  VomitSystem _vomit = default!;
 
     private EntityQuery<MobStateComponent> _mobQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;

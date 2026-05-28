@@ -6,7 +6,7 @@ namespace Content.Client.Mech.Ui.Equipment;
 
 public sealed partial class MechGeneratorUi : UIFragment
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
 
     private MechGeneratorUiFragment? _fragment;
 

@@ -5,9 +5,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KMetaProgressSystem : EntitySystem
+public sealed partial class WH40KMetaProgressSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public event Action<WH40KMetaProgressSnapshot>? SnapshotUpdated;
     public event Action<WH40KMetaProgressResetAccountResultEvent>? AccountResetResultReceived;

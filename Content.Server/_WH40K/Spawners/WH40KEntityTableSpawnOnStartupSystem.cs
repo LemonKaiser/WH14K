@@ -9,10 +9,10 @@ namespace Content.Server._WH40K.Spawners;
 /// Runtime-safe table spawner for WH40K markers.
 /// Used by timed wave markers that are spawned after map initialization.
 /// </summary>
-public sealed class WH40KEntityTableSpawnOnStartupSystem : EntitySystem
+public sealed partial class WH40KEntityTableSpawnOnStartupSystem : EntitySystem
 {
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  EntityTableSystem _entityTable = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     public override void Initialize()
     {

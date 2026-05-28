@@ -18,22 +18,22 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Fire;
 
-public sealed class WH40KLavaHeatSystem : EntitySystem
+public sealed partial class WH40KLavaHeatSystem : EntitySystem
 {
     private const float IntervalMultiplier = 2f;
     private static readonly ProtoId<TagPrototype> CatwalkTag = "Catwalk";
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitions = default!;
-    [Dependency] private readonly WH40KEnvironmentalFireSystem _environmentalFire = default!;
+    [Dependency] private  AtmosphereSystem _atmosphere = default!;
+    [Dependency] private  FlammableSystem _flammable = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
+    [Dependency] private  TagSystem _tags = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  ITileDefinitionManager _tileDefinitions = default!;
+    [Dependency] private  WH40KEnvironmentalFireSystem _environmentalFire = default!;
 
     private readonly Dictionary<(MapId MapId, Vector2i Position), bool> _roofedCache = new();
     private readonly HashSet<EntityUid> _tileEntities = new();

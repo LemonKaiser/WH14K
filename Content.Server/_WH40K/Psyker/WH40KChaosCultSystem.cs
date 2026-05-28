@@ -12,10 +12,10 @@ namespace Content.Server._WH40K.Psyker;
 /// Round-scoped shared progression state per chaos patron.
 /// Actor-local progression components become a replicated projection of this state.
 /// </summary>
-public sealed class WH40KChaosCultSystem : EntitySystem
+public sealed partial class WH40KChaosCultSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private  SharedMindSystem _mind = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
 
     private const float SharedPassiveXpBasePerTick = 1f;
     private const float SharedPassiveXpPerLevelBonus = 0.025f;

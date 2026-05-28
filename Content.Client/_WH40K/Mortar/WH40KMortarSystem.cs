@@ -5,10 +5,10 @@ using Robust.Shared.Animations;
 
 namespace Content.Client._WH40K.Mortar;
 
-public sealed class WH40KMortarSystem : EntitySystem
+public sealed partial class WH40KMortarSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
+    [Dependency] private  AnimationPlayerSystem _animation = default!;
+    [Dependency] private  SharedPointLightSystem _lights = default!;
 
     private const string AnimationKey = "wh40k_mortar_fire";
     private const string LightAnimationKey = "wh40k_mortar_fire_light";

@@ -26,7 +26,7 @@ namespace Content.Server._WH40K.Overlays;
 /// Applies time-dilation gameplay effects for WH40K radial grayscale zones.
 /// Inside a zone, movers are slowed and dynamic physics velocities are scaled down.
 /// </summary>
-public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
+public sealed partial class WH40KRadialGreyscaleFieldSystem : EntitySystem
 {
     private const float UpdateInterval = 0.02f;
     private const float Epsilon = 0.0001f;
@@ -34,14 +34,14 @@ public sealed class WH40KRadialGreyscaleFieldSystem : EntitySystem
     private static readonly TimeSpan NetworkSyncInterval = TimeSpan.FromMilliseconds(200);
     private static readonly ProtoId<TagPrototype> HandGrenadeTag = "HandGrenade";
 
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  TagSystem _tag = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private float _accumulator;
 

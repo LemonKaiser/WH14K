@@ -43,36 +43,36 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Mortar;
 
-public sealed class WH40KMortarSystem : EntitySystem
+public sealed partial class WH40KMortarSystem : EntitySystem
 {
     private static readonly TimeSpan PopupSpamCooldown = TimeSpan.FromSeconds(1);
 
-    [Dependency] private readonly ISharedAdminLogManager _adminLogs = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly WH40KEnvironmentalFireSystem _environmentalFire = default!;
-    [Dependency] private readonly SharedExplosionSystem _explosion = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly FixtureSystem _fixture = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly PuddleSystem _puddle = default!;
-    [Dependency] private readonly ExpendableLightSystem _expLight = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly WH40KRangefinderSystem _rangefinder = default!;
-    [Dependency] private readonly WH40KFlareSignalSystem _flareSignal = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  ISharedAdminLogManager _adminLogs = default!;
+    [Dependency] private  SharedAppearanceSystem _appearance = default!;
+    [Dependency] private  AtmosphereSystem _atmosphere = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  WH40KEnvironmentalFireSystem _environmentalFire = default!;
+    [Dependency] private  SharedExplosionSystem _explosion = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  FixtureSystem _fixture = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  PuddleSystem _puddle = default!;
+    [Dependency] private  ExpendableLightSystem _expLight = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  IRobustRandom _random = default!;
+    [Dependency] private  WH40KRangefinderSystem _rangefinder = default!;
+    [Dependency] private  WH40KFlareSignalSystem _flareSignal = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  TriggerSystem _trigger = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<EntityUid, int> _lastUiCooldownSeconds = new();
     private readonly Dictionary<(EntityUid User, string Key), TimeSpan> _popupCooldowns = new();

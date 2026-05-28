@@ -28,25 +28,25 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace Content.Server._WH40K.SupplyDrop;
 
-public sealed class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
+public sealed partial class WH40KSupplyDropSystem : SharedWH40KSupplyDropSystem
 {
     private const float DropVisualStartOffsetY = 18f;
     private const int MaxListingDropAmount = 50;
     private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(10);
 
-    [Dependency] private readonly CargoSystem _cargo = default!;
-    [Dependency] private readonly EntityStorageSystem _entityStorage = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedRoofSystem _roof = default!;
-    [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  CargoSystem _cargo = default!;
+    [Dependency] private  EntityStorageSystem _entityStorage = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  SharedRoofSystem _roof = default!;
+    [Dependency] private  StationSystem _station = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     private readonly List<PendingDrop> _pendingDrops = new();
 

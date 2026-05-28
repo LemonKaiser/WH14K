@@ -5,9 +5,9 @@ using Robust.Client.UserInterface;
 
 namespace Content.Client.Mech;
 
-public sealed class MechEquipmentRadialSystem : EntitySystem
+public sealed partial class MechEquipmentRadialSystem : EntitySystem
 {
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private  IUserInterfaceManager _uiManager = default!;
 
     public override void Initialize()
     {

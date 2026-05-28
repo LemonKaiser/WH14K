@@ -23,16 +23,16 @@ namespace Content.Server._WH40K.Store;
 /// Applies WH40K tier progression to generic lathes:
 /// tiered cycle timing and optional tier-pack profile remap.
 /// </summary>
-public sealed class WH40KTieredLatheProcessingSystem : EntitySystem
+public sealed partial class WH40KTieredLatheProcessingSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly WH40KCommandTreeBonusSystem _treeBonuses = default!;
-    [Dependency] private readonly LatheSystem _lathe = default!;
-    [Dependency] private readonly MaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  WH40KCommandTreeBonusSystem _treeBonuses = default!;
+    [Dependency] private  LatheSystem _lathe = default!;
+    [Dependency] private  MaterialStorageSystem _materialStorage = default!;
+    [Dependency] private  Diagnostics.WH40KNetDiagAttributionSystem _attribution = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

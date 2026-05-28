@@ -14,7 +14,7 @@ namespace Content.Client.Mech.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class MechEquipmentControl : Control
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
 
     private const int NameWrapLineLength = 26;
 

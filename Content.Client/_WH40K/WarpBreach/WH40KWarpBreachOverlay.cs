@@ -10,15 +10,15 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._WH40K.WarpBreach;
 
-public sealed class WH40KWarpBreachOverlay : Overlay
+public sealed partial class WH40KWarpBreachOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> ShaderProto = "WH40KWarpBreach";
 
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IResourceCache _resCache = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IEntityManager _entMan = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
+    [Dependency] private  IResourceCache _resCache = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     private SharedTransformSystem? _xform;
 

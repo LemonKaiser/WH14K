@@ -3,7 +3,6 @@ using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Silicons.Laws;
 using Content.Shared.Silicons.Laws.Components;
-using Content.Shared.Station;
 using Robust.Shared.Random;
 using System.Linq;
 using Content.Shared.Random;
@@ -12,14 +11,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Silicons.Laws;
 
-public sealed class IonStormSystem : EntitySystem
+public sealed partial class IonStormSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly SiliconLawSystem _siliconLaw = default!;
-    [Dependency] private readonly IRobustRandom _robustRandom = default!;
-    [Dependency] private readonly IonLawSystem _ionLaw = default!;
-    [Dependency] private readonly SharedStationSystem _station = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SiliconLawSystem _siliconLaw = default!;
+    [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private IonLawSystem _ionLaw = default!;
 
     /// <summary>
     /// Randomly alters the laws of an individual silicon.
@@ -73,8 +71,7 @@ public sealed class IonStormSystem : EntitySystem
         }
 
         // generate a new law...
-        var station = _station.GetOwningStation(ent.Owner);
-        var newLaw = _ionLaw.GetIonLaw(station);
+        var newLaw = _ionLaw.GetIonLaw();
 
         if (string.IsNullOrEmpty(newLaw))
             return;

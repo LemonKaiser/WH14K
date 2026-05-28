@@ -15,7 +15,7 @@ namespace Content.Client.Research.UI;
 [GenerateTypedNameReferences]
 public sealed partial class ResearchClientServerSelectionMenu : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
+    [Dependency] private  IEntityManager _entity = default!;
 
     private readonly Dictionary<int, ResearchServerEntryControl> _serverEntries = new();
 

@@ -44,6 +44,7 @@ namespace Content.Shared.Movement.Components
         /// <remarks>
         /// This can be useful to filter out input from just pressing the walk button with no directions, for example.
         /// </remarks>
+        [ViewVariables]
         public bool HasDirectionalMovement => (HeldMoveButtons & MoveButtons.AnyDirection) != MoveButtons.None;
 
         // I don't know if we even need this networked? It's mostly so conveyors can calculate properly.

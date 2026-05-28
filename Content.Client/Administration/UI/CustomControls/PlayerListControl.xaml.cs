@@ -21,7 +21,7 @@ public sealed partial class PlayerListControl : BoxContainer
     private readonly AdminSystem _adminSystem;
     private readonly IEntityManager _entManager;
     private readonly IUserInterfaceManager _uiManager;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private  IConfigurationManager _cfg = default!;
 
     private PlayerInfo? _selectedPlayer;
 

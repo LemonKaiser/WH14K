@@ -18,8 +18,8 @@ namespace Content.Client._WH40K.Psyker.UI;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KChaosSkrizhalLeaderWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPlayerManager _player = default!;
 
     private readonly SpriteSystem _sprite;
 

@@ -12,11 +12,11 @@ namespace Content.Server.Mech.Systems;
 /// Bridges mech FuelGenerator-based modules to the mech battery by consuming fuel via the standard
 /// generator events and adding the module's chargeRate into the per-tick recharge accumulator.
 /// </summary>
-public sealed class MechFuelGeneratorBridgeSystem : EntitySystem
+public sealed partial class MechFuelGeneratorBridgeSystem : EntitySystem
 {
-    [Dependency] private readonly GeneratorSystem _generator = default!;
-    [Dependency] private readonly SharedMaterialStorageSystem _materialStorage = default!;
-    [Dependency] private readonly SharedMechSystem _mech = default!;
+    [Dependency] private  GeneratorSystem _generator = default!;
+    [Dependency] private  SharedMaterialStorageSystem _materialStorage = default!;
+    [Dependency] private  SharedMechSystem _mech = default!;
 
     /// <inheritdoc/>
     public override void Initialize()

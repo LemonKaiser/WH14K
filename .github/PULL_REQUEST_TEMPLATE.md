@@ -1,20 +1,42 @@
 <!-- Guidelines: https://docs.spacestation14.io/en/getting-started/pr-guideline -->
 
-## о чём PR
+## About the PR
+<!-- What did you change? -->
 
-## Технические детали
+## Why / Balance
+<!-- Discuss how this would affect game balance or explain why it was changed. Link any relevant discussions or issues. -->
 
-## Медиа
+## Technical details
+<!-- Summary of code changes for easier review. -->
 
-## Клятва
-Я заверяю генерал-фабрикатора или иное ответственное лицо о том, что этот pull request пойдёт лишь на пользу, не имеет багов и не нарушает ни один из 12 Универсальных законов.
+## Test plan
+<!--
+Describe how you tested the pull request, and how someone reviewing this PR can test it themselves.
+-->
 
-Восславь все приток и отток,
-Почуй все воссияние нимба,
-Воспой все электрику тела,
-Почуй, как трещит полный заряд!
+## Media
+<!-- Attach media if the PR makes in-game changes (clothing, items, features, etc).
+Small fixes/refactors are exempt. Media may be used in SS14 progress reports with credit. -->
 
-**Changelog**
+## Requirements
+<!-- Confirm the following by placing an X in the brackets without spaces inside (for example: [X] ): -->
+- [ ] I have read and am following the [Pull Request and Changelog Guidelines](https://docs.spacestation14.com/en/general-development/codebase-info/pull-request-guidelines.html).
+- [ ] I have tested this pull request and written instructions on how to test it
+- [ ] I have added media to this PR or it does not require an in-game showcase.
+<!-- You should understand that not following the above may get your PR closed at maintainer’s discretion -->
+
+## Breaking changes
+<!-- List any breaking changes, including namespaces, public class/method/field changes, prototype renames; and provide instructions for fixing them.
+This will be posted in #codebase-changes. -->
+
+## Changelog
 <!-- Add a Changelog entry to make players aware of new features or changes that could affect gameplay.
 Make sure to read the guidelines and take this Changelog template out of the comment block in order for it to show up.
 Changelog must have a :cl: symbol, so the bot recognizes the changes and adds them to the game's changelog. -->
+<!--
+:cl:
+- add: Added fun!
+- remove: Removed fun!
+- tweak: Changed fun!
+- fix: Fixed fun!
+-->

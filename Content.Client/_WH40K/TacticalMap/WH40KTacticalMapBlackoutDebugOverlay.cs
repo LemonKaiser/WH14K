@@ -12,12 +12,12 @@ namespace Content.Client._WH40K.TacticalMap;
 /// <summary>
 /// Debug overlay that highlights mapper-authored tactical blackout tiles.
 /// </summary>
-public sealed class WH40KTacticalMapBlackoutDebugOverlay : Overlay
+public sealed partial class WH40KTacticalMapBlackoutDebugOverlay : Overlay
 {
     private static readonly Color BlackoutColor = new(1.0f, 0.18f, 0.18f, 0.38f);
 
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
 
     private readonly EntityLookupSystem _lookup;
     private readonly SharedMapSystem _mapSystem;

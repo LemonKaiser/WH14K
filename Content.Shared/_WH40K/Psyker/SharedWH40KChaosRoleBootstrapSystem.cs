@@ -6,9 +6,9 @@ namespace Content.Shared._WH40K.Psyker;
 /// Chaos role bootstrap stays separate from the shared warp runtime.
 /// Cult members now receive warp runtime so patron unlocks can be shared across the cult.
 /// </summary>
-public sealed class SharedWH40KChaosRoleBootstrapSystem : EntitySystem
+public sealed partial class SharedWH40KChaosRoleBootstrapSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private  INetManager _netManager = default!;
 
     public override void Initialize()
     {

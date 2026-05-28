@@ -15,17 +15,17 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._WH40K.Intel;
 
-public sealed class WH40KIntelDetectorOverlay : Overlay
+public sealed partial class WH40KIntelDetectorOverlay : Overlay
 {
     private const float ArrowRadius = 0.35f;
     private const float ArrowRadiusStackStep = 0.14f;
     private static readonly Color ArrowColor = new(110, 245, 255);
     private static readonly Color SpecialArrowColor = new(255, 210, 110);
 
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IClientNetManager _net = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  IEntityManager _entity = default!;
+    [Dependency] private  IClientNetManager _net = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 

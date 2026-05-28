@@ -5,10 +5,10 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._WH40K.Aiming;
 
-public sealed class SharedAimingSystem : EntitySystem
+public sealed partial class SharedAimingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly ActionContainerSystem _actionContainer = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  ActionContainerSystem _actionContainer = default!;
 
     public override void Initialize()
     {

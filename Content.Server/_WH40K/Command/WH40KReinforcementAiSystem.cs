@@ -18,18 +18,18 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Command;
 
-public sealed class WH40KReinforcementAiSystem : EntitySystem
+public sealed partial class WH40KReinforcementAiSystem : EntitySystem
 {
     private static readonly ProtoId<HTNCompoundPrototype> ReinforcementRootTask = "SimpleHumanoidHostileCompound";
     private readonly record struct WeaponCandidate(EntityUid Weapon, string? SlotName);
 
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly HTNSystem _htn = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly NPCSystem _npc = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  HTNSystem _htn = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
+    [Dependency] private  NPCSystem _npc = default!;
+    [Dependency] private  NPCSteeringSystem _steering = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

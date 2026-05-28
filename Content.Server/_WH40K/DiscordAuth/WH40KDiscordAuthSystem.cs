@@ -40,17 +40,17 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         PropertyNameCaseInsensitive = true,
     };
 
-    [Dependency] private readonly IWH40KDiscordAuthApi _api = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly IStatusHost _statusHost = default!;
-    [Dependency] private readonly ITaskManager _task = default!;
-    [Dependency] private readonly UserDbDataManager _userDb = default!;
-    [Dependency] private readonly WH40KMetaProgressSystem _metaProgress = default!;
+    [Dependency] private  IWH40KDiscordAuthApi _api = default!;
+    [Dependency] private  IConfigurationManager _config = default!;
+    [Dependency] private  IServerDbManager _db = default!;
+    [Dependency] private  ILogManager _logManager = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  SharedPopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  IStatusHost _statusHost = default!;
+    [Dependency] private  ITaskManager _task = default!;
+    [Dependency] private  UserDbDataManager _userDb = default!;
+    [Dependency] private  WH40KMetaProgressSystem _metaProgress = default!;
 
     private readonly Dictionary<NetUserId, RuntimeState> _states = new();
     private readonly Dictionary<NetUserId, DateTimeOffset> _connectRefreshAttempts = new();

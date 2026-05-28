@@ -13,10 +13,10 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server._WH40K.Medical;
 
-public sealed class WH40KTeamBattleMedicalPolicySystem : EntitySystem
+public sealed partial class WH40KTeamBattleMedicalPolicySystem : EntitySystem
 {
-    [Dependency] private readonly WH40KAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamBattle = default!;
+    [Dependency] private  WH40KAttackerResolverSystem _attackerResolver = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamBattle = default!;
 
     public override void Initialize()
     {

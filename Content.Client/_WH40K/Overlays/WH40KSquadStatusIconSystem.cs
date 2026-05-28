@@ -8,10 +8,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.Overlays;
 
-public sealed class WH40KSquadStatusIconSystem : EntitySystem
+public sealed partial class WH40KSquadStatusIconSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private  IPlayerManager _player = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

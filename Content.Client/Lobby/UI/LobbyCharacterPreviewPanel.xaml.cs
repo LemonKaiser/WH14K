@@ -10,7 +10,7 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class LobbyCharacterPreviewPanel : Control, ILocalizedControl
 {
-    [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!;
+    [Dependency] private  IClientPreferencesManager _preferencesManager = default!;
 
     public Button CharacterSetupButton => CharacterSetup;
 

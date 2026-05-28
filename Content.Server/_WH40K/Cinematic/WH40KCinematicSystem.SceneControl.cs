@@ -16,8 +16,8 @@ public sealed partial class WH40KCinematicSystem
 {
     private const string MainSceneContextId = "main";
 
-    [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private  MapLoaderSystem _mapLoader = default!;
+    [Dependency] private  MetaDataSystem _metaData = default!;
 
     private void InitializeSceneControlFeatures()
     {

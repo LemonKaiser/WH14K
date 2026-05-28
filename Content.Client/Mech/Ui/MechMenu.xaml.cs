@@ -23,8 +23,8 @@ namespace Content.Client.Mech.Ui;
 [GenerateTypedNameReferences]
 public sealed partial class MechMenu : FancyWindow
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private  IEntityManager _entityManager = default!;
+    [Dependency] private  IPlayerManager _playerManager = default!;
 
     // State.
     private EntityUid _mech;

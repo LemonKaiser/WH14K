@@ -4,7 +4,6 @@
     - tasks:
         - !type:HTNPrimitiveTask
           operator: !type:PickPathfindPointOperator
-            targetKey: MovementTarget
 
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator

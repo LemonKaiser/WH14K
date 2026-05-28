@@ -1,7 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.UI;
-using Content.Server.Disposal.Tube;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles;
 using Content.Server.Mind;
@@ -14,6 +13,7 @@ using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Configurable;
 using Content.Shared.Database;
+using Content.Shared.Disposal.Tube;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Inventory;
@@ -45,29 +45,28 @@ namespace Content.Server.Administration.Systems
     /// </summary>
     public sealed partial class AdminVerbSystem : EntitySystem
     {
-        [Dependency] private readonly IConGroupController _groupController = default!;
-        [Dependency] private readonly IConsoleHost _console = default!;
-        [Dependency] private readonly IAdminManager _adminManager = default!;
-        [Dependency] private readonly IAdminHierarchyManager _adminHierarchyManager = default!;
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly SharedMapSystem _map = default!;
-        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-        [Dependency] private readonly AdminSystem _adminSystem = default!;
-        [Dependency] private readonly DisposalTubeSystem _disposalTubes = default!;
-        [Dependency] private readonly EuiManager _euiManager = default!;
-        [Dependency] private readonly GhostRoleSystem _ghostRoleSystem = default!;
-        [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-        [Dependency] private readonly PrayerSystem _prayerSystem = default!;
-        [Dependency] private readonly MindSystem _mindSystem = default!;
-        [Dependency] private readonly ToolshedManager _toolshed = default!;
-        [Dependency] private readonly RejuvenateSystem _rejuvenate = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
-        [Dependency] private readonly StationSystem _stations = default!;
-        [Dependency] private readonly StationSpawningSystem _spawning = default!;
-        [Dependency] private readonly ExamineSystemShared _examine = default!;
-        [Dependency] private readonly AdminFrozenSystem _freeze = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
-        [Dependency] private readonly SiliconLawSystem _siliconLawSystem = default!;
+        [Dependency] private IConGroupController _groupController = default!;
+        [Dependency] private IConsoleHost _console = default!;
+        [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private SharedMapSystem _map = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private AdminSystem _adminSystem = default!;
+        [Dependency] private DisposalTubeSystem _disposalTubes = default!;
+        [Dependency] private EuiManager _euiManager = default!;
+        [Dependency] private GhostRoleSystem _ghostRoleSystem = default!;
+        [Dependency] private UserInterfaceSystem _uiSystem = default!;
+        [Dependency] private PrayerSystem _prayerSystem = default!;
+        [Dependency] private MindSystem _mindSystem = default!;
+        [Dependency] private ToolshedManager _toolshed = default!;
+        [Dependency] private RejuvenateSystem _rejuvenate = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
+        [Dependency] private StationSystem _stations = default!;
+        [Dependency] private StationSpawningSystem _spawning = default!;
+        [Dependency] private ExamineSystemShared _examine = default!;
+        [Dependency] private AdminFrozenSystem _freeze = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private SiliconLawSystem _siliconLawSystem = default!;
 
         private readonly Dictionary<ICommonSession, List<EditSolutionsEui>> _openSolutionUis = new();
 
@@ -83,14 +82,6 @@ namespace Content.Server.Administration.Systems
 
         private void GetVerbs(GetVerbsEvent<Verb> ev)
         {
-            if (TryComp(ev.User, out ActorComponent? actor)
-                && TryComp(ev.Target, out ActorComponent? targetActor)
-                && _adminManager.IsAdmin(actor.PlayerSession)
-                && !_adminHierarchyManager.CanManageAdmin(actor.PlayerSession, targetActor.PlayerSession).Allowed)
-            {
-                return;
-            }
-
             AddAdminVerbs(ev);
             AddDebugVerbs(ev);
             AddSmiteVerbs(ev);
@@ -108,9 +99,7 @@ namespace Content.Server.Administration.Systems
             if (_adminManager.IsAdmin(player))
             {
                 Verb mark = new();
-                mark.TextLocId = "toolshed-verb-mark";
                 mark.Text = Loc.GetString("toolshed-verb-mark");
-                mark.MessageLocId = "toolshed-verb-mark-description";
                 mark.Message = Loc.GetString("toolshed-verb-mark-description");
                 mark.Category = VerbCategory.Admin;
                 mark.Act = () => _toolshed.InvokeCommand(player, "=> $marked", new List<EntityUid> {args.Target}, out _);
@@ -119,12 +108,8 @@ namespace Content.Server.Administration.Systems
 
                 if (TryComp(args.Target, out ActorComponent? targetActor))
                 {
-                    if (!_adminHierarchyManager.CanManageAdmin(player, targetActor.PlayerSession).Allowed)
-                        return;
-
                     // AdminHelp
                     Verb verb = new();
-                    verb.TextLocId = "ahelp-verb-get-data-text";
                     verb.Text = Loc.GetString("ahelp-verb-get-data-text");
                     verb.Category = VerbCategory.Admin;
                     verb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/gavel.svg.192dpi.png"));
@@ -151,7 +136,6 @@ namespace Content.Server.Administration.Systems
                     // Spawn - Like respawn but on the spot.
                     args.Verbs.Add(new Verb()
                     {
-                        TextLocId = "admin-player-actions-spawn",
                         Text = Loc.GetString("admin-player-actions-spawn"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -178,7 +162,6 @@ namespace Content.Server.Administration.Systems
                     // Clone - Spawn but without the mind transfer, also spawns at the user's coordinates not the target's
                     args.Verbs.Add(new Verb()
                     {
-                        TextLocId = "admin-player-actions-clone",
                         Text = Loc.GetString("admin-player-actions-clone"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -201,7 +184,6 @@ namespace Content.Server.Administration.Systems
                     // PlayerPanel
                     args.Verbs.Add(new Verb
                     {
-                        TextLocId = "admin-player-actions-player-panel",
                         Text = Loc.GetString("admin-player-actions-player-panel"),
                         Category = VerbCategory.Admin,
                         Act = () => _console.ExecuteCommand(player, $"playerpanel \"{targetActor.PlayerSession.UserId}\""),
@@ -214,9 +196,7 @@ namespace Content.Server.Administration.Systems
                     // Erase
                     args.Verbs.Add(new Verb
                     {
-                        TextLocId = "admin-verbs-erase",
                         Text = Loc.GetString("admin-verbs-erase"),
-                        MessageLocId = "admin-verbs-erase-description",
                         Message = Loc.GetString("admin-verbs-erase-description"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(
@@ -232,7 +212,6 @@ namespace Content.Server.Administration.Systems
                     // Respawn
                     args.Verbs.Add(new Verb
                     {
-                        TextLocId = "admin-player-actions-respawn",
                         Text = Loc.GetString("admin-player-actions-respawn"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -246,7 +225,6 @@ namespace Content.Server.Administration.Systems
                     // Inspect mind
                     args.Verbs.Add(new Verb
                     {
-                        TextLocId = "inspect-mind-verb-get-data-text",
                         Text = Loc.GetString("inspect-mind-verb-get-data-text"),
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
                         Category = VerbCategory.Debug,
@@ -263,7 +241,6 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
-                        TextLocId = "admin-verbs-freeze",
                         Text = Loc.GetString("admin-verbs-freeze"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -281,7 +258,6 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
-                        TextLocId = "admin-verbs-freeze-and-mute",
                         Text = Loc.GetString("admin-verbs-freeze-and-mute"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -298,7 +274,6 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
-                        TextLocId = "admin-verbs-unfreeze",
                         Text = Loc.GetString("admin-verbs-unfreeze"),
                         Category = VerbCategory.Admin,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
@@ -317,7 +292,6 @@ namespace Content.Server.Administration.Systems
                     Verb logsVerbEntity = new()
                     {
                         Priority = -2,
-                        TextLocId = "admin-verbs-admin-logs-entity",
                         Text = Loc.GetString("admin-verbs-admin-logs-entity"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -334,7 +308,6 @@ namespace Content.Server.Administration.Systems
                 // TeleportTo
                 args.Verbs.Add(new Verb
                 {
-                    TextLocId = "admin-verbs-teleport-to",
                     Text = Loc.GetString("admin-verbs-teleport-to"),
                     Category = VerbCategory.Admin,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/open.svg.192dpi.png")),
@@ -348,7 +321,6 @@ namespace Content.Server.Administration.Systems
                 // TeleportHere
                 args.Verbs.Add(new Verb
                 {
-                    TextLocId = "admin-verbs-teleport-here",
                     Text = Loc.GetString("admin-verbs-teleport-here"),
                     Category = VerbCategory.Admin,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
@@ -406,7 +378,6 @@ namespace Content.Server.Administration.Systems
                 {
                     args.Verbs.Add(new Verb()
                     {
-                        TextLocId = "silicon-law-ui-verb",
                         Text = Loc.GetString("silicon-law-ui-verb"),
                         Category = VerbCategory.Admin,
                         Act = () =>
@@ -427,9 +398,7 @@ namespace Content.Server.Administration.Systems
                 args.Verbs.Add(new Verb()
                 {
                     Priority = 10,
-                    TextLocId = "admin-verbs-camera",
                     Text = Loc.GetString("admin-verbs-camera"),
-                    MessageLocId = "admin-verbs-camera-description",
                     Message = Loc.GetString("admin-verbs-camera-description"),
                     Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/vv.svg.192dpi.png")),
                     Category = VerbCategory.Admin,
@@ -455,7 +424,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "delete-verb-get-data-text",
                     Text = Loc.GetString("delete-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/delete_transparent.svg.192dpi.png")),
@@ -471,7 +439,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "rejuvenate-verb-get-data-text",
                     Text = Loc.GetString("rejuvenate-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")),
@@ -487,7 +454,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "control-mob-verb-get-data-text",
                     Text = Loc.GetString("control-mob-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     // TODO VERB ICON control mob icon
@@ -508,7 +474,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "make-sentient-verb-get-data-text",
                     Text = Loc.GetString("make-sentient-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
@@ -525,7 +490,6 @@ namespace Content.Server.Administration.Systems
                 {
                     args.Verbs.Add(new Verb
                     {
-                        TextLocId = "strip-all-verb-get-data-text",
                         Text = Loc.GetString("strip-all-verb-get-data-text"),
                         Category = VerbCategory.Debug,
                         Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
@@ -539,7 +503,6 @@ namespace Content.Server.Administration.Systems
                 {
                     Verb verb = new()
                     {
-                        TextLocId = "set-outfit-verb-get-data-text",
                         Text = Loc.GetString("set-outfit-verb-get-data-text"),
                         Category = VerbCategory.Debug,
                         Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
@@ -555,7 +518,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "in-range-unoccluded-verb-get-data-text",
                     Text = Loc.GetString("in-range-unoccluded-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
@@ -578,11 +540,10 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "tube-direction-verb-get-data-text",
                     Text = Loc.GetString("tube-direction-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
-                    Act = () => _disposalTubes.PopupDirections(args.Target, tube, args.User)
+                    Act = () => _disposalTubes.PopupDirections((args.Target, tube), args.User)
                 };
                 args.Verbs.Add(verb);
             }
@@ -592,7 +553,6 @@ namespace Content.Server.Administration.Systems
                 !(EntityManager.GetComponentOrNull<MindContainerComponent>(args.Target)?.HasMind ?? false))
             {
                 Verb verb = new();
-                verb.TextLocId = "make-ghost-role-verb-get-data-text";
                 verb.Text = Loc.GetString("make-ghost-role-verb-get-data-text");
                 verb.Category = VerbCategory.Debug;
                 // TODO VERB ICON add ghost icon
@@ -607,7 +567,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "configure-verb-get-data-text",
                     Text = Loc.GetString("configure-verb-get-data-text"),
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
                     Category = VerbCategory.Debug,
@@ -622,7 +581,6 @@ namespace Content.Server.Administration.Systems
             {
                 Verb verb = new()
                 {
-                    TextLocId = "edit-solutions-verb-get-data-text",
                     Text = Loc.GetString("edit-solutions-verb-get-data-text"),
                     Category = VerbCategory.Debug,
                     Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/spill.svg.192dpi.png")),

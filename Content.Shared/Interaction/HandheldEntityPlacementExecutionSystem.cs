@@ -14,12 +14,12 @@ namespace Content.Shared.Interaction;
 /// Server execution path for in-hand placement requests.
 /// Client-side preview / mode lifecycle is handled by <see cref="Content.Client.Interaction.Systems.HandheldEntityPlacementSystem"/>.
 /// </summary>
-public sealed class HandheldEntityPlacementExecutionSystem : EntitySystem
+public sealed partial class HandheldEntityPlacementExecutionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  SharedInteractionSystem _interaction = default!;
+    [Dependency] private  INetManager _net = default!;
 
     private readonly Dictionary<(EntityUid User, EntityUid Item), DoAfterId> _activePlacementDoAfters = new();
 

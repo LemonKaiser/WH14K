@@ -3,9 +3,9 @@ using Content.Shared.Tools.Systems;
 
 namespace Content.Shared._WH40K.Tools;
 
-public sealed class WH40KMultipleToolRadialSystem : EntitySystem
+public sealed partial class WH40KMultipleToolRadialSystem : EntitySystem
 {
-    [Dependency] private readonly SharedToolSystem _tool = default!;
+    [Dependency] private  SharedToolSystem _tool = default!;
 
     public override void Initialize()
     {

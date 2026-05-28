@@ -16,7 +16,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Fire;
 
-public sealed class WH40KEnvironmentalFireSystem : EntitySystem
+public sealed partial class WH40KEnvironmentalFireSystem : EntitySystem
 {
     private const float BurnDurationMultiplier = 2f;
     private const float IntervalMultiplier = 2f;
@@ -38,15 +38,15 @@ public sealed class WH40KEnvironmentalFireSystem : EntitySystem
     private static readonly ProtoId<ContentTileDefinition> BurnedPlanetGrassAshTile = "WH40KFloorBurnedPlanetGrassAsh";
     private static readonly ProtoId<ContentTileDefinition> BurnedWoodAshTile = "WH40KFloorBurnedWoodAsh";
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitions = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly TileSystem _tiles = default!;
-    [Dependency] private readonly FlammableSystem _flammable = default!;
-    [Dependency] private readonly DecalSystem _decals = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private  AtmosphereSystem _atmosphere = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  ITileDefinitionManager _tileDefinitions = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  TileSystem _tiles = default!;
+    [Dependency] private  FlammableSystem _flammable = default!;
+    [Dependency] private  DecalSystem _decals = default!;
+    [Dependency] private  EntityLookupSystem _lookup = default!;
 
     private readonly Dictionary<string, ConfiguredBurnRuleData> _configuredBurnRulesByTileId = new(StringComparer.Ordinal);
     private readonly Dictionary<int, BurnRuleData> _burnRulesByTileType = new();

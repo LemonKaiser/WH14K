@@ -15,13 +15,13 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._WH40K.MetaProgress;
 
-public sealed class WH40KCharacterDevelopmentView : BoxContainer
+public sealed partial class WH40KCharacterDevelopmentView : BoxContainer
 {
 	[Dependency]
-	private readonly IEntityManager _entityManager = default!;
+	private  IEntityManager _entityManager = default!;
 
 	[Dependency]
-	private readonly IPrototypeManager _prototypeManager = default!;
+	private  IPrototypeManager _prototypeManager = default!;
 
 	private const string RewardTableId = "WH40KMetaLevelRewardTableDefault";
 	private const float InfoDescriptionMaxWidth = 720f;

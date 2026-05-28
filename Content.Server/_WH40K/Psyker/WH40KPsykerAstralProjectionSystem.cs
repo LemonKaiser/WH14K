@@ -20,21 +20,21 @@ namespace Content.Server._WH40K.Psyker;
 /// Handles the Imperium psyker astral trance entry point.
 /// The trance is built on SleepingComponent so it respects existing Robust/SS14 sleep restrictions.
 /// </summary>
-public sealed class WH40KPsykerAstralProjectionSystem : EntitySystem
+public sealed partial class WH40KPsykerAstralProjectionSystem : EntitySystem
 {
     private const string AstralBarrierPrototype = "WH40KPsykerAstralBarrierVisual";
     private const float AstralDamageReductionFactor = 0.5f;
 
-    [Dependency] private readonly ActionsSystem _actions = default!;
-    [Dependency] private readonly SleepingSystem _sleeping = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
-    [Dependency] private readonly WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
-    [Dependency] private readonly WH40KPsykerDisciplineModifierSystem _modifiers = default!;
-    [Dependency] private readonly WH40KPsykerAstralRiskSystem _risks = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private  ActionsSystem _actions = default!;
+    [Dependency] private  SleepingSystem _sleeping = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  WH40KGlobalWarpInstabilitySystem _globalWarp = default!;
+    [Dependency] private  WH40KPsykerDisciplineModifierSystem _modifiers = default!;
+    [Dependency] private  WH40KPsykerAstralRiskSystem _risks = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

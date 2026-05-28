@@ -6,14 +6,14 @@ using Robust.Shared.Containers;
 
 namespace Content.Server._WH40K.Oskvernitel;
 
-public sealed class WH40KOskvernitelWeaponSystem : SharedWH40KOskvernitelWeaponSystem
+public sealed partial class WH40KOskvernitelWeaponSystem : SharedWH40KOskvernitelWeaponSystem
 {
     private const string MinigunLocKey = "wh40k-oskvernitel-weapon-minigun-name";
     private const string AutogunLocKey = "wh40k-oskvernitel-weapon-autogun-name";
 
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  SharedContainerSystem _container = default!;
+    [Dependency] private  SharedGunSystem _gun = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

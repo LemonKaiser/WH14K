@@ -9,10 +9,10 @@ namespace Content.Server._WH40K.Research;
 /// <summary>
 /// Mirrors WH40K research servers to the team's shared research balance.
 /// </summary>
-public sealed class WH40KTeamResearchBalanceSyncSystem : EntitySystem
+public sealed partial class WH40KTeamResearchBalanceSyncSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly ResearchSystem _research = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  ResearchSystem _research = default!;
 
     public override void Initialize()
     {

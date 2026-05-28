@@ -57,6 +57,8 @@ public sealed partial class AdminOptionsTab : Control, ILocalizedControl
             OverlayGhostHideSlider,
             OverlayGhostHideMin,
             OverlayGhostHideMax);
+
+        Control.AddOptionCheckBox(CCVars.AdminStripMenuOverlayDefault, EnableAdminStripOverlayDefault);
     }
 
     public void Relocalize()

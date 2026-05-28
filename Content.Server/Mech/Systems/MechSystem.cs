@@ -7,10 +7,10 @@ using Content.Shared.Mech.Systems;
 
 namespace Content.Server.Mech.Systems;
 
-public sealed class MechSystem : SharedMechSystem
+public sealed partial class MechSystem : SharedMechSystem
 {
-    [Dependency] private readonly ConstructionSystem _construction = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private  ConstructionSystem _construction = default!;
+    [Dependency] private  DamageableSystem _damageable = default!;
 
     private const string MechRepairGraph = "MechRepair";
     private const string MechDisassembleGraph = "MechDisassemble";

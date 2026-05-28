@@ -19,7 +19,7 @@ namespace Content.Client._WH40K.StrategicPoints.UI;
 [GenerateTypedNameReferences]
 public sealed partial class WH40KStrategicPointWindow : FancyWindow, ILocalizedControl
 {
-    [Dependency] private readonly ILocalizationManager _localization = default!;
+    [Dependency] private  ILocalizationManager _localization = default!;
 
     private WH40KStrategicPointBuiState? _state;
     private WH40KStrategicPointBuiState? _renderedState;

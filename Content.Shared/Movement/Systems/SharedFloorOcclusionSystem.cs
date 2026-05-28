@@ -10,11 +10,11 @@ namespace Content.Shared.Movement.Systems;
 /// <summary>
 /// Applies an occlusion shader for any relevant entities.
 /// </summary>
-public abstract class SharedFloorOcclusionSystem : EntitySystem
+public abstract partial class SharedFloorOcclusionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {

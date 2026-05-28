@@ -8,7 +8,6 @@ using Content.Shared.Movement.Events;
 using Robust.Shared.GameStates;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -308,11 +307,8 @@ namespace Content.Shared.Movement.Systems
         {
             // Relayed movement just uses the same keybinds given we're moving the relayed entity
             // the same as us.
-
-            if (!MoverQuery.TryComp(entity.Owner, out var moverComp))
+            if (!MoverQuery.Resolve(entity, ref entity.Comp))
                 return;
-
-            entity.Comp = moverComp;
 
             // TODO: Should move this into HandleMobMovement itself.
             if (entity.Comp.CanMove && RelayQuery.TryComp(entity, out var relayMover))
@@ -320,24 +316,25 @@ namespace Content.Shared.Movement.Systems
                 DebugTools.Assert(relayMover.RelayEntity != entity.Owner);
                 DebugTools.AssertNotNull(relayMover.RelayEntity);
 
-                SetMoveInput((entity.Owner, entity.Comp), MoveButtons.None);
-                HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
+                if (MoverQuery.TryGetComponent(entity, out var mover))
+                    SetMoveInput((entity, mover), MoveButtons.None);
 
+                HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
                 return;
             }
 
             // For stuff like "Moving out of locker" or the likes
             // We'll relay a movement input to the parent.
-            if (_container.IsEntityInContainer(entity.Owner) &&
-                TryComp(entity.Owner, out TransformComponent? xform) &&
+            if (_container.IsEntityInContainer(entity) &&
+                TryComp(entity, out TransformComponent? xform) &&
                 xform.ParentUid.IsValid() &&
-                _mobState.IsAlive(entity.Owner))
+                _mobState.IsAlive(entity))
             {
-                var relayMoveEvent = new ContainerRelayMovementEntityEvent(entity.Owner);
+                var relayMoveEvent = new ContainerRelayMovementEntityEvent(entity);
                 RaiseLocalEvent(xform.ParentUid, ref relayMoveEvent);
             }
 
-            SetVelocityDirection((entity.Owner, entity.Comp), dir, subTick, state);
+            SetVelocityDirection((entity, entity.Comp), dir, subTick, state);
         }
 
         private void OnInputInit(Entity<InputMoverComponent> entity, ref ComponentInit args)
@@ -360,7 +357,7 @@ namespace Content.Shared.Movement.Systems
                 // if we swap to relay then stop our existing input if we ever change back.
                 if (moverComp != null)
                 {
-                    SetMoveInput((uid, moverComp), MoveButtons.Walk);
+                    SetMoveInput((uid, moverComp), MoveButtons.None);
                 }
 
                 HandleRunChange(relayMover.RelayEntity, subTick, walking);
@@ -369,9 +366,7 @@ namespace Content.Shared.Movement.Systems
 
             if (moverComp == null) return;
 
-            // "Walk" input is repurposed as sprint modifier:
-            // unpressed = walk by default, pressed = run.
-            SetSprinting((uid, moverComp), subTick, !walking);
+            SetSprinting((uid, moverComp), subTick, walking);
         }
 
         public (Vector2 Walking, Vector2 Sprinting) GetVelocityInput(InputMoverComponent mover)

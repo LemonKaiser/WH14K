@@ -5,7 +5,7 @@ using Content.Shared.Speech;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed class LizardAccentSystem : EntitySystem
+public sealed partial class LizardAccentSystem : EntitySystem
 {
     private static readonly Regex RegexLowerS = new("s+");
     private static readonly Regex RegexUpperS = new("S+");
@@ -21,7 +21,7 @@ public sealed class LizardAccentSystem : EntitySystem
     private static readonly Regex RegexLowerChe = new(@"\u0447+");
     private static readonly Regex RegexUpperChe = new(@"\u0427+");
 
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private  IRobustRandom _random = default!;
 
     public override void Initialize()
     {

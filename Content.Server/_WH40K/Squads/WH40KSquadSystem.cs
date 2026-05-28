@@ -22,19 +22,19 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Squads;
 
-public sealed class WH40KSquadSystem : EntitySystem
+public sealed partial class WH40KSquadSystem : EntitySystem
 {
     private static readonly Color DefaultImperiumColor = Color.FromHex("#D6B24A".AsSpan());
     private static readonly Color DefaultHereticsColor = Color.FromHex("#A64747".AsSpan());
 
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedRoleSystem _roles = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedMindSystem _mind = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IPrototypeManager _prototype = default!;
+    [Dependency] private  SharedRoleSystem _roles = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

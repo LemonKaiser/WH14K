@@ -5,10 +5,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Oskvernitel;
 
-public sealed class WH40KReloadOnEmptyAmmoSystem : EntitySystem
+public sealed partial class WH40KReloadOnEmptyAmmoSystem : EntitySystem
 {
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private  SharedGunSystem _gun = default!;
+    [Dependency] private  IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {

@@ -4,9 +4,9 @@ using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client._WH40K.Roadmap;
 
-public sealed class RoadmapButton : Button, ILocalizedControl
+public sealed partial class RoadmapButton : Button, ILocalizedControl
 {
-    [Dependency] private readonly RoadmapManager _roadmapManager = default!;
+    [Dependency] private  RoadmapManager _roadmapManager = default!;
 
     public RoadmapButton()
     {

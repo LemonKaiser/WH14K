@@ -7,9 +7,9 @@ namespace Content.Shared._WH40K.Mortar;
 /// Shared folded-state interaction guard for mortar.
 /// Prevents predicted and server-side load/open interactions while mortar is not deployed.
 /// </summary>
-public sealed class SharedWH40KMortarFoldedInteractionSystem : EntitySystem
+public sealed partial class SharedWH40KMortarFoldedInteractionSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private  INetManager _net = default!;
 
     public override void Initialize()
     {

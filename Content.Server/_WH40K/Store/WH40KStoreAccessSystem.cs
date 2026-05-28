@@ -15,11 +15,11 @@ namespace Content.Server._WH40K.Store;
 /// <summary>
 /// Blocks enemy faction members from opening or using WH40K team stores.
 /// </summary>
-public sealed class WH40KStoreAccessSystem : EntitySystem
+public sealed partial class WH40KStoreAccessSystem : EntitySystem
 {
-    [Dependency] private readonly WH40KTeamRuleFacadeSystem _teamRule = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  WH40KTeamRuleFacadeSystem _teamRule = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     public override void Initialize()
     {

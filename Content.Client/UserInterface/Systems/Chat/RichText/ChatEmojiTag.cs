@@ -10,10 +10,10 @@ using Robust.Shared.Utility;
 namespace Content.Client.UserInterface.Systems.Chat.RichText;
 
 [UsedImplicitly]
-public sealed class ChatEmojiTag : IMarkupTagHandler
+public sealed partial class ChatEmojiTag : IMarkupTagHandler
 {
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private  IResourceCache _resourceCache = default!;
+    [Dependency] private  IPrototypeManager _prototypeManager = default!;
 
     public string Name => ChatEmojiRichText.EmojiMarkupTag;
 

@@ -4,13 +4,13 @@ using Content.Shared.NPC.Systems;
 
 namespace Content.Server._WH40K.GameTicking.Rules;
 
-public sealed class WH40KTeamNpcFactionSystem : EntitySystem
+public sealed partial class WH40KTeamNpcFactionSystem : EntitySystem
 {
     private const string TeamImperium = "Imperium";
     private const string TeamHeretics = "Heretics";
     private const string TeamTau = "Tau";
 
-    [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
+    [Dependency] private  NpcFactionSystem _npcFaction = default!;
 
     public override void Initialize()
     {

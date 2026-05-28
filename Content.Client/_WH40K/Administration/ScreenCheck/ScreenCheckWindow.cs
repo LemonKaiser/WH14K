@@ -10,10 +10,10 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Content.Client._WH40K.Administration.ScreenCheck;
 
-public sealed class ScreenCheckWindow : DefaultWindow, ILocalizedControl
+public sealed partial class ScreenCheckWindow : DefaultWindow, ILocalizedControl
 {
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly ILogManager _logs = default!;
+    [Dependency] private  IClyde _clyde = default!;
+    [Dependency] private  ILogManager _logs = default!;
 
     private readonly Label _statusLabel;
     private readonly TextureRect _imageRect;

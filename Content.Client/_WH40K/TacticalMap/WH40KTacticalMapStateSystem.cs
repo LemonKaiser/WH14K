@@ -7,9 +7,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client._WH40K.TacticalMap;
 
-public sealed class WH40KTacticalMapStateSystem : EntitySystem
+public sealed partial class WH40KTacticalMapStateSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private  UserInterfaceSystem _ui = default!;
 
     private readonly Dictionary<EntityUid, WH40KTacticalMapBuiState> _cachedStates = new();
     private readonly Dictionary<EntityUid, WH40KTacticalMapLiveRefreshState> _cachedLiveRefreshStates = new();

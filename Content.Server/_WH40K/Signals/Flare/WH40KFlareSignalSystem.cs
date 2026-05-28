@@ -28,20 +28,20 @@ using Content.Server._WH40K.Localizations;
 
 namespace Content.Server._WH40K.Signals.Flare;
 
-public sealed class WH40KFlareSignalSystem : EntitySystem
+public sealed partial class WH40KFlareSignalSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly WH40KTeamBattleRuleSystem _teamRule = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly WH40KPlayerCultureTracker _culture = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
+    [Dependency] private  IChatManager _chat = default!;
+    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
+    [Dependency] private  IPlayerManager _players = default!;
+    [Dependency] private  PopupSystem _popup = default!;
+    [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private  TurfSystem _turf = default!;
+    [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
 
     private readonly Dictionary<int, EntityUid> _signalMarkers = new();
     private int _nextSignalId = 400;

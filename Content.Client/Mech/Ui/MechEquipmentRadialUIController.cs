@@ -8,9 +8,9 @@ using Robust.Shared.Utility;
 namespace Content.Client.Mech.Ui;
 
 [UsedImplicitly]
-public sealed class MechEquipmentRadialUIController : UIController
+public sealed partial class MechEquipmentRadialUIController : UIController
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private  IEntityManager _entManager = default!;
 
     private SimpleRadialMenu? _menu;
 

@@ -8,15 +8,15 @@ using Content.Shared.Vehicle.Components;
 
 namespace Content.Shared._WH40K.Vehicle.Visuals;
 
-public sealed class WH40KVehicleRiderSeatSystem : EntitySystem
+public sealed partial class WH40KVehicleRiderSeatSystem : EntitySystem
 {
     private const int RiderSuppressedCollisionMask = (int) (CollisionGroup.Impassable |
                                                             CollisionGroup.MidImpassable |
                                                             CollisionGroup.HighImpassable |
                                                             CollisionGroup.LowImpassable);
 
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly VehicleSystem _vehicle = default!;
+    [Dependency] private  SharedPhysicsSystem _physics = default!;
+    [Dependency] private  VehicleSystem _vehicle = default!;
 
     private EntityQuery<BuckleComponent> _buckleQuery;
     private EntityQuery<VehicleComponent> _vehicleQuery;
