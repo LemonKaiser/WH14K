@@ -41,8 +41,8 @@
   ## Movement
   To move your character around, use [color=yellow][bold][keybind="MoveUp"][keybind="MoveLeft"][keybind="MoveDown"][keybind="MoveRight"][/bold][/color].
 
-  Carried objects and afflictions influence your movement speed, but you can also hold [color=yellow][bold][keybind="Walk"][/bold][/color] to [color=cyan]walk[/color].
-  This reduces your speed and helps you avoid [color=cyan]slipping[/color] and falling over when walking over slippery hazards like banana peels or spills.
+  Carried objects and afflictions influence your movement speed, and your character [color=cyan]walks[/color] by default. Hold [color=yellow][bold][keybind="Walk"][/bold][/color] to [color=cyan]sprint[/color].
+  Walking helps you avoid [color=cyan]slipping[/color] and falling over when crossing slippery hazards like banana peels or spills, while sprinting trades safety for speed.
   \n[italic]Note: walking can be switched to a [bolditalic]toggle[/bolditalic] in the controls menu.[/italic]
 
   ### Spacewalks

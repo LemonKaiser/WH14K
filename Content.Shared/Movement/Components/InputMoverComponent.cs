@@ -36,7 +36,8 @@ namespace Content.Shared.Movement.Components
         public Vector2 CurTickSprintMovement;
 
         [ViewVariables]
-        public MoveButtons HeldMoveButtons = MoveButtons.None;
+        // WH40K uses walking as the baseline pace, so movers should preserve the walk modifier unless sprint is requested.
+        public MoveButtons HeldMoveButtons = MoveButtons.Walk;
 
         /// <summary>
         /// Does our input indicate actual movement, and not just modifiers?

@@ -317,7 +317,7 @@ namespace Content.Shared.Movement.Systems
                 DebugTools.AssertNotNull(relayMover.RelayEntity);
 
                 if (MoverQuery.TryGetComponent(entity, out var mover))
-                    SetMoveInput((entity, mover), MoveButtons.None);
+                    SetMoveInput((entity, mover), MoveButtons.Walk);
 
                 HandleDirChange(relayMover.RelayEntity, dir, subTick, state);
                 return;
@@ -357,7 +357,7 @@ namespace Content.Shared.Movement.Systems
                 // if we swap to relay then stop our existing input if we ever change back.
                 if (moverComp != null)
                 {
-                    SetMoveInput((uid, moverComp), MoveButtons.None);
+                    SetMoveInput((uid, moverComp), MoveButtons.Walk);
                 }
 
                 HandleRunChange(relayMover.RelayEntity, subTick, walking);
@@ -594,7 +594,8 @@ namespace Content.Shared.Movement.Systems
             {
                 if (session?.AttachedEntity == null) return false;
 
-                _controller.HandleRunChange(session.AttachedEntity.Value, message.SubTick, message.State == BoundKeyState.Down);
+                // WH40K uses walking as the default pace, so the sprint key clears the walking modifier while held.
+                _controller.HandleRunChange(session.AttachedEntity.Value, message.SubTick, message.State != BoundKeyState.Down);
                 return false;
             }
         }

@@ -34,7 +34,7 @@ public abstract partial class SharedMoverController
     protected virtual void OnInputMoverCanMoveUpdated(Entity<InputMoverComponent> ent, ref CanMoveUpdatedEvent args)
     {
         if (!args.CanMove)
-            SetMoveInput(ent, MoveButtons.None);
+            SetMoveInput(ent, MoveButtons.Walk);
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ public abstract partial class SharedMoverController
         PhysicsSystem.UpdateIsPredicted(entity.Comp.RelayEntity);
 
         if (MoverQuery.TryComp(entity.Comp.RelayEntity, out var inputMover))
-            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Comp.RelayEntity, inputMover), MoveButtons.Walk);
 
         if (Timing.ApplyingState)
             return;
@@ -126,7 +126,7 @@ public abstract partial class SharedMoverController
             return;
 
         if (MoverQuery.TryComp(entity.Owner, out var inputMover))
-            SetMoveInput((entity.Owner, inputMover), MoveButtons.None);
+            SetMoveInput((entity.Owner, inputMover), MoveButtons.Walk);
 
         if (RelayQuery.TryComp(entity.Comp.Source, out var relay) && relay.LifeStage <= ComponentLifeStage.Running)
         {

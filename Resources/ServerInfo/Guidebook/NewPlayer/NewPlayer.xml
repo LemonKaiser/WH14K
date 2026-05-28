@@ -13,7 +13,7 @@
 ## Основные элементы управления
 Ниже перечислены элементы управления, которые понадобятся вам для обычной игры:
 
-- Бегайте, используя [color=yellow][bold][keybind="MoveUp"][keybind="MoveLeft"][keybind="MoveDown"][keybind="MoveRight"][/bold][/color]. Зажмите [color=yellow][bold][keybind="Walk"][/bold][/color] для ходьбы.
+- Ходите, используя [color=yellow][bold][keybind="MoveUp"][keybind="MoveLeft"][keybind="MoveDown"][keybind="MoveRight"][/bold][/color]. Зажмите [color=yellow][bold][keybind="Walk"][/bold][/color] для бега.
 
 - Изучите окружающий мир с помощью [color=yellow][bold][keybind="ExamineEntity"][/bold][/color]
 

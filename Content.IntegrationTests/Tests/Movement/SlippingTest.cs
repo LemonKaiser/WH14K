@@ -26,20 +26,21 @@ public sealed class SlippingTest : MovementTest
 
         var stepTrigger = Server.System<StepTriggerSystem>();
 
-        // Walking over the banana slowly does not trigger a slip.
+        // Walking is the default movement mode, so crossing the banana slowly does not trigger a slip.
         await Server.WaitPost(() => stepTrigger.SetRequiredTriggerSpeed(STarget!.Value, 999f));
-        await SetKey(EngineKeyFunctions.Walk, BoundKeyState.Down);
         await RunTicks(1);
         await AssertFiresEvent<SlipEvent>(async () => await Move(DirectionFlag.East, 1f), count: 0);
 
         Assert.That(Delta(), Is.LessThan(0.5f));
         AssertComp<KnockedDownComponent>(false, Player);
 
-        // Moving at normal speeds does trigger a slip.
+        // Holding the sprint key returns us to full speed and should trigger a slip.
         await Server.WaitPost(() => stepTrigger.SetRequiredTriggerSpeed(STarget!.Value, 0f));
-        await SetKey(EngineKeyFunctions.Walk, BoundKeyState.Up);
+        await SetKey(EngineKeyFunctions.Walk, BoundKeyState.Down);
         await RunTicks(1);
         await AssertFiresEvent<SlipEvent>(async () => await Move(DirectionFlag.West, 1f));
+        await SetKey(EngineKeyFunctions.Walk, BoundKeyState.Up);
+        await RunTicks(1);
 
         // And the person that slipped was the player
         AssertEvent<SlipEvent>(predicate: @event => @event.Slipped == SPlayer);
