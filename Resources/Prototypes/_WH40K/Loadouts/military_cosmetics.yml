@@ -1179,6 +1179,24 @@
   groupBy: "cigars"
 
 - type: loadout
+  id: WeaponFlareGunWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - WeaponFlareGun
+  groupBy: "FlareGun"
+
+- type: loadout
+  id: BoxShotgunFlareWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - BoxShotgunFlare
+  groupBy: "FlareGun"
+
+- type: loadout
   id: FoodBoxDonkpocketHonkWH40K
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
