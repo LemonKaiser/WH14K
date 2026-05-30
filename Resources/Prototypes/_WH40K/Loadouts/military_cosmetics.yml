@@ -1296,6 +1296,15 @@
   groupBy: "plushies"
 
 - type: loadout
+  id: PlushieLitiyWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieLitiy
+  groupBy: "plushies"
+
+- type: loadout
   id: PlushieGGadosWH40K
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
