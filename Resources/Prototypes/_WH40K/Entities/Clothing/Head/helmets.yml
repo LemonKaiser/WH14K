@@ -395,3 +395,13 @@
     sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/medichelmet_inquisition.rsi
+    
+- type: entity
+  parent: ClothingHeadHelmetFlakMed
+  id: ClothingHeadHelmetFlakMedCyan
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed_cyan.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmetmed_cyan.rsi
