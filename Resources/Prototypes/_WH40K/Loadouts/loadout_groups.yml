@@ -311,6 +311,7 @@
   name: loadout-group-wh40k-imperial-medic-head
   minLimit: 0
   loadouts:
+  - WH40KCyanMedicHelmet
   - WH40KBandanaRed
   - WH40KCatachanBandana
   - WH40KCatachanHeadband
@@ -320,7 +321,6 @@
   - WH40KSeniorMedicBeret
   - WH40KValhallanUshanka
   - WH40KValhallanHelmet
-  - WH40KCyanMedicHelmet
 
 - type: loadoutGroup
   id: WH40KImperialMedicHonours
