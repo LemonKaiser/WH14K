@@ -389,6 +389,7 @@
 - type: entity
   parent: ClothingHeadHelmetFlakMed
   id: ClothingHeadHelmetFlakMedInquisition
+  name: Cyan Chirurgeon Flak Helmet
   suffix: WH40K, Инквизиция, BOOSTY
   components:
   - type: Sprite
