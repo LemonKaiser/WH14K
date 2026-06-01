@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Content.Client.Stylesheets.Fonts;
+using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Client.UserInterface.Controls;
@@ -13,9 +14,17 @@ namespace Content.Client.Stylesheets.Sheetlets;
 [CommonSheetlet]
 public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet, IButtonConfig, IIconConfig
 {
-    private static MutableSelectorElement CButton()
+    private static MutableSelectorElement CButton(string? shapeClass = null, string? toneClass = null)
     {
-        return E<MenuButton>();
+        var selector = E<MenuButton>();
+
+        if (!string.IsNullOrEmpty(shapeClass))
+            selector = selector.Class(shapeClass);
+
+        if (!string.IsNullOrEmpty(toneClass))
+            selector = selector.Class(toneClass);
+
+        return selector;
     }
 
     public override StyleRule[] GetRules(T sheet, object config)
@@ -51,32 +60,82 @@ public sealed class MenuButtonSheetlet<T> : Sheetlet<T> where T : PalettedStyles
 
         var rules = new List<StyleRule>
         {
-            CButton().Class(StyleClass.ButtonSquare).Box(topButtonSquare),
-            CButton().Class(StyleClass.ButtonOpenLeft).Box(topButtonOpenLeft),
-            CButton().Class(StyleClass.ButtonOpenRight).Box(topButtonOpenRight),
-            CButton().Box(StyleBoxHelpers.BaseStyleBox(sheet)),
+            CButton().Box(topButtonBase),
+            CButton(StyleClass.ButtonSquare).Box(topButtonSquare),
+            CButton(StyleClass.ButtonOpenLeft).Box(topButtonOpenLeft),
+            CButton(StyleClass.ButtonOpenRight).Box(topButtonOpenRight),
+            CButton(StyleClass.ButtonOpenLeft)
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonOpenLeft, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonOpenRight)
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonOpenRight, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonOpenBoth)
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal, cfg.ButtonPalette)),
+            CButton(StyleClass.ButtonSquare)
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonSquare, ButtonVisualState.Normal, cfg.ButtonPalette)),
             CButton()
-                .Class(StyleClass.ButtonOpenLeft)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.OpenLeftStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonOpenRight)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.OpenRightStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonOpenBoth)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.SquareStyleBox(sheet)),
-            CButton()
-                .Class(StyleClass.ButtonSquare)
-                .Prop(ContainerButton.StylePropertyStyleBox, StyleBoxHelpers.SquareStyleBox(sheet)),
+                .PseudoNormal()
+                .Box(MenuButtonStateBox(topButtonBase, ButtonVisualState.Normal, cfg.ButtonPalette)),
             E<Label>()
                 .Class(MenuButton.StyleClassLabelTopButton)
                 .Prop(Label.StylePropertyFont, sheet.BaseFont.GetFont(14, FontKind.Bold)),
-            // new StyleProperty(Label.StylePropertyFont, notoSansDisplayBold14),
         };
 
-        ButtonSheetlet<T>.MakeButtonRules<MenuButton>(rules, cfg.ButtonPalette, null);
-        ButtonSheetlet<T>.MakeButtonRules<MenuButton>(rules, cfg.PositiveButtonPalette, StyleClass.Positive);
-        ButtonSheetlet<T>.MakeButtonRules<MenuButton>(rules, cfg.NegativeButtonPalette, StyleClass.Negative);
+        AddMenuButtonStateRules(rules, topButtonBase, null, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonOpenLeft, StyleClass.ButtonOpenLeft, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonOpenRight, StyleClass.ButtonOpenRight, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonSquare, cfg.ButtonPalette);
+        AddMenuButtonStateRules(rules, topButtonSquare, StyleClass.ButtonOpenBoth, cfg.ButtonPalette);
+
+        AddMenuButtonToneRules(rules, topButtonBase, null, cfg.PositiveButtonPalette, StyleClass.Positive);
+        AddMenuButtonToneRules(rules, topButtonBase, null, cfg.NegativeButtonPalette, StyleClass.Negative);
 
         return rules.ToArray();
+    }
+
+    private static void AddMenuButtonToneRules(
+        List<StyleRule> rules,
+        StyleBoxTexture baseBox,
+        string? shapeClass,
+        ColorPalette palette,
+        string toneClass)
+    {
+        AddMenuButtonStateRules(rules, baseBox, shapeClass, palette, toneClass);
+    }
+
+    private static void AddMenuButtonStateRules(
+        List<StyleRule> rules,
+        StyleBoxTexture baseBox,
+        string? shapeClass,
+        ColorPalette palette,
+        string? toneClass = null)
+    {
+        rules.AddRange([
+            CButton(shapeClass, toneClass).PseudoNormal()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Normal, palette)),
+            CButton(shapeClass, toneClass).PseudoHovered()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Hovered, palette)),
+            CButton(shapeClass, toneClass).PseudoPressed()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Pressed, palette)),
+            CButton(shapeClass, toneClass).PseudoDisabled()
+                .Box(MenuButtonStateBox(baseBox, ButtonVisualState.Disabled, palette)),
+        ]);
+    }
+
+    private static StyleBoxTexture MenuButtonStateBox(StyleBoxTexture baseBox, ButtonVisualState state, ColorPalette palette)
+    {
+        var box = new StyleBoxTexture(baseBox);
+        box.Modulate = state switch
+        {
+            ButtonVisualState.Hovered => palette.HoveredElement,
+            ButtonVisualState.Pressed => palette.PressedElement,
+            ButtonVisualState.Disabled => palette.DisabledElement.WithAlpha(0.75f),
+            _ => palette.Element,
+        };
+
+        return box;
     }
 }

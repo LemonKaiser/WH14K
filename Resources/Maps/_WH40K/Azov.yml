@@ -104926,18 +104926,6 @@ entities:
     - type: Transform
       pos: 146.5,38.5
       parent: 2
-- proto: SpawnPointHVoxScout
-  entities:
-  - uid: 17450
-    components:
-    - type: Transform
-      pos: 160.5,36.5
-      parent: 2
-  - uid: 17451
-    components:
-    - type: Transform
-      pos: 161.5,36.5
-      parent: 2
 - proto: SpawnPointLatejoin
   entities:
   - uid: 17452
@@ -105016,6 +105004,13 @@ entities:
     - type: Transform
       pos: 5.5,46.5
       parent: 2
+- proto: SpawnPointVoxScout
+  entities:
+  - uid: 17472
+    components:
+    - type: Transform
+      pos: 9.5,47.5
+      parent: 2
 - proto: SpawnPointSergeant
   entities:
   - uid: 17464
@@ -105065,13 +105060,6 @@ entities:
     components:
     - type: Transform
       pos: 19.5,112.5
-      parent: 2
-- proto: SpawnPointVoxScout
-  entities:
-  - uid: 17472
-    components:
-    - type: Transform
-      pos: 9.5,47.5
       parent: 2
 - proto: SpawnPointWH40KChaplain
   entities:

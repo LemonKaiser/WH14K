@@ -143,8 +143,8 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KChaosKhorneRepulse
-  name: Клинок Чемпиона
-  description: Призовите варп-клинок для рукопашной бойни и ближнего пролома.
+  name: Клинок Избранного
+  description: Призовите геноклинок Кхорна для рукопашной бойни и ближнего пролома.
   components:
   - type: Action
     useDelay: 14
@@ -164,7 +164,7 @@
   parent: ActionSmoke
   id: ActionWH40KChaosNurgleMiasma
   name: Миазмы Нургла
-  description: Распространите чумной туман, чтобы затруднить обзор и задавить поле.
+  description: Создайте чумное облако и на время благословите лечением ближайших последователей Нургла.
   components:
   - type: Action
     useDelay: 180
@@ -185,7 +185,7 @@
   parent: BaseAction
   id: ActionWH40KChaosSlaaneshSwap
   name: Обмен Восторга
-  description: Хлестните ткань реальности и поменяйтесь местами с выбранной целью.
+  description: На 5 секунд обменяйтесь позициями с вражеской имперской целью; затем обоих вернет назад.
   components:
   - type: Action
     useDelay: 18
@@ -299,6 +299,7 @@
     requireWarpRole: true
     allowPsykerRole: true
     allowChaosRole: false
+    requireAliveTarget: true
 
 - type: entity
   parent: BaseAction
@@ -325,7 +326,7 @@
   parent: ActionFireballII
   id: ActionWH40KChaosWarpBlastSurge
   name: Всплеск варп-взрыва
-  description: Выпустите перегруженный варп-взрыв с сокрушительной силой.
+  description: Выпустите нестабильный варп-взрыв с повышенной ценой энергии и риском нестабильности.
   components:
   - type: Action
     useDelay: 60
@@ -438,7 +439,7 @@
   parent: BaseAction
   id: ActionWH40KChaosSlaaneshMiasma
   name: Экстатический Хор
-  description: Влейте в ближайших культистов Слаанеш стимуляторы и боевую мед-химию.
+  description: Влейте в ближайших последователей Слаанеш стимуляторы и боевую мед-химию.
   components:
   - type: Action
     useDelay: 26
@@ -458,7 +459,7 @@
   parent: BaseAction
   id: ActionWH40KChaosTzeentchMindTwist
   name: Заговор Перемен
-  description: На 30 секунд ускорьте и просветите ближайших культистов Тзинча, а избранным дайте ускорение откатов.
+  description: На 30 секунд ускорьте ближайших последователей Тзинча, ослабьте их откаты и снимите пелену обзора.
   components:
   - type: Action
     useDelay: 30
@@ -478,7 +479,7 @@
   parent: BaseAction
   id: ActionWH40KChaosKhorneBloodstorm
   name: Кровавый Натиск
-  description: Рванитесь сквозь строй, сбивая и оглушая всех, кого заденете.
+  description: Рванитесь сквозь строй, раня, сбивая и оглушая всех, кого заденете.
   components:
   - type: Action
     useDelay: 180
@@ -590,7 +591,7 @@
   parent: BaseAction
   id: ActionWH40KChaosSlaaneshArena
   name: Арена Экстаза
-  description: Притяните цель к себе, оглушите обоих и замкните дуэль в краткой варп-арене.
+  description: Притяните вражескую имперскую цель к себе, оглушите обоих и замкните дуэль в краткой варп-арене.
   components:
   - type: Action
     useDelay: 90
@@ -619,7 +620,7 @@
   parent: BaseAction
   id: ActionWH40KChaosLeaderSacrifice
   name: Пепельная Жертва
-  description: Мгновенно обратите своего последователя того же пантеона в пепел, восстановите 100 энергии Варпа и дайте культу 100 XP.
+  description: После начала штурма обратите не-лидера того же покровителя в пепел, восстановите 100 энергии Варпа и дайте культу 100 XP.
   components:
   - type: Action
     useDelay: 300

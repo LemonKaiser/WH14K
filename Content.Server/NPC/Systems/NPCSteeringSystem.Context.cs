@@ -347,24 +347,11 @@ public sealed partial class NPCSteeringSystem
             if (TryApplyPendingPathDirectMove(uid, steering, xform, ourMap, direction, offsetRot, interest))
                 return true;
 
-            LogSteeringStall(
-                uid,
-                steering,
-                xform,
-                "waiting-for-path",
-                $"first path is still pending and local direct step is blocked; targetDistance={targetDistance:0.00}");
-
             return true;
         }
 
         if (moveSpeed == 0f || direction == Vector2.Zero)
         {
-            LogSteeringStall(
-                uid,
-                steering,
-                xform,
-                "zero-speed-or-direction",
-                $"speed={moveSpeed:0.00} direction={direction}");
             steering.Status = SteeringStatus.NoPath;
             return false;
         }
@@ -419,15 +406,6 @@ public sealed partial class NPCSteeringSystem
         }
 
         steering.PendingPathDirectMoveTicks++;
-        if (steering.PendingPathDirectMoveTicks == 1)
-        {
-            LogSteeringStall(
-                uid,
-                steering,
-                xform,
-                "path-pending-direct-step",
-                $"path is pending with no queued polys; using clear local step probe={probeDistance:0.00}");
-        }
 
         ApplySeek(interest, offsetRot.RotateVec(normal), 0.75f);
         return true;

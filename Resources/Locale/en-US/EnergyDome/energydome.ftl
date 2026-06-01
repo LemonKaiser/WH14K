@@ -2,6 +2,8 @@ energy-dome-recharging = Recharging...
 energy-dome-no-power = Low battery
 energy-dome-no-cell = There is no power source
 energy-dome-interference = Another active shield field blocks activation
+energy-dome-must-be-worn = The shield generator must be worn in a matching equipment slot.
+energy-dome-worn-conflict = The worn shield generators overload each other and shut down.
 
 energy-dome-on-examine-is-on-message = The energy barrier is [color=darkgreen]up[/color].
 energy-dome-on-examine-is-off-message = The energy barrier is [color=darkred]down[/color].

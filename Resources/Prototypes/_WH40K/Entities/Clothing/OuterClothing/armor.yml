@@ -188,7 +188,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvestadvheresy.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorMunitorumRig
   suffix: WH40K, Munitorum
   components:
@@ -198,7 +198,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/munitorum_rig.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorMunitorumVest
   suffix: WH40K, Munitorum
   components:

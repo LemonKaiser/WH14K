@@ -250,6 +250,9 @@
     minBaseLevel: 1
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRoot]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeWeaponLaserLasgun, WH40KRecipeLasgunPowerCell, WH40KRecipeChainsword, WH40KRecipeAmmoAutogun, WH40KRecipeAmmo10mm, WH40KRecipeAmmo10mmLong, WH40KRecipeAmmoLethalshot]
+      Heretics: [WH40KRecipeWeaponHereticLaserLasgun, WH40KRecipeLasgunPowerCell, WH40KRecipeChaosMachete, WH40KRecipeAmmoAutogun, WH40KRecipeAmmo10mm, WH40KRecipeAmmo10mmLong, WH40KRecipeAmmoLethalshot]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumChainsword, WH40KImperiumAmmo10mmLong, WH40KImperiumAmmo10mm, WH40KImperiumAmmoAutogun, WH40KImperiumMortar, WH40KImperiumMortarHE, WH40KImperiumMortarFlare, WH40KImperiumMortarSmoke, WH40KImperiumMortarIncendiary, WH40KImperiumMortarEMP]
       Heretics: [WH40KHereticsMachete, WH40KHereticsMortar, WH40KHereticsMortarHE, WH40KHereticsMortarFlare, WH40KHereticsMortarSmoke, WH40KHereticsMortarIncendiary, WH40KHereticsMortarEMP]
@@ -262,6 +265,9 @@
     minBaseLevel: 2
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft2]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeWeaponStubRifle, WH40KRecipeWeaponStubSMG2, WH40KRecipeWeaponStubSMG3, WH40KRecipeWeaponStubShotgun]
+      Heretics: [WH40KRecipeWeaponStubRifle, WH40KRecipeWeaponChsStubSMG2, WH40KRecipeWeaponChsStubSMG3, WH40KRecipeWeaponChsStubShotgun]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSmg, WH40KImperiumStubSMG, WH40KImperiumStubSMG3, WH40KImperiumStubMG, WH40KImperiumStubRifle, WH40KImperiumStubShotgun, WH40KImperiumStubLMG, WH40KImperiumMagazineSMG, WH40KImperiumMagazineSMG3, WH40KImperiumMagazinePistol, WH40KImperiumMagazineMG, WH40KImperiumMagazineLMG, WH40KImperiumMagazineCombatShotgun, WH40KImperiumMagazineRifle, WH40KImperiumShotgunShells]
       Heretics: [WH40KHereticsSmg, WH40KHereticsStubSMG, WH40KHereticsStubSMG3, WH40KHereticsStubMG, WH40KHereticsStubRifle, WH40KHereticsStubShotgun, WH40KHereticsStubLMG, WH40KHereticsMagazineSMG, WH40KHereticsMagazineSMG3, WH40KHereticsMagazineHevStubPistol, WH40KHereticsMagazinePistol, WH40KHereticsMagazineMG, WH40KHereticsMagazineLMG, WH40KHereticsMagazineCombatShotgun, WH40KHereticsMagazineRifle, WH40KHereticsShotgunShells]
@@ -274,6 +280,9 @@
     minBaseLevel: 2
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight2]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeWeaponLaserPlasmagun, WH40KRecipePlasmGunPowerCell, WH40KRecipePlasmPistolPowerCell]
+      Heretics: [WH40KRecipeWeaponLaserPlasmaPistol, WH40KRecipePlasmGunPowerCell, WH40KRecipePlasmPistolPowerCell]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
       Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell]
@@ -286,6 +295,9 @@
     minBaseLevel: 3
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft3]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeWeaponLaserLasgunAccatran, WH40KRecipeAccatranPowerCell, WH40KRecipeWeaponRifleBolter, WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade]
+      Heretics: [WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel, WH40KImperiumBolter, WH40KImperiumMagazineBolter, WH40KImperiumMagazineBolterPistol, WH40KImperiumLauncherCadia, WH40KImperiumGrenadeFrag]
       Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel, WH40KHereticsBolterPistol, WH40KHereticsMagazineBolter, WH40KHereticsMagazineBolterPistol, WH40KHereticsLauncherChs, WH40KHereticsGrenadeFrag]
@@ -298,6 +310,9 @@
     minBaseLevel: 3
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight3]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeHeavyBolter, WH40KRecipeMagazineHeavyBolter, WH40KRecipeWeaponLaserMeltagun, WH40KRecipeMeltPowerCell, WH40KRecipeWeaponLaserLasgunVoss, WH40KRecipePowerCellVoss]
+      Heretics: [WH40KRecipeHeavyBolter, WH40KRecipeMagazineHeavyBolter, WH40KRecipeWeaponLaserMeltagun, WH40KRecipeMeltPowerCell]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank, WH40KImperiumStubRevolver, WH40KImperiumSpeedLoader11mm, WH40KImperiumLondoronMk2Aquila, WH40KImperiumMagazineLondoronMk2, WH40KImperiumAmmoLondoronMk2]
       Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank,  WH40KHereticsStubRevolver, WH40KHereticsSpeedLoader11mm, WH40KHereticsLondoronMk2Vengeance, WH40KHereticsMagazineLondoronMk2, WH40KHereticsAmmoLondoronMk2]
@@ -310,6 +325,9 @@
     minBaseLevel: 4
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft4]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeWeaponHellgun, WH40KRecipeHellgunPowerPack]
+      Heretics: [WH40KRecipeWeaponHellgun, WH40KRecipeHellgunPowerPack]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSentryTurretDmr, WH40KImperiumHellgun, WH40KImperiumHellgunPowerPack, WH40KImperiumGrenadeBlast, WH40KImperiumLascannon, WH40KImperiumMagazineLascannon]
       Heretics: [WH40KHereticsSentryTurretDmr, WH40KHereticsHellgun, WH40KHereticsHellgunPowerPack, WH40KHereticsGrenadeBlast, WH40KHereticsLascannon, WH40KHereticsMagazineLascannon]
@@ -358,6 +376,9 @@
     minBaseLevel: 2
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthLeft2]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeInflatableCoverKitImperium, WH40KRecipeBarricadeBars, WH40KRecipeBarricadeBoarded, WH40KRecipeBarricadeWarhammer, WH40KRecipeBarricadeSandbags, WH40KRecipeBarricadeHedgehog, WH40KRecipeBarbedWire, WH40KRecipeMineExplosive]
+      Heretics: [WH40KRecipeInflatableCoverKitHeretics, WH40KRecipeBarricadeBars, WH40KRecipeBarricadeBoarded, WH40KRecipeBarricadeChaosGreen, WH40KRecipeBarricadeChaosBlack, WH40KRecipeBarricadeSandbags, WH40KRecipeBarricadeHedgehog, WH40KRecipeBarbedWire, WH40KRecipeMineExplosive]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumInflatableCoverKit, WH40KImperiumBarricadeBars, WH40KImperiumBarricadeBoarded, WH40KImperiumBarricadeWarhammer, WH40KImperiumBarricadeSandbags, WH40KImperiumBarricadeHedgehog, WH40KImperiumBarbedWire, WH40KImperiumMineExplosive]
       Heretics: [WH40KHereticsInflatableCoverKit, WH40KHereticsBarricadeBars, WH40KHereticsBarricadeBoarded, WH40KHereticsBarricadeChaosGreen, WH40KHereticsBarricadeChaosBlack, WH40KHereticsBarricadeSandbags, WH40KHereticsBarricadeHedgehog, WH40KHereticsBarbedWire, WH40KHereticsMineExplosive]
@@ -370,6 +391,9 @@
     minBaseLevel: 2
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRight2]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeMissionPinpointerKitImperium, WH40KRecipeFragGrenade]
+      Heretics: [WH40KRecipeMissionPinpointerKitHeretics, WH40KRecipeFragGrenade]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumFrag]
       Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsFrag]
@@ -382,6 +406,9 @@
     minBaseLevel: 3
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthLeft3]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeIntelDetectorImperium, WH40KRecipeCarapaceArmor, WH40KRecipeCarapaceHelmet]
+      Heretics: [WH40KRecipeIntelDetectorHeretics, WH40KRecipeHereticCarapaceArmor, WH40KRecipeHereticCarapaceHelmet]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumIntelDetector, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet]
       Heretics: [WH40KHereticsIntelDetector, WH40KHereticsCarapaceArmor, WH40KHereticsCarapaceHelmet]
@@ -394,6 +421,9 @@
     minBaseLevel: 3
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRight3]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeTacticalWhistleImperium, WH40KRecipeServoSkull, WH40KRecipeKrakGrenade]
+      Heretics: [WH40KRecipeTacticalWhistleHeretics, WH40KRecipeServoSkull, WH40KRecipeKrakGrenade]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumTacticalWhistle, WH40KImperiumServoSkull, WH40KImperiumKrak]
       Heretics: [WH40KHereticsTacticalWhistle, WH40KHereticsServoSkull, WH40KHereticsKrak]
@@ -406,6 +436,9 @@
     minBaseLevel: 4
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthLeft4]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeSignalFlareImperium]
+      Heretics: [WH40KRecipeSignalFlareHeretics]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSignalFlare, WH40KImperiumCloningSuite, WH40KImperiumGorjet]
       Heretics: [WH40KHereticsSignalFlare, WH40KHereticsNecklaceChaosCultistReflectWeak]
@@ -418,6 +451,9 @@
     minBaseLevel: 4
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRight4]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeMeltaGrenade]
+      Heretics: [WH40KRecipeMeltaGrenade]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumMeltaGrenade]
       Heretics: [WH40KHereticsMeltaGrenade]
@@ -430,6 +466,9 @@
     minBaseLevel: 5
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthCap]
+    teamLatheRecipeUnlocks:
+      Imperium: [WH40KRecipeTacticalFultonImperium]
+      Heretics: [WH40KRecipeTacticalFultonHeretics]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumTacticalFulton]
       Heretics: [WH40KHereticsTacticalFulton]

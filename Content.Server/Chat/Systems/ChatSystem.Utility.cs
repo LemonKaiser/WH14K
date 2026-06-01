@@ -131,12 +131,17 @@ public sealed partial class ChatSystem
         return prefix + newMessage;
     }
 
-    private string SanitizeInGameOOCMessage(string message)
+    private string SanitizeInGameOOCMessage(string message, ChatSelectChannel emojiChannel)
     {
-        var newMessage = message.Trim();
+        var newMessage = ApplyEmojiPolicy(message.Trim(), emojiChannel);
         newMessage = FormattedMessage.EscapeText(newMessage);
 
         return newMessage;
+    }
+
+    private string ApplyEmojiPolicy(string message, ChatSelectChannel channel)
+    {
+        return ChatEmoji.ApplyPolicy(message, channel, _emojiAllowedChannels);
     }
 
     public string TransformSpeech(EntityUid sender, string message)

@@ -150,7 +150,7 @@
   - WH40KImperialMedicHead
   - WH40KImperialLineMask
   - WH40KImperialMedicHonours
-  - WH40KImperialFieldOuter
+  - WH40KImperialMedicOuter
   - WH40KImperialFieldBelt
   - WH40KImperialLineUniform
   - WH40KImperialLineHands
@@ -259,6 +259,7 @@
   - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
   - WH40KImperialColonelSidearm
+  - WH40KImperialColonelMainWeapon
   - WH40KImperialCommandMelee
 
 - type: roleLoadout
@@ -332,22 +333,6 @@
   - WH40KHereticLineUniform
   - WH40KHereticLineOuter
   - WH40KHereticLineMask
-  - WH40KHereticLineHands
-  - WH40KHereticLineFeet
-  - WH40KHereticFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
-
-- type: roleLoadout
-  id: JobHVoxScout
-  groups:
-  - WH40KHereticGameBuns
-  - WH40KHereticLineHead
-  - WH40KHereticLineEyes
-  - WH40KHereticLineUniform
-  - WH40KHereticLineMask
-  - WH40KHereticLineOuter
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
@@ -447,7 +432,7 @@
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
   - WH40KHeresiarchMelee
-  - WH40KHereticMainWeapon
+  - WH40KHeresiarchMainWeapon
   - WH40KHereticCmdSecondaryWeapon
 
 - type: roleLoadout

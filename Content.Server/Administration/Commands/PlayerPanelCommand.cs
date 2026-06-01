@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.EUI;
+using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;
@@ -10,6 +11,7 @@ namespace Content.Server.Administration.Commands;
 public sealed partial class PlayerPanelCommand : LocalizedCommands
 {
     [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private EuiManager _euis = default!;
     [Dependency] private IPlayerManager _players = default!;
 
@@ -34,6 +36,16 @@ public sealed partial class PlayerPanelCommand : LocalizedCommands
         if (queriedPlayer == null)
         {
             shell.WriteError(Loc.GetString("cmd-playerpanel-invalid-player"));
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                admin,
+                queriedPlayer.UserId,
+                Loc.GetString("admin-hierarchy-action-open-player-panel"),
+                queriedPlayer.Username,
+                shell.WriteError))
+        {
             return;
         }
 

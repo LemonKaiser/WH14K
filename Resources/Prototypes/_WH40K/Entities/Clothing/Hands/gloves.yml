@@ -87,6 +87,7 @@
       - state: inhand-right
   - type: Clothing
     sprite: _WH40K/Clothing/Hands/Gloves/gloves_fingerless_cult.rsi
+  - type: Insulated
 
 - type: entity
   parent: ClothingHandsBase

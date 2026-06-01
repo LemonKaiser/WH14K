@@ -114,7 +114,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Coats/munitorum_coat.rsi
 
 - type: entity
-  parent: ClothingOuterArmorFlakVestLight
+  parent: ClothingOuterArmorFlakVest
   id: ClothingOuterArmorMunitorumGreatcoat
   suffix: WH40K, Munitorum
   components:

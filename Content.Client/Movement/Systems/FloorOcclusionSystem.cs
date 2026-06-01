@@ -13,24 +13,27 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
     [Dependency] private IPrototypeManager _proto = default!;
 
     [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+    private ShaderInstance _horizontalCutShader = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        _horizontalCutShader = _proto.Index(HorizontalCut).Instance();
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentStartup>(OnOcclusionStartup);
         SubscribeLocalEvent<FloorOcclusionComponent, ComponentShutdown>(OnOcclusionShutdown);
         SubscribeLocalEvent<FloorOcclusionComponent, AfterAutoHandleStateEvent>(OnOcclusionAuto);
+        SubscribeLocalEvent<FloorOcclusionComponent, MoveEvent>(OnOcclusionMove);
     }
 
     private void OnOcclusionAuto(Entity<FloorOcclusionComponent> ent, ref AfterAutoHandleStateEvent args)
     {
-        SetShader(ent.Owner, ent.Comp.Enabled);
+        SetShader(ent.Owner, ShouldApplyOcclusion(ent));
     }
 
     private void OnOcclusionStartup(Entity<FloorOcclusionComponent> ent, ref ComponentStartup args)
     {
-        SetShader(ent.Owner, ent.Comp.Enabled);
+        SetShader(ent.Owner, ShouldApplyOcclusion(ent));
     }
 
     private void OnOcclusionShutdown(Entity<FloorOcclusionComponent> ent, ref ComponentShutdown args)
@@ -40,7 +43,12 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 
     protected override void SetEnabled(Entity<FloorOcclusionComponent> entity)
     {
-        SetShader(entity.Owner, entity.Comp.Enabled);
+        SetShader(entity.Owner, ShouldApplyOcclusion(entity));
+    }
+
+    private void OnOcclusionMove(Entity<FloorOcclusionComponent> ent, ref MoveEvent args)
+    {
+        SetShader(ent.Owner, ShouldApplyOcclusion(ent));
     }
 
     private void SetShader(Entity<SpriteComponent?> sprite, bool enabled)
@@ -48,18 +56,15 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
         if (!_spriteQuery.Resolve(sprite.Owner, ref sprite.Comp, false))
             return;
 
-        var shader = _proto.Index(HorizontalCut).Instance();
-
-        if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
-            return;
-
         if (enabled)
         {
-            sprite.Comp.PostShader = shader;
+            if (sprite.Comp.PostShader is null || sprite.Comp.PostShader == _horizontalCutShader)
+                sprite.Comp.PostShader = _horizontalCutShader;
         }
         else
         {
-            sprite.Comp.PostShader = null;
+            if (sprite.Comp.PostShader == _horizontalCutShader)
+                sprite.Comp.PostShader = null;
         }
     }
 }

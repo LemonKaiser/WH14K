@@ -154,13 +154,6 @@
 
 - type: entity
   parent: StandardDogTag
-  id: HVoxScoutDogTag
-  components:
-  - type: PresetIdCard
-    job: HVoxScout
-
-- type: entity
-  parent: StandardDogTag
   id: HColonelDogTag
   components:
   - type: PresetIdCard

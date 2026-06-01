@@ -10,11 +10,13 @@ namespace Content.Shared.Atmos;
 [ByRefEvent]
 public sealed class GetFireProtectionEvent : EntityEventArgs, IInventoryRelayEvent
 {
+    private const float MinimumDamageMultiplier = 0.05f;
+
     public SlotFlags TargetSlots { get; } = ~SlotFlags.POCKET;
 
     /// <summary>
     /// What to multiply the fire damage by.
-    /// If this is 0 then it's ignored
+    /// Fire protection can no longer reduce this to 0 so burning always has an effect.
     /// </summary>
     public float Multiplier;
 
@@ -29,6 +31,6 @@ public sealed class GetFireProtectionEvent : EntityEventArgs, IInventoryRelayEve
     public void Reduce(float by)
     {
         Multiplier -= by;
-        Multiplier = MathF.Max(Multiplier, 0f);
+        Multiplier = Math.Clamp(Multiplier, MinimumDamageMultiplier, 1f);
     }
 }

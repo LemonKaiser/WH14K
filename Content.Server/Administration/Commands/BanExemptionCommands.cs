@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
@@ -9,6 +10,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Ban)]
 public sealed partial class BanExemptionUpdateCommand : LocalizedCommands
 {
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IServerDbManager _dbManager = default!;
     [Dependency] private IPlayerLocator _playerLocator = default!;
 
@@ -40,6 +42,16 @@ public sealed partial class BanExemptionUpdateCommand : LocalizedCommands
         if (playerData == null)
         {
             shell.WriteError(LocalizationManager.GetString("cmd-ban_exemption_update-locate", ("player", player)));
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                playerData.UserId,
+                Loc.GetString("admin-hierarchy-action-ban-exemption-update"),
+                playerData.Username,
+                shell.WriteLine))
+        {
             return;
         }
 

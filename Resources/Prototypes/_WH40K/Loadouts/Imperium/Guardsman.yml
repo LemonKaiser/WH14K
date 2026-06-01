@@ -29,6 +29,11 @@
     outerClothing: ClothingOuterArmorFlakVestLight
 
 - type: loadout
+  id: WH40KMedicFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestMed
+
+- type: loadout
   id: WH40KCyanLightFlakArmor
   equipment:
     outerClothing: ClothingOuterArmorFlakVestLightCyan

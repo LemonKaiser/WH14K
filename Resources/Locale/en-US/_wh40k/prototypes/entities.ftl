@@ -1308,14 +1308,14 @@ ent-ActionWH40KChaosWarpKnock = Defiled Breach
 ent-ActionWH40KChaosUndividedBlink = Step of the Undivided
     .desc = Instantly move to the selected point through the Warp.
 
-ent-ActionWH40KChaosKhorneRepulse = Champion's Blade
-    .desc = Summon a warp blade for close-quarters carnage and melee breaching.
+ent-ActionWH40KChaosKhorneRepulse = Chosen Blade
+    .desc = Summon Khorne's geneblade for close-quarters carnage and melee breaching.
 
 ent-ActionWH40KChaosNurgleMiasma = Miasma of Nurgle
-    .desc = Spread a plague cloud; Nurgle followers inside it are healed.
+    .desc = Spread a plague cloud and temporarily heal nearby Nurgle followers.
 
 ent-ActionWH40KChaosSlaaneshSwap = Exchange of Ecstasy
-    .desc = Lash the fabric of reality and swap positions with a chosen target.
+    .desc = Swap positions with an enemy Imperium target for 5 seconds, then both of you return.
 
 ent-ActionWH40KChaosTzeentchBarrier = Barrier of Tzeentch
     .desc = Form a short-lived wall of mutating Warp strands.
@@ -1324,7 +1324,7 @@ ent-ActionWH40KChaosTzeentchFireball = Inferno of Tzeentch
     .desc = Unleash a powerful bolt of shifting flame with a long cooldown.
 
 ent-ActionWH40KChaosWarpBlastSurge = Warp Blast Surge
-    .desc = Unleash an overcharged warp blast with devastating force.
+    .desc = Unleash an unstable warp blast with a higher energy cost and instability risk.
 
 ent-ActionWH40KChaosWarpRiftStep = Rift Step
     .desc = Instantly move to the selected point through a short Warp rift.
@@ -1339,13 +1339,13 @@ ent-ActionWH40KChaosNurgleRepulse = Acid Spit
     .desc = Spit a concentrated glob of caustic bile that burns through flesh and armour.
 
 ent-ActionWH40KChaosSlaaneshMiasma = Ecstatic Chorus
-    .desc = Infuse nearby Slaanesh cultists with stimulants and combat chem.
+    .desc = Infuse nearby Slaanesh followers with stimulants and combat medicine.
 
 ent-ActionWH40KChaosTzeentchMindTwist = Conspiracy of Change
-    .desc = Speed up nearby Tzeentch followers for a short time; chosen ones also get reduced cooldowns.
+    .desc = For 30 seconds, speed up nearby Tzeentch followers, reduce their cooldowns, and lift their vision veil.
 
 ent-ActionWH40KChaosKhorneBloodstorm = Bloody Onslaught
-    .desc = Charge through the ranks, knocking down and stunning everyone in your path.
+    .desc = Charge through the ranks, damaging, knocking down, and stunning everyone in your path.
 
 ent-ActionWH40KChaosKhorneGroxMorph = Grox Form
     .desc = Transform into a raging grox for a brief window of blood-mad fury.
@@ -1360,10 +1360,10 @@ ent-ActionWH40KChaosTzeentchWarpRewrite = Weaver's Dash
     .desc = Instantly move to the selected point, escaping danger or changing your angle of attack.
 
 ent-ActionWH40KChaosSlaaneshArena = Arena of Ecstasy
-    .desc = Pull a target to you, stun both combatants, and seal the duel in a brief warp arena.
+    .desc = Pull an enemy Imperium target to you, stun both combatants, and seal the duel in a brief warp arena.
 
 ent-ActionWH40KChaosLeaderSacrifice = Ashen Sacrifice
-    .desc = Instantly turn your follower of the same pantheon to ash, restore 100 Warp energy, and grant the cult 100 XP.
+    .desc = After the assault phase begins, turn a non-leader follower of the same patron to ash, restore 100 Warp energy, and grant the cult 100 XP.
 
 ent-ActionWH40KOpenSquadConsole = Squad Command
     .desc = Open the squad command interface and assign your team's fighters.

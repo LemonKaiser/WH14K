@@ -49,14 +49,18 @@ public sealed partial class ChatSystem
 
         name = FormattedMessage.EscapeText(name);
 
+        var speechVerbLocKey = _random.Pick(speech.SpeechVerbStrings);
+
         var wrappedMessage = Loc.GetString(speech.Bold ? "chat-manager-entity-say-bold-wrap-message" : "chat-manager-entity-say-wrap-message",
             ("entityName", name),
-            ("verb", Loc.GetString(_random.Pick(speech.SpeechVerbStrings))),
+            ("verb", Loc.GetString(speechVerbLocKey)),
             ("fontType", speech.FontId),
             ("fontSize", speech.FontSize),
             ("message", FormattedMessage.EscapeText(message)));
 
-        SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range);
+        var translatedSpeak = TryDispatchTranslatedEntitySpeak(source, message, wrappedMessage, speech, speechVerbLocKey, name, range);
+        if (!translatedSpeak)
+            SendInVoiceRange(ChatChannel.Local, message, wrappedMessage, source, range);
 
         var ev = new EntitySpokeEvent(source, message, null, null);
         RaiseLocalEvent(source, ev, true);
@@ -128,29 +132,43 @@ public sealed partial class ChatSystem
         var wrappedUnknownMessage = Loc.GetString("chat-manager-entity-whisper-unknown-wrap-message",
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
+        var translatedWhisper = TryDispatchTranslatedEntityWhisper(
+            source,
+            message,
+            obfuscatedMessage,
+            wrappedMessage,
+            wrappedobfuscatedMessage,
+            wrappedUnknownMessage,
+            range,
+            channel,
+            name,
+            nameIdentity);
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
+        if (!translatedWhisper)
         {
-            EntityUid listener;
+            DispatchWhisperRecipients(
+                source,
+                message,
+                obfuscatedMessage,
+                wrappedMessage,
+                wrappedobfuscatedMessage,
+                wrappedUnknownMessage,
+                range,
+                channel,
+                null,
+                name,
+                nameIdentity,
+                null);
 
-            if (session.AttachedEntity is not { Valid: true } playerEntity)
-                continue;
-            listener = session.AttachedEntity.Value;
-
-            if (MessageRangeCheck(session, data, range) != MessageRangeCheckResult.Full)
-                continue; // Won't get logged to chat, and ghosts are too far away to see the pop-up, so we just won't send it to them.
-
-            if (data.Range <= WhisperClearRange || data.Observer)
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, message, wrappedMessage, source, false, session.Channel);
-            //If listener is too far, they only hear fragments of the message
-            else if (_examineSystem.InRangeUnOccluded(source, listener, WhisperMuffledRange))
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedobfuscatedMessage, source, false, session.Channel);
-            //If listener is too far and has no line of sight, they can't identify the whisperer's identity
-            else
-                _chatManager.ChatMessageToOne(ChatChannel.Whisper, obfuscatedMessage, wrappedUnknownMessage, source, false, session.Channel);
+            _replay.RecordServerMessage(new ChatMessage(
+                ChatChannel.Whisper,
+                message,
+                wrappedMessage,
+                GetNetEntity(source),
+                null,
+                MessageRangeHideChatForReplay(range),
+                speechTransport: channel == null ? ChatSpeechTransport.Direct : ChatSpeechTransport.Radio));
         }
-
-        _replay.RecordServerMessage(new ChatMessage(ChatChannel.Whisper, message, wrappedMessage, GetNetEntity(source), null, MessageRangeHideChatForReplay(range)));
 
         var ev = new EntitySpokeEvent(source, message, channel, obfuscatedMessage);
         RaiseLocalEvent(source, ev, true);
@@ -228,7 +246,11 @@ public sealed partial class ChatSystem
             ("entityName", name),
             ("message", FormattedMessage.EscapeText(message)));
 
-        SendInVoiceRange(ChatChannel.LOOC, message, wrappedMessage, source, hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal, player.UserId);
+        var range = hideChat ? ChatTransmitRange.HideChat : ChatTransmitRange.Normal;
+        var translatedLooc = TryDispatchTranslatedLooc(source, message, wrappedMessage, range, player.UserId, name);
+        if (!translatedLooc)
+            SendInVoiceRange(ChatChannel.LOOC, message, wrappedMessage, source, range, player.UserId);
+
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"LOOC from {source}: {message}");
     }
 
@@ -253,6 +275,9 @@ public sealed partial class ChatSystem
                 ("message", FormattedMessage.EscapeText(message)));
             _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Dead chat from {source}: {message}");
         }
+
+        if (TryDispatchTranslatedDeadChat(source, player, message, wrappedMessage, hideChat, _adminManager.IsAdmin(player), playerName))
+            return;
 
         _chatManager.ChatMessageToMany(ChatChannel.Dead, message, wrappedMessage, source, hideChat, true, clients.ToList(), author: player.UserId);
     }

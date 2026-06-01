@@ -22,4 +22,7 @@ public sealed partial class WH40KWarpActionCostComponent : Component
 
     [DataField("allowChaosRole"), AutoNetworkedField]
     public bool AllowChaosRole = true;
+
+    [DataField("requireAliveTarget"), AutoNetworkedField]
+    public bool RequireAliveTarget;
 }

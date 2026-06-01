@@ -33,7 +33,6 @@ job-name-hsergeant = избранный Хаоса
 job-name-hspecialist-hws = специалист ОТВ Скверны
 job-name-hspecialist-sws = специалист ОСВ Скверны
 job-name-hguardsman = культист
-job-name-hvox-scout = вокс-оператор еретиков
 job-name-hband-supplier = контрабандист
 job-name-hmagos = магос-еретех
 job-name-hexplorator = эксплоратор-еретех

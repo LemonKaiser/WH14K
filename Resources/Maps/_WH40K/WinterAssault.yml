@@ -54703,7 +54703,6 @@ entities:
   - uid: 6536
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 96.5,-109.5
       parent: 2
 - proto: ClockworkWindow
@@ -72915,7 +72914,6 @@ entities:
   - uid: 9793
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 128.5,-207.5
       parent: 2
   - uid: 9794
@@ -72926,7 +72924,6 @@ entities:
   - uid: 9795
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 131.5,-204.5
       parent: 2
   - uid: 9796
@@ -72937,13 +72934,11 @@ entities:
   - uid: 9797
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 131.5,-228.5
       parent: 2
   - uid: 9798
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 132.5,-228.5
       parent: 2
   - uid: 9799
@@ -72954,7 +72949,6 @@ entities:
   - uid: 9800
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 141.5,-224.5
       parent: 2
   - uid: 9801
@@ -72970,7 +72964,6 @@ entities:
   - uid: 9803
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 141.5,-207.5
       parent: 2
   - uid: 9804
@@ -72981,7 +72974,6 @@ entities:
   - uid: 9805
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 289.5,-225.5
       parent: 2
   - uid: 9806
@@ -72992,37 +72984,31 @@ entities:
   - uid: 9807
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 284.5,-226.5
       parent: 2
   - uid: 9808
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 284.5,-227.5
       parent: 2
   - uid: 9809
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 281.5,-227.5
       parent: 2
   - uid: 9810
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 282.5,-225.5
       parent: 2
   - uid: 9811
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 283.5,-225.5
       parent: 2
   - uid: 9812
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 290.5,-232.5
       parent: 2
   - uid: 9813
@@ -73033,19 +73019,16 @@ entities:
   - uid: 9814
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 291.5,-234.5
       parent: 2
   - uid: 9815
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 284.5,-234.5
       parent: 2
   - uid: 9816
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 283.5,-232.5
       parent: 2
   - uid: 9817
@@ -73071,31 +73054,26 @@ entities:
   - uid: 9821
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 275.5,-225.5
       parent: 2
   - uid: 9822
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 276.5,-227.5
       parent: 2
   - uid: 9823
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: 276.5,-234.5
       parent: 2
   - uid: 9824
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 274.5,-234.5
       parent: 2
   - uid: 9825
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
       pos: 274.5,-233.5
       parent: 2
 - proto: GrilleDiagonal
@@ -111368,18 +111346,6 @@ entities:
     - type: Transform
       pos: 166.5,-290.5
       parent: 2
-- proto: SpawnPointHVoxScout
-  entities:
-  - uid: 16617
-    components:
-    - type: Transform
-      pos: 210.5,-285.5
-      parent: 2
-  - uid: 16618
-    components:
-    - type: Transform
-      pos: 208.5,-286.5
-      parent: 2
 - proto: SpawnPointLatejoin
   entities:
   - uid: 16619
@@ -111463,6 +111429,18 @@ entities:
     - type: Transform
       pos: 82.5,-54.5
       parent: 2
+- proto: SpawnPointVoxScout
+  entities:
+  - uid: 16642
+    components:
+    - type: Transform
+      pos: 79.5,-54.5
+      parent: 2
+  - uid: 16643
+    components:
+    - type: Transform
+      pos: 76.5,-51.5
+      parent: 2
 - proto: SpawnPointSergeant
   entities:
   - uid: 16632
@@ -111515,18 +111493,6 @@ entities:
     components:
     - type: Transform
       pos: 25.5,-10.5
-      parent: 2
-- proto: SpawnPointVoxScout
-  entities:
-  - uid: 16642
-    components:
-    - type: Transform
-      pos: 79.5,-54.5
-      parent: 2
-  - uid: 16643
-    components:
-    - type: Transform
-      pos: 76.5,-51.5
       parent: 2
 - proto: SpawnPointWH40KChaplain
   entities:

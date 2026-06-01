@@ -34,7 +34,6 @@ job-description-hsergeant = Command the renegade squad and maintain offensive te
 job-description-hspecialist-hws = Deploy heretic heavy weapons and suppress enemy positions at range.
 job-description-hspecialist-sws = Use heretic special weapons for raids and assault pushes.
 job-description-hguardsman = Cultist: mass Chaos infantry focused on numbers and close combat pressure.
-job-description-hvox-scout = Provide communications and targeting support for heretic squads.
 job-description-hband-supplier = Keep the warband supplied through captured cargo channels, illicit trade, and battlefield plunder.
 job-description-hmagos = Heretek Magos: expand the machine cults of the Dark Mechanicum.
 job-description-hexplorator = Heretek Explorator: recover artifacts and resources for the warband.

@@ -69,6 +69,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     private List<EntityUid> _entityList = new();
     private HashSet<Entity<IComponent>> _entitySet = new();
     private List<EntityPrototype.ComponentRegistryEntry> _compTypes = new();
+    private readonly HashSet<string> _missingUtilityQueries = new();
 
     /// <summary>
     /// Runs the UtilityQueryPrototype and returns the best-matching entities.
@@ -81,7 +82,14 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     {
         // TODO: PickHostilesop or whatever needs to juse be UtilityQueryOperator
 
-        var weh = _proto.Index<UtilityQueryPrototype>(proto);
+        if (!_proto.TryIndex<UtilityQueryPrototype>(proto, out var weh))
+        {
+            if (_missingUtilityQueries.Add(proto))
+                Log.Error($"Missing utility query prototype '{proto}'. NPC utility query will return no targets.");
+
+            return UtilityResult.Empty;
+        }
+
         var ents = _entPool.Get();
 
         foreach (var query in weh.Query)

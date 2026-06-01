@@ -2,12 +2,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Shared.Access.Components;
 using Content.Shared.NPC;
 using Content.Shared.Physics;
 using Robust.Shared.Collections;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -22,6 +25,19 @@ public sealed partial class PathfindingSystem
     // Stuff like chairs have collision but aren't relevant for mobs.
     public const int PathfindingCollisionMask = (int) CollisionGroup.MobMask;
     public const int PathfindingCollisionLayer = (int) CollisionGroup.MobLayer;
+    private const float PathfindingAgentClearance = 0.35f;
+
+    private static readonly Vector2[] PathfindingClearanceOffsets =
+    {
+        new(1f, 0f),
+        new(-1f, 0f),
+        new(0f, 1f),
+        new(0f, -1f),
+        new(0.70710677f, 0.70710677f),
+        new(-0.70710677f, 0.70710677f),
+        new(0.70710677f, -0.70710677f),
+        new(-0.70710677f, -0.70710677f),
+    };
 
     /// <summary>
     ///     If true, UpdateGrid() will not process grids.
@@ -41,6 +57,11 @@ public sealed partial class PathfindingSystem
         SubscribeLocalEvent<GridInitializeEvent>(OnGridInit);
         SubscribeLocalEvent<GridRemovalEvent>(OnGridRemoved);
         SubscribeLocalEvent<GridPathfindingComponent, ComponentShutdown>(OnGridPathShutdown);
+        SubscribeLocalEvent<FixturesComponent, ComponentStartup>(OnFixturesStartup);
+        SubscribeLocalEvent<FixturesComponent, EntityTerminatingEvent>(OnFixturesTerminating);
+        SubscribeLocalEvent<PathfindingIgnoredComponent, ComponentStartup>(OnPathfindingIgnoredStartup);
+        SubscribeLocalEvent<PathfindingIgnoredComponent, ComponentShutdown>(OnPathfindingIgnoredShutdown);
+        SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorStateChanged);
         SubscribeLocalEvent<CollisionChangeEvent>(OnCollisionChange);
         SubscribeLocalEvent<CollisionLayerChangeEvent>(OnCollisionLayerChange);
         SubscribeLocalEvent<PhysicsBodyTypeChangedEvent>(OnBodyTypeChange);
@@ -218,7 +239,7 @@ public sealed partial class PathfindingSystem
         }
     }
 
-    private bool IsBodyRelevant(FixturesComponent fixtures)
+    private bool HasPathfindingRelevantFixture(FixturesComponent fixtures)
     {
         foreach (var fixture in fixtures.Fixtures.Values)
         {
@@ -235,43 +256,86 @@ public sealed partial class PathfindingSystem
         return false;
     }
 
+    private bool IsBodyRelevant(EntityUid uid, FixturesComponent fixtures)
+    {
+        if (HasComp<PathfindingIgnoredComponent>(uid))
+            return false;
+
+        if (!HasPathfindingRelevantFixture(fixtures) ||
+            !TryComp<PhysicsComponent>(uid, out var body) ||
+            !body.Hard ||
+            !body.CanCollide ||
+            body.BodyType == BodyType.KinematicController)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void OnPathfindingIgnoredStartup(EntityUid uid, PathfindingIgnoredComponent component, ComponentStartup args)
+    {
+        if (_fixturesQuery.TryGetComponent(uid, out var fixtures))
+            DirtyEntityArea(uid, fixtures, true);
+    }
+
+    private void OnPathfindingIgnoredShutdown(EntityUid uid, PathfindingIgnoredComponent component, ComponentShutdown args)
+    {
+        if (_fixturesQuery.TryGetComponent(uid, out var fixtures))
+            DirtyEntityArea(uid, fixtures, true);
+    }
+
+    private void OnFixturesStartup(EntityUid uid, FixturesComponent component, ComponentStartup args)
+    {
+        DirtyEntityArea(uid, component, true);
+    }
+
+    private void OnFixturesTerminating(EntityUid uid, FixturesComponent component, ref EntityTerminatingEvent args)
+    {
+        DirtyEntityArea(uid, component, true);
+    }
+
+    private void OnAnchorStateChanged(EntityUid uid, TransformComponent component, ref AnchorStateChangedEvent args)
+    {
+        if (_fixturesQuery.TryGetComponent(uid, out var fixtures))
+            DirtyEntityArea(uid, fixtures, true);
+    }
+
     private void OnCollisionChange(ref CollisionChangeEvent ev)
     {
-        var xform = Transform(ev.BodyUid);
-
-        if (xform.GridUid == null)
-            return;
-
-        // This will also rebuild on door open / closes which I think is good?
-        var aabb = _lookup.GetAABBNoContainer(ev.BodyUid, xform.Coordinates.Position, xform.LocalRotation);
-        DirtyChunkArea(xform.GridUid.Value, aabb);
+        if (_fixturesQuery.TryGetComponent(ev.BodyUid, out var fixtures))
+            DirtyEntityArea(ev.BodyUid, fixtures, true);
     }
 
     private void OnCollisionLayerChange(ref CollisionLayerChangeEvent ev)
     {
-        var xform = Transform(ev.Body);
-
-        if (xform.GridUid == null)
-            return;
-
-        var aabb = _lookup.GetAABBNoContainer(ev.Body, xform.Coordinates.Position, xform.LocalRotation);
-        DirtyChunkArea(xform.GridUid.Value, aabb);
+        if (_fixturesQuery.TryGetComponent(ev.Body, out var fixtures))
+            DirtyEntityArea(ev.Body, fixtures, true);
     }
 
     private void OnBodyTypeChange(ref PhysicsBodyTypeChangedEvent ev)
     {
-        if (TryComp(ev.Entity, out TransformComponent? xform) &&
-            xform.GridUid != null)
-        {
-            var aabb = _lookup.GetAABBNoContainer(ev.Entity, xform.Coordinates.Position, xform.LocalRotation);
-            DirtyChunkArea(xform.GridUid.Value, aabb);
-        }
+        if (_fixturesQuery.TryGetComponent(ev.Entity, out var fixtures))
+            DirtyEntityArea(ev.Entity, fixtures, true);
+    }
+
+    private void DirtyEntityArea(EntityUid uid, FixturesComponent fixtures, bool immediate)
+    {
+        if (!HasPathfindingRelevantFixture(fixtures) ||
+            _mapGridQuery.HasComponent(uid) ||
+            !TryComp(uid, out TransformComponent? xform) ||
+            xform.GridUid == null)
+            return;
+
+        var aabb = _lookup.GetAABBNoContainer(uid, xform.Coordinates.Position, xform.LocalRotation);
+        DirtyChunkArea(xform.GridUid.Value, aabb, immediate);
     }
 
     private void OnMoveEvent(ref MoveEvent ev)
     {
         if (!_fixturesQuery.TryGetComponent(ev.Sender, out var fixtures) ||
-            !IsBodyRelevant(fixtures) ||
+            HasComp<PathfindingIgnoredComponent>(ev.Sender) ||
+            !HasPathfindingRelevantFixture(fixtures) ||
             _mapGridQuery.HasComponent(ev.Sender))
         {
             return;
@@ -285,13 +349,13 @@ public sealed partial class PathfindingSystem
         if (oldGridUid != null && oldGridUid != gridUid)
         {
             var aabb = _lookup.GetAABBNoContainer(ev.Sender, ev.OldPosition.Position, ev.OldRotation);
-            DirtyChunkArea(oldGridUid.Value, aabb);
+            DirtyChunkArea(oldGridUid.Value, aabb, true);
         }
 
         if (gridUid != null)
         {
             var aabb = _lookup.GetAABBNoContainer(ev.Sender, ev.NewPosition.Position, ev.NewRotation);
-            DirtyChunkArea(gridUid.Value, aabb);
+            DirtyChunkArea(gridUid.Value, aabb, true);
         }
     }
 
@@ -334,27 +398,38 @@ public sealed partial class PathfindingSystem
         chunks.Add(GetOrigin(coordinates, gridUid));
     }
 
-    private void DirtyChunkArea(EntityUid gridUid, Box2 aabb)
+    private void DirtyChunkArea(EntityUid gridUid, Box2 aabb, bool immediate = false)
     {
         if (!TryComp<GridPathfindingComponent>(gridUid, out var comp))
             return;
 
+        aabb = aabb.Enlarged(PathfindingAgentClearance + StepOffset);
+
         var currentTime = _timing.CurTime;
 
-        if (comp.NextUpdate < currentTime)
+        if (immediate)
+        {
+            comp.NextUpdate = currentTime;
+        }
+        else if (comp.NextUpdate < currentTime)
+        {
             comp.NextUpdate = currentTime + UpdateCooldown;
+        }
 
         var chunks = comp.DirtyChunks;
+        var min = new Vector2i(
+            (int) Math.Floor(aabb.Left / ChunkSize),
+            (int) Math.Floor(aabb.Bottom / ChunkSize));
+        var max = new Vector2i(
+            (int) Math.Floor(aabb.Right / ChunkSize),
+            (int) Math.Floor(aabb.Top / ChunkSize));
 
-        // This assumes you never have bounds equal to or larger than 2 * ChunkSize.
-        var corners = new Vector2[] { aabb.BottomLeft, aabb.TopRight, aabb.BottomRight, aabb.TopLeft };
-        foreach (var corner in corners)
+        for (var x = min.X; x <= max.X; x++)
         {
-            var sampledPoint = new Vector2i(
-                (int) Math.Floor((corner.X) / ChunkSize),
-                (int) Math.Floor((corner.Y) / ChunkSize));
-
-            chunks.Add(sampledPoint);
+            for (var y = min.Y; y <= max.Y; y++)
+            {
+                chunks.Add(new Vector2i(x, y));
+            }
         }
     }
 
@@ -426,25 +501,20 @@ public sealed partial class PathfindingSystem
                 tilePolys.Clear();
 
                 var tile = _maps.GetTileRef(grid.Owner, grid.Comp, tilePos);
-                var flags = tile.Tile.IsEmpty ? PathfindingBreadcrumbFlag.Space : PathfindingBreadcrumbFlag.None;
+                var baseFlags = tile.Tile.IsEmpty ? PathfindingBreadcrumbFlag.Space : PathfindingBreadcrumbFlag.None;
                 // var isBorder = x < 0 || y < 0 || x == ChunkSize - 1 || y == ChunkSize - 1;
 
                 tileEntities.Clear();
-                var available = _lookup.GetLocalEntitiesIntersecting(tile, flags: LookupFlags.Dynamic | LookupFlags.Static);
+                var available = _lookup.GetLocalEntitiesIntersecting(
+                    tile,
+                    PathfindingAgentClearance,
+                    flags: LookupFlags.Dynamic | LookupFlags.Static);
 
                 foreach (var ent in available)
                 {
                     // Irrelevant for pathfinding
                     if (!_fixturesQuery.TryGetComponent(ent, out var fixtures) ||
-                        !IsBodyRelevant(fixtures))
-                    {
-                        continue;
-                    }
-
-                    var xform = Transform(ent);
-
-                    if (xform.ParentUid != grid.Owner ||
-                        _maps.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tilePos)
+                        !IsBodyRelevant(ent, fixtures))
                     {
                         continue;
                     }
@@ -461,6 +531,7 @@ public sealed partial class PathfindingSystem
 
                         // Subtile
                         var localPos = new Vector2(StepOffset + gridOrigin.X + x + (float) subX / SubStep, StepOffset + gridOrigin.Y + y + (float) subY / SubStep);
+                        var flags = baseFlags;
                         var collisionMask = 0x0;
                         var collisionLayer = 0x0;
                         var damage = 0f;
@@ -482,12 +553,12 @@ public sealed partial class PathfindingSystem
                                     continue;
                                 }
 
-                                // Do an AABB check first as it's probably faster, then do an actual point check.
+                                // Do an inflated AABB check first as it's probably faster, then do an actual clearance check.
                                 var intersects = false;
 
                                 foreach (var proxy in fixture.Proxies)
                                 {
-                                    if (!proxy.AABB.Contains(localPos))
+                                    if (!proxy.AABB.Enlarged(PathfindingAgentClearance).Contains(localPos))
                                         continue;
 
                                     intersects = true;
@@ -499,7 +570,7 @@ public sealed partial class PathfindingSystem
                                     continue;
                                 }
 
-                                if (!_fixtures.TestPoint(fixture.Shape, new Transform(xform.LocalPosition, xform.LocalRotation), localPos))
+                                if (!PathSampleIntersectsFixture(fixture, new Transform(xform.LocalPosition, xform.LocalRotation), localPos))
                                 {
                                     continue;
                                 }
@@ -513,7 +584,8 @@ public sealed partial class PathfindingSystem
                             if (!colliding)
                                 continue;
 
-                            if (_accessReaderQuery.HasComponent(ent))
+                            if (_accessReaderQuery.TryGetComponent(ent, out var accessReader) &&
+                                IsAccessBlocking(accessReader))
                             {
                                 flags |= PathfindingBreadcrumbFlag.Access;
                             }
@@ -523,7 +595,7 @@ public sealed partial class PathfindingSystem
                                 flags |= PathfindingBreadcrumbFlag.Door;
                             }
 
-                            if (_climbableQuery.HasComponent(ent))
+                            if (_climbableQuery.TryGetComponent(ent, out var climbable) && climbable.Vaultable)
                             {
                                 flags |= PathfindingBreadcrumbFlag.Climb;
                             }
@@ -630,6 +702,29 @@ public sealed partial class PathfindingSystem
 
         // Log.Debug($"Built breadcrumbs in {sw.Elapsed.TotalMilliseconds}ms");
         SendBreadcrumbs(chunk, grid);
+    }
+
+    private bool PathSampleIntersectsFixture(Fixture fixture, Transform transform, Vector2 localPos)
+    {
+        if (_fixtures.TestPoint(fixture.Shape, transform, localPos))
+            return true;
+
+        foreach (var offset in PathfindingClearanceOffsets)
+        {
+            if (_fixtures.TestPoint(fixture.Shape, transform, localPos + offset * PathfindingAgentClearance))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsAccessBlocking(AccessReaderComponent accessReader)
+    {
+        return accessReader.Enabled &&
+               (accessReader.ContainerAccessProvider != null ||
+                accessReader.AccessLists.Count > 0 ||
+                accessReader.AccessKeys.Count > 0 ||
+                accessReader.DenyTags.Count > 0);
     }
 
     /// <summary>

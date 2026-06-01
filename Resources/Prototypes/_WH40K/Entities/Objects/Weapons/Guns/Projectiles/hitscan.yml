@@ -192,7 +192,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: HitscanBasicRaycast
-    maxDistance: 15
+    maxDistance: 10
 
 - type: entity
   parent: WH40KShortlasBeam

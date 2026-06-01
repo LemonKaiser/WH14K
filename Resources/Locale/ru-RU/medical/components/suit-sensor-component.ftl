@@ -5,6 +5,13 @@ suit-sensor-mode-binary = Бинарные
 suit-sensor-mode-vitals = Здоровье
 suit-sensor-mode-cords = Координаты
 
+## Descriptions
+
+suit-sensor-description-off = На станцию ничего не передаётся.
+suit-sensor-description-binary = На станцию передаётся смерть носителя.
+suit-sensor-description-vitals = На станцию передаётся общее состояние здоровья носителя.
+suit-sensor-description-cords = На станцию передаются состояние здоровья и местоположение носителя.
+
 ## Popups
 
 suit-sensor-mode-state = Датчики костюма: { $mode }

@@ -122,8 +122,7 @@ public sealed partial class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
             args.Performer,
             args.Action,
             NurgleMiasmaBaseCooldownSeconds,
-            progression.KhorneGiftOneCooldownTier,
-            NurgleMiasmaBaseCooldownSeconds);
+            progression.KhorneGiftOneCooldownTier);
         var giftOneExUnlocked = WH40KChaosLeaderRuntimeRules.IsGiftExUnlocked(progression, 1);
         ApplyMiasmaBlessing(
             args.Performer,

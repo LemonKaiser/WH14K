@@ -1,3 +1,4 @@
+using Content.Server.Administration.Managers;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Administration;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -9,13 +10,14 @@ namespace Content.Server.Administration.Commands
     [AdminCommand(AdminFlags.Fun)]
     public sealed partial class SetSolutionThermalEnergy : IConsoleCommand
     {
+        [Dependency] private IAdminActionGuard _adminActionGuard = default!;
         [Dependency] private IEntityManager _entManager = default!;
 
         public string Command => "setsolutionthermalenergy";
         public string Description => "Set the thermal energy of some solution.";
         public string Help => $"Usage: {Command} <target> <solution> <new thermal energy>";
 
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        public async void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length < 3)
             {
@@ -26,6 +28,15 @@ namespace Content.Server.Administration.Commands
             if (!NetEntity.TryParse(args[0], out var uidNet) || !_entManager.TryGetEntity(uidNet, out var uid))
             {
                 shell.WriteLine($"Invalid entity id.");
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedEntityTargetAsync(
+                    shell.Player,
+                    uid.Value,
+                    Loc.GetString("admin-hierarchy-action-set-solution-thermal-energy"),
+                    notify: shell.WriteLine))
+            {
                 return;
             }
 

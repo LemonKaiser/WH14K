@@ -1,3 +1,4 @@
+using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Ghost;
 using Content.Shared.Administration;
@@ -11,6 +12,7 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Admin)]
 public sealed partial class ForceGhostCommand : LocalizedEntityCommands
 {
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedMindSystem _mind = default!;
@@ -18,7 +20,7 @@ public sealed partial class ForceGhostCommand : LocalizedEntityCommands
 
     public override string Command => "forceghost";
 
-    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length == 0 || args.Length > 1)
         {
@@ -29,6 +31,16 @@ public sealed partial class ForceGhostCommand : LocalizedEntityCommands
         if (!_playerManager.TryGetSessionByUsername(args[0], out var player))
         {
             shell.WriteError(LocalizationManager.GetString("shell-target-player-does-not-exist"));
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                player.UserId,
+                Loc.GetString("admin-hierarchy-action-force-ghost"),
+                player.Name,
+                shell.WriteError))
+        {
             return;
         }
 

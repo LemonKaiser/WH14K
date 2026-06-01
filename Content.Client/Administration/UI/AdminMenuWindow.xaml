@@ -8,7 +8,8 @@
     xmlns:playerTab="clr-namespace:Content.Client.Administration.UI.Tabs.PlayerTab"
     xmlns:objectsTab="clr-namespace:Content.Client.Administration.UI.Tabs.ObjectsTab"
     xmlns:panic="clr-namespace:Content.Client.Administration.UI.Tabs.PanicBunkerTab"
-    >
+    ShowBackgroundLogo="True"
+    BackgroundLogoTexturePath="/Textures/Interface/Nano/adeptus-administratum.svg.96dpi.png">
     <TabContainer Name="MasterTabContainer" Margin="10">
         <adminTab:AdminTab Name="AdminTabControl" Access="Public" />
         <adminbusTab:AdminbusTab Name="AdminbusTabControl" Access="Public" />

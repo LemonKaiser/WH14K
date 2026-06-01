@@ -2,6 +2,8 @@ energy-dome-recharging = Перезарядка...
 energy-dome-no-power = Низкий заряд батареи
 energy-dome-no-cell = Нет источника питания
 energy-dome-interference = Другое активное щитовое поле блокирует активацию
+energy-dome-must-be-worn = Генератор щита должен быть надет в подходящий слот экипировки.
+energy-dome-worn-conflict = Надетые генераторы щита перегружают друг друга и отключаются.
 
 energy-dome-on-examine-is-on-message = Энергетический барьер [color=darkgreen]активен[/color].
 energy-dome-on-examine-is-off-message = Энергетический барьер [color=darkred]отключен[/color].

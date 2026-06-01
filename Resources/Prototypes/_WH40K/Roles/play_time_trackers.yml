@@ -152,9 +152,6 @@
   id: JobHGuardsman
 
 - type: playTimeTracker
-  id: JobHVoxScout
-
-- type: playTimeTracker
   id: JobWH40KChaplain
 
 - type: playTimeTracker
