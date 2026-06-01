@@ -320,6 +320,7 @@
   - WH40KSeniorMedicBeret
   - WH40KValhallanUshanka
   - WH40KValhallanHelmet
+  - WH40KCyanMedicHelmet
 
 - type: loadoutGroup
   id: WH40KImperialMedicHonours
