@@ -16,7 +16,7 @@
 - type: loadout
   id: WH40KCyanMedicHelmet
   equipment:
-    head: ClothingHeadHelmetFlakCyan
+    head: ClothingHeadHelmetFlakMedCyan
 
 - type: loadout
   id: WH40KCyanArmoredHelmet
