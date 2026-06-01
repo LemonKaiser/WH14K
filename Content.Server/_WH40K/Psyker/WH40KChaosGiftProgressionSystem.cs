@@ -2093,7 +2093,8 @@ public sealed partial class WH40KChaosGiftProgressionSystem : EntitySystem
     {
         return patron is WH40KChaosPatron.Khorne or
                WH40KChaosPatron.Nurgle or
-               WH40KChaosPatron.Slaanesh;
+               WH40KChaosPatron.Slaanesh or
+               WH40KChaosPatron.Tzeentch;
     }
 
     private static void ApplyPatronProfile(WH40KChaosSkrizhalComponent skrizhal, WH40KChaosPatron patron)

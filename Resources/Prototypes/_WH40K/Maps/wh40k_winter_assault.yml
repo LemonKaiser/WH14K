@@ -23,9 +23,9 @@
             Medic: [ 3, 3 ]
             MunitorumOfficer: [ 1, 1 ]
             Psyker: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
             Sergeant: [ 2, 2 ]
             TitheSupplier: [ 2, 2 ]
-            VoxScout: [ 3, 3 ]
             WH40KChaplain: [ 1, 1 ]
             # Heretics
             HColonel: [ 1, 1 ]
@@ -34,4 +34,3 @@
             HLieutenant: [ 4, 4 ]
             HSergeant: [ 4, 4 ]
             HBandSupplier: [ 3, 3 ]
-            #HVoxScout: [ 3, 3 ]

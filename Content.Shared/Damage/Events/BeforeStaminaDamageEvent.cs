@@ -17,6 +17,8 @@ public enum StaminaDamageType : byte
 public record struct BeforeStaminaDamageEvent(
     float Value,
     StaminaDamageType Type = StaminaDamageType.Generic,
+    EntityUid? Source = null,
+    EntityUid? With = null,
     bool Cancelled = false) : IInventoryRelayEvent
 {
     SlotFlags IInventoryRelayEvent.TargetSlots =>  ~SlotFlags.POCKET;

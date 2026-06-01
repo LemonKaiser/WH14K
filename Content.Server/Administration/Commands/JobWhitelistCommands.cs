@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Database;
+using Content.Server.Administration.Managers;
 using Content.Server.Players.JobWhitelist;
 using Content.Shared.Administration;
 using Content.Shared.Roles;
@@ -13,6 +14,7 @@ namespace Content.Server.Administration.Commands;
 public sealed partial class JobWhitelistAddCommand : LocalizedCommands
 {
     [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IPlayerLocator _playerLocator = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -51,6 +53,16 @@ public sealed partial class JobWhitelistAddCommand : LocalizedCommands
                     ("player", player),
                     ("jobId", job.Id),
                     ("jobName", jobPrototype.LocalizedName)));
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-job-whitelist-add"),
+                    data.Username,
+                    shell.WriteLine))
+            {
                 return;
             }
 
@@ -141,6 +153,7 @@ public sealed partial class GetJobWhitelistCommand : LocalizedCommands
 public sealed partial class RemoveJobWhitelistCommand : LocalizedCommands
 {
     [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IPlayerLocator _playerLocator = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -179,6 +192,16 @@ public sealed partial class RemoveJobWhitelistCommand : LocalizedCommands
                     ("player", player),
                     ("jobId", job.Id),
                     ("jobName", jobPrototype.LocalizedName)));
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-job-whitelist-remove"),
+                    data.Username,
+                    shell.WriteLine))
+            {
                 return;
             }
 

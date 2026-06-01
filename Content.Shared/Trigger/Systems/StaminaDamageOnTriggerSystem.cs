@@ -12,7 +12,7 @@ public sealed partial class StaminaDamageOnTriggerSystem : XOnTriggerSystem<Stam
         var ev = new BeforeStaminaDamageOnTriggerEvent(ent.Comp.Stamina, target);
         RaiseLocalEvent(ent.Owner, ref ev);
 
-        _stamina.TakeStaminaDamage(target, ev.Stamina, source: args.User, with: ent.Owner, ignoreResist: ent.Comp.IgnoreResistances);
+        _stamina.TakeStaminaDamage(target, ev.Stamina, source: ent.Owner, with: ent.Owner, ignoreResist: ent.Comp.IgnoreResistances);
 
         args.Handled = true;
     }

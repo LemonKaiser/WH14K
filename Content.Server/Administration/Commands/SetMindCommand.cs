@@ -1,3 +1,4 @@
+using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -10,6 +11,7 @@ namespace Content.Server.Administration.Commands
     [AdminCommand(AdminFlags.Admin)]
     public sealed partial class SetMindCommand : LocalizedEntityCommands
     {
+        [Dependency] private IAdminActionGuard _adminActionGuard = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private SharedMindSystem _mindSystem = default!;
 
@@ -17,7 +19,7 @@ namespace Content.Server.Administration.Commands
 
         public override string Description => Loc.GetString("cmd-setmind-desc", ("requiredComponent", nameof(MindContainerComponent)));
 
-        public override void Execute(IConsoleShell shell, string argStr, string[] args)
+        public override async void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length < 2)
             {
@@ -54,6 +56,16 @@ namespace Content.Server.Administration.Commands
             if (!_playerManager.TryGetSessionByUsername(args[1], out var session))
             {
                 shell.WriteLine(Loc.GetString("shell-target-player-does-not-exist"));
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    session.UserId,
+                    Loc.GetString("admin-hierarchy-action-set-mind"),
+                    session.Name,
+                    shell.WriteLine))
+            {
                 return;
             }
 

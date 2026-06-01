@@ -55,6 +55,7 @@ ui-disposal-unit-footer-right = Логистика WH14K
 ## No hands
 
 disposal-unit-no-hands = У вас нет рук!
+disposal-unit-is-full = Внутри больше нет места.
 disposal-flush-verb-get-data-text = Смыть
 
 # state

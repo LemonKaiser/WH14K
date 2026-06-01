@@ -189,12 +189,6 @@ public sealed partial class NPCSteeringComponent : Component
 
     [ViewVariables] public PathPoly? AvoidedPathPoly;
 
-    [ViewVariables] public string LastStallReason = string.Empty;
-
-    [DataField("lastStallLogTime", customTypeSerializer: typeof(TimeOffsetSerializer))]
-    [AutoPausedField]
-    public TimeSpan LastStallLogTime;
-
     [ViewVariables] public int PendingPathDirectMoveTicks;
 
     [ViewVariables(VVAccess.ReadWrite), DataField("pendingPathDirectMoveProbe")]

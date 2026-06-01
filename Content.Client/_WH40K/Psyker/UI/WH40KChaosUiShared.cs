@@ -249,12 +249,12 @@ internal static class WH40KChaosUiShared
             return slot switch
             {
                 1 => new WH40KChaosGiftPathKeys(
-                    "w40k-ch-upgrade-path-slaanesh-masochism-power-short",
-                    "w40k-ch-upgrade-path-khorne-cooldown-short",
-                    "w40k-ch-upgrade-path-slaanesh-masochism-cost-short",
-                    "w40k-ch-upgrade-path-slaanesh-masochism-power",
-                    "w40k-ch-upgrade-path-khorne-cooldown",
-                    "w40k-ch-upgrade-path-slaanesh-masochism-cost"),
+                    "w40k-ch-upgrade-path-slaanesh-swap-power-short",
+                    "w40k-ch-upgrade-path-slaanesh-swap-cooldown-short",
+                    "w40k-ch-upgrade-path-slaanesh-swap-utility-short",
+                    "w40k-ch-upgrade-path-slaanesh-swap-power",
+                    "w40k-ch-upgrade-path-slaanesh-swap-cooldown",
+                    "w40k-ch-upgrade-path-slaanesh-swap-utility"),
                 2 => new WH40KChaosGiftPathKeys(
                     "w40k-ch-upgrade-path-slaanesh-choir-power-short",
                     "w40k-ch-upgrade-path-khorne-cooldown-short",
@@ -284,26 +284,26 @@ internal static class WH40KChaosUiShared
             return slot switch
             {
                 1 => new WH40KChaosGiftPathKeys(
+                    "w40k-ch-upgrade-path-tzeentch-fireball-power-short",
+                    "w40k-ch-upgrade-path-khorne-cooldown-short",
+                    "w40k-ch-upgrade-path-tzeentch-fireball-utility-short",
+                    "w40k-ch-upgrade-path-tzeentch-fireball-power",
+                    "w40k-ch-upgrade-path-khorne-cooldown",
+                    "w40k-ch-upgrade-path-tzeentch-fireball-utility"),
+                2 => new WH40KChaosGiftPathKeys(
                     "w40k-ch-upgrade-path-tzeentch-barrier-power-short",
                     "w40k-ch-upgrade-path-khorne-cooldown-short",
                     "w40k-ch-upgrade-path-tzeentch-barrier-duration-short",
                     "w40k-ch-upgrade-path-tzeentch-barrier-power",
                     "w40k-ch-upgrade-path-khorne-cooldown",
                     "w40k-ch-upgrade-path-tzeentch-barrier-duration"),
-                2 => new WH40KChaosGiftPathKeys(
-                    "w40k-ch-upgrade-path-tzeentch-speed-power-short",
-                    "w40k-ch-upgrade-path-khorne-cooldown-short",
-                    "w40k-ch-upgrade-path-tzeentch-speed-radius-short",
-                    "w40k-ch-upgrade-path-tzeentch-speed-power",
-                    "w40k-ch-upgrade-path-khorne-cooldown",
-                    "w40k-ch-upgrade-path-tzeentch-speed-radius"),
                 3 => new WH40KChaosGiftPathKeys(
-                    "w40k-ch-upgrade-path-tzeentch-vision-power-short",
-                    "w40k-ch-upgrade-path-khorne-cooldown-short",
-                    "w40k-ch-upgrade-path-tzeentch-vision-radius-short",
-                    "w40k-ch-upgrade-path-tzeentch-vision-power",
-                    "w40k-ch-upgrade-path-khorne-cooldown",
-                    "w40k-ch-upgrade-path-tzeentch-vision-radius"),
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-power-short",
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-cooldown-short",
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-utility-short",
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-power",
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-cooldown",
+                    "w40k-ch-upgrade-path-tzeentch-warpstep-utility"),
                 _ => new WH40KChaosGiftPathKeys(
                     "w40k-ch-upgrade-path-power-short",
                     "w40k-ch-upgrade-path-cooldown-short",

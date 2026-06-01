@@ -5,12 +5,15 @@ using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Server.DeviceLinking.Systems;
 using Content.Server.Popups;
 using Content.Shared.Actions;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DeviceLinking.Events;
 using Content.Shared.EnergyDome;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.NPC.Components;
@@ -71,6 +74,7 @@ public sealed partial class EnergyDomeSystem : EntitySystem
     [Dependency] private  PowerCellSystem _powerCell = default!;
     [Dependency] private  DeviceLinkSystem _deviceLink = default!;
     [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
     [Dependency] private  NpcFactionSystem _npcFaction = default!;
     [Dependency] private  IPrototypeManager _prototype = default!;
     [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
@@ -96,6 +100,8 @@ public sealed partial class EnergyDomeSystem : EntitySystem
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, PowerCellSlotEmptyEvent>(OnPowerCellSlotEmpty);
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, ChargeChangedEvent>(OnChargeChanged);
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, EntParentChangedMessage>(OnParentChanged);
+        SubscribeLocalEvent<EnergyDomeGeneratorComponent, GotEquippedEvent>(OnGotEquipped);
+        SubscribeLocalEvent<EnergyDomeGeneratorComponent, GotUnequippedEvent>(OnGotUnequipped);
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, GetVerbsEvent<ActivationVerb>>(OnGetVerbs);
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
         SubscribeLocalEvent<EnergyDomeGeneratorComponent, ExaminedEvent>(OnExamined);
@@ -124,9 +130,13 @@ public sealed partial class EnergyDomeSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var generator))
         {
+            if (!ValidateWearableGeneratorRuntime((uid, generator)))
+                continue;
+
             if (generator.Enabled &&
                 generator.DomeParentEntity != GetProtectedEntity(uid))
             {
+                DisableDesiredActivation((uid, generator));
                 TurnOff((uid, generator), startReloading: false, reason: EnergyDomeBreakReason.ParentChanged);
                 continue;
             }
@@ -134,6 +144,7 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             TryRaiseRechargeReadyEvent((uid, generator));
             EnforceTeamBattleColor((uid, generator));
             EnforceLinkedSingleShield((uid, generator));
+            EnforceWearableSingleShield((uid, generator));
             UpdateContestedState((uid, generator));
             UpdateStress((uid, generator), frameTime, generator.Enabled);
             DecayUiTelemetry((uid, generator), frameTime);
@@ -283,7 +294,32 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             return;
 
         if (GetProtectedEntity(ent.Owner) != ent.Comp.DomeParentEntity)
+        {
+            DisableDesiredActivation(ent);
             TurnOff(ent, startReloading: false, reason: EnergyDomeBreakReason.ParentChanged);
+        }
+    }
+
+    private void OnGotEquipped(Entity<EnergyDomeGeneratorComponent> ent, ref GotEquippedEvent args)
+    {
+        if (!IsWearableGenerator(ent))
+            return;
+
+        if (!TryGetEquippedWearer(ent.Owner, out _))
+        {
+            DisableWearableGenerator(ent, EnergyDomeBreakReason.ParentChanged);
+            return;
+        }
+
+        EnforceWearableSingleShield(ent);
+    }
+
+    private void OnGotUnequipped(Entity<EnergyDomeGeneratorComponent> ent, ref GotUnequippedEvent args)
+    {
+        if (!IsWearableGenerator(ent))
+            return;
+
+        DisableWearableGenerator(ent, EnergyDomeBreakReason.ParentChanged);
     }
 
     private void OnGetVerbs(Entity<EnergyDomeGeneratorComponent> ent, ref GetVerbsEvent<ActivationVerb> args)
@@ -513,6 +549,12 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             return true;
         }
 
+        if (!TryGetActivationProtectedEntity(generator, out var protectedEntity, user, popupErrors))
+        {
+            DisableDesiredActivation(generator);
+            return true;
+        }
+
         if (!generator.Comp.GlobalEnabled)
             generator.Comp.GlobalEnabled = true;
 
@@ -521,7 +563,7 @@ public sealed partial class EnergyDomeSystem : EntitySystem
 
         // Explicit enable requests (LMB / verb / UI / device signal) should try to activate immediately.
         // If activation fails (cooldown/power/conflict), keep global enabled and let controller retry later.
-        if (TryEnableActiveDome(generator, user, ignoreUseDelay, popupErrors))
+        if (TryEnableActiveDome(generator, user, ignoreUseDelay, popupErrors, protectedEntity))
             return true;
 
         generator.Comp.NextAutoEnableAttemptAt = _timing.CurTime + DesiredActivationRetryInterval;
@@ -532,10 +574,18 @@ public sealed partial class EnergyDomeSystem : EntitySystem
         Entity<EnergyDomeGeneratorComponent> generator,
         EntityUid? user = null,
         bool ignoreUseDelay = false,
-        bool popupErrors = true)
+        bool popupErrors = true,
+        EntityUid? preResolvedProtectedEntity = null)
     {
         if (generator.Comp.Enabled)
             return true;
+
+        if (preResolvedProtectedEntity is not { } protectedEntity &&
+            !TryGetActivationProtectedEntity(generator, out protectedEntity, user, popupErrors))
+        {
+            DisableDesiredActivation(generator);
+            return false;
+        }
 
         if (!ignoreUseDelay &&
             TryComp<UseDelayComponent>(generator, out var useDelay) &&
@@ -557,7 +607,6 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             return false;
         }
 
-        var protectedEntity = GetProtectedEntity(generator.Owner);
         if (!TryResolveActivationConflicts(generator, protectedEntity, user, popupErrors))
             return false;
 
@@ -1614,6 +1663,81 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             : uid;
     }
 
+    private bool TryGetActivationProtectedEntity(
+        Entity<EnergyDomeGeneratorComponent> generator,
+        out EntityUid protectedEntity,
+        EntityUid? user = null,
+        bool popupErrors = true)
+    {
+        if (!IsWearableGenerator(generator))
+        {
+            protectedEntity = GetProtectedEntity(generator.Owner);
+            return true;
+        }
+
+        if (TryGetEquippedWearer(generator.Owner, out protectedEntity))
+            return true;
+
+        ShowAccessDeniedPopup(generator, "energy-dome-must-be-worn", user, popupErrors);
+        protectedEntity = EntityUid.Invalid;
+        return false;
+    }
+
+    private bool ValidateWearableGeneratorRuntime(Entity<EnergyDomeGeneratorComponent> generator)
+    {
+        if (!IsWearableGenerator(generator))
+            return true;
+
+        if (TryGetEquippedWearer(generator.Owner, out _))
+            return true;
+
+        DisableWearableGenerator(generator, EnergyDomeBreakReason.ParentChanged);
+        return false;
+    }
+
+    private void DisableWearableGenerator(
+        Entity<EnergyDomeGeneratorComponent> generator,
+        EnergyDomeBreakReason reason,
+        bool playSound = true)
+    {
+        DisableDesiredActivation(generator);
+
+        if (generator.Comp.Enabled || generator.Comp.SpawnedDome != null)
+            TurnOff(generator, startReloading: false, reason: reason, playSound: playSound);
+    }
+
+    private bool TryGetEquippedWearer(EntityUid uid, out EntityUid wearer)
+    {
+        wearer = EntityUid.Invalid;
+
+        if (!TryComp<ClothingComponent>(uid, out var clothing) ||
+            !_container.TryGetContainingContainer(uid, out var container) ||
+            !_inventory.TryGetContainingSlot(uid, out var slot))
+        {
+            return false;
+        }
+
+        if ((slot.SlotFlags & SlotFlags.POCKET) != 0 ||
+            (clothing.Slots & slot.SlotFlags) == SlotFlags.NONE)
+        {
+            return false;
+        }
+
+        wearer = container.Owner;
+        return true;
+    }
+
+    private bool IsWearableGenerator(Entity<EnergyDomeGeneratorComponent> generator)
+    {
+        return HasComp<ClothingComponent>(generator.Owner);
+    }
+
+    private static void DisableDesiredActivation(Entity<EnergyDomeGeneratorComponent> generator)
+    {
+        generator.Comp.GlobalEnabled = false;
+        generator.Comp.NextAutoEnableAttemptAt = TimeSpan.Zero;
+    }
+
     private bool CanParticipateInLinkedNetwork(Entity<EnergyDomeGeneratorComponent> generator)
     {
         if (!generator.Comp.LinkEnabled ||
@@ -1751,6 +1875,50 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             return;
 
         TurnOff(generator, startReloading: false, reason: EnergyDomeBreakReason.Conflict, playSound: false);
+    }
+
+    private void EnforceWearableSingleShield(Entity<EnergyDomeGeneratorComponent> generator)
+    {
+        if (!generator.Comp.Enabled ||
+            generator.Comp.SpawnedDome == null ||
+            !IsWearableGenerator(generator) ||
+            !TryGetEquippedWearer(generator.Owner, out var wearer))
+        {
+            return;
+        }
+
+        _activationConflictLosers.Clear();
+        var query = EntityQueryEnumerator<EnergyDomeGeneratorComponent>();
+
+        while (query.MoveNext(out var otherUid, out var other))
+        {
+            if (otherUid == generator.Owner ||
+                !other.Enabled ||
+                other.SpawnedDome == null ||
+                !IsWearableGenerator((otherUid, other)) ||
+                !TryGetEquippedWearer(otherUid, out var otherWearer) ||
+                otherWearer != wearer)
+            {
+                continue;
+            }
+
+            _activationConflictLosers.Add(otherUid);
+        }
+
+        if (_activationConflictLosers.Count == 0)
+            return;
+
+        DisableDesiredActivation(generator);
+        TurnOff(generator, startReloading: false, reason: EnergyDomeBreakReason.Conflict, playSound: false);
+
+        foreach (var loserUid in _activationConflictLosers)
+        {
+            if (!TryComp<EnergyDomeGeneratorComponent>(loserUid, out var loser))
+                continue;
+
+            DisableDesiredActivation((loserUid, loser));
+            TurnOff((loserUid, loser), startReloading: false, reason: EnergyDomeBreakReason.Conflict, playSound: false);
+        }
     }
 
     private void TryCycleMode(Entity<EnergyDomeGeneratorComponent> generator, EntityUid? user = null)
@@ -2422,6 +2590,8 @@ public sealed partial class EnergyDomeSystem : EntitySystem
         bool popupErrors)
     {
         _activationConflictLosers.Clear();
+        var wearableConflict = IsWearableGenerator(generator);
+        var hasWearableConflict = false;
         var query = EntityQueryEnumerator<EnergyDomeGeneratorComponent>();
 
         while (query.MoveNext(out var otherUid, out var other))
@@ -2434,6 +2604,13 @@ public sealed partial class EnergyDomeSystem : EntitySystem
                 continue;
             }
 
+            if (wearableConflict && IsWearableGenerator((otherUid, other)))
+            {
+                _activationConflictLosers.Add(otherUid);
+                hasWearableConflict = true;
+                continue;
+            }
+
             var compare = CompareActivationPriority(generator, (otherUid, other));
             if (compare < 0)
             {
@@ -2442,6 +2619,23 @@ public sealed partial class EnergyDomeSystem : EntitySystem
             }
 
             _activationConflictLosers.Add(otherUid);
+        }
+
+        if (hasWearableConflict)
+        {
+            DisableDesiredActivation(generator);
+
+            foreach (var loserUid in _activationConflictLosers)
+            {
+                if (!TryComp<EnergyDomeGeneratorComponent>(loserUid, out var loser))
+                    continue;
+
+                DisableDesiredActivation((loserUid, loser));
+                TurnOff((loserUid, loser), startReloading: false, reason: EnergyDomeBreakReason.Conflict, playSound: false);
+            }
+
+            ShowAccessDeniedPopup(generator, "energy-dome-worn-conflict", user, popupErrors);
+            return false;
         }
 
         foreach (var loserUid in _activationConflictLosers)

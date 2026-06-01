@@ -157,6 +157,8 @@ food-sequence-cotton-burger-content-plushie-moth = пуши
 food-sequence-cotton-burger-content-plushie-vulp = вульп
 food-sequence-cotton-burger-content-plushie-ian = корги
 food-sequence-cotton-burger-content-among-pequeno = сас
+food-sequence-cotton-burger-content-plushie-sheep = шерсто
+food-sequence-cotton-burger-content-plushie-sheepspace = космошерсто
 food-sequence-taco-gen = тако с { $content }
 
 # SKEWER

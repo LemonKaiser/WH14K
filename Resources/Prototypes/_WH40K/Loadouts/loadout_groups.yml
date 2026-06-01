@@ -167,6 +167,23 @@
   - WH40KValhallanHeavyArmor
 
 - type: loadoutGroup
+  id: WH40KImperialMedicOuter
+  name: loadout-group-wh40k-imperial-field-outer
+  loadouts:
+  - WH40KMedicFlakArmor
+  - WH40KLightFlakArmor
+  - WH40KCatachanLightArmor
+  - WH40KCatachanMediumArmor
+  - WH40KCatachanVest
+  - WH40KKriegCoat
+  - WH40KCyanLightFlakArmor
+  - WH40KCyanFlakArmor
+  - WH40KFlakArmor
+  - WH40KCoatVst
+  - WH40KValhallanCoat
+  - WH40KValhallanHeavyArmor
+
+- type: loadoutGroup
   id: WH40KImperialFieldBelt
   name: loadout-group-wh40k-imperial-field-belt
   loadouts:
@@ -562,6 +579,7 @@
   minLimit: 0
   maxLimit: 1
   loadouts:
+  - WH40KWeaponStubRifleLoadoutSerg
   - WH40KWeaponLondoronMk2AquilaLoadout
 
 - type: loadoutGroup
@@ -951,7 +969,7 @@
   name: loadout-group-wh40k-heretic-command-outer
   minLimit: 0
   loadouts:
-  - WH40KChaosCoat
+  - WH40KVraksCarapaceArmor
   - WH40KBloodPactArmor
   - WH40KArmorMauler
   - WH40KSlaaneshArmorKini

@@ -244,6 +244,11 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
     /// <param name="component">The ensnaring component</param>
     public bool TryEnsnare(EntityUid target, EntityUid ensnare, EnsnaringComponent component)
     {
+        var attempt = new BeforeEnsnareAttemptEvent(target, ensnare);
+        RaiseLocalEvent(ensnare, ref attempt);
+        if (attempt.Cancelled)
+            return false;
+
         //Don't do anything if they don't have the ensnareable component.
         if (!TryComp<EnsnareableComponent>(target, out var ensnareable) || ensnareable.Container == null)
             return false;
@@ -259,7 +264,7 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
         // Apply stamina damage to target
         if (TryComp<StaminaComponent>(target, out var stamina))
         {
-            _stamina.TakeStaminaDamage(target, component.StaminaDamage, with: ensnare, component: stamina);
+            _stamina.TakeStaminaDamage(target, component.StaminaDamage, source: ensnare, with: ensnare, component: stamina);
         }
 
         component.Ensnared = target;
@@ -346,3 +351,6 @@ public abstract partial class SharedEnsnareableSystem : EntitySystem
             _alerts.ShowAlert(target, component.EnsnaredAlert);
     }
 }
+
+[ByRefEvent]
+public record struct BeforeEnsnareAttemptEvent(EntityUid Target, EntityUid Source, bool Cancelled = false);

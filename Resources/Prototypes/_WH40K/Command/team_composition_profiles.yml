@@ -58,7 +58,6 @@
   - HSergeantHWS
   coreRoles:
   - HGuardsman
-  - HVoxScout
   - HSpecialistSWS
   - HSpecialistHWS
   - HBandSupplier

@@ -192,20 +192,6 @@
 
 - type: entity
   parent: MobHuman
-  id: WH40KReinforcementPreviewHereticsVoxScout
-  name: reinforcement preview heretics vox scout
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: RandomHumanoidAppearance
-    randomizeName: false
-  - type: Loadout
-    prototypes:
-    - HVoxScoutGear
-    roleLoadout:
-    - JobHVoxScout
-
-- type: entity
-  parent: MobHuman
   id: WH40KReinforcementPreviewHereticsBandSupplier
   name: reinforcement preview heretics band supplier
   categories: [ HideSpawnMenu ]

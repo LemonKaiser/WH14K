@@ -166,7 +166,11 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                 if (!string.IsNullOrEmpty(equipmentStr))
                 {
                     var equipmentEntity = Spawn(equipmentStr, xform.Coordinates);
-                    InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true);
+                    if (!InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true))
+                    {
+                        Del(equipmentEntity);
+                        InventorySystem.SpawnItemOnEntity(entity, equipmentStr);
+                    }
                 }
             }
         }
@@ -178,10 +182,17 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             foreach (var prototype in inhand)
             {
                 var inhandEntity = Spawn(prototype, coords);
+                var pickedUp = false;
 
                 if (_handsSystem.TryGetEmptyHand((entity, handsComponent), out var emptyHand))
                 {
-                    _handsSystem.TryPickup(entity, inhandEntity, emptyHand, checkActionBlocker: false, handsComp: handsComponent);
+                    pickedUp = _handsSystem.TryPickup(entity, inhandEntity, emptyHand, checkActionBlocker: false, handsComp: handsComponent);
+                }
+
+                if (!pickedUp)
+                {
+                    Del(inhandEntity);
+                    InventorySystem.SpawnItemOnEntity(entity, prototype);
                 }
             }
         }

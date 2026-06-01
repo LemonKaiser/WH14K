@@ -339,7 +339,7 @@ public abstract partial class SharedStaminaSystem : EntitySystem
         if (!Resolve(uid, ref component, false))
             return;
 
-        var ev = new BeforeStaminaDamageEvent(value, damageType);
+        var ev = new BeforeStaminaDamageEvent(value, damageType, source, with);
         RaiseLocalEvent(uid, ref ev);
         if (ev.Cancelled)
             return;

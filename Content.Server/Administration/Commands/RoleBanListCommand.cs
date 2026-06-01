@@ -1,5 +1,6 @@
 ﻿using Content.Server.Administration.BanList;
 using Content.Server.EUI;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Shared.Administration;
 using Content.Shared.Database;
@@ -11,6 +12,7 @@ namespace Content.Server.Administration.Commands;
 public sealed partial class RoleBanListCommand : IConsoleCommand
 {
     [Dependency] private IServerDbManager _dbManager = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
 
     [Dependency] private EuiManager _eui = default!;
 
@@ -40,6 +42,16 @@ public sealed partial class RoleBanListCommand : IConsoleCommand
         if (data == null)
         {
             shell.WriteError("Unable to find a player with that name or id.");
+            return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                data.UserId,
+                Loc.GetString("admin-hierarchy-action-view-role-ban-list"),
+                data.Username,
+                shell.WriteLine))
+        {
             return;
         }
 

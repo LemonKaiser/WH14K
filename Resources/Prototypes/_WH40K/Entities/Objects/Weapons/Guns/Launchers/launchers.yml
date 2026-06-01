@@ -46,6 +46,7 @@
     - suitStorage
   - type: Item
     size: Huge
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/grenade_cadia/grenade_cadia.rsi
     shape:
     - 0,0,4,2
   - type: Gun
@@ -78,6 +79,7 @@
     - suitStorage
   - type: Item
     size: Huge
+    sprite: _WH40K/Objects/Weapons/Guns/Launcher/grenade_chs/grenade_chs.rsi
     shape:
     - 0,0,4,2
   - type: Gun

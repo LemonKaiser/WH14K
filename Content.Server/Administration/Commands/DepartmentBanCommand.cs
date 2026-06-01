@@ -14,6 +14,7 @@ public sealed partial class DepartmentBanCommand : IConsoleCommand
 {
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IBanManager _banManager = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ILogManager _log = default!;
@@ -95,6 +96,16 @@ public sealed partial class DepartmentBanCommand : IConsoleCommand
 
         var targetUid = located.UserId;
         var targetHWid = located.LastHWId;
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                shell.Player,
+                targetUid,
+                Loc.GetString("admin-hierarchy-action-department-ban"),
+                located.Username,
+                shell.WriteLine))
+        {
+            return;
+        }
 
         var banInfo = new CreateRoleBanInfo(reason);
         if (minutes > 0)

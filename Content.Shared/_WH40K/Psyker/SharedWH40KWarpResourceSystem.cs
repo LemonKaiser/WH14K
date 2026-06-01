@@ -1,5 +1,7 @@
 using System;
 using Content.Shared.Actions.Events;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
@@ -15,6 +17,7 @@ public sealed partial class SharedWH40KWarpResourceSystem : EntitySystem
 
     [Dependency] private  INetManager _netManager = default!;
     [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private  MobStateSystem _mobState = default!;
 
     public override void Initialize()
     {
@@ -67,6 +70,15 @@ public sealed partial class SharedWH40KWarpResourceSystem : EntitySystem
 
         var actionKey = ResolveActionKey(ent.Owner);
         if (IsAstralFatiguedForAction(args.User, actionKey))
+        {
+            args.Invalid = true;
+            return;
+        }
+
+        if (ent.Comp.RequireAliveTarget &&
+            (args.EntityTarget is not { } target ||
+             !TryComp<MobStateComponent>(target, out var mobState) ||
+             !_mobState.IsAlive(target, mobState)))
         {
             args.Invalid = true;
             return;

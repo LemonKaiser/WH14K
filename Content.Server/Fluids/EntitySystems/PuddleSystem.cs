@@ -1,3 +1,4 @@
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Fluids.Components;
 using Content.Server.Spreader;
 using Content.Shared.Chemistry;
@@ -36,6 +37,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
 
     [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
     [Dependency] private EntityQuery<EvaporationSparkleComponent> _evaporationSparklesQuery = default!;
@@ -52,6 +54,41 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         SubscribeLocalEvent<PuddleComponent, SpreadNeighborsEvent>(OnPuddleSpread);
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
+        SubscribeLocalEvent<PuddleComponent, ComponentShutdown>(OnPuddleShutdown);
+    }
+
+    protected override void OnSolutionUpdate(Entity<PuddleComponent> entity, ref SolutionChangedEvent args)
+    {
+        base.OnSolutionUpdate(entity, ref args);
+
+        if (args.Solution.Comp.Id != entity.Comp.SolutionName)
+            return;
+
+        UpdatePuddleTileFlammability(entity.Owner, args.Solution.Comp.Solution);
+    }
+
+    protected override void OnAnchorChanged(Entity<PuddleComponent> entity, ref AnchorStateChangedEvent args)
+    {
+        base.OnAnchorChanged(entity, ref args);
+
+        if (!args.Anchored)
+            _atmosphere.SetPuddleFlammabilityAtTile(entity.Owner);
+    }
+
+    private void OnPuddleShutdown(Entity<PuddleComponent> entity, ref ComponentShutdown args)
+    {
+        _atmosphere.SetPuddleFlammabilityAtTile(entity.Owner);
+    }
+
+    private void UpdatePuddleTileFlammability(EntityUid uid, Solution solution)
+    {
+        if (solution.Volume <= FixedPoint2.Zero)
+        {
+            _atmosphere.SetPuddleFlammabilityAtTile(uid);
+            return;
+        }
+
+        _atmosphere.SetPuddleFlammabilityAtTile(uid, solution.GetSolutionFlammability(_prototypeManager));
     }
 
     // TODO: This can be predicted once https://github.com/space-wizards/RobustToolbox/pull/5849 is merged

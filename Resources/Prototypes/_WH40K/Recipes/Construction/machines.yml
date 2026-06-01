@@ -1,4 +1,15 @@
 - type: construction
+  id: WH40KMachineFrame
+  graph: Machine
+  startNode: start
+  targetNode: machine
+  category: construction-category-machines
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
   id: WH40KTwoWayLever
   graph: LeverGraph
   startNode: start

@@ -12,6 +12,7 @@ loadout-group-survival-clown = Клоунский аварийный запас
 loadout-group-survival-medical = Медицинский аварийный запас
 loadout-group-survival-security = Аварийный запас охраны
 loadout-group-survival-syndicate = Github заставил меня перевести текст, который игрок вообще никогда не сможет увидеть, спасите
+loadout-group-survival-military = См. строку 14, это всё равно никто не увидит, так что :3
 loadout-group-breath-tool = Видовое дыхательное снаряжение
 loadout-group-tank-harness = Видовое снаряжение для выживания
 loadout-group-EVA-tank = Видовой газовый баллон
@@ -168,6 +169,8 @@ loadout-group-paramedic-shoes = Парамедик, обувь
 loadout-group-medical-glasses = Медицинский отдел, очки
 # Wildcards
 loadout-group-reporter-jumpsuit = Репортёр, комбинезон
+loadout-group-reporter-head = Репортёр, головной убор
+loadout-group-reporter-outerclothing = Репортёр, верхняя одежда
 loadout-group-psychologist-jumpsuit = Психолог, комбинезон
 loadout-group-boxer-jumpsuit = Боксёр, комбинезон
 loadout-group-boxer-gloves = Боксёр, перчатки

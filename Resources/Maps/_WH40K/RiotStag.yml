@@ -16768,6 +16768,18 @@ entities:
     - type: Transform
       pos: -2.5,-17.5
       parent: 2
+- proto: SpawnPointVoxScout
+  entities:
+  - uid: 2221
+    components:
+    - type: Transform
+      pos: -2.5,-18.5
+      parent: 2
+  - uid: 2222
+    components:
+    - type: Transform
+      pos: -1.5,-18.5
+      parent: 2
 - proto: SpawnPointSergeant
   entities:
   - uid: 2214
@@ -16810,18 +16822,6 @@ entities:
     components:
     - type: Transform
       pos: 16.5,1.5
-      parent: 2
-- proto: SpawnPointVoxScout
-  entities:
-  - uid: 2221
-    components:
-    - type: Transform
-      pos: -2.5,-18.5
-      parent: 2
-  - uid: 2222
-    components:
-    - type: Transform
-      pos: -1.5,-18.5
       parent: 2
 - proto: SpawnPointWH40KChaplain
   entities:

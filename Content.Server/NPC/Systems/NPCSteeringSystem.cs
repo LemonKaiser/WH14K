@@ -213,8 +213,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         component.LastRouteProgressTime = TimeSpan.Zero;
         component.LastFallbackRepathTime = TimeSpan.Zero;
         component.LastRouteProgressDistance = float.PositiveInfinity;
-        component.LastStallReason = string.Empty;
-        component.LastStallLogTime = TimeSpan.Zero;
         component.PendingPathDirectMoveTicks = 0;
         component.AvoidedPathPoly = null;
         component.LineOfSightTimer = 0f;
@@ -372,47 +370,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         RaiseLocalEvent(uid, ref ev);
     }
 
-    private void LogSteeringStall(
-        EntityUid uid,
-        NPCSteeringComponent steering,
-        TransformComponent xform,
-        string reason,
-        string details)
-    {
-        var now = _timing.CurTime;
-        if (steering.LastStallReason == reason &&
-            steering.LastStallLogTime != TimeSpan.Zero &&
-            (now - steering.LastStallLogTime).TotalSeconds < 2.5f)
-        {
-            return;
-        }
-
-        steering.LastStallReason = reason;
-        steering.LastStallLogTime = now;
-
-        var target = steering.Coordinates.IsValid(EntityManager)
-            ? _transform.ToMapCoordinates(steering.Coordinates)
-            : MapCoordinates.Nullspace;
-        var origin = _transform.GetMapCoordinates(uid, xform: xform);
-        var distance = origin.MapId == target.MapId
-            ? Vector2.Distance(origin.Position, target.Position)
-            : float.NaN;
-
-        Log.Info(
-            $"NPC steering stall {reason}: {ToPrettyString(uid)} status={steering.Status} distance={distance:0.00} range={steering.Range:0.00} pathPending={steering.Pathfind} pathCount={steering.CurrentPath.Count} flags={steering.Flags} target={target} details={details}");
-    }
-
-    private static float GetMax(float[] values)
-    {
-        var result = 0f;
-        foreach (var value in values)
-        {
-            result = MathF.Max(result, value);
-        }
-
-        return result;
-    }
-
     /// <summary>
     /// Go through each steerer and combine their vectors
     /// </summary>
@@ -427,7 +384,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         if (!steering.Coordinates.IsValid(EntityManager) ||
             Deleted(steering.Coordinates.EntityId))
         {
-            LogSteeringStall(uid, steering, xform, "invalid-target", "target coordinates are invalid or deleted");
             SetDirection(uid, mover, steering, Vector2.Zero);
             steering.Status = SteeringStatus.NoPath;
             return;
@@ -436,7 +392,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         // No path set from pathfinding or the likes.
         if (steering.Status == SteeringStatus.NoPath)
         {
-            LogSteeringStall(uid, steering, xform, "status-nopath", "steering status is NoPath");
             SetDirection(uid, mover, steering, Vector2.Zero);
             return;
         }
@@ -444,7 +399,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         // Can't move at all, just noop input.
         if (!mover.CanMove)
         {
-            LogSteeringStall(uid, steering, xform, "cannot-move", "InputMoverComponent.CanMove is false");
             SetDirection(uid, mover, steering, Vector2.Zero);
             steering.Status = SteeringStatus.NoPath;
             return;
@@ -476,7 +430,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
         if (steering.CanSeek && !TrySeek(uid, mover, steering, body, xform, offsetRot, moveSpeed, interest, frameTime, ref forceSteer))
         {
-            LogSteeringStall(uid, steering, xform, "seek-failed", $"TrySeek failed; speed={moveSpeed:0.00} pathPending={steering.Pathfind} pathCount={steering.CurrentPath.Count}");
             SetDirection(uid, mover, steering, Vector2.Zero);
             return;
         }
@@ -526,15 +479,6 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         if (desiredDirection != -1)
         {
             resultDirection = new Angle(desiredDirection * InterestRadians).ToVec();
-        }
-        else
-        {
-            LogSteeringStall(
-                uid,
-                steering,
-                xform,
-                "no-steering-slot",
-                $"all steering slots blocked or empty; maxInterest={GetMax(steering.Interest):0.00} maxDanger={GetMax(steering.Danger):0.00} pathPending={steering.Pathfind} pathCount={steering.CurrentPath.Count}");
         }
 
         steering.LastSteerDirection = resultDirection;

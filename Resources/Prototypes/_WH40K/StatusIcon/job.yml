@@ -200,14 +200,6 @@
 
 - type: jobIcon
   parent: JobIcon
-  id: JobIconHVoxScout
-  icon:
-    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
-    state: HVoxScout
-  jobName: job-name-hvox-scout
-
-- type: jobIcon
-  parent: JobIcon
   id: JobIconHCargo
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi

@@ -428,7 +428,7 @@ public abstract partial class SharedDisposalUnitSystem : EntitySystem
 
             if (GetState(ent) != DisposalsPressureState.Ready)
             {
-                newFlush += ent.Comp.NextPressurized;
+                newFlush = TimeSpan.FromSeconds(Math.Max(newFlush.TotalSeconds, ent.Comp.NextPressurized.TotalSeconds));
             }
 
             nextFlush = (ent.Comp.NextFlush ?? TimeSpan.MaxValue);

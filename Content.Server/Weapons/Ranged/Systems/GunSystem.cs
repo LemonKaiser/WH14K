@@ -152,23 +152,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (ent == null)
                         break;
 
-                    var shooterEvent = new GetShootingEntityEvent();
-                    if (user != null)
-                        RaiseLocalEvent(user.Value, ref shooterEvent);
-
-                    var effectiveShooter = shooterEvent.ShootingEntity ?? user;
-
-                    var hitscanEv = new HitscanTraceEvent
-                    {
-                        FromCoordinates = fromCoordinates,
-                        ShotDirection = mapDirection.Normalized(),
-                        Gun = gun,
-                        Shooter = effectiveShooter,
-                        Target = gun.Comp.Target,
-                    };
-                    RaiseLocalEvent(ent.Value, ref hitscanEv);
-
-                    Del(ent);
+                    FireHitscan(ent.Value);
 
                     if (heavyBolter)
                         Audio.PlayPvs(gun.Comp.SoundGunshotModified, gun);
@@ -184,6 +168,57 @@ public sealed partial class GunSystem : SharedGunSystem
         {
             FiredProjectiles = shotProjectiles,
         });
+
+        void FireHitscan(EntityUid hitscanEnt)
+        {
+            var shooterEvent = new GetShootingEntityEvent();
+            if (user != null)
+                RaiseLocalEvent(user.Value, ref shooterEvent);
+
+            var effectiveShooter = shooterEvent.ShootingEntity ?? user;
+            var baseDirection = mapDirection.Normalized();
+
+            if (TryComp<ProjectileSpreadComponent>(hitscanEnt, out var hitscanSpreadComp) &&
+                hitscanSpreadComp.Count > 1)
+            {
+                var spreadEvent = new GunGetAmmoSpreadEvent(hitscanSpreadComp.Spread);
+                RaiseLocalEvent(gun, ref spreadEvent);
+
+                var baseAngle = baseDirection.ToAngle();
+                var angles = LinearSpread(
+                    baseAngle - spreadEvent.Spread / 2,
+                    baseAngle + spreadEvent.Spread / 2,
+                    hitscanSpreadComp.Count);
+
+                FireHitscanTrace(hitscanEnt, angles[0].ToVec(), effectiveShooter);
+                Del(hitscanEnt);
+
+                for (var i = 1; i < hitscanSpreadComp.Count; i++)
+                {
+                    var newUid = Spawn(hitscanSpreadComp.Proto, fromEnt);
+                    FireHitscanTrace(newUid, angles[i].ToVec(), effectiveShooter);
+                    Del(newUid);
+                }
+
+                return;
+            }
+
+            FireHitscanTrace(hitscanEnt, baseDirection, effectiveShooter);
+            Del(hitscanEnt);
+        }
+
+        void FireHitscanTrace(EntityUid hitscanEnt, Vector2 shotDirection, EntityUid? effectiveShooter)
+        {
+            var hitscanEv = new HitscanTraceEvent
+            {
+                FromCoordinates = fromCoordinates,
+                ShotDirection = shotDirection,
+                Gun = gun,
+                Shooter = effectiveShooter,
+                Target = gun.Comp.Target,
+            };
+            RaiseLocalEvent(hitscanEnt, ref hitscanEv);
+        }
 
         void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
         {

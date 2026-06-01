@@ -22,6 +22,11 @@ internal sealed partial class StunOnCollideSystem : EntitySystem
 
     private void TryDoCollideStun(Entity<StunOnCollideComponent> ent, EntityUid target)
     {
+        var attempt = new BeforeStunOnCollideEvent(target, ent.Owner);
+        RaiseLocalEvent(ent.Owner, ref attempt);
+        if (attempt.Cancelled)
+            return;
+
         _stunSystem.TryKnockdown(target, ent.Comp.KnockdownAmount, ent.Comp.Refresh, ent.Comp.AutoStand, ent.Comp.Drop, true);
 
         if (ent.Comp.Refresh)
@@ -62,3 +67,6 @@ internal sealed partial class StunOnCollideSystem : EntitySystem
         TryDoCollideStun(ent, args.Target);
     }
 }
+
+[ByRefEvent]
+public record struct BeforeStunOnCollideEvent(EntityUid Target, EntityUid Source, bool Cancelled = false);

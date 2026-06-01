@@ -8297,43 +8297,36 @@ entities:
   - uid: 1212
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -44.5,7.5
       parent: 2
   - uid: 1213
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -46.5,7.5
       parent: 2
   - uid: 1214
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -47.5,7.5
       parent: 2
   - uid: 1215
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -48.5,7.5
       parent: 2
   - uid: 1216
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -49.5,7.5
       parent: 2
   - uid: 1217
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -50.5,7.5
       parent: 2
   - uid: 1218
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
       pos: -51.5,7.5
       parent: 2
   - uid: 1219
@@ -13942,13 +13935,6 @@ entities:
     - type: Transform
       pos: 8.5,-52.5
       parent: 2
-- proto: SpawnPointHVoxScout
-  entities:
-  - uid: 2127
-    components:
-    - type: Transform
-      pos: 9.5,-44.5
-      parent: 2
 - proto: SpawnPointLatejoin
   entities:
   - uid: 2141
@@ -14005,6 +13991,13 @@ entities:
     - type: Transform
       pos: -58.5,-3.5
       parent: 2
+- proto: SpawnPointVoxScout
+  entities:
+  - uid: 2140
+    components:
+    - type: Transform
+      pos: -59.5,-3.5
+      parent: 2
 - proto: SpawnPointSergeant
   entities:
   - uid: 2135
@@ -14039,13 +14032,6 @@ entities:
     components:
     - type: Transform
       pos: -51.5,5.5
-      parent: 2
-- proto: SpawnPointVoxScout
-  entities:
-  - uid: 2140
-    components:
-    - type: Transform
-      pos: -59.5,-3.5
       parent: 2
 - proto: SpawnPointWH40KReinforcementHeretics
   entities:

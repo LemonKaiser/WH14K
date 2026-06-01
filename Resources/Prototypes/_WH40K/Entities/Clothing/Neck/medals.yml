@@ -71,6 +71,40 @@
         Heat: 0.95
   - type: ExplosionResistance
     damageCoefficient: 0.95
+  - type: Battery
+    maxCharge: 520
+    startingCharge: 520
+  - type: BatterySelfRecharger
+    autoRechargeRate: 4
+  - type: EnergyDomeGenerator
+    enabledOnSpawn: false
+    globalEnabled: false
+    domePrototype: EnergyDomeSmallBlue
+    useModeProfiles: true
+    useSizeColorProfiles: false
+    useAutoResponseProfiles: false
+    mode: Bubble
+    size: Small
+    color: Blue
+    wallSide: Front
+    autoResponseProfile: HoldLine
+    bubbleDomePrototype: EnergyDomeSmallBlue
+    wallDomePrototype: EnergyDomeSmallBlueDirected
+    activationEnergyCost: 18
+    passiveEnergyDraw: 1.2
+    damageEnergyDraw: 6
+    teamId: Imperium
+    interiorRadiusMultiplier: 1.0
+    linkEnabled: false
+  - type: UserInterface
+    interfaces:
+      enum.EnergyDomeUiKey.Key:
+        type: EnergyDomeBoundUserInterface
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 0
+  - type: UseDelay
+    delay: 10
   - type: Tag
     tags:
       - Medal

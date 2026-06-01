@@ -1,8 +1,10 @@
+using Content.Server.Administration.Managers;
 using Content.Server.Administration.UI;
 using Content.Server.Clothing.Systems;
 using Content.Server.EUI;
 using Content.Shared.Administration;
 using Content.Shared.Inventory;
+using Robust.Server.Player;
 using Robust.Shared.Console;
 
 namespace Content.Server.Administration.Commands
@@ -10,13 +12,15 @@ namespace Content.Server.Administration.Commands
     [AdminCommand(AdminFlags.Admin)]
     public sealed partial class SetOutfitCommand : LocalizedEntityCommands
     {
+        [Dependency] private IAdminActionGuard _adminActionGuard = default!;
         [Dependency] private EuiManager _euiManager = default!;
         [Dependency] private OutfitSystem _outfitSystem = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
 
         public override string Command => "setoutfit";
         public override string Description => Loc.GetString("cmd-setoutfit-desc", ("requiredComponent", nameof(InventoryComponent)));
 
-        public override void Execute(IConsoleShell shell, string argStr, string[] args)
+        public override async void Execute(IConsoleShell shell, string argStr, string[] args)
         {
             if (args.Length < 1)
             {
@@ -41,6 +45,17 @@ namespace Content.Server.Administration.Commands
             if (!EntityManager.HasComponent<InventoryComponent>(target))
             {
                 shell.WriteLine(Loc.GetString("shell-target-entity-does-not-have-message", ("missing", "inventory")));
+                return;
+            }
+
+            if (_playerManager.TryGetSessionByEntity(target.Value, out var targetSession)
+                && await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    targetSession.UserId,
+                    Loc.GetString("admin-hierarchy-action-set-outfit"),
+                    targetSession.Name,
+                    shell.WriteError))
+            {
                 return;
             }
 

@@ -1,4 +1,5 @@
 using Content.Server.Administration;
+using Content.Server.Administration.Managers;
 using Content.Server.Database;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
@@ -13,6 +14,7 @@ namespace Content.Server.Whitelist;
 public sealed partial class AddWhitelistCommand : LocalizedCommands
 {
     [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IServerDbManager _dbManager = default!;
     public override string Command => "whitelistadd";
 
@@ -35,6 +37,16 @@ public sealed partial class AddWhitelistCommand : LocalizedCommands
             if (isWhitelisted)
             {
                 shell.WriteLine(Loc.GetString("cmd-whitelistadd-existing", ("username", data.Username)));
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-whitelist-add"),
+                    data.Username,
+                    shell.WriteLine))
+            {
                 return;
             }
 
@@ -61,6 +73,7 @@ public sealed partial class AddWhitelistCommand : LocalizedCommands
 public sealed partial class RemoveWhitelistCommand : LocalizedCommands
 {
     [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IServerDbManager _dbManager = default!;
 
     public override string Command => "whitelistremove";
@@ -84,6 +97,16 @@ public sealed partial class RemoveWhitelistCommand : LocalizedCommands
             if (!isWhitelisted)
             {
                 shell.WriteLine(Loc.GetString("cmd-whitelistremove-existing", ("username", data.Username)));
+                return;
+            }
+
+            if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                    shell.Player,
+                    guid,
+                    Loc.GetString("admin-hierarchy-action-whitelist-remove"),
+                    data.Username,
+                    shell.WriteLine))
+            {
                 return;
             }
 

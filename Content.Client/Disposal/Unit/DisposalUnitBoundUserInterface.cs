@@ -53,7 +53,6 @@ namespace Content.Client.Disposal.Unit
                 return;
 
             var name = EntMan.GetComponent<MetaDataComponent>(entity.Owner).EntityName;
-            _disposalUnitWindow.Title = Loc.GetString("ui-disposal-unit-title", ("name", name));
 
             if (!EntMan.TryGetComponent(entity.Owner, out DisposalUnitComponent? disposals))
                 return;
@@ -62,13 +61,12 @@ namespace Content.Client.Disposal.Unit
             var disposalState = disposalUnit.GetState(entity);
             var fullPressure = disposalUnit.EstimatedFullPressure((Owner, disposals));
             var pressurePerSecond = disposals.PressurePerSecond;
+            var powered = EntMan.System<PowerReceiverSystem>().IsPowered(Owner);
+            var engaged = entity.Comp.Engaged;
 
-            _disposalUnitWindow.UnitState.Text = Loc.GetString($"disposal-unit-state-{disposalState}");
-            _disposalUnitWindow.FullPressure = disposalUnit.EstimatedFullPressure(entity);
-            _disposalUnitWindow.PressurePerSecond = entity.Comp.PressurePerSecond;
-            _disposalUnitWindow.PressureBar.UpdatePressure(fullPressure, pressurePerSecond);
-            _disposalUnitWindow.Power.Pressed = EntMan.System<PowerReceiverSystem>().IsPowered(Owner);
-            _disposalUnitWindow.Engage.Pressed = entity.Comp.Engaged;
+            _disposalUnitWindow.RefreshState(name, disposalState, powered, engaged, fullPressure, pressurePerSecond);
+            _disposalUnitWindow.Power.Pressed = powered;
+            _disposalUnitWindow.Engage.Pressed = engaged;
         }
     }
 }

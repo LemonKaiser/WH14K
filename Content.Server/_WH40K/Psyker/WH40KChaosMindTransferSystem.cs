@@ -1,7 +1,10 @@
+using Content.Server._WH40K.GameTicking.Rules;
+using Content.Server._WH40K.GameTicking.Rules.Components;
 using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
 using Content.Shared.Mind.Components;
+using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.Psyker;
 
 namespace Content.Server._WH40K.Psyker;
@@ -12,8 +15,10 @@ namespace Content.Server._WH40K.Psyker;
 public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
 {
     [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
 
     private readonly Dictionary<EntityUid, ChaosMindTransferState> _pendingTransfers = new();
+    private readonly Dictionary<EntityUid, TeamMindTransferState> _pendingTeamTransfers = new();
 
     public override void Initialize()
     {
@@ -24,6 +29,9 @@ public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
 
     private void OnMindRemoved(Entity<MindContainerComponent> ent, ref MindRemovedMessage args)
     {
+        if (TryCaptureTeamTransferState(ent.Owner, args.TransferEntity, out var teamState))
+            _pendingTeamTransfers[args.Mind.Owner] = teamState;
+
         if (!TryCaptureTransferState(ent.Owner, out var state))
             return;
 
@@ -33,20 +41,57 @@ public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
 
     private void OnMindAdded(Entity<MindContainerComponent> ent, ref MindAddedMessage args)
     {
-        if (!_pendingTransfers.TryGetValue(args.Mind.Owner, out var state))
+        var hasTeamTransfer = _pendingTeamTransfers.TryGetValue(args.Mind.Owner, out var teamState);
+        var hasChaosTransfer = _pendingTransfers.TryGetValue(args.Mind.Owner, out var state);
+
+        if (!hasTeamTransfer && !hasChaosTransfer)
             return;
 
         if (HasComp<GhostComponent>(ent.Owner))
+        {
+            if (hasTeamTransfer)
+                _pendingTeamTransfers.Remove(args.Mind.Owner);
+
+            return;
+        }
+
+        if (hasTeamTransfer)
+        {
+            _pendingTeamTransfers.Remove(args.Mind.Owner);
+
+            if (teamState.PreviousBody != ent.Owner && ShouldClearPreviousTeamBody(teamState.PreviousBody))
+                ClearTeamBodyState(teamState.PreviousBody);
+
+            ApplyTeamTransferState(ent.Owner, teamState.TeamId);
+        }
+
+        if (!hasChaosTransfer)
             return;
 
         _pendingTransfers.Remove(args.Mind.Owner);
         ClearChaosBodyState(ent.Owner);
-        ApplyTransferState(ent.Owner, state);
+        ApplyTransferState(ent.Owner, state!);
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent args)
     {
         _pendingTransfers.Clear();
+        _pendingTeamTransfers.Clear();
+    }
+
+    private bool TryCaptureTeamTransferState(EntityUid uid, EntityUid? transferEntity, out TeamMindTransferState state)
+    {
+        state = default;
+
+        if (transferEntity == null ||
+            !TryComp<WH40KTeamMemberComponent>(uid, out var member) ||
+            string.IsNullOrWhiteSpace(member.TeamId))
+        {
+            return false;
+        }
+
+        state = new TeamMindTransferState(uid, member.TeamId);
+        return true;
     }
 
     private bool TryCaptureTransferState(EntityUid uid, out ChaosMindTransferState state)
@@ -124,6 +169,33 @@ public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
         RemComp<WH40KChaosGiftProgressionComponent>(uid);
         RemComp<WH40KChaosLeaderRoleComponent>(uid);
         RemComp<WH40KChaosGiftRoleComponent>(uid);
+    }
+
+    private bool ShouldClearPreviousTeamBody(EntityUid previousBody)
+    {
+        return !Deleted(previousBody) &&
+               (!TryComp<MindContainerComponent>(previousBody, out var container) || !container.HasMind);
+    }
+
+    private void ApplyTeamTransferState(EntityUid uid, string teamId)
+    {
+        var member = EnsureComp<WH40KTeamMemberComponent>(uid);
+        member.TeamId = teamId;
+
+        var factionIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(uid);
+        if (!string.Equals(factionIcon.TeamId, teamId, StringComparison.OrdinalIgnoreCase))
+        {
+            factionIcon.TeamId = teamId;
+            Dirty(uid, factionIcon);
+        }
+
+        _teamNpcFactions.ApplyTeamFaction(uid, teamId);
+    }
+
+    private void ClearTeamBodyState(EntityUid uid)
+    {
+        RemComp<WH40KTeamMemberComponent>(uid);
+        RemComp<WH40KTeamBattleFactionIconComponent>(uid);
     }
 
     private static ChaosProgressionState CaptureProgression(WH40KChaosGiftProgressionComponent progression)
@@ -334,4 +406,6 @@ public sealed partial class WH40KChaosMindTransferSystem : EntitySystem
         public float DecayPerSecond;
         public TimeSpan NextNetworkSyncAt;
     }
+
+    private readonly record struct TeamMindTransferState(EntityUid PreviousBody, string TeamId);
 }

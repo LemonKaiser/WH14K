@@ -408,21 +408,6 @@
       - state: guardsman
 
 - type: entity
-  id: SpawnPointHVoxScout
-  parent: SpawnPointJobBase
-  name: HVoxScout
-  suffix: WH40K, Heretics
-  components:
-  - type: SpawnPoint
-    job_id: HVoxScout
-  - type: Sprite
-    sprite: _WH40K/Markers/jobs.rsi
-    layers:
-      - state: green
-      - state: heretic
-      - state: guardsman
-
-- type: entity
   id: SpawnPointHLieutenant
   parent: SpawnPointJobBase
   name: Lieutenant

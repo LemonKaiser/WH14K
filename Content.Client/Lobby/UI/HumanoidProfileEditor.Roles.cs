@@ -113,6 +113,7 @@ public sealed partial class HumanoidProfileEditor
             roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
             _loadoutWindow?.RefreshLoadouts(roleLoadout, session, collection);
             Profile = Profile?.WithLoadout(roleLoadout);
+            SetDirty();
             ReloadPreview();
         };
 
@@ -121,6 +122,7 @@ public sealed partial class HumanoidProfileEditor
             roleLoadout.RemoveLoadout(loadoutGroup, loadoutProto, _prototypeManager);
             _loadoutWindow?.RefreshLoadouts(roleLoadout, session, collection);
             Profile = Profile?.WithLoadout(roleLoadout);
+            SetDirty();
             ReloadPreview();
         };
 

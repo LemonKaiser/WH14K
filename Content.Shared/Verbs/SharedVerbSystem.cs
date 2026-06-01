@@ -2,7 +2,9 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory.VirtualItem;
+using Content.Shared.Localizations;
 using Robust.Shared.Containers;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 
 namespace Content.Shared.Verbs
@@ -11,6 +13,7 @@ namespace Content.Shared.Verbs
     {
         [Dependency] private SharedInteractionSystem _interactionSystem = default!;
         [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
+        [Dependency] private ILocalizationManager _localizationManager = default!;
         [Dependency] protected SharedContainerSystem ContainerSystem = default!;
 
         public override void Initialize()
@@ -22,6 +25,8 @@ namespace Content.Shared.Verbs
 
         private void HandleExecuteVerb(ExecuteVerbEvent args, EntitySessionEventArgs eventArgs)
         {
+            using var cultureScope = new LocalizationCultureScope(_localizationManager, args.CultureName);
+
             var user = eventArgs.SenderSession.AttachedEntity;
             if (user == null)
                 return;

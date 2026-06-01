@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Content.Server.Administration.Notes;
+using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;
@@ -11,6 +12,7 @@ namespace Content.Server.Administration.Commands;
 public sealed partial class OpenAdminNotesCommand : LocalizedCommands
 {
     [Dependency] private IAdminNotesManager _adminNotes = default!;
+    [Dependency] private IAdminActionGuard _adminActionGuard = default!;
     [Dependency] private IPlayerLocator _locator = default!;
 
     public const string CommandName = "adminnotes";
@@ -45,6 +47,15 @@ public sealed partial class OpenAdminNotesCommand : LocalizedCommands
             default:
                 shell.WriteError(Loc.GetString("cmd-adminnotes-args-error"));
                 return;
+        }
+
+        if (await _adminActionGuard.TryDenyProtectedTargetAsync(
+                player,
+                new NetUserId(notedPlayer),
+                Loc.GetString("admin-hierarchy-action-open-admin-notes"),
+                notify: shell.WriteError))
+        {
+            return;
         }
 
         await _adminNotes.OpenEui(player, new NetUserId(notedPlayer));

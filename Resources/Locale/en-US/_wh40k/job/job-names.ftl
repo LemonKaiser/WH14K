@@ -33,7 +33,6 @@ job-name-hsergeant = Chosen of Chaos
 job-name-hspecialist-hws = Corruption HWS Specialist
 job-name-hspecialist-sws = Corruption SWS Specialist
 job-name-hguardsman = Cultist
-job-name-hvox-scout = Heretic Vox Operator
 job-name-hband-supplier = Contrabandist
 job-name-hmagos = Heretek Magos
 job-name-hexplorator = Heretek Explorator
