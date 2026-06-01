@@ -158,6 +158,9 @@ ent-ClothingUniformJumpsuitSmug = Smuggler's Jumpsuit
 ent-ClothingHeadHelmetFlakCyan = cyan-pattern flak helmet
     .desc = { ent-ClothingHeadHelmetFlak.desc }
 
+ent-ClothingHeadHelmetFlakMedCyan = cyan-pattern visor helmet
+    .desc = { ent-ClothingHeadHelmetFlakMed.desc }
+
 ent-ClothingHeadHelmetBloodPact = bloodpact helmet
     .desc = Standard helmet
 
