@@ -211,8 +211,8 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Structural: 20
-        Heat: 25
+        Structural: 25
+        Heat: 50
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
@@ -231,7 +231,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 50
+        Heat: 20
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi

@@ -259,8 +259,8 @@
     tags:
       - WH40KMagazineMultilas
   - type: Battery
-    maxCharge: 60000
-    startingCharge: 60000
+    maxCharge: 30000
+    startingCharge: 30000
   - type: BatteryAmmoProvider
     proto: LaserMultilas
-    fireCost: 300
+    fireCost: 100

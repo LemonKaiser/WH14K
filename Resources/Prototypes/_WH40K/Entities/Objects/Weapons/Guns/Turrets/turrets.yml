@@ -176,7 +176,7 @@
     deployingState: normal_uac_sentry
     retractingState: normal_uac_sentry_handheld
   - type: Gun
-    fireRate: 2
+    fireRate: 7
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -188,19 +188,19 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: LasgunPowerCell
+        startingItem: WH40KMagazineMultilas
         insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
         ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
         whitelist:
           tags:
-          - LasgunPowerCell
+          - WH40KMagazineMultilas
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
   - type: WH40KTurretProfile
     detectionRange: 14
     fireRange: 14
-    supportedAmmo: LasgunPowerCell, BoxLasgunPowerCell
+    supportedAmmo: WH40KMagazineMultilas, BoxLasgunPowerCell
   - type: TurretTargetSettings
     exemptAccessLevels:
     - Borg
