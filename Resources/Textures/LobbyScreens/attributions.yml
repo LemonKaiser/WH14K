@@ -66,4 +66,4 @@
 - files: ["wh40k-plush-devs.png"]
   license: "CC-BY-NC-SA-3.0"
   copyright: "Composite assembled for WH14K from internal _WH40K plush sprites and an original generated lobby plate."
-  source: "Internal WH14K asset composite"
+  source: "https://github.com/LemonKaiser/WH14K"
