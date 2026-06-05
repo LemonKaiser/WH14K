@@ -136,7 +136,7 @@ public static class WH40KNotificationColors
     public static readonly Color Neutral = Color.FromHex("#D6D6D6");
     public static readonly Color Imperium = Color.FromHex("#F3C548");
     public static readonly Color Chaos = Color.FromHex("#E03232");
-    public static readonly Color Tau = Color.FromHex("#4DA7FF");
+    public static readonly Color Tau = Color.FromHex("#F4F4F4");
     public static readonly Color Weather = Color.FromHex("#66D7FF");
     public static readonly Color Event = Color.FromHex("#FF9B2F");
     public static readonly Color Objective = Color.FromHex("#B86CFF");

@@ -167,6 +167,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         base.Started(uid, component, gameRule, args);
         _activeRuleUid = uid;
 
+        ApplySelectedMapFactionFilter(component);
         BuildDepartmentMap(component);
         component.CheckInterval = _checkInterval;
         component.RequireAllTeamsPresent = _requireAllTeamsPresent;
@@ -389,6 +390,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         {
             _sawmill.Debug($"No team match for {ev.Player?.Name} ({ToPrettyString(ev.Mob)}). Job not in configured departments.");
             RemCompDeferred<WH40KTeamBattleFactionIconComponent>(ev.Mob);
+            RemCompDeferred<WH40KFactionRecruiterComponent>(ev.Mob);
             if (ev.Player is { } unknownPlayer)
             {
                 RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), unknownPlayer);
@@ -407,6 +409,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
             Dirty(ev.Mob, factionIcon);
         }
         _teamNpcFactions.ApplyTeamFaction(ev.Mob, team.Id);
+        ApplyTeamGrantedComponents(ev.Mob, team);
         if (ev.Player is { } teamPlayer)
         {
             rule.PlayerLastKnownTeam[teamPlayer.UserId] = team.Id;
@@ -467,6 +470,9 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
 
         rule.PlayerLastKnownTeam[userId] = resolvedTeamId;
 
+        if (TryGetTeamDefinitionById(rule, resolvedTeamId, out var team))
+            ApplyTeamGrantedComponents(ent.Owner, team);
+
         if (_players.TryGetSessionById(userId, out var session))
         {
             RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), session);
@@ -496,6 +502,11 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         }
 
         _teamNpcFactions.ApplyTeamFaction(args.NewEntity, resolvedTeamId);
+        if (TryGetActiveRule(out _, out var activeRule, out _) &&
+            TryGetTeamDefinitionById(activeRule, resolvedTeamId, out var team))
+        {
+            ApplyTeamGrantedComponents(args.NewEntity, team);
+        }
     }
 
     private static List<WH40KTeamColorDefinition> BuildTeamColorDefinitions(Components.WH40KTeamBattleRuleComponent rule)
@@ -646,6 +657,102 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
 
         departments = team!.Departments;
         return true;
+    }
+
+    public bool TrySetEntityTeam(EntityUid entity, string teamId, bool updatePlayerMemory = true)
+    {
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        if (!TryGetTeamDefinitionById(rule, teamId, out var team))
+            return false;
+
+        var member = EnsureComp<WH40KTeamMemberComponent>(entity);
+        member.TeamId = team.Id;
+        Dirty(entity, member);
+
+        var factionIcon = EnsureComp<WH40KTeamBattleFactionIconComponent>(entity);
+        if (!string.Equals(factionIcon.TeamId, team.Id, StringComparison.OrdinalIgnoreCase))
+        {
+            factionIcon.TeamId = team.Id;
+            Dirty(entity, factionIcon);
+        }
+
+        _teamNpcFactions.ApplyTeamFaction(entity, team.Id);
+        ApplyTeamGrantedComponents(entity, team);
+
+        if (updatePlayerMemory &&
+            _mind.TryGetMind(entity, out _, out var mind) &&
+            mind.UserId is { } userId)
+        {
+            rule.PlayerLastKnownTeam[userId] = team.Id;
+
+            if (_players.TryGetSessionById(userId, out var session))
+            {
+                RaiseNetworkEvent(new WH40KTeamColorsAssignedEvent(BuildTeamColorDefinitions(rule)), session);
+                RaiseNetworkEvent(new WH40KTeamThemeAssignedEvent(team.Id), session);
+            }
+        }
+
+        if (rule.TeamLevelBuffs.TryGetValue(team.Id, out var buffType) &&
+            buffType != WH40KLevelBuffType.None)
+        {
+            ApplyTeamLevelBuffToEntity(entity, rule, buffType);
+        }
+
+        ApplyWh40KStaminaProfile(entity);
+        _characterDevelopment.RefreshStaminaProfileModifiers(entity);
+        return true;
+    }
+
+    public bool TryGrantRecruitmentReward(string teamId, int multiplier)
+    {
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        var reward = Math.Max(1, rule.FrontPointsPerKill) * Math.Max(1, multiplier);
+        var xpGranted = TryAdjustTeamXp(resolvedTeamId, reward, out _, out _, out _, "recruitment");
+        var influenceGranted = TryAdjustTeamInfluence(resolvedTeamId, reward, out _, out _, "recruitment");
+        return xpGranted || influenceGranted;
+    }
+
+    private bool TryGetTeamDefinitionById(
+        Components.WH40KTeamBattleRuleComponent rule,
+        string teamId,
+        out WH40KTeamDefinition team)
+    {
+        foreach (var candidate in rule.Teams)
+        {
+            if (!string.Equals(candidate.Id, teamId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            team = candidate;
+            return true;
+        }
+
+        team = default!;
+        return false;
+    }
+
+    private void ApplyTeamGrantedComponents(EntityUid entity, WH40KTeamDefinition team)
+    {
+        if (team.Recruitment is { Enabled: true } recruitment)
+        {
+            var recruiter = EnsureComp<WH40KFactionRecruiterComponent>(entity);
+            recruiter.DoAfter = recruitment.DoAfter;
+            recruiter.RewardMultiplier = Math.Max(1, recruitment.RewardMultiplier);
+            Dirty(entity, recruiter);
+        }
+        else
+        {
+            RemCompDeferred<WH40KFactionRecruiterComponent>(entity);
+        }
     }
 
     public bool TryGetRememberedTeam(NetUserId userId, out string teamId)
@@ -828,6 +935,22 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         }
     }
 
+    private void ApplySelectedMapFactionFilter(Components.WH40KTeamBattleRuleComponent component)
+    {
+        var selectedMap = _gameMapManager.GetSelectedMap();
+        if (selectedMap?.WH40KTeamBattleFactions == null || selectedMap.WH40KTeamBattleFactions.Count == 0)
+            return;
+
+        var allowed = new HashSet<string>(selectedMap.WH40KTeamBattleFactions, StringComparer.OrdinalIgnoreCase);
+        var before = component.Teams.Count;
+        component.Teams.RemoveAll(team => string.IsNullOrWhiteSpace(team.Id) || !allowed.Contains(team.Id));
+
+        if (component.Teams.Count == before)
+            return;
+
+        _sawmill.Info($"Applied WH40K TeamBattle faction filter for map '{selectedMap.ID}': {string.Join(", ", component.Teams.Select(team => team.Id))}");
+    }
+
     private void CheckForVictory(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule)
     {
         ComputeTeamCounts(component, out var total, out var alive);
@@ -836,8 +959,14 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         if (totalAssigned == 0)
             return;
 
-        if (component.RequireAllTeamsPresent && total.Any(t => t == 0))
-            return;
+        if (component.RequireAllTeamsPresent)
+        {
+            for (var i = 0; i < component.Teams.Count; i++)
+            {
+                if (component.Teams[i].RequiredForPresence && total[i] == 0)
+                    return;
+            }
+        }
 
         var aliveTeams = alive
             .Select((count, index) => (count, index))
@@ -2334,6 +2463,12 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         if (string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase))
         {
             account = "WH40KHeretics";
+            return true;
+        }
+
+        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KTau";
             return true;
         }
 

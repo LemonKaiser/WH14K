@@ -1,0 +1,5 @@
+- type: lobbyBackground
+  id: WH40KPlushDevLineup
+  background: /Textures/LobbyScreens/wh40k-plush-devs.png
+  title: lobby-state-background-wh40k-plush-devs-title
+  artist: lobby-state-background-wh40k-plush-devs-artist

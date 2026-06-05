@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared._WH40K.Overlays;
 using Content.Shared.Magic;
 using Content.Shared.Magic.Events;
 using Content.Shared.Movement.Systems;
@@ -9,6 +10,7 @@ using Content.Shared._WH40K.Psyker;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
@@ -31,14 +33,18 @@ public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
     private static readonly EntProtoId FireballTierTwoProjectile = "WH40KProjectileChaosWarpBlastTzeentchTier2";
     private static readonly EntProtoId FireballTierThreeProjectile = "WH40KProjectileChaosWarpBlastTzeentchTier3";
     private static readonly EntProtoId FireballExProjectile = "WH40KProjectileChaosWarpBlastTzeentchEx";
+    private static readonly EntProtoId TimeFieldPrototype = "WH40KRadialGreyscaleField";
+    private static readonly float[] TimeFieldDurationByTier = { 3f, 5f, 10f, 15f };
+    private static readonly float[] TimeFieldRadiusByTier = { 2f, 3f, 5f, 7f };
+    private static readonly float[] TimeFieldSlowByTier = { 0.7f, 0.5f, 0.25f, 0.1f };
 
     private const string TzeentchFireballAction = "ActionWH40KChaosTzeentchFireball";
     private const string TzeentchBarrierAction = "ActionWH40KChaosTzeentchBarrier";
-    private const string TzeentchAuraAction = "ActionWH40KChaosTzeentchMindTwist";
+    private const string TzeentchTimeFieldAction = "ActionWH40KChaosTzeentchTimeField";
 
     private const float FireballBaseCooldown = 45f;
     private const float BarrierBaseCooldown = 18f;
-    private const float AuraBaseCooldown = 42f;
+    private const float TimeFieldBaseCooldown = 42f;
 
     private readonly HashSet<EntityUid> _nearby = new();
 
@@ -50,7 +56,7 @@ public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, InstantSpawnSpellEvent>(
             OnTzeentchBarrierCast,
             before: [typeof(SharedMagicSystem)]);
-        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosTzeentchSpeedAuraActionEvent>(OnTzeentchChosenAura);
+        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosTzeentchTimeFieldActionEvent>(OnTzeentchTimeField);
         SubscribeLocalEvent<WH40KChaosTzeentchAuraBuffComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
         SubscribeLocalEvent<WH40KChaosTzeentchAuraBuffComponent, ComponentShutdown>(OnBuffShutdown);
     }
@@ -121,13 +127,13 @@ public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
             giftTwoExUnlocked);
     }
 
-    private void OnTzeentchChosenAura(Entity<WH40KChaosGiftRoleComponent> ent, ref WH40KChaosTzeentchSpeedAuraActionEvent args)
+    private void OnTzeentchTimeField(Entity<WH40KChaosGiftRoleComponent> ent, ref WH40KChaosTzeentchTimeFieldActionEvent args)
     {
-        if (!TryGetTzeentchProgression(ent.Owner, args.Action.Owner, TzeentchAuraAction, out _))
+        if (!TryGetTzeentchProgression(ent.Owner, args.Action.Owner, TzeentchTimeFieldAction, out var progression))
             return;
 
-        ApplyTieredCooldown(args.Performer, args.Action, AuraBaseCooldown, 0);
-        ApplyChosenAura(args.Performer, radius: 6.5f, duration: 30f, speedMultiplier: 1.18f, cooldownMultiplier: 0.85f);
+        ApplyTieredCooldown(args.Performer, args.Action, TimeFieldBaseCooldown, 0);
+        SpawnTimeField(args.Performer, progression);
         args.Handled = true;
     }
 
@@ -203,6 +209,31 @@ public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
         buff.EyeBaselineCaptured = false;
     }
 
+    private void SpawnTimeField(EntityUid performer, WH40KChaosGiftProgressionComponent progression)
+    {
+        var field = Spawn(TimeFieldPrototype, Transform(performer).Coordinates);
+        var duration = ResolveTimeFieldDuration(progression);
+        var radius = ResolveTimeFieldRadius(progression);
+        var slow = ResolveTimeFieldSlowMultiplier(progression);
+
+        var radial = EnsureComp<WH40KRadialGreyscaleComponent>(field);
+        radial.Radius = radius;
+        radial.Feather = Math.Clamp(radius * 0.22f, 0.35f, 1.25f);
+        Dirty(field, radial);
+
+        var logic = EnsureComp<WH40KTimeDilationFieldComponent>(field);
+        logic.Caster = performer;
+        logic.ImmunePatron = WH40KChaosPatron.Tzeentch;
+        logic.MovementSpeedMultiplier = slow;
+        logic.MeleeAttackRateMultiplier = slow;
+        logic.PhysicsVelocityMultiplier = slow;
+        logic.TimedDespawnMultiplier = slow;
+        logic.GrenadeFuseTimerMultiplier = slow;
+
+        var despawn = EnsureComp<TimedDespawnComponent>(field);
+        despawn.Lifetime = duration;
+    }
+
     private void ApplyTieredCooldown(EntityUid performer, Entity<ActionComponent> action, float baseSeconds, byte tier)
     {
         var duration = MathF.Max(0.1f, baseSeconds * WH40KChaosGiftUpgradeMath.CooldownMultiplier(tier));
@@ -235,6 +266,31 @@ public sealed partial class WH40KChaosTzeentchGiftAbilitySystem : EntitySystem
 
         progression = found;
         return true;
+    }
+
+    private static float ResolveTimeFieldDuration(WH40KChaosGiftProgressionComponent progression)
+    {
+        var duration = ResolveTierValue(TimeFieldDurationByTier, progression.KhornePassiveSpeedTier);
+        if (WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression))
+            duration *= 2f;
+
+        return duration;
+    }
+
+    private static float ResolveTimeFieldRadius(WH40KChaosGiftProgressionComponent progression)
+    {
+        return ResolveTierValue(TimeFieldRadiusByTier, progression.KhornePassiveHealthTier);
+    }
+
+    private static float ResolveTimeFieldSlowMultiplier(WH40KChaosGiftProgressionComponent progression)
+    {
+        return ResolveTierValue(TimeFieldSlowByTier, progression.KhornePassiveMeleeTier);
+    }
+
+    private static float ResolveTierValue(float[] values, byte tier)
+    {
+        var index = Math.Clamp(tier, (byte) 0, (byte) (values.Length - 1));
+        return values[index];
     }
 
     private static EntProtoId ResolveBarrierWallPrototype(byte powerTier, byte utilityTier, bool exUnlocked)

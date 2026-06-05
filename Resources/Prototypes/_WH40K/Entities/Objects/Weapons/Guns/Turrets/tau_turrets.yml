@@ -1,0 +1,163 @@
+- type: entity
+  id: WH40KWeaponTurretTauPulse
+  parent: WH40KWeaponTurretLaserBase
+  name: pulse sentry turret
+  description: A deployable Tau sentry fitted with a pulse carbine weapon package.
+  suffix: WH40K, Tau, Pulse
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretpulse.rsi
+    drawdepth: Mobs
+    granularLayersRendering: true
+    layers:
+    - state: base
+      renderingStrategy: NoRotation
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: pulse
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      renderingStrategy: NoRotation
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretpulse.rsi
+    state: icon
+  - type: DeployableTurret
+    deployedState: blank
+    retractedState: blank
+    deployingState: blank
+    retractingState: blank
+  - type: Gun
+    fireRate: 3.6
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: TauPulseCellCarbine
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        whitelist:
+          tags:
+          - TauPulseCellCarbine
+  - type: WH40KTurretProfile
+    detectionRange: 15
+    fireRange: 15
+    supportedAmmo: TauPulseCellCarbine
+  - type: NpcFactionMember
+    factions:
+    - Tau
+
+- type: entity
+  id: WH40KWeaponTurretTauRailgun
+  parent: WH40KWeaponTurretLaserBase
+  name: railgun sentry turret
+  description: A deployable Tau sentry fitted with a long-range railgun package.
+  suffix: WH40K, Tau, Railgun
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretrailgun.rsi
+    drawdepth: Mobs
+    granularLayersRendering: true
+    layers:
+    - state: base
+      renderingStrategy: NoRotation
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: railgun
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      renderingStrategy: NoRotation
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretrailgun.rsi
+    state: icon
+  - type: DeployableTurret
+    deployedState: blank
+    retractedState: blank
+    deployingState: blank
+    retractingState: blank
+  - type: Gun
+    fireRate: 0.45
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: TauRailgunCell
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        whitelist:
+          tags:
+          - TauRailgunCell
+  - type: WH40KTurretProfile
+    detectionRange: 20
+    fireRange: 20
+    supportedAmmo: TauRailgunCell
+  - type: NpcFactionMember
+    factions:
+    - Tau
+
+- type: entity
+  id: WH40KWeaponTurretTauMissile
+  parent: WH40KWeaponTurretBallisticBase
+  name: missile sentry turret
+  description: A deployable Tau sentry configured for anti-infantry rocket fire.
+  suffix: WH40K, Tau, Missile
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretmissile.rsi
+    drawdepth: Mobs
+    granularLayersRendering: true
+    layers:
+    - state: base
+      renderingStrategy: NoRotation
+    - state: blank
+      map: [ "enum.DeployableTurretVisuals.Turret" ]
+    - state: missile
+      map: [ "enum.DeployableTurretVisuals.Weapon" ]
+      renderingStrategy: NoRotation
+      visible: false
+    - state: blank
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      visible: false
+  - type: Icon
+    sprite: _WH40K/Objects/Weapons/Guns/Turrets/tauturretmissile.rsi
+    state: icon
+  - type: DeployableTurret
+    deployedState: blank
+    retractedState: blank
+    deployingState: blank
+    retractingState: blank
+  - type: Gun
+    fireRate: 0.4
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
+  - type: BallisticAmmoProvider
+    proto: CartridgeRocketHE
+    capacity: 12
+    whitelist:
+      tags:
+      - CartridgeRocket
+  - type: WH40KTurretProfile
+    detectionRange: 18
+    fireRange: 18
+    supportedAmmo: CartridgeRocketHE
+  - type: NpcFactionMember
+    factions:
+    - Tau

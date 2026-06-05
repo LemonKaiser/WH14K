@@ -22,6 +22,7 @@
   equipment:
     jumpsuit: ClothingUniformJumpsuitTau
     back: ClothingBackpackTau
+    ears: ClothingHeadsetVoxBackpackTau
     gloves: ClothingHandsGlovesTau
     shoes: ClothingShoesBootsTau
     belt: ClothingBeltTau

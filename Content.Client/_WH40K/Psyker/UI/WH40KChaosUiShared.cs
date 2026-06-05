@@ -22,6 +22,7 @@ internal static class WH40KChaosUiShared
     private static readonly ResPath SkrizhalRsi = new("_WH40K/Interface/Abilities/skrizhali_runes.rsi");
     private static readonly ResPath CultistActionsRsi = new("_WH40K/Interface/Actions/cultist_abilities.rsi");
     private static readonly ResPath MagicActionsRsi = new("Objects/Magic/magicactions.rsi");
+    private static readonly ResPath GoldwatchRsi = new("Objects/Devices/goldwatch.rsi");
     private static readonly ResPath XenoToxicRsi = new("Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi");
 
     public static SpriteSpecifier.Rsi GetGiftIconSpecifier(WH40KChaosPatron patron, int slot)
@@ -54,7 +55,7 @@ internal static class WH40KChaosUiShared
                 1 => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
                 2 => new SpriteSpecifier.Rsi(CultistActionsRsi, "shield"),
                 3 => new SpriteSpecifier.Rsi(CultistActionsRsi, "portal"),
-                _ => new SpriteSpecifier.Rsi(MagicActionsRsi, "fireball"),
+                _ => new SpriteSpecifier.Rsi(GoldwatchRsi, "goldwatch"),
             },
             _ => slot switch
             {
@@ -170,6 +171,27 @@ internal static class WH40KChaosUiShared
     public static SpriteSpecifier.Rsi GetPatronIconSpecifier(WH40KChaosPatron patron)
     {
         return new SpriteSpecifier.Rsi(SkrizhalRsi, GetPatronIconState(patron));
+    }
+
+    public static SpriteSpecifier GetPassiveIconSpecifier(WH40KChaosPatron patron)
+    {
+        return patron == WH40KChaosPatron.Tzeentch
+            ? new SpriteSpecifier.Rsi(GoldwatchRsi, "goldwatch")
+            : GetPatronIconSpecifier(patron);
+    }
+
+    public static string GetPassiveTitleKey(WH40KChaosPatron patron)
+    {
+        return patron == WH40KChaosPatron.Tzeentch
+            ? "w40k-ch-tzeentch-gift-4-title"
+            : "w40k-ch-passive-title";
+    }
+
+    public static string GetPassiveDescriptionKey(WH40KChaosPatron patron)
+    {
+        return patron == WH40KChaosPatron.Tzeentch
+            ? "w40k-ch-tzeentch-gift-4-desc"
+            : "w40k-ch-passive-description";
     }
 
     public static WH40KChaosGiftPathKeys ResolvePathKeys(WH40KChaosPatron patron, int slot)
@@ -305,12 +327,12 @@ internal static class WH40KChaosUiShared
                     "w40k-ch-upgrade-path-tzeentch-warpstep-cooldown",
                     "w40k-ch-upgrade-path-tzeentch-warpstep-utility"),
                 _ => new WH40KChaosGiftPathKeys(
-                    "w40k-ch-upgrade-path-power-short",
-                    "w40k-ch-upgrade-path-cooldown-short",
-                    "w40k-ch-upgrade-path-cast-time-short",
-                    "w40k-ch-upgrade-path-power",
-                    "w40k-ch-upgrade-path-cooldown",
-                    "w40k-ch-upgrade-path-cast-time"),
+                    "w40k-ch-upgrade-path-tzeentch-timefield-duration-short",
+                    "w40k-ch-upgrade-path-tzeentch-timefield-radius-short",
+                    "w40k-ch-upgrade-path-tzeentch-timefield-slow-short",
+                    "w40k-ch-upgrade-path-tzeentch-timefield-duration",
+                    "w40k-ch-upgrade-path-tzeentch-timefield-radius",
+                    "w40k-ch-upgrade-path-tzeentch-timefield-slow"),
             };
         }
 

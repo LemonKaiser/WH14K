@@ -54,6 +54,9 @@ namespace Content.Client.Lobby
 
         public void SelectCharacter(int slot)
         {
+            if (!Preferences.Characters.ContainsKey(slot))
+                return;
+
             Preferences = new PlayerPreferences(Preferences.Characters, slot, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
             var msg = new MsgSelectCharacter
             {
@@ -102,8 +105,18 @@ namespace Content.Client.Lobby
 
         public void DeleteCharacter(int slot)
         {
-            var characters = Preferences.Characters.Where(p => p.Key != slot);
-            Preferences = new PlayerPreferences(characters, Preferences.SelectedCharacterIndex, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
+            var characters = new Dictionary<int, HumanoidCharacterProfile>(Preferences.Characters);
+            characters.Remove(slot);
+
+            var selectedSlot = Preferences.SelectedCharacterIndex;
+            if (!characters.ContainsKey(selectedSlot))
+            {
+                selectedSlot = characters.Count > 0
+                    ? characters.Keys.Min()
+                    : 0;
+            }
+
+            Preferences = new PlayerPreferences(characters, selectedSlot, Preferences.AdminOOCColor, Preferences.ConstructionFavorites);
             var msg = new MsgDeleteCharacter
             {
                 Slot = slot

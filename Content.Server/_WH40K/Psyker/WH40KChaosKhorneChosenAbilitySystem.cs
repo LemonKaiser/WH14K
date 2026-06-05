@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using Content.Server.Body.Systems;
 using Content.Server.KillTracking;
 using Content.Server._WH40K.MetaProgress;
@@ -14,21 +13,16 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Movement.Systems;
-using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Content.Shared.Weapons.Reflect;
 using Content.Shared._WH40K.Psyker;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
-using Robust.Shared.Physics.Systems;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._WH40K.Psyker;
@@ -51,18 +45,13 @@ public sealed partial class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
     [Dependency] private  DamageableSystem _damageable = default!;
     [Dependency] private  SharedHandsSystem _hands = default!;
     [Dependency] private  MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private  SharedPhysicsSystem _physics = default!;
     [Dependency] private  IGameTiming _timing = default!;
     [Dependency] private  IPrototypeManager _prototype = default!;
-    [Dependency] private  IRobustRandom _random = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
 
     private DamageTypePrototype _bluntDamage = default!;
     private DamageTypePrototype _slashDamage = default!;
     private DamageTypePrototype _piercingDamage = default!;
     private DamageTypePrototype _heatDamage = default!;
-
-    private static readonly Angle ReflectSpread = Angle.FromDegrees(35);
 
     public override void Initialize()
     {
@@ -74,8 +63,6 @@ public sealed partial class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosKhorneBladeActionEvent>(OnBladeManifest);
         SubscribeLocalEvent<WH40KChaosGiftRoleComponent, WH40KChaosKhorneBloodHealActionEvent>(OnBloodHeal);
         SubscribeLocalEvent<WH40KChaosKhorneChosenRuntimeComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeed);
-        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, ProjectileReflectAttemptEvent>(OnProjectileReflectAttempt);
-        SubscribeLocalEvent<WH40KChaosGiftRoleComponent, HitScanReflectAttemptEvent>(OnHitScanReflectAttempt);
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<MeleeWeaponComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<WH40KChaosKhorneChosenRuntimeComponent, ComponentShutdown>(OnRuntimeShutdown);
@@ -190,48 +177,6 @@ public sealed partial class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
         var passiveExUnlocked = WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression);
         var bonus = GetKillRushMultiplier(ent.Comp.KillRushStacks, progression.KhornePassiveSpeedTier, passiveExUnlocked);
         args.ModifySpeed(bonus, bonus, MovementSpeedModifierLayer.Status);
-    }
-
-    private void OnProjectileReflectAttempt(Entity<WH40KChaosGiftRoleComponent> ent, ref ProjectileReflectAttemptEvent args)
-    {
-        if (args.Cancelled || !TryGetLeaderKhorneProgression(ent.Owner, out var progression))
-            return;
-
-        if (!_random.Prob(GetReflectChance(WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression))))
-            return;
-
-        if (!TryComp<PhysicsComponent>(args.ProjUid, out var physics))
-            return;
-
-        var rotation = _random.NextAngle(-ReflectSpread / 2, ReflectSpread / 2).Opposite();
-        var existingVelocity = _physics.GetMapLinearVelocity(args.ProjUid, component: physics);
-        var relativeVelocity = existingVelocity - _physics.GetMapLinearVelocity(ent.Owner);
-        var newVelocity = rotation.RotateVec(relativeVelocity);
-        var difference = newVelocity - existingVelocity;
-
-        _physics.SetLinearVelocity(args.ProjUid, physics.LinearVelocity + difference, body: physics);
-
-        var locRot = Transform(args.ProjUid).LocalRotation;
-        var newRot = rotation.RotateVec(locRot.ToVec());
-        _transform.SetLocalRotation(args.ProjUid, newRot.ToAngle());
-
-        args.Component.Shooter = ent.Owner;
-        args.Component.Weapon = ent.Owner;
-        Dirty(args.ProjUid, args.Component);
-        args.Cancelled = true;
-    }
-
-    private void OnHitScanReflectAttempt(Entity<WH40KChaosGiftRoleComponent> ent, ref HitScanReflectAttemptEvent args)
-    {
-        if (args.Reflected || !TryGetLeaderKhorneProgression(ent.Owner, out var progression))
-            return;
-
-        if (!_random.Prob(GetReflectChance(WH40KChaosLeaderRuntimeRules.IsPassiveExUnlocked(progression))))
-            return;
-
-        var spread = _random.NextAngle(-ReflectSpread / 2, ReflectSpread / 2);
-        args.Direction = -spread.RotateVec(args.Direction);
-        args.Reflected = true;
     }
 
     private void OnAttemptShoot(Entity<GunComponent> ent, ref AttemptShootEvent args)
@@ -513,8 +458,4 @@ public sealed partial class WH40KChaosKhorneChosenAbilitySystem : EntitySystem
         return 1f + stacks * perStack;
     }
 
-    private static float GetReflectChance(bool exUnlocked)
-    {
-        return exUnlocked ? 0.55f : 0.5f;
-    }
 }

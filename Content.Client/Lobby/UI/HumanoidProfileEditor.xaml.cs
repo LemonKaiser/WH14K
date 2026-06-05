@@ -65,6 +65,8 @@ namespace Content.Client.Lobby.UI
         public HumanoidCharacterProfile? Profile;
 
         private Direction _previewRotation = Direction.North;
+        private bool _deferredJobsSync;
+        private bool _deferredMarkingsSync;
 
         private bool _isDirty;
 
@@ -390,7 +392,7 @@ namespace Content.Client.Lobby.UI
         /// <summary>
         /// Sets the editor to the specified profile with the specified slot.
         /// </summary>
-        public void SetProfile(HumanoidCharacterProfile? profile, int? slot)
+        public void SetProfile(HumanoidCharacterProfile? profile, int? slot, bool fullRefresh = true)
         {
             Profile = profile?.Clone();
             CharacterSlot = slot;
@@ -407,14 +409,54 @@ namespace Content.Client.Lobby.UI
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
-            UpdateMarkings();
 
-            RefreshAntags();
-            RefreshJobs();
-            RefreshLoadouts();
-            RefreshSpecies();
-            RefreshTraits();
             RefreshFlavorText();
+            if (fullRefresh || _loadoutWindow != null || TabContainer.CurrentTab == 1)
+                RefreshLoadouts();
+
+            if (fullRefresh || TabContainer.CurrentTab == 5)
+            {
+                UpdateMarkings();
+                _deferredMarkingsSync = false;
+            }
+            else
+            {
+                _deferredMarkingsSync = true;
+            }
+
+            if (fullRefresh)
+            {
+                RefreshAntags();
+                RefreshJobs();
+                RefreshSpecies();
+                RefreshTraits();
+                _deferredJobsSync = false;
+                _deferredMarkingsSync = false;
+            }
+            else
+            {
+                if (_species.Count == 0)
+                    RefreshSpecies();
+                else
+                    UpdateSpeciesSelection();
+
+                if (TabContainer.CurrentTab == 1)
+                {
+                    UpdateJobPriorities();
+                    _deferredJobsSync = false;
+                }
+                else
+                {
+                    _deferredJobsSync = true;
+                }
+
+                if (TabContainer.CurrentTab == 2)
+                    RefreshAntags();
+
+                if (TabContainer.CurrentTab == 4)
+                    RefreshTraits();
+            }
+
             ReloadPreview();
 
             if (Profile != null)
@@ -513,6 +555,24 @@ namespace Content.Client.Lobby.UI
                 RefreshDevelopmentPreview();
             else
                 CharacterDevelopmentView.ClearPreview();
+
+            if (tabIndex == 1 && _deferredJobsSync)
+            {
+                UpdateJobPriorities();
+                _deferredJobsSync = false;
+            }
+
+            if (tabIndex == 2)
+                RefreshAntags();
+
+            if (tabIndex == 4)
+                RefreshTraits();
+
+            if (tabIndex == 5 && _deferredMarkingsSync)
+            {
+                UpdateMarkings();
+                _deferredMarkingsSync = false;
+            }
         }
 
         private void RefreshDevelopmentPreview()

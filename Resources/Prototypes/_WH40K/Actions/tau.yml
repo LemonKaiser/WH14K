@@ -1,0 +1,12 @@
+- type: entity
+  parent: BaseToggleAction
+  id: ActionWH40KTauToggleDroneAggression
+  components:
+  - type: Action
+    useDelay: 0.5
+    icon:
+      sprite: _WH40K/Objects/Devices/tau_gun_drone.rsi
+      state: icon
+    iconOn:
+      sprite: _WH40K/Objects/Devices/tau_gun_drone.rsi
+      state: icon

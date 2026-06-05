@@ -2,6 +2,8 @@ using System;
 using Content.Shared._WH40K.GameMode;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Prototypes;
+using Content.Shared.Cargo.Prototypes;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
 using Content.Shared.Store;
 using Robust.Shared.Localization;
@@ -419,6 +421,43 @@ public sealed partial class WH40KTeamDefinition
 
     [DataField("departments")]
     public List<ProtoId<DepartmentPrototype>> Departments = new();
+
+    [DataField("balanceGroup")]
+    public string? BalanceGroup = "main";
+
+    [DataField("maxPlayers")]
+    public int MaxPlayers = -1;
+
+    [DataField("sameFactionStreakLimit")]
+    public int SameFactionStreakLimit = 3;
+
+    [DataField("selectionEnabled")]
+    public bool SelectionEnabled = true;
+
+    [DataField("requiredForPresence")]
+    public bool RequiredForPresence = true;
+
+    [DataField("cargoAccount")]
+    public ProtoId<CargoAccountPrototype>? CargoAccount;
+
+    [DataField("npcFaction")]
+    public ProtoId<NpcFactionPrototype>? NpcFaction;
+
+    [DataField("recruitment")]
+    public WH40KTeamRecruitmentDefinition? Recruitment;
+}
+
+[DataDefinition]
+public sealed partial class WH40KTeamRecruitmentDefinition
+{
+    [DataField("enabled")]
+    public bool Enabled = true;
+
+    [DataField("doAfter")]
+    public TimeSpan DoAfter = TimeSpan.FromSeconds(5);
+
+    [DataField("rewardMultiplier")]
+    public int RewardMultiplier = 3;
 }
 
 public enum WH40KVictoryCondition

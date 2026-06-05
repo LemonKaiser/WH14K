@@ -3,3 +3,6 @@
 
 - type: cargoMarket
   id: WH40KHereticsMarket
+
+- type: cargoMarket
+  id: WH40KTauMarket

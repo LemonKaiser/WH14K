@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Client.Info;
 using Content.Client.Info.PlaytimeStats;
 using Content.Client.Localization;
@@ -29,12 +30,14 @@ namespace Content.Client.Lobby.UI
         [Dependency] private  ISharedPlayerManager _playerManager = default!;
 
         private readonly Button _createNewCharacterButton;
+        private readonly Dictionary<int, CharacterPickerButton> _characterButtons = new();
 
         private BaseWindow? _rulesWindow;
         private BaseWindow? _statsWindow;
         private BaseWindow? _achievementsWindow;
         private BaseWindow? _decorationsWindow;
 
+        public event Action? CreateCharacterRequested;
         public event Action<int>? SelectCharacter;
         public event Action<int>? DeleteCharacter;
 
@@ -55,8 +58,7 @@ namespace Content.Client.Lobby.UI
 
             _createNewCharacterButton.OnPressed += args =>
             {
-                _preferencesManager.CreateCharacter(HumanoidCharacterProfile.Random());
-                ReloadCharacterPickers();
+                CreateCharacterRequested?.Invoke();
                 args.Event.Handle();
             };
 
@@ -101,6 +103,7 @@ namespace Content.Client.Lobby.UI
         {
             _createNewCharacterButton.Orphan();
             Characters.RemoveAllChildren();
+            _characterButtons.Clear();
 
             var numberOfFullSlots = 0;
             var characterButtonsGroup = new ButtonGroup();
@@ -125,6 +128,7 @@ namespace Content.Client.Lobby.UI
                     character,
                     slot == selectedSlot);
 
+                _characterButtons[slot] = characterPickerButton;
                 Characters.AddChild(characterPickerButton);
 
                 characterPickerButton.OnPressed += args =>
@@ -140,6 +144,14 @@ namespace Content.Client.Lobby.UI
 
             _createNewCharacterButton.Disabled = numberOfFullSlots >= _preferencesManager.Settings.MaxCharacterSlots;
             Characters.AddChild(_createNewCharacterButton);
+        }
+
+        public void SetSelectedCharacter(int? slot)
+        {
+            foreach (var (buttonSlot, button) in _characterButtons)
+            {
+                button.SetSelected(slot == buttonSlot);
+            }
         }
 
         public void Relocalize()

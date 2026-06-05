@@ -8,6 +8,8 @@ namespace Content.Server.GameTicking;
 
 public sealed partial class GameTicker
 {
+    private const string WH40KPreferredLobbyBackgroundId = "WH40KPlushDevLineup";
+
     [ViewVariables]
     public ProtoId<LobbyBackgroundPrototype>? LobbyBackground { get; private set; }
 
@@ -42,6 +44,15 @@ public sealed partial class GameTicker
 
     private void RandomizeLobbyBackground()
     {
+        // Prefer the curated WH40K static lineup when the content pack provides it.
+        if (_prototypeManager.TryIndex<LobbyBackgroundPrototype>(WH40KPreferredLobbyBackgroundId, out var preferred)
+            && preferred.Background is { } staticPath
+            && WhitelistedBackgroundExtensions.Contains(staticPath.Extension, StringComparer.OrdinalIgnoreCase))
+        {
+            LobbyBackground = new ProtoId<LobbyBackgroundPrototype>(preferred.ID);
+            return;
+        }
+
         if (_lobbyBackgrounds != null && _lobbyBackgrounds.Count != 0)
             LobbyBackground = _robustRandom.Pick(_lobbyBackgrounds);
         else

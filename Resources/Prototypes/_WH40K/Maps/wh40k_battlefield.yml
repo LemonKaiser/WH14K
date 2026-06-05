@@ -6,6 +6,7 @@
   wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/battlefield40k_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherBattlefield
   wh40kEventsProfile: WH40KMapEventsAll
+  wh40kTeamBattleFactions: [ Imperium, Heretics ]
   stations:
     Battlefield40k:
       stationProto: WH40KStation

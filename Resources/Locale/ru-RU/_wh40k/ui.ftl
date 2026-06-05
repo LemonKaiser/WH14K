@@ -1,3 +1,5 @@
+wh40k-faction-max-players-blocked = Эта фракция уже достигла лимита игроков.
+
 action-aiming-name = Прицеливание
 action-aiming-desc = Смещает камеру в сторону курсора, чтобы видеть дальше.
 
@@ -7,7 +9,7 @@ wh40k-faction-late-join-title = Поздний вход: { $faction }
 wh40k-faction-balance-blocked = Эта фракция временно недоступна из-за автобаланса.
 wh40k-faction-balance-blocked-imperium = Фракция Империума временно недоступна из-за автобаланса.
 wh40k-faction-balance-blocked-heretics = Фракция Еретиков временно недоступна из-за автобаланса.
-wh40k-faction-streak-blocked = Вы 3 раунда подряд играли за эту фракцию. Выберите противоположную сторону.
+wh40k-faction-streak-blocked = Вы слишком много раундов подряд играли за эту фракцию. Выберите другую сторону.
 wh40k-faction-ready-selection-required = Перед готовностью нужно выбрать фракцию.
 wh40k-faction-latejoin-selection-required = Перед открытием списка ролей нужно выбрать фракцию.
 wh40k-faction-invalid-job-selection = Выбранная роль не принадлежит выбранной фракции.

@@ -198,6 +198,30 @@ public sealed partial class HumanoidProfileEditor
         }
     }
 
+    private void UpdateSpeciesSelection()
+    {
+        if (Profile == null)
+            return;
+
+        if (_species.Count == 0)
+        {
+            RefreshSpecies();
+            return;
+        }
+
+        for (var i = 0; i < _species.Count; i++)
+        {
+            if (_species[i].ID != Profile.Species)
+                continue;
+
+            SpeciesButton.SelectId(i);
+            UpdateSpeciesGuidebookIcon();
+            return;
+        }
+
+        RefreshSpecies();
+    }
+
     private void SetSpecies(string newSpecies)
     {
         if (!_prototypeManager.TryIndex<SpeciesPrototype>(newSpecies, out var speciesProto))

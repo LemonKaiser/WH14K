@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "by endr_animet",
+  "size": {
+    "x": 44,
+    "y": 45
+  },
+  "states": [
+    {
+      "name": "icon"
+    }
+  ]
+}

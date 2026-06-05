@@ -1,0 +1,77 @@
+- type: entity
+  parent: MobTau
+  id: WH40KReinforcementPreviewTauFireWarrior
+  name: reinforcement preview tau fire warrior
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TauFireWarriorGear
+    roleLoadout:
+    - JobTauFireWarrior
+
+- type: entity
+  parent: MobTau
+  id: WH40KReinforcementPreviewTauEarthCaste
+  name: reinforcement preview tau earth caste
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TauEarthCasteGear
+
+- type: entity
+  parent: MobTau
+  id: WH40KReinforcementPreviewTauAirCaste
+  name: reinforcement preview tau air caste
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TauAirCasteGear
+
+- type: entity
+  parent: MobTau
+  id: WH40KReinforcementPreviewTauWaterCaste
+  name: reinforcement preview tau water caste
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TauWaterCasteGear
+
+- type: entity
+  parent: MobTau
+  id: WH40KReinforcementPreviewTauOfficer
+  name: reinforcement preview tau officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes:
+    - TauOfficerGear
+    roleLoadout:
+    - JobTauOfficer
+
+- type: entity
+  id: SpawnPointWH40KReinforcementTau
+  parent: MarkerBase
+  name: tau reinforcement spawn
+  suffix: WH40K
+  components:
+  - type: WH40KReinforcementSpawnPoint
+    teamId: Tau
+  - type: Sprite
+    sprite: _WH40K/Markers/jobs.rsi
+    layers:
+    - state: green
+    - state: guardsman

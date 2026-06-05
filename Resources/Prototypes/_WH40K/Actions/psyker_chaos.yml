@@ -457,17 +457,15 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionWH40KChaosTzeentchMindTwist
-  name: Заговор Перемен
-  description: На 30 секунд ускорьте ближайших последователей Тзинча, ослабьте их откаты и снимите пелену обзора.
+  id: ActionWH40KChaosTzeentchTimeField
   components:
   - type: Action
-    useDelay: 30
+    useDelay: 42
     icon:
-      sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
-      state: dash
+      sprite: Objects/Devices/goldwatch.rsi
+      state: goldwatch
   - type: InstantAction
-    event: !type:WH40KChaosTzeentchSpeedAuraActionEvent
+    event: !type:WH40KChaosTzeentchTimeFieldActionEvent
   - type: WH40KWarpActionCost
     warpChargeCost: 20
     instabilityGain: 11

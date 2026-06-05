@@ -63,11 +63,13 @@ public sealed partial class WH40KStrategicPointVisualizerSystem : EntitySystem
 
         var team = "imperium";
         if (args.AppearanceData.TryGetValue(WH40KStrategicPointVisuals.OwnerTeamId, out var teamObj) &&
-            teamObj is string teamId &&
-            (string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase) ||
-             string.Equals(teamId, "Chaos", StringComparison.OrdinalIgnoreCase)))
+            teamObj is string teamId)
         {
-            team = "chaos";
+            if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
+                team = "tau";
+            else if (string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(teamId, "Chaos", StringComparison.OrdinalIgnoreCase))
+                team = "chaos";
         }
 
         var tierValue = (int) tier;

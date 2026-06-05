@@ -26,6 +26,8 @@ public sealed partial class WH40KChaosSlaaneshArenaActionEvent : EntityTargetAct
 
 public sealed partial class WH40KChaosTzeentchSpeedAuraActionEvent : InstantActionEvent;
 
+public sealed partial class WH40KChaosTzeentchTimeFieldActionEvent : InstantActionEvent;
+
 public sealed partial class WH40KChaosTzeentchVisionAuraActionEvent : InstantActionEvent;
 
 public sealed partial class WH40KChaosTzeentchSacrificeActionEvent : EntityTargetActionEvent;

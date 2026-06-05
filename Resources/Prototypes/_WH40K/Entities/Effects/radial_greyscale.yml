@@ -12,11 +12,15 @@
       color: "#9ac6ff99"
   - type: PointLight
     enabled: true
-    radius: 3
+    radius: 2.5
     energy: 0.6
     color: "#8dbfff"
   - type: WH40KRadialGreyscale
-    radius: 3
+    radius: 2
     feather: 0.35
-    movementSpeedMultiplier: 0.05
-    physicsVelocityMultiplier: 0.05
+  - type: WH40KTimeDilationField
+    movementSpeedMultiplier: 0.7
+    meleeAttackRateMultiplier: 0.7
+    physicsVelocityMultiplier: 0.7
+    timedDespawnMultiplier: 0.7
+    grenadeFuseTimerMultiplier: 0.7

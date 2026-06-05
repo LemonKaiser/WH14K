@@ -4,6 +4,7 @@ using System.Linq;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
+using Content.Server.Maps;
 using Content.Server.Station.Events;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.GameTicking.Rules.Components;
@@ -25,16 +26,18 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 {
     private const string TeamBattleRulePrototypeId = "WH40KTeamBattle";
     private const string BalanceBlockedLocKey = "wh40k-faction-balance-blocked";
+    private const string MaxPlayersBlockedLocKey = "wh40k-faction-max-players-blocked";
     private const string StreakBlockedLocKey = "wh40k-faction-streak-blocked";
     private const string ReadySelectionRequiredLocKey = "wh40k-faction-ready-selection-required";
     private const string LateJoinSelectionRequiredLocKey = "wh40k-faction-latejoin-selection-required";
     private const string InvalidJobSelectionLocKey = "wh40k-faction-invalid-job-selection";
     private const int MaxAllowedTeamLead = 2;
-    private const int SameFactionStreakLimit = 3;
+    private const int MaxTrackedFactionHistory = 8;
     private static readonly TimeSpan LateJoinReservationLifetime = TimeSpan.FromMinutes(2);
 
     [Dependency] private  GameTicker _gameTicker = default!;
     [Dependency] private  IChatManager _chatManager = default!;
+    [Dependency] private  IGameMapManager _gameMapManager = default!;
     [Dependency] private  IPlayerManager _players = default!;
     [Dependency] private  IPrototypeManager _prototype = default!;
     [Dependency] private  IGameTiming _timing = default!;
@@ -230,9 +233,10 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 
         var requesterId = requester?.UserId;
         var teamPlayerCounts = BuildConnectedTeamCounts(requesterId, ResolvePurpose(purpose));
-        var result = new List<WH40KFactionInfo>(rule.Teams.Count);
+        var teams = GetAvailableTeams(rule);
+        var result = new List<WH40KFactionInfo>(teams.Count);
 
-        foreach (var team in rule.Teams)
+        foreach (var team in teams)
         {
             if (string.IsNullOrWhiteSpace(team.Id))
                 continue;
@@ -341,7 +345,7 @@ public sealed partial class WH40KFactionSystem : EntitySystem
     {
         messageLocKey = null;
 
-        if (!TryResolveFactionId(rule, factionId, out var canonicalFactionId))
+        if (!TryGetTeamDefinition(rule, factionId, out var team))
         {
             messageLocKey = purpose == WH40KFactionSelectionPurpose.LobbyReady
                 ? ReadySelectionRequiredLocKey
@@ -349,14 +353,32 @@ public sealed partial class WH40KFactionSystem : EntitySystem
             return false;
         }
 
-        if (purpose == WH40KFactionSelectionPurpose.LobbyReady && HasFactionStreakBlock(userId, canonicalFactionId))
+        var canonicalFactionId = team.Id;
+        if (!team.SelectionEnabled)
+        {
+            messageLocKey = purpose == WH40KFactionSelectionPurpose.LobbyReady
+                ? ReadySelectionRequiredLocKey
+                : LateJoinSelectionRequiredLocKey;
+            return false;
+        }
+
+        var teamCounts = BuildConnectedTeamCounts(userId, purpose);
+        var selectedCount = teamCounts.TryGetValue(canonicalFactionId, out var currentSelected) ? currentSelected : 0;
+        if (team.MaxPlayers >= 0 && selectedCount + 1 > team.MaxPlayers)
+        {
+            messageLocKey = MaxPlayersBlockedLocKey;
+            return false;
+        }
+
+        if (purpose == WH40KFactionSelectionPurpose.LobbyReady &&
+            team.SameFactionStreakLimit > 0 &&
+            HasFactionStreakBlock(userId, canonicalFactionId, team.SameFactionStreakLimit))
         {
             messageLocKey = StreakBlockedLocKey;
             return false;
         }
 
-        var teamCounts = BuildConnectedTeamCounts(userId, purpose);
-        if (WouldExceedBalance(rule, canonicalFactionId, teamCounts))
+        if (WouldExceedBalance(rule, team, teamCounts))
         {
             messageLocKey = BalanceBlockedLocKey;
             return false;
@@ -465,7 +487,7 @@ public sealed partial class WH40KFactionSystem : EntitySystem
     {
         canonicalFactionId = string.Empty;
 
-        foreach (var team in rule.Teams)
+        foreach (var team in GetAvailableTeams(rule))
         {
             if (!string.Equals(team.Id, factionId, StringComparison.OrdinalIgnoreCase))
                 continue;
@@ -475,6 +497,36 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool TryGetTeamDefinition(
+        WH40KTeamBattleRuleComponent rule,
+        string factionId,
+        out WH40KTeamDefinition team)
+    {
+        foreach (var candidate in GetAvailableTeams(rule))
+        {
+            if (!string.Equals(candidate.Id, factionId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            team = candidate;
+            return true;
+        }
+
+        team = default!;
+        return false;
+    }
+
+    private IReadOnlyList<WH40KTeamDefinition> GetAvailableTeams(WH40KTeamBattleRuleComponent rule)
+    {
+        var selectedMap = _gameMapManager.GetSelectedMap();
+        if (selectedMap?.WH40KTeamBattleFactions == null || selectedMap.WH40KTeamBattleFactions.Count == 0)
+            return rule.Teams;
+
+        var allowed = new HashSet<string>(selectedMap.WH40KTeamBattleFactions, StringComparer.OrdinalIgnoreCase);
+        return rule.Teams
+            .Where(team => !string.IsNullOrWhiteSpace(team.Id) && allowed.Contains(team.Id))
+            .ToList();
     }
 
     private static void AddTeamCount(IDictionary<string, int> counts, string teamId)
@@ -488,15 +540,21 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 
     private bool WouldExceedBalance(
         WH40KTeamBattleRuleComponent rule,
-        string factionId,
+        WH40KTeamDefinition selectedTeam,
         IReadOnlyDictionary<string, int> teamCounts)
     {
-        var selectedCount = teamCounts.TryGetValue(factionId, out var currentSelected) ? currentSelected : 0;
+        if (string.IsNullOrWhiteSpace(selectedTeam.BalanceGroup))
+            return false;
+
+        var selectedCount = teamCounts.TryGetValue(selectedTeam.Id, out var currentSelected) ? currentSelected : 0;
         var otherMax = 0;
 
-        foreach (var team in rule.Teams)
+        foreach (var team in GetAvailableTeams(rule))
         {
-            if (string.Equals(team.Id, factionId, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(team.BalanceGroup, selectedTeam.BalanceGroup, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (string.Equals(team.Id, selectedTeam.Id, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             if (teamCounts.TryGetValue(team.Id, out var teamCount) && teamCount > otherMax)
@@ -506,24 +564,26 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         return selectedCount + 1 - otherMax > MaxAllowedTeamLead;
     }
 
-    private bool HasFactionStreakBlock(NetUserId userId, string factionId)
+    private bool HasFactionStreakBlock(NetUserId userId, string factionId, int streakLimit)
     {
-        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < SameFactionStreakLimit)
+        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < streakLimit)
             return false;
 
-        return history.All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
+        return history
+            .TakeLast(streakLimit)
+            .All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
     }
 
     private void RecordCompletedFaction(NetUserId userId, string factionId)
     {
         if (!_recentCompletedFactions.TryGetValue(userId, out var history))
         {
-            history = new List<string>(SameFactionStreakLimit);
+            history = new List<string>(MaxTrackedFactionHistory);
             _recentCompletedFactions[userId] = history;
         }
 
         history.Add(factionId);
-        while (history.Count > SameFactionStreakLimit)
+        while (history.Count > MaxTrackedFactionHistory)
         {
             history.RemoveAt(0);
         }
@@ -549,7 +609,7 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         string factionId,
         ProtoId<JobPrototype> jobId)
     {
-        foreach (var team in rule.Teams)
+        foreach (var team in GetAvailableTeams(rule))
         {
             if (!string.Equals(team.Id, factionId, StringComparison.OrdinalIgnoreCase))
                 continue;

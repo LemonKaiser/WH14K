@@ -1056,7 +1056,7 @@
 - type: loadoutGroup
   id: WH40KTauSupportHead
   name: loadout-group-wh40k-tau-support-head
-  minLimit: 0
+  minLimit: 1
   loadouts:
   - WH40KTauHelmetStandard
   - WH40KTauHelmetBreach
@@ -1101,7 +1101,7 @@
 - type: loadoutGroup
   id: WH40KTauSidearm
   name: loadout-group-wh40k-tau-sidearm
-  minLimit: 0
+  minLimit: 1
   loadouts:
   - WH40KTauPulsePistolLoadout
 
@@ -1138,7 +1138,7 @@
 - type: loadoutGroup
   id: WH40KTauCommandNeck
   name: loadout-group-wh40k-tau-command-neck
-  minLimit: 0
+  minLimit: 1
   loadouts:
   - WH40KTauCommanderCloakLoadout
 

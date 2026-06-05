@@ -14,6 +14,9 @@
     - id: Imperium
       name: wh40k-team-imperium
       color: "#FFD200"
+      balanceGroup: main
+      cargoAccount: WH40KImperium
+      npcFaction: Imperium
       logo:
         sprite: _WH40K/Structures/Decorations/banners.rsi
         state: gvardia_banner
@@ -21,7 +24,26 @@
     - id: Heretics
       name: wh40k-team-heretics
       color: "#D62828"
+      balanceGroup: main
+      cargoAccount: WH40KHeretics
+      npcFaction: Heretics
       logo:
         sprite: _WH40K/Structures/Decorations/banners.rsi
         state: chaos_banner
       departments: [ Heretics, DarkMechanicum ]
+    - id: Tau
+      name: wh40k-team-tau
+      color: "#F4F4F4"
+      balanceGroup: ""
+      maxPlayers: 10
+      sameFactionStreakLimit: 2
+      requiredForPresence: false
+      cargoAccount: WH40KTau
+      npcFaction: Tau
+      logo:
+        sprite: _WH40K/Structures/Decorations/banners.rsi
+        state: tau_banner
+      departments: [ Tau ]
+      recruitment:
+        enabled: true
+        rewardMultiplier: 3

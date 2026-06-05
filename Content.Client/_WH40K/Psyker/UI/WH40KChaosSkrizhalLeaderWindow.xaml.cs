@@ -338,9 +338,9 @@ public sealed partial class WH40KChaosSkrizhalLeaderWindow : FancyWindow, ILocal
 
     private void ApplyPassiveCardState(WH40KChaosSkrizhalPatronBranchBuiState state)
     {
-        PassiveIcon.Texture = _sprite.Frame0(WH40KChaosUiShared.GetPatronIconSpecifier(state.Patron));
-        PassiveTitleLabel.Text = Loc.GetString("w40k-ch-passive-title");
-        PassiveDescriptionLabel.Text = BuildCardPreviewText(Loc.GetString("w40k-ch-passive-description"));
+        PassiveIcon.Texture = _sprite.Frame0(WH40KChaosUiShared.GetPassiveIconSpecifier(state.Patron));
+        PassiveTitleLabel.Text = Loc.GetString(WH40KChaosUiShared.GetPassiveTitleKey(state.Patron));
+        PassiveDescriptionLabel.Text = BuildCardPreviewText(Loc.GetString(WH40KChaosUiShared.GetPassiveDescriptionKey(state.Patron)));
         PassiveStatusLabel.Text = Loc.GetString(state.CanEdit
             ? "w40k-ch-passive-status-open"
             : "w40k-ch-passive-status-open-readonly");
@@ -434,9 +434,9 @@ public sealed partial class WH40KChaosSkrizhalLeaderWindow : FancyWindow, ILocal
 
     private void ShowPassiveUpgradeWorkspace(WH40KChaosSkrizhalPatronBranchBuiState state)
     {
-        var passiveTitle = Loc.GetString("w40k-ch-passive-title");
-        var passiveDescription = Loc.GetString("w40k-ch-passive-description");
-        var passiveTexture = _sprite.Frame0(WH40KChaosUiShared.GetPatronIconSpecifier(state.Patron));
+        var passiveTitle = Loc.GetString(WH40KChaosUiShared.GetPassiveTitleKey(state.Patron));
+        var passiveDescription = Loc.GetString(WH40KChaosUiShared.GetPassiveDescriptionKey(state.Patron));
+        var passiveTexture = _sprite.Frame0(WH40KChaosUiShared.GetPassiveIconSpecifier(state.Patron));
         var accent = WH40KChaosUiShared.ResolvePatronAccent(state.Patron);
         var pathKeys = WH40KChaosUiShared.ResolvePathKeys(state.Patron, 4);
 
