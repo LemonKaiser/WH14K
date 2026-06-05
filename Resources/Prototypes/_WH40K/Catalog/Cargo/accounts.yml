@@ -13,3 +13,11 @@
   color: "#b15050"
   radioChannel: Supply
   acquisitionSlip: PaperAcquisitionSlipCargo
+
+- type: cargoAccount
+  id: WH40KTau
+  name: wh40k-cargo-account-tau-name-clean
+  code: wh40k-cargo-account-tau-code-clean
+  color: "#f4f4f4"
+  radioChannel: Supply
+  acquisitionSlip: PaperAcquisitionSlipCargo

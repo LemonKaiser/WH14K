@@ -48,10 +48,8 @@ public sealed partial class CharacterPickerButton : ContainerButton
             description = $"{description}\n{jobName}";
         }
 
-        Pressed = isSelected;
-        DeleteButton.Visible = !isSelected;
-
         DescriptionLabel.Text = description;
+        SetSelected(isSelected);
 
         ConfirmDeleteButton.OnPressed += _ =>
         {
@@ -65,5 +63,12 @@ public sealed partial class CharacterPickerButton : ContainerButton
             DeleteButton.Visible = false;
             ConfirmDeleteButton.Visible = true;
         };
+    }
+
+    public void SetSelected(bool selected)
+    {
+        Pressed = selected;
+        DeleteButton.Visible = !selected;
+        ConfirmDeleteButton.Visible = false;
     }
 }

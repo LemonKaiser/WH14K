@@ -445,6 +445,33 @@
   - WH40KTauAdditionalSupplies
 
 - type: roleLoadout
+  id: JobTauEarthCaste
+  groups:
+  - WH40KTauSupportHead
+  - WH40KTauSupportOuter
+  - WH40KTauEarthWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobTauAirCaste
+  groups:
+  - WH40KTauSupportHead
+  - WH40KTauSupportOuter
+  - WH40KTauAirWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobTauWaterCaste
+  groups:
+  - WH40KTauSupportHead
+  - WH40KTauSupportOuter
+  - WH40KTauWaterWeapon
+  - WH40KTauSidearm
+  - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
   id: JobTauOfficer
   groups:
   - WH40KTauCommandHead
@@ -457,6 +484,8 @@
 - type: roleLoadout
   id: JobTauEthereal
   groups:
+  - WH40KTauCommandHead
+  - WH40KTauEtherealOuter
   - WH40KTauMainWeapon
   - WH40KTauSidearm
   - WH40KTauAdditionalSupplies

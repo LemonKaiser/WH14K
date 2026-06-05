@@ -76,7 +76,7 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
     [DataField("tzeentchScaledActions")]
     public List<WH40KLevelLockedAction> TzeentchScaledActions = new()
     {
-        new() { ActionPrototype = "ActionWH40KChaosTzeentchMindTwist", RequiredLevel = 8 },
+        new() { ActionPrototype = "ActionWH40KChaosTzeentchTimeField", RequiredLevel = 8 },
     };
 
     // R5 branch unlock economy contract:
@@ -131,7 +131,7 @@ public sealed partial class WH40KChaosGiftStarterActionLoadoutComponent : Compon
     [DataField("tzeentchBonusActions")]
     public List<string> TzeentchBonusActions = new()
     {
-        "ActionWH40KChaosTzeentchMindTwist",
+        "ActionWH40KChaosTzeentchTimeField",
     };
 
     [DataField("leaderActions")]

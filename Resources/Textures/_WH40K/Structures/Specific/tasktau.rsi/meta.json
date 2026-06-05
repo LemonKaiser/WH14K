@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for WH14K project from user-provided Tau assets",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "computer"
+    },
+    {
+      "name": "computer-broken"
+    },
+    {
+      "name": "decorative_monitor",
+      "directions": 4
+    }
+  ]
+}

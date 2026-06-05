@@ -18,6 +18,9 @@ namespace Content.Client.Lobby.UI.ProfileEditorControls;
 
 public sealed partial class ProfilePreviewSpriteView
 {
+    private EntProtoId? _loadedHumanoidBasePrototype;
+    private bool _loadedHumanoidUsedSpecialPreview;
+
     /// <summary>
     /// A slim reload that only updates the entity itself and not any of the job entities, etc.
     /// </summary>
@@ -30,18 +33,57 @@ public sealed partial class ProfilePreviewSpriteView
         EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
     }
 
+    private bool TryRefreshHumanoidPreview(HumanoidCharacterProfile humanoid, JobPrototype? job, bool jobClothes)
+    {
+        if (!TryResolveHumanoidPreviewBasePrototype(humanoid, job, jobClothes, out var basePrototype, out var resolvedJob, out var usesSpecialPreview))
+            return false;
+
+        if (!EntMan.EntityExists(PreviewDummy))
+            return false;
+
+        if (!EntMan.HasComponent<VisualBodyComponent>(PreviewDummy))
+            return false;
+
+        if (_loadedHumanoidBasePrototype != basePrototype)
+            return false;
+
+        if (_loadedHumanoidUsedSpecialPreview)
+            return false;
+
+        if (usesSpecialPreview)
+            return false;
+
+        ClearDummyEquipment();
+        EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
+
+        if (jobClothes && resolvedJob != null)
+        {
+            RoleLoadout? loadout = null;
+            if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(resolvedJob.ID)))
+            {
+                loadout = humanoid.GetLoadoutOrDefault(
+                    LoadoutSystem.GetJobPrototype(resolvedJob.ID),
+                    _playerManager.LocalSession,
+                    humanoid.Species,
+                    EntMan,
+                    _prototypeManager);
+            }
+
+            GiveDummyLoadout(loadout);
+            GiveDummyJobClothes(resolvedJob);
+        }
+
+        _loadedHumanoidBasePrototype = basePrototype;
+        _loadedHumanoidUsedSpecialPreview = false;
+        return true;
+    }
+
     /// <summary>
     /// Loads the profile onto a dummy entity.
     /// </summary>
     private void LoadHumanoidEntity(HumanoidCharacterProfile? humanoid, JobPrototype? job, bool jobClothes)
     {
-        EntProtoId? previewEntity = null;
-        if (humanoid != null && jobClothes)
-        {
-            job ??= GetPreferredJob(humanoid);
-
-            previewEntity = job.JobPreviewEntity ?? (EntProtoId?)job?.JobEntity;
-        }
+        var previewEntity = ResolveHumanoidPreviewEntity(humanoid, job, jobClothes, out job, out var usesSpecialPreview);
 
         if (previewEntity != null)
         {
@@ -52,12 +94,19 @@ public sealed partial class ProfilePreviewSpriteView
         {
             var dummy = _prototypeManager.Index(humanoid.Species).DollPrototype;
             PreviewDummy = EntMan.SpawnEntity(dummy, MapCoordinates.Nullspace);
-            EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
         }
         else
         {
             PreviewDummy = EntMan.SpawnEntity(_prototypeManager.Index(HumanoidCharacterProfile.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
         }
+
+        if (humanoid != null && EntMan.HasComponent<VisualBodyComponent>(PreviewDummy))
+        {
+            EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
+        }
+
+        _loadedHumanoidBasePrototype = previewEntity;
+        _loadedHumanoidUsedSpecialPreview = usesSpecialPreview;
 
         if (humanoid != null && jobClothes)
         {
@@ -73,6 +122,41 @@ public sealed partial class ProfilePreviewSpriteView
             GiveDummyLoadout(loadout);
             GiveDummyJobClothes(job);
         }
+    }
+
+    private EntProtoId? ResolveHumanoidPreviewEntity(HumanoidCharacterProfile? humanoid, JobPrototype? job, bool jobClothes, out JobPrototype? resolvedJob, out bool usesSpecialPreview)
+    {
+        resolvedJob = job;
+        usesSpecialPreview = false;
+
+        EntProtoId? previewEntity = null;
+        if (humanoid != null && jobClothes)
+        {
+            resolvedJob ??= GetPreferredJob(humanoid);
+            previewEntity = resolvedJob.JobPreviewEntity ?? (EntProtoId?) resolvedJob.JobEntity;
+            usesSpecialPreview = previewEntity != null;
+        }
+
+        if (previewEntity != null)
+            return previewEntity;
+
+        if (humanoid != null)
+            return _prototypeManager.Index(humanoid.Species).DollPrototype;
+
+        return _prototypeManager.Index(HumanoidCharacterProfile.DefaultSpecies).DollPrototype;
+    }
+
+    private bool TryResolveHumanoidPreviewBasePrototype(HumanoidCharacterProfile humanoid, JobPrototype? job, bool jobClothes, out EntProtoId basePrototype, out JobPrototype? resolvedJob, out bool usesSpecialPreview)
+    {
+        var previewEntity = ResolveHumanoidPreviewEntity(humanoid, job, jobClothes, out resolvedJob, out usesSpecialPreview);
+        if (previewEntity == null)
+        {
+            basePrototype = default;
+            return false;
+        }
+
+        basePrototype = previewEntity.Value;
+        return true;
     }
 
     /// <summary>
@@ -131,5 +215,27 @@ public sealed partial class ProfilePreviewSpriteView
                     EntMan.DeleteEntity(item);
             }
         }
+    }
+
+    private void ClearDummyEquipment()
+    {
+        var inventorySys = EntMan.System<InventorySystem>();
+        if (!inventorySys.TryGetSlots(PreviewDummy, out var slots))
+            return;
+
+        foreach (var slot in slots)
+        {
+            if (!inventorySys.TryUnequip(PreviewDummy, slot.Name, out var removedItem, silent: true, force: true, reparent: false))
+                continue;
+
+            if (removedItem != null)
+                EntMan.DeleteEntity(removedItem.Value);
+        }
+    }
+
+    private void ResetHumanoidPreviewState()
+    {
+        _loadedHumanoidBasePrototype = null;
+        _loadedHumanoidUsedSpecialPreview = false;
     }
 }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Content.Server._WH40K.Combat.PhantomStep;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Content.Shared._WH40K.Psyker;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.Psyker;
 
@@ -20,6 +22,15 @@ public sealed partial class WH40KChaosCultSystem : EntitySystem
     private const float SharedPassiveXpBasePerTick = 1f;
     private const float SharedPassiveXpPerLevelBonus = 0.025f;
     private static readonly TimeSpan SharedPassiveXpInterval = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan KhornePhantomStepCooldown = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan KhornePhantomStepInvulnerability = TimeSpan.FromSeconds(0.25);
+    private static readonly TimeSpan KhornePhantomStepDashDuration = TimeSpan.FromSeconds(0.12);
+    private static readonly TimeSpan KhornePhantomStepTrailLifetime = TimeSpan.FromSeconds(0.32);
+    private static readonly EntProtoId KhornePhantomStepAfterimagePrototype = "WH40KPhantomStepAfterimage";
+    private const int KhornePhantomStepMaxCharges = 3;
+    private const int KhornePhantomStepMinDistance = 1;
+    private const int KhornePhantomStepMaxDistance = 2;
+    private const int KhornePhantomStepTrailCopies = 4;
 
     private readonly Dictionary<WH40KChaosPatron, ChaosCultState> _cultStates = new();
     private int _leadershipSequence;
@@ -125,11 +136,13 @@ public sealed partial class WH40KChaosCultSystem : EntitySystem
     private void OnChaosRoleShutdown(EntityUid uid, WH40KChaosGiftRoleComponent component, ref ComponentShutdown args)
     {
         RemComp<WH40KChaosPatronStatusIconComponent>(uid);
+        RemComp<WH40KPhantomStepComponent>(uid);
     }
 
     private void OnChaosProgressionShutdown(EntityUid uid, WH40KChaosGiftProgressionComponent component, ref ComponentShutdown args)
     {
         RemComp<WH40KChaosPatronStatusIconComponent>(uid);
+        RemComp<WH40KPhantomStepComponent>(uid);
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
@@ -147,6 +160,7 @@ public sealed partial class WH40KChaosCultSystem : EntitySystem
         {
             progression.EffectiveLeader = false;
             SyncPatronStatusIcon(uid, WH40KChaosPatron.None, false);
+            RemComp<WH40KPhantomStepComponent>(uid);
             Dirty(uid, progression);
             return;
         }
@@ -381,9 +395,56 @@ public sealed partial class WH40KChaosCultSystem : EntitySystem
         var effectiveLeader = state.ActiveLeader == uid;
         changed |= Apply(ref progression.EffectiveLeader, effectiveLeader);
         SyncPatronStatusIcon(uid, patron, effectiveLeader);
+        SyncPatronPassives(uid, patron);
 
         if (changed)
             Dirty(uid, progression);
+    }
+
+    private void SyncPatronPassives(EntityUid uid, WH40KChaosPatron patron)
+    {
+        if (patron != WH40KChaosPatron.Khorne)
+        {
+            RemComp<WH40KPhantomStepComponent>(uid);
+            return;
+        }
+
+        var added = !TryComp<WH40KPhantomStepComponent>(uid, out var step);
+        step ??= EnsureComp<WH40KPhantomStepComponent>(uid);
+
+        var changed = false;
+        changed |= Apply(ref step.Enabled, true);
+        changed |= Apply(ref step.DodgeRanged, true);
+        changed |= Apply(ref step.DodgeMelee, false);
+        changed |= Apply(ref step.MaxCharges, KhornePhantomStepMaxCharges);
+        changed |= Apply(ref step.Cooldown, KhornePhantomStepCooldown);
+        changed |= Apply(ref step.MinDistance, KhornePhantomStepMinDistance);
+        changed |= Apply(ref step.MaxDistance, KhornePhantomStepMaxDistance);
+        changed |= Apply(ref step.Invulnerability, KhornePhantomStepInvulnerability);
+        changed |= Apply(ref step.DashDuration, KhornePhantomStepDashDuration);
+        changed |= Apply(ref step.TrailCopies, KhornePhantomStepTrailCopies);
+        changed |= Apply(ref step.TrailLifetime, KhornePhantomStepTrailLifetime);
+        changed |= Apply(ref step.AfterimagePrototype, KhornePhantomStepAfterimagePrototype);
+
+        if (added)
+        {
+            step.Enabled = true;
+            step.Charges = step.MaxCharges;
+            step.NextRecharge = TimeSpan.Zero;
+            step.InvulnerableUntil = TimeSpan.Zero;
+            step.Dashing = false;
+            step.DashStartedAt = TimeSpan.Zero;
+            step.DashEndsAt = TimeSpan.Zero;
+            changed = true;
+        }
+        else if (step.Charges > step.MaxCharges)
+        {
+            step.Charges = step.MaxCharges;
+            changed = true;
+        }
+
+        if (changed)
+            Dirty(uid, step);
     }
 
     private static void CopySharedFields(WH40KChaosGiftProgressionComponent progression, ChaosCultState state)

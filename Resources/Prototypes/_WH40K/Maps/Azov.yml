@@ -6,6 +6,7 @@
   wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/azov_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherDisabled
   wh40kEventsProfile: WH40KMapEventsDisabled
+  wh40kTeamBattleFactions: [ Imperium, Heretics ]
   stations:
     Warpforge:
       stationProto: WH40KStation

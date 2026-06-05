@@ -43,6 +43,7 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
     {
         { "Imperium", Color.FromHex("#F3C548") },
         { "Heretics", Color.FromHex("#C7483F") },
+        { "Tau", Color.FromHex("#F4F4F4") },
     };
 
     private static readonly Color CardBackground = Color.FromHex("#12151B");
@@ -50,6 +51,15 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
     private static readonly Color SeparatorColor = Color.FromHex("#5D4D2A");
     private static readonly Color SoftTextColor = Color.FromHex("#A79668");
     private static readonly Color VsTextColor = Color.FromHex("#7E6A3A");
+    private static readonly Vector2 SingleRowBaseWindowSize = new(500f, 404f);
+    private static readonly Vector2 TwoRowBaseWindowSize = new(520f, 500f);
+    private static readonly Vector2 SpaciousCardSize = new(200f, 280f);
+    private static readonly Vector2 CompactCardSize = new(220f, 178f);
+    private const float WindowChromeWidth = 24f;
+    private const float CardRowMargin = 8f;
+    private const int SingleRowGap = 8;
+    private const int TwoRowGap = 10;
+    private const float SeparatorWidth = 44f;
 
     [Dependency] private  IEntitySystemManager _entitySystems = default!;
     [Dependency] private  IResourceCache _resourceCache = default!;
@@ -57,7 +67,8 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
 
     private readonly SpriteSystem _sprites;
     private readonly BoxContainer _root;
-    private readonly BoxContainer _row;
+    private readonly ScrollContainer _factionScroll;
+    private readonly BoxContainer _factionLayoutHost;
     private readonly PanelContainer _statusPanel;
     private readonly RichTextLabel _statusLabel;
     private IReadOnlyList<WH40KFactionInfo> _latestFactions;
@@ -69,26 +80,31 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
 
     public WH40KFactionJoinGui(WH40KFactionSelectionPurpose purpose, IReadOnlyList<WH40KFactionInfo> initialFactions)
     {
-        MinSize = SetSize = new Vector2(500, 404);
+        MinSize = SetSize = SingleRowBaseWindowSize;
         IoCManager.InjectDependencies(this);
 
         Purpose = purpose;
         _latestFactions = initialFactions;
         _sprites = _entitySystems.GetEntitySystem<SpriteSystem>();
 
-        _row = new BoxContainer
+        _factionLayoutHost = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
             HorizontalExpand = true,
             VerticalExpand = true,
-            Margin = new Thickness(8, 8, 8, 8),
-            SeparationOverride = 8,
+        };
+
+        _factionScroll = new ScrollContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            HScrollEnabled = false,
+            Children = { _factionLayoutHost },
         };
 
         _statusLabel = new RichTextLabel
         {
             HorizontalExpand = true,
-            MaxWidth = 452,
         };
         _statusLabel.SetMessage(string.Empty, defaultColor: SoftTextColor);
 
@@ -107,7 +123,7 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
             HorizontalExpand = true,
             VerticalExpand = true,
             SeparationOverride = 4,
-            Children = { _row, _statusPanel }
+            Children = { _factionScroll, _statusPanel }
         };
 
         ContentsContainer.AddChild(_root);
@@ -157,12 +173,14 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
     private void ApplyFactions(IReadOnlyList<WH40KFactionInfo> factions)
     {
         _latestFactions = factions;
-        _row.RemoveAllChildren();
+        _factionLayoutHost.RemoveAllChildren();
         UpdateStatusPanel(factions);
+        _factionScroll.HScrollEnabled = factions.Count > 4;
+        UpdateWindowSize(factions.Count);
 
         if (factions.Count == 0)
         {
-            _row.AddChild(new Label
+            _factionLayoutHost.AddChild(new Label
             {
                 HorizontalExpand = true,
                 VerticalExpand = true,
@@ -173,27 +191,100 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
             return;
         }
 
+        _factionLayoutHost.AddChild(factions.Count <= 3
+            ? BuildSingleRowLayout(factions)
+            : BuildTwoRowLayout(factions));
+    }
+
+    private Control BuildSingleRowLayout(IReadOnlyList<WH40KFactionInfo> factions)
+    {
+        var row = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = false,
+            VerticalExpand = true,
+            HorizontalAlignment = HAlignment.Center,
+            Margin = new Thickness(8, 8, 8, 8),
+            SeparationOverride = SingleRowGap,
+            MinSize = new Vector2(GetSingleRowContentWidth(factions.Count), 0f),
+        };
+
         for (var index = 0; index < factions.Count; index++)
         {
             if (index > 0)
-                _row.AddChild(BuildSeparator());
+                row.AddChild(BuildSeparator());
 
-            _row.AddChild(BuildFactionButton(factions[index]));
+            row.AddChild(BuildFactionButton(factions[index], compact: false));
         }
+
+        return row;
     }
 
-    private Control BuildFactionButton(WH40KFactionInfo faction)
+    private Control BuildTwoRowLayout(IReadOnlyList<WH40KFactionInfo> factions)
+    {
+        var columnCount = (factions.Count + 1) / 2;
+        var columns = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = false,
+            VerticalExpand = true,
+            HorizontalAlignment = HAlignment.Center,
+            Margin = new Thickness(8, 8, 8, 8),
+            SeparationOverride = TwoRowGap,
+            MinSize = new Vector2(GetTwoRowContentWidth(columnCount), 0f),
+        };
+
+        for (var columnIndex = 0; columnIndex < columnCount; columnIndex++)
+        {
+            var column = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Vertical,
+                HorizontalExpand = false,
+                VerticalExpand = true,
+                SeparationOverride = 8,
+                MinSize = new Vector2(CompactCardSize.X, 0f),
+            };
+
+            column.AddChild(BuildFactionButton(factions[columnIndex], compact: true));
+
+            var secondRowIndex = columnIndex + columnCount;
+            if (secondRowIndex < factions.Count)
+            {
+                column.AddChild(BuildFactionButton(factions[secondRowIndex], compact: true));
+            }
+            else
+            {
+                column.AddChild(new Control
+                {
+                    MinSize = CompactCardSize,
+                    VerticalExpand = true,
+                });
+            }
+
+            columns.AddChild(column);
+        }
+
+        return columns;
+    }
+
+    private Control BuildFactionButton(WH40KFactionInfo faction, bool compact)
     {
         var accent = FactionAccentColors.GetValueOrDefault(faction.Id, Color.White);
         var accentDim = accent.WithAlpha(0.5f);
         var disabled = !faction.CanSelect;
+        var cardSize = compact ? CompactCardSize : SpaciousCardSize;
+        var iconSize = compact ? new Vector2(88f, 88f) : new Vector2(110f, 110f);
+        var iconScale = compact ? new Vector2(3.85f, 3.85f) : new Vector2(4.5f, 4.5f);
+        var countFontSize = compact ? 20 : 24;
+        var nameFontSize = compact ? 22 : 26;
+        var topSpacerRatio = compact ? 0.35f : 0.6f;
+        var bottomSpacerRatio = compact ? 0.2f : 0.4f;
 
         var button = new ContainerButton
         {
-            MinSize = new Vector2(200, 280),
-            HorizontalExpand = true,
+            MinSize = cardSize,
+            HorizontalExpand = false,
             VerticalExpand = true,
-            SizeFlagsStretchRatio = 1f,
             Disabled = disabled,
         };
 
@@ -240,19 +331,19 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
             Text = faction.PlayerCount.ToString(),
             FontColorOverride = disabled ? accentDim : accent,
         };
-        countLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 24);
+        countLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), countFontSize);
 
         var topSpacer = new Control
         {
             VerticalExpand = true,
-            SizeFlagsStretchRatio = 0.6f,
+            SizeFlagsStretchRatio = topSpacerRatio,
         };
 
         var icon = new TextureRect
         {
-            TextureScale = new Vector2(4.5f, 4.5f),
+            TextureScale = iconScale,
             Stretch = TextureRect.StretchMode.KeepCentered,
-            MinSize = new Vector2(110, 110),
+            MinSize = iconSize,
             HorizontalAlignment = HAlignment.Center,
             ModulateSelfOverride = disabled ? Color.White.WithAlpha(0.55f) : Color.White,
         };
@@ -265,7 +356,7 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
         var bottomSpacer = new Control
         {
             VerticalExpand = true,
-            SizeFlagsStretchRatio = 0.4f,
+            SizeFlagsStretchRatio = bottomSpacerRatio,
         };
 
         var nameLabel = new Label
@@ -275,7 +366,7 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
             Text = Loc.GetString(faction.Name),
             FontColorOverride = disabled ? accentDim : accent,
         };
-        nameLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), 26);
+        nameLabel.FontOverride = _resourceCache.GetFont(new ResPath("/Fonts/NotoSansDisplay/NotoSansDisplay-Bold.ttf"), nameFontSize);
 
         inner.AddChild(accentBar);
         inner.AddChild(countLabel);
@@ -350,6 +441,46 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
         container.AddChild(vsLabel);
         container.AddChild(bottomLine);
         return container;
+    }
+
+    private void UpdateWindowSize(int factionCount)
+    {
+        var size = factionCount switch
+        {
+            <= 0 => SingleRowBaseWindowSize,
+            <= 3 => new Vector2(
+                MathF.Max(SingleRowBaseWindowSize.X, GetSingleRowContentWidth(factionCount) + WindowChromeWidth),
+                SingleRowBaseWindowSize.Y),
+            _ => new Vector2(
+                TwoRowBaseWindowSize.X,
+                TwoRowBaseWindowSize.Y),
+        };
+
+        MinSize = size;
+        SetSize = size;
+    }
+
+    private static float GetSingleRowContentWidth(int factionCount)
+    {
+        if (factionCount <= 0)
+            return 0f;
+
+        var separators = Math.Max(0, factionCount - 1);
+        var gapCount = Math.Max(0, factionCount * 2 - 2);
+        return CardRowMargin * 2f +
+               factionCount * SpaciousCardSize.X +
+               separators * SeparatorWidth +
+               gapCount * SingleRowGap;
+    }
+
+    private static float GetTwoRowContentWidth(int columnCount)
+    {
+        if (columnCount <= 0)
+            return 0f;
+
+        return CardRowMargin * 2f +
+               columnCount * CompactCardSize.X +
+               Math.Max(0, columnCount - 1) * TwoRowGap;
     }
 
     private void UpdateStatusPanel(IReadOnlyList<WH40KFactionInfo> factions)

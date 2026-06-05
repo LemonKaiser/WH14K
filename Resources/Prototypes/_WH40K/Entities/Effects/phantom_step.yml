@@ -1,0 +1,14 @@
+- type: entity
+  id: WH40KPhantomStepAfterimage
+  name: phantom afterimage
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: Mobs/Ghosts/ghost_human.rsi
+    layers:
+    - state: icon
+      color: "#FFFFFF66"
+  - type: TimedDespawn
+    lifetime: 0.45

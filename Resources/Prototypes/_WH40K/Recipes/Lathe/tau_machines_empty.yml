@@ -1,0 +1,35 @@
+- type: latheRecipePack
+  id: WH40KAutolatheStaticTau
+  parent: WH40KAutolatheStatic
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier1Tau
+  parent: WH40KAutolatheTier1
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier2Tau
+  parent: WH40KAutolatheTier2
+
+- type: latheRecipePack
+  id: WH40KAutolatheTier3Tau
+  parent: WH40KAutolatheTier3
+
+- type: latheRecipePack
+  id: WH40KProtolatheStaticTau
+  parent: WH40KProtolatheStatic
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier1Tau
+  parent: WH40KProtolatheTier1
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier2Tau
+  parent: WH40KProtolatheTier2
+
+- type: latheRecipePack
+  id: WH40KProtolatheTier3Tau
+  parent: WH40KProtolatheTier3
+
+- type: latheRecipePack
+  id: WH40KOreProcessorVanillaFullTau
+  parent: WH40KOreProcessorVanillaFull

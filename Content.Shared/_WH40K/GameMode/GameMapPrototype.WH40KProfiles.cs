@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Utility;
 
@@ -13,4 +14,7 @@ public sealed partial class GameMapPrototype
 
     [DataField("wh40kTacticalMapSnapshot")]
     public ResPath? WH40KTacticalMapSnapshot { get; private set; }
+
+    [DataField("wh40kTeamBattleFactions")]
+    public List<string>? WH40KTeamBattleFactions { get; private set; }
 }

@@ -1928,6 +1928,12 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             return true;
         }
 
+        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
+        {
+            account = "WH40KTau";
+            return true;
+        }
+
         account = default;
         return false;
     }

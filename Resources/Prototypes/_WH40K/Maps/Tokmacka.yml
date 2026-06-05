@@ -6,6 +6,7 @@
   wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/tokmacka_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherBattlefield
   wh40kEventsProfile: WH40KMapEventsAll
+  wh40kTeamBattleFactions: [ Imperium, Heretics, Tau ]
   stations:
     Tokmacka:
       stationProto: WH40KStation
@@ -47,3 +48,10 @@
             HNovice: [ 1, 1 ]
             HSpecialistHWS: [ 1, 1 ]
             HSpecialistSWS: [ 1, 1 ]
+            # Tau
+            TauEthereal: [ 1, 1 ]
+            TauOfficer: [ 1, 1 ]
+            TauFireWarrior: [ -1, -1 ]
+            TauAirCaste: [ 2, 2 ]
+            TauEarthCaste: [ 2, 2 ]
+            TauWaterCaste: [ 2, 2 ]

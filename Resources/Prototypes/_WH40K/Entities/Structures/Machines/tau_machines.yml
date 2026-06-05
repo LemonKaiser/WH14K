@@ -1,0 +1,170 @@
+- type: entity
+  id: WH40KAutolatheTau
+  parent: WH40KAutolathe
+  name: autolathe
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/tau_autolathe.rsi
+    snapCardinals: true
+    offset: 0.5,0
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Lathe
+    staticPacks:
+    - WH40KAutolatheStaticTau
+  - type: WH40KTieredLatheProcessing
+    teamId: Tau
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KAutolatheStaticTau
+    tier1Pack: WH40KAutolatheTier1Tau
+    tier2Pack: WH40KAutolatheTier2Tau
+    tier3Pack: WH40KAutolatheTier3Tau
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Tau
+  - type: Machine
+    board: AutolatheMachineCircuitboardTau
+
+- type: entity
+  id: WH40KProtolatheTau
+  parent: WH40KProtolathe
+  name: protolathe
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/tau_protolathe.rsi
+    offset: 0,0.5
+    snapCardinals: true
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Lathe
+    staticPacks:
+    - WH40KProtolatheStaticTau
+    dynamicPacks:
+    - WH40KProtolatheDynamic
+    - WH40KCommandWeaponryResearchTau
+    - WH40KCommandEquipmentResearchTau
+  - type: WH40KTieredLatheProcessing
+    teamId: Tau
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KProtolatheStaticTau
+    tier1Pack: WH40KProtolatheTier1Tau
+    tier2Pack: WH40KProtolatheTier2Tau
+    tier3Pack: WH40KProtolatheTier3Tau
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Tau
+  - type: Machine
+    board: ProtolatheMachineCircuitboardTau
+
+- type: entity
+  id: WH40KOreProcessorTau
+  parent: WH40KOreProcessor
+  name: ore processor
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/tau_ore_processor.rsi
+    offset: 0.5,0.5
+    layers:
+    - state: icon
+      map: ["enum.LatheVisualLayers.IsRunning"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: inserting
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: Lathe
+    staticPacks:
+    - WH40KOreProcessorVanillaFullTau
+  - type: WH40KTieredLatheProcessing
+    teamId: Tau
+    tierMachineProfile: WH40KTierMachineStandard
+    tier0Pack: WH40KOreProcessorVanillaFullTau
+    tier1Pack: WH40KOreProcessorVanillaFullTau
+    tier2Pack: WH40KOreProcessorVanillaFullTau
+    tier3Pack: WH40KOreProcessorVanillaFullTau
+    remapQueueToSelectedTierPack: false
+  - type: WH40KResearchTeam
+    teamId: Tau
+  - type: Machine
+    board: OreProcessorMachineCircuitboardTau
+
+- type: entity
+  id: WH40KOreExtractorTau
+  parent: WH40KOreExtractorBase
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/tau_ore_extractor.rsi
+    state: icon
+    snapCardinals: true
+  - type: Icon
+    sprite: _WH40K/Structures/Machines/tau_ore_extractor.rsi
+    state: icon
+  - type: WH40KOreExtractor
+    teamId: Tau
+    teamIds:
+    - Tau
+
+- type: entity
+  id: WH40KResearchAndDevelopmentServerTau
+  parent: WH40KResearchAndDevelopmentServer
+  name: tau R&D server
+  suffix: WH40K, Tau
+  components:
+  - type: ResearchServer
+    serverName: RD-TAU
+    timedResearchEnabled: true
+  - type: TechnologyDatabase
+    supportedDisciplines:
+    - WH40KWeaponry
+    - WH40KEquipment
+  - type: WH40KResearchTeam
+    teamId: Tau
+
+- type: entity
+  id: WH40KComputerResearchAndDevelopmentTau
+  parent: WH40KBaseResearchAndDevelopmentComputer
+  name: tau R&D computer
+  suffix: WH40K, Tau
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Machines/tau_modular_computer.rsi
+    drawdepth: Mobs
+    offset: 0,0.4
+    layers:
+    - state: base
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+      visible: false
+    - state: unshaded
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      visible: false
+    - state: inserting
+      visible: false
+      map: ["enum.MaterialStorageVisualLayers.Inserting"]
+  - type: WH40KResearchTeam
+    teamId: Tau
+  - type: AccessReader
+    access: []

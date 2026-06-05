@@ -1,0 +1,25 @@
+light_mode unshaded;
+
+uniform highp vec3 Tint;
+uniform highp float EdgeStrength;
+uniform highp float Smear;
+uniform highp float Phase;
+
+void fragment()
+{
+    highp vec4 base = zTexture(UV);
+
+    if (base.a <= 0.001)
+        discard;
+
+    highp vec2 smearUv = UV - vec2(Smear * (1.0 - UV.y), 0.0);
+    highp vec4 smearSample = zTexture(smearUv);
+    highp float shimmer = 0.5 + 0.5 * sin(TIME * 18.0 + Phase + UV.y * 16.0);
+    highp float rim = clamp((smearSample.a - base.a * 0.35) * EdgeStrength, 0.0, 1.0);
+
+    highp vec3 tint = mix(base.rgb, Tint, 0.82);
+    tint += Tint * (0.16 + shimmer * 0.12 + rim * 0.18);
+
+    highp float alpha = base.a * (0.76 + shimmer * 0.12 + rim * 0.20);
+    COLOR = vec4(tint, alpha);
+}

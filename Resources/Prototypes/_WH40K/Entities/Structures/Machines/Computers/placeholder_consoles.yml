@@ -61,6 +61,43 @@
   - type: SpriteFade
 
 - type: entity
+  id: WH40KBaseFieldCommandConsole
+  parent: BaseStructureComputer
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Animateable
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: GlassSmash
+  - type: Construction
+    graph: Computer
+    node: computer
+    containers:
+    - board
+  - type: Computer
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+  - type: LightningTarget
+    priority: 1
+  - type: RequireProjectileTarget
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: Wires
+    boardName: wires-board-name-computer
+    layoutId: Computer
+  - type: UserInterface
+    interfaces:
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: SpriteFade
+
+- type: entity
   id: WH40KPlaceholderConsoleImperium
   parent: WH40KBasePlaceholderConsole
   name: imperium field console

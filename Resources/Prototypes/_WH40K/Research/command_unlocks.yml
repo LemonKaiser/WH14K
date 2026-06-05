@@ -214,6 +214,8 @@
   - WH40KRecipeWeaponLaserLasgun
   - WH40KRecipeWeaponHereticLaserLasgun
   - WH40KRecipeWeaponLaserLasgunVoss
+  - WH40KRecipeWeaponTauPulseRifle
+  - WH40KRecipeWeaponTauPulseCarbine
 
 - type: technology
   id: WH40KWeaponryChainblades
@@ -265,6 +267,7 @@
   - WH40KWeaponryChainblades
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLasgunAccatran
+  - WH40KRecipeWeaponTauPulseBlaster
 
 - type: technology
   id: WH40KWeaponryLonglasPatterns
@@ -281,6 +284,7 @@
   - WH40KWeaponryAccatranPatterns
   recipeUnlocks:
   - WH40KRecipeWeaponLaserLonglas
+  - WH40KRecipeWeaponTauPulseSniperRifle
 
 - type: technology
   id: WH40KWeaponryHellgunPatterns
@@ -366,6 +370,7 @@
   recipeUnlocks:
   - WH40KRecipeWeaponLaserPlasmagun
   - WH40KRecipeWeaponLaserPlasmaPistol
+  - WH40KRecipeWeaponTauRailgun
 
 - type: technology
   id: WH40KWeaponryMeltaArming
@@ -415,6 +420,7 @@
   recipeUnlocks:
   - WH40KRecipeTacticalWhistleImperium
   - WH40KRecipeTacticalWhistleHeretics
+  - WH40KRecipeTauHeadset
 
 - type: technology
   id: WH40KEquipmentBasicAmmunition
@@ -438,6 +444,10 @@
   - WH40KRecipeAccatranPowerCell
   - WH40KRecipeLasgunPowerCellLucius
   - WH40KRecipePowerCellVoss
+  - WH40KRecipeTauPulseCellRifle
+  - WH40KRecipeTauPulseCellCarbine
+  - WH40KRecipeTauPulseCellBlaster
+  - WH40KRecipeTauPulseCellSniper
 
 - type: technology
   id: WH40KEquipmentFieldFlares
@@ -499,6 +509,7 @@
   - WH40KRecipeFragGrenade
   - WH40KRecipeKrakGrenade
   - WH40KRecipeMeltaGrenade
+  - WH40KRecipeTauGunDrone
 
 - type: technology
   id: WH40KEquipmentIntelDetectors
@@ -574,6 +585,7 @@
   - WH40KRecipeMagazineBolter
   - WH40KRecipeMagazineBolterPistol
   - WH40KRecipeMagazineHeavyBolter
+  - WH40KRecipeTauRailgunCell
 
 - type: technology
   id: WH40KEquipmentMissionCommand

@@ -16,6 +16,7 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
     /// Entity used for the profile editor preview
     /// </summary>
     public EntityUid PreviewDummy;
+    public bool HasValidPreviewDummy => PreviewDummy != EntityUid.Invalid && EntMan.EntityExists(PreviewDummy) && !EntMan.Deleted(PreviewDummy);
 
     public ProfilePreviewSpriteView()
     {
@@ -30,10 +31,13 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
     /// </remarks>
     public void LoadPreview(HumanoidCharacterProfile profile, JobPrototype? jobOverride = null, bool showClothes = true)
     {
-        EntMan.DeleteEntity(PreviewDummy);
-        PreviewDummy = EntityUid.Invalid;
-
-        LoadHumanoidEntity(profile, jobOverride, showClothes);
+        var reusedDummy = TryRefreshHumanoidPreview(profile, jobOverride, showClothes);
+        if (!reusedDummy)
+        {
+            EntMan.DeleteEntity(PreviewDummy);
+            PreviewDummy = EntityUid.Invalid;
+            LoadHumanoidEntity(profile, jobOverride, showClothes);
+        }
 
         SetEntity(PreviewDummy);
         SetName(HumanoidNameScriptHelper.ResolveUnresolvedDatasetIds(profile.Name));
@@ -59,6 +63,8 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
     {
         EntMan.DeleteEntity(PreviewDummy);
         PreviewDummy = EntityUid.Invalid;
+        ResetHumanoidPreviewState();
+        SetEntity((EntityUid?) null);
     }
 
     protected override void ExitedTree()

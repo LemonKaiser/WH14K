@@ -8,4 +8,7 @@ public sealed partial class WH40KDeployServoSkullComponent : Component
 {
     [DataField("mobPrototype", required: true, customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>))]
     public string MobPrototype = string.Empty;
+
+    [DataField("startFollowingOwner")]
+    public bool StartFollowingOwner;
 }

@@ -127,17 +127,25 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (_stateManager.CurrentState is not LobbyState)
             return;
 
-        ReloadCharacterSetup();
+        RefreshLobbyPreview();
+        RefreshCharacterSetupIfOpen();
     }
 
     public void OnStateEntered(LobbyState state)
     {
+        if (state.Lobby?.CharacterPreview != null)
+            state.Lobby.CharacterPreview.CharacterSelected += OnPreviewCharacterSelected;
+
         PreviewPanel?.SetLoaded(_preferencesManager.ServerDataLoaded);
-        ReloadCharacterSetup();
+        RefreshLobbyPreview();
+        RefreshCharacterSetupIfOpen();
     }
 
     public void OnStateExited(LobbyState state)
     {
+        if (state.Lobby?.CharacterPreview != null)
+            state.Lobby.CharacterPreview.CharacterSelected -= OnPreviewCharacterSelected;
+
         PreviewPanel?.SetLoaded(false);
 
         if (_savePanel != null)
@@ -167,11 +175,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     public void ReloadCharacterSetup()
     {
         RefreshLobbyPreview();
-        var (characterGui, profileEditor) = EnsureGui();
-        characterGui.ReloadCharacterPickers();
-        profileEditor.SetProfile(
-            _preferencesManager.Preferences?.SelectedCharacter,
-            _preferencesManager.Preferences?.SelectedCharacterIndex);
+        EnsureGui();
+        RefreshCharacterSetupIfOpen();
     }
 
     public void RefreshLocalization()
@@ -185,23 +190,66 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     /// <summary>
     /// Refreshes the character preview in the lobby chat.
     /// </summary>
-    private void RefreshLobbyPreview()
+    private void RefreshLobbyPreview(bool refreshCarousel = true)
     {
         if (PreviewPanel == null)
             return;
 
-        // Get selected character, load it, then set it
-        var character = _preferencesManager.Preferences?.SelectedCharacter;
+        if (refreshCarousel || !PreviewPanel.HasCharacters)
+            PreviewPanel.SetCharacters(_preferencesManager.Preferences);
+        else
+            PreviewPanel.SetSelectedSlot(_preferencesManager.Preferences?.SelectedCharacterIndex);
 
-        if (character is not HumanoidCharacterProfile humanoid)
+        var (humanoid, _) = GetSelectedCharacterData();
+        if (humanoid == null)
         {
-            PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
             PreviewPanel.SetSummaryText(string.Empty);
             return;
         }
 
-        PreviewPanel.ProfilePreviewSpriteView.LoadPreview(humanoid);
         PreviewPanel.SetSummaryText(humanoid.Summary);
+    }
+
+    private void OnPreviewCharacterSelected(int slot)
+    {
+        _preferencesManager.SelectCharacter(slot);
+        RefreshLobbyPreview(refreshCarousel: false);
+        RefreshCharacterSetupIfOpen(reloadPickers: false, fastProfileSwap: true);
+    }
+
+    private void RefreshCharacterSetupIfOpen(bool reloadPickers = true, bool reloadProfile = true, bool fastProfileSwap = false)
+    {
+        if (_characterSetup == null || _profileEditor == null)
+            return;
+
+        var (profile, slot) = GetSelectedCharacterData();
+
+        if (reloadPickers)
+            _characterSetup.ReloadCharacterPickers();
+        else
+            _characterSetup.SetSelectedCharacter(slot);
+
+        if (!reloadProfile)
+            return;
+
+        _profileEditor.SetProfile(profile, slot, fullRefresh: !fastProfileSwap);
+    }
+
+    private (HumanoidCharacterProfile? Profile, int? Slot) GetSelectedCharacterData()
+    {
+        var preferences = _preferencesManager.Preferences;
+        if (preferences == null)
+            return (null, null);
+
+        if (preferences.Characters.TryGetValue(preferences.SelectedCharacterIndex, out var selected))
+            return (selected, preferences.SelectedCharacterIndex);
+
+        foreach (var (slot, profile) in preferences.Characters.OrderBy(character => character.Key))
+        {
+            return (profile, slot);
+        }
+
+        return (null, null);
     }
 
     private void RefreshProfileEditor()
@@ -308,25 +356,32 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
         _profileEditor.Save += SaveProfile;
 
+        _characterSetup.CreateCharacterRequested += () =>
+        {
+            _preferencesManager.CreateCharacter(HumanoidCharacterProfile.Random());
+            RefreshLobbyPreview();
+            RefreshCharacterSetupIfOpen(reloadPickers: true, reloadProfile: false);
+        };
+
         _characterSetup.SelectCharacter += args =>
         {
             _preferencesManager.SelectCharacter(args);
-            ReloadCharacterSetup();
+            RefreshLobbyPreview(refreshCarousel: false);
+            RefreshCharacterSetupIfOpen(reloadPickers: false, fastProfileSwap: true);
         };
 
         _characterSetup.DeleteCharacter += args =>
         {
             _preferencesManager.DeleteCharacter(args);
+            RefreshLobbyPreview();
 
-            // Reload everything
             if (EditedSlot == args)
             {
-                ReloadCharacterSetup();
+                RefreshCharacterSetupIfOpen();
             }
             else
             {
-                // Only need to reload character pickers
-                _characterSetup?.ReloadCharacterPickers();
+                RefreshCharacterSetupIfOpen(reloadPickers: true, reloadProfile: false);
             }
         };
 

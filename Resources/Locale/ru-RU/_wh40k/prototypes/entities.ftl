@@ -2016,3 +2016,11 @@ ent-ClothingOuterChaosSlaaneshChoisenArmor = Броня избранного С�
 
 ent-ClothingOuterChaosSlaaneshCultistArmor = Броня культиста Слаанеша
     .desc = Прочная броня культиста Слаанеша
+ent-ActionWH40KChaosTzeentchTimeField = Поле серого времени
+    .desc = Развернуть у себя под ногами поле искажённого времени, замедляющее всех, кроме вас и культистов Тзинча.
+
+ent-ActionWH40KTogglePhantomStep = Фантомный шаг
+    .desc = Включить или выключить автоматическое уклонение рывком.
+
+ent-ActionWH40KTauToggleDroneAggression = Режим атаки дронов
+    .desc = Включить или выключить автономную атаку боевых дронов.

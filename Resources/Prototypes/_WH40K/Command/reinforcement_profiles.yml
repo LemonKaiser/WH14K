@@ -135,9 +135,50 @@
     minBaseLevel: 4
     groupKey: w40k-cmd-reinforcement-group-special
 
+- type: wh40kCommandReinforcementProfile
+  id: WH40KCommandReinforcementProfileTau
+  teamId: Tau
+  options:
+  - id: tau-fire-warrior
+    job: TauFireWarrior
+    previewPrototype: WH40KReinforcementPreviewTauFireWarrior
+    baseCost: 20
+    maxCount: 10
+    groupKey: w40k-cmd-reinforcement-group-line
+    sortOrder: 10
+  - id: tau-earth-caste
+    job: TauEarthCaste
+    previewPrototype: WH40KReinforcementPreviewTauEarthCaste
+    baseCost: 20
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 20
+  - id: tau-air-caste
+    job: TauAirCaste
+    previewPrototype: WH40KReinforcementPreviewTauAirCaste
+    baseCost: 24
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 30
+  - id: tau-water-caste
+    job: TauWaterCaste
+    previewPrototype: WH40KReinforcementPreviewTauWaterCaste
+    baseCost: 24
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-support
+    sortOrder: 40
+  - id: tau-officer
+    job: TauOfficer
+    previewPrototype: WH40KReinforcementPreviewTauOfficer
+    baseCost: 32
+    maxCount: 2
+    groupKey: w40k-cmd-reinforcement-group-command
+    sortOrder: 50
+
 - type: wh40kCommandReinforcementTeamMap
   id: WH40KCommandReinforcementTeamMap
   defaultProfile: WH40KCommandReinforcementProfileImperium
   teamProfiles:
     Imperium: WH40KCommandReinforcementProfileImperium
     Heretics: WH40KCommandReinforcementProfileHeretics
+    Tau: WH40KCommandReinforcementProfileTau

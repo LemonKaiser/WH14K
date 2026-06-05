@@ -2001,3 +2001,11 @@ ent-ClothingOuterChaosSlaaneshChoisenArmor = Slaanesh Chosen's Armor
 
 ent-ClothingOuterChaosSlaaneshCultistArmor = Slaanesh Cultist's Armor
     .desc = Sturdy armor of a Slaanesh cultist
+ent-ActionWH40KChaosTzeentchTimeField = Grey Time Field
+    .desc = Unfold a localized time field beneath you that slows everyone except you and Tzeentch cultists.
+
+ent-ActionWH40KTogglePhantomStep = Phantom Step
+    .desc = Toggle automatic evasive dashes.
+
+ent-ActionWH40KTauToggleDroneAggression = Drone Attack Mode
+    .desc = Enable or disable autonomous gun drone attacks.

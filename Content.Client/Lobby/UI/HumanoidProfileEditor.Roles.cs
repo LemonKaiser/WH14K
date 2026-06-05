@@ -43,8 +43,11 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (jobId, prioritySelector) in _jobPriorities)
         {
-            var priority = Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never;
-            prioritySelector.Select((int)priority);
+            var priority = (int)(Profile?.JobPriorities.GetValueOrDefault(jobId, JobPriority.Never) ?? JobPriority.Never);
+            if (prioritySelector.Selected == priority)
+                continue;
+
+            prioritySelector.Select(priority);
         }
     }
 
