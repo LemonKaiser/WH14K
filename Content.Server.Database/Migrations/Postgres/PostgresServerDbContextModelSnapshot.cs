@@ -1677,6 +1677,89 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.ToTable("wh40k_meta_progress", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.WH40KMute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("wh40k_mute_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("created_by_id");
+
+                    b.Property<DateTime?>("ExpirationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiration_time");
+
+                    b.Property<DateTime>("MuteTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("mute_time");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_user_id");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("reason");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("PK_wh40k_mute");
+
+                    b.HasIndex("CreatedById")
+                        .HasDatabaseName("IX_wh40k_mute_created_by_id");
+
+                    b.HasIndex("PlayerUserId")
+                        .HasDatabaseName("IX_wh40k_mute_player_user_id");
+
+                    b.HasIndex("PlayerUserId", "Type")
+                        .HasDatabaseName("IX_wh40k_mute_player_user_id_type");
+
+                    b.ToTable("wh40k_mute", (string)null);
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KUnmute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("wh40k_unmute_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MuteId")
+                        .HasColumnType("integer")
+                        .HasColumnName("mute_id");
+
+                    b.Property<DateTime>("UnmuteTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("unmute_time");
+
+                    b.Property<Guid?>("UnmutingAdminId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("unmuting_admin_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_wh40k_unmute");
+
+                    b.HasIndex("MuteId")
+                        .IsUnique();
+
+                    b.HasIndex("UnmutingAdminId")
+                        .HasDatabaseName("IX_wh40k_unmute_unmuting_admin_id");
+
+                    b.ToTable("wh40k_unmute", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.Whitelist", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -2311,6 +2394,49 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("Player");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.WH40KMute", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_wh40k_mute_player_created_by_id");
+
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_mute_player_player_user_id");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KUnmute", b =>
+                {
+                    b.HasOne("Content.Server.Database.WH40KMute", "Mute")
+                        .WithOne("Unmute")
+                        .HasForeignKey("Content.Server.Database.WH40KUnmute", "MuteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_wh40k_unmute_wh40k_mute_mute_id");
+
+                    b.HasOne("Content.Server.Database.Player", "UnmutingAdmin")
+                        .WithMany()
+                        .HasForeignKey("UnmutingAdminId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_wh40k_unmute_player_unmuting_admin_id");
+
+                    b.Navigation("Mute");
+
+                    b.Navigation("UnmutingAdmin");
+                });
+
             modelBuilder.Entity("PlayerRound", b =>
                 {
                     b.HasOne("Content.Server.Database.Player", null)
@@ -2438,6 +2564,11 @@ namespace Content.Server.Database.Migrations.Postgres
                     b.Navigation("ConnectionLogs");
 
                     b.Navigation("Rounds");
+                });
+
+            modelBuilder.Entity("Content.Server.Database.WH40KMute", b =>
+                {
+                    b.Navigation("Unmute");
                 });
 #pragma warning restore 612, 618
         }

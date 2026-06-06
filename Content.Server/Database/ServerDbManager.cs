@@ -11,6 +11,7 @@ using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared._WH40K.Administration.Mute;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -107,6 +108,10 @@ namespace Content.Server.Database
 
         Task<BanDef> AddBanAsync(BanDef ban);
         Task AddUnbanAsync(UnbanDef ban);
+        Task<WH40KMuteDef?> GetMuteAsync(int id);
+        Task<List<WH40KMuteDef>> GetMutesAsync(NetUserId userId, bool includeUnmuted = true, WH40KMuteType? type = null);
+        Task<WH40KMuteDef> AddMuteAsync(WH40KMuteDef mute);
+        Task AddUnmuteAsync(WH40KUnmuteDef unmute);
 
         public Task EditBan(
             int id,
@@ -565,6 +570,30 @@ namespace Content.Server.Database
         {
             DbWriteOpsMetric.Inc();
             return RunDbCommand(() => _db.AddUnbanAsync(unban));
+        }
+
+        public Task<WH40KMuteDef?> GetMuteAsync(int id)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetMuteAsync(id));
+        }
+
+        public Task<List<WH40KMuteDef>> GetMutesAsync(NetUserId userId, bool includeUnmuted = true, WH40KMuteType? type = null)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetMutesAsync(userId, includeUnmuted, type));
+        }
+
+        public Task<WH40KMuteDef> AddMuteAsync(WH40KMuteDef mute)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddMuteAsync(mute));
+        }
+
+        public Task AddUnmuteAsync(WH40KUnmuteDef unmute)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.AddUnmuteAsync(unmute));
         }
 
         public Task EditBan(int id, string reason, NoteSeverity severity, DateTimeOffset? expiration, Guid editedBy, DateTimeOffset editedAt)

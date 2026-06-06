@@ -27,6 +27,7 @@ public sealed partial class PlayerPanelEui : BaseEui
         PlayerPanel.OnKick += username => _console.ExecuteCommand($"kick \"{username}\"");
         PlayerPanel.OnCamera += username => _console.ExecuteCommand($"camera \"{username}\"");
         PlayerPanel.OnOpenBanPanel += id => _console.ExecuteCommand($"banpanel \"{id}\"");
+        PlayerPanel.OnOpenMutePanel += id => _console.ExecuteCommand($"mutepanel \"{id}\"");
         PlayerPanel.OnOpenBans += id => _console.ExecuteCommand($"banlist \"{id}\"");
         PlayerPanel.OnAhelp += id => _console.ExecuteCommand($"openahelp \"{id}\"");
         PlayerPanel.OnWhitelistToggle += (id, whitelisted) =>

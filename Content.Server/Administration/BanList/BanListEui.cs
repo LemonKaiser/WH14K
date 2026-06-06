@@ -8,6 +8,7 @@ using Content.Shared.Administration;
 using Content.Shared.Administration.BanList;
 using Content.Shared.Database;
 using Content.Shared.Eui;
+using Content.Shared._WH40K.Administration.Mute;
 using Robust.Shared.Network;
 
 namespace Content.Server.Administration.BanList;
@@ -27,6 +28,7 @@ public sealed partial class BanListEui : BaseEui
     private string BanListPlayerName { get; set; } = string.Empty;
     private List<SharedBan> Bans { get; } = new();
     private List<SharedBan> RoleBans { get; } = new();
+    private List<WH40KSharedMute> Mutes { get; } = new();
 
     public override void Opened()
     {
@@ -44,7 +46,7 @@ public sealed partial class BanListEui : BaseEui
 
     public override EuiStateBase GetNewState()
     {
-        return new BanListEuiState(BanListPlayerName, Bans, RoleBans);
+        return new BanListEuiState(BanListPlayerName, Bans, RoleBans, Mutes);
     }
 
     private void OnPermsChanged(AdminPermsChangedEventArgs args)
@@ -59,6 +61,7 @@ public sealed partial class BanListEui : BaseEui
     {
         await LoadBansCore(userId, BanType.Server, Bans);
         await LoadBansCore(userId, BanType.Role, RoleBans);
+        await LoadMutesCore(userId);
     }
 
     private async Task LoadBansCore(NetUserId userId, BanType banType, List<SharedBan> list)
@@ -105,6 +108,7 @@ public sealed partial class BanListEui : BaseEui
     {
         Bans.Clear();
         RoleBans.Clear();
+        Mutes.Clear();
 
         var userId = new NetUserId(BanListPlayer);
         BanListPlayerName = (await _playerLocator.LookupIdAsync(userId))?.Username ??
@@ -119,5 +123,31 @@ public sealed partial class BanListEui : BaseEui
     {
         BanListPlayer = banListPlayer;
         await LoadFromDb();
+    }
+
+    private async Task LoadMutesCore(NetUserId userId)
+    {
+        foreach (var mute in await _db.GetMutesAsync(userId))
+        {
+            SharedUnban? unmute = null;
+            if (mute.Unmute is { } unmuteDef)
+            {
+                var unmutingAdmin = unmuteDef.UnmutingAdmin == null
+                    ? null
+                    : (await _playerLocator.LookupIdAsync(unmuteDef.UnmutingAdmin.Value))?.Username;
+                unmute = new SharedUnban(unmutingAdmin, unmuteDef.UnmuteTime.UtcDateTime);
+            }
+
+            Mutes.Add(new WH40KSharedMute(
+                mute.Id ?? 0,
+                mute.Type,
+                mute.MuteTime.UtcDateTime,
+                mute.ExpirationTime?.UtcDateTime,
+                mute.Reason,
+                mute.MutingAdmin == null
+                    ? null
+                    : (await _playerLocator.LookupIdAsync(mute.MutingAdmin.Value))?.Username,
+                unmute));
+        }
     }
 }

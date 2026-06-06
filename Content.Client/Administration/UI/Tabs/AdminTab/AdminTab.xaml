@@ -6,8 +6,9 @@
     Margin="4"
     MinSize="50 50">
     <BoxContainer Orientation="Vertical">
-        <GridContainer Columns="3">
+        <GridContainer Columns="5">
             <cc:CommandButton Name="BanPanelButton" Command="banpanel" Text="{Loc admin-player-actions-window-ban}" />
+            <cc:CommandButton Name="MutePanelButton" Command="mutepanel" Text="{Loc admin-player-actions-window-mute}" />
             <cc:CommandButton Name="AdminGhostButton" Command="aghost" Text="{Loc admin-player-actions-window-admin-ghost}" />
             <cc:CommandButton Name="PermissionsButton" Command="permissions" Text="{Loc admin-player-actions-window-permissions}" />
             <cc:CommandButton Name="AnnounceButton" Command="announceui" Text="{Loc admin-player-actions-window-announce}"/>

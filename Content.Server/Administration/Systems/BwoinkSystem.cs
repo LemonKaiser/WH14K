@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Content.Server._WH40K.Administration.Mute;
 using Content.Server.Administration.Managers;
 using Content.Server.Afk;
 using Content.Server.Database;
@@ -43,6 +44,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private IAfkManager _afkManager = default!;
         [Dependency] private IServerDbManager _dbManager = default!;
         [Dependency] private PlayerRateLimitManager _rateLimit = default!;
+        [Dependency] private WH40KMuteSystem _muteSystem = default!;
 
         [GeneratedRegex(@"^https://discord\.com/api/webhooks/(\d+)/((?!.*/).*)$")]
         private static partial Regex DiscordRegex();
@@ -634,6 +636,9 @@ namespace Content.Server.Administration.Systems
             base.OnBwoinkTextMessage(message, eventArgs);
             _activeConversations[message.UserId] = DateTime.Now;
             var senderSession = eventArgs.SenderSession;
+
+            if (_muteSystem.IsAHelpMuted(senderSession, out _))
+                return;
 
             // TODO: Sanitize text?
             // Confirm that this person is actually allowed to send a message here.

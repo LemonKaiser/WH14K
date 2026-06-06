@@ -37,6 +37,8 @@ namespace Content.Server.Database
         public DbSet<BanHwid> BanHwid { get; set; } = default!;
         public DbSet<BanRole> BanRole { get; set; } = default!;
         public DbSet<Unban> Unban { get; set; } = default!;
+        public DbSet<WH40KMute> WH40KMute { get; set; } = default!;
+        public DbSet<WH40KUnmute> WH40KUnmute { get; set; } = default!;
         public DbSet<ServerBanExemption> BanExemption { get; set; } = default!;
         public DbSet<ConnectionLog> ConnectionLog { get; set; } = default!;
         public DbSet<ServerBanHit> ServerBanHit { get; set; } = default!;
@@ -364,6 +366,7 @@ namespace Content.Server.Database
                 .HasDefaultValue(HwidType.Legacy);
 
             ModelBan.OnModelCreating(modelBuilder);
+            ModelWH40KMute.OnModelCreating(modelBuilder);
         }
 
         public virtual IQueryable<AdminLog> SearchLogs(IQueryable<AdminLog> query, string searchText)

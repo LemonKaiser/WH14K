@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using Content.Server._WH40K.Administration.Mute;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -70,8 +71,8 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private  DiscordChatLink _discordLink = default!;
     [Dependency] private  ILogManager _logManager = default!;
     [Dependency] private  IPrototypeManager _prototypeManager = default!;
-
     private ISawmill _sawmill = default!;
+    private WH40KMuteSystem Mutes => _entitySystems.GetEntitySystem<WH40KMuteSystem>();
 
     /// <summary>
     /// The maximum length a player-sent message can be sent
@@ -281,6 +282,9 @@ internal sealed partial class ChatManager : IChatManager
     /// <param name="type">The type of message.</param>
     public void TrySendOOCMessage(ICommonSession player, string message, OOCChatType type)
     {
+        if (Mutes.IsChatMuted(player, out _))
+            return;
+
         if (HandleRateLimit(player) != RateLimitStatus.Allowed)
             return;
 
@@ -310,6 +314,9 @@ internal sealed partial class ChatManager : IChatManager
     {
         message = ChatEmoji.ApplyPolicy(message, ChatSelectChannel.OOC, _emojiAllowedChannels);
         if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        if (HandleRepeatedRateLimit(player, message) != RateLimitStatus.Allowed)
             return;
 
         var adminDecorationPriority = _configurationManager.GetCVar(CCVars.WH40KMetaAdminPriorityOverDecorations);
@@ -922,6 +929,9 @@ internal sealed partial class ChatManager : IChatManager
 
         message = ChatEmoji.ApplyPolicy(message, ChatSelectChannel.Admin, _emojiAllowedChannels);
         if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        if (HandleRepeatedRateLimit(player, message) != RateLimitStatus.Allowed)
             return;
 
         var clients = _adminManager.ActiveAdmins.Select(p => p.Channel);

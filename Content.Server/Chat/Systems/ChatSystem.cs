@@ -1,4 +1,5 @@
 using System.Globalization;
+using Content.Server._WH40K.Administration.Mute;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -47,6 +48,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
     [Dependency] private EntityQuery<GhostHearingComponent> _ghostHearingQuery = default!;
+    [Dependency] private WH40KMuteSystem _muteSystem = default!;
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;
@@ -215,6 +217,9 @@ public sealed partial class ChatSystem : SharedChatSystem
                 if (string.IsNullOrWhiteSpace(modMessage))
                     return;
 
+                if (player != null && _chatManager.HandleRepeatedRateLimit(player, modMessage) != RateLimitStatus.Allowed)
+                    return;
+
                 SendEntityWhisper(source, modMessage, range, channel, nameOverride, hideLog, ignoreActionBlocker);
                 return;
             }
@@ -228,6 +233,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         });
 
         if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        if (player != null && _chatManager.HandleRepeatedRateLimit(player, message) != RateLimitStatus.Allowed)
             return;
 
         // Otherwise, send whatever type.
@@ -266,9 +274,10 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (player?.AttachedEntity is not { Valid: true } entity || source != entity)
             return;
 
+        var session = player!;
         var sendType = type;
         // If dead player LOOC is disabled, unless you are an admin with Moderator perms, send dead messages to dead chat
-        if ((_adminManager.IsAdmin(player) && _adminManager.HasAdminFlag(player, AdminFlags.Moderator)) // Override if admin
+        if ((_adminManager.IsAdmin(session) && _adminManager.HasAdminFlag(session, AdminFlags.Moderator)) // Override if admin
             || _deadLoocEnabled
             || (!HasComp<GhostComponent>(source) && !_mobStateSystem.IsDead(source))) // Check that player is not dead
         {
@@ -287,8 +296,11 @@ public sealed partial class ChatSystem : SharedChatSystem
         if (string.IsNullOrWhiteSpace(message))
             return;
 
+        if (_chatManager.HandleRepeatedRateLimit(session, message) != RateLimitStatus.Allowed)
+            return;
+
         // Systems can differentiate Looc and DeadChat by type, and cancel the speak attempt if necessary.
-        var ev = new InGameOocMessageAttemptEvent(player, sendType);
+        var ev = new InGameOocMessageAttemptEvent(session, sendType);
         RaiseLocalEvent(source, ref ev, true);
         if (ev.Cancelled)
             return;

@@ -175,6 +175,12 @@ namespace Content.Client.Administration.UI.Bwoink
                     _console.ExecuteCommand($"banpanel \"{_currentPlayer.SessionId}\"");
             };
 
+            Mute.OnPressed += _ =>
+            {
+                if (_currentPlayer is not null)
+                    _console.ExecuteCommand($"mutepanel \"{_currentPlayer.SessionId}\"");
+            };
+
             Kick.OnPressed += _ =>
             {
                 // TODO: Reason field
@@ -236,6 +242,9 @@ namespace Content.Client.Administration.UI.Bwoink
 
             Ban.Visible = _adminManager.HasFlag(AdminFlags.Ban);
             Ban.Disabled = !Ban.Visible || disabled;
+
+            Mute.Visible = _adminManager.CanCommand("mutepanel");
+            Mute.Disabled = !Mute.Visible || disabled;
 
             Kick.Visible = _adminManager.CanCommand("kick");
             Kick.Disabled = !Kick.Visible || disabled;
