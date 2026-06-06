@@ -539,6 +539,8 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
+  - WeaponFlareGunWH40K
+  - BoxShotgunFlareWH40K
   - WH40KLighterKit
   - WH40KFlippoKit
   - WH40KCigarKit
@@ -1032,6 +1034,8 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
+  - WeaponFlareGunWH40K
+  - BoxShotgunFlareWH40K
   - WH40KLighterKit
   - WH40KFlippoKit
   - WH40KCigarKit
