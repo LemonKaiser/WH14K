@@ -1,0 +1,32 @@
+<ui:FancyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+    Title="{Loc wh40k-mute-panel-title}" MinSize="430 430">
+    <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="4">
+        <TabContainer Name="Tabs" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                <BoxContainer Orientation="Horizontal" Margin="2">
+                    <Label MinWidth="100" Text="{Loc wh40k-mute-panel-player}" />
+                    <Control MinWidth="50" />
+                    <LineEdit Name="PlayerNameLine" MinWidth="100" HorizontalExpand="True" PlaceHolder="{Loc wh40k-mute-panel-player}" />
+                </BoxContainer>
+                <BoxContainer Orientation="Horizontal" Margin="2" SeparationOverride="8">
+                    <CheckBox Name="ChatMuteCheckbox" Text="{Loc wh40k-mute-panel-chat}" Pressed="True" />
+                    <CheckBox Name="AHelpMuteCheckbox" Text="{Loc wh40k-mute-panel-ahelp}" Pressed="False" />
+                </BoxContainer>
+                <CheckBox Name="EraseCheckbox" Margin="2" Text="{Loc wh40k-mute-panel-erase}" Pressed="False" />
+                <BoxContainer Orientation="Horizontal" Margin="2">
+                    <LineEdit Name="TimeLine" MaxWidth="150" MinWidth="70" PlaceHolder="0" />
+                    <OptionButton Name="MultiplierOption" />
+                    <Control MinWidth="50" />
+                    <Label Name="ExpiresLabel" />
+                </BoxContainer>
+                <cc:HSeparator Margin="1"/>
+                <TextEdit Name="ReasonTextEdit" MinHeight="100" VerticalExpand="True" HorizontalExpand="True" />
+            </BoxContainer>
+            <cc:PlayerListControl Name="PlayerList" VerticalExpand="True" />
+        </TabContainer>
+        <Button Name="SubmitButton" Text="{Loc wh40k-mute-panel-submit}" HorizontalExpand="True" />
+    </BoxContainer>
+</ui:FancyWindow>

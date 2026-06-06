@@ -108,6 +108,9 @@ public sealed partial class ChatSystem
             return false;
         }
 
+        if (_muteSystem.IsChatMuted(player, out _))
+            return false;
+
         return !_chatManager.MessageCharacterLimit(player, message);
     }
 

@@ -21,7 +21,7 @@
        <Label Name="ScreenCheckLast"/>
 
        <BoxContainer Align="Center">
-           <GridContainer Rows="7">
+           <GridContainer Rows="8">
             <Button Name="NotesButton" Text="{Loc player-panel-show-notes}" SetWidth="136" Disabled="True"/>
             <Button Name="AhelpButton" Text="{Loc player-panel-help}" Disabled="True"/>
             <Button Name="FreezeButton" Text = "{Loc player-panel-freeze}" Disabled="True"/>
@@ -32,9 +32,11 @@
             <Button Name="LogsButton" Text="{Loc player-panel-logs}" Disabled="True"/>
             <Button Name="FreezeAndMuteToggleButton" Text="{Loc player-panel-freeze-and-mute}" Disabled="True"/>
             <Button Name="BanButton" Text="{Loc player-panel-ban}" Disabled="True"/>
+            <Button Name="MuteButton" Text="{Loc player-panel-mute}" Disabled="True"/>
             <controls:ConfirmButton Name="RejuvenateButton" Text="{Loc player-panel-rejuvenate}" Disabled="True"/>
             <Button Name="CameraButton" Text="{Loc player-panel-camera}" Disabled="True"/>
             <Button Name="ScreenCheckButton" Text="{Loc player-panel-screen-check}" Disabled="True"/>
+            <Control/>
             <Control/>
            </GridContainer>
        </BoxContainer>

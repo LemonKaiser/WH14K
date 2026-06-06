@@ -15,6 +15,7 @@ using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Speech;
+using Content.Shared._WH40K.Administration.Mute;
 using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -370,6 +371,78 @@ namespace Content.Server.Database
         public abstract Task<BanDef> AddBanAsync(BanDef ban);
         public abstract Task AddUnbanAsync(UnbanDef unban);
 
+        public virtual async Task<WH40KMuteDef?> GetMuteAsync(int id)
+        {
+            await using var db = await GetDb();
+            var mute = await WH40KMuteQuery(db.DbContext)
+                .SingleOrDefaultAsync(m => m.Id == id);
+
+            return mute == null ? null : ConvertMute(mute);
+        }
+
+        public virtual async Task<List<WH40KMuteDef>> GetMutesAsync(NetUserId userId, bool includeUnmuted, WH40KMuteType? type = null)
+        {
+            await using var db = await GetDb();
+            var query = WH40KMuteQuery(db.DbContext)
+                .Where(m => m.PlayerUserId == userId.UserId);
+
+            if (type != null)
+                query = query.Where(m => m.Type == (int) type.Value);
+
+            if (!includeUnmuted)
+            {
+                query = query.Where(m =>
+                    m.Unmute == null &&
+                    (m.ExpirationTime == null || m.ExpirationTime > DateTime.UtcNow));
+            }
+
+            var mutes = await query
+                .OrderByDescending(m => m.MuteTime)
+                .ToListAsync();
+
+            return mutes.Select(ConvertMute).ToList();
+        }
+
+        public virtual async Task<WH40KMuteDef> AddMuteAsync(WH40KMuteDef mute)
+        {
+            await using var db = await GetDb();
+
+            var entity = new WH40KMute
+            {
+                PlayerUserId = mute.UserId.UserId,
+                Type = (int) mute.Type,
+                Reason = mute.Reason,
+                CreatedById = mute.MutingAdmin?.UserId,
+                MuteTime = mute.MuteTime.UtcDateTime,
+                ExpirationTime = mute.ExpirationTime?.UtcDateTime,
+            };
+
+            db.DbContext.WH40KMute.Add(entity);
+            await db.DbContext.SaveChangesAsync();
+
+            return new WH40KMuteDef(
+                entity.Id,
+                mute.UserId,
+                mute.Type,
+                mute.Reason,
+                mute.MutingAdmin,
+                mute.MuteTime,
+                mute.ExpirationTime,
+                null);
+        }
+
+        public virtual async Task AddUnmuteAsync(WH40KUnmuteDef unmute)
+        {
+            await using var db = await GetDb();
+            db.DbContext.WH40KUnmute.Add(new WH40KUnmute
+            {
+                MuteId = unmute.MuteId,
+                UnmutingAdminId = unmute.UnmutingAdmin?.UserId,
+                UnmuteTime = unmute.UnmuteTime.UtcDateTime,
+            });
+            await db.DbContext.SaveChangesAsync();
+        }
+
         public async Task EditBan(int id, string reason, NoteSeverity severity, DateTimeOffset? expiration, Guid editedBy, DateTimeOffset editedAt)
         {
             await using var db = await GetDb();
@@ -397,6 +470,40 @@ namespace Content.Server.Database
                 .SingleOrDefaultAsync(e => e.UserId == userId.Value.UserId, cancellationToken: cancel);
 
             return exemption?.Flags;
+        }
+
+        private static IQueryable<WH40KMute> WH40KMuteQuery(ServerDbContext dbContext)
+        {
+            return dbContext.WH40KMute
+                .Include(m => m.Unmute)
+                .Include(m => m.CreatedBy);
+        }
+
+        private WH40KMuteDef ConvertMute(WH40KMute mute)
+        {
+            NetUserId? admin = mute.CreatedById == null ? null : new NetUserId(mute.CreatedById.Value);
+
+            return new WH40KMuteDef(
+                mute.Id,
+                new NetUserId(mute.PlayerUserId),
+                (WH40KMuteType) mute.Type,
+                mute.Reason,
+                admin,
+                NormalizeDatabaseTime(mute.MuteTime),
+                NormalizeDatabaseTime(mute.ExpirationTime),
+                ConvertUnmute(mute.Unmute));
+        }
+
+        private WH40KUnmuteDef? ConvertUnmute(WH40KUnmute? unmute)
+        {
+            if (unmute == null)
+                return null;
+
+            NetUserId? admin = null;
+            if (unmute.UnmutingAdminId is { } adminId)
+                admin = new NetUserId(adminId);
+
+            return new WH40KUnmuteDef(unmute.MuteId, admin, NormalizeDatabaseTime(unmute.UnmuteTime));
         }
 
         public async Task UpdateBanExemption(NetUserId userId, ServerBanExemptFlags flags)

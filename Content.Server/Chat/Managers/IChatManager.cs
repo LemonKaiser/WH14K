@@ -52,5 +52,13 @@ namespace Content.Server.Chat.Managers
         /// <param name="player">The player sending a chat message.</param>
         /// <returns>False if the player has violated rate limits and should be blocked from sending further messages.</returns>
         RateLimitStatus HandleRateLimit(ICommonSession player);
+
+        /// <summary>
+        /// Called when a player is about to send a normalized chat message and repeated-message anti-spam should be checked.
+        /// </summary>
+        /// <param name="player">The player sending a chat message.</param>
+        /// <param name="message">The sanitized message text that is about to be sent.</param>
+        /// <returns>Whether the message should be blocked.</returns>
+        RateLimitStatus HandleRepeatedRateLimit(ICommonSession player, string message);
     }
 }

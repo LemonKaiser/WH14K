@@ -4,6 +4,7 @@ using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
 using Content.Client.Administration.UI.Bwoink;
+using Content.Client._WH40K.Administration.Mute;
 using Content.Client.Gameplay;
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
@@ -13,6 +14,7 @@ using Content.Client.UserInterface.Systems.MenuBar.Widgets;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Input;
+using Content.Shared._WH40K.Administration.Mute;
 using JetBrains.Annotations;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
@@ -26,6 +28,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Bwoink;
@@ -39,7 +42,9 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IUserInterfaceManager _uiManager = default!;
     [Dependency] private IInputManager _input = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [UISystemDependency] private readonly AudioSystem _audio = default!;
+    [UISystemDependency] private readonly WH40KMuteSystem? _muteSystem = default;
 
     private BwoinkSystem? _bwoinkSystem;
     private MenuButton? GameAHelpButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.AHelpButton;
@@ -49,6 +54,8 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     private bool _hasUnreadAHelp;
     private bool _bwoinkSoundEnabled;
     private string? _aHelpSound;
+    private TimeSpan _nextMuteUiRefresh;
+    private bool _aHelpMuteUiLocked;
 
     protected override string SawmillName => "c.s.go.es.bwoink";
 
@@ -62,6 +69,35 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         _adminManager.AdminStatusUpdated += OnAdminStatusUpdated;
         _config.OnValueChanged(CCVars.AHelpSound, v => _aHelpSound = v, true);
         _config.OnValueChanged(CCVars.BwoinkSoundEnabled, v => _bwoinkSoundEnabled = v, true);
+        if (_muteSystem != null)
+        {
+            _muteSystem.SnapshotUpdated += OnMuteSnapshotUpdated;
+            _muteSystem.EnsureSnapshot();
+        }
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (_muteSystem == null)
+            return;
+
+        var locked = _muteSystem.IsAHelpMuted(out var muteInfo);
+        if (!locked)
+        {
+            if (!_aHelpMuteUiLocked)
+                return;
+
+            ApplyMuteStateToUi();
+            return;
+        }
+
+        if (_timing.RealTime < _nextMuteUiRefresh || !WH40KMuteDisplayHelper.NeedsLiveRefresh(muteInfo))
+            return;
+
+        _nextMuteUiRefresh = _timing.RealTime + TimeSpan.FromSeconds(1);
+        ApplyMuteStateToUi();
     }
 
     public void UnloadButton()
@@ -93,6 +129,11 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     {
         EnsureUIHelper();
         UIHelper!.ToggleWindow();
+    }
+
+    private void OnMuteSnapshotUpdated(WH40KMuteSnapshot snapshot)
+    {
+        ApplyMuteStateToUi();
     }
 
     public void OnSystemLoaded(BwoinkSystem system)
@@ -127,6 +168,18 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
 
         UIManager.ClickSound();
         UnreadAHelpRead();
+    }
+
+    private void ApplyMuteStateToUi()
+    {
+        if (_muteSystem == null || UIHelper == null)
+            return;
+
+        var locked = _muteSystem.IsAHelpMuted(out var muteInfo);
+        _aHelpMuteUiLocked = locked;
+        var placeholder = locked ? WH40KMuteDisplayHelper.BuildAHelpPlaceholder(muteInfo) : null;
+        var toolTip = locked ? WH40KMuteDisplayHelper.BuildMuteTooltip(muteInfo) : null;
+        UIHelper.UpdateMuteState(locked, placeholder, toolTip);
     }
 
     private void ReceivedBwoink(object? sender, SharedBwoinkSystem.BwoinkTextMessage message)
@@ -170,7 +223,10 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
 
         if (UIHelper != null && UIHelper.IsAdmin == isAdmin)
+        {
+            ApplyMuteStateToUi();
             return;
+        }
 
         UIHelper?.Dispose();
         var ownerUserId = _playerManager.LocalUser!.Value;
@@ -182,6 +238,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         UIHelper.OnClose += () => { SetAHelpPressed(false); };
         UIHelper.OnOpen +=  () => { SetAHelpPressed(true); };
         SetAHelpPressed(UIHelper.IsOpen);
+        ApplyMuteStateToUi();
     }
 
     public void Open()
@@ -328,10 +385,14 @@ public interface IAHelpUIHandler : IDisposable
     public event Action OnOpen;
     public Action<NetUserId, string, bool, bool>? SendMessageAction { get; set; }
     public event Action<NetUserId, string>? InputTextChanged;
+    public void UpdateMuteState(bool locked, string? placeholder, string? toolTip);
 }
 public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 {
     private readonly NetUserId _ownerId;
+    private bool _inputLocked;
+    private string? _lockedPlaceholder;
+    private string? _lockedToolTip;
     public AdminAHelpUIHandler(NetUserId owner)
     {
         _ownerId = owner;
@@ -466,6 +527,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 
         _activePanelMap[channelId] = existingPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(channelId, text, Window?.Bwoink.PlaySound.Pressed ?? true, Window?.Bwoink.AdminOnly.Pressed ?? false));
         existingPanel.InputTextChanged += text => InputTextChanged?.Invoke(channelId, text);
+        existingPanel.SetInputLockState(_inputLocked, _lockedPlaceholder, _lockedToolTip);
         existingPanel.Visible = false;
         if (!Control!.BwoinkArea.Children.Contains(existingPanel))
             Control.BwoinkArea.AddChild(existingPanel);
@@ -478,6 +540,18 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
     {
         EnsurePanel(uid);
         Control!.SelectChannel(uid);
+    }
+
+    public void UpdateMuteState(bool locked, string? placeholder, string? toolTip)
+    {
+        _inputLocked = locked;
+        _lockedPlaceholder = placeholder;
+        _lockedToolTip = toolTip;
+
+        foreach (var panel in _activePanelMap.Values)
+        {
+            panel.SetInputLockState(locked, placeholder, toolTip);
+        }
     }
 
     public void Dispose()
@@ -493,6 +567,9 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 public sealed class UserAHelpUIHandler : IAHelpUIHandler
 {
     private readonly NetUserId _ownerId;
+    private bool _inputLocked;
+    private string? _lockedPlaceholder;
+    private string? _lockedToolTip;
     public UserAHelpUIHandler(NetUserId owner)
     {
         _ownerId = owner;
@@ -565,6 +642,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
             return;
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
+        _chatPanel.SetInputLockState(_inputLocked, _lockedPlaceholder, _lockedToolTip);
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
         _window = new FancyWindow()
         {
@@ -585,5 +663,13 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _window?.Dispose();
         _window = null;
         _chatPanel = null;
+    }
+
+    public void UpdateMuteState(bool locked, string? placeholder, string? toolTip)
+    {
+        _inputLocked = locked;
+        _lockedPlaceholder = placeholder;
+        _lockedToolTip = toolTip;
+        _chatPanel?.SetInputLockState(locked, placeholder, toolTip);
     }
 }

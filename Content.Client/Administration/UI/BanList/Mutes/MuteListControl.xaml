@@ -1,0 +1,12 @@
+<mutes:MuteListControl
+    xmlns="https://spacestation14.io"
+    xmlns:mutes="clr-namespace:Content.Client.Administration.UI.BanList.Mutes"
+    xmlns:lobby="clr-namespace:Content.Client.Lobby.UI">
+    <lobby:HighlightedContainer UseUiWindowOpacity="True">
+        <ScrollContainer>
+            <BoxContainer Name="Mutes" Access="Public" Orientation="Vertical">
+                <mutes:MuteListHeader />
+            </BoxContainer>
+        </ScrollContainer>
+    </lobby:HighlightedContainer>
+</mutes:MuteListControl>

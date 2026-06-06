@@ -53,6 +53,12 @@ chat-manager-admin-channel-name = ADMIN
 
 chat-manager-rate-limited = You are sending messages too quickly!
 chat-manager-rate-limit-admin-announcement = Rate limit warning: { $player }
+chat-manager-repeat-rate-limited = You are repeating the same message too often!
+chat-manager-repeat-rate-limit-admin-announcement = Repeated-message spam warning: { $player } - { $message }
+chat-manager-rate-limit-auto-muted = You were automatically chat-muted for {$minutes} minute(s) for flooding chat.
+chat-manager-repeat-rate-limit-auto-muted = You were automatically chat-muted for {$minutes} minute(s) for repeating the same message.
+chat-manager-rate-limit-auto-mute-reason = Automatic chat mute: chat rate limit exceeded.
+chat-manager-repeat-rate-limit-auto-mute-reason = Automatic chat mute: repeated message spam.
 
 ## Speech verbs for chat
 

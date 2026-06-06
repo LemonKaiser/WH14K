@@ -1,6 +1,6 @@
 <cc:BwoinkWindow xmlns="https://spacestation14.io"
                  xmlns:cc="clr-namespace:Content.Client.Administration.UI.Bwoink"
-                 SetSize="900 500"
+                 SetSize="980 500"
                  Title="{Loc 'bwoink-user-title'}">
     <cc:BwoinkControl Name="Bwoink" Access="Public" />
 </cc:BwoinkWindow>

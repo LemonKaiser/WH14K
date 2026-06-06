@@ -17,6 +17,7 @@ namespace Content.Client.Administration.UI.Tabs.AdminTab
         public void Relocalize()
         {
             BanPanelButton.Text = Loc.GetString("admin-player-actions-window-ban");
+            MutePanelButton.Text = Loc.GetString("admin-player-actions-window-mute");
             AdminGhostButton.Text = Loc.GetString("admin-player-actions-window-admin-ghost");
             PermissionsButton.Text = Loc.GetString("admin-player-actions-window-permissions");
             AnnounceButton.Text = Loc.GetString("admin-player-actions-window-announce");

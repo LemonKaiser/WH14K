@@ -24,6 +24,7 @@ internal sealed partial class ChatManager
     private void RateLimitPlayerLimited(ICommonSession player)
     {
         DispatchServerMessage(player, Loc.GetString("chat-manager-rate-limited"), suppressLog: true);
+        HandleWh40KAutomaticSpamPunishment(player, WH40KChatSpamTrigger.RateLimit);
     }
 
     private void RateLimitAlertAdmins(ICommonSession player)
@@ -33,6 +34,9 @@ internal sealed partial class ChatManager
 
     public RateLimitStatus HandleRateLimit(ICommonSession player)
     {
+        if (ShouldBypassWh40KChatRateLimit(player))
+            return RateLimitStatus.Allowed;
+
         return _rateLimitManager.CountAction(player, RateLimitKey);
     }
 }
