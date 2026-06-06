@@ -186,6 +186,8 @@
     pointType: Research
     tier: T1
     profile: WH40KStrategicPointResearch
+  - type: Physics
+    bodyType: Static
 
 - type: entity
   parent: WH40KStrategicPointResearchT1
@@ -206,7 +208,7 @@
 
 - type: entity
   parent: BaseStructure
-  id: WH40KStrategicPointInfluenceT1
+  id: WH40KStrategicPointInfluenceT1Base
   suffix: WH40K, Strategic Point, Influence, T1
   components:
   - type: Sprite
@@ -215,6 +217,9 @@
     offset: 0,0.5
     noRot: true
     layers:
+    - state: Powered
+    - state: Weapon
+    - state: Turret
     - state: base
       map: [ enum.WH40KStrategicPointVisualLayers.Base ]
   - type: WH40KWaveShader
@@ -256,7 +261,65 @@
     profile: WH40KStrategicPointInfluence
 
 - type: entity
-  parent: WH40KStrategicPointInfluenceT1
+  parent: WH40KStrategicPointInfluenceT1Base
+  id: WH40KStrategicPointInfluenceT1
+  suffix: WH40K, Strategic Point, Influence, T1
+  components:
+  - type: WH40KStrategicPointTurretTierGate
+    requiredTier: 3
+    turretEnabledOnMatch: true
+    turretEnabledOffMatch: false
+  - type: CombatMode
+  - type: HTN
+    enabled: true
+    rootTask:
+      task: WH40KPointTurretCompound
+    blackboard:
+      RotateSpeed: !type:Single
+        3.141
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+  - type: Gun
+    fireRate: 0.5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/stubber_fire_1.wav
+  - type: BallisticAmmoProvider
+    proto: BulletBolter
+    capacity: 30
+    whitelist:
+      tags:
+      - CartridgeBolter75
+  - type: BallisticAmmoSelfRefiller
+    autoRefillRate: 1s
+    firingPausesAutoRefill: true
+    autoRefillPauseDuration: 1s
+  - type: WH40KTurretProfile
+    detectionRange: 14
+    fireRange: 14
+    supportedAmmo: CartridgeBolter75
+  - type: DeployableTurret
+    enabled: false
+  - type: WH40KStrategicPointOwnerFactionBinder
+    imperiumFaction: Imperium
+    hereticsFaction: Heretics
+    imperiumTeamId: Imperium
+    hereticsTeamId: Heretics
+  - type: TurretTargetSettings
+    exemptAccessLevels:
+    - Borg
+    - BasicSilicon
+  - type: WH40KTurretGlobalActivationLock
+  - type: NpcFactionMember
+  - type: WH40KGunPrediction
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+
+- type: entity
+  parent: WH40KStrategicPointInfluenceT1Base
   id: WH40KStrategicPointInfluenceT1PreviewHeretics
   suffix: WH40K, Strategic Point, Influence, T1, Preview, Heretics
   components:

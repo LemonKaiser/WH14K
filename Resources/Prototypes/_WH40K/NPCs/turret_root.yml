@@ -52,3 +52,37 @@
     - tasks:
         - !type:HTNCompoundTask
           task: IdleSpinCompound
+
+- type: htnCompound
+  id: WH40KPointTurretCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyTurretGunTargets
+
+        - !type:HTNPrimitiveTask
+          preconditions:
+            - !type:DeployableTurretEnabledPrecondition
+            - !type:KeyExistsPrecondition
+              key: Target
+            - !type:TargetInRangePrecondition
+              targetKey: Target
+              rangeKey: RangedRange
+            - !type:TargetInLOSPrecondition
+              targetKey: Target
+              rangeKey: RangedRange
+              opaqueKey: false
+          operator: !type:GunOperator
+            targetKey: Target
+            requireLOS: true
+            opaqueKey: false
+          services:
+            - !type:UtilityService
+              id: RangedService
+              proto: NearbyTurretGunTargets
+              key: Target
+
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleSpinCompound
