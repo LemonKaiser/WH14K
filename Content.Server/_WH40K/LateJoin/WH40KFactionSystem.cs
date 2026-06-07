@@ -520,13 +520,11 @@ public sealed partial class WH40KFactionSystem : EntitySystem
     private IReadOnlyList<WH40KTeamDefinition> GetAvailableTeams(WH40KTeamBattleRuleComponent rule)
     {
         var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap?.WH40KTeamBattleFactions == null || selectedMap.WH40KTeamBattleFactions.Count == 0)
+        if (!WH40KMapTeamConfiguration.HasCustomConfiguration(selectedMap))
             return rule.Teams;
 
-        var allowed = new HashSet<string>(selectedMap.WH40KTeamBattleFactions, StringComparer.OrdinalIgnoreCase);
-        return rule.Teams
-            .Where(team => !string.IsNullOrWhiteSpace(team.Id) && allowed.Contains(team.Id))
-            .ToList();
+        var configuredMap = selectedMap!;
+        return WH40KMapTeamConfiguration.BuildConfiguredTeams(configuredMap, rule.Teams);
     }
 
     private static void AddTeamCount(IDictionary<string, int> counts, string teamId)

@@ -938,17 +938,13 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
     private void ApplySelectedMapFactionFilter(Components.WH40KTeamBattleRuleComponent component)
     {
         var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap?.WH40KTeamBattleFactions == null || selectedMap.WH40KTeamBattleFactions.Count == 0)
+        if (!WH40KMapTeamConfiguration.HasCustomConfiguration(selectedMap))
             return;
 
-        var allowed = new HashSet<string>(selectedMap.WH40KTeamBattleFactions, StringComparer.OrdinalIgnoreCase);
-        var before = component.Teams.Count;
-        component.Teams.RemoveAll(team => string.IsNullOrWhiteSpace(team.Id) || !allowed.Contains(team.Id));
+        var configuredMap = selectedMap!;
+        component.Teams = WH40KMapTeamConfiguration.BuildConfiguredTeams(configuredMap, component.Teams);
 
-        if (component.Teams.Count == before)
-            return;
-
-        _sawmill.Info($"Applied WH40K TeamBattle faction filter for map '{selectedMap.ID}': {string.Join(", ", component.Teams.Select(team => team.Id))}");
+        _sawmill.Info($"Applied WH40K TeamBattle faction filter for map '{configuredMap.ID}': {string.Join(", ", component.Teams.Select(team => team.Id))}");
     }
 
     private void CheckForVictory(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule)
