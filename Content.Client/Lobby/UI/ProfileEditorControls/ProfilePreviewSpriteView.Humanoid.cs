@@ -4,7 +4,10 @@ using Content.Client.Station;
 using Content.Shared.Body;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Inventory;
 using Content.Shared.Preferences;
@@ -30,7 +33,7 @@ public sealed partial class ProfilePreviewSpriteView
             !EntMan.HasComponent<VisualBodyComponent>(PreviewDummy))
             return;
 
-        EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
+        ApplyHumanoidAppearanceToPreview(humanoid);
     }
 
     private bool TryRefreshHumanoidPreview(HumanoidCharacterProfile humanoid, JobPrototype? job, bool jobClothes)
@@ -54,7 +57,7 @@ public sealed partial class ProfilePreviewSpriteView
             return false;
 
         ClearDummyEquipment();
-        EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
+        ApplyHumanoidAppearanceToPreview(humanoid);
 
         if (jobClothes && resolvedJob != null)
         {
@@ -102,7 +105,7 @@ public sealed partial class ProfilePreviewSpriteView
 
         if (humanoid != null && EntMan.HasComponent<VisualBodyComponent>(PreviewDummy))
         {
-            EntMan.System<SharedVisualBodySystem>().ApplyProfileTo(PreviewDummy, humanoid);
+            ApplyHumanoidAppearanceToPreview(humanoid);
         }
 
         _loadedHumanoidBasePrototype = previewEntity;
@@ -219,6 +222,18 @@ public sealed partial class ProfilePreviewSpriteView
 
     private void ClearDummyEquipment()
     {
+        var handsSys = EntMan.System<SharedHandsSystem>();
+        if (EntMan.TryGetComponent<HandsComponent>(PreviewDummy, out var hands))
+        {
+            foreach (var held in handsSys.EnumerateHeld((PreviewDummy, hands)).ToList())
+            {
+                handsSys.TryDrop((PreviewDummy, hands), held, checkActionBlocker: false, doDropInteraction: false);
+
+                if (EntMan.EntityExists(held))
+                    EntMan.DeleteEntity(held);
+            }
+        }
+
         var inventorySys = EntMan.System<InventorySystem>();
         if (!inventorySys.TryGetSlots(PreviewDummy, out var slots))
             return;
@@ -237,5 +252,39 @@ public sealed partial class ProfilePreviewSpriteView
     {
         _loadedHumanoidBasePrototype = null;
         _loadedHumanoidUsedSpecialPreview = false;
+    }
+
+    private void ApplyHumanoidAppearanceToPreview(HumanoidCharacterProfile humanoid)
+    {
+        var visualBody = EntMan.System<SharedVisualBodySystem>();
+        visualBody.ApplyProfile(PreviewDummy, new OrganProfileData
+        {
+            Sex = humanoid.Sex,
+            SkinColor = humanoid.Appearance.SkinColor,
+            EyeColor = humanoid.Appearance.EyeColor,
+        });
+        visualBody.ApplyMarkings(PreviewDummy, ExpandPreviewMarkings(humanoid));
+    }
+
+    private Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> ExpandPreviewMarkings(HumanoidCharacterProfile humanoid)
+    {
+        var expanded = new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>();
+
+        foreach (var (organ, organData) in _markingManager.GetMarkingData(humanoid.Species))
+        {
+            var organMarkings = new Dictionary<HumanoidVisualLayers, List<Marking>>();
+            humanoid.Appearance.Markings.TryGetValue(organ, out var sourceMarkings);
+
+            foreach (var layer in organData.Layers)
+            {
+                organMarkings[layer] = sourceMarkings?.TryGetValue(layer, out var markings) == true
+                    ? markings.ToList()
+                    : [];
+            }
+
+            expanded[organ] = organMarkings;
+        }
+
+        return expanded;
     }
 }
