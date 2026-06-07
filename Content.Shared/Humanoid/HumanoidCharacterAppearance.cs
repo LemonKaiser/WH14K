@@ -34,7 +34,7 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
     }
 
     public HumanoidCharacterAppearance(HumanoidCharacterAppearance other) :
-        this(other.EyeColor, other.SkinColor, new(other.Markings))
+        this(other.EyeColor, other.SkinColor, CloneMarkings(other.Markings))
     {
 
     }
@@ -249,5 +249,15 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
     public HumanoidCharacterAppearance Clone()
     {
         return new(this);
+    }
+
+    private static Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> CloneMarkings(
+        Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings)
+    {
+        return markings.ToDictionary(
+            organ => organ.Key,
+            organ => organ.Value.ToDictionary(
+                layer => layer.Key,
+                layer => layer.Value.ToList()));
     }
 }

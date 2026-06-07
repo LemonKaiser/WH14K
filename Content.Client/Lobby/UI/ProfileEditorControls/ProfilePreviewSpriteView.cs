@@ -1,4 +1,5 @@
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Client.UserInterface.Controls;
@@ -11,6 +12,7 @@ public sealed partial class ProfilePreviewSpriteView : SpriteView
 {
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private ISharedPlayerManager _playerManager = default!;
+    [Dependency] private MarkingManager _markingManager = default!;
 
     /// <summary>
     /// Entity used for the profile editor preview

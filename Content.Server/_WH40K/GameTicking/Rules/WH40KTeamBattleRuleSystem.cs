@@ -380,13 +380,12 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (!_mind.TryGetMind(ev.Mob, out var mindId, out _))
-            return;
-
         var killTracker = EnsureComp<KillTrackerComponent>(ev.Mob);
         _killTracking.SetKillState(ev.Mob, MobState.Dead, killTracker);
 
-        if (!TryGetTeamIndex(mindId, rule, out var teamIndex))
+        // Some WH40K spawns pre-assign a team directly on the mob (reinforcements, scripted
+        // takeovers, faction swaps). Re-use that authoritative state before falling back to jobs.
+        if (!TryGetTeamIndexFromEntity(ev.Mob, rule, out var teamIndex))
         {
             _sawmill.Debug($"No team match for {ev.Player?.Name} ({ToPrettyString(ev.Mob)}). Job not in configured departments.");
             RemCompDeferred<WH40KTeamBattleFactionIconComponent>(ev.Mob);
@@ -938,17 +937,13 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
     private void ApplySelectedMapFactionFilter(Components.WH40KTeamBattleRuleComponent component)
     {
         var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap?.WH40KTeamBattleFactions == null || selectedMap.WH40KTeamBattleFactions.Count == 0)
+        if (!WH40KMapTeamConfiguration.HasCustomConfiguration(selectedMap))
             return;
 
-        var allowed = new HashSet<string>(selectedMap.WH40KTeamBattleFactions, StringComparer.OrdinalIgnoreCase);
-        var before = component.Teams.Count;
-        component.Teams.RemoveAll(team => string.IsNullOrWhiteSpace(team.Id) || !allowed.Contains(team.Id));
+        var configuredMap = selectedMap!;
+        component.Teams = WH40KMapTeamConfiguration.BuildConfiguredTeams(configuredMap, component.Teams);
 
-        if (component.Teams.Count == before)
-            return;
-
-        _sawmill.Info($"Applied WH40K TeamBattle faction filter for map '{selectedMap.ID}': {string.Join(", ", component.Teams.Select(team => team.Id))}");
+        _sawmill.Info($"Applied WH40K TeamBattle faction filter for map '{configuredMap.ID}': {string.Join(", ", component.Teams.Select(team => team.Id))}");
     }
 
     private void CheckForVictory(EntityUid uid, Components.WH40KTeamBattleRuleComponent component, GameRuleComponent gameRule)
@@ -1020,16 +1015,8 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (!TryGetTeamIndex(ev.KillerUserId, rule, out var teamIndex) ||
-            teamIndex < 0 ||
-            teamIndex >= rule.Teams.Count)
-        {
-            return;
-        }
-
-        var teamId = rule.Teams[teamIndex].Id;
-        if (string.IsNullOrWhiteSpace(teamId) ||
-            string.Equals(teamId, ev.VictimTeamId, StringComparison.Ordinal))
+        if (!TryResolveTeamId(rule, ev.KillerTeamId, out var teamId) ||
+            string.Equals(teamId, ev.VictimTeamId, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
@@ -1044,16 +1031,8 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         if (!TryGetActiveRule(out _, out var rule, out _))
             return;
 
-        if (!TryGetTeamIndex(ev.KillerUserId, rule, out var teamIndex) ||
-            teamIndex < 0 ||
-            teamIndex >= rule.Teams.Count)
-        {
-            return;
-        }
-
-        var teamId = rule.Teams[teamIndex].Id;
-        if (string.IsNullOrWhiteSpace(teamId) ||
-            string.Equals(teamId, ev.VictimTeamId, StringComparison.Ordinal))
+        if (!TryResolveTeamId(rule, ev.KillerTeamId, out var teamId) ||
+            string.Equals(teamId, ev.VictimTeamId, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
@@ -1665,6 +1644,12 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
             TryGetTeamIndexById(member.TeamId, component, out teamIndex))
             return true;
 
+        if (TryComp<WH40KTeamBattleFactionIconComponent>(entity, out var factionIcon) &&
+            TryGetTeamIndexById(factionIcon.TeamId, component, out teamIndex))
+        {
+            return true;
+        }
+
         if (_mind.TryGetMind(entity, out var mindId, out _))
             return TryGetTeamIndex(mindId, component, out teamIndex);
 
@@ -1677,7 +1662,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
 
         for (var i = 0; i < component.Teams.Count; i++)
         {
-            if (component.Teams[i].Id != teamId)
+            if (!string.Equals(component.Teams[i].Id, teamId, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             teamIndex = i;
@@ -1747,6 +1732,20 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
     private bool TryGetTeamIndex(NetUserId userId, Components.WH40KTeamBattleRuleComponent component, out int teamIndex)
     {
         teamIndex = -1;
+
+        if (component.PlayerLastKnownTeam.TryGetValue(userId, out var rememberedTeam) &&
+            !string.IsNullOrWhiteSpace(rememberedTeam) &&
+            TryGetTeamIndexById(rememberedTeam, component, out teamIndex))
+        {
+            return true;
+        }
+
+        if (_players.TryGetSessionById(userId, out var session) &&
+            session.AttachedEntity is { Valid: true } attached &&
+            TryGetTeamIndexFromEntity(attached, component, out teamIndex))
+        {
+            return true;
+        }
 
         if (!_mind.TryGetMind(userId, out var mindId, out _))
             return false;
