@@ -14,18 +14,11 @@ VERSION = os.environ["GITHUB_SHA"]
 RELEASE_DIR = "release"
 
 #
-# CONFIGURATION PARAMETERS
-# Forks should change these to publish to their own infrastructure.
+# WH14K CDN configuration
 #
 
-# Primary CDN — game server CDN (simplestation), server gets builds from here.
-PRIMARY_CDN_URL = "https://cdn.simplestation.org/"
-PRIMARY_FORK_ID = "ebengrad"
-
-# Mirror CDN — your own CDN, clients should download from here.
-# Set MIRROR_PUBLISH_TOKEN env var to enable mirror publishing.
-MIRROR_CDN_URL = "https://heretec.online/cdn"
-MIRROR_FORK_ID = "wh14k"
+CDN_URL = "https://heretec.online/cdn/"
+FORK_ID = "wh14k"
 
 UPLOAD_RETRIES = 4
 TRANSIENT_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504}
@@ -34,6 +27,16 @@ RETRYABLE_EXCEPTIONS = (
     requests.exceptions.SSLError,
     requests.exceptions.Timeout,
 )
+
+
+def normalize_cdn_url(cdn_url: str) -> str:
+    """
+    Robust.Cdn publish URLs must look like:
+    https://heretec.online/cdn/fork/wh14k/publish/start
+
+    So CDN_URL must always end with slash.
+    """
+    return cdn_url.rstrip("/") + "/"
 
 
 def post_with_retry(
@@ -49,6 +52,7 @@ def post_with_retry(
         "Authorization": f"Bearer {token}",
         "Connection": "close",
     }
+
     if headers is not None:
         request_headers.update(headers)
 
@@ -58,27 +62,29 @@ def post_with_retry(
     for attempt in range(1, UPLOAD_RETRIES + 1):
         try:
             with requests.Session() as session:
-                resp = session.post(
+                response = session.post(
                     url,
                     json=json_payload,
                     headers=request_headers,
                     timeout=timeout,
                 )
 
-            if resp.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
-                last_response = resp
+            if response.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
+                last_response = response
                 wait_seconds = attempt * 2
                 print(
-                    f"    Transient HTTP {resp.status_code} during {label} "
+                    f"    Transient HTTP {response.status_code} during {label} "
                     f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
                 )
                 time.sleep(wait_seconds)
                 continue
 
-            resp.raise_for_status()
-            return resp
+            response.raise_for_status()
+            return response
+
         except RETRYABLE_EXCEPTIONS as exc:
             last_error = exc
+
             if attempt >= UPLOAD_RETRIES:
                 break
 
@@ -96,8 +102,11 @@ def post_with_retry(
 
 
 def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
+    cdn_url = normalize_cdn_url(cdn_url)
+
     upload_url = f"{cdn_url}fork/{fork_id}/publish/file"
     file_name = os.path.basename(file_path)
+
     headers = {
         "Authorization": f"Bearer {token}",
         "Connection": "close",
@@ -107,31 +116,35 @@ def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
     }
 
     last_error = None
+    last_response = None
 
     for attempt in range(1, UPLOAD_RETRIES + 1):
         try:
             with requests.Session() as upload_session:
                 with open(file_path, "rb") as file_handle:
-                    resp = upload_session.post(
+                    response = upload_session.post(
                         upload_url,
                         data=file_handle,
                         headers=headers,
                         timeout=(30, 600),
                     )
 
-            if resp.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
+            if response.status_code in TRANSIENT_STATUS_CODES and attempt < UPLOAD_RETRIES:
+                last_response = response
                 wait_seconds = attempt * 2
                 print(
-                    f"    Transient HTTP {resp.status_code} while uploading {file_name} "
+                    f"    Transient HTTP {response.status_code} while uploading {file_name} "
                     f"(attempt {attempt}/{UPLOAD_RETRIES}), retrying in {wait_seconds}s..."
                 )
                 time.sleep(wait_seconds)
                 continue
 
-            resp.raise_for_status()
+            response.raise_for_status()
             return
+
         except RETRYABLE_EXCEPTIONS as exc:
             last_error = exc
+
             if attempt >= UPLOAD_RETRIES:
                 break
 
@@ -142,96 +155,108 @@ def upload_file(cdn_url: str, fork_id: str, token: str, file_path: str) -> None:
             )
             time.sleep(wait_seconds)
 
+    if last_response is not None:
+        last_response.raise_for_status()
+
     raise RuntimeError(f"Failed to upload {file_name} after {UPLOAD_RETRIES} attempts.") from last_error
 
 
-def publish_to_cdn(cdn_url, fork_id, token, engine_version, label="CDN"):
-    """Publish the release to a single Robust.Cdn instance."""
-    print(f"\n===== Publishing to {label}: {cdn_url}fork/{fork_id}/ =====")
-    print(f"Version: {VERSION}")
+def publish_to_cdn(cdn_url: str, fork_id: str, token: str, engine_version: str) -> None:
+    cdn_url = normalize_cdn_url(cdn_url)
 
-    data = {
+    print(f"\n===== Publishing WH14K to Robust.Cdn =====")
+    print(f"CDN: {cdn_url}")
+    print(f"Fork: {fork_id}")
+    print(f"Version: {VERSION}")
+    print(f"Engine version: {engine_version}")
+
+    start_payload = {
         "version": VERSION,
         "engineVersion": engine_version,
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
+
     post_with_retry(
         f"{cdn_url}fork/{fork_id}/publish/start",
         token=token,
-        json_payload=data,
-        headers=headers,
-        label=f"starting publish on {label}",
+        json_payload=start_payload,
+        headers={"Content-Type": "application/json"},
+        label="starting publish",
     )
-    print("Publish started, adding files...")
 
-    for file in get_files_to_publish():
-        print(f"  Uploading {file}")
-        upload_file(cdn_url, fork_id, token, file)
+    print("Publish started, uploading files...")
 
-    print("Files pushed, finishing publish...")
+    for file_path in get_files_to_publish():
+        print(f"  Uploading {file_path}")
+        upload_file(cdn_url, fork_id, token, file_path)
 
-    data = {
-        "version": VERSION
+    print("Files uploaded, finishing publish...")
+
+    finish_payload = {
+        "version": VERSION,
     }
-    headers = {
-        "Content-Type": "application/json"
-    }
+
     post_with_retry(
         f"{cdn_url}fork/{fork_id}/publish/finish",
         token=token,
-        json_payload=data,
-        headers=headers,
-        label=f"finishing publish on {label}",
+        json_payload=finish_payload,
+        headers={"Content-Type": "application/json"},
+        label="finishing publish",
     )
 
-    print(f"===== {label} publish SUCCESS! =====\n")
+    print("===== WH14K publish SUCCESS =====")
+    print(f"Build page: {cdn_url}fork/{fork_id}")
+    print(f"Manifest: {cdn_url}fork/{fork_id}/manifest\n")
 
 
-def main():
+def get_files_to_publish() -> Iterable[str]:
+    if not os.path.isdir(RELEASE_DIR):
+        raise RuntimeError(f"Release directory does not exist: {RELEASE_DIR}")
+
+    files = sorted(os.listdir(RELEASE_DIR))
+
+    if not files:
+        raise RuntimeError(f"Release directory is empty: {RELEASE_DIR}")
+
+    for file_name in files:
+        file_path = os.path.join(RELEASE_DIR, file_name)
+
+        if os.path.isfile(file_path):
+            yield file_path
+
+
+def get_engine_version() -> str:
+    proc = subprocess.run(
+        ["git", "describe", "--tags", "--abbrev=0"],
+        stdout=subprocess.PIPE,
+        cwd="RobustToolbox",
+        check=True,
+        encoding="UTF-8",
+    )
+
+    tag = proc.stdout.strip()
+
+    if not tag.startswith("v"):
+        raise RuntimeError(f"Unexpected RobustToolbox tag format: {tag}")
+
+    return tag[1:]
+
+
+def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--fork-id", default=PRIMARY_FORK_ID)
-    parser.add_argument("--mirror-fork-id", default=MIRROR_FORK_ID)
+    parser.add_argument("--cdn-url", default=CDN_URL)
+    parser.add_argument("--fork-id", default=FORK_ID)
 
     args = parser.parse_args()
 
     engine_version = get_engine_version()
 
-    # 1. Publish to primary CDN (game server CDN)
     publish_to_cdn(
-        cdn_url=PRIMARY_CDN_URL,
+        cdn_url=args.cdn_url,
         fork_id=args.fork_id,
         token=PUBLISH_TOKEN,
         engine_version=engine_version,
-        label="Primary (game server CDN)"
     )
 
-    # 2. Publish to mirror CDN (your own CDN for client downloads)
-    mirror_token = os.environ.get("MIRROR_PUBLISH_TOKEN", "")
-    if mirror_token:
-        publish_to_cdn(
-            cdn_url=MIRROR_CDN_URL,
-            fork_id=args.mirror_fork_id,
-            token=mirror_token,
-            engine_version=engine_version,
-            label="Mirror (client download CDN)"
-        )
-    else:
-        print("MIRROR_PUBLISH_TOKEN not set, skipping mirror CDN publish.")
 
-
-def get_files_to_publish() -> Iterable[str]:
-    for file in sorted(os.listdir(RELEASE_DIR)):
-        yield os.path.join(RELEASE_DIR, file)
-
-
-def get_engine_version() -> str:
-    proc = subprocess.run(["git", "describe","--tags", "--abbrev=0"], stdout=subprocess.PIPE, cwd="RobustToolbox", check=True, encoding="UTF-8")
-    tag = proc.stdout.strip()
-    assert tag.startswith("v")
-    return tag[1:] # Cut off v prefix.
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
