@@ -1,0 +1,45 @@
+- type: loadout
+  id: HFlakHelmet
+  equipment:
+    head: ClothingHeadHelmetFlakCHAOS
+
+- type: loadout
+  id: HFlakHelmetCandle
+  equipment:
+    head: ClothingHeadHelmetFlakCandleChaos
+
+- type: loadout
+  id: WH40KBandanaBrown
+  equipment:
+    head: ClothingHeadBandBrown
+
+- type: loadout
+  id: WH40KBandanaSkull
+  equipment:
+    head: ClothingHeadBandSkull
+
+- type: loadout
+  id: WH40KChaosScarf
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 14
+  equipment:
+    head: ClothingHeadScarfChaos
+
+- type: loadout
+  id: WH40KHeresyHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHelmetrHeresy
+
+- type: loadout
+  id: WH40KBloodPactHelmet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 16
+  equipment:
+    head: ClothingHeadHelmetBloodPact

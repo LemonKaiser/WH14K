@@ -2009,3 +2009,20 @@ ent-ActionWH40KTogglePhantomStep = Phantom Step
 
 ent-ActionWH40KTauToggleDroneAggression = Drone Attack Mode
     .desc = Enable or disable autonomous gun drone attacks.
+
+ent-ClothingUniformJumpsuitHelldriverUniform = Helldiver Uniform
+    .desc = Standard Helldiver Uniform.
+
+ent-ClothingShoesHelldriverBoots = Helldiver Boots
+    .desc = Standard Helldiver Boots.
+
+ent-WeaponHellDiverCarabin = Helldiver Carabiner
+
+ent-ClothingOuterHelldriverArmor = "Infiltrator" Armor
+    .desc = This armor is the standard Super-Earth armor, made of the same titanium alloy as the Annihilator's body.
+
+ent-ClothingNeckHelldriver = "FOESMASHER" Cloak
+    .desc = Durable, waterproof, and insulated lining, left over from tent production.
+
+ent-ClothingHeadHelldriverHelmet = B-01 TACTICAL Helmet
+    .desc = This is the standard Super-Earth version, made from the same titanium as the Eradicator's body.

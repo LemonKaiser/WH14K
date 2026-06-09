@@ -178,3 +178,35 @@
     autoRefillRate: 30s
     firingPausesAutoRefill: true
     autoRefillPauseDuration: 30s
+
+- type: entity
+  name: Kardashev-Mosin
+  parent: [BaseWeaponSniper, BaseGunWieldable]
+  id: WeaponHellDiverCarabin
+  suffix: WH40K, helldrivers
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Snipers/dem_carabin.rsi
+    layers:
+    - state: base
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Snipers/dem_carabin_in-hands.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Snipers/dem_carabin_in-hands.rsi
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Piercing: 35
+    angle: 0
+    animation: WeaponArcThrust
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  - type: MeleeRequiresWield
+  - type: AltFireMelee
+    attackType: Heavy
+  - type: Sharp
+  - type: GunRequiresWield
+  - type: AimingCamera
+    maxOffset: 8
+    pvsIncrease: 0.8

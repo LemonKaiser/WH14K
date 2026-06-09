@@ -206,3 +206,15 @@
     sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_boots_.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Shoes/Boots/chaos_slaanesh_choisen_boots_.rsi
+
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesHelldriverBoots
+  suffix: WH40K, helldrivers
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/helldiver.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/helldiver.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

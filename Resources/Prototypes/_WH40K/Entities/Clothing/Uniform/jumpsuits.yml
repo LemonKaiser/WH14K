@@ -231,3 +231,27 @@
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/smug_uniform1.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Uniforms/Jumpsuit/smug_uniform1.rsi
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitAstartes
+  suffix: WH40K, Astartes
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/astartes.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/astartes.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitHelldriverUniform
+  suffix: WH40K, helldrivers
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/helldiver.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/helldiver.rsi

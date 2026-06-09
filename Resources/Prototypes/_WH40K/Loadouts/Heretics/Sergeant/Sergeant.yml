@@ -1,0 +1,7 @@
+- type: loadout
+  id: WH40KArmorTzeentchSerg
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorTzeentchSerg

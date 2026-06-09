@@ -1,0 +1,22 @@
+- type: loadout
+  id: WH40KChaosMask1
+  equipment:
+    mask: ClothingMaskGasChaosCultist1
+
+- type: loadout
+  id: WH40KChaosMask2
+  equipment:
+    mask: ClothingMaskGasChaosCultist2
+
+- type: loadout
+  id: WH40KChaosMask3
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 28
+  equipment:
+    mask: ClothingMaskGasCultist3
+
+- type: loadout
+  id: WH40KBloodPactMask
+  equipment:
+    mask: ClothingMaskGasBloodPact

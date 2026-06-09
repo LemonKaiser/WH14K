@@ -1,0 +1,9 @@
+- type: loadout
+  id: WH40KColonelGloves
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 27
+  equipment:
+    gloves: ClothingHandsGlovesCombatColonel

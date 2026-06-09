@@ -1,0 +1,24 @@
+- type: loadout
+  id: WH40KCommandCatachanUniform1
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan1
+
+- type: loadout
+  id: WH40KCommandCatachanUniform2
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan2
+
+- type: loadout
+  id: WH40KCommandCatachanUniform3
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan3
+
+- type: loadout
+  id: WH40KCommandCatachanPants
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachanPants
+
+- type: loadout
+  id: WH40KValhallanCaptainUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallanCaptain

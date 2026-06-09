@@ -255,3 +255,157 @@
     - MagazineLondoronMk2
     - MagazineLondoronMk2
     - MagazineLondoronMk2
+
+
+
+- type: loadout
+  id: WH40KChaplainWarHammer
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  - WHHammerImperial
+
+- type: loadout
+  id: WH40KChaplainWarEvestiator
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  inhand:
+  - ChainswordEvestiator
+
+- type: loadout
+  id: WH40KPowerFist
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - WHPowerFist
+
+- type: loadout
+  id: WH40KCommandWarHammer
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 40
+  inhand:
+  - WHHammerImperial
+
+- type: loadout
+  id: WH40KCommandChainsword
+  inhand:
+  - Chainsword
+
+- type: loadout
+  id: WH40KCommandCatachanMachete
+  inhand:
+  - CatachanMachete
+
+- type: loadout
+  id: WH40KCommandPowerSaber
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  - WHPowerSaberImperial
+
+- type: loadout
+  id: WH40KCommandPowerFist
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WHPowerFist
+
+- type: loadout
+  id: WH40KChainsword
+  inhand:
+    - Chainsword
+
+- type: loadout
+  id: WH40KSaber
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+    - WHPowerSaberImperial
+
+- type: loadout
+  id: WH40KMace
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+    - WHPowerMaceImperial
+
+- type: loadout
+  id: WH40KCrowbarKit
+  storage:
+    belt:
+    - CrowbarRed
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KCombatKnifeKit
+  storage:
+    belt:
+    - CombatKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KCatachanKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  storage:
+    belt:
+    - CatachanKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KCatachanMacheteKit
+  storage:
+    belt:
+    - CatachanMachete
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KSurvivalKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 34
+  storage:
+    belt:
+    - SurvivalKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KSapperShovelKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  storage:
+    belt:
+    - WHSapperShovel
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KKukriKnifeKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  storage:
+    belt:
+    - KukriKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KImperialCombatShieldLoadout
+  dummyEntity: WH40KImperialCombatShield
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  inhand:
+  - WH40KImperialCombatShield
+  groupBy: "shield"

@@ -1,0 +1,4 @@
+- type: loadout
+  id: WH40KcontrabandUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitSmug

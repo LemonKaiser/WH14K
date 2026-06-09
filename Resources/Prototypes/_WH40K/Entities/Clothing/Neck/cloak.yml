@@ -71,3 +71,14 @@
   - type: WH40KWaveShader
     speed: 1.7
     dis: 2.1
+
+- type: entity
+  parent: ClothingNeckBase
+  id: ClothingNeckHelldriver
+  suffix: WH40K, helldrivers
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/helldiver.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Neck/Cloaks/helldiver.rsi

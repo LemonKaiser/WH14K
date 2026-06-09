@@ -20,6 +20,7 @@
     back: ClothingBackpackAstartesMk4Powerpack
     head: ClothingHeadHelmetAstartesMk4
     outerClothing: ClothingOuterArmorAstartesMk4A
+    jumpsuit: ClothingUniformJumpsuitAstartes
     shoes: ClothingShoesAstartesImperiumBoots
     belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet
@@ -35,6 +36,7 @@
     back: ClothingBackpackAstartesChaosPowerpack
     head: ClothingHeadHelmetAstartesChaos
     outerClothing: ClothingOuterArmorAstartesChaos
+    jumpsuit: ClothingUniformJumpsuitAstartes
     shoes: ClothingShoesAstartesChaosBoots
     belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet

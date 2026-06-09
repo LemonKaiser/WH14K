@@ -69,6 +69,8 @@
   id: MobOrk
   suffix: WH40K, Орки
   components:
+  - type: Inventory
+    speciesId: Ork
   - type: DamageVisuals
     thresholds: [ 8, 16, 24, 40, 56, 80 ]
     targetLayers:

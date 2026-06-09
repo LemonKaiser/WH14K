@@ -1,0 +1,42 @@
+- type: loadout
+  id: WH40KCyanOfficerCap
+  equipment:
+    head: ClothingHeadOfficerCyan
+
+- type: loadout
+  id: WH40KCommandCatachanBandana
+  equipment:
+    head: ClothingHeadHatCatachanBandana
+
+- type: loadout
+  id: WH40KCommandCatachanBeret
+  equipment:
+    head: ClothingHeadHatCatachanBeret
+
+- type: loadout
+  id: WH40KCommandCatachanHeadband
+  equipment:
+    head: ClothingHeadHatCatachanHeadband
+
+- type: loadout
+  id: WH40KCommandCatachanCap
+  equipment:
+    head: ClothingHeadHatCatachanCap
+
+- type: loadout
+  id: WH40KOfficerCap
+  equipment:
+    head: ClothingHeadOfficer
+
+- type: loadout
+  id: WH40KCommandBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 14
+  equipment:
+    head: ClothingHeadHatBeretCommand
+
+- type: loadout
+  id: WH40KHelmetSergVst
+  equipment:
+    head: ClothingHeadHelmetFlakAdvSergVst

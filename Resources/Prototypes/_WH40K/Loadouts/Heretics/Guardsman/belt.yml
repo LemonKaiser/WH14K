@@ -1,0 +1,17 @@
+- type: loadout
+  id: WH40KClothingBeltChaosDynamitebase
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+  - ClothingBeltChaosDynamite
+  groupBy: "belt"
+
+- type: loadout
+  id: chaosbelt2base
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  inhand:
+  - chaosbelt2
+  groupBy: "belt"

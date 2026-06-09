@@ -1,0 +1,4 @@
+- type: loadout
+  id: WH40KValhallanSergeantUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallanSergeant

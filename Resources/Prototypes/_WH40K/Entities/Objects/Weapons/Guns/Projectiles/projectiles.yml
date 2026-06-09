@@ -500,9 +500,9 @@
     radius: 2.0
     energy: 7.0
   - type: ChangeTemperatureOnCollide
-    heat: 50000
+    heat: 75000
   - type: IgniteOnCollide
-    fireStacks: 2.3
+    fireStacks: 3
   - type: StunOnCollide
     stunAmount: 0
     knockdownAmount: 0
@@ -530,7 +530,7 @@
     forceSound: true
   - type: LightningArcShooter
     arcDepth: 0
-    maxLightningArc: 2
+    maxLightningArc: 3
     shootMinInterval: 0.01
     shootMaxInterval: 0.01
     shootRange: 1.5
@@ -539,9 +539,11 @@
     stunAmount: 0
     knockdownAmount: 0 # Enough to subdue and follow up with a stun baton
     drop: false #Ranged KD and item drop are too strong in one package
-    slowdownAmount: 5
-    walkSpeedModifier: 0.5
-    sprintSpeedModifier: 0.5
+    slowdownAmount: 7
+    walkSpeedModifier: 0.1
+    sprintSpeedModifier: 0.1
+  - type: StaminaDamageOnCollide
+    damage: 15
   - type: TimedDespawn
     lifetime: 0.5
 
@@ -632,9 +634,9 @@
     radius: 2.0
     energy: 9.0
   - type: ChangeTemperatureOnCollide
-    heat: 150000
+    heat: 175000
   - type: IgniteOnCollide
-    fireStacks: 3.5
+    fireStacks: 4
   - type: StunOnCollide
     stunAmount: 0
     knockdownAmount: 0

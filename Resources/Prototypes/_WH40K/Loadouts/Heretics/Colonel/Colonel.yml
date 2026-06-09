@@ -1,0 +1,59 @@
+- type: loadout
+  id: WH40KHeresiarchKhorneRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchKhorne
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-khorne-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchKhorne
+    outerClothing: ClothingOuterArmorHeresiarchKhorne
+
+- type: loadout
+  id: WH40KHeresiarchNurgleRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchNurgle
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-nurgle-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchNurgle
+    outerClothing: ClothingOuterArmorHeresiarchNurgle
+
+- type: loadout
+  id: WH40KHeresiarchSlaaneshRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchSlaanesh
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-slaanesh-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchSlaanesh
+    outerClothing: ClothingOuterArmorHeresiarchSlaanesh
+
+- type: loadout
+  id: WH40KHeresiarchTzeentchRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchTzeentch
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-tzeentch-attunement-veteran
+  equipment:
+    head: ClothingHeadHelmetHeresiarchTzeentch
+    outerClothing: ClothingOuterArmorHeresiarchTzeentch
+
+- type: loadout
+  id: WH40KHeresiarchСardinalRaiment
+  dummyEntity: ClothingOuterArmorHeresiarchCardinal
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 50h
+  equipment:
+    head: ClothingHeadHelmetHeresiarchCardinal
+    outerClothing: ClothingOuterArmorHeresiarchCardinal

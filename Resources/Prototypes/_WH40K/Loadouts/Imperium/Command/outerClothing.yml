@@ -1,0 +1,39 @@
+- type: loadout
+  id: WH40KCommandCatachanLightArmor
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanLight
+
+- type: loadout
+  id: WH40KCommandCatachanMediumArmor
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanMedium
+
+- type: loadout
+  id: WH40KCommandCatachanVest
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanVest
+
+- type: loadout
+  id: WH40KOfficerCoat
+  equipment:
+    outerClothing: ClothingOuterArmorOfficer
+
+- type: loadout
+  id: WH40KJuniorOfficerJacket
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 23
+  equipment:
+    outerClothing: ClothingOuterArmorJuniorOfficerArmoredJacket
+
+- type: loadout
+  id: WH40KSeniorOfficerJacket
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 24
+  equipment:
+    outerClothing: ClothingOuterArmorSeniorOfficerArmoredJacket

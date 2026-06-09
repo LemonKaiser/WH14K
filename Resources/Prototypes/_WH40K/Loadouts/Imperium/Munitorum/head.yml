@@ -1,0 +1,7 @@
+- type: loadout
+  id: WH40KQuartermasterBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 8
+  equipment:
+    head: ClothingHeadHatBeretQM

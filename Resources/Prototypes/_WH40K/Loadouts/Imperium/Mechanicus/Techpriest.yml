@@ -125,3 +125,19 @@
     requiredLevel: 25
   inhand:
   - WeaponRevolverPhosphorSerpenta
+#  storage:
+#    belt:
+#    - SpeedLoaderSerpenta
+
+- type: loadout
+  id: WH40KTechPriestBreather
+  equipment:
+    mask: ClothingMaskGasTechPriest
+
+- type: loadout
+  id: WH40KTechPriestGasmask
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 29
+  equipment:
+    mask: ClothingGasTechPriest

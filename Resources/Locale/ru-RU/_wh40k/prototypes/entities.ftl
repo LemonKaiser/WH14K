@@ -2024,3 +2024,20 @@ ent-ActionWH40KTogglePhantomStep = Фантомный шаг
 
 ent-ActionWH40KTauToggleDroneAggression = Режим атаки дронов
     .desc = Включить или выключить автономную атаку боевых дронов.
+
+ent-ClothingUniformJumpsuitHelldriverUniform = форма хеллдайвера
+    .desc = Стандартная форма хеллдайвера.
+
+ent-ClothingShoesHelldriverBoots = ботинки хеллдайвера
+    .desc = Стандартные ботинки хеллдайвера.
+
+ent-WeaponHellDiverCarabin = карабин хеллдайвера
+
+ent-ClothingOuterHelldriverArmor = броня "Infiltrator"
+    .desc = Эта броня — стандартная броня Суперземли, изготовленная из того же титанового сплава, что и корпус Уничтожителя.
+
+ent-ClothingNeckHelldriver = плащ "FOESMASHER"
+    .desc = Прочные, водонепроницаемые и с теплоизоляционной подкладкой, оставшиеся после производства палаток.
+
+ent-ClothingHeadHelldriverHelmet = шлем B-01 TACTICAL
+    .desc = Это стандартная версия Суперземли, изготовленная из того же титана, что и корпус Уничтожителя.
