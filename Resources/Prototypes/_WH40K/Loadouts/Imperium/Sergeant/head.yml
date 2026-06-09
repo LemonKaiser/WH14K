@@ -1,0 +1,9 @@
+- type: loadout
+  id: WH40KSergeantCap
+  equipment:
+    head: ClothingHeadSgt
+
+- type: loadout
+  id: WH40KValhallanPapakhaSergeant
+  equipment:
+    head: ClothingHeadHatValhallanPapakhaSergeant

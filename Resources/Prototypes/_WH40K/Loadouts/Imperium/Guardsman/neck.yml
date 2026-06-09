@@ -1,0 +1,42 @@
+- type: loadout
+  id: WH40KImperialRainCloak
+  equipment:
+    neck: ClothingNeckCloakRainImp
+
+- type: loadout
+  id: WH40KImperialAquilaMedal
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 17
+  equipment:
+    neck: ClothingNeckImperialAquilaMedal
+
+- type: loadout
+  id: WH40KImperialCrossMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 18
+  equipment:
+    neck: ClothingNeckImperialCrossMedal
+
+- type: loadout
+  id: WH40KImperialInquisitionSeal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 19
+  equipment:
+    neck: ClothingNeckImperialInquisitionSeal
+
+- type: loadout
+  id: WH40KImperialGoldenPrize
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  equipment:
+    neck: ClothingNeckImperialGoldenPrize

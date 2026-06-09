@@ -1,0 +1,12 @@
+- type: loadout
+  id: WH40KSlaaneshUniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    jumpsuit: ClothingUniformJumpskirtSlaanesh
+
+- type: loadout
+  id: WH40KBloodPactUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitBloodPact

@@ -1,0 +1,96 @@
+- type: loadout
+  id: WH40KLightFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestLight
+
+- type: loadout
+  id: WH40KMedicFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestMed
+
+- type: loadout
+  id: WH40KCyanLightFlakArmor
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestLightCyan
+
+- type: loadout
+  id: WH40KCyanFlakArmor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestCyan
+
+- type: loadout
+  id: WH40KFlakArmor
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVest
+
+- type: loadout
+  id: WH40KCyanFlakArmorSrg
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestCyan
+
+- type: loadout
+  id: WH40KFlakArmorSrg
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVest
+
+- type: loadout
+  id: WH40KJumpsuitGuardVst
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitGuardsmanVst
+
+- type: loadout
+  id: WH40KCoatVst
+  equipment:
+    outerClothing: ClothingOuterArmorFlakVestVst
+
+- type: loadout
+  id: WH40KValhallanCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanCoat
+
+- type: loadout
+  id: WH40KValhallanHeavyArmor
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanHeavy
+
+- type: loadout
+  id: WH40KKriegCoat
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    outerClothing: ClothingOuterArmorKriegCoat
+
+- type: loadout
+  id: WH40KCatachanLightArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanLight
+
+- type: loadout
+  id: WH40KCatachanMediumArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanMedium
+
+- type: loadout
+  id: WH40KCatachanVest
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    outerClothing: ClothingOuterArmorCatachanVest

@@ -1,0 +1,14 @@
+- type: loadout
+  id: WH40KChaosCombatGloves
+  equipment:
+    gloves: ClothingHandsGlovesCombatcult
+
+- type: loadout
+  id: WH40KBloodPactGloves
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 27
+  equipment:
+    gloves: ClothingHandsGlovesBloodPact

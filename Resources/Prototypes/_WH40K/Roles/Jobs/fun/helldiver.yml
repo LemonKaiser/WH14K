@@ -1,0 +1,11 @@
+- type: startingGear
+  id: HellDriverGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitHelldriverUniform
+    shoes: ClothingShoesHelldriverBoots
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHelldriverArmor
+    neck: ClothingNeckHelldriver
+    head: ClothingHeadHelldriverHelmet
+  inhand:
+    - WeaponHellDiverCarabin

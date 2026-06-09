@@ -3,6 +3,10 @@
   id: ClothingShoesAstartesImperiumBoots
   suffix: WH40K, Astartes, Imperium
   components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/astartes_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/astartes_boots.rsi
   - type: SpeciesRestrictedClothing
     species:
     - Astartes
@@ -13,6 +17,10 @@
   id: ClothingShoesAstartesChaosBoots
   suffix: WH40K, Astartes, Chaos
   components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/astartes_boots_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/astartes_boots_chaos.rsi
   - type: SpeciesRestrictedClothing
     species:
     - Astartes

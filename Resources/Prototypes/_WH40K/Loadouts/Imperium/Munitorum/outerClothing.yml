@@ -1,0 +1,19 @@
+- type: loadout
+  id: WH40KMunitorumCoat
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumCoat
+
+- type: loadout
+  id: WH40KMunitorumGreatcoat
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumGreatcoat
+
+- type: loadout
+  id: WH40KMunitorumRig
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumRig
+
+- type: loadout
+  id: WH40KMunitorumVest
+  equipment:
+    outerClothing: ClothingOuterArmorMunitorumVest

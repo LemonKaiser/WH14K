@@ -1,0 +1,12 @@
+- type: loadout
+  id: WH40KGuardsmanGlasses
+  equipment:
+    eyes: ClothingEyesGlasses
+
+- type: loadout
+  id: WH40KEyesGuard
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  equipment:
+    eyes: ClothingEyesHudGuard

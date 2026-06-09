@@ -456,3 +456,13 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_cultist_armor.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/chaos_slaanesh_cultist_armor.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterHelldriverArmor
+  suffix: WH40K, helldrivers
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/helldiver.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/helldiver.rsi

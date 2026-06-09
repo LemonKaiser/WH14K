@@ -72,13 +72,54 @@
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk3.rsi
 
 - type: entity
-  parent: ClothingHeadHelmetAstartesMk7
+  parent: [ClothingHeadHelmetBasic, ShowMedicalIcons]
   id: ClothingHeadHelmetAstartesMk4
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk4.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk4.rsi
+    stripDelay: 26
+    clothingVisuals:
+      head:
+      - state: equipped-HELMET
+        color: "#2F5DB3"
+      - state: equipped-HELMET-eyes
+  - type: Item
+    size: Normal
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#2F5DB3"
+      - state: inhand-left-eyes
+      right:
+      - state: inhand-right
+        color: "#2F5DB3"
+      - state: inhand-right-eyes
+  - type: BreathMask
+  - type: IngestionBlocker
+  - type: PressureProtection
+    highPressureMultiplier: 0.08
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    heatingCoefficient: 0.1
+    coolingCoefficient: 0.1
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.75
+        Piercing: 0.8
+        Heat: 0.85
+  - type: ExplosionResistance
+    damageCoefficient: 0.8
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+  - type: SpeciesRestrictedClothing
+    species:
+    - Astartes
+    popup: species-restricted-clothing-component-astartes-only
 
 - type: entity
   parent: ClothingHeadHelmetAstartesMk7

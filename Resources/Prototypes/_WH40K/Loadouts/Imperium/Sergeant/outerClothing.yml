@@ -1,0 +1,9 @@
+- type: loadout
+  id: WH40KValhallanSergeantCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanSergeantCoat
+
+- type: loadout
+  id: WH40KValhallanCaptainCoat
+  equipment:
+    outerClothing: ClothingOuterArmorValhallanCaptainCoat

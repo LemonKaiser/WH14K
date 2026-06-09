@@ -1,0 +1,117 @@
+- type: loadout
+  id: FlakHelmet
+  equipment:
+    head: ClothingHeadHelmetFlak
+
+- type: loadout
+  id: FlakHelmetCandle
+  equipment:
+    head: ClothingHeadHelmetFlakCandle
+
+- type: loadout
+  id: WH40KBandanaGreen
+  equipment:
+    head: ClothingHeadBandGreen
+
+- type: loadout
+  id: WH40KBandanaBlack
+  equipment:
+    head: ClothingHeadBandBlack
+
+- type: loadout
+  id: WH40KBandanaGold
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 4
+  equipment:
+    head: ClothingHeadBandGold
+
+- type: loadout
+  id: WH40KBandanaMerc
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 2
+  equipment:
+    head: ClothingHeadBandMerc
+
+- type: loadout
+  id: WH40KCyanFlakHelmet
+  equipment:
+    head: ClothingHeadHelmetFlakCyan
+
+- type: loadout
+  id: WH40KCyanMedicHelmet
+  equipment:
+    head: ClothingHeadHelmetFlakMedCyan
+
+- type: loadout
+  id: WH40KCyanArmoredHelmet
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  equipment:
+    head: ClothingHeadHelmetFlakAdvCyan
+
+- type: loadout
+  id: WH40KHelmetVst
+  equipment:
+    head: ClothingHeadHelmetFlakAdvVst
+
+- type: loadout
+  id: WH40KValhallanHelmet
+  equipment:
+    head: ClothingHeadHelmetValhallan
+
+- type: loadout
+  id: WH40KValhallanUshanka
+  equipment:
+    head: ClothingHeadHatValhallanUshanka
+
+- type: loadout
+  id: WH40KValhallanCap
+  equipment:
+    head: ClothingHeadHatValhallanCap
+
+- type: loadout
+  id: WH40KCatachanBandana
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanBandana
+
+- type: loadout
+  id: WH40KCatachanBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanBeret
+
+- type: loadout
+  id: WH40KCatachanHeadband
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHatCatachanHeadband
+
+- type: loadout
+  id: WH40KImperialVeteranBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 6
+  equipment:
+    head: ClothingHeadVet
+
+- type: loadout
+  id: WH40KKriegHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    head: ClothingHeadHelmetKrieg

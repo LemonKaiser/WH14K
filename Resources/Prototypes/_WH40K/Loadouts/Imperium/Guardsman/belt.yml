@@ -1,0 +1,12 @@
+- type: loadout
+  id: WH40KGuardBelt
+  equipment:
+    belt: guardbelt
+
+- type: loadout
+  id: WH40KKriegWebbing
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    belt: ClothingBeltKriegWebbing

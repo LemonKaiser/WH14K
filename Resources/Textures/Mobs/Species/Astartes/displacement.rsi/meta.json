@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "copyright": "Made for WH14K project",
+  "copyright": "Made for WH14K project; jumpsuit-female made by TheShuEd",
   "license": "CC-BY-SA-3.0",
   "size": {
     "x": 32,
@@ -20,6 +20,10 @@
     },
     {
       "name": "shoes",
+      "directions": 4
+    },
+    {
+      "name": "jumpsuit-female",
       "directions": 4
     }
   ]

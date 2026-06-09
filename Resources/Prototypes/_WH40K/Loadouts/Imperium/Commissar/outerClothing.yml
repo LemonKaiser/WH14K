@@ -1,0 +1,9 @@
+- type: loadout
+  id: WH40KCommissarCoat
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 24
+  equipment:
+    outerClothing: ClothingOuterArmorCommissar

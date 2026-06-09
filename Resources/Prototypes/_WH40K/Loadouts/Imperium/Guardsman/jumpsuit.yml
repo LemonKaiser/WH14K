@@ -1,0 +1,36 @@
+- type: loadout
+  id: WH40KValhallanUniform
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitValhallan
+
+- type: loadout
+  id: WH40KCatachanUniform1
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan1
+
+- type: loadout
+  id: WH40KCatachanUniform2
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan2
+
+- type: loadout
+  id: WH40KCatachanUniform3
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitCatachan3
+
+- type: loadout
+  id: WH40KKriegUniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitKrieg

@@ -102,3 +102,141 @@
     belt:
     - MagazineStubPistol
     - MagazineStubPistol
+
+
+
+
+- type: loadout
+  id: WH40KChaosclubKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  storage:
+    belt:
+    - Chaosclub
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KAxeChaosKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  storage:
+    belt:
+    - AxeChaos
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosNailBoardKit
+  storage:
+    belt:
+    - WeaponMeleeChaosNailBoard
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KTruncheonKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  storage:
+    belt:
+    - Truncheon
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KCommandHereticPowerFist
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 25
+  inhand:
+  - WHHereticPowerFist
+
+- type: loadout
+  id: WH40KHeresiarchCardinalWarHammer
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:OverallPlaytimeRequirement
+      time: 50h
+  inhand:
+  - WHHammerHeretic
+
+- type: loadout
+  id: WH40KChaosCrowbarKit
+  storage:
+    belt:
+    - CrowbarRed
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosKnifeKit
+  storage:
+    belt:
+    - CombatKnife
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosTrenchKnifeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 3
+  storage:
+    belt:
+    - TrenchKnifeChaos
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosSapperShovelKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 38
+  storage:
+    belt:
+    - WHSapperShovel
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosTruncheonKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 39
+  storage:
+    belt:
+    - Truncheon
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosMacheteKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  storage:
+    belt:
+    - ChaosMachete
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KVraksHandBladeKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 5
+  storage:
+    belt:
+    - WeaponVraksHandBlade
+  groupBy: "melee"
+
+- type: loadout
+  id: WH40KChaosSerpKit
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  storage:
+    belt:
+    - WeaponMeleeSerpChaos
+  groupBy: "melee"

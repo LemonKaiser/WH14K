@@ -1,0 +1,17 @@
+- type: loadout
+  id: WH40KKriegGasmask
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    mask: ClothingMaskGasKrieg
+
+- type: loadout
+  id: WH40KGuardsmanGasmask
+  equipment:
+    mask: ClothingMaskGasGuardsman
+
+- type: loadout
+  id: WH40KGasmaskVst
+  equipment:
+    mask: ClothingMaskGasVst

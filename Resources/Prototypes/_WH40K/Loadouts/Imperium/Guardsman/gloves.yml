@@ -1,0 +1,12 @@
+- type: loadout
+  id: WH40KKriegGloves
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  equipment:
+    gloves: ClothingHandsGlovesKrieg
+
+- type: loadout
+  id: WH40KGlovesVst
+  equipment:
+    gloves: ClothingHandsGlovesVst

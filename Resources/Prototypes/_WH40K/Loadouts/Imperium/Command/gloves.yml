@@ -1,0 +1,9 @@
+- type: loadout
+  id: WH40KBlackGloves
+  equipment:
+    gloves: ClothingHandsGlovesColorBlack
+
+- type: loadout
+  id: WH40KCombatGloves
+  equipment:
+    gloves: ClothingHandsGlovesCombat

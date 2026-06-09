@@ -730,7 +730,7 @@
   name: loadout-group-wh40k-heretic-line-outer
   minLimit: 0
   loadouts:
-  - WH40Kcolchuga 
+  - WH40Kcolchuga
   - WH40Kcontrabandcoat
 
 - type: loadoutGroup
@@ -972,7 +972,7 @@
   name: loadout-group-wh40k-heretic-command-outer
   minLimit: 0
   loadouts:
-  - WH40KVraksCarapaceArmor
+  - WH40KChaosCoat
   - WH40KBloodPactArmor
   - WH40KArmorMauler
   - WH40KSlaaneshArmorKini

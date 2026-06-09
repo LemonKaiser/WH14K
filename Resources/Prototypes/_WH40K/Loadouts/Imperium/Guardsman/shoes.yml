@@ -1,0 +1,19 @@
+- type: loadout
+  id: WH40KCombatBoots
+  equipment:
+    shoes: ClothingShoesAnkleBoots
+
+- type: loadout
+  id: WH40KCyanCombatBoots
+  equipment:
+    shoes: ClothingShoesAnkleBootsCyan
+
+- type: loadout
+  id: WH40KBootsVst
+  equipment:
+    shoes: ClothingShoesBootsVst
+
+- type: loadout
+  id: WH40KValhallanBoots
+  equipment:
+    shoes: ClothingShoesBootsValhallan

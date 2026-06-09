@@ -1,0 +1,22 @@
+- type: loadout
+  id: WH40KBandanaRed
+  equipment:
+    head: ClothingHeadBandRed
+
+- type: loadout
+  id: WH40KMedicBeret
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 9
+  equipment:
+    head: ClothingHeadHatBeretMedic
+
+- type: loadout
+  id: WH40KSeniorMedicBeret
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 11
+  equipment:
+    head: ClothingHeadHatBeretSeniorPhysician

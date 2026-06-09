@@ -1,0 +1,75 @@
+- type: loadout
+  id: WH40KChaosUndividedMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 17
+  equipment:
+    neck: ClothingNeckChaosUndividedMedal
+
+- type: loadout
+  id: WH40KChaosKhorneMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-khorne-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosKhorneMedal
+
+- type: loadout
+  id: WH40KChaosNurgleMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KVeteranService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-nurgle-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosNurgleMedal
+
+- type: loadout
+  id: WH40KChaosSlaaneshMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-slaanesh-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosSlaaneshMedal
+
+- type: loadout
+  id: WH40KChaosTzeentchMedal
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KEliteService
+  - !type:WH40KMetaAchievementLoadoutEffect
+    achievement: wh40k-ach-tzeentch-attunement-veteran
+  equipment:
+    neck: ClothingNeckChaosTzeentchMedal
+
+- type: loadout
+  id: WH40KChaosNecklaceZero
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 0
+  equipment:
+    neck: NecklaceChaosCultistReflectWeak
+
+- type: loadout
+  id: WH40KChaosNecklace
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 22
+  equipment:
+    neck: NecklaceChaosCultistReflectWeak
+
+- type: loadout
+  id: WH40KChaosCoat
+  equipment:
+    outerClothing: ClothingOuterArmorCultistCoat
+
+- type: loadout
+  id: WH40KHereticRainCloak
+  equipment:
+    neck: ClothingNeckCloakRainChs
