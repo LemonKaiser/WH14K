@@ -1,0 +1,32 @@
+ent-WH40KArmorPlateLaserT1 = laser-protection armor plate T1
+    .desc = A replaceable armor plate that improves protection against laser and other heat-based attacks. Grants +5% protection, up to the armor's 80% cap.
+ent-WH40KArmorPlateLaserT2 = laser-protection armor plate T2
+    .desc = An improved laser-protection armor plate. Grants +10% protection against laser and other heat-based attacks, up to the armor's 80% cap.
+ent-WH40KArmorPlateLaserT3 = laser-protection armor plate T3
+    .desc = A heavy laser-protection armor plate. Grants +15% protection against laser and other heat-based attacks and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateLaserT4 = laser-protection armor plate T4
+    .desc = A reinforced laser-protection armor plate. Grants +20% protection against laser and other heat-based attacks and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateLaserT5 = laser-protection armor plate T5
+    .desc = A maximum-grade laser-protection armor plate. Grants +30% protection against laser and other heat-based attacks and slows the wearer by 10% while installed.
+
+ent-WH40KArmorPlateBulletT1 = bulletproof armor plate T1
+    .desc = A replaceable armor plate that improves protection against bullets and other piercing attacks. Grants +5% protection, up to the armor's 80% cap.
+ent-WH40KArmorPlateBulletT2 = bulletproof armor plate T2
+    .desc = An improved bulletproof armor plate. Grants +10% protection against bullets and other piercing attacks, up to the armor's 80% cap.
+ent-WH40KArmorPlateBulletT3 = bulletproof armor plate T3
+    .desc = A heavy bulletproof armor plate. Grants +15% protection against bullets and other piercing attacks and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateBulletT4 = bulletproof armor plate T4
+    .desc = A reinforced bulletproof armor plate. Grants +20% protection against bullets and other piercing attacks and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateBulletT5 = bulletproof armor plate T5
+    .desc = A maximum-grade bulletproof armor plate. Grants +30% protection against bullets and other piercing attacks and slows the wearer by 10% while installed.
+
+ent-WH40KArmorPlateMeleeT1 = close-combat armor plate T1
+    .desc = A replaceable armor plate that improves protection against strikes and slashing attacks. Grants +5% protection against blunt and slash damage, up to the armor's 80% cap.
+ent-WH40KArmorPlateMeleeT2 = close-combat armor plate T2
+    .desc = An improved close-combat armor plate. Grants +10% protection against blunt and slash damage, up to the armor's 80% cap.
+ent-WH40KArmorPlateMeleeT3 = close-combat armor plate T3
+    .desc = A heavy close-combat armor plate. Grants +15% protection against blunt and slash damage and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateMeleeT4 = close-combat armor plate T4
+    .desc = A reinforced close-combat armor plate. Grants +20% protection against blunt and slash damage and slows the wearer by 5% while installed.
+ent-WH40KArmorPlateMeleeT5 = close-combat armor plate T5
+    .desc = A maximum-grade close-combat armor plate. Grants +30% protection against blunt and slash damage and slows the wearer by 10% while installed.

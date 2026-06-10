@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.Connection.IPIntel;
@@ -377,7 +378,9 @@ namespace Content.Server.Connection
         {
             return ConnectionManagerStaffBypass.HasHostBanBypass(adminData)
                    || _adminManager.IsPromotedHost(args.UserId)
-                   || args.UserName == _cfg.GetCVar(CCVars.ConsoleLoginHostUser)
+                   || HostLoginNameHelper.MatchesConfiguredHostUser(
+                       args.UserName,
+                       _cfg.GetCVar(CCVars.ConsoleLoginHostUser))
                    || _cfg.GetCVar(CCVars.ConsoleLoginLocal) && IsLoopback(args.IP.Address);
         }
 
