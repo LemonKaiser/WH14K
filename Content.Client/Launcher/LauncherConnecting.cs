@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Content.Shared.CCVar;
 using Robust.Client;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
@@ -12,7 +10,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Client.MainMenu;
 using Robust.Client.State;
-using Robust.Shared.Timing;
 
 namespace Content.Client.Launcher
 {
@@ -29,7 +26,6 @@ namespace Content.Client.Launcher
         [Dependency] private  ILogManager _logManager = default!;
         [Dependency] private  ConnectingTargetManager _connectingTarget = default!;
         [Dependency] private  IStateManager _stateManager = default!;
-        [Dependency] private  IGameTiming _timing = default!;
         [Dependency] private  ExtendedDisconnectInformationManager _extendedDisconnectInformation = default!;
 
         private LauncherConnectingGui? _control;
@@ -37,17 +33,8 @@ namespace Content.Client.Launcher
 
         private Page _currentPage;
         private string? _connectFailReason;
-        private string? _activeConnectAddress;
-        private string? _activeConnectHost;
-        private ushort? _activeConnectPort;
-        private INetStructuredReason? _lastFallbackReason;
-        private bool _pendingAutomaticFallback;
-        private TimeSpan _automaticFallbackAt;
-        private TimeSpan _alternativeFallbackAvailableAt;
-        private readonly HashSet<string> _automaticFallbackTriedTargets = new(StringComparer.OrdinalIgnoreCase);
 
-        public string? Address => _activeConnectAddress
-                                  ?? _gameController.LaunchState.Ss14Address
+        public string? Address => _gameController.LaunchState.Ss14Address
                                   ?? _gameController.LaunchState.ConnectAddress
                                   ?? _connectingTarget.Address;
 
@@ -81,22 +68,6 @@ namespace Content.Client.Launcher
         public event Action<string?>? ConnectFailReasonChanged;
         public event Action<ClientConnectionState>? ConnectionStateChanged;
         public event Action<NetConnectFailArgs>? ConnectFailed;
-        public event Action<string?>? AddressChanged;
-        public event Action? AlternativeConnectAvailabilityChanged;
-
-        public bool CanUseAlternativeConnection =>
-            _cfg.GetCVar(CCVars.WH40KConnectionFallbackButtonEnabled) &&
-            IsFallbackEligible(_lastFallbackReason) &&
-            TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: false, out _);
-
-        public TimeSpan AlternativeConnectCooldownRemaining
-        {
-            get
-            {
-                var remaining = _alternativeFallbackAvailableAt - _timing.RealTime;
-                return remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
-            }
-        }
 
         protected override void Startup()
         {
@@ -114,14 +85,6 @@ namespace Content.Client.Launcher
             _clientNetManager.ConnectFailed += OnConnectFailed;
             _clientNetManager.Disconnect += OnDisconnected;
             _clientNetManager.ClientConnectStateChanged += OnConnectStateChanged;
-
-            _activeConnectAddress = null;
-            _activeConnectHost = null;
-            _activeConnectPort = null;
-            _lastFallbackReason = null;
-            _pendingAutomaticFallback = false;
-            _alternativeFallbackAvailableAt = TimeSpan.Zero;
-            _automaticFallbackTriedTargets.Clear();
 
             CurrentPage = Page.Connecting;
             UseCachedConnectionEndIfAlreadyFailed();
@@ -156,7 +119,6 @@ namespace Content.Client.Launcher
             ConnectFailReason = args.Reason;
             CurrentPage = Page.ConnectFailed;
             ConnectFailed?.Invoke(args);
-            RememberFallbackReason(args);
         }
 
         private void OnDisconnected(object? _, NetDisconnectedArgs args)
@@ -171,7 +133,6 @@ namespace Content.Client.Launcher
         {
             ConnectFailReason = null;
             CurrentPage = Page.Disconnected;
-            RememberFallbackReason(args);
         }
 
         private void OnConnectStateChanged(ClientConnectionState state)
@@ -195,7 +156,6 @@ namespace Content.Client.Launcher
                     _baseClient.DisconnectFromServer("Retrying failed connection");
                 }
 
-                ClearFallbackPrompt();
                 ConnectFailReason = null;
                 _baseClient.ConnectToServer(host, port);
                 CurrentPage = Page.Connecting;
@@ -209,7 +169,7 @@ namespace Content.Client.Launcher
         {
             try
             {
-                var redialAddress = _activeConnectAddress ?? _gameController.LaunchState.Ss14Address;
+                var redialAddress = _gameController.LaunchState.Ss14Address;
                 if (redialAddress != null && _gameController.LaunchState.FromLauncher)
                 {
                     _gameController.Redial(redialAddress);
@@ -249,7 +209,6 @@ namespace Content.Client.Launcher
         public void SetDisconnected()
         {
             CurrentPage = Page.Disconnected;
-            RememberFallbackReason(_extendedDisconnectInformation.LastNetDisconnectedArgs);
         }
 
         public enum Page : byte
@@ -261,13 +220,6 @@ namespace Content.Client.Launcher
 
         private bool TryGetConnectTarget(out string host, out ushort port)
         {
-            if (!string.IsNullOrWhiteSpace(_activeConnectHost) && _activeConnectPort != null)
-            {
-                host = _activeConnectHost;
-                port = _activeConnectPort.Value;
-                return true;
-            }
-
             if (_connectingTarget.HasManualTarget && _connectingTarget.Host != null && _connectingTarget.Port != null)
             {
                 host = _connectingTarget.Host;
@@ -301,19 +253,6 @@ namespace Content.Client.Launcher
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(Address))
-            {
-                try
-                {
-                    ConnectingAddressParser.ParseAddress(Address, _baseClient.DefaultPort, out host, out port);
-                    return true;
-                }
-                catch (ArgumentException ex)
-                {
-                    _sawmill.Warning($"Unable to parse fallback address '{Address}' for reconnect: {ex.Message}");
-                }
-            }
-
             host = string.Empty;
             port = 0;
             return false;
@@ -340,118 +279,6 @@ namespace Content.Client.Launcher
             }
 
             return false;
-        }
-
-        public bool TryRunPendingAutomaticFallback()
-        {
-            if (!_pendingAutomaticFallback)
-                return false;
-
-            if (_timing.RealTime < _automaticFallbackAt)
-                return false;
-
-            if (_clientNetManager.ClientConnectState != ClientConnectionState.NotConnecting ||
-                _baseClient.RunLevel >= ClientRunLevel.Connecting)
-            {
-                return false;
-            }
-
-            _pendingAutomaticFallback = false;
-            return TryConnectAlternative(automatic: true);
-        }
-
-        public bool TryConnectAlternative(bool automatic)
-        {
-            if (_clientNetManager.ClientConnectState != ClientConnectionState.NotConnecting ||
-                _baseClient.RunLevel >= ClientRunLevel.Connecting)
-            {
-                return false;
-            }
-
-            if (!IsFallbackEligible(_lastFallbackReason))
-                return false;
-
-            if (AlternativeConnectCooldownRemaining > TimeSpan.Zero)
-                return false;
-
-            if (!TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: automatic, out var target))
-                return false;
-
-            if (automatic)
-                _automaticFallbackTriedTargets.Add(target.Key);
-
-            _activeConnectAddress = target.Address;
-            _activeConnectHost = target.Host;
-            _activeConnectPort = target.Port;
-            AddressChanged?.Invoke(Address);
-
-            ClearFallbackPrompt();
-            ConnectFailReason = null;
-            _sawmill.Info($"Connecting through alternate address '{target.Address}' (automatic={automatic}).");
-            _baseClient.ConnectToServer(target.Host, target.Port);
-            CurrentPage = Page.Connecting;
-            return true;
-        }
-
-        private void RememberFallbackReason(INetStructuredReason? reason)
-        {
-            _lastFallbackReason = reason;
-            _pendingAutomaticFallback = false;
-            _alternativeFallbackAvailableAt = TimeSpan.Zero;
-
-            if (reason != null &&
-                IsFallbackEligible(reason) &&
-                TryGetAlternativeConnectTarget(skipAutomaticTriedTargets: true, out _))
-            {
-                var reconnectDelay = GetReconnectCleanupDelay(reason);
-                _alternativeFallbackAvailableAt = _timing.RealTime + TimeSpan.FromSeconds(reconnectDelay);
-                if (reconnectDelay > 0f)
-                    _sawmill.Info($"Delaying alternate connection for {reconnectDelay:0.#} seconds after disconnect to let the server release the old session.");
-
-                if (_cfg.GetCVar(CCVars.WH40KConnectionFallbackAutomatic))
-                {
-                    var autoDelay = MathF.Max(0f, _cfg.GetCVar(CCVars.WH40KConnectionFallbackAutoDelaySeconds));
-                    var delay = MathF.Max(autoDelay, reconnectDelay);
-                    _automaticFallbackAt = _timing.RealTime + TimeSpan.FromSeconds(delay);
-                    _pendingAutomaticFallback = true;
-                }
-            }
-
-            AlternativeConnectAvailabilityChanged?.Invoke();
-        }
-
-        private void ClearFallbackPrompt()
-        {
-            _lastFallbackReason = null;
-            _pendingAutomaticFallback = false;
-            _alternativeFallbackAvailableAt = TimeSpan.Zero;
-            AlternativeConnectAvailabilityChanged?.Invoke();
-        }
-
-        private float GetReconnectCleanupDelay(INetStructuredReason reason)
-        {
-            if (reason is not NetDisconnectedArgs)
-                return 0f;
-
-            return MathF.Max(0f, _cfg.GetCVar(CCVars.WH40KConnectionFallbackDisconnectDelaySeconds));
-        }
-
-        private bool IsFallbackEligible(INetStructuredReason? reason)
-        {
-            return _cfg.GetCVar(CCVars.WH40KConnectionFallbackEnabled) &&
-                   reason != null &&
-                   ConnectionFallbackHelper.IsNetworkFallbackEligible(reason.Reason, reason.RedialFlag);
-        }
-
-        private bool TryGetAlternativeConnectTarget(bool skipAutomaticTriedTargets, out ConnectionFallbackTarget target)
-        {
-            return ConnectionFallbackHelper.TryPickAlternative(
-                Address,
-                _cfg.GetCVar(CCVars.WH40KConnectionFallbackPrimaryAddresses),
-                _cfg.GetCVar(CCVars.WH40KConnectionFallbackAlternateAddresses),
-                _baseClient.DefaultPort,
-                skipAutomaticTriedTargets ? _automaticFallbackTriedTargets : null,
-                out target);
         }
     }
 }

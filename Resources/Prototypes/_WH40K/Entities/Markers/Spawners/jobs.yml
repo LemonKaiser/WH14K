@@ -287,8 +287,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon
+      - state: guardsman
 
 - type: entity
   id: SpawnPointTauEarthCaste
@@ -302,8 +301,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon
+      - state: guardsman
 
 - type: entity
   id: SpawnPointTauAirCaste
@@ -317,8 +315,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon
+      - state: guardsman
 
 - type: entity
   id: SpawnPointTauWaterCaste
@@ -332,8 +329,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon
+      - state: guardsman
 
 - type: entity
   id: SpawnPointTauOfficer
@@ -347,8 +343,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon-break
+      - state: lieutenant
 
 - type: entity
   id: SpawnPointTauEthereal
@@ -362,8 +357,7 @@
     sprite: _WH40K/Markers/jobs.rsi
     layers:
       - state: green
-      - sprite: _WH40K/Clothing/Head/Helmets/tau_helmet.rsi
-        state: icon-break
+      - state: head_officer
 
 # Ork
 

@@ -737,12 +737,6 @@ public sealed partial class WH40KBattleAdminCommand : IConsoleCommand
             return true;
         }
 
-        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
-        {
-            account = "WH40KTau";
-            return true;
-        }
-
         return false;
     }
 

@@ -10,9 +10,6 @@
     size: Large
     sprite: _WH40K/Objects/Weapons/Melee/power_fist.rsi
   - type: WH40KPowerFist
-  - type: MeleeThrowOnHit
-    stunTime: 0.1
-    activateOnThrown: false
   - type: MeleeWeapon
     attackRate: 0.64
     range: 1.35

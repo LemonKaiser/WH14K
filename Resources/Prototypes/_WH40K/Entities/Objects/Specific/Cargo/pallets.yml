@@ -33,21 +33,3 @@
   components:
   - type: CargoOrderBatchPallet
     account: WH40KHeretics
-
-- type: entity
-  id: WH40KCargoPalletBuyTau
-  parent: CargoPalletBuy
-  name: tau delivery pallet
-  description: Faction delivery pallet for Tau requisitions.
-  components:
-  - type: CargoOrderBatchPallet
-    account: WH40KTau
-
-- type: entity
-  id: WH40KCargoPalletSellTau
-  parent: CargoPalletSell
-  name: tau export pallet
-  description: Faction sale pallet for Tau logistics.
-  components:
-  - type: CargoOrderBatchPallet
-    account: WH40KTau

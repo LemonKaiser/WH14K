@@ -2022,9 +2022,6 @@ ent-ActionWH40KChaosTzeentchTimeField = Поле серого времени
 ent-ActionWH40KTogglePhantomStep = Фантомный шаг
     .desc = Включить или выключить автоматическое уклонение рывком.
 
-ent-ActionWH40KTauToggleDroneAggression = Режим атаки дронов
-    .desc = Включить или выключить автономную атаку боевых дронов.
-
 ent-ClothingUniformJumpsuitHelldriverUniform = форма хеллдайвера
     .desc = Стандартная форма хеллдайвера.
 

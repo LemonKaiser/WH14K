@@ -1570,12 +1570,6 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
             return true;
         }
 
-        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
-        {
-            account = "WH40KTau";
-            return true;
-        }
-
         account = default;
         return false;
     }

@@ -60,6 +60,10 @@ namespace Content.Server.Database
         // Username assignment (for guest accounts, so they persist GUID)
         Task AssignUserIdAsync(string name, NetUserId userId);
         Task<NetUserId?> GetAssignedUserIdAsync(string name);
+        Task<WH40KAuthAccountMigrationResult> MigrateLegacyGuestAccountAsync(
+            string userName,
+            NetUserId authenticatedUserId,
+            CancellationToken cancel = default);
         #endregion
 
         #region Bans
@@ -529,6 +533,15 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetAssignedUserIdAsync(name));
+        }
+
+        public Task<WH40KAuthAccountMigrationResult> MigrateLegacyGuestAccountAsync(
+            string userName,
+            NetUserId authenticatedUserId,
+            CancellationToken cancel = default)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.MigrateLegacyGuestAccountAsync(userName, authenticatedUserId, cancel));
         }
 
         public Task<BanDef?> GetBanAsync(int id)

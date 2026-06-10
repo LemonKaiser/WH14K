@@ -54,9 +54,6 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
         if (ent.Comp.Enabled && IsEnemyDeactivationBlocked(ent, args.User, false))
             return;
 
-        if (IsGlobalActivationToggleBlocked(ent, args.User))
-            return;
-
         var user = args.User;
 
         var verb = new Verb
@@ -106,16 +103,6 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
     public bool TrySetState(Entity<DeployableTurretComponent> ent, bool enabled, EntityUid? user = null)
     {
         if (user != null && IsEnemyDeactivationBlocked(ent, user.Value, enabled))
-        {
-            _popup.PopupClient(Loc.GetString("deployable-turret-component-access-denied"), ent, user.Value);
-            _audio.PlayPredicted(ent.Comp.AccessDeniedSound, ent, user.Value);
-            return false;
-        }
-
-        // For strategic points we also need server-side logic (tier gates / owner binding) to be able to
-        // keep the turret enabled/disabled. So the global activation lock only blocks player-initiated toggles.
-        // If called without a user (server systems), do not block.
-        if (user != null && IsGlobalActivationToggleBlocked(ent, user.Value))
         {
             _popup.PopupClient(Loc.GetString("deployable-turret-component-access-denied"), ent, user.Value);
             _audio.PlayPredicted(ent.Comp.AccessDeniedSound, ent, user.Value);
@@ -244,14 +231,6 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
         RaiseLocalEvent(ent, ref ammoCountEv);
 
         return ammoCountEv.Count > 0;
-    }
-
-    private bool IsGlobalActivationToggleBlocked(Entity<DeployableTurretComponent> ent, EntityUid user)
-    {
-        if (!TryComp<WH40KTurretGlobalActivationLockComponent>(ent, out var lockComp))
-            return false;
-
-        return lockComp.PreventAllActivationToggle;
     }
 
     private bool IsEnemyDeactivationBlocked(Entity<DeployableTurretComponent> ent, EntityUid user, bool targetEnabledState)

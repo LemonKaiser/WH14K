@@ -88,43 +88,7 @@ namespace Content.Server.GameTicking
                 case SessionStatus.InGame:
                 {
                     _userDb.ClientConnected(session);
-
-                    if (mind == null)
-                    {
-                        if (LobbyEnabled)
-                            PlayerJoinLobby(session);
-                        else
-                            SpawnWaitDb();
-
-                        _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
-                        break;
-                    }
-
-                    if (mind.CurrentEntity == null || Deleted(mind.CurrentEntity))
-                    {
-                        DebugTools.Assert(mind.CurrentEntity == null, "a mind's current entity was deleted without updating the mind");
-
-                        // This player is joining the game with an existing mind, but the mind has no entity.
-                        // Their entity was probably deleted sometime while they were disconnected, or they were an observer.
-                        // Instead of allowing them to spawn in, we will dump and their existing mind in an observer ghost.
-                        SpawnObserverWaitDb();
-                    }
-                    else
-                    {
-                        if (_playerManager.SetAttachedEntity(session, mind.CurrentEntity))
-                        {
-                            PlayerJoinGame(session);
-                        }
-                        else
-                        {
-                            Log.Error(
-                                $"Failed to attach player {session} with mind {ToPrettyString(mindId)} to its current entity {ToPrettyString(mind.CurrentEntity)}");
-                            SpawnObserverWaitDb();
-                        }
-                    }
-
-                    _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
-
+                    FinalizeJoinAfterUserDbLoad();
                     break;
                 }
 
@@ -146,7 +110,7 @@ namespace Content.Server.GameTicking
             //When the status of a player changes, update the server info text
             UpdateInfoText();
 
-            async void SpawnWaitDb()
+            async void FinalizeJoinAfterUserDbLoad()
             {
                 try
                 {
@@ -159,23 +123,47 @@ namespace Content.Server.GameTicking
                     return;
                 }
 
-                SpawnPlayer(session, EntityUid.Invalid);
-            }
+                if (session.Status != SessionStatus.InGame)
+                    return;
 
-            async void SpawnObserverWaitDb()
-            {
-                try
+                if (!_mind.TryGetMind(session.UserId, out var loadedMindId, out var loadedMind))
                 {
-                    await _userDb.WaitLoadComplete(session);
-                }
-                catch (OperationCanceledException)
-                {
-                    // Bail, user must've disconnected or something.
-                    Log.Debug($"Database load cancelled while waiting to spawn {session}");
+                    if (LobbyEnabled)
+                    {
+                        PlayerJoinLobby(session);
+                    }
+                    else
+                    {
+                        SpawnPlayer(session, EntityUid.Invalid);
+                    }
+
+                    LogConnectedToGame(session);
+                    UpdateInfoText();
                     return;
                 }
 
+                if (loadedMind.CurrentEntity == null || Deleted(loadedMind.CurrentEntity))
+                {
+                    DebugTools.Assert(loadedMind.CurrentEntity == null, "a mind's current entity was deleted without updating the mind");
+                    JoinAsObserver(session);
+                    LogConnectedToGame(session);
+                    UpdateInfoText();
+                    return;
+                }
+
+                if (_playerManager.SetAttachedEntity(session, loadedMind.CurrentEntity))
+                {
+                    PlayerJoinGame(session);
+                    LogConnectedToGame(session);
+                    UpdateInfoText();
+                    return;
+                }
+
+                Log.Error(
+                    $"Failed to attach player {session} with mind {ToPrettyString(loadedMindId)} to its current entity {ToPrettyString(loadedMind.CurrentEntity)}");
                 JoinAsObserver(session);
+                LogConnectedToGame(session);
+                UpdateInfoText();
             }
 
             async void AddPlayerToDb(Guid id)
@@ -184,6 +172,11 @@ namespace Content.Server.GameTicking
                 {
                     await _db.AddRoundPlayers(RoundId, id);
                 }
+            }
+
+            void LogConnectedToGame(ICommonSession playerSession)
+            {
+                _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {playerSession:Player} attached to {(playerSession.AttachedEntity != null ? ToPrettyString(playerSession.AttachedEntity) : "nothing"):entity} connected to the game.");
             }
         }
 
@@ -195,6 +188,12 @@ namespace Content.Server.GameTicking
 
         public void PlayerJoinGame(ICommonSession session, bool silent = false)
         {
+            if (!_userDb.IsLoadComplete(session))
+            {
+                _sawmill.Warning($"Blocked early JoinGame for {session}: user DB load is not complete yet.");
+                return;
+            }
+
             if (!silent)
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
 
@@ -217,6 +216,12 @@ namespace Content.Server.GameTicking
 
         private void PlayerJoinLobby(ICommonSession session)
         {
+            if (!_userDb.IsLoadComplete(session))
+            {
+                _sawmill.Warning($"Blocked early JoinLobby for {session}: user DB load is not complete yet.");
+                return;
+            }
+
             _playerGameStatuses[session.UserId] = LobbyEnabled ? PlayerGameStatus.NotReadyToPlay : PlayerGameStatus.ReadyToPlay;
             _db.AddRoundPlayers(RoundId, session.UserId);
 

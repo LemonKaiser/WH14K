@@ -62,8 +62,3 @@
   license: "CC-BY-NC-SA-3.0"
   copyright: "GetOutMarutak,aka.Snicket on Discord/github/Cara/Ko-fi"
   source: "https://github.com/space-wizards/space-station-14"
-
-- files: ["wh40k-plush-devs.png"]
-  license: "CC-BY-NC-SA-3.0"
-  copyright: "Composite assembled for WH14K from internal _WH40K plush sprites and an original generated lobby plate."
-  source: "https://github.com/LemonKaiser/WH14K"

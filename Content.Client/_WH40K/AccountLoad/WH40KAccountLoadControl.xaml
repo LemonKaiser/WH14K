@@ -1,0 +1,35 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:launcher="clr-namespace:Content.Client._WH40K.Launcher"
+         MouseFilter="Stop">
+    <launcher:WH40KCrtShaderContainer>
+        <launcher:WH40KConnectingCrtBackground />
+    </launcher:WH40KCrtShaderContainer>
+
+    <PanelContainer Name="StatusPanel"
+                    MouseFilter="Stop"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinWidth="560"
+                    MaxWidth="680">
+        <BoxContainer Orientation="Vertical"
+                      SeparationOverride="8"
+                      Margin="18">
+            <Label Name="Header"
+                   Access="Public"
+                   HorizontalAlignment="Center" />
+            <Label Name="Stage"
+                   Access="Public" />
+            <ProgressBar Name="ProgressBar"
+                         Access="Public"
+                         MaxValue="1"
+                         MinValue="0"
+                         Value="0"
+                         MinWidth="520"
+                         MinHeight="24" />
+            <Label Name="ProgressText"
+                   Access="Public" />
+            <Label Name="Detail"
+                   Access="Public" />
+        </BoxContainer>
+    </PanelContainer>
+</Control>

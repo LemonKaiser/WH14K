@@ -455,7 +455,9 @@ internal sealed partial class ChatManager : IChatManager
         WH40KMetaProgressSnapshot snapshot;
         try
         {
-            snapshot = _entityManager.System<WH40KMetaProgressSystem>().GetSnapshot(player.UserId);
+            var metaProgress = _entityManager.System<WH40KMetaProgressSystem>();
+            if (!metaProgress.TryGetLoadedSnapshot(player, out snapshot))
+                return;
         }
         catch (Exception e)
         {

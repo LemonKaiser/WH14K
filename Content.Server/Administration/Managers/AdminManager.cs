@@ -34,8 +34,10 @@ namespace Content.Server.Administration.Managers
         [Dependency] private IChatManager _chat = default!;
         [Dependency] private ToolshedManager _toolshed = default!;
         [Dependency] private ILogManager _logManager = default!;
+        [Dependency] private UserDbDataManager _userDb = default!;
 
         private readonly Dictionary<ICommonSession, AdminReg> _admins = new();
+        private readonly HashSet<NetUserId> _pendingAdminLogins = new();
         private readonly HashSet<NetUserId> _promotedPlayers = new();
 
         public event Action<AdminPermsChangedEventArgs>? OnPermsChanged;
@@ -250,6 +252,7 @@ namespace Content.Server.Administration.Managers
         public void Initialize()
         {
             _sawmill = _logManager.GetSawmill("admin");
+            _userDb.AddOnFinishLoad(OnUserDbLoadFinished);
 
             _netMgr.RegisterNetMessage<MsgUpdateAdminStatus>();
 
@@ -356,10 +359,12 @@ namespace Content.Server.Administration.Managers
             }
             else if (e.NewStatus == SessionStatus.InGame)
             {
-                LoginAdminMaybe(e.Session);
+                TryLoginAdminWhenReady(e.Session);
             }
             else if (e.NewStatus == SessionStatus.Disconnected)
             {
+                _pendingAdminLogins.Remove(e.Session.UserId);
+
                 if (_admins.Remove(e.Session, out var reg ) && _cfg.GetCVar(CCVars.AdminAnnounceLogout))
                 {
                     if (reg.Data.Stealth)
@@ -377,49 +382,78 @@ namespace Content.Server.Administration.Managers
             }
         }
 
+        private void OnUserDbLoadFinished(ICommonSession session)
+        {
+            TryLoginAdminWhenReady(session);
+        }
+
+        private void TryLoginAdminWhenReady(ICommonSession session)
+        {
+            if (session.Status != SessionStatus.InGame)
+                return;
+
+            if (!_userDb.TryIsLoadComplete(session))
+                return;
+
+            if (_admins.ContainsKey(session))
+                return;
+
+            if (!_pendingAdminLogins.Add(session.UserId))
+                return;
+
+            LoginAdminMaybe(session);
+        }
+
         private async void LoginAdminMaybe(ICommonSession session)
         {
-            var adminDat = await LoadAdminData(session);
-            if (adminDat == null)
+            try
             {
-                // Not an admin.
-                return;
-            }
-
-            var (dat, rankId, specialLogin) = adminDat.Value;
-            var reg = new AdminReg(session, dat)
-            {
-                IsSpecialLogin = specialLogin,
-                RankId = rankId
-            };
-
-            _admins.Add(session, reg);
-
-            if (session.ContentData()!.Stealthed)
-                reg.Data.Stealth = true;
-
-            if (reg.Data.Active)
-            {
-                if (_cfg.GetCVar(CCVars.AdminAnnounceLogin))
+                var adminDat = await LoadAdminData(session);
+                if (adminDat == null || _admins.ContainsKey(session))
                 {
-                    if (reg.Data.Stealth)
-                    {
-
-                        _chat.DispatchServerMessage(session, Loc.GetString("admin-manager-stealthed-message"));
-                        _chat.SendAdminAnnouncement(Loc.GetString("admin-manager-admin-login-message",
-                            ("name", session.Name)), flagWhitelist: AdminFlags.Stealth);
-                    }
-                    else
-                    {
-                        _chat.SendAdminAnnouncement(Loc.GetString("admin-manager-admin-login-message",
-                            ("name", session.Name)));
-                    }
+                    // Not an admin, or already loaded while the DB request was in flight.
+                    return;
                 }
 
-                SendPermsChangedEvent(session);
-            }
+                var (dat, rankId, specialLogin) = adminDat.Value;
+                var reg = new AdminReg(session, dat)
+                {
+                    IsSpecialLogin = specialLogin,
+                    RankId = rankId
+                };
 
-            UpdateAdminStatus(session);
+                _admins.Add(session, reg);
+
+                if (session.ContentData()!.Stealthed)
+                    reg.Data.Stealth = true;
+
+                if (reg.Data.Active)
+                {
+                    if (_cfg.GetCVar(CCVars.AdminAnnounceLogin))
+                    {
+                        if (reg.Data.Stealth)
+                        {
+
+                            _chat.DispatchServerMessage(session, Loc.GetString("admin-manager-stealthed-message"));
+                            _chat.SendAdminAnnouncement(Loc.GetString("admin-manager-admin-login-message",
+                                ("name", session.Name)), flagWhitelist: AdminFlags.Stealth);
+                        }
+                        else
+                        {
+                            _chat.SendAdminAnnouncement(Loc.GetString("admin-manager-admin-login-message",
+                                ("name", session.Name)));
+                        }
+                    }
+
+                    SendPermsChangedEvent(session);
+                }
+
+                UpdateAdminStatus(session);
+            }
+            finally
+            {
+                _pendingAdminLogins.Remove(session.UserId);
+            }
         }
 
         private async Task<(AdminData dat, int? rankId, bool specialLogin)?> LoadAdminData(ICommonSession session)

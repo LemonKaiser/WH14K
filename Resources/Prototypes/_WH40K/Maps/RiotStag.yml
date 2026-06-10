@@ -6,7 +6,6 @@
   maxPlayers: 40
   wh40kWeatherProfile: WH40KMapWeatherBattlefield
   wh40kEventsProfile: WH40KMapEventsAll
-  wh40kTeamBattleFactions: [ Imperium, Heretics ]
   stations:
     WH40KWaveDefenceRiotStag:
       stationProto: WH40KStation
