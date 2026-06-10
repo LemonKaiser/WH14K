@@ -7,7 +7,6 @@
   wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/tinybattle_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherTinyBattle
   wh40kEventsProfile: WH40KMapEventsAll
-  wh40kTeamBattleFactions: [ Imperium, Heretics ]
   stations:
     TinyBattle:
       stationProto: WH40KStation

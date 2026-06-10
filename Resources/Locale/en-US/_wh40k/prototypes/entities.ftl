@@ -2007,9 +2007,6 @@ ent-ActionWH40KChaosTzeentchTimeField = Grey Time Field
 ent-ActionWH40KTogglePhantomStep = Phantom Step
     .desc = Toggle automatic evasive dashes.
 
-ent-ActionWH40KTauToggleDroneAggression = Drone Attack Mode
-    .desc = Enable or disable autonomous gun drone attacks.
-
 ent-ClothingUniformJumpsuitHelldriverUniform = Helldiver Uniform
     .desc = Standard Helldiver Uniform.
 

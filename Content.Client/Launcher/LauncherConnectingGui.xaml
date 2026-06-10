@@ -36,10 +36,6 @@
                                     VerticalAlignment="Bottom"
                                     StyleClasses="OpenLeft"/>
                         </BoxContainer>
-                        <Button Name="AlternativeConnectButton"
-                                Text="{Loc 'connecting-alt-address'}"
-                                HorizontalAlignment="Center"
-                                Visible="False" />
                         <Button Name="DiscordAuthChangeButton"
                                 Text="{Loc 'connecting-discord-auth-change'}"
                                 HorizontalAlignment="Center"
@@ -60,10 +56,6 @@
                                     VerticalAlignment="Bottom"
                                     StyleClasses="OpenLeft"/>
                         </BoxContainer>
-                        <Button Name="AlternativeReconnectButton"
-                                Text="{Loc 'connecting-alt-address'}"
-                                HorizontalAlignment="Center"
-                                Visible="False" />
                     </BoxContainer>
                 </Control>
                 <Label Name="ConnectingAddress" StyleClasses="LabelSubText" HorizontalAlignment="Center" />

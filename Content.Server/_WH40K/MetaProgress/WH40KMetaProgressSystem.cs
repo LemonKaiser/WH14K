@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.Preferences.Managers;
@@ -10,6 +11,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.KillTracking;
 using Content.Server.Players.PlayTimeTracking;
+using Content.Server._WH40K.AccountMigration;
 using Content.Server._WH40K.Command;
 using Content.Server._WH40K.Command.Components;
 using Content.Server._WH40K.GameTicking.Rules;
@@ -225,6 +227,12 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 	[Dependency]
 	private  IServerPreferencesManager _prefs = default!;
 
+	[Dependency]
+	private  UserDbDataManager _userDb = default!;
+
+	[Dependency]
+	private  WH40KAuthAccountMigrationSystem _authMigration = default!;
+
 	private readonly Dictionary<NetUserId, RuntimeProgressState> _states = new Dictionary<NetUserId, RuntimeProgressState>();
 
 	private readonly Dictionary<NetUserId, int> _roundKillXpSpent = new Dictionary<NetUserId, int>();
@@ -349,6 +357,8 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		SubscribeNetworkEvent<WH40KMetaProgressSetDecorationSelectionEvent>(OnSetDecorationSelection);
 		SubscribeNetworkEvent<WH40KMetaProgressConfirmDevelopmentPlanEvent>(OnConfirmDevelopmentPlan);
 		SubscribeNetworkEvent<WH40KMetaProgressResetAccountRequestEvent>(OnResetAccountRequest);
+		_userDb.AddOnLoadPlayer(LoadPlayerDataAsync);
+		_userDb.AddOnFinishLoad(FinishPlayerLoad);
 		_players.PlayerStatusChanged += OnPlayerStatusChanged;
 		_proto.PrototypesReloaded += OnPrototypesReloaded;
 	}
@@ -392,6 +402,26 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		RuntimeProgressState state = EnsureState(userId);
 		ReconcileState(userId, state);
 		return BuildSnapshot(userId, state);
+	}
+
+	public bool TryGetLoadedSnapshot(ICommonSession session, out WH40KMetaProgressSnapshot snapshot)
+	{
+		if (!TryEnsureLoadedRuntimeState(session, out var userId))
+		{
+			snapshot = default!;
+			return false;
+		}
+
+		var state = EnsureState(userId, session);
+		if (!state.DbLoadCompleted)
+		{
+			snapshot = default!;
+			return false;
+		}
+
+		ReconcileState(userId, state);
+		snapshot = BuildSnapshot(userId, state);
+		return true;
 	}
 
 	public async Task EnsureStateLoadedForUserAsync(NetUserId userId)
@@ -966,9 +996,7 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		foreach (ICommonSession commonSession in sessions)
 		{
 			if (commonSession.Status != SessionStatus.Disconnected)
-			{
-				EnsureState(commonSession.UserId, commonSession);
-			}
+				TryEnsureLoadedRuntimeState(commonSession, out _);
 		}
 		_roundKillXpSpent.Clear();
 		_roundObjectiveXpSpent.Clear();
@@ -1007,7 +1035,11 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 				num2++;
 				continue;
 			}
-			EnsureState(commonSession.UserId, commonSession);
+			if (!TryEnsureLoadedRuntimeState(commonSession, out _))
+			{
+				num2++;
+				continue;
+			}
 			num++;
 		}
 		TraceStats($"RoundStarting seed round={ev.Id}: seeded={num}, skippedNotInGame={num2}.");
@@ -1199,15 +1231,8 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			{
 				continue;
 			}
-			NetUserId userId = commonSession.UserId;
-			if (!_states.ContainsKey(userId))
-			{
-				EnsureState(userId, commonSession);
-				if (!_states.ContainsKey(userId))
-				{
-					continue;
-				}
-			}
+			if (!TryEnsureLoadedRuntimeState(commonSession, out var userId))
+				continue;
 			if (_teamBattleRule.TryGetTeamIdForUser(userId, out string teamId) && string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
 			{
 				_stats.Record(userId, "objective.capture.success", 1L, new Dictionary<string, string>(StringComparer.Ordinal)
@@ -1240,15 +1265,8 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			{
 				continue;
 			}
-			NetUserId userId = commonSession.UserId;
-			if (!_states.ContainsKey(userId))
-			{
-				EnsureState(userId, commonSession);
-				if (!_states.ContainsKey(userId))
-				{
-					continue;
-				}
-			}
+			if (!TryEnsureLoadedRuntimeState(commonSession, out var userId))
+				continue;
 			if (_teamBattleRule.TryGetTeamIdForUser(userId, out string teamId) && string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
 			{
 				_stats.Record(userId, "objective.defense.success", 1L, new Dictionary<string, string>(StringComparer.Ordinal)
@@ -1369,13 +1387,8 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			if (commonSession.Status != SessionStatus.InGame)
 				continue;
 
-			var userId = commonSession.UserId;
-			if (!_states.ContainsKey(userId))
-			{
-				EnsureState(userId, commonSession);
-				if (!_states.ContainsKey(userId))
-					continue;
-			}
+			if (!TryEnsureLoadedRuntimeState(commonSession, out var userId))
+				continue;
 
 			if (!_teamBattleRule.TryGetTeamIdForUser(userId, out var teamId) ||
 				!string.Equals(teamId, ev.TeamId, StringComparison.OrdinalIgnoreCase))
@@ -1673,8 +1686,7 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			NetUserId userId = commonSession.UserId;
 			if (!_states.ContainsKey(userId))
 			{
-				EnsureState(userId, commonSession);
-				if (!_states.ContainsKey(userId))
+				if (!TryEnsureLoadedRuntimeState(commonSession, out userId))
 				{
 					num5++;
 					continue;
@@ -1778,9 +1790,7 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 				if (!_states.ContainsKey(valueOrDefault))
 				{
 					if (_players.TryGetSessionById(valueOrDefault, out ICommonSession session))
-					{
-						EnsureState(valueOrDefault, session);
-					}
+						TryEnsureLoadedRuntimeState(session, out _);
 					if (!_states.ContainsKey(valueOrDefault))
 					{
 						num6++;
@@ -1858,6 +1868,10 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		{
 			TraceStats($"Stat event ignored: no runtime state for user={userId}, key={ev.Entry.Key}.");
 		}
+		else if (!value.DbLoadCompleted)
+		{
+			TraceStats($"Stat event deferred by pending DB load: user={userId}, key={ev.Entry.Key}.");
+		}
 		else if (string.IsNullOrWhiteSpace(ev.Entry.Key))
 		{
 			TraceStats($"Stat event ignored: empty key for user={userId}.");
@@ -1885,7 +1899,15 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		if (!IsRateLimited(userId, _requestStateRateLimits, 1f, 8))
 		{
 			MarkNetworkSnapshotInterested(userId);
-			EnsureState(userId, args.SenderSession);
+			if (!IsSessionReadyForMetaState(args.SenderSession))
+			{
+				return;
+			}
+			RuntimeProgressState state = EnsureState(userId, args.SenderSession);
+			if (!state.DbLoadCompleted)
+			{
+				return;
+			}
 			SendSnapshot(args.SenderSession);
 		}
 	}
@@ -1896,10 +1918,13 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		if (!IsRateLimited(userId, _setDecorationRateLimits, 1f, 4))
 		{
 			MarkNetworkSnapshotInterested(userId);
+			if (!IsSessionReadyForMetaState(args.SenderSession))
+			{
+				return;
+			}
 			var state = EnsureState(userId, args.SenderSession);
 			if (!state.DbLoadCompleted)
 			{
-				SendSnapshot(args.SenderSession);
 				return;
 			}
 			if (!TrySetDecorationSelection(userId, ev.Category, ev.DecorationId, out string _, out string error))
@@ -1916,10 +1941,13 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		if (!IsRateLimited(userId, _confirmDevelopmentRateLimits, 1f, 4))
 		{
 			MarkNetworkSnapshotInterested(userId);
+			if (!IsSessionReadyForMetaState(args.SenderSession))
+			{
+				return;
+			}
 			var state = EnsureState(userId, args.SenderSession);
 			if (!state.DbLoadCompleted)
 			{
-				SendSnapshot(args.SenderSession);
 				return;
 			}
 			if (!TryConfirmDevelopmentPlan(userId, ev.NodeIds, out int unlockedCount, out string error))
@@ -1941,6 +1969,9 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			return;
 
 		MarkNetworkSnapshotInterested(userId);
+		if (!IsSessionReadyForMetaState(args.SenderSession))
+			return;
+
 		var task = HandleResetAccountRequestAsync(args.SenderSession);
 		TrackPending(task);
 	}
@@ -2075,11 +2106,9 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		}
 		else
 		{
-			EnsureState(args.Session.UserId, args.Session);
-			if (args.NewStatus == SessionStatus.InGame)
-			{
+			if (args.NewStatus == SessionStatus.InGame &&
+				TryEnsureLoadedRuntimeState(args.Session, out _))
 				SendSnapshot(args.Session);
-			}
 		}
 	}
 
@@ -2092,13 +2121,7 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 			return false;
 		}
 
-		userId = session.UserId;
-		if (!_states.ContainsKey(userId))
-		{
-			EnsureState(userId, session);
-		}
-
-		return _states.ContainsKey(userId);
+		return TryEnsureLoadedRuntimeState(session, out userId);
 	}
 
 	private void GrantStrategicPointXp(
@@ -2176,6 +2199,46 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		return runtimeProgressState;
 	}
 
+	private async Task LoadPlayerDataAsync(ICommonSession session, CancellationToken cancel)
+	{
+		EnsureState(session.UserId, session);
+		await EnsureStateLoadedAsync(session.UserId);
+	}
+
+	private void FinishPlayerLoad(ICommonSession session)
+	{
+		if (session.Status == SessionStatus.Disconnected)
+			return;
+
+		MarkNetworkSnapshotInterested(session.UserId);
+
+		if (!TryEnsureLoadedRuntimeState(session, out _))
+			return;
+
+		SendSnapshot(session);
+	}
+
+	private bool IsSessionReadyForMetaState(ICommonSession session)
+	{
+		return _userDb.IsLoadComplete(session);
+	}
+
+	private bool TryEnsureLoadedRuntimeState(ICommonSession session, out NetUserId userId)
+	{
+		userId = session.UserId;
+
+		if (session.Status == SessionStatus.Disconnected)
+			return false;
+
+		if (!_userDb.TryIsLoadComplete(session))
+			return false;
+
+		if (!_states.ContainsKey(userId))
+			EnsureState(userId, session);
+
+		return _states.ContainsKey(userId);
+	}
+
 	private void StartLoadFromDb(NetUserId userId)
 	{
 		if (_states.TryGetValue(userId, out RuntimeProgressState value) && !value.DbLoadStarted && !value.DbLoadCompleted)
@@ -2223,6 +2286,7 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 	{
 		try
 		{
+			await _authMigration.WaitForPendingMigrationAsync(userId);
 			WH40KMetaProgressDbData progress = await _db.GetWH40KMetaProgress(userId);
 			List<WH40KMetaAchievementDbData> achievements = await _db.GetWH40KMetaAchievements(userId);
 			List<WH40KMetaDecorationDbData> decorations = await _db.GetWH40KMetaDecorations(userId);

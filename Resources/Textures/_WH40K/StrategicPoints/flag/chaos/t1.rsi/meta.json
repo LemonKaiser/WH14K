@@ -9,15 +9,6 @@
     "states": [
         {
             "name": "base"
-        },
-        {
-            "name": "Turret"
-        },
-        {
-            "name": "Weapon"
-        },
-        {
-            "name": "Powered"
         }
     ]
 }

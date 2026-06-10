@@ -15,7 +15,12 @@ public sealed partial class WH40KMetaProgressManager : ISharedWH40KMetaProgressM
 
 	public bool TryGetMetaLevel(ICommonSession session, out int level)
 	{
-		WH40KMetaProgressSnapshot snapshot = _entitySystems.GetEntitySystem<WH40KMetaProgressSystem>().GetSnapshot(session.UserId);
+		if (!_entitySystems.GetEntitySystem<WH40KMetaProgressSystem>().TryGetLoadedSnapshot(session, out var snapshot))
+		{
+			level = 1;
+			return false;
+		}
+
 		level = Math.Max(1, snapshot.Level);
 		return true;
 	}
@@ -28,7 +33,8 @@ public sealed partial class WH40KMetaProgressManager : ISharedWH40KMetaProgressM
 			return true;
 
 		var normalizedId = achievementId.Trim();
-		WH40KMetaProgressSnapshot snapshot = _entitySystems.GetEntitySystem<WH40KMetaProgressSystem>().GetSnapshot(session.UserId);
+		if (!_entitySystems.GetEntitySystem<WH40KMetaProgressSystem>().TryGetLoadedSnapshot(session, out var snapshot))
+			return false;
 
 		foreach (var entry in snapshot.Achievements)
 		{

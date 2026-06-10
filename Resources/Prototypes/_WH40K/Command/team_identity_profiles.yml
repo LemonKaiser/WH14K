@@ -14,18 +14,9 @@
   reinforcementProfile: WH40KCommandReinforcementProfileHeretics
   commandTreeProfile: WH40KCommandTreeProfileDefault
 
-- type: wh40kTeamIdentityProfile
-  id: WH40KTeamIdentityProfileTau
-  teamId: Tau
-  interfaceThemeId: WH40KImperiumTheme
-  accentColorHex: "#F4F4F4"
-  reinforcementProfile: WH40KCommandReinforcementProfileTau
-  commandTreeProfile: WH40KCommandTreeProfileDefault
-
 - type: wh40kTeamIdentityMap
   id: WH40KTeamIdentityMap
   defaultProfile: WH40KTeamIdentityProfileImperium
   teamProfiles:
     Imperium: WH40KTeamIdentityProfileImperium
     Heretics: WH40KTeamIdentityProfileHeretics
-    Tau: WH40KTeamIdentityProfileTau

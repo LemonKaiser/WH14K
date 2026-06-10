@@ -318,6 +318,832 @@ namespace Content.Server.Database
 
             await db.DbContext.SaveChangesAsync();
         }
+
+        public async Task<WH40KAuthAccountMigrationResult> MigrateLegacyGuestAccountAsync(
+            string userName,
+            NetUserId authenticatedUserId,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync(cancel);
+
+            var assigned = await db.DbContext.AssignedUserId
+                .SingleOrDefaultAsync(p => p.UserName == userName, cancel);
+
+            if (assigned == null)
+                return new WH40KAuthAccountMigrationResult(WH40KAuthAccountMigrationOutcome.None);
+
+            var legacyUserId = new NetUserId(assigned.UserId);
+            _opsLog.Info(
+                "Auth account migration start: userName={UserName}, legacyUserId={LegacyUserId}, authenticatedUserId={AuthenticatedUserId}.",
+                userName,
+                legacyUserId,
+                authenticatedUserId);
+
+            if (legacyUserId == authenticatedUserId)
+            {
+                db.DbContext.AssignedUserId.Remove(assigned);
+                await db.DbContext.SaveChangesAsync(cancel);
+                await transaction.CommitAsync(cancel);
+                _opsLog.Info(
+                    "Auth account migration cleanup-only: userName={UserName}, userId={UserId}. Removed matching assigned_user_id entry.",
+                    userName,
+                    authenticatedUserId);
+                return new WH40KAuthAccountMigrationResult(WH40KAuthAccountMigrationOutcome.CleanedAssignment, legacyUserId);
+            }
+
+            var targetPlayer = await GetOrCreateMigrationTargetPlayerAsync(db.DbContext, authenticatedUserId, userName, cancel);
+            var legacyPlayer = await db.DbContext.Player
+                .SingleOrDefaultAsync(p => p.UserId == legacyUserId.UserId, cancel);
+
+            _opsLog.Info(
+                "Auth account migration merge phase: userName={UserName}, legacyPlayerExists={LegacyPlayerExists}, targetPlayerId={TargetPlayerId}.",
+                userName,
+                legacyPlayer != null,
+                targetPlayer.Id);
+
+            await MergePlayerRoundLinksAsync(db.DbContext, legacyPlayer?.Id, targetPlayer.Id);
+            await MergePreferencesAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergePlayTimeAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KMetaProgressAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KMetaAchievementsAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KMetaDecorationsAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KMetaDevelopmentUnlocksAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KDiscordLinkAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeAdminStateAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeRemarksAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeRoleWhitelistsAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWhitelistAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeBlacklistAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeBanExemptionAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeBanPlayersAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeBanAdminReferencesAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeConnectionLogsAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeAdminLogPlayersAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeUploadedResourceLogsAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+            await MergeWH40KMutesAsync(db.DbContext, legacyUserId, authenticatedUserId, cancel);
+
+            MergePlayerRecord(targetPlayer, legacyPlayer);
+
+            db.DbContext.AssignedUserId.Remove(assigned);
+            if (legacyPlayer != null)
+                db.DbContext.Player.Remove(legacyPlayer);
+
+            await db.DbContext.SaveChangesAsync(cancel);
+            await transaction.CommitAsync(cancel);
+
+            _opsLog.Info(
+                "Auth account migration committed successfully: userName={UserName}, legacyUserId={LegacyUserId}, authenticatedUserId={AuthenticatedUserId}.",
+                userName,
+                legacyUserId,
+                authenticatedUserId);
+
+            return new WH40KAuthAccountMigrationResult(WH40KAuthAccountMigrationOutcome.Migrated, legacyUserId);
+        }
+
+        private static async Task<Player> GetOrCreateMigrationTargetPlayerAsync(
+            ServerDbContext dbContext,
+            NetUserId authenticatedUserId,
+            string userName,
+            CancellationToken cancel)
+        {
+            var targetPlayer = await dbContext.Player
+                .SingleOrDefaultAsync(p => p.UserId == authenticatedUserId.UserId, cancel);
+
+            if (targetPlayer != null)
+                return targetPlayer;
+
+            targetPlayer = new Player
+            {
+                UserId = authenticatedUserId.UserId,
+                FirstSeenTime = DateTime.UtcNow,
+                LastSeenTime = DateTime.UtcNow,
+                LastSeenAddress = IPAddress.None,
+                LastSeenUserName = userName,
+            };
+
+            dbContext.Player.Add(targetPlayer);
+            await dbContext.SaveChangesAsync(cancel);
+            return targetPlayer;
+        }
+
+        private static async Task MergePreferencesAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyPreference = await dbContext.Preference
+                .SingleOrDefaultAsync(p => p.UserId == legacyUserId.UserId, cancel);
+
+            if (legacyPreference == null)
+                return;
+
+            await dbContext.Preference
+                .Where(p => p.UserId == targetUserId.UserId)
+                .ExecuteDeleteAsync(cancellationToken: cancel);
+
+            legacyPreference.UserId = targetUserId.UserId;
+        }
+
+        private static async Task MergePlayTimeAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRows = await dbContext.PlayTime
+                .Where(p => p.PlayerId == legacyUserId.UserId)
+                .ToListAsync(cancel);
+
+            if (legacyRows.Count == 0)
+                return;
+
+            var targetRows = await dbContext.PlayTime
+                .Where(p => p.PlayerId == targetUserId.UserId)
+                .ToDictionaryAsync(p => p.Tracker, StringComparer.Ordinal, cancel);
+
+            foreach (var legacyRow in legacyRows)
+            {
+                if (targetRows.TryGetValue(legacyRow.Tracker, out var targetRow))
+                {
+                    targetRow.TimeSpent += legacyRow.TimeSpent;
+                    dbContext.PlayTime.Remove(legacyRow);
+                    continue;
+                }
+
+                legacyRow.PlayerId = targetUserId.UserId;
+            }
+        }
+
+        private static async Task MergeWH40KMetaProgressAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRow = await dbContext.WH40KMetaProgress
+                .SingleOrDefaultAsync(p => p.PlayerUserId == legacyUserId.UserId, cancel);
+
+            if (legacyRow == null)
+                return;
+
+            var targetRow = await dbContext.WH40KMetaProgress
+                .SingleOrDefaultAsync(p => p.PlayerUserId == targetUserId.UserId, cancel);
+
+            if (targetRow == null)
+            {
+                targetRow = new WH40KMetaProgress
+                {
+                    PlayerUserId = targetUserId.UserId,
+                    LifetimeXp = Math.Max(0, legacyRow.LifetimeXp),
+                    SeasonXp = Math.Max(0, legacyRow.SeasonXp),
+                    LastProgressAt = legacyRow.LastProgressAt,
+                    LastAccountResetAt = legacyRow.LastAccountResetAt,
+                    SelectedGhostSkinId = legacyRow.SelectedGhostSkinId,
+                    SelectedOocTitleId = legacyRow.SelectedOocTitleId,
+                    SelectedOocNameColorId = legacyRow.SelectedOocNameColorId,
+                };
+
+                dbContext.WH40KMetaProgress.Add(targetRow);
+            }
+            else
+            {
+                targetRow.LifetimeXp = Math.Max(0, targetRow.LifetimeXp) + Math.Max(0, legacyRow.LifetimeXp);
+                targetRow.SeasonXp = Math.Max(0, targetRow.SeasonXp) + Math.Max(0, legacyRow.SeasonXp);
+                targetRow.LastProgressAt = MaxDate(targetRow.LastProgressAt, legacyRow.LastProgressAt);
+                targetRow.LastAccountResetAt = MaxNullableDate(targetRow.LastAccountResetAt, legacyRow.LastAccountResetAt);
+                targetRow.SelectedGhostSkinId = PickPreferredString(targetRow.SelectedGhostSkinId, legacyRow.SelectedGhostSkinId);
+                targetRow.SelectedOocTitleId = PickPreferredString(targetRow.SelectedOocTitleId, legacyRow.SelectedOocTitleId);
+                targetRow.SelectedOocNameColorId = PickPreferredString(targetRow.SelectedOocNameColorId, legacyRow.SelectedOocNameColorId);
+            }
+
+            dbContext.WH40KMetaProgress.Remove(legacyRow);
+        }
+
+        private static async Task MergeWH40KMetaAchievementsAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRows = await dbContext.WH40KMetaAchievementProgress
+                .Where(p => p.PlayerUserId == legacyUserId.UserId)
+                .ToListAsync(cancel);
+
+            if (legacyRows.Count == 0)
+                return;
+
+            var targetRows = await dbContext.WH40KMetaAchievementProgress
+                .Where(p => p.PlayerUserId == targetUserId.UserId)
+                .ToDictionaryAsync(p => p.AchievementId, StringComparer.Ordinal, cancel);
+
+            foreach (var legacyRow in legacyRows)
+            {
+                if (targetRows.TryGetValue(legacyRow.AchievementId, out var targetRow))
+                {
+                    targetRow.ProgressValue = Math.Max(0, targetRow.ProgressValue) + Math.Max(0, legacyRow.ProgressValue);
+                    targetRow.Unlocked |= legacyRow.Unlocked;
+                    targetRow.Claimed |= legacyRow.Claimed;
+                    targetRow.UnlockedAt = MinNullableDate(targetRow.UnlockedAt, legacyRow.UnlockedAt);
+                    targetRow.Version = Math.Max(Math.Max(1, targetRow.Version), Math.Max(1, legacyRow.Version));
+                    targetRow.UpdatedAt = MaxDate(targetRow.UpdatedAt, legacyRow.UpdatedAt);
+                    dbContext.WH40KMetaAchievementProgress.Remove(legacyRow);
+                    continue;
+                }
+
+                dbContext.WH40KMetaAchievementProgress.Add(new WH40KMetaAchievementProgress
+                {
+                    PlayerUserId = targetUserId.UserId,
+                    AchievementId = legacyRow.AchievementId,
+                    ProgressValue = Math.Max(0, legacyRow.ProgressValue),
+                    Unlocked = legacyRow.Unlocked,
+                    UnlockedAt = legacyRow.UnlockedAt,
+                    Claimed = legacyRow.Claimed,
+                    Version = Math.Max(1, legacyRow.Version),
+                    UpdatedAt = legacyRow.UpdatedAt,
+                });
+
+                dbContext.WH40KMetaAchievementProgress.Remove(legacyRow);
+            }
+        }
+
+        private static async Task MergeWH40KMetaDecorationsAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRows = await dbContext.WH40KMetaDecorationUnlock
+                .Where(p => p.PlayerUserId == legacyUserId.UserId)
+                .ToListAsync(cancel);
+
+            if (legacyRows.Count == 0)
+                return;
+
+            var targetRows = await dbContext.WH40KMetaDecorationUnlock
+                .Where(p => p.PlayerUserId == targetUserId.UserId)
+                .ToDictionaryAsync(p => p.UnlockId, StringComparer.Ordinal, cancel);
+
+            foreach (var legacyRow in legacyRows)
+            {
+                if (targetRows.TryGetValue(legacyRow.UnlockId, out var targetRow))
+                {
+                    targetRow.Unlocked |= legacyRow.Unlocked;
+                    targetRow.UnlockedAt = MinNullableDate(targetRow.UnlockedAt, legacyRow.UnlockedAt);
+                    targetRow.SourceLevel = Math.Max(targetRow.SourceLevel, legacyRow.SourceLevel);
+                    targetRow.UpdatedAt = MaxDate(targetRow.UpdatedAt, legacyRow.UpdatedAt);
+                    dbContext.WH40KMetaDecorationUnlock.Remove(legacyRow);
+                    continue;
+                }
+
+                dbContext.WH40KMetaDecorationUnlock.Add(new WH40KMetaDecorationUnlock
+                {
+                    PlayerUserId = targetUserId.UserId,
+                    UnlockId = legacyRow.UnlockId,
+                    Unlocked = legacyRow.Unlocked,
+                    UnlockedAt = legacyRow.UnlockedAt,
+                    SourceLevel = Math.Max(0, legacyRow.SourceLevel),
+                    UpdatedAt = legacyRow.UpdatedAt,
+                });
+
+                dbContext.WH40KMetaDecorationUnlock.Remove(legacyRow);
+            }
+        }
+
+        private static async Task MergeWH40KMetaDevelopmentUnlocksAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRows = await dbContext.WH40KMetaDevelopmentUnlock
+                .Where(p => p.PlayerUserId == legacyUserId.UserId)
+                .ToListAsync(cancel);
+
+            if (legacyRows.Count == 0)
+                return;
+
+            var targetRows = await dbContext.WH40KMetaDevelopmentUnlock
+                .Where(p => p.PlayerUserId == targetUserId.UserId)
+                .ToDictionaryAsync(p => p.NodeId, StringComparer.Ordinal, cancel);
+
+            foreach (var legacyRow in legacyRows)
+            {
+                if (targetRows.TryGetValue(legacyRow.NodeId, out var targetRow))
+                {
+                    targetRow.UnlockedAt = MinDate(targetRow.UnlockedAt, legacyRow.UnlockedAt);
+                    targetRow.SpentCost = Math.Max(targetRow.SpentCost, legacyRow.SpentCost);
+                    targetRow.UpdatedAt = MaxDate(targetRow.UpdatedAt, legacyRow.UpdatedAt);
+                    dbContext.WH40KMetaDevelopmentUnlock.Remove(legacyRow);
+                    continue;
+                }
+
+                dbContext.WH40KMetaDevelopmentUnlock.Add(new WH40KMetaDevelopmentUnlock
+                {
+                    PlayerUserId = targetUserId.UserId,
+                    NodeId = legacyRow.NodeId,
+                    UnlockedAt = legacyRow.UnlockedAt,
+                    SpentCost = Math.Max(0, legacyRow.SpentCost),
+                    UpdatedAt = legacyRow.UpdatedAt,
+                });
+
+                dbContext.WH40KMetaDevelopmentUnlock.Remove(legacyRow);
+            }
+        }
+
+        private static async Task MergeWH40KDiscordLinkAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRow = await dbContext.WH40KDiscordLink
+                .SingleOrDefaultAsync(p => p.PlayerUserId == legacyUserId.UserId, cancel);
+
+            if (legacyRow == null)
+                return;
+
+            var targetRow = await dbContext.WH40KDiscordLink
+                .SingleOrDefaultAsync(p => p.PlayerUserId == targetUserId.UserId, cancel);
+
+            if (targetRow == null)
+            {
+                dbContext.WH40KDiscordLink.Add(new WH40KDiscordLink
+                {
+                    PlayerUserId = targetUserId.UserId,
+                    DiscordUserId = legacyRow.DiscordUserId,
+                    Username = legacyRow.Username,
+                    GlobalName = legacyRow.GlobalName,
+                    AvatarHash = legacyRow.AvatarHash,
+                    AccessToken = legacyRow.AccessToken,
+                    RefreshToken = legacyRow.RefreshToken,
+                    TokenType = legacyRow.TokenType,
+                    Scope = legacyRow.Scope,
+                    LinkedAt = legacyRow.LinkedAt,
+                    TokenExpiresAt = legacyRow.TokenExpiresAt,
+                    LastRefreshAt = legacyRow.LastRefreshAt,
+                    GuildIdCached = legacyRow.GuildIdCached,
+                    LastGuildRefreshAt = legacyRow.LastGuildRefreshAt,
+                    GuildMemberCached = legacyRow.GuildMemberCached,
+                    GuildNickname = legacyRow.GuildNickname,
+                    RoleCacheJson = legacyRow.RoleCacheJson,
+                });
+            }
+            else
+            {
+                targetRow.GlobalName = PickPreferredString(targetRow.GlobalName, legacyRow.GlobalName);
+                targetRow.AvatarHash = PickPreferredString(targetRow.AvatarHash, legacyRow.AvatarHash);
+                targetRow.RefreshToken = PickPreferredString(targetRow.RefreshToken, legacyRow.RefreshToken);
+                targetRow.GuildIdCached = PickPreferredString(targetRow.GuildIdCached, legacyRow.GuildIdCached);
+                targetRow.GuildNickname = PickPreferredString(targetRow.GuildNickname, legacyRow.GuildNickname);
+                if (string.IsNullOrWhiteSpace(targetRow.RoleCacheJson) || targetRow.RoleCacheJson == "[]")
+                    targetRow.RoleCacheJson = legacyRow.RoleCacheJson;
+            }
+
+            dbContext.WH40KDiscordLink.Remove(legacyRow);
+        }
+
+        private static async Task MergeAdminStateAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyAdmin = await dbContext.Admin
+                .Include(a => a.Flags)
+                .SingleOrDefaultAsync(a => a.UserId == legacyUserId.UserId, cancel);
+
+            if (legacyAdmin == null)
+                return;
+
+            var targetAdmin = await dbContext.Admin
+                .Include(a => a.Flags)
+                .SingleOrDefaultAsync(a => a.UserId == targetUserId.UserId, cancel);
+
+            if (targetAdmin == null)
+            {
+                targetAdmin = new Admin
+                {
+                    UserId = targetUserId.UserId,
+                    Title = legacyAdmin.Title,
+                    Deadminned = legacyAdmin.Deadminned,
+                    Suspended = legacyAdmin.Suspended,
+                    AdminRankId = legacyAdmin.AdminRankId,
+                    Flags = legacyAdmin.Flags
+                        .Select(flag => new AdminFlag
+                        {
+                            AdminId = targetUserId.UserId,
+                            Flag = flag.Flag,
+                            Negative = flag.Negative,
+                        })
+                        .ToList()
+                };
+
+                dbContext.Admin.Add(targetAdmin);
+            }
+            else
+            {
+                targetAdmin.Title = PickPreferredString(targetAdmin.Title, legacyAdmin.Title);
+                targetAdmin.Deadminned |= legacyAdmin.Deadminned;
+                targetAdmin.Suspended |= legacyAdmin.Suspended;
+                targetAdmin.AdminRankId ??= legacyAdmin.AdminRankId;
+
+                var targetFlags = targetAdmin.Flags.ToDictionary(flag => flag.Flag, StringComparer.Ordinal);
+                foreach (var legacyFlag in legacyAdmin.Flags)
+                {
+                    if (targetFlags.TryGetValue(legacyFlag.Flag, out var existing))
+                    {
+                        existing.Negative |= legacyFlag.Negative;
+                        continue;
+                    }
+
+                    targetAdmin.Flags.Add(new AdminFlag
+                    {
+                        AdminId = targetUserId.UserId,
+                        Flag = legacyFlag.Flag,
+                        Negative = legacyFlag.Negative,
+                    });
+                }
+            }
+
+            dbContext.Admin.Remove(legacyAdmin);
+        }
+
+        private static async Task MergeRemarksAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyGuid = legacyUserId.UserId;
+            var targetGuid = targetUserId.UserId;
+
+            foreach (var note in await dbContext.AdminNotes
+                         .Where(note => note.PlayerUserId == legacyGuid ||
+                                        note.CreatedById == legacyGuid ||
+                                        note.LastEditedById == legacyGuid ||
+                                        note.DeletedById == legacyGuid)
+                         .ToListAsync(cancel))
+            {
+                if (note.PlayerUserId == legacyGuid)
+                    note.PlayerUserId = targetGuid;
+                if (note.CreatedById == legacyGuid)
+                    note.CreatedById = targetGuid;
+                if (note.LastEditedById == legacyGuid)
+                    note.LastEditedById = targetGuid;
+                if (note.DeletedById == legacyGuid)
+                    note.DeletedById = targetGuid;
+            }
+
+            foreach (var watchlist in await dbContext.AdminWatchlists
+                         .Where(note => note.PlayerUserId == legacyGuid ||
+                                        note.CreatedById == legacyGuid ||
+                                        note.LastEditedById == legacyGuid ||
+                                        note.DeletedById == legacyGuid)
+                         .ToListAsync(cancel))
+            {
+                if (watchlist.PlayerUserId == legacyGuid)
+                    watchlist.PlayerUserId = targetGuid;
+                if (watchlist.CreatedById == legacyGuid)
+                    watchlist.CreatedById = targetGuid;
+                if (watchlist.LastEditedById == legacyGuid)
+                    watchlist.LastEditedById = targetGuid;
+                if (watchlist.DeletedById == legacyGuid)
+                    watchlist.DeletedById = targetGuid;
+            }
+
+            foreach (var message in await dbContext.AdminMessages
+                         .Where(note => note.PlayerUserId == legacyGuid ||
+                                        note.CreatedById == legacyGuid ||
+                                        note.LastEditedById == legacyGuid ||
+                                        note.DeletedById == legacyGuid)
+                         .ToListAsync(cancel))
+            {
+                if (message.PlayerUserId == legacyGuid)
+                    message.PlayerUserId = targetGuid;
+                if (message.CreatedById == legacyGuid)
+                    message.CreatedById = targetGuid;
+                if (message.LastEditedById == legacyGuid)
+                    message.LastEditedById = targetGuid;
+                if (message.DeletedById == legacyGuid)
+                    message.DeletedById = targetGuid;
+            }
+        }
+
+        private static async Task MergeRoleWhitelistsAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRows = await dbContext.RoleWhitelists
+                .Where(p => p.PlayerUserId == legacyUserId.UserId)
+                .ToListAsync(cancel);
+
+            if (legacyRows.Count == 0)
+                return;
+
+            var targetRoles = await dbContext.RoleWhitelists
+                .Where(p => p.PlayerUserId == targetUserId.UserId)
+                .Select(p => p.RoleId)
+                .ToHashSetAsync(StringComparer.Ordinal, cancel);
+
+            foreach (var legacyRow in legacyRows)
+            {
+                if (!targetRoles.Contains(legacyRow.RoleId))
+                {
+                    dbContext.RoleWhitelists.Add(new RoleWhitelist
+                    {
+                        PlayerUserId = targetUserId.UserId,
+                        RoleId = legacyRow.RoleId,
+                    });
+                }
+
+                dbContext.RoleWhitelists.Remove(legacyRow);
+            }
+        }
+
+        private static async Task MergeWhitelistAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRow = await dbContext.Whitelist.SingleOrDefaultAsync(p => p.UserId == legacyUserId.UserId, cancel);
+            if (legacyRow == null)
+                return;
+
+            if (!await dbContext.Whitelist.AnyAsync(p => p.UserId == targetUserId.UserId, cancel))
+                dbContext.Whitelist.Add(new Whitelist { UserId = targetUserId.UserId });
+
+            dbContext.Whitelist.Remove(legacyRow);
+        }
+
+        private static async Task MergeBlacklistAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRow = await dbContext.Blacklist.SingleOrDefaultAsync(p => p.UserId == legacyUserId.UserId, cancel);
+            if (legacyRow == null)
+                return;
+
+            if (!await dbContext.Blacklist.AnyAsync(p => p.UserId == targetUserId.UserId, cancel))
+                dbContext.Blacklist.Add(new Blacklist { UserId = targetUserId.UserId });
+
+            dbContext.Blacklist.Remove(legacyRow);
+        }
+
+        private static async Task MergeBanExemptionAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var legacyRow = await dbContext.BanExemption.SingleOrDefaultAsync(p => p.UserId == legacyUserId.UserId, cancel);
+            if (legacyRow == null)
+                return;
+
+            var targetRow = await dbContext.BanExemption.SingleOrDefaultAsync(p => p.UserId == targetUserId.UserId, cancel);
+            if (targetRow == null)
+            {
+                dbContext.BanExemption.Add(new ServerBanExemption
+                {
+                    UserId = targetUserId.UserId,
+                    Flags = legacyRow.Flags
+                });
+            }
+            else
+            {
+                targetRow.Flags |= legacyRow.Flags;
+            }
+
+            dbContext.BanExemption.Remove(legacyRow);
+        }
+
+        private static async Task MergeBanPlayersAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var targetBanIds = await dbContext.BanPlayer
+                .Where(p => p.UserId == targetUserId.UserId)
+                .Select(p => p.BanId)
+                .ToHashSetAsync(cancel);
+
+            foreach (var legacyRow in await dbContext.BanPlayer
+                         .Where(p => p.UserId == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                if (targetBanIds.Contains(legacyRow.BanId))
+                {
+                    dbContext.BanPlayer.Remove(legacyRow);
+                    continue;
+                }
+
+                legacyRow.UserId = targetUserId.UserId;
+            }
+        }
+
+        private static async Task MergeBanAdminReferencesAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            foreach (var ban in await dbContext.Ban
+                         .Where(ban => ban.BanningAdmin == legacyUserId.UserId || ban.LastEditedById == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                if (ban.BanningAdmin == legacyUserId.UserId)
+                    ban.BanningAdmin = targetUserId.UserId;
+                if (ban.LastEditedById == legacyUserId.UserId)
+                    ban.LastEditedById = targetUserId.UserId;
+            }
+
+            foreach (var unban in await dbContext.Unban
+                         .Where(unban => unban.UnbanningAdmin == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                unban.UnbanningAdmin = targetUserId.UserId;
+            }
+        }
+
+        private static async Task MergeConnectionLogsAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            foreach (var log in await dbContext.ConnectionLog
+                         .Where(log => log.UserId == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                log.UserId = targetUserId.UserId;
+            }
+        }
+
+        private static async Task MergeAdminLogPlayersAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            var targetKeys = await dbContext.AdminLogPlayer
+                .Where(link => link.PlayerUserId == targetUserId.UserId)
+                .Select(link => new { link.RoundId, link.LogId })
+                .ToListAsync(cancel);
+
+            var targetSet = targetKeys
+                .Select(key => (key.RoundId, key.LogId))
+                .ToHashSet();
+
+            foreach (var legacyLink in await dbContext.AdminLogPlayer
+                         .Where(link => link.PlayerUserId == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                if (!targetSet.Contains((legacyLink.RoundId, legacyLink.LogId)))
+                {
+                    dbContext.AdminLogPlayer.Add(new AdminLogPlayer
+                    {
+                        RoundId = legacyLink.RoundId,
+                        LogId = legacyLink.LogId,
+                        PlayerUserId = targetUserId.UserId,
+                    });
+                }
+
+                dbContext.AdminLogPlayer.Remove(legacyLink);
+            }
+        }
+
+        private static async Task MergeUploadedResourceLogsAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            foreach (var row in await dbContext.UploadedResourceLog
+                         .Where(row => row.UserId == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                row.UserId = targetUserId.UserId;
+            }
+        }
+
+        private static async Task MergeWH40KMutesAsync(
+            ServerDbContext dbContext,
+            NetUserId legacyUserId,
+            NetUserId targetUserId,
+            CancellationToken cancel)
+        {
+            foreach (var mute in await dbContext.WH40KMute
+                         .Where(mute => mute.PlayerUserId == legacyUserId.UserId || mute.CreatedById == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                if (mute.PlayerUserId == legacyUserId.UserId)
+                    mute.PlayerUserId = targetUserId.UserId;
+                if (mute.CreatedById == legacyUserId.UserId)
+                    mute.CreatedById = targetUserId.UserId;
+            }
+
+            foreach (var unmute in await dbContext.WH40KUnmute
+                         .Where(unmute => unmute.UnmutingAdminId == legacyUserId.UserId)
+                         .ToListAsync(cancel))
+            {
+                unmute.UnmutingAdminId = targetUserId.UserId;
+            }
+        }
+
+        private static void MergePlayerRecord(Player targetPlayer, Player? legacyPlayer)
+        {
+            if (legacyPlayer == null)
+                return;
+
+            if (targetPlayer.FirstSeenTime == default || legacyPlayer.FirstSeenTime < targetPlayer.FirstSeenTime)
+                targetPlayer.FirstSeenTime = legacyPlayer.FirstSeenTime;
+
+            if (legacyPlayer.LastSeenTime > targetPlayer.LastSeenTime)
+            {
+                targetPlayer.LastSeenTime = legacyPlayer.LastSeenTime;
+                targetPlayer.LastSeenUserName = legacyPlayer.LastSeenUserName;
+                targetPlayer.LastSeenAddress = legacyPlayer.LastSeenAddress;
+                targetPlayer.LastSeenHWId = legacyPlayer.LastSeenHWId;
+            }
+
+            targetPlayer.LastReadRules = MaxNullableDate(targetPlayer.LastReadRules, legacyPlayer.LastReadRules);
+        }
+
+        private static async Task MergePlayerRoundLinksAsync(ServerDbContext dbContext, int? legacyPlayerId, int targetPlayerId)
+        {
+            if (legacyPlayerId == null || legacyPlayerId == targetPlayerId)
+                return;
+
+            var legacyId = legacyPlayerId.Value;
+            var provider = dbContext.Database.ProviderName ?? string.Empty;
+            if (provider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                await dbContext.Database.ExecuteSqlAsync($"""
+INSERT OR IGNORE INTO player_round (players_id, rounds_id)
+SELECT {targetPlayerId}, rounds_id
+FROM player_round
+WHERE players_id = {legacyId}
+""");
+            }
+            else
+            {
+                await dbContext.Database.ExecuteSqlAsync($"""
+INSERT INTO player_round (players_id, rounds_id)
+SELECT {targetPlayerId}, rounds_id
+FROM player_round
+WHERE players_id = {legacyId}
+ON CONFLICT DO NOTHING
+""");
+            }
+
+            await dbContext.Database.ExecuteSqlAsync($"""
+DELETE FROM player_round WHERE players_id = {legacyId}
+""");
+        }
+
+        private static string? PickPreferredString(string? currentValue, string? fallbackValue)
+        {
+            return string.IsNullOrWhiteSpace(currentValue)
+                ? (string.IsNullOrWhiteSpace(fallbackValue) ? null : fallbackValue)
+                : currentValue;
+        }
+
+        private static DateTime MaxDate(DateTime left, DateTime right)
+        {
+            return left >= right ? left : right;
+        }
+
+        private static DateTime MinDate(DateTime left, DateTime right)
+        {
+            return left <= right ? left : right;
+        }
+
+        private static DateTime? MaxNullableDate(DateTime? left, DateTime? right)
+        {
+            if (left == null)
+                return right;
+            if (right == null)
+                return left;
+
+            return left >= right ? left : right;
+        }
+
+        private static DateTime? MinNullableDate(DateTime? left, DateTime? right)
+        {
+            if (left == null)
+                return right;
+            if (right == null)
+                return left;
+
+            return left <= right ? left : right;
+        }
         #endregion
 
         #region Bans
@@ -636,59 +1462,73 @@ namespace Content.Server.Database
 
         public async Task SetWH40KMetaProgress(NetUserId player, WH40KMetaProgressDbData data)
         {
-            await using var db = await GetDb();
-
-            var lifetimeXp = Math.Max(0, data.LifetimeXp);
-            var seasonXp = Math.Max(0, data.SeasonXp);
-            var lastProgressAt = data.LastProgressAt.UtcDateTime;
-            var lastAccountResetAt = data.LastAccountResetAt?.UtcDateTime;
-            var ghostSkinId = string.IsNullOrWhiteSpace(data.SelectedGhostSkinId)
-                ? null
-                : data.SelectedGhostSkinId;
-            var oocTitleId = string.IsNullOrWhiteSpace(data.SelectedOocTitleId)
-                ? null
-                : data.SelectedOocTitleId;
-            var oocColorId = string.IsNullOrWhiteSpace(data.SelectedOocNameColorId)
-                ? null
-                : data.SelectedOocNameColorId;
-
-            var metaRow = await db.DbContext.WH40KMetaProgress
-                .SingleOrDefaultAsync(p => p.PlayerUserId == player.UserId);
-
-            if (metaRow == null)
+            for (var attempt = 0; ; attempt++)
             {
-                var playerRow = await db.DbContext.Player
-                    .SingleOrDefaultAsync(p => p.UserId == player.UserId);
+                await using var db = await GetDb();
 
-                if (playerRow == null)
+                var lifetimeXp = Math.Max(0, data.LifetimeXp);
+                var seasonXp = Math.Max(0, data.SeasonXp);
+                var lastProgressAt = data.LastProgressAt.UtcDateTime;
+                var lastAccountResetAt = data.LastAccountResetAt?.UtcDateTime;
+                var ghostSkinId = string.IsNullOrWhiteSpace(data.SelectedGhostSkinId)
+                    ? null
+                    : data.SelectedGhostSkinId;
+                var oocTitleId = string.IsNullOrWhiteSpace(data.SelectedOocTitleId)
+                    ? null
+                    : data.SelectedOocTitleId;
+                var oocColorId = string.IsNullOrWhiteSpace(data.SelectedOocNameColorId)
+                    ? null
+                    : data.SelectedOocNameColorId;
+
+                try
                 {
-                    var now = DateTime.UtcNow;
-                    db.DbContext.Player.Add(new Player
+                    var metaRow = await db.DbContext.WH40KMetaProgress
+                        .SingleOrDefaultAsync(p => p.PlayerUserId == player.UserId);
+
+                    if (metaRow == null)
                     {
-                        UserId = player.UserId,
-                        FirstSeenTime = now,
-                        LastSeenTime = now,
-                        LastSeenAddress = IPAddress.None,
-                        LastSeenUserName = player.UserId.ToString(),
-                    });
+                        var playerRow = await db.DbContext.Player
+                            .SingleOrDefaultAsync(p => p.UserId == player.UserId);
+
+                        if (playerRow == null)
+                        {
+                            var now = DateTime.UtcNow;
+                            db.DbContext.Player.Add(new Player
+                            {
+                                UserId = player.UserId,
+                                FirstSeenTime = now,
+                                LastSeenTime = now,
+                                LastSeenAddress = IPAddress.None,
+                                LastSeenUserName = player.UserId.ToString(),
+                            });
+                        }
+
+                        metaRow = new WH40KMetaProgress
+                        {
+                            PlayerUserId = player.UserId
+                        };
+                        db.DbContext.WH40KMetaProgress.Add(metaRow);
+                    }
+
+                    metaRow.LifetimeXp = lifetimeXp;
+                    metaRow.SeasonXp = seasonXp;
+                    metaRow.LastProgressAt = lastProgressAt;
+                    metaRow.LastAccountResetAt = lastAccountResetAt;
+                    metaRow.SelectedGhostSkinId = ghostSkinId;
+                    metaRow.SelectedOocTitleId = oocTitleId;
+                    metaRow.SelectedOocNameColorId = oocColorId;
+
+                    await db.DbContext.SaveChangesAsync();
+                    return;
                 }
-
-                metaRow = new WH40KMetaProgress
+                catch (DbUpdateException ex) when (attempt == 0)
                 {
-                    PlayerUserId = player.UserId
-                };
-                db.DbContext.WH40KMetaProgress.Add(metaRow);
+                    _opsLog.Warning(
+                        "Retrying SetWH40KMetaProgress after concurrent write for userId={UserId}: {Error}",
+                        player,
+                        ex.InnerException?.Message ?? ex.Message);
+                }
             }
-
-            metaRow.LifetimeXp = lifetimeXp;
-            metaRow.SeasonXp = seasonXp;
-            metaRow.LastProgressAt = lastProgressAt;
-            metaRow.LastAccountResetAt = lastAccountResetAt;
-            metaRow.SelectedGhostSkinId = ghostSkinId;
-            metaRow.SelectedOocTitleId = oocTitleId;
-            metaRow.SelectedOocNameColorId = oocColorId;
-
-            await db.DbContext.SaveChangesAsync();
         }
 
         public async Task<List<WH40KMetaAchievementDbData>> GetWH40KMetaAchievements(NetUserId player, CancellationToken cancel)
@@ -899,139 +1739,151 @@ namespace Content.Server.Database
             IReadOnlyCollection<WH40KMetaDecorationDbData> decorationData,
             IReadOnlyCollection<WH40KMetaDevelopmentUnlockDbData> developmentData)
         {
-            await using var db = await GetDb();
-            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
-
-            try
+            for (var attempt = 0; ; attempt++)
             {
-                // --- Progress ---
-                var lifetimeXp = Math.Max(0, progressData.LifetimeXp);
-                var seasonXp = Math.Max(0, progressData.SeasonXp);
-                var lastProgressAt = progressData.LastProgressAt.UtcDateTime;
-                var lastAccountResetAt = progressData.LastAccountResetAt?.UtcDateTime;
-                var ghostSkinId = string.IsNullOrWhiteSpace(progressData.SelectedGhostSkinId) ? null : progressData.SelectedGhostSkinId;
-                var oocTitleId = string.IsNullOrWhiteSpace(progressData.SelectedOocTitleId) ? null : progressData.SelectedOocTitleId;
-                var oocColorId = string.IsNullOrWhiteSpace(progressData.SelectedOocNameColorId) ? null : progressData.SelectedOocNameColorId;
+                await using var db = await GetDb();
+                await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
 
-                var metaRow = await db.DbContext.WH40KMetaProgress
-                    .SingleOrDefaultAsync(p => p.PlayerUserId == player.UserId);
-
-                if (metaRow == null)
+                try
                 {
-                    var playerRow = await db.DbContext.Player
-                        .SingleOrDefaultAsync(p => p.UserId == player.UserId);
+                    // --- Progress ---
+                    var lifetimeXp = Math.Max(0, progressData.LifetimeXp);
+                    var seasonXp = Math.Max(0, progressData.SeasonXp);
+                    var lastProgressAt = progressData.LastProgressAt.UtcDateTime;
+                    var lastAccountResetAt = progressData.LastAccountResetAt?.UtcDateTime;
+                    var ghostSkinId = string.IsNullOrWhiteSpace(progressData.SelectedGhostSkinId) ? null : progressData.SelectedGhostSkinId;
+                    var oocTitleId = string.IsNullOrWhiteSpace(progressData.SelectedOocTitleId) ? null : progressData.SelectedOocTitleId;
+                    var oocColorId = string.IsNullOrWhiteSpace(progressData.SelectedOocNameColorId) ? null : progressData.SelectedOocNameColorId;
 
-                    if (playerRow == null)
+                    var metaRow = await db.DbContext.WH40KMetaProgress
+                        .SingleOrDefaultAsync(p => p.PlayerUserId == player.UserId);
+
+                    if (metaRow == null)
                     {
-                        var now = DateTime.UtcNow;
-                        db.DbContext.Player.Add(new Player
+                        var playerRow = await db.DbContext.Player
+                            .SingleOrDefaultAsync(p => p.UserId == player.UserId);
+
+                        if (playerRow == null)
                         {
-                            UserId = player.UserId,
-                            FirstSeenTime = now,
-                            LastSeenTime = now,
-                            LastSeenAddress = IPAddress.None,
-                            LastSeenUserName = player.UserId.ToString(),
-                        });
+                            var now = DateTime.UtcNow;
+                            db.DbContext.Player.Add(new Player
+                            {
+                                UserId = player.UserId,
+                                FirstSeenTime = now,
+                                LastSeenTime = now,
+                                LastSeenAddress = IPAddress.None,
+                                LastSeenUserName = player.UserId.ToString(),
+                            });
+                        }
+
+                        metaRow = new WH40KMetaProgress { PlayerUserId = player.UserId };
+                        db.DbContext.WH40KMetaProgress.Add(metaRow);
                     }
 
-                    metaRow = new WH40KMetaProgress { PlayerUserId = player.UserId };
-                    db.DbContext.WH40KMetaProgress.Add(metaRow);
-                }
+                    metaRow.LifetimeXp = lifetimeXp;
+                    metaRow.SeasonXp = seasonXp;
+                    metaRow.LastProgressAt = lastProgressAt;
+                    metaRow.LastAccountResetAt = lastAccountResetAt;
+                    metaRow.SelectedGhostSkinId = ghostSkinId;
+                    metaRow.SelectedOocTitleId = oocTitleId;
+                    metaRow.SelectedOocNameColorId = oocColorId;
 
-                metaRow.LifetimeXp = lifetimeXp;
-                metaRow.SeasonXp = seasonXp;
-                metaRow.LastProgressAt = lastProgressAt;
-                metaRow.LastAccountResetAt = lastAccountResetAt;
-                metaRow.SelectedGhostSkinId = ghostSkinId;
-                metaRow.SelectedOocTitleId = oocTitleId;
-                metaRow.SelectedOocNameColorId = oocColorId;
+                    // --- Achievements ---
+                    var existingAch = await db.DbContext.WH40KMetaAchievementProgress
+                        .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                    var existingAchById = existingAch.ToDictionary(a => a.AchievementId, StringComparer.Ordinal);
+                    var incomingAchIds = new HashSet<string>(StringComparer.Ordinal);
 
-                // --- Achievements ---
-                var existingAch = await db.DbContext.WH40KMetaAchievementProgress
-                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
-                var existingAchById = existingAch.ToDictionary(a => a.AchievementId, StringComparer.Ordinal);
-                var incomingAchIds = new HashSet<string>(StringComparer.Ordinal);
-
-                foreach (var entry in achievementData)
-                {
-                    if (string.IsNullOrWhiteSpace(entry.AchievementId)) continue;
-                    incomingAchIds.Add(entry.AchievementId);
-                    if (!existingAchById.TryGetValue(entry.AchievementId, out var achRow))
+                    foreach (var entry in achievementData)
                     {
-                        achRow = new WH40KMetaAchievementProgress { PlayerUserId = player.UserId, AchievementId = entry.AchievementId };
-                        db.DbContext.WH40KMetaAchievementProgress.Add(achRow);
+                        if (string.IsNullOrWhiteSpace(entry.AchievementId)) continue;
+                        incomingAchIds.Add(entry.AchievementId);
+                        if (!existingAchById.TryGetValue(entry.AchievementId, out var achRow))
+                        {
+                            achRow = new WH40KMetaAchievementProgress { PlayerUserId = player.UserId, AchievementId = entry.AchievementId };
+                            db.DbContext.WH40KMetaAchievementProgress.Add(achRow);
+                        }
+                        achRow.ProgressValue = Math.Max(0, entry.ProgressValue);
+                        achRow.Unlocked = entry.Unlocked;
+                        achRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
+                        achRow.Claimed = entry.Claimed;
+                        achRow.Version = Math.Max(1, entry.Version);
+                        achRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
                     }
-                    achRow.ProgressValue = Math.Max(0, entry.ProgressValue);
-                    achRow.Unlocked = entry.Unlocked;
-                    achRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
-                    achRow.Claimed = entry.Claimed;
-                    achRow.Version = Math.Max(1, entry.Version);
-                    achRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
-                }
-                foreach (var achRow in existingAch)
-                {
-                    if (!incomingAchIds.Contains(achRow.AchievementId))
-                        db.DbContext.WH40KMetaAchievementProgress.Remove(achRow);
-                }
-
-                // --- Decorations ---
-                var existingDecor = await db.DbContext.WH40KMetaDecorationUnlock
-                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
-                var existingDecorById = existingDecor.ToDictionary(a => a.UnlockId, StringComparer.Ordinal);
-                var incomingDecorIds = new HashSet<string>(StringComparer.Ordinal);
-
-                foreach (var entry in decorationData)
-                {
-                    if (string.IsNullOrWhiteSpace(entry.UnlockId)) continue;
-                    incomingDecorIds.Add(entry.UnlockId);
-                    if (!existingDecorById.TryGetValue(entry.UnlockId, out var decorRow))
+                    foreach (var achRow in existingAch)
                     {
-                        decorRow = new WH40KMetaDecorationUnlock { PlayerUserId = player.UserId, UnlockId = entry.UnlockId };
-                        db.DbContext.WH40KMetaDecorationUnlock.Add(decorRow);
+                        if (!incomingAchIds.Contains(achRow.AchievementId))
+                            db.DbContext.WH40KMetaAchievementProgress.Remove(achRow);
                     }
-                    decorRow.Unlocked = entry.Unlocked;
-                    decorRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
-                    decorRow.SourceLevel = Math.Max(0, entry.SourceLevel);
-                    decorRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
-                }
-                foreach (var decorRow in existingDecor)
-                {
-                    if (!incomingDecorIds.Contains(decorRow.UnlockId))
-                        db.DbContext.WH40KMetaDecorationUnlock.Remove(decorRow);
-                }
 
-                // --- Development ---
-                var existingDev = await db.DbContext.WH40KMetaDevelopmentUnlock
-                    .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
-                var existingDevById = existingDev.ToDictionary(a => a.NodeId, StringComparer.Ordinal);
-                var incomingDevIds = new HashSet<string>(StringComparer.Ordinal);
+                    // --- Decorations ---
+                    var existingDecor = await db.DbContext.WH40KMetaDecorationUnlock
+                        .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                    var existingDecorById = existingDecor.ToDictionary(a => a.UnlockId, StringComparer.Ordinal);
+                    var incomingDecorIds = new HashSet<string>(StringComparer.Ordinal);
 
-                foreach (var entry in developmentData)
-                {
-                    if (string.IsNullOrWhiteSpace(entry.NodeId)) continue;
-                    incomingDevIds.Add(entry.NodeId);
-                    if (!existingDevById.TryGetValue(entry.NodeId, out var devRow))
+                    foreach (var entry in decorationData)
                     {
-                        devRow = new WH40KMetaDevelopmentUnlock { PlayerUserId = player.UserId, NodeId = entry.NodeId };
-                        db.DbContext.WH40KMetaDevelopmentUnlock.Add(devRow);
+                        if (string.IsNullOrWhiteSpace(entry.UnlockId)) continue;
+                        incomingDecorIds.Add(entry.UnlockId);
+                        if (!existingDecorById.TryGetValue(entry.UnlockId, out var decorRow))
+                        {
+                            decorRow = new WH40KMetaDecorationUnlock { PlayerUserId = player.UserId, UnlockId = entry.UnlockId };
+                            db.DbContext.WH40KMetaDecorationUnlock.Add(decorRow);
+                        }
+                        decorRow.Unlocked = entry.Unlocked;
+                        decorRow.UnlockedAt = entry.UnlockedAt?.UtcDateTime;
+                        decorRow.SourceLevel = Math.Max(0, entry.SourceLevel);
+                        decorRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
                     }
-                    devRow.UnlockedAt = entry.UnlockedAt.UtcDateTime;
-                    devRow.SpentCost = Math.Max(0, entry.SpentCost);
-                    devRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
-                }
-                foreach (var devRow in existingDev)
-                {
-                    if (!incomingDevIds.Contains(devRow.NodeId))
-                        db.DbContext.WH40KMetaDevelopmentUnlock.Remove(devRow);
-                }
+                    foreach (var decorRow in existingDecor)
+                    {
+                        if (!incomingDecorIds.Contains(decorRow.UnlockId))
+                            db.DbContext.WH40KMetaDecorationUnlock.Remove(decorRow);
+                    }
 
-                await db.DbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
+                    // --- Development ---
+                    var existingDev = await db.DbContext.WH40KMetaDevelopmentUnlock
+                        .Where(a => a.PlayerUserId == player.UserId).ToListAsync();
+                    var existingDevById = existingDev.ToDictionary(a => a.NodeId, StringComparer.Ordinal);
+                    var incomingDevIds = new HashSet<string>(StringComparer.Ordinal);
+
+                    foreach (var entry in developmentData)
+                    {
+                        if (string.IsNullOrWhiteSpace(entry.NodeId)) continue;
+                        incomingDevIds.Add(entry.NodeId);
+                        if (!existingDevById.TryGetValue(entry.NodeId, out var devRow))
+                        {
+                            devRow = new WH40KMetaDevelopmentUnlock { PlayerUserId = player.UserId, NodeId = entry.NodeId };
+                            db.DbContext.WH40KMetaDevelopmentUnlock.Add(devRow);
+                        }
+                        devRow.UnlockedAt = entry.UnlockedAt.UtcDateTime;
+                        devRow.SpentCost = Math.Max(0, entry.SpentCost);
+                        devRow.UpdatedAt = entry.UpdatedAt.UtcDateTime;
+                    }
+                    foreach (var devRow in existingDev)
+                    {
+                        if (!incomingDevIds.Contains(devRow.NodeId))
+                            db.DbContext.WH40KMetaDevelopmentUnlock.Remove(devRow);
+                    }
+
+                    await db.DbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return;
+                }
+                catch (DbUpdateException ex) when (attempt == 0)
+                {
+                    await transaction.RollbackAsync();
+                    _opsLog.Warning(
+                        "Retrying BatchSetWH40KMetaProgressAll after concurrent write for userId={UserId}: {Error}",
+                        player,
+                        ex.InnerException?.Message ?? ex.Message);
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
             }
         }
 

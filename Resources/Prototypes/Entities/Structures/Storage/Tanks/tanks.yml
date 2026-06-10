@@ -24,11 +24,6 @@
     solution: tank
   - type: ReagentTank
     tankType: Fuel
-  - type: DamageOnToolInteract
-    tools: Welding
-    weldingDamage:
-      types:
-        Heat: 10
   - type: PacifismDangerousAttack
   - type: Explosive
     explosionType: Default

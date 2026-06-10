@@ -47,7 +47,9 @@ public static class SpeciesSelectionValidator
             return collection == null ? profile : profile.Validated(session, collection);
 
         HashSet<string>? completedAchievements = null;
-        var snapshot = entitySystems.GetEntitySystem<WH40KMetaProgressSystem>().GetSnapshot(session.UserId);
+        var metaProgress = entitySystems.GetEntitySystem<WH40KMetaProgressSystem>();
+        if (!metaProgress.TryGetLoadedSnapshot(session, out var snapshot))
+            return profile;
 
         if (species.RequiredAchievements.Count > 0)
         {

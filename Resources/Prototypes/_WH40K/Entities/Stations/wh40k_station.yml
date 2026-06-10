@@ -15,21 +15,17 @@
       accounts:
         WH40KImperium: 12000
         WH40KHeretics: 12000
-        WH40KTau: 12000
       revenueDistribution:
         WH40KImperium: 0.5
         WH40KHeretics: 0.5
-        WH40KTau: 0
     - type: StationCargoOrderDatabase
       capacity: 10
       orders:
         WH40KImperium: [ ]
         WH40KHeretics: [ ]
-        WH40KTau: [ ]
       markets:
         - WH40KImperiumMarket
         - WH40KHereticsMarket
-        - WH40KTauMarket
     - type: WH40KCargoProductUnlocks
       unlockedProductsByAccount:
         WH40KImperium:
@@ -62,17 +58,6 @@
           - WH40KHereticsArmorChaosVest
           - WH40KHereticsBackpack
           - WH40KHereticsBelt
-        WH40KTau:
-          - WH40KTauHeadset
-          - WH40KTauJumpsuit
-          - WH40KTauBackpack
-          - WH40KTauBelt
-          - WH40KTauHelmet
-          - WH40KTauArmor
-          - WH40KTauMedkit
-          - WH40KTauPulsePistol
-          - WH40KTauPulseCarbine
-          - WH40KTauPulseCellCarbine
       researchRequirementsByAccount:
         WH40KImperium:
           WH40KImperiumLasgun: [WH40KWeaponryStandardLasguns]
@@ -80,27 +65,12 @@
         WH40KHeretics:
           WH40KHereticsLasgun: [WH40KWeaponryStandardLasguns]
           WH40KHereticsStubRifle: [WH40KWeaponryStubberLines]
-        WH40KTau:
-          WH40KTauPulseRifle: [WH40KWeaponryStandardLasguns]
-          WH40KTauPulseBlaster: [WH40KWeaponryAccatranPatterns]
-          WH40KTauPulseSniperRifle: [WH40KWeaponryLonglasPatterns]
-          WH40KTauRailgun: [WH40KWeaponryPlasmaArming]
-          WH40KTauPulseCellRifle: [WH40KEquipmentBasicAmmunition]
-          WH40KTauPulseCellBlaster: [WH40KEquipmentBasicAmmunition]
-          WH40KTauPulseCellSniper: [WH40KEquipmentBasicAmmunition]
-          WH40KTauRailgunCell: [WH40KEquipmentCargoTrackers]
-          WH40KTauGunDrone: [WH40KEquipmentServoSkull]
-          WH40KTauSentryTurretPulse: [WH40KEquipmentBarricades]
-          WH40KTauSentryTurretRailgun: [WH40KWeaponryPlasmaArming]
-          WH40KTauSentryTurretMissile: [WH40KWeaponryMortarSupport]
     - type: StationCargoOrderBatch
     - type: CargoLogisticsTier
       tierLogisticsProfile: WH40KTierLogisticsStandard
       accountTiers:
         WH40KImperium: 0
         WH40KHeretics: 0
-        WH40KTau: 0
       accountTeams:
         WH40KImperium: Imperium
         WH40KHeretics: Heretics
-        WH40KTau: Tau

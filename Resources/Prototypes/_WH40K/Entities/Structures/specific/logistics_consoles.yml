@@ -27,7 +27,7 @@
   - type: SpriteFade
 
 - type: entity
-  parent: WH40KBaseFieldCommandConsole
+  parent: WH40KBasePlaceholderConsole
   id: StructureLogisticsConsoleImperiumCmd
   name: imperium command terminal
   description: Strategic command terminal for imperial control.
@@ -42,7 +42,7 @@
     - map: [ "computerLayerScreen" ]
       state: computer_on
       shader: unshaded
-      visible: true
+      visible: false
   - type: Icon
     sprite: _WH40K/Structures/Machines/Computers/srtimperium.rsi
     state: computer
@@ -115,7 +115,7 @@
       teamId: Heretics
 
 - type: entity
-  parent: WH40KBaseFieldCommandConsole
+  parent: WH40KBasePlaceholderConsole
   id: StructureLogisticsConsoleHereticsCmd
   name: heretic command terminal
   description: Strategic command terminal for heretic control.
@@ -130,7 +130,7 @@
     - map: [ "computerLayerScreen" ]
       state: computer_on
       shader: unshaded
-      visible: true
+      visible: false
   - type: Icon
     sprite: _WH40K/Structures/Machines/Computers/srtchaos.rsi
     state: computer

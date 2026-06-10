@@ -126,3 +126,5 @@ loadout-group-wh40k-tau-combat-kit = Cadre equipment
 loadout-group-wh40k-imperial-line-shield = imperial frontline shield
 
 wh40k-astartes-only-power-sword = The weapon's machine spirit refuses your unaugmented grip.
+wh40k-auth-migration-notification-start = Migrating your account data. This can take a little while; please wait for the connection to finish.
+wh40k-auth-migration-notification-complete = Account data migration complete.

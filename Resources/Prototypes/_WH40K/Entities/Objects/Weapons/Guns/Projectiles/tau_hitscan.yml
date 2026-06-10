@@ -20,18 +20,6 @@
 
 - type: entity
   parent: Pulse
-  id: WH40KTauGunDroneBeam
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: HitscanBasicRaycast
-    maxDistance: 18
-  - type: HitscanBasicDamage
-    damage:
-      types:
-        Heat: 15
-
-- type: entity
-  parent: Pulse
   id: WH40KTauPulseBlasterBeam
   categories: [ HideSpawnMenu ]
   components:

@@ -1399,12 +1399,6 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             return true;
         }
 
-        if (string.Equals(teamId, "Tau", StringComparison.OrdinalIgnoreCase))
-        {
-            account = "WH40KTau";
-            return true;
-        }
-
         return false;
     }
 

@@ -6,7 +6,6 @@
   wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/winterassault_snapshot.png
   wh40kWeatherProfile: WH40KMapWeatherWinterAssault
   wh40kEventsProfile: WH40KMapEventsAll
-  wh40kTeamBattleFactions: [ Imperium, Heretics ]
   stations:
     WinterAssault:
       stationProto: WH40KStation

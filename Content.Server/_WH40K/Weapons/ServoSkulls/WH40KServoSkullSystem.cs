@@ -5,7 +5,6 @@ using Content.Server.NPC.Systems;
 using Content.Server.Popups;
 using Content.Server._WH40K.GameTicking.Rules;
 using Content.Server._WH40K.Localizations;
-using Content.Server._WH40K.Tau.Drones.Components;
 using Content.Server._WH40K.Weapons.ServoSkulls.Components;
 using Content.Shared.Database;
 using Content.Shared.Explosion.Components;
@@ -74,9 +73,6 @@ public sealed partial class WH40KServoSkullSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var skull, out var xform, out var physics))
         {
-            if (HasComp<WH40KTauGunDroneComponent>(uid))
-                continue;
-
             UpdateServoSkull(uid, skull, xform, physics, now);
         }
     }
@@ -99,7 +95,7 @@ public sealed partial class WH40KServoSkullSystem : EntitySystem
         {
             skull.OwnerEntity = args.User;
             skull.TeamId = teamId;
-            skull.FollowTarget = ent.Comp.StartFollowingOwner ? args.User : null;
+            skull.FollowTarget = null;
             skull.HostileTarget = null;
             skull.CurrentMovementTarget = null;
             skull.NextScanTime = _timing.CurTime;
