@@ -415,11 +415,25 @@ public sealed partial class WH40KFactionJoinGui : FancyWindow, ILocalizedControl
             };
         }
 
-        var reason = Loc.GetString(faction.DisabledReason);
+        var reason = RequiresDisabledReasonCount(faction)
+            ? Loc.GetString(faction.DisabledReason, ("count", faction.DisabledReasonCount))
+            : Loc.GetString(faction.DisabledReason);
+
         if (!showFactionPrefix)
             return reason;
 
         return $"{Loc.GetString(faction.Name)}: {reason}";
+    }
+
+    private static bool RequiresDisabledReasonCount(WH40KFactionInfo faction)
+    {
+        if (faction.DisabledReasonCount <= 0 || string.IsNullOrWhiteSpace(faction.DisabledReason))
+            return false;
+
+        return faction.DisabledReason is
+            "wh40k-faction-soft-streak-blocked" or
+            "wh40k-faction-soft-streak-ignored" or
+            "wh40k-faction-hard-streak-blocked";
     }
 
     [Obsolete]
