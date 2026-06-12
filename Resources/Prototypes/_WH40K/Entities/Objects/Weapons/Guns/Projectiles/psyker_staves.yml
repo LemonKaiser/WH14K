@@ -54,12 +54,12 @@
   - type: IgniteOnCollide
     fireStacks: 3.0
   - type: ExplodeOnTrigger
-    deleteAfterExplosion: true
   - type: Explosive
     explosionType: Default
     totalIntensity: 30
     intensitySlope: 3
     maxIntensity: 10
+    deleteAfterExplosion: true
 
 - type: entity
   id: WH40KProjectilePsykerBiomanticBolt
