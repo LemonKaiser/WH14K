@@ -50,4 +50,10 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
 
     [DataField]
     public bool CooldownShown;
+
+    /// <summary>
+    /// If true, allows executing any same-team member regardless of WH40KMoraleExecutionTargetComponent.
+    /// </summary>
+    [DataField]
+    public bool Unrestricted;
 }

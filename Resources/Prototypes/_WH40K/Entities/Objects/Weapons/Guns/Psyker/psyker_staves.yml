@@ -16,7 +16,7 @@
 
 - type: entity
   name: biomantic force staff
-  description: A force staff tuned for biomantic workings.
+  description: A force staff that channels biomantic energy into healing bolts. The projectile injects omnizine on impact rather than instantly healing.
   parent: WH40KWeaponPsykerForceStaffBase
   id: WeaponPsykerForceStaffBiomantic
   suffix: WH40K, Psyker
@@ -32,7 +32,7 @@
       path: /Audio/Weapons/Guns/Gunshots/Magic/staff_healing.ogg
     projectileSpeed: 20
   - type: BasicEntityAmmoProvider
-    proto: ProjectileHealingBolt
+    proto: WH40KProjectilePsykerBiomanticBolt
     capacity: 5
     count: 5
   - type: RechargeBasicEntityAmmo
@@ -41,7 +41,7 @@
 
 - type: entity
   name: pyromantic force staff
-  description: A force staff that spits warpfire.
+  description: A force staff that channels the warp into searing flames. Use in hand to switch between warpfire stream and fireball modes.
   parent: WH40KWeaponPsykerForceStaffBase
   id: WeaponPsykerForceStaffPyromantic
   suffix: WH40K, Psyker
@@ -53,16 +53,45 @@
     sprite: _WH40K/Objects/Weapons/Guns/Psyker/pyromantic_force_staff.rsi
     heldPrefix: pyromancy
   - type: Gun
-    fireRate: 0.8
+    fireRate: 7
+    minAngle: 0
+    maxAngle: 25
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
     soundGunshot:
-      path: /Audio/Magic/fireball.ogg
+      path: /Audio/_WH40K/Weapons/flamethrower.ogg
+      params:
+        volume: 2
     projectileSpeed: 22
   - type: BasicEntityAmmoProvider
     proto: WH40KProjectilePsykerWarpfireBolt
-    capacity: 4
-    count: 4
+    capacity: 20
+    count: 20
   - type: RechargeBasicEntityAmmo
-    rechargeCooldown: 35
+    rechargeCooldown: 25
+  - type: WH40KPsykerStaffFireModes
+    fireModes:
+    - proto: WH40KProjectilePsykerWarpfireBolt
+      shotInstability: 8
+      fireRate: 7
+      minAngle: 0
+      maxAngle: 25
+      availableModes: FullAuto
+      selectedMode: FullAuto
+      soundGunshot:
+        path: /Audio/_WH40K/Weapons/flamethrower.ogg
+        params:
+          volume: 2
+    - proto: WH40KProjectilePsykerFireball
+      shotInstability: 35
+      fireRate: 0.8
+      minAngle: 1
+      maxAngle: 2
+      availableModes: SemiAuto
+      selectedMode: SemiAuto
+      soundGunshot:
+        path: /Audio/Magic/fireball.ogg
 
 - type: entity
   name: psychic force staff

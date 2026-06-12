@@ -155,6 +155,24 @@
   groupBy: "FlareGun"
 
 - type: loadout
+  id: WH40KBinocularsKitOfficer
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  inhand:
+  - Binoculars
+  groupBy: "binoculars"
+
+- type: loadout
+  id: WH40KBinocularsKitSergeant
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+  - Binoculars
+  groupBy: "binoculars"
+
+- type: loadout
   id: FoodBoxDonkpocketHonkWH40K
   effects:
   - !type:WH40KMetaLevelLoadoutEffect

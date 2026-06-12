@@ -10,6 +10,11 @@
       - material: WoodPlank
         amount: 10
         doAfter: 4
+    - to: bonfireStake
+      steps:
+      - material: WoodPlank
+        amount: 12
+        doAfter: 6
 
   - node: bonfire
     entity: Bonfire

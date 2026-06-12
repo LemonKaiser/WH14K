@@ -179,6 +179,9 @@ ent-ClothingHeadHelmetPsyker = шлем псайкера
 ent-ClothingHeadHelmetFlakMed = шлем с визором
     .desc = Шлем с медицинским визором, что носят хирургеоны.
 
+ent-ClothingHeadHelmetFlakMedCyan = циановый шлем с визором
+    .desc = { ent-ClothingHeadHelmetFlakMed.desc }
+
 ent-ClothingHeadHelmetHardsuitVoidsmanStandard = шлем войдсмена
     .desc = Шлем стандартного скафандра войдсмена.
 

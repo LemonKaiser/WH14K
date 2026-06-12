@@ -456,7 +456,6 @@
   name: loadout-group-wh40k-imperial-command-neck
   minLimit: 0
   loadouts:
-  - WH40KCommandCatachanToken
   - WH40KImperialAquilaMedal
   - WH40KImperialCrossMedal
   - WH40KImperialInquisitionSeal
@@ -541,6 +540,8 @@
   loadouts:
   - WeaponFlareGunWH40K
   - BoxShotgunFlareWH40K
+  - WH40KBinocularsKitOfficer
+  - WH40KBinocularsKitSergeant
   - WH40KLighterKit
   - WH40KFlippoKit
   - WH40KCigarKit

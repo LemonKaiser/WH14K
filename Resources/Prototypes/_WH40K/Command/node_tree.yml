@@ -395,8 +395,8 @@
       Imperium: [WH40KRecipeMissionPinpointerKitImperium, WH40KRecipeFragGrenade]
       Heretics: [WH40KRecipeMissionPinpointerKitHeretics, WH40KRecipeFragGrenade]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumFrag]
-      Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsFrag]
+      Imperium: [WH40KImperiumMissionPinpointerKit, WH40KImperiumFrag, WH40KImperiumBinoculars]
+      Heretics: [WH40KHereticsMissionPinpointerKit, WH40KHereticsFrag, WH40KHereticsBinoculars]
   - id: eqp_left_3
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-left-3-title

@@ -21,6 +21,8 @@ durand-armor-plates = Durand armor plates
 clarke-central-control-module = Clarke central control module
 clarke-peripherals-control-module = Clarke peripherals control module
 
+wh40k-chaplain-cannot-use-firearms = Your faith forbids you from using firearms!
+
 figurines-ifi-1 = "Must practice, must practice..."
 figurines-ifi-2 = "One day the Omnissiah will appear to me and free me from these crooked hands"
 figurines-ifi-3 = "How was it?... I forgot"
@@ -89,6 +91,9 @@ loadout-group-wh40k-heretic-command-hands = chaos command gloves
 loadout-group-wh40k-heretic-command-feet = chaos command boots
 loadout-group-wh40k-heretic-command-field-kit = chaos command field kit
 loadout-group-wh40k-heresiarch-cult-raiment = heresiarch cult raiment
+
+loadout-WH40KBinocularsKitOfficer = binoculars (officer)
+loadout-WH40KBinocularsKitSergeant = binoculars (sergeant)
 loadout-group-wh40k-meta-level-restriction = Required level: {$requiredLevel}
 loadout-group-wh40k-meta-progress-loading = Loading meta progression...
 loadout-group-wh40k-achievement-restriction = Requires achievement: {$achievement}

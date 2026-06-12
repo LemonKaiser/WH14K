@@ -39,6 +39,7 @@
         Male: W40KOffMale
         Female: W40KOffFemale
         Unsexed: W40KOffMale
+    - type: WH40KChaplainRole
 - type: startingGear
   id: WH40KChaplainGear
   equipment:

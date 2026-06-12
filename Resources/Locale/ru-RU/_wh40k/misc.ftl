@@ -28,6 +28,8 @@ figurines-ifi-4 = "Так и запишем, реколор"
 materials-datapoint = необработанные данные
 
 loadout-group-techpriest-neck = роба, техножрец
+
+wh40k-chaplain-cannot-use-firearms = Ваша вера запрещает вам пользоваться огнестрельным оружием!
 loadout-group-wh40k-meta-level-restriction = требуеться уровень: {$requiredLevel}
 loadout-group-wh40k-meta-progress-loading = загрузка мета-прогрессии...
 loadout-group-wh40k-achievement-restriction = требуется достижение: {$achievement}
@@ -105,6 +107,9 @@ loadout-group-wh40k-heretic-command-hands = Хаос, командование, 
 loadout-group-wh40k-heretic-command-feet = Хаос, командование, ботинки
 loadout-group-wh40k-heretic-command-field-kit = Хаос, командный походный набор
 loadout-group-wh40k-heresiarch-cult-raiment = Ересиарх, культовые доспехи
+
+loadout-WH40KBinocularsKitOfficer = бинокль (офицер)
+loadout-WH40KBinocularsKitSergeant = бинокль (сержант)
 
 loadout-group-wh40k-techpriest-weapon = техножрец, вооружение
 loadout-group-techpriest-mask = техножрец, респираторы
