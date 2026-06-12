@@ -17,9 +17,18 @@ wh40k-faction-late-join-title = Late Join: { $faction }
 wh40k-faction-balance-blocked = This faction is temporarily locked by balance.
 wh40k-faction-balance-blocked-imperium = The Imperium faction is temporarily locked by balance.
 wh40k-faction-balance-blocked-heretics = The Heretics faction is temporarily locked by balance.
-wh40k-faction-soft-streak-blocked = You have played this faction for { $count } rounds in a row. Choose the opposite side.
-wh40k-faction-soft-streak-ignored = You have played this faction for { $count } rounds in a row. The opposite side is full, so you may join, but your streak will continue to grow.
-wh40k-faction-hard-streak-blocked = You have played this faction for { $count } rounds in a row. Choose the opposite side.
+wh40k-faction-soft-streak-blocked = You have played this faction for { $count } { $count ->
+        [one] round
+       *[other] rounds
+    } in a row. Choose the opposite side.
+wh40k-faction-soft-streak-ignored = You have played this faction for { $count } { $count ->
+        [one] round
+       *[other] rounds
+    } in a row. The opposite side is full, so you may join, but your streak will continue to grow.
+wh40k-faction-hard-streak-blocked = You have played this faction for { $count } { $count ->
+        [one] round
+       *[other] rounds
+    } in a row. Choose the opposite side.
 wh40k-faction-ready-selection-required = Choose a faction before marking yourself ready.
 wh40k-faction-latejoin-selection-required = Choose a faction before opening the job list.
 wh40k-faction-invalid-job-selection = The selected job does not belong to your chosen faction.

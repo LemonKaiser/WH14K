@@ -241,7 +241,8 @@ public sealed partial class WH40KFactionSystem : EntitySystem
             return new List<WH40KFactionInfo>();
 
         var requesterId = requester?.UserId;
-        var teamPlayerCounts = BuildConnectedTeamCounts(requesterId, ResolvePurpose(purpose));
+        var resolvedPurpose = ResolvePurpose(purpose);
+        var teamPlayerCounts = BuildConnectedTeamCounts(requesterId, resolvedPurpose);
         var result = new List<WH40KFactionInfo>(rule.Teams.Count);
 
         foreach (var team in rule.Teams)
@@ -251,8 +252,13 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 
             var canSelect = true;
             string? disabledReason = null;
+            var disabledReasonCount = 0;
             if (requesterId != null)
-                canSelect = CanSelectFaction(requesterId.Value, team.Id, rule, ResolvePurpose(purpose), out disabledReason);
+            {
+                canSelect = CanSelectFaction(requesterId.Value, team.Id, rule, resolvedPurpose, out disabledReason);
+                if (!string.IsNullOrWhiteSpace(disabledReason) && RequiresStreakCount(disabledReason))
+                    disabledReasonCount = GetStreakCount(requesterId.Value, team.Id);
+            }
 
             result.Add(new WH40KFactionInfo(
                 team.Id,
@@ -261,7 +267,8 @@ public sealed partial class WH40KFactionSystem : EntitySystem
                 new List<ProtoId<DepartmentPrototype>>(team.Departments),
                 teamPlayerCounts.TryGetValue(team.Id, out var teamCount) ? teamCount : 0,
                 canSelect,
-                disabledReason));
+                disabledReason,
+                disabledReasonCount));
         }
 
         return result;
@@ -532,18 +539,12 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 
     private bool HasHardStreakBlock(NetUserId userId, string factionId)
     {
-        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < HardStreakLimit)
-            return false;
-
-        return history.All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
+        return GetStreakCount(userId, factionId) >= HardStreakLimit;
     }
 
     private bool HasSoftStreakBlock(NetUserId userId, string factionId)
     {
-        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < SoftStreakLimit)
-            return false;
-
-        return history.All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
+        return GetStreakCount(userId, factionId) >= SoftStreakLimit;
     }
 
     private bool AreAllOtherTeamsBlockedByBalance(
@@ -592,6 +593,11 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         }
 
         return count;
+    }
+
+    private static bool RequiresStreakCount(string? messageLocKey)
+    {
+        return messageLocKey is SoftStreakBlockedLocKey or SoftStreakIgnoredLocKey or HardStreakBlockedLocKey;
     }
 
     private void PruneExpiredLateJoinSelections()

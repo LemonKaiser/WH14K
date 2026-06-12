@@ -99,6 +99,7 @@ public sealed class WH40KFactionInfo
     public int PlayerCount { get; }
     public bool CanSelect { get; }
     public string? DisabledReason { get; }
+    public int DisabledReasonCount { get; }
 
     public WH40KFactionInfo(
         string id,
@@ -107,7 +108,8 @@ public sealed class WH40KFactionInfo
         List<ProtoId<DepartmentPrototype>> departments,
         int playerCount = 0,
         bool canSelect = true,
-        string? disabledReason = null)
+        string? disabledReason = null,
+        int disabledReasonCount = 0)
     {
         Id = id;
         Name = name;
@@ -116,5 +118,6 @@ public sealed class WH40KFactionInfo
         PlayerCount = Math.Max(0, playerCount);
         CanSelect = canSelect;
         DisabledReason = disabledReason;
+        DisabledReasonCount = Math.Max(0, disabledReasonCount);
     }
 }

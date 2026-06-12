@@ -7,9 +7,21 @@ wh40k-faction-late-join-title = Поздний вход: { $faction }
 wh40k-faction-balance-blocked = Эта фракция временно недоступна из-за автобаланса.
 wh40k-faction-balance-blocked-imperium = Фракция Империума временно недоступна из-за автобаланса.
 wh40k-faction-balance-blocked-heretics = Фракция Еретиков временно недоступна из-за автобаланса.
-wh40k-faction-soft-streak-blocked = Вы { $count } раундов подряд играете за эту фракцию. Выберите противоположную сторону.
-wh40k-faction-soft-streak-ignored = Вы { $count } раундов подряд играете за эту фракцию. Противоположная сторона переполнена, поэтому вы можете присоединиться, но ваша серия продолжит расти.
-wh40k-faction-hard-streak-blocked = Вы { $count } раундов подряд играли за эту фракцию. Выберите противоположную сторону.
+wh40k-faction-soft-streak-blocked = Вы { $count } { $count ->
+        [1] раунд
+        [few] раунда
+       *[other] раундов
+    } подряд играете за эту фракцию. Выберите противоположную сторону.
+wh40k-faction-soft-streak-ignored = Вы { $count } { $count ->
+        [1] раунд
+        [few] раунда
+       *[other] раундов
+    } подряд играете за эту фракцию. Противоположная сторона переполнена, поэтому вы можете присоединиться, но ваша серия продолжит расти.
+wh40k-faction-hard-streak-blocked = Вы { $count } { $count ->
+        [1] раунд
+        [few] раунда
+       *[other] раундов
+    } подряд играли за эту фракцию. Выберите противоположную сторону.
 wh40k-faction-ready-selection-required = Перед готовностью нужно выбрать фракцию.
 wh40k-faction-latejoin-selection-required = Перед открытием списка ролей нужно выбрать фракцию.
 wh40k-faction-invalid-job-selection = Выбранная роль не принадлежит выбранной фракции.
