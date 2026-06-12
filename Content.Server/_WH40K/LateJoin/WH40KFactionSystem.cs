@@ -25,12 +25,15 @@ public sealed partial class WH40KFactionSystem : EntitySystem
 {
     private const string TeamBattleRulePrototypeId = "WH40KTeamBattle";
     private const string BalanceBlockedLocKey = "wh40k-faction-balance-blocked";
-    private const string StreakBlockedLocKey = "wh40k-faction-streak-blocked";
+    private const string SoftStreakBlockedLocKey = "wh40k-faction-soft-streak-blocked";
+    private const string SoftStreakIgnoredLocKey = "wh40k-faction-soft-streak-ignored";
+    private const string HardStreakBlockedLocKey = "wh40k-faction-hard-streak-blocked";
     private const string ReadySelectionRequiredLocKey = "wh40k-faction-ready-selection-required";
     private const string LateJoinSelectionRequiredLocKey = "wh40k-faction-latejoin-selection-required";
     private const string InvalidJobSelectionLocKey = "wh40k-faction-invalid-job-selection";
     private const int MaxAllowedTeamLead = 2;
-    private const int SameFactionStreakLimit = 3;
+    private const int SoftStreakLimit = 3;
+    private const int HardStreakLimit = 7;
     private static readonly TimeSpan LateJoinReservationLifetime = TimeSpan.FromMinutes(2);
 
     [Dependency] private  GameTicker _gameTicker = default!;
@@ -85,8 +88,17 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         var factions = BuildFactionList(session, msg.Purpose);
         RaiseNetworkEvent(new WH40KFactionSelectionResultEvent(msg.Purpose, canonicalFactionId, accepted, messageLocKey, factions), session);
 
-        if (!accepted && !string.IsNullOrWhiteSpace(messageLocKey))
-            SendLocalizedServerMessage(session, messageLocKey);
+        if (string.IsNullOrWhiteSpace(messageLocKey))
+            return;
+
+        var message = messageLocKey switch
+        {
+            SoftStreakBlockedLocKey or SoftStreakIgnoredLocKey or HardStreakBlockedLocKey
+                => Loc.GetString(messageLocKey, ("count", GetStreakCount(session.UserId, canonicalFactionId))),
+            _ => Loc.GetString(messageLocKey)
+        };
+
+        _chatManager.DispatchServerMessage(session, message);
     }
 
     private void OnCancelFactionSelection(WH40KCancelFactionSelectionEvent msg, EntitySessionEventArgs args)
@@ -349,13 +361,25 @@ public sealed partial class WH40KFactionSystem : EntitySystem
             return false;
         }
 
-        if (purpose == WH40KFactionSelectionPurpose.LobbyReady && HasFactionStreakBlock(userId, canonicalFactionId))
+        var teamCounts = BuildConnectedTeamCounts(userId, purpose);
+
+        if (purpose == WH40KFactionSelectionPurpose.LobbyReady && HasHardStreakBlock(userId, canonicalFactionId))
         {
-            messageLocKey = StreakBlockedLocKey;
+            messageLocKey = HardStreakBlockedLocKey;
             return false;
         }
 
-        var teamCounts = BuildConnectedTeamCounts(userId, purpose);
+        if (purpose == WH40KFactionSelectionPurpose.LobbyReady && HasSoftStreakBlock(userId, canonicalFactionId))
+        {
+            if (!AreAllOtherTeamsBlockedByBalance(rule, canonicalFactionId, teamCounts))
+            {
+                messageLocKey = SoftStreakBlockedLocKey;
+                return false;
+            }
+
+            messageLocKey = SoftStreakIgnoredLocKey;
+        }
+
         if (WouldExceedBalance(rule, canonicalFactionId, teamCounts))
         {
             messageLocKey = BalanceBlockedLocKey;
@@ -506,27 +530,68 @@ public sealed partial class WH40KFactionSystem : EntitySystem
         return selectedCount + 1 - otherMax > MaxAllowedTeamLead;
     }
 
-    private bool HasFactionStreakBlock(NetUserId userId, string factionId)
+    private bool HasHardStreakBlock(NetUserId userId, string factionId)
     {
-        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < SameFactionStreakLimit)
+        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < HardStreakLimit)
             return false;
 
         return history.All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool HasSoftStreakBlock(NetUserId userId, string factionId)
+    {
+        if (!_recentCompletedFactions.TryGetValue(userId, out var history) || history.Count < SoftStreakLimit)
+            return false;
+
+        return history.All(teamId => string.Equals(teamId, factionId, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool AreAllOtherTeamsBlockedByBalance(
+        WH40KTeamBattleRuleComponent rule,
+        string factionId,
+        IReadOnlyDictionary<string, int> teamCounts)
+    {
+        foreach (var team in rule.Teams)
+        {
+            if (string.Equals(team.Id, factionId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (!WouldExceedBalance(rule, team.Id, teamCounts))
+                return false;
+        }
+
+        return true;
     }
 
     private void RecordCompletedFaction(NetUserId userId, string factionId)
     {
         if (!_recentCompletedFactions.TryGetValue(userId, out var history))
         {
-            history = new List<string>(SameFactionStreakLimit);
+            history = new List<string>(HardStreakLimit);
             _recentCompletedFactions[userId] = history;
         }
 
         history.Add(factionId);
-        while (history.Count > SameFactionStreakLimit)
+        while (history.Count > HardStreakLimit)
         {
             history.RemoveAt(0);
         }
+    }
+
+    private int GetStreakCount(NetUserId userId, string factionId)
+    {
+        if (!_recentCompletedFactions.TryGetValue(userId, out var history))
+            return 0;
+
+        var count = 0;
+        for (var i = history.Count - 1; i >= 0; i--)
+        {
+            if (!string.Equals(history[i], factionId, StringComparison.OrdinalIgnoreCase))
+                break;
+            count++;
+        }
+
+        return count;
     }
 
     private void PruneExpiredLateJoinSelections()
