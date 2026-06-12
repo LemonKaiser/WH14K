@@ -99,7 +99,7 @@
   - type: Tool
     qualities:
       - Screwing
-    speedModifier: 1.2 # Kept for future adjustments. Currently 1.2x for balance
+    speedModifier: 3.0 # Omnissiah's blessing makes this the finest tool in the galaxy
     useSound: /Audio/Items/drill_use.ogg
   - type: ToolTileCompatible
   - type: WH40KMultipleToolRadial
@@ -142,6 +142,11 @@
         changeSound:
           path: /Audio/Items/change_drill.ogg
       - behavior: Pulsing
+        changeSound:
+          path: /Audio/Items/change_drill.ogg
+      - behavior: Welding
+        useSound:
+          collection: Welder
         changeSound:
           path: /Audio/Items/change_drill.ogg
 

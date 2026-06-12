@@ -162,7 +162,7 @@ public sealed partial class WH40KMoraleExecutionSystem : EntitySystem
         }
 
         if (!TryGetSameTeam(ent.Owner, args.Target) ||
-            !IsAllowedMoraleExecutionTarget(args.Target) ||
+            (!ent.Comp.Unrestricted && !IsAllowedMoraleExecutionTarget(args.Target)) ||
             !IsWithinExecutionRange(ent.Owner, args.Target, ent.Comp))
         {
             TryShowInvalidTargetPopup(ent.Owner, ent.Comp);

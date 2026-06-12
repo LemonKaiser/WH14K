@@ -987,6 +987,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumBinoculars
+  icon:
+    sprite: Objects/Tools/binoculars.rsi
+    state: icon
+  product: Binoculars
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KHereticsLantern
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1971,5 +1981,15 @@
     state: extraction_pack
   product: NecklaceChaosCultistReflectWeak
   cost: 10000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBinoculars
+  icon:
+    sprite: Objects/Tools/binoculars.rsi
+    state: icon
+  product: Binoculars
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket

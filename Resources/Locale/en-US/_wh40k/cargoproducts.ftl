@@ -24,3 +24,9 @@ cargoproduct-description-wh40k-magazine-londoron-mk2 = Spare 5-round magazine fo
 
 cargoproduct-name-wh40k-ammobox-londoron-mk2 = Londoron MK2 ammunition box
 cargoproduct-description-wh40k-ammobox-londoron-mk2 = A box of heavy rounds for Londoron MK2 pattern rifles.
+
+cargoproduct-name-wh40k-imperium-binoculars = binoculars (Imperium)
+cargoproduct-description-wh40k-imperium-binoculars = An optical device for long-range observation. Issued to Imperial forces for reconnaissance.
+
+cargoproduct-name-wh40k-heretics-binoculars = binoculars (Heretics)
+cargoproduct-description-wh40k-heretics-binoculars = An optical device for long-range observation. Issued to heretic forces for reconnaissance.
