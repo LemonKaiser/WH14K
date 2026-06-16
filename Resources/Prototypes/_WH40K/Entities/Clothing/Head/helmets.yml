@@ -68,6 +68,35 @@
     sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_cyan.rsi
 
 - type: entity
+  parent: ClothingHeadHelmetFlak
+  id: ClothingHeadHelmetFlakWhiteShield
+  suffix: WH40K, White Shield
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_white_shield.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_white_shield.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.975
+        Slash: 0.95
+        Piercing: 0.975
+        Heat: 0.975
+  - type: ExplosionResistance
+    damageCoefficient: 0.975
+
+- type: entity
+  parent: ClothingHeadHelmetFlakWhiteShield
+  id: ClothingHeadHelmetFlakWhiteDented
+  suffix: WH40K, White Shield Dented
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_white_dented.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/flakhelmet_white_dented.rsi
+
+- type: entity
   parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
   id: ClothingHeadHelmetBloodPact
   suffix: WH40K, Бладпакт

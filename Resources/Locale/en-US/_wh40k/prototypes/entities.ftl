@@ -114,6 +114,15 @@ ent-colbelt = colonel's belt
 
 ent-ClothingHeadsetVoxBackpack = radio operator headset
 
+ent-ClothingHeadHelmetFlakWhiteShield = white shield flak helmet
+    .desc = A reserve-pattern flak helmet marked with a white shield and issued to fresh reinforcements.
+
+ent-ClothingHeadHelmetFlakWhiteDented = dented white shield flak helmet
+    .desc = A battered reserve flak helmet with a white shield marking and plenty of field wear.
+
+ent-ClothingOuterArmorFlakVestOld = old-pattern flak vest
+    .desc = An aging flak vest from older Munitorum stocks. It protects, but not as well as standard guard issue.
+
 ent-EncryptionKeyVox = vox encryption key
 ent-ClothingHeadsetVoxBackpackImperium = imperium radio operator headset
 ent-ClothingHeadsetVoxBackpackHeretics = heretics radio operator headset

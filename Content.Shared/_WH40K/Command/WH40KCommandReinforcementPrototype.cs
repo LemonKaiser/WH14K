@@ -41,6 +41,9 @@ public sealed partial class WH40KCommandReinforcementOptionPrototype
 
     [DataField("additionalUnitCostMultiplier")]
     public float AdditionalUnitCostMultiplier = 0f;
+
+    [DataField("equipmentOverrides")]
+    public Dictionary<string, EntProtoId> EquipmentOverrides = new();
 }
 
 [Prototype("wh40kCommandReinforcementProfile")]
