@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.Chaplain.Components;
@@ -28,6 +29,9 @@ public sealed partial class WH40KChaplainDashComponent : Component
 
     [DataField]
     public EntProtoId ActionPrototype = "ActionWH40KChaplainDash";
+
+    [DataField]
+    public SoundSpecifier VoiceLine = new SoundCollectionSpecifier("WH40KChaplainDashVoice", AudioParams.Default.WithVolume(-4f));
 
     [DataField]
     public EntityUid? ActionEntity;

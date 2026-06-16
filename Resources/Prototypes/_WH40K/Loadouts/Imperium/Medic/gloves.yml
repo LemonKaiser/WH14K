@@ -1,0 +1,5 @@
+- type: loadout
+  id: WH40KChirurgeonSawGlove
+  equipment:
+    gloves: ClothingHandsGlovesChirurgeonSaw
+

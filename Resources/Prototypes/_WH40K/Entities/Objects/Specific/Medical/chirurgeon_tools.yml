@@ -1,0 +1,16 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KHumanSkull
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Skeleton/parts.rsi
+    state: skull_icon
+  - type: Item
+    size: Small
+  - type: StaticPrice
+    price: 50
+  - type: WH40KCombineWithPrototype
+    requiredPrototype: WH40KServoSkullChassis
+    resultPrototype: WH40KServoSkull
+

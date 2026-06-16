@@ -960,7 +960,7 @@ ent-CrateNecron = necron box
     .desc = This is a storage facility belonging to the mysterious civilization of machines made of living steel - the Necrons. Do you have the will to open it?
 
 ent-WH40KServoSkull = servo skull
-    .desc = A compact servo skull chassis. Deploy it to create a friendly support skull.
+    .desc = A completed servo skull ready to deploy as a friendly support drone.
 ent-WH40KServoSkullMelta = melta servo skull
     .desc = A servo skull rigged with a melta charge. Deploy it and it will hunt nearby enemies for your team.
 ent-WH40KServoSkullMob = servo skull

@@ -351,6 +351,15 @@
   - WH40KImperialRainCloak
 
 - type: loadoutGroup
+  id: WH40KImperialMedicHands
+  name: loadout-group-wh40k-imperial-medic-hands
+  minLimit: 0
+  loadouts:
+  - WH40KChirurgeonSawGlove
+  - WH40KKriegGloves
+  - WH40KGlovesVst
+
+- type: loadoutGroup
   id: WH40KImperialLogisticsHead
   name: loadout-group-wh40k-imperial-logistics-head
   minLimit: 0
