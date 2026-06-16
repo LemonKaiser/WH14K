@@ -779,8 +779,8 @@
 - type: cargoProduct
   id: WH40KImperiumSentinel
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
+    state: sentinel_autogun
   product: MechSentinelBatteryAutogun
   cost: 25000
   category: cpcat-arm
@@ -1767,9 +1767,9 @@
 - type: cargoProduct
   id: WH40KHereticsSentinel
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
-  product: MechSentinelBatteryAutogun
+    sprite: _WH40K/Objects/Specific/Mech/mecha_chaos.rsi
+    state: sentinel_autogun
+  product: MechChaosSentinelBatteryAutogun
   cost: 25000
   category: cpcat-arm
   group: WH40KHereticsMarket

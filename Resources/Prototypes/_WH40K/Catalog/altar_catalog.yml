@@ -398,9 +398,9 @@
 
 - type: listing
   id: AltarSentinelAutogun
-  name: Captured sentinel (autogun)
-  description: Repurposed walker support.
-  productEntity: MechSentinelBatteryAutogun
+  name: wh40k-altar-sentinel-autogun-name
+  description: wh40k-altar-sentinel-autogun-desc
+  productEntity: MechChaosSentinelBatteryAutogun
   cost:
     intelligence_ch: 20
   categories:
@@ -411,9 +411,9 @@
 
 - type: listing
   id: AltarSentinelPlasma
-  name: Captured sentinel (plasma)
-  description: Elite repurposed plasma walker.
-  productEntity: MechSentinelBatteryPlasma
+  name: wh40k-altar-sentinel-plasma-name
+  description: wh40k-altar-sentinel-plasma-desc
+  productEntity: MechChaosSentinelBatteryPlasma
   cost:
     intelligence_ch: 26
   categories:

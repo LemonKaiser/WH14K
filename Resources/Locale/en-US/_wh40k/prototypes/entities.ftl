@@ -2035,3 +2035,17 @@ ent-ClothingNeckHelldriver = "FOESMASHER" Cloak
 
 ent-ClothingHeadHelldriverHelmet = B-01 TACTICAL Helmet
     .desc = This is the standard Super-Earth version, made from the same titanium as the Eradicator's body.
+
+ent-MechChaosSentinel = Captured Sentinel
+    .desc = A captured scout walker desecrated with eight-pointed sigils and refitted for heretic crews.
+
+ent-MechChaosSentinelBatteryAutogun = Captured Autocannon Sentinel
+    .desc = A captured Sentinel fitted with an autocannon, a power cell and basic life-support modules.
+
+ent-MechChaosSentinelBatteryPlasma = Captured Plasma Sentinel
+    .desc = A captured Sentinel fitted with a plasma rifle, a power cell and basic life-support modules.
+
+wh40k-altar-sentinel-autogun-name = Captured sentinel (autogun)
+wh40k-altar-sentinel-autogun-desc = Repurposed walker support.
+wh40k-altar-sentinel-plasma-name = Captured sentinel (plasma)
+wh40k-altar-sentinel-plasma-desc = Elite repurposed plasma walker.
