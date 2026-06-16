@@ -25,6 +25,8 @@
   - type: WH40KStoreTeam
     teamId: Imperium
   - type: SpriteFade
+  - type: AccessReader
+    access: [["Cargo"]]
 
 - type: entity
   parent: WH40KBasePlaceholderConsole
@@ -113,6 +115,8 @@
       batchDelaySeconds: 300
     - type: WH40KStoreTeam
       teamId: Heretics
+    - type: AccessReader
+      access: [["Cargo"]]
 
 - type: entity
   parent: WH40KBasePlaceholderConsole

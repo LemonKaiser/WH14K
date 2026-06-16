@@ -1577,6 +1577,18 @@ ent-ClothingNeckCloakRainChs = Raincoat
 ent-ClothingHeadHoodRainChs = Raincoat Hood
     .desc = Useful in rain.
 
+ent-ClothingNeckCloakChameleonImp = chameleoline cloak
+    .desc = A cloak woven from chameleoline fibres. When worn, the wearer fades from sight while remaining still.
+
+ent-ClothingHeadHoodChameleonImp = chameleoline cloak hood
+    .desc = A hood woven from chameleoline fibres.
+
+ent-ClothingNeckCloakChameleonChs = chameleoline cloak
+    .desc = A blasphemous cloak woven from chameleoline fibres, blessed by the Dark Gods. The wearer fades from sight while remaining still.
+
+ent-ClothingHeadHoodChameleonChs = chameleoline cloak hood
+    .desc = A hood woven from chameleoline fibres, bearing the mark of Chaos.
+
 ent-ClothingUniformJumpsuitGuardsmanVst = Vostroyan Uniform
     .desc = Normal Uniform.
 

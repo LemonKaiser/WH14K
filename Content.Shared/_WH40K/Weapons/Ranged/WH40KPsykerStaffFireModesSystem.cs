@@ -126,7 +126,6 @@ public sealed partial class WH40KPsykerStaffFireModesSystem : EntitySystem
         if (TryComp<WH40KPsykerForceStaffComponent>(ent, out var staff))
         {
             staff.ShotInstability = fireMode.ShotInstability;
-            Dirty(ent, staff);
         }
 
         if (TryComp<GunComponent>(ent, out var gun))
