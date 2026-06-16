@@ -64,3 +64,23 @@
     tags:
     - Cartridge
     - Cartridge11mm
+
+- type: entity
+  id: CartridgeHeavyStubPistol
+  parent: BaseCartridgePistol
+  suffix: WH40K
+  components:
+  - type: CartridgeAmmo
+    proto: Bullet11mm
+    deleteOnSpawn: true
+  - type: Tag
+    tags:
+    - Cartridge
+    - CartridgeHeavyStubPistol
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Cartridges/heavy_stub_pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Appearance
+  - type: SpentAmmoVisuals

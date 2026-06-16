@@ -229,6 +229,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumMagazineHeavyStubPistol
+  name: cargoproduct-name-wh40k-magazine-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-magazine-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/heavy_stub_pistol.rsi
+    state: base
+  product: MagazineHeavyStubPistol
+  cost: 120
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumMagazineMG
   name: cargoproduct-name-wh40k-magazine-stub-mg
   description: cargoproduct-description-wh40k-magazine-stub-mg
@@ -363,6 +375,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumHeavyStubPistol
+  name: cargoproduct-name-wh40k-heavy-stub-pistol-aquila
+  description: cargoproduct-description-wh40k-heavy-stub-pistol-aquila
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/heavy_stub_pistol_aquila.rsi
+    state: icon
+  product: WeaponHeavyStubPistolAquila
+  cost: 6000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumSpeedLoader11mm
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -379,6 +403,18 @@
     state: icon
   product: WH40KAmmoBoxSerpenta
   cost: 750
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumAmmoHeavyStubPistol
+  name: cargoproduct-name-wh40k-ammobox-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-ammobox-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  product: WH40KAmmoBoxHeavyStubPistol
+  cost: 1000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -1237,6 +1273,18 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsMagazineHeavyStubPistol
+  name: cargoproduct-name-wh40k-magazine-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-magazine-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/heavy_stub_pistol.rsi
+    state: base
+  product: MagazineHeavyStubPistol
+  cost: 120
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsMagazineMG
   name: cargoproduct-name-wh40k-magazine-stub-mg
   description: cargoproduct-description-wh40k-magazine-stub-mg
@@ -1391,6 +1439,18 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsHeavyStubPistol
+  name: cargoproduct-name-wh40k-heavy-stub-pistol-blood-pact
+  description: cargoproduct-description-wh40k-heavy-stub-pistol-blood-pact
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/heavy_stub_pistol_blood_pact.rsi
+    state: icon
+  product: WeaponHeavyStubPistolBloodPact
+  cost: 6000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsSpeedLoader11mm
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1407,6 +1467,18 @@
     state: icon
   product: WH40KAmmoBoxSerpenta
   cost: 750
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmoHeavyStubPistol
+  name: cargoproduct-name-wh40k-ammobox-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-ammobox-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  product: WH40KAmmoBoxHeavyStubPistol
+  cost: 1000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 

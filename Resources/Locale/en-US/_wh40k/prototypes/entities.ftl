@@ -2049,3 +2049,18 @@ wh40k-altar-sentinel-autogun-name = Captured sentinel (autogun)
 wh40k-altar-sentinel-autogun-desc = Repurposed walker support.
 wh40k-altar-sentinel-plasma-name = Captured sentinel (plasma)
 wh40k-altar-sentinel-plasma-desc = Elite repurposed plasma walker.
+
+ent-WeaponHeavyStubPistolAquila = M36 "Aquila" heavy stub pistol
+    .desc = A large-caliber magazine-fed stub pistol that hits as hard as a revolver while keeping extra rounds in the grip.
+
+ent-WeaponHeavyStubPistolBloodPact = M36 "Blood Pact" heavy stub pistol
+    .desc = A blood-red renegade variant of the M36, built for brutal close-range execution.
+
+ent-MagazineHeavyStubPistol = heavy stub pistol magazine (11 mm)
+    .desc = An 8-round magazine loaded with heavy 11 mm rounds for the M36 family.
+
+ent-CartridgeHeavyStubPistol = heavy stub pistol cartridge (11 mm)
+    .desc = A blunt, heavy pistol round built to deliver revolver-grade stopping power.
+
+ent-WH40KAmmoBoxHeavyStubPistol = heavy stub pistol ammunition box (11 mm)
+    .desc = A box of heavy 11 mm cartridges for M36 heavy stub pistols.

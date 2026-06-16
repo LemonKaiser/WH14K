@@ -30,3 +30,15 @@ cargoproduct-description-wh40k-imperium-binoculars = An optical device for long-
 
 cargoproduct-name-wh40k-heretics-binoculars = binoculars (Heretics)
 cargoproduct-description-wh40k-heretics-binoculars = An optical device for long-range observation. Issued to heretic forces for reconnaissance.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-aquila = heavy stub pistol (Imperium)
+cargoproduct-description-wh40k-heavy-stub-pistol-aquila = A magazine-fed M36 heavy stub pistol with revolver-grade stopping power.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-blood-pact = heavy stub pistol (Heretics)
+cargoproduct-description-wh40k-heavy-stub-pistol-blood-pact = A renegade-painted M36 heavy stub pistol for heretic officers and raiders.
+
+cargoproduct-name-wh40k-magazine-heavy-stub-pistol = heavy stub pistol magazine
+cargoproduct-description-wh40k-magazine-heavy-stub-pistol = Spare 8-round magazine for M36 heavy stub pistols.
+
+cargoproduct-name-wh40k-ammobox-heavy-stub-pistol = heavy stub pistol ammunition box
+cargoproduct-description-wh40k-ammobox-heavy-stub-pistol = A box of heavy 11 mm cartridges for M36 heavy stub pistols.

@@ -557,6 +557,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KCommandHeavyStubPistolAquila
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -575,6 +576,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KCommandHeavyStubPistolAquila
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -822,6 +824,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout30
 
 - type: loadoutGroup
@@ -830,6 +833,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -838,6 +842,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout20
 
 - type: loadoutGroup

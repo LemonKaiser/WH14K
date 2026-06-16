@@ -83,6 +83,9 @@
   id: Cartridge10mmLong
 
 - type: Tag
+  id: CartridgeHeavyStubPistol
+
+- type: Tag
   id: DataChip
 
 - type: Tag
@@ -117,6 +120,9 @@
 
 - type: Tag
   id: MagazineHevStubPistol
+
+- type: Tag
+  id: MagazineHeavyStubPistol
 
 - type: Tag
   id: MagazineStub3SMG
