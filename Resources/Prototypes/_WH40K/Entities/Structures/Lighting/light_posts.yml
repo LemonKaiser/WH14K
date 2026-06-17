@@ -1,0 +1,57 @@
+- type: entity
+  id: WH40KImperialLightPost
+  parent: BaseStructure
+  suffix: WH40K, Props, Always Powered
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    noRot: true
+    sprite: _WH40K/Structures/Lighting/imperial_light_post.rsi
+    state: base
+    drawdepth: Mobs
+    offset: "0.0,1.0"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.16,-0.45,0.16,0.35"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: PointLight
+    radius: 8
+    energy: 1.8
+    softness: 0.9
+    color: "#F2B1A0"
+  - type: Anchorable
+  - type: InteractionOutline
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 180
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          SheetSteel1:
+            min: 1
+            max: 3
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: StaticPrice
+    price: 75
+  - type: RequireProjectileTarget

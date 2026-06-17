@@ -399,3 +399,90 @@
   - type: Sprite
     sprite: _WH40K/Structures/Decorations/Fallout_props.rsi
     state: skeleton
+
+- type: entity
+  id: WH40KImperialColumn
+  parent: BaseStructure
+  suffix: WH40K, Props
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.22,-0.45,0.22,0.45"
+        density: 250
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalSlam
+          params:
+            volume: 1
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Sprite
+    noRot: true
+    sprite: _WH40K/Structures/Decorations/imperial_props.rsi
+    state: column_1
+    drawdepth: Mobs
+    offset: "0.0,0.5"
+  - type: StaticPrice
+    price: 80
+  - type: RequireProjectileTarget
+
+- type: entity
+  id: WH40KImperialColumn2
+  parent: WH40KImperialColumn
+  suffix: WH40K, Props
+  components:
+  - type: Sprite
+    state: column_2
+
+- type: entity
+  id: WH40KImperialColumn3
+  parent: WH40KImperialColumn
+  suffix: WH40K, Props
+  components:
+  - type: Sprite
+    state: column_3
+
+- type: entity
+  id: WH40KCommissarStatue
+  parent: WH40KImperialColumn
+  suffix: WH40K, Props
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.35,0.25,0.35"
+        density: 300
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: Sprite
+    state: commissar_statue
+  - type: StaticPrice
+    price: 120

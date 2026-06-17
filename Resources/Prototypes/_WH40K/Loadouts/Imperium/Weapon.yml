@@ -124,6 +124,17 @@
   groupBy: "second"
 
 - type: loadout
+  id: WH40KCommandSignalPistolImperium
+  dummyEntity: WeaponWH40KSignalPistolImperium
+  inhand:
+  - WeaponWH40KSignalPistolImperium
+  storage:
+    belt:
+    - ShellShotgunFlare
+    - ShellShotgunFlare
+  groupBy: "FlareGun"
+
+- type: loadout
   id: WH40KWeaponStubRevolverLoadout30
   effects:
   - !type:WH40KMetaLevelLoadoutEffect

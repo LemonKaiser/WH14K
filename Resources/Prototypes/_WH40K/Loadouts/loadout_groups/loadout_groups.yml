@@ -557,7 +557,7 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
-  - WeaponFlareGunWH40K
+  - WH40KCommandSignalPistolImperium
   - BoxShotgunFlareWH40K
   - WH40KBinocularsKitOfficer
   - WH40KBinocularsKitSergeant
@@ -1059,7 +1059,7 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
-  - WeaponFlareGunWH40K
+  - WH40KCommandSignalPistolChaos
   - BoxShotgunFlareWH40K
   - WH40KLighterKit
   - WH40KFlippoKit

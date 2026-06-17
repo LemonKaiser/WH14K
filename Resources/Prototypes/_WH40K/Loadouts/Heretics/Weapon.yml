@@ -116,6 +116,17 @@
     - MagazineHeavyStubPistol
     - MagazineHeavyStubPistol
 
+- type: loadout
+  id: WH40KCommandSignalPistolChaos
+  dummyEntity: WeaponWH40KSignalPistolChaos
+  inhand:
+  - WeaponWH40KSignalPistolChaos
+  storage:
+    belt:
+    - ShellShotgunFlare
+    - ShellShotgunFlare
+  groupBy: "FlareGun"
+
 
 
 

@@ -918,6 +918,21 @@ ent-MapPropFallout7 = sign
 ent-MapPropFallout8 = skeleton
     .desc = hard.
 
+ent-WH40KImperialColumn = imperial column
+    .desc = A heavy gothic column built for Imperial halls and parade grounds.
+
+ent-WH40KImperialColumn2 = imperial column
+    .desc = A heavy gothic column built for Imperial halls and parade grounds.
+
+ent-WH40KImperialColumn3 = ruined imperial column
+    .desc = A damaged gothic column that still holds the weight of Imperial architecture.
+
+ent-WH40KCommissarStatue = commissar statue
+    .desc = A stern monument to discipline, duty, and the cost of cowardice.
+
+ent-WH40KImperialLightPost = imperial light post
+    .desc = A tall lamp post casting a warm warning light over Imperial streets.
+
 ent-StatueWH = statue
     .desc = One of the great many statues that stand silently for centuries, delighting the eyes of everyone who contemplates them.
 
@@ -1109,6 +1124,12 @@ ent-WH40KTacticalWhistle = tactical whistle
 
 ent-WH40KSignalFlare = signal flare
     .desc = A field flare for quick visual signaling and target marking.
+
+ent-WeaponWH40KSignalPistolImperium = imperium signal pistol
+    .desc = A compact flare pistol used by Imperial officers to mark targets and rally formations.
+
+ent-WeaponWH40KSignalPistolChaos = chaos signal pistol
+    .desc = A warped flare pistol used by heretic officers to cast battlefield signals through smoke and fire.
 
 ent-WH40KIntelDetector = intel detector
     .desc = A compact detector tuned for frontline intel signatures.
