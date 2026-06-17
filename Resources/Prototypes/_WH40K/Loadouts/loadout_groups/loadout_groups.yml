@@ -138,6 +138,14 @@
   - WH40KHelmetVst
   - WH40KValhallanUshanka
   - WH40KValhallanHelmet
+  - WH40KSavlarHelmet
+
+- type: loadoutGroup
+  id: WH40KImperialVoxHead
+  parent: WH40KImperialLineHead
+  name: loadout-group-wh40k-imperial-line-head
+  loadouts:
+  - WH40KSpecialistHelmet
 
 - type: loadoutGroup
   id: WH40KImperialLineHonours
@@ -165,6 +173,8 @@
   - WH40KCoatVst
   - WH40KValhallanCoat
   - WH40KValhallanHeavyArmor
+  - WH40KSavlarArmor
+  - WH40KSavlarVest
 
 - type: loadoutGroup
   id: WH40KImperialMedicOuter

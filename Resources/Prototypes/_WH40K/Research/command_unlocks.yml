@@ -501,6 +501,21 @@
   - WH40KRecipeMeltaGrenade
 
 - type: technology
+  id: WH40KEquipmentSpecialistHelmet
+  name: research-technology-wh40k-equipment-specialist-helmet
+  icon:
+    sprite: _WH40K/Clothing/Head/Helmets/specialist_helmet.rsi
+    state: icon
+  discipline: WH40KEquipment
+  tier: 1
+  cost: 4500
+  researchTimeSeconds: 120
+  technologyPrerequisites:
+  - WH40KEquipmentAuthLeft3
+  genericUnlocks:
+  - unlockDescription: research-technology-wh40k-equipment-specialist-helmet-unlock
+
+- type: technology
   id: WH40KEquipmentIntelDetectors
   name: research-technology-wh40k-equipment-tactical-scanners
   icon:

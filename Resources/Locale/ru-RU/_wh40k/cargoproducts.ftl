@@ -42,3 +42,6 @@ cargoproduct-description-wh40k-magazine-heavy-stub-pistol = Запасной м�
 
 cargoproduct-name-wh40k-ammobox-heavy-stub-pistol = коробка патронов тяжёлого стаб-пистолета
 cargoproduct-description-wh40k-ammobox-heavy-stub-pistol = Коробка тяжёлых 11-мм патронов для тяжёлых стаб-пистолетов M36.
+
+cargoproduct-name-wh40k-imperium-specialist-helmet = шлем специалиста
+cargoproduct-description-wh40k-imperium-specialist-helmet = Шлем спецобразца с ночным видением и переключаемым отображателем здоровья.

@@ -34,6 +34,22 @@
     outerClothing: ClothingOuterArmorFlakVest
 
 - type: loadout
+  id: WH40KSavlarArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    outerClothing: ClothingOuterArmorSavlar
+
+- type: loadout
+  id: WH40KSavlarVest
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    outerClothing: ClothingOuterArmorSavlarVest
+
+- type: loadout
   id: WH40KCyanFlakArmorSrg
   equipment:
     outerClothing: ClothingOuterArmorFlakVestCyan

@@ -793,6 +793,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumSpecialistHelmet
+  name: cargoproduct-name-wh40k-imperium-specialist-helmet
+  description: cargoproduct-description-wh40k-imperium-specialist-helmet
+  icon:
+    sprite: _WH40K/Clothing/Head/Helmets/specialist_helmet.rsi
+    state: icon
+  product: ClothingHeadHelmetSpecialist
+  cost: 15000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumCombatMedkit
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi

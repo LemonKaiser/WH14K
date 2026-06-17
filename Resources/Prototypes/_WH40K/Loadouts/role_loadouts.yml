@@ -114,7 +114,7 @@
   id: JobVoxScout
   groups:
   - WH40KImperialGameBuns
-  - WH40KImperialLineHead
+  - WH40KImperialVoxHead
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter

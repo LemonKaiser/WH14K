@@ -42,3 +42,6 @@ cargoproduct-description-wh40k-magazine-heavy-stub-pistol = Spare 8-round magazi
 
 cargoproduct-name-wh40k-ammobox-heavy-stub-pistol = heavy stub pistol ammunition box
 cargoproduct-description-wh40k-ammobox-heavy-stub-pistol = A box of heavy 11 mm cartridges for M36 heavy stub pistols.
+
+cargoproduct-name-wh40k-imperium-specialist-helmet = specialist helmet
+cargoproduct-description-wh40k-imperium-specialist-helmet = A specialist-pattern helmet with night vision and a toggleable health display.

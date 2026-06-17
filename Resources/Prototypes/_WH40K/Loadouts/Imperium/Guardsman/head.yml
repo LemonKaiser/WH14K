@@ -37,6 +37,22 @@
     head: ClothingHeadBandMerc
 
 - type: loadout
+  id: WH40KSavlarHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    head: ClothingHeadHelmetSavlar
+
+- type: loadout
+  id: WH40KSpecialistHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 35
+  equipment:
+    head: ClothingHeadHelmetSpecialist
+
+- type: loadout
   id: WH40KCyanFlakHelmet
   equipment:
     head: ClothingHeadHelmetFlakCyan
