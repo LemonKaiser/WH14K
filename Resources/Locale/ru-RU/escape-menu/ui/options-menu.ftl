@@ -230,6 +230,7 @@ ui-options-function-smart-equip-belt = Умная экипировка на по
 ui-options-function-smart-equip-suit-storage = Умная экипировка на хранилище костюма
 ui-options-function-smart-equip-pocket1 = Умная экипировка в карман 1
 ui-options-function-smart-equip-pocket2 = Умная экипировка в карман 2
+ui-options-function-take-from-suit-storage = Снять со спинного хранения
 ui-options-function-open-backpack = Открыть рюкзак
 ui-options-function-open-belt = Открыть пояс
 ui-options-function-throw-item-in-hand = Бросить предмет

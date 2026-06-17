@@ -1131,6 +1131,9 @@ ent-WeaponWH40KSignalPistolImperium = imperium signal pistol
 ent-WeaponWH40KSignalPistolChaos = chaos signal pistol
     .desc = A warped flare pistol used by heretic officers to cast battlefield signals through smoke and fire.
 
+ent-WeaponWH40KCyberTozik = cyber-tozik
+    .desc = A rugged cybernetic double-barreled shotgun. Uses .50 shotgun shells.
+
 ent-WH40KIntelDetector = intel detector
     .desc = A compact detector tuned for frontline intel signatures.
 

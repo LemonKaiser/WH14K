@@ -267,6 +267,9 @@ binds:
   type: State
   key: H
   mod1: Shift
+- function: TakeFromSuitStorage
+  type: State
+  key: F
 - function: OpenBackpack
   type: State
   key: V
@@ -303,6 +306,7 @@ binds:
 - function: FlipObject
   type: State
   key: F
+  mod1: Alt
 - function: TextCursorLeft
   type: State
   key: Left
