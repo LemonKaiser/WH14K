@@ -105,7 +105,8 @@ public sealed partial class WH40KChaplainDashSystem : EntitySystem
         if (!HasComp<ThrownItemComponent>(args.Performer))
             return;
 
-        _audio.PlayPvs(ent.Comp.VoiceLine, ent.Owner);
+        if (ent.Comp.VoiceLine != null)
+            _audio.PlayPvs(ent.Comp.VoiceLine, ent.Owner);
         ApplyDashPathDamage(args.Performer, start, end, ent.Comp);
         args.Handled = true;
     }

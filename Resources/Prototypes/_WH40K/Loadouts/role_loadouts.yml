@@ -459,3 +459,15 @@
   - WH40KTauMainWeapon
   - WH40KTauSidearm
   - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobAstartesImperium
+  groups:
+  - WH40KAstartesImperiumArmor
+  - WH40KAstartesWeapon
+
+- type: roleLoadout
+  id: JobHAstartes
+  groups:
+  - WH40KAstartesChaosArmor
+  - WH40KAstartesWeapon

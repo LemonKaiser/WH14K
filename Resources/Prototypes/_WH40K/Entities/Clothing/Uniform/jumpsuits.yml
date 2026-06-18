@@ -247,6 +247,16 @@
     popup: species-restricted-clothing-component-astartes-only
 
 - type: entity
+  parent: ClothingUniformJumpsuitAstartes
+  id: ClothingUniformJumpsuitAstartesChaos
+  suffix: WH40K, Astartes, Chaos
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/astartes_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/astartes_chaos.rsi
+
+- type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitHelldriverUniform
   suffix: WH40K, helldrivers

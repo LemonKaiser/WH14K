@@ -1421,20 +1421,23 @@ ent-ClothingBackpackAstartesMk5Powerpack = Mk V power pack
 ent-ClothingBackpackAstartesMk6Powerpack = Mk VI power pack
     .desc = A lightweight Astartes power pack.
 
+ent-ClothingBackpackAstartesMk7Powerpack = Ultramarines Mk VII power pack
+    .desc = A power pack for Ultramarines power armour, scaled for the Adeptus Astartes.
+
 ent-ClothingBackpackAstartesMk7JumpPack = Mk VII jump pack
     .desc = A jump pack for Astartes power armour.
 
 ent-ClothingBackpackAstartesMk23JumpPack = Mk II/III jump pack
     .desc = An early jump pack for Astartes power armour.
 
-ent-ClothingShoesAstartesImperiumBoots = Imperium Space Marine boots
-    .desc = Reinforced power-armour boots built for the anatomy of the Adeptus Astartes.
+ent-ClothingShoesAstartesImperiumBoots = Ultramarines sabatons
+    .desc = Reinforced sabatons from an Ultramarines power armour set, built for the anatomy of the Adeptus Astartes.
 
-ent-ClothingShoesAstartesChaosBoots = Chaos Space Marine boots
-    .desc = Defiled power-armour boots fitted for the anatomy of a traitor Astartes.
+ent-ClothingShoesAstartesChaosBoots = Black Legion sabatons
+    .desc = Defiled power-armour sabatons fitted for the anatomy of a traitor Astartes.
 
-ent-ClothingHeadHelmetAstartesMk7 = Mk VII "Aquila" helmet
-    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+ent-ClothingHeadHelmetAstartesMk7 = Ultramarines Mk VII "Aquila" helmet
+    .desc = A sealed Ultramarines power armour helmet designed for the anatomy of the Adeptus Astartes.
 
 ent-ClothingHeadHelmetAstartesMk2 = Mk II helmet
     .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
@@ -1451,8 +1454,8 @@ ent-ClothingHeadHelmetAstartesMk5 = Mk V helmet
 ent-ClothingHeadHelmetAstartesMk6 = Mk VI helmet
     .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
 
-ent-ClothingOuterArmorAstartesMk7 = Mk VII "Aquila" power armour
-    .desc = A servo-enhanced suit of Adeptus Astartes power armour. Superior to standard carapace armour and fitted for a Space Marine.
+ent-ClothingOuterArmorAstartesMk7 = Ultramarines Mk VII "Aquila" power armour
+    .desc = A servo-enhanced suit of Ultramarines power armour, superior to standard carapace armour and fitted for a Space Marine.
 
 ent-ClothingOuterArmorAstartesMk2 = Mk II power armour
     .desc = An early Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
@@ -1472,14 +1475,20 @@ ent-ClothingOuterArmorAstartesMk5 = Mk V power armour
 ent-ClothingOuterArmorAstartesMk6 = Mk VI power armour
     .desc = A reconnaissance Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
 
-ent-ClothingBackpackAstartesChaosPowerpack = Chaos Space Marine power pack
-    .desc = A defiled power pack for Space Marine armour, adorned with the symbols of Chaos.
+ent-ClothingBackpackAstartesChaosPowerpack = Black Legion power pack
+    .desc = A defiled power pack for Black Legion power armour, adorned with the symbols of Chaos.
 
-ent-ClothingHeadHelmetAstartesChaos = Chaos Space Marine helmet
-    .desc = A sealed helmet of corrupted Space Marine power armour, built for the anatomy of the Adeptus Astartes.
+ent-ClothingHeadHelmetAstartesChaos = Black Legion helmet
+    .desc = A sealed helmet of corrupted Black Legion power armour, built for the anatomy of the Adeptus Astartes.
 
-ent-ClothingOuterArmorAstartesChaos = Chaos Space Marine power armour
-    .desc = A corrupted suit of power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+ent-ClothingOuterArmorAstartesChaos = Black Legion power armour
+    .desc = A corrupted suit of Black Legion power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+
+ent-ClothingUniformJumpsuitAstartes = Ultramarines bodyglove
+    .desc = A reinforced under-armour bodyglove worn beneath Ultramarines power armour.
+
+ent-ClothingUniformJumpsuitAstartesChaos = Black Legion bodyglove
+    .desc = A defiled under-armour bodyglove worn beneath Black Legion power armour.
 
 ent-ClothingShoesBootsSlaanesh = Slaanesh Champion Boots
     .desc = Exquisite boots, specially designed for the most sophisticated champions of Slaanesh
@@ -2051,6 +2060,12 @@ ent-ActionWH40KChaosTzeentchTimeField = Grey Time Field
 
 ent-ActionWH40KTogglePhantomStep = Phantom Step
     .desc = Toggle automatic evasive dashes.
+
+ent-ActionWH40KAstartesToxicSpit = Toxic Spit
+    .desc = Spit a corrosive toxin at a target.
+
+ent-ActionWH40KAstartesDash = Shock Dash
+    .desc = Rush up to three tiles, stunning enemies caught in your path.
 
 ent-ClothingUniformJumpsuitHelldriverUniform = Helldiver Uniform
     .desc = Standard Helldiver Uniform.

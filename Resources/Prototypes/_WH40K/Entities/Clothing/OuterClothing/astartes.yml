@@ -5,24 +5,18 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7.rsi
-    layers:
-    - state: icon
-      color: "#2F5DB3"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
-        color: "#2F5DB3"
       right:
       - state: inhand-right
-        color: "#2F5DB3"
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/astartes_mk7.rsi
     stripDelay: 34
     clothingVisuals:
       outerClothing:
       - state: equipped-OUTERCLOTHING
-        color: "#2F5DB3"
   - type: Armor
     modifiers:
       coefficients:
@@ -30,6 +24,9 @@
         Slash: 0.3
         Piercing: 0.35
         Heat: 0.45
+  - type: Reflect
+    reflectProb: 0.1
+    reflectingInHands: false
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -80,6 +77,9 @@
         Slash: 0.3
         Piercing: 0.35
         Heat: 0.45
+  - type: Reflect
+    reflectProb: 0.1
+    reflectingInHands: false
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -140,6 +140,9 @@
         Slash: 0.3
         Piercing: 0.35
         Heat: 0.45
+  - type: Reflect
+    reflectProb: 0.1
+    reflectingInHands: false
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000

@@ -152,6 +152,14 @@
 
 - type: jobIcon
   parent: JobIcon
+  id: JobIconAstartesImperium
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: Guardsman
+  jobName: job-name-astartes-imperium
+
+- type: jobIcon
+  parent: JobIcon
   id: JobIconVoxScout
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
@@ -197,6 +205,14 @@
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: HGuardsman
   jobName: job-name-hguardsman
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconHAstartes
+  icon:
+    sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
+    state: HGuardsman
+  jobName: job-name-hastartes
 
 - type: jobIcon
   parent: JobIcon

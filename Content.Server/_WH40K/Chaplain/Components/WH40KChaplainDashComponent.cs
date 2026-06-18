@@ -31,7 +31,7 @@ public sealed partial class WH40KChaplainDashComponent : Component
     public EntProtoId ActionPrototype = "ActionWH40KChaplainDash";
 
     [DataField]
-    public SoundSpecifier VoiceLine = new SoundCollectionSpecifier("WH40KChaplainDashVoice", AudioParams.Default.WithVolume(-4f));
+    public SoundSpecifier? VoiceLine = new SoundCollectionSpecifier("WH40KChaplainDashVoice", AudioParams.Default.WithVolume(-4f));
 
     [DataField]
     public EntityUid? ActionEntity;

@@ -1200,3 +1200,27 @@
   maxLimit: 1
   loadouts:
   - ClothingBeltChaplainMeltaChargebase
+
+- type: loadoutGroup
+  id: WH40KAstartesImperiumArmor
+  name: loadout-group-wh40k-astartes-imperium-armor
+  loadouts:
+  - WH40KAstartesImperiumArmorMk7
+  - WH40KAstartesImperiumArmorBlackTemplars
+
+- type: loadoutGroup
+  id: WH40KAstartesChaosArmor
+  name: loadout-group-wh40k-astartes-chaos-armor
+  loadouts:
+  - WH40KAstartesChaosArmorBlackLegion
+  - WH40KAstartesChaosArmorEmperorsChildren
+
+- type: loadoutGroup
+  id: WH40KAstartesWeapon
+  name: loadout-group-wh40k-astartes-weapon
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - WH40KAstartesBolterLoadout
+  - WH40KAstartesBoltPistolLoadout
+  - WH40KAstartesPowerSwordLoadout

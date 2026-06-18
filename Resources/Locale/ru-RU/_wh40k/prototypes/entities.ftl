@@ -1312,23 +1312,26 @@ ent-ClothingBackpackAstartesMk5Powerpack = силовой ранец Mk V
 ent-ClothingBackpackAstartesMk6Powerpack = силовой ранец Mk VI
     .desc = Облегчённый силовой ранец космодесантника.
 
+ent-ClothingBackpackAstartesMk7Powerpack = силовой ранец Ультрамаринов Mk VII
+    .desc = Силовой ранец брони Ультрамаринов, рассчитанный на анатомию Адептус Астартес.
+
 ent-ClothingBackpackAstartesMk7JumpPack = прыжковый ранец Mk VII
     .desc = Прыжковый ранец силовой брони космодесантника.
 
 ent-ClothingBackpackAstartesMk23JumpPack = прыжковый ранец Mk II/III
     .desc = Ранний прыжковый ранец силовой брони космодесантника.
 
-ent-ClothingBackpackAstartesChaosPowerpack = силовой ранец хаоситского космодесантника
-    .desc = Осквернённый силовой ранец для брони космодесантника, украшенный символами Хаоса.
+ent-ClothingBackpackAstartesChaosPowerpack = силовой ранец Чёрного легиона
+    .desc = Осквернённый силовой ранец брони Чёрного легиона, украшенный символами Хаоса.
 
-ent-ClothingShoesAstartesImperiumBoots = сапоги космодесантника Империума
-    .desc = Усиленные сапоги силовой брони, рассчитанные на анатомию Адептус Астартес.
+ent-ClothingShoesAstartesImperiumBoots = сабатоны Ультрамаринов
+    .desc = Усиленные сабатоны из комплекта силовой брони Ультрамаринов, рассчитанные на анатомию Адептус Астартес.
 
-ent-ClothingShoesAstartesChaosBoots = сапоги хаоситского космодесантника
-    .desc = Осквернённые сапоги силовой брони, подогнанные под анатомию еретика-Астартес.
+ent-ClothingShoesAstartesChaosBoots = сабатоны Чёрного легиона
+    .desc = Осквернённые сабатоны силовой брони, подогнанные под анатомию еретика-Астартес.
 
-ent-ClothingHeadHelmetAstartesMk7 = шлем Mk VII "Аквила"
-    .desc = Герметичный шлем силовой брони космодесанта. Его крепления и уплотнения рассчитаны на анатомию Адептус Астартес.
+ent-ClothingHeadHelmetAstartesMk7 = шлем Ультрамаринов Mk VII "Аквила"
+    .desc = Герметичный шлем силовой брони Ультрамаринов, рассчитанный на анатомию Адептус Астартес.
 
 ent-ClothingHeadHelmetAstartesMk2 = шлем Mk II
     .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
@@ -1345,11 +1348,11 @@ ent-ClothingHeadHelmetAstartesMk5 = шлем Mk V
 ent-ClothingHeadHelmetAstartesMk6 = шлем Mk VI
     .desc = Герметичный шлем силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
 
-ent-ClothingHeadHelmetAstartesChaos = шлем хаоситского космодесантника
-    .desc = Герметичный шлем осквернённой силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
+ent-ClothingHeadHelmetAstartesChaos = шлем Чёрного легиона
+    .desc = Герметичный шлем осквернённой силовой брони Чёрного легиона, рассчитанный на анатомию Адептус Астартес.
 
-ent-ClothingOuterArmorAstartesMk7 = силовая броня Mk VII "Аквила"
-    .desc = Сервоусиленный комплект силовой брони Адептус Астартес. Защищает лучше обычной панцирной брони и рассчитан на тело космодесантника.
+ent-ClothingOuterArmorAstartesMk7 = силовая броня Ультрамаринов Mk VII "Аквила"
+    .desc = Сервоусиленный комплект силовой брони Ультрамаринов, защищающий лучше обычной панцирной брони и рассчитанный на тело космодесантника.
 
 ent-ClothingOuterArmorAstartesMk2 = силовая броня Mk II
     .desc = Ранний комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
@@ -1369,8 +1372,14 @@ ent-ClothingOuterArmorAstartesMk5 = силовая броня Mk V
 ent-ClothingOuterArmorAstartesMk6 = силовая броня Mk VI
     .desc = Разведывательный комплект силовой брони космодесантника, рассчитанный на анатомию Адептус Астартес.
 
-ent-ClothingOuterArmorAstartesChaos = силовая броня хаоситского космодесантника
-    .desc = Осквернённый комплект силовой брони, переделанный под анатомию Адептус Астартес и укреплённый варп-скверной.
+ent-ClothingOuterArmorAstartesChaos = силовая броня Чёрного легиона
+    .desc = Осквернённый комплект силовой брони Чёрного легиона, переделанный под анатомию Адептус Астартес и укреплённый варп-скверной.
+
+ent-ClothingUniformJumpsuitAstartes = поддоспешник Ультрамаринов
+    .desc = Усиленный поддоспешник, который носят под силовой бронёй Ультрамаринов.
+
+ent-ClothingUniformJumpsuitAstartesChaos = поддоспешник Чёрного легиона
+    .desc = Осквернённый поддоспешник, который носят под силовой бронёй Чёрного легиона.
 
 ent-MobAstartesWH40KImperiumMk2 = космодесантник Империума Mk II
 ent-MobAstartesWH40KImperiumMk4 = космодесантник Империума Mk IV
@@ -2060,6 +2069,12 @@ ent-ActionWH40KChaosTzeentchTimeField = Поле серого времени
 
 ent-ActionWH40KTogglePhantomStep = Фантомный шаг
     .desc = Включить или выключить автоматическое уклонение рывком.
+
+ent-ActionWH40KAstartesToxicSpit = Токсичный плевок
+    .desc = Выплюнуть едкий токсин в цель.
+
+ent-ActionWH40KAstartesDash = Ударный рывок
+    .desc = Рвануть на расстояние до трёх тайлов, оглушая врагов на траектории.
 
 ent-ClothingUniformJumpsuitHelldriverUniform = форма хеллдайвера
     .desc = Стандартная форма хеллдайвера.

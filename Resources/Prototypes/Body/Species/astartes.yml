@@ -1,10 +1,64 @@
+- type: markingsGroup
+  parent: Undergarments
+  id: Astartes
+  limits:
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
+      onlyGroupWhitelisted: true
+      required: false
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      onlyGroupWhitelisted: true
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 0
+      onlyGroupWhitelisted: true
+      required: false
+    enum.HumanoidVisualLayers.Chest:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Tail:
+      limit: 0
+      required: false
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
 - type: entity
   parent: BaseSpeciesAppearance
   id: AppearanceAstartes
+  categories: [ HideSpawnMenu ]
   name: astartes appearance
   components:
   - type: Inventory
-    speciesId: astartes
+    speciesId: Astartes
     displacements:
       jumpsuit:
         sizeMaps:
@@ -33,16 +87,16 @@
       LegRight: OrganAstartesLegRight
       FootLeft: OrganAstartesFootLeft
       FootRight: OrganAstartesFootRight
-      Brain: OrganHumanBrain
-      Eyes: OrganHumanEyes
-      Tongue: OrganHumanTongue
-      Appendix: OrganHumanAppendix
-      Ears: OrganHumanEars
-      Lungs: OrganHumanLungs
-      Heart: OrganHumanHeart
-      Stomach: OrganHumanStomach
-      Liver: OrganHumanLiver
-      Kidneys: OrganHumanKidneys
+      Brain: OrganAstartesBrain
+      Eyes: OrganAstartesEyes
+      Tongue: OrganAstartesTongue
+      Appendix: OrganAstartesAppendix
+      Ears: OrganAstartesEars
+      Lungs: OrganAstartesLungs
+      Heart: OrganAstartesHeart
+      Stomach: OrganAstartesStomach
+      Liver: OrganAstartesLiver
+      Kidneys: OrganAstartesKidneys
   - type: HumanoidProfile
     species: Astartes
 
@@ -74,13 +128,24 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 40
+        Blunt: 80
         Structural: 20
+  - type: ActionGun
+    action: ActionWH40KAstartesToxicSpit
+    gunProto: WH40KAstartesToxicSpitGun
+  - type: WH40KChaplainDash
+    cooldownSeconds: 60
+    dashRange: 3
+    damage: 0
+    knockdownSeconds: 2
+    stunSeconds: 1
+    actionPrototype: ActionWH40KAstartesDash
+    voiceLine: null
   - type: MobThresholds
     thresholds:
       0: Alive
-      300: Critical
-      600: Dead
+      450: Critical
+      900: Dead
   - type: Destructible
     thresholds:
     - trigger:
@@ -121,8 +186,8 @@
       - !type:VomitBehavior
   - type: SlowOnDamage
     speedModifierThresholds:
-      180: 0.7
-      240: 0.5
+      270: 0.7
+      360: 0.5
   - type: Bloodstream
     bleedReductionAmount: 1
     maxBleedAmount: 30
@@ -142,7 +207,7 @@
     popup: species-armor-requirement-component-astartes-only
 
 - type: entity
-  parent: OrganHuman
+  parent: OrganBase
   id: OrganAstartes
   abstract: true
   suffix: astartes
@@ -159,7 +224,22 @@
       sprite: Mobs/Species/Astartes/parts.rsi
   - type: VisualOrganMarkings
     markingData:
-      group: None
+      group: Astartes
+
+- type: entity
+  parent: OrganAstartes
+  id: OrganAstartesInternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Astartes/organs.rsi
+
+- type: entity
+  id: OrganAstartesMetabolizer
+  abstract: true
+  components:
+  - type: Metabolizer
+    metabolizerTypes: [ Human ]
 
 - type: entity
   parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganAstartesExternal ]
@@ -168,6 +248,11 @@
 - type: entity
   parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganAstartesExternal ]
   id: OrganAstartesHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+    - enum.HumanoidVisualLayers.HeadTop
 
 - type: entity
   parent: [ OrganBaseArmLeft, OrganAstartesExternal ]
@@ -200,3 +285,47 @@
 - type: entity
   parent: [ OrganBaseFootRight, OrganAstartesExternal ]
   id: OrganAstartesFootRight
+
+- type: entity
+  parent: [ OrganBaseBrain, OrganAstartesInternal ]
+  id: OrganAstartesBrain
+
+- type: entity
+  parent: [ OrganBaseEyes, OrganAstartesInternal, OrganAstartesExternal ]
+  id: OrganAstartesEyes
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: Mobs/Species/Astartes/eyes.rsi
+
+- type: entity
+  parent: [ OrganBaseTongue, OrganAstartesInternal ]
+  id: OrganAstartesTongue
+
+- type: entity
+  parent: [ OrganBaseAppendix, OrganAstartesInternal ]
+  id: OrganAstartesAppendix
+
+- type: entity
+  parent: [ OrganBaseEars, OrganAstartesInternal ]
+  id: OrganAstartesEars
+
+- type: entity
+  parent: [ OrganBaseLungs, OrganAstartesInternal, OrganAstartesMetabolizer ]
+  id: OrganAstartesLungs
+
+- type: entity
+  parent: [ OrganBaseHeart, OrganAstartesInternal, OrganAstartesMetabolizer ]
+  id: OrganAstartesHeart
+
+- type: entity
+  parent: [ OrganBaseStomach, OrganAstartesInternal, OrganAstartesMetabolizer ]
+  id: OrganAstartesStomach
+
+- type: entity
+  parent: [ OrganBaseLiver, OrganAstartesInternal, OrganAstartesMetabolizer ]
+  id: OrganAstartesLiver
+
+- type: entity
+  parent: [ OrganBaseKidneys, OrganAstartesInternal, OrganAstartesMetabolizer ]
+  id: OrganAstartesKidneys

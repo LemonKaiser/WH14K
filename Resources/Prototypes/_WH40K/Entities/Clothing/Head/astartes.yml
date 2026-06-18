@@ -5,29 +5,19 @@
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7.rsi
-    layers:
-    - state: icon
-      color: "#2F5DB3"
-    - state: icon-eyes
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/astartes_mk7.rsi
     stripDelay: 26
     clothingVisuals:
       head:
       - state: equipped-HELMET
-        color: "#2F5DB3"
-      - state: equipped-HELMET-eyes
   - type: Item
     size: Normal
     inhandVisuals:
       left:
       - state: inhand-left
-        color: "#2F5DB3"
-      - state: inhand-left-eyes
       right:
       - state: inhand-right
-        color: "#2F5DB3"
-      - state: inhand-right-eyes
   - type: BreathMask
   - type: IngestionBlocker
   - type: PressureProtection

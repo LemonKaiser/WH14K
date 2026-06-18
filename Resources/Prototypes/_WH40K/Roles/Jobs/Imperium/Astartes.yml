@@ -1,0 +1,41 @@
+- type: job
+  id: AstartesImperium
+  name: job-name-astartes-imperium
+  description: job-description-astartes-imperium
+  displayWeight: 1
+  playTimeTracker: JobAstartesImperium
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Astartes
+  startingGear: AstartesImperiumGear
+  icon: "JobIconAstartesImperium"
+  supervisors: job-supervisors-wh40k-imperium-astartes
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
+      - type: WH40KMoraleExecutionTarget
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Engineering
+
+- type: startingGear
+  id: AstartesImperiumGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackImperium
+    back: ClothingBackpackAstartesMk7Powerpack
+    head: ClothingHeadHelmetAstartesMk7
+    outerClothing: ClothingOuterArmorAstartesMk7
+    jumpsuit: ClothingUniformJumpsuitAstartes
+    shoes: ClothingShoesAstartesImperiumBoots
+    belt: WeaponPistolAstartesBolt
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineBolter
+    id: AstartesImperiumDogTag
+  inhand:
+  - WeaponRifleBolter

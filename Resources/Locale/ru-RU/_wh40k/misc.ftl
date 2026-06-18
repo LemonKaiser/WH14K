@@ -122,3 +122,6 @@ wh40k-astartes-only-power-sword = Машинный дух оружия отве�
 
 game-buns-wh40k-imperial = Плюшки
 game-buns-wh40k-heretic = Плюшки
+loadout-group-wh40k-astartes-imperium-armor = Доспехи Адептус Астартес
+loadout-group-wh40k-astartes-chaos-armor = Доспехи Астартес Хаоса
+loadout-group-wh40k-astartes-weapon = Вооружение Астартес

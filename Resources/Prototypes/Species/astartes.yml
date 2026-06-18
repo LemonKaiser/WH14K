@@ -1,7 +1,7 @@
 - type: species
   id: Astartes
   name: species-name-astartes
-  roundStart: false
+  roundStart: true
   prototype: MobAstartes
   dollPrototype: AppearanceAstartes
   skinColoration: HumanToned

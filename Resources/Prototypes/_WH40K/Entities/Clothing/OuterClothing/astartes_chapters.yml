@@ -24,6 +24,9 @@
         Slash: 0.3
         Piercing: 0.35
         Heat: 0.45
+  - type: Reflect
+    reflectProb: 0.1
+    reflectingInHands: false
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
@@ -66,6 +69,9 @@
         Slash: 0.3
         Piercing: 0.35
         Heat: 0.45
+  - type: Reflect
+    reflectProb: 0.1
+    reflectingInHands: false
   - type: PressureProtection
     highPressureMultiplier: 0.08
     lowPressureMultiplier: 1000
