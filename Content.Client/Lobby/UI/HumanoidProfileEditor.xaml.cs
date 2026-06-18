@@ -451,7 +451,7 @@ namespace Content.Client.Lobby.UI
 
                 if (TabContainer.CurrentTab == 1)
                 {
-                    UpdateJobPriorities();
+                    RefreshJobs();
                     _deferredJobsSync = false;
                 }
                 else
@@ -567,7 +567,7 @@ namespace Content.Client.Lobby.UI
 
             if (tabIndex == 1 && _deferredJobsSync)
             {
-                UpdateJobPriorities();
+                RefreshJobs();
                 _deferredJobsSync = false;
             }
 
