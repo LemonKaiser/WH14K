@@ -1024,9 +1024,11 @@ public sealed partial class WH40KCinematicSystem
     private NpcActorBaseline CaptureNpcActorBaseline(EntityUid entity, ProtoId<StartingGearPrototype>? startingGearId)
     {
         var xform = Transform(entity);
+#pragma warning disable CS0618
         var damage = TryComp<DamageableComponent>(entity, out var damageable)
             ? _damageable.GetAllDamage((entity, damageable))
             : new DamageSpecifier();
+#pragma warning restore CS0618
         var factions = new HashSet<ProtoId<NpcFactionPrototype>>();
         if (TryComp<NpcFactionMemberComponent>(entity, out var faction))
             factions.UnionWith(faction.Factions);

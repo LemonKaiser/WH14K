@@ -3,6 +3,8 @@ using Content.Client.UserInterface.Controls;
 using Content.Shared._WH40K.Oskvernitel;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
+using Robust.Shared.IoC;
+using Robust.Shared.Localization;
 using Robust.Shared.Utility;
 using System.Linq;
 
@@ -52,7 +54,7 @@ public sealed class WH40KOskvernitelWeaponBoundUserInterface(EntityUid owner, En
     {
         foreach (var entry in state.Entries.OrderBy(static entry => entry.Id))
         {
-            var localizedName = Loc.TryGetString($"ent-{entry.PrototypeId}", out var prototypeName) &&
+            var localizedName = IoCManager.Resolve<ILocalizationManager>().TryGetString($"ent-{entry.PrototypeId}", out var prototypeName) &&
                                 !string.IsNullOrWhiteSpace(prototypeName)
                 ? prototypeName
                 : Loc.GetString(entry.NameLocKey);

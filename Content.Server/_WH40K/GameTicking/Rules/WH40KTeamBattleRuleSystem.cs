@@ -92,6 +92,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
     [Dependency] private  GameTicker _gameTicker = default!;
     [Dependency] private  IGameMapManager _gameMapManager = default!;
     [Dependency] private  KillTrackingSystem _killTracking = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  IMapManager _mapManager = default!;
     [Dependency] private  IPlayerManager _players = default!;
     [Dependency] private  PlayTimeTrackingSystem _playTimeTracking = default!;
@@ -158,7 +159,9 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         SubscribeLocalEvent<WH40KValidatedKillRewardEvent>(OnValidatedKillReward);
         SubscribeLocalEvent<WH40KValidatedKillRewardRevokedEvent>(OnValidatedKillRewardRevoked);
         SubscribeLocalEvent<WH40KConfirmedEliminationEvent>(OnConfirmedElimination);
+#pragma warning disable CS0618
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamageChanged);
+#pragma warning restore CS0618
         SubscribeLocalEvent<WH40KTeamBattleFactionIconComponent, PolymorphedEvent>(OnFactionIconPolymorphed);
     }
 
@@ -974,6 +977,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         rule.TeamKills[killerTeamIndex]++;
     }
 
+#pragma warning disable CS0618
     private void OnDamageChanged(EntityUid uid, DamageableComponent component, DamageChangedEvent args)
     {
         if (!TryGetActiveRule(out _, out var rule, out _))
@@ -1093,6 +1097,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
             teamId,
             healedInt));
     }
+#pragma warning restore CS0618
 
     private void ApplyConfigToActiveRules()
     {
@@ -3433,7 +3438,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
     private string? TryGetWeatherLocString(string prefix, string weatherId)
     {
         var key = $"{prefix}-{weatherId}";
-        return Loc.TryGetString(key, out var localized) && !string.IsNullOrWhiteSpace(localized)
+        return _loc.TryGetString(key, out var localized) && !string.IsNullOrWhiteSpace(localized)
             ? localized
             : null;
     }

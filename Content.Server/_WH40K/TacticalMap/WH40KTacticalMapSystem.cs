@@ -77,6 +77,7 @@ public sealed partial class WH40KTacticalMapSystem : SharedWH40KTacticalMapSyste
     [Dependency] private  PowerCellSystem _cell = default!;
     [Dependency] private  SharedStationSystem _station = default!;
     [Dependency] private  IGameMapManager _gameMapManager = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  WH40KTeamBattleRuleSystem _teamRule = default!;
     [Dependency] private  MobStateSystem _mobState = default!;
     [Dependency] private  SharedTransformSystem _xform = default!;
@@ -1063,7 +1064,7 @@ public sealed partial class WH40KTacticalMapSystem : SharedWH40KTacticalMapSyste
         var suffix = separator >= 0 ? trimmed[separator..] : string.Empty;
         var key = $"wh40k-tactical-map-callsign-{baseToken.ToLowerInvariant()}";
 
-        var localized = Loc.TryGetString(key, out var value) && !string.IsNullOrWhiteSpace(value)
+        var localized = _loc.TryGetString(key, out var value) && !string.IsNullOrWhiteSpace(value)
             ? value
             : baseToken;
 

@@ -94,6 +94,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private  UserInterfaceSystem _ui = default!;
     [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  IGameTiming _timing = default!;
     [Dependency] private  PopupSystem _popup = default!;
     [Dependency] private  IPlayerManager _players = default!;
@@ -971,7 +972,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        if (Loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
+        if (_loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
             return localized!;
 
         return value;

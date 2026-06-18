@@ -28,16 +28,13 @@ public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
     [Dependency] private  DamageableSystem _damageable = default!;
     [Dependency] private  WH40KWaveDefenceRuleSystem _rule = default!;
 
-    private ISawmill _sawmill = default!;
-
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = Logger.GetSawmill("wh40k.wave");
 
         SubscribeLocalEvent<WH40KWaveDefenceObjectiveComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WH40KWaveDefenceObjectiveComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<WH40KWaveDefenceObjectiveComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<WH40KWaveDefenceObjectiveComponent, DamageDealtEvent>(OnDamageDealt);
         SubscribeLocalEvent<WH40KWaveDefenceObjectiveComponent, MobStateChangedEvent>(OnMobStateChanged);
     }
 
@@ -55,9 +52,6 @@ public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
             bar.UseMobThresholds = false;
             Dirty(uid, bar);
         }
-
-        _sawmill.Info(
-            $"WaveDefence objective initialized: objective={ToPrettyString(uid)}, team={component.TeamId}, maxHealth={component.MaxHealth}, warnAt={component.WarnAtPercent:P0}, coordinates={Transform(uid).Coordinates}.");
     }
 
     private void OnBeforeDamageChanged(
@@ -81,9 +75,9 @@ public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
         }
     }
 
-    private void OnDamageChanged(EntityUid uid, WH40KWaveDefenceObjectiveComponent component, DamageChangedEvent args)
+    private void OnDamageDealt(EntityUid uid, WH40KWaveDefenceObjectiveComponent component, DamageDealtEvent args)
     {
-        if (!args.DamageIncreased || component.Destroyed || !TryComp<DamageableComponent>(uid, out var damageable))
+        if (component.Destroyed || !TryComp<DamageableComponent>(uid, out var damageable))
             return;
 
 #pragma warning disable CS0618
@@ -95,8 +89,6 @@ public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
             if (!component.LowHealthAnnounced && remainingRatio <= component.WarnAtPercent)
             {
                 component.LowHealthAnnounced = true;
-                _sawmill.Warning(
-                    $"WaveDefence objective low health: objective={ToPrettyString(uid)}, remainingRatio={remainingRatio:P1}, totalDamage={totalDamage}, maxHealth={component.MaxHealth}.");
                 _rule.BroadcastWaveMessage(
                     Loc.GetString("wh40k-objective-low-health", ("target", Loc.GetString(component.NameLoc))));
             }
@@ -120,8 +112,6 @@ public sealed partial class WH40KWaveDefenceObjectiveSystem : EntitySystem
             return;
 
         component.Destroyed = true;
-        _sawmill.Warning(
-            $"WaveDefence objective destroyed: objective={ToPrettyString(uid)}, team={component.TeamId}, coordinates={Transform(uid).Coordinates}.");
         RaiseLocalEvent(new WH40KWaveDefenceObjectiveDestroyedEvent(uid, component.TeamId));
     }
 }

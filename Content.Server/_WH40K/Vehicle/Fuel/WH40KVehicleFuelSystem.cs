@@ -41,7 +41,7 @@ public sealed partial class WH40KVehicleFuelSystem : EntitySystem
         SubscribeLocalEvent<WH40KVehicleFuelComponent, SolutionChangedEvent>(OnVehicleFuelSolutionChanged);
 
         SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, ComponentStartup>(OnHandlingStartup);
-        SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, DamageDealtEvent>(OnDamageDealt);
         SubscribeLocalEvent<WH40KVehicleHandlingHealthComponent, RepairedEvent>(OnRepaired);
 
         SubscribeLocalEvent<WH40KVehicleFuelTerminalComponent, MapInitEvent>(OnTerminalMapInit);
@@ -126,9 +126,9 @@ public sealed partial class WH40KVehicleFuelSystem : EntitySystem
         UpdateServiceState(ent.Owner, ent.Comp);
     }
 
-    private void OnDamageChanged(Entity<WH40KVehicleHandlingHealthComponent> ent, ref DamageChangedEvent args)
+    private void OnDamageDealt(Entity<WH40KVehicleHandlingHealthComponent> ent, ref DamageDealtEvent args)
     {
-        UpdateServiceState(ent.Owner, ent.Comp, args.Damageable);
+        UpdateServiceState(ent.Owner, ent.Comp);
     }
 
     private void OnRepaired(Entity<WH40KVehicleHandlingHealthComponent> ent, ref RepairedEvent args)
