@@ -7,20 +7,16 @@
   - type: Sprite
     layers:
     - state: icon
-      color: "#2F5DB3"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
-        color: "#2F5DB3"
       right:
       - state: inhand-right
-        color: "#2F5DB3"
   - type: Clothing
     clothingVisuals:
       back:
       - state: equipped-BACKPACK
-        color: "#2F5DB3"
   - type: SpeciesRestrictedClothing
     species:
     - Astartes
@@ -70,6 +66,15 @@
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk6_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk7Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_powerpack.rsi
 
 - type: entity
   parent: ClothingBackpackAstartesBase

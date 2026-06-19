@@ -619,7 +619,7 @@
 - type: latheRecipe
   parent: BaseToolRecipe
   id: WH40KRecipeServoSkull
-  result: WH40KServoSkullMelta
+  result: WH40KServoSkullChassis
   materials:
     Steel: 500
     Glass: 100

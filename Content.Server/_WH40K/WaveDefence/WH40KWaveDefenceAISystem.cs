@@ -34,12 +34,9 @@ public sealed partial class WH40KWaveDefenceAISystem : EntitySystem
     [Dependency] private  PathfindingSystem _pathfinding = default!;
     [Dependency] private  IPrototypeManager _prototype = default!;
 
-    private ISawmill _sawmill = default!;
-
     public override void Initialize()
     {
         base.Initialize();
-        _sawmill = Logger.GetSawmill("wh40k.wave.ai");
 
         SubscribeLocalEvent<WH40KWaveDefenceAttackerComponent, ComponentStartup>(OnAttackerStartup);
     }
@@ -265,7 +262,6 @@ public sealed partial class WH40KWaveDefenceAISystem : EntitySystem
 
         if (!_prototype.HasIndex<HTNCompoundPrototype>(taskId))
         {
-            _sawmill.Warning($"WaveDefence attacker {ToPrettyString(uid)} requested missing HTN root '{taskId}'.");
             return;
         }
 

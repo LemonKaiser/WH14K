@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Astartes eye placement for WH14K based on existing human eyes by DrSmugleaf",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "eyes",
+      "directions": 4
+    }
+  ]
+}

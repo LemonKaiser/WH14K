@@ -1,4 +1,5 @@
 using Content.Shared.Alert;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.Morale.Components;
@@ -35,6 +36,9 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
 
     [DataField]
     public EntProtoId ActionPrototype = "ActionWH40KMoraleExecution";
+
+    [DataField]
+    public SoundSpecifier VoiceLine = new SoundCollectionSpecifier("WH40KCommissarExecutionVoice", AudioParams.Default.WithVolume(-4f));
 
     [DataField]
     public EntityUid? ActionEntity;

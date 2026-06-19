@@ -85,6 +85,32 @@
         - Cartridge10mm
 
 - type: entity
+  id: MagazineHeavyStubPistol
+  parent: BaseMagazinePistol
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/heavy_stub_pistol.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+    steps: 2
+    zeroVisible: false
+  - type: Tag
+    tags:
+      - MagazineHeavyStubPistol
+  - type: BallisticAmmoProvider
+    capacity: 8
+    proto: CartridgeHeavyStubPistol
+    mayTransfer: true
+    whitelist:
+      tags:
+        - CartridgeHeavyStubPistol
+
+- type: entity
   id: MagazineStubRifle
   parent: BaseMagazineRifle
   components:

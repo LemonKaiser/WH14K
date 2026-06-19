@@ -1,0 +1,13 @@
+- type: entity
+  parent: WeaponShotgunDoubleBarreled
+  id: WeaponWH40KCyberTozik
+  name: cyber-tozik
+  description: A rugged cybernetic double-barreled shotgun. Uses .50 shotgun shells.
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/cyber_tozik.rsi
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/cyber_tozik_inhands.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Shotguns/cyber_tozik_inhands.rsi

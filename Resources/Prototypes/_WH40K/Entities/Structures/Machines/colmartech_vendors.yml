@@ -98,6 +98,8 @@
         amount: 36
       - id: MagazineHevStubPistol
         amount: 24
+      - id: MagazineHeavyStubPistol
+        amount: 16
       - id: MagazineStubPistol
         amount: 24
       - id: MagazineStubRifle
@@ -105,6 +107,8 @@
       - id: WH40KAmmoBox10mmLong
         amount: 12
       - id: WH40KAmmoBox10mm
+        amount: 6
+      - id: WH40KAmmoBoxHeavyStubPistol
         amount: 6
       - id: WH40KAmmoBoxAutogun
         amount: 2

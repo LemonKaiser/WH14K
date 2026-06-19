@@ -103,6 +103,30 @@
     - MagazineStubPistol
     - MagazineStubPistol
 
+- type: loadout
+  id: WH40KCommandHeavyStubPistolBloodPact
+  dummyEntity: WeaponHeavyStubPistolBloodPact
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  equipment:
+    pocket1: WeaponHeavyStubPistolBloodPact
+  storage:
+    belt:
+    - MagazineHeavyStubPistol
+    - MagazineHeavyStubPistol
+
+- type: loadout
+  id: WH40KCommandSignalPistolChaos
+  dummyEntity: WeaponWH40KSignalPistolChaos
+  inhand:
+  - WeaponWH40KSignalPistolChaos
+  storage:
+    belt:
+    - ShellShotgunFlare
+    - ShellShotgunFlare
+  groupBy: "FlareGun"
+
 
 
 

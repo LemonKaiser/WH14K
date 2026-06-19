@@ -1,7 +1,21 @@
 - type: entity
+  id: WH40KServoSkullChassis
+  parent: BaseItem
+  suffix: WH40K, incomplete
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Devices/servo_skull.rsi
+    state: deactivate
+  - type: Item
+    size: Normal
+  - type: WH40KCombineWithPrototype
+    requiredPrototype: WH40KHumanSkull
+    resultPrototype: WH40KServoSkull
+
+- type: entity
   id: WH40KServoSkull
   name: servo skull
-  description: A compact servo skull chassis. Deploy it to create a friendly support skull.
+  description: A completed servo skull ready to deploy as a friendly support drone.
   parent: BaseItem
   suffix: WH40K, non-activated
   components:

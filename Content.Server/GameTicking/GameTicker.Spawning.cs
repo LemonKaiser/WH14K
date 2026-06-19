@@ -250,6 +250,8 @@ namespace Content.Server.GameTicking
             if (jobBans != null)
                 restrictedRoles.UnionWith(jobBans);
 
+            AddSpeciesRestrictedJobs(character, restrictedRoles);
+
             // Pick best job best on prefs.
             jobId ??= _stationJobs.PickBestAvailableJobWithPriority(station,
                 character.JobPriorities,
@@ -416,23 +418,20 @@ namespace Content.Server.GameTicking
             return true;
         }
 
+        private void AddSpeciesRestrictedJobs(
+            HumanoidCharacterProfile character,
+            HashSet<ProtoId<JobPrototype>> restrictedRoles)
+        {
+            foreach (var job in _prototypeManager.EnumeratePrototypes<JobPrototype>())
+            {
+                if (!JobPrioritySpeciesNormalizer.IsSpeciesAllowedForJob(character.Species, job, _roles))
+                    restrictedRoles.Add(job.ID);
+            }
+        }
+
         private bool IsSpeciesAllowedForJob(ProtoId<SpeciesPrototype> speciesId, JobPrototype job)
         {
-            var requirements = _roles.GetRoleRequirements(job);
-            if (requirements == null)
-                return true;
-
-            foreach (var requirement in requirements)
-            {
-                if (requirement is not SpeciesRequirement speciesRequirement)
-                    continue;
-
-                var listed = speciesRequirement.Species.Contains(speciesId);
-                if (speciesRequirement.Inverted ? listed : !listed)
-                    return false;
-            }
-
-            return true;
+            return JobPrioritySpeciesNormalizer.IsSpeciesAllowedForJob(speciesId, job, _roles);
         }
 
         /// <summary>

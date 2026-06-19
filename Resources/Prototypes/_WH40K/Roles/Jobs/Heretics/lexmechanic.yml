@@ -43,6 +43,7 @@
   - Atmospherics
   - Research
   - ResearchDirector
+  - Cargo
 
 - type: startingGear
   id: HLexmechanicGear

@@ -44,6 +44,19 @@
     PhosphorStrength: 0.48
 
 - type: shader
+  id: WH40KNightVision
+  kind: source
+  path: "/Textures/_WH40K/Shaders/night_vision.swsl"
+  params:
+    Strength: 0.82
+    BrightnessBoost: 2.45
+    Contrast: 1.18
+    Vignette: 0.32
+    Scanline: 0.14
+    Noise: 0.018
+    LightFloor: 0.34
+
+- type: shader
   id: WH40KPhantomAfterimage
   kind: source
   path: "/Textures/_WH40K/Shaders/phantom_afterimage.swsl"

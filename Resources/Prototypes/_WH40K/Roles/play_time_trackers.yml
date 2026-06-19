@@ -107,6 +107,9 @@
   id: JobMedic
 
 - type: playTimeTracker
+  id: JobAstartesImperium
+
+- type: playTimeTracker
   id: JobHMagos
 
 - type: playTimeTracker
@@ -152,6 +155,9 @@
   id: JobHGuardsman
 
 - type: playTimeTracker
+  id: JobHAstartes
+
+- type: playTimeTracker
   id: JobWH40KChaplain
 
 - type: playTimeTracker
@@ -177,3 +183,6 @@
 
 - type: playTimeTracker
   id: JobOrkBoyz
+
+- type: playTimeTracker
+  id: JobWH40KSpeciesPreview

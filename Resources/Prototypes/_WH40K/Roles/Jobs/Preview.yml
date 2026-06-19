@@ -1,0 +1,8 @@
+- type: job
+  id: WH40KSpeciesPreview
+  name: job-name-wh40k-species-preview
+  description: job-description-wh40k-species-preview
+  playTimeTracker: JobWH40KSpeciesPreview
+  setPreference: false
+  canBeAntag: false
+

@@ -1,0 +1,44 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform sampler2D LIGHT_TEXTURE;
+
+uniform highp float Strength;
+uniform highp float BrightnessBoost;
+uniform highp float Contrast;
+uniform highp float Vignette;
+uniform highp float Scanline;
+uniform highp float Noise;
+uniform highp float LightFloor;
+
+highp float wh40k_nvg_rand(highp vec2 coord)
+{
+    return fract(sin(dot(coord, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+void fragment()
+{
+    highp vec4 base = zTextureSpec(SCREEN_TEXTURE, Pos);
+    highp vec3 light = texture2D(LIGHT_TEXTURE, Pos).rgb;
+    highp float lightLevel = max(max(light.r, max(light.g, light.b)), max(LightFloor, 0.025));
+    highp vec3 recovered = clamp(base.rgb / lightLevel, 0.0, 1.0);
+
+    highp float luma = dot(recovered, vec3(0.299, 0.587, 0.114));
+    highp float amplified = pow(clamp(luma * BrightnessBoost + 0.035, 0.0, 1.0), 0.58);
+    highp vec3 night = vec3(
+        amplified * 0.24 + recovered.r * 0.08,
+        amplified + recovered.g * 0.12,
+        amplified * 0.32 + recovered.b * 0.08
+    );
+    night = (night - 0.5) * Contrast + 0.5;
+
+    highp vec2 centered = Pos * 2.0 - 1.0;
+    highp float vignette = smoothstep(1.32, 0.18, dot(centered, centered));
+    night *= mix(1.0 - Vignette, 1.0, vignette);
+
+    highp float scan = sin(FRAGCOORD.y * 1.85) * 0.5 + 0.5;
+    night *= 1.0 - Scanline * (1.0 - scan) * 0.42;
+
+    highp float noise = (wh40k_nvg_rand(FRAGCOORD.xy + vec2(TIME * 41.0, TIME * 17.0)) - 0.5) * Noise;
+    night += vec3(noise * 0.45, noise, noise * 0.45);
+
+    COLOR = vec4(mix(base.rgb, clamp(night, 0.0, 1.0), clamp(Strength, 0.0, 1.0)), base.a);
+}

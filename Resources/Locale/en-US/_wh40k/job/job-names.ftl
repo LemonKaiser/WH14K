@@ -24,6 +24,7 @@ job-name-psyker = Psyker
 job-name-vox-scout = Vox Operator
 job-name-tithe-supplier = Munitorum Logistician
 job-name-munitorum-officer = Munitorum Officer
+job-name-astartes-imperium = Imperium Astartes
 
 job-name-hcolonel = Heresiarch
 job-name-hlieutenant = Chaos Champion
@@ -41,9 +42,11 @@ job-name-hgenetor = Heretek Genetor
 job-name-henginseer = Renegade Tech-Priest
 job-name-hnovice = Dark Mechanicum Acolyte
 job-name-hellish-foreman = hellish foreman
+job-name-hastartes = Chaos Astartes
 
 job-name-tau-fire-warrior = Shas'la
 job-name-tau-officer = Shas'ui
 job-name-tau-ethereal = Ethereal
 
 job-name-ork-boyz = boyz
+job-name-wh40k-species-preview = Species preview

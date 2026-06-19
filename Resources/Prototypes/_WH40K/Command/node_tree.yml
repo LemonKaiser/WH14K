@@ -314,8 +314,8 @@
       Imperium: [WH40KRecipeHeavyBolter, WH40KRecipeMagazineHeavyBolter, WH40KRecipeWeaponLaserMeltagun, WH40KRecipeMeltPowerCell, WH40KRecipeWeaponLaserLasgunVoss, WH40KRecipePowerCellVoss]
       Heretics: [WH40KRecipeHeavyBolter, WH40KRecipeMagazineHeavyBolter, WH40KRecipeWeaponLaserMeltagun, WH40KRecipeMeltPowerCell]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank, WH40KImperiumStubRevolver, WH40KImperiumSpeedLoader11mm, WH40KImperiumLondoronMk2Aquila, WH40KImperiumMagazineLondoronMk2, WH40KImperiumAmmoLondoronMk2]
-      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank,  WH40KHereticsStubRevolver, WH40KHereticsSpeedLoader11mm, WH40KHereticsLondoronMk2Vengeance, WH40KHereticsMagazineLondoronMk2, WH40KHereticsAmmoLondoronMk2]
+      Imperium: [WH40KImperiumSentryTurretMini, WH40KImperiumHeavyBolter, WH40KImperiumMagazineHeavyBolter, WH40KImperiumMeltagun, WH40KImperiumMeltCell, WH40KImperiumFlameThrower, WH40KImperiumFlameTank, WH40KImperiumStubRevolver, WH40KImperiumSpeedLoader11mm, WH40KImperiumHeavyStubPistol, WH40KImperiumMagazineHeavyStubPistol, WH40KImperiumAmmoHeavyStubPistol, WH40KImperiumLondoronMk2Aquila, WH40KImperiumMagazineLondoronMk2, WH40KImperiumAmmoLondoronMk2]
+      Heretics: [WH40KHereticsSentryTurretMini, WH40KHereticsHeavyBolter, WH40KHereticsMagazineHeavyBolter, WH40KHereticsMeltagun, WH40KHereticsMeltCell, WH40KHereticsFlameThrower, WH40KHereticsFlameTank, WH40KHereticsStubRevolver, WH40KHereticsSpeedLoader11mm, WH40KHereticsHeavyStubPistol, WH40KHereticsMagazineHeavyStubPistol, WH40KHereticsAmmoHeavyStubPistol, WH40KHereticsLondoronMk2Vengeance, WH40KHereticsMagazineLondoronMk2, WH40KHereticsAmmoLondoronMk2]
   - id: wep_left_4
     domain: weaponry
     titleKey: w40k-cmd-upgrade-tree-node-wep-left-4-title
@@ -410,7 +410,7 @@
       Imperium: [WH40KRecipeIntelDetectorImperium, WH40KRecipeCarapaceArmor, WH40KRecipeCarapaceHelmet]
       Heretics: [WH40KRecipeIntelDetectorHeretics, WH40KRecipeHereticCarapaceArmor, WH40KRecipeHereticCarapaceHelmet]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumIntelDetector, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet]
+      Imperium: [WH40KImperiumIntelDetector, WH40KImperiumCarapaceArmor, WH40KImperiumCarapaceHelmet, WH40KImperiumSpecialistHelmet]
       Heretics: [WH40KHereticsIntelDetector, WH40KHereticsCarapaceArmor, WH40KHereticsCarapaceHelmet]
   - id: eqp_right_3
     domain: equipment

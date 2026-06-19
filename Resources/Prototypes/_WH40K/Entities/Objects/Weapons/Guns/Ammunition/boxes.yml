@@ -59,6 +59,26 @@
     price: 120
 
 - type: entity
+  id: WH40KAmmoBoxHeavyStubPistol
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  - type: Item
+    size: Normal
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeHeavyStubPistol
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeHeavyStubPistol
+  - type: StaticPrice
+    price: 180
+
+- type: entity
   id: WH40KAmmoBoxMinigun
   parent: BaseAmmoProvider
   suffix: WH40K

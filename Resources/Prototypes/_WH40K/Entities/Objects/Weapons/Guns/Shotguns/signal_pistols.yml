@@ -1,0 +1,31 @@
+- type: entity
+  parent: WeaponFlareGun
+  id: WeaponWH40KSignalPistolImperium
+  name: imperium signal pistol
+  description: A compact flare pistol used by Imperial officers to mark targets and rally formations.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_imperium.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_imperium.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_imperium.rsi
+
+- type: entity
+  parent: WeaponFlareGun
+  id: WeaponWH40KSignalPistolChaos
+  name: chaos signal pistol
+  description: A warped flare pistol used by heretic officers to cast battlefield signals through smoke and fire.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_chaos.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_chaos.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/SignalPistols/signal_pistol_chaos.rsi

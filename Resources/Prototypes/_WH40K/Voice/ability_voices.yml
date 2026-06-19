@@ -1,0 +1,16 @@
+- type: soundCollection
+  id: WH40KChaplainDashVoice
+  files:
+    - /Audio/_WH40K/Voice/Chaplain/charge.ogg
+    - /Audio/_WH40K/Voice/Chaplain/down.ogg
+    - /Audio/_WH40K/Voice/Chaplain/goldenthrone.ogg
+    - /Audio/_WH40K/Voice/Chaplain/riseup.ogg
+    - /Audio/_WH40K/Voice/Chaplain/withme.ogg
+    - /Audio/_WH40K/Voice/Chaplain/youcantstand.ogg
+
+- type: soundCollection
+  id: WH40KCommissarExecutionVoice
+  files:
+    - /Audio/_WH40K/Voice/Commissar/Execution/ifyou.ogg
+    - /Audio/_WH40K/Voice/Commissar/Execution/judge.ogg
+    - /Audio/_WH40K/Voice/Commissar/Execution/tremble.ogg

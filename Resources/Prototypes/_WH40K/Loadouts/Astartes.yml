@@ -1,0 +1,101 @@
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk7
+  dummyEntity: ClothingOuterArmorAstartesMk7
+  equipment:
+    head: ClothingHeadHelmetAstartesMk7
+    outerClothing: ClothingOuterArmorAstartesMk7
+    back: ClothingBackpackAstartesMk7Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk2
+  dummyEntity: ClothingOuterArmorAstartesMk2
+  equipment:
+    head: ClothingHeadHelmetAstartesMk2
+    outerClothing: ClothingOuterArmorAstartesMk2
+    back: ClothingBackpackAstartesMk2Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk3
+  dummyEntity: ClothingOuterArmorAstartesMk3
+  equipment:
+    head: ClothingHeadHelmetAstartesMk3
+    outerClothing: ClothingOuterArmorAstartesMk3
+    back: ClothingBackpackAstartesMk3Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk4
+  dummyEntity: ClothingOuterArmorAstartesMk4A
+  equipment:
+    head: ClothingHeadHelmetAstartesMk4
+    outerClothing: ClothingOuterArmorAstartesMk4A
+    back: ClothingBackpackAstartesMk4Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk5
+  dummyEntity: ClothingOuterArmorAstartesMk5
+  equipment:
+    head: ClothingHeadHelmetAstartesMk5
+    outerClothing: ClothingOuterArmorAstartesMk5
+    back: ClothingBackpackAstartesMk5Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorMk6
+  dummyEntity: ClothingOuterArmorAstartesMk6
+  equipment:
+    head: ClothingHeadHelmetAstartesMk6
+    outerClothing: ClothingOuterArmorAstartesMk6
+    back: ClothingBackpackAstartesMk6Powerpack
+
+- type: loadout
+  id: WH40KAstartesImperiumArmorBlackTemplars
+  dummyEntity: ClothingOuterArmorAstartesMk7BlackTemplars
+  equipment:
+    head: ClothingHeadHelmetAstartesMk7BlackTemplars
+    outerClothing: ClothingOuterArmorAstartesMk7BlackTemplars
+    back: ClothingBackpackAstartesMk7BlackTemplarsPowerpack
+
+- type: loadout
+  id: WH40KAstartesChaosArmorBlackLegion
+  dummyEntity: ClothingOuterArmorAstartesChaos
+  equipment:
+    head: ClothingHeadHelmetAstartesChaos
+    outerClothing: ClothingOuterArmorAstartesChaos
+    back: ClothingBackpackAstartesChaosPowerpack
+
+- type: loadout
+  id: WH40KAstartesChaosArmorEmperorsChildren
+  dummyEntity: ClothingOuterArmorAstartesMk7EmperorsChildren
+  equipment:
+    head: ClothingHeadHelmetAstartesMk7EmperorsChildren
+    outerClothing: ClothingOuterArmorAstartesMk7EmperorsChildren
+    back: ClothingBackpackAstartesMk7EmperorsChildrenPowerpack
+
+- type: loadout
+  id: WH40KAstartesBolterLoadout
+  dummyEntity: WeaponRifleBolter
+  equipment:
+    suitstorage: WeaponRifleBolter
+  storage:
+    back:
+    - MagazineBolter
+    - MagazineBolter
+    - MagazineBolter
+  groupBy: main
+
+- type: loadout
+  id: WH40KAstartesBoltPistolLoadout
+  dummyEntity: WeaponPistolAstartesBolt
+  equipment:
+    belt: WeaponPistolAstartesBolt
+  storage:
+    back:
+    - WH40KAstartesLaserPistolPowerCell
+    - WH40KAstartesLaserPistolPowerCell
+  groupBy: sidearm
+
+- type: loadout
+  id: WH40KAstartesPowerSwordLoadout
+  dummyEntity: WH40KAstartesPowerSword
+  inhand:
+  - WH40KAstartesPowerSword
+  groupBy: melee

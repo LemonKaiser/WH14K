@@ -30,3 +30,18 @@ cargoproduct-description-wh40k-imperium-binoculars = Оптический при
 
 cargoproduct-name-wh40k-heretics-binoculars = бинокль (Еретики)
 cargoproduct-description-wh40k-heretics-binoculars = Оптический прибор для наблюдения на дальних дистанциях. Поставляется еретическим силам для разведки.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-aquila = тяжёлый стаб-пистолет (Империум)
+cargoproduct-description-wh40k-heavy-stub-pistol-aquila = Магазинный M36 с останавливающей мощью револьвера.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-blood-pact = тяжёлый стаб-пистолет (Еретики)
+cargoproduct-description-wh40k-heavy-stub-pistol-blood-pact = Еретическая версия M36, перекрашенная для офицеров и налётчиков.
+
+cargoproduct-name-wh40k-magazine-heavy-stub-pistol = магазин тяжёлого стаб-пистолета
+cargoproduct-description-wh40k-magazine-heavy-stub-pistol = Запасной магазин на 8 патронов для тяжёлых стаб-пистолетов M36.
+
+cargoproduct-name-wh40k-ammobox-heavy-stub-pistol = коробка патронов тяжёлого стаб-пистолета
+cargoproduct-description-wh40k-ammobox-heavy-stub-pistol = Коробка тяжёлых 11-мм патронов для тяжёлых стаб-пистолетов M36.
+
+cargoproduct-name-wh40k-imperium-specialist-helmet = шлем специалиста
+cargoproduct-description-wh40k-imperium-specialist-helmet = Шлем спецобразца с ночным видением и переключаемым отображателем здоровья.

@@ -62,6 +62,7 @@
         WH40KImperium:
           WH40KImperiumLasgun: [WH40KWeaponryStandardLasguns]
           WH40KImperiumStubRifle: [WH40KWeaponryStubberLines]
+          WH40KImperiumSpecialistHelmet: [WH40KEquipmentSpecialistHelmet]
         WH40KHeretics:
           WH40KHereticsLasgun: [WH40KWeaponryStandardLasguns]
           WH40KHereticsStubRifle: [WH40KWeaponryStubberLines]

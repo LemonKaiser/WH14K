@@ -4,6 +4,7 @@ using Content.Server._WH40K.MetaProgress;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
 using Robust.Shared.Player;
@@ -22,7 +23,11 @@ public static class SpeciesSelectionValidator
         IEntitySystemManager entitySystems)
     {
         var validated = profile.Validated(session, collection);
-        return EnsureUnlocked(validated, session, collection, prototypeManager, adminManager, entitySystems);
+        validated = EnsureUnlocked(validated, session, collection, prototypeManager, adminManager, entitySystems);
+        return JobPrioritySpeciesNormalizer.EnsureSpeciesCompatibleJobPriorities(
+            validated,
+            prototypeManager,
+            entitySystems.GetEntitySystem<SharedRoleSystem>());
     }
 
     public static HumanoidCharacterProfile EnsureUnlocked(

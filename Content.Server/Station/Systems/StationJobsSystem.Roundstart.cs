@@ -304,7 +304,11 @@ public sealed partial class StationJobsSystem
             foreach (var station in givenStations)
             {
                 // Pick a random overflow job from that station
-                var overflows = GetOverflowJobs(station).ToList();
+                var overflows = GetOverflowJobs(station)
+                    .Where(jobId =>
+                        _prototypeManager.Resolve(jobId, out var job) &&
+                        JobPrioritySpeciesNormalizer.IsSpeciesAllowedForJob(profile.Species, job, _roles))
+                    .ToList();
                 var overflowEvent = new StationJobsGetOverflowCandidatesEvent(player, station, overflows);
                 RaiseLocalEvent(ref overflowEvent);
                 _random.Shuffle(overflows);
@@ -372,6 +376,9 @@ public sealed partial class StationJobsSystem
                     continue;
 
                 if (!_prototypeManager.Resolve(jobId, out var job))
+                    continue;
+
+                if (!JobPrioritySpeciesNormalizer.IsSpeciesAllowedForJob(profile.Species, job, _roles))
                     continue;
 
                 if (whitelist != null && !whitelist.Contains(jobId))

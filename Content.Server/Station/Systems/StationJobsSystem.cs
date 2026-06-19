@@ -23,10 +23,11 @@ namespace Content.Server.Station.Systems;
 [PublicAPI]
 public sealed partial class StationJobsSystem : EntitySystem
 {
-    [Dependency] private  IConfigurationManager _configurationManager = default!;
-    [Dependency] private  IPlayerManager _player = default!;
-    [Dependency] private  IRobustRandom _random = default!;
-    [Dependency] private  GameTicker _gameTicker = default!;
+    [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -463,7 +464,10 @@ public sealed partial class StationJobsSystem : EntitySystem
         if (!pickOverflows)
             return null;
 
-        var overflows = GetOverflowJobs(station);
+        var overflows = GetOverflowJobs(station)
+            .Where(job => disallowedJobs == null || !disallowedJobs.Contains(job))
+            .ToList();
+
         if (overflows.Count == 0)
             return null;
 

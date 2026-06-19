@@ -18,6 +18,7 @@ using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -36,6 +37,7 @@ public sealed partial class WH40KIntelDetectorSystem : EntitySystem
     [Dependency] private  SharedContainerSystem _container = default!;
     [Dependency] private  EntityLookupSystem _lookup = default!;
     [Dependency] private  SharedHandsSystem _hands = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  INetManager _net = default!;
     [Dependency] private  PopupSystem _popup = default!;
     [Dependency] private  WH40KCommandEventMissionRuntimeSystem _runtime = default!;
@@ -523,7 +525,7 @@ public sealed partial class WH40KIntelDetectorSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        if (Loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
+        if (_loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
             return localized!;
 
         return value;

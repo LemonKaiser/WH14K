@@ -1,7 +1,7 @@
 {
-  "copyright" : "by @londorondondon",
-  "license" : "CC-BY-SA-3.0",
   "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for WH14K project from user-provided sentinel assets",
   "size": {
     "x": 64,
     "y": 64
@@ -15,94 +15,15 @@
       "name": "sentinel-moving",
       "directions": 4,
       "delays": [
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ]
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
       ]
     },
     {
-      "name": "sentinel-moving_autogun",
-      "directions": 4,
-      "delays": [
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ]
-      ]
-    },
-    {
-      "name": "sentinel-moving_plasma",
-      "directions": 4,
-      "delays": [
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ],
-        [
-          0.1,
-          0.1,
-          0.1,
-          0.1
-        ]
-      ]
-    },
-    {
-      "name": "sentinel-open"
+      "name": "sentinel-open",
+      "directions": 4
     },
     {
       "name": "sentinel-broken"
@@ -112,7 +33,107 @@
       "directions": 4
     },
     {
+      "name": "sentinel-moving_autogun",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_autogun",
+      "directions": 4
+    },
+    {
       "name": "sentinel_plasma",
+      "directions": 4
+    },
+    {
+      "name": "sentinel-moving_plasma",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_plasma",
+      "directions": 4
+    },
+    {
+      "name": "sentinel_heavyflamer",
+      "directions": 4
+    },
+    {
+      "name": "sentinel-moving_heavyflamer",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_heavyflamer",
+      "directions": 4
+    },
+    {
+      "name": "sentinel_chainsaw",
+      "directions": 4
+    },
+    {
+      "name": "sentinel-moving_chainsaw",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_chainsaw",
+      "directions": 4
+    },
+    {
+      "name": "sentinel_lascannon",
+      "directions": 4
+    },
+    {
+      "name": "sentinel-moving_lascannon",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_lascannon",
+      "directions": 4
+    },
+    {
+      "name": "sentinel_multilas",
+      "directions": 4
+    },
+    {
+      "name": "sentinel-moving_multilas",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "sentinel-open_multilas",
       "directions": 4
     }
   ]

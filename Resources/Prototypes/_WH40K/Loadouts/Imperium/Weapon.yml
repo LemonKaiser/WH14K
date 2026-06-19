@@ -110,6 +110,31 @@
   groupBy: "second"
 
 - type: loadout
+  id: WH40KCommandHeavyStubPistolAquila
+  dummyEntity: WeaponHeavyStubPistolAquila
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  inhand:
+  - WeaponHeavyStubPistolAquila
+  storage:
+    belt:
+    - MagazineHeavyStubPistol
+    - MagazineHeavyStubPistol
+  groupBy: "second"
+
+- type: loadout
+  id: WH40KCommandSignalPistolImperium
+  dummyEntity: WeaponWH40KSignalPistolImperium
+  inhand:
+  - WeaponWH40KSignalPistolImperium
+  storage:
+    belt:
+    - ShellShotgunFlare
+    - ShellShotgunFlare
+  groupBy: "FlareGun"
+
+- type: loadout
   id: WH40KWeaponStubRevolverLoadout30
   effects:
   - !type:WH40KMetaLevelLoadoutEffect

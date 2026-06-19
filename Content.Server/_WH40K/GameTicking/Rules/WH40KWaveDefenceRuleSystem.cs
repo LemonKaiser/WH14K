@@ -79,6 +79,7 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
     [Dependency] private  WH40KWaveDefenceAISystem _waveAi = default!;
     [Dependency] private  WH40KWaveDefenceMapRegistrySystem _registry = default!;
     [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  SharedMapSystem _map = default!;
 
     private ISawmill _sawmill = default!;
     private EntityUid? _activeRuleUid;
@@ -183,9 +184,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             _sawmill.Error("WaveDefence could not resolve a valid map id from the active station.");
             return;
         }
-
-        _sawmill.Info(
-            $"WaveDefence starting: rule={ToPrettyString(uid)}, config={component.Config}, station={ToPrettyString(component.Station.Value)}, map={mapId}, mode={component.Mode}, defendingTeam={component.DefendingTeamId}, preparation={component.PreparationDurationSeconds}s, intermission={component.IntermissionDurationSeconds}s, maxWave={component.MaxWaveDurationSeconds}s, finalWave={component.FinalWaveNumber}, profileCount={component.WaveProfiles.Count}.");
 
         ApplyMapStabilitySafeguards(component, mapId);
         TryInitializeLayout(component, announceOnSuccess: true);
@@ -295,16 +293,8 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         if (!TryGetRuleMapId(component, out var mapId))
         {
             component.LastLayoutStatus = "WaveDefence layout retry could not resolve the active map id yet.";
-
-            if (component.LayoutRetryCount == 1 || component.LayoutRetryCount % 10 == 0)
-                _sawmill.Warning($"{component.LastLayoutStatus} attempt={component.LayoutRetryCount}.");
-
             return false;
         }
-
-        var shouldLogRetryDetails = component.LayoutRetryCount == 1 || component.LayoutRetryCount % 10 == 0;
-        if (shouldLogRetryDetails)
-            LogLayoutSummary(mapId, component.DefendingTeamId);
 
         var valid = _registry.ValidateLayout(
             mapId,
@@ -320,23 +310,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             component.PrimaryObjective = hasObjective ? resolvedObjective : null;
             component.LastLayoutStatus =
                 $"WaveDefence layout not ready on map {mapId}; attempt={component.LayoutRetryCount}, errors={errors.Count}, objectiveResolved={hasObjective}.";
-
-            if (shouldLogRetryDetails)
-            {
-                _sawmill.Warning(component.LastLayoutStatus);
-
-                foreach (var error in errors)
-                {
-                    _sawmill.Warning(error);
-                }
-
-                if (!hasObjective)
-                {
-                    _sawmill.Warning(
-                        $"WaveDefence primary objective is not available yet on map {mapId} for team '{component.DefendingTeamId}'.");
-                }
-            }
-
             return false;
         }
 
@@ -346,19 +319,12 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         component.LastLayoutStatus =
             $"WaveDefence layout ready on map {mapId} after {component.LayoutRetryCount} attempt(s).";
 
-        _sawmill.Info(component.LastLayoutStatus);
-        if (!shouldLogRetryDetails)
-            LogLayoutSummary(mapId, component.DefendingTeamId);
-        _sawmill.Info(
-            $"WaveDefence primary objective resolved: objective={ToPrettyString(resolvedObjective)}, coordinates={Transform(resolvedObjective).Coordinates}, team={component.DefendingTeamId}.");
-
         if (announceOnSuccess && !component.PreparationAnnounced)
         {
             component.PreparationAnnounced = true;
             component.NextPhaseChange = component.ManualWaveAdvanceOnly
                 ? TimeSpan.Zero
                 : Timing.CurTime + TimeSpan.FromSeconds(component.PreparationDurationSeconds);
-            _sawmill.Info($"WaveDefence authoring validation passed for map {mapId}; entering preparation phase.");
             BroadcastWaveMessage(Loc.GetString("wh40k-wave-defence-preparation-announce"));
             BroadcastWaveNotification(
                 "wh40k-wave-defence-preparation-announce",
@@ -391,8 +357,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             rule.LateJoinQueuesDuringWave)
         {
             rule.QueuedLateJoinJobs[ev.Player.UserId] = jobId;
-            _sawmill.Info(
-                $"WaveDefence queued latejoin player '{ev.Player.Name}' as observer during active wave {rule.CurrentWaveNumber}; requestedJob={jobId}, queuedLatejoins={rule.QueuedLateJoinJobs.Count}.");
             GameTicker.SpawnObserver(ev.Player);
             ev.Handled = true;
             return;
@@ -404,13 +368,8 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
 
         if (!TrySpawnDefenderForTicker(ev.Player, station, profile, jobId, ev.LateJoin, spawnType))
         {
-            _sawmill.Warning(
-                $"WaveDefence failed to spawn player '{ev.Player.Name}' as job '{jobId}' using spawnType={spawnType}; lateJoin={ev.LateJoin}.");
             return;
         }
-
-        _sawmill.Info(
-            $"WaveDefence routed player '{ev.Player.Name}' into spawnType={spawnType} as job '{jobId}'; lateJoin={ev.LateJoin}, phase={rule.Phase}, wave={rule.CurrentWaveNumber}.");
 
         ev.Handled = true;
     }
@@ -436,9 +395,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         rule.QueuedLateJoinJobs.Remove(ev.Player.UserId);
         rule.QueuedRespawns.Remove(ev.Player.UserId);
 
-        _sawmill.Info(
-            $"WaveDefence spawn complete: player='{ev.Player.Name}', mob={ToPrettyString(ev.Mob)}, job='{ev.JobId}', phase={rule.Phase}, wave={rule.CurrentWaveNumber}, coordinates={Transform(ev.Mob).Coordinates}.");
-
         SendSpawnBriefing(ev.Player, rule);
     }
 
@@ -455,8 +411,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         }
 
         rule.QueuedRespawns.Add(actor.PlayerSession.UserId);
-        _sawmill.Info(
-            $"WaveDefence queued reinforcement respawn for player '{actor.PlayerSession.Name}' after death; wave={rule.CurrentWaveNumber}, phase={rule.Phase}, queuedRespawns={rule.QueuedRespawns.Count}.");
     }
 
     private void OnObjectiveDestroyed(WH40KWaveDefenceObjectiveDestroyedEvent args)
@@ -467,8 +421,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         if (!string.Equals(args.TeamId, rule.DefendingTeamId, StringComparison.OrdinalIgnoreCase))
             return;
 
-        _sawmill.Warning(
-            $"WaveDefence objective destroyed: objective={ToPrettyString(args.Objective)}, team={args.TeamId}, wave={rule.CurrentWaveNumber}, phase={rule.Phase}.");
         SetDefeat(rule, Loc.GetString("wh40k-wave-defence-defeat-objective"));
     }
 
@@ -525,16 +477,12 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
                 out var coordinates,
                 teamId: rule.DefendingTeamId))
         {
-            _sawmill.Warning($"No {spawnType} marker found on map {mapId} for team '{rule.DefendingTeamId}'.");
             return false;
         }
 
         var mob = SpawnPlayerMobFreshMind(player, profile, jobId, coordinates, station);
         if (mob == null)
             return false;
-
-        _sawmill.Info(
-            $"WaveDefence defender spawned: player='{player.Name}', mob={ToPrettyString(mob.Value)}, job='{jobId}', spawnType={spawnType}, coordinates={coordinates}, station={ToPrettyString(station)}.");
 
         GameTicker.PlayersJoinedRoundNormally++;
         var complete = new PlayerSpawnCompleteEvent(
@@ -638,16 +586,12 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
                 out var coordinates,
                 teamId: rule.DefendingTeamId))
         {
-            _sawmill.Warning($"No defender reinforcement marker found on map {mapId} for team '{rule.DefendingTeamId}'.");
             return false;
         }
 
         var mob = SpawnPlayerMobFreshMind(session, profile, jobId, coordinates, station);
         if (mob == null)
             return false;
-
-        _sawmill.Info(
-            $"WaveDefence queued defender released: player='{session.Name}', mob={ToPrettyString(mob.Value)}, job='{jobId}', coordinates={coordinates}, phase={rule.Phase}, wave={rule.CurrentWaveNumber}.");
 
         var complete = new PlayerSpawnCompleteEvent(
             mob.Value,
@@ -679,8 +623,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
     {
         if (!rule.LayoutReady || !rule.AuthoringValid || rule.PrimaryObjective == null)
         {
-            _sawmill.Warning(
-                $"WaveDefence refused to start a new wave because layout is not ready yet. ready={rule.LayoutReady}, authoringValid={rule.AuthoringValid}, objectivePresent={rule.PrimaryObjective != null}.");
             return;
         }
 
@@ -712,13 +654,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
                 Spawned = false,
             });
         }
-
-        var batchSummary = string.Join(
-            "; ",
-            profile.Batches.Select(batch =>
-                $"delay={Math.Max(0f, batch.DelaySeconds)}s table={batch.EntityTable} count={Math.Max(1, batch.Count)} spawnId={batch.SpawnId ?? "<any>"} root={batch.RootTaskOverride ?? "<auto>"} faction={batch.NpcFactionId ?? "<unchanged>"}"));
-        _sawmill.Info(
-            $"WaveDefence wave start: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, mode={rule.Mode}, completion={profile.CompletionPolicy}, batches={profile.Batches.Count}. {batchSummary}");
 
         BroadcastWaveMessage(Loc.GetString(
             "wh40k-wave-defence-wave-start",
@@ -785,14 +720,12 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         if (rule.Station == null || rule.PrimaryObjective == null)
         {
             rule.LastBatchSummary = "Wave batch skipped: station or primary objective was missing.";
-            _sawmill.Warning(rule.LastBatchSummary);
             return;
         }
 
         if (!TryGetRuleMapId(rule, out var mapId))
         {
             rule.LastBatchSummary = "Wave batch skipped: active map id could not be resolved.";
-            _sawmill.Warning(rule.LastBatchSummary);
             return;
         }
 
@@ -801,7 +734,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         {
             rule.LastBatchSummary =
                 $"Wave batch '{batch.EntityTable}' failed: attacker spawn '{batch.SpawnId ?? "<any>"}' could not resolve a spawn marker.";
-            _sawmill.Warning(rule.LastBatchSummary);
             return;
         }
 
@@ -862,13 +794,8 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
 
         if (spawnedCount == 0)
         {
-            _sawmill.Warning(
-                $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' failed to spawn attackers from candidate spawn markers.");
             return;
         }
-
-        _sawmill.Info(
-            $"Wave {rule.CurrentWaveNumber} batch '{batch.EntityTable}' spawned {spawnedCount}/{requestedCount} attackers; active attackers={rule.ActiveAttackers.Count}, candidateSpawns={candidateSpawns.Count}, usedSpawns=[{string.Join(", ", usedSpawns)}].");
     }
 
     private List<(EntityUid Uid, WH40KWaveSpawnPointComponent Spawn, TransformComponent Xform)> ResolveAttackerSpawnPoints(
@@ -959,8 +886,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
     private void CompleteCurrentWave(WH40KWaveDefenceRuleComponent rule)
     {
         rule.ActiveWaveEndsAt = TimeSpan.Zero;
-        _sawmill.Info(
-            $"WaveDefence wave complete: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, remainingAttackers={rule.ActiveAttackers.Count}, pendingBatches={rule.PendingBatches.Count(batch => !batch.Spawned)}.");
         BroadcastWaveMessage(Loc.GetString(
             "wh40k-wave-defence-wave-clear",
             ("wave", rule.CurrentWaveNumber)));
@@ -991,9 +916,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
 
     private void ExpireCurrentWave(WH40KWaveDefenceRuleComponent rule)
     {
-        _sawmill.Warning(
-            $"WaveDefence wave timeout: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, maxDuration={rule.MaxWaveDurationSeconds:0.#}s, activeAttackers={rule.ActiveAttackers.Count}, pendingBatches={rule.PendingBatches.Count(batch => !batch.Spawned)}; counting wave as completed.");
-
         foreach (var attacker in rule.ActiveAttackers.ToArray())
         {
             if (Exists(attacker))
@@ -1019,7 +941,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         rule.ActiveWaveEndsAt = TimeSpan.Zero;
         rule.Phase = WH40KWaveDefencePhase.Victory;
         rule.EndReason = reason;
-        _sawmill.Info($"WaveDefence victory: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, reason='{reason}'.");
         BroadcastWaveMessage(reason);
         BroadcastWaveNotification(
             "wh40k-wave-defence-victory",
@@ -1036,7 +957,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         rule.ActiveWaveEndsAt = TimeSpan.Zero;
         rule.Phase = WH40KWaveDefencePhase.Defeat;
         rule.EndReason = reason;
-        _sawmill.Warning($"WaveDefence defeat: wave={rule.CurrentWaveNumber}/{rule.FinalWaveNumber}, reason='{reason}'.");
         BroadcastWaveMessage(reason);
         BroadcastWaveNotification(
             string.Equals(reason, Loc.GetString("wh40k-wave-defence-defeat-objective"), StringComparison.Ordinal)
@@ -1662,21 +1582,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             $"Last batch: {rule.LastBatchSummary}";
     }
 
-    private void LogLayoutSummary(MapId mapId, string defendingTeamId)
-    {
-        var defenderStarts = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.DefenderStart, defendingTeamId);
-        var defenderReinforcements = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.DefenderReinforcement, defendingTeamId);
-        var attackerSpawns = _registry.GetSpawnPoints(mapId, WH40KWaveSpawnPointType.Attacker);
-        var hasObjective = _registry.TryGetPrimaryObjective(mapId, defendingTeamId, out var objective);
-
-        var attackerCoordinates = string.Join(", ", attackerSpawns.Select(spawn => spawn.Xform.Coordinates.ToString()));
-        var defenderStartCoordinates = string.Join(", ", defenderStarts.Select(spawn => spawn.Xform.Coordinates.ToString()));
-        var defenderReinforcementCoordinates = string.Join(", ", defenderReinforcements.Select(spawn => spawn.Xform.Coordinates.ToString()));
-
-        _sawmill.Info(
-            $"WaveDefence map layout: map={mapId}, team={defendingTeamId}, objective={(hasObjective ? ToPrettyString(objective) : "<missing>")}, defenderStarts={defenderStarts.Count}[{defenderStartCoordinates}], defenderReinforcements={defenderReinforcements.Count}[{defenderReinforcementCoordinates}], attackerSpawns={attackerSpawns.Count}[{attackerCoordinates}].");
-    }
-
     private void ApplyMapStabilitySafeguards(WH40KWaveDefenceRuleComponent rule, MapId mapId)
     {
         var stationGrids = new HashSet<EntityUid>();
@@ -1705,15 +1610,14 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             EnsureInherentGravity(gridUid, raiseGravityChangedEvent: true);
         }
 
-        if (_mapManager.MapExists(mapId))
+        if (_map.MapExists(mapId))
         {
-            var mapUid = _mapManager.GetMapEntityId(mapId);
+            var mapUid = _map.GetMapOrInvalid(mapId);
             if (mapUid != EntityUid.Invalid)
                 EnsureInherentGravity(mapUid, raiseGravityChangedEvent: false);
         }
 
         rule.MapStabilitySummary = $"gravity enforced on {stationGrids.Count} grid(s) for map {mapId}";
-        _sawmill.Info($"Applied WaveDefence map safeguards: {rule.MapStabilitySummary}.");
     }
 
     private void EnsureInherentGravity(EntityUid uid, bool raiseGravityChangedEvent)
@@ -1956,13 +1860,11 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
 
         if (!TryInitializeLayout(rule, announceOnSuccess: true))
         {
-            _sawmill.Warning("WaveDefence admin advance requested before layout became ready; request rejected.");
             return false;
         }
 
         if (rule.Phase == WH40KWaveDefencePhase.WaveActive)
         {
-            _sawmill.Info($"WaveDefence admin advance requested during active wave {rule.CurrentWaveNumber}; clearing attackers and completing the wave.");
             foreach (var attacker in rule.ActiveAttackers.ToArray())
             {
                 if (Exists(attacker))
@@ -1981,7 +1883,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
 
         if (rule.Phase is WH40KWaveDefencePhase.Preparation or WH40KWaveDefencePhase.Intermission)
         {
-            _sawmill.Info($"WaveDefence admin advance requested during phase {rule.Phase}; starting the next wave immediately.");
             StartNextWave(rule);
             return true;
         }
@@ -1994,7 +1895,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         if (!TryGetActiveRule(out _, out var rule, out _))
             return false;
 
-        _sawmill.Warning("WaveDefence admin forced victory.");
         SetVictory(rule, Loc.GetString("wh40k-wave-defence-victory"));
         return true;
     }
@@ -2004,7 +1904,6 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         if (!TryGetActiveRule(out _, out var rule, out _))
             return false;
 
-        _sawmill.Warning($"WaveDefence admin forced defeat with reason '{reason}'.");
         SetDefeat(rule, reason);
         return true;
     }

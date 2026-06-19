@@ -599,6 +599,7 @@ public sealed partial class WH40KCommandNodeSystem
 
                 var profile = HumanoidCharacterProfile.RandomWithSpecies(HumanoidCharacterProfile.DefaultSpecies);
                 var spawned = _stationSpawning.SpawnPlayerMob(coordinates, role.JobId, profile, station);
+                ApplyPendingReinforcementEquipmentOverrides(teamId, role.RoleId, spawned);
                 ApplySpawnedReinforcementTeamData(
                     spawned,
                     teamId,
@@ -746,6 +747,17 @@ public sealed partial class WH40KCommandNodeSystem
         EnsureComp<WH40KReinforcementGhostRoleOneShotComponent>(entity);
     }
 
+    private void ApplyPendingReinforcementEquipmentOverrides(string teamId, string roleId, EntityUid entity)
+    {
+        if (!TryResolveReinforcementProfileForTeam(teamId, out var profile) ||
+            !TryResolveReinforcementOption(profile, roleId, out var option))
+        {
+            return;
+        }
+
+        ApplyReinforcementEquipmentOverrides(entity, option);
+    }
+
     private WH40KCommandReinforcementBoundUserInterfaceState BuildReinforcementUiState(EntityUid? sourceUid, string teamId, string teamName)
     {
         _teamRule.TryGetTeamCommandPoints(teamId, out var commandPoints);
@@ -797,7 +809,7 @@ public sealed partial class WH40KCommandNodeSystem
                 ResolveReinforcementOptionName(option),
                 ResolveReinforcementOptionDescription(option),
                 string.IsNullOrWhiteSpace(option.GroupKey) ? ReinforcementDefaultGroupKey : option.GroupKey,
-                BuildReinforcementEquipmentSummary(option.Job),
+                BuildReinforcementEquipmentSummary(option),
                 option.PreviewPrototype.ToString(),
                 unitInfluenceCost,
                 WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost),

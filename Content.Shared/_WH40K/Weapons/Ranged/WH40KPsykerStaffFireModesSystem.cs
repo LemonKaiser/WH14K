@@ -5,6 +5,7 @@ using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Maths;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._WH40K.Weapons.Ranged;
@@ -12,6 +13,7 @@ namespace Content.Shared._WH40K.Weapons.Ranged;
 public sealed partial class WH40KPsykerStaffFireModesSystem : EntitySystem
 {
     [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
 
@@ -125,8 +127,12 @@ public sealed partial class WH40KPsykerStaffFireModesSystem : EntitySystem
         // Update WH40KPsykerForceStaffComponent instability
         if (TryComp<WH40KPsykerForceStaffComponent>(ent, out var staff))
         {
-            staff.ShotInstability = fireMode.ShotInstability;
-            Dirty(ent, staff);
+            if (!MathHelper.CloseTo(staff.ShotInstability, fireMode.ShotInstability))
+            {
+                staff.ShotInstability = fireMode.ShotInstability;
+                if (_net.IsServer)
+                    Dirty(ent, staff);
+            }
         }
 
         if (TryComp<GunComponent>(ent, out var gun))

@@ -138,6 +138,14 @@
   - WH40KHelmetVst
   - WH40KValhallanUshanka
   - WH40KValhallanHelmet
+  - WH40KSavlarHelmet
+
+- type: loadoutGroup
+  id: WH40KImperialVoxHead
+  parent: WH40KImperialLineHead
+  name: loadout-group-wh40k-imperial-line-head
+  loadouts:
+  - WH40KSpecialistHelmet
 
 - type: loadoutGroup
   id: WH40KImperialLineHonours
@@ -165,6 +173,8 @@
   - WH40KCoatVst
   - WH40KValhallanCoat
   - WH40KValhallanHeavyArmor
+  - WH40KSavlarArmor
+  - WH40KSavlarVest
 
 - type: loadoutGroup
   id: WH40KImperialMedicOuter
@@ -349,6 +359,15 @@
   - WH40KImperialInquisitionSeal
   - WH40KImperialGoldenPrize
   - WH40KImperialRainCloak
+
+- type: loadoutGroup
+  id: WH40KImperialMedicHands
+  name: loadout-group-wh40k-imperial-medic-hands
+  minLimit: 0
+  loadouts:
+  - WH40KChirurgeonSawGlove
+  - WH40KKriegGloves
+  - WH40KGlovesVst
 
 - type: loadoutGroup
   id: WH40KImperialLogisticsHead
@@ -538,7 +557,7 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
-  - WeaponFlareGunWH40K
+  - WH40KCommandSignalPistolImperium
   - BoxShotgunFlareWH40K
   - WH40KBinocularsKitOfficer
   - WH40KBinocularsKitSergeant
@@ -557,6 +576,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KCommandHeavyStubPistolAquila
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -575,6 +595,7 @@
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
   - WH40KCommandPlasmaPistol
+  - WH40KCommandHeavyStubPistolAquila
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -822,6 +843,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout30
 
 - type: loadoutGroup
@@ -830,6 +852,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -838,6 +861,7 @@
   loadouts:
   - WH40KWeaponStubPistolLoadout
   - WH40KWeaponStubSMGLoadout
+  - WH40KCommandHeavyStubPistolBloodPact
   - WH40KWeaponStubRevolverLoadout20
 
 - type: loadoutGroup
@@ -1035,7 +1059,7 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
-  - WeaponFlareGunWH40K
+  - WH40KCommandSignalPistolChaos
   - BoxShotgunFlareWH40K
   - WH40KLighterKit
   - WH40KFlippoKit
@@ -1176,3 +1200,27 @@
   maxLimit: 1
   loadouts:
   - ClothingBeltChaplainMeltaChargebase
+
+- type: loadoutGroup
+  id: WH40KAstartesImperiumArmor
+  name: loadout-group-wh40k-astartes-imperium-armor
+  loadouts:
+  - WH40KAstartesImperiumArmorMk7
+  - WH40KAstartesImperiumArmorBlackTemplars
+
+- type: loadoutGroup
+  id: WH40KAstartesChaosArmor
+  name: loadout-group-wh40k-astartes-chaos-armor
+  loadouts:
+  - WH40KAstartesChaosArmorBlackLegion
+  - WH40KAstartesChaosArmorEmperorsChildren
+
+- type: loadoutGroup
+  id: WH40KAstartesWeapon
+  name: loadout-group-wh40k-astartes-weapon
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - WH40KAstartesBolterLoadout
+  - WH40KAstartesBoltPistolLoadout
+  - WH40KAstartesPowerSwordLoadout

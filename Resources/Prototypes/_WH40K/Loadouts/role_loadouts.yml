@@ -114,7 +114,7 @@
   id: JobVoxScout
   groups:
   - WH40KImperialGameBuns
-  - WH40KImperialLineHead
+  - WH40KImperialVoxHead
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
   - WH40KImperialFieldOuter
@@ -152,7 +152,7 @@
   - WH40KImperialMedicOuter
   - WH40KImperialFieldBelt
   - WH40KImperialLineUniform
-  - WH40KImperialLineHands
+  - WH40KImperialMedicHands
   - WH40KImperialLineFeet
   - WH40KImperialLineEyes
   - WH40KFieldKit
@@ -459,3 +459,15 @@
   - WH40KTauMainWeapon
   - WH40KTauSidearm
   - WH40KTauAdditionalSupplies
+
+- type: roleLoadout
+  id: JobAstartesImperium
+  groups:
+  - WH40KAstartesImperiumArmor
+  - WH40KAstartesWeapon
+
+- type: roleLoadout
+  id: JobHAstartes
+  groups:
+  - WH40KAstartesChaosArmor
+  - WH40KAstartesWeapon

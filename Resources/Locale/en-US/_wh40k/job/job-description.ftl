@@ -25,6 +25,7 @@ job-description-psyker = Sanctioned Imperium psyker: wield the warp under contro
 job-description-vox-scout = Serve as vox operator: recon, communications, and target designation for the squad.
 job-description-tithe-supplier = Keep Munitorum frontline logistics moving: process requisitions, deliver supplies, and maintain the regiment cargo loop.
 job-description-munitorum-officer = Coordinate regiment supply priorities, oversee requisitions, and keep the Munitorum network functioning under fire.
+job-description-astartes-imperium = Adeptus Astartes in Ultramarines power armour: inspect the transhuman race visuals, armour, and weapon kit.
 
 job-description-hcolonel = Lead the renegade warband, keep pressure on the enemy, and break Imperium defenses.
 job-description-hlieutenant = Warband champion: lead assault groups and eliminate resistance pockets.
@@ -42,9 +43,11 @@ job-description-hlexmechanic = Heretek Lexmechanic: hack and reconfigure enemy s
 job-description-henginseer = Renegade Tech-Priest: maintain machines and profane machine spirits.
 job-description-hnovice = Dark Mechanicum Acolyte: serve the hereteks and learn forbidden rites.
 job-description-hellish-foreman = Elite assault reinforcements in carapace armor, with a hellgun and a shoulder battery.
+job-description-hastartes = Traitor Astartes in Black Legion power armour: inspect the corrupted transhuman visuals, armour, and weapon kit.
 
 job-description-tau-fire-warrior = Shas'la: a line warrior of the Fire Caste, armed and drilled to deliver disciplined pulse fire for the T'au'va.
 job-description-tau-officer = Shas'ui: a Fire Caste officer who leads the cadre's battle line, coordinates volleys, and answers to the Ethereals rather than ruling in their place.
 job-description-tau-ethereal = Ethereal: the spiritual and political leader of the cadre, standing above the castes to direct them in the name of the Greater Good.
 
 job-description-ork-boyz = Nope.
+job-description-wh40k-species-preview = Empty fallback role used only to preview a species without applying incompatible job equipment.

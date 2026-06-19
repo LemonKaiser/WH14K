@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites by ComradLie, adapted by WH14K contributors",
+  "states": [
+    {
+      "name": "column_1"
+    },
+    {
+      "name": "column_2"
+    },
+    {
+      "name": "column_3"
+    },
+    {
+      "name": "commissar_statue"
+    }
+  ]
+}

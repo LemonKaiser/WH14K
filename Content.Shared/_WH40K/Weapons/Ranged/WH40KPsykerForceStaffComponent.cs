@@ -1,9 +1,12 @@
+using Robust.Shared.GameStates;
+
 namespace Content.Shared._WH40K.Weapons.Ranged;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class WH40KPsykerForceStaffComponent : Component
 {
     [DataField("shotInstability")]
+    [AutoNetworkedField]
     public float ShotInstability = 15f;
 
     [DataField("popup")]

@@ -129,6 +129,9 @@ wh40k-barbed-wire-item-desc = Lengths of coiled wire used to reinforce barricade
 wh40k-turret-supported-ammo = Supported ammo: {$ammo}
 loadout-group-wh40k-tau-combat-kit = Cadre equipment
 loadout-group-wh40k-imperial-line-shield = imperial frontline shield
+loadout-group-wh40k-astartes-imperium-armor = Adeptus Astartes armour
+loadout-group-wh40k-astartes-chaos-armor = Chaos Astartes armour
+loadout-group-wh40k-astartes-weapon = Astartes armament
 
 wh40k-astartes-only-power-sword = The weapon's machine spirit refuses your unaugmented grip.
 wh40k-auth-migration-notification-start = Migrating your account data. This can take a little while; please wait for the connection to finish.

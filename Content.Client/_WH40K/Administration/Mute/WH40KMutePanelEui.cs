@@ -28,7 +28,6 @@ public sealed class WH40KMutePanelEui : BaseEui
     {
         base.Closed();
         _window.Close();
-        _window.Dispose();
     }
 
     public override void HandleState(EuiStateBase state)
