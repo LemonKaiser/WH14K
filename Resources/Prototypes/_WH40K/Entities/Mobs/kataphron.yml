@@ -1,0 +1,107 @@
+- type: entity
+  id: MobWH40KKataphron
+  parent: MobRobotic
+  name: kataphron
+  description: A heavy combat servitor. It is a terrifying hybrid of human flesh and machinery, created solely for destruction.
+  suffix: WH40K, Imperium, АдМехи, Ghost Role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowMovement: true
+    allowSpeech: true
+    name: wh40k-ghost-role-kataphron-name
+    description: wh40k-ghost-role-kataphron-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Mobs/kataphron.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base", "movement" ]
+      state: base
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 0.75
+    range: 2
+    animation: WeaponArcFist
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Blunt: 30
+        Shock: 30
+        Structural: 40
+    angle: 80
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: base
+      Dead:
+        Base: dead
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1250: Critical
+      1300: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Critical: HumanCrit
+      Dead: BorgDead
+    showOverlays: false
+  - type: ComplexInteraction
+  - type: ContainerContainer
+  - type: Appearance
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3
+    baseSprintSpeed: 5
+  - type: StandingState
+  - type: Repairable
+    damageValue: -25
+    doAfterDelay: 1
+    fuelCost: 0.75
+  - type: CombatMode
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: walking
+    noMovementLayers:
+      movement:
+        state: base
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - SiliconEmotes
+  - type: Loadout
+    prototypes:
+    - WH40KKataphron
+  - type: Hands
+    activeHandId: Right
+    hands:
+      Right:
+        location: Right
+      extra_hand_1:
+        location: Middle
+
+- type: startingGear
+  id: WH40KKataphron
+  inhand:
+    - WH40KKataphronWeaponHeavyElectricArc

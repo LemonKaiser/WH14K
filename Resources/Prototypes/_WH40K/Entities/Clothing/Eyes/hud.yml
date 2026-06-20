@@ -52,5 +52,22 @@
       - state: equipped-EYES
       - state: equipped-EYES-unshaded
         shader: unshaded
-  - type: ShowJobIcons
-  - type: ShowAccessReaderSettings
+  - type: ItemToggle
+    onUse: false
+    soundActivate:
+      path: /Audio/Items/flashlight_on.ogg
+    soundDeactivate:
+      path: /Audio/Items/flashlight_off.ogg
+    soundFailToActivate:
+      path: /Audio/Machines/button.ogg
+  - type: ToggleClothing
+    action: ActionWH40KToggleSpecialistHelmet
+    disableOnUnequip: true
+  - type: ComponentToggler
+    components:
+    - type: ShowJobIcons
+    - type: ShowAccessReaderSettings
+    - type: ShowHealthBars
+    - type: WH40KNightVision
+  - type: UseDelay
+    delay: 1

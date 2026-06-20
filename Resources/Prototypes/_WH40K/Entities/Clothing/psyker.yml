@@ -17,6 +17,12 @@
   description: Освящённая риза с защитными швами и слоями, помогающими держать дисциплину под давлением Варпа.
 
 - type: entity
+  id: ClothingOuterPsykerWardCoatPremium
+  parent: ClothingOuterChaplainRobe
+  name: форма Схоластики Псайкана
+  description: Униформа выпускника элитной школы Схоластика Псайкана
+
+- type: entity
   id: ClothingShoesPsykerBoots
   parent: ClothingShoesBootsChaplain
   name: сапоги псайкера

@@ -1,0 +1,33 @@
+- type: entity
+  id: WH40KServitor3Gun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_mg.rsi
+    state: base
+  - type: Gun
+    fireRate: 8
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    minAngle: 2
+    maxAngle: 6
+    angleIncrease: 1.2
+    angleDecay: 18
+    soundGunshot:
+      collection: WH40KDreadnoughtAssaultCannon
+  - type: WH40KGunPrediction
+  - type: Unremoveable
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: BallisticAmmoProvider
+    capacity: 100
+    proto: Bullet825mmLong
+    cycleable: false
+  - type: BallisticAmmoSelfRefiller
+    autoRefillRate: 0.5s
+    firingPausesAutoRefill: true
+    autoRefillPauseDuration: 0.5s
+  - type: Item
+    size: Huge

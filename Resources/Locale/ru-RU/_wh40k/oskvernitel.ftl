@@ -6,3 +6,9 @@ wh40k-oskvernitel-weapon-tooltip = { $weapon }\nПатроны: { $current }/{ $
 
 wh40k-ghost-role-dreadnought-name = Дредноут
 wh40k-ghost-role-dreadnought-description = Крупная боевая машина. Поддерживай имперские силы и переключайся между штурмовой пушкой и залповой ракетницей.
+
+wh40k-ghost-role-servitor-name = Сервитор
+wh40k-ghost-role-servitor-description = Бездумный кибернетический дрон, представляющий собой симбиоз человеческой плоти и технологий.
+
+wh40k-ghost-role-kataphron-name = Катафрон-прорывник
+wh40k-ghost-role-kataphron-description = Тяжелый боевой сервитор. Представляет собой устрашающий гибрид человеческой плоти и механизмов, созданный исключительно для разрушения.
