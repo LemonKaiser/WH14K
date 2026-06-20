@@ -1,0 +1,20 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Action icons derived from WH14K folding stock sprites",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "folded"
+    },
+    {
+      "name": "unfolded"
+    }
+  ]
+}

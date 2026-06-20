@@ -337,6 +337,7 @@ namespace Content.Client.Hands.Systems
             // update hands visuals if this item is in a hand (rather then inventory or other container).
             if (!component.Hands.ContainsKey(args.ContainerId))
                 return;
+
             UpdateHandVisuals((uid, component), GetEntity(args.Item), args.ContainerId);
         }
         #endregion

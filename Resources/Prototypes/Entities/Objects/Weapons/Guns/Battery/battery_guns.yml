@@ -26,6 +26,10 @@
     startingCharge: 1000
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   parent: [BaseWeaponBattery, BaseGunWieldable]
@@ -104,6 +108,10 @@
   - type: ContainerContainer
     containers:
       cell_slot: !type:ContainerSlot
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   id: BaseWeaponBatterySmall
@@ -124,6 +132,10 @@
     slots:
     - Belt
     - suitStorage
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   id: BaseWeaponPowerCellSmall
@@ -140,6 +152,10 @@
     quickEquip: false
     slots:
     - Belt
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   name: svalinn laser pistol
@@ -886,6 +902,13 @@
   - type: Battery
     maxCharge: 480
     startingCharge: 480
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
 
 - type: entity
   name: energy magnum

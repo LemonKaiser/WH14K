@@ -4,6 +4,43 @@
   suffix: WH40K, Общий
   components:
   - type: GunRequiresWield
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticCombatShotgun
+    - id: stock
+      slotType: StockRear
+      name: wh40k-weapon-mod-slot-name-stock
+      priority: 117
+      whitelist:
+        tags:
+        - WH40KWeaponModStockCombatShotgun
+    - id: muzzle
+      slotType: MuzzleFront
+      name: wh40k-weapon-mod-slot-name-muzzle
+      priority: 115
+      whitelist:
+        tags:
+        - WH40KWeaponModMuzzleCombatShotgun
+    - id: bayonet
+      slotType: BayonetLug
+      name: wh40k-weapon-mod-slot-name-bayonet
+      priority: 110
+      whitelist:
+        tags:
+        - WH40KWeaponModBayonetCombatShotgun
+    - id: sling
+      slotType: SlingMount
+      name: wh40k-weapon-mod-slot-name-sling
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModSlingCombatShotgun
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi
@@ -17,7 +54,6 @@
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi
     quickEquip: false
     slots:
-    - Back
     - suitStorage
   - type: AmmoCounter
   - type: Gun
@@ -53,3 +89,10 @@
     sprintModifier: 0.97
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight

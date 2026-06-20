@@ -1,6 +1,7 @@
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Robust.Shared.GameStates;
+using Robust.Shared.Audio;
 
 namespace Content.Shared._WH40K.ArmorPlates;
 
@@ -21,4 +22,13 @@ public sealed partial class WH40KArmorPlateHolderComponent : Component
 
     [ViewVariables]
     public bool BaseModifiersInitialized;
+
+    [DataField]
+    public SoundSpecifier? InsertSound = new SoundPathSpecifier("/Audio/Items/toolbox_insert.ogg");
+
+    [DataField]
+    public SoundSpecifier? EjectSound = new SoundPathSpecifier("/Audio/Items/toolbox_remove.ogg");
+
+    [DataField]
+    public SoundSpecifier? BreakSound = new SoundCollectionSpecifier("MetalBreak", AudioParams.Default.WithVolume(-4f));
 }

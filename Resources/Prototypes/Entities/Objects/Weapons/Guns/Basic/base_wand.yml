@@ -26,3 +26,7 @@
   - type: Tag
     tags:
     - WizardWand
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight

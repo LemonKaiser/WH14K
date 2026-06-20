@@ -14,6 +14,7 @@ using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
@@ -30,6 +31,7 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private INetManager _net = default!;
@@ -74,7 +76,7 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
             for (var i = 1; i <= ent.Comp.SlotCount; i++)
             {
                 var slotId = WH40KArmorPlateHelper.GetSlotId(i);
-                var slot = CreatePlateSlot(i);
+                var slot = CreatePlateSlot(ent.Comp, i);
                 ent.Comp.PlateSlots[slotId] = slot;
                 _itemSlots.AddItemSlot(ent.Owner, slotId, slot);
             }
@@ -378,7 +380,7 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
         ent.Comp.BaseModifiersInitialized = true;
     }
 
-    private ItemSlot CreatePlateSlot(int slotIndex)
+    private ItemSlot CreatePlateSlot(WH40KArmorPlateHolderComponent holder, int slotIndex)
     {
         return new ItemSlot
         {
@@ -394,8 +396,8 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
             Name = $"wh40k-armor-plate-slot-name-{slotIndex}",
             LockedFailPopup = "wh40k-armor-plate-slot-locked",
             WhitelistFailPopup = "wh40k-armor-plate-slot-invalid",
-            InsertSound = new SoundPathSpecifier("/Audio/Weapons/Guns/MagIn/revolver_magin.ogg"),
-            EjectSound = new SoundPathSpecifier("/Audio/Weapons/Guns/MagOut/revolver_magout.ogg"),
+            InsertSound = holder.InsertSound,
+            EjectSound = holder.EjectSound,
         };
     }
 
@@ -594,19 +596,22 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
             targets = installed;
 
         var changed = false;
+        var brokeAny = false;
 
         foreach (var (_, _, plateUid, plate) in targets)
         {
-            if (plate.CurrentDurability <= 0)
+            if (!TryWearPlate(plateUid, plate, out var brokeNow))
                 continue;
 
-            plate.CurrentDurability = Math.Max(0, plate.CurrentDurability - 1);
-            Dirty(plateUid, plate);
             changed = true;
+            brokeAny |= brokeNow;
         }
 
         if (changed)
+        {
             RefreshArmorModifiers(ent);
+            PlayBreakSound(ent, brokeAny);
+        }
 
         return changed;
     }
@@ -614,21 +619,47 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
     private bool WearAllInstalledPlates(Entity<WH40KArmorPlateHolderComponent> ent)
     {
         var changed = false;
+        var brokeAny = false;
 
         foreach (var (_, _, plateUid, plate) in GetInstalledPlates(ent))
         {
-            if (plate.CurrentDurability <= 0)
+            if (!TryWearPlate(plateUid, plate, out var brokeNow))
                 continue;
 
-            plate.CurrentDurability = Math.Max(0, plate.CurrentDurability - 1);
-            Dirty(plateUid, plate);
             changed = true;
+            brokeAny |= brokeNow;
         }
 
         if (changed)
+        {
             RefreshArmorModifiers(ent);
+            PlayBreakSound(ent, brokeAny);
+        }
 
         return changed;
+    }
+
+    private bool TryWearPlate(EntityUid plateUid, WH40KArmorPlateComponent plate, out bool brokeNow)
+    {
+        brokeNow = false;
+
+        if (plate.CurrentDurability <= 0)
+            return false;
+
+        var previous = plate.CurrentDurability;
+        plate.CurrentDurability = Math.Max(0, plate.CurrentDurability - 1);
+        Dirty(plateUid, plate);
+
+        brokeNow = previous > 0 && plate.CurrentDurability == 0;
+        return true;
+    }
+
+    private void PlayBreakSound(Entity<WH40KArmorPlateHolderComponent> ent, bool brokeAny)
+    {
+        if (!brokeAny || ent.Comp.BreakSound == null)
+            return;
+
+        _audio.PlayPvs(ent.Comp.BreakSound, ent.Owner);
     }
 
     private bool TryGetContainingHolder(

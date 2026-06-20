@@ -63,6 +63,13 @@
     sprintModifier: 0.94
   - type: StaticPrice
     price: 700
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
 
 - type: entity
   parent: WeaponOgrynLoyalRipperGun

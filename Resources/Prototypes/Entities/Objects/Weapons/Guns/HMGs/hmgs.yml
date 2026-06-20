@@ -29,6 +29,10 @@
   - type: StaticPrice
     price: 500
   # No chamber because HMG may want its own
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   name: minigun

@@ -1,0 +1,56 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSlingCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Slings/combat_shotgun_sling.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModSlingCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: SlingMount
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Slings/combat_shotgun_sling.rsi
+    overlayState: base
+  - type: WH40KWeaponModSling
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSlingKrieg
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Slings/krieg_sling.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModSlingKrieg
+  - type: WH40KWeaponMod
+    slotType: SlingMount
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Slings/krieg_sling.rsi
+    overlayState: base
+  - type: WH40KWeaponModSling
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSlingStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Slings/stub_shotgun_sling.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModSlingStubShotgun
+  - type: WH40KWeaponMod
+    slotType: SlingMount
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Slings/stub_shotgun_sling.rsi
+    overlayState: base
+  - type: WH40KWeaponModSling

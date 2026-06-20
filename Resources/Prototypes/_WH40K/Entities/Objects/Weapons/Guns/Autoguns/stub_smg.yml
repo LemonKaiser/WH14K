@@ -3,6 +3,29 @@
   id: WeaponStubSMG
   suffix: WH40K, Хаос
   components:
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticStubSMG
+    - id: muzzle
+      slotType: MuzzleFront
+      name: wh40k-weapon-mod-slot-name-muzzle
+      priority: 115
+      whitelist:
+        tags:
+        - WH40KWeaponModMuzzleStubSMG
+    - id: utility
+      slotType: SideUtility
+      name: wh40k-weapon-mod-slot-name-laser
+      priority: 103
+      whitelist:
+        tags:
+        - WH40KWeaponModUtilityStubSMG
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg.rsi
     scale: 0.85,0.85
@@ -50,3 +73,10 @@
     radius: 6
     energy: 2.2
     netsync: false
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: gun_bolt_sight

@@ -6,6 +6,36 @@
   - type: Gun
     fireRate: 1.5
   - type: GunRequiresWield
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticKrieg
+    - id: barrel
+      slotType: BarrelFront
+      name: wh40k-weapon-mod-slot-name-barrel
+      priority: 108
+      whitelist:
+        tags:
+        - WH40KWeaponModBarrelKrieg
+    - id: sling
+      slotType: SlingMount
+      name: wh40k-weapon-mod-slot-name-sling
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModSlingKrieg
+    - id: bayonet
+      slotType: BayonetLug
+      name: wh40k-weapon-mod-slot-name-bayonet
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModBayonetKrieg
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:

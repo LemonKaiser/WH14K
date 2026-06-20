@@ -52,3 +52,17 @@
     EdgeStrength: 1.2
     Smear: 0.02
     Phase: 0.0
+
+- type: shader
+  id: WH40KOpticHighlight
+  kind: source
+  path: "/Textures/_WH40K/Shaders/optic_highlight.swsl"
+  params:
+    Tint: 1.0, 0.58, 0.22
+    TintMix: 0.72
+    Brightness: 2.15
+    EdgeWidth: 1.0
+    EdgeStrength: 2.7
+    EdgeOpacity: 0.92
+    PulseStrength: 0.10
+    PulseSpeed: 4.2

@@ -34,6 +34,10 @@
     proto: EnergyCrossbowBolt
     capacity: 1
     count: 1
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   parent: [WeaponEnergyCrossbowBase, BaseSyndicateContraband]

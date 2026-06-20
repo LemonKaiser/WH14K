@@ -56,7 +56,10 @@ namespace Content.Shared.Containers.ItemSlots
     ///     insert/eject sounds.
     /// </summary>
     [DataDefinition]
-    [Access(typeof(ItemSlotsSystem), typeof(Content.Shared._WH40K.ArmorPlates.SharedWH40KArmorPlateSystem))]
+    [Access(
+        typeof(ItemSlotsSystem),
+        typeof(Content.Shared._WH40K.ArmorPlates.SharedWH40KArmorPlateSystem),
+        typeof(Content.Shared._WH40K.Weapons.Mods.SharedWH40KWeaponModSystem))]
     [Serializable, NetSerializable]
     public sealed partial class ItemSlot
     {

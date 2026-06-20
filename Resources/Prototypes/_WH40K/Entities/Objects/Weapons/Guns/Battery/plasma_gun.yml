@@ -32,3 +32,7 @@
   - type: HeldSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight

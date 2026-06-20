@@ -42,3 +42,10 @@
     slots:
     - Back
     - suitStorage
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: sniper_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: sniper_bolt_sight

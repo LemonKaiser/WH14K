@@ -1,0 +1,99 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModLaserSightCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Utilities/cantrael_laser_sight.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUtilityLasgun
+  - type: WH40KWeaponMod
+    slotType: SideUtility
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Utilities/cantrael_laser_sight.rsi
+    overlayState: base
+  - type: WH40KWeaponModLaserSight
+    beamColor: "#FF3B30"
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModLaserSightLaspistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Utilities/laspistol_laser_sight.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUtilityLaspistol
+  - type: WH40KWeaponMod
+    slotType: SideUtility
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Utilities/laspistol_laser_sight.rsi
+    overlayState: base
+  - type: WH40KWeaponModLaserSight
+    beamColor: "#FF3B30"
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModLaserSightStubPistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_pistol_laser_sight.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUtilityStubPistol
+  - type: WH40KWeaponMod
+    slotType: SideUtility
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_pistol_laser_sight.rsi
+    overlayState: base
+  - type: WH40KWeaponModLaserSight
+    beamColor: "#FF3B30"
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModLaserSightStubSMG
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_smg_laser_sight.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUtilityStubSMG
+  - type: WH40KWeaponMod
+    slotType: SideUtility
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_smg_laser_sight.rsi
+    overlayState: base
+  - type: WH40KWeaponModLaserSight
+    beamColor: "#FF3B30"
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModLaserSightStubSMG2
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_smg2_laser_sight.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUtilityStubSMG2
+  - type: WH40KWeaponMod
+    slotType: SideUtility
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Utilities/stub_smg2_laser_sight.rsi
+    overlayState: base
+  - type: WH40KWeaponModLaserSight
+    beamColor: "#FF3B30"

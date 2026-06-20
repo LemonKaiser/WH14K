@@ -19,6 +19,13 @@
     containers:
       ballistic-ammo: !type:Container
         ents: []
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
   - type: Gun
     fireRate: 1
     projectileSpeed: 25 # Slower than a bullet, same speed as our old projectile limit.
@@ -334,6 +341,10 @@
             True: { state: base-unshaded }
             False: { state: base-unshaded-off }
     - type: PacifismAllowedGun
+    - type: CombatSight
+      sight:
+        sprite: Interface/Misc/crosshair_pointers.rsi
+        state: launcher_sight
 
 # Admeme
 - type: entity

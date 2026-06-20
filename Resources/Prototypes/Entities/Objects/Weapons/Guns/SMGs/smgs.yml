@@ -59,6 +59,13 @@
       gun_chamber: !type:ContainerSlot
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_bolt_sight
 
 - type: entity
   name: Atreides
@@ -168,6 +175,10 @@
     autoRefillRate: 4s
     affectedByEmp: true
   - type: AmmoCounter
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   name: Drozd

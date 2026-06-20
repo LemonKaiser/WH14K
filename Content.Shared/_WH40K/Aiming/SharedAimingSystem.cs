@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Hands;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Toggleable;
 using Robust.Shared.GameStates;
 
@@ -9,9 +10,15 @@ public sealed partial class SharedAimingSystem : EntitySystem
 {
     [Dependency] private  SharedActionsSystem _actions = default!;
     [Dependency] private  ActionContainerSystem _actionContainer = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    private bool _initialized;
 
     public override void Initialize()
     {
+        if (_initialized)
+            return;
+
+        _initialized = true;
         base.Initialize();
 
         SubscribeLocalEvent<AimingCameraComponent, MapInitEvent>(OnMapInit);
@@ -22,7 +29,6 @@ public sealed partial class SharedAimingSystem : EntitySystem
         SubscribeLocalEvent<AimingUserComponent, ComponentGetState>(OnGetUserState);
         SubscribeLocalEvent<AimingUserComponent, ComponentHandleState>(OnHandleUserState);
 
-        SubscribeLocalEvent<AimingCameraComponent, GetItemActionsEvent>(OnGetActions);
         SubscribeLocalEvent<AimingCameraComponent, ToggleActionEvent>(OnToggleAction);
     }
 
@@ -36,12 +42,12 @@ public sealed partial class SharedAimingSystem : EntitySystem
     private void OnShutdown(EntityUid uid, AimingCameraComponent component, ComponentShutdown args)
     {
         if (component.ToggleActionEntity != null)
-            _actions.RemoveAction(uid, component.ToggleActionEntity);
+            _actions.RemoveAction(component.ToggleActionEntity);
     }
 
     private void OnGetState(EntityUid uid, AimingCameraComponent component, ref ComponentGetState args)
     {
-        args.State = new AimingCameraComponentState(component.Enabled);
+        args.State = new AimingCameraComponentState(component.Enabled, component.MaxOffset);
     }
 
     private void OnHandleState(EntityUid uid, AimingCameraComponent component, ref ComponentHandleState args)
@@ -50,6 +56,7 @@ public sealed partial class SharedAimingSystem : EntitySystem
             return;
 
         component.Enabled = state.Enabled;
+        component.MaxOffset = state.MaxOffset;
         _actions.SetToggled(component.ToggleActionEntity, component.Enabled);
     }
 
@@ -66,14 +73,12 @@ public sealed partial class SharedAimingSystem : EntitySystem
         component.Enabled = state.Enabled;
     }
 
-    private void OnGetActions(EntityUid uid, AimingCameraComponent component, GetItemActionsEvent args)
-    {
-        args.AddAction(component.ToggleActionEntity);
-    }
-
     private void OnToggleAction(EntityUid uid, AimingCameraComponent component, ref ToggleActionEvent args)
     {
         if (args.Handled)
+            return;
+
+        if (!_hands.TryGetActiveItem(args.Performer, out var activeItem) || activeItem != uid)
             return;
 
         var user = args.Performer;

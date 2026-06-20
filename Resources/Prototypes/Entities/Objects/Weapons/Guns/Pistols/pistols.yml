@@ -69,6 +69,10 @@
   - type: Appearance
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   name: viper
@@ -140,6 +144,10 @@
     autoRefillRate: 2s
     affectedByEmp: true
   - type: AmmoCounter
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   name: cobra

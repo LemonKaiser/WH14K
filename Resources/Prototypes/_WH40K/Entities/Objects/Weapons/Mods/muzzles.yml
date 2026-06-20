@@ -1,0 +1,170 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSuppressorCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/combat_shotgun_suppressor.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/combat_shotgun_suppressor.rsi
+    overlayState: base
+  - type: WH40KWeaponModSuppressor
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModMuzzleBrakeCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/combat_shotgun_muzzle_brake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/combat_shotgun_muzzle_brake.rsi
+    overlayState: base
+  - type: WH40KWeaponModMuzzleBrake
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSuppressorStubPistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_pistol_suppressor.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubPistol
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_pistol_suppressor.rsi
+    overlayState: base
+  - type: WH40KWeaponModSuppressor
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSuppressorStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_rifle_suppressor.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubRifle
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_rifle_suppressor.rsi
+    overlayState: base
+  - type: WH40KWeaponModSuppressor
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModMuzzleBrakeStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_rifle_muzzle_brake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubRifle
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_rifle_muzzle_brake.rsi
+    overlayState: base
+  - type: WH40KWeaponModMuzzleBrake
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSuppressorStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_shotgun_suppressor.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubShotgun
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_shotgun_suppressor.rsi
+    overlayState: base
+  - type: WH40KWeaponModSuppressor
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModMuzzleBrakeStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_shotgun_muzzle_brake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubShotgun
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_shotgun_muzzle_brake.rsi
+    overlayState: base
+  - type: WH40KWeaponModMuzzleBrake
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModMuzzleBrakeStubSMG
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_smg_muzzle_brake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubSMG
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_smg_muzzle_brake.rsi
+    overlayState: base
+  - type: WH40KWeaponModMuzzleBrake
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModMuzzleBrakeStubSMG3
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_smg3_muzzle_brake.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModMuzzleStubSMG3
+  - type: WH40KWeaponMod
+    slotType: MuzzleFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Muzzles/stub_smg3_muzzle_brake.rsi
+    overlayState: base
+  - type: WH40KWeaponModMuzzleBrake

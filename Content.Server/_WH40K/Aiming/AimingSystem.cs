@@ -1,6 +1,7 @@
 using System;
 using Robust.Shared;
 using Robust.Shared.Configuration;
+using Content.Shared.Actions;
 using Content.Server.Movement.Systems;
 using Content.Shared.Camera;
 using Content.Shared.Hands;
@@ -15,6 +16,7 @@ namespace Content.Server._WH40K.Aiming;
 
 public sealed partial class AimingSystem : EntitySystem
 {
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private  ContentEyeSystem _eye = default!;
     [Dependency] private  SharedHandsSystem _hands = default!;
     [Dependency] private  SharedAimingSystem _shared = default!;
@@ -44,22 +46,26 @@ public sealed partial class AimingSystem : EntitySystem
     private void OnEquipped(EntityUid uid, AimingCameraComponent component, GotEquippedHandEvent args)
     {
         SyncToUserState(uid, component, args.User);
+        EnsureActionGranted(uid, component, args.User);
         _eye.UpdatePvsScale(args.User);
     }
 
     private void OnUnequipped(EntityUid uid, AimingCameraComponent component, GotUnequippedHandEvent args)
     {
+        RemoveGrantedAction(uid, component, args.User);
         _eye.UpdatePvsScale(args.User);
     }
 
     private void OnHandSelected(EntityUid uid, AimingCameraComponent component, HandSelectedEvent args)
     {
         SyncToUserState(uid, component, args.User);
+        EnsureActionGranted(uid, component, args.User);
         _eye.UpdatePvsScale(args.User);
     }
 
     private void OnHandDeselected(EntityUid uid, AimingCameraComponent component, HandDeselectedEvent args)
     {
+        RemoveGrantedAction(uid, component, args.User);
         _eye.UpdatePvsScale(args.User);
     }
 
@@ -78,6 +84,29 @@ public sealed partial class AimingSystem : EntitySystem
     {
         var userComp = EnsureComp<AimingUserComponent>(user);
         _shared.SetEnabled(uid, userComp.Enabled, component, user);
+    }
+
+    private void EnsureActionGranted(EntityUid uid, AimingCameraComponent component, EntityUid user)
+    {
+        if (component.ToggleActionEntity == null)
+            return;
+
+        if (!_hands.TryGetActiveItem(user, out var activeItem) || activeItem != uid)
+            return;
+
+        _actions.AddAction(user, ref component.ToggleActionEntity, component.ToggleAction, uid);
+    }
+
+    private void RemoveGrantedAction(EntityUid uid, AimingCameraComponent component, EntityUid user)
+    {
+        if (component.ToggleActionEntity == null ||
+            _actions.GetAction(component.ToggleActionEntity.Value) is not { } action ||
+            action.Comp.AttachedEntity != user)
+        {
+            return;
+        }
+
+        _actions.RemoveProvidedAction(user, uid, action.Owner);
     }
 
     private void OnGetEyePvsScale(EntityUid uid, AimingCameraComponent component, ref HeldRelayedEvent<GetEyePvsScaleRelayedEvent> args)

@@ -71,9 +71,11 @@ public sealed partial class AimingCameraComponent : Component
 public sealed class AimingCameraComponentState : ComponentState
 {
     public bool Enabled { get; }
+    public float MaxOffset { get; }
 
-    public AimingCameraComponentState(bool enabled)
+    public AimingCameraComponentState(bool enabled, float maxOffset)
     {
         Enabled = enabled;
+        MaxOffset = maxOffset;
     }
 }

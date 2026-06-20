@@ -67,6 +67,10 @@
     price: 500
   - type: UseDelay
     delay: 1
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   name: L6 SAW
@@ -132,3 +136,7 @@
       autoRefillRate: 4s
       affectedByEmp: true
     - type: AmmoCounter
+    - type: CombatSight
+      sight:
+        sprite: Interface/Misc/crosshair_pointers.rsi
+        state: rifle_sight

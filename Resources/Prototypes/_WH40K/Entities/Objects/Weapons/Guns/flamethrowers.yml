@@ -49,6 +49,10 @@
     - 0,0,5,6
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
 
 - type: entity
   id: ChaosFlameThrowerGun

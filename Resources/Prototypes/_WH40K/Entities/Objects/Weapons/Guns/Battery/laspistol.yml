@@ -30,6 +30,29 @@
     sprite: Objects/Weapons/Guns/Pistols/viper.rsi
     slots:
     - Belt
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: gun_bolt_sight
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticLaspistol
+    - id: utility
+      slotType: SideUtility
+      name: wh40k-weapon-mod-slot-name-laser
+      priority: 103
+      whitelist:
+        tags:
+        - WH40KWeaponModUtilityLaspistol
 
 - type: entity
   parent: WeaponLaserWH40KEnergy
@@ -62,3 +85,7 @@
     sprite: Objects/Weapons/Guns/Pistols/viper.rsi
     slots:
     - Belt
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight

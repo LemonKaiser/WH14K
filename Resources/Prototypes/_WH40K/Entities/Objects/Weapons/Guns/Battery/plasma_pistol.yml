@@ -46,3 +46,7 @@
     sprite: Objects/Weapons/Guns/Pistols/viper.rsi
     slots:
     - Belt
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
