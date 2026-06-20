@@ -105,6 +105,3 @@
         color: "#ff4300"
   - type: Appearance
   - type: SpentAmmoVisuals
-  - type: AimingCamera
-    maxOffset: 15
-    pvsIncrease: 0.8
