@@ -1,0 +1,54 @@
+- type: entity
+  parent: BaseSpeedLoaderMagnum
+  id: SpeedLoaderGalvanic
+  components:
+  - type: Tag
+    tags:
+      - SpeedLoaderGalvanic
+  - type: BallisticAmmoProvider
+    proto: CartridgeGalvanic
+    whitelist:
+      tags:
+        - CartridgeGalvanic
+    capacity: 10
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi
+    layers:
+      - state: base
+        map: [ "enum.GunVisualLayers.Base" ]
+      - state: base-6
+        map: [ "enum.GunVisualLayers.Mag" ]
+  - type: MagazineVisuals
+    magState: base
+    steps: 7
+    zeroVisible: false
+  - type: Appearance
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left-mag
+      - state: inhand-left-ammo
+      right:
+      - state: inhand-right-mag
+      - state: inhand-right-ammo
+
+- type: entity
+  parent: SpeedLoaderSerpenta
+  id: SpeedLoaderGalvanicEmpty
+  suffix: WH40K, empty
+  components:
+  - type: BallisticAmmoProvider
+    proto: null
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/SpeedLoaders/Magnum/magnum_speed_loader.rsi
+    layers:
+      - state: base
+        map: [ "enum.GunVisualLayers.Base" ]
+      - state: base-6
+        map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: inhand-left-mag
+      right:
+      - state: inhand-right-mag

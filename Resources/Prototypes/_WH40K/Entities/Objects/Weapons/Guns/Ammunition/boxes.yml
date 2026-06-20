@@ -175,3 +175,23 @@
       - Cartridge308
   - type: StaticPrice
     price: 180
+
+- type: entity
+  id: WH40KAmmoBoxGalvanic
+  parent: BaseAmmoProvider
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/admech_ammo_box.rsi
+    state: icon
+  - type: BallisticAmmoProvider
+    mayTransfer: true
+    proto: CartridgeGalvanic
+    capacity: 40
+    whitelist:
+      tags:
+      - CartridgeGalvanic
+  - type: StaticPrice
+    price: 180

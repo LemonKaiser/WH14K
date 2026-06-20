@@ -2,6 +2,7 @@
   parent: MarkerBase
   id: SpawnMobGrox
   name: Grox Spawner
+  suffix: WH40K
   components:
   - type: Sprite
     layers:

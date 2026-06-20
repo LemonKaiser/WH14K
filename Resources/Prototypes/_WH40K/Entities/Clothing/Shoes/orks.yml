@@ -1,0 +1,15 @@
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: ClothingShoesBootsOrk
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/ork_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/ork_boots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

@@ -178,7 +178,7 @@
     explosionType: Plasma
     maxIntensity: 6
     intensitySlope: 1
-    totalIntensity: 8
+    totalIntensity: 10
     maxTileBreak: 1
   - type: Projectile
     damage:
@@ -350,24 +350,24 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 10
-        Radiation: 10
-        Structural: 10
+        Piercing: 13
+        Radiation: 12
+        Structural: 20
   - type: PointLight
     enabled: true
     color: "#38c24f"
     radius: 3.0
     energy: 7.0
   - type: RadiationSource
-    intensity: 6
+    intensity: 7
     slope: 0.3
   - type: StunOnCollide
     stunAmount: 0
     knockdownAmount: 0
     drop: false
     slowdownAmount: 3
-    walkSpeedModifier: 0.9
-    sprintSpeedModifier: 0.9
+    walkSpeedModifier: 0.85
+    sprintSpeedModifier: 0.85
 
 - type: entity
   id: Bullet825mmLong
@@ -644,3 +644,40 @@
     slowdownAmount: 3
     walkSpeedModifier: 0.9
     sprintSpeedModifier: 0.9
+
+- type: entity
+  parent: BaseBulletIncendiary
+  id: WH40KPelletClusterIncendiary
+  categories: [ HideSpawnMenu ]
+  name: pellet (ball, incendiary)
+  components:
+  - type: Projectile
+    deleteOnCollide: false
+    damage:
+      types:
+        Blunt: 1
+        Heat: 2
+  - type: IgniteOnCollide
+    fireStacks: 30
+  - type: TimedDespawn
+    lifetime: 0.1
+
+- type: entity
+  id: BulletGalvanic
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K, АдМехи
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 21
+        Shock: 29
+        Structural: 20
+  - type: StunOnCollide
+    stunAmount: 0
+    knockdownAmount: 0
+    drop: false
+    slowdownAmount: 3
+    walkSpeedModifier: 0.85
+    sprintSpeedModifier: 0.85

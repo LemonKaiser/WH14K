@@ -2112,3 +2112,44 @@ ent-CartridgeHeavyStubPistol = heavy stub pistol cartridge (11 mm)
 
 ent-WH40KAmmoBoxHeavyStubPistol = heavy stub pistol ammunition box (11 mm)
     .desc = A box of heavy 11 mm cartridges for M36 heavy stub pistols.
+
+ent-WeaponRifleGalvanic = Galvanic Rifle
+    .desc = The traditional weapon of Skitarii Jaegers. It is typically decorated (according to the Machine God's designs) with copper scrolls that depict the undulating sand dunes of Mars.
+
+ent-SpeedLoaderGalvanic = galvanic cartridge speedloader
+
+ent-SpeedLoaderGalvanicEmpty = galvanic cartridge speedloader
+
+ent-CartridgeGalvanic = galvanic cartridge
+
+ent-WH40KAmmoBoxGalvanic = galvanic cartridge box
+
+ent-ClothingOuterArmorShoota = shoota boyz armar
+    .desc = Armor worn by shoota boyz
+
+ent-ClothingOuterArmorSlugga = slugga boyz armar
+    .desc = Armor worn by slugga boyz
+
+ent-ClothingOuterArmorArd = " 'ard boyz armar"
+    .desc = "Armor worn by slugga boyz"
+
+ent-ClothingOuterArmorSkar = scar boyz armar
+    .desc = Armor worn by Scar Boys Wear
+
+ent-ClothingShoesBootsOrk = Scar Boyz Boots
+    .desc = Boots that Scar Boys Wear
+
+ent-ClothingUniformJumpsuitOrks = Boyz clothes
+    .desc = Clothes worn by Boyz
+
+ent-ClothingMaskGasOrk = Boyz mask
+    .desc = Mask worn by Boyz
+
+ent-ClothingHeadHelmetOrk = Boyz hat
+    .desc = Hat worn by Boyz
+
+ent-ClothingBackpackOrk = Boyz bag
+    .desc = Bag worn by Boyz
+
+ent-ClothingBackpackOrkBoss = Boss bag
+    .desc = Bag worn by Bosses

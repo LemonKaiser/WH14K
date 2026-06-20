@@ -365,8 +365,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KEquipmentAuthRoot]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumCombatMedkit, WH40KImperiumDefibrillator, WH40KImperiumPlastic]
-      Heretics: [WH40KHereticsCombatMedkit, WH40KHereticsDefibrillator, WH40KHereticsPlastic]
+      Imperium: [WH40KImperiumCombatMedkit, WH40KImperiumDefibrillator, WH40KImperiumPlastic, WH40KImperiumPlasteel]
+      Heretics: [WH40KHereticsCombatMedkit, WH40KHereticsDefibrillator, WH40KHereticsPlastic, WH40KHereticsPlasteel]
   - id: eqp_left_2
     domain: equipment
     titleKey: w40k-cmd-upgrade-tree-node-eqp-left-2-title

@@ -129,6 +129,26 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumPlasteel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SheetPlasteel
+  cost: 3000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumCloth
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MaterialCloth
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumLasgun
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -900,7 +920,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBars
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -910,7 +930,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
-  cost: 500
+  cost: 200
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -940,7 +960,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -1162,6 +1182,26 @@
   product: CrateMaterialPlastic
   cost: 1900
   category: cpcat-med
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsPlasteel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SheetPlasteel
+  cost: 3000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsCloth
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MaterialCloth
+  cost: 500
+  category: cpcat-cgo
   group: WH40KHereticsMarket
 
 - type: cargoProduct
@@ -1974,7 +2014,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KHereticsMarket
 

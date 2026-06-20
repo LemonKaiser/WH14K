@@ -210,3 +210,9 @@
 
 - type: Tag
   id: TauRailgunCell
+
+- type: Tag
+  id: SpeedLoaderGalvanic
+
+- type: Tag
+  id: CartridgeGalvanic

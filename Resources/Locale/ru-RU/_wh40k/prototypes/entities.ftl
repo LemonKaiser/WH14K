@@ -2119,3 +2119,44 @@ ent-CartridgeHeavyStubPistol = патрон тяжёлого стаб-писто
 
 ent-WH40KAmmoBoxHeavyStubPistol = коробка патронов для тяжёлого стаб-пистолета (11 мм)
     .desc = Коробка тяжёлых 11-мм патронов для тяжёлых стаб-пистолетов M36.
+
+ent-WeaponRifleGalvanic = гальвалическое ружьё
+    .desc = традиционное вооружение егерей скитариев.Оно обычно орнаментировано (согласно чертежам Машинного бога) медными завитками, которые изображают волны песчаных дюн Марса.
+
+ent-SpeedLoaderGalvanic = спидлоадер гальванических патрон
+
+ent-SpeedLoaderGalvanicEmpty = спидлоадер гальванических патрон
+
+ent-CartridgeGalvanic = гальванический патрон
+
+ent-WH40KAmmoBoxGalvanic = ящик гальванических патрон
+
+ent-ClothingOuterArmorShoota = браня шутта бойза
+    .desc = Броня, что носят шутта бойзы
+
+ent-ClothingOuterArmorSlugga = браня слугга бойза
+    .desc = Броня, что носят слугга бойзы
+
+ent-ClothingOuterArmorArd = "браня 'ард бойза"
+    .desc = "Броня, что носят 'ард бойзы"
+
+ent-ClothingOuterArmorSkar = браня скар бойза
+    .desc = Броня, что носят скар бойзы
+
+ent-ClothingShoesBootsOrk = батинки бойза
+    .desc = Ботинки, что носят бойзы
+
+ent-ClothingUniformJumpsuitOrks = одежда бойза
+    .desc = Одежда, что носят бойзы
+
+ent-ClothingMaskGasOrk = маска бойза
+    .desc = Маска, что носят бойзы
+
+ent-ClothingHeadHelmetOrk = шляпа бойза
+    .desc = Шляпа, что носят бойзы
+
+ent-ClothingBackpackOrk = сумка бойза
+    .desc = Сумка, что носят бойзы
+
+ent-ClothingBackpackOrkBoss = сумка босса
+    .desc = Сумка, что носят боссы

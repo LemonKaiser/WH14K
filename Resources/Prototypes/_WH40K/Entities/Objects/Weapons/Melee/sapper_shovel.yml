@@ -20,7 +20,7 @@
       types:
         Slash: 11
         Blunt: 9
-        Structural: 12
+        Structural: 20
     soundHit:
       collection: MetalThud
   - type: StaminaDamageOnHit
