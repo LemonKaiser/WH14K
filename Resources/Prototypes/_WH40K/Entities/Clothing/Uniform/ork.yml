@@ -11,3 +11,17 @@
     species:
     - Ork
     popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitOrks
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/ork_clothing.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/ork_clothing.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

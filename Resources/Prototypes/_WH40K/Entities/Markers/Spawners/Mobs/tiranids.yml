@@ -1,0 +1,113 @@
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobQueenChrysalis
+  name: QueenChrysalis Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: QueenChrysalis
+      sprite: _WH40K/Mobs/QueenChrysalis.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobQueenChrysalis
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobQueenChrysalisImperium
+  name: Imperium QueenChrysalis Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: QueenChrysalis
+      sprite: _WH40K/Mobs/QueenChrysalis.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobQueenChrysalisImperium
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobGenestealer
+  name: Genestealer Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: _WH40K/Mobs/genestealer.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobGenestealer
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobHormagaunt
+  name: Hormagaunt Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: hormagaunt
+      sprite: _WH40K/Mobs/hormagaunt.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobHormagaunt
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobRavener
+  name: Ravener Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: _WH40K/Mobs/ravener.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobRavener
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobZoanthrope
+  name: Zoanthrope Spawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: _WH40K/Mobs/zoanthrope.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - MobZoanthrope
+
+- type: entity
+  name: Hormagaunt Timed Spawner
+  id: HormagauntTimedSpawner
+  parent: MarkerBase
+  suffix: WH40K, periodic
+  components:
+    - type: Sprite
+      layers:
+        - state: blue
+        - state: hormagaunt
+          sprite: _WH40K/Mobs/hormagaunt.rsi
+        - state: timed
+    - type: TimedSpawner
+      prototypes:
+        - MobHormagaunt
+      # round ~90m
+      # one spawner should only spawn ~5 mice for sanity reasons
+      # therefore 18m
+      # use 50% chance for randomness and balance with halved interval
+      chance: 0.75
+      intervalSeconds: 180
+      minimumEntitiesSpawned: 1
+      maximumEntitiesSpawned: 1

@@ -37,7 +37,7 @@
         conditions:
         - !type:ReagentCondition
           reagent: Dylovene
-          min: 20
+          min: 25
         damage:
           types:
             Blunt: 2
@@ -153,7 +153,7 @@
         conditions:
         - !type:ReagentCondition
           reagent: Bicaridine
-          min: 15
+          min: 25
         damage:
           types:
             Asphyxiation: 0.5
@@ -240,7 +240,7 @@
         conditions:
         - !type:ReagentCondition
           reagent: Dermaline
-          min: 10
+          min: 25
         damage:
           types:
             Asphyxiation: 1
@@ -272,7 +272,7 @@
         conditions:
           - !type:ReagentCondition
             reagent: Dexalin
-            min: 20
+            min: 25
         damage:
           types:
             Asphyxiation: 3

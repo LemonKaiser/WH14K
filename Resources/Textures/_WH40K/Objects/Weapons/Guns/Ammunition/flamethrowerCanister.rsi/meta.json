@@ -5,8 +5,11 @@
         "y": 32
     },
     "license": "CC-BY-SA-3.0",
-    "copyright": "Made for Ebengrad by Biomass",
+    "copyright": "Made for Ebengrad by Biomass; icon by suslik2331",
     "states": [
+        {
+            "name": "icon"
+        },
         {
             "name": "base"
         },

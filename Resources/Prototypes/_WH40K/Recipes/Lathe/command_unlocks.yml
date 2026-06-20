@@ -471,21 +471,22 @@
   id: WH40KRecipeBarricadeBars
   result: WH40KDeployableBarricadeBars
   materials:
-    Steel: 500
+    Steel: 250
 
 - type: latheRecipe
   parent: BaseToolRecipe
   id: WH40KRecipeBarricadeBoarded
   result: WH40KDeployableBarricadeBoarded
   materials:
-    Steel: 500
+    Wood: 500
 
 - type: latheRecipe
   parent: BaseToolRecipe
   id: WH40KRecipeBarricadeSandbags
   result: WH40KDeployableBarricadeSandbags
   materials:
-    Steel: 500
+    Steel: 250
+    Cloth: 25
 
 - type: latheRecipe
   parent: BaseToolRecipe
@@ -553,7 +554,7 @@
   id: WH40KRecipeBarricadeHedgehog
   result: WH40KDeployableBarricadeHedgehog
   materials:
-    Steel: 500
+    Steel: 250
 
 - type: latheRecipe
   parent: BaseToolRecipe

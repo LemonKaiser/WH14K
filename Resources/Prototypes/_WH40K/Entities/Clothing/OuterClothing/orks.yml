@@ -1,0 +1,67 @@
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorShoota
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_shoota.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_shoota.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLight
+  id: ClothingOuterArmorSlugga
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_slugga.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_slugga.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingOuterArmorAdvancedFlakVest
+  id: ClothingOuterArmorArd
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_hard.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_hard.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.3
+        Slash: 0.3
+        Piercing: 0.3
+        Heat: 0.4
+  - type: ExplosionResistance
+    damageCoefficient: 0.3
+  - type: ClothingSpeedModifier
+    walkModifier: 0.7
+    sprintModifier: 0.7
+
+- type: entity
+  parent: ClothingOuterArmorAdvancedFlakVest
+  id: ClothingOuterArmorSkar
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_skar.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/generic_skar.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

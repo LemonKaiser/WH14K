@@ -84,3 +84,27 @@
         color: "#ff4300"
   - type: Appearance
   - type: SpentAmmoVisuals
+
+- type: entity
+  id: CartridgeGalvanic
+  parent: BaseCartridge
+  suffix: WH40K, АдМехи
+  components:
+  - type: Tag
+    tags:
+      - CartridgeGalvanic
+  - type: CartridgeAmmo
+    proto: BulletGalvanic
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/ammo_casing.rsi
+    layers:
+      - state: base
+        map: [ "enum.AmmoVisualLayers.Base" ]
+      - state: tip
+        map: [ "enum.AmmoVisualLayers.Tip" ]
+        color: "#ff4300"
+  - type: Appearance
+  - type: SpentAmmoVisuals
+  - type: AimingCamera
+    maxOffset: 15
+    pvsIncrease: 0.8

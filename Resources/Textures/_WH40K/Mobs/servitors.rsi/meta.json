@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by londorondondon for WH14K project",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ser1",
+      "directions": 4
+    },
+    {
+      "name": "ser2",
+      "directions": 4
+    },
+    {
+      "name": "ser3",
+      "directions": 4
+    }
+  ]
+}
