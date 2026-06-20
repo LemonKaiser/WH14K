@@ -2153,3 +2153,6 @@ ent-ClothingBackpackOrk = Boyz bag
 
 ent-ClothingBackpackOrkBoss = Boss bag
     .desc = Bag worn by Bosses
+
+ent-ClothingOuterPsykerWardCoatPremium = Scholastica Psykana Uniform
+    .desc = Scholastica Psykana Elite School Graduate Uniform

@@ -1,0 +1,33 @@
+- type: entity
+  id: WH40KKataphronWeaponHeavyElectricArc
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Rifles/heavy_electric_arc.rsi
+    state: base
+  - type: Gun
+    fireRate: 5
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    minAngle: 2
+    maxAngle: 6
+    angleIncrease: 1.2
+    angleDecay: 18
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/electric_arc.ogg
+  - type: WH40KGunPrediction
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+  - type: BallisticAmmoProvider
+    capacity: 12
+    proto: BulletHeavyElectricArc
+    cycleable: false
+  - type: BallisticAmmoSelfRefiller
+    autoRefillRate: 0.5s
+    firingPausesAutoRefill: true
+    autoRefillPauseDuration: 0.5s
+  - type: Unremoveable
+  - type: Item
+    size: Huge

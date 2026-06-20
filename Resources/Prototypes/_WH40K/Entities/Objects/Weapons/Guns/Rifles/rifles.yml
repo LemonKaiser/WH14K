@@ -90,6 +90,9 @@
         - CartridgeGalvanic
     proto: CartridgeGalvanic
   - type: Appearance
+  - type: AimingCamera
+    maxOffset: 15
+    pvsIncrease: 0.8
   - type: HeldSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98

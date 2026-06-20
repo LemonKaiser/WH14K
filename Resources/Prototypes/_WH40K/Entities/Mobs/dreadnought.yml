@@ -88,8 +88,8 @@
     animation: WeaponArcSmash
     damage:
       types:
-        Blunt: 28
-        Structural: 40
+        Blunt: 48
+        Structural: 80
   - type: AltFireMelee
     attackType: Heavy
   - type: NpcFactionMember
