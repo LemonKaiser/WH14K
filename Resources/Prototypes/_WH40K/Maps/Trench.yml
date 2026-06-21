@@ -1,0 +1,36 @@
+- type: gameMap
+  id: Trench
+  mapName: Trench
+  mapPath: /Maps/_WH40K/Trench.yml
+  minPlayers: 0
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/trench_snapshot.png
+  wh40kWeatherProfile: WH40KMapWeatherBattlefield
+  wh40kEventsProfile: WH40KMapEventsAll
+  stations:
+    Trench:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Trench"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ 1, 1 ]
+            Commissar: [ 2, 2 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 3, 3 ]
+            Lieutenant: [ 3, 3 ]
+            Medic: [ 3, 3 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 2, 2 ]
+            VoxScout: [ 3, 3 ]
+            Sergeant: [ 2, 2 ]
+            TitheSupplier: [ 2, 2 ]
+            WH40KChaplain: [ 2, 2 ]
+            # Heretics
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 3, 3 ]
+            HLieutenant: [ 4, 4 ]
+            HSergeant: [ 4, 4 ]
+            HBandSupplier: [ 3, 3 ]

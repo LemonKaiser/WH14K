@@ -147,3 +147,13 @@
   id: WH40KChaplainChameleonOutfit
   job: WH40KChaplain
   startingGear: WH40KChaplainGear
+
+- type: chameleonOutfit
+  id: WH40KAstartesImperiumChameleonOutfit
+  job: AstartesImperium
+  startingGear: AstartesImperiumGear
+
+- type: chameleonOutfit
+  id: WH40KHAstartesChameleonOutfit
+  job: HAstartes
+  startingGear: HAstartesGear
