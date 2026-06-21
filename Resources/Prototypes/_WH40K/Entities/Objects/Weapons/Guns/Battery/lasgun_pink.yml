@@ -1,0 +1,43 @@
+- type: entity
+  parent: WeaponLaserLasgun
+  id: WeaponLaserLasgunPink
+  suffix: WH40K, (розовый)
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_pink/lasgun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_pink/lasgun_in-hands.rsi
+    size: Huge
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_pink/lasgun_in-hands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage
+
+- type: entity
+  parent: WeaponHereticLaserLasgun
+  id: WeaponHereticLaserLasgunPink
+  suffix: WH40K, (розовый)
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_pink/lasgun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_pink/lasgun_in-hands.rsi
+    size: Huge
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_pink/lasgun_in-hands.rsi
+    quickEquip: false
+    slots:
+    - Back
+    - suitStorage

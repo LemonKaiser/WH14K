@@ -1,0 +1,274 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/cantrael_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetLasgun
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/cantrael_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/combat_shotgun_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/combat_shotgun_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetVoss
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/voss_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetVoss
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/voss_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetKrieg
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/krieg_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetKrieg
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/krieg_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/accatran_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetAccatran
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/accatran_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_rifle_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubRifle
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_rifle_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_shotgun_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubShotgun
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_shotgun_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetStubSMG2
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg2_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubSMG2
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg2_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSerpStubSMG2
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg2_serp.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubSMG2
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg2_serp.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Slash: 30
+    animation: WeaponArcSlash
+    wideAnimation: WeaponArcSlash
+    wideAnimationRotation: 0
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBayonetStubSMG3
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg3_bayonet.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubSMG3
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg3_bayonet.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Piercing: 30
+    animation: WeaponArcThrust
+    wideAnimation: WeaponArcThrust
+    wideAnimationRotation: -135
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModSerpStubSMG3
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg3_serp.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBayonetStubSMG3
+  - type: WH40KWeaponMod
+    slotType: BayonetLug
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bayonets/stub_smg3_serp.rsi
+    overlayState: base
+  - type: WH40KWeaponModMeleeOverride
+    damage:
+      types:
+        Slash: 30
+    animation: WeaponArcSlash
+    wideAnimation: WeaponArcSlash
+    wideAnimationRotation: 0

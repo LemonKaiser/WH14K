@@ -1,0 +1,75 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModForegripAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Foregrips/accatran_foregrip.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelAccatran
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Foregrips/accatran_foregrip.rsi
+    overlayState: base
+  - type: WH40KWeaponModForegrip
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModForegripStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_rifle_foregrip.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelStubRifle
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_rifle_foregrip.rsi
+    overlayState: base
+  - type: WH40KWeaponModForegrip
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModForegripStubSMG2
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_smg2_foregrip.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelStubSMG2
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_smg2_foregrip.rsi
+    overlayState: base
+  - type: WH40KWeaponModForegrip
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModForegripStubSMG3
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_smg3_foregrip.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelStubSMG3
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Foregrips/stub_smg3_foregrip.rsi
+    overlayState: base
+  - type: WH40KWeaponModForegrip

@@ -47,6 +47,7 @@
     - LasgunPowerCell
     - LasgunPowerCell
     - LasgunPowerCell
+  groupBy: "m36-cantrael-heretic"
 
 - type: loadout
   id: WH40KWeaponHereticShortlasLoadout
@@ -138,7 +139,6 @@
   storage:
     belt:
     - Chaosclub
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KAxeChaosKit
@@ -148,14 +148,12 @@
   storage:
     belt:
     - AxeChaos
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosNailBoardKit
   storage:
     belt:
     - WeaponMeleeChaosNailBoard
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KTruncheonKit
@@ -167,7 +165,6 @@
   storage:
     belt:
     - Truncheon
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KCommandHereticPowerFist
@@ -192,14 +189,12 @@
   storage:
     belt:
     - CrowbarRed
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosKnifeKit
   storage:
     belt:
     - CombatKnife
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosTrenchKnifeKit
@@ -209,7 +204,6 @@
   storage:
     belt:
     - TrenchKnifeChaos
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosSapperShovelKit
@@ -219,7 +213,6 @@
   storage:
     belt:
     - WHSapperShovel
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosTruncheonKit
@@ -231,7 +224,6 @@
   storage:
     belt:
     - Truncheon
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosMacheteKit
@@ -243,7 +235,6 @@
   storage:
     belt:
     - ChaosMachete
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KVraksHandBladeKit
@@ -253,7 +244,6 @@
   storage:
     belt:
     - WeaponVraksHandBlade
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KChaosSerpKit
@@ -263,4 +253,3 @@
   storage:
     belt:
     - WeaponMeleeSerpChaos
-  groupBy: "melee"

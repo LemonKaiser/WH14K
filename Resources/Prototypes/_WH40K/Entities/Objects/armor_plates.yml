@@ -1,0 +1,175 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: WH40KArmorPlateBase
+  suffix: WH40K
+  components:
+  - type: Item
+    size: Small
+  - type: WH40KArmorPlate
+    repairDelay: 1
+    repairFuelCost: 0
+    repairQuality: Welding
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateTier1Base
+  components:
+  - type: WH40KArmorPlate
+    tier: 1
+    bonusPercent: 5
+    maxDurability: 10
+    speedModifier: 1
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateTier2Base
+  components:
+  - type: WH40KArmorPlate
+    tier: 2
+    bonusPercent: 10
+    maxDurability: 20
+    speedModifier: 1
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateTier3Base
+  components:
+  - type: WH40KArmorPlate
+    tier: 3
+    bonusPercent: 15
+    maxDurability: 30
+    speedModifier: 0.95
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateTier4Base
+  components:
+  - type: WH40KArmorPlate
+    tier: 4
+    bonusPercent: 20
+    maxDurability: 40
+    speedModifier: 0.95
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateTier5Base
+  components:
+  - type: WH40KArmorPlate
+    tier: 5
+    bonusPercent: 30
+    maxDurability: 50
+    speedModifier: 0.9
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateLaserBase
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/ArmorPlates/laser.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/ArmorPlates/laser.rsi
+    storedSprite:
+      sprite: _WH40K/Objects/ArmorPlates/laser.rsi
+      state: icon
+  - type: WH40KArmorPlate
+    plateType: Laser
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateBulletBase
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/ArmorPlates/bullet.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/ArmorPlates/bullet.rsi
+    storedSprite:
+      sprite: _WH40K/Objects/ArmorPlates/bullet.rsi
+      state: icon
+  - type: WH40KArmorPlate
+    plateType: Bullet
+
+- type: entity
+  abstract: true
+  parent: WH40KArmorPlateBase
+  id: WH40KArmorPlateMeleeBase
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/ArmorPlates/melee.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/ArmorPlates/melee.rsi
+    storedSprite:
+      sprite: _WH40K/Objects/ArmorPlates/melee.rsi
+      state: icon
+  - type: WH40KArmorPlate
+    plateType: Melee
+
+- type: entity
+  id: WH40KArmorPlateLaserT1
+  parent: [WH40KArmorPlateTier1Base, WH40KArmorPlateLaserBase]
+
+- type: entity
+  id: WH40KArmorPlateLaserT2
+  parent: [WH40KArmorPlateTier2Base, WH40KArmorPlateLaserBase]
+
+- type: entity
+  id: WH40KArmorPlateLaserT3
+  parent: [WH40KArmorPlateTier3Base, WH40KArmorPlateLaserBase]
+
+- type: entity
+  id: WH40KArmorPlateLaserT4
+  parent: [WH40KArmorPlateTier4Base, WH40KArmorPlateLaserBase]
+
+- type: entity
+  id: WH40KArmorPlateLaserT5
+  parent: [WH40KArmorPlateTier5Base, WH40KArmorPlateLaserBase]
+
+- type: entity
+  id: WH40KArmorPlateBulletT1
+  parent: [WH40KArmorPlateTier1Base, WH40KArmorPlateBulletBase]
+
+- type: entity
+  id: WH40KArmorPlateBulletT2
+  parent: [WH40KArmorPlateTier2Base, WH40KArmorPlateBulletBase]
+
+- type: entity
+  id: WH40KArmorPlateBulletT3
+  parent: [WH40KArmorPlateTier3Base, WH40KArmorPlateBulletBase]
+
+- type: entity
+  id: WH40KArmorPlateBulletT4
+  parent: [WH40KArmorPlateTier4Base, WH40KArmorPlateBulletBase]
+
+- type: entity
+  id: WH40KArmorPlateBulletT5
+  parent: [WH40KArmorPlateTier5Base, WH40KArmorPlateBulletBase]
+
+- type: entity
+  id: WH40KArmorPlateMeleeT1
+  parent: [WH40KArmorPlateTier1Base, WH40KArmorPlateMeleeBase]
+
+- type: entity
+  id: WH40KArmorPlateMeleeT2
+  parent: [WH40KArmorPlateTier2Base, WH40KArmorPlateMeleeBase]
+
+- type: entity
+  id: WH40KArmorPlateMeleeT3
+  parent: [WH40KArmorPlateTier3Base, WH40KArmorPlateMeleeBase]
+
+- type: entity
+  id: WH40KArmorPlateMeleeT4
+  parent: [WH40KArmorPlateTier4Base, WH40KArmorPlateMeleeBase]
+
+- type: entity
+  id: WH40KArmorPlateMeleeT5
+  parent: [WH40KArmorPlateTier5Base, WH40KArmorPlateMeleeBase]

@@ -46,3 +46,7 @@
     magState: mag
     steps: 1
     zeroVisible: true
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight

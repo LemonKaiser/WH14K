@@ -1,0 +1,549 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModAcogCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_acog.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticLasgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_acog.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF9438"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticLasgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModScopeCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_scope.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticLasgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/cantrael_scope.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 4
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModAcogCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/combat_shotgun_acog.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/combat_shotgun_acog.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF9438"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/combat_shotgun_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/combat_shotgun_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModAcogVoss
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/voss_acog.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticVoss
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/voss_acog.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF9438"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorVoss
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/voss_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticVoss
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/voss_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModScopeKrieg
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/krieg_scope.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticKrieg
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/krieg_scope.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 4
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorLaspistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/laspistol_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticLaspistol
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/laspistol_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModScopeLaspistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/laspistol_scope.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticLaspistol
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/laspistol_scope.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 4
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorStubPistol
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_pistol_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubPistol
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_pistol_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModAcogStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_acog.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubRifle
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_acog.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF9438"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubRifle
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModScopeStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_scope.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubRifle
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_rifle_scope.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 4
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModAcogStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_shotgun_acog.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubShotgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_shotgun_acog.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF9438"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_acog_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_shotgun_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubShotgun
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_shotgun_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStabCollimatorStubSMG
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_smg_stab_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubSMG
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_smg_stab_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorStubSMG2
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/stub_smg2_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticStubSMG2
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/stub_smg2_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModCollimatorAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/accatran_collimator.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticAccatran
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/accatran_collimator.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 2
+    highlightTargets: true
+    highlightColor: "#FF3B30"
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_collimator_bolt_sight
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModScopeAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Optics/accatran_scope.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModOpticAccatran
+  - type: WH40KWeaponMod
+    slotType: OpticTop
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Optics/accatran_scope.rsi
+    overlayState: base
+  - type: WH40KWeaponModOptic
+    aimRangeBonus: 4
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_sight
+    unavailableSight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: wh40k_scope_bolt_sight

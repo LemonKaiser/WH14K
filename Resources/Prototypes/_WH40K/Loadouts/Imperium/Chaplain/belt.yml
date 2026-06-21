@@ -1,8 +1,0 @@
-- type: loadout
-  id: ClothingBeltChaplainMeltaChargebase
-  effects:
-  - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 15
-  inhand:
-  - ClothingBeltChaplainMeltaCharge
-  groupBy: "belt"

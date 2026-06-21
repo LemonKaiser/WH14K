@@ -3,6 +3,36 @@
   id: WeaponStubSMG2
   suffix: WH40K, Общий
   components:
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticStubSMG2
+    - id: underbarrel
+      slotType: Underbarrel
+      name: wh40k-weapon-mod-slot-name-underbarrel
+      priority: 105
+      whitelist:
+        tags:
+        - WH40KWeaponModUnderbarrelStubSMG2
+    - id: utility
+      slotType: SideUtility
+      name: wh40k-weapon-mod-slot-name-laser
+      priority: 103
+      whitelist:
+        tags:
+        - WH40KWeaponModUtilityStubSMG2
+    - id: bayonet
+      slotType: BayonetLug
+      name: wh40k-weapon-mod-slot-name-bayonet
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModBayonetStubSMG2
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg2.rsi
     scale: 0.85,0.85
@@ -11,6 +41,7 @@
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_smg2.rsi
   - type: Item
@@ -44,3 +75,10 @@
   - type: HeldSpeedModifier
     walkModifier: 0.98
     sprintModifier: 0.98
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_bolt_sight

@@ -44,6 +44,13 @@
         ents: []
   - type: StaticPrice
     price: 500
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
 
 - type: entity
   name: Bulldog
@@ -102,6 +109,13 @@
   - type: Appearance
   - type: StaticPrice
     price: 5000
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
 
 - type: entity
   name: double-barreled shotgun

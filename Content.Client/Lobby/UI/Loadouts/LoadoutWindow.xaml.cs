@@ -28,6 +28,12 @@ public sealed partial class LoadoutWindow : FancyWindow
     public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<LoadoutPrototype>>? OnLoadoutPressed;
     public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<LoadoutPrototype>>? OnLoadoutUnpressed;
 
+    /// <summary>
+    /// WH40K: raised when a weapon mod is selected/deselected for a loadout.
+    /// Arguments: (groupId, loadoutProtoId, slotId, modProtoId or null if deselected).
+    /// </summary>
+    public event Action<ProtoId<LoadoutGroupPrototype>, ProtoId<LoadoutPrototype>, string, string?>? OnWeaponModsChanged;
+
     private List<LoadoutGroupContainer> _groups = new();
 
     public HumanoidCharacterProfile Profile;
@@ -104,6 +110,11 @@ public sealed partial class LoadoutWindow : FancyWindow
                 container.OnLoadoutUnpressed += args =>
                 {
                     OnLoadoutUnpressed?.Invoke(group, args);
+                };
+
+                container.OnWeaponModsChanged += (loadoutId, slotId, modId) =>
+                {
+                    OnWeaponModsChanged?.Invoke(group, loadoutId, slotId, modId);
                 };
             }
         }

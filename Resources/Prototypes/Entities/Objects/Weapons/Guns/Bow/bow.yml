@@ -46,6 +46,13 @@
       projectiles: !type:ContainerSlot
   - type: ContainerAmmoProvider
     container: projectiles
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: sniper_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: sniper_bolt_sight
 
 - type: entity
   id: BowImprovised

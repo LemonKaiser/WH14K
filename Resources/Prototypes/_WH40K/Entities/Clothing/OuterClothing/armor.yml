@@ -8,6 +8,7 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest.rsi
+  - type: Appearance
   - type: Armor
     modifiers:
       coefficients:
@@ -15,6 +16,8 @@
         Slash: 0.6
         Piercing: 0.6
         Heat: 0.6
+  - type: WH40KArmorPlateHolder
+    slotCount: 1
   - type: ExplosionResistance
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier

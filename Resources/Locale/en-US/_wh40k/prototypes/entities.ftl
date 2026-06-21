@@ -645,6 +645,12 @@ ent-WeaponLaserLasgun = M36 Cantrael
 ent-WeaponHereticLaserLasgun = Heretic M36 Cantrael
     .desc = The cursed weapon of the heretics Troops.
 
+ent-WeaponLaserLasgunPink = M36 Cantrael (Pink)
+    .desc = The standard weapon of the Cadian shock troops, painted in bright pink.
+
+ent-WeaponHereticLaserLasgunPink = Heretic M36 Cantrael (Pink)
+    .desc = The cursed weapon of the heretic forces, painted in bright pink.
+
 ent-WeaponHereticShortlas = Shortlas
     .desc = A cut-down heretic lasgun with an internal battery that discharges three brutal beams at once.
 

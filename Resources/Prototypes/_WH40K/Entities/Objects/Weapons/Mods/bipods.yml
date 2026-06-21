@@ -1,0 +1,18 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModBipodAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Bipods/accatran_bipod.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelAccatran
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Bipods/accatran_bipod.rsi
+    overlayState: base
+  - type: WH40KWeaponModBipod

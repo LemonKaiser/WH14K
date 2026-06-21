@@ -1,0 +1,53 @@
+- type: entity
+  parent: BaseToggleAction
+  id: ActionWH40KToggleWeaponStock
+  name: Toggle Stock
+  description: Fold or unfold the weapon stock.
+  components:
+  - type: Action
+    useDelay: 0.5
+    itemIconStyle: BigAction
+    icon:
+      sprite: _WH40K/Interface/Actions/folding_stock_toggle.rsi
+      state: folded
+    iconOn:
+      sprite: _WH40K/Interface/Actions/folding_stock_toggle.rsi
+      state: unfolded
+  - type: InstantAction
+    event: !type:WH40KToggleWeaponStockActionEvent
+
+- type: entity
+  parent: BaseToggleAction
+  id: ActionWH40KToggleWeaponGrenadeLauncher
+  name: Toggle Grenade Launcher
+  description: Swap the weapon between lasgun fire and the attached underbarrel launcher.
+  components:
+  - type: Action
+    useDelay: 0.5
+    itemIconStyle: BigAction
+    icon:
+      sprite: _WH40K/Interface/Actions/grenade_launcher_toggle.rsi
+      state: off
+    iconOn:
+      sprite: _WH40K/Interface/Actions/grenade_launcher_toggle.rsi
+      state: on
+  - type: InstantAction
+    event: !type:WH40KToggleWeaponGrenadeLauncherActionEvent
+
+- type: entity
+  parent: BaseToggleAction
+  id: ActionWH40KToggleWeaponLaserSight
+  name: Toggle Laser Sight
+  description: Turn the attached laser sight on or off.
+  components:
+  - type: Action
+    useDelay: 0.5
+    itemIconStyle: BigAction
+    icon:
+      sprite: _WH40K/Interface/Actions/laser_sight_toggle.rsi
+      state: off
+    iconOn:
+      sprite: _WH40K/Interface/Actions/laser_sight_toggle.rsi
+      state: on
+  - type: InstantAction
+    event: !type:WH40KToggleWeaponLaserSightActionEvent

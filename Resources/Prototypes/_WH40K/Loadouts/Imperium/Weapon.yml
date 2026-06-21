@@ -8,7 +8,7 @@
     - LasgunPowerCell
     - LasgunPowerCell
     - LasgunPowerCell
-  groupBy: "main"
+  groupBy: "m36-cantrael"
 
 - type: loadout
   id: WH40KWeaponLaserLasgunVossLoadout
@@ -23,7 +23,6 @@
     - PowerCellVoss
     - PowerCellVoss
     - PowerCellVoss
-  groupBy: "main"
 
 - type: loadout
   id: WH40KWeaponLaserLonglasLoadout
@@ -38,7 +37,6 @@
     - LonglasPowerCell
     - LonglasPowerCell
     - LonglasPowerCell
-  groupBy: "main"
 
 - type: loadout
   id: WH40KWeaponLaserLasgunAccatranLoadout
@@ -53,7 +51,6 @@
     - AccatranPowerCell
     - AccatranPowerCell
     - AccatranPowerCell
-  groupBy: "main"
 
 - type: loadout
   id: WH40KWeaponLaserLasgunKriegLoadout
@@ -68,7 +65,6 @@
     - LasgunPowerCellLucius
     - LasgunPowerCellLucius
     - LasgunPowerCellLucius
-  groupBy: "main"
 
 - type: loadout
   id: WH40KCommandLaspistolWillOfTheEmperor
@@ -79,7 +75,6 @@
     belt:
     - LasgunPowerCell
     - LasgunPowerCell
-  groupBy: "second"
 
 - type: loadout
   id: WH40KCommandBoltPistol
@@ -93,7 +88,6 @@
     belt:
     - MagazineBolterPistol
     - MagazineBolterPistol
-  groupBy: "second"
 
 - type: loadout
   id: WH40KCommandPlasmaPistol
@@ -107,7 +101,6 @@
     belt:
     - PlasmPistolPowerCell
     - PlasmPistolPowerCell
-  groupBy: "second"
 
 - type: loadout
   id: WH40KCommandHeavyStubPistolAquila
@@ -281,6 +274,58 @@
     - MagazineLondoronMk2
     - MagazineLondoronMk2
 
+- type: loadout
+  id: WH40KWeaponStubShotgunLoadout
+  dummyEntity: WeaponStubShotgun
+  equipment:
+    suitstorage: WeaponStubShotgun
+  storage:
+    belt:
+    - BoxLethalshot
+    - BoxLethalshot
+
+- type: loadout
+  id: WH40KWeaponStubSMG2Loadout
+  dummyEntity: WeaponStubSMG2
+  equipment:
+    suitstorage: WeaponStubSMG2
+  storage:
+    belt:
+    - MagazineStubSMG
+    - MagazineStubSMG
+    - MagazineStubSMG
+
+- type: loadout
+  id: WH40KWeaponStubSMG3Loadout
+  dummyEntity: WeaponStubSMG3
+  equipment:
+    suitstorage: WeaponStubSMG3
+  storage:
+    belt:
+    - MagazineStub3SMG
+    - MagazineStub3SMG
+    - MagazineStub3SMG
+
+- type: loadout
+  id: WH40KWeaponCombatShotgunLoadout
+  dummyEntity: WeaponCombatShotgun
+  equipment:
+    suitstorage: WeaponCombatShotgun
+  storage:
+    belt:
+    - MagazineCombatShotgun
+    - MagazineCombatShotgun
+    - MagazineCombatShotgun
+
+- type: loadout
+  id: WH40KWeaponStubSMGLoadoutMain
+  dummyEntity: WeaponStubSMG
+  equipment:
+    suitstorage: WeaponStubSMG
+  storage:
+    belt:
+    - MagazineHevStubPistol
+    - MagazineHevStubPistol
 
 
 - type: loadout
@@ -367,14 +412,12 @@
   storage:
     belt:
     - CrowbarRed
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KCombatKnifeKit
   storage:
     belt:
     - CombatKnife
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KCatachanKnifeKit
@@ -384,14 +427,12 @@
   storage:
     belt:
     - CatachanKnife
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KCatachanMacheteKit
   storage:
     belt:
     - CatachanMachete
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KSurvivalKnifeKit
@@ -401,7 +442,6 @@
   storage:
     belt:
     - SurvivalKnife
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KSapperShovelKit
@@ -411,7 +451,6 @@
   storage:
     belt:
     - WHSapperShovel
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KKukriKnifeKit
@@ -423,7 +462,6 @@
   storage:
     belt:
     - KukriKnife
-  groupBy: "melee"
 
 - type: loadout
   id: WH40KImperialCombatShieldLoadout
@@ -433,4 +471,34 @@
     requiredLevel: 5
   inhand:
   - WH40KImperialCombatShield
-  groupBy: "shield"
+
+# Розовые скины (level 20)
+- type: loadout
+  id: WH40KWeaponLaserLasgunPinkLoadout
+  dummyEntity: WeaponLaserLasgunPink
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  equipment:
+    suitstorage: WeaponLaserLasgunPink
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "m36-cantrael"
+
+- type: loadout
+  id: WH40KWeaponHereticLaserLasgunPinkLoadout
+  dummyEntity: WeaponHereticLaserLasgunPink
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 20
+  equipment:
+    suitstorage: WeaponHereticLaserLasgunPink
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "m36-cantrael-heretic"

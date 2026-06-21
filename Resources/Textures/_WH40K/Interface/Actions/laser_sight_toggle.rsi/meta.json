@@ -1,0 +1,20 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Laser sight action icon derived from WH14K cantrael laser sight sprites",
+    "size": {
+        "x": 48,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon"
+        },
+        {
+            "name": "off"
+        },
+        {
+            "name": "on"
+        }
+    ]
+}

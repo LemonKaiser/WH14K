@@ -50,6 +50,10 @@
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/flaregun.ogg
   - type: WH40KGunPrediction
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 
 - type: entity

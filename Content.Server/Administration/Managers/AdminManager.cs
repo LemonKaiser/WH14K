@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Content.Server.Administration;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Shared.Administration;
@@ -487,7 +488,9 @@ namespace Content.Server.Administration.Managers
         {
             var promoteHost = IsLocal(session) && _cfg.GetCVar(CCVars.ConsoleLoginLocal)
                               || _promotedPlayers.Contains(session.UserId)
-                              || session.Name == _cfg.GetCVar(CCVars.ConsoleLoginHostUser);
+                              || HostLoginNameHelper.MatchesConfiguredHostUser(
+                                  session.Name,
+                                  _cfg.GetCVar(CCVars.ConsoleLoginHostUser));
 
             if (promoteHost)
             {

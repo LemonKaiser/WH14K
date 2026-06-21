@@ -59,6 +59,8 @@
 - type: roleLoadout
   id: JobGuardsman
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineEyes
@@ -71,12 +73,12 @@
   - WH40KImperialLineFeet
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobSpecialistSWS
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineHonours
@@ -89,12 +91,12 @@
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobSpecialistHWS
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLineHead
   - WH40KImperialLineHonours
@@ -107,12 +109,12 @@
   - WH40KImperialSpecialistMask
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobVoxScout
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialVoxHead
   - WH40KImperialLineMask
@@ -125,12 +127,13 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KImperialOperatorMainWeapon
 
 - type: roleLoadout
   id: JobPsyker
   groups:
+  - WH40KImperialCommandSidearm
+  - WH40KPsykerForceStaff
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLineMask
   - WH40KImperialLineHonours
@@ -138,13 +141,12 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KPsykerForceStaff
-  - WH40KImperialCommandSidearm
 
 - type: roleLoadout
   id: JobMedic
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialMedicHead
   - WH40KImperialLineMask
@@ -157,12 +159,12 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
-  - WH40KImperialMainWeapon
 
 - type: roleLoadout
   id: JobTitheSupplier
   groups:
+  - WH40KImperialMainWeapon
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLogisticsHead
   - WH40KImperialLineMask
@@ -175,11 +177,12 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialMelee
 
 - type: roleLoadout
   id: JobMunitorumOfficer
   groups:
+  - WH40KImperialCommandSidearm
+  - WH40KImperialMelee
   - WH40KImperialGameBuns
   - WH40KImperialLogisticsHead
   - WH40KImperialLineMask
@@ -192,8 +195,6 @@
   - WH40KImperialLineEyes
   - WH40KFieldKit
   - WH40KImperialAdditionalSupplies
-  - WH40KImperialCommandSidearm
-  - WH40KImperialMelee
 
 - type: roleLoadout
   id: JobWH40KChaplain
@@ -204,6 +205,8 @@
 - type: roleLoadout
   id: JobSergeant
   groups:
+  - WH40KImperialSegeantSidearm
+  - WH40KSergeantMelee
   - WH40KImperialGameBuns
   - WH40KImperialSergeantHead
   - WH40KImperialSpecialistMask
@@ -213,12 +216,12 @@
   - WH40KImperialCommandHands
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
-  - WH40KImperialSegeantSidearm
-  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobSergeantSWS
   groups:
+  - WH40KImperialCommandSidearm
+  - WH40KSergeantMelee
   - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
@@ -227,12 +230,12 @@
   - WH40KImperialCommandHands
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
-  - WH40KImperialCommandSidearm
-  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobSergeantHWS
   groups:
+  - WH40KImperialCommandSidearm
+  - WH40KSergeantMelee
   - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialCommandNeck
@@ -241,12 +244,12 @@
   - WH40KImperialCommandHands
   - WH40KImperialSergeantFeet
   - WH40KCommandFieldKit
-  - WH40KImperialCommandSidearm
-  - WH40KSergeantMelee
 
 - type: roleLoadout
   id: JobLieutenant
   groups:
+  - WH40KImperialColonelSidearm
+  - WH40KImperialCommandMelee
   - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialEyes
@@ -257,12 +260,12 @@
   - WH40KImperialCommandHands
   - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
-  - WH40KImperialColonelSidearm
-  - WH40KImperialCommandMelee
 
 - type: roleLoadout
   id: JobCommissar
   groups:
+  - WH40KImperialCommandSidearm
+  - WH40KImperialCommandMelee
   - WH40KImperialGameBuns
   - WH40KImperialCommissarHead
   - WH40KImperialEyes
@@ -270,12 +273,13 @@
   - WH40KImperialCommandNeckGorget
   - WH40KImperialCommandHands
   - WH40KCommandFieldKit
-  - WH40KImperialCommandSidearm
-  - WH40KImperialCommandMelee
 
 - type: roleLoadout
   id: JobColonel
   groups:
+  - WH40KImperialColonelMainWeapon
+  - WH40KImperialColonelSidearm
+  - WH40KImperialCommandMelee
   - WH40KImperialGameBuns
   - WH40KImperialCommandHead
   - WH40KImperialEyes
@@ -286,13 +290,13 @@
   - WH40KImperialCommandHands
   - WH40KImperialCommandFeet
   - WH40KCommandFieldKit
-  - WH40KImperialColonelSidearm
-  - WH40KImperialColonelMainWeapon
-  - WH40KImperialCommandMelee
 
 - type: roleLoadout
   id: JobHGuardsman
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KEretikBeltBase
   - WH40KHereticGameBuns
   - WH40KHereticLineHead
@@ -303,13 +307,13 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHSpecialistSWS
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineHonours
@@ -319,13 +323,13 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHSpecialistHWS
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLineHonours
@@ -335,13 +339,13 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHBandSupplier
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSergSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KHereticGameBuns
   - WH40KHereticLineHead
   - WH40KHereticLogisticsHonours
@@ -351,13 +355,13 @@
   - WH40KHereticLineHands
   - WH40KHereticLineFeet
   - WH40KHereticFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSergSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHSergeant
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSergSecondaryWeapon
+  - WH40KChosenMelee
   - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
@@ -367,13 +371,13 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
-  - WH40KChosenMelee
-  - WH40KHereticMainWeapon
-  - WH40KHereticSergSecondaryWeapon
 
 - type: roleLoadout
   id: JobHSergeantSWS
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
@@ -383,13 +387,13 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHSergeantHWS
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticSecondaryWeapon
+  - WH40KHereticMelee
   - WH40KHereticGameBuns
   - WH40KHereticCommandHead
   - WH40KHereticCommandUniform
@@ -399,13 +403,13 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
-  - WH40KHereticMainWeapon
-  - WH40KHereticSecondaryWeapon
-  - WH40KHereticMelee
 
 - type: roleLoadout
   id: JobHLieutenant
   groups:
+  - WH40KHereticMainWeapon
+  - WH40KHereticCmdSecondaryWeapon
+  - WH40KHereticCommandMelee
   - WH40KHereticGameBuns
   - WH40KHereticChampionHead
   - WH40KHereticCommandUniform
@@ -415,13 +419,13 @@
   - WH40KHereticCommandHands
   - WH40KHereticChampionFeet
   - WH40KHereticCommandFieldKit
-  - WH40KHereticCommandMelee
-  - WH40KHereticMainWeapon
-  - WH40KHereticCmdSecondaryWeapon
 
 - type: roleLoadout
   id: JobHColonel
   groups:
+  - WH40KHeresiarchMainWeapon
+  - WH40KHereticCmdSecondaryWeapon
+  - WH40KHeresiarchMelee
   - WH40KHereticGameBuns
   - WH40KHeresiarchCultRaiment
   - WH40KHereticCommandUniform
@@ -430,9 +434,6 @@
   - WH40KHereticCommandHands
   - WH40KHereticCommandFeet
   - WH40KHereticCommandFieldKit
-  - WH40KHeresiarchMelee
-  - WH40KHeresiarchMainWeapon
-  - WH40KHereticCmdSecondaryWeapon
 
 - type: roleLoadout
   id: JobTauFireWarrior

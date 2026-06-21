@@ -1,0 +1,107 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModGrenadeLauncherCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/GrenadeLaunchers/cantrael_grenade_launcher.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelLasgun
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/GrenadeLaunchers/cantrael_grenade_launcher.rsi
+    overlayState: base
+  - type: WH40KWeaponModGrenadeLauncher
+    toggleSound:
+      path: /Audio/Weapons/Guns/Misc/selector.ogg
+    presentationSprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    presentationLoadedState: icon
+    presentationEmptyState: bolt-open
+    presentationItemSprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+  - type: Gun
+    fireRate: 1
+    projectileSpeed: 25
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+  - type: WH40KGunPrediction
+  - type: AmmoCounter
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - Grenade
+    capacity: 1
+    proto: GrenadeFrag
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModGrenadeLauncherAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/GrenadeLaunchers/accatran_grenade_launcher.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModUnderbarrelAccatran
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+  - type: WH40KWeaponMod
+    slotType: Underbarrel
+    overlaySprite: _WH40K/Objects/Weapons/Mods/GrenadeLaunchers/accatran_grenade_launcher.rsi
+    overlayState: base
+  - type: WH40KWeaponModGrenadeLauncher
+    toggleSound:
+      path: /Audio/Weapons/Guns/Misc/selector.ogg
+    presentationSprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+    presentationLoadedState: icon
+    presentationEmptyState: bolt-open
+    presentationItemSprite: Objects/Weapons/Guns/Launchers/china_lake.rsi
+  - type: Gun
+    fireRate: 1
+    projectileSpeed: 25
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+  - type: WH40KGunPrediction
+  - type: AmmoCounter
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_sight
+    unavailable:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: launcher_bolt_sight
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - Grenade
+    capacity: 1
+    proto: GrenadeFrag
+    soundInsert:
+      path: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg

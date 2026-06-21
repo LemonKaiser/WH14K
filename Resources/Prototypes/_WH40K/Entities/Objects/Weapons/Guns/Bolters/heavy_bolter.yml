@@ -138,6 +138,10 @@
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   id: WH40KHeavyBolterPlacementPreview

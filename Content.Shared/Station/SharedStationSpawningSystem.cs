@@ -33,6 +33,8 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// </summary>
     public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
     {
+        var weaponModLoadout = EntitySystem.Get<Content.Shared._WH40K.Weapons.Mods.WH40KLoadoutModSystem>();
+
         foreach (var items in EnumerateValidSelectedLoadouts(loadout, roleProto))
         {
             if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
@@ -42,6 +44,9 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             }
 
             EquipStartingGear(entity, loadoutProto, raiseEvent: false);
+
+            if (items.SelectedMods.Count > 0)
+                weaponModLoadout.ApplySelectedModsToEquipped(entity, loadoutProto, items.SelectedMods);
         }
 
         EquipRoleName(entity, loadout, roleProto);

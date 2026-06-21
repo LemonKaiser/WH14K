@@ -60,6 +60,10 @@
     wieldedInhandPrefix: null
   - type: StaticPrice
     price: 900
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: rifle_sight
 
 - type: entity
   parent: BaseItem
@@ -127,6 +131,10 @@
       gun_chamber: !type:ContainerSlot
   - type: StaticPrice
     price: 450
+  - type: CombatSight
+    sight:
+      sprite: Interface/Misc/crosshair_pointers.rsi
+      state: revolver_sight
 
 - type: entity
   parent: [BaseWeaponLauncher, BaseMajorContraband]

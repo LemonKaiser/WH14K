@@ -1,0 +1,154 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStockCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/cantrael_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockLasgun
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/cantrael_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModFoldingStockCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/cantrael_folding_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockLasgun
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/cantrael_folding_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+  - type: WH40KWeaponModFoldingStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStockCombatShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/combat_shotgun_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockCombatShotgun
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/combat_shotgun_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStockVoss
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/voss_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockVoss
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/voss_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModFoldingStockVoss
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/voss_folding_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockVoss
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/voss_folding_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+  - type: WH40KWeaponModFoldingStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStockStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_rifle_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockStubRifle
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_rifle_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModFoldingStockStubRifle
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_rifle_folding_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockStubRifle
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_rifle_folding_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock
+  - type: WH40KWeaponModFoldingStock
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModStockStubShotgun
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_shotgun_stock.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModStockStubShotgun
+  - type: WH40KWeaponMod
+    slotType: StockRear
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Stocks/stub_shotgun_stock.rsi
+    overlayState: base
+  - type: WH40KWeaponModStock

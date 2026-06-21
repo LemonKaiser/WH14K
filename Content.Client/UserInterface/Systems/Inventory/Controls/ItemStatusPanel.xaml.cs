@@ -107,9 +107,6 @@ public sealed partial class ItemStatusPanel : Control
 
     public void Update(EntityUid? entity, Hand? hand)
     {
-        if (entity == _entity && hand == _hand)
-            return;
-
         _hand = hand;
         if (entity == null)
         {

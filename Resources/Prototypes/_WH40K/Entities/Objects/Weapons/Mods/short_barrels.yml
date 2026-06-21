@@ -1,0 +1,56 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModShortBarrelCantrael
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Barrels/cantrael_short_barrel.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBarrelLasgun
+  - type: WH40KWeaponMod
+    slotType: BarrelFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Barrels/cantrael_short_barrel.rsi
+    overlayState: base
+  - type: WH40KWeaponModShortBarrel
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModShortBarrelAccatran
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Barrels/accatran_short_barrel.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBarrelAccatran
+  - type: WH40KWeaponMod
+    slotType: BarrelFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Barrels/accatran_short_barrel.rsi
+    overlayState: base
+  - type: WH40KWeaponModShortBarrel
+
+- type: entity
+  parent: BaseItem
+  id: WH40KWeaponModShortBarrelKrieg
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Mods/Barrels/krieg_short_barrel.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - WH40KWeaponModBarrelKrieg
+  - type: WH40KWeaponMod
+    slotType: BarrelFront
+    overlaySprite: _WH40K/Objects/Weapons/Mods/Barrels/krieg_short_barrel.rsi
+    overlayState: base
+  - type: WH40KWeaponModShortBarrel

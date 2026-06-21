@@ -1,0 +1,42 @@
+light_mode unshaded;
+
+uniform highp vec3 Tint;
+uniform highp float TintMix;
+uniform highp float Brightness;
+uniform highp float EdgeWidth;
+uniform highp float EdgeStrength;
+uniform highp float EdgeOpacity;
+uniform highp float PulseStrength;
+uniform highp float PulseSpeed;
+
+void fragment()
+{
+    highp vec4 base = zTexture(UV);
+    highp vec2 ps = TEXTURE_PIXEL_SIZE * EdgeWidth;
+    highp float maxa = base.a;
+
+    maxa = max(maxa, zTexture(UV + vec2(ps.x, 0.0)).a);
+    maxa = max(maxa, zTexture(UV + vec2(-ps.x, 0.0)).a);
+    maxa = max(maxa, zTexture(UV + vec2(0.0, ps.y)).a);
+    maxa = max(maxa, zTexture(UV + vec2(0.0, -ps.y)).a);
+    maxa = max(maxa, zTexture(UV + vec2(ps.x, ps.y)).a);
+    maxa = max(maxa, zTexture(UV + vec2(ps.x, -ps.y)).a);
+    maxa = max(maxa, zTexture(UV + vec2(-ps.x, ps.y)).a);
+    maxa = max(maxa, zTexture(UV + vec2(-ps.x, -ps.y)).a);
+
+    highp float edge = clamp((maxa - base.a) * EdgeStrength, 0.0, 1.0);
+
+    if (base.a <= 0.001 && edge <= 0.001)
+        discard;
+
+    highp float pulse = 0.5 + 0.5 * sin(TIME * PulseSpeed + UV.y * 14.0);
+    highp vec3 lifted = max(base.rgb * Brightness, Tint * 0.18);
+    highp vec3 filled = mix(lifted, max(lifted, Tint), TintMix);
+    filled += Tint * (0.06 + pulse * PulseStrength);
+
+    highp vec3 edgeColor = Tint * (1.0 + pulse * (PulseStrength + 0.08));
+    highp vec3 color = mix(filled, edgeColor, edge);
+    highp float alpha = max(base.a, edge * EdgeOpacity);
+
+    COLOR = vec4(color, alpha);
+}

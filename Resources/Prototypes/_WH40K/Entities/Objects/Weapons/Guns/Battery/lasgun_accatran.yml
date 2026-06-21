@@ -6,6 +6,36 @@
   - type: GunRequiresWield
   - type: Gun
     fireRate: 5.5
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticAccatran
+    - id: underbarrel
+      slotType: Underbarrel
+      name: wh40k-weapon-mod-slot-name-underbarrel
+      priority: 105
+      whitelist:
+        tags:
+        - WH40KWeaponModUnderbarrelAccatran
+    - id: barrel
+      slotType: BarrelFront
+      name: wh40k-weapon-mod-slot-name-barrel
+      priority: 108
+      whitelist:
+        tags:
+        - WH40KWeaponModBarrelAccatran
+    - id: bayonet
+      slotType: BayonetLug
+      name: wh40k-weapon-mod-slot-name-bayonet
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModBayonetAccatran
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_accatran/lasgun_in-hands.rsi
     quickEquip: false
