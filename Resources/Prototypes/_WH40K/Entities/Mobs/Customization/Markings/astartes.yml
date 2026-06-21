@@ -1,0 +1,31 @@
+- type: marking
+  id: AstartesHairBuzzcut
+  bodyPart: Hair
+  groupWhitelist: [Astartes]
+  sprites:
+  - sprite: _WH40K/Mobs/Customization/astartes_hair.rsi
+    state: buzzcut
+
+- type: marking
+  id: AstartesHairFlatshaved
+  bodyPart: Hair
+  groupWhitelist: [Astartes]
+  sprites:
+  - sprite: _WH40K/Mobs/Customization/astartes_hair.rsi
+    state: flatshaved
+
+- type: marking
+  id: AstartesHairShaved
+  bodyPart: Hair
+  groupWhitelist: [Astartes]
+  sprites:
+  - sprite: _WH40K/Mobs/Customization/astartes_hair.rsi
+    state: shaved
+
+- type: marking
+  id: AstartesHeadPin
+  bodyPart: HeadTop
+  groupWhitelist: [Astartes]
+  sprites:
+  - sprite: _WH40K/Mobs/Customization/astartes_markings.rsi
+    state: pin

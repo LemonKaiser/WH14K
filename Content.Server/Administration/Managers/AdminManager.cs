@@ -10,6 +10,7 @@ using Content.Shared.CCVar;
 using Content.Shared.Players;
 using Robust.Server.Console;
 using Robust.Server.Player;
+using Robust.Shared.Asynchronous;
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.ContentPack;
@@ -34,6 +35,7 @@ namespace Content.Server.Administration.Managers
         [Dependency] private IServerConsoleHost _consoleHost = default!;
         [Dependency] private IChatManager _chat = default!;
         [Dependency] private ToolshedManager _toolshed = default!;
+        [Dependency] private ITaskManager _task = default!;
         [Dependency] private ILogManager _logManager = default!;
         [Dependency] private UserDbDataManager _userDb = default!;
 
@@ -385,7 +387,21 @@ namespace Content.Server.Administration.Managers
 
         private void OnUserDbLoadFinished(ICommonSession session)
         {
-            TryLoginAdminWhenReady(session);
+            _ = TryLoginAdminAfterUserDbLoadAsync(session);
+        }
+
+        private async Task TryLoginAdminAfterUserDbLoadAsync(ICommonSession session)
+        {
+            try
+            {
+                await _userDb.WaitLoadComplete(session);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+
+            _task.RunOnMainThread(() => TryLoginAdminWhenReady(session));
         }
 
         private void TryLoginAdminWhenReady(ICommonSession session)

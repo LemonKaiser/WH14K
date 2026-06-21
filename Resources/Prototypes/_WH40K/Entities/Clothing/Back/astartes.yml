@@ -7,20 +7,16 @@
   - type: Sprite
     layers:
     - state: icon
-      color: "#2F5DB3"
   - type: Item
     inhandVisuals:
       left:
       - state: inhand-left
-        color: "#2F5DB3"
       right:
       - state: inhand-right
-        color: "#2F5DB3"
   - type: Clothing
     clothingVisuals:
       back:
       - state: equipped-BACKPACK
-        color: "#2F5DB3"
   - type: SpeciesRestrictedClothing
     species:
     - Astartes
@@ -73,12 +69,31 @@
 
 - type: entity
   parent: ClothingBackpackAstartesBase
+  id: ClothingBackpackAstartesMk7Powerpack
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_powerpack.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_powerpack.rsi
+
+- type: entity
+  parent: ClothingBackpackAstartesBase
   id: ClothingBackpackAstartesMk7JumpPack
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk7_jumpack.rsi
+  - type: JumpAbility
+    jumpDistance: 10
+    jumpSound: /Audio/Effects/stealthoff.ogg
+  - type: ActionGrant
+    actions:
+    - ActionGravityJump
+  - type: ItemActionGrant
+    actions:
+    - ActionGravityJump
+    activeIfWorn: true
 
 - type: entity
   parent: ClothingBackpackAstartesBase
@@ -88,6 +103,16 @@
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Back/Backpacks/astartes_mk23_jumpack.rsi
+  - type: JumpAbility
+    jumpDistance: 10
+    jumpSound: /Audio/Effects/stealthoff.ogg
+  - type: ActionGrant
+    actions:
+    - ActionGravityJump
+  - type: ItemActionGrant
+    actions:
+    - ActionGravityJump
+    activeIfWorn: true
 
 - type: entity
   parent: [ClothingBackpack, WH40KChaosDamnationClothing]

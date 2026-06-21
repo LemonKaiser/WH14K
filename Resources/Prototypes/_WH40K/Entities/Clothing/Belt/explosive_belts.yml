@@ -10,7 +10,7 @@
   - type: Item
     size: Small
   - type: WH40KExplosiveBelt
-    defaultDelaySeconds: 1
+    defaultDelaySeconds: 5
   - type: ActionGrant
     actions:
     - ActionWH40KChaosDynamiteBeltShort
@@ -22,7 +22,7 @@
     activeIfWorn: true
   - type: TriggerOnSignal
   - type: TimerTrigger
-    delay: 1
+    delay: 5
     initialBeepDelay: 0
     beepSound: /Audio/Machines/Nuke/general_beep.ogg
   - type: DeviceLinkSink
@@ -41,7 +41,7 @@
     deleteItems: true
   - type: Explosive
     explosionType: WH40KChaosDynamiteBelt
-    totalIntensity: 2400
+    totalIntensity: 1200
     intensitySlope: 12
     maxIntensity: 45
     canCreateVacuum: false
@@ -58,17 +58,19 @@
   - type: Item
     size: Small
   - type: WH40KExplosiveBelt
-    defaultDelaySeconds: 10
+    defaultDelaySeconds: 5
   - type: ActionGrant
     actions:
-    - ActionWH40KMeltaChargeBelt
+    - ActionWH40KMeltaChargeBeltShort
+    - ActionWH40KMeltaChargeBeltLong
   - type: ItemActionGrant
     actions:
-    - ActionWH40KMeltaChargeBelt
+    - ActionWH40KMeltaChargeBeltShort
+    - ActionWH40KMeltaChargeBeltLong
     activeIfWorn: true
   - type: TriggerOnSignal
   - type: TimerTrigger
-    delay: 10
+    delay: 5
     initialBeepDelay: 0
     beepSound: /Audio/Machines/Nuke/general_beep.ogg
   - type: DeviceLinkSink
@@ -87,7 +89,11 @@
     deleteItems: true
   - type: Explosive
     explosionType: WH40KMeltaChargeBelt
-    totalIntensity: 700
+    totalIntensity: 1400
     intensitySlope: 45
-    maxIntensity: 10
+    maxIntensity: 20
     canCreateVacuum: false
+  - type: ProjectileGrenade
+    triggerKey: trigger
+    fillPrototype: WH40KPelletClusterIncendiary
+    capacity: 30

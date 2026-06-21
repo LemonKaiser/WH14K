@@ -1,0 +1,43 @@
+- type: job
+  id: HAstartes
+  name: job-name-hastartes
+  description: job-description-hastartes
+  displayWeight: 1
+  playTimeTracker: JobHAstartes
+  requirements:
+    - !type:SpeciesRequirement
+      species:
+      - Astartes
+  startingGear: HAstartesGear
+  icon: "JobIconHAstartes"
+  supervisors: job-supervisors-wh40k-chaos-astartes
+  canBeAntag: false
+  special:
+  - !type:AddComponentSpecial
+    components:
+      - type: WH40KSquadAssignable
+      - type: WH40KChaosGiftRole
+      - type: WH40KChaosLeaderRole
+  access:
+  - Maintenance
+  - External
+  - Command
+  - Medical
+  - Engineering
+  - Research
+
+- type: startingGear
+  id: HAstartesGear
+  equipment:
+    ears: ClothingHeadsetVoxBackpackHeretics
+    back: ClothingBackpackAstartesChaosPowerpack
+    head: ClothingHeadHelmetAstartesChaos
+    outerClothing: ClothingOuterArmorAstartesChaos
+    jumpsuit: ClothingUniformJumpsuitAstartesChaos
+    shoes: ClothingShoesAstartesChaosBoots
+    belt: WeaponPistolAstartesBolt
+    pocket1: WH40KStandardTacticalMapTablet
+    pocket2: MagazineBolter
+    id: HAstartesDogTag
+  inhand:
+  - WeaponRifleBolter

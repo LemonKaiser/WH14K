@@ -2,9 +2,10 @@
   id: WH40KAstartesImperiumMk2Gear
   equipment:
     ears: ClothingHeadsetVoxBackpackImperium
-    back: ClothingBackpackAstartesMk2Powerpack
-    head: ClothingHeadHelmetAstartesMk2
-    outerClothing: ClothingOuterArmorAstartesMk2
+    back: ClothingBackpackAstartesMk7Powerpack
+    head: ClothingHeadHelmetAstartesMk7
+    outerClothing: ClothingOuterArmorAstartesMk7
+    jumpsuit: ClothingUniformJumpsuitAstartes
     shoes: ClothingShoesAstartesImperiumBoots
     belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet
@@ -17,9 +18,9 @@
   id: WH40KAstartesImperiumMk4Gear
   equipment:
     ears: ClothingHeadsetVoxBackpackImperium
-    back: ClothingBackpackAstartesMk4Powerpack
-    head: ClothingHeadHelmetAstartesMk4
-    outerClothing: ClothingOuterArmorAstartesMk4A
+    back: ClothingBackpackAstartesMk7Powerpack
+    head: ClothingHeadHelmetAstartesMk7
+    outerClothing: ClothingOuterArmorAstartesMk7
     jumpsuit: ClothingUniformJumpsuitAstartes
     shoes: ClothingShoesAstartesImperiumBoots
     belt: WeaponPistolAstartesBolt
@@ -36,7 +37,7 @@
     back: ClothingBackpackAstartesChaosPowerpack
     head: ClothingHeadHelmetAstartesChaos
     outerClothing: ClothingOuterArmorAstartesChaos
-    jumpsuit: ClothingUniformJumpsuitAstartes
+    jumpsuit: ClothingUniformJumpsuitAstartesChaos
     shoes: ClothingShoesAstartesChaosBoots
     belt: WeaponPistolAstartesBolt
     pocket1: WH40KStandardTacticalMapTablet

@@ -24,3 +24,24 @@ cargoproduct-description-wh40k-magazine-londoron-mk2 = Spare 5-round magazine fo
 
 cargoproduct-name-wh40k-ammobox-londoron-mk2 = Londoron MK2 ammunition box
 cargoproduct-description-wh40k-ammobox-londoron-mk2 = A box of heavy rounds for Londoron MK2 pattern rifles.
+
+cargoproduct-name-wh40k-imperium-binoculars = binoculars (Imperium)
+cargoproduct-description-wh40k-imperium-binoculars = An optical device for long-range observation. Issued to Imperial forces for reconnaissance.
+
+cargoproduct-name-wh40k-heretics-binoculars = binoculars (Heretics)
+cargoproduct-description-wh40k-heretics-binoculars = An optical device for long-range observation. Issued to heretic forces for reconnaissance.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-aquila = heavy stub pistol (Imperium)
+cargoproduct-description-wh40k-heavy-stub-pistol-aquila = A magazine-fed M36 heavy stub pistol with revolver-grade stopping power.
+
+cargoproduct-name-wh40k-heavy-stub-pistol-blood-pact = heavy stub pistol (Heretics)
+cargoproduct-description-wh40k-heavy-stub-pistol-blood-pact = A renegade-painted M36 heavy stub pistol for heretic officers and raiders.
+
+cargoproduct-name-wh40k-magazine-heavy-stub-pistol = heavy stub pistol magazine
+cargoproduct-description-wh40k-magazine-heavy-stub-pistol = Spare 8-round magazine for M36 heavy stub pistols.
+
+cargoproduct-name-wh40k-ammobox-heavy-stub-pistol = heavy stub pistol ammunition box
+cargoproduct-description-wh40k-ammobox-heavy-stub-pistol = A box of heavy 11 mm cartridges for M36 heavy stub pistols.
+
+cargoproduct-name-wh40k-imperium-specialist-helmet = specialist helmet
+cargoproduct-description-wh40k-imperium-specialist-helmet = A specialist-pattern helmet with night vision and a toggleable health display.

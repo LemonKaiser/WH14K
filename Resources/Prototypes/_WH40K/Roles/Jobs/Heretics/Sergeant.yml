@@ -31,7 +31,6 @@
   - External
   - Command
   - Medical
-  - Cargo
   - Engineering
   - Research
 
@@ -63,7 +62,6 @@
   - External
   - Command
   - Medical
-  - Cargo
   - Engineering
   - Research
 
@@ -96,7 +94,6 @@
   - Command
   - Medical
   - Cargo
-  - Engineering
   - Research
 
 - type: startingGear

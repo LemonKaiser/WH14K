@@ -14,11 +14,14 @@ public sealed partial class WH40KMechPilotCatastrophicEjectSystem : EntitySystem
 
     public override void Initialize()
     {
+#pragma warning disable CS0618
         SubscribeLocalEvent<WH40KMechPilotCatastrophicEjectComponent, DamageChangedEvent>(
             OnDamageChanged,
             before: [typeof(MechSystem)]);
+#pragma warning restore CS0618
     }
 
+#pragma warning disable CS0618
     private void OnDamageChanged(Entity<WH40KMechPilotCatastrophicEjectComponent> ent, ref DamageChangedEvent args)
     {
         if (!args.DamageIncreased ||
@@ -32,6 +35,7 @@ public sealed partial class WH40KMechPilotCatastrophicEjectSystem : EntitySystem
         }
 
         var currentIntegrity = mech.MaxIntegrity - _damageable.GetTotalDamage((ent.Owner, args.Damageable));
+#pragma warning restore CS0618
         if (currentIntegrity > 0)
             return;
 

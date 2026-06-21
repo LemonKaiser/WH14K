@@ -27,6 +27,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -85,6 +86,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
     [Dependency] private  CargoSystem _cargo = default!;
     [Dependency] private  DamageableSystem _damageable = default!;
     [Dependency] private  SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  IGameTiming _timing = default!;
     [Dependency] private  SharedPhysicsSystem _physics = default!;
     [Dependency] private  IPrototypeManager _prototype = default!;
@@ -111,7 +113,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         SubscribeLocalEvent<WH40KStrategicPointComponent, ComponentShutdown>(OnPointShutdown);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<WH40KStrategicPointComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<WH40KStrategicPointComponent, DamageChangedEvent>(OnPointDamageChanged);
+        SubscribeLocalEvent<WH40KStrategicPointComponent, DamageDealtEvent>(OnPointDamageDealt);
         SubscribeLocalEvent<WH40KStrategicPointComponent, RepairAttemptEvent>(OnRepairAttempt);
         SubscribeLocalEvent<WH40KStrategicPointComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<WH40KStrategicPointComponent, InteractUsingEvent>(OnInteractUsing);
@@ -351,12 +353,17 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnPointDamageChanged(Entity<WH40KStrategicPointComponent> ent, ref DamageChangedEvent args)
+    private void OnPointDamageDealt(Entity<WH40KStrategicPointComponent> ent, ref DamageDealtEvent args)
     {
         if (!TryGetTierProfile(ent.Comp, out var tier))
             return;
 
-        if (_damageable.GetTotalDamage((ent.Owner, args.Damageable)) >= tier.MaxHp)
+        if (!TryComp<DamageableComponent>(ent.Owner, out var damageable))
+            return;
+
+#pragma warning disable CS0618
+        if (_damageable.GetTotalDamage((ent.Owner, damageable)) >= tier.MaxHp)
+#pragma warning restore CS0618
         {
             DestroyStrategicPoint(ent.Owner, ent.Comp, args.Origin);
             return;
@@ -1088,7 +1095,9 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         if (!TryComp<DamageableComponent>(uid, out var damageable))
             return maxHp;
 
+#pragma warning disable CS0618
         var damage = (int) Math.Ceiling(_damageable.GetTotalDamage((uid, damageable)).Float());
+#pragma warning restore CS0618
         return Math.Clamp(maxHp - damage, 0, maxHp);
     }
 
@@ -1254,7 +1263,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         if (!_teamRule.TryGetTeamDisplayName(teamId, out var teamName))
             return teamId;
 
-        return Loc.TryGetString(teamName, out var localized) && !string.IsNullOrWhiteSpace(localized)
+        return _loc.TryGetString(teamName, out var localized) && !string.IsNullOrWhiteSpace(localized)
             ? localized
             : teamName;
     }

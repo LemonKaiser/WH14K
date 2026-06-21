@@ -30,6 +30,7 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Tools.Components;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
+using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -235,6 +236,7 @@ public sealed partial class WH40KCommandEventMissionRuntimeSystem : EntitySystem
 
     [Dependency] private  GameTicker _gameTicker = default!;
     [Dependency] private  IMapManager _mapManager = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  MobStateSystem _mobState = default!;
     [Dependency] private  MovementSpeedModifierSystem _movement = default!;
     [Dependency] private  SharedMapSystem _map = default!;
@@ -3199,7 +3201,7 @@ public sealed partial class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(text))
             return string.Empty;
 
-        if (Loc.TryGetString(text, out var localized))
+        if (_loc.TryGetString(text, out var localized))
             return localized ?? text;
 
         return text;
@@ -3562,7 +3564,7 @@ public sealed partial class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var fallback = string.IsNullOrWhiteSpace(config.Title) ? config.Id : config.Title;
         var titleKey = $"wh40k-command-runtime-mission-{NormalizeMissionIdForLoc(config.Id)}-title";
         if (!string.IsNullOrWhiteSpace(config.Id) &&
-            Robust.Shared.Localization.Loc.TryGetString(titleKey, out _))
+            IoCManager.Resolve<ILocalizationManager>().TryGetString(titleKey, out _))
             return titleKey;
 
         return fallback;
@@ -3573,7 +3575,7 @@ public sealed partial class WH40KCommandEventMissionRuntimeSystem : EntitySystem
         var fallback = string.IsNullOrWhiteSpace(config.Description) ? config.Id : config.Description;
         var descriptionKey = $"wh40k-command-runtime-mission-{NormalizeMissionIdForLoc(config.Id)}-description";
         if (!string.IsNullOrWhiteSpace(config.Id) &&
-            Robust.Shared.Localization.Loc.TryGetString(descriptionKey, out _))
+            IoCManager.Resolve<ILocalizationManager>().TryGetString(descriptionKey, out _))
             return descriptionKey;
 
         return fallback;

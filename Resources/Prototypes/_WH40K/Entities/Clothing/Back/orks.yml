@@ -1,0 +1,23 @@
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackOrk
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/ork_backpack.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only
+
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackOrkBoss
+  suffix: WH40K, Орки
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Back/Backpacks/generic_bosspole.rsi
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

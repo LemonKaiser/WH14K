@@ -10,8 +10,8 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    minAngle: 8
-    maxAngle: 18
+    minAngle: 2
+    maxAngle: 6
     angleIncrease: 1.2
     angleDecay: 18
     soundGunshot:
@@ -25,9 +25,9 @@
     proto: Bullet825mmLong
     cycleable: false
   - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 1s
+    autoRefillRate: 0.1s
     firingPausesAutoRefill: true
-    autoRefillPauseDuration: 1s
+    autoRefillPauseDuration: 0.1s
 
 - type: entity
   id: WH40KDreadnoughtWeaponMissileRack
@@ -49,8 +49,8 @@
       path: /Audio/Weapons/Guns/Gunshots/rpgfire.ogg
   - type: WH40KGunPrediction
   - type: BasicEntityAmmoProvider
-    proto: BulletWeakRocket
+    proto: WH40KBulletOskvernitelSiegeShell
     capacity: 6
     count: 6
   - type: WH40KReloadOnEmptyAmmo
-    reloadCooldown: 30
+    reloadCooldown: 20

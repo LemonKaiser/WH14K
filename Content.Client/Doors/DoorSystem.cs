@@ -93,6 +93,8 @@ public sealed partial class DoorSystem : SharedDoorSystem
 
                 foreach (var (layer, layerState) in ent.Comp.OpenSpriteStates)
                 {
+                    if (!_sprite.LayerMapTryGet((ent.Owner, sprite), layer, out _, false))
+                        continue;
                     _sprite.LayerSetRsiState((ent.Owner, sprite), layer, layerState);
                 }
 
@@ -101,6 +103,8 @@ public sealed partial class DoorSystem : SharedDoorSystem
 
                 foreach (var (layer, layerState) in ent.Comp.ClosedSpriteStates)
                 {
+                    if (!_sprite.LayerMapTryGet((ent.Owner, sprite), layer, out _, false))
+                        continue;
                     _sprite.LayerSetRsiState((ent.Owner, sprite), layer, layerState);
                 }
 
@@ -144,8 +148,8 @@ public sealed partial class DoorSystem : SharedDoorSystem
 
                 foreach (var (layer, layerState) in entity.Comp.OpenSpriteStates)
                 {
-                    // Allow animations to play while it's open (e.g., pinion);
-                    // the animation unsets this so we gotta set it again.
+                    if (!_sprite.LayerMapTryGet((entity.Owner, sprite), layer, out _, false))
+                        continue;
                     _sprite.LayerSetAutoAnimated((entity.Owner, sprite), layer, true);
                     _sprite.LayerSetRsiState((entity.Owner, sprite), layer, layerState);
                 }
@@ -163,6 +167,8 @@ public sealed partial class DoorSystem : SharedDoorSystem
 
                 foreach (var (layer, layerState) in entity.Comp.ClosedSpriteStates)
                 {
+                    if (!_sprite.LayerMapTryGet((entity.Owner, sprite), layer, out _, false))
+                        continue;
                     _sprite.LayerSetAutoAnimated((entity.Owner, sprite), layer, true);
                     _sprite.LayerSetRsiState((entity.Owner, sprite), layer, layerState);
                 }

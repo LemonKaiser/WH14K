@@ -7,6 +7,7 @@ using Content.Shared.Guidebook;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Roles;
 using Content.Shared.Speech;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Enums;
@@ -236,6 +237,12 @@ public sealed partial class HumanoidProfileEditor
         Profile = Profile?.WithSpecies(newSpecies);
         if (Profile == null)
             return;
+
+        Profile = JobPrioritySpeciesNormalizer.EnsureSpeciesCompatibleJobPriorities(
+            Profile,
+            _prototypeManager,
+            _entManager.System<SharedRoleSystem>(),
+            preferFirstAvailable: true);
 
         _markingsModel.OrganProfileData = _markingManager.GetProfileData(Profile.Species, Profile.Sex, Profile.Appearance.SkinColor, Profile.Appearance.EyeColor);
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);

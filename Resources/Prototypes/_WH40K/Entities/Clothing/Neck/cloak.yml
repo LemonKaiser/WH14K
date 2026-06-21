@@ -13,7 +13,20 @@
     sprite: _WH40K/Clothing/Neck/Cloaks/colonelcloak.rsi
 
 - type: entity
+  abstract: true
   parent: ClothingNeckBase
+  id: WH40KClothingNeckToggleableCloakBase
+  components:
+  - type: ToggleableClothing
+    requiredSlot:
+    - neck
+    slot: head
+  - type: ContainerContainer
+    containers:
+      toggleable-clothing: !type:ContainerSlot {}
+
+- type: entity
+  parent: WH40KClothingNeckToggleableCloakBase
   id: ClothingNeckCloakRainImp
   suffix: WH40K, Гвардия
   components:
@@ -24,15 +37,9 @@
     dis: 2.0
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHoodRainImp
-    requiredSlot:
-    - neck
-    slot: head
-  - type: ContainerContainer
-    containers:
-      toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
-  parent: [ClothingNeckBase, WH40KChaosDamnationClothing]
+  parent: [WH40KClothingNeckToggleableCloakBase, WH40KChaosDamnationClothing]
   id: ClothingNeckCloakRainChs
   suffix: WH40K, Культ Хаоса
   components:
@@ -43,12 +50,6 @@
     dis: 2.0
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHoodRainChs
-    requiredSlot:
-    - neck
-    slot: head
-  - type: ContainerContainer
-    containers:
-      toggleable-clothing: !type:ContainerSlot {}
 
 - type: entity
   parent: ClothingNeckBase
@@ -82,3 +83,37 @@
     state: icon
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Cloaks/helldiver.rsi
+
+# Chameleoline Cloaks
+
+- type: entity
+  parent: WH40KClothingNeckToggleableCloakBase
+  id: ClothingNeckCloakChameleonImp
+  suffix: WH40K, Гвардия
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/imp_chameleon.rsi
+  - type: WH40KWaveShader
+    speed: 1.9
+    dis: 2.0
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodChameleonImp
+  - type: WH40KChameleonCloak
+    passiveVisibilityRate: -0.1
+    movementVisibilityRate: 0.2
+
+- type: entity
+  parent: [WH40KClothingNeckToggleableCloakBase, WH40KChaosDamnationClothing]
+  id: ClothingNeckCloakChameleonChs
+  suffix: WH40K, Культ Хаоса
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Neck/Cloaks/chs_chameleon.rsi
+  - type: WH40KWaveShader
+    speed: 1.9
+    dis: 2.0
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHoodChameleonChs
+  - type: WH40KChameleonCloak
+    passiveVisibilityRate: -0.1
+    movementVisibilityRate: 0.2

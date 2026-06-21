@@ -38,6 +38,7 @@ public sealed partial class SmartEquipSystem : EntitySystem
             .Bind(ContentKeyFunctions.SmartEquipPocket1, InputCmdHandler.FromDelegate(HandleSmartEquipPocket1, handle: false, outsidePrediction: false))
             .Bind(ContentKeyFunctions.SmartEquipPocket2, InputCmdHandler.FromDelegate(HandleSmartEquipPocket2, handle: false, outsidePrediction: false))
             .Bind(ContentKeyFunctions.SmartEquipSuitStorage, InputCmdHandler.FromDelegate(HandleSmartEquipSuitStorage, handle: false, outsidePrediction: false))
+            .Bind(ContentKeyFunctions.TakeFromSuitStorage, InputCmdHandler.FromDelegate(HandleTakeFromSuitStorage, handle: false, outsidePrediction: false))
             .Register<SmartEquipSystem>();
     }
 
@@ -71,6 +72,54 @@ public sealed partial class SmartEquipSystem : EntitySystem
     private void HandleSmartEquipSuitStorage(ICommonSession? session)
     {
         HandleSmartEquip(session, "suitstorage");
+    }
+
+    private void HandleTakeFromSuitStorage(ICommonSession? session)
+    {
+        HandleTakeFromEquipmentSlot(session, "suitstorage");
+    }
+
+    private void HandleTakeFromEquipmentSlot(ICommonSession? session, string equipmentSlot)
+    {
+        if (session is not { } playerSession)
+            return;
+
+        if (playerSession.AttachedEntity is not { Valid: true } uid || !Exists(uid))
+            return;
+
+        if (!TryComp<HandsComponent>(uid, out var hands) || hands.ActiveHandId == null)
+            return;
+
+        var handItem = _hands.GetActiveItem((uid, hands));
+        if (!_actionBlocker.CanInteract(uid, handItem))
+            return;
+
+        if (handItem != null)
+        {
+            _popup.PopupClient(Loc.GetString("smart-equip-cant-drop"), uid, uid);
+            return;
+        }
+
+        if (!TryComp<InventoryComponent>(uid, out var inventory) || !_inventory.HasSlot(uid, equipmentSlot, inventory))
+        {
+            _popup.PopupClient(Loc.GetString("smart-equip-missing-equipment-slot", ("slotName", equipmentSlot)), uid, uid);
+            return;
+        }
+
+        if (!_inventory.TryGetSlotEntity(uid, equipmentSlot, out var slotItem, inventory))
+        {
+            _popup.PopupClient(Loc.GetString("smart-equip-empty-equipment-slot", ("slotName", equipmentSlot)), uid, uid);
+            return;
+        }
+
+        if (!_inventory.CanUnequip(uid, equipmentSlot, out var reason))
+        {
+            _popup.PopupClient(Loc.GetString(reason), uid, uid);
+            return;
+        }
+
+        _inventory.TryUnequip(uid, equipmentSlot, inventory: inventory, predicted: true, checkDoafter: true);
+        _hands.TryPickup(uid, slotItem.Value, handsComp: hands);
     }
 
     private void HandleSmartEquip(ICommonSession? session, string equipmentSlot)

@@ -103,3 +103,5 @@ research-technology-wh40k-equipment-relay-trackers = Трекеры релейн
 research-technology-wh40k-equipment-cargo-trackers = Трекеры грузовых задач
 research-technology-wh40k-equipment-mission-command = Командный набор миссии
 research-technology-wh40k-equipment-carapace-armor = Производство панцирной брони
+research-technology-wh40k-equipment-specialist-helmet = Оптика специалиста
+research-technology-wh40k-equipment-specialist-helmet-unlock = шлемы специалиста в имперском карго

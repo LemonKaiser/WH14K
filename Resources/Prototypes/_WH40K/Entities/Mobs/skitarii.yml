@@ -7,11 +7,24 @@
     mask: ClothingGasTechPriest
     eyes: ClothingEyesHudTechPriestMed
     outerClothing: ClothingOuterHardsuitTechpriestMarsSkitarii
+    suitstorage: WeaponRifleGalvanic
     gloves: ClothingHandsGlovesTechpriest
     jumpsuit: ClothingUniformJumpsuitTechpriest
     shoes: ClothingShoesBootsMagTechpriest
+    belt: WHPowerMaceImperial
     pocket1: WH40KStandardTacticalMapTablet
+    pocket2: SpeedLoaderGalvanic
     id: EnginseerDogTag
+  storage:
+    back:
+    - SpeedLoaderGalvanic
+    - SpeedLoaderGalvanic
+    - SpeedLoaderGalvanic
+    - SpeedLoaderGalvanic
+    - WH40KAmmoBoxGalvanic
+    - RadAutoInjector
+    - RegenerativeMesh
+    - MedicatedSuture
 
 - type: startingGear
   id: WH40KSkitariiVanguardMarsGear
@@ -57,6 +70,35 @@
     channels:
     - Binary
   - type: IntrinsicRadioReceiver
+  - type: Repairable
+    damageValue: -5
+    doAfterDelay: 1
+    fuelCost: 0.25
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+
+- type: entity
+  parent: MobHuman
+  id: MobSkitariiRangerMars
+  name: vanguard skitarii
+  suffix: WH40K, Imperium, АдМехи, Егерь
+  components:
+  - type: Loadout
+    prototypes:
+    - WH40KSkitariiRangerMarsGear
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+  - type: ActiveRadio
+    channels:
+    - Binary
+  - type: IntrinsicRadioReceiver
+  - type: Repairable
+    damageValue: -5
+    doAfterDelay: 1
+    fuelCost: 0.25
   - type: WH40KTeamMember
     teamId: Imperium
   - type: WH40KSquadAssignable

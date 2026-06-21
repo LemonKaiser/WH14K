@@ -469,3 +469,22 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/helldiver.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/helldiver.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVest
+  id: ClothingOuterArmorFlakVestOld
+  suffix: WH40K, Old Pattern
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_old.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/flakvest_old.rsi
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.8
+        Slash: 0.8
+        Piercing: 0.8
+        Heat: 0.8
+  - type: ExplosionResistance
+    damageCoefficient: 0.8

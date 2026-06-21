@@ -1,0 +1,22 @@
+- type: entity
+  parent: ClothingMaskGas
+  id: ClothingMaskGasOrk
+  suffix: WH40K, Орки
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/generic_gob.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/generic_gob.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout
+  - type: Armor
+    modifiers:
+      coefficients:
+        Radiation: 0.85
+  - type: SpeciesRestrictedClothing
+    species:
+    - Ork
+    popup: species-restricted-clothing-component-astartes-only

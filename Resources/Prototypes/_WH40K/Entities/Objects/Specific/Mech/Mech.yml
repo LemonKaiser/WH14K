@@ -9,7 +9,7 @@
     noRot: true
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     layers:
-    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
       state: sentinel
   - type: StatusIcon
   - type: FootstepModifier
@@ -56,14 +56,14 @@
 - type: entity
   id: MechSentinelBatteryAutogun
   parent: MechSentinel
-  suffix: Battery, WH40K, Автоган
+  suffix: Battery, WH40K, Autogun
   components:
   - type: Sprite
     drawdepth: Mobs
     noRot: true
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     layers:
-    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
       state: sentinel_autogun
   - type: ItemSlots
     slots:
@@ -73,12 +73,14 @@
         disableEject: true
         swap: false
   - type: Mech
+    baseState: sentinel_autogun
+    openState: sentinel-open_autogun
     startingEquipment:
-      - WeaponMechCombatSentinelRifle
+    - WeaponMechCombatSentinelRifle
     startingModules:
-      - WH40KMechModuleFanSentinel
-      - MechModuleAirTank
-      - MechModuleTeslaRelay
+    - WH40KMechModuleFanSentinel
+    - MechModuleAirTank
+    - MechModuleTeslaRelay
   - type: SpriteMovement
     movementLayers:
       movement:
@@ -90,14 +92,14 @@
 - type: entity
   id: MechSentinelBatteryPlasma
   parent: MechSentinel
-  suffix: Battery, WH40K, Плазма
+  suffix: Battery, WH40K, Plasma
   components:
   - type: Sprite
     drawdepth: Mobs
     noRot: true
     sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
     layers:
-    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement"]
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
       state: sentinel_plasma
   - type: ItemSlots
     slots:
@@ -107,12 +109,100 @@
         disableEject: true
         swap: false
   - type: Mech
+    baseState: sentinel_plasma
+    openState: sentinel-open_plasma
     startingEquipment:
-      - WeaponMechCombatSentinelPlasma
+    - WeaponMechCombatSentinelPlasma
     startingModules:
-      - WH40KMechModuleFanSentinel
-      - MechModuleAirTank
-      - MechModuleTeslaRelay
+    - WH40KMechModuleFanSentinel
+    - MechModuleAirTank
+    - MechModuleTeslaRelay
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: sentinel-moving_plasma
+    noMovementLayers:
+      movement:
+        state: sentinel_plasma
+
+- type: entity
+  id: MechChaosSentinel
+  parent: MechSentinel
+  suffix: WH40K, Chaos
+  description: A captured scout walker desecrated with eight-pointed sigils and refitted for heretic crews.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Objects/Specific/Mech/mecha_chaos.rsi
+    layers:
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
+      state: sentinel
+
+- type: entity
+  id: MechChaosSentinelBatteryAutogun
+  parent: MechChaosSentinel
+  suffix: Battery, WH40K, Chaos, Autogun
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Objects/Specific/Mech/mecha_chaos.rsi
+    layers:
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
+      state: sentinel_autogun
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        disableEject: true
+        swap: false
+  - type: Mech
+    baseState: sentinel_autogun
+    openState: sentinel-open_autogun
+    startingEquipment:
+    - WeaponMechCombatSentinelRifle
+    startingModules:
+    - WH40KMechModuleFanSentinel
+    - MechModuleAirTank
+    - MechModuleTeslaRelay
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: sentinel-moving_autogun
+    noMovementLayers:
+      movement:
+        state: sentinel_autogun
+
+- type: entity
+  id: MechChaosSentinelBatteryPlasma
+  parent: MechChaosSentinel
+  suffix: Battery, WH40K, Chaos, Plasma
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _WH40K/Objects/Specific/Mech/mecha_chaos.rsi
+    layers:
+    - map: [ "enum.MechVisualLayers.Base", "enum.DamageStateVisualLayers.Base", "movement" ]
+      state: sentinel_plasma
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: PowerCellHigh
+        disableEject: true
+        swap: false
+  - type: Mech
+    baseState: sentinel_plasma
+    openState: sentinel-open_plasma
+    startingEquipment:
+    - WeaponMechCombatSentinelPlasma
+    startingModules:
+    - WH40KMechModuleFanSentinel
+    - MechModuleAirTank
+    - MechModuleTeslaRelay
   - type: SpriteMovement
     movementLayers:
       movement:

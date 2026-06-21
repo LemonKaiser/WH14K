@@ -1,54 +1,55 @@
 - type: entity
+  abstract: true
   parent: ClothingHeadBase
+  id: WH40KClothingHeadToggleableHoodBase
+  components:
+  - type: HideLayerClothing
+    layers:
+      Hair: HEAD
+
+- type: entity
+  parent: WH40KClothingHeadToggleableHoodBase
   id: ClothingHeadHoodRainImp
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, Гвардия
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Hoods/imp_rain.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hoods/imp_rain.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
-  parent: [ClothingHeadBase, WH40KChaosDamnationClothing]
+  parent: [WH40KClothingHeadToggleableHoodBase, WH40KChaosDamnationClothing]
   id: ClothingHeadHoodRainChs
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, Культ Хаоса
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Hoods/chs_rain.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hoods/chs_rain.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
   parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
   id: ClothingHeadHoodTzeentchSerg
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, Еретики, Тзинтч
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
   parent: ClothingHeadHelmetFlakAdvHeresy
   id: ClothingHeadHoodTzeentchLiet
+  categories: [ HideSpawnMenu ]
   suffix: WH40K, Еретики, Тзинтч
   components:
   - type: Sprite
     sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood_liet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Hoods/tzeentch_hood_liet.rsi
-  - type: HideLayerClothing
-    slots:
-    - Hair
 
 - type: entity
   parent: ClothingHeadHelmetFlakAdvHeresy
@@ -60,5 +61,29 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/chaos_slaanesh_choisen_helmet.rsi
   - type: HideLayerClothing
-    slots:
-    - Hair
+    layers:
+      Hair: HEAD
+
+# Chameleoline Hoods
+
+- type: entity
+  parent: WH40KClothingHeadToggleableHoodBase
+  id: ClothingHeadHoodChameleonImp
+  suffix: WH40K, Гвардия
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hoods/imp_chameleon.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hoods/imp_chameleon.rsi
+
+- type: entity
+  parent: [WH40KClothingHeadToggleableHoodBase, WH40KChaosDamnationClothing]
+  id: ClothingHeadHoodChameleonChs
+  suffix: WH40K, Культ Хаоса
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Hoods/chs_chameleon.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Hoods/chs_chameleon.rsi

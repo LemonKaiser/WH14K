@@ -1,0 +1,70 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KAstartesToxicSpit
+  name: ent-ActionWH40KAstartesToxicSpit
+  description: ent-ActionWH40KAstartesToxicSpit.desc
+  components:
+  - type: Action
+    useDelay: 20
+    icon:
+      sprite: Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi
+      state: xeno_toxic
+  - type: TargetAction
+    checkCanAccess: false
+    range: 8
+  - type: WorldTargetAction
+    event: !type:ActionGunShootEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KAstartesDash
+  name: ent-ActionWH40KAstartesDash
+  description: ent-ActionWH40KAstartesDash.desc
+  components:
+  - type: Action
+    useDelay: 60
+    icon:
+      sprite: Interface/Actions/jump.rsi
+      state: icon
+  - type: TargetAction
+    checkCanAccess: false
+    range: 3
+    repeat: false
+  - type: WorldTargetAction
+    event: !type:WH40KChaplainDashActionEvent
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  id: WH40KAstartesToxicSpitGun
+  name: astartes toxic spit gland
+  components:
+  - type: RechargeBasicEntityAmmo
+    rechargeCooldown: 20
+  - type: BasicEntityAmmoProvider
+    proto: WH40KAstartesToxicSpitProjectile
+    capacity: 1
+    count: 1
+  - type: Gun
+    soundGunshot:
+      path: /Audio/Weapons/Xeno/alien_spitacid.ogg
+    soundEmpty: null
+    projectileSpeed: 30
+
+- type: entity
+  id: WH40KAstartesToxicSpitProjectile
+  parent: BaseBullet
+  name: toxic spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    deleteOnCollide: true
+    damage:
+      types:
+        Poison: 20
+        Caustic: 5
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi
+    layers:
+    - state: xeno_toxic
+  - type: Ammo
+    muzzleFlash: null

@@ -22,6 +22,7 @@ using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Actions.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Localization;
 using Robust.Shared.Physics;
@@ -33,6 +34,7 @@ namespace Content.Server._WH40K.Morale;
 public sealed partial class WH40KMoraleExecutionSystem : EntitySystem
 {
     [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
     [Dependency] private  AlertsSystem _alerts = default!;
     [Dependency] private  IConfigurationManager _config = default!;
     [Dependency] private  SharedHandsSystem _hands = default!;
@@ -162,7 +164,7 @@ public sealed partial class WH40KMoraleExecutionSystem : EntitySystem
         }
 
         if (!TryGetSameTeam(ent.Owner, args.Target) ||
-            !IsAllowedMoraleExecutionTarget(args.Target) ||
+            (!ent.Comp.Unrestricted && !IsAllowedMoraleExecutionTarget(args.Target)) ||
             !IsWithinExecutionRange(ent.Owner, args.Target, ent.Comp))
         {
             TryShowInvalidTargetPopup(ent.Owner, ent.Comp);
@@ -191,6 +193,7 @@ public sealed partial class WH40KMoraleExecutionSystem : EntitySystem
         if (targetMobState.CurrentState != MobState.Dead)
             return;
 
+        _audio.PlayPvs(ent.Comp.VoiceLine, ent.Owner);
         StartExecutionCooldown(ent.Owner, ent.Comp, now);
         ApplyMoraleAura(ent.Owner, ent.Comp, now);
         args.Handled = true;

@@ -1,4 +1,5 @@
 using Content.Shared.Alert;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._WH40K.Morale.Components;
@@ -37,6 +38,9 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
     public EntProtoId ActionPrototype = "ActionWH40KMoraleExecution";
 
     [DataField]
+    public SoundSpecifier VoiceLine = new SoundCollectionSpecifier("WH40KCommissarExecutionVoice", AudioParams.Default.WithVolume(-4f));
+
+    [DataField]
     public EntityUid? ActionEntity;
 
     [DataField]
@@ -50,4 +54,10 @@ public sealed partial class WH40KMoraleExecutionComponent : Component
 
     [DataField]
     public bool CooldownShown;
+
+    /// <summary>
+    /// If true, allows executing any same-team member regardless of WH40KMoraleExecutionTargetComponent.
+    /// </summary>
+    [DataField]
+    public bool Unrestricted;
 }

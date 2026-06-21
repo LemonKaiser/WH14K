@@ -19,7 +19,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 1000
+        damage: 1800
       behaviors:
       - !type:PlaySoundBehavior #Nyano
         sound:
@@ -31,7 +31,7 @@
           collection: MetalSlam
     - trigger:
         !type:DamageTrigger
-        damage: 800
+        damage: 1200
       behaviors:
       - !type:PlaySoundBehavior
         sound:

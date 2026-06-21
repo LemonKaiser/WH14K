@@ -65,7 +65,7 @@ namespace Content.Server.GameTicking
         [Dependency] private  SharedTransformSystem _transform = default!;
         [Dependency] private  UserDbDataManager _userDb = default!;
         [Dependency] private  MetaDataSystem _metaData = default!;
-        [Dependency] private  SharedRoleSystem _roles = default!;
+        [Dependency] private SharedRoleSystem _roles = default!;
         [Dependency] private  ServerDbEntryManager _dbEntryManager = default!;
 
         [ViewVariables] private bool _initialized;

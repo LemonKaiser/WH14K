@@ -16,6 +16,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Throwing;
 using Content.Shared._WH40K.Chaplain;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
@@ -25,6 +26,7 @@ namespace Content.Server._WH40K.Chaplain;
 
 public sealed partial class WH40KChaplainDashSystem : EntitySystem
 {
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private  SharedActionsSystem _actions = default!;
     [Dependency] private  DamageableSystem _damageable = default!;
     [Dependency] private  SharedInteractionSystem _interaction = default!;
@@ -103,6 +105,8 @@ public sealed partial class WH40KChaplainDashSystem : EntitySystem
         if (!HasComp<ThrownItemComponent>(args.Performer))
             return;
 
+        if (ent.Comp.VoiceLine != null)
+            _audio.PlayPvs(ent.Comp.VoiceLine, ent.Owner);
         ApplyDashPathDamage(args.Performer, start, end, ent.Comp);
         args.Handled = true;
     }

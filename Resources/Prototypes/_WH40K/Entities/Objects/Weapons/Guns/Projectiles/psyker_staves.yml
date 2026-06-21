@@ -25,6 +25,74 @@
     fireStacks: 1.5
 
 - type: entity
+  id: WH40KProjectilePsykerFireball
+  name: warp fireball
+  description: A concentrated sphere of warpflame.
+  parent: BaseBulletTrigger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#ff4500"
+    radius: 3.0
+    energy: 4
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: fireball
+      shader: unshaded
+      color: "#ff4500"
+  - type: Projectile
+    damage:
+      types:
+        Heat: 25
+    soundHit:
+      path: /Audio/Effects/fire.ogg
+    forceSound: true
+  - type: IgnitionSource
+    temperature: 1200
+    ignited: true
+  - type: IgniteOnCollide
+    fireStacks: 3.0
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 30
+    intensitySlope: 3
+    maxIntensity: 10
+    deleteAfterExplosion: true
+
+- type: entity
+  id: WH40KProjectilePsykerBiomanticBolt
+  name: biomantic bolt
+  description: A bolt of concentrated biomantic energy carrying omnizine.
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#00ff66"
+    radius: 1.8
+    energy: 1.5
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/magic.rsi
+    layers:
+    - state: spell
+      shader: unshaded
+      color: "#00ff66"
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 2
+  - type: Solution
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Omnizine
+        Quantity: 10
+  - type: SolutionInjectOnProjectileHit
+    transferAmount: 10
+    solution: ammo
+
+- type: entity
   id: WH40KProjectilePsykerMindBolt
   name: mind bolt
   description: A focused shard of warp force.

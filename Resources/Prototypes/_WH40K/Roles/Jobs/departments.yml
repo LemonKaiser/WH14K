@@ -32,6 +32,7 @@
   - WH40KChaplain
   - Lexmechanic
   - Medic
+  - AstartesImperium
 
 - type: department
   id: DarkMechanicum
@@ -60,6 +61,7 @@
   - HGuardsman
   - HBandSupplier
   - HLexmechanic
+  - HAstartes
 
 - type: department
   id: Tau

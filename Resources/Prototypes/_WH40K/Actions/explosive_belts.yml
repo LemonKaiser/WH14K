@@ -1,7 +1,7 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KChaosDynamiteBeltShort
-  name: Взвести пояс с динамитом (1с)
+  name: Взвести пояс с динамитом (5с)
   description: Активировать пояс Хаоса на мгновенный подрыв.
   components:
   - type: Action
@@ -12,7 +12,7 @@
     checkCanInteract: false
   - type: InstantAction
     event: !type:WH40KActivateExplosiveBeltActionEvent
-      delaySeconds: 1
+      delaySeconds: 5
 
 - type: entity
   parent: BaseAction
@@ -32,8 +32,8 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionWH40KMeltaChargeBelt
-  name: Взвести пояс с мельта-зарядом (10с)
+  id: ActionWH40KMeltaChargeBeltShort
+  name: Взвести пояс с мельта-зарядом (5с)
   description: Активировать пояс с мельта-зарядом.
   components:
   - type: Action
@@ -44,4 +44,20 @@
     checkCanInteract: false
   - type: InstantAction
     event: !type:WH40KActivateExplosiveBeltActionEvent
-      delaySeconds: 10
+      delaySeconds: 5
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KMeltaChargeBeltLong
+  name: Взвести пояс с мельта-зарядом (30с)
+  description: Активировать пояс с мельта-зарядом на длинный таймер.
+  components:
+  - type: Action
+    icon:
+      sprite: _WH40K/Clothing/Belt/chaplain_melta_belt.rsi
+      state: icon
+    itemIconStyle: BigItem
+    checkCanInteract: false
+  - type: InstantAction
+    event: !type:WH40KActivateExplosiveBeltActionEvent
+      delaySeconds: 30

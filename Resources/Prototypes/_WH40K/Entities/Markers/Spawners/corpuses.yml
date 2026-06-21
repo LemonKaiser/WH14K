@@ -1,0 +1,13 @@
+- type: entity
+  name: Random Guardsman Corpse Spawner
+  id: RandomGuardsmanCorpseSpawner
+  parent: SalvageHumanCorpseSpawner
+  suffix: WH40K
+  components:
+  - type: Sprite
+    layers:
+      - state: security_officer
+      - state: green
+  - type: ConditionalSpawner
+    prototypes:
+      - MobRandomGuardsmanCorpse

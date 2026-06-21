@@ -5,6 +5,9 @@
   - id: guardsman
     job: Guardsman
     previewPrototype: WH40KReinforcementPreviewImperiumGuardsman
+    equipmentOverrides:
+      head: ClothingHeadHelmetFlakWhiteShield
+      outerClothing: ClothingOuterArmorFlakVestOld
     baseCost: 18
     maxCount: 10
     groupKey: w40k-cmd-reinforcement-group-line
@@ -12,6 +15,9 @@
   - id: voxscout
     job: VoxScout
     previewPrototype: WH40KReinforcementPreviewImperiumVoxScout
+    equipmentOverrides:
+      head: ClothingHeadHelmetFlakWhiteShield
+      outerClothing: ClothingOuterArmorFlakVestOld
     baseCost: 24
     maxCount: 3
     groupKey: w40k-cmd-reinforcement-group-line
@@ -19,6 +25,9 @@
   - id: medic
     job: Medic
     previewPrototype: WH40KReinforcementPreviewImperiumMedic
+    equipmentOverrides:
+      head: ClothingHeadHelmetFlakWhiteShield
+      outerClothing: ClothingOuterArmorFlakVestOld
     baseCost: 26
     maxCount: 3
     groupKey: w40k-cmd-reinforcement-group-support

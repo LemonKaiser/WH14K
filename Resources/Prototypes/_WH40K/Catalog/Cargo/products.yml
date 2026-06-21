@@ -129,6 +129,26 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumPlasteel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SheetPlasteel
+  cost: 3000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumCloth
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MaterialCloth
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumLasgun
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -225,6 +245,18 @@
     state: icon
   product: MagazineStubPistol
   cost: 30
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumMagazineHeavyStubPistol
+  name: cargoproduct-name-wh40k-magazine-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-magazine-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/heavy_stub_pistol.rsi
+    state: base
+  product: MagazineHeavyStubPistol
+  cost: 120
   category: cpcat-arm
   group: WH40KImperiumMarket
 
@@ -363,6 +395,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumHeavyStubPistol
+  name: cargoproduct-name-wh40k-heavy-stub-pistol-aquila
+  description: cargoproduct-description-wh40k-heavy-stub-pistol-aquila
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/heavy_stub_pistol_aquila.rsi
+    state: icon
+  product: WeaponHeavyStubPistolAquila
+  cost: 6000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumSpeedLoader11mm
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -379,6 +423,18 @@
     state: icon
   product: WH40KAmmoBoxSerpenta
   cost: 750
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumAmmoHeavyStubPistol
+  name: cargoproduct-name-wh40k-ammobox-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-ammobox-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  product: WH40KAmmoBoxHeavyStubPistol
+  cost: 1000
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -757,6 +813,18 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumSpecialistHelmet
+  name: cargoproduct-name-wh40k-imperium-specialist-helmet
+  description: cargoproduct-description-wh40k-imperium-specialist-helmet
+  icon:
+    sprite: _WH40K/Clothing/Head/Helmets/specialist_helmet.rsi
+    state: icon
+  product: ClothingHeadHelmetSpecialist
+  cost: 15000
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumCombatMedkit
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -779,8 +847,8 @@
 - type: cargoProduct
   id: WH40KImperiumSentinel
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
+    sprite: _WH40K/Objects/Specific/Mech/mecha.rsi
+    state: sentinel_autogun
   product: MechSentinelBatteryAutogun
   cost: 25000
   category: cpcat-arm
@@ -852,7 +920,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBars
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -862,7 +930,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeBoarded
-  cost: 500
+  cost: 200
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -892,7 +960,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -983,6 +1051,16 @@
     state: extraction_pack
   product: Gorjet
   cost: 10000
+  category: cpcat-cgo
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
+  id: WH40KImperiumBinoculars
+  icon:
+    sprite: Objects/Tools/binoculars.rsi
+    state: icon
+  product: Binoculars
+  cost: 500
   category: cpcat-cgo
   group: WH40KImperiumMarket
 
@@ -1107,6 +1185,26 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsPlasteel
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: SheetPlasteel
+  cost: 3000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsCloth
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: MaterialCloth
+  cost: 500
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsLasgun
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1223,6 +1321,18 @@
     state: icon
   product: MagazineStubPistol
   cost: 30
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsMagazineHeavyStubPistol
+  name: cargoproduct-name-wh40k-magazine-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-magazine-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/Magazine/heavy_stub_pistol.rsi
+    state: base
+  product: MagazineHeavyStubPistol
+  cost: 120
   category: cpcat-arm
   group: WH40KHereticsMarket
 
@@ -1381,6 +1491,18 @@
   group: WH40KHereticsMarket
 
 - type: cargoProduct
+  id: WH40KHereticsHeavyStubPistol
+  name: cargoproduct-name-wh40k-heavy-stub-pistol-blood-pact
+  description: cargoproduct-description-wh40k-heavy-stub-pistol-blood-pact
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Autoguns/heavy_stub_pistol_blood_pact.rsi
+    state: icon
+  product: WeaponHeavyStubPistolBloodPact
+  cost: 6000
+  category: cpcat-arm
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
   id: WH40KHereticsSpeedLoader11mm
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
@@ -1397,6 +1519,18 @@
     state: icon
   product: WH40KAmmoBoxSerpenta
   cost: 750
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsAmmoHeavyStubPistol
+  name: cargoproduct-name-wh40k-ammobox-heavy-stub-pistol
+  description: cargoproduct-description-wh40k-ammobox-heavy-stub-pistol
+  icon:
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+  product: WH40KAmmoBoxHeavyStubPistol
+  cost: 1000
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1757,9 +1891,9 @@
 - type: cargoProduct
   id: WH40KHereticsSentinel
   icon:
-    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
-    state: icon
-  product: MechSentinelBatteryAutogun
+    sprite: _WH40K/Objects/Specific/Mech/mecha_chaos.rsi
+    state: sentinel_autogun
+  product: MechChaosSentinelBatteryAutogun
   cost: 25000
   category: cpcat-arm
   group: WH40KHereticsMarket
@@ -1880,7 +2014,7 @@
     sprite: _WH40K/Objects/Misc/inflatable_wall.rsi
     state: folded_wall
   product: WH40KDeployableBarricadeHedgehog
-  cost: 500
+  cost: 300
   category: cpcat-cgo
   group: WH40KHereticsMarket
 
@@ -1971,5 +2105,15 @@
     state: extraction_pack
   product: NecklaceChaosCultistReflectWeak
   cost: 10000
+  category: cpcat-cgo
+  group: WH40KHereticsMarket
+
+- type: cargoProduct
+  id: WH40KHereticsBinoculars
+  icon:
+    sprite: Objects/Tools/binoculars.rsi
+    state: icon
+  product: Binoculars
+  cost: 500
   category: cpcat-cgo
   group: WH40KHereticsMarket

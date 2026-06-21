@@ -114,6 +114,15 @@ ent-colbelt = colonel's belt
 
 ent-ClothingHeadsetVoxBackpack = radio operator headset
 
+ent-ClothingHeadHelmetFlakWhiteShield = white shield flak helmet
+    .desc = A reserve-pattern flak helmet marked with a white shield and issued to fresh reinforcements.
+
+ent-ClothingHeadHelmetFlakWhiteDented = dented white shield flak helmet
+    .desc = A battered reserve flak helmet with a white shield marking and plenty of field wear.
+
+ent-ClothingOuterArmorFlakVestOld = old-pattern flak vest
+    .desc = An aging flak vest from older Munitorum stocks. It protects, but not as well as standard guard issue.
+
 ent-EncryptionKeyVox = vox encryption key
 ent-ClothingHeadsetVoxBackpackImperium = imperium radio operator headset
 ent-ClothingHeadsetVoxBackpackHeretics = heretics radio operator headset
@@ -915,6 +924,21 @@ ent-MapPropFallout7 = sign
 ent-MapPropFallout8 = skeleton
     .desc = hard.
 
+ent-WH40KImperialColumn = imperial column
+    .desc = A heavy gothic column built for Imperial halls and parade grounds.
+
+ent-WH40KImperialColumn2 = imperial column
+    .desc = A heavy gothic column built for Imperial halls and parade grounds.
+
+ent-WH40KImperialColumn3 = ruined imperial column
+    .desc = A damaged gothic column that still holds the weight of Imperial architecture.
+
+ent-WH40KCommissarStatue = commissar statue
+    .desc = A stern monument to discipline, duty, and the cost of cowardice.
+
+ent-WH40KImperialLightPost = imperial light post
+    .desc = A tall lamp post casting a warm warning light over Imperial streets.
+
 ent-StatueWH = statue
     .desc = One of the great many statues that stand silently for centuries, delighting the eyes of everyone who contemplates them.
 
@@ -966,7 +990,7 @@ ent-CrateNecron = necron box
     .desc = This is a storage facility belonging to the mysterious civilization of machines made of living steel - the Necrons. Do you have the will to open it?
 
 ent-WH40KServoSkull = servo skull
-    .desc = A compact servo skull chassis. Deploy it to create a friendly support skull.
+    .desc = A completed servo skull ready to deploy as a friendly support drone.
 ent-WH40KServoSkullMelta = melta servo skull
     .desc = A servo skull rigged with a melta charge. Deploy it and it will hunt nearby enemies for your team.
 ent-WH40KServoSkullMob = servo skull
@@ -1106,6 +1130,15 @@ ent-WH40KTacticalWhistle = tactical whistle
 
 ent-WH40KSignalFlare = signal flare
     .desc = A field flare for quick visual signaling and target marking.
+
+ent-WeaponWH40KSignalPistolImperium = imperium signal pistol
+    .desc = A compact flare pistol used by Imperial officers to mark targets and rally formations.
+
+ent-WeaponWH40KSignalPistolChaos = chaos signal pistol
+    .desc = A warped flare pistol used by heretic officers to cast battlefield signals through smoke and fire.
+
+ent-WeaponWH40KCyberTozik = cyber-tozik
+    .desc = A rugged cybernetic double-barreled shotgun. Uses .50 shotgun shells.
 
 ent-WH40KIntelDetector = intel detector
     .desc = A compact detector tuned for frontline intel signatures.
@@ -1394,20 +1427,23 @@ ent-ClothingBackpackAstartesMk5Powerpack = Mk V power pack
 ent-ClothingBackpackAstartesMk6Powerpack = Mk VI power pack
     .desc = A lightweight Astartes power pack.
 
+ent-ClothingBackpackAstartesMk7Powerpack = Ultramarines Mk VII power pack
+    .desc = A power pack for Ultramarines power armour, scaled for the Adeptus Astartes.
+
 ent-ClothingBackpackAstartesMk7JumpPack = Mk VII jump pack
     .desc = A jump pack for Astartes power armour.
 
 ent-ClothingBackpackAstartesMk23JumpPack = Mk II/III jump pack
     .desc = An early jump pack for Astartes power armour.
 
-ent-ClothingShoesAstartesImperiumBoots = Imperium Space Marine boots
-    .desc = Reinforced power-armour boots built for the anatomy of the Adeptus Astartes.
+ent-ClothingShoesAstartesImperiumBoots = Ultramarines sabatons
+    .desc = Reinforced sabatons from an Ultramarines power armour set, built for the anatomy of the Adeptus Astartes.
 
-ent-ClothingShoesAstartesChaosBoots = Chaos Space Marine boots
-    .desc = Defiled power-armour boots fitted for the anatomy of a traitor Astartes.
+ent-ClothingShoesAstartesChaosBoots = Black Legion sabatons
+    .desc = Defiled power-armour sabatons fitted for the anatomy of a traitor Astartes.
 
-ent-ClothingHeadHelmetAstartesMk7 = Mk VII "Aquila" helmet
-    .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
+ent-ClothingHeadHelmetAstartesMk7 = Ultramarines Mk VII "Aquila" helmet
+    .desc = A sealed Ultramarines power armour helmet designed for the anatomy of the Adeptus Astartes.
 
 ent-ClothingHeadHelmetAstartesMk2 = Mk II helmet
     .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
@@ -1424,8 +1460,8 @@ ent-ClothingHeadHelmetAstartesMk5 = Mk V helmet
 ent-ClothingHeadHelmetAstartesMk6 = Mk VI helmet
     .desc = A sealed power armour helmet designed for the anatomy of the Adeptus Astartes.
 
-ent-ClothingOuterArmorAstartesMk7 = Mk VII "Aquila" power armour
-    .desc = A servo-enhanced suit of Adeptus Astartes power armour. Superior to standard carapace armour and fitted for a Space Marine.
+ent-ClothingOuterArmorAstartesMk7 = Ultramarines Mk VII "Aquila" power armour
+    .desc = A servo-enhanced suit of Ultramarines power armour, superior to standard carapace armour and fitted for a Space Marine.
 
 ent-ClothingOuterArmorAstartesMk2 = Mk II power armour
     .desc = An early Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
@@ -1445,14 +1481,20 @@ ent-ClothingOuterArmorAstartesMk5 = Mk V power armour
 ent-ClothingOuterArmorAstartesMk6 = Mk VI power armour
     .desc = A reconnaissance Astartes power armour suit designed for the anatomy of the Adeptus Astartes.
 
-ent-ClothingBackpackAstartesChaosPowerpack = Chaos Space Marine power pack
-    .desc = A defiled power pack for Space Marine armour, adorned with the symbols of Chaos.
+ent-ClothingBackpackAstartesChaosPowerpack = Black Legion power pack
+    .desc = A defiled power pack for Black Legion power armour, adorned with the symbols of Chaos.
 
-ent-ClothingHeadHelmetAstartesChaos = Chaos Space Marine helmet
-    .desc = A sealed helmet of corrupted Space Marine power armour, built for the anatomy of the Adeptus Astartes.
+ent-ClothingHeadHelmetAstartesChaos = Black Legion helmet
+    .desc = A sealed helmet of corrupted Black Legion power armour, built for the anatomy of the Adeptus Astartes.
 
-ent-ClothingOuterArmorAstartesChaos = Chaos Space Marine power armour
-    .desc = A corrupted suit of power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+ent-ClothingOuterArmorAstartesChaos = Black Legion power armour
+    .desc = A corrupted suit of Black Legion power armour rebuilt for the anatomy of the Adeptus Astartes and reinforced by warp-taint.
+
+ent-ClothingUniformJumpsuitAstartes = Ultramarines bodyglove
+    .desc = A reinforced under-armour bodyglove worn beneath Ultramarines power armour.
+
+ent-ClothingUniformJumpsuitAstartesChaos = Black Legion bodyglove
+    .desc = A defiled under-armour bodyglove worn beneath Black Legion power armour.
 
 ent-ClothingShoesBootsSlaanesh = Slaanesh Champion Boots
     .desc = Exquisite boots, specially designed for the most sophisticated champions of Slaanesh
@@ -1582,6 +1624,18 @@ ent-ClothingNeckCloakRainChs = Raincoat
 
 ent-ClothingHeadHoodRainChs = Raincoat Hood
     .desc = Useful in rain.
+
+ent-ClothingNeckCloakChameleonImp = chameleoline cloak
+    .desc = A cloak woven from chameleoline fibres. When worn, the wearer fades from sight while remaining still.
+
+ent-ClothingHeadHoodChameleonImp = chameleoline cloak hood
+    .desc = A hood woven from chameleoline fibres.
+
+ent-ClothingNeckCloakChameleonChs = chameleoline cloak
+    .desc = A blasphemous cloak woven from chameleoline fibres, blessed by the Dark Gods. The wearer fades from sight while remaining still.
+
+ent-ClothingHeadHoodChameleonChs = chameleoline cloak hood
+    .desc = A hood woven from chameleoline fibres, bearing the mark of Chaos.
 
 ent-ClothingUniformJumpsuitGuardsmanVst = Vostroyan Uniform
     .desc = Normal Uniform.
@@ -2013,6 +2067,12 @@ ent-ActionWH40KChaosTzeentchTimeField = Grey Time Field
 ent-ActionWH40KTogglePhantomStep = Phantom Step
     .desc = Toggle automatic evasive dashes.
 
+ent-ActionWH40KAstartesToxicSpit = Toxic Spit
+    .desc = Spit a corrosive toxin at a target.
+
+ent-ActionWH40KAstartesDash = Shock Dash
+    .desc = Rush up to three tiles, stunning enemies caught in your path.
+
 ent-ClothingUniformJumpsuitHelldriverUniform = Helldiver Uniform
     .desc = Standard Helldiver Uniform.
 
@@ -2029,3 +2089,76 @@ ent-ClothingNeckHelldriver = "FOESMASHER" Cloak
 
 ent-ClothingHeadHelldriverHelmet = B-01 TACTICAL Helmet
     .desc = This is the standard Super-Earth version, made from the same titanium as the Eradicator's body.
+
+ent-MechChaosSentinel = Captured Sentinel
+    .desc = A captured scout walker desecrated with eight-pointed sigils and refitted for heretic crews.
+
+ent-MechChaosSentinelBatteryAutogun = Captured Autocannon Sentinel
+    .desc = A captured Sentinel fitted with an autocannon, a power cell and basic life-support modules.
+
+ent-MechChaosSentinelBatteryPlasma = Captured Plasma Sentinel
+    .desc = A captured Sentinel fitted with a plasma rifle, a power cell and basic life-support modules.
+
+wh40k-altar-sentinel-autogun-name = Captured sentinel (autogun)
+wh40k-altar-sentinel-autogun-desc = Repurposed walker support.
+wh40k-altar-sentinel-plasma-name = Captured sentinel (plasma)
+wh40k-altar-sentinel-plasma-desc = Elite repurposed plasma walker.
+
+ent-WeaponHeavyStubPistolAquila = M36 "Aquila" heavy stub pistol
+    .desc = A large-caliber magazine-fed stub pistol that hits as hard as a revolver while keeping extra rounds in the grip.
+
+ent-WeaponHeavyStubPistolBloodPact = M36 "Blood Pact" heavy stub pistol
+    .desc = A blood-red renegade variant of the M36, built for brutal close-range execution.
+
+ent-MagazineHeavyStubPistol = heavy stub pistol magazine (11 mm)
+    .desc = An 8-round magazine loaded with heavy 11 mm rounds for the M36 family.
+
+ent-CartridgeHeavyStubPistol = heavy stub pistol cartridge (11 mm)
+    .desc = A blunt, heavy pistol round built to deliver revolver-grade stopping power.
+
+ent-WH40KAmmoBoxHeavyStubPistol = heavy stub pistol ammunition box (11 mm)
+    .desc = A box of heavy 11 mm cartridges for M36 heavy stub pistols.
+
+ent-WeaponRifleGalvanic = Galvanic Rifle
+    .desc = The traditional weapon of Skitarii Jaegers. It is typically decorated (according to the Machine God's designs) with copper scrolls that depict the undulating sand dunes of Mars.
+
+ent-SpeedLoaderGalvanic = galvanic cartridge speedloader
+
+ent-SpeedLoaderGalvanicEmpty = galvanic cartridge speedloader
+
+ent-CartridgeGalvanic = galvanic cartridge
+
+ent-WH40KAmmoBoxGalvanic = galvanic cartridge box
+
+ent-ClothingOuterArmorShoota = shoota boyz armar
+    .desc = Armor worn by shoota boyz
+
+ent-ClothingOuterArmorSlugga = slugga boyz armar
+    .desc = Armor worn by slugga boyz
+
+ent-ClothingOuterArmorArd = " 'ard boyz armar"
+    .desc = "Armor worn by slugga boyz"
+
+ent-ClothingOuterArmorSkar = scar boyz armar
+    .desc = Armor worn by Scar Boys Wear
+
+ent-ClothingShoesBootsOrk = Scar Boyz Boots
+    .desc = Boots that Scar Boys Wear
+
+ent-ClothingUniformJumpsuitOrks = Boyz clothes
+    .desc = Clothes worn by Boyz
+
+ent-ClothingMaskGasOrk = Boyz mask
+    .desc = Mask worn by Boyz
+
+ent-ClothingHeadHelmetOrk = Boyz hat
+    .desc = Hat worn by Boyz
+
+ent-ClothingBackpackOrk = Boyz bag
+    .desc = Bag worn by Boyz
+
+ent-ClothingBackpackOrkBoss = Boss bag
+    .desc = Bag worn by Bosses
+
+ent-ClothingOuterPsykerWardCoatPremium = Scholastica Psykana Uniform
+    .desc = Scholastica Psykana Elite School Graduate Uniform

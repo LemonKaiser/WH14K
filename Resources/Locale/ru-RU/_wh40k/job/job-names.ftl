@@ -24,6 +24,7 @@ job-name-psyker = псайкер
 job-name-vox-scout = вокс-оператор
 job-name-tithe-supplier = логист Муниторума
 job-name-munitorum-officer = офицер Муниторума
+job-name-astartes-imperium = астартес Империума
 
 job-name-hcolonel = ересиарх
 job-name-hlieutenant = чемпион Хаоса
@@ -41,9 +42,11 @@ job-name-hgenetor = генетор-еретех
 job-name-henginseer = техножрец-отступник
 job-name-hnovice = аколит Тёмного Механикума
 job-name-hellish-foreman = адский бригадир
+job-name-hastartes = астартес Хаоса
 
 job-name-tau-fire-warrior = Шас'ла
 job-name-tau-officer = Шас'уи
 job-name-tau-ethereal = Эфириал
 
 job-name-ork-boyz = бойзы
+job-name-wh40k-species-preview = осмотр расы

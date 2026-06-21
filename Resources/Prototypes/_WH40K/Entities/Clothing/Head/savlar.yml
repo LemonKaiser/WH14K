@@ -7,3 +7,43 @@
     sprite: _WH40K/Clothing/Head/Helmets/savlar_helmet.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/Head/Helmets/savlar_helmet.rsi
+
+- type: entity
+  parent: ClothingHeadHelmetFlakAdv
+  id: ClothingHeadHelmetSpecialist
+  suffix: WH40K, Specialist
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/specialist_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/specialist_helmet.rsi
+  - type: ItemToggle
+    onUse: false
+    soundActivate:
+      path: /Audio/Items/flashlight_on.ogg
+    soundDeactivate:
+      path: /Audio/Items/flashlight_off.ogg
+    soundFailToActivate:
+      path: /Audio/Machines/button.ogg
+  - type: ToggleClothing
+    action: ActionWH40KToggleSpecialistHelmet
+    disableOnUnequip: true
+  - type: ComponentToggler
+    components:
+    - type: ShowHealthBars
+    - type: ShowHealthIcons
+    - type: WH40KNightVision
+  - type: UseDelay
+    delay: 1
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KToggleSpecialistHelmet
+  name: Toggle specialist optics
+  description: Toggles the helmet's night vision and health display.
+  components:
+  - type: Action
+    useDelay: 1
+    itemIconStyle: BigItem
+  - type: InstantAction
+    event: !type:ToggleActionEvent

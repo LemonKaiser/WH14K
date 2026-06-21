@@ -276,7 +276,7 @@
     sprite: _WH40K/Objects/Consumable/Food/Boxes/imperial_mre.rsi
     size: Small
     shape:
-    - 0,0,1,0
+    - 0,0,1,1
   - type: Storage
     grid:
     - 0,0,3,1

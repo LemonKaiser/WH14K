@@ -34,6 +34,7 @@
         speedMultiplier: 1.1
         outgoingDamageMultiplier: 1.1
         incomingDamageMultiplier: 0.9
+        unrestricted: true
       - type: Vocal
         sounds:
           Male: W40KOffMale

@@ -42,7 +42,7 @@ public sealed partial class WH40KPsykerAstralProjectionSystem : EntitySystem
         SubscribeLocalEvent<WH40KPsykerAstralProjectionComponent, SleepStateChangedEvent>(OnSleepStateChanged);
         SubscribeLocalEvent<WH40KPsykerAstralProjectionComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<WH40KPsykerAstralProjectionComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
-        SubscribeLocalEvent<WH40KPsykerAstralProjectionComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<WH40KPsykerAstralProjectionComponent, DamageDealtEvent>(OnDamageDealt);
         SubscribeLocalEvent<WH40KPsykerRoleShutdownEvent>(OnPsykerRoleShutdown);
         SubscribeLocalEvent<WH40KChaosRoleStartupEvent>(OnChaosRoleStartup);
         SubscribeNetworkEvent<WH40KPsykerAstralExitRequestEvent>(OnExitRequest);
@@ -178,9 +178,9 @@ public sealed partial class WH40KPsykerAstralProjectionSystem : EntitySystem
         EndAstralProjection(ent.Owner, wake: false, WH40KPsykerAstralExitReason.Death);
     }
 
-    private void OnDamageChanged(Entity<WH40KPsykerAstralProjectionComponent> ent, ref DamageChangedEvent args)
+    private void OnDamageDealt(Entity<WH40KPsykerAstralProjectionComponent> ent, ref DamageDealtEvent args)
     {
-        if (!args.DamageIncreased || args.DamageDelta == null || args.DamageDelta.GetTotal() <= 0)
+        if (args.Damage.GetTotal() <= 0)
             return;
 
         EndAstralProjection(ent.Owner, wake: true, WH40KPsykerAstralExitReason.Damage);

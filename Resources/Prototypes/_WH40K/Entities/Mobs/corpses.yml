@@ -1,0 +1,12 @@
+- type: entity
+  parent: SalvageHumanCorpse
+  id: MobRandomGuardsmanCorpse
+  suffix: WH40K, Dead, Guardsman
+  components:
+  - type: Loadout
+    prototypes:
+    - VoxScoutGear
+    - MedicGear
+    - GuardsmanGear
+    - GuardsmanSpesSpecGear
+    - GuardsmanHevSpecGear

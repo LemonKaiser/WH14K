@@ -21,6 +21,14 @@
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmagun.wav
   - type: WH40KGunPrediction
+  - type: WH40KPlasmaOverheat
+    chance: 0.02
+    totalIntensity: 486
+    intensitySlope: 54
+    maxTileIntensity: 54
+    maxTileBreak: 0
+    canCreateVacuum: false
+    deleteWeapon: true
   - type: ItemSlots
     slots:
       gun_magazine:

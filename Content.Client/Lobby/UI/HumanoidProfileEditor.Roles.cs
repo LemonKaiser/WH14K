@@ -271,7 +271,7 @@ public sealed partial class HumanoidProfileEditor
                 icon.Texture = _sprite.Frame0(jobIcon.Icon);
                 selector.Setup(items, job.LocalizedName, 200, job.LocalizedDescription, icon, job.Guides);
 
-                if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
+                if (!_requirements.IsAllowed(job, Profile, out var reason))
                 {
                     selector.LockRequirements(reason);
                 }

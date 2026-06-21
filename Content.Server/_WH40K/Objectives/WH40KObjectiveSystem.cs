@@ -46,7 +46,7 @@ public sealed partial class WH40KObjectiveSystem : EntitySystem
 
         SubscribeLocalEvent<WH40KObjectiveComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<WH40KObjectiveComponent, ComponentShutdown>(OnObjectiveShutdown);
-        SubscribeLocalEvent<WH40KObjectiveComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<WH40KObjectiveComponent, DamageDealtEvent>(OnDamageDealt);
         SubscribeLocalEvent<WH40KObjectiveComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
         SubscribeLocalEvent<WH40KObjectiveComponent, TriggerEvent>(OnTrigger);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
@@ -155,9 +155,9 @@ public sealed partial class WH40KObjectiveSystem : EntitySystem
 
     }
 
-    private void OnDamageChanged(EntityUid uid, WH40KObjectiveComponent component, DamageChangedEvent args)
+    private void OnDamageDealt(EntityUid uid, WH40KObjectiveComponent component, DamageDealtEvent args)
     {
-        if (!args.DamageIncreased || component.Destroyed)
+        if (component.Destroyed)
             return;
 
         if (!TryComp<DamageableComponent>(uid, out var damageable))

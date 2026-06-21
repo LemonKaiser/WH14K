@@ -1,0 +1,151 @@
+- type: entity
+  id: MobWH40KServitor1
+  parent: MobRobotic
+  name: servitor
+  description: A heavy combat servitor. It is a terrifying hybrid of human flesh and machinery, created solely for destruction.
+  suffix: WH40K, Imperium, АдМехи, Ghost Role
+  components:
+  - type: GhostRole
+    makeSentient: true
+    allowMovement: true
+    allowSpeech: true
+    name: wh40k-ghost-role-servitor-name
+    description: wh40k-ghost-role-servitor-description
+    rules: ghost-role-information-rules-default-team-antagonist
+    mindRoles:
+    - MindRoleGhostRoleTeamAntagonist
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: SSDIndicator
+  - type: ComplexInteraction
+  - type: ContainerContainer
+  - type: Appearance
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/servitors.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: ser1
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 2
+    range: 2
+    animation: WeaponArcFist
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Blunt: 15
+        Structural: 15
+    angle: 80
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      200: Critical
+      300: Dead
+    stateAlertDict:
+      Alive: BorgHealth
+      Critical: HumanCrit
+      Dead: BorgDead
+    showOverlays: false
+  - type: Hands
+    activeHandId: Right
+    canBeStripped: false
+    hands:
+      Right:
+        location: Right
+      extra_hand_1:
+        location: Middle
+      extra_hand_2:
+        location: Middle
+      Left:
+        location: Left
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3
+  - type: StandingState
+  - type: Repairable
+    damageValue: -25
+    doAfterDelay: 1
+    fuelCost: 0.75
+  - type: CombatMode
+  - type: NpcFactionMember
+    factions:
+    - Imperium
+  - type: WH40KTeamMember
+    teamId: Imperium
+  - type: WH40KSquadAssignable
+    teamId: Imperium
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - DoorBumpOpener
+    - FootstepSound
+    - SiliconEmotes
+
+- type: entity
+  id: MobWH40KServitor2
+  parent: MobWH40KServitor1
+  name: servitor
+  description: A heavy combat servitor. It is a terrifying hybrid of human flesh and machinery, created solely for destruction.
+  suffix: WH40K, Imperium, АдМехи, Ghost Role
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/servitors.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: ser2
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.5
+    range: 2
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Blunt: 60
+        Structural: 40
+    angle: 80
+  - type: Hands
+    activeHandId: Left
+    canBeStripped: false
+    hands:
+      Left:
+        location: Left
+
+- type: entity
+  id: MobWH40KServitor3
+  parent: MobWH40KServitor1
+  name: servitor
+  description: A heavy combat servitor. It is a terrifying hybrid of human flesh and machinery, created solely for destruction.
+  suffix: WH40K, Imperium, АдМехи, Ghost Role
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _WH40K/Mobs/servitors.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: ser3
+  - type: Hands
+    activeHandId: Right
+    canBeStripped: false
+    hands:
+      Right:
+        location: Right
+      Left:
+        location: Left
+  - type: Loadout
+    prototypes:
+    - WH40KSer3
+
+- type: startingGear
+  id: WH40KSer3
+  inhand:
+    - WH40KServitor3Gun

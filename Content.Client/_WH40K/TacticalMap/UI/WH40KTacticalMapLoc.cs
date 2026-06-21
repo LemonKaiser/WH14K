@@ -1,6 +1,7 @@
 using System;
 using Content.Client._WH40K.Command;
 using Content.Shared._WH40K.TacticalMap;
+using Robust.Shared.IoC;
 using Robust.Shared.Localization;
 
 namespace Content.Client._WH40K.TacticalMap.UI;
@@ -66,7 +67,7 @@ internal static class WH40KTacticalMapLoc
         var suffix = separator >= 0 ? trimmed[separator..] : string.Empty;
         var key = $"wh40k-tactical-map-callsign-{baseToken.ToLowerInvariant()}";
 
-        var localized = Loc.TryGetString(key, out var value) && !string.IsNullOrWhiteSpace(value)
+        var localized = IoCManager.Resolve<ILocalizationManager>().TryGetString(key, out var value) && !string.IsNullOrWhiteSpace(value)
             ? value
             : baseToken;
 
@@ -77,7 +78,7 @@ internal static class WH40KTacticalMapLoc
     {
         if (!string.IsNullOrWhiteSpace(teamId) &&
             TryGetTeamLocKey(teamId, out var key) &&
-            Loc.TryGetString(key, out var localized) &&
+            IoCManager.Resolve<ILocalizationManager>().TryGetString(key, out var localized) &&
             !string.IsNullOrWhiteSpace(localized))
         {
             return localized;

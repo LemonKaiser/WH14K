@@ -94,6 +94,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private  WH40KPlayerCultureTracker _culture = default!;
     [Dependency] private  UserInterfaceSystem _ui = default!;
     [Dependency] private  IPrototypeManager _proto = default!;
+    [Dependency] private  ILocalizationManager _loc = default!;
     [Dependency] private  IGameTiming _timing = default!;
     [Dependency] private  PopupSystem _popup = default!;
     [Dependency] private  IPlayerManager _players = default!;
@@ -112,6 +113,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
     [Dependency] private  IRobustRandom _random = default!;
     [Dependency] private  WH40KTeamNpcFactionSystem _teamNpcFactions = default!;
     [Dependency] private  WH40KReinforcementAiSystem _reinforcementAi = default!;
+    [Dependency] private  InventorySystem _inventory = default!;
     [Dependency] private  SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -970,7 +972,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(value))
             return string.Empty;
 
-        if (Loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
+        if (_loc.TryGetString(value, out var localized) && !string.IsNullOrWhiteSpace(localized))
             return localized!;
 
         return value;
@@ -1467,7 +1469,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
                 option.Id,
                 option.NameKey,
                 option.DescriptionKey,
-                BuildReinforcementEquipmentSummary(option.Job),
+                BuildReinforcementEquipmentSummary(option),
                 option.PreviewPrototype.ToString(),
                 Math.Max(1, costX1),
                 Math.Max(1, costX2),
@@ -1516,6 +1518,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
 
             var profile = HumanoidCharacterProfile.RandomWithSpecies(HumanoidCharacterProfile.DefaultSpecies);
             var spawned = _stationSpawning.SpawnPlayerMob(coordinates, option.Job, profile, station);
+            ApplyReinforcementEquipmentOverrides(spawned, option);
             ApplySpawnedReinforcementTeamData(spawned, ent.Comp.TeamId, option);
             _reinforcementAi.TryReadyWeapon(spawned);
             _reinforcementAi.Enable(spawned, coordinates);
@@ -1593,6 +1596,28 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         EnsureComp<WH40KReinforcementGhostRoleOneShotComponent>(entity);
     }
 
+    private void ApplyReinforcementEquipmentOverrides(
+        EntityUid entity,
+        WH40KCommandReinforcementOptionPrototype option)
+    {
+        if (option.EquipmentOverrides.Count == 0 || !TryComp<InventoryComponent>(entity, out var inventory))
+            return;
+
+        var coordinates = Transform(entity).Coordinates;
+        foreach (var (slot, prototype) in option.EquipmentOverrides)
+        {
+            if (string.IsNullOrWhiteSpace(slot))
+                continue;
+
+            if (_inventory.TryUnequip(entity, slot, out var removed, silent: true, force: true, inventory: inventory))
+                QueueDel(removed.Value);
+
+            var spawned = Spawn(prototype, coordinates);
+            if (!_inventory.TryEquip(entity, spawned, slot, silent: true, force: true, inventory: inventory))
+                QueueDel(spawned);
+        }
+    }
+
     private bool IsReinforcementOptionUnlocked(string teamId, WH40KCommandReinforcementOptionPrototype option)
     {
         var minLevel = Math.Max(1, option.MinBaseLevel);
@@ -1606,8 +1631,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return currentLevel >= minLevel;
     }
 
-    private string BuildReinforcementEquipmentSummary(ProtoId<JobPrototype> jobId)
+    private string BuildReinforcementEquipmentSummary(WH40KCommandReinforcementOptionPrototype option)
     {
+        var jobId = option.Job;
         if (!_proto.TryIndex(jobId, out JobPrototype? job) ||
             job.StartingGear is not { } gearId ||
             !_proto.TryIndex(gearId, out StartingGearPrototype? gear))
@@ -1615,6 +1641,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             return "-";
         }
 
+        var slotNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var roleLoadoutId = LoadoutSystem.GetJobPrototype(job.ID);
         RoleLoadout? defaultRoleLoadout = null;
@@ -1629,7 +1656,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             ? _stationSpawning.GetLoadoutEquipmentOverrides(defaultRoleLoadout, defaultRoleLoadoutProto)
             : null;
 
-        AddGearNames(gear, names, excludedSlots);
+        AddGearNames(gear, slotNames, names, excludedSlots);
 
         if (defaultRoleLoadout != null && defaultRoleLoadoutProto != null)
         {
@@ -1646,13 +1673,24 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
                     if (loadout.StartingGear is { } startingGearId &&
                         _proto.TryIndex(startingGearId, out StartingGearPrototype? startingGear))
                     {
-                        AddGearNames(startingGear, names);
+                        AddGearNames(startingGear, slotNames, names);
                     }
 
-                    AddGearNames(loadout, names);
+                    AddGearNames(loadout, slotNames, names);
                 }
             }
         }
+
+        foreach (var (slot, proto) in option.EquipmentOverrides)
+        {
+            if (string.IsNullOrWhiteSpace(slot))
+                continue;
+
+            if (TryGetGearName(proto, out var locKey))
+                slotNames[slot] = locKey;
+        }
+
+        names.UnionWith(slotNames.Values);
 
         if (names.Count == 0)
             return "-";
@@ -1665,34 +1703,47 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         return $"{string.Join(", ", ordered.Take(maxShown))}, +{ordered.Length - maxShown}";
     }
 
-    private void AddGearNames(IEquipmentLoadout gear, HashSet<string> names, ISet<string>? excludedSlots = null)
+    private void AddGearNames(
+        IEquipmentLoadout gear,
+        Dictionary<string, string> slotNames,
+        HashSet<string> names,
+        ISet<string>? excludedSlots = null)
     {
         foreach (var (slot, proto) in gear.Equipment)
         {
             if (excludedSlots?.Contains(slot) == true)
                 continue;
 
-            AddGearName(proto, names);
+            if (TryGetGearName(proto, out var locKey))
+                slotNames[slot] = locKey;
         }
 
         foreach (var proto in gear.Inhand)
-            AddGearName(proto, names);
+        {
+            if (TryGetGearName(proto, out var locKey))
+                names.Add(locKey);
+        }
 
         foreach (var storage in gear.Storage.Values)
         {
             foreach (var proto in storage)
-                AddGearName(proto, names);
+            {
+                if (TryGetGearName(proto, out var locKey))
+                    names.Add(locKey);
+            }
         }
     }
 
-    private void AddGearName(EntProtoId entityId, HashSet<string> names)
+    private bool TryGetGearName(EntProtoId entityId, out string locKey)
     {
+        locKey = string.Empty;
+
         if (!_proto.TryIndex<EntityPrototype>(entityId, out _))
-            return;
+            return false;
 
         // Send FTL entity key so the client can resolve the name in its own culture.
-        var locKey = $"ent-{entityId}";
-        names.Add(locKey);
+        locKey = $"ent-{entityId}";
+        return true;
     }
 
     private bool IsUserAllowedForTeam(EntityUid user, string teamId)

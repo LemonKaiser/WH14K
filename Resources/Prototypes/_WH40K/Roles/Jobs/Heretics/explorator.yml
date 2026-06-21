@@ -28,7 +28,6 @@
       - type: WH40KChaosGiftRole
       - type: WH40KStrategicPointUpgradeSkill
   access:
-  - Cargo
   - Salvage
   - Maintenance
   - External

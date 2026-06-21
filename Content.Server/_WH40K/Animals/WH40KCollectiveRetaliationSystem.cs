@@ -19,13 +19,13 @@ public sealed partial class WH40KCollectiveRetaliationSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<WH40KCollectiveRetaliationComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<WH40KCollectiveRetaliationComponent, DamageDealtEvent>(OnDamageDealt);
         SubscribeLocalEvent<WH40KCollectiveRetaliationComponent, DisarmedEvent>(OnDisarmed);
     }
 
-    private void OnDamageChanged(Entity<WH40KCollectiveRetaliationComponent> ent, ref DamageChangedEvent args)
+    private void OnDamageDealt(Entity<WH40KCollectiveRetaliationComponent> ent, ref DamageDealtEvent args)
     {
-        if (!args.DamageIncreased || args.Origin is not { } origin)
+        if (args.Origin is not { } origin)
             return;
 
         AlertNearbyHerd(ent, origin);
