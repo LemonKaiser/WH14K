@@ -9,6 +9,6 @@
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 27
+    requiredLevel: 16
   equipment:
     gloves: ClothingHandsGlovesBloodPact
