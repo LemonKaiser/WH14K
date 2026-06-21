@@ -22,4 +22,47 @@
     - suitStorage
   - type: Gun
     fireRate: 1.5
-  
+  - type: WH40KWeaponModHost
+    slotDefinitions:
+    - id: optic
+      slotType: OpticTop
+      name: wh40k-weapon-mod-slot-name-optic
+      priority: 120
+      whitelist:
+        tags:
+        - WH40KWeaponModOpticLasgun
+    - id: stock
+      slotType: StockRear
+      name: wh40k-weapon-mod-slot-name-stock
+      priority: 110
+      whitelist:
+        tags:
+        - WH40KWeaponModStockLasgun
+    - id: barrel
+      slotType: BarrelFront
+      name: wh40k-weapon-mod-slot-name-barrel
+      priority: 108
+      whitelist:
+        tags:
+        - WH40KWeaponModBarrelLasgun
+    - id: underbarrel
+      slotType: Underbarrel
+      name: wh40k-weapon-mod-slot-name-underbarrel
+      priority: 105
+      whitelist:
+        tags:
+        - WH40KWeaponModUnderbarrelLasgun
+    - id: laser
+      slotType: SideUtility
+      name: wh40k-weapon-mod-slot-name-laser
+      priority: 103
+      whitelist:
+        tags:
+        - WH40KWeaponModUtilityLasgun
+    - id: bayonet
+      slotType: BayonetLug
+      name: wh40k-weapon-mod-slot-name-bayonet
+      priority: 100
+      whitelist:
+        tags:
+        - WH40KWeaponModBayonetLasgun

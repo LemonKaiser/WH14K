@@ -270,20 +270,23 @@
   loadouts:
   - WH40KWeaponLaserLasgunLoadout
   - WH40KWeaponLaserLasgunVossLoadout
+  - WH40KWeaponLaserLasgunAccatranLoadout
   - WH40KWeaponLaserLasgunKriegLoadout
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponLaserLasgunPinkLoadout
 
 - type: loadoutGroup
-  id: WH40KImperialOperatorMainWeapon
-  name: loadout-group-wh40k-imperial-main
+  id: WH40KHereticMainWeapon
+  name: loadout-group-wh40k-heretic-main
   loadouts:
-  - WH40KWeaponLaserLasgunLoadout
-  - WH40KWeaponLaserLasgunVossLoadout
-  - WH40KWeaponLaserLonglasLoadout
-  - WH40KWeaponLaserLasgunAccatranLoadout
-  - WH40KWeaponflamer
-  - WH40KWeaponStubmachinegun
-  - WH40KWeaponplasma
-  - WH40KWeaponmelta
+  - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponStubShotgunLoadout
+  - WH40KWeaponCombatShotgunLoadout
+  - WH40KWeaponStubSMG2Loadout
+  - WH40KWeaponStubSMG3Loadout
+  - WH40KWeaponStubSMGLoadoutMain
+  - WH40KWeaponHereticLaserLasgunPinkLoadout
 
 - type: loadoutGroup
   id: WH40KImperialMelee
@@ -564,8 +567,6 @@
   loadouts:
   - WH40KCommandLaspistolWillOfTheEmperor
   - WH40KCommandBoltPistol
-  - WH40KWeaponStubRifleLoadoutSerg
-  - WH40KWeaponSergStubShotgunLoadout
 
 - type: loadoutGroup
   id: WH40KImperialColonelSidearm
@@ -582,8 +583,12 @@
   minLimit: 0
   maxLimit: 1
   loadouts:
+  - WH40KWeaponLaserLasgunLoadout
+  - WH40KWeaponLaserLasgunVossLoadout
+  - WH40KWeaponLaserLasgunAccatranLoadout
+  - WH40KWeaponLaserLasgunKriegLoadout
   - WH40KWeaponStubRifleLoadoutSerg
-  - WH40KWeaponLondoronMk2AquilaLoadout
+  - WH40KWeaponLaserLasgunPinkLoadout
 
 - type: loadoutGroup
   id: WH40KPsykerForceStaff
@@ -785,42 +790,36 @@
   - WH40KHereticRainCloak
 
 - type: loadoutGroup
-  id: WH40KHereticMainWeapon
-  name: loadout-group-wh40k-heretic-main
-  loadouts:
-  - WH40KWeaponChsStubSMG3Loadout
-  - WH40KWeaponChsStubSMG2Loadout
-  - WH40KWeaponHereticLaserLasgunLoadout
-  - WH40KWeaponStubRifleLoadout
-  - WH40KWeaponChsStubShotgunLoadout
-
-- type: loadoutGroup
   id: WH40KHereticBandSupplierMainWeapon
   name: loadout-group-wh40k-heretic-main
   loadouts:
-  - WH40KWeaponChsStubSMG3Loadout
-  - WH40KWeaponChsStubSMG2Loadout
-  - WH40KWeaponHereticShortlasLoadout
-  - WH40KWeaponStubRifleLoadout
-  - WH40KWeaponChsStubShotgunLoadout
+  - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponStubShotgunLoadout
+  - WH40KWeaponCombatShotgunLoadout
+  - WH40KWeaponStubSMG2Loadout
+  - WH40KWeaponStubSMG3Loadout
+  - WH40KWeaponStubSMGLoadoutMain
+  - WH40KWeaponHereticLaserLasgunPinkLoadout
 
 - type: loadoutGroup
   id: WH40KHeresiarchMainWeapon
   name: loadout-group-wh40k-heretic-main
   loadouts:
-  - WH40KWeaponChsStubSMG3Loadout
-  - WH40KWeaponChsStubSMG2Loadout
   - WH40KWeaponHereticLaserLasgunLoadout
-  - WH40KWeaponStubRifleLoadout
-  - WH40KWeaponChsStubShotgunLoadout
-  - WH40KWeaponLondoronMk2BloodPactLoadout
+  - WH40KWeaponStubRifleLoadoutSerg
+  - WH40KWeaponStubShotgunLoadout
+  - WH40KWeaponCombatShotgunLoadout
+  - WH40KWeaponStubSMG2Loadout
+  - WH40KWeaponStubSMG3Loadout
+  - WH40KWeaponStubSMGLoadoutMain
+  - WH40KWeaponHereticLaserLasgunPinkLoadout
 
 - type: loadoutGroup
   id: WH40KHereticSecondaryWeapon
   name: loadout-group-wh40k-heretic-secondary
   loadouts:
   - WH40KWeaponStubPistolLoadout
-  - WH40KWeaponStubSMGLoadout
   - WH40KWeaponStubRevolverLoadout30
 
 - type: loadoutGroup
@@ -828,7 +827,6 @@
   name: loadout-group-wh40k-heretic-secondary
   loadouts:
   - WH40KWeaponStubPistolLoadout
-  - WH40KWeaponStubSMGLoadout
   - WH40KWeaponStubRevolverLoadout15
 
 - type: loadoutGroup
@@ -836,7 +834,6 @@
   name: loadout-group-wh40k-heretic-secondary
   loadouts:
   - WH40KWeaponStubPistolLoadout
-  - WH40KWeaponStubSMGLoadout
   - WH40KWeaponStubRevolverLoadout20
 
 - type: loadoutGroup
@@ -1165,7 +1162,6 @@
   minLimit: 0
   maxLimit: 1
   loadouts:
-  - WH40KClothingBeltChaosDynamitebase
   - chaosbelt2base
 
 - type: loadoutGroup
@@ -1173,5 +1169,4 @@
   name: loadout-group-wh40k-imperial-boom-belt
   minLimit: 0
   maxLimit: 1
-  loadouts:
-  - ClothingBeltChaplainMeltaChargebase
+  loadouts: []

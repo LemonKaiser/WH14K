@@ -68,12 +68,3 @@
     radius: 6.5
     energy: 2.3
     netsync: false
-
-- type: entity
-  parent: WeaponLaserLasgun
-  id: WeaponLaserLasgunModded
-  suffix: "[МОД], WH40K"
-  components:
-  - type: WH40KWeaponModHost
-    startingMods:
-      stock: WH40KWeaponModStockCantrael
