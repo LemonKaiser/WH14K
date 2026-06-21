@@ -1051,7 +1051,7 @@ public sealed partial class SharedWH40KWeaponModSystem : EntitySystem
         }
     }
 
-    private IEnumerable<(string SlotId, WH40KWeaponModSlotDefinition Definition, EntityUid ModUid, WH40KWeaponModComponent Mod)> GetInstalledMods(
+    public IEnumerable<(string SlotId, WH40KWeaponModSlotDefinition Definition, EntityUid ModUid, WH40KWeaponModComponent Mod)> GetInstalledMods(
         Entity<WH40KWeaponModHostComponent> ent)
     {
         foreach (var definition in ent.Comp.SlotDefinitions.OrderByDescending(x => x.Priority))

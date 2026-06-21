@@ -129,6 +129,38 @@ public sealed partial class HumanoidProfileEditor
             ReloadPreview();
         };
 
+        _loadoutWindow.OnWeaponModsChanged += (loadoutGroup, loadoutProto, slotId, modId) =>
+        {
+            // WH40K: selecting a weapon mod implies intent to use that loadout.
+            // If the loadout isn't selected yet, auto-select it first so the mod has
+            // a Loadout entry to attach its SelectedMods to. Without this, clicking a
+            // mod on an un-selected loadout silently does nothing (no Loadout entry exists
+            // to receive the SelectedMods update, so RefreshLoadouts resets the button).
+            if (roleLoadout.SelectedLoadouts.TryGetValue(loadoutGroup, out var selections))
+            {
+                var existing = selections.FirstOrDefault(s => s.Prototype == loadoutProto);
+                if (existing == null && modId != null)
+                {
+                    roleLoadout.AddLoadout(loadoutGroup, loadoutProto, _prototypeManager);
+                    // Re-read after add so we mutate the actual stored entry.
+                    selections = roleLoadout.SelectedLoadouts[loadoutGroup];
+                    existing = selections.FirstOrDefault(s => s.Prototype == loadoutProto);
+                }
+
+                if (existing != null)
+                {
+                    if (modId == null)
+                        existing.SelectedMods.Remove(slotId);
+                    else
+                        existing.SelectedMods[slotId] = modId;
+                }
+            }
+            _loadoutWindow?.RefreshLoadouts(roleLoadout, session, collection);
+            Profile = Profile?.WithLoadout(roleLoadout);
+            SetDirty();
+            ReloadPreview();
+        };
+
         JobOverride = jobProto;
         ReloadPreview();
 

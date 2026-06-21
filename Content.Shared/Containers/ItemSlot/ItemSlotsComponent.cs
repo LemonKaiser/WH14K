@@ -59,7 +59,8 @@ namespace Content.Shared.Containers.ItemSlots
     [Access(
         typeof(ItemSlotsSystem),
         typeof(Content.Shared._WH40K.ArmorPlates.SharedWH40KArmorPlateSystem),
-        typeof(Content.Shared._WH40K.Weapons.Mods.SharedWH40KWeaponModSystem))]
+        typeof(Content.Shared._WH40K.Weapons.Mods.SharedWH40KWeaponModSystem),
+        typeof(Content.Shared._WH40K.Weapons.Mods.WH40KLoadoutModSystem))]
     [Serializable, NetSerializable]
     public sealed partial class ItemSlot
     {

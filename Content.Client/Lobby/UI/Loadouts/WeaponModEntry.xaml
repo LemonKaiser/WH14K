@@ -1,0 +1,22 @@
+<BoxContainer Name="ModEntryContainer" xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:lobby="clr-namespace:Content.Client.Lobby.UI"
+         xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+         Orientation="Horizontal"
+         HorizontalExpand="True"
+         MouseFilter="Ignore"
+         Margin="0 0 0 5">
+    <Button Name="ModSelectButton" ToggleMode="True" Margin="0 0 5 0" HorizontalExpand="True"/>
+    <lobby:HighlightedContainer SetSize="48 48" HorizontalAlignment="Right" UseUiWindowOpacity="True">
+        <lobby:HighlightedContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#14171D"
+                                   BorderColor="#4E4124"
+                                   BorderThickness="1"
+                                   ContentMarginTopOverride="3"
+                                   ContentMarginBottomOverride="3"
+                                   ContentMarginLeftOverride="3"
+                                   ContentMarginRightOverride="3"/>
+        </lobby:HighlightedContainer.PanelOverride>
+        <SpriteView Name="ModSprite" Scale="3 3" MouseFilter="Stop"/>
+    </lobby:HighlightedContainer>
+</BoxContainer>

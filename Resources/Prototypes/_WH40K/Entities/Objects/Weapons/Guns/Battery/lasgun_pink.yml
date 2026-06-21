@@ -1,7 +1,3 @@
-# Розовые скин-версии лазганов для лодаутов (level 20)
-# Наследуют всё от базовых — включая WH40KWeaponModHost со всеми слотами модов
-# Меняют только спрайт (sprite/item/clothing) на розовые версии
-
 - type: entity
   parent: WeaponLaserLasgun
   id: WeaponLaserLasgunPink
