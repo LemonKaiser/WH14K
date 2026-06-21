@@ -553,8 +553,6 @@ public sealed partial class SharedWH40KWeaponModSystem : EntitySystem
                 });
             }
         }
-
-        AddEquipmentSlotOverviewVerbs(ent, args.Args.User, args.Args.Verbs);
     }
 
     private void OnGunRefreshModifiers(Entity<WH40KWeaponModHostComponent> ent, ref GunRefreshModifiersEvent args)
@@ -1080,52 +1078,6 @@ public sealed partial class SharedWH40KWeaponModSystem : EntitySystem
                 continue;
 
             var verb = new ActivationVerb
-            {
-                Category = WeaponModSlotsCategory,
-                Priority = definition.Priority,
-            };
-
-            var slotName = Loc.GetString(definition.Name);
-            if (slot.Item is not { } modUid)
-            {
-                verb.Text = Loc.GetString("wh40k-weapon-mod-slot-empty-verb", ("slot", slotName));
-                verb.Disabled = true;
-                verbs.Add(verb);
-                continue;
-            }
-
-            verb.Text = Loc.GetString(
-                "wh40k-weapon-mod-slot-filled-verb",
-                ("slot", slotName),
-                ("mod", Name(modUid)));
-            verb.IconEntity = GetNetEntity(modUid);
-
-            if (!_actionBlocker.CanPickup(user, modUid))
-            {
-                verb.Disabled = true;
-                verbs.Add(verb);
-                continue;
-            }
-
-            var owner = ent.Owner;
-            var localSlot = slot;
-            verb.Act = () => _itemSlots.TryEjectToHands(owner, localSlot, user, excludeUserAudio: true);
-            verbs.Add(verb);
-        }
-    }
-
-    private void AddEquipmentSlotOverviewVerbs(
-        Entity<WH40KWeaponModHostComponent> ent,
-        EntityUid user,
-        SortedSet<EquipmentVerb> verbs)
-    {
-        foreach (var definition in ent.Comp.SlotDefinitions.OrderByDescending(x => x.Priority))
-        {
-            var slotId = WH40KWeaponModHelper.GetSlotId(definition.Id);
-            if (!ent.Comp.ModSlots.TryGetValue(slotId, out var slot))
-                continue;
-
-            var verb = new EquipmentVerb
             {
                 Category = WeaponModSlotsCategory,
                 Priority = definition.Priority,

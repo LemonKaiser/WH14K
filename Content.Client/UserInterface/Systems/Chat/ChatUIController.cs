@@ -1174,8 +1174,43 @@ public sealed partial class ChatUIController : UIController
         // Usages of the erase admin verb should be rare enough that this does not matter.
         // Otherwise the client would need to know that one entity has multiple author players,
         // or the server would need to track when and which entities a player sent messages as.
-        History.RemoveAll(h => h.Msg.SenderKey == msg.Key || msg.Entities.Contains(h.Msg.SenderEntity));
+
+        HashSet<uint>? removedIds = null;
+        foreach (var entry in History)
+        {
+            if (entry.Msg.SenderKey != msg.Key && !msg.Entities.Contains(entry.Msg.SenderEntity))
+                continue;
+
+            if (entry.Msg.ServerMessageId is { } messageId)
+            {
+                removedIds ??= new HashSet<uint>();
+                removedIds.Add(messageId);
+            }
+            else
+            {
+                removedIds = null;
+                break;
+            }
+        }
+
+        var removed = History.RemoveAll(h => h.Msg.SenderKey == msg.Key || msg.Entities.Contains(h.Msg.SenderEntity));
+
+        if (removed == 0)
+            return;
+
         _senderRoleIconCache.Remove(msg.Key);
+
+        if (removedIds != null && removedIds.Count > 0)
+        {
+            foreach (var chat in _chats)
+            {
+                if (!chat.TryRemoveDisplayedEntries(removedIds))
+                    chat.Repopulate();
+            }
+
+            return;
+        }
+
         Repopulate();
     }
 
