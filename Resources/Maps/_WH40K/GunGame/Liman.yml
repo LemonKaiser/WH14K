@@ -384,6 +384,8 @@ entities:
       bodyType: Dynamic
     - type: Fixtures
       fixtures: {}
+    - type: BecomesStation
+      id: Liman
     - type: OccluderTree
     - type: TileHistory
       chunkHistory: {}
@@ -58447,21 +58449,9 @@ entities:
       pos: 55.5,-8.5
       parent: 2
 - proto: WH40KVehicleKeyMotorbikeChaos
-  entities:
-  - uid: 10186
-    components:
-    - type: Transform
-      parent: 10185
-    - type: Physics
-      canCollide: False
+  entities: []
 - proto: WH40KVehicleKeyMotorbikeImperium
-  entities:
-  - uid: 10180
-    components:
-    - type: Transform
-      parent: 10179
-    - type: Physics
-      canCollide: False
+  entities: []
 - proto: WH40KVehicleMotorbikeChaos
   entities:
   - uid: 10185
@@ -58475,7 +58465,6 @@ entities:
         key_slot: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 10186
 - proto: WH40KVehicleMotorbikeImperium
   entities:
   - uid: 10179
@@ -58489,7 +58478,6 @@ entities:
         key_slot: !type:ContainerSlot
           showEnts: False
           occludes: True
-          ent: 10180
 - proto: WHChaosBanner
   entities:
   - uid: 9780

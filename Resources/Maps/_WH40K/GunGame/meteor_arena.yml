@@ -109,7 +109,7 @@ entities:
     - type: Fixtures
       fixtures: {}
     - type: BecomesStation
-      id: dm01-entryway
+      id: Arena
     - type: Gravity
       gravityShakeSound: !type:SoundPathSpecifier
         path: /Audio/Effects/alert.ogg
@@ -3966,7 +3966,7 @@ entities:
     - type: Transform
       pos: 12.5,33.5
       parent: 2
-- proto: SpawnPointPassenger
+- proto: WH40KGunGameSpawnPoint
   entities:
   - uid: 424
     components:

@@ -1,9 +1,11 @@
 - type: entity
   id: WH40KGunGameSpawnPoint
-  parent: MarkerBase
+  parent: SpawnPointJobBase
   name: gun game spawn point
   suffix: "[GunGame]"
   components:
+  - type: SpawnPoint
+    job_id: GunGamePlayer
   - type: WH40KGunGameSpawnPoint
   - type: Sprite
     sprite: Markers/jobs.rsi
