@@ -1,0 +1,107 @@
+- type: entity
+  id: WH40KGunGame
+  parent: BaseGameRule
+  name: gun game rule
+  suffix: "[GunGame]"
+  components:
+  - type: WH40KGunGameRule
+    weaponPool:
+    - WeaponPistolMk58
+    - WeaponPistolViper
+    - WeaponPistolCobra
+    - WeaponRevolverDeckard
+    - WeaponRevolverInspector
+    - WeaponRevolverMateba
+    - WeaponSubMachineGunDrozd
+    - WeaponRifleLecter
+    - WeaponRifleAk
+    - WeaponRifleM90GrenadeLauncher
+    - WeaponShotgunEnforcer
+    - WeaponShotgunKammerer
+    - WeaponShotgunDoubleBarreled
+    - WeaponShotgunSawn
+    - WeaponShotgunBlunderbuss
+    - WeaponLaserCarbine
+    - WeaponLaserCannon
+    - WeaponSniperHristov
+    - WeaponLauncherRocket
+    - WeaponLauncherChinaLake
+    - WeaponLaserLasgun
+    - WeaponLaserLasgunKrieg
+    - WeaponLaserLasgunVoss
+    - WeaponLaserLasgunAccatran
+    - WeaponLaserPistol
+    - WeaponLaserPistolCommissar
+    - WeaponStubPistol
+    - WeaponStubRifle
+    - WeaponStubSMG
+    - WeaponStubShotgun
+    - WeaponRifleBolter
+    - WeaponPistolBolter
+    weaponCount: 30
+    finalWeapon: KitchenKnife
+    backupWeapon: CombatKnife
+    roundDuration: 900
+    respawnDelay: 5
+    consecutiveDeathThreshold: 5
+    restartDelay: 10
+    jumpsuitPool:
+    - ClothingUniformJumpsuitColorWhite
+    - ClothingUniformJumpsuitColorGrey
+    - ClothingUniformJumpsuitColorBlack
+    - ClothingUniformJumpsuitColorBlue
+    - ClothingUniformJumpsuitColorDarkBlue
+    - ClothingUniformJumpsuitColorTeal
+    - ClothingUniformJumpsuitColorGreen
+    - ClothingUniformJumpsuitColorDarkGreen
+    - ClothingUniformJumpsuitColorOrange
+    - ClothingUniformJumpsuitColorPink
+    - ClothingUniformJumpsuitColorRed
+    - ClothingUniformJumpsuitColorYellow
+    - ClothingUniformJumpsuitColorPurple
+    - ClothingUniformJumpsuitColorLightBrown
+    - ClothingUniformJumpsuitColorBrown
+    - ClothingUniformJumpsuitColorMaroon
+    shoesPool:
+    - ClothingShoesColorBlack
+    - ClothingShoesColorWhite
+    - ClothingShoesColorBlue
+    - ClothingShoesColorBrown
+    - ClothingShoesColorGreen
+    - ClothingShoesColorOrange
+    - ClothingShoesColorRed
+    - ClothingShoesColorYellow
+    - ClothingShoesColorPurple
+    glassesPool:
+    - ClothingEyesGlasses
+    - ClothingEyesGlassesGar
+    - ClothingEyesGlassesJamjar
+    - ClothingEyesGlassesCheapSunglasses
+    - ClothingEyesGlassesSunglasses
+    - ClothingEyesGlassesNoir
+    headPool:
+    - ClothingHeadHatBeret
+    - ClothingHeadHatBeretFrench
+    - ClothingHeadHatCasa
+    - ClothingHeadHatBeaverHat
+    - ClothingHeadHatBowlerHat
+    - ClothingHeadHatBeretEngineering
+    glovesPool:
+    - ClothingHandsGlovesColorBlack
+    - ClothingHandsGlovesColorWhite
+    - ClothingHandsGlovesColorBlue
+    - ClothingHandsGlovesColorBrown
+    - ClothingHandsGlovesColorRed
+    - ClothingHandsGlovesColorOrange
+    - ClothingHandsGlovesColorGreen
+    - ClothingHandsGlovesColorGray
+    backPool:
+    - ClothingBackpack
+    - ClothingBackpackSatchel
+    - ClothingBackpackDuffel
+    glassesChance: 0.3
+    headChance: 0.3
+    glovesChance: 0.25
+  - type: RespawnTracker
+    respawnDelay: 5
+    deleteBody: true

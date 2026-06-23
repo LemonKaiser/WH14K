@@ -188,6 +188,7 @@ public static class WH40KPlayerStatKeys
     public const string MetaXpManualSet = "meta.xp.manual_set_delta";
     public const string MetaXpKill = "meta.xp.kill";
     public const string MetaXpRoundWin = "meta.xp.round_win";
+    public const string MetaXpGunGamePlace = "meta.xp.gungame.place";
     public const string MetaXpObjective = "meta.xp.objective";
     public const string MetaXpStrategicPointBuild = "meta.xp.strategic_point.build";
     public const string MetaXpStrategicPointUpgrade = "meta.xp.strategic_point.upgrade";

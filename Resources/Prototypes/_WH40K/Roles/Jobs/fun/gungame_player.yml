@@ -1,0 +1,18 @@
+- type: job
+  id: GunGamePlayer
+  name: job-name-gungame-player
+  description: job-description-gungame-player
+  playTimeTracker: JobGunGamePlayer
+  startingGear: GunGamePlayerGear
+  icon: "JobIconPassenger"
+  supervisors: job-supervisors-nobody
+  canBeAntag: false
+  setPreference: false
+  access:
+  - Maintenance
+
+- type: startingGear
+  id: GunGamePlayerGear
+  equipment:
+    id: PassengerPDA
+    ears: ClothingHeadsetGrey

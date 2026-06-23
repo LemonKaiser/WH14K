@@ -1,8 +1,8 @@
 using Content.Shared.Stray.Weapons.FireUnderBullet;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Atmos;
-using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Projectiles;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
@@ -24,15 +24,15 @@ public sealed partial class FireUnderBulletSystem : SharedFireUnderBulletSystem
         base.Initialize();
         _xformQuery = GetEntityQuery<TransformComponent>();
         SubscribeLocalEvent<FireUnderBulletComponent, ComponentInit>(OnInit);
-        SubscribeLocalEvent<GunComponent, GunShotEvent>(OnShoot);
+        SubscribeLocalEvent<GunComponent, AmmoShotEvent>(OnShoot);
         SubscribeLocalEvent<FireUnderBulletComponent, ProjectileHitEvent>(OnHit);
     }
 
-    private void OnShoot(EntityUid uid, GunComponent component, ref GunShotEvent args)
+    private void OnShoot(Entity<GunComponent> ent, ref AmmoShotEvent args)
     {
-        foreach (var dat in args.Ammo)
+        foreach (var projectile in args.FiredProjectiles)
         {
-            if (dat.Uid == null || !TryComp<FireUnderBulletComponent>(dat.Uid, out var comp))
+            if (!TryComp<FireUnderBulletComponent>(projectile, out var comp))
                 continue;
 
             comp.pickedUp = false;

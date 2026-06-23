@@ -83,3 +83,13 @@
   color: "#006400"
   roles:
   - Boyz
+
+- type: department
+  id: SideRoles
+  name: department-SideRoles
+  description: department-SideRoles-description
+  color: "#8a7f68"
+  weight: -100
+  roles:
+  - GunGamePlayer
+  editorHidden: true

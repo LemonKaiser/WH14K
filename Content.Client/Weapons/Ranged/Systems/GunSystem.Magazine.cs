@@ -1,5 +1,7 @@
 using Content.Shared.Weapons.Ranged;
 
+using Robust.Client.GameObjects;
+
 namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem
@@ -9,6 +11,7 @@ public sealed partial class GunSystem
         base.InitializeMagazine();
         SubscribeLocalEvent<MagazineAmmoProviderComponent, UpdateAmmoCounterEvent>(OnMagazineAmmoUpdate);
         SubscribeLocalEvent<MagazineAmmoProviderComponent, AmmoCounterControlEvent>(OnMagazineControl);
+        SubscribeLocalEvent<MagazineAmmoProviderComponent, AppearanceChangeEvent>(OnMagazineAppearance);
     }
 
     private void OnMagazineAmmoUpdate(Entity<MagazineAmmoProviderComponent> ent, ref UpdateAmmoCounterEvent args)
@@ -34,5 +37,10 @@ public sealed partial class GunSystem
         if (magEnt == null)
             return;
         RaiseLocalEvent(magEnt.Value, args, false);
+    }
+
+    private void OnMagazineAppearance(Entity<MagazineAmmoProviderComponent> ent, ref AppearanceChangeEvent args)
+    {
+        UpdateAmmoCount(ent);
     }
 }

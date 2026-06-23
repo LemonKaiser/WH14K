@@ -584,6 +584,8 @@ public abstract partial class SharedGunSystem : EntitySystem
     /// </summary>
     protected virtual void UpdateAmmoCount(EntityUid uid, bool prediction = true) { }
 
+    public void RefreshAmmoCount(EntityUid gun) => UpdateAmmoCount(gun, prediction: false);
+
     protected void SetCartridgeSpent(EntityUid uid, CartridgeAmmoComponent cartridge, bool spent)
     {
         if (cartridge.Spent != spent)

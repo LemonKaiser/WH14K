@@ -21,3 +21,17 @@
   supportedMaps: WH40KWaveDefenceMapPool
   rules:
   - WH40KWaveDefence
+
+- type: gamePreset
+  id: WH40KGunGame
+  alias:
+  - gungame
+  - gg
+  name: wh40k-gun-game-title
+  description: wh40k-gun-game-description
+  minPlayers: 2
+  maxPlayers: 30
+  showInVote: true
+  supportedMaps: WH40KGunGameMapPool
+  rules:
+  - WH40KGunGame
