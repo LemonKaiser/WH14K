@@ -48,25 +48,31 @@
 
 - type: loadout
   id: HTechpriestPhosphorBlast
+  dummyEntity: WeaponRevolverPhosphorBlastDarkMech
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 5
   inhand:
   - WeaponRevolverPhosphorBlastDarkMech
-#  storage:
-#    belt:
-#    - SpeedLoaderPhosphor
+  storage:
+    back:
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
 
 - type: loadout
   id: HTechpriestElectricArc
+  dummyEntity: WeaponRevolverElectricArcDarkMech
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 15
   inhand:
   - WeaponRevolverElectricArcDarkMech
-#  storage:
-#    belt:
-#    - SpeedLoaderElectricArc
+  storage:
+    back:
+    - WH40KMagazineArcPistol
+    - WH40KMagazineArcPistol
+    - WH40KMagazineArcPistol
 
 - type: loadout
   id: HTechpriestAxe

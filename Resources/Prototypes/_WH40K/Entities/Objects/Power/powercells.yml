@@ -264,3 +264,25 @@
   - type: BatteryAmmoProvider
     proto: LaserMultilas
     fireCost: 100
+
+- type: entity
+  id: WH40KMagazineArcPistol
+  parent: WH40KPowerCell
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Power/power_cells.rsi
+    layers:
+    - state: arc_pistol
+    scale: 0.8, 0.8
+  - type: Tag
+    tags:
+      - WH40KMagazineArcPistol
+  - type: Battery
+    maxCharge: 4000
+    startingCharge: 4000
+  - type: BatteryAmmoProvider
+    proto: LaserArcPistol
+    fireCost: 200
+  - type: BatterySelfRecharger
+    autoRechargeRate: 1

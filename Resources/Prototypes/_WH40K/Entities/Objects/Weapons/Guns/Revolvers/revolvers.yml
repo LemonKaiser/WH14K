@@ -23,7 +23,7 @@
   - type: Appearance
 
 - type: entity
-  parent: BaseWeaponRevolver
+  parent: WeaponLaserWH40KEnergy
   id: WeaponRevolverElectricArc
   suffix: WH40K, АдМехи
   components:
@@ -31,25 +31,36 @@
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
+    slots:
+    - Belt
   - type: Gun
     fireRate: 0.6
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/electric_arc.ogg
-  - type: RevolverAmmoProvider
-    capacity: 6
-    chambers: [ True, True, True, True, True, True ]
-    ammoSlots: [ null, null, null, null, null, null ]
-    whitelist:
-      tags:
-        - CustomSpeedLoaderElectricArc
-        - CartridgeElectricArc
-    proto: CartridgeElectricArc
-  - type: Appearance
-  - type: MagazineVisuals
-    magState: mag
-    steps: 4
-  - type: Electrified
-    requirePower: false
+  - type: AimingCamera
+    maxOffset: 2
+    pvsIncrease: 0.2
+    requireWield: false
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Pistol/electricarc.rsi
+    size: Small
+    shape:
+    - 0,0,1,0
+    - 0,1,0,1
+  - type: Tag
+    tags:
+    - Sidearm
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: WH40KMagazineArcPistol
+        whitelist:
+          tags:
+            - WH40KMagazineArcPistol
 
 - type: entity
   parent: WeaponRevolverPhosphorBlast

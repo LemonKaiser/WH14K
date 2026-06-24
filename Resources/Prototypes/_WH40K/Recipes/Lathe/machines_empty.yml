@@ -196,7 +196,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -228,7 +228,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -281,7 +281,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -334,7 +334,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeWarhammer
   - Beaker
   - LargeBeaker
@@ -387,7 +387,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
@@ -419,7 +419,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
@@ -472,7 +472,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker
@@ -525,7 +525,7 @@
   recipes:
   - WH40KAmmoBoxPhosphor
   - WH40KAmmoBoxSerpenta
-  - WH40KRecipeAmmoElectricArc
+  - WH40KMagazineArcPistol
   - WH40KRecipeBarricadeChaosBlack
   - Beaker
   - LargeBeaker

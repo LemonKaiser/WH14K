@@ -2162,3 +2162,6 @@ ent-ClothingBackpackOrkBoss = Boss bag
 
 ent-ClothingOuterPsykerWardCoatPremium = Scholastica Psykana Uniform
     .desc = Scholastica Psykana Elite School Graduate Uniform
+
+ent-WH40KMagazineArcPistol = Arc Pistol Battery
+    .desc = For delivering a devastating bolt of electricity to a target.
