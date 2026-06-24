@@ -1,0 +1,94 @@
+- type: entity
+  id: WH40KGunGameSpawnPoint
+  parent: SpawnPointJobBase
+  name: gun game spawn point
+  suffix: "[GunGame]"
+  components:
+  - type: SpawnPoint
+    job_id: GunGamePlayer
+  - type: WH40KGunGameSpawnPoint
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    state: green
+
+- type: entity
+  id: WH40KGunGamePickupTelepadBase
+  abstract: true
+  name: cargo telepad
+  description: Beam in the pizzas and dig in.
+  suffix: "[GunGame]"
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    sprite: Structures/cargo_telepad.rsi
+    drawdepth: HighFloorObjects
+    layers:
+    - state: offline
+      map: [ "enum.CargoTelepadLayers.Base" ]
+    - state: idle
+      map: [ "enum.CargoTelepadLayers.Beam" ]
+      shader: unshaded
+
+- type: entity
+  id: WH40KGunGamePickupDisplayBase
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    drawdepth: Items
+
+- type: entity
+  id: WH40KGunGameAmmoPickup
+  parent: WH40KGunGamePickupDisplayBase
+  name: ammo crate [GunGame]
+  description: A sealed crate of ammunition for Gun Game.
+  suffix: "[GunGame]"
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Ammunition/autogun_ammo_box.rsi
+    state: icon
+
+- type: entity
+  id: WH40KGunGameMedkitPickup
+  parent: WH40KGunGamePickupDisplayBase
+  name: first aid kit [GunGame]
+  description: It's an emergency medical kit for those serious boo-boos.
+  suffix: "[GunGame]"
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/firstaidkits.rsi
+    state: firstaid
+
+- type: entity
+  id: WH40KGunGameAmmoSpawner
+  parent: WH40KGunGamePickupTelepadBase
+  name: cargo telepad
+  description: Beam in the pizzas and dig in.
+  suffix: "[GunGame]"
+  components:
+  - type: WH40KGunGamePickupSpawner
+    pickupType: Ammo
+    respawnDelay: 30
+    pickupRadius: 0.8
+    itemPrototype: WH40KGunGameAmmoPickup
+
+- type: entity
+  id: WH40KGunGameMedkitSpawner
+  parent: WH40KGunGamePickupTelepadBase
+  name: cargo telepad
+  description: Beam in the pizzas and dig in.
+  suffix: "[GunGame]"
+  components:
+  - type: WH40KGunGamePickupSpawner
+    pickupType: Medkit
+    respawnDelay: 30
+    pickupRadius: 0.8
+    itemPrototype: WH40KGunGameMedkitPickup

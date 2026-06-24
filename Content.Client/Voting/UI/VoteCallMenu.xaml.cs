@@ -243,7 +243,10 @@ namespace Content.Client.Voting.UI
                 int i = 0;
                 foreach (var voteDropdown in voteList)
                 {
-                    var optionButton = new OptionButton();
+                    var optionButton = new OptionButton
+                    {
+                        HorizontalExpand = true
+                    };
                     int j = 0;
                     foreach (var (key, value) in voteDropdown)
                     {

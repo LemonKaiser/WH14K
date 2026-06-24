@@ -62,6 +62,15 @@
   id: JobPassengerWH40K
 
 - type: playTimeTracker
+  id: JobGunGamePlayer
+
+- type: playTimeTracker
+  id: JobPropHuntPlayer
+
+- type: playTimeTracker
+  id: JobMurderMysteryPlayer
+
+- type: playTimeTracker
   id: JobColonel
 
 - type: playTimeTracker

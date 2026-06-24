@@ -6,6 +6,7 @@ using Content.Server.Administration.Managers;
 using Content.Server.Discord.WebhookMessages;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
+using Content.Server._WH40K.GameTicking;
 using Content.Server.Roles;
 using Content.Server.RoundEnd;
 using Content.Shared.CCVar;
@@ -24,6 +25,11 @@ namespace Content.Server.Voting.Managers
 {
     public sealed partial class VoteManager
     {
+        private const string MainPresetHeaderId = "__header_main";
+        private const string MiniGamePresetHeaderId = "__header_mini";
+        private const string MainPresetHeaderText = "----- \u041E\u0441\u043D\u043E\u0432\u043D\u044B\u0435 -----";
+        private const string MiniGamePresetHeaderText = "----- \u041C\u0438\u043D\u0438-\u0438\u0433\u0440\u044B -----";
+
         [Dependency] private IPlayerLocator _locator = default!;
         [Dependency] private ILogManager _logManager = default!;
         [Dependency] private IBanManager _bans = default!;
@@ -225,6 +231,10 @@ namespace Content.Server.Voting.Managers
         private void CreatePresetVote(ICommonSession? initiator)
         {
             var presets = GetGamePresets();
+            var selectablePresets = presets.Where(entry => !entry.IsHeader).ToArray();
+
+            if (selectablePresets.Length == 0)
+                return;
 
             var alone = _playerManager.PlayerCount == 1 && initiator != null;
             var options = new VoteOptions
@@ -240,30 +250,40 @@ namespace Content.Server.Voting.Managers
                 options.InitiatorTimeout = TimeSpan.FromSeconds(10);
 
             options.OptionLocKeys = new List<string?>();
-            foreach (var (k, v) in presets)
+            foreach (var entry in presets)
             {
-                options.Options.Add((Loc.GetString(v), k));
-                options.OptionLocKeys.Add(v);
+                var display = entry.Localize ? Loc.GetString(entry.Text) : entry.Text;
+                options.Options.Add((display, entry.Id));
+                options.OptionLocKeys.Add(entry.Localize ? entry.Text : null);
             }
 
             WirePresetVoteInitiator(options, initiator);
 
             var vote = CreateVote(options);
+            var presetLookup = selectablePresets.ToDictionary(entry => entry.Id, entry => entry);
 
             vote.OnFinished += (_, args) =>
             {
                 string picked;
-                if (args.Winner == null)
+                var eligibleWinners = args.Winners
+                    .OfType<string>()
+                    .Where(id => presetLookup.ContainsKey(id))
+                    .ToList();
+
+                if (eligibleWinners.Count == 0)
+                    eligibleWinners = selectablePresets.Select(entry => entry.Id).ToList();
+
+                if (args.Winner is not string winnerId || !presetLookup.ContainsKey(winnerId))
                 {
-                    picked = (string) _random.Pick(args.Winners);
+                    picked = _random.Pick(eligibleWinners);
                     _chatManager.DispatchServerAnnouncement(
-                        Loc.GetString("ui-vote-gamemode-tie", ("picked", Loc.GetString(presets[picked]))));
+                        Loc.GetString("ui-vote-gamemode-tie", ("picked", ResolvePresetVoteDisplayName(presetLookup[picked]))));
                 }
                 else
                 {
-                    picked = (string) args.Winner;
+                    picked = winnerId;
                     _chatManager.DispatchServerAnnouncement(
-                        Loc.GetString("ui-vote-gamemode-win", ("winner", Loc.GetString(presets[picked]))));
+                        Loc.GetString("ui-vote-gamemode-win", ("winner", ResolvePresetVoteDisplayName(presetLookup[picked]))));
                 }
                 _adminLogger.Add(LogType.Vote, LogImpact.Medium, $"Preset vote finished: {picked}");
                 var ticker = _entityManager.EntitySysManager.GetEntitySystem<GameTicker>();
@@ -608,24 +628,57 @@ namespace Content.Server.Voting.Managers
             DirtyCanCallVoteAll();
         }
 
-        private Dictionary<string, string> GetGamePresets()
+        private List<PresetVoteEntry> GetGamePresets()
         {
-            var presets = new Dictionary<string, string>();
+            var availability = _entityManager.EntitySysManager.GetEntitySystem<WH40KPresetVoteAvailabilitySystem>();
+            var main = new List<PresetVoteEntry>();
+            var minigames = new List<PresetVoteEntry>();
 
             foreach (var preset in _prototypeManager.EnumeratePrototypes<GamePresetPrototype>())
             {
-                if(!preset.ShowInVote)
+                if (!preset.ShowInVote)
                     continue;
 
-                if(_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
+                if (_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
                     continue;
 
-                if(_playerManager.PlayerCount > (preset.MaxPlayers ?? int.MaxValue))
+                if (_playerManager.PlayerCount > (preset.MaxPlayers ?? int.MaxValue))
                     continue;
 
-                presets[preset.ID] = preset.ModeTitle;
+                if (preset.IsMiniGame && availability.AreMiniGamesBlocked)
+                    continue;
+
+                var entry = new PresetVoteEntry(preset.ID, preset.ModeTitle, true, false);
+                if (preset.IsMiniGame)
+                    minigames.Add(entry);
+                else
+                    main.Add(entry);
             }
-            return presets;
+
+            var result = new List<PresetVoteEntry>(main.Count + minigames.Count + 2);
+
+            if (main.Count > 0)
+            {
+                result.Add(new PresetVoteEntry(MainPresetHeaderId, MainPresetHeaderText, false, true));
+                result.AddRange(main);
+            }
+
+            if (minigames.Count > 0)
+            {
+                result.Add(new PresetVoteEntry(MiniGamePresetHeaderId, MiniGamePresetHeaderText, false, true));
+                result.AddRange(minigames);
+            }
+
+            return result;
         }
+
+        private static string ResolvePresetVoteDisplayName(PresetVoteEntry entry)
+        {
+            return entry.Localize
+                ? Loc.GetString(entry.Text)
+                : entry.Text;
+        }
+
+        private readonly record struct PresetVoteEntry(string Id, string Text, bool Localize, bool IsHeader);
     }
 }

@@ -1,0 +1,94 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntMorph
+  name: wh40k-prop-hunt-action-morph-name
+  description: wh40k-prop-hunt-action-morph-desc
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Devices/chameleon_projector.rsi
+      state: icon
+    useDelay: 60
+    checkCanInteract: true
+  - type: TargetAction
+    checkCanAccess: false
+    range: 3
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:WH40KPropHuntMorphActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntAnchor
+  name: wh40k-prop-hunt-action-anchor-name
+  description: wh40k-prop-hunt-action-anchor-desc
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Tools/wrench.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:DisguiseToggleAnchoredEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntHonk
+  name: wh40k-prop-hunt-action-honk-name
+  description: wh40k-prop-hunt-action-honk-desc
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Fun/bikehorn.rsi
+      state: icon
+    useDelay: 30
+  - type: InstantAction
+    event: !type:WH40KPropHuntHonkActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntInvisible
+  name: wh40k-prop-hunt-action-invisible-name
+  description: wh40k-prop-hunt-action-invisible-desc
+  components:
+  - type: Action
+    icon: Interface/Actions/ghostHearingToggled.png
+  - type: InstantAction
+    event: !type:WH40KPropHuntInvisibilityActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntSmoke
+  name: wh40k-prop-hunt-action-smoke-name
+  description: wh40k-prop-hunt-action-smoke-desc
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Weapons/Grenades/smoke.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:WH40KPropHuntSmokeActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntSeekerPulse
+  name: wh40k-prop-hunt-action-pulse-name
+  description: wh40k-prop-hunt-action-pulse-desc
+  components:
+  - type: Action
+    icon: Interface/Actions/scream.png
+    useDelay: 120
+  - type: InstantAction
+    event: !type:WH40KPropHuntSeekerPulseActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KPropHuntSeekerDash
+  name: wh40k-prop-hunt-action-dash-name
+  description: wh40k-prop-hunt-action-dash-desc
+  components:
+  - type: Action
+    icon: Interface/Actions/spellblade.png
+    useDelay: 60
+    checkCanInteract: true
+  - type: WorldTargetAction
+    event: !type:WH40KChaplainDashActionEvent

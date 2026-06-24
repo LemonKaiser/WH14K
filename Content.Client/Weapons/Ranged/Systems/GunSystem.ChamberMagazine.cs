@@ -20,6 +20,8 @@ public sealed partial class GunSystem
 
     private void OnChamberMagazineAppearance(Entity<ChamberMagazineAmmoProviderComponent> ent, ref AppearanceChangeEvent args)
     {
+        UpdateAmmoCount(ent);
+
         if (args.Sprite == null ||
             !_sprite.LayerMapTryGet((ent, args.Sprite), GunVisualLayers.Base, out var boltLayer, false) ||
             !Appearance.TryGetData(ent, AmmoVisuals.BoltClosed, out bool boltClosed))

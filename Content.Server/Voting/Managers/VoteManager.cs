@@ -369,8 +369,11 @@ namespace Content.Server.Voting.Managers
             // Still allow vote if availbable one is different from current one
             if (voteType == StandardVoteType.Preset)
             {
-                var presets = GetGamePresets();
-                if (presets.Count == 1 && presets.Select(x => x.Key).Single() == _entityManager.System<GameTicker>().Preset?.ID)
+                var presets = GetGamePresets()
+                    .Where(entry => !entry.IsHeader)
+                    .ToArray();
+
+                if (presets.Length == 1 && presets[0].Id == _entityManager.System<GameTicker>().Preset?.ID)
                     return false;
             }
 

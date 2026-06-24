@@ -7,3 +7,28 @@
   id: good
   rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
   state: good
+
+- type: chatCustomEmoji
+  id: Nosramus
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: Nosramus
+
+- type: chatCustomEmoji
+  id: noERP
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: noERP
+
+- type: chatCustomEmoji
+  id: pepe
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: pepe
+
+- type: chatCustomEmoji
+  id: skull
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: skull
+
+- type: chatCustomEmoji
+  id: woodsman
+  rsiPath: /Textures/Interface/Chat/custom_emoji.rsi
+  state: woodsman

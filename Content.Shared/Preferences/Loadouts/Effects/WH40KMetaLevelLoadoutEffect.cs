@@ -35,8 +35,14 @@ public sealed partial class WH40KMetaLevelLoadoutEffect : LoadoutEffect
         var requiredLevel = Math.Max(1, RequiredLevel);
         var metaProgress = collection.Resolve<ISharedWH40KMetaProgressManager>();
 
-        if (metaProgress.TryGetMetaLevel(session, out var currentLevel) &&
-            currentLevel >= requiredLevel)
+        if (!metaProgress.TryGetMetaLevel(session, out var currentLevel))
+        {
+            // Don't strip persisted loadout selections while meta progress is still loading.
+            reason = FormattedMessage.Empty;
+            return true;
+        }
+
+        if (currentLevel >= requiredLevel)
         {
             reason = FormattedMessage.Empty;
             return true;

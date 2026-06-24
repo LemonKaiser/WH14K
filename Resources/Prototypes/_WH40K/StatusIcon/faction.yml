@@ -29,3 +29,11 @@
   icon:
     sprite: /Textures/_WH40K/Interface/Misc/job_icons.rsi
     state: ReinforcementAI
+
+- type: factionIcon
+  id: WH40KMurderMysteryMurderIcon
+  priority: -9
+  locationPreference: Left
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Syndicate

@@ -6,6 +6,7 @@
   name: wh40k-team-battle-title
   description: wh40k-team-battle-description
   showInVote: true
+  isMiniGame: false
   supportedMaps: WH40KMapPool
   rules:
   - WH40KTeamBattle
@@ -18,6 +19,52 @@
   name: wh40k-wave-defence-title
   description: wh40k-wave-defence-description
   showInVote: true
+  isMiniGame: false
   supportedMaps: WH40KWaveDefenceMapPool
   rules:
   - WH40KWaveDefence
+
+- type: gamePreset
+  id: WH40KGunGame
+  alias:
+  - gungame
+  - gg
+  name: wh40k-gun-game-title
+  description: wh40k-gun-game-description
+  minPlayers: 2
+  maxPlayers: 30
+  showInVote: true
+  isMiniGame: true
+  supportedMaps: WH40KGunGameMapPool
+  rules:
+  - WH40KGunGame
+
+- type: gamePreset
+  id: WH40KPropHunt
+  alias:
+  - prophunt
+  - ph
+  name: wh40k-prop-hunt-title
+  description: wh40k-prop-hunt-description
+  minPlayers: 2
+  maxPlayers: 30
+  showInVote: true
+  isMiniGame: true
+  supportedMaps: WH40KPropHuntMapPool
+  rules:
+  - WH40KPropHunt
+
+- type: gamePreset
+  id: WH40KMurderMystery
+  alias:
+  - murdermystery
+  - mm
+  name: wh40k-murder-mystery-title
+  description: wh40k-murder-mystery-description
+  minPlayers: 2
+  maxPlayers: 30
+  showInVote: true
+  isMiniGame: true
+  supportedMaps: WH40KMurderMysteryMapPool
+  rules:
+  - WH40KMurderMystery

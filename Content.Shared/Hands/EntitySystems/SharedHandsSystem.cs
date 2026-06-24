@@ -490,4 +490,16 @@ public abstract partial class SharedHandsSystem
 
         return freeable;
     }
+
+    public void SetCanBeStripped(Entity<HandsComponent?> ent, bool value)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        if (ent.Comp.CanBeStripped == value)
+            return;
+
+        ent.Comp.CanBeStripped = value;
+        Dirty(ent);
+    }
 }

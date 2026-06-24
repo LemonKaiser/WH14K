@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
+using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Item;
@@ -37,6 +38,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private ItemToggleSystem _toggle = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     public override void Initialize()
     {
@@ -47,6 +49,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
         SubscribeLocalEvent<ChameleonDisguiseComponent, InsertIntoEntityStorageAttemptEvent>(OnDisguiseInsertAttempt);
         SubscribeLocalEvent<ChameleonDisguiseComponent, ComponentShutdown>(OnDisguiseShutdown);
         SubscribeLocalEvent<ChameleonDisguiseComponent, BeforeGettingEquippedHandEvent>(OnDisguiseBeforeEquippedHand);
+        SubscribeLocalEvent<ChameleonDisguiseComponent, ExaminedEvent>(OnDisguiseExamined);
 
         SubscribeLocalEvent<ChameleonDisguisedComponent, EntGotInsertedIntoContainerMessage>(OnDisguisedInserted);
 
@@ -64,6 +67,12 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
 
     private void OnDisguiseInteractHand(Entity<ChameleonDisguiseComponent> ent, ref InteractHandEvent args)
     {
+        if (TryComp<ChameleonProjectorComponent>(ent.Comp.Projector, out var projector) &&
+            !projector.RevealOnInteract)
+        {
+            return;
+        }
+
         TryReveal(ent.Comp.User);
         args.Handled = true;
     }
@@ -79,6 +88,13 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
     {
         // stay parented to the user, not the storage
         args.Cancelled = true;
+
+        if (TryComp<ChameleonProjectorComponent>(ent.Comp.Projector, out var projector) &&
+            !projector.RevealOnStorageInsert)
+        {
+            return;
+        }
+
         TryReveal(ent.Comp.User);
     }
 
@@ -90,7 +106,22 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
     private void OnDisguiseBeforeEquippedHand(Entity<ChameleonDisguiseComponent> ent, ref BeforeGettingEquippedHandEvent args)
     {
         args.Cancelled = true;
+
+        if (TryComp<ChameleonProjectorComponent>(ent.Comp.Projector, out var projector) &&
+            !projector.RevealOnPickup)
+        {
+            return;
+        }
+
         TryReveal(ent.Comp.User);
+    }
+
+    private void OnDisguiseExamined(Entity<ChameleonDisguiseComponent> ent, ref ExaminedEvent args)
+    {
+        if (TerminatingOrDeleted(ent.Comp.SourceEntity))
+            return;
+
+        args.PushMessage(_examine.GetExamineText(ent.Comp.SourceEntity, args.Examiner), 1);
     }
 
     #endregion
@@ -205,6 +236,9 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
 
     private void OnProjectorShutdown(Entity<ChameleonProjectorComponent> ent, ref ComponentShutdown args)
     {
+        if (!ent.Comp.RevealOnProjectorShutdown)
+            return;
+
         RevealProjector(ent);
     }
 
@@ -237,7 +271,8 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
             ClearDisguise(ent, ent.Comp.Disguised.Value);
 
         // add actions for controlling transform aspects
-        _actions.AddAction(user, ref proj.NoRotActionEntity, proj.NoRotAction, container: ent);
+        if (proj.ProvideNoRotAction)
+            _actions.AddAction(user, ref proj.NoRotActionEntity, proj.NoRotAction, container: ent);
         _actions.AddAction(user, ref proj.AnchorActionEntity, proj.AnchorAction, container: ent);
 
         proj.Disguised = user;
@@ -251,7 +286,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
         // make disguise look real (for simple things at least)
         var meta = MetaData(entity);
         _meta.SetEntityName(disguise, meta.EntityName);
-        _meta.SetEntityDescription(disguise, meta.EntityDescription);
+        _meta.SetEntityDescription(disguise, string.Empty);
 
         var comp = EnsureComp<ChameleonDisguiseComponent>(disguise);
         comp.User = user;
@@ -262,6 +297,7 @@ public abstract partial class SharedChameleonProjectorSystem : EntitySystem
 
         // item disguises can be picked up to be revealed, also makes sure their examine size is correct
         CopyComp<ItemComponent>((disguise, comp));
+        EnsureComp<AppearanceComponent>(disguise);
 
         _appearance.CopyData(entity, disguise);
     }

@@ -1,0 +1,49 @@
+- type: entity
+  parent: WH40KRedMediumLaserLasgun
+  id: WH40KPropHuntRedMediumLaserLasgun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 55
+
+- type: entity
+  parent: LasgunPowerCell
+  id: WH40KPropHuntLasgunPowerCell
+  suffix: Prop Hunt
+  components:
+  - type: Battery
+    maxCharge: 250
+    startingCharge: 250
+    pricePerJoule: 0.15
+  - type: BatterySelfRecharger
+    autoRechargeRate: 1.6666666
+    autoRechargePauseTime: 30
+  - type: BatteryAmmoProvider
+    proto: WH40KPropHuntRedMediumLaserLasgun
+    fireCost: 50
+
+- type: entity
+  parent: WeaponLaserLasgun
+  id: WH40KPropHuntWeaponLaserLasgun
+  name: seeker lasgun
+  suffix: Prop Hunt
+  components:
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Blunt: 30
+    soundHit:
+      collection: MetalThud
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: WH40KPropHuntLasgunPowerCell
+        insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+        ejectSound: /Audio/Weapons/Guns/MagOut/batrifle_magout.ogg
+        whitelist:
+          tags:
+          - LasgunPowerCell
