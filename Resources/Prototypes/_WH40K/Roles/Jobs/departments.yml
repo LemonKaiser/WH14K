@@ -93,4 +93,5 @@
   roles:
   - GunGamePlayer
   - PropHuntPlayer
+  - MurderMysteryPlayer
   editorHidden: true

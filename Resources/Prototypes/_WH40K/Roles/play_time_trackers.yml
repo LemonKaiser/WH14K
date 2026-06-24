@@ -68,6 +68,9 @@
   id: JobPropHuntPlayer
 
 - type: playTimeTracker
+  id: JobMurderMysteryPlayer
+
+- type: playTimeTracker
   id: JobColonel
 
 - type: playTimeTracker

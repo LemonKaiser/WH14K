@@ -50,6 +50,21 @@
   maxPlayers: 30
   showInVote: true
   isMiniGame: true
-  supportedMaps: WH40KGunGameMapPool
+  supportedMaps: WH40KPropHuntMapPool
   rules:
   - WH40KPropHunt
+
+- type: gamePreset
+  id: WH40KMurderMystery
+  alias:
+  - murdermystery
+  - mm
+  name: wh40k-murder-mystery-title
+  description: wh40k-murder-mystery-description
+  minPlayers: 2
+  maxPlayers: 30
+  showInVote: true
+  isMiniGame: true
+  supportedMaps: WH40KMurderMysteryMapPool
+  rules:
+  - WH40KMurderMystery

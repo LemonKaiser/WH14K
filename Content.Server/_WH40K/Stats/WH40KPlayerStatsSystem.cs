@@ -190,6 +190,7 @@ public static class WH40KPlayerStatKeys
     public const string MetaXpRoundWin = "meta.xp.round_win";
     public const string MetaXpGunGamePlace = "meta.xp.gungame.place";
     public const string MetaXpPropHuntWin = "meta.xp.prophunt.win";
+    public const string MetaXpMurderMysteryWin = "meta.xp.murdermystery.win";
     public const string MetaXpObjective = "meta.xp.objective";
     public const string MetaXpStrategicPointBuild = "meta.xp.strategic_point.build";
     public const string MetaXpStrategicPointUpgrade = "meta.xp.strategic_point.upgrade";

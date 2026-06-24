@@ -1,0 +1,21 @@
+- type: job
+  id: MurderMysteryPlayer
+  name: job-name-murder-mystery-player
+  description: job-description-murder-mystery-player
+  playTimeTracker: JobMurderMysteryPlayer
+  startingGear: MurderMysteryPlayerGear
+  icon: "JobIconPassenger"
+  supervisors: job-supervisors-nobody
+  canBeAntag: false
+  setPreference: false
+  access:
+  - Maintenance
+
+- type: startingGear
+  id: MurderMysteryPlayerGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorWhite
+    shoes: ClothingShoesColorBlack
+    id: PassengerPDA
+    ears: ClothingHeadsetGrey
+    back: ClothingBackpack

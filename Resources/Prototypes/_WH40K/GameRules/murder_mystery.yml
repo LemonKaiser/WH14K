@@ -1,0 +1,23 @@
+- type: entity
+  id: WH40KMurderMystery
+  parent: BaseGameRule
+  name: murder mystery rule
+  suffix: "[MurderMystery]"
+  components:
+  - type: WH40KMurderMysteryRule
+    fallbackJob: MurderMysteryPlayer
+    roundDuration: 900
+    restartDelay: 10
+    roleAssignmentDelay: 30
+    minimumPlayersToRun: 2
+    winnerRewardXp: 500
+    murderKnifePrototype: WH40KMurderMysteryKnife
+    sheriffRevolverPrototype: WH40KMurderMysterySheriffRevolver
+    smokeAction: ActionWH40KMurderMysterySmoke
+    flashAction: ActionWH40KMurderMysteryFlash
+    smokeGrenadePrototype: SmokeGrenade
+    murderAbilityUses: 3
+    flashRadius: 7
+    flashDuration: 3
+    flashSlowTo: 0.25
+    bloodCleanupInterval: 1
