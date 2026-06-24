@@ -1,0 +1,13 @@
+- type: damageModifierSet
+  id: Kataphron
+  coefficients:
+    Blunt: 0.4
+    Slash: 0.4
+    Piercing: 0.45
+    Heat: 0.35
+  flatReductions:
+    Blunt: 10
+    Slash: 10
+    Piercing: 10
+    Heat: 10
+    Structural: 10

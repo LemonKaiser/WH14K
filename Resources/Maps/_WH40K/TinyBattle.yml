@@ -95,6 +95,8 @@ entities:
           Nitrogen: 82.10312
     - type: MapLight
       ambientLightColor: '#C28A4EFF'
+    - type: LightCycle
+      minLightLevel: 0.35
     - type: SunShadow
       alpha: 0.38
       direction: 1.85,1.15

@@ -51,8 +51,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      1250: Critical
-      1300: Dead
+      650: Dead
     stateAlertDict:
       Alive: BorgHealth
       Critical: HumanCrit
@@ -93,13 +92,28 @@
   - type: Loadout
     prototypes:
     - WH40KKataphron
+  - type: Input
+    context: "human"
   - type: Hands
-    activeHandId: Right
+    canBeStripped: false
+    activeHandId: hand_right
     hands:
-      Right:
+      hand_right:
         location: Right
       extra_hand_1:
         location: Middle
+    sortedHands:
+    - hand_right
+    - extra_hand_1
+  - type: Stripping
+  - type: UserInterface
+    interfaces:
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Damageable
+    damageModifierSet: Kataphron
 
 - type: startingGear
   id: WH40KKataphron

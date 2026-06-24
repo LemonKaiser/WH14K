@@ -23,9 +23,9 @@
   - type: WH40KGunPrediction
   - type: WH40KPlasmaOverheat
     chance: 0.02
-    totalIntensity: 486
-    intensitySlope: 54
-    maxTileIntensity: 54
+    totalIntensity: 1800
+    intensitySlope: 200
+    maxTileIntensity: 200
     maxTileBreak: 0
     canCreateVacuum: false
     deleteWeapon: true

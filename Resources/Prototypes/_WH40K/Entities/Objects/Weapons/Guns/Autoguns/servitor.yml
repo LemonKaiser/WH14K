@@ -6,7 +6,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Autoguns/stub_mg.rsi
     state: base
   - type: Gun
-    fireRate: 8
+    fireRate: 6
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -22,12 +22,16 @@
     containers:
       ballistic-ammo: !type:Container
   - type: BallisticAmmoProvider
-    capacity: 100
+    capacity: 50
     proto: Bullet825mmLong
     cycleable: false
   - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 0.5s
+    autoRefillRate: 0.75s
     firingPausesAutoRefill: true
-    autoRefillPauseDuration: 0.5s
+    autoRefillPauseDuration: 0.75s
   - type: Item
     size: Huge
+  - type: AimingCamera
+    maxOffset: 7
+    pvsIncrease: 0.6
+    requireWield: false

@@ -24,6 +24,13 @@
       collection: MetalThud
   - type: DisarmMalus
     malus: 0.7
+  - type: MeleeThrowOnHit
+    stunTime: 0
+    activateOnThrown: false
+    speed: 10
+    distance: 3
+  - type: StaminaDamageOnHit
+    damage: 10
 
 - type: entity
   parent: WHPowerFist

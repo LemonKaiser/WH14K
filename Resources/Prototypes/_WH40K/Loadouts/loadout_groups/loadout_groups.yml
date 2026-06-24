@@ -967,11 +967,10 @@
   minLimit: 0
   loadouts:
   - WH40Ktraitguard
-  - WH40KChaosCoat
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
-  - WH40KArmorTzeentchLiet
+  - WH40KArmorTzeentchSerg
 
 - type: loadoutGroup
   id: WH40KHereticChampionHead
@@ -997,8 +996,8 @@
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
   - WH40KArmorKhorne
-  - WH40KArmorTzeentchSerg
   - WH40KArmorSlaaneshLiet
+  - WH40KArmorTzeentchLiet
 
 - type: loadoutGroup
   id: WH40KHereticChampionFeet
