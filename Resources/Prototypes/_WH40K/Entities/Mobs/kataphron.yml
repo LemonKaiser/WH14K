@@ -26,8 +26,8 @@
       state: base
   - type: MeleeWeapon
     wideAnimationRotation: -135
-    attackRate: 0.75
-    range: 2
+    attackRate: 1.25
+    range: 2.5
     animation: WeaponArcFist
     soundHit:
       collection: MetalThud

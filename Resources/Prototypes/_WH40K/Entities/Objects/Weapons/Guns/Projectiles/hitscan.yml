@@ -262,3 +262,29 @@
       sprite: _WH40K/Objects/Weapons/Guns/Projectiles/projectiles.rsi
       state: impact_arc
   - type: HitscanBasicEffects
+
+- type: entity
+  parent: BasicHitscanElectricArc
+  id: LaserArcPistol
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 20
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Shock: 30
+  - type: HitscanStaminaDamage
+    staminaDamage: 35
+
+- type: entity
+  parent: BasicHitscanElectricArc
+  id: LaserHeavyArc
+  components:
+  - type: HitscanBasicRaycast
+    maxDistance: 40
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Shock: 40
+  - type: HitscanStaminaDamage
+    staminaDamage: 15

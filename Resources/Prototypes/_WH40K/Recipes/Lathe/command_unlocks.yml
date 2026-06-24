@@ -527,8 +527,8 @@
 
 - type: latheRecipe
   parent: BaseToolRecipe
-  id: WH40KRecipeAmmoElectricArc
-  result: WH40KAmmoBoxElectricArc
+  id: WH40KMagazineArcPistol
+  result: WH40KMagazineArcPistol
   materials:
     Steel: 500
     Plastic: 50

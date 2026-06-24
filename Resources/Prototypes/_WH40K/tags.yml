@@ -357,3 +357,6 @@
 
 - type: Tag
   id: CartridgeGalvanic
+
+- type: Tag
+  id: WH40KMagazineArcPistol

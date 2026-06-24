@@ -90,25 +90,31 @@
 
 - type: loadout
   id: TechpriestPhosphorBlast
+  dummyEntity: WeaponRevolverPhosphorBlast
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 5
   inhand:
   - WeaponRevolverPhosphorBlast
-#  storage:
-#    belt:
-#    - SpeedLoaderPhosphor
+  storage:
+    back:
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
+    - SpeedLoaderPhosphor
 
 - type: loadout
   id: TechpriestElectricArc
+  dummyEntity: WeaponRevolverElectricArc
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 15
   inhand:
   - WeaponRevolverElectricArc
-#  storage:
-#    belt:
-#    - SpeedLoaderElectricArc
+  storage:
+    back:
+    - WH40KMagazineArcPistol
+    - WH40KMagazineArcPistol
+    - WH40KMagazineArcPistol
 
 - type: loadout
   id: TechpriestAxe
@@ -120,14 +126,17 @@
 
 - type: loadout
   id: TechpriestSerpenta
+  dummyEntity: WeaponRevolverPhosphorSerpenta
   effects:
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 25
   inhand:
   - WeaponRevolverPhosphorSerpenta
-#  storage:
-#    belt:
-#    - SpeedLoaderSerpenta
+  storage:
+    back:
+    - SpeedLoaderSerpenta
+    - SpeedLoaderSerpenta
+    - SpeedLoaderSerpenta
 
 - type: loadout
   id: WH40KTechPriestBreather

@@ -20,14 +20,14 @@
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
-  - type: BallisticAmmoProvider
-    capacity: 15
-    proto: BulletHeavyElectricArc
-    cycleable: false
-  - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 1.5s
-    firingPausesAutoRefill: true
-    autoRefillPauseDuration: 1.5s
+  - type: Battery
+    maxCharge: 1500
+    startingCharge: 1500
+  - type: BatteryAmmoProvider
+    proto: LaserHeavyArc
+    fireCost: 100
+  - type: BatterySelfRecharger
+    autoRechargeRate: 66.7
   - type: Unremoveable
   - type: Item
     size: Huge
@@ -35,3 +35,16 @@
     maxOffset: 7
     pvsIncrease: 0.6
     requireWield: false
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 1.25
+    range: 2.5
+    animation: WeaponArcFist
+    soundHit:
+      collection: MetalThud
+    damage:
+      types:
+        Blunt: 30
+        Shock: 30
+        Structural: 40
+    angle: 80
