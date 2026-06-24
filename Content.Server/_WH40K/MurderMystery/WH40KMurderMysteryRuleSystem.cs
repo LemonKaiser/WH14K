@@ -123,6 +123,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private WH40KDamageProtectionSystem _damageProtection = default!;
     [Dependency] private WH40KMeleeProtectionSystem _meleeProtection = default!;
 
     private readonly HashSet<EntityUid> _flashTargets = [];
@@ -137,7 +138,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnBeforeSpawn);
         SubscribeLocalEvent<RefreshLateJoinAllowedEvent>(OnRefreshLateJoinAllowed);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged, before: new[] { typeof(KillTrackingSystem) });
-        SubscribeLocalEvent<MetaDataComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        _damageProtection.RegisterHandler(OnBeforeDamageChanged);
         _meleeProtection.RegisterHandler(OnMeleeHit);
 
         SubscribeLocalEvent<WH40KMurderMysteryPlayerComponent, WH40KMurderMysterySmokeActionEvent>(OnSmokeAction);
@@ -317,7 +318,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         RefreshSheriffRoles(rule);
     }
 
-    private void OnBeforeDamageChanged(EntityUid uid, MetaDataComponent component, ref BeforeDamageChangedEvent args)
+    private void OnBeforeDamageChanged(EntityUid uid, ref BeforeDamageChangedEvent args)
     {
         if (args.Cancelled || !HasHarmfulDamage(args.Damage))
             return;
