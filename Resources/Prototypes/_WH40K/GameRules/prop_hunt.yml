@@ -74,3 +74,6 @@
     - PottedPlant
     - Poweredlight
     - AlwaysPoweredLight
+    - AlwaysPoweredWallLight
+    - SmallLight
+    - EmergencyLight

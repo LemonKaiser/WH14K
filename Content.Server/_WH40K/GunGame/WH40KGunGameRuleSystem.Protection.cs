@@ -17,10 +17,10 @@ public sealed partial class WH40KGunGameRuleSystem
 
     public void InitializeProtection()
     {
-        SubscribeLocalEvent<MetaDataComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        _damageProtection.RegisterHandler(OnBeforeDamageChanged);
     }
 
-    private void OnBeforeDamageChanged(EntityUid uid, MetaDataComponent component, ref BeforeDamageChangedEvent args)
+    private void OnBeforeDamageChanged(EntityUid uid, ref BeforeDamageChangedEvent args)
     {
         if (!_protectionActive)
             return;

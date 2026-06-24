@@ -22,3 +22,9 @@ wh40k-murder-mystery-action-smoke-name = Smoke
 wh40k-murder-mystery-action-smoke-desc = Release a cloud of smoke. Usable 3 times per round with a 1 minute cooldown.
 wh40k-murder-mystery-action-flash-name = Flash
 wh40k-murder-mystery-action-flash-desc = Blind everyone nearby except the murderers. Usable 3 times per round with a 1 minute cooldown.
+
+ent-ActionWH40KMurderMysterySmoke = Smoke
+    .desc = Release a cloud of smoke. Usable 3 times per round with a 1 minute cooldown.
+
+ent-ActionWH40KMurderMysteryFlash = Flash
+    .desc = Blind everyone nearby except the murderers. Usable 3 times per round with a 1 minute cooldown.

@@ -842,6 +842,9 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
         if (!forceAllowed && HasInvalidPrototypeHint(prototypeId))
             return false;
 
+        if (forceAllowed)
+            return true;
+
         return meta.EntityPrototype.Components.ContainsKey("Sprite") ||
                meta.EntityPrototype.Components.ContainsKey("Appearance");
     }

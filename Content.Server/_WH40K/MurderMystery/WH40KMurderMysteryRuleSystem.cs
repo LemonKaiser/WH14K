@@ -47,6 +47,7 @@ using Content.Shared.Players;
 using Content.Shared.Preferences;
 using Content.Shared.Projectiles;
 using Content.Shared.Prototypes;
+using Content.Shared.Pulling.Events;
 using Content.Shared.Roles;
 using Content.Shared.Station.Components;
 using Content.Shared.Storage;
@@ -54,6 +55,7 @@ using Content.Shared.Strip.Components;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Trigger.Systems;
 using Content.Shared.Verbs;
+using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared._WH40K.GunGame;
 using Content.Shared._WH40K.Interface;
@@ -77,7 +79,7 @@ namespace Content.Server._WH40K.MurderMystery;
 public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KMurderMysteryRuleComponent>
 {
     private static readonly TimeSpan TimerSyncInterval = TimeSpan.FromSeconds(5);
-    private static readonly SoundSpecifier FlashSound = new SoundPathSpecifier("/Audio/Weapons/Grenades/flashbang.ogg");
+    private static readonly SoundSpecifier FlashSound = new SoundPathSpecifier("/Audio/Weapons/flash.ogg");
     private static readonly DamageSpecifier FatalBallisticDamage = new()
     {
         DamageDict = new()
@@ -121,6 +123,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private WH40KMeleeProtectionSystem _meleeProtection = default!;
 
     private readonly HashSet<EntityUid> _flashTargets = [];
     private ISawmill _sawmill = default!;
@@ -135,6 +138,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         SubscribeLocalEvent<RefreshLateJoinAllowedEvent>(OnRefreshLateJoinAllowed);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged, before: new[] { typeof(KillTrackingSystem) });
         SubscribeLocalEvent<MetaDataComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        _meleeProtection.RegisterHandler(OnMeleeHit);
 
         SubscribeLocalEvent<WH40KMurderMysteryPlayerComponent, WH40KMurderMysterySmokeActionEvent>(OnSmokeAction);
         SubscribeLocalEvent<WH40KMurderMysteryPlayerComponent, WH40KMurderMysteryFlashActionEvent>(OnFlashAction);
@@ -145,10 +149,13 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         SubscribeLocalEvent<WH40KMurderMysteryKnifeComponent, GetVerbsEvent<AlternativeVerb>>(OnKnifeAlternativeVerbs);
         SubscribeLocalEvent<WH40KMurderMysteryKnifeComponent, GetVerbsEvent<ActivationVerb>>(OnKnifeActivationVerbs);
         SubscribeLocalEvent<WH40KMurderMysteryKnifeComponent, GetVerbsEvent<Verb>>(OnKnifeAnyVerbs);
+        SubscribeLocalEvent<WH40KMurderMysteryKnifeComponent, BeingPulledAttemptEvent>(OnKnifeBeingPulledAttempt);
 
         SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, GettingPickedUpAttemptEvent>(OnSheriffRevolverPickupAttempt);
         SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, GotEquippedHandEvent>(OnSheriffRevolverEquipped);
         SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, ShotAttemptedEvent>(OnSheriffRevolverShotAttempted);
+        SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, BeingPulledAttemptEvent>(OnSheriffRevolverBeingPulledAttempt);
+        SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, GetVerbsEvent<Verb>>(OnSheriffRevolverAnyVerbs);
 
         SubscribeLocalEvent<WH40KMurderMysterySheriffBulletComponent, ProjectileHitEvent>(OnSheriffBulletHit);
     }
@@ -346,6 +353,30 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         }
     }
 
+    private void OnMeleeHit(EntityUid uid, ref MeleeHitEvent args)
+    {
+        if (args.Handled || !args.IsHit)
+            return;
+
+        if (!TryGetActiveRule(out _, out _))
+            return;
+
+        if (HasComp<WH40KMurderMysteryKnifeComponent>(args.Weapon) ||
+            HasComp<WH40KMurderMysterySheriffRevolverComponent>(args.Weapon))
+        {
+            return;
+        }
+
+        foreach (var target in args.HitEntities)
+        {
+            if (HasComp<WH40KMurderMysteryPlayerComponent>(target))
+            {
+                args.Handled = true;
+                return;
+            }
+        }
+    }
+
     private void OnSmokeAction(Entity<WH40KMurderMysteryPlayerComponent> ent, ref WH40KMurderMysterySmokeActionEvent args)
     {
         if (args.Handled ||
@@ -442,6 +473,15 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         FilterKnifeVerbs(ent.Comp, ref args);
     }
 
+    private void OnKnifeBeingPulledAttempt(Entity<WH40KMurderMysteryKnifeComponent> ent, ref BeingPulledAttemptEvent args)
+    {
+        if (args.Cancelled || CanUseKnife(args.Puller, ent.Comp))
+            return;
+
+        args.Cancel();
+        _popup.PopupEntity(Loc.GetString("wh40k-murder-mystery-knife-locked"), ent.Owner, args.Puller);
+    }
+
     private void OnSheriffRevolverPickupAttempt(Entity<WH40KMurderMysterySheriffRevolverComponent> ent, ref GettingPickedUpAttemptEvent args)
     {
         if (args.Cancelled)
@@ -481,6 +521,30 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         }
 
         args.Cancel();
+    }
+
+    private void OnSheriffRevolverBeingPulledAttempt(Entity<WH40KMurderMysterySheriffRevolverComponent> ent, ref BeingPulledAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!TryComp<WH40KMurderMysteryPlayerComponent>(args.Puller, out var playerComp) ||
+            playerComp.Role == WH40KMurderMysteryRole.Murder)
+        {
+            args.Cancel();
+            _popup.PopupEntity(Loc.GetString("wh40k-murder-mystery-revolver-locked"), ent.Owner, args.Puller);
+        }
+    }
+
+    private void OnSheriffRevolverAnyVerbs(Entity<WH40KMurderMysterySheriffRevolverComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (TryComp<WH40KMurderMysteryPlayerComponent>(args.User, out var playerComp) &&
+            playerComp.Role != WH40KMurderMysteryRole.Murder)
+        {
+            return;
+        }
+
+        args.Verbs.Clear();
     }
 
     private void OnSheriffBulletHit(Entity<WH40KMurderMysterySheriffBulletComponent> ent, ref ProjectileHitEvent args)
@@ -903,6 +967,12 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
             if (slot.Name is not ("id" or "ears") && !HasComp<Content.Shared.Clothing.Components.ClothingComponent>(item.Value))
                 continue;
 
+            if (slot.Name == "back")
+            {
+                ProtectBackpackItem(item.Value, playerComp);
+                continue;
+            }
+
             ProtectEquippedItem(item.Value, playerComp);
         }
     }
@@ -918,6 +988,14 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
 
         playerComp.ProtectedItems.Add(item);
         ProtectPdaContents(item, playerComp);
+    }
+
+    private void ProtectBackpackItem(EntityUid item, WH40KMurderMysteryPlayerComponent playerComp)
+    {
+        var unremovable = EnsureComp<UnremoveableComponent>(item);
+        unremovable.DeleteOnDrop = false;
+
+        playerComp.ProtectedItems.Add(item);
     }
 
     private void ProtectPdaContents(EntityUid item, WH40KMurderMysteryPlayerComponent playerComp)
@@ -1015,6 +1093,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
             if (!IsNestedUnderOwner(revolverUid, mob))
                 continue;
 
+            _container.TryRemoveFromContainer(revolverUid, force: true);
             _transform.DropNextTo(revolverUid, mob);
         }
     }

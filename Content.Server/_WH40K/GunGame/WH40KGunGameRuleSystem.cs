@@ -50,6 +50,7 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private AtmosphereSystem _atmos = default!;
     [Dependency] private ShuttleSystem _shuttles = default!;
+    [Dependency] private WH40KDamageProtectionSystem _damageProtection = default!;
 
     private ISawmill _sawmill = default!;
 

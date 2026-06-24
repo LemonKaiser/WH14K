@@ -22,3 +22,9 @@ wh40k-murder-mystery-action-smoke-name = Дым
 wh40k-murder-mystery-action-smoke-desc = Выпустить облако дыма. Можно использовать 3 раза за раунд, с перезарядкой 1 минута.
 wh40k-murder-mystery-action-flash-name = Вспышка
 wh40k-murder-mystery-action-flash-desc = Ослепить всех рядом, кроме убийц. Можно использовать 3 раза за раунд, с перезарядкой 1 минута.
+
+ent-ActionWH40KMurderMysterySmoke = Дым
+    .desc = Выпустить облако дыма. Можно использовать 3 раза за раунд, с перезарядкой 1 минута.
+
+ent-ActionWH40KMurderMysteryFlash = Вспышка
+    .desc = Ослепить всех рядом, кроме убийц. Можно использовать 3 раза за раунд, с перезарядкой 1 минута.

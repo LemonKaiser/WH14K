@@ -11,7 +11,7 @@
     useDelay: 60
     checkCanInteract: true
   - type: TargetAction
-    checkCanAccess: true
+    checkCanAccess: false
     range: 3
   - type: EntityTargetAction
     canTargetSelf: false
