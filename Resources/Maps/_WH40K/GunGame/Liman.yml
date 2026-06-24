@@ -58448,10 +58448,6 @@ entities:
     - type: Transform
       pos: 55.5,-8.5
       parent: 2
-- proto: WH40KVehicleKeyMotorbikeChaos
-  entities: []
-- proto: WH40KVehicleKeyMotorbikeImperium
-  entities: []
 - proto: WH40KVehicleMotorbikeChaos
   entities:
   - uid: 10185
