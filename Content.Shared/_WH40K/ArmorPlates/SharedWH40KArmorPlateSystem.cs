@@ -237,8 +237,6 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
                 });
             }
         }
-
-        AddEquipmentSlotOverviewVerbs(ent, args.Args.User, args.Args.Verbs);
     }
 
     private void OnRefreshMoveSpeed(Entity<WH40KArmorPlateHolderComponent> ent, ref InventoryRelayedEvent<RefreshMovementSpeedModifiersEvent> args)
@@ -510,48 +508,6 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
                 continue;
 
             var verb = new ActivationVerb
-            {
-                Category = PlateSlotsCategory,
-                Priority = WH40KArmorPlateHolderComponent.MaxSlots - slotIndex,
-            };
-
-            if (slot.Item is not { } plateUid || !TryComp(plateUid, out WH40KArmorPlateComponent? plate))
-            {
-                verb.Text = Loc.GetString("wh40k-armor-plate-slot-empty-verb", ("slot", slotIndex));
-                verb.Disabled = true;
-                verbs.Add(verb);
-                continue;
-            }
-
-            verb.Text = GetSlotStatusText(slotIndex, plateUid, plate);
-            verb.IconEntity = GetNetEntity(plateUid);
-
-            if (!_actionBlocker.CanPickup(user, plateUid))
-            {
-                verb.Disabled = true;
-                verbs.Add(verb);
-                continue;
-            }
-
-            var owner = ent.Owner;
-            var localSlot = slot;
-            verb.Act = () => _itemSlots.TryEjectToHands(owner, localSlot, user, excludeUserAudio: true);
-            verbs.Add(verb);
-        }
-    }
-
-    private void AddEquipmentSlotOverviewVerbs(
-        Entity<WH40KArmorPlateHolderComponent> ent,
-        EntityUid user,
-        SortedSet<EquipmentVerb> verbs)
-    {
-        for (var slotIndex = 1; slotIndex <= ent.Comp.SlotCount; slotIndex++)
-        {
-            var slotId = WH40KArmorPlateHelper.GetSlotId(slotIndex);
-            if (!ent.Comp.PlateSlots.TryGetValue(slotId, out var slot))
-                continue;
-
-            var verb = new EquipmentVerb
             {
                 Category = PlateSlotsCategory,
                 Priority = WH40KArmorPlateHolderComponent.MaxSlots - slotIndex,
