@@ -42,7 +42,7 @@
     thresholds:
       0: Alive
       2000: Critical
-      2100: Dead
+      2001: Dead
     stateAlertDict:
       Alive: BorgHealth
       Critical: HumanCrit

@@ -47,25 +47,29 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      200: Critical
-      300: Dead
+      200: Dead
     stateAlertDict:
       Alive: BorgHealth
       Critical: HumanCrit
       Dead: BorgDead
     showOverlays: false
   - type: Hands
-    activeHandId: Right
+    activeHandId: hand_right
     canBeStripped: false
     hands:
-      Right:
+      hand_right:
         location: Right
       extra_hand_1:
         location: Middle
       extra_hand_2:
         location: Middle
-      Left:
+      hand_left:
         location: Left
+    sortedHands:
+    - hand_right
+    - extra_hand_1
+    - extra_hand_2
+    - hand_left
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 3
@@ -114,11 +118,13 @@
         Structural: 40
     angle: 80
   - type: Hands
-    activeHandId: Left
+    activeHandId: hand_left
     canBeStripped: false
     hands:
-      Left:
+      hand_left:
         location: Left
+    sortedHands:
+    - hand_left
 
 - type: entity
   id: MobWH40KServitor3
@@ -134,13 +140,16 @@
     - map: [ "enum.DamageStateVisualLayers.Base" ]
       state: ser3
   - type: Hands
-    activeHandId: Right
+    activeHandId: hand_right
     canBeStripped: false
     hands:
-      Right:
+      hand_right:
         location: Right
-      Left:
+      hand_left:
         location: Left
+    sortedHands:
+    - hand_right
+    - hand_left
   - type: Loadout
     prototypes:
     - WH40KSer3

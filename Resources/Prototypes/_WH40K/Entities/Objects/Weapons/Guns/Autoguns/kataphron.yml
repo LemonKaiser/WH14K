@@ -6,7 +6,7 @@
     sprite: _WH40K/Objects/Weapons/Guns/Rifles/heavy_electric_arc.rsi
     state: base
   - type: Gun
-    fireRate: 5
+    fireRate: 1.5
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -21,13 +21,17 @@
     containers:
       ballistic-ammo: !type:Container
   - type: BallisticAmmoProvider
-    capacity: 12
+    capacity: 15
     proto: BulletHeavyElectricArc
     cycleable: false
   - type: BallisticAmmoSelfRefiller
-    autoRefillRate: 0.5s
+    autoRefillRate: 1.5s
     firingPausesAutoRefill: true
-    autoRefillPauseDuration: 0.5s
+    autoRefillPauseDuration: 1.5s
   - type: Unremoveable
   - type: Item
     size: Huge
+  - type: AimingCamera
+    maxOffset: 7
+    pvsIncrease: 0.6
+    requireWield: false

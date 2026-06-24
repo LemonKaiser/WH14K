@@ -759,6 +759,6 @@
     walkSpeedModifier: 0.1
     sprintSpeedModifier: 0.1
   - type: StaminaDamageOnCollide
-    damage: 15
+    damage: 5
   - type: TimedDespawn
     lifetime: 0.05
