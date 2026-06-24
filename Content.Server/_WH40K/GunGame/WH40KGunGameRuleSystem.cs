@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Combat;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -7,17 +8,22 @@ using Content.Server.KillTracking;
 using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.RoundEnd;
+using Content.Server.Shuttles.Systems;
 using Content.Server.Station.Systems;
 using Content.Server._WH40K.MetaProgress;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Gravity;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
+using Content.Shared.Strip.Components;
+using Content.Shared._WH40K.Cinematic;
 using Content.Shared._WH40K.GunGame;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -40,6 +46,10 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private WH40KMetaProgressSystem _metaProgress = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private ShuttleSystem _shuttles = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -75,6 +85,7 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         component.LastTimerStopped = false;
         component.PlacementRewardsGranted = false;
         ClearKillFeedState();
+        ApplyMapStabilitySafeguards();
 
         var pool = component.WeaponPool.ToList();
         _random.Shuffle(pool);
@@ -96,6 +107,12 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         component.PlayerProfiles.Clear();
         ClearStandingsHud();
         ClearRoundTimerHud();
+
+        var query = EntityQueryEnumerator<WH40KGunGamePlayerComponent>();
+        while (query.MoveNext(out var playerUid, out var playerComp))
+        {
+            RemovePlayerProtection(playerUid, playerComp);
+        }
 
         if (!TryGetActiveRule(out _, out _))
             _protectionActive = false;
@@ -158,12 +175,13 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         if (args.NewMobState != MobState.Critical && args.NewMobState != MobState.Dead)
             return;
 
-        if (!HasComp<WH40KGunGamePlayerComponent>(args.Target))
+        if (!TryComp<WH40KGunGamePlayerComponent>(args.Target, out var playerComp))
             return;
 
         if (!TryGetActiveRule(out var ruleEntity, out var rule))
             return;
 
+        RemovePlayerProtection(args.Target, playerComp);
         RemComp<WH40KGunGamePlayerComponent>(args.Target);
 
         NetUserId victimUserId;

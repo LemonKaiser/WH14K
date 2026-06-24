@@ -124,6 +124,12 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
             }
 
+            var beforeIgnite = new BeforeIgniteOnCollideEvent(uid);
+            RaiseLocalEvent(otherEnt, ref beforeIgnite);
+
+            if (beforeIgnite.Cancelled)
+                return;
+
             flammable.FireStacks += component.FireStacks;
             Ignite(otherEnt, uid, flammable);
             component.Count--;

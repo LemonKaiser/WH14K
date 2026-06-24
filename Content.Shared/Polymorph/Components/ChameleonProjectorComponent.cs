@@ -38,12 +38,42 @@ public sealed partial class ChameleonProjectorComponent : Component
     public EntityUid? NoRotActionEntity;
 
     /// <summary>
+    /// Whether disguising should grant the rotation toggle action.
+    /// </summary>
+    [DataField]
+    public bool ProvideNoRotAction = true;
+
+    /// <summary>
     /// Action for anchoring your disguise in place.
     /// </summary>
     [DataField]
     public EntProtoId AnchorAction = "ActionDisguiseAnchor";
     [DataField]
     public EntityUid? AnchorActionEntity;
+
+    /// <summary>
+    /// Whether hand interaction with the disguise should reveal the user.
+    /// </summary>
+    [DataField]
+    public bool RevealOnInteract = true;
+
+    /// <summary>
+    /// Whether trying to pick the disguise up should reveal the user.
+    /// </summary>
+    [DataField]
+    public bool RevealOnPickup = true;
+
+    /// <summary>
+    /// Whether attempting to insert the disguise into storage should reveal the user.
+    /// </summary>
+    [DataField]
+    public bool RevealOnStorageInsert = true;
+
+    /// <summary>
+    /// Whether shutting down the projector should reveal the disguised user.
+    /// </summary>
+    [DataField]
+    public bool RevealOnProjectorShutdown = true;
 
     /// <summary>
     /// Minimum health to give the disguise.

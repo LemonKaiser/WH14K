@@ -656,7 +656,7 @@
 
 - type: loadoutGroup
   id: WH40KChosenMelee
-  name: loadout-group-wh40k-sergeant-melee
+  name: loadout-group-wh40k-chosen-melee
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword

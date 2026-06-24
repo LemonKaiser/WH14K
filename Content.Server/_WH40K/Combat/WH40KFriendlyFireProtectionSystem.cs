@@ -7,6 +7,8 @@ using Content.Shared.Damage.Events;
 using Content.Shared.Electrocution;
 using Content.Shared.Ensnaring;
 using Content.Shared.Ensnaring.Components;
+using Content.Shared.Atmos;
+using Content.Shared.Atmos.Components;
 using Robust.Shared.Configuration;
 
 namespace Content.Server._WH40K.Combat;
@@ -19,7 +21,7 @@ public sealed partial class WH40KFriendlyFireProtectionSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private WH40KAttackerResolverSystem _attackerResolver = default!;
-    [Dependency] private WH40KTeamBattleRuleSystem _teamRule = default!;
+    [Dependency] private WH40KTeamRuleFacadeSystem _teamRule = default!;
 
     public override void Initialize()
     {
@@ -29,6 +31,7 @@ public sealed partial class WH40KFriendlyFireProtectionSystem : EntitySystem
         SubscribeLocalEvent<DamageableComponent, ElectrocutionAttemptEvent>(OnElectrocutionAttempt);
         SubscribeLocalEvent<EnsnaringComponent, BeforeEnsnareAttemptEvent>(OnBeforeEnsnareAttempt);
         SubscribeLocalEvent<StunOnCollideComponent, BeforeStunOnCollideEvent>(OnBeforeStunOnCollide);
+        SubscribeLocalEvent<FlammableComponent, BeforeIgniteOnCollideEvent>(OnBeforeIgniteOnCollide);
     }
 
     private void OnBeforeStaminaDamage(Entity<StaminaComponent> ent, ref BeforeStaminaDamageEvent args)
@@ -64,6 +67,15 @@ public sealed partial class WH40KFriendlyFireProtectionSystem : EntitySystem
             return;
 
         if (ShouldBlockFriendlyEffect(args.Target, args.Source))
+            args.Cancelled = true;
+    }
+
+    private void OnBeforeIgniteOnCollide(Entity<FlammableComponent> ent, ref BeforeIgniteOnCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (ShouldBlockFriendlyEffect(ent.Owner, args.Source))
             args.Cancelled = true;
     }
 

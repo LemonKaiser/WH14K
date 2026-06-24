@@ -1,0 +1,33 @@
+wh40k-prop-hunt-title = Охота на пропы
+wh40k-prop-hunt-description = Прячься под видом предметов, продержись 10 минут за прячущихся или найди всех до конца времени за ищущих.
+wh40k-prop-hunt-team-seekers = ищущие
+wh40k-prop-hunt-team-hiders = прячущиеся
+wh40k-prop-hunt-winner-team = Победившая команда: {$team}
+wh40k-prop-hunt-best-seeker = Лучший ищущий: {$player} с {$kills} убийствами
+wh40k-prop-hunt-morph-invalid = В это превращаться нельзя.
+wh40k-prop-hunt-anchor-no-prop = Сначала превратись в предмет.
+wh40k-prop-hunt-invisibility-no-prop = Невидимость доступна только в облике предмета.
+wh40k-prop-hunt-late-join-closed = Позднее присоединение закрыто. Вы вошли как наблюдатель.
+wh40k-prop-hunt-no-spawn = Не найден корректный спавн для режима «Охота на пропы». Вы вошли как наблюдатель.
+wh40k-prop-hunt-seeker-countdown-title = Ищущие будут выпущены через
+wh40k-prop-hunt-paused-waiting-players = Режим «Охота на пропы» поставлен на паузу, пока не зайдут {$players} активных игрока.
+wh40k-prop-hunt-paused-resumed = Игроков достаточно. Режим «Охота на пропы» продолжается.
+wh40k-prop-hunt-pulse-result = Сканер движения: рядом {$count} прячущихся.
+
+job-name-prophunt-player = игрок
+job-description-prophunt-player = Участник мини-режима «Охота на пропы».
+
+wh40k-prop-hunt-action-morph-name = Метаморфоза
+wh40k-prop-hunt-action-morph-desc = Превратитесь в ближайший предмет. Вернуться в исходный облик нельзя.
+wh40k-prop-hunt-action-anchor-name = Переключить закрепление
+wh40k-prop-hunt-action-anchor-desc = Закрепите себя на месте или снимите закрепление, чтобы снова двигаться.
+wh40k-prop-hunt-action-honk-name = Гудок
+wh40k-prop-hunt-action-honk-desc = Издайте громкий гудок, чтобы приманить ищущих.
+wh40k-prop-hunt-action-invisible-name = Исчезновение
+wh40k-prop-hunt-action-invisible-desc = Полностью станьте невидимым на 5 секунд. Можно использовать только один раз за раунд.
+wh40k-prop-hunt-action-smoke-name = Дым
+wh40k-prop-hunt-action-smoke-desc = Выпустите облако дыма. Можно использовать только один раз за раунд.
+wh40k-prop-hunt-action-pulse-name = Импульс локатора
+wh40k-prop-hunt-action-pulse-desc = Подсчитать ближайших прячущихся в радиусе 10 тайлов, не раскрывая их точное местоположение.
+wh40k-prop-hunt-action-dash-name = Рывок
+wh40k-prop-hunt-action-dash-desc = Стремительно рвануть к выбранной точке.

@@ -65,6 +65,9 @@
   id: JobGunGamePlayer
 
 - type: playTimeTracker
+  id: JobPropHuntPlayer
+
+- type: playTimeTracker
   id: JobColonel
 
 - type: playTimeTracker

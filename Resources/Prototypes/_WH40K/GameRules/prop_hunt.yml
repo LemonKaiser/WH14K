@@ -1,0 +1,76 @@
+- type: entity
+  id: WH40KPropHunt
+  parent: BaseGameRule
+  name: prop hunt rule
+  suffix: "[PropHunt]"
+  components:
+  - type: WH40KPropHuntRule
+    fallbackJob: PropHuntPlayer
+    roundDuration: 600
+    restartDelay: 10
+    lateJoinGraceDuration: 30
+    seekerFreezeDuration: 30
+    invisibilityDuration: 5
+    minimumPlayersToRun: 2
+    winnerRewardXp: 500
+    hiderJumpsuit: ClothingUniformJumpsuitColorBlue
+    hiderShoes: ClothingShoesColorBlue
+    seekerJumpsuit: ClothingUniformJumpsuitColorRed
+    seekerShoes: ClothingShoesColorRed
+    seekerRangedWeapon: WH40KPropHuntWeaponLaserLasgun
+    morphAction: ActionWH40KPropHuntMorph
+    anchorAction: ActionWH40KPropHuntAnchor
+    honkAction: ActionWH40KPropHuntHonk
+    invisibilityAction: ActionWH40KPropHuntInvisible
+    smokeAction: ActionWH40KPropHuntSmoke
+    seekerPulseAction: ActionWH40KPropHuntSeekerPulse
+    seekerDashAction: ActionWH40KPropHuntSeekerDash
+    smokeGrenadePrototype: SmokeGrenade
+    disguisePrototype: ChameleonDisguise
+    morphProjectorPrototype: WH40KPropHuntMorphProjector
+    periodicRevealInterval: 300
+    periodicRevealDuration: 8
+    seekerPulseRadius: 10
+    seekerDashRange: 10
+    seekerDashSpeed: 26
+    morphWhitelist:
+      components:
+      - Anchorable
+    morphBlacklist:
+      components:
+      - Actor
+      - Door
+      - MapGrid
+      - MindContainer
+      - MobState
+      - Pda
+      - SubFloorHide
+      tags:
+      - Catwalk
+      - Wall
+      - Window
+    morphAllowedPrototypes:
+    - BarricadeSandbags
+    - Brutepack
+    - Brutepack1
+    - FireExtinguisher
+    - FloorDrain
+    - WH40KFloorDrain
+    - MechanicusBanner
+    - Ointment
+    - Ointment1
+    - Shovel
+    - WHChaosBanner
+    - WHGvardiaBanner
+    - WHGvardiaBanner2
+    - WHMedicalBanner
+    - WHTauBanner
+    - WHSapperShovel
+    morphAllowedPrototypePrefixes:
+    - Banner
+    - Brutepack
+    - MapProp
+    - Ointment
+    - PottedPlant
+    - Poweredlight
+    - AlwaysPoweredLight

@@ -35,8 +35,9 @@ public sealed partial class WH40KMetaAchievementLoadoutEffect : LoadoutEffect
         var metaProgress = collection.Resolve<ISharedWH40KMetaProgressManager>();
         if (!metaProgress.TryHasCompletedAchievement(session, Achievement, out var completed))
         {
-            reason = FormattedMessage.FromUnformatted(Loc.GetString("loadout-group-wh40k-meta-progress-loading"));
-            return false;
+            // Don't strip persisted loadout selections while meta progress is still loading.
+            reason = FormattedMessage.Empty;
+            return true;
         }
 
         if (completed)

@@ -281,10 +281,10 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthRight2]
     teamLatheRecipeUnlocks:
-      Imperium: [WH40KRecipeWeaponLaserPlasmagun, WH40KRecipePlasmGunPowerCell, WH40KRecipePlasmPistolPowerCell]
+      Imperium: [WH40KRecipeWeaponLaserPlasmagun, WH40KRecipeWeaponLaserPlasmaPistol, WH40KRecipePlasmGunPowerCell, WH40KRecipePlasmPistolPowerCell]
       Heretics: [WH40KRecipeWeaponLaserPlasmaPistol, WH40KRecipePlasmGunPowerCell, WH40KRecipePlasmPistolPowerCell]
     teamCargoProductUnlocks:
-      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
+      Imperium: [WH40KImperiumPlasmaGun, WH40KImperiumPlasmaPistol, WH40KImperiumPlasmGunCell, WH40KImperiumPlasmPistolCell]
       Heretics: [WH40KHereticsPlasmaPistol, WH40KHereticsPlasmGunCell, WH40KHereticsPlasmPistolCell]
   - id: wep_left_3
     domain: weaponry

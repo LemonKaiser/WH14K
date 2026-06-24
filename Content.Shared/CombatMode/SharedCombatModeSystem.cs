@@ -58,6 +58,24 @@ public abstract partial class SharedCombatModeSystem : EntitySystem
         component.CanDisarm = canDisarm;
     }
 
+    public void SetCombatActionEnabled(EntityUid entity, bool enabled, CombatModeComponent? component = null)
+    {
+        if (!Resolve(entity, ref component))
+            return;
+
+        if (!enabled)
+        {
+            SetInCombatMode(entity, false, component);
+            _actionsSystem.RemoveAction(entity, component.CombatToggleActionEntity);
+            component.CombatToggleActionEntity = null;
+            Dirty(entity, component);
+            return;
+        }
+
+        _actionsSystem.AddAction(entity, ref component.CombatToggleActionEntity, component.CombatToggleAction);
+        Dirty(entity, component);
+    }
+
     public bool IsInCombatMode(EntityUid? entity, CombatModeComponent? component = null)
     {
         return entity != null && Resolve(entity.Value, ref component, false) && component.IsInCombatMode;

@@ -92,4 +92,5 @@
   weight: -100
   roles:
   - GunGamePlayer
+  - PropHuntPlayer
   editorHidden: true

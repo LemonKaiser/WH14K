@@ -49,13 +49,14 @@ public sealed partial class WH40KGunGameRuleSystem
         _mind.TransferTo(mindId, mob, mind: mind);
 
         EnsureComp<KillTrackerComponent>(mob);
-        EnsureComp<WH40KGunGamePlayerComponent>(mob);
+        var playerComp = EnsureComp<WH40KGunGamePlayerComponent>(mob);
 
         var level = rule.PlayerLevel.GetValueOrDefault(player.UserId);
 
         EquipRandomClothing(mob, rule);
         GiveWeaponToPlayer(mob, level, rule);
         GiveBackupKnife(mob, rule);
+        ApplyPlayerProtection(mob, playerComp);
 
         rule.PlayerLevel.TryAdd(player.UserId, 0);
         rule.PlayerKills.TryAdd(player.UserId, 0);

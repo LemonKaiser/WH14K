@@ -1,9 +1,8 @@
 - type: entity
-  parent: [BaseItem, BaseGunWieldable]
+  parent: WeaponCombatShotgun
   id: WeaponChsCombatShotgun
   suffix: WH40K, Хаос
   components:
-  - type: GunRequiresWield
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun_inhands.rsi
@@ -13,42 +12,20 @@
     layers:
     - state: icon
       map: ["enum.GunVisualLayers.Base"]
+    - state: icon
+      visible: false
+      map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/chs_combat_shotgun_inhands.rsi
     quickEquip: false
     slots:
     - Back
     - suitStorage
-  - type: AmmoCounter
   - type: Gun
     maxAngle: 7
-    fireRate: 2
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot:
-      path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
-    soundEmpty:
-      path: /Audio/Weapons/Guns/Empty/empty.ogg
-  - type: WH40KGunPrediction
-  - type: MagazineAmmoProvider
-  - type: ItemSlots
-    slots:
-      gun_magazine:
-        name: Magazine
-        startingItem: MagazineCombatShotgun
-        priority: 2
-        whitelist:
-          tags:
-          - MagazineCombatShotgun
-        whitelistFailPopup: gun-magazine-whitelist-fail
-        insertSound: /Audio/Weapons/Guns/MagIn/smg_magin.ogg
-        ejectSound: /Audio/Weapons/Guns/MagOut/smg_magout.ogg
-  - type: ContainerContainer
-    containers:
-      gun_magazine: !type:ContainerSlot
-      gun_chamber: !type:ContainerSlot
-  - type: Appearance
   - type: ClothingSpeedModifier
     walkModifier: 0.97
     sprintModifier: 0.97
