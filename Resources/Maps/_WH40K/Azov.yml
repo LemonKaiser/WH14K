@@ -50532,7 +50532,7 @@ entities:
     - type: Transform
       pos: 162.5,36.5
       parent: 2
-- proto: DebugAPCRecharging
+- proto: WH40KDebugAPC
   entities:
   - uid: 7853
     components:

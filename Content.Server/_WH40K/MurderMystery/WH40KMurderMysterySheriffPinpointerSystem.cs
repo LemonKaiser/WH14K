@@ -13,8 +13,8 @@ namespace Content.Server._WH40K.MurderMystery;
 /// </summary>
 public sealed partial class WH40KMurderMysterySheriffPinpointerSystem : EntitySystem
 {
-    [Dependency] private readonly PinpointerSystem _pinpointer = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private PinpointerSystem _pinpointer = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
 

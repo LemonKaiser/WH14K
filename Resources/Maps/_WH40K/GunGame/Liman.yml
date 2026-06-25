@@ -6982,7 +6982,7 @@ entities:
       parent: 2
     - type: Stack
       count: 3
-- proto: DebugAPCRecharging
+- proto: WH40KDebugAPC
   entities:
   - uid: 404
     components:
