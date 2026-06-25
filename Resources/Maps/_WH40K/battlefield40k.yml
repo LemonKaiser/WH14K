@@ -54608,7 +54608,7 @@ entities:
       canCollide: False
     - type: InsideEntityStorage
       storage: 3701
-- proto: DebugAPCRecharging
+- proto: WH40KDebugAPC
   entities:
   - uid: 3810
     components:
