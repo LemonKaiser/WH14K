@@ -63,10 +63,10 @@
   - type: Clothing
     sprite: _WH40K/Clothing/Neck/Medals/Imperium/catachan_token.rsi
   - type: Battery
-    maxCharge: 520
-    startingCharge: 520
+    maxCharge: 400
+    startingCharge: 400
   - type: BatterySelfRecharger
-    autoRechargeRate: 4
+    autoRechargeRate: 2.5
   - type: EnergyDomeGenerator
     enabledOnSpawn: false
     globalEnabled: false
@@ -81,9 +81,27 @@
     autoResponseProfile: HoldLine
     bubbleDomePrototype: EnergyDomeSmallBlue
     wallDomePrototype: EnergyDomeSmallBlueDirected
-    activationEnergyCost: 18
+    activationEnergyCost: 16
     passiveEnergyDraw: 1.2
     damageEnergyDraw: 6
+    impactEnergyDrawMultiplier: 1.0
+    bubbleCostMultiplier: 1.0
+    wallCostMultiplier: 0.62
+    wallForwardOffset: 1.0
+    heatImpactMultiplier: 1.20
+    piercingImpactMultiplier: 1.25
+    otherImpactMultiplier: 1.0
+    burstWindow: 0.60
+    burstStepMultiplier: 0.15
+    burstMaxMultiplier: 1.95
+    stressEnabled: true
+    stressPerDamage: 0.0050
+    stressDecayPerSecond: 0.085
+    stressDecayInactiveMultiplier: 1.35
+    stressImpactEnergyMultiplier: 0.75
+    stressPassiveEnergyMultiplier: 0.50
+    stressBreakThreshold: 1.00
+    stressWarningThreshold: 0.62
     teamId: Imperium
     interiorRadiusMultiplier: 1.0
     linkEnabled: false

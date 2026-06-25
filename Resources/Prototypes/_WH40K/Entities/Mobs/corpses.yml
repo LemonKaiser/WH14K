@@ -6,7 +6,6 @@
   - type: Loadout
     prototypes:
     - VoxScoutGear
-    - MedicGear
     - GuardsmanGear
     - GuardsmanSpesSpecGear
     - GuardsmanHevSpecGear

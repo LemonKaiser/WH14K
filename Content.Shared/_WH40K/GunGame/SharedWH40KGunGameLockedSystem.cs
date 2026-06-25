@@ -20,9 +20,9 @@ public sealed partial class SharedWH40KGunGameLockedSystem : EntitySystem
     {
         SubscribeLocalEvent<WH40KGunGameLockedComponent, FellDownThrowAttemptEvent>(OnFellDownThrowAttempt);
         SubscribeLocalEvent<WH40KGunGameLockedComponent, ThrowItemAttemptEvent>(OnThrowItemAttempt);
+        SubscribeLocalEvent<HandsComponent, DropAttemptEvent>(OnDropAttempt);
         SubscribeLocalEvent<WH40KGunGameLockedComponent, ContainerGettingInsertedAttemptEvent>(OnInsertAttempt);
         SubscribeLocalEvent<WH40KGunGameLockedComponent, ItemSlotEjectAttemptEvent>(OnItemSlotEjectAttempt);
-        SubscribeLocalEvent<HandsComponent, DropAttemptEvent>(OnDropAttempt);
     }
 
     private static void OnFellDownThrowAttempt(Entity<WH40KGunGameLockedComponent> ent, ref FellDownThrowAttemptEvent args)
@@ -36,7 +36,16 @@ public sealed partial class SharedWH40KGunGameLockedSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnInsertAttempt(Entity<WH40KGunGameLockedComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
+    private void OnDropAttempt(EntityUid uid, HandsComponent comp, CancellableEntityEventArgs args)
+    {
+        if (_hands.TryGetActiveItem((uid, comp), out var activeItem)
+            && HasComp<WH40KGunGameLockedComponent>(activeItem))
+        {
+            args.Cancel();
+        }
+    }
+
+    private static void OnInsertAttempt(Entity<WH40KGunGameLockedComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
     {
         if (args.Container.ID == StorageComponent.ContainerId)
             args.Cancel();
@@ -48,15 +57,6 @@ public sealed partial class SharedWH40KGunGameLockedSystem : EntitySystem
             return;
 
         args.Cancelled = true;
-    }
-
-    private void OnDropAttempt(EntityUid uid, HandsComponent comp, CancellableEntityEventArgs args)
-    {
-        if (_hands.TryGetActiveItem((uid, comp), out var activeItem)
-            && HasComp<WH40KGunGameLockedComponent>(activeItem))
-        {
-            args.Cancel();
-        }
     }
 
     private bool IsBlockedAmmoSlot(EntityUid uid, ItemSlot slot)

@@ -49,9 +49,6 @@
     layers:
     - state: icon
       map: ["enum.GunVisualLayers.Base"]
-    - state: icon
-      visible: false
-      map: ["enum.GunVisualLayers.Mag"]
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi
     quickEquip: false

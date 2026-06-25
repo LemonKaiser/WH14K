@@ -39,7 +39,7 @@
     - WeaponRifleBolter
     - WeaponPistolBolter
     weaponCount: 30
-    finalWeapon: KitchenKnife
+    finalWeapon: WH40KGunGameGoldenWrench
     backupWeapon: CombatKnife
     roundDuration: 900
     respawnDelay: 5

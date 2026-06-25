@@ -5,7 +5,6 @@ using Content.Shared.Gravity;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Strip.Components;
-using Content.Shared._WH40K.Cinematic;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -13,8 +12,6 @@ namespace Content.Server._WH40K.GunGame;
 
 public sealed partial class WH40KGunGameRuleSystem
 {
-    private bool _protectionActive;
-
     public void InitializeProtection()
     {
         _damageProtection.RegisterHandler(OnBeforeDamageChanged);
@@ -22,7 +19,10 @@ public sealed partial class WH40KGunGameRuleSystem
 
     private void OnBeforeDamageChanged(EntityUid uid, ref BeforeDamageChangedEvent args)
     {
-        if (!_protectionActive)
+        if (args.Cancelled)
+            return;
+
+        if (!TryGetActiveRule(out _, out _))
             return;
 
         if (HasComp<MobStateComponent>(uid))
@@ -33,8 +33,6 @@ public sealed partial class WH40KGunGameRuleSystem
 
     private void ApplyPlayerProtection(EntityUid mob, WH40KGunGamePlayerComponent playerComp)
     {
-        EnsureComp<WH40KCinematicProtectedComponent>(mob);
-
         if (TryComp<HandsComponent>(mob, out var hands))
         {
             playerComp.PreviousHandsCanBeStripped = hands.CanBeStripped;
@@ -50,8 +48,6 @@ public sealed partial class WH40KGunGameRuleSystem
 
     private void RemovePlayerProtection(EntityUid mob, WH40KGunGamePlayerComponent playerComp)
     {
-        RemComp<WH40KCinematicProtectedComponent>(mob);
-
         if (TryComp<HandsComponent>(mob, out var hands))
             _hands.SetCanBeStripped((mob, hands), playerComp.PreviousHandsCanBeStripped);
 
