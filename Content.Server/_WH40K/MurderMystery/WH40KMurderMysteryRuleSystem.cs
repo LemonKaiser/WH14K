@@ -13,6 +13,7 @@ using Content.Server.Popups;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Spawners.Components;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server._WH40K.MetaProgress;
 using Content.Server._WH40K.Stats;
@@ -135,6 +136,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
 
         _sawmill = Logger.GetSawmill("wh40k.murdermystery");
 
+        SubscribeLocalEvent<RulePlayerSpawningEvent>(OnRulePlayerSpawning);
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnBeforeSpawn);
         SubscribeLocalEvent<RefreshLateJoinAllowedEvent>(OnRefreshLateJoinAllowed);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged, before: new[] { typeof(KillTrackingSystem) });
@@ -269,6 +271,37 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         {
             FinishRound(rule, WH40KMurderMysteryVictoryTeam.Innocents);
         }
+    }
+
+    private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
+    {
+        if (!TryGetActiveRule(out var ruleEntity, out var rule))
+            return;
+
+        if (rule.PlayerRoles.Count > 0 || ev.PlayerPool.Count == 0)
+            return;
+
+        EntityUid station = EntityUid.Invalid;
+        var stationQuery = EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent>();
+        while (stationQuery.MoveNext(out var uid, out _, out _))
+        {
+            station = uid;
+            break;
+        }
+
+        if (station == EntityUid.Invalid)
+            return;
+
+        foreach (var player in ev.PlayerPool.ToList())
+        {
+            if (!ev.Profiles.TryGetValue(player.UserId, out var profile))
+                continue;
+
+            SpawnMurderMysteryPlayer(player, profile, station, ruleEntity, rule, lateJoin: false);
+            GameTicker.PlayerJoinGame(player);
+        }
+
+        ev.PlayerPool.Clear();
     }
 
     private void OnBeforeSpawn(PlayerBeforeSpawnEvent ev)

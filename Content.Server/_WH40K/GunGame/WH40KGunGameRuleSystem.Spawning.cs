@@ -7,6 +7,7 @@ using Content.Shared._WH40K.GunGame;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Preferences;
@@ -55,7 +56,8 @@ public sealed partial class WH40KGunGameRuleSystem
 
         EquipRandomClothing(mob, rule);
         GiveWeaponToPlayer(mob, level, rule);
-        GiveBackupKnife(mob, rule);
+        if (level < rule.WeaponSequence.Count - 1)
+            GiveBackupKnife(mob, playerComp, rule);
         ApplyPlayerProtection(mob, playerComp);
 
         rule.PlayerLevel.TryAdd(player.UserId, 0);
@@ -218,13 +220,30 @@ public sealed partial class WH40KGunGameRuleSystem
         EnsureComp<WH40KGunGameLockedComponent>(weapon);
         playerComp.CurrentWeapon = weapon;
 
+        if (level == rule.WeaponSequence.Count - 1 &&
+            playerComp.BackupWeapon is { } backup && !TerminatingOrDeleted(backup))
+        {
+            Del(backup);
+            playerComp.BackupWeapon = null;
+        }
+
         _hands.TryPickupAnyHand(mob, weapon);
     }
 
-    private void GiveBackupKnife(EntityUid mob, WH40KGunGameRuleComponent rule)
+    private void GiveBackupKnife(EntityUid mob, WH40KGunGamePlayerComponent playerComp, WH40KGunGameRuleComponent rule)
     {
+        if (playerComp.BackupWeapon is { } oldBackup && !TerminatingOrDeleted(oldBackup))
+            Del(oldBackup);
+
         var knife = Spawn(rule.BackupWeapon, _transform.GetMapCoordinates(mob));
         EnsureComp<WH40KGunGameLockedComponent>(knife);
+        playerComp.BackupWeapon = knife;
+
+        if (_inventory.TryEquip(mob, knife, "pocket1"))
+            return;
+        if (_inventory.TryEquip(mob, knife, "pocket2"))
+            return;
+
         _hands.TryPickupAnyHand(mob, knife);
     }
 }

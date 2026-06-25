@@ -15,6 +15,7 @@ using Content.Server.Popups;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Systems;
 using Content.Server.Spawners.Components;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server._WH40K.Chaplain.Components;
 using Content.Server._WH40K.MetaProgress;
@@ -120,6 +121,7 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
     [Dependency] private TriggerSystem _trigger = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private WH40KDamageProtectionSystem _damageProtection = default!;
 
     private readonly Dictionary<NetUserId, RecentWeaponUse> _recentWeaponUses = new();
     private ISawmill _sawmill = default!;
@@ -135,7 +137,7 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnBeforeSpawn);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged, before: new[] { typeof(KillTrackingSystem) });
-        SubscribeLocalEvent<TransformComponent, BeforeDamageChangedEvent>(OnBeforeDamageChanged);
+        _damageProtection.RegisterHandler(OnBeforeDamageChanged);
 
         SubscribeLocalEvent<WH40KPropHuntPlayerComponent, ContainerGettingInsertedAttemptEvent>(OnContainerInsertAttempt);
         SubscribeLocalEvent<WH40KPropHuntPlayerComponent, WH40KPropHuntMorphActionEvent>(OnMorphAction);
@@ -255,10 +257,21 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
 
     private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
     {
-        if (!TryGetActiveRule(out _, out var rule))
+        if (!TryGetActiveRule(out var ruleEntity, out var rule))
             return;
 
         if (rule.PlayerRoles.Count > 0 || ev.PlayerPool.Count == 0)
+            return;
+
+        EntityUid station = EntityUid.Invalid;
+        var stationQuery = EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent>();
+        while (stationQuery.MoveNext(out var uid, out _, out _))
+        {
+            station = uid;
+            break;
+        }
+
+        if (station == EntityUid.Invalid)
             return;
 
         var pool = ev.PlayerPool.ToList();
@@ -273,8 +286,14 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
             rule.PlayerKills.TryAdd(player.UserId, 0);
 
             if (ev.Profiles.TryGetValue(player.UserId, out var profile))
+            {
                 RememberPlayerProfile(player.UserId, profile, rule);
+                SpawnPropHuntPlayer(player, profile, station, ruleEntity, rule, lateJoin: false);
+                GameTicker.PlayerJoinGame(player);
+            }
         }
+
+        ev.PlayerPool.Clear();
     }
 
     private void OnRefreshLateJoinAllowed(RefreshLateJoinAllowedEvent ev)
@@ -355,7 +374,7 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
         QueueDel(args.Target);
     }
 
-    private void OnBeforeDamageChanged(EntityUid uid, TransformComponent component, ref BeforeDamageChangedEvent args)
+    private void OnBeforeDamageChanged(EntityUid uid, ref BeforeDamageChangedEvent args)
     {
         if (args.Cancelled || !HasHarmfulDamage(args.Damage))
             return;
@@ -500,12 +519,18 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
 
     private void OnGunShot(EntityUid uid, TransformComponent component, ref GunShotEvent args)
     {
+        if (!TryGetActiveRule(out _, out _))
+            return;
+
         RecordRecentWeaponUse(args.User, uid);
     }
 
     private void OnMeleeHit(EntityUid uid, TransformComponent component, ref MeleeHitEvent args)
     {
         if (!args.IsHit)
+            return;
+
+        if (!TryGetActiveRule(out _, out _))
             return;
 
         RecordRecentWeaponUse(args.User, uid);

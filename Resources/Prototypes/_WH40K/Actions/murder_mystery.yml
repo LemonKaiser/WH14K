@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KMurderMysterySmoke
-  name: wh40k-murder-mystery-action-smoke-name
-  description: wh40k-murder-mystery-action-smoke-desc
   components:
   - type: Action
     icon:
@@ -16,8 +14,6 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KMurderMysteryFlash
-  name: wh40k-murder-mystery-action-flash-name
-  description: wh40k-murder-mystery-action-flash-desc
   components:
   - type: Action
     icon:

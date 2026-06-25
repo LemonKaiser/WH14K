@@ -13,6 +13,8 @@
       - type: StationJobs
         availableJobs:
           GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]
 
 - type: gameMap
   id: WH40KGunGameDm01Entryway
@@ -29,6 +31,8 @@
       - type: StationJobs
         availableJobs:
           GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]
 
 - type: gameMap
   id: WH40KGunGameLiman
@@ -44,3 +48,5 @@
       - type: StationJobs
         availableJobs:
           GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]

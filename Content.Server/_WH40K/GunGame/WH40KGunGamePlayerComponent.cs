@@ -7,6 +7,9 @@ public sealed partial class WH40KGunGamePlayerComponent : Component
     public EntityUid? CurrentWeapon;
 
     [ViewVariables]
+    public EntityUid? BackupWeapon;
+
+    [ViewVariables]
     public bool PreviousHandsCanBeStripped = true;
 
     [ViewVariables]

@@ -1,8 +1,6 @@
 - type: entity
   id: WH40KMurderMysteryKnife
   parent: BaseKnife
-  name: ent-WH40KMurderMysteryKnife
-  description: ent-WH40KMurderMysteryKnife.desc
   components:
   - type: Tag
     tags:
@@ -50,8 +48,6 @@
 - type: entity
   id: WH40KMurderMysterySheriffRevolver
   parent: BaseItem
-  name: ent-WH40KMurderMysterySheriffRevolver
-  description: ent-WH40KMurderMysterySheriffRevolver.desc
   components:
   - type: Sprite
     sprite: Objects/Weapons/Guns/Revolvers/mateba.rsi

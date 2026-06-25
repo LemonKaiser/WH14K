@@ -9,9 +9,11 @@ using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.RoundEnd;
 using Content.Server.Shuttles.Systems;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server._WH40K.MetaProgress;
 using Content.Shared.GameTicking;
+using Content.Shared.Station.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Gravity;
 using Content.Shared.Hands.EntitySystems;
@@ -65,6 +67,7 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         InitializeKillFeed();
         InitializeStandings();
 
+        SubscribeLocalEvent<RulePlayerSpawningEvent>(OnRulePlayerSpawning);
         SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnBeforeSpawn);
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged, before: new[] { typeof(KillTrackingSystem) });
@@ -95,7 +98,6 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         component.WeaponSequence = pool.Take(take).Select(p => new EntProtoId(p.Id)).ToList();
         component.WeaponSequence.Add(component.FinalWeapon);
 
-        _protectionActive = true;
         PushRoundTimer(component, force: true);
         _sawmill.Info($"Gun Game started with {component.WeaponSequence.Count} weapons in sequence");
     }
@@ -113,10 +115,8 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
         while (query.MoveNext(out var playerUid, out var playerComp))
         {
             RemovePlayerProtection(playerUid, playerComp);
+            RemCompDeferred<WH40KGunGamePlayerComponent>(playerUid);
         }
-
-        if (!TryGetActiveRule(out _, out _))
-            _protectionActive = false;
     }
 
     protected override void AppendRoundEndText(EntityUid uid, WH40KGunGameRuleComponent component, GameRuleComponent gameRule, ref RoundEndTextAppendEvent args)
@@ -146,6 +146,37 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
                     ("level", GetDisplayedLevel(level, totalLevels)),
                     ("total", totalLevels)));
         }
+    }
+
+    private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
+    {
+        if (!TryGetActiveRule(out var ruleEntity, out var rule))
+            return;
+
+        if (ev.PlayerPool.Count == 0)
+            return;
+
+        EntityUid station = EntityUid.Invalid;
+        var stationQuery = EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent>();
+        while (stationQuery.MoveNext(out var uid, out _, out _))
+        {
+            station = uid;
+            break;
+        }
+
+        if (station == EntityUid.Invalid)
+            return;
+
+        foreach (var player in ev.PlayerPool.ToList())
+        {
+            if (!ev.Profiles.TryGetValue(player.UserId, out var profile))
+                continue;
+
+            SpawnGunGamePlayer(player, profile, station, ruleEntity, rule);
+            GameTicker.PlayerJoinGame(player);
+        }
+
+        ev.PlayerPool.Clear();
     }
 
     private void OnBeforeSpawn(PlayerBeforeSpawnEvent ev)

@@ -46,7 +46,10 @@ namespace Content.IntegrationTests.Tests
             "CentComm",
             "Dart",
             "WH40KWaveDefenceTest",
-            "WH40KWaveDefenceRiotStag"
+            "WH40KWaveDefenceRiotStag",
+            "WH40KGunGameDm01Entryway",
+            "WH40KGunGameLiman",
+            "WH40KGunGameMeteorArena"
         };
 
         private static readonly string[] Grids =

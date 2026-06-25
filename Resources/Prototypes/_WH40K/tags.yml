@@ -1,4 +1,7 @@
 - type: Tag
+  id: WH40KGunGameFinalWeapon
+
+- type: Tag
   id: LasgunPowerCell
 
 - type: Tag
