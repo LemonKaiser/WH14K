@@ -40,6 +40,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -126,6 +127,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
     [Dependency] private TriggerSystem _trigger = default!;
     [Dependency] private WH40KDamageProtectionSystem _damageProtection = default!;
     [Dependency] private WH40KMeleeProtectionSystem _meleeProtection = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     private readonly HashSet<EntityUid> _flashTargets = [];
     private ISawmill _sawmill = default!;
@@ -161,6 +163,10 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         SubscribeLocalEvent<WH40KMurderMysterySheriffRevolverComponent, GetVerbsEvent<Verb>>(OnSheriffRevolverAnyVerbs);
 
         SubscribeLocalEvent<WH40KMurderMysterySheriffBulletComponent, ProjectileHitEvent>(OnSheriffBulletHit);
+
+        SubscribeLocalEvent<WH40KMurderMysteryClueComponent, ActivateInWorldEvent>(OnClueActivate);
+        SubscribeLocalEvent<WH40KMurderMysteryClueComponent, GetVerbsEvent<ActivationVerb>>(OnClueActivationVerbs);
+        SubscribeLocalEvent<WH40KMurderMysteryClueComponent, GettingPickedUpAttemptEvent>(OnCluePickupAttempt);
     }
 
     protected override void Started(EntityUid uid, WH40KMurderMysteryRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
@@ -181,6 +187,8 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         component.LastTimerElapsedSeconds = -1;
         component.LastTimerStopped = false;
         component.NextBloodCleanupAt = TimeSpan.Zero;
+        component.NextClueSpawnAt = TimeSpan.Zero;
+        component.CluesCollected.Clear();
 
         ApplyMapStabilitySafeguards();
         PushRoundTimer(component, force: true);
@@ -213,6 +221,20 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
                 QueueDel(revolverUid);
         }
 
+        var pinpointerQuery = EntityQueryEnumerator<WH40KMurderMysterySheriffPinpointerComponent>();
+        while (pinpointerQuery.MoveNext(out var pinpointerUid, out _))
+        {
+            if (!TerminatingOrDeleted(pinpointerUid))
+                QueueDel(pinpointerUid);
+        }
+
+        var clueQuery = EntityQueryEnumerator<WH40KMurderMysteryClueComponent>();
+        while (clueQuery.MoveNext(out var clueUid, out _))
+        {
+            if (!TerminatingOrDeleted(clueUid))
+                QueueDel(clueUid);
+        }
+
         component.PlayerRoles.Clear();
         component.PlayerProfiles.Clear();
         ClearRoundTimerHud();
@@ -237,6 +259,7 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
 
         UpdateRoundProgress(rule);
         RefreshSheriffRoles(rule);
+        UpdateClueSpawning(rule);
         CleanupBlood(rule);
         PushRoundTimer(rule);
 
@@ -294,8 +317,9 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
 
         foreach (var player in ev.PlayerPool.ToList())
         {
-            if (!ev.Profiles.TryGetValue(player.UserId, out var profile))
-                continue;
+            var profile = ev.Profiles.TryGetValue(player.UserId, out var p)
+                ? p
+                : HumanoidCharacterProfile.DefaultWithSpecies();
 
             SpawnMurderMysteryPlayer(player, profile, station, ruleEntity, rule, lateJoin: false);
             GameTicker.PlayerJoinGame(player);
@@ -646,8 +670,11 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         var mob = _stationSpawning.SpawnPlayerMob(spawn, rule.FallbackJob, profile, station);
         _mind.TransferTo(mindId, mob, mind: mind);
 
+        EquipRandomClothing(mob, rule);
+
         var playerComp = EnsureComp<WH40KMurderMysteryPlayerComponent>(mob);
         ApplyPlayerProtection(mob, playerComp);
+        EnsureSheriffPinpointer(mob, rule, playerComp);
 
         if (rule.RolesAssigned && rule.PlayerRoles.TryGetValue(player.UserId, out var assignedRole))
             ApplyRole(mob, player.UserId, playerComp, assignedRole, rule, announce: false, grantStartingWeapon: true);
@@ -902,6 +929,28 @@ public sealed partial class WH40KMurderMysteryRuleSystem : GameRuleSystem<WH40KM
         var spawned = Spawn(rule.SheriffRevolverPrototype, _transform.GetMapCoordinates(mob));
         if (!TryInsertIntoBackpack(mob, spawned) && !_hands.TryPickupAnyHand(mob, spawned))
             _transform.DropNextTo(spawned, mob);
+    }
+
+    private void EnsureSheriffPinpointer(EntityUid mob, WH40KMurderMysteryRuleComponent rule, WH40KMurderMysteryPlayerComponent playerComp)
+    {
+        if (playerComp.SheriffPinpointer is { } existing && !TerminatingOrDeleted(existing))
+            return;
+
+        var spawned = Spawn(rule.SheriffPinpointerPrototype, _transform.GetMapCoordinates(mob));
+        playerComp.SheriffPinpointer = spawned;
+
+        var unremovable = EnsureComp<UnremoveableComponent>(spawned);
+        unremovable.DeleteOnDrop = false;
+        playerComp.ProtectedItems.Add(spawned);
+
+        if (_inventory.TryEquip(mob, spawned, "pocket1"))
+            return;
+        if (_inventory.TryEquip(mob, spawned, "pocket2"))
+            return;
+        if (_hands.TryPickupAnyHand(mob, spawned))
+            return;
+
+        _transform.DropNextTo(spawned, mob);
     }
 
     private bool TryInsertIntoBackpack(EntityUid mob, EntityUid item)

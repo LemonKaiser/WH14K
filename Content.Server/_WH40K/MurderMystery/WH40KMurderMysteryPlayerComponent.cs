@@ -31,4 +31,7 @@ public sealed partial class WH40KMurderMysteryPlayerComponent : Component
 
     [ViewVariables]
     public HashSet<EntityUid> ProtectedItems = new();
+
+    [ViewVariables]
+    public EntityUid? SheriffPinpointer;
 }

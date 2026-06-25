@@ -18,6 +18,15 @@ wh40k-murder-mystery-role-promoted-sheriff = You picked up the sheriff's revolve
 wh40k-murder-mystery-knife-locked = Only the owning murderer can interact with this knife.
 wh40k-murder-mystery-revolver-locked = Murderers cannot pick up or use the sheriff's revolver.
 
+wh40k-murder-mystery-pinpointer-target = sheriff revolver
+wh40k-murder-mystery-pinpointer-hidden = The revolver is currently hidden
+
+wh40k-murder-mystery-clue-pickup-verb = Pick up evidence
+wh40k-murder-mystery-clue-cannot-collect = Only civilians may collect evidence.
+wh40k-murder-mystery-clue-collected = Evidence collected: {$collected}/{$required} ({$remaining} left).
+wh40k-murder-mystery-clue-collected-final = You found the last piece of evidence! The sheriff's revolver is yours.
+wh40k-murder-mystery-clue-sheriff-emerged = A civilian has gathered enough evidence to claim the sheriff's revolver. A new sheriff walks the station.
+
 ent-ActionWH40KMurderMysterySmoke = Smoke
     .desc = Release a cloud of smoke. Usable 3 times per round with a 1 minute cooldown.
 

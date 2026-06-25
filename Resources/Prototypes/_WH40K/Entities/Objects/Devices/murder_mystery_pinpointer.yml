@@ -1,0 +1,22 @@
+- type: entity
+  id: WH40KMurderMysterySheriffPinpointer
+  parent: PinpointerBase
+  name: sheriff revolver pinpointer
+  description: A handheld tracker handed to every participant of a Murder Mystery round. Locks onto the sheriff revolver only while it lies unattended on the ground - if it is in someone's hands the device falls silent to protect the sheriff's identity.
+  components:
+  - type: Pinpointer
+    canRetarget: false
+    updateTargetName: true
+    closeDistance: 12
+    mediumDistance: 28
+    reachedDistance: 2
+  - type: WH40KMurderMysterySheriffPinpointer
+  - type: Item
+    sprite: Objects/Devices/pinpointer.rsi
+    size: Small
+    storedSprite:
+      sprite: Objects/Devices/pinpointer.rsi
+      state: pinpointer
+  - type: Tag
+    tags:
+    - HideContextMenu
