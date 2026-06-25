@@ -20,6 +20,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Content.Shared.Strip.Components;
 using Content.Shared._WH40K.Cinematic;
 using Content.Shared._WH40K.GunGame;
@@ -169,8 +170,9 @@ public sealed partial class WH40KGunGameRuleSystem : GameRuleSystem<WH40KGunGame
 
         foreach (var player in ev.PlayerPool.ToList())
         {
-            if (!ev.Profiles.TryGetValue(player.UserId, out var profile))
-                continue;
+            var profile = ev.Profiles.TryGetValue(player.UserId, out var p)
+                ? p
+                : HumanoidCharacterProfile.DefaultWithSpecies();
 
             SpawnGunGamePlayer(player, profile, station, ruleEntity, rule);
             GameTicker.PlayerJoinGame(player);

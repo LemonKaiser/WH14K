@@ -13,6 +13,11 @@
     winnerRewardXp: 500
     murderKnifePrototype: WH40KMurderMysteryKnife
     sheriffRevolverPrototype: WH40KMurderMysterySheriffRevolver
+    sheriffPinpointerPrototype: WH40KMurderMysterySheriffPinpointer
+    cluePrototype: WH40KMurderMysteryClue
+    cluesToRevolver: 7
+    clueSpawnInterval: 10
+    maxConcurrentClues: 14
     smokeAction: ActionWH40KMurderMysterySmoke
     flashAction: ActionWH40KMurderMysteryFlash
     smokeGrenadePrototype: SmokeGrenade
@@ -21,3 +26,72 @@
     flashDuration: 3
     flashSlowTo: 0.25
     bloodCleanupInterval: 1
+    jumpsuitPool:
+    - ClothingUniformJumpsuitColorWhite
+    - ClothingUniformJumpsuitColorGrey
+    - ClothingUniformJumpsuitColorBlack
+    - ClothingUniformJumpsuitColorBlue
+    - ClothingUniformJumpsuitColorDarkBlue
+    - ClothingUniformJumpsuitColorTeal
+    - ClothingUniformJumpsuitColorGreen
+    - ClothingUniformJumpsuitColorDarkGreen
+    - ClothingUniformJumpsuitColorOrange
+    - ClothingUniformJumpsuitColorPink
+    - ClothingUniformJumpsuitColorRed
+    - ClothingUniformJumpsuitColorYellow
+    - ClothingUniformJumpsuitColorPurple
+    - ClothingUniformJumpsuitColorLightBrown
+    - ClothingUniformJumpsuitColorBrown
+    - ClothingUniformJumpsuitColorMaroon
+    shoesPool:
+    - ClothingShoesColorBlack
+    - ClothingShoesColorWhite
+    - ClothingShoesColorBlue
+    - ClothingShoesColorBrown
+    - ClothingShoesColorGreen
+    - ClothingShoesColorOrange
+    - ClothingShoesColorRed
+    - ClothingShoesColorYellow
+    - ClothingShoesColorPurple
+    backPool:
+    - ClothingBackpack
+    - ClothingBackpackSatchel
+    - ClothingBackpackDuffel
+    glassesPool:
+    - ClothingEyesGlasses
+    - ClothingEyesGlassesGar
+    - ClothingEyesGlassesJamjar
+    - ClothingEyesGlassesCheapSunglasses
+    - ClothingEyesGlassesSunglasses
+    - ClothingEyesGlassesNoir
+    headPool:
+    - ClothingHeadHatBeret
+    - ClothingHeadHatBeretFrench
+    - ClothingHeadHatCasa
+    - ClothingHeadHatBeaverHat
+    - ClothingHeadHatBowlerHat
+    - ClothingHeadHatBeretEngineering
+    glovesPool:
+    - ClothingHandsGlovesColorBlack
+    - ClothingHandsGlovesColorWhite
+    - ClothingHandsGlovesColorBlue
+    - ClothingHandsGlovesColorBrown
+    - ClothingHandsGlovesColorRed
+    - ClothingHandsGlovesColorOrange
+    - ClothingHandsGlovesColorGreen
+    - ClothingHandsGlovesColorGray
+    maskPool:
+    - ClothingMaskGas
+    - ClothingMaskBreathMedical
+    - ClothingMaskSterile
+    outerClothingPool:
+    - ClothingOuterWinterCoat
+    - ClothingOuterWinterColorBlack
+    - ClothingOuterCoatBomber
+    - ClothingOuterHoodieBlack
+    - ClothingOuterHoodieGrey
+    glassesChance: 0.3
+    headChance: 0.3
+    glovesChance: 0.25
+    maskChance: 0.2
+    outerClothingChance: 0.2

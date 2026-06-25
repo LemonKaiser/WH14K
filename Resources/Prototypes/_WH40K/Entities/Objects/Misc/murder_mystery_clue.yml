@@ -1,0 +1,29 @@
+- type: entity
+  id: WH40KMurderMysteryClue
+  parent: BaseItem
+  name: evidence note
+  description: A damning scrap of evidence. Collect enough of these and the sheriff's revolver will be yours.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: Objects/Misc/bureaucracy.rsi
+    color: "#FFE066"
+    layers:
+    - state: paper
+    - state: paper_words
+      visible: true
+  - type: PointLight
+    enabled: true
+    radius: 2.5
+    softness: 1
+    color: "#FFD24D"
+    energy: 1.5
+  - type: Item
+    size: Tiny
+  - type: WH40KMurderMysteryClue
+  - type: Tag
+    tags:
+    - HideContextMenu

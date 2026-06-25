@@ -285,12 +285,13 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
             rule.PlayerRoles[player.UserId] = role;
             rule.PlayerKills.TryAdd(player.UserId, 0);
 
-            if (ev.Profiles.TryGetValue(player.UserId, out var profile))
-            {
-                RememberPlayerProfile(player.UserId, profile, rule);
-                SpawnPropHuntPlayer(player, profile, station, ruleEntity, rule, lateJoin: false);
-                GameTicker.PlayerJoinGame(player);
-            }
+            var profile = ev.Profiles.TryGetValue(player.UserId, out var p)
+                ? p
+                : HumanoidCharacterProfile.DefaultWithSpecies();
+
+            RememberPlayerProfile(player.UserId, profile, rule);
+            SpawnPropHuntPlayer(player, profile, station, ruleEntity, rule, lateJoin: false);
+            GameTicker.PlayerJoinGame(player);
         }
 
         ev.PlayerPool.Clear();
@@ -799,7 +800,6 @@ public sealed partial class WH40KPropHuntRuleSystem : GameRuleSystem<WH40KPropHu
         dash.KnockdownSeconds = 0f;
         dash.StunSeconds = 0f;
         dash.VoiceLine = null;
-        Dirty(mob, dash);
     }
 
     private void RemoveRoleActions(EntityUid mob, WH40KPropHuntPlayerComponent playerComp)

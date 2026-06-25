@@ -18,6 +18,15 @@ wh40k-murder-mystery-role-promoted-sheriff = Вы подняли револьв�
 wh40k-murder-mystery-knife-locked = Только сам убийца может взаимодействовать с этим ножом.
 wh40k-murder-mystery-revolver-locked = Убийца не может подобрать или использовать револьвер шерифа.
 
+wh40k-murder-mystery-pinpointer-target = револьвер шерифа
+wh40k-murder-mystery-pinpointer-hidden = Револьвер сейчас спрятан у кого-то в руках
+
+wh40k-murder-mystery-clue-pickup-verb = Подобрать улику
+wh40k-murder-mystery-clue-cannot-collect = Только мирные могут собирать улики.
+wh40k-murder-mystery-clue-collected = Улика найдена: {$collected}/{$required} (осталось {$remaining}).
+wh40k-murder-mystery-clue-collected-final = Вы нашли последнюю улику! Револьвер шерифа ваш.
+wh40k-murder-mystery-clue-sheriff-emerged = Один из мирных собрал достаточно улик, чтобы получить револьвер шерифа. На станции появился новый шериф.
+
 ent-ActionWH40KMurderMysterySmoke = Дым
     .desc = Выпустить облако дыма. Можно использовать 3 раза за раунд, с перезарядкой 1 минута.
 
