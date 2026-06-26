@@ -2,3 +2,11 @@
   id: WH40KBloodPactBoots
   equipment:
     shoes: ClothingShoesBootsBloodPact
+
+- type: loadout
+  id: WH40KMoebian6Boots
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    shoes: ClothingShoesBootsMoebian6

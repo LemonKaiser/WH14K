@@ -1,0 +1,15 @@
+- type: entity
+  parent: [ClothingMaskGas, WH40KChaosDamnationClothing]
+  id: ClothingMaskGasMoebian6
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _WH40K/Clothing/Mask/moebian_mask.rsi
+    state: icon
+  - type: Clothing
+    sprite: _WH40K/Clothing/Mask/moebian_mask.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout

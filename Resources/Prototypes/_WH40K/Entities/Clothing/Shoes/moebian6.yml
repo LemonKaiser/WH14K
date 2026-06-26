@@ -1,0 +1,11 @@
+- type: entity
+  parent: [ClothingShoesBootsworkTechpriest, WH40KChaosDamnationClothing]
+  id: ClothingShoesBootsMoebian6
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Shoes/Boots/moebian_boots.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Shoes/Boots/moebian_boots.rsi
+  - type: ClothingSlowOnDamageModifier
+    modifier: 0.5

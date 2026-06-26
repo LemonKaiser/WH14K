@@ -1,0 +1,9 @@
+- type: entity
+  parent: [ClothingOuterArmorFlakVest, WH40KChaosDamnationClothing]
+  id: ClothingOuterArmorMoebian6
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/moebian_armor.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/moebian_armor.rsi

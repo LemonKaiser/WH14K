@@ -20,3 +20,11 @@
   id: WH40KBloodPactMask
   equipment:
     mask: ClothingMaskGasBloodPact
+
+- type: loadout
+  id: WH40KMoebian6Mask
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    mask: ClothingMaskGasMoebian6
