@@ -1,0 +1,9 @@
+- type: entity
+  parent: [UnsensoredClothingUniformBase, WH40KChaosDamnationClothing]
+  id: ClothingUniformJumpsuitMoebian6
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/moebian_uniform.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/moebian_uniform.rsi

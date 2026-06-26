@@ -43,3 +43,11 @@
     requiredLevel: 16
   equipment:
     head: ClothingHeadHelmetBloodPact
+
+- type: loadout
+  id: WH40KMoebian6Helmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    helmet: ClothingHeadHelmetMoebian6
