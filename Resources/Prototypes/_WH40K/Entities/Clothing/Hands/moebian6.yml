@@ -1,0 +1,10 @@
+- type: entity
+  parent: [ClothingHandsBase, WH40KChaosDamnationClothing]
+  id: ClothingHandsGlovesMoebian6
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Hands/Gloves/moebian_gloves.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Hands/Gloves/moebian_gloves.rsi
+  - type: Insulated

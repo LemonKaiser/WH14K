@@ -1,8 +1,6 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KAstartesToxicSpit
-  name: ent-ActionWH40KAstartesToxicSpit
-  description: ent-ActionWH40KAstartesToxicSpit.desc
   components:
   - type: Action
     useDelay: 20
@@ -18,8 +16,6 @@
 - type: entity
   parent: BaseAction
   id: ActionWH40KAstartesDash
-  name: ent-ActionWH40KAstartesDash
-  description: ent-ActionWH40KAstartesDash.desc
   components:
   - type: Action
     useDelay: 60

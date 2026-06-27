@@ -573,6 +573,11 @@ public sealed partial class WH40KMetaProgressSystem : EntitySystem
 		AddLifetimeXpInternal(userId, deltaXp, "meta.xp.manual_adjust", new Dictionary<string, string>(StringComparer.Ordinal) { ["source"] = "add_lifetime_xp" });
 	}
 
+	public void GrantLifetimeXp(NetUserId userId, int deltaXp, string statKey, IReadOnlyDictionary<string, string>? metadata = null)
+	{
+		AddLifetimeXpInternal(userId, deltaXp, statKey, metadata);
+	}
+
 	private void AddLifetimeXpInternal(NetUserId userId, int deltaXp, string statKey, IReadOnlyDictionary<string, string>? metadata = null)
 	{
 		if (deltaXp != 0)

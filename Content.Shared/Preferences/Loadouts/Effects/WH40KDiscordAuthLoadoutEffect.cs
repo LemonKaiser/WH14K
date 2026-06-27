@@ -45,7 +45,7 @@ public sealed partial class WH40KDiscordAuthLoadoutEffect : LoadoutEffect
         var discordAuth = collection.Resolve<ISharedWH40KDiscordAuthManager>();
         if (!discordAuth.TryGetSnapshot(session.UserId, out var snapshot))
         {
-            reason = FormattedMessage.FromUnformatted(Loc.GetString("loadout-group-wh40k-discord-loading"));
+            reason = FormattedMessage.FromUnformatted(Loc.GetString("loadout-group-wh40k-discord-not-linked"));
             return false;
         }
 

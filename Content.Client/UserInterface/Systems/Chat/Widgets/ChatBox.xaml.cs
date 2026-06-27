@@ -170,6 +170,73 @@ public partial class ChatBox : UIWidget, ILocalizedControl
         return true;
     }
 
+    /// <summary>
+    ///     Removes the displayed chat lines matching the supplied message IDs from this ChatBox without
+    ///     rebuilding the entire contents list. Returns false when not every requested ID is currently
+    ///     tracked by <see cref="_messageEntryIndices"/> (for example because the line was filtered out
+    ///     by the active channel filter, or it never had a server-assigned ID); in that case the caller
+    ///     must fall back to a full <see cref="Repopulate"/>.
+    /// </summary>
+    public bool TryRemoveDisplayedEntries(HashSet<uint> messageIds)
+    {
+        if (messageIds.Count == 0)
+            return true;
+
+        var pending = new List<(uint Id, int EntryIndex)>(messageIds.Count);
+        foreach (var id in messageIds)
+        {
+            if (!_messageEntryIndices.TryGetValue(id, out var entryIndex))
+                return false;
+
+            pending.Add((id, entryIndex));
+        }
+
+        // Sort by entry index descending so RemoveEntry on a higher slot never invalidates the
+        // cached position of a not-yet-removed entry below it.
+        pending.Sort(static (a, b) => b.EntryIndex.CompareTo(a.EntryIndex));
+
+        var scrollBar = GetContentsScrollBar();
+        var wasAtEnd = scrollBar?.IsAtEnd ?? true;
+        var previousScroll = scrollBar?.Value ?? 0f;
+
+        foreach (var (id, entryIndex) in pending)
+        {
+            if (entryIndex < 0 || entryIndex >= Contents.EntryCount)
+                continue;
+
+            Contents.RemoveEntry(new Index(entryIndex));
+            _messageEntryIndices.Remove(id);
+            DecrementIndicesAbove(entryIndex);
+        }
+
+        if (scrollBar == null)
+            return true;
+
+        if (wasAtEnd)
+            scrollBar.Value = scrollBar.MaxValue;
+        else
+            scrollBar.Value = previousScroll;
+
+        return true;
+    }
+
+    private void DecrementIndicesAbove(int removedSlot)
+    {
+        // Avoid allocating by reusing the dictionary's enumerator; the number of cached ids is
+        // bounded by MaxHistoryLength so this linear scan is cheap relative to a full Repopulate.
+        var staleIds = new List<uint>();
+        foreach (var (id, index) in _messageEntryIndices)
+        {
+            if (index > removedSlot)
+                staleIds.Add(id);
+        }
+
+        foreach (var id in staleIds)
+        {
+            _messageEntryIndices[id]--;
+        }
+    }
+
     private bool TryRebuildTailFromHistory(int entryIndex, uint messageId)
     {
         var historyIndex = FindHistoryIndex(messageId);

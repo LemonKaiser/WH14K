@@ -1,0 +1,6 @@
+- type: gameMapPool
+  id: WH40KGunGameMapPool
+  maps:
+  - WH40KGunGameMeteorArena
+  - WH40KGunGameDm01Entryway
+  - WH40KGunGameLiman

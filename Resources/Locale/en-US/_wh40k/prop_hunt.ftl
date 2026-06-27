@@ -1,0 +1,33 @@
+wh40k-prop-hunt-title = Prop Hunt
+wh40k-prop-hunt-description = Hide as station props, survive the seekers for 10 minutes, or hunt every hider down before time runs out.
+wh40k-prop-hunt-team-seekers = seekers
+wh40k-prop-hunt-team-hiders = hiders
+wh40k-prop-hunt-winner-team = Winning team: {$team}
+wh40k-prop-hunt-best-seeker = Best seeker: {$player} with {$kills} kills
+wh40k-prop-hunt-morph-invalid = You cannot transform into that.
+wh40k-prop-hunt-anchor-no-prop = Transform into a prop first.
+wh40k-prop-hunt-invisibility-no-prop = You can only vanish while disguised.
+wh40k-prop-hunt-late-join-closed = Late join is closed. You have joined as an observer.
+wh40k-prop-hunt-no-spawn = No valid Prop Hunt spawn point was found. You have joined as an observer.
+wh40k-prop-hunt-seeker-countdown-title = Hunters are released in
+wh40k-prop-hunt-paused-waiting-players = Prop Hunt is paused until {$players} active players join.
+wh40k-prop-hunt-paused-resumed = Enough players joined. Prop Hunt continues.
+wh40k-prop-hunt-pulse-result = Motion scan: {$count} hider(s) nearby.
+
+job-name-prophunt-player = Player
+job-description-prophunt-player = Participant of the Prop Hunt mini-mode.
+
+ent-ActionWH40KPropHuntMorph = Metamorphosis
+    .desc = Become a nearby prop. You cannot return to your true form.
+ent-ActionWH40KPropHuntAnchor = Toggle Anchor
+    .desc = Lock yourself in place or break the anchor to move again.
+ent-ActionWH40KPropHuntHonk = Honk
+    .desc = Play a loud honk to bait the seekers.
+ent-ActionWH40KPropHuntInvisible = Vanish
+    .desc = Become fully invisible for 5 seconds. Can be used only once each round.
+ent-ActionWH40KPropHuntSmoke = Smoke
+    .desc = Release a cloud of smoke. Can be used only once each round.
+ent-ActionWH40KPropHuntSeekerPulse = Locator Pulse
+    .desc = Count nearby hiders in a radius of 10 tiles without revealing exact positions.
+ent-ActionWH40KPropHuntSeekerDash = Dash
+    .desc = Rapidly lunge toward a targeted point.

@@ -1,0 +1,26 @@
+- type: entity
+  id: WH40KPropHuntMorphProjector
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ChameleonProjector
+    whitelist:
+      components:
+      - Anchorable
+    blacklist:
+      components:
+      - Actor
+      - Door
+      - MindContainer
+      - MobState
+      - Pda
+      - SubFloorHide
+      tags:
+      - Catwalk
+      - Wall
+      - Window
+    disguiseProto: ChameleonDisguise
+    anchorAction: ActionWH40KPropHuntAnchor
+    provideNoRotAction: false
+    revealOnInteract: false
+    revealOnPickup: false
+    revealOnStorageInsert: false

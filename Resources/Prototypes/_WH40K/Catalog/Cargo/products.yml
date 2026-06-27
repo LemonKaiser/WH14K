@@ -639,6 +639,16 @@
   group: WH40KImperiumMarket
 
 - type: cargoProduct
+  id: WH40KImperiumPlasmaPistol
+  icon:
+    sprite: Objects/Weapons/Guns/Pistols/mk58.rsi
+    state: icon
+  product: WeaponLaserPlasmaPistol
+  cost: 9500
+  category: cpcat-arm
+  group: WH40KImperiumMarket
+
+- type: cargoProduct
   id: WH40KImperiumPlasmGunCell
   icon:
     sprite: Objects/Weapons/Guns/Pistols/mk58.rsi

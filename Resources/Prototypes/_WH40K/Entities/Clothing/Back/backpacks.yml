@@ -124,10 +124,20 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/guardpackvox.rsi
     state: icon
+  - type: Storage
+    grid:
+    - 0,0,6,3
+    maxItemSize: Huge
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
   - type: UserInterface
     interfaces:
       enum.StoreUiKey.Key:
         type: WH40KVoxStoreBoundUserInterface
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
   - type: WH40KVoxSupplyDropStore
@@ -166,10 +176,20 @@
   - type: Sprite
     sprite: _WH40K/Clothing/Back/Backpacks/cultchaospack.rsi
     state: icon
+  - type: Storage
+    grid:
+    - 0,0,6,3
+    maxItemSize: Huge
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
   - type: UserInterface
     interfaces:
       enum.StoreUiKey.Key:
         type: WH40KVoxStoreBoundUserInterface
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
   - type: ActivatableUI
     key: enum.StoreUiKey.Key
   - type: WH40KVoxSupplyDropStore

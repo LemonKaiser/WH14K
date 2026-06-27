@@ -86,6 +86,7 @@ loadout-group-wh40k-imperial-command-melee = Командование, оруж�
 loadout-group-wh40k-heretic-command-melee = Командование, оружие ближнего боя
 loadout-group-wh40k-heresiarch-melee = оружие ближнего боя ересиарха
 loadout-group-wh40k-sergeant-melee = Сержант, оружие ближнего боя
+loadout-group-wh40k-chosen-melee = Избранный Хаоса, оружие ближнего боя
 loadout-group-wh40k-heretic-line-head = Хаос, пехота, головные аксессуары
 loadout-group-wh40k-heretic-line-honours = Хаос, пехота, трофеи
 loadout-group-wh40k-heretic-line-uniform = Хаос, пехота, униформа

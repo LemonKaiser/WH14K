@@ -40,3 +40,20 @@ public struct ExtinguishedEvent;
 /// </remarks>
 [ByRefEvent]
 public struct IgnitedEvent;
+
+/// <summary>
+/// Raised before an <see cref="IgniteOnCollideComponent"/> applies direct ignition to a target.
+/// Handlers may cancel this to block contact-based ignition without affecting unrelated fire sources.
+/// </summary>
+[ByRefEvent]
+public struct BeforeIgniteOnCollideEvent
+{
+    public EntityUid Source;
+    public bool Cancelled;
+
+    public BeforeIgniteOnCollideEvent(EntityUid source)
+    {
+        Source = source;
+        Cancelled = false;
+    }
+}

@@ -10,3 +10,11 @@
   id: WH40KBloodPactUniform
   equipment:
     jumpsuit: ClothingUniformJumpsuitBloodPact
+
+- type: loadout
+  id: WH40KMoebian6Uniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMoebian6

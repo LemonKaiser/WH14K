@@ -1,0 +1,33 @@
+wh40k-prop-hunt-title = Охота на пропы
+wh40k-prop-hunt-description = Прячься под видом предметов, продержись 10 минут за прячущихся или найди всех до конца времени за ищущих.
+wh40k-prop-hunt-team-seekers = ищущие
+wh40k-prop-hunt-team-hiders = прячущиеся
+wh40k-prop-hunt-winner-team = Победившая команда: {$team}
+wh40k-prop-hunt-best-seeker = Лучший ищущий: {$player} с {$kills} убийствами
+wh40k-prop-hunt-morph-invalid = В это превращаться нельзя.
+wh40k-prop-hunt-anchor-no-prop = Сначала превратись в предмет.
+wh40k-prop-hunt-invisibility-no-prop = Невидимость доступна только в облике предмета.
+wh40k-prop-hunt-late-join-closed = Позднее присоединение закрыто. Вы вошли как наблюдатель.
+wh40k-prop-hunt-no-spawn = Не найден корректный спавн для режима «Охота на пропы». Вы вошли как наблюдатель.
+wh40k-prop-hunt-seeker-countdown-title = Ищущие будут выпущены через
+wh40k-prop-hunt-paused-waiting-players = Режим «Охота на пропы» поставлен на паузу, пока не зайдут {$players} активных игрока.
+wh40k-prop-hunt-paused-resumed = Игроков достаточно. Режим «Охота на пропы» продолжается.
+wh40k-prop-hunt-pulse-result = Сканер движения: рядом {$count} прячущихся.
+
+job-name-prophunt-player = игрок
+job-description-prophunt-player = Участник мини-режима «Охота на пропы».
+
+ent-ActionWH40KPropHuntMorph = Метаморфоза
+    .desc = Превратитесь в ближайший предмет. Вернуться в исходный облик нельзя.
+ent-ActionWH40KPropHuntAnchor = Переключить закрепление
+    .desc = Закрепите себя на месте или снимите закрепление, чтобы снова двигаться.
+ent-ActionWH40KPropHuntHonk = Гудок
+    .desc = Издайте громкий гудок, чтобы приманить ищущих.
+ent-ActionWH40KPropHuntInvisible = Исчезновение
+    .desc = Полностью станьте невидимым на 5 секунд. Можно использовать только один раз за раунд.
+ent-ActionWH40KPropHuntSmoke = Дым
+    .desc = Выпустите облако дыма. Можно использовать только один раз за раунд.
+ent-ActionWH40KPropHuntSeekerPulse = Импульс локатора
+    .desc = Подсчитать ближайших прячущихся в радиусе 10 тайлов, не раскрывая их точное местоположение.
+ent-ActionWH40KPropHuntSeekerDash = Рывок
+    .desc = Стремительно рвануть к выбранной точке.

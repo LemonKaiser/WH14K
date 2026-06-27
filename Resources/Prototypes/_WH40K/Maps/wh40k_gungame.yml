@@ -1,0 +1,52 @@
+- type: gameMap
+  id: WH40KGunGameMeteorArena
+  mapName: Gun Game — Meteor Arena
+  mapPath: /Maps/_WH40K/GunGame/meteor_arena.yml
+  minPlayers: 0
+  maxPlayers: 10
+  stations:
+    Arena:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Gun Game — Meteor Arena"
+      - type: StationJobs
+        availableJobs:
+          GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]
+
+- type: gameMap
+  id: WH40KGunGameDm01Entryway
+  mapName: Gun Game — DM01 Entryway
+  mapPath: /Maps/_WH40K/GunGame/dm01_entryway.yml
+  minPlayers: 0
+  maxPlayers: 20
+  stations:
+    dm01-entryway:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Gun Game — DM01 Entryway"
+      - type: StationJobs
+        availableJobs:
+          GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]
+
+- type: gameMap
+  id: WH40KGunGameLiman
+  mapName: Gun Game — Liman
+  mapPath: /Maps/_WH40K/GunGame/Liman.yml
+  minPlayers: 0
+  stations:
+    Liman:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Gun Game — Liman"
+      - type: StationJobs
+        availableJobs:
+          GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]

@@ -1,5 +1,6 @@
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Robust.Client.GameObjects;
 using Robust.Shared.Map;
 
 namespace Content.Client.Weapons.Ranged.Systems;
@@ -10,6 +11,7 @@ public sealed partial class GunSystem
     {
         base.InitializeBallistic();
         SubscribeLocalEvent<BallisticAmmoProviderComponent, UpdateAmmoCounterEvent>(OnBallisticAmmoCount);
+        SubscribeLocalEvent<BallisticAmmoProviderComponent, AppearanceChangeEvent>(OnBallisticAppearance);
     }
 
     private void OnBallisticAmmoCount(Entity<BallisticAmmoProviderComponent> ent, ref UpdateAmmoCounterEvent args)
@@ -18,6 +20,11 @@ public sealed partial class GunSystem
         {
             control.Update(GetBallisticShots(ent.Comp), ent.Comp.Capacity);
         }
+    }
+
+    private void OnBallisticAppearance(Entity<BallisticAmmoProviderComponent> ent, ref AppearanceChangeEvent args)
+    {
+        UpdateAmmoCount(ent);
     }
 
     protected override void Cycle(Entity<BallisticAmmoProviderComponent> ent, MapCoordinates coordinates)

@@ -9615,7 +9615,7 @@ entities:
       parent: 2
     - type: Stack
       count: 4
-- proto: DebugAPCRecharging
+- proto: WH40KDebugAPC
   entities:
   - uid: 1368
     components:

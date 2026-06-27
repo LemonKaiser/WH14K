@@ -1,0 +1,13 @@
+- type: gameMapPool
+  id: WH40KPropHuntMapPool
+  maps:
+  - WH40KGunGameMeteorArena
+  - WH40KGunGameDm01Entryway
+  - WH40KGunGameLiman
+
+- type: gameMapPool
+  id: WH40KMurderMysteryMapPool
+  maps:
+  - WH40KGunGameMeteorArena
+  - WH40KGunGameDm01Entryway
+  - WH40KGunGameLiman

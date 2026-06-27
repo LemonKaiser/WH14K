@@ -1,0 +1,16 @@
+- type: job
+  id: PropHuntPlayer
+  name: job-name-prophunt-player
+  description: job-description-prophunt-player
+  playTimeTracker: JobPropHuntPlayer
+  startingGear: PropHuntPlayerGear
+  icon: "JobIconPassenger"
+  supervisors: job-supervisors-nobody
+  canBeAntag: false
+  setPreference: false
+  access:
+  - Maintenance
+
+- type: startingGear
+  id: PropHuntPlayerGear
+  equipment: {}

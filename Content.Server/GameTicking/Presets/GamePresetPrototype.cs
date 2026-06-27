@@ -25,6 +25,9 @@ namespace Content.Server.GameTicking.Presets
         [DataField("showInVote")]
         public bool ShowInVote;
 
+        [DataField("isMiniGame")]
+        public bool IsMiniGame;
+
         [DataField("minPlayers")]
         public int? MinPlayers;
 

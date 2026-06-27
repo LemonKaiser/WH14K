@@ -8,6 +8,7 @@ using Content.Shared.Database;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.Verbs;
 
 namespace Content.Server._WH40K.Medical;
@@ -23,6 +24,7 @@ public sealed partial class WH40KChirurgeonGloveSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -97,6 +99,9 @@ public sealed partial class WH40KChirurgeonGloveSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        EnsureComp<UnrevivableComponent>(target);
+        _mobThreshold.SetAllowRevives(target, false);
 
         _transform.AttachToGridOrMap(head);
         QueueDel(head);

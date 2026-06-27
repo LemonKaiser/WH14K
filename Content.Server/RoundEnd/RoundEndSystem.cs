@@ -221,21 +221,7 @@ namespace Content.Server.RoundEnd
 
             ActivateCooldown();
             RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
-
-            var shuttle = _shuttle.GetShuttle();
-            if (shuttle != null && TryComp<DeviceNetworkComponent>(shuttle, out var net))
-            {
-                var payload = new NetworkPayload
-                {
-                    [ShuttleTimerMasks.ShuttleMap] = shuttle,
-                    [ShuttleTimerMasks.SourceMap] = GetCentcomm(),
-                    [ShuttleTimerMasks.DestMap] = GetStation(),
-                    [ShuttleTimerMasks.ShuttleTime] = countdownTime,
-                    [ShuttleTimerMasks.SourceTime] = countdownTime + TimeSpan.FromSeconds(_shuttle.TransitTime + _cfg.GetCVar(CCVars.EmergencyShuttleDockTime)),
-                    [ShuttleTimerMasks.DestTime] = countdownTime,
-                };
-                _deviceNetworkSystem.QueuePacket(shuttle.Value, null, payload, net.TransmitFrequency);
-            }
+            UpdateShuttleTimerPayload(countdownTime);
         }
 
         public void CancelRoundEndCountdown(EntityUid? requester = null, EntityUid? machine = null, bool forceRecall = false)
@@ -289,14 +275,15 @@ namespace Content.Server.RoundEnd
         public void EndRound(TimeSpan? countdownTime = null)
         {
             if (_gameTicker.RunLevel != GameRunLevel.InRound) return;
-            LastCountdownStart = null;
-            ExpectedCountdownEnd = null;
-            RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
             _gameTicker.EndRound();
             _countdownTokenSource?.Cancel();
             _countdownTokenSource = new();
 
             countdownTime ??= TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.RoundRestartTime));
+            LastCountdownStart = _gameTiming.CurTime;
+            ExpectedCountdownEnd = _gameTiming.CurTime + countdownTime.Value;
+            RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
+
             int time;
             string unitsLocString;
             if (countdownTime.Value.TotalSeconds < 60)
@@ -315,6 +302,49 @@ namespace Content.Server.RoundEnd
                     ("time", time),
                     ("units", Loc.GetString(unitsLocString, ("amount", time)))));
             Timer.Spawn(countdownTime.Value, AfterEndRoundRestart, _countdownTokenSource.Token);
+        }
+
+        public bool DelayRoundEnd(TimeSpan amount)
+        {
+            if (_countdownTokenSource == null || amount <= TimeSpan.Zero)
+                return false;
+
+            var baseEnd = ExpectedCountdownEnd ?? _gameTiming.CurTime;
+            if (baseEnd < _gameTiming.CurTime)
+                baseEnd = _gameTiming.CurTime;
+
+            ExpectedCountdownEnd = baseEnd + amount;
+            LastCountdownStart ??= _gameTiming.CurTime;
+
+            _countdownTokenSource.Cancel();
+            _countdownTokenSource = new();
+
+            var remaining = ExpectedCountdownEnd.Value - _gameTiming.CurTime;
+            if (remaining < TimeSpan.Zero)
+                remaining = TimeSpan.Zero;
+
+            switch (_gameTicker.RunLevel)
+            {
+                case GameRunLevel.InRound:
+                    Timer.Spawn(remaining, _shuttle.DockEmergencyShuttle, _countdownTokenSource.Token);
+                    UpdateShuttleTimerPayload(remaining);
+                    break;
+                case GameRunLevel.PostRound:
+                    Timer.Spawn(remaining, AfterEndRoundRestart, _countdownTokenSource.Token);
+                    break;
+                default:
+                    _countdownTokenSource.Cancel();
+                    _countdownTokenSource = null;
+                    return false;
+            }
+
+            RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
+            return true;
+        }
+
+        public bool DelayRoundRestart()
+        {
+            return DelayRoundEnd(TimeSpan.FromSeconds(30));
         }
 
         /// <summary>
@@ -372,6 +402,25 @@ namespace Content.Server.RoundEnd
                 _cooldownTokenSource = null;
                 RaiseLocalEvent(RoundEndSystemChangedEvent.Default);
             }, _cooldownTokenSource.Token);
+        }
+
+        private void UpdateShuttleTimerPayload(TimeSpan countdownTime)
+        {
+            var shuttle = _shuttle.GetShuttle();
+            if (shuttle == null || !TryComp<DeviceNetworkComponent>(shuttle, out var net))
+                return;
+
+            var payload = new NetworkPayload
+            {
+                [ShuttleTimerMasks.ShuttleMap] = shuttle,
+                [ShuttleTimerMasks.SourceMap] = GetCentcomm(),
+                [ShuttleTimerMasks.DestMap] = GetStation(),
+                [ShuttleTimerMasks.ShuttleTime] = countdownTime,
+                [ShuttleTimerMasks.SourceTime] = countdownTime + TimeSpan.FromSeconds(_shuttle.TransitTime + _cfg.GetCVar(CCVars.EmergencyShuttleDockTime)),
+                [ShuttleTimerMasks.DestTime] = countdownTime,
+            };
+
+            _deviceNetworkSystem.QueuePacket(shuttle.Value, null, payload, net.TransmitFrequency);
         }
 
         public override void Update(float frameTime)

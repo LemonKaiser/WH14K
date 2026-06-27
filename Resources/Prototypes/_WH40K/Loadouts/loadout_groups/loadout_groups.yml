@@ -656,7 +656,7 @@
 
 - type: loadoutGroup
   id: WH40KChosenMelee
-  name: loadout-group-wh40k-sergeant-melee
+  name: loadout-group-wh40k-chosen-melee
   minLimit: 0
   loadouts:
   - WH40KCommandChainsword
@@ -713,6 +713,7 @@
   - WH40KHeresyHelmet
   - HFlakHelmetCandle
   - WH40KBloodPactHelmet
+  - WH40KMoebian6Helmet
 
 - type: loadoutGroup
   id: WH40KHereticLineHonours
@@ -733,6 +734,7 @@
   loadouts:
   - WH40KBloodPactUniform
   - WH40KSlaaneshUniform
+  - WH40KMoebian6Uniform
 
 - type: loadoutGroup
   id: WH40KHereticsupUniform
@@ -751,6 +753,7 @@
   - WH40KBloodPactArmor
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
+  - WH40KMoebian6Armor
 
 - type: loadoutGroup
   id: WH40KHereticsuppOuter
@@ -769,6 +772,7 @@
   - WH40KChaosMask2
   - WH40KChaosMask3
   - WH40KBloodPactMask
+  - WH40KMoebian6Mask
 
 - type: loadoutGroup
   id: WH40KHereticLineHands
@@ -778,6 +782,7 @@
   - WH40KBlackGloves
   - WH40KChaosCombatGloves
   - WH40KBloodPactGloves
+  - WH40KMoebian6Gloves
 
 - type: loadoutGroup
   id: WH40KHereticLineFeet
@@ -785,6 +790,7 @@
   minLimit: 0
   loadouts:
   - WH40KBloodPactBoots
+  - WH40KMoebian6Boots
 
 - type: loadoutGroup
   id: WH40KHereticFieldKit

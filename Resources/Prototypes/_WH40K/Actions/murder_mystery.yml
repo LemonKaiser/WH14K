@@ -1,0 +1,25 @@
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KMurderMysterySmoke
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Weapons/Grenades/smoke.rsi
+      state: icon
+    useDelay: 60
+    checkCanInteract: true
+  - type: InstantAction
+    event: !type:WH40KMurderMysterySmokeActionEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionWH40KMurderMysteryFlash
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Weapons/Grenades/flashbang.rsi
+      state: icon
+    useDelay: 60
+    checkCanInteract: true
+  - type: InstantAction
+    event: !type:WH40KMurderMysteryFlashActionEvent
