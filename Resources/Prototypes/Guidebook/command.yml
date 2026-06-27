@@ -1,4 +1,5 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Command
+  ruleEntry: true
   name: guide-entry-command
   text: "/ServerInfo/Guidebook/Command.xml"

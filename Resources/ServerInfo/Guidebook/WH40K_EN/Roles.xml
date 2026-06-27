@@ -1,0 +1,60 @@
+<Document>
+# Roles
+
+Roles are split across factions and departments. The faction you pick in the lobby decides which roles are available to you. To take an officer role you need to have played a certain amount on the lower roles of the same faction — that way you build experience before commanding.
+
+## Imperium
+[color=#FFD200]Imperium[/color] — defenders of humanity.
+
+### Command
+- [color=#a4885c]Colonel[/color] — faction commander, can perform morale execution. Requires experience as a sergeant and lieutenant.
+- [color=#a4885c]Commissar[/color] — political officer, with morale execution and order in the ranks in his hands.
+- [color=#a4885c]Lieutenant[/color] — mid-ranking officer.
+- [color=#a4885c]Sergeant[/color] (and HWS/SWS variants) — a [textlink="squad" link="WH40KSquads"] leader who leads fighters.
+
+### Line
+- [color=#a4885c]Guardsman[/color] — base role, human. Where newcomers start.
+- [color=#a4885c]Kasrkin[/color] — elite, requires the team to have pumped to a high level. Available through reinforcements.
+- [color=#a4885c]Vox Scout[/color] — recon with comms.
+
+### Support
+- [color=#a4885c]Chirurgeon[/color] — field medic.
+- [color=#a4885c]Psyker[/color] — [textlink="sanctioned psyker" link="WH40KPsyker"], human.
+- [color=#a4885c]Chaplain[/color] — [textlink="Sacred Dash" link="WH40KChaplain"], bible healing, projectile reflection. Requires experience as a sergeant and a guardsman.
+- [color=#a4885c]Munitorum Logistician[/color] and [color=#a4885c]Munitorum Officer[/color] — supply and logistics.
+- [color=#a4885c]Lexmechanic[/color] — Mechanicus researcher.
+
+### Astartes
+- [color=#a4885c]Imperium Astartes[/color] — an [textlink="Astartes" link="WH40KSpecies"] in power armor, with a bolter and bolt pistol, with a tactical map.
+
+### Mechanicus (department)
+- [color=#a4885c]Magos[/color] — leader of the tech-priesthood.
+- [color=#a4885c]Explorator[/color], [color=#a4885c]Genetor[/color], [color=#a4885c]Enginseer[/color], [color=#a4885c]Acolyte[/color] — technical roles under him.
+
+## Heretics
+[color=#D62828]Heretics[/color] — Chaos cultists. The roles mirror the Imperial ones, but instead of morale execution the officers receive [textlink="gifts of Chaos" link="WH40KPsyker"] from their patron gods.
+
+### Command
+- [color=#a4885c]Heresiarch[/color] — Chaos commander, requires experience on the lower heretic roles.
+- [color=#a4885c]Champion of Chaos[/color] — officer.
+- [color=#a4885c]Chosen of Chaos[/color] (and HWS/SWS variants) — squad leader.
+
+### Line and support
+- [color=#a4885c]Cultist[/color] — base role, human or vulpkanin.
+- [color=#a4885c]Smuggler[/color] — supply.
+- [color=#a4885c]Chaos Astartes[/color] — a heretic Astartes with Chaos gifts.
+- [color=#a4885c]Hellish Foreman[/color] — elite, requires a high team level.
+
+### Gifts of Chaos
+Heretic officers receive gifts from their patron gods: [color=#a4885c]Khorne[/color] — melee and blood, [color=#a4885c]Nurgle[/color] — rot and miasma, [color=#a4885c]Slaanesh[/color] — speed and ecstasy, [color=#a4885c]Tzeentch[/color] — warp and fire. More in [textlink="Psyker & Chaos" link="WH40KPsyker"].
+
+## T'au (separate faction)
+- [color=#a4885c]Shas'la[/color] — Fire Caste fighter, T'au race.
+- [color=#a4885c]Shas'ui[/color] — officer.
+- [color=#a4885c]Ethereal[/color] — caste leader.
+- The Earth, Air and Water castes are cosmetic variants for roleplay.
+
+## Orks (separate faction)
+- [color=#a4885c]Boyz[/color] — an ork fighter, Ork race. The simplest role to get the hang of combat.
+
+</Document>

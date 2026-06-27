@@ -1,0 +1,21 @@
+<Document>
+# Squads
+
+A squad is a group of up to five fighters under one leader. Sergeants, lieutenants, commissars and colonels can form squads and lead people.
+
+## How to create
+- An officer opens the squad console through the action bar.
+- In the window you can create a squad and assign fighters to open slots.
+- The squad's color matches the faction: gold for Imperium, dark red for Heretics.
+
+## Traits
+- A squad has one leader and up to four fighters.
+- A squad [color=#ff0000]disbands when the leader dies[/color] — don't throw an officer under fire, people stand behind them.
+- A fighter can only be in one squad at a time.
+
+## Why form a squad
+- Coordination in combat — you see the squad roster in the window and know who's with whom.
+- The squad leader is an officer who can perform [textlink="morale execution" link="WH40KMorale"] and other command abilities.
+- Killing an enemy officer or squad leader earns the team triple points — protect your commanders and hunt theirs.
+
+</Document>

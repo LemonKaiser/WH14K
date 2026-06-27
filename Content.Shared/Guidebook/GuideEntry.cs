@@ -39,6 +39,8 @@ public class GuideEntry
     /// </summary>
     [DataField] public bool FilterEnabled = default!;
 
+    [DataField] public string? RequiredCulture;
+
     [DataField] public bool RuleEntry;
 
     /// <summary>

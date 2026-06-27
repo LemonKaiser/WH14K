@@ -1,0 +1,43 @@
+<Document>
+# Species
+
+WH14K has three custom species, each with its own character. The species sets your toughness, speed, abilities and what armor you can wear.
+
+<Box>
+<GuideEntityEmbed Entity="AppearanceOrk" Caption="Ork"/>
+<GuideEntityEmbed Entity="AppearanceTau" Caption="T'au"/>
+<GuideEntityEmbed Entity="AppearanceAstartes" Caption="Astartes"/>
+</Box>
+
+## Ork
+Green-skinned warriors — tough, sturdy beasts. Their bodies knit wounds on their own, even when the ork is already in critical state and looks ready to drop. An ork's fists hit hard — they don't strictly need a weapon to maim.
+
+- [color=#a4885c]Toughness[/color]: sturdy, takes noticeably more punishment than a human.
+- [color=#a4885c]Regeneration[/color]: wounds knit on their own while the ork lives — even in critical state.
+- [color=#a4885c]Fists[/color]: hit cutting and hard, an ork doesn't strictly need to find a weapon.
+- [color=#a4885c]Armor[/color]: only ork — foreign plate won't fit the green hide.
+
+## T'au
+Grey-blue warriors of the Fire Caste. More fragile than a human and noticeably shorter, but that's made up for by the firepower of their pulse weaponry. The trouble is that T'au slow down faster than others when hurt — take a couple hits and you're already dragging your feet.
+
+- [color=#a4885c]Toughness[/color]: weaker than a human, they drop into crit fast.
+- [color=#a4885c]Height[/color]: a bit shorter than the rest — a smaller target.
+- [color=#a4885c]Weakness[/color]: they slow down faster than others when wounded. Don't expose yourself to fire.
+- [color=#a4885c]Armor[/color]: their own, T'au.
+
+## Astartes
+Genetically modified superhumans. An Astartes is a walking fortress: he takes far more damage than a regular fighter, hits with his fist so it's no joke, and wears his own power armor that no one else can put on. The trade-off is slowness: the armored giant moves noticeably quieter than a regular human.
+
+- [color=#a4885c]Toughness[/color]: superhuman, survives what would kill anyone else.
+- [color=#a4885c]Fists[/color]: hit heavy and smash through structures — an Astartes is fearsome even unarmed.
+- [color=#a4885c]Speed[/color]: slower than a human due to the armor. Don't count on a quick dash without an ability.
+- [color=#a4885c]Armor[/color]: [color=#a4885c]Astartes only[/color] — standard plate won't fit him.
+- [color=#a4885c]Sex[/color]: male only.
+
+Special abilities:
+- [color=#a4885c]Toxic spit[/color] — spits poison at range, burns and poisons the target.
+- [color=#a4885c]Dash[/color] — a short leap forward that knocks the enemy down and stuns them. Break through a melee line to the shooters.
+- [color=#a4885c]Radiation resistance[/color] — small doses only give a "metallic taste," large ones cause vomiting, but don't kill outright.
+- [color=#a4885c]Gibbing[/color] — to smear an Astartes you need a very heavy blunt blow; from intense heat he turns to ash, not a bloody mess.
+
+</Document>

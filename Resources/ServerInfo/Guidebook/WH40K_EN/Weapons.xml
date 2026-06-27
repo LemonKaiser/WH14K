@@ -1,0 +1,83 @@
+<Document>
+# Weapons
+
+WH14K boasts a vast arsenal: lasguns, stub guns, bolters, heavy emplacements, sniper rifles, Mechanicus weapons, Tau Pulse, sonic weapons, flamethrowers and grenades.
+
+## Lasguns (energy weapons)
+<Box>
+<GuideEntityEmbed Entity="WeaponLaserLasgun" Caption="Lasgun"/>
+<GuideEntityEmbed Entity="WeaponLaserLasgunAccatran" Caption="Accatran"/>
+<GuideEntityEmbed Entity="WeaponLaserLasgunKrieg" Caption="Krieg Lasgun"/>
+<GuideEntityEmbed Entity="WeaponLaserLasgunVoss" Caption="Voss Lasgun"/>
+</Box>
+- [color=#a4885c]Lasgun[/color] — the Imperium's workhorse: fires a heat beam, runs off a power cell, needs a two-handed grip and takes a lot of mods.
+- [color=#a4885c]Accatran[/color] — a fast, compact lasgun: weaker per shot but stitches often, the cell lasts long.
+- [color=#a4885c]Krieg lasgun[/color] — stronger than the standard one, with a bayonet for trench fighting. A yellow beam that hits hard.
+- [color=#a4885c]Voss lasgun[/color] — fires without a two-handed grip, more mobile, but fewer mod slots.
+- [color=#a4885c]Hellgun[/color] — fast and powerful, but feeds from a backpack generator. Without the pack it's useless.
+- [color=#a4885c]Laspistol[/color] — compact, fires one-handed, good for officers.
+- [color=#a4885c]Melta gun[/color] — incinerates armor and vehicles, but only point-blank. Useless at range.
+- [color=#a4885c]Plasma gun[/color] — hits hard and explodes on impact, [color=#ff0000]but sometimes overheats and explodes in your hands, destroying the weapon[/color]. Don't squeeze the trigger for no reason.
+
+## Stub guns (autoguns)
+- [color=#a4885c]Stub pistol[/color] — compact, hits piercing, fires one-handed.
+- [color=#a4885c]Heavy stub pistol[/color] — a powerful big-bore, but the magazine is small.
+- [color=#a4885c]Stub rifle[/color] — universal, with fire modes and plenty of mod slots. Needs a two-handed grip.
+- [color=#a4885c]Stub SMG[/color] — compact submachine guns with varying fire rate and spread. The third one is a true bullet hose, but no optics.
+- [color=#a4885c]Stub shotgun[/color] and [color=#a4885c]combat shotgun[/color] — for close quarters, the combat one's drum mag holds more.
+- [color=#a4885c]Stub MG[/color] — a heavy machine gun with a two-hundred-round belt, needs a two-handed grip.
+
+## Bolters
+- [color=#a4885c]Bolter rifle[/color] — pierces armor and explodes on impact. A bolter round is damage, a micro-blast and a slowdown all in one.
+- [color=#a4885c]Bolter pistol[/color] — a compact version, hits just as piercing but the magazine is small.
+- [color=#a4885c]Astartes bolt pistol[/color] — actually a laser, fires a heat beam, runs off a cell.
+
+## Heavy emplacements (deployable)
+- [color=#a4885c]Heavy bolter[/color] — a stationary turret: deploy, anchor, and the operator swings the barrel. No anchor, no firing.
+- [color=#a4885c]Lascannon[/color] — a powerful laser that punches armor and structures.
+- [color=#a4885c]Multilaser[/color] — a fast laser with a big energy reserve.
+- [color=#a4885c]Autocannon[/color] — punches armor and explodes, save it for heavy targets.
+
+## Sniper rifles
+- [color=#a4885c]Londoron Mk2[/color] — one-shots, needs aiming. Prone, aim, fire, reposition.
+- [color=#a4885c]Londoron Possessed[/color] — a possessed version: hits and pierces, burns and ignites, refills itself over time.
+
+## Mechanicus
+- [color=#a4885c]Rad carbine[/color] — irradiates the target: damage plus area radiation. Don't stand next to the target after a volley.
+- [color=#a4885c]Galvanic rifle[/color] — precise weapon with a scope, needs a two-handed grip.
+- [color=#a4885c]Phosphor weapons[/color] — ignite the target and flood it with heat.
+
+## Tau Pulse
+Tau weapons hit harder up close and weaker at range — close the distance.
+- [color=#a4885c]Carbine[/color] — universal, mid range.
+- [color=#a4885c]Blaster[/color] — fast firing, close range.
+- [color=#a4885c]Sniper[/color] — long range, for a prepared ambush.
+- [color=#a4885c]Rail rifle[/color] — punches through everything at long range.
+
+## NoizeMarine sonic weapons
+Slice flesh with sound and slow the enemy. The Blastmaster is mini-artillery with a shockwave.
+
+## Flamethrower
+Floods fire and ignites. Ideal for clearing trenches and barricades — but watch the fuel tank.
+
+## Melee
+- [color=#a4885c]Power fist[/color] — hits heavy and shocks, knocks the enemy back on hit.
+- [color=#a4885c]Chainsword[/color] — cuts hard, especially two-handed and switched on.
+- [color=#a4885c]Power saber[/color] — cuts and shocks, reflects some projectiles.
+- [color=#a4885c]Catachan knife and machete[/color] — light cutting blades for a scout.
+- [color=#a4885c]Chaos machete[/color] — cuts more than the Catachan one.
+- [color=#a4885c]Imperium hammer[/color] — smashes and breaks structures, hits twice as hard two-handed, and puts out fire.
+- [color=#a4885c]Omnissian axe[/color] — a weapon and a multitool in one: cuts, smashes, unscrews, prys, welds.
+
+## Grenades
+- [color=#a4885c]Frag[/color] — fragmentation, for crowds.
+- [color=#a4885c]Krak[/color] — anti-tank, a focused blast against armor.
+- [color=#a4885c]Melta[/color] — anti-tank melta, melts vehicles into a puddle.
+
+## Weapon mods
+Many guns have slots for modules: optics, suppressor, bipod, sling, bayonet, a long or short barrel. A sniper scope noticeably extends your aiming range, a bipod zeroes spread while prone, a sling keeps the weapon from falling on a stun. More in the separate pages on mods.
+
+## Armor plates
+The Flak vest takes one plate — laser, bullet or melee. Pick the one that matches the threat on your front. Plates wear out from hits — check them between fights and swap the broken ones.
+
+</Document>

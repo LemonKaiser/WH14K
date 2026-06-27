@@ -1,5 +1,6 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Science
+  ruleEntry: true
   name: guide-entry-science
   text: "/ServerInfo/Guidebook/Science/Science.xml"
   children:
@@ -10,12 +11,14 @@
 
 - type: guideEntry
   id: Technologies
+  ruleEntry: true
   name: guide-entry-technologies
   text: "/ServerInfo/Guidebook/Science/Technologies.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: AnomalousResearch
+  ruleEntry: true
   name: guide-entry-anomalous-research
   text: "/ServerInfo/Guidebook/Science/AnomalousResearch.xml"
   children:
@@ -24,16 +27,19 @@
 
 - type: guideEntry
   id: ScannersAndVessels
+  ruleEntry: true
   name: guide-entry-scanners-and-vessels
   text: "/ServerInfo/Guidebook/Science/ScannersAndVessels.xml"
 
 - type: guideEntry
   id: APE
+  ruleEntry: true
   name: guide-entry-ape
   text: "/ServerInfo/Guidebook/Science/APE.xml"
 
 - type: guideEntry
   id: Xenoarchaeology
+  ruleEntry: true
   name: guide-entry-xenoarchaeology
   text: "/ServerInfo/Guidebook/Science/Xenoarchaeology.xml"
   children:
@@ -42,16 +48,19 @@
 
 - type: guideEntry
   id: XenoarchaeologyUnlockingNodes
+  ruleEntry: true
   name: guide-entry-xenoarchaeologyunlockingnodes
   text: "/ServerInfo/Guidebook/Science/UnlockingNodes.xml"
 
 - type: guideEntry
   id: AnalysisConsole
+  ruleEntry: true
   name: guide-entry-analysisconsole
   text: "/ServerInfo/Guidebook/Science/AnalysisConsole.xml"
 
 - type: guideEntry
   id: Robotics
+  ruleEntry: true
   name: guide-entry-robotics
   text: "/ServerInfo/Guidebook/Science/Robotics.xml"
   children:
@@ -59,5 +68,6 @@
 
 - type: guideEntry
   id: Cyborgs
+  ruleEntry: true
   name: guide-entry-cyborgs
   text: "/ServerInfo/Guidebook/Science/Cyborgs.xml"

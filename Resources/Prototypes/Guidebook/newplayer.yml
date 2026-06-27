@@ -25,7 +25,6 @@
   text: "/ServerInfo/Guidebook/NewPlayer/CharacterCreation.xml"
   children:
   - YourFirstCharacter
-  - Species
 
 - type: guideEntry
   id: YourFirstCharacter
