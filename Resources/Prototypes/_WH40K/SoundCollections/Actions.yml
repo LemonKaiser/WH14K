@@ -1,0 +1,26 @@
+- type: soundCollection
+  id: KhorneBloodstorm
+  files:
+  - /Audio/_WH40K/Actions/KhorneBloodstorm_0.ogg
+  - /Audio/_WH40K/Actions/KhorneBloodstorm_1.ogg
+  - /Audio/_WH40K/Actions/KhorneBloodstorm_2.ogg
+  - /Audio/_WH40K/Actions/KhorneBloodstorm_3.ogg
+  - /Audio/_WH40K/Actions/KhorneBloodstorm_4.ogg
+
+- type: soundCollection
+  id: NurgleMiasma
+  files:
+  - /Audio/_WH40K/Actions/NurgleMiasma_0.ogg
+  - /Audio/_WH40K/Actions/NurgleMiasma_1.ogg
+  - /Audio/_WH40K/Actions/NurgleMiasma_2.ogg
+  - /Audio/_WH40K/Actions/NurgleMiasma_3.ogg
+
+- type: soundCollection
+  id: NurgleCorpseBloom
+  files:
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_0.ogg
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_1.ogg
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_2.ogg
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_3.ogg
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_4.ogg
+  - /Audio/_WH40K/Actions/NurgleCorpseBloom_5.ogg

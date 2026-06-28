@@ -168,6 +168,8 @@
   components:
   - type: Action
     useDelay: 180
+    sound:
+      collection: NurgleMiasma
     icon:
       sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
       state: smoke
@@ -481,6 +483,8 @@
   components:
   - type: Action
     useDelay: 180
+    sound:
+      collection: KhorneBloodstorm
     icon:
       sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
       state: dash
@@ -525,6 +529,8 @@
     breakOnDamage: true
   - type: Action
     useDelay: 35
+    sound:
+      collection: NurgleCorpseBloom
     icon:
       sprite: _WH40K/Interface/Actions/cultist_abilities.rsi
       state: zombie
