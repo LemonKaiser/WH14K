@@ -1,23 +1,23 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: References
   name: guide-entry-references
   priority: 30
   text: "/ServerInfo/Guidebook/References.xml"
   children:
-  - Chemicals
-  - Drinks
-  - FoodRecipes
   - Writing
-  - Lawsets
 
 - type: guideEntry
   id: Drinks
+
+  ruleEntry: true
   name: guide-entry-drinks
   text: "/ServerInfo/Guidebook/ReferenceTables/Drinks.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: FoodRecipes
+
+  ruleEntry: true
   name: guide-entry-foodrecipes
   text: "/ServerInfo/Guidebook/Service/FoodRecipes.xml"
   filterEnabled: True
@@ -40,90 +40,120 @@
 
 - type: guideEntry
   id: PizzaRecipes
+
+  ruleEntry: true
   name: guide-entry-pizza-recipes
   text: "/ServerInfo/Guidebook/Service/PizzaRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: SavoryRecipes
+
+  ruleEntry: true
   name: guide-entry-savory-recipes
   text: "/ServerInfo/Guidebook/Service/SavoryRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: BreadRecipes
+
+  ruleEntry: true
   name: guide-entry-bread-recipes
   text: "/ServerInfo/Guidebook/Service/BreadRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: BreakfastRecipes
+
+  ruleEntry: true
   name: guide-entry-breakfast-recipes
   text: "/ServerInfo/Guidebook/Service/BreakfastRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: MothRecipes
+
+  ruleEntry: true
   name: guide-entry-moth-recipes
   text: "/ServerInfo/Guidebook/Service/MothRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: PastaRecipes
+
+  ruleEntry: true
   name: guide-entry-pasta-recipes
   text: "/ServerInfo/Guidebook/Service/PastaRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: DessertRecipes
+
+  ruleEntry: true
   name: guide-entry-dessert-recipes
   text: "/ServerInfo/Guidebook/Service/DessertRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: SoupRecipes
+
+  ruleEntry: true
   name: guide-entry-soup-recipes
   text: "/ServerInfo/Guidebook/Service/SoupRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: PieRecipes
+
+  ruleEntry: true
   name: guide-entry-pie-recipes
   text: "/ServerInfo/Guidebook/Service/PieRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: BarsAndCookiesRecipes
+
+  ruleEntry: true
   name: guide-entry-barsandcookies-recipes
   text: "/ServerInfo/Guidebook/Service/BarsAndCookiesRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: CakeRecipes
+
+  ruleEntry: true
   name: guide-entry-cake-recipes
   text: "/ServerInfo/Guidebook/Service/CakeRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: SaladRecipes
+
+  ruleEntry: true
   name: guide-entry-salad-recipes
   text: "/ServerInfo/Guidebook/Service/SaladRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: OtherRecipes
+
+  ruleEntry: true
   name: guide-entry-other-recipes
   text: "/ServerInfo/Guidebook/Service/OtherRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: MedicinalRecipes
+
+  ruleEntry: true
   name: guide-entry-medicinal-recipes
   text: "/ServerInfo/Guidebook/Service/MedicinalRecipes.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: SecretRecipes
+
+  ruleEntry: true
   name: guide-entry-secret-recipes
   text: "/ServerInfo/Guidebook/Service/SecretRecipes.xml"
   filterEnabled: True
@@ -135,6 +165,8 @@
 
 - type: guideEntry
   id: Lawsets
+
+  ruleEntry: true
   name: guide-entry-lawsets
   text: "/ServerInfo/Guidebook/ReferenceTables/Lawsets.xml"
   filterEnabled: True

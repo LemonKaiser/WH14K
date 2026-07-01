@@ -1,0 +1,31 @@
+<Document>
+# WH14K — Team Battle
+
+Welcome to WH14K, a Space Station 14 project set in the Warhammer 40,000 universe. This isn't a Nanotrasen station or a space crew: here a [color=#a4885c]faction battle[/color] rages, where two teams — [color=#FFD200]Imperium[/color] and [color=#D62828]Heretics[/color] — fight for control of the battlefield.
+
+## Where to start
+If you're new to the build, start with the [color=#a4885c]Factions[/color] section, then read [color=#a4885c]Species[/color] and [color=#a4885c]Roles[/color]. Basic character controls are in the [textlink="Controls" link="Controls"] section, and server rules are in the "Rules" tab.
+
+## Main sections
+- [textlink="Factions" link="WH40KFactions"] — the Imperium and Heretics teams, colors, composition.
+- [textlink="Species" link="WH40KSpecies"] — Ork, T'au, Astartes and their traits.
+- [textlink="Roles" link="WH40KRoles"] — jobs by faction: guardsman, commissar, psyker, magos and more.
+- [textlink="Combat systems" link="WH40KCombat"] — psyker, morale, squads, influence, chaplain.
+- [textlink="Command node" link="WH40KCommand"] — faction terminal: reinforcements, upgrade tree, missions.
+- [textlink="Logistics" link="WH40KLogistics"] — supply, Fulton extraction, ore mining.
+- [textlink="Weapons" link="WH40KWeapons"] — lasguns, stub guns, bolters, weapon mods, armor plates.
+- [textlink="Tactical map" link="WH40KTacticalMap"] — tablet with fog of war and annotations.
+- [textlink="Weather" link="WH40KWeather"] — hazardous weather fronts and protection.
+- [textlink="Game modes" link="WH40KGameModes"] — Team Battle, Wave Defence, mini-games.
+- [textlink="Progression" link="WH40KProgression"] — team levels, meta-progress, achievements, character development.
+- [textlink="Mini-games" link="WH40KMiniGames"] — Gun Game, Prop Hunt, Murder Mystery.
+
+## Battle phases
+A Team Battle round is split into three phases:
+- [color=#a4885c]Preparation[/color] (10 minutes) — combat is blocked by a barrier, teams build, gather resources, pump the upgrade tree.
+- [color=#a4885c]Assault[/color] (60 minutes) — active combat, capturing influence points, running missions.
+- [color=#a4885c]Apocalypse[/color] — final phase, economy at its peak, dangerous events.
+
+Team economy: preparation is weakest, assault doubles it, apocalypse triples it. Use preparation wisely.
+
+</Document>

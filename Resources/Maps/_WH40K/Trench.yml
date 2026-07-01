@@ -5,7 +5,7 @@ meta:
   forkId: koara2612
   forkVersion: f25251a3a94703dbb6e42b39ba61b4b0b134eee4
   time: 06/19/2026 12:33:58
-  entityCount: 18419
+  entityCount: 18421
 maps:
 - 1
 grids:
@@ -72171,6 +72171,18 @@ entities:
     components:
     - type: Transform
       pos: -25.5,6.5
+      parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 18420
+    components:
+    - type: Transform
+      pos: -16.5,70.5
+      parent: 2
+  - uid: 18421
+    components:
+    - type: Transform
+      pos: 233.5,9.5
       parent: 2
 - proto: SpawnPointHBandSupplier
   entities:

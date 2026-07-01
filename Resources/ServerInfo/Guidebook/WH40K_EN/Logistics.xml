@@ -1,0 +1,33 @@
+<Document>
+# Logistics
+
+This section covers supply, extraction and resource gathering — without it the faction runs out of ammo, armor and money.
+
+## Supply drop
+A pad for calling in air supply. It drains money from the faction balance, and a few seconds later a crate parachutes down from the sky.
+
+- It's expensive and takes a long time to recharge — don't call it for nothing.
+- The crate usually holds power cells for lasguns, but you can arrange other cargo.
+- Agree with the team who calls the crate and when, so you don't blow the balance on duplicates.
+
+There's a [color=#a4885c]Vox variant[/color] — a shop-backpack you wear. It carries food, medkits, ammo and mortar shells for war funds. Only works under the open sky — under a roof the order won't go through.
+
+## Fulton extraction
+A balloon you hook onto a corpse or objective and lift it off the battlefield to an offscreen map. For each [color=#a4885c]enemy corpse[/color] extracted the team earns front and command points.
+
+- Hooking takes a few seconds, extraction takes longer. Protect the carrier while he hauls the balloon.
+- Hauling your own dead is pointless — no reward for them.
+- The limits are strict: only a few bodies can be extracted at once per team, and the balloon recharges between uses.
+- Per round you can earn so many points — beyond that there's a cap, so haul in the opening minutes before you hit the ceiling.
+
+## Ore extraction
+The ore extractor is a powered machine that spits ore onto the tile in front of it on its own. The higher your team level, the more often and the more it yields.
+
+- At low level — steel and coal, at mid — quartz, at high — gold, silver, plasma and uranium.
+- It needs power and a clear output tile — don't clog it with crates.
+- Build a roof over it or the weather eats it alive.
+
+## Cargo
+WH14K uses faction accounts and a war funds currency. Order through the cargo console: lasguns, sniper rifles, medkits, defibrillators, plasteel, grenades. The higher the team level, the more cargo fits per run and the faster the delivery.
+
+</Document>

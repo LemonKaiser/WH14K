@@ -1,0 +1,31 @@
+<Document>
+# Game modes
+
+WH14K offers several modes: a main PvP battle, PvE defense and arcade mini-games.
+
+## Team Battle
+The main mode. [textlink="Imperium" link="WH40KFactions"] versus [textlink="Heretics" link="WH40KFactions"].
+
+- Phases: [color=#a4885c]Preparation[/color] (combat blocked by a barrier, build and pump) → [color=#a4885c]Assault[/color] (active combat, point capture, missions) → [color=#a4885c]Apocalypse[/color] (peak economy, dangerous events).
+- Economy grows with the phase: weak in preparation, doubled in assault, tripled in apocalypse.
+- Victory: one living team remains, or the enemy [textlink="command node" link="WH40KCommand"] is destroyed, or the time limit runs out — then it's a draw.
+- Hazardous weather fronts and round events roll in randomly: logistics surge, orbital bombardment, black front.
+
+## Wave Defence
+PvE. Imperium defends the [textlink="command node" link="WH40KCommand"] from thirty escalating waves of Chaos mobs.
+
+- Phases: preparation → wave → break → next wave.
+- Enemies: tyranids, Slaanesh daemons, cultists, hellgunners, elite, and from wave twenty — [color=#a4885c]Chaos Astartes[/color].
+- Victory: survive wave thirty. Defeat: the command node is destroyed.
+- Critical enemies count as alive — finish off the downed or the wave won't end.
+
+## Mini-games
+Separate arcade modes for two to thirty players:
+- [textlink="Gun Game" link="WH40KGunGame"] — free-for-all, thirty weapon tiers per frag.
+- [textlink="Prop Hunt" link="WH40KPropHunt"] — hide and seek: the hider turns into a prop, the seeker hunts.
+- [textlink="Murder Mystery" link="WH40KMurderMystery"] — TTT style: a murderer with a knife, a sheriff with a revolver, civilians with clues.
+
+## Picking a mode
+The mode is chosen by lobby vote or admin command. Mini-games are marked separately and usually run on shared maps.
+
+</Document>

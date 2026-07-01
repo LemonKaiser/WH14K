@@ -1,0 +1,18 @@
+<Document>
+# Intel detector & pinpointer
+
+## Intel detector
+A handheld scanner that finds your faction's active objectives in a radius — mission markers light up on the screen.
+
+- The scanner has two modes: [color=#a4885c]short range[/color] (scans more often, smaller radius) and [color=#a4885c]long[/color] (reaches farther, updates less often). Switch depending on the task.
+- Activate it in hand or by clicking a placed scanner; it turns off when dropped.
+- Faction-safe: it only finds your team's objectives (or neutral ones), so it won't give your quests away to the enemy.
+
+## Mission pinpointer
+Leads you to the active mission target — an arrow points the way.
+
+- Updates regularly.
+- Only works for your team.
+- If there's no team mission, it switches to the global one — watch the arrow.
+
+</Document>

@@ -1,5 +1,6 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Chemicals
+  ruleEntry: true
   name: guide-entry-chemicals
   text: "/ServerInfo/Guidebook/Chemicals.xml"
   children:
@@ -17,54 +18,63 @@
 
 - type: guideEntry
   id: Elements
+  ruleEntry: true
   name: guide-entry-elements
   text: "/ServerInfo/Guidebook/ChemicalTabs/Elements.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Narcotics
+  ruleEntry: true
   name: guide-entry-narcotics
   text: "/ServerInfo/Guidebook/ChemicalTabs/Narcotics.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Pyrotechnic
+  ruleEntry: true
   name: guide-entry-pyrotechnics
   text: "/ServerInfo/Guidebook/ChemicalTabs/Pyrotechnic.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Toxins
+  ruleEntry: true
   name: guide-entry-toxins
   text: "/ServerInfo/Guidebook/ChemicalTabs/Toxins.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Foods
+  ruleEntry: true
   name: guide-entry-foods
   text: "/ServerInfo/Guidebook/ChemicalTabs/Foods.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Botanical
+  ruleEntry: true
   name: guide-entry-botanical
   text: "/ServerInfo/Guidebook/Medical/Botanicals.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Biological
+  ruleEntry: true
   name: guide-entry-biological
   text: "/ServerInfo/Guidebook/ChemicalTabs/Biological.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Special
+  ruleEntry: true
   name: guide-entry-special
   text: "/ServerInfo/Guidebook/ChemicalTabs/Special.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Others
+  ruleEntry: true
   name: guide-entry-others
   text: "/ServerInfo/Guidebook/ChemicalTabs/Other.xml"
   filterEnabled: True

@@ -1,0 +1,34 @@
+<Document>
+# Tactical map
+
+The tablet shows a pre-rendered snapshot of the battlefield with [color=#a4885c]fog of war[/color], allied positions and capture point status. It's your main tool for coordinating the team.
+
+<Box>
+<GuideEntityEmbed Entity="WH40KStandardTacticalMapTablet" Caption="Standard tablet"/>
+<GuideEntityEmbed Entity="WH40KCommandTacticalMapTablet" Caption="Officer tablet"/>
+</Box>
+
+## How it works
+- Click the tablet in your hand to open the map window.
+- [color=#a4885c]Fog of war[/color]: the map only opens where your allies stand. Move as a group — the fog recedes ahead of you, revealing enemy positions.
+- [color=#a4885c]Allied markers[/color] are tinted with your faction's color — gold for Imperium, dark red for Heretics.
+- [color=#a4885c]Capture points[/color] show a progress bar, callsign and owner — you see at a glance whose point it is and how capture is going.
+
+## Annotations (officer tablet)
+The officer tablet can draw on the map:
+- [color=#a4885c]Brush[/color] — draw lines and marks.
+- [color=#a4885c]Eraser[/color] — erase.
+- The whole team sees the annotations — mark enemy points and danger directions before a push.
+- There are sensible limits on stroke and point counts — draw for a reason, don't paint over the whole map.
+
+## Updates
+- Fog of war opens several times a second.
+- Allied markers and points update often.
+- By default the map snapshot is static — live refresh is off for performance.
+
+## Tips
+- Keep the tablet in your pocket and open it before a push — orient yourself on where the enemy and your allies are.
+- Move as a group so the fog of war recedes faster.
+- Officer: mark enemy points and attack directions for the team before advancing.
+
+</Document>

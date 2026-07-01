@@ -1,0 +1,16 @@
+<Document>
+# Gun Game
+
+Everyone for themselves. With each frag you're handed a new weapon — thirty tiers in total. Whoever reaches the top first and grabs the golden wrench wins.
+
+- Weapons are drawn from a big pool — from vanilla pistols and shotguns to WH14K lasguns, stubs and bolters.
+- Critical state counts as death — you don't clutch out, you respawn right away.
+- The body vanishes on death, respawn is quick.
+- The combat knife always sits in your other hand and never changes — slash if you run out of ammo.
+- [color=#a4885c]Pickups[/color]: ammo and medkit crates spawn on the map. The medkit fully heals, ammo refills the current weapon.
+- A death streak without frags lowers your level — play more carefully, don't charge into the crowd.
+- At the end of the round the top three by level and ten by frag count make the honors board.
+
+Your weapon can't be dropped or lost — it's bound to you. But you can pocket it or sling it on your back.
+
+</Document>

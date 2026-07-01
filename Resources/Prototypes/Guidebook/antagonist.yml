@@ -1,6 +1,7 @@
 - type: guideEntry
   id: Antagonists
   name: guide-entry-antagonists
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Antagonists.xml"
   children:
   - Traitors
@@ -16,44 +17,53 @@
 - type: guideEntry
   id: Traitors
   name: guide-entry-traitors
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Traitors.xml"
 
 - type: guideEntry
   id: NuclearOperatives
   name: guide-entry-nuclear-operatives
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Nuclear Operatives.xml"
 
 - type: guideEntry
   id: Zombies
   name: guide-entry-zombies
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Zombies.xml"
 
 - type: guideEntry
   id: Revolutionaries
   name: guide-entry-revolutionaries
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Revolutionaries.xml"
 
 - type: guideEntry
   id: MinorAntagonists
   name: guide-entry-minor-antagonists
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/MinorAntagonists.xml"
 
 - type: guideEntry
   id: SpaceNinja
   name: guide-entry-space-ninja
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/SpaceNinja.xml"
 
 - type: guideEntry
   id: Thieves
   name: guide-entry-thieves
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Thieves.xml"
 
 - type: guideEntry
   id: Wizard
   name: guide-entry-wizard
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Wizard.xml"
 
 - type: guideEntry
   id: Xenoborgs
   name: guide-entry-xenoborgs
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Antagonist/Xenoborgs.xml"

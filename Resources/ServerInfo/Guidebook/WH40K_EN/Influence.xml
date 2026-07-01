@@ -1,0 +1,24 @@
+<Document>
+# Influence
+
+Influence points on the map are capture objectives that bring the team passive income while you hold them.
+
+## Capturing
+- To capture a point, stand near it. The more fighters standing, the faster the capture.
+- Capture is only possible from the [color=#a4885c]Assault[/color] phase — in preparation the points are frozen.
+
+## Mechanics
+- If both teams have equal forces on the point, [color=#a4885c]capture freezes[/color] until someone tips the balance.
+- If a point is left empty, progress starts to melt — don't leave captured points unattended.
+- Once capture is complete, the team owns the point and earns income until it's taken back.
+
+## Reward
+- The point's owner earns front points on a regular interval, multiplied by the current phase economy.
+- The point appears on the [textlink="tactical map" link="WH40KTacticalMap"] with a callsign and capture progress.
+
+## Tips
+- Keep several fighters on the point — capture goes much faster.
+- Don't leave a point empty — progress drops and the enemy takes it back easily.
+- Coordinate captures through the tactical map so you don't spread thin.
+
+</Document>

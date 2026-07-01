@@ -1,6 +1,7 @@
 - type: guideEntry
   id: Jobs
   name: guide-entry-jobs
+  ruleEntry: true
   text: "/ServerInfo/Guidebook/Jobs.xml"
   children:
   - Service
