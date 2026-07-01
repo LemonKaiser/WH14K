@@ -1,0 +1,15 @@
+- type: gameMap
+  id: WH40KParallaxTest
+  mapName: WH40K Parallax Test
+  mapPath: /Maps/_WH40K/parallax_test.yml
+  minPlayers: 0
+  maxPlayers: 5
+  stations:
+    ParallaxTest:
+      stationProto: TestStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Parallax Test"
+        - type: StationJobs
+          availableJobs:
+            Passenger: [ -1, -1 ]

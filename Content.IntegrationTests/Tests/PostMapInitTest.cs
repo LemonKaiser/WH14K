@@ -49,7 +49,8 @@ namespace Content.IntegrationTests.Tests
             "WH40KWaveDefenceRiotStag",
             "WH40KGunGameDm01Entryway",
             "WH40KGunGameLiman",
-            "WH40KGunGameMeteorArena"
+            "WH40KGunGameMeteorArena",
+            "WH40KParallaxTest"
         };
 
         private static readonly string[] Grids =
