@@ -8,6 +8,9 @@
 
 - type: loadout
   id: WH40KBloodPactUniform
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
   equipment:
     jumpsuit: ClothingUniformJumpsuitBloodPact
 

@@ -1,5 +1,8 @@
 - type: loadout
   id: WH40KBloodPactBoots
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
   equipment:
     shoes: ClothingShoesBootsBloodPact
 
