@@ -10,3 +10,11 @@
     requiredLevel: 10
   equipment:
     shoes: ClothingShoesBootsMoebian6
+
+- type: loadout
+  id: WH40KTzeentchBoots
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    shoes: ClothingShoesBootsTzeentch

@@ -50,4 +50,12 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
   equipment:
-    helmet: ClothingHeadHelmetMoebian6
+    head: ClothingHeadHelmetMoebian6
+
+- type: loadout
+  id: WH40KTzeentchHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    head: ClothingHeadHelmetTzeentch

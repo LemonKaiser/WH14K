@@ -1,0 +1,10 @@
+- type: entity
+  parent: [ClothingHandsBase, WH40KChaosDamnationClothing]
+  id: ClothingHandsGlovesTzeentch
+  suffix: WH40K, Тзинч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Hands/Gloves/tzeentch_cult.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Hands/Gloves/tzeentch_cult.rsi
+  - type: Insulated
