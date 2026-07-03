@@ -1,0 +1,9 @@
+- type: entity
+  parent: [ClothingHeadHelmetFlak, WH40KChaosDamnationClothing]
+  id: ClothingHeadHelmetRager
+  suffix: WH40K, Мёбиан-6
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Head/Helmets/rager_helmet.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Head/Helmets/rager_helmet.rsi

@@ -1,6 +1,9 @@
 ent-ClothingHeadHelmetMoebian6 = Moebian 6th helmet
     .desc = The helmet of the traitorous Moebian 6th Guard Regiment.
 
+ent-ClothingHeadHelmetRager = Moebian 6th Rager helmet
+    .desc = The helmet of the traitorous Moebian 6th Guard Regiment. This specimen bears battle damage and has undergone rough repairs.
+
 ent-ClothingOuterArmorMoebian6 = Moebian 6th armor
     .desc = The armor of the traitorous Moebian 6th Guard Regiment.
 

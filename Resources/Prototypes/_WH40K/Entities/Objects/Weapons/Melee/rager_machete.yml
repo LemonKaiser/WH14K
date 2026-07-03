@@ -1,0 +1,28 @@
+- type: entity
+  parent: BaseSword
+  id: RagerMachete
+  suffix: WH40K, Хаос
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/machete_rager.rsi
+    state: icon
+  - type: MultiHandedItem
+  - type: MeleeWeapon
+    autoAttack: true
+    attackRate: 3
+    damage:
+      types:
+        Slash: 25
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/machete_rager.rsi
+    storedSprite: null
+    size: Large
+  - type: StaminaDamageOnHit
+    damage: 2.5
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Melee/machete_rager.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: HeldSpeedModifier
+    sprintModifier: 1.25
