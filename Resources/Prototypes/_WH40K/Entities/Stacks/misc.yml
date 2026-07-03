@@ -21,6 +21,20 @@
   maxCount: 4
 
 - type: stack
+  id: WH40KArtifactSquare
+  name: wh40k-artifact-square-stack-name
+  icon: { sprite: /Textures/_WH40K/Objects/Specific/artifact_square.rsi, state: artifact }
+  spawn: WH40KArtifactSquare
+  maxCount: 4
+
+- type: stack
+  id: WH40KArtifactTriangle
+  name: wh40k-artifact-triangle-stack-name
+  icon: { sprite: /Textures/_WH40K/Objects/Specific/artifact_triangle.rsi, state: artifact }
+  spawn: WH40KArtifactTriangle
+  maxCount: 4
+
+- type: stack
   parent: BaseSmallStack
   id: WH40KBarbedWire
   name: wh40k-stack-barbed-wire

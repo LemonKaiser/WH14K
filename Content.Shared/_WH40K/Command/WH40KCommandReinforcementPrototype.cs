@@ -24,6 +24,9 @@ public sealed partial class WH40KCommandReinforcementOptionPrototype
     [DataField("baseCost")]
     public int BaseCost = 20;
 
+    [DataField("baseArtifactCost")]
+    public int BaseArtifactCost;
+
     [DataField("maxCount")]
     public int MaxCount = 1;
 

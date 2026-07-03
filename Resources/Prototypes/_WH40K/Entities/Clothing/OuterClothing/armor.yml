@@ -18,6 +18,25 @@
         Heat: 0.6
   - type: WH40KArmorPlateHolder
     slotCount: 1
+  - type: ItemSlots
+    slots:
+      wh40k-plate-slot-1:
+        name: wh40k-armor-plate-slot-name-1
+        priority: 4
+        insertOnInteract: true
+        ejectOnInteract: false
+        disableEject: true
+        swap: false
+        lockedFailPopup: wh40k-armor-plate-slot-locked
+        whitelistFailPopup: wh40k-armor-plate-slot-invalid
+        insertSound: /Audio/Items/toolbox_insert.ogg
+        ejectSound: /Audio/Items/toolbox_remove.ogg
+        whitelist:
+          components:
+          - WH40KArmorPlate
+  - type: ContainerContainer
+    containers:
+      wh40k-plate-slot-1: !type:ContainerSlot {}
   - type: ExplosionResistance
     damageCoefficient: 0.6
   - type: ClothingSpeedModifier
@@ -409,6 +428,7 @@
   - type: ContainerContainer
     containers:
       toggleable-clothing: !type:ContainerSlot {}
+      wh40k-plate-slot-1: !type:ContainerSlot {}
 
 - type: entity
   parent: ClothingOuterArmorFlakVest

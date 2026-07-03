@@ -62,6 +62,13 @@
         whitelist:
           tags:
             - AccatranPowerCell
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-underbarrel: !type:ContainerSlot
+      wh40k-weapon-mod-barrel: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot
   - type: WH40KWeaponLight
   - type: PointLight
     enabled: false

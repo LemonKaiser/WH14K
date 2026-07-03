@@ -118,6 +118,7 @@
   - PlushieEndrAnimetWH40K
   - PlushieFizzoWH40K
   - PlushieLitiyWH40K
+  - PlushieWarpImpWH40K
 
 - type: loadoutGroup
   id: WH40KImperialLineHead
@@ -279,6 +280,7 @@
   name: loadout-group-wh40k-imperial-main
   loadouts:
   - WH40KWeaponLaserLasgunLoadout
+  - WH40KWeaponLaserLasgunTriplexLoadout
   - WH40KWeaponLaserLasgunVossLoadout
   - WH40KWeaponLaserLasgunAccatranLoadout
   - WH40KWeaponLaserLasgunKriegLoadout
@@ -290,6 +292,7 @@
   name: loadout-group-wh40k-heretic-main
   loadouts:
   - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponHereticLaserLasgunTriplexLoadout
   - WH40KWeaponStubRifleLoadoutSerg
   - WH40KWeaponStubShotgunLoadout
   - WH40KWeaponCombatShotgunLoadout
@@ -524,6 +527,7 @@
   - WH40KCommandCatachanMediumArmor
   - WH40KCommandCatachanVest
   - WH40KOfficerCoat
+  - WH40KMajorFlakCoat
   - WH40KCoatLietVst
   - WH40KValhallanCaptainCoat
 
@@ -607,6 +611,7 @@
   maxLimit: 1
   loadouts:
   - WH40KWeaponLaserLasgunLoadout
+  - WH40KWeaponLaserLasgunTriplexLoadout
   - WH40KWeaponLaserLasgunVossLoadout
   - WH40KWeaponLaserLasgunAccatranLoadout
   - WH40KWeaponLaserLasgunKriegLoadout
@@ -621,6 +626,14 @@
   - WH40KPsykerStaffPyromantic
   - WH40KPsykerStaffPsychic
   - WH40KPsykerStaffTelekinetic
+
+- type: loadoutGroup
+  id: WH40KImperialPsykerOuter
+  name: loadout-group-wh40k-imperial-psyker-outer
+  minLimit: 0
+  loadouts:
+  - WH40KPsykerWardCoat
+  - WH40KPsykerWardCoatPremium
 
 - type: loadoutGroup
   id: WH40KChaplainMelee
@@ -702,6 +715,7 @@
   - PlushieEndrAnimetWH40K
   - PlushieFizzoWH40K
   - PlushieLitiyWH40K
+  - PlushieWarpImpWH40K
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
@@ -829,6 +843,7 @@
   name: loadout-group-wh40k-heretic-main
   loadouts:
   - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponHereticLaserLasgunTriplexLoadout
   - WH40KWeaponStubRifleLoadoutSerg
   - WH40KWeaponStubShotgunLoadout
   - WH40KWeaponCombatShotgunLoadout
@@ -842,6 +857,7 @@
   name: loadout-group-wh40k-heretic-main
   loadouts:
   - WH40KWeaponHereticLaserLasgunLoadout
+  - WH40KWeaponHereticLaserLasgunTriplexLoadout
   - WH40KWeaponStubRifleLoadoutSerg
   - WH40KWeaponStubShotgunLoadout
   - WH40KWeaponCombatShotgunLoadout

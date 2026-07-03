@@ -57,6 +57,13 @@
         whitelist:
           tags:
             - Cartridge10mmLong
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      wh40k-weapon-mod-underbarrel: !type:ContainerSlot
+      wh40k-weapon-mod-muzzle: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot
   - type: Gun
     fireRate: 7.5
     minAngle: 25

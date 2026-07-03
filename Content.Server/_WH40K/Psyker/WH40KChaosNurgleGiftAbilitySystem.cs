@@ -23,6 +23,8 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared._WH40K.GameTicking.Rules;
 using Content.Shared._WH40K.Psyker;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Server.Player;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
@@ -37,6 +39,8 @@ public sealed partial class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     private const string NurgleCorpseRiseAction = "ActionWH40KChaosNurgleCorpseBloom";
     private const float NurgleMiasmaBaseCooldownSeconds = 180f;
     private const string HereticTeamId = "Heretics";
+    private static readonly SoundSpecifier NurgleCorpseRiseVoice =
+        new SoundCollectionSpecifier("WH40KNurgleCorpseRiseVoice", AudioParams.Default.WithVolume(-4f));
 
     private static readonly EntProtoId AcidSpitTierZeroProjectile = "WH40KProjectileChaosNurgleAcidSpit";
     private static readonly EntProtoId AcidSpitTierOneProjectile = "WH40KProjectileChaosNurgleAcidSpitTier1";
@@ -45,6 +49,7 @@ public sealed partial class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
     private static readonly EntProtoId AcidSpitExProjectile = "WH40KProjectileChaosNurgleAcidSpitEx";
 
     [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
     [Dependency] private  DamageableSystem _damageable = default!;
     [Dependency] private  EntityLookupSystem _lookup = default!;
     [Dependency] private  MobStateSystem _mobState = default!;
@@ -179,6 +184,7 @@ public sealed partial class WH40KChaosNurgleGiftAbilitySystem : EntitySystem
             _damageable.HealEvenly((args.Target, damageable), -healAmount, origin: args.Performer, ignoreGlobalModifiers: true);
         }
 
+        _audio.PlayPvs(NurgleCorpseRiseVoice, args.Performer);
         args.Handled = true;
     }
 

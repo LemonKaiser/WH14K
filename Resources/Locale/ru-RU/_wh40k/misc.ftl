@@ -76,6 +76,7 @@ loadout-group-wh40k-imperial-command-head = Командование, голов
 loadout-group-wh40k-imperial-command-neck = Командование, награды и наплечники
 loadout-group-wh40k-imperial-command-uniform = Командование, униформа
 loadout-group-wh40k-imperial-command-outer = Командование, верхняя одежда
+loadout-group-wh40k-imperial-psyker-outer = Псайкер, верхняя одежда
 loadout-group-wh40k-imperial-command-hands = Командование, перчатки
 loadout-group-wh40k-imperial-command-feet = Командование, ботинки
 loadout-group-wh40k-command-field-kit = Командный походный набор

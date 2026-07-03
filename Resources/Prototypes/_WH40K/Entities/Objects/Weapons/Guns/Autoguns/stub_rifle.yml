@@ -88,6 +88,11 @@
     containers:
       gun_magazine: !type:ContainerSlot
       gun_chamber: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-muzzle: !type:ContainerSlot
+      wh40k-weapon-mod-underbarrel: !type:ContainerSlot
+      wh40k-weapon-mod-stock: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot
   - type: MagazineVisuals
     magState: mag
     steps: 1

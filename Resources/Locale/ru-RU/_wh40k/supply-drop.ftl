@@ -30,5 +30,7 @@ wh40k-vox-supplydrop-popup-open-sky-required = Требуется открыто
 wh40k-currency-intel = Разведданные
 wh40k-currency-intel-chaos = Разведданные Хаоса
 wh40k-currency-intel-imperium = Разведданные Империума
+wh40k-currency-artifact-imperium = Артефакты Империума
+wh40k-currency-artifact-chaos = Артефакты Хаоса
 wh40k-vox-supplydrop-selected-name-with-amount = { $name } x{ $amount }
 wh40k-vox-supplydrop-quantity-line = Количество в дропе: x{ $amount }

@@ -133,6 +133,7 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         component.TeamFrontPoints.Clear();
         component.TeamCommandPoints.Clear();
         component.TeamResearchPoints.Clear();
+        component.TeamArtifactPoints.Clear();
         component.TeamBaseLevels.Clear();
         component.CurrentWaveNumber = 0;
         component.Phase = WH40KWaveDefencePhase.Preparation;
@@ -1495,6 +1496,68 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         return true;
     }
 
+    public bool TryGetTeamArtifactPoints(string teamId, out int points)
+    {
+        points = 0;
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        points = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
+        return true;
+    }
+
+    public bool TrySpendTeamArtifacts(string teamId, int amount, out int remaining, string? source = null)
+    {
+        remaining = 0;
+        if (string.IsNullOrWhiteSpace(teamId) || amount <= 0 ||
+            !TryGetActiveRule(out _, out var rule, out _))
+        {
+            return false;
+        }
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        var current = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
+        if (current < amount)
+            return false;
+
+        remaining = current - amount;
+        rule.TeamArtifactPoints[resolvedTeamId] = remaining;
+        return true;
+    }
+
+    public bool TryAdjustTeamArtifacts(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int artifactPoints,
+        string? source = null)
+    {
+        resolvedTeamId = string.Empty;
+        artifactPoints = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || delta == 0 ||
+            !TryGetActiveRule(out _, out var rule, out _))
+        {
+            return false;
+        }
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var current = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
+        artifactPoints = Math.Max(0, current + delta);
+        rule.TeamArtifactPoints[resolvedTeamId] = artifactPoints;
+        return true;
+    }
+
     public bool TryGetTeamEconomySnapshot(EntityUid? sourceUid, string teamId, out WH40KTeamEconomySnapshot snapshot)
     {
         snapshot = default;
@@ -1508,6 +1571,7 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
         var teamXp = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
         var influence = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0);
         var research = rule.TeamResearchPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var artifacts = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
         var level = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
         var pointsToNextLevel = GetPointsToNextLevel(teamXp, rule.BaseLevelThresholds);
         TryGetTeamFunds(sourceUid, resolvedTeamId, out var funds);
@@ -1517,6 +1581,7 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             teamXp,
             influence,
             research,
+            artifacts,
             funds,
             level,
             pointsToNextLevel);
@@ -1723,6 +1788,7 @@ public sealed partial class WH40KWaveDefenceRuleSystem : GameRuleSystem<WH40KWav
             rule.TeamFrontPoints.TryAdd(teamId, startingPoints);
             rule.TeamCommandPoints.TryAdd(teamId, startingPoints);
             rule.TeamResearchPoints.TryAdd(teamId, 0);
+            rule.TeamArtifactPoints.TryAdd(teamId, 0);
             rule.TeamBaseLevels.TryAdd(teamId, CalculateTeamLevel(startingPoints, rule.BaseLevelThresholds));
         }
     }

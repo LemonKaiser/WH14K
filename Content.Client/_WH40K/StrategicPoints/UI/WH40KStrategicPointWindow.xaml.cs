@@ -144,8 +144,8 @@ public sealed partial class WH40KStrategicPointWindow : FancyWindow, ILocalizedC
             state.IncomeEntries.Select(entry => Loc.GetString(
                 "wh40k-strategic-point-ui-income-row",
                 ("name", Loc.GetString(entry.LocKey)),
-                ("base", FormatIncomeAmount(entry.LocKey, entry.BaseAmount)),
-                ("effective", FormatIncomeAmount(entry.LocKey, entry.EffectiveAmount)),
+                ("base", FormatIncomeAmount(state, entry.LocKey, entry.BaseAmount)),
+                ("effective", FormatIncomeAmount(state, entry.LocKey, entry.EffectiveAmount)),
                 ("seconds", state.IncomeIntervalSeconds))));
     }
 
@@ -315,13 +315,16 @@ public sealed partial class WH40KStrategicPointWindow : FancyWindow, ILocalizedC
         };
     }
 
-    private static string FormatIncomeAmount(string locKey, int amount)
+    private static string FormatIncomeAmount(WH40KStrategicPointBuiState state, string locKey, int amount)
     {
         return locKey switch
         {
             "wh40k-strategic-point-ui-income-funds" => WH40KCommandUiStyles.FormatThroneGelt(amount),
             "wh40k-strategic-point-ui-income-influence" => WH40KCommandUiStyles.FormatInfluence(amount),
             "wh40k-strategic-point-ui-income-research" => WH40KCommandUiStyles.FormatResearch(amount),
+            "wh40k-strategic-point-ui-income-artifact" => WH40KCommandUiStyles.FormatArtifacts(
+                amount,
+                !string.IsNullOrWhiteSpace(state.ThemeTeamId) ? state.ThemeTeamId : state.OwnerTeamId),
             _ => WH40KCommandUiStyles.FormatExperience(amount)
         };
     }

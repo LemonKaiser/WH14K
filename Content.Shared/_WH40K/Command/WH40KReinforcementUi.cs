@@ -23,6 +23,7 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
     public int UnitCost { get; }
     public int UnitFundsCost { get; }
     public int UnitInfluenceCost { get; }
+    public int UnitArtifactCost { get; }
     public int PerRoleCap { get; }
     public int CurrentTeamCount { get; }
     public bool AllowAuto { get; }
@@ -38,6 +39,7 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
         int unitCost,
         int unitFundsCost,
         int unitInfluenceCost,
+        int unitArtifactCost,
         int perRoleCap,
         int currentTeamCount,
         bool allowAuto)
@@ -51,6 +53,7 @@ public sealed class WH40KCommandReinforcementCatalogEntryState
         UnitCost = unitCost;
         UnitFundsCost = unitFundsCost;
         UnitInfluenceCost = unitInfluenceCost;
+        UnitArtifactCost = unitArtifactCost;
         PerRoleCap = perRoleCap;
         CurrentTeamCount = currentTeamCount;
         AllowAuto = allowAuto;
@@ -80,8 +83,10 @@ public sealed class WH40KCommandReinforcementPendingRoleState
     public int TotalCost { get; }
     public int UnitFundsCost { get; }
     public int UnitInfluenceCost { get; }
+    public int UnitArtifactCost { get; }
     public int TotalFundsCost { get; }
     public int TotalInfluenceCost { get; }
+    public int TotalArtifactCost { get; }
 
     public WH40KCommandReinforcementPendingRoleState(
         string roleId,
@@ -91,8 +96,10 @@ public sealed class WH40KCommandReinforcementPendingRoleState
         int totalCost,
         int unitFundsCost,
         int unitInfluenceCost,
+        int unitArtifactCost,
         int totalFundsCost,
-        int totalInfluenceCost)
+        int totalInfluenceCost,
+        int totalArtifactCost)
     {
         RoleId = roleId;
         Name = name;
@@ -101,8 +108,10 @@ public sealed class WH40KCommandReinforcementPendingRoleState
         TotalCost = totalCost;
         UnitFundsCost = unitFundsCost;
         UnitInfluenceCost = unitInfluenceCost;
+        UnitArtifactCost = unitArtifactCost;
         TotalFundsCost = totalFundsCost;
         TotalInfluenceCost = totalInfluenceCost;
+        TotalArtifactCost = totalArtifactCost;
     }
 }
 
@@ -115,6 +124,7 @@ public sealed class WH40KCommandReinforcementPendingRequestState
     public int TotalCost { get; }
     public int TotalFundsCost { get; }
     public int TotalInfluenceCost { get; }
+    public int TotalArtifactCost { get; }
     public WH40KCommandReinforcementPendingRoleState[] Roles { get; }
 
     public WH40KCommandReinforcementPendingRequestState(
@@ -124,6 +134,7 @@ public sealed class WH40KCommandReinforcementPendingRequestState
         int totalCost,
         int totalFundsCost,
         int totalInfluenceCost,
+        int totalArtifactCost,
         WH40KCommandReinforcementPendingRoleState[] roles)
     {
         Kind = kind;
@@ -132,6 +143,7 @@ public sealed class WH40KCommandReinforcementPendingRequestState
         TotalCost = totalCost;
         TotalFundsCost = totalFundsCost;
         TotalInfluenceCost = totalInfluenceCost;
+        TotalArtifactCost = totalArtifactCost;
         Roles = roles;
     }
 }
@@ -145,6 +157,7 @@ public sealed class WH40KCommandReinforcementAutoConfigState
     public int TotalCost { get; }
     public int TotalFundsCost { get; }
     public int TotalInfluenceCost { get; }
+    public int TotalArtifactCost { get; }
     public WH40KCommandReinforcementDraftEntry[] Roles { get; }
 
     public WH40KCommandReinforcementAutoConfigState(
@@ -154,6 +167,7 @@ public sealed class WH40KCommandReinforcementAutoConfigState
         int totalCost,
         int totalFundsCost,
         int totalInfluenceCost,
+        int totalArtifactCost,
         WH40KCommandReinforcementDraftEntry[] roles)
     {
         Enabled = enabled;
@@ -162,6 +176,7 @@ public sealed class WH40KCommandReinforcementAutoConfigState
         TotalCost = totalCost;
         TotalFundsCost = totalFundsCost;
         TotalInfluenceCost = totalInfluenceCost;
+        TotalArtifactCost = totalArtifactCost;
         Roles = roles;
     }
 }
@@ -175,6 +190,7 @@ public sealed class WH40KCommandReinforcementBoundUserInterfaceState : BoundUser
     public int CommandPoints { get; }
     public int InfluencePoints { get; }
     public int Funds { get; }
+    public int ArtifactPoints { get; }
     public int CooldownSeconds { get; }
     public int ManualDelaySeconds { get; }
     public int AutoDelaySeconds { get; }
@@ -194,6 +210,7 @@ public sealed class WH40KCommandReinforcementBoundUserInterfaceState : BoundUser
         int commandPoints,
         int influencePoints,
         int funds,
+        int artifactPoints,
         int cooldownSeconds,
         int manualDelaySeconds,
         int autoDelaySeconds,
@@ -212,6 +229,7 @@ public sealed class WH40KCommandReinforcementBoundUserInterfaceState : BoundUser
         CommandPoints = commandPoints;
         InfluencePoints = influencePoints;
         Funds = funds;
+        ArtifactPoints = artifactPoints;
         CooldownSeconds = cooldownSeconds;
         ManualDelaySeconds = manualDelaySeconds;
         AutoDelaySeconds = autoDelaySeconds;

@@ -73,6 +73,30 @@ ent-DataChipChaos3 = чип данных хаоса x3
 ent-DataChipChaos4 = чип данных хаоса x4
     .desc = { ent-DataChipChaos.desc }
 
+ent-WH40KArtifactSquare = квадратный артефакт
+    .desc = Фрагмент реликвии Империума, используемый как ресурс для редких подкреплений.
+
+ent-WH40KArtifactSquare2 = квадратный артефакт x2
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactSquare3 = квадратный артефакт x3
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactSquare4 = квадратный артефакт x4
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactTriangle = треугольный артефакт
+    .desc = Осквернённая реликвия Хаоса, используемая как ресурс для редких подкреплений.
+
+ent-WH40KArtifactTriangle2 = треугольный артефакт x2
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
+ent-WH40KArtifactTriangle3 = треугольный артефакт x3
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
+ent-WH40KArtifactTriangle4 = треугольный артефакт x4
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
 ent-ClothingBackpackSkitarii = радиевый ранец
     .desc = Ранец скитарийцев.
 
@@ -1298,7 +1322,7 @@ ent-ClothingEyesHudTechPriestAdm = визор должностей
 ent-ClothingBackpackTechpriestDendrite = ранец с дендритами
     .desc = Этот ранец техножрецов оснащён двумя дополнительными меха-дендритами
 
-ent-MobQueenChrysalis = королева Крисалис
+ent-MobQueenChrysalis = королева Кризалис
     .desc = Пони оборотень, который может принимать самые разные формы.
 
 # --- Снаряжение космодесанта ---
@@ -1547,7 +1571,7 @@ ent-WH40KAmmoBoxElectricArc = ящик патрон электродуговог
 ent-WH40KAmmoBoxRadCarabin = ящик патрон радиевого карабина
     .desc = Передают радиевые патроны правильным людям.
 
-ent-MobQueenChrysalisImperium = королева Крисалис
+ent-MobQueenChrysalisImperium = королева Кризалис
     .desc = Пони оборотень, который может принимать самые разные формы.
 
 ent-WH40KPlaceholderConsoleImperium = полевая консоль Империума
@@ -1822,6 +1846,36 @@ ent-ClothingBackpackPsykerSatchel = псайкана-сумка
 
 ent-ClothingOuterPsykerWardCoat = защитная риза псайкера
     .desc = Освящённая риза с защитными швами и слоями, помогающими держать дисциплину под давлением Варпа.
+
+ent-ClothingOuterPsykerWardCoatPremium = форма Схоластики Псайкана
+    .desc = Униформа выпускника элитной школы Схоластика Псайкана.
+
+ent-ClothingOuterArmorMajorFlakCoat = флак-плащ майора
+    .desc = Старый командирский флак-плащ, доставшийся в наследство от легаси майоров.
+
+ent-PlushieWarpImp = варп-плюшка
+    .desc = Маленькая синяя варп-тварь, которая выглядит слишком довольной для плюшевой игрушки.
+
+ent-WeaponMeleePilokosa = пилокоса
+    .desc = Грубый гибрид косы и цепного лезвия. Без анимаций, зато с намерением резать.
+
+ent-ChairEggThrone = яйцевес
+    .desc = Злобное кресло-фиксатор. Залезть легко, а вот слезть самостоятельно уже нет.
+
+ent-WH40KStairsBasalt = базальтовые кирпичные лестницы
+    .desc = Тяжёлые тёмные ступени для окопных укреплений, карьеров и грубых платформ.
+
+ent-WH40KStairsBasaltStage = базальтовая кирпичная ступень-подиум
+    .desc = Пониженный ступенчатый вариант тех же базальтовых лестниц.
+
+ent-WH40KBasaltPlatformEdge = край базальтовой платформы
+    .desc = Тяжёлая базальтовая кромка, отмечающая край приподнятой платформы.
+
+ent-WH40KBasaltPlatformEdgeBroken = сломанный край базальтовой платформы
+    .desc = Базальтовая кромка платформы, расколотая временем, обстрелом или и тем и другим.
+
+ent-WH40KBasaltPlatformEdgeDeco = обломки базальтовой кромки
+    .desc = Рассыпавшиеся фрагменты базальтового края платформы.
 
 ent-ClothingShoesPsykerBoots = сапоги псайкера
     .desc = Тяжёлые сапоги с внутренними печатями, чтобы держать стойку даже под давлением астрала.

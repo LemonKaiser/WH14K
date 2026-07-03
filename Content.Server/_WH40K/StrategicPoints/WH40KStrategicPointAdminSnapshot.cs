@@ -14,4 +14,5 @@ public readonly record struct WH40KStrategicPointAdminSnapshot(
     int TeamXpIncome,
     int InfluenceIncome,
     int ResearchIncome,
+    int ArtifactIncome,
     int FundsIncome);

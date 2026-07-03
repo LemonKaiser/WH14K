@@ -83,6 +83,30 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
         "MobWH40KSlaaneshRapturousDemonette",
         "MobWH40KSlaaneshAlluress",
     };
+    private static readonly EntProtoId[] PsykerOverloadMinorPrototypes =
+    {
+        "MobWH40KWarpRunner",
+        "MobWH40KWarpRunner",
+        "MobWH40KWarpSpitter",
+        "MobWH40KWarpSpitter",
+        "MobWH40KWarpTank",
+    };
+    private static readonly EntProtoId[] PsykerOverloadMajorPrototypes =
+    {
+        "MobWH40KWarpRunner",
+        "MobWH40KWarpRunnerAlpha",
+        "MobWH40KWarpSpitter",
+        "MobWH40KWarpSpitterAlpha",
+        "MobWH40KWarpTank",
+    };
+    private static readonly EntProtoId[] PsykerOverloadCatastrophicPrototypes =
+    {
+        "MobWH40KWarpRunnerAlpha",
+        "MobWH40KWarpSpitterAlpha",
+        "MobWH40KWarpTank",
+        "MobWH40KWarpTankAlpha",
+        "MobWH40KWarpTankAlpha",
+    };
     private static readonly ProtoId<HTNCompoundPrototype> SimpleHostileCompoundTask = "SimpleHostileCompound";
     private static readonly ProtoId<NpcFactionPrototype> SimpleHostileFaction = "SimpleHostile";
     private static readonly TimeSpan MirrorSyncCooldown = TimeSpan.FromSeconds(0.25);
@@ -95,6 +119,7 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private readonly List<EntityUid> _entityBuffer = new();
     private readonly Dictionary<EntityUid, WarpPossessionState> _activePossessions = new();
     private readonly Dictionary<EntityUid, WarpHallucinationState> _activeHallucinations = new();
+    private readonly HashSet<EntityUid> _pendingPsykerCastOverloads = new();
 
     [Dependency] private  BloodstreamSystem _bloodstream = default!;
     [Dependency] private  ChatSystem _chat = default!;
@@ -167,6 +192,12 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private int _dropMaxCount = 3;
     private float _mutationMinSeverity = WarpMutationMinSeverity;
     private float _mutationMaxSeverity = WarpMutationMaxSeverity;
+    private bool _psykerOverloadEnabled = true;
+    private float _psykerOverloadChance700 = 0.05f;
+    private float _psykerOverloadChance800 = 0.11f;
+    private float _psykerOverloadChance900 = 0.18f;
+    private bool _psykerOverloadDropEquipment = true;
+    private bool _psykerOverloadAnnounceGlobally = true;
 
     private readonly record struct WarpGlobalPulseTier(string Id, float Threshold, TimeSpan Interval, string MessageKey);
     private readonly record struct WarpDropCandidate(EntityUid Item, string? SlotName);
@@ -210,6 +241,7 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
 
         SubscribeLocalEvent<WH40KWarpInstabilityContributionEvent>(OnInstabilityContribution);
         SubscribeLocalEvent<WH40KWarpInstabilityComponent, ComponentStartup>(OnInstabilityStartup);
+        SubscribeLocalEvent<WH40KPsykerRoleComponent, WH40KWarpActionCastEvent>(OnPsykerWarpActionCast);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
     }
@@ -270,6 +302,13 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
         _mutationMaxSeverity = Math.Clamp(config.Effects.MutationMaxSeverity, 0f, 1f);
         if (_mutationMaxSeverity < _mutationMinSeverity)
             _mutationMaxSeverity = _mutationMinSeverity;
+
+        _psykerOverloadEnabled = config.PsykerOverload.Enabled;
+        _psykerOverloadChance700 = Math.Clamp(config.PsykerOverload.Chance700, 0f, 1f);
+        _psykerOverloadChance800 = Math.Clamp(config.PsykerOverload.Chance800, 0f, 1f);
+        _psykerOverloadChance900 = Math.Clamp(config.PsykerOverload.Chance900, 0f, 1f);
+        _psykerOverloadDropEquipment = config.PsykerOverload.DropEquipment;
+        _psykerOverloadAnnounceGlobally = config.PsykerOverload.AnnounceGlobally;
 
         ApplyRuntimeConfigChanges();
     }
@@ -426,10 +465,16 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         ClearTemporaryEffects();
+        _pendingPsykerCastOverloads.Clear();
         _currentInstability = 0f;
         _nextGlobalPulseAt = TimeSpan.Zero;
         _catastropheTriggered = false;
         SyncMirrors(immediate: true);
+    }
+
+    private void OnPsykerWarpActionCast(Entity<WH40KPsykerRoleComponent> ent, ref WH40KWarpActionCastEvent args)
+    {
+        _pendingPsykerCastOverloads.Add(ent.Owner);
     }
 
     private void OnInstabilityStartup(EntityUid uid, WH40KWarpInstabilityComponent component, ref ComponentStartup args)
@@ -460,6 +505,13 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
         if (_currentInstability >= _maxInstability && _catastropheEnabled)
         {
             TriggerWarpCatastrophe(ev.Performer);
+            SyncMirrors(immediate: true);
+            return;
+        }
+
+        if (TryTriggerPsykerOverload(ev.Performer, ev.SourceKey))
+        {
+            RefreshGlobalPulseState(previous, _currentInstability, announceOnEscalation: true);
             SyncMirrors(immediate: true);
             return;
         }
@@ -740,6 +792,84 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
             interruptsDoAfters: false,
             origin: uid,
             ignoreGlobalModifiers: true);
+    }
+
+    private bool TryTriggerPsykerOverload(EntityUid performer, string sourceKey)
+    {
+        var fromCast = _pendingPsykerCastOverloads.Remove(performer);
+        if (!_psykerOverloadEnabled ||
+            (!fromCast && !string.Equals(sourceKey, "psyker.staff", StringComparison.Ordinal)) ||
+            !HasComp<WH40KPsykerRoleComponent>(performer) ||
+            !CanAffect(performer))
+        {
+            return false;
+        }
+
+        var overloadChance = GetPsykerOverloadChance(_currentInstability);
+        if (overloadChance <= 0f || _random.NextFloat() >= overloadChance)
+            return false;
+
+        TriggerPsykerOverload(performer);
+        return true;
+    }
+
+    private float GetPsykerOverloadChance(float instability)
+    {
+        if (instability >= _pulse900Threshold)
+            return _psykerOverloadChance900;
+
+        if (instability >= _pulse800Threshold)
+            return _psykerOverloadChance800;
+
+        if (instability >= _pulse700Threshold)
+            return _psykerOverloadChance700;
+
+        return 0f;
+    }
+
+    private void TriggerPsykerOverload(EntityUid performer)
+    {
+        if (TerminatingOrDeleted(performer))
+            return;
+
+        var coords = Transform(performer).Coordinates;
+        var daemon = Spawn(PickPsykerOverloadDaemonPrototype(_currentInstability), coords);
+
+        if (_psykerOverloadAnnounceGlobally)
+        {
+            _chat.DispatchGlobalAnnouncement(
+                Loc.GetString("wh40k-psyker-overload-announcement", ("psyker", Name(performer)), ("daemon", Name(daemon))),
+                Loc.GetString("wh40k-warp-instability-global-announcer"),
+                playSound: false,
+                colorOverride: Color.MediumPurple);
+        }
+
+        _activePossessions.Remove(performer);
+        _activeHallucinations.Remove(performer);
+
+        if (_mind.TryGetMind(performer, out var mindId, out var mind))
+            _ghost.SpawnGhost((mindId, mind), coords, false);
+
+        if (_psykerOverloadDropEquipment)
+            DropAllOverloadItems(performer);
+
+        Spawn("Ash", coords);
+        QueueDel(performer);
+    }
+
+    private void DropAllOverloadItems(EntityUid performer)
+    {
+        BuildDropCandidateList(performer, _dropCandidates);
+        foreach (var candidate in _dropCandidates)
+        {
+            if (TerminatingOrDeleted(candidate.Item))
+                continue;
+
+            if (candidate.SlotName == null)
+                _hands.TryDrop(performer, candidate.Item, checkActionBlocker: false, doDropInteraction: false);
+            else
+                _inventory.TryUnequip(performer, candidate.SlotName, out _, silent: true, force: true);
+        }
     }
 
     private bool SpawnWarpDoppelganger(EntityUid source)
@@ -1037,6 +1167,17 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
         return _random.Pick(WarpDaemonPrototypes);
     }
 
+    private EntProtoId PickPsykerOverloadDaemonPrototype(float instability)
+    {
+        if (instability >= _pulse900Threshold)
+            return _random.Pick(PsykerOverloadCatastrophicPrototypes);
+
+        if (instability >= _pulse800Threshold)
+            return _random.Pick(PsykerOverloadMajorPrototypes);
+
+        return _random.Pick(PsykerOverloadMinorPrototypes);
+    }
+
     private WarpGlobalPulseTier? GetGlobalPulseTier(float instability)
     {
         WarpGlobalPulseTier? best = null;
@@ -1231,6 +1372,7 @@ public sealed partial class WH40KGlobalWarpInstabilitySystem : EntitySystem
 
         _activePossessions.Clear();
         _activeHallucinations.Clear();
+        _pendingPsykerCastOverloads.Clear();
     }
 
     private bool TryPickRandomLivingActor(out EntityUid actor)

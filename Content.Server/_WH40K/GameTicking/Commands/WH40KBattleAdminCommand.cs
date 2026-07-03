@@ -443,7 +443,7 @@ public sealed partial class WH40KBattleAdminCommand : IConsoleCommand
             var owner = string.IsNullOrWhiteSpace(point.OwnerTeamId) ? "Neutral" : point.OwnerTeamId;
             var income = point.Tier <= WH40KStrategicPointTier.T0
                 ? "income=inactive"
-                : $"income=xp:{point.TeamXpIncome} inf:{point.InfluenceIncome} res:{point.ResearchIncome} funds:{point.FundsIncome}";
+                : $"income=xp:{point.TeamXpIncome} inf:{point.InfluenceIncome} res:{point.ResearchIncome} art:{point.ArtifactIncome} funds:{point.FundsIncome}";
 
             shell.WriteLine(
                 $"Point {point.Target} anchor={point.Anchor} built={point.BuiltPoint} callsign={callsign} " +

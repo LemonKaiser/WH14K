@@ -565,6 +565,11 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         if (research > 0)
             _teamRule.TryAdjustTeamResearchPoints(teamId, research, out _, out _, "strategic-point");
 
+        // Artifact income stays fixed per 10-second cycle so research points follow their declared tier yield.
+        var artifacts = Math.Max(0, tier.ArtifactIncome);
+        if (artifacts > 0)
+            _teamRule.TryAdjustTeamArtifacts(teamId, artifacts, out _, out _, "strategic-point");
+
         var funds = ApplyPhaseMultiplier(tier.FundsIncome, point, WH40KStrategicPointCurrency.Funds);
         if (funds > 0)
             TryAdjustTeamFunds(uid, teamId, funds);
@@ -596,11 +601,13 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         out float teamXpPerSecond,
         out float influencePerSecond,
         out float researchPerSecond,
+        out float artifactPerSecond,
         out float fundsPerSecond)
     {
         teamXpPerSecond = 0f;
         influencePerSecond = 0f;
         researchPerSecond = 0f;
+        artifactPerSecond = 0f;
         fundsPerSecond = 0f;
 
         if (string.IsNullOrWhiteSpace(teamId))
@@ -635,6 +642,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
             teamXpPerSecond += GetAverageIncomePerSecond(tier.TeamXpIncome, numerator, denominator, intervalSeconds);
             influencePerSecond += GetAverageIncomePerSecond(tier.InfluenceIncome, numerator, denominator, intervalSeconds);
             researchPerSecond += GetAverageIncomePerSecond(tier.ResearchIncome, numerator, denominator, intervalSeconds);
+            artifactPerSecond += Math.Max(0, tier.ArtifactIncome) / intervalSeconds / 10f;
             fundsPerSecond += GetAverageIncomePerSecond(tier.FundsIncome, numerator, denominator, intervalSeconds);
         }
 
@@ -1148,10 +1156,15 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         AddIncomeEntry(entries, "wh40k-strategic-point-ui-income-funds", tier.FundsIncome);
         AddIncomeEntry(entries, "wh40k-strategic-point-ui-income-research", tier.ResearchIncome);
         AddIncomeEntry(entries, "wh40k-strategic-point-ui-income-influence", tier.InfluenceIncome);
+        AddIncomeEntry(entries, "wh40k-strategic-point-ui-income-artifact", tier.ArtifactIncome, applyPhaseMultiplier: false);
         return entries.ToArray();
     }
 
-    private void AddIncomeEntry(List<WH40KStrategicPointIncomeUiEntry> entries, string locKey, int baseAmount)
+    private void AddIncomeEntry(
+        List<WH40KStrategicPointIncomeUiEntry> entries,
+        string locKey,
+        int baseAmount,
+        bool applyPhaseMultiplier = true)
     {
         if (baseAmount <= 0)
             return;
@@ -1159,7 +1172,9 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
         entries.Add(new WH40KStrategicPointIncomeUiEntry(
             locKey,
             baseAmount,
-            WH40KStrategicPointIncomeCalculator.GetEffectiveIncome(baseAmount, _teamRule.GetCurrentPhase())));
+            applyPhaseMultiplier
+                ? WH40KStrategicPointIncomeCalculator.GetEffectiveIncome(baseAmount, _teamRule.GetCurrentPhase())
+                : baseAmount));
     }
 
     private WH40KStrategicPointMaterialUiEntry[] BuildMaterialEntries(
@@ -1368,6 +1383,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
             var teamXpIncome = 0;
             var influenceIncome = 0;
             var researchIncome = 0;
+            var artifactIncome = 0;
             var fundsIncome = 0;
 
             if (anchor.BuiltPoint is { } builtPointUid &&
@@ -1384,6 +1400,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
                     teamXpIncome = tierProfile.TeamXpIncome;
                     influenceIncome = tierProfile.InfluenceIncome;
                     researchIncome = tierProfile.ResearchIncome;
+                    artifactIncome = tierProfile.ArtifactIncome;
                     fundsIncome = tierProfile.FundsIncome;
                 }
             }
@@ -1399,6 +1416,7 @@ public sealed partial class WH40KStrategicPointSystem : EntitySystem
                 teamXpIncome,
                 influenceIncome,
                 researchIncome,
+                artifactIncome,
                 fundsIncome));
         }
 

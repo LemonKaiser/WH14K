@@ -123,6 +123,7 @@ public sealed partial class SharedWH40KPsykerProgressionSystem : EntitySystem
         if (amount <= 0f || progression.MaxLevel <= 0)
             return;
 
+        var previousLevel = progression.Level;
         progression.TotalXp += amount;
 
         if (progression.Level >= progression.MaxLevel)
@@ -144,6 +145,9 @@ public sealed partial class SharedWH40KPsykerProgressionSystem : EntitySystem
             progression.LevelXp = 0f;
 
         Dirty(uid, progression);
+
+        if (progression.Level > previousLevel)
+            RaiseLocalEvent(uid, new WH40KPsykerLevelChangedEvent(uid, previousLevel, progression.Level));
     }
 
     private static float GetXpRequiredForNextLevel(WH40KPsykerProgressionComponent progression)

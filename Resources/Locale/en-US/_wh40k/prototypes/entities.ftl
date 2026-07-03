@@ -70,6 +70,30 @@ ent-DataChipChaos3 = chaos data chip x3
 ent-DataChipChaos4 = chaos data chip x4
     .desc = { ent-DataChipChaos.desc }
 
+ent-WH40KArtifactSquare = square artifact
+    .desc = A square relic shard secured for the Imperium. Command can spend these artifacts on Astartes reinforcement.
+
+ent-WH40KArtifactSquare2 = square artifact x2
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactSquare3 = square artifact x3
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactSquare4 = square artifact x4
+    .desc = { ent-WH40KArtifactSquare.desc }
+
+ent-WH40KArtifactTriangle = triangle artifact
+    .desc = A triangular relic shard secured for Chaos. Command can spend these artifacts on Astartes reinforcement.
+
+ent-WH40KArtifactTriangle2 = triangle artifact x2
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
+ent-WH40KArtifactTriangle3 = triangle artifact x3
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
+ent-WH40KArtifactTriangle4 = triangle artifact x4
+    .desc = { ent-WH40KArtifactTriangle.desc }
+
 ent-ClothingBackpackSkitarii = radium backpack
     .desc = Skitarii Satchel.
 
@@ -2162,6 +2186,33 @@ ent-ClothingBackpackOrkBoss = Boss bag
 
 ent-ClothingOuterPsykerWardCoatPremium = Scholastica Psykana Uniform
     .desc = Scholastica Psykana Elite School Graduate Uniform
+
+ent-ClothingOuterArmorMajorFlakCoat = major's flak coat
+    .desc = A legacy command flak coat once issued to majors, cut to stand out while still taking the edge off incoming fire.
+
+ent-PlushieWarpImp = warp imp plushie
+    .desc = A tiny blue warp-creature plush that looks far too smug for something this soft.
+
+ent-WeaponMeleePilokosa = pilokosa
+    .desc = A brutal hybrid of a polearm and chainblade. This one skips the moving parts and goes straight to carving.
+
+ent-ChairEggThrone = egg throne
+    .desc = A vicious restraint chair. Getting in is easy, getting out on your own is not.
+
+ent-WH40KStairsBasalt = basalt brick stairs
+    .desc = Dark blocky stairs fit for trenchworks, quarry sites, and ugly fortified platforms.
+
+ent-WH40KStairsBasaltStage = basalt brick stair stage
+    .desc = A lower staged variant of the same basalt stairs.
+
+ent-WH40KBasaltPlatformEdge = basalt platform edge
+    .desc = A heavy basalt lip marking the edge of an elevated platform.
+
+ent-WH40KBasaltPlatformEdgeBroken = broken basalt platform edge
+    .desc = A basalt platform edge fractured by time, shelling, or both.
+
+ent-WH40KBasaltPlatformEdgeDeco = basalt platform edge debris
+    .desc = Broken fragments from a basalt platform edge.
 
 ent-WH40KMagazineArcPistol = Arc Pistol Battery
     .desc = For delivering a devastating bolt of electricity to a target.

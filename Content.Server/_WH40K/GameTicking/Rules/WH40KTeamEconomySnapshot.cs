@@ -5,6 +5,7 @@ public readonly record struct WH40KTeamEconomySnapshot(
     int TeamXp,
     int Influence,
     int ResearchPoints,
+    int ArtifactPoints,
     int Funds,
     int BaseLevel,
     int? PointsToNextLevel);

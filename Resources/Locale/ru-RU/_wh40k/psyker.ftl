@@ -388,6 +388,7 @@ wh40k-warp-instability-global-pulse-800 = Налетает фронт варп-�
 wh40k-warp-instability-global-pulse-850 = Реальность режется рваными разломами. Сквозь пробоины прорываются враждебные сущности.
 wh40k-warp-instability-global-pulse-900 = Катастрофическая перегрузка. Станция тонет под давлением Варпа, и каждый новый импульс становится голоднее.
 wh40k-warp-instability-global-catastrophe = Завеса рвется. Все души, отмеченные Варпом, сгорают в пепел, а из разрыва нелепо выходит одинокая корова.
+wh40k-psyker-overload-announcement = {$psyker} не удерживает санкционированный канал. Плоть рвется, и из разлома выходит {$daemon}.
 
 wh40k-psyker-window-title = Прогрессия псайкера
 wh40k-psyker-window-role = Путь: Имперский псайкер

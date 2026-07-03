@@ -10,7 +10,7 @@ wh40k-strategic-point-resource-t1-desc = Закреплённая ресурсн
 wh40k-strategic-point-resource-recipe-desc = Закрепляет свободную ресурсную площадку за вашей фракцией.
 
 wh40k-strategic-point-research-t1-name = исследовательская точка
-wh40k-strategic-point-research-t1-desc = Закреплённая исследовательская точка. Даёт команде исследования и опыт.
+wh40k-strategic-point-research-t1-desc = Закреплённая исследовательская точка. Даёт команде исследования, артефакты и опыт.
 wh40k-strategic-point-research-recipe-desc = Закрепляет свободную исследовательскую площадку за вашей фракцией.
 
 wh40k-strategic-point-influence-t1-name = точка влияния
@@ -66,6 +66,7 @@ wh40k-strategic-point-ui-income-team-xp = Опыт
 wh40k-strategic-point-ui-income-funds = Трон-гельты
 wh40k-strategic-point-ui-income-research = Исследования
 wh40k-strategic-point-ui-income-influence = Влияние
+wh40k-strategic-point-ui-income-artifact = Артефакты
 wh40k-strategic-point-ui-income-empty = Поступления не настроены.
 wh40k-strategic-point-ui-income-row = {$name}: +{$effective} / {$seconds}с (номинал {$base})
 wh40k-strategic-point-ui-upgrade-title = Контур модернизации

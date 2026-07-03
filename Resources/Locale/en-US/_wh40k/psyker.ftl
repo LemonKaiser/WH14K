@@ -287,6 +287,7 @@ wh40k-warp-instability-global-pulse-800 = The warp storm front hits. Equipment s
 wh40k-warp-instability-global-pulse-850 = Reality tears open in jagged cuts. Hostile things claw through the breach.
 wh40k-warp-instability-global-pulse-900 = Catastrophic overload. The station is drowning in warp pressure and every pulse grows hungrier.
 wh40k-warp-instability-global-catastrophe = The veil ruptures. Every soul marked by the warp is burned to ash as a lone cow lumbers through the wound.
+wh40k-psyker-overload-announcement = {$psyker} loses control of the sanctioned channel. Flesh ruptures and {$daemon} crawls out of the breach.
 
 wh40k-psyker-window-title = Psyker Progression
 wh40k-psyker-window-role = Path: Imperium Psyker

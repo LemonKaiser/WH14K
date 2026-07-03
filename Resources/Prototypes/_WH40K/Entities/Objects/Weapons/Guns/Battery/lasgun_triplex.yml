@@ -1,0 +1,47 @@
+- type: entity
+  parent: WeaponLaserLasgun
+  id: WeaponLaserLasgunTriplex
+  suffix: WH40K, Triplex
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_triplex/lasgun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_triplex/lasgun_in-hands.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_triplex/lasgun_in-hands.rsi
+  - type: Gun
+    selectedMode: Burst
+    availableModes:
+    - Burst
+    shotsPerBurst: 3
+    burstFireRate: 8
+    burstCooldown: 1.75
+
+- type: entity
+  parent: WeaponHereticLaserLasgun
+  id: WeaponHereticLaserLasgunTriplex
+  suffix: WH40K, Triplex
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_triplex/lasgun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_triplex/lasgun_in-hands.rsi
+  - type: Clothing
+    sprite: _WH40K/Objects/Weapons/Guns/Battery/heretic_lasgun_triplex/lasgun_in-hands.rsi
+  - type: Gun
+    selectedMode: Burst
+    availableModes:
+    - Burst
+    shotsPerBurst: 3
+    burstFireRate: 8
+    burstCooldown: 1.75

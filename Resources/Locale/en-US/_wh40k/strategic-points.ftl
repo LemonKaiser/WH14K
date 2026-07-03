@@ -10,7 +10,7 @@ wh40k-strategic-point-resource-t1-desc = A secured resource point that yields th
 wh40k-strategic-point-resource-recipe-desc = Secures a free resource site for your faction.
 
 wh40k-strategic-point-research-t1-name = research point
-wh40k-strategic-point-research-t1-desc = A secured research point that yields research and XP for its team.
+wh40k-strategic-point-research-t1-desc = A secured research point that yields research, artifacts, and XP for its team.
 wh40k-strategic-point-research-recipe-desc = Secures a free research site for your faction.
 
 wh40k-strategic-point-influence-t1-name = influence point
@@ -66,6 +66,7 @@ wh40k-strategic-point-ui-income-team-xp = XP
 wh40k-strategic-point-ui-income-funds = Throne Gelt
 wh40k-strategic-point-ui-income-research = Research
 wh40k-strategic-point-ui-income-influence = Influence
+wh40k-strategic-point-ui-income-artifact = Artifacts
 wh40k-strategic-point-ui-income-empty = No income configured.
 wh40k-strategic-point-ui-income-row = {$name}: +{$effective} / {$seconds}s (nominal {$base})
 wh40k-strategic-point-ui-upgrade-title = Upgrade contour

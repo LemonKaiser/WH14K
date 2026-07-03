@@ -23,6 +23,8 @@ using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared._WH40K.Psyker;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Content.Server.Stunnable;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -42,6 +44,7 @@ namespace Content.Server._WH40K.Psyker;
 public sealed partial class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
 {
     [Dependency] private  SharedActionsSystem _actions = default!;
+    [Dependency] private  SharedAudioSystem _audio = default!;
     [Dependency] private  RepulseAttractSystem _repulseAttract = default!;
     [Dependency] private  ThrowingSystem _throwing = default!;
     [Dependency] private  SharedTransformSystem _transform = default!;
@@ -75,6 +78,8 @@ public sealed partial class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
     private const float JumpExExplosionDamage = 5.5f;
     private const float JumpExExplosionRepulseSpeed = 2f;
     private const float DashHitPadding = 0.15f;
+    private static readonly SoundSpecifier KhorneDashVoice =
+        new SoundCollectionSpecifier("WH40KKhorneDashVoice", AudioParams.Default.WithVolume(-4f));
 
     public override void Initialize()
     {
@@ -296,6 +301,7 @@ public sealed partial class WH40KChaosKhorneGiftAbilitySystem : EntitySystem
             return;
 
         ApplyDashPathDamage(args.Performer, start, end, progression.KhorneGiftThreePowerTier, giftThreeExUnlocked);
+        _audio.PlayPvs(KhorneDashVoice, args.Performer);
         args.Handled = true;
     }
 

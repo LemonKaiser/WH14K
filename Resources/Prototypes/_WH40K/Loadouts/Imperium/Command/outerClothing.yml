@@ -37,3 +37,8 @@
     requiredLevel: 24
   equipment:
     outerClothing: ClothingOuterArmorSeniorOfficerArmoredJacket
+
+- type: loadout
+  id: WH40KMajorFlakCoat
+  equipment:
+    outerClothing: ClothingOuterArmorMajorFlakCoat

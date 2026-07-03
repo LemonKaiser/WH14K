@@ -53,18 +53,21 @@
       maxHp: 750
       teamXpIncome: 1
       researchIncome: 20
+      artifactIncome: 1
       destroyTeamXpReward: 5
       destroyInfluenceReward: 1
     2:
       maxHp: 1500
       teamXpIncome: 2
       researchIncome: 60
+      artifactIncome: 2
       destroyTeamXpReward: 12
       destroyInfluenceReward: 3
     3:
       maxHp: 2000
       teamXpIncome: 3
       researchIncome: 120
+      artifactIncome: 3
       destroyTeamXpReward: 25
       destroyInfluenceReward: 6
 

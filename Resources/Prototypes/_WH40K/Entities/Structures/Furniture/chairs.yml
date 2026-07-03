@@ -1,0 +1,11 @@
+- type: entity
+  id: ChairEggThrone
+  parent: ChairBase
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Furniture/egg_throne.rsi
+    state: icon
+  - type: Strap
+    buckleOffset: "0,0.02"
+  - type: WH40KSelfLockingChair

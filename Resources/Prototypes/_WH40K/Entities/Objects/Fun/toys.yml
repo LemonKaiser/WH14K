@@ -285,3 +285,14 @@
       path: /Audio/_WH40K/Fun/pyro_laughlong01.ogg
       params:
         volume: -5
+
+- type: entity
+  parent: BasePlushie
+  id: PlushieWarpImp
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/Plushies/warp_imp.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Fun/Plushies/warp_imp.rsi

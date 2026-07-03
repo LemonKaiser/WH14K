@@ -351,6 +351,9 @@ public sealed partial class WH40KTeamBattleRuleComponent : Component
     public Dictionary<string, int> TeamResearchPoints = new();
 
     [ViewVariables]
+    public Dictionary<string, int> TeamArtifactPoints = new();
+
+    [ViewVariables]
     public Dictionary<string, int> TeamBaseLevels = new();
 
     [ViewVariables]

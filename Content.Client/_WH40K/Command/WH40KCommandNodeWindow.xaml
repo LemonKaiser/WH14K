@@ -68,6 +68,7 @@
                                         <Label Name="CommandPointsLineLabel" ClipText="True" />
                                         <Label Name="ResearchPointsLineLabel" ClipText="True" />
                                         <Label Name="DevelopmentPointsLineLabel" ClipText="True" />
+                                        <Label Name="ArtifactPointsLineLabel" ClipText="True" />
                                     </BoxContainer>
                                     <cc:HSeparator />
                                     <ProgressBar Name="BaseProgressBar"

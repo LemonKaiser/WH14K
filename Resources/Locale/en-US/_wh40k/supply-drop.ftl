@@ -32,3 +32,5 @@ wh40k-vox-supplydrop-popup-open-sky-required = Open sky required. Move out from 
 wh40k-currency-intel = Intelligence
 wh40k-currency-intel-chaos = Chaos intelligence
 wh40k-currency-intel-imperium = Imperium intelligence
+wh40k-currency-artifact-imperium = Imperium artifacts
+wh40k-currency-artifact-chaos = Chaos artifacts
