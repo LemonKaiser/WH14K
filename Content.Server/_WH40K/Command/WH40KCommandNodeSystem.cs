@@ -280,8 +280,9 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         var missionBoard = BuildMissionBoardState(ent.Comp, globalMissionRuntime, teamMissionRuntime);
         var reinforcementUiState = BuildReinforcementUiState(ent.Owner, ent.Comp.TeamId, teamName);
         var upgradeBaseCost = GetUpgradeCost(ent.Comp);
-        var minimumReinforcementInfluenceCost = GetMinimumReinforcementCost(ent.Comp.TeamId, ent.Comp.ReinforcementCost);
-        var (teamXpIncomePerSecond, influenceIncomePerSecond, fundsIncomePerSecond, researchIncomePerSecond) =
+        var (minimumReinforcementCost, minimumReinforcementFundsCost, minimumReinforcementInfluenceCost, minimumReinforcementArtifactCost) =
+            GetMinimumReinforcementResourceCosts(ent.Comp.TeamId, ent.Comp.ReinforcementCost);
+        var (teamXpIncomePerSecond, influenceIncomePerSecond, fundsIncomePerSecond, researchIncomePerSecond, artifactIncomePerSecond) =
             GetIncomeRates(ent.Comp);
 
         var state = new WH40KCommandNodeBoundUserInterfaceState(
@@ -294,17 +295,20 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
             economy.Influence,
             economy.Funds,
             economy.ResearchPoints,
+            economy.ArtifactPoints,
             teamXpIncomePerSecond,
             influenceIncomePerSecond,
             fundsIncomePerSecond,
             researchIncomePerSecond,
+            artifactIncomePerSecond,
             ent.Comp.UpgradeLevel,
             upgradeBaseCost,
             WH40KCommandEconomyCalculator.GetCommandNodeUpgradeFundsCost(upgradeBaseCost),
             WH40KCommandEconomyCalculator.GetCommandNodeUpgradeResearchCost(upgradeBaseCost),
+            minimumReinforcementCost,
+            minimumReinforcementFundsCost,
             minimumReinforcementInfluenceCost,
-            WH40KCommandEconomyCalculator.GetReinforcementFundsCost(minimumReinforcementInfluenceCost),
-            minimumReinforcementInfluenceCost,
+            minimumReinforcementArtifactCost,
             GetRemainingReinforcementCooldown(ent.Comp.TeamId),
             _teamRule.GetRoundElapsedSeconds(),
             economy.PointsToNextLevel,
@@ -332,24 +336,27 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
         _ui.SetUiState(ent.Owner, WH40KCommandNodeUiKey.MissionBoard, state);
     }
 
-    private (float TeamXpPerSecond, float InfluencePerSecond, float FundsPerSecond, float ResearchPerSecond)
+    private (float TeamXpPerSecond, float InfluencePerSecond, float FundsPerSecond, float ResearchPerSecond, float ArtifactPerSecond)
         GetIncomeRates(WH40KCommandNodeComponent component)
     {
         var teamXpPerSecond = 0f;
         var influencePerSecond = 0f;
         var fundsPerSecond = 0f;
         var researchPerSecond = 0f;
+        var artifactPerSecond = 0f;
 
         if (_strategicPoints.TryGetTeamIncomeRates(
                 component.TeamId,
                 out var strategicTeamXp,
                 out var strategicInfluence,
                 out var strategicResearch,
+                out var strategicArtifacts,
                 out var strategicFunds))
         {
             teamXpPerSecond += strategicTeamXp;
             influencePerSecond += strategicInfluence;
             researchPerSecond += strategicResearch;
+            artifactPerSecond += strategicArtifacts;
             fundsPerSecond += strategicFunds;
         }
 
@@ -363,7 +370,7 @@ public sealed partial class WH40KCommandNodeSystem : EntitySystem
                               passiveIntervalSeconds;
         }
 
-        return (teamXpPerSecond, influencePerSecond, fundsPerSecond, researchPerSecond);
+        return (teamXpPerSecond, influencePerSecond, fundsPerSecond, researchPerSecond, artifactPerSecond);
     }
 
     private void OnTreeNodePurchaseRequested(

@@ -50,6 +50,21 @@
   groupBy: "m36-cantrael-heretic"
 
 - type: loadout
+  id: WH40KWeaponHereticLaserLasgunTriplexLoadout
+  dummyEntity: WeaponHereticLaserLasgunTriplex
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    suitstorage: WeaponHereticLaserLasgunTriplex
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "m36-triplex-heretic"
+
+- type: loadout
   id: WH40KWeaponHereticShortlasLoadout
   dummyEntity: WeaponHereticShortlas
   equipment:

@@ -48,6 +48,7 @@
     tags:
     - Payload
     - ClothMade
+  - type: WH40KMirrorablePlush
 
 - type: entity
   parent: BasePlushie

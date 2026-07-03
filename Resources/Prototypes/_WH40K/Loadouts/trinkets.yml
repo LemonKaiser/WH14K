@@ -324,3 +324,12 @@
   inhand:
   - PlushieFizzo
   groupBy: "plushies"
+
+- type: loadout
+  id: PlushieWarpImpWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieWarpImp
+  groupBy: "plushies"

@@ -149,6 +149,9 @@ public sealed partial class WH40KWaveDefenceRuleComponent : Component
     public Dictionary<string, int> TeamResearchPoints = new(StringComparer.OrdinalIgnoreCase);
 
     [ViewVariables]
+    public Dictionary<string, int> TeamArtifactPoints = new(StringComparer.OrdinalIgnoreCase);
+
+    [ViewVariables]
     public Dictionary<string, int> TeamBaseLevels = new(StringComparer.OrdinalIgnoreCase);
 
     [ViewVariables]

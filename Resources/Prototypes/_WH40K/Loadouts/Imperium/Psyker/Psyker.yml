@@ -25,3 +25,13 @@
   inhand:
   - WeaponPsykerForceStaffTelekinetic
   groupBy: "psyker-staff"
+
+- type: loadout
+  id: WH40KPsykerWardCoat
+  equipment:
+    outerClothing: ClothingOuterPsykerWardCoat
+
+- type: loadout
+  id: WH40KPsykerWardCoatPremium
+  equipment:
+    outerClothing: ClothingOuterPsykerWardCoatPremium

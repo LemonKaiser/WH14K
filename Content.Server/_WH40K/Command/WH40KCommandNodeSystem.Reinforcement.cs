@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Server._WH40K.Command.Components;
@@ -35,6 +36,10 @@ public sealed partial class WH40KCommandNodeSystem
     private const int ReinforcementMaxTotalCount = 10;
     private const float ReinforcementSpawnZoneConnectDistance = 1.6f;
     private const string ReinforcementDefaultGroupKey = "w40k-cmd-reinforcement-group-line";
+    private const string ReinforcementFundsSymbol = "\u20AE";
+    private const string ReinforcementInfluenceSymbol = "\u2182";
+    private const string ReinforcementImperiumArtifactSymbol = "\u25A0";
+    private const string ReinforcementChaosArtifactSymbol = "\u25B2";
 
     private readonly record struct ReinforcementPendingEntry(
         string RoleId,
@@ -44,7 +49,8 @@ public sealed partial class WH40KCommandNodeSystem
         int Count,
         int UnitCost,
         int UnitFundsCost,
-        int UnitInfluenceCost);
+        int UnitInfluenceCost,
+        int UnitArtifactCost);
 
     private readonly record struct ReinforcementSpawnPointCandidate(
         EntityCoordinates Coordinates,
@@ -71,6 +77,7 @@ public sealed partial class WH40KCommandNodeSystem
         public int TotalCost;
         public int TotalFundsCost;
         public int TotalInfluenceCost;
+        public int TotalArtifactCost;
         public List<ReinforcementPendingEntry> Roles = new();
     }
 
@@ -192,13 +199,20 @@ public sealed partial class WH40KCommandNodeSystem
                 out var totalCost,
                 out var totalFundsCost,
                 out var totalInfluenceCost,
+                out var totalArtifactCost,
                 out var errorKey))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, errorKey), ent.Owner, args.Actor);
             return;
         }
 
-        if (!TrySpendTeamFundsAndInfluence(ent.Owner, ent.Comp.TeamId, totalFundsCost, totalInfluenceCost, "reinforcement-manual"))
+        if (!TrySpendTeamReinforcementResources(
+                ent.Owner,
+                ent.Comp.TeamId,
+                totalFundsCost,
+                totalInfluenceCost,
+                totalArtifactCost,
+                "reinforcement-manual"))
         {
             _popup.PopupEntity(_culture.GetPlayerString(args.Actor, "w40k-cmd-reinforcement-denied"), ent.Owner, args.Actor);
             return;
@@ -212,6 +226,7 @@ public sealed partial class WH40KCommandNodeSystem
             totalCost,
             totalFundsCost,
             totalInfluenceCost,
+            totalArtifactCost,
             ReinforcementManualDelaySeconds);
         RecordEconomySpendStats(
             args.Actor,
@@ -226,8 +241,7 @@ public sealed partial class WH40KCommandNodeSystem
             Loc.GetString(
                 "w40k-cmd-reinforcement-request-created",
                 ("count", totalCount),
-                ("funds", totalFundsCost),
-                ("influence", totalInfluenceCost),
+                ("cost", BuildReinforcementCostSummary(ent.Comp.TeamId, totalFundsCost, totalInfluenceCost, totalArtifactCost)),
                 ("delay", ReinforcementManualDelaySeconds / 60)),
             ent.Owner,
             args.Actor);
@@ -267,6 +281,7 @@ public sealed partial class WH40KCommandNodeSystem
                         out _,
                         out _,
                         out _,
+                        out _,
                         out var disabledErrorKey))
                 {
                     _popup.PopupEntity(_culture.GetPlayerString(args.Actor, disabledErrorKey), ent.Owner, args.Actor);
@@ -293,6 +308,7 @@ public sealed partial class WH40KCommandNodeSystem
                 true,
                 ReinforcementRoleCapMode.IgnoreCurrentCounts,
                 out var entries,
+                out _,
                 out _,
                 out _,
                 out _,
@@ -347,6 +363,7 @@ public sealed partial class WH40KCommandNodeSystem
         out int totalCost,
         out int totalFundsCost,
         out int totalInfluenceCost,
+        out int totalArtifactCost,
         out string errorKey)
     {
         entries = new List<ReinforcementPendingEntry>();
@@ -354,6 +371,7 @@ public sealed partial class WH40KCommandNodeSystem
         totalCost = 0;
         totalFundsCost = 0;
         totalInfluenceCost = 0;
+        totalArtifactCost = 0;
         errorKey = "w40k-cmd-reinforcement-option-invalid";
 
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile))
@@ -431,14 +449,18 @@ public sealed partial class WH40KCommandNodeSystem
                 return false;
             }
 
-            var unitInfluenceCost = GetReinforcementUnitCost(option);
+            var unitInfluenceCost = GetReinforcementUnitInfluenceCost(option);
+            var unitArtifactCost = GetReinforcementUnitArtifactCost(option);
             var unitFundsCost = WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost);
-            var optionTotalCost = unitInfluenceCost * effectiveRequestedCount;
+            var unitTotalCost = unitInfluenceCost + unitArtifactCost;
+            var optionTotalCost = unitTotalCost * effectiveRequestedCount;
             var optionTotalFundsCost = unitFundsCost * effectiveRequestedCount;
+            var optionTotalArtifactCost = unitArtifactCost * effectiveRequestedCount;
             totalCount += effectiveRequestedCount;
             totalCost += optionTotalCost;
-            totalInfluenceCost += optionTotalCost;
+            totalInfluenceCost += unitInfluenceCost * effectiveRequestedCount;
             totalFundsCost += optionTotalFundsCost;
+            totalArtifactCost += optionTotalArtifactCost;
 
             entries.Add(new ReinforcementPendingEntry(
                 option.Id,
@@ -446,9 +468,10 @@ public sealed partial class WH40KCommandNodeSystem
                 ResolveReinforcementOptionName(option),
                 ResolveReinforcementOptionDescription(option),
                 effectiveRequestedCount,
-                unitInfluenceCost,
+                unitTotalCost,
                 unitFundsCost,
-                unitInfluenceCost));
+                unitInfluenceCost,
+                unitArtifactCost));
         }
 
         if (entries.Count == 0)
@@ -474,6 +497,7 @@ public sealed partial class WH40KCommandNodeSystem
         int totalCost,
         int totalFundsCost,
         int totalInfluenceCost,
+        int totalArtifactCost,
         int delaySeconds)
     {
         runtime.PendingRequest = new TeamReinforcementPendingRequest
@@ -484,6 +508,7 @@ public sealed partial class WH40KCommandNodeSystem
             TotalCost = totalCost,
             TotalFundsCost = totalFundsCost,
             TotalInfluenceCost = totalInfluenceCost,
+            TotalArtifactCost = totalArtifactCost,
             Roles = entries.ToList()
         };
         runtime.NextAvailable = _timing.CurTime + TimeSpan.FromSeconds(ReinforcementSharedCooldownSeconds);
@@ -504,6 +529,7 @@ public sealed partial class WH40KCommandNodeSystem
 
         TryAdjustTeamFunds(null, teamId, pending.TotalFundsCost, "reinforcement-refund");
         _teamRule.TryAdjustTeamInfluence(teamId, pending.TotalInfluenceCost, out _, out _, source: "reinforcement-refund");
+        _teamRule.TryAdjustTeamArtifacts(teamId, pending.TotalArtifactCost, out _, out _, source: "reinforcement-refund");
         runtime.PendingRequest = null;
     }
 
@@ -541,6 +567,7 @@ public sealed partial class WH40KCommandNodeSystem
                 out var totalCost,
                 out var totalFundsCost,
                 out var totalInfluenceCost,
+                out var totalArtifactCost,
                 out _))
             return;
 
@@ -550,7 +577,10 @@ public sealed partial class WH40KCommandNodeSystem
         if (!_teamRule.TryGetTeamInfluencePoints(teamId, out var influence) || influence < totalInfluenceCost)
             return;
 
-        if (!TrySpendTeamFundsAndInfluence(null, teamId, totalFundsCost, totalInfluenceCost, "reinforcement-auto"))
+        if (!_teamRule.TryGetTeamArtifactPoints(teamId, out var artifacts) || artifacts < totalArtifactCost)
+            return;
+
+        if (!TrySpendTeamReinforcementResources(null, teamId, totalFundsCost, totalInfluenceCost, totalArtifactCost, "reinforcement-auto"))
             return;
 
         CreatePendingRequest(
@@ -561,6 +591,7 @@ public sealed partial class WH40KCommandNodeSystem
             totalCost,
             totalFundsCost,
             totalInfluenceCost,
+            totalArtifactCost,
             ReinforcementAutoDelaySeconds);
     }
 
@@ -763,6 +794,7 @@ public sealed partial class WH40KCommandNodeSystem
         _teamRule.TryGetTeamCommandPoints(teamId, out var commandPoints);
         _teamRule.TryGetTeamInfluencePoints(teamId, out var influencePoints);
         TryGetTeamFunds(sourceUid, teamId, out var funds);
+        _teamRule.TryGetTeamArtifactPoints(teamId, out var artifactPoints);
         var runtime = GetOrCreateTeamReinforcementRuntime(teamId);
         var currentPhase = _teamRule.GetCurrentPhase();
         var snapshot = BuildTeamAliveSnapshot(teamId);
@@ -777,6 +809,7 @@ public sealed partial class WH40KCommandNodeSystem
             commandPoints,
             influencePoints,
             funds,
+            artifactPoints,
             GetRemainingReinforcementCooldown(teamId),
             ReinforcementManualDelaySeconds,
             ReinforcementAutoDelaySeconds,
@@ -803,7 +836,8 @@ public sealed partial class WH40KCommandNodeSystem
                      .OrderBy(option => option.SortOrder)
                      .ThenBy(option => ResolveReinforcementOptionName(option), StringComparer.OrdinalIgnoreCase))
         {
-            var unitInfluenceCost = GetReinforcementUnitCost(option);
+            var unitInfluenceCost = GetReinforcementUnitInfluenceCost(option);
+            var unitArtifactCost = GetReinforcementUnitArtifactCost(option);
             catalog.Add(new WH40KCommandReinforcementCatalogEntryState(
                 option.Id,
                 ResolveReinforcementOptionName(option),
@@ -811,9 +845,10 @@ public sealed partial class WH40KCommandNodeSystem
                 string.IsNullOrWhiteSpace(option.GroupKey) ? ReinforcementDefaultGroupKey : option.GroupKey,
                 BuildReinforcementEquipmentSummary(option),
                 option.PreviewPrototype.ToString(),
-                unitInfluenceCost,
+                unitInfluenceCost + unitArtifactCost,
                 WH40KCommandEconomyCalculator.GetReinforcementFundsCost(unitInfluenceCost),
                 unitInfluenceCost,
+                unitArtifactCost,
                 GetReinforcementRoleCap(option),
                 Math.Max(0, currentRoleCounts.GetValueOrDefault(option.Id)),
                 option.AllowAuto));
@@ -877,6 +912,7 @@ public sealed partial class WH40KCommandNodeSystem
         var totalCost = 0;
         var totalFundsCost = 0;
         var totalInfluenceCost = 0;
+        var totalArtifactCost = 0;
         foreach (var role in config.Roles)
         {
             if (string.IsNullOrWhiteSpace(role.RoleId) || role.Count <= 0)
@@ -892,6 +928,7 @@ public sealed partial class WH40KCommandNodeSystem
             totalCost += clampedCount * catalogEntry.UnitCost;
             totalFundsCost += clampedCount * catalogEntry.UnitFundsCost;
             totalInfluenceCost += clampedCount * catalogEntry.UnitInfluenceCost;
+            totalArtifactCost += clampedCount * catalogEntry.UnitArtifactCost;
         }
 
         return new WH40KCommandReinforcementAutoConfigState(
@@ -901,6 +938,7 @@ public sealed partial class WH40KCommandNodeSystem
             totalCost,
             totalFundsCost,
             totalInfluenceCost,
+            totalArtifactCost,
             validRoles.ToArray());
     }
 
@@ -918,8 +956,10 @@ public sealed partial class WH40KCommandNodeSystem
                 role.UnitCost * role.Count,
                 role.UnitFundsCost,
                 role.UnitInfluenceCost,
+                role.UnitArtifactCost,
                 role.UnitFundsCost * role.Count,
-                role.UnitInfluenceCost * role.Count))
+                role.UnitInfluenceCost * role.Count,
+                role.UnitArtifactCost * role.Count))
             .ToArray();
 
         return new WH40KCommandReinforcementPendingRequestState(
@@ -929,6 +969,7 @@ public sealed partial class WH40KCommandNodeSystem
             pending.TotalCost,
             pending.TotalFundsCost,
             pending.TotalInfluenceCost,
+            pending.TotalArtifactCost,
             roles);
     }
 
@@ -969,28 +1010,71 @@ public sealed partial class WH40KCommandNodeSystem
         return (int) Math.Ceiling((runtime.NextAvailable - _timing.CurTime).TotalSeconds);
     }
 
-    private int GetMinimumReinforcementCost(string teamId, int fallback)
+    private (int TotalCost, int FundsCost, int InfluenceCost, int ArtifactCost) GetMinimumReinforcementResourceCosts(
+        string teamId,
+        int fallback)
     {
         if (!TryResolveReinforcementProfileForTeam(teamId, out var profile) || profile.Options.Count == 0)
-            return Math.Max(1, fallback);
+        {
+            var safeFallback = Math.Max(1, fallback);
+            return (
+                safeFallback,
+                WH40KCommandEconomyCalculator.GetReinforcementFundsCost(safeFallback),
+                safeFallback,
+                0);
+        }
 
-        var min = int.MaxValue;
+        var minTotalCost = int.MaxValue;
+        var minFundsCost = 0;
+        var minInfluenceCost = 0;
+        var minArtifactCost = 0;
         foreach (var option in profile.Options)
         {
             if (!IsReinforcementOptionUnlocked(teamId, option))
                 continue;
 
-            min = Math.Min(min, GetReinforcementUnitCost(option));
+            var influenceCost = GetReinforcementUnitInfluenceCost(option);
+            var artifactCost = GetReinforcementUnitArtifactCost(option);
+            var totalCost = Math.Max(1, influenceCost + artifactCost);
+            var fundsCost = WH40KCommandEconomyCalculator.GetReinforcementFundsCost(influenceCost);
+            if (totalCost > minTotalCost)
+                continue;
+
+            if (totalCost == minTotalCost && fundsCost + influenceCost + artifactCost >= minFundsCost + minInfluenceCost + minArtifactCost)
+                continue;
+
+            minTotalCost = totalCost;
+            minFundsCost = fundsCost;
+            minInfluenceCost = influenceCost;
+            minArtifactCost = artifactCost;
         }
 
-        return min == int.MaxValue
-            ? Math.Max(1, fallback)
-            : min;
+        if (minTotalCost == int.MaxValue)
+        {
+            var safeFallback = Math.Max(1, fallback);
+            return (
+                safeFallback,
+                WH40KCommandEconomyCalculator.GetReinforcementFundsCost(safeFallback),
+                safeFallback,
+                0);
+        }
+
+        return (minTotalCost, minFundsCost, minInfluenceCost, minArtifactCost);
     }
 
     private int GetReinforcementUnitCost(WH40KCommandReinforcementOptionPrototype option)
     {
-        return Math.Max(1, option.BaseCost);
+        return Math.Max(1, GetReinforcementUnitInfluenceCost(option) + GetReinforcementUnitArtifactCost(option));
+    }
+
+    private static int GetReinforcementUnitInfluenceCost(WH40KCommandReinforcementOptionPrototype option)
+    {
+        return Math.Max(0, option.BaseCost);
+    }
+
+    private static int GetReinforcementUnitArtifactCost(WH40KCommandReinforcementOptionPrototype option)
+    {
+        return Math.Max(0, option.BaseArtifactCost);
     }
 
     private static int GetReinforcementRoleCap(WH40KCommandReinforcementOptionPrototype option)
@@ -1018,5 +1102,80 @@ public sealed partial class WH40KCommandNodeSystem
             return job.Description ?? option.Id;
 
         return option.Id;
+    }
+
+    private bool TrySpendTeamReinforcementResources(
+        EntityUid? sourceUid,
+        string teamId,
+        int fundsCost,
+        int influenceCost,
+        int artifactCost,
+        string source)
+    {
+        fundsCost = Math.Max(0, fundsCost);
+        influenceCost = Math.Max(0, influenceCost);
+        artifactCost = Math.Max(0, artifactCost);
+
+        if (fundsCost <= 0 && influenceCost <= 0 && artifactCost <= 0)
+            return true;
+
+        if (!TryGetTeamFunds(sourceUid, teamId, out var funds) || funds < fundsCost)
+            return false;
+
+        if (!_teamRule.TryGetTeamInfluencePoints(teamId, out var influence) || influence < influenceCost)
+            return false;
+
+        if (!_teamRule.TryGetTeamArtifactPoints(teamId, out var artifacts) || artifacts < artifactCost)
+            return false;
+
+        if (fundsCost > 0 && !TryAdjustTeamFunds(sourceUid, teamId, -fundsCost, source))
+            return false;
+
+        if (influenceCost > 0 && !_teamRule.TrySpendTeamInfluence(teamId, influenceCost, out _, source))
+        {
+            if (fundsCost > 0)
+                TryAdjustTeamFunds(sourceUid, teamId, fundsCost, $"{source}-refund");
+
+            return false;
+        }
+
+        if (artifactCost <= 0)
+            return true;
+
+        if (_teamRule.TrySpendTeamArtifacts(teamId, artifactCost, out _, source))
+            return true;
+
+        if (influenceCost > 0)
+            _teamRule.TryAdjustTeamInfluence(teamId, influenceCost, out _, out _, $"{source}-refund");
+
+        if (fundsCost > 0)
+            TryAdjustTeamFunds(sourceUid, teamId, fundsCost, $"{source}-refund");
+
+        return false;
+    }
+
+    private static string BuildReinforcementCostSummary(string teamId, int fundsCost, int influenceCost, int artifactCost)
+    {
+        var parts = new List<string>(3);
+        if (fundsCost > 0)
+            parts.Add($"{Math.Max(0, fundsCost)}{ReinforcementFundsSymbol}");
+
+        if (influenceCost > 0)
+            parts.Add($"{Math.Max(0, influenceCost)}{ReinforcementInfluenceSymbol}");
+
+        if (artifactCost > 0)
+            parts.Add(FormatArtifactAmount(teamId, artifactCost));
+
+        return parts.Count == 0 ? "0" : string.Join(" / ", parts);
+    }
+
+    private static string FormatArtifactAmount(string teamId, int amount)
+    {
+        var value = Math.Max(0, amount) / 10f;
+        var symbol = string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(teamId, "Chaos", StringComparison.OrdinalIgnoreCase)
+            ? ReinforcementChaosArtifactSymbol
+            : ReinforcementImperiumArtifactSymbol;
+        return $"{value.ToString("0.0", CultureInfo.InvariantCulture)}{symbol}";
     }
 }

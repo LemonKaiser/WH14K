@@ -96,6 +96,15 @@
     maxCount: 2
     groupKey: w40k-cmd-reinforcement-group-command
     sortOrder: 110
+  - id: astartes
+    job: AstartesImperium
+    previewPrototype: WH40KReinforcementPreviewImperiumAstartes
+    baseCost: 0
+    baseArtifactCost: 120
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-special
+    sortOrder: 120
+    allowAuto: false
 
 - type: wh40kCommandReinforcementProfile
   id: WH40KCommandReinforcementProfileHeretics
@@ -143,6 +152,15 @@
     maxCount: 5
     minBaseLevel: 4
     groupKey: w40k-cmd-reinforcement-group-special
+  - id: hastartes
+    job: HAstartes
+    previewPrototype: WH40KReinforcementPreviewHereticsAstartes
+    baseCost: 0
+    baseArtifactCost: 120
+    maxCount: 1
+    groupKey: w40k-cmd-reinforcement-group-special
+    sortOrder: 90
+    allowAuto: false
 
 - type: wh40kCommandReinforcementTeamMap
   id: WH40KCommandReinforcementTeamMap

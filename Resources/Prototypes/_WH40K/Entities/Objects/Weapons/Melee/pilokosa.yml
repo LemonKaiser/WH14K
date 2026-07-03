@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseSword
+  id: WeaponMeleePilokosa
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Weapons/Melee/pilokosa.rsi
+    state: icon
+  - type: MeleeWeapon
+    attackRate: 1.25
+    damage:
+      types:
+        Slash: 24
+        Piercing: 4
+    soundHit:
+      path: /Audio/Weapons/chainsaw_rev.ogg
+      params:
+        volume: -5
+  - type: Item
+    sprite: _WH40K/Objects/Weapons/Melee/pilokosa.rsi
+    storedSprite: null
+    size: Normal
+    shape:
+    - 0,0,2,1
+  - type: StaminaDamageOnHit
+    damage: 5

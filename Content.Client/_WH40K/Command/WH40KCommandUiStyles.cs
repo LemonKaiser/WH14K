@@ -15,6 +15,8 @@ public static class WH40KCommandUiStyles
     public const string InfluenceSymbol = "\u2182";
     public const string ResearchSymbol = "\u03A9";
     public const string ExperienceSymbol = "XP";
+    public const string ImperiumArtifactSymbol = "\u25A0";
+    public const string ChaosArtifactSymbol = "\u25B2";
 
     public static readonly Color DefaultAccent = Color.FromHex("#C9A94C".AsSpan());
     public static readonly Color HeaderBackground = Color.FromHex("#0B0C10".AsSpan());
@@ -323,9 +325,26 @@ public static class WH40KCommandUiStyles
         return $"{Math.Max(0, amount)}{ExperienceSymbol}";
     }
 
+    public static string FormatArtifacts(int amount, string teamId)
+    {
+        var value = Math.Max(0, amount) / 10f;
+        return $"{value.ToString("0.0", CultureInfo.CurrentCulture)}{ResolveArtifactSymbol(teamId)}";
+    }
+
+    public static string ResolveArtifactSymbol(string teamId)
+    {
+        return string.Equals(teamId, "Heretics", StringComparison.OrdinalIgnoreCase) ||
+               string.Equals(teamId, "Chaos", StringComparison.OrdinalIgnoreCase)
+            ? ChaosArtifactSymbol
+            : ImperiumArtifactSymbol;
+    }
+
     public static string FormatRate(float amount)
     {
         var clamped = Math.Max(0f, amount);
+        if (clamped > 0f && clamped < 0.1f)
+            return clamped.ToString("0.##", CultureInfo.CurrentCulture);
+
         var rounded = MathF.Round(clamped * 10f) / 10f;
         if (Math.Abs(rounded - MathF.Round(rounded)) < 0.01f)
             return MathF.Round(rounded).ToString(CultureInfo.CurrentCulture);

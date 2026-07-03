@@ -204,10 +204,12 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public int InfluencePoints { get; }
     public int Funds { get; }
     public int ResearchPoints { get; }
+    public int ArtifactPoints { get; }
     public float TeamXpIncomePerSecond { get; }
     public float InfluenceIncomePerSecond { get; }
     public float FundsIncomePerSecond { get; }
     public float ResearchIncomePerSecond { get; }
+    public float ArtifactIncomePerSecond { get; }
     public int UpgradeLevel { get; }
     public int UpgradeCost { get; }
     public int UpgradeFundsCost { get; }
@@ -215,6 +217,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
     public int ReinforcementCost { get; }
     public int ReinforcementFundsCost { get; }
     public int ReinforcementInfluenceCost { get; }
+    public int ReinforcementArtifactCost { get; }
     public int ReinforcementCooldownSeconds { get; }
     public int RoundElapsedSeconds { get; }
     public int? PointsToNextLevel { get; }
@@ -246,10 +249,12 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         int influencePoints,
         int funds,
         int researchPoints,
+        int artifactPoints,
         float teamXpIncomePerSecond,
         float influenceIncomePerSecond,
         float fundsIncomePerSecond,
         float researchIncomePerSecond,
+        float artifactIncomePerSecond,
         int upgradeLevel,
         int upgradeCost,
         int upgradeFundsCost,
@@ -257,6 +262,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         int reinforcementCost,
         int reinforcementFundsCost,
         int reinforcementInfluenceCost,
+        int reinforcementArtifactCost,
         int reinforcementCooldownSeconds,
         int roundElapsedSeconds,
         int? pointsToNextLevel,
@@ -287,10 +293,12 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         InfluencePoints = influencePoints;
         Funds = funds;
         ResearchPoints = researchPoints;
+        ArtifactPoints = artifactPoints;
         TeamXpIncomePerSecond = teamXpIncomePerSecond;
         InfluenceIncomePerSecond = influenceIncomePerSecond;
         FundsIncomePerSecond = fundsIncomePerSecond;
         ResearchIncomePerSecond = researchIncomePerSecond;
+        ArtifactIncomePerSecond = artifactIncomePerSecond;
         UpgradeLevel = upgradeLevel;
         UpgradeCost = upgradeCost;
         UpgradeFundsCost = upgradeFundsCost;
@@ -298,6 +306,7 @@ public sealed class WH40KCommandNodeBoundUserInterfaceState : BoundUserInterface
         ReinforcementCost = reinforcementCost;
         ReinforcementFundsCost = reinforcementFundsCost;
         ReinforcementInfluenceCost = reinforcementInfluenceCost;
+        ReinforcementArtifactCost = reinforcementArtifactCost;
         ReinforcementCooldownSeconds = reinforcementCooldownSeconds;
         RoundElapsedSeconds = roundElapsedSeconds;
         PointsToNextLevel = pointsToNextLevel;

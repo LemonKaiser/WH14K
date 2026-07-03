@@ -1,0 +1,117 @@
+- type: entity
+  parent: BaseItem
+  id: WH40KArtifactSquare
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Specific/artifact_square.rsi
+    layers:
+    - state: artifact
+      map: ["base"]
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: WH40KArtifactSquare
+    count: 1
+    baseLayer: base
+    layerStates:
+    - artifact
+    - artifact_2
+    - artifact_3
+    - artifact_4
+    layerFunction: Threshold
+  - type: StackLayerThreshold
+    thresholds: [ 2, 3, 4 ]
+  - type: StackPrice
+    price: 1
+  - type: Currency
+    price:
+      artifact_imp: 1
+  - type: Appearance
+
+- type: entity
+  parent: WH40KArtifactSquare
+  id: WH40KArtifactSquare2
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 2
+
+- type: entity
+  parent: WH40KArtifactSquare
+  id: WH40KArtifactSquare3
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 3
+
+- type: entity
+  parent: WH40KArtifactSquare
+  id: WH40KArtifactSquare4
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 4
+
+- type: entity
+  parent: BaseItem
+  id: WH40KArtifactTriangle
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Specific/artifact_triangle.rsi
+    layers:
+    - state: artifact
+      map: ["base"]
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: WH40KArtifactTriangle
+    count: 1
+    baseLayer: base
+    layerStates:
+    - artifact
+    - artifact_2
+    - artifact_3
+    - artifact_4
+    layerFunction: Threshold
+  - type: StackLayerThreshold
+    thresholds: [ 2, 3, 4 ]
+  - type: StackPrice
+    price: 1
+  - type: Currency
+    price:
+      artifact_chaos: 1
+  - type: Appearance
+
+- type: entity
+  parent: WH40KArtifactTriangle
+  id: WH40KArtifactTriangle2
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 2
+
+- type: entity
+  parent: WH40KArtifactTriangle
+  id: WH40KArtifactTriangle3
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 3
+
+- type: entity
+  parent: WH40KArtifactTriangle
+  id: WH40KArtifactTriangle4
+  categories: [ HideSpawnMenu ]
+  suffix: WH40K
+  components:
+  - type: Stack
+    count: 4

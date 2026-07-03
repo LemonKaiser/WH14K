@@ -274,6 +274,35 @@ public sealed partial class WH40KTeamRuleFacadeSystem : EntitySystem
         return _waveDefence.TryAdjustTeamResearchPoints(teamId, delta, out resolvedTeamId, out researchPoints, source);
     }
 
+    public bool TryGetTeamArtifactPoints(string teamId, out int points)
+    {
+        if (_teamBattle.TryGetTeamArtifactPoints(teamId, out points))
+            return true;
+
+        return _waveDefence.TryGetTeamArtifactPoints(teamId, out points);
+    }
+
+    public bool TrySpendTeamArtifacts(string teamId, int amount, out int remaining, string? source = null)
+    {
+        if (_teamBattle.TrySpendTeamArtifacts(teamId, amount, out remaining, source))
+            return true;
+
+        return _waveDefence.TrySpendTeamArtifacts(teamId, amount, out remaining, source);
+    }
+
+    public bool TryAdjustTeamArtifacts(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int artifactPoints,
+        string? source = null)
+    {
+        if (_teamBattle.TryAdjustTeamArtifacts(teamId, delta, out resolvedTeamId, out artifactPoints, source))
+            return true;
+
+        return _waveDefence.TryAdjustTeamArtifacts(teamId, delta, out resolvedTeamId, out artifactPoints, source);
+    }
+
     public bool TryGetTeamAliveSnapshot(string teamId, out int aliveCount, out int totalCount)
     {
         if (_waveDefence.TryGetTeamAliveSnapshot(teamId, out aliveCount, out totalCount))

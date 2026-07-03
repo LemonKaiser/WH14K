@@ -114,10 +114,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      90: Dead
+      110: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 4.7
-    baseSprintSpeed: 6.7
+    baseWalkSpeed: 5.1
+    baseSprintSpeed: 7.2
   - type: MeleeWeapon
     hidden: true
     altDisarm: false
@@ -163,10 +163,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      130: Dead
+      155: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 5
-    baseSprintSpeed: 7.1
+    baseWalkSpeed: 5.4
+    baseSprintSpeed: 7.6
   - type: MeleeWeapon
     hidden: true
     altDisarm: false
@@ -212,10 +212,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      140: Dead
+      170: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3.2
-    baseSprintSpeed: 4.4
+    baseWalkSpeed: 3.6
+    baseSprintSpeed: 4.9
   - type: MeleeWeapon
     hidden: true
     altDisarm: false
@@ -261,10 +261,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      190: Dead
+      225: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 2.9
-    baseSprintSpeed: 3.9
+    baseWalkSpeed: 3.2
+    baseSprintSpeed: 4.3
   - type: MeleeWeapon
     hidden: true
     altDisarm: false
@@ -310,10 +310,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      330: Dead
+      390: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 1.9
-    baseSprintSpeed: 2.8
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 3.1
   - type: MeleeWeapon
     hidden: true
     altDisarm: false
@@ -360,10 +360,10 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      460: Dead
+      540: Dead
   - type: MovementSpeedModifier
-    baseWalkSpeed: 1.6
-    baseSprintSpeed: 2.4
+    baseWalkSpeed: 1.9
+    baseSprintSpeed: 2.8
   - type: MeleeWeapon
     hidden: true
     altDisarm: false

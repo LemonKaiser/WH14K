@@ -157,6 +157,7 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         CommandPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
         ResearchPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
         DevelopmentPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
+        ArtifactPointsLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
         BaseProgressLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
         UpgradeLineLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveMutedText(chaosTheme);
         MissionTitleLabel.ModulateSelfOverride = WH40KCommandUiStyles.ResolveSoftText(chaosTheme);
@@ -204,6 +205,12 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
             "w40k-cmd-base-funds-line",
             ("funds", WH40KCommandUiStyles.FormatThroneGelt(state.Funds)),
             ("income", BuildIncomeRate(state.FundsIncomePerSecond, WH40KCommandUiStyles.ThroneGeltSymbol)));
+        ArtifactPointsLineLabel.Text = Loc.GetString(
+            "w40k-cmd-base-artifacts-line",
+            ("artifacts", WH40KCommandUiStyles.FormatArtifacts(state.ArtifactPoints, state.TeamId)),
+            ("artifactIncome", BuildIncomeRate(
+                state.ArtifactIncomePerSecond,
+                WH40KCommandUiStyles.ResolveArtifactSymbol(state.TeamId))));
 
         var (progress, segmentCurrent, segmentTotal) = CalculateBaseProgress(state);
         BaseProgressBar.Value = progress;
@@ -319,7 +326,7 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
         FooterLabel.Text = CanUpgradeNode(state)
             ? Loc.GetString("w40k-cmd-footer-upgrade-ready", ("cost", FormatFundsResearchCost(state.UpgradeFundsCost, state.UpgradeResearchCost)))
             : CanCallReinforcement(state)
-                ? Loc.GetString("w40k-cmd-footer-reinforcement-ready", ("cost", FormatFundsInfluenceCost(state.ReinforcementFundsCost, state.ReinforcementInfluenceCost)))
+                ? Loc.GetString("w40k-cmd-footer-reinforcement-ready", ("cost", FormatReinforcementCost(state)))
                 : BuildCompactText(BuildFocusText(state), 176);
     }
 
@@ -333,9 +340,10 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
     private static bool CanCallReinforcement(WH40KCommandNodeBoundUserInterfaceState state)
     {
         return state.Phase == WH40KBattlePhase.Assault &&
-               (state.ReinforcementFundsCost > 0 || state.ReinforcementInfluenceCost > 0) &&
+               (state.ReinforcementFundsCost > 0 || state.ReinforcementInfluenceCost > 0 || state.ReinforcementArtifactCost > 0) &&
                state.Funds >= state.ReinforcementFundsCost &&
                state.InfluencePoints >= state.ReinforcementInfluenceCost &&
+               state.ArtifactPoints >= state.ReinforcementArtifactCost &&
                state.ReinforcementCooldownSeconds <= 0;
     }
 
@@ -499,6 +507,21 @@ public sealed partial class WH40KCommandNodeWindow : FancyWindow, ILocalizedCont
             "w40k-cmd-cost-funds-influence",
             ("funds", WH40KCommandUiStyles.FormatThroneGelt(funds)),
             ("influence", WH40KCommandUiStyles.FormatInfluence(influence)));
+    }
+
+    private static string FormatReinforcementCost(WH40KCommandNodeBoundUserInterfaceState state)
+    {
+        var parts = new List<string>(3);
+        if (state.ReinforcementFundsCost > 0)
+            parts.Add(WH40KCommandUiStyles.FormatThroneGelt(state.ReinforcementFundsCost));
+
+        if (state.ReinforcementInfluenceCost > 0)
+            parts.Add(WH40KCommandUiStyles.FormatInfluence(state.ReinforcementInfluenceCost));
+
+        if (state.ReinforcementArtifactCost > 0)
+            parts.Add(WH40KCommandUiStyles.FormatArtifacts(state.ReinforcementArtifactCost, state.TeamId));
+
+        return parts.Count == 0 ? "0" : string.Join(" / ", parts);
     }
 
     private static string BuildIncomeRate(float amountPerSecond, string unitSuffix = "")

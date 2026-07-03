@@ -11,6 +11,18 @@
   groupBy: "m36-cantrael"
 
 - type: loadout
+  id: WH40KWeaponLaserLasgunTriplexLoadout
+  dummyEntity: WeaponLaserLasgunTriplex
+  equipment:
+    suitstorage: WeaponLaserLasgunTriplex
+  storage:
+    belt:
+    - LasgunPowerCell
+    - LasgunPowerCell
+    - LasgunPowerCell
+  groupBy: "m36-triplex"
+
+- type: loadout
   id: WH40KWeaponLaserLasgunVossLoadout
   dummyEntity: WeaponLaserLasgunVoss
   effects:

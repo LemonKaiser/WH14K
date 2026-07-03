@@ -339,6 +339,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             "w40k-cmd-reinforcement-rework-header-status",
             ("funds", WH40KCommandUiStyles.FormatThroneGelt(state.Funds)),
             ("influence", WH40KCommandUiStyles.FormatInfluence(state.InfluencePoints)),
+            ("artifacts", WH40KCommandUiStyles.FormatArtifacts(state.ArtifactPoints, state.TeamId)),
             ("alive", state.AliveCount),
             ("total", state.TotalCount),
             ("percent", state.AlivePercent),
@@ -405,19 +406,19 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             SeparationOverride = 6,
             HorizontalExpand = true,
-            MinHeight = 42
+            MinHeight = 48
         };
 
         var iconFrame = new PanelContainer
         {
-            MinWidth = 44,
-            MinHeight = 40,
+            MinWidth = 48,
+            MinHeight = 44,
             PanelOverride = CreatePanelStyle(ThemeInset, ThemeBorder, 1, 4, 4)
         };
         var preview = new EntityPrototypeView
         {
             MinSize = new Vector2(32f, 32f),
-            Scale = new Vector2(1.35f, 1.35f),
+            Scale = ResolveCatalogPreviewScale(role.PreviewPrototypeId),
             HorizontalAlignment = HAlignment.Center,
             VerticalAlignment = VAlignment.Center
         };
@@ -450,7 +451,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             ThemeInset,
             roleCapReached ? TerminalDanger : ThemeBorder,
             roleCapReached ? TerminalDanger : ThemeMuted));
-        row.AddChild(CreateMiniBadge(FormatFundsInfluenceCost(role.UnitFundsCost, role.UnitInfluenceCost), ThemeInset, ThemeAction, ThemeText));
+        row.AddChild(CreateMiniBadge(FormatCost(role.UnitFundsCost, role.UnitInfluenceCost, role.UnitArtifactCost), ThemeInset, ThemeAction, ThemeText));
         row.AddChild(CreateCatalogStepper(role, activeDraft, activeCount, _catalogAutoMode));
 
         return row;
@@ -527,8 +528,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
                 ? "w40k-cmd-reinforcement-rework-pending-auto"
                 : "w40k-cmd-reinforcement-rework-pending-manual",
             ("count", pending.TotalCount),
-            ("funds", WH40KCommandUiStyles.FormatThroneGelt(pending.TotalFundsCost)),
-            ("influence", WH40KCommandUiStyles.FormatInfluence(pending.TotalInfluenceCost)),
+            ("cost", FormatCost(pending.TotalFundsCost, pending.TotalInfluenceCost, pending.TotalArtifactCost)),
             ("time", FormatDuration(pending.ArrivalSeconds)));
         PendingStatusLabel.ModulateSelfOverride = ThemeAction;
 
@@ -540,7 +540,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         {
             PendingRoles.AddChild(CreateReadOnlyRow(
                 $"{WH40KCommandUiStyles.ResolveLocalizedOrRaw(role.Name)} x{role.Count}",
-                FormatFundsInfluenceCost(role.TotalFundsCost, role.TotalInfluenceCost)));
+                FormatCost(role.TotalFundsCost, role.TotalInfluenceCost, role.TotalArtifactCost)));
         }
 
         _pendingRowsBuilt = true;
@@ -602,7 +602,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         summaryBox.AddChild(label);
         summaryBox.AddChild(new Label
         {
-            Text = FormatFundsInfluenceCost(role.UnitFundsCost * count, role.UnitInfluenceCost * count),
+            Text = FormatCost(role.UnitFundsCost * count, role.UnitInfluenceCost * count, role.UnitArtifactCost * count),
             FontColorOverride = autoMode ? ThemeAction : _accent
         });
         row.AddChild(summary);
@@ -652,15 +652,14 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         if (_latestState == null)
             return;
 
-        var (manualCount, manualFundsCost, manualInfluenceCost) = GetDraftTotals(_manualDraft);
-        var (autoCount, autoFundsCost, autoInfluenceCost) = GetDraftTotals(_autoDraft);
+        var (manualCount, manualFundsCost, manualInfluenceCost, manualArtifactCost) = GetDraftTotals(_manualDraft);
+        var (autoCount, autoFundsCost, autoInfluenceCost, autoArtifactCost) = GetDraftTotals(_autoDraft);
 
         ManualSummaryLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-manual-summary",
             ("count", manualCount),
             ("max", _latestState.MaxTotalCount),
-            ("funds", WH40KCommandUiStyles.FormatThroneGelt(manualFundsCost)),
-            ("influence", WH40KCommandUiStyles.FormatInfluence(manualInfluenceCost)),
+            ("cost", FormatCost(manualFundsCost, manualInfluenceCost, manualArtifactCost)),
             ("delay", _latestState.ManualDelaySeconds / 60));
         AutoMetaLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-auto-meta",
@@ -670,8 +669,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             "w40k-cmd-reinforcement-rework-auto-summary",
             ("count", autoCount),
             ("max", _latestState.MaxTotalCount),
-            ("funds", WH40KCommandUiStyles.FormatThroneGelt(autoFundsCost)),
-            ("influence", WH40KCommandUiStyles.FormatInfluence(autoInfluenceCost)));
+            ("cost", FormatCost(autoFundsCost, autoInfluenceCost, autoArtifactCost)));
         ThresholdValueLabel.Text = Loc.GetString(
             "w40k-cmd-reinforcement-rework-threshold",
             ("value", _autoThresholdPercent));
@@ -682,7 +680,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             ThresholdSlider.SetValueWithoutEvent(_autoThresholdPercent);
         _suppressAutoInput = false;
 
-        SubmitManualButton.Disabled = !CanSubmitManual(_latestState, manualCount, manualFundsCost, manualInfluenceCost);
+        SubmitManualButton.Disabled = !CanSubmitManual(_latestState, manualCount, manualFundsCost, manualInfluenceCost, manualArtifactCost);
         ClearManualButton.Disabled = manualCount <= 0;
         SaveAutoButton.Disabled = !CanSaveAuto(_latestState, autoCount);
         ResetAutoButton.Disabled = !_autoDirty;
@@ -733,7 +731,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
 
         if (delta > 0)
         {
-            var (totalCount, _, _) = GetDraftTotals(draft);
+            var (totalCount, _, _, _) = GetDraftTotals(draft);
             if (totalCount >= _latestState.MaxTotalCount)
                 return;
         }
@@ -761,7 +759,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         if (current >= GetDraftRoleCap(role, autoMode))
             return false;
 
-        var (totalCount, _, _) = GetDraftTotals(draft);
+        var (totalCount, _, _, _) = GetDraftTotals(draft);
         return totalCount < _latestState.MaxTotalCount;
     }
 
@@ -844,19 +842,21 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             .ToArray();
     }
 
-    private (int TotalCount, int TotalFundsCost, int TotalInfluenceCost) GetDraftTotals(Dictionary<string, int> draft)
+    private (int TotalCount, int TotalFundsCost, int TotalInfluenceCost, int TotalArtifactCost) GetDraftTotals(Dictionary<string, int> draft)
     {
         var totalCount = 0;
         var totalFundsCost = 0;
         var totalInfluenceCost = 0;
+        var totalArtifactCost = 0;
         foreach (var (role, count) in BuildResolvedDraftEntries(draft))
         {
             totalCount += count;
             totalFundsCost += role.UnitFundsCost * count;
             totalInfluenceCost += role.UnitInfluenceCost * count;
+            totalArtifactCost += role.UnitArtifactCost * count;
         }
 
-        return (totalCount, totalFundsCost, totalInfluenceCost);
+        return (totalCount, totalFundsCost, totalInfluenceCost, totalArtifactCost);
     }
 
     private static int GetDraftRoleCap(WH40KCommandReinforcementCatalogEntryState role, bool autoMode)
@@ -870,9 +870,10 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         WH40KCommandReinforcementBoundUserInterfaceState state,
         int totalCount,
         int totalFundsCost,
-        int totalInfluenceCost)
+        int totalInfluenceCost,
+        int totalArtifactCost)
     {
-        if (totalCount <= 0 || (totalFundsCost <= 0 && totalInfluenceCost <= 0))
+        if (totalCount <= 0 || (totalFundsCost <= 0 && totalInfluenceCost <= 0 && totalArtifactCost <= 0))
             return false;
 
         if (state.PendingRequest != null)
@@ -885,7 +886,8 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             return false;
 
         return state.Funds >= totalFundsCost &&
-               state.InfluencePoints >= totalInfluenceCost;
+               state.InfluencePoints >= totalInfluenceCost &&
+               state.ArtifactPoints >= totalArtifactCost;
     }
 
     private bool CanSaveAuto(WH40KCommandReinforcementBoundUserInterfaceState state, int totalCount)
@@ -920,12 +922,19 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         return $"{minutes:00}:{seconds:00}";
     }
 
-    private static string FormatFundsInfluenceCost(int funds, int influence)
+    private string FormatCost(int funds, int influence, int artifacts)
     {
-        return Loc.GetString(
-            "w40k-cmd-cost-funds-influence",
-            ("funds", WH40KCommandUiStyles.FormatThroneGelt(funds)),
-            ("influence", WH40KCommandUiStyles.FormatInfluence(influence)));
+        var parts = new List<string>(3);
+        if (funds > 0)
+            parts.Add(WH40KCommandUiStyles.FormatThroneGelt(funds));
+
+        if (influence > 0)
+            parts.Add(WH40KCommandUiStyles.FormatInfluence(influence));
+
+        if (artifacts > 0 && _latestState != null)
+            parts.Add(WH40KCommandUiStyles.FormatArtifacts(artifacts, _latestState.TeamId));
+
+        return parts.Count == 0 ? "0" : string.Join(" / ", parts);
     }
 
     private static string GetPhaseKey(WH40KBattlePhase phase)
@@ -937,6 +946,13 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             WH40KBattlePhase.Apocalypse => "wh40k-phase-apocalypse-name",
             _ => "wh40k-phase-preparation-name"
         };
+    }
+
+    private static Vector2 ResolveCatalogPreviewScale(string previewPrototypeId)
+    {
+        return previewPrototypeId.Contains("Astartes", StringComparison.OrdinalIgnoreCase)
+            ? new Vector2(0.95f, 0.95f)
+            : new Vector2(1.35f, 1.35f);
     }
 
     private static PanelContainer CreateMiniBadge(string text, Color background, Color border, Color foreground)
@@ -1024,6 +1040,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             hash.Add(entry.UnitCost);
             hash.Add(entry.UnitFundsCost);
             hash.Add(entry.UnitInfluenceCost);
+            hash.Add(entry.UnitArtifactCost);
             hash.Add(entry.PerRoleCap);
             hash.Add(entry.CurrentTeamCount);
             hash.Add(entry.AllowAuto);
@@ -1052,6 +1069,7 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
         hash.Add(pending.TotalCost);
         hash.Add(pending.TotalFundsCost);
         hash.Add(pending.TotalInfluenceCost);
+        hash.Add(pending.TotalArtifactCost);
         foreach (var role in pending.Roles)
         {
             hash.Add(role.RoleId, StringComparer.OrdinalIgnoreCase);
@@ -1061,8 +1079,10 @@ public sealed partial class WH40KCommandNodeReinforcementWindow : FancyWindow, I
             hash.Add(role.TotalCost);
             hash.Add(role.UnitFundsCost);
             hash.Add(role.UnitInfluenceCost);
+            hash.Add(role.UnitArtifactCost);
             hash.Add(role.TotalFundsCost);
             hash.Add(role.TotalInfluenceCost);
+            hash.Add(role.TotalArtifactCost);
         }
 
         return hash.ToHashCode();

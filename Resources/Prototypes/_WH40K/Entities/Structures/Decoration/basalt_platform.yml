@@ -1,0 +1,79 @@
+- type: entity
+  id: WH40KStairsBasalt
+  parent: Stairs
+  suffix: WH40K, Basalt
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Furniture/basalt_stairs.rsi
+    state: stairs_basalt
+    drawdepth: FloorTiles
+  - type: Damageable
+    damageModifierSet: Rock
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+          params:
+            volume: -6
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: WH40KStairsBasaltStage
+  parent: WH40KStairsBasalt
+  suffix: WH40K, Basalt, stage
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Furniture/basalt_stairs.rsi
+    state: stairs_stage_basalt
+    drawdepth: FloorTiles
+
+- type: entity
+  id: WH40KBasaltPlatformEdge
+  parent: BaseFloorDecoration
+  suffix: WH40K
+  name: basalt platform edge
+  description: A heavy basalt lip marking the edge of an elevated platform.
+  components:
+  - type: Rotatable
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/basalt_platform_edge.rsi
+    state: platform
+    drawdepth: FloorTiles
+
+- type: entity
+  id: WH40KBasaltPlatformEdgeBroken
+  parent: WH40KBasaltPlatformEdge
+  suffix: WH40K, Broken
+  name: broken basalt platform edge
+  description: A basalt platform edge fractured by time, shelling, or both.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/basalt_platform_edge.rsi
+    state: platform_broken
+    drawdepth: FloorTiles
+
+- type: entity
+  id: WH40KBasaltPlatformEdgeDeco
+  parent: WH40KBasaltPlatformEdge
+  suffix: WH40K, Debris
+  name: basalt platform edge debris
+  description: Broken fragments from a basalt platform edge.
+  components:
+  - type: Sprite
+    sprite: _WH40K/Structures/Decorations/basalt_platform_edge.rsi
+    state: platform_deco
+    drawdepth: FloorTiles

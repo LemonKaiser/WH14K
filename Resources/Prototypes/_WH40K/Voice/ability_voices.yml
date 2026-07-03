@@ -14,3 +14,26 @@
     - /Audio/_WH40K/Voice/Commissar/Execution/ifyou.ogg
     - /Audio/_WH40K/Voice/Commissar/Execution/judge.ogg
     - /Audio/_WH40K/Voice/Commissar/Execution/tremble.ogg
+
+- type: soundCollection
+  id: WH40KNurgleCorpseRiseVoice
+  files:
+    - /Audio/_WH40K/Voice/Nurgle/zombie_rise_1.ogg
+    - /Audio/_WH40K/Voice/Nurgle/zombie_rise_2.ogg
+
+- type: soundCollection
+  id: WH40KKhorneDashVoice
+  files:
+    - /Audio/_WH40K/Voice/Khorne/dash_warcry_1.ogg
+    - /Audio/_WH40K/Voice/Khorne/dash_warcry_2.ogg
+
+- type: soundCollection
+  id: WH40KPsykerLevelUpVoice
+  files:
+    - /Audio/_WH40K/Voice/Psyker/level_up.ogg
+
+- type: soundCollection
+  id: WH40KPsykerOverheatCastVoice
+  files:
+    - /Audio/_WH40K/Voice/Psyker/overheat_cast_1.ogg
+    - /Audio/_WH40K/Voice/Psyker/overheat_cast_2.ogg

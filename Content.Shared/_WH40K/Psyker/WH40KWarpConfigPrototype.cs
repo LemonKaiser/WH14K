@@ -19,6 +19,9 @@ public sealed partial class WH40KWarpConfigPrototype : IPrototype
 
     [DataField("effects")]
     public WH40KWarpEffectConfig Effects = new();
+
+    [DataField("psykerOverload")]
+    public WH40KPsykerOverloadConfig PsykerOverload = new();
 }
 
 [DataDefinition]
@@ -161,4 +164,26 @@ public sealed partial class WH40KWarpEffectConfig
 
     [DataField("mutationMaxSeverity")]
     public float MutationMaxSeverity = 0.75f;
+}
+
+[DataDefinition]
+public sealed partial class WH40KPsykerOverloadConfig
+{
+    [DataField("enabled")]
+    public bool Enabled = true;
+
+    [DataField("chance700")]
+    public float Chance700 = 0.05f;
+
+    [DataField("chance800")]
+    public float Chance800 = 0.11f;
+
+    [DataField("chance900")]
+    public float Chance900 = 0.18f;
+
+    [DataField("dropEquipment")]
+    public bool DropEquipment = true;
+
+    [DataField("announceGlobally")]
+    public bool AnnounceGlobally = true;
 }

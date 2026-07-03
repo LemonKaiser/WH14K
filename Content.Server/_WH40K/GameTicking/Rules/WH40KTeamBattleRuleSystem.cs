@@ -189,6 +189,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         component.TeamFrontPoints.Clear();
         component.TeamCommandPoints.Clear();
         component.TeamResearchPoints.Clear();
+        component.TeamArtifactPoints.Clear();
         component.TeamBaseLevels.Clear();
         component.TeamLevelBuffs.Clear();
         component.PlayerLastKnownTeam.Clear();
@@ -2001,6 +2002,72 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         return true;
     }
 
+    public bool TryGetTeamArtifactPoints(string teamId, out int points)
+    {
+        points = 0;
+        if (string.IsNullOrWhiteSpace(teamId))
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId))
+            return false;
+
+        return rule.TeamArtifactPoints.TryGetValue(resolvedTeamId, out points);
+    }
+
+    public bool TrySpendTeamArtifacts(string teamId, int amount, out int remaining, string? source = null)
+    {
+        remaining = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || amount <= 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out var resolvedTeamId) ||
+            !rule.TeamArtifactPoints.TryGetValue(resolvedTeamId, out var current) ||
+            current < amount)
+        {
+            return false;
+        }
+
+        current -= amount;
+        rule.TeamArtifactPoints[resolvedTeamId] = current;
+        remaining = current;
+        return true;
+    }
+
+    public bool TryAdjustTeamArtifacts(
+        string teamId,
+        int delta,
+        out string resolvedTeamId,
+        out int artifactPoints,
+        string? source = null)
+    {
+        resolvedTeamId = string.Empty;
+        artifactPoints = 0;
+
+        if (string.IsNullOrWhiteSpace(teamId) || delta == 0)
+            return false;
+
+        if (!TryGetActiveRule(out _, out var rule, out _))
+            return false;
+
+        EnsureTeamProgress(rule);
+        if (!TryResolveTeamId(rule, teamId, out resolvedTeamId))
+            return false;
+
+        var current = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
+        artifactPoints = Math.Max(0, current + delta);
+        rule.TeamArtifactPoints[resolvedTeamId] = artifactPoints;
+        return true;
+    }
+
     public bool AddTeamFrontPoints(string teamId, int baseAmount, string? source = null)
     {
         return AddTeamFrontPointsInternal(teamId, baseAmount, applyEconomyMultiplier: true, source: source);
@@ -2252,6 +2319,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
         var teamXp = rule.TeamFrontPoints.GetValueOrDefault(resolvedTeamId, 0);
         var influence = rule.TeamCommandPoints.GetValueOrDefault(resolvedTeamId, 0);
         var research = rule.TeamResearchPoints.GetValueOrDefault(resolvedTeamId, 0);
+        var artifacts = rule.TeamArtifactPoints.GetValueOrDefault(resolvedTeamId, 0);
         var level = rule.TeamBaseLevels.GetValueOrDefault(resolvedTeamId, 1);
         var pointsToNextLevel = GetPointsToNextLevel(teamXp, rule.BaseLevelThresholds);
         TryGetTeamFunds(sourceUid, resolvedTeamId, out var funds);
@@ -2261,6 +2329,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
             teamXp,
             influence,
             research,
+            artifacts,
             funds,
             level,
             pointsToNextLevel);
@@ -2358,6 +2427,7 @@ public sealed partial class WH40KTeamBattleRuleSystem : GameRuleSystem<Component
             component.TeamFrontPoints.TryAdd(team.Id, startingPoints);
             component.TeamCommandPoints.TryAdd(team.Id, startingPoints);
             component.TeamResearchPoints.TryAdd(team.Id, 0);
+            component.TeamArtifactPoints.TryAdd(team.Id, 0);
             component.TeamBaseLevels.TryAdd(team.Id, 1);
             component.TeamLevelBuffs.TryAdd(team.Id, WH40KLevelBuffType.None);
         }

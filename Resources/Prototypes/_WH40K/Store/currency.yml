@@ -23,3 +23,17 @@
   id: WH40KFactionFunds
   displayName: store-currency-display-wh40k-faction-funds
   canWithdraw: false
+
+- type: currency
+  id: artifact_imp
+  displayName: wh40k-currency-artifact-imperium
+  cash:
+    1: WH40KArtifactSquare
+  canWithdraw: false
+
+- type: currency
+  id: artifact_chaos
+  displayName: wh40k-currency-artifact-chaos
+  cash:
+    1: WH40KArtifactTriangle
+  canWithdraw: false

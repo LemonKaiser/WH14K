@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "WH14K custom asset",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "artifact"
+    },
+    {
+      "name": "artifact_2"
+    },
+    {
+      "name": "artifact_3"
+    },
+    {
+      "name": "artifact_4"
+    },
+    {
+      "name": "inhand-left"
+    },
+    {
+      "name": "inhand-right"
+    }
+  ]
+}

@@ -37,6 +37,9 @@ public sealed partial class WH40KStrategicPointTierProfile
     [DataField("influenceIncome")]
     public int InfluenceIncome;
 
+    [DataField("artifactIncome")]
+    public int ArtifactIncome;
+
     [DataField("destroyTeamXpReward")]
     public int DestroyTeamXpReward;
 

@@ -46,3 +46,10 @@
     fleshRiftDeathDamage: 500
     mutationMinSeverity: 0.25
     mutationMaxSeverity: 0.75
+  psykerOverload:
+    enabled: true
+    chance700: 0.05
+    chance800: 0.11
+    chance900: 0.18
+    dropEquipment: true
+    announceGlobally: true

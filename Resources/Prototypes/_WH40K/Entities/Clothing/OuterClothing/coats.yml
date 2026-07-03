@@ -169,3 +169,13 @@
     sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_captain_coat.rsi
   - type: Clothing
     sprite: _WH40K/Clothing/OuterClothing/Armor/valhallan_captain_coat.rsi
+
+- type: entity
+  parent: ClothingOuterArmorFlakVestLietVst
+  id: ClothingOuterArmorMajorFlakCoat
+  suffix: WH40K, Legacy Major
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Armor/major_flak_coat.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Armor/major_flak_coat.rsi

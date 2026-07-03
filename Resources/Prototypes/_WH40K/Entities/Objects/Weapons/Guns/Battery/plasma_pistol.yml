@@ -17,6 +17,22 @@
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmapist.wav
   - type: WH40KGunPrediction
+  - type: WH40KPlasmaOverheat
+    chance: 0
+    totalIntensity: 1400
+    intensitySlope: 160
+    maxTileIntensity: 160
+    maxTileBreak: 0
+    canCreateVacuum: false
+    deleteWeapon: true
+  - type: WH40KPlasmaFireModes
+    fireModes:
+    - name: wh40k-plasma-fire-mode-standard
+      proto: WHBulletPlasmaPistolStandard
+      overheatChance: 0
+    - name: wh40k-plasma-fire-mode-overheat
+      proto: WHBulletPlasmaPistolOverheat
+      overheatChance: 0.02
   - type: ItemSlots
     slots:
       gun_magazine:

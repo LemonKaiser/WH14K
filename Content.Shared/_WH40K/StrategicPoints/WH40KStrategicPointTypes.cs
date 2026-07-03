@@ -26,7 +26,8 @@ public enum WH40KStrategicPointCurrency : byte
     TeamXp = 0,
     Funds = 1,
     Research = 2,
-    Influence = 3
+    Influence = 3,
+    Artifact = 4
 }
 
 [Serializable, NetSerializable]

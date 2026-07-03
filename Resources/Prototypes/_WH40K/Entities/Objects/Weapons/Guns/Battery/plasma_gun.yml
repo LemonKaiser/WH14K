@@ -21,8 +21,16 @@
     soundGunshot:
       path: /Audio/_WH40K/Weapons/Guns/Gunshots/plasmagun.wav
   - type: WH40KGunPrediction
+  - type: WH40KPlasmaFireModes
+    fireModes:
+    - name: wh40k-plasma-fire-mode-standard
+      proto: WHBulletPlasmaRifleStandard
+      overheatChance: 0
+    - name: wh40k-plasma-fire-mode-overheat
+      proto: WHBulletPlasmaRifleOverheat
+      overheatChance: 0.02
   - type: WH40KPlasmaOverheat
-    chance: 0.02
+    chance: 0
     totalIntensity: 1800
     intensitySlope: 200
     maxTileIntensity: 200

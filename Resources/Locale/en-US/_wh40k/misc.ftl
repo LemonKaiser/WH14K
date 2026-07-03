@@ -60,6 +60,7 @@ loadout-group-wh40k-imperial-command-head = command headgear
 loadout-group-wh40k-imperial-command-neck = command honours
 loadout-group-wh40k-imperial-command-uniform = command uniform
 loadout-group-wh40k-imperial-command-outer = command outerwear
+loadout-group-wh40k-imperial-psyker-outer = psyker outerwear
 loadout-group-wh40k-imperial-command-hands = command gloves
 loadout-group-wh40k-imperial-command-feet = command boots
 loadout-group-wh40k-command-field-kit = command field kit

@@ -18,9 +18,14 @@
 
 - type: entity
   id: ClothingOuterPsykerWardCoatPremium
-  parent: ClothingOuterChaplainRobe
+  parent: ClothingOuterPsykerWardCoat
   name: форма Схоластики Псайкана
   description: Униформа выпускника элитной школы Схоластика Псайкана
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/OuterClothing/Robes/psyker_premium.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/OuterClothing/Robes/psyker_premium.rsi
 
 - type: entity
   id: ClothingShoesPsykerBoots

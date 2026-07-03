@@ -172,6 +172,22 @@
 
 - type: entity
   parent: MobHuman
+  id: WH40KReinforcementPreviewImperiumAstartes
+  name: reinforcement preview imperium astartes
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Sprite
+    scale: 0.72, 0.72
+  - type: Loadout
+    prototypes:
+    - AstartesImperiumGear
+    roleLoadout:
+    - JobAstartesImperium
+
+- type: entity
+  parent: MobHuman
   id: WH40KReinforcementPreviewHereticsGuardsman
   name: reinforcement preview heretics guardsman
   categories: [ HideSpawnMenu ]
@@ -257,6 +273,22 @@
   - type: Loadout
     prototypes:
     - HellishForemanGear
+
+- type: entity
+  parent: MobHuman
+  id: WH40KReinforcementPreviewHereticsAstartes
+  name: reinforcement preview heretics astartes
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Sprite
+    scale: 0.72, 0.72
+  - type: Loadout
+    prototypes:
+    - HAstartesGear
+    roleLoadout:
+    - JobHAstartes
 
 - type: entity
   id: SpawnPointWH40KReinforcementImperium

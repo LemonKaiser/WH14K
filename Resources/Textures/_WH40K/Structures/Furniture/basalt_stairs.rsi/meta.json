@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for WH14K project",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "stairs_basalt",
+      "directions": 4
+    },
+    {
+      "name": "stairs_stage_basalt",
+      "directions": 4
+    }
+  ]
+}
