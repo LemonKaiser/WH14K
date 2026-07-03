@@ -33,7 +33,7 @@
   - !type:GroupLoadoutEffect
     proto: WH40KBattleHardened
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 16
+    requiredLevel: 10
   equipment:
     outerClothing: ClothingOuterArmorBloodpact
 
@@ -44,3 +44,11 @@
     requiredLevel: 10
   equipment:
     outerClothing: ClothingOuterArmorMoebian6
+
+- type: loadout
+  id: WH40KTzeentchArmor
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    outerClothing: ClothingOuterArmorTzeentch

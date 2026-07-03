@@ -40,7 +40,7 @@
   - !type:GroupLoadoutEffect
     proto: WH40KBattleHardened
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 16
+    requiredLevel: 10
   equipment:
     head: ClothingHeadHelmetBloodPact
 
@@ -50,4 +50,20 @@
   - !type:WH40KMetaLevelLoadoutEffect
     requiredLevel: 10
   equipment:
-    helmet: ClothingHeadHelmetMoebian6
+    head: ClothingHeadHelmetMoebian6
+
+- type: loadout
+  id: WH40KTzeentchHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    head: ClothingHeadHelmetTzeentch
+
+- type: loadout
+  id: WH40KRagerHelmet
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  equipment:
+    head: ClothingHeadHelmetRager

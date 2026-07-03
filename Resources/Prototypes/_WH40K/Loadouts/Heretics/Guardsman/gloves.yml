@@ -9,7 +9,7 @@
   - !type:GroupLoadoutEffect
     proto: WH40KVeteranService
   - !type:WH40KMetaLevelLoadoutEffect
-    requiredLevel: 16
+    requiredLevel: 10
   equipment:
     gloves: ClothingHandsGlovesBloodPact
 
@@ -20,3 +20,11 @@
     requiredLevel: 10
   equipment:
     gloves: ClothingHandsGlovesMoebian6
+
+- type: loadout
+  id: WH40KTzeentchGloves
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 10
+  equipment:
+    gloves: ClothingHandsGlovesTzeentch

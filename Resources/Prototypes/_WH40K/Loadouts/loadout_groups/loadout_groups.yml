@@ -297,6 +297,7 @@
   - WH40KWeaponStubSMG3Loadout
   - WH40KWeaponStubSMGLoadoutMain
   - WH40KWeaponHereticLaserLasgunPinkLoadout
+  - WH40KRagerMacheteKit
 
 - type: loadoutGroup
   id: WH40KImperialMelee
@@ -714,6 +715,8 @@
   - HFlakHelmetCandle
   - WH40KBloodPactHelmet
   - WH40KMoebian6Helmet
+  - WH40KTzeentchHelmet
+  - WH40KRagerHelmet
 
 - type: loadoutGroup
   id: WH40KHereticLineHonours
@@ -735,6 +738,7 @@
   - WH40KBloodPactUniform
   - WH40KSlaaneshUniform
   - WH40KMoebian6Uniform
+  - WH40KTzeentchUniform
 
 - type: loadoutGroup
   id: WH40KHereticsupUniform
@@ -754,6 +758,7 @@
   - WH40KSlaaneshArmorKini
   - WH40KSlaaneshArmor
   - WH40KMoebian6Armor
+  - WH40KTzeentchArmor
 
 - type: loadoutGroup
   id: WH40KHereticsuppOuter
@@ -783,6 +788,7 @@
   - WH40KChaosCombatGloves
   - WH40KBloodPactGloves
   - WH40KMoebian6Gloves
+  - WH40KTzeentchGloves
 
 - type: loadoutGroup
   id: WH40KHereticLineFeet
@@ -791,6 +797,7 @@
   loadouts:
   - WH40KBloodPactBoots
   - WH40KMoebian6Boots
+  - WH40KTzeentchBoots
 
 - type: loadoutGroup
   id: WH40KHereticFieldKit

@@ -1,0 +1,9 @@
+- type: entity
+  parent: [UnsensoredClothingUniformBase, WH40KChaosDamnationClothing]
+  id: ClothingUniformJumpsuitTzeentch
+  suffix: WH40K, Тзинч
+  components:
+  - type: Sprite
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/tzeentch_cult.rsi
+  - type: Clothing
+    sprite: _WH40K/Clothing/Uniforms/Jumpsuit/tzeentch_cult.rsi
