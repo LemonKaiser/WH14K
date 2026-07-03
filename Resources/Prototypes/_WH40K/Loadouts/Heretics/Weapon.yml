@@ -237,6 +237,17 @@
     - ChaosMachete
 
 - type: loadout
+  id: WH40KRagerMacheteKit
+  effects:
+  - !type:GroupLoadoutEffect
+    proto: WH40KBattleHardened
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 15
+  storage:
+    belt:
+    - RagerMachete
+
+- type: loadout
   id: WH40KVraksHandBladeKit
   effects:
   - !type:WH40KMetaLevelLoadoutEffect

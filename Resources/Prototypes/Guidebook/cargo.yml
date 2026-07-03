@@ -1,5 +1,6 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Cargo
+  ruleEntry: true
   name: guide-entry-cargo
   text: "/ServerInfo/Guidebook/Cargo/Cargo.xml"
   children:
@@ -8,10 +9,12 @@
 
 - type: guideEntry
   id: CargoBounties
+  ruleEntry: true
   name: guide-entry-cargo-bounties
   text: "/ServerInfo/Guidebook/Cargo/CargoBounties.xml"
 
 - type: guideEntry
   id: Salvage
+  ruleEntry: true
   name: guide-entry-salvage
   text: "/ServerInfo/Guidebook/Cargo/Salvage.xml"

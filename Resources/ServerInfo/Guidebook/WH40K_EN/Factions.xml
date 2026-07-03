@@ -1,0 +1,38 @@
+<Document>
+# Factions
+
+In [textlink="Team Battle" link="WH40KGameModes"] two armies clash. Each has its own color, banner and set of [textlink="roles" link="WH40KRoles"].
+
+<Box>
+<GuideEntityEmbed Entity="WHGvardiaBanner" Caption="Imperium"/>
+<GuideEntityEmbed Entity="WHChaosBanner" Caption="Heretics"/>
+</Box>
+
+## Imperium
+[color=#FFD200]Imperium[/color] — defenders of humanity. Color: gold, banner: guardsman.
+
+Composition:
+- [color=#a4885c]Imperium[/color] (main roles): colonel, commissar, lieutenant, sergeant, guardsman, kasrkin, psyker, vox scout, chirurgeon, chaplain, astartes, Munitorum logistician, Munitorum officer, lexmechanic.
+- [color=#a4885c]Mechanicus[/color] (technical wing): magos, explorator, genetor, enginseer, acolyte.
+
+Imperium command can perform [textlink="morale execution" link="WH40KMorale"] to buff the whole team.
+
+## Heretics
+[color=#D62828]Heretics[/color] — Chaos cultists and traitors. Color: dark red, banner: chaos.
+
+Composition:
+- [color=#a4885c]Heretics[/color] (main roles): heresiarch, champion of Chaos, chosen of Chaos, cultist, smuggler, Chaos astartes, hellish foreman.
+- [color=#a4885c]Dark Mechanicum[/color] (technical wing): magos-heretek, explorator, genetor, renegade tech-priest, acolyte.
+
+Heretic officers receive [textlink="gifts of Chaos" link="WH40KPsyker"] from their patron gods: Khorne, Nurgle, Slaanesh and Tzeentch.
+
+## Choosing a faction
+In the lobby and on late join you pick a faction — after that only its departments' roles are available to you. The system keeps balance:
+- [color=#a4885c]Soft limit[/color]: after a few rounds in a row on one faction you'll get a warning — time to switch sides.
+- [color=#a4885c]Hard limit[/color]: after a long streak on one faction you can't pick it again.
+- [color=#a4885c]Team balance[/color]: the player count gap can't be large — the system won't let everyone pile into one team.
+
+## Race and faction
+Race and faction are independent but linked through roles. For example, "Imperium astartes" requires the Astartes race, while "cultist" requires a human or vulpkanin. Orks and T'au are separate races with their own roles and don't join Team Battle (available in free spawn and some modes).
+
+</Document>

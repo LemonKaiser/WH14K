@@ -4,9 +4,7 @@
   priority: 20
   text: "/ServerInfo/Guidebook/SpaceStation14.xml"
   children:
-  - Jobs
   - Survival
-  - Antagonists
   - Glossary
 
 - type: guideEntry

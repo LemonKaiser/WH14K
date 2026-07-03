@@ -1,0 +1,314 @@
+﻿- type: guideEntry
+  id: WH40K
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k
+  priority: 15
+  text: "/ServerInfo/Guidebook/WH40K/WH40K.xml"
+  children:
+  - WH40KFactions
+  - WH40KSpecies
+  - WH40KRoles
+  - WH40KCombat
+  - WH40KCommand
+  - WH40KLogistics
+  - WH40KWeapons
+  - WH40KTacticalMap
+  - WH40KWeather
+  - WH40KGameModes
+  - WH40KProgression
+  - WH40KMiniGames
+
+- type: guideEntry
+  id: WH40KFactions
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-factions
+  text: "/ServerInfo/Guidebook/WH40K/Factions.xml"
+
+- type: guideEntry
+  id: WH40KSpecies
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-species
+  text: "/ServerInfo/Guidebook/WH40K/Species.xml"
+
+- type: guideEntry
+  id: WH40KRoles
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-roles
+  text: "/ServerInfo/Guidebook/WH40K/Roles.xml"
+
+- type: guideEntry
+  id: WH40KCombat
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-combat
+  text: "/ServerInfo/Guidebook/WH40K/Combat.xml"
+  children:
+  - WH40KPsyker
+  - WH40KMorale
+  - WH40KSquads
+  - WH40KInfluence
+  - WH40KChaplain
+
+- type: guideEntry
+  id: WH40KPsyker
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-psyker
+  text: "/ServerInfo/Guidebook/WH40K/Psyker.xml"
+
+- type: guideEntry
+  id: WH40KMorale
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-morale
+  text: "/ServerInfo/Guidebook/WH40K/Morale.xml"
+
+- type: guideEntry
+  id: WH40KSquads
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-squads
+  text: "/ServerInfo/Guidebook/WH40K/Squads.xml"
+
+- type: guideEntry
+  id: WH40KInfluence
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-influence
+  text: "/ServerInfo/Guidebook/WH40K/Influence.xml"
+
+- type: guideEntry
+  id: WH40KChaplain
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-chaplain
+  text: "/ServerInfo/Guidebook/WH40K/Chaplain.xml"
+
+- type: guideEntry
+  id: WH40KCommand
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-command
+  text: "/ServerInfo/Guidebook/WH40K/Command.xml"
+
+- type: guideEntry
+  id: WH40KLogistics
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-logistics
+  text: "/ServerInfo/Guidebook/WH40K/Logistics.xml"
+  children:
+  - WH40KIntel
+
+- type: guideEntry
+  id: WH40KIntel
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-intel
+  text: "/ServerInfo/Guidebook/WH40K/Intel.xml"
+
+- type: guideEntry
+  id: WH40KWeapons
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-weapons
+  text: "/ServerInfo/Guidebook/WH40K/Weapons.xml"
+
+- type: guideEntry
+  id: WH40KTacticalMap
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-tactical-map
+  text: "/ServerInfo/Guidebook/WH40K/TacticalMap.xml"
+
+- type: guideEntry
+  id: WH40KWeather
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-weather
+  text: "/ServerInfo/Guidebook/WH40K/Weather.xml"
+
+- type: guideEntry
+  id: WH40KGameModes
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-game-modes
+  text: "/ServerInfo/Guidebook/WH40K/GameModes.xml"
+
+- type: guideEntry
+  id: WH40KProgression
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-progression
+  text: "/ServerInfo/Guidebook/WH40K/Progression.xml"
+
+- type: guideEntry
+  id: WH40KMiniGames
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-mini-games
+  text: "/ServerInfo/Guidebook/WH40K/MiniGames.xml"
+  children:
+  - WH40KGunGame
+  - WH40KPropHunt
+  - WH40KMurderMystery
+
+- type: guideEntry
+  id: WH40KGunGame
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-gun-game
+  text: "/ServerInfo/Guidebook/WH40K/GunGame.xml"
+
+- type: guideEntry
+  id: WH40KPropHunt
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-prop-hunt
+  text: "/ServerInfo/Guidebook/WH40K/PropHunt.xml"
+
+- type: guideEntry
+  id: WH40KMurderMystery
+  requiredCulture: "ru-RU"
+  name: guide-entry-wh40k-murder-mystery
+  text: "/ServerInfo/Guidebook/WH40K/MurderMystery.xml"
+- type: guideEntry
+  id: WH40K_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k
+  priority: 15
+  text: "/ServerInfo/Guidebook/WH40K_EN/WH40K.xml"
+  children:
+  - WH40KFactions_EN
+  - WH40KSpecies_EN
+  - WH40KRoles_EN
+  - WH40KCombat_EN
+  - WH40KCommand_EN
+  - WH40KLogistics_EN
+  - WH40KWeapons_EN
+  - WH40KTacticalMap_EN
+  - WH40KWeather_EN
+  - WH40KGameModes_EN
+  - WH40KProgression_EN
+  - WH40KMiniGames_EN
+
+- type: guideEntry
+  id: WH40KFactions_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-factions
+  text: "/ServerInfo/Guidebook/WH40K_EN/Factions.xml"
+
+- type: guideEntry
+  id: WH40KSpecies_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-species
+  text: "/ServerInfo/Guidebook/WH40K_EN/Species.xml"
+
+- type: guideEntry
+  id: WH40KRoles_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-roles
+  text: "/ServerInfo/Guidebook/WH40K_EN/Roles.xml"
+
+- type: guideEntry
+  id: WH40KCombat_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-combat
+  text: "/ServerInfo/Guidebook/WH40K_EN/Combat.xml"
+  children:
+  - WH40KPsyker_EN
+  - WH40KMorale_EN
+  - WH40KSquads_EN
+  - WH40KInfluence_EN
+  - WH40KChaplain_EN
+
+- type: guideEntry
+  id: WH40KPsyker_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-psyker
+  text: "/ServerInfo/Guidebook/WH40K_EN/Psyker.xml"
+
+- type: guideEntry
+  id: WH40KMorale_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-morale
+  text: "/ServerInfo/Guidebook/WH40K_EN/Morale.xml"
+
+- type: guideEntry
+  id: WH40KSquads_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-squads
+  text: "/ServerInfo/Guidebook/WH40K_EN/Squads.xml"
+
+- type: guideEntry
+  id: WH40KInfluence_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-influence
+  text: "/ServerInfo/Guidebook/WH40K_EN/Influence.xml"
+
+- type: guideEntry
+  id: WH40KChaplain_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-chaplain
+  text: "/ServerInfo/Guidebook/WH40K_EN/Chaplain.xml"
+
+- type: guideEntry
+  id: WH40KCommand_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-command
+  text: "/ServerInfo/Guidebook/WH40K_EN/Command.xml"
+
+- type: guideEntry
+  id: WH40KLogistics_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-logistics
+  text: "/ServerInfo/Guidebook/WH40K_EN/Logistics.xml"
+  children:
+  - WH40KIntel_EN
+
+- type: guideEntry
+  id: WH40KIntel_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-intel
+  text: "/ServerInfo/Guidebook/WH40K_EN/Intel.xml"
+
+- type: guideEntry
+  id: WH40KWeapons_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-weapons
+  text: "/ServerInfo/Guidebook/WH40K_EN/Weapons.xml"
+
+- type: guideEntry
+  id: WH40KTacticalMap_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-tactical-map
+  text: "/ServerInfo/Guidebook/WH40K_EN/TacticalMap.xml"
+
+- type: guideEntry
+  id: WH40KWeather_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-weather
+  text: "/ServerInfo/Guidebook/WH40K_EN/Weather.xml"
+
+- type: guideEntry
+  id: WH40KGameModes_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-game-modes
+  text: "/ServerInfo/Guidebook/WH40K_EN/GameModes.xml"
+
+- type: guideEntry
+  id: WH40KProgression_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-progression
+  text: "/ServerInfo/Guidebook/WH40K_EN/Progression.xml"
+
+- type: guideEntry
+  id: WH40KMiniGames_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-mini-games
+  text: "/ServerInfo/Guidebook/WH40K_EN/MiniGames.xml"
+  children:
+  - WH40KGunGame_EN
+  - WH40KPropHunt_EN
+  - WH40KMurderMystery_EN
+
+- type: guideEntry
+  id: WH40KGunGame_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-gun-game
+  text: "/ServerInfo/Guidebook/WH40K_EN/GunGame.xml"
+
+- type: guideEntry
+  id: WH40KPropHunt_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-prop-hunt
+  text: "/ServerInfo/Guidebook/WH40K_EN/PropHunt.xml"
+
+- type: guideEntry
+  id: WH40KMurderMystery_EN
+  requiredCulture: "en-US"
+  name: guide-entry-wh40k-murder-mystery
+  text: "/ServerInfo/Guidebook/WH40K_EN/MurderMystery.xml"

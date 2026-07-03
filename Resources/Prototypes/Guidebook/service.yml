@@ -1,5 +1,6 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Service
+  ruleEntry: true
   name: guide-entry-service
   text: "/ServerInfo/Guidebook/Service/Service.xml"
   filterEnabled: True
@@ -11,21 +12,25 @@
   
 - type: guideEntry
   id: Bartender
+  ruleEntry: true
   name: guide-entry-bartender
   text: "/ServerInfo/Guidebook/Service/Bartender.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Botany
+  ruleEntry: true
   name: guide-entry-botany
   text: "/ServerInfo/Guidebook/Service/Botany.xml"
 
 - type: guideEntry
   id: Chef
+  ruleEntry: true
   name: guide-entry-chef
   text: "/ServerInfo/Guidebook/Service/Chef.xml"
 
 - type: guideEntry
   id: Janitorial
+  ruleEntry: true
   name: guide-entry-janitorial
   text: "/ServerInfo/Guidebook/Service/Janitorial.xml"

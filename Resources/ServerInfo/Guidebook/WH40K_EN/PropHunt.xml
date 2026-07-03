@@ -1,0 +1,14 @@
+<Document>
+# Prop Hunt
+
+Hide and seek. The hider turns into a piece of furniture, the seeker must find and "kill" everyone.
+
+- Roles: hider (blue) and seeker (red).
+- The round lasts ten minutes. Victory: all hiders are killed, or all seekers are killed, or time runs out — then the hiders win.
+- The hider can: morph into a prop (only something that can be anchored), anchor in place, honk, go invisible for a while, throw smoke.
+- The seeker can: fire a pulse that highlights hiders in a radius, and dash to a target.
+- At the start of the round seekers are frozen — hiders have time to take positions and disguise.
+- Periodically all hiders become visible for a short time — catch those moments.
+- The seeker is armed with a lasgun. The winner earns experience, and among seekers the most effective is picked.
+
+</Document>

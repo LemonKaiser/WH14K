@@ -2165,3 +2165,6 @@ ent-ClothingOuterPsykerWardCoatPremium = Scholastica Psykana Uniform
 
 ent-WH40KMagazineArcPistol = Arc Pistol Battery
     .desc = For delivering a devastating bolt of electricity to a target.
+
+ent-RagerMachete = Rager's Machetes
+    .desc = A pair of crudely made chopping blades fashioned from improvised materials. It feels like you can run and attack faster with them in your hands.

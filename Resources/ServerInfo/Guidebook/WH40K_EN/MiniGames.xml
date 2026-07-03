@@ -1,0 +1,40 @@
+<Document>
+# Mini-games
+
+Arcade WH14K modes for two to thirty players, separate from the main battle. A place to warm up and have fun.
+
+## Gun Game
+Everyone for themselves. With each frag you're handed a new weapon — thirty tiers in total. Whoever reaches the top first wins.
+
+- Weapons are drawn from a big pool — from vanilla pistols and shotguns to WH14K lasguns, stubs and bolters.
+- Critical state counts as death — you don't clutch out, you respawn right away.
+- The body vanishes on death, respawn is quick.
+- The combat knife always sits in your other hand and never changes — slash if you run out of ammo.
+- [color=#a4885c]Pickups[/color]: ammo and medkit crates spawn on the map. The medkit fully heals, ammo refills the current weapon.
+- A death streak without frags lowers your level — play more carefully, don't charge into the crowd.
+- At the end of the round the top three by level and ten by frag count make the honors board.
+
+## Prop Hunt
+Hide and seek. The hider turns into a piece of furniture, the seeker must find and "kill" everyone.
+
+- Roles: hider (blue) and seeker (red).
+- The round lasts ten minutes. Victory: all hiders are killed, or all seekers are killed, or time runs out — then the hiders win.
+- The hider can: morph into a prop (only something that can be anchored), anchor in place, honk, go invisible for a while, throw smoke.
+- The seeker can: fire a pulse that highlights hiders in a radius, and dash to a target.
+- At the start of the round seekers are frozen — hiders have time to take positions and disguise.
+- Periodically all hiders become visible for a short time — catch those moments.
+- The seeker is armed with a lasgun. The winner earns experience, and among seekers the most effective is picked.
+
+## Murder Mystery
+TTT style. A murderer with a knife hides among civilians, the sheriff has a revolver. Whoever outsmarts the other wins.
+
+- Roles: civilians (majority), sheriff with a revolver (one), murderer with a knife (one).
+- The round lasts fifteen minutes, roles aren't handed out right away — watch each other.
+- [color=#a4885c]The murderer's knife[/color] kills in one hit. The murderer can't pick up the sheriff's revolver.
+- [color=#a4885c]The sheriff's revolver[/color] also kills in one shot. The murderer can't take it — so losing the revolver is deadly.
+- [color=#a4885c]The sheriff's pinpointer[/color] is in everyone's pocket. It points at the revolver [color=#a4885c]only when it's lying on the floor[/color] — in someone's hands there's no arrow, so the sheriff isn't exposed.
+- [color=#a4885c]Clues[/color]: civilians collect clues scattered across the map. Seven clues — and the collector becomes the new sheriff with a revolver.
+- The murderer can throw smoke and blind everyone with a flash — run for cover and pick your moment to strike.
+- Victory: the innocents kill the murderer, or the murderer kills everyone. The winner earns experience.
+
+</Document>

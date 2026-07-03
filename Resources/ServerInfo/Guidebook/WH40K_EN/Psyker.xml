@@ -1,0 +1,62 @@
+<Document>
+# Psyker & Chaos
+
+Psykers draw power from the [color=#a4885c]Warp[/color]. Each has a personal store of warp energy that's spent on spells and slowly regenerates. But every spell also stirs up [color=#a4885c]global instability[/color] — the more there is, the worse the backlash, up to a catastrophe that sacrifices all psykers at once.
+
+## Warp resource
+- The personal store is limited and regenerates a bit each second.
+- The more complex the ability, the more energy it eats.
+- Pumping disciplines increases the store and the regeneration rate.
+
+## Imperium abilities
+- [color=#a4885c]Astral projection[/color] — a trance in which disciplines are leveled.
+- [color=#a4885c]Telekinetic burst[/color] — shoves enemies away from you.
+- [color=#a4885c]Warp step[/color] — a teleport over a fair distance, saves you when surrounded.
+- [color=#a4885c]Psychic knock[/color] — opens doors and containers without a key.
+- [color=#a4885c]Aegis[/color] — a force wall sealing a corridor.
+- [color=#a4885c]Veil of silence[/color] — a smoke veil that hides you from enemies.
+- [color=#a4885c]Mind shunt[/color] — swapping minds with an enemy, a risky and long ability.
+- [color=#a4885c]Biomantic surge[/color] — healing allies around you.
+
+## Disciplines
+Leveling happens through [color=#a4885c]astral projection[/color]: in the trance you collect "stars" and spend discipline points on constellation nodes. Five branches:
+- [color=#a4885c]Sanctioning[/color] — lowers spell backlash and speeds up the astral trance.
+- [color=#a4885c]Telekinesis[/color] — improves the burst and knock, makes you more mobile and durable.
+- [color=#a4885c]Aegis[/color] — strengthens the force wall and your toughness.
+- [color=#a4885c]Divination[/color] — makes the warp step cheaper and lowers its backlash, later unlocks mind shunt.
+- [color=#a4885c]Biomancy[/color] — strengthens healing, adds toughness and speed.
+
+At the top of each branch is a powerful capstone node, but you can take only one per round.
+
+## Backlash
+Global instability grows from casting. The higher it climbs, the worse the consequences for psykers. The chance is high that on backlash the strongest available tier hits:
+- [color=#a4885c]Light backlash[/color] — a small burn.
+- [color=#a4885c]Stun[/color] — a stun and drunken haze.
+- [color=#a4885c]Collapse[/color] — a long stun and heavy intoxication.
+- [color=#a4885c]Drop[/color] — several items fall out of your hands and slots.
+- [color=#a4885c]Bleed[/color] — a heavy bleed opens up.
+- [color=#a4885c]Doppelganger[/color] — an exact hostile copy of you steps out of the warp.
+- [color=#a4885c]Flesh rift[/color] — a chance to turn into a demon, a chance to die on the spot, otherwise a long paralysis.
+- [color=#a4885c]Possession[/color] — you become a hostile NPC for a while and lose control.
+- [color=#a4885c]Mutation[/color] — irreversible disfigurement: worse health and speed for the rest of the round.
+
+## Catastrophe
+When instability reaches the limit, a catastrophe happens. [color=#ff0000]All psykers are sacrificed[/color] — they vanish, leaving only a handful of ash, and their abilities are sealed until the end of the round. A random demon bursts out of the warp at the same time. [color=#ff0000]Cast steadily and coordinate with other psykers[/color] so you don't pump shared instability to the breaking point.
+
+## Chaos (heretics)
+Heretic psykers can't enter astral projection. Instead they receive [color=#a4885c]gifts from their patron gods[/color]:
+- [color=#a4885c]Khorne[/color] — melee and blood: a blade from the warp, healing for spilled blood, a dash through the line.
+- [color=#a4885c]Nurgle[/color] — rot and miasma: a poisonous cloud, an acid spit, raising corpses as zombies.
+- [color=#a4885c]Slaanesh[/color] — speed and ecstasy: swapping places with an enemy, a cult buff, self-flagellation for power.
+- [color=#a4885c]Tzeentch[/color] — warp and fire: a fireball, a barrier, a slow field, an aura that speeds up the cult's cooldowns.
+
+A Chaos leader can sacrifice a follower — it restores warp and gives cult experience. Sacrifice works only in the assault phase.
+
+## Tips for the psyker
+- Cast steadily — backlash starts long before the catastrophe.
+- Meditate in a bed so experience flows faster.
+- Don't repeat the same spell back-to-back — experience drops for repeats.
+- In astral projection you take half damage, but any attack from you breaks the trance.
+- A psyker is a lawful target for a commissar's [textlink="morale execution" link="WH40KMorale"].
+
+</Document>

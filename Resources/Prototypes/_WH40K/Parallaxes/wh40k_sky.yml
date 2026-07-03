@@ -1,0 +1,15 @@
+- type: parallax
+  id: WH40KSkyParallax
+  layers:
+    - texture:
+        !type:ImageParallaxTextureSource
+        path: "/Textures/Parallaxes/land.png"
+      slowness: 0.98
+      scale: "0.3, 0.3"
+    - texture:
+        !type:ImageParallaxTextureSource
+        path: "/Textures/Parallaxes/noise.png"
+      slowness: 0.97
+      scale: "0.7, 0.7"
+      scrolling: "0.03, -0.015"
+

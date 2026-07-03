@@ -297,6 +297,7 @@
   - WH40KWeaponStubSMG3Loadout
   - WH40KWeaponStubSMGLoadoutMain
   - WH40KWeaponHereticLaserLasgunPinkLoadout
+  - WH40KRagerMacheteKit
 
 - type: loadoutGroup
   id: WH40KImperialMelee
@@ -715,6 +716,7 @@
   - WH40KBloodPactHelmet
   - WH40KMoebian6Helmet
   - WH40KTzeentchHelmet
+  - WH40KRagerHelmet
 
 - type: loadoutGroup
   id: WH40KHereticLineHonours

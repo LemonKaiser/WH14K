@@ -1,5 +1,6 @@
 ﻿- type: guideEntry
   id: Security
+  ruleEntry: true
   name: guide-entry-security
   text: "/ServerInfo/Guidebook/Security/Security.xml"
   children:
@@ -10,21 +11,25 @@
 
 - type: guideEntry
   id: Forensics
+  ruleEntry: true
   name: guide-entry-forensics
   text: "/ServerInfo/Guidebook/Security/Forensics.xml"
 
 - type: guideEntry
   id: Defusal
+  ruleEntry: true
   name: guide-entry-defusal
   text: "/ServerInfo/Guidebook/Security/Defusal.xml"
 
 - type: guideEntry
   id: CriminalRecords
+  ruleEntry: true
   name: guide-entry-criminal-records
   text: "/ServerInfo/Guidebook/Security/CriminalRecords.xml"
 
 - type: guideEntry
   id: SpaceLaw
+  ruleEntry: true
   name: guide-entry-rules-space-law
   text: "/ServerInfo/Guidebook/ServerRules/SpaceLaw/SpaceLaw.xml"
   children:
@@ -32,5 +37,6 @@
 
 - type: guideEntry
   id: SpaceLawCrimeList
+  ruleEntry: true
   name: guide-entry-rules-sl-crime-list
   text: "/ServerInfo/Guidebook/ServerRules/SpaceLaw/SLCrimeList.xml"

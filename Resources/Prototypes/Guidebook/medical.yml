@@ -1,5 +1,6 @@
-- type: guideEntry
+﻿- type: guideEntry
   id: Medical
+  ruleEntry: true
   name: guide-entry-medical
   text: "/ServerInfo/Guidebook/Medical/Medical.xml"
   children:
@@ -10,21 +11,25 @@
 
 - type: guideEntry
   id: MedicalDoctor
+  ruleEntry: true
   name: guide-entry-medicaldoctor
   text: "/ServerInfo/Guidebook/Medical/MedicalDoctor.xml"
 
 - type: guideEntry
   id: Cloning
+  ruleEntry: true
   name: guide-entry-cloning
   text: "/ServerInfo/Guidebook/Medical/Cloning.xml"
 
 - type: guideEntry
   id: Cryogenics
+  ruleEntry: true
   name: guide-entry-cryogenics
   text: "/ServerInfo/Guidebook/Medical/Cryogenics.xml"
 
 - type: guideEntry
   id: Chemist
+  ruleEntry: true
   name: guide-entry-chemist
   text: "/ServerInfo/Guidebook/Medical/Chemist.xml"
   children:
@@ -36,17 +41,20 @@
 
 - type: guideEntry
   id: Medicine
+  ruleEntry: true
   name: guide-entry-medicine
   text: "/ServerInfo/Guidebook/Medical/Medicine.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: Botanicals
+  ruleEntry: true
   name: guide-entry-botanicals
   text: "/ServerInfo/Guidebook/Medical/Botanicals.xml"
   filterEnabled: True
 
 - type: guideEntry
   id: AdvancedBrute
+  ruleEntry: true
   name: guide-entry-brute
   text: "/ServerInfo/Guidebook/Medical/AdvancedBrute.xml"

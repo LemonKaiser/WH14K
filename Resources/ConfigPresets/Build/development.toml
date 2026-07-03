@@ -7,6 +7,10 @@ role_timers = false
 admin_job_tracking = true
 role_loadout_timers = false
 
+[tips]
+dataset = "WH40KTips"
+login_dataset = "WH40KTips"
+
 [events]
 enabled = false
 

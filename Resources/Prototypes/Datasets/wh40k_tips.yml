@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: WH40KTips
+  values:
+    prefix: wh40k-tips-dataset-
+    count: 100

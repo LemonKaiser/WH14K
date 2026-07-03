@@ -1,0 +1,15 @@
+<Document>
+# Murder Mystery
+
+TTT style. A murderer with a knife hides among civilians, the sheriff has a revolver. Whoever outsmarts the other wins.
+
+- Roles: civilians (majority), sheriff with a revolver (one), murderer with a knife (one).
+- The round lasts fifteen minutes, roles aren't handed out right away — watch each other.
+- [color=#a4885c]The murderer's knife[/color] kills in one hit. The murderer can't pick up the sheriff's revolver.
+- [color=#a4885c]The sheriff's revolver[/color] also kills in one shot. The murderer can't take it — so losing the revolver is deadly.
+- [color=#a4885c]The sheriff's pinpointer[/color] is in everyone's pocket. It points at the revolver [color=#a4885c]only when it's lying on the floor[/color] — in someone's hands there's no arrow, so the sheriff isn't exposed.
+- [color=#a4885c]Clues[/color]: civilians collect clues scattered across the map. Seven clues — and the collector becomes the new sheriff with a revolver.
+- The murderer can throw smoke and blind everyone with a flash — run for cover and pick your moment to strike.
+- Victory: the innocents kill the murderer, or the murderer kills everyone. The winner earns experience.
+
+</Document>

@@ -1,0 +1,53 @@
+<Document>
+# Command node
+
+The faction's terminal-stronghold — the main hub of economy, reinforcements and progression. It's a fortified tower that takes more punishment than any ordinary structure. [color=#ff0000]In Wave Defence, destroying the node means instant defeat[/color] — defend it at any cost.
+
+<Box>
+<GuideEntityEmbed Entity="WH40KWaveDefenceCommandNodeImperium" Caption="Imperium Node"/>
+</Box>
+
+## Four consoles
+Click the terminal to open the main screen. Inside are links to four work sections:
+- [color=#a4885c]Main panel[/color] — battle phase, team level, points, income and fighter roster.
+- [color=#a4885c]Reinforcements[/color] — ordering new fighters for front points.
+- [color=#a4885c]Upgrade tree[/color] — faction progression across five tracks.
+- [color=#a4885c]Mission board[/color] — picking active tasks with rewards.
+
+Access is restricted to your own team — an outsider won't open the console.
+
+## Reinforcements
+Order roles for front points. Arrival goes through a raffle among ghosts — whoever takes the role first enters the fight.
+
+- [color=#a4885c]Cheap[/color]: guardsman, vox scout, logistician, chirurgeon.
+- [color=#a4885c]Expensive[/color]: sergeant, lieutenant, commissar, psyker, chaplain.
+- [color=#a4885c]Elite[/color]: kasrkin — requires the team to have already pumped to a high level.
+- [color=#a4885c]Shared cooldown[/color] on reinforcements is long, and only a limited number of fighters can be called in per round.
+- [color=#a4885c]Auto-reinforce[/color] kicks in on its own when too few of the team are left alive.
+
+## Upgrade tree
+Five tracks of faction progression. Each track starts at a root and deepens — to take the upper nodes you need to open the lower ones. The strongest nodes at the top require both mid-tier nodes.
+- [color=#a4885c]Engineering[/color] — speeds up machines and expands storage, unlocks new ammo.
+- [color=#a4885c]Logistics[/color] — more cargo per run, faster delivery, a discount on everything at the top.
+- [color=#a4885c]Research[/color] — more research points and faster accumulation.
+- [color=#a4885c]Weaponry[/color] — unlocks new crafting tech: from lasguns to chainblades, stubbers, bolters, plasma and melta.
+- [color=#a4885c]Equipment[/color] — barricades, intel detectors, carapace armor, pinpointers, grenades, fulton.
+
+The higher the node's own level, the more often passive income drips into the treasury — pumping the node doubles the cash flow.
+
+## Mission board
+- [color=#a4885c]System tasks[/color] are tied to the battle phase: some are available from preparation, others only in assault or apocalypse.
+- [color=#a4885c]Selectable tasks[/color] — four options with a reward. Take one and a [textlink="pinpointer" link="WH40KIntel"] leads you to the target.
+- The reward grows with the team level — the stronger the faction, the more lucrative the missions.
+
+## Economy
+- The treasury fills on its own — passive income comes the more often the higher the node is pumped.
+- For an enemy kill the team earns front points, with triple for enemy officers and squad leaders and double for special roles.
+- Front points convert into war funds and research points, which buy nodes and reinforcements.
+
+## Tips
+- At the start of the round take the roots of engineering and logistics — they speed up crafting and passive income, paying off fast.
+- Pump the node itself to the max — money starts dripping twice as often.
+- In preparation the economy is weakest — spend points on the upgrade tree, not on reinforcements. Reinforcements pay off in assault when the economy doubles.
+
+</Document>
