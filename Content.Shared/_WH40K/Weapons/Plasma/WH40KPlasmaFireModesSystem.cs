@@ -125,7 +125,6 @@ public sealed partial class WH40KPlasmaFireModesSystem : EntitySystem
         if (TryComp<WH40KPlasmaOverheatComponent>(ent, out var overheat))
         {
             overheat.Chance = Math.Max(0f, fireMode.OverheatChance);
-            Dirty(ent, overheat);
         }
     }
 
