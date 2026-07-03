@@ -76,6 +76,12 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
             for (var i = 1; i <= ent.Comp.SlotCount; i++)
             {
                 var slotId = WH40KArmorPlateHelper.GetSlotId(i);
+                if (_itemSlots.TryGetSlot(ent.Owner, slotId, out var existingSlot))
+                {
+                    ent.Comp.PlateSlots[slotId] = existingSlot;
+                    continue;
+                }
+
                 var slot = CreatePlateSlot(ent.Comp, i);
                 ent.Comp.PlateSlots[slotId] = slot;
                 _itemSlots.AddItemSlot(ent.Owner, slotId, slot);

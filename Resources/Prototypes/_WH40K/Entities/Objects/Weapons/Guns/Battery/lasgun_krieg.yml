@@ -73,3 +73,10 @@
         whitelist:
           tags:
             - LasgunPowerCellLucius
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-barrel: !type:ContainerSlot
+      wh40k-weapon-mod-sling: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot

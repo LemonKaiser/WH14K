@@ -53,6 +53,11 @@
       whitelist:
         tags:
         - WH40KWeaponModUtilityLaspistol
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-utility: !type:ContainerSlot
 
 - type: entity
   parent: WeaponLaserWH40KEnergy

@@ -57,6 +57,10 @@
     sprite: _WH40K/Clothing/Belt/chaplain_melta_belt.rsi
   - type: Item
     size: Small
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
   - type: WH40KExplosiveBelt
     defaultDelaySeconds: 5
   - type: ActionGrant

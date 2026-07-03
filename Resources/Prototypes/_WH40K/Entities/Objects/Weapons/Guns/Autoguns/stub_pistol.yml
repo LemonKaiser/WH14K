@@ -54,6 +54,13 @@
         whitelist:
           tags:
             - Cartridge10mm
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-muzzle: !type:ContainerSlot
+      wh40k-weapon-mod-utility: !type:ContainerSlot
   - type: Gun
     fireRate: 3.5
     availableModes:

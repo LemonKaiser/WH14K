@@ -40,6 +40,15 @@
       whitelist:
         tags:
         - WH40KWeaponModSlingCombatShotgun
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-stock: !type:ContainerSlot
+      wh40k-weapon-mod-muzzle: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot
+      wh40k-weapon-mod-sling: !type:ContainerSlot
   - type: Item
     size: Huge
     sprite: _WH40K/Objects/Weapons/Guns/Shotguns/combat_shotgun_inhands.rsi

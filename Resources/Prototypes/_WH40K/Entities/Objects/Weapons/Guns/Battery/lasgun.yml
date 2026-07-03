@@ -54,6 +54,15 @@
       whitelist:
         tags:
         - WH40KWeaponModBayonetLasgun
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      wh40k-weapon-mod-optic: !type:ContainerSlot
+      wh40k-weapon-mod-stock: !type:ContainerSlot
+      wh40k-weapon-mod-barrel: !type:ContainerSlot
+      wh40k-weapon-mod-underbarrel: !type:ContainerSlot
+      wh40k-weapon-mod-laser: !type:ContainerSlot
+      wh40k-weapon-mod-bayonet: !type:ContainerSlot
   - type: Clothing
     sprite: _WH40K/Objects/Weapons/Guns/Battery/lasgun_standart/lasgun_in-hands.rsi
     quickEquip: false
