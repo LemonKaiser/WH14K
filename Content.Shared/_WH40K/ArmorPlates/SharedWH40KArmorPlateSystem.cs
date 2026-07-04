@@ -70,13 +70,15 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
     {
         ent.Comp.SlotCount = Math.Clamp(ent.Comp.SlotCount, 1, WH40KArmorPlateHolderComponent.MaxSlots);
         EnsureBaseModifiers(ent);
+        TryComp<ItemSlotsComponent>(ent.Owner, out var itemSlots);
 
         if (ent.Comp.PlateSlots.Count == 0)
         {
             for (var i = 1; i <= ent.Comp.SlotCount; i++)
             {
                 var slotId = WH40KArmorPlateHelper.GetSlotId(i);
-                if (_itemSlots.TryGetSlot(ent.Owner, slotId, out var existingSlot))
+                if (itemSlots != null &&
+                    _itemSlots.TryGetSlot(ent.Owner, slotId, out var existingSlot, itemSlots))
                 {
                     ent.Comp.PlateSlots[slotId] = existingSlot;
                     continue;
@@ -84,7 +86,7 @@ public sealed partial class SharedWH40KArmorPlateSystem : EntitySystem
 
                 var slot = CreatePlateSlot(ent.Comp, i);
                 ent.Comp.PlateSlots[slotId] = slot;
-                _itemSlots.AddItemSlot(ent.Owner, slotId, slot);
+                _itemSlots.AddItemSlot(ent.Owner, slotId, slot, itemSlots);
             }
         }
 
