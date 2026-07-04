@@ -333,3 +333,12 @@
   inhand:
   - PlushieWarpImp
   groupBy: "plushies"
+
+- type: loadout
+  id: PlushieUddTomskWH40K
+  effects:
+  - !type:WH40KMetaLevelLoadoutEffect
+    requiredLevel: 30
+  inhand:
+  - PlushieUddTomsk
+  groupBy: "plushies"

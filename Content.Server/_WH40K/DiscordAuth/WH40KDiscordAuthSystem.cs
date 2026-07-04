@@ -171,14 +171,14 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
 
     private void FinishPlayerLoad(ICommonSession session)
     {
-        _task.RunOnMainThread(() =>
+        RunOnMainThreadSafe(() =>
         {
             if (_players.TryGetSessionById(session.UserId, out var current))
             {
                 SendSnapshot(current);
-                _metaProgress.RefreshDiscordRequirementsForUser(session.UserId);
+                TryRefreshMetaProgressForUser(session.UserId);
             }
-        });
+        }, $"finish player load for {session.UserId}");
     }
 
     private void OnPlayerDisconnected(ICommonSession session)
@@ -269,7 +269,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         ApplyLinkedState(args.SenderSession.UserId, refreshResult.Data);
         Popup(args.SenderSession, "wh40k-discord-auth-popup-refresh-success");
         SendSnapshotIfOnline(args.SenderSession.UserId);
-        _metaProgress.RefreshDiscordRequirementsForUser(args.SenderSession.UserId);
+        TryRefreshMetaProgressForUser(args.SenderSession.UserId);
     }
 
     private async void OnUnlink(WH40KDiscordAuthUnlinkEvent ev, EntitySessionEventArgs args)
@@ -440,7 +440,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
                 SendSnapshot(session);
             }
 
-            _metaProgress.RefreshDiscordRequirementsForUser(pending.UserId);
+            TryRefreshMetaProgressForUser(pending.UserId);
         });
 
         return new CallbackResult(HttpStatusCode.OK, true, "Discord успешно привязан.");
@@ -536,7 +536,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
                 {
                     await _db.SetWH40KDiscordLink(userId, refreshResult.Data);
                     ApplyLinkedState(userId, refreshResult.Data);
-                    _task.RunOnMainThread(() => _metaProgress.RefreshDiscordRequirementsForUser(userId));
+                    RunOnMainThreadSafe(() => TryRefreshMetaProgressForUser(userId), $"connect refresh for {userId}");
                     link = refreshResult.Data;
                 }
                 else if (refreshResult.RequiresReauth)
@@ -655,7 +655,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         foreach (var session in _players.Sessions)
         {
             if (session.Status != SessionStatus.Disconnected)
-                _metaProgress.RefreshDiscordRequirementsForUser(session.UserId);
+                TryRefreshMetaProgressForUser(session.UserId);
         }
     }
 
@@ -723,7 +723,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         cancel.ThrowIfCancellationRequested();
         SetRuntimeLinkData(userId, refreshResult.Data);
 
-        _task.RunOnMainThread(() => _metaProgress.RefreshDiscordRequirementsForUser(userId));
+        RunOnMainThreadSafe(() => TryRefreshMetaProgressForUser(userId), $"stale link refresh for {userId}");
 
         return refreshResult.Data;
     }
@@ -844,7 +844,7 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
         await _db.ClearWH40KDiscordLink(userId);
         ApplyLinkedState(userId, null);
         SendSnapshotIfOnline(userId);
-        _metaProgress.RefreshDiscordRequirementsForUser(userId);
+        TryRefreshMetaProgressForUser(userId);
     }
 
     private void ApplyLinkedState(NetUserId userId, WH40KDiscordAuthDbData? data)
@@ -1351,6 +1351,33 @@ public sealed partial class WH40KDiscordAuthSystem : EntitySystem
     private string GetDefaultSupportMessage()
     {
         return Loc.GetString("wh40k-discord-auth-support-default");
+    }
+
+    private void TryRefreshMetaProgressForUser(NetUserId userId)
+    {
+        try
+        {
+            _metaProgress.RefreshDiscordRequirementsForUser(userId);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Discord auth meta-progress refresh failed for {userId}: {e}");
+        }
+    }
+
+    private void RunOnMainThreadSafe(Action action, string context)
+    {
+        _task.RunOnMainThread(() =>
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+                _sawmill.Error($"Discord auth main-thread callback failed during {context}: {e}");
+            }
+        });
     }
 
     private async Task RunOnMainThreadAsync(Action action)
