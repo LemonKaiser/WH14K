@@ -521,6 +521,9 @@ ent-PlushieFizzo = Plush FizzoGhoster
 ent-PlushieRad = Plush Rad
     .desc = A tiny masked arsonist plush. When used to bonk someone, it laughs far too happily.
 
+ent-PlushieUddTomsk = Plush UddTomsk
+    .desc = A tiny mapper plushie with a permanently thoughtful look. It seems ready to judge your decals.
+
 ent-StrangeToster = Strange toaster
     .desc = There's a lazy spirit in it, so you can't get this toaster to work.
 

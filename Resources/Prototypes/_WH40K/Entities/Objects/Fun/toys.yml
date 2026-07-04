@@ -288,6 +288,17 @@
 
 - type: entity
   parent: BasePlushie
+  id: PlushieUddTomsk
+  suffix: WH40K, UddTomsk
+  components:
+  - type: Sprite
+    sprite: _WH40K/Objects/Fun/Plushies/uddtomsk.rsi
+    state: icon
+  - type: Item
+    sprite: _WH40K/Objects/Fun/Plushies/uddtomsk.rsi
+
+- type: entity
+  parent: BasePlushie
   id: PlushieWarpImp
   suffix: WH40K
   components:

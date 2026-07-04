@@ -119,6 +119,7 @@
   - PlushieFizzoWH40K
   - PlushieLitiyWH40K
   - PlushieWarpImpWH40K
+  - PlushieUddTomskWH40K
 
 - type: loadoutGroup
   id: WH40KImperialLineHead
@@ -716,6 +717,7 @@
   - PlushieFizzoWH40K
   - PlushieLitiyWH40K
   - PlushieWarpImpWH40K
+  - PlushieUddTomskWH40K
 
 - type: loadoutGroup
   id: WH40KHereticLineHead
