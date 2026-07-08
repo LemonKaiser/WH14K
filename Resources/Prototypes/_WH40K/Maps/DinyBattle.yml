@@ -1,0 +1,37 @@
+- type: gameMap
+  id: DinyBattle
+  mapName: DinyBattle
+  mapPath: /Maps/_WH40K/DinyBattle.yml
+  minPlayers: 0
+  maxPlayers: 30
+  wh40kTacticalMapSnapshot: /Textures/_WH40K/Interface/TacticalMap/tinybattle_snapshot.png
+  wh40kWeatherProfile: WH40KMapWeatherDinyBattle
+  wh40kEventsProfile: WH40KMapEventsAll
+  stations:
+    DinyBattle:
+      stationProto: WH40KStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Diny Battle"
+        - type: StationJobs
+          availableJobs:
+            # Imperium
+            Colonel: [ 1, 1 ]
+            Commissar: [ 1, 1 ]
+            Guardsman: [ -1, -1 ]
+            Lexmechanic: [ 2, 2 ]
+            Lieutenant: [ 1, 1 ]
+            Medic: [ 1, 1 ]
+            MunitorumOfficer: [ 1, 1 ]
+            Psyker: [ 1, 1 ]
+            VoxScout: [ 1, 1 ]
+            Sergeant: [ 2, 2 ]
+            TitheSupplier: [ 1, 1 ]
+            WH40KChaplain: [ 1, 1 ]
+            # Heretics
+            HColonel: [ 1, 1 ]
+            HGuardsman: [ -1, -1 ]
+            HLexmechanic: [ 2, 2 ]
+            HLieutenant: [ 2, 2 ]
+            HSergeant: [ 2, 2 ]
+            HBandSupplier: [ 2, 2 ]

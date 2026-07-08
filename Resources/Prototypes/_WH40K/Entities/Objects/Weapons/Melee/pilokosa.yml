@@ -6,12 +6,14 @@
   - type: Sprite
     sprite: _WH40K/Objects/Weapons/Melee/pilokosa.rsi
     state: icon
+  - type: MultiHandedItem
   - type: MeleeWeapon
-    attackRate: 1.25
+    attackRate: 3
+    range: 1.6
     damage:
       types:
-        Slash: 24
-        Piercing: 4
+        Slash: 40
+        Shock: 5
     soundHit:
       path: /Audio/Weapons/chainsaw_rev.ogg
       params:
@@ -19,8 +21,12 @@
   - type: Item
     sprite: _WH40K/Objects/Weapons/Melee/pilokosa.rsi
     storedSprite: null
-    size: Normal
+    size: Ginormous
     shape:
     - 0,0,2,1
+  - type: Appearance
   - type: StaminaDamageOnHit
     damage: 5
+  - type: HeldSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9

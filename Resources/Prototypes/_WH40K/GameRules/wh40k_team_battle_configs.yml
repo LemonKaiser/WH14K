@@ -149,6 +149,34 @@
       weight: 1
 
 - type: wh40kTeamBattleWeatherProfile
+  id: WH40KMapWeatherDinyBattle
+  config:
+    minStartDelaySeconds: 300
+    firstStartJitterSeconds: 900
+    noRoundChance: 0.2
+    minDurationSeconds: 180
+    maxDurationSeconds: 600
+    gapMinSeconds: 300
+    gapMaxSeconds: 720
+    repeatChance: 0.72
+    warningLeadSeconds: 30
+    weightedPool:
+    - weatherId: WHSandHurricane
+      weight: 6
+    - weatherId: WHAsh
+      weight: 4
+    - weatherId: WHToxicAshFront
+      weight: 3
+    - weatherId: WHAcidRain
+      weight: 2
+    - weatherId: WHRadFront
+      weight: 1
+    - weatherId: WHIonStorm
+      weight: 1
+    - weatherId: WHSporeDrift
+      weight: 1
+
+- type: wh40kTeamBattleWeatherProfile
   id: WH40KMapWeatherDisabled
   config:
     minStartDelaySeconds: 300
