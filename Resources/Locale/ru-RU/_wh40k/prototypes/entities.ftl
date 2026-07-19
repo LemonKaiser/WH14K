@@ -1430,7 +1430,7 @@ ent-ClothingShoesBootsChaplain = ботинки клерика
 ent-ClothingOuterChaplainRobe = роба клерика
     .desc = Одежна священнослужителя.
 
-ent-ClothingNeckInqusition = цель Экклезиархии
+ent-ClothingNeckInqusition = цепь Экклезиархии
     .desc = Цепочка с знаком Экклезиархии.
 
 ent-WH40KBible = библия
@@ -1573,6 +1573,8 @@ ent-WH40KAmmoBoxElectricArc = ящик патрон электродуговог
 
 ent-WH40KAmmoBoxRadCarabin = ящик патрон радиевого карабина
     .desc = Передают радиевые патроны правильным людям.
+
+ent-WH40KAmmoBoxBotl = ящик болтов
 
 ent-MobQueenChrysalisImperium = королева Кризалис
     .desc = Пони оборотень, который может принимать самые разные формы.

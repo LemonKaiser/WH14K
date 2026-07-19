@@ -68,6 +68,10 @@
     - Borg
     - BasicSilicon
   - type: WH40KTurretFactionLock
+  - type: Repairable
+    damageValue: -25
+    doAfterDelay: 1
+    fuelCost: 0.75
 
 - type: entity
   id: WH40KWeaponTurretImperium

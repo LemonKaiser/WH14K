@@ -1140,6 +1140,8 @@ ent-WH40KOreExtractor = ore extractor
 ent-WH40KAmmoBoxAutogun = autogun ammo box
     .desc = A compact box filled with 8.25mm cartridges for automatic stub weapons.
 
+ent-WH40KAmmoBoxBotl = bolt ammo box
+
 ent-WH40KAmmoBoxMinigun = minigun ammo box
     .desc = A compact ammo box packed with .10 minigun cartridges for mini sentry turrets.
 
