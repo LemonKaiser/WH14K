@@ -588,6 +588,7 @@
   - WH40KRecipeMeltPowerCell
   - WH40KRecipeMagazineBolter
   - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineBoltAmmoBox
   - WH40KRecipeMagazineHeavyBolter
 
 - type: technology

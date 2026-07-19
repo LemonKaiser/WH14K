@@ -3,7 +3,7 @@
   maps:
   - WH40KGunGameMeteorArena
   - WH40KGunGameDm01Entryway
-  - WH40KGunGameLiman
+  - WH40KPropHuntBackrooms
 
 - type: gameMapPool
   id: WH40KMurderMysteryMapPool
@@ -11,3 +11,4 @@
   - WH40KGunGameMeteorArena
   - WH40KGunGameDm01Entryway
   - WH40KGunGameLiman
+  - WH40KPropHuntBackrooms

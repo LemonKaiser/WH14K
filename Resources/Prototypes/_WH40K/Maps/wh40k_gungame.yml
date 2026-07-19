@@ -50,3 +50,20 @@
           GunGamePlayer: [-1, -1]
           MurderMysteryPlayer: [-1, -1]
           PropHuntPlayer: [-1, -1]
+
+- type: gameMap
+  id: WH40KPropHuntBackrooms
+  mapName: Prop Hunt — Backrooms
+  mapPath: /Maps/_WH40K/GunGame/Backrooms.yml
+  minPlayers: 0
+  stations:
+    Backrooms:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Prop Hunt — Backrooms"
+      - type: StationJobs
+        availableJobs:
+          GunGamePlayer: [-1, -1]
+          MurderMysteryPlayer: [-1, -1]
+          PropHuntPlayer: [-1, -1]

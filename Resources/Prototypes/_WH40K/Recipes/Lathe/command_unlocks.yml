@@ -332,6 +332,15 @@
 
 - type: latheRecipe
   parent: BaseAmmoRecipe
+  id: WH40KRecipeMagazineBoltAmmoBox
+  result: WH40KAmmoBoxBotl
+  materials:
+    Steel: 625
+    Plastic: 250
+    Gold: 75
+
+- type: latheRecipe
+  parent: BaseAmmoRecipe
   id: WH40KRecipeMagazineBolterPistol
   result: MagazineBolterPistol
   materials:
@@ -787,6 +796,486 @@
   materials:
     Steel: 100
 
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorCantrael
+  result: WH40KWeaponModCollimatorCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLaserSightCantrael
+  result: WH40KWeaponModLaserSightCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModScopeCantrael
+  result: WH40KWeaponModScopeCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModGrenadeLauncherCantrael
+  result: WH40KWeaponModGrenadeLauncherCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModStockCantrael
+  result: WH40KWeaponModStockCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModAcogCantrael
+  result: WH40KWeaponModAcogCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModFoldingStockCantrael
+  result: WH40KWeaponModFoldingStockCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLongBarrelCantrael
+  result: WH40KWeaponModLongBarrelCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModShortBarrelCantrael
+  result: WH40KWeaponModShortBarrelCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetCantrael
+  result: WH40KWeaponModBayonetCantrael
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorVoss
+  result: WH40KWeaponModCollimatorVoss
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModStockVoss
+  result: WH40KWeaponModStockVoss
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModAcogVoss
+  result: WH40KWeaponModAcogVoss
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModFoldingStockVoss
+  result: WH40KWeaponModFoldingStockVoss
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetVoss
+  result: WH40KWeaponModBayonetVoss
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorAccatran
+  result: WH40KWeaponModCollimatorAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModScopeAccatran
+  result: WH40KWeaponModScopeAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModGrenadeLauncherAccatran
+  result: WH40KWeaponModGrenadeLauncherAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBipodAccatran
+  result: WH40KWeaponModBipodAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModForegripAccatran
+  result: WH40KWeaponModForegripAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLongBarrelAccatran
+  result: WH40KWeaponModLongBarrelAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModShortBarrelAccatran
+  result: WH40KWeaponModShortBarrelAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetAccatran
+  result: WH40KWeaponModBayonetAccatran
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModScopeKrieg
+  result: WH40KWeaponModScopeKrieg
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSlingKrieg
+  result: WH40KWeaponModSlingKrieg
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLongBarrelKrieg
+  result: WH40KWeaponModLongBarrelKrieg
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModShortBarrelKrieg
+  result: WH40KWeaponModShortBarrelKrieg
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetKrieg
+  result: WH40KWeaponModBayonetKrieg
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModMuzzleBrakeStubRifle
+  result: WH40KWeaponModMuzzleBrakeStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetStubRifle
+  result: WH40KWeaponModBayonetStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSuppressorStubRifle
+  result: WH40KWeaponModSuppressorStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorStubRifle
+  result: WH40KWeaponModCollimatorStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModScopeStubRifle
+  result: WH40KWeaponModScopeStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModStockStubRifle
+  result: WH40KWeaponModStockStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModAcogStubRifle
+  result: WH40KWeaponModAcogStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModFoldingStockStubRifle
+  result: WH40KWeaponModFoldingStockStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModForegripStubRifle
+  result: WH40KWeaponModForegripStubRifle
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSuppressorCombatShotgun
+  result: WH40KWeaponModSuppressorCombatShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModMuzzleBrakeStubShotgun
+  result: WH40KWeaponModMuzzleBrakeStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorStubShotgun
+  result: WH40KWeaponModCollimatorStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModStockStubShotgun
+  result: WH40KWeaponModStockStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModAcogStubShotgun
+  result: WH40KWeaponModAcogStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSlingStubShotgun
+  result: WH40KWeaponModSlingStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetCombatShotgun
+  result: WH40KWeaponModBayonetCombatShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSuppressorStubShotgun
+  result: WH40KWeaponModSuppressorStubShotgun
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModMuzzleBrakeStubSMG3
+  result: WH40KWeaponModMuzzleBrakeStubSMG3
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSerpStubSMG3
+  result: WH40KWeaponModSerpStubSMG3
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModForegripStubSMG3
+  result: WH40KWeaponModForegripStubSMG3
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetStubSMG3
+  result: WH40KWeaponModBayonetStubSMG3
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorStubSMG2
+  result: WH40KWeaponModCollimatorStubSMG2
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLaserSightStubSMG2
+  result: WH40KWeaponModLaserSightStubSMG2
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModForegripStubSMG2
+  result: WH40KWeaponModForegripStubSMG2
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSerpStubSMG2
+  result: WH40KWeaponModSerpStubSMG2
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModBayonetStubSMG2
+  result: WH40KWeaponModBayonetStubSMG2
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModSuppressorStubPistol
+  result: WH40KWeaponModSuppressorStubPistol
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLaserSightStubPistol
+  result: WH40KWeaponModLaserSightStubPistol
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModCollimatorStubPistol
+  result: WH40KWeaponModCollimatorStubPistol
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModMuzzleBrakeStubSMG
+  result: WH40KWeaponModMuzzleBrakeStubSMG
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModLaserSightStubSMG
+  result: WH40KWeaponModLaserSightStubSMG
+  completetime: 4
+  materials:
+    Steel: 100
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: WH40KWeaponModStabCollimatorStubSMG
+  result: WH40KWeaponModStabCollimatorStubSMG
+  completetime: 4
+  materials:
+    Steel: 100
+
 - type: latheRecipePack
   id: WH40KCommandWeaponryResearchImperium
   recipes:
@@ -850,6 +1339,7 @@
   - WH40KRecipeMeltPowerCell
   - WH40KRecipeMagazineBolter
   - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineBoltAmmoBox
   - WH40KRecipeMagazineHeavyBolter
   - WH40KRecipeFragGrenade
   - WH40KRecipeKrakGrenade
@@ -892,6 +1382,7 @@
   - WH40KRecipeMeltPowerCell
   - WH40KRecipeMagazineBolter
   - WH40KRecipeMagazineBolterPistol
+  - WH40KRecipeMagazineBoltAmmoBox
   - WH40KRecipeMagazineHeavyBolter
   - WH40KRecipeFragGrenade
   - WH40KRecipeKrakGrenade

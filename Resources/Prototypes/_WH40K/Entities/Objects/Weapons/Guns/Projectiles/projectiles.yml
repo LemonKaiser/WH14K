@@ -326,7 +326,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 19
+        Piercing: 30
   - type: StunOnCollide
     stunAmount: 0
     knockdownAmount: 0

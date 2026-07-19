@@ -296,8 +296,8 @@
     minRoundTimeSeconds: 0
     technologyUnlocks: [WH40KWeaponryAuthLeft3]
     teamLatheRecipeUnlocks:
-      Imperium: [WH40KRecipeWeaponLaserLasgunAccatran, WH40KRecipeAccatranPowerCell, WH40KRecipeWeaponRifleBolter, WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade]
-      Heretics: [WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade]
+      Imperium: [WH40KRecipeWeaponLaserLasgunAccatran, WH40KRecipeAccatranPowerCell, WH40KRecipeWeaponRifleBolter, WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade, WH40KRecipeMagazineBoltAmmoBox]
+      Heretics: [WH40KRecipeWeaponPistolBolter, WH40KRecipeMagazineBolter, WH40KRecipeMagazineBolterPistol, WH40KRecipeFragGrenade, WH40KRecipeMagazineBoltAmmoBox]
     teamCargoProductUnlocks:
       Imperium: [WH40KImperiumSentryTurret, WH40KImperiumSentinel, WH40KImperiumBolter, WH40KImperiumMagazineBolter, WH40KImperiumMagazineBolterPistol, WH40KImperiumLauncherCadia, WH40KImperiumGrenadeFrag]
       Heretics: [WH40KHereticsSentryTurret, WH40KHereticsSentinel, WH40KHereticsBolterPistol, WH40KHereticsMagazineBolter, WH40KHereticsMagazineBolterPistol, WH40KHereticsLauncherChs, WH40KHereticsGrenadeFrag]

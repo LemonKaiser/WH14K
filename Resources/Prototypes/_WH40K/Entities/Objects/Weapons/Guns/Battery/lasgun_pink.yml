@@ -19,6 +19,9 @@
     slots:
     - Back
     - suitStorage
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/pink_lasgun.ogg
 
 - type: entity
   parent: WeaponHereticLaserLasgun
@@ -41,3 +44,6 @@
     slots:
     - Back
     - suitStorage
+  - type: Gun
+    soundGunshot:
+      path: /Audio/_WH40K/Weapons/Guns/Gunshots/pink_lasgun.ogg
